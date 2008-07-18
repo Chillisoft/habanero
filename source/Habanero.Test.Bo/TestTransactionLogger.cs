@@ -86,7 +86,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(Environment.MachineName, trLog.MachineUpdatedName);
             //Assert.GreaterOrEqual(trLog.DateTimeUpdated, DateTime.Now.AddMinutes(-1));
             Assert.LessOrEqual(trLog.DateTimeUpdated, DateTime.Now);
-
+            Assert.AreEqual(cp.ToString(),trLog.BusinessObjectToString);
             //---------------Tear Down -------------------------          
         }
         [Test]
@@ -232,6 +232,7 @@ namespace Habanero.Test.BO
 					<property  name=""LogonUser"" />
 					<property  name=""MachineUpdatedName"" databaseField=""MachineName""/>
 					<property  name=""BusinessObjectTypeName"" />
+                    <property  name=""BusinessObjectToString""/>
 					<property  name=""CRUDAction"" />
 					<property  name=""DirtyXMLLog"" databaseField=""DirtyXML""/>
 					<primaryKey isObjectID=""false"">

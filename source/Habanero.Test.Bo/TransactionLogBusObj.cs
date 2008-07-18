@@ -43,6 +43,12 @@ namespace Habanero.Test.BO
             set { SetPropertyValue("DateTimeUpdated", value); }
         }
 
+        public string BusinessObjectToString
+        {
+            get { return GetPropertyValueString("BusinessObjectToString"); }
+            set { SetPropertyValue("BusinessObjectToString", value); }
+        }
+
         public static void DeleteAllTransactionLogsFromDatabase()
         {
             string sql = "DELETE FROM transactionlog";

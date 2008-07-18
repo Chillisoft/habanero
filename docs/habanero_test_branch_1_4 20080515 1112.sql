@@ -40,7 +40,7 @@ CREATE TABLE `car` (
 
 /*!40000 ALTER TABLE `car` DISABLE KEYS */;
 INSERT INTO `car` (`Car_ID`,`Owner_Id`,`Car_Reg_No`,`Driver_FK1`,`Driver_FK2`) VALUES 
- ('{55B289A4-9665-400F-B8DB-CE438B702F0E}',NULL,'NP32459',NULL,NULL);
+ ('{7DBCDB1E-BC24-4B69-B2FC-A7618A953D1D}',NULL,'NP32459',NULL,NULL);
 /*!40000 ALTER TABLE `car` ENABLE KEYS */;
 
 
@@ -102,10 +102,10 @@ CREATE TABLE `contact_person` (
 
 /*!40000 ALTER TABLE `contact_person` DISABLE KEYS */;
 INSERT INTO `contact_person` (`ContactPersonID`,`Surname`,`FirstName`,`EmailAddress`,`PhoneNumber`,`CellNumber`,`DateOfBirth`,`DateLastUpdated`,`UserLastUpdated`,`MachineLastUpdated`,`VersionNumber`,`PK2_Prop1`,`PK2_Prop2`,`PK3_Prop`,`OrganisationID`,`UserLocked`,`DateTimeLocked`,`MachineLocked`,`OperatingSystemUserLocked`,`Locked`) VALUES 
- ('{28D468E5-27EE-46D2-A140-73501F16F646}','aba0630d-35b6-4f14-bdce-ad9ef7978088','f2ceb968-6c66-4867-b66e-d173797c92ad',NULL,NULL,NULL,NULL,'2008-05-10 12:05:35','CHILLI\\brett','BRETT',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
- ('{42BD9211-52BF-41F7-BE0E-510080EC5C05}','abc','aa',NULL,NULL,NULL,NULL,'2008-05-10 12:05:33','CHILLI\\brett','BRETT',2,NULL,NULL,'ID={42BD9211-52BF-41F7-BE0E-510080EC5C05}',NULL,NULL,NULL,NULL,NULL,NULL),
- ('{914863C3-3F15-451B-9096-B67777B9022D}','zzz','a',NULL,NULL,NULL,NULL,'2008-05-10 12:05:33','CHILLI\\brett','BRETT',3,NULL,NULL,'ID={914863C3-3F15-451B-9096-B67777B9022D}',NULL,NULL,NULL,NULL,NULL,NULL),
- ('{E384749B-1AAA-4CA0-8641-C5C37C5CDBA6}','abcd','aa',NULL,NULL,NULL,NULL,'2008-05-10 12:05:33','CHILLI\\brett','BRETT',2,NULL,NULL,'ID={E384749B-1AAA-4CA0-8641-C5C37C5CDBA6}',NULL,NULL,NULL,NULL,NULL,NULL);
+ ('{0765FE7A-F1FD-4FA5-BA42-67E3126EA622}','abc','aa',NULL,NULL,NULL,NULL,'2008-07-18 14:33:02','CHILLI\\Hagashen','NOOB-RAFT',2,NULL,NULL,'ID={0765FE7A-F1FD-4FA5-BA42-67E3126EA622}',NULL,NULL,NULL,NULL,NULL,NULL),
+ ('{68891BD7-7BCA-405E-9CCF-BC371237F081}','abcd','aa',NULL,NULL,NULL,NULL,'2008-07-18 14:33:02','CHILLI\\Hagashen','NOOB-RAFT',2,NULL,NULL,'ID={68891BD7-7BCA-405E-9CCF-BC371237F081}',NULL,NULL,NULL,NULL,NULL,NULL),
+ ('{DBE3EB47-E633-4096-977E-B0733B09DFD5}','zzz','a',NULL,NULL,NULL,NULL,'2008-07-18 14:33:02','CHILLI\\Hagashen','NOOB-RAFT',3,NULL,NULL,'ID={DBE3EB47-E633-4096-977E-B0733B09DFD5}',NULL,NULL,NULL,NULL,NULL,NULL),
+ ('{E2E8DCE3-2A3D-44B2-9FDB-85E2CA83235A}','342e6f1c-c2ce-4c04-914d-366a8bcdb5c3','3dfe9124-6063-4a11-8564-4ddaec5a66f4',NULL,NULL,NULL,NULL,'2008-07-18 14:33:03','CHILLI\\Hagashen','NOOB-RAFT',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `contact_person` ENABLE KEYS */;
 
 
@@ -158,13 +158,13 @@ CREATE TABLE `contactpersoncompositekey` (
 
 /*!40000 ALTER TABLE `contactpersoncompositekey` DISABLE KEYS */;
 INSERT INTO `contactpersoncompositekey` (`PK1_Prop1`,`PK1_Prop2`,`Surname`,`FirstName`,`DateOfBirth`,`DateLastUpdated`,`UserLastUpdated`,`MachineLastUpdated`,`VersionNumber`) VALUES 
- ('{37AB9DFF-33DA-4198-AD09-A0C282DBC8E5}','{722E5D94-B9EA-4652-85ED-E42823AB75A3}','Surname','NewFirstName','1969-01-29 00:00:00','2008-05-10 12:05:33',NULL,NULL,1),
- ('{C4811B91-0313-489E-9012-725E42FAD370}','{7014BB5F-B0B5-43F0-A84E-96D8D212223D}','Vincent','Brad','1980-01-22 00:00:00','2008-05-10 12:05:33',NULL,NULL,1),
- ('{42487994-2B66-4371-8DC0-A42B71A0E81D}','{619A536C-E062-4D1E-B602-0FAED2075E6D}','Vincent','Brad','1980-01-22 00:00:00','2008-05-10 12:05:33',NULL,NULL,1),
- ('{6046DD96-B51C-458A-AAF5-35CAF04B69FD}','{6E3BFAB6-9475-448A-A320-4CD46F53A3D7}','Vincent','Brad','1980-01-22 00:00:00','2008-05-10 12:05:33',NULL,NULL,1),
- ('{18332A1E-2281-42A6-8846-2BCA67D92CE2}','{75D96D5C-6C09-4258-AAAD-713FEC68BCD9}','Vincent','Brad','1980-01-22 00:00:00','2008-05-10 12:05:33',NULL,NULL,1),
- ('69f8f725-e80b-41ea-9b7f-b2211c2c42d91','3c3315af-fd15-4f4d-a01b-64a21f65fef5','Vincent',NULL,NULL,'2008-05-10 12:05:33',NULL,NULL,1),
- ('69f8f725-e80b-41ea-9b7f-b2211c2c42d9','3c3315af-fd15-4f4d-a01b-64a21f65fef5','Vincent 2',NULL,NULL,'2008-05-10 12:05:33',NULL,NULL,1);
+ ('{41E6852B-4C1C-4D6F-80C6-479106C73E3E}','{56555656-5DCF-4C99-8016-1BCBDE1A0CDB}','Surname','NewFirstName','1969-01-29 00:00:00','2008-07-18 14:33:02',NULL,NULL,1),
+ ('{97E41613-9CFA-484D-A9B6-D8E9488A724C}','{6BF462C4-EDCF-4C1F-9A17-36DF0B75E8C1}','Vincent','Brad','1980-01-22 00:00:00','2008-07-18 14:33:02',NULL,NULL,1),
+ ('{3247AF26-07CD-4EFA-8393-86BA6528D6E2}','{179B69C4-655F-4625-8820-AF65B4F47D15}','Vincent','Brad','1980-01-22 00:00:00','2008-07-18 14:33:02',NULL,NULL,1),
+ ('{E52CCA49-E6A6-42E6-8474-64418803A63B}','{116E3164-91FC-40E3-AE67-FBEB1FB2087D}','Vincent','Brad','1980-01-22 00:00:00','2008-07-18 14:33:02',NULL,NULL,1),
+ ('{9390CBD6-1F99-43D2-87B2-40131EA4D7A5}','{7B31D070-6988-45A6-B67B-34AF3F4EF4CA}','Vincent','Brad','1980-01-22 00:00:00','2008-07-18 14:33:02',NULL,NULL,1),
+ ('62624a37-cbf2-4283-a23b-17d39a7708e11','a28bf36d-6556-4595-8751-12112004647d','Vincent',NULL,NULL,'2008-07-18 14:33:02',NULL,NULL,1),
+ ('62624a37-cbf2-4283-a23b-17d39a7708e1','a28bf36d-6556-4595-8751-12112004647d','Vincent 2',NULL,NULL,'2008-07-18 14:33:02',NULL,NULL,1);
 /*!40000 ALTER TABLE `contactpersoncompositekey` ENABLE KEYS */;
 
 
@@ -185,6 +185,12 @@ CREATE TABLE `filledcircle` (
 --
 
 /*!40000 ALTER TABLE `filledcircle` DISABLE KEYS */;
+INSERT INTO `filledcircle` (`FilledCircleID`,`Colour`,`ShapeID`,`CircleID`) VALUES 
+ ('{D1B040A7-8338-4847-A469-525186A4B0C7}',4,'{D1B040A7-8338-4847-A469-525186A4B0C7}',NULL),
+ ('{E491C64B-3C1C-478F-894F-976F9824F45A}',4,'{E491C64B-3C1C-478F-894F-976F9824F45A}',NULL),
+ ('{BF055AF4-C831-4422-A892-B9BBAD462FA7}',4,'{BF055AF4-C831-4422-A892-B9BBAD462FA7}',NULL),
+ ('{6A80F936-2A8A-4694-A775-0580E4426104}',4,'{6A80F936-2A8A-4694-A775-0580E4426104}',NULL),
+ ('{40562E8D-FA35-47D5-A74F-F7EE79D66642}',4,'{40562E8D-FA35-47D5-A74F-F7EE79D66642}',NULL);
 /*!40000 ALTER TABLE `filledcircle` ENABLE KEYS */;
 
 
@@ -2094,6 +2100,45 @@ INSERT INTO `mockbo` (`MockBOID`,`MockBOProp1`,`MockBOProp2`) VALUES
  ('{10E4B4B3-2DBD-4575-AD92-077E08C1CF6C}','{89F1A6C5-AA14-49F9-BB31-1F246EEC3FCC}',NULL),
  ('{C50C0934-1F90-4E79-BD11-54D403750C6B}',NULL,NULL),
  ('{37F3FA70-A28F-46A1-9EF8-AD8FE731297B}','{01930413-8BB0-41D1-9EA1-9B400748F1ED}',NULL);
+INSERT INTO `mockbo` (`MockBOID`,`MockBOProp1`,`MockBOProp2`) VALUES 
+ ('{2F7AEEEF-6935-476C-811D-192B7A58DF89}',NULL,NULL),
+ ('{71D8CB47-A5FA-4DDD-ABEF-80593322BA10}','{A0AAFB1D-954A-438D-9DD2-9E3949E3A844}',NULL),
+ ('{5F88807E-EFCF-4072-BF6E-914AB3A22398}',NULL,NULL),
+ ('{6995F514-2046-4B53-B772-DF2955E4E3DC}','{41877766-AD73-4B29-A70B-FB49E2549F4F}',NULL),
+ ('{51B33098-B24F-4976-8024-CEA86771FB1D}',NULL,NULL),
+ ('{80219D65-CD63-4E85-9584-1F8FD2D6A889}','{A99DD5B2-CF55-41D5-AFA6-EBC7FA3109C1}',NULL),
+ ('{BFFA20C4-B157-43AA-9431-F2021AAE05B5}',NULL,NULL),
+ ('{8466D353-F5FC-4E0A-B760-23642600D822}','{969D241E-D3DF-4113-9532-F725DF5A9407}',NULL),
+ ('{DF989EBD-51B5-4EC1-9285-68B6423F0F55}',NULL,NULL),
+ ('{6F49B0EB-741C-4E15-8A75-C03D57AEA9BF}','{6F8024BF-8E52-410D-93BD-49DBBA460963}',NULL),
+ ('{48018829-3FD1-4078-BB6F-5E79065447F2}',NULL,NULL),
+ ('{81AE423E-A872-4611-B1E0-1E9004436929}','{9E472D0A-75BE-43CA-93C1-8C30B84BD05E}',NULL),
+ ('{07A1AC3B-0398-4B62-B32B-D2E79B6D0C7D}',NULL,NULL),
+ ('{7BBAA3DA-3F18-4475-97F2-240CB8E7DF05}','{2296AA17-2D15-4FBC-A8AF-4E0D530D0AA7}',NULL);
+INSERT INTO `mockbo` (`MockBOID`,`MockBOProp1`,`MockBOProp2`) VALUES 
+ ('{8457135E-A554-479C-B4AE-5DD27E4E1E76}',NULL,NULL),
+ ('{590A5429-F4DB-4EBC-8D11-7AFDBCF7B022}','{0CC1965B-A8AE-4E00-9298-6B852E2CE283}',NULL),
+ ('{C5080355-2652-44F6-BDCA-54ACCE23CC72}',NULL,NULL),
+ ('{2D19B4D3-3B64-4148-970E-66C4C92B6838}','{DCCA8FDE-D2CA-4599-8EEB-E2D0FBF38C51}',NULL),
+ ('{00306D9C-39D3-4CF0-AAB0-EF723AFC2752}',NULL,NULL),
+ ('{84CF48E6-3683-4095-A305-80DAEEA44909}','{8108BB64-2417-4ABA-AB72-277A45D4742A}',NULL),
+ ('{B6741C20-A925-4B6D-B5F7-5F4F6FC18761}',NULL,NULL),
+ ('{28A60A36-6A77-4283-AA89-D057F7A9E3B9}','{12AD130C-BA84-4C70-A586-F4B7511FCC9F}',NULL),
+ ('{5EF17880-6AAD-45F7-A262-6A3F5233ECEC}',NULL,NULL),
+ ('{0B8C3504-AC16-48E9-B62F-E3864B93BFEC}','{89F661C2-CEEA-44AF-8D2A-C3FCA48FC09F}',NULL),
+ ('{44EEA9B3-8ECB-4EF9-86FA-90FD5F82C12E}',NULL,NULL),
+ ('{607B6B91-389A-449F-80AE-14D486DE6621}','{0A6734DD-FA89-4B7E-A993-59821DDF9301}',NULL),
+ ('{EB88E149-2D05-4D4A-BCC4-5BC260FEDD0D}',NULL,NULL),
+ ('{17629D10-2118-49C1-80A6-24393DE624E5}','{8CA3D246-0E9E-4326-8FAE-F0B7E1D59E19}',NULL);
+INSERT INTO `mockbo` (`MockBOID`,`MockBOProp1`,`MockBOProp2`) VALUES 
+ ('{1CB99F4F-9199-4474-910F-69DC4EC21C9F}',NULL,NULL),
+ ('{39CF99BA-F8F2-4B7B-8B11-D4C6AF4196F1}','{19D5805E-1E5B-4B7B-B611-9304FB26EF59}',NULL),
+ ('{B9A8F875-8575-44DE-B765-75E6F3222E91}',NULL,NULL),
+ ('{C410CDD3-660E-47A2-8371-3CF17DC60176}','{20065EF2-C2E6-4C8F-B6FF-541D5B4AB56E}',NULL),
+ ('{387311FA-C5CA-4A4D-B14C-9DDC7774A2ED}',NULL,NULL),
+ ('{82357579-E18D-47C1-BFBD-A11B5DF6070D}','{9F4E773B-DD6F-4551-9D33-A44429453C25}',NULL),
+ ('{C35F4032-4F98-4199-94E5-9A7F11C2EAAB}',NULL,NULL),
+ ('{A786A213-2485-4F2C-B0B4-59EE44D8671C}','{201567D3-9657-44C6-B6EA-996414ECEC73}',NULL);
 /*!40000 ALTER TABLE `mockbo` ENABLE KEYS */;
 
 
@@ -2120,6 +2165,7 @@ INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES
  ('{01DDB7E3-735D-43F0-A97F-7504013018AB}','TestValue','TestValue2'),
  ('{028BBDF3-3CE7-465B-8FDC-372976CA2205}','TestValue','TestValue2'),
  ('{02F75925-6FFA-40F0-9272-FD2EDAE4DE4F}','qwe','rty'),
+ ('{03A29D25-43EC-4327-B76D-54CD3AF2616F}','TestValue','TestValue2'),
  ('{04A0048F-3446-46F4-8863-713666D75A85}','TestValue','TestValue2'),
  ('{0516F739-4DDC-4E06-9145-373B3B7B1475}','qwe','rty'),
  ('{05EC98E8-A820-4AF2-B68D-7731D155BC82}','qwe','rty'),
@@ -2129,9 +2175,9 @@ INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES
  ('{094FBBE3-FCFB-41D0-9E05-FFB7ED0CEA10}','qwe','rty'),
  ('{095E6A42-1CE5-4EAD-BE07-C29FCBC47497}','qwe','rty'),
  ('{0E7182BB-B4D1-4CE6-8588-7FBA0C378FD8}','TestValue','TestValue2'),
- ('{124368F5-5FCF-428F-8D35-EF201AF7D1DD}','TestValue','TestValue2'),
- ('{12A21947-0A64-4A63-9030-CCA3E1293F8C}','qwe','rty');
+ ('{124368F5-5FCF-428F-8D35-EF201AF7D1DD}','TestValue','TestValue2');
 INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES 
+ ('{12A21947-0A64-4A63-9030-CCA3E1293F8C}','qwe','rty'),
  ('{1374E636-1D26-4DD9-ACEE-7EF7E0B21D79}','qwe','rty'),
  ('{15C50812-0E2B-4D7A-9C7D-B3C87746BCE7}','TestValue','TestValue2'),
  ('{16BA4F89-12D0-4D91-9663-F0083CA0C2BD}','qwe','rty'),
@@ -2146,9 +2192,9 @@ INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES
  ('{234B6570-2DC2-4E06-A06A-A2420E8D84B9}','TestValue','TestValue2'),
  ('{253BB6BB-A04A-43D1-8CDE-7DB1E8BDCC4F}','TestValue','TestValue2'),
  ('{255417A0-1D47-4727-A572-0103643B01F1}','TestValue','TestValue2'),
- ('{256AD4AD-B1AD-4547-AB11-54C15F556639}','TestValue','TestValue2'),
- ('{269B799D-1DE0-45D6-ADB4-3B784B635F9C}','qwe','rty');
+ ('{256AD4AD-B1AD-4547-AB11-54C15F556639}','TestValue','TestValue2');
 INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES 
+ ('{269B799D-1DE0-45D6-ADB4-3B784B635F9C}','qwe','rty'),
  ('{27BC04DD-E916-4810-8A58-E81E42F49AA5}','TestValue','TestValue2'),
  ('{294E643F-E302-4604-9699-04CEC91A9F91}','qwe','rty'),
  ('{2A65A2B0-10FC-40F0-AC9B-DF233FBBC6DC}','qwe','rty'),
@@ -2159,14 +2205,15 @@ INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES
  ('{30AB944C-0562-42C2-BE8C-D4C958DC063F}','qwe','rty'),
  ('{334A6B60-BDE2-4160-98A3-AC646C638BA2}','qwe','rty'),
  ('{3375DB0A-0D55-4392-BE40-DBACC085AEBC}','TestValue','TestValue2'),
+ ('{33848755-BE96-4E7F-8F23-13FA7734D2B9}','TestValue','TestValue2'),
  ('{38762EFD-90CA-4460-95FE-13DD89D86870}','qwe','rty'),
  ('{389C8902-48DD-4A05-A5FF-A63D9136050C}','qwe','rty'),
  ('{389DA9AC-0F10-4956-9304-CCABADA69DBB}','qwe','rty'),
  ('{38A85B11-EAC1-4787-B64F-023958ECD709}','TestValue','TestValue2'),
- ('{38E33DFD-1ABC-4B24-A6E2-58E65FDBB7DE}','qwe','rty'),
- ('{3B0720A1-6680-41F2-A4CE-F04DA28ACC94}','qwe','rty'),
- ('{3B17FC64-B12E-4088-9B7F-42A3BDEADAB3}','TestValue','TestValue2');
+ ('{38E33DFD-1ABC-4B24-A6E2-58E65FDBB7DE}','qwe','rty');
 INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES 
+ ('{3B0720A1-6680-41F2-A4CE-F04DA28ACC94}','qwe','rty'),
+ ('{3B17FC64-B12E-4088-9B7F-42A3BDEADAB3}','TestValue','TestValue2'),
  ('{3B472CE7-035C-4EF8-AFB6-CAB2CAA281EF}','TestValue','TestValue2'),
  ('{3B51B457-9D20-48B4-9F0E-795EB4C87874}','qwe','rty'),
  ('{3C6788AD-2CFF-44FA-9B21-7E7C5278682D}','TestValue','TestValue2'),
@@ -2181,10 +2228,10 @@ INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES
  ('{463768B5-6B71-4E5C-8B75-438C819C6672}','qwe','rty'),
  ('{48455BC1-0607-4D17-BFD2-0118653FD3BA}','qwe','rty'),
  ('{4999A0E0-5686-4161-A656-F3FCF1584686}','qwe','rty'),
- ('{49F99C07-4E2B-411D-8CC8-34C7392C0B10}','qwe','rty'),
- ('{4C547394-F8B5-4CBC-93C6-598911AE9CC7}','qwe','rty'),
- ('{4C573D1F-9DAF-4055-84E2-E4E0D9D010E9}','qwe','rty');
+ ('{49F99C07-4E2B-411D-8CC8-34C7392C0B10}','qwe','rty');
 INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES 
+ ('{4C547394-F8B5-4CBC-93C6-598911AE9CC7}','qwe','rty'),
+ ('{4C573D1F-9DAF-4055-84E2-E4E0D9D010E9}','qwe','rty'),
  ('{4C6D56DA-3623-416C-BD14-158DF349F656}','qwe','rty'),
  ('{4DB3286D-CAB9-4A2F-8B22-552A06AD84E9}','TestValue','TestValue2'),
  ('{4DD1398F-E603-457C-8411-A010E15613A0}','TestValue','TestValue2'),
@@ -2198,10 +2245,10 @@ INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES
  ('{58B1EAFB-ACFB-4A6A-A25B-EA9937BE05CB}','TestValue','TestValue2'),
  ('{58E6F187-A2C7-4ED0-8AFA-CF4BA3C3C5C3}','TestValue','TestValue2'),
  ('{5BDE2CFF-F7D6-494A-8790-F98ED7FC270D}','TestValue','TestValue2'),
- ('{5CE3B24B-62C7-41E6-BE97-0D9EC9CD1438}','qwe','rty'),
- ('{5CEAA0D8-FA63-4B6C-9C3A-8594C93DD8E0}','qwe','rty'),
- ('{5D1AAB07-1428-4AE0-B111-41F0C1950332}','TestValue','TestValue2');
+ ('{5CE3B24B-62C7-41E6-BE97-0D9EC9CD1438}','qwe','rty');
 INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES 
+ ('{5CEAA0D8-FA63-4B6C-9C3A-8594C93DD8E0}','qwe','rty'),
+ ('{5D1AAB07-1428-4AE0-B111-41F0C1950332}','TestValue','TestValue2'),
  ('{5FB460A0-7DD8-4B67-8FAE-6F6DD9C37086}','TestValue','TestValue2'),
  ('{5FF2F127-19EA-4A00-B403-265A7C9FA0CB}','TestValue','TestValue2'),
  ('{618445C9-29A5-4410-A1BD-C215BC4B6130}','TestValue','TestValue2'),
@@ -2215,10 +2262,10 @@ INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES
  ('{6E00D23C-3B0F-4C08-9387-8EC1FB9EC569}','TestValue','TestValue2'),
  ('{6E9CFCFE-5A3E-40FB-A9CE-BC982FB7873A}','TestValue','TestValue2'),
  ('{71295D75-9999-405A-B599-52CE332EA765}','qwe','rty'),
- ('{734C294A-BA80-4F43-86E8-67AF183F26BD}','TestValue','TestValue2'),
- ('{734D10FC-BE0D-44DC-BE97-2A648F92B527}','qwe','rty'),
- ('{746BC4B7-A640-40B5-8EB0-C82284D7C0FD}','qwe','rty');
+ ('{734C294A-BA80-4F43-86E8-67AF183F26BD}','TestValue','TestValue2');
 INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES 
+ ('{734D10FC-BE0D-44DC-BE97-2A648F92B527}','qwe','rty'),
+ ('{746BC4B7-A640-40B5-8EB0-C82284D7C0FD}','qwe','rty'),
  ('{77E3663F-1607-4406-9897-3D937E27E083}','TestValue','TestValue2'),
  ('{7C027A55-3852-49F2-858D-0588BA54F5BF}','qwe','rty'),
  ('{81876435-DE84-4096-86DF-7C82CE7CDE97}','qwe','rty'),
@@ -2233,9 +2280,9 @@ INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES
  ('{884260A9-0C46-48C6-A672-43561B1468BD}','TestValue','TestValue2'),
  ('{88DE95CB-C3B3-4786-B3F3-FE521C8CD23C}','qwe','rty'),
  ('{89F4FC12-4A8D-46AA-84D4-A45FC45F957B}','qwe','rty'),
- ('{8A67A7E1-02CF-4A16-9592-F2D51540B201}','TestValue','TestValue2'),
- ('{8FF03263-84D0-4AA6-BA26-1EF774D286AA}','qwe','rty');
+ ('{8A67A7E1-02CF-4A16-9592-F2D51540B201}','TestValue','TestValue2');
 INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES 
+ ('{8FF03263-84D0-4AA6-BA26-1EF774D286AA}','qwe','rty'),
  ('{90D285E9-496C-4BB3-AE24-62BC8BE1B294}','qwe','rty'),
  ('{90DC1496-8DDC-4ECE-BF52-A278286B329C}','TestValue','TestValue2'),
  ('{92885DAC-0C59-4C91-87EF-97F48F97883F}','TestValue','TestValue2'),
@@ -2250,26 +2297,29 @@ INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES
  ('{A461F681-5BE3-40D2-94D1-CB99217DC322}','TestValue','TestValue2'),
  ('{A5D194AF-5A55-4A1C-B9CE-673E29E55278}','qwe','rty'),
  ('{A5EF3BBD-366D-4FF6-BC02-984654FD3BA8}','TestValue','TestValue2'),
- ('{A6A8C9B6-2656-4472-B252-7B54EB959518}','TestValue','TestValue2'),
- ('{A9078FCB-EA7F-463A-A803-0D9CF8D440DB}','TestValue','TestValue2');
+ ('{A6A8C9B6-2656-4472-B252-7B54EB959518}','TestValue','TestValue2');
 INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES 
+ ('{A9078FCB-EA7F-463A-A803-0D9CF8D440DB}','TestValue','TestValue2'),
  ('{A982B24B-777A-4963-A2D6-3A33501DC4DD}','TestValue','TestValue2'),
  ('{A9C71DFD-0D9E-49C3-A656-505104B00F5F}','TestValue','TestValue2'),
  ('{AB1AEED8-D360-4829-A423-F8DDEC9CC274}','qwe','rty'),
  ('{AD40A2BD-608B-4F1D-ACB4-EE60E559376D}','TestValue','TestValue2'),
  ('{B1B0DD5E-3572-41D1-A259-A5088BB41A7E}','qwe','rty'),
  ('{B262F9BF-9D8F-4D58-A830-350C1552C061}','qwe','rty'),
+ ('{B27C8F45-5020-4D8B-8416-83103B12A9C2}','TestValue','TestValue2'),
+ ('{B30CCDC7-1E62-4F51-B6F3-58D98DAC119E}','TestValue','TestValue2'),
  ('{B4A2E233-37F5-4547-BF7F-0B6914A30930}','TestValue','TestValue2'),
  ('{B4B2474A-1808-4DEF-969F-7E0B7024F8EE}','TestValue','TestValue2'),
  ('{B4B82399-370C-45B8-B007-F2E516A44821}','qwe','rty'),
  ('{B6DFD143-8631-4CC1-AD5E-ED344143ADFA}','TestValue','TestValue2'),
  ('{B7AA85AF-A486-4C62-A888-A416FCCE7504}','TestValue','TestValue2'),
  ('{BACDF337-B2FB-4439-8754-083341C1E8D1}','TestValue','TestValue2'),
- ('{BACE5655-E7CA-4802-A14F-3409BEA918A1}','qwe','rty'),
- ('{BAF493D6-9EDF-4C97-A5AB-60633C4A7DA8}','qwe','rty'),
- ('{C04EA56E-B8A6-4B38-9C7B-E0C58D394835}','qwe','rty'),
- ('{C1D6AB2D-E944-4D9E-AFE1-15C6959132BF}','qwe','rty');
+ ('{BACE5655-E7CA-4802-A14F-3409BEA918A1}','qwe','rty');
 INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES 
+ ('{BAF493D6-9EDF-4C97-A5AB-60633C4A7DA8}','qwe','rty'),
+ ('{BE78DDA7-5E65-42F8-9853-01073A836C39}','TestValue','TestValue2'),
+ ('{C04EA56E-B8A6-4B38-9C7B-E0C58D394835}','qwe','rty'),
+ ('{C1D6AB2D-E944-4D9E-AFE1-15C6959132BF}','qwe','rty'),
  ('{C2066D0B-2BBD-4D07-BEB1-9629C6407E82}','qwe','rty'),
  ('{C41D68CB-9A6F-42C7-ACD8-6D8D3550BC80}','qwe','rty'),
  ('{C4431184-DC20-49CD-A218-62A93AE1CCB8}','qwe','rty'),
@@ -2281,12 +2331,13 @@ INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES
  ('{CD0E12EB-A338-4FA3-8F7F-E345CCFC8E56}','TestValue','TestValue2'),
  ('{CFCD6DB2-0B40-424B-94BB-193A5448DC1B}','TestValue','TestValue2'),
  ('{D0C749E4-FF36-4AD5-954A-43DE14D652A9}','TestValue','TestValue2'),
+ ('{D54937A5-7C2F-49FB-96F4-729F9DF555B4}','TestValue','TestValue2');
+INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES 
  ('{D601EB34-82DF-4FEB-8AC9-1A28B209A8A6}','qwe','rty'),
  ('{D6087168-3C0A-46F2-A26F-06B2865465E8}','TestValue','TestValue2'),
  ('{D6E78247-D790-4CB4-A92A-0ED9BCC6DFC1}','TestValue','TestValue2'),
  ('{D9084B5D-6997-4A95-9F9F-5FE743F31A5A}','qwe','rty'),
- ('{DB4BE20C-664F-4948-94A7-9C3572D3B93B}','qwe','rty');
-INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES 
+ ('{DB4BE20C-664F-4948-94A7-9C3572D3B93B}','qwe','rty'),
  ('{DB8EF0E8-6576-4A20-B639-3AC3A7AF6790}','TestValue','TestValue2'),
  ('{E1F0525B-7230-4714-BFA5-037D965F76BE}','qwe','rty'),
  ('{E203ECA2-9D2E-4A26-A07E-2CD1552ECF2B}','qwe','rty'),
@@ -2297,21 +2348,25 @@ INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES
  ('{E7B0CB95-E8A3-40CE-8230-0B600D7DB73D}','qwe','rty'),
  ('{E7FF02D7-00CF-44EA-B8B4-E91F4CB64291}','qwe','rty'),
  ('{E92DE422-6961-4C85-AB5C-CDB4C6CB27BA}','TestValue','TestValue2'),
- ('{E98EBBAD-11DB-496A-9CE2-83BB7106907B}','qwe','rty'),
+ ('{E98EBBAD-11DB-496A-9CE2-83BB7106907B}','qwe','rty');
+INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES 
  ('{EAC8CB68-0477-4ED0-A7AC-CDB596D39441}','qwe','rty'),
  ('{EB3FC37F-7D62-4AF3-8EB8-3942DF518CDC}','qwe','rty'),
  ('{ECD6EC35-DCC9-4396-BB34-5727ADEA0BEB}','qwe','rty'),
  ('{EE670F91-B4BA-4115-ACA4-3607A8FF08EE}','qwe','rty'),
+ ('{EF5FA801-299F-4AE9-9DE3-27297D170333}','TestValue','TestValue2'),
  ('{F11BF225-CF47-481F-8B36-C2A42795101B}','TestValue','TestValue2'),
- ('{F1A7369B-C4E9-45AC-BF4F-BB67EF786C31}','TestValue','TestValue2');
-INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES 
+ ('{F1A7369B-C4E9-45AC-BF4F-BB67EF786C31}','TestValue','TestValue2'),
  ('{F2495975-86F2-430C-9BD0-9B486B4F9020}','TestValue','TestValue2'),
  ('{F2BC6768-EA8A-4B8F-8624-6CD19AD05063}','qwe','rty'),
  ('{F34671A8-FBC8-441B-8607-745C12D8DBCF}','qwe','rty'),
  ('{F397368C-7878-4915-BB9F-68E3D218D525}','qwe','rty'),
+ ('{F415D695-AD29-4339-A17F-C6AEF8533249}','TestValue','TestValue2'),
  ('{F5E5EC73-0CA6-4A48-B5AE-F0C69CEA8B02}','TestValue','TestValue2'),
  ('{F6D3D08B-69A1-44AA-9437-0F9FAAF4F574}','qwe','rty'),
- ('{FCC4F075-C419-4B38-A7F2-6DEDE558A4D7}','qwe','rty'),
+ ('{F9592351-B37A-4EC8-83FF-17C1041E1B9E}','TestValue','TestValue2'),
+ ('{FCC4F075-C419-4B38-A7F2-6DEDE558A4D7}','qwe','rty');
+INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`) VALUES 
  ('{FD8BD304-A922-48DE-B1CF-F7BE20ACA36A}','qwe','rty'),
  ('{FEB69A8A-3983-4717-8238-7C17D5A0C02F}','qwe','rty');
 /*!40000 ALTER TABLE `mybo` ENABLE KEYS */;
@@ -2340,7 +2395,7 @@ CREATE TABLE `numbergenerator` (
 /*!40000 ALTER TABLE `numbergenerator` DISABLE KEYS */;
 INSERT INTO `numbergenerator` (`SequenceNumber`,`NumberType`,`UserLocked`,`Locked`,`MachineLocked`,`OperatingSystemUserLocked`,`DateTimeLocked`) VALUES 
  (0,'GeneratedNumber',NULL,NULL,NULL,NULL,NULL),
- (0,'tmp','CHILLI\\brett',0,'BRETT','CHILLI\\brett','2008-05-10 12:05:17');
+ (0,'tmp','CHILLI\\Hagashen',0,'NOOB-RAFT','CHILLI\\Hagashen','2008-07-18 14:32:52');
 /*!40000 ALTER TABLE `numbergenerator` ENABLE KEYS */;
 
 
@@ -2437,7 +2492,7 @@ CREATE TABLE `table_engine` (
 
 /*!40000 ALTER TABLE `table_engine` DISABLE KEYS */;
 INSERT INTO `table_engine` (`ENGINE_ID`,`CAR_ID`,`ENGINE_NO`) VALUES 
- ('{6E06B3BC-6ADD-4D5E-BD2E-27EFD51A0F6C}','{55B289A4-9665-400F-B8DB-CE438B702F0E}','NO111');
+ ('{97486572-3F22-47EA-8368-B334E639B94D}','{7DBCDB1E-BC24-4B69-B2FC-A7618A953D1D}','NO111');
 /*!40000 ALTER TABLE `table_engine` ENABLE KEYS */;
 
 
@@ -2450,7 +2505,7 @@ CREATE TABLE `testautoinc` (
   `testautoincid` int(10) unsigned NOT NULL auto_increment,
   `testfield` varchar(45) NOT NULL default '',
   PRIMARY KEY  (`testautoincid`)
-) ENGINE=InnoDB AUTO_INCREMENT=436 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=454 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `habanero_test_branch_1_4`.`testautoinc`
@@ -2893,7 +2948,26 @@ INSERT INTO `testautoinc` (`testautoincid`,`testfield`) VALUES
  (432,'testing 123'),
  (433,'testing'),
  (434,'testing 123'),
- (435,'testing');
+ (435,'testing'),
+ (436,'testing 123'),
+ (437,'testing'),
+ (438,'testing 123'),
+ (439,'testing'),
+ (440,'testing 123'),
+ (441,'testing'),
+ (442,'testing 123'),
+ (443,'testing'),
+ (444,'testing 123');
+INSERT INTO `testautoinc` (`testautoincid`,`testfield`) VALUES 
+ (445,'testing'),
+ (446,'testing 123'),
+ (447,'testing'),
+ (448,'testing 123'),
+ (449,'testing'),
+ (450,'testing 123'),
+ (451,'testing'),
+ (452,'testing 123'),
+ (453,'testing');
 /*!40000 ALTER TABLE `testautoinc` ENABLE KEYS */;
 
 
@@ -2933,23 +3007,25 @@ CREATE TABLE `transactionlog` (
   `BusinessObjectTypeName` varchar(50) default NULL,
   `CRUDAction` varchar(50) default NULL,
   `DirtyXML` mediumtext,
+  `BusinessObjectToString` varchar(255) default NULL,
   PRIMARY KEY  (`TransactionSequenceNo`)
-) ENGINE=InnoDB AUTO_INCREMENT=656 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `habanero_test_branch_1_4`.`transactionlog`
 --
 
 /*!40000 ALTER TABLE `transactionlog` DISABLE KEYS */;
-INSERT INTO `transactionlog` (`TransactionSequenceNo`,`DateTimeUpdated`,`WindowsUser`,`LogonUser`,`MachineName`,`BusinessObjectTypeName`,`CRUDAction`,`DirtyXML`) VALUES 
- (649,'2008-05-10 12:05:19','CHILLIrett','','BRETT','ContactPersonTransactionLogging','Created','<ContactPersonTransactionLogging ID=ContactPersonID={eca0f3ba-56ab-40a0-9e35-cdb7640b9fcd}><Properties><ContactPersonID><PreviousValue></PreviousValue><NewValue>{ECA0F3BA-56AB-40A0-9E35-CDB7640B9FCD}</NewValue></ContactPersonID><Surname><PreviousValue></PreviousValue><NewValue>a831e490-6ab7-4ce9-982e-4139efe8b3c4</NewValue></Surname><ContactPersonTransactionLogging>'),
- (650,'2008-05-10 12:05:19','CHILLIrett','','BRETT','ContactPersonTransactionLogging','Updated','<ContactPersonTransactionLogging ID=ContactPersonID={eca0f3ba-56ab-40a0-9e35-cdb7640b9fcd}><Properties><Surname><PreviousValue>a831e490-6ab7-4ce9-982e-4139efe8b3c4</PreviousValue><NewValue>01b4d2b6-532f-4ef2-8644-5880a0b7b0f5</NewValue></Surname><ContactPersonTransactionLogging>'),
- (651,'2008-05-10 12:05:19','CHILLIrett','','BRETT','ContactPersonTransactionLogging','Updated','<ContactPersonTransactionLogging ID=ContactPersonID={eca0f3ba-56ab-40a0-9e35-cdb7640b9fcd}><Properties><Surname><PreviousValue>01b4d2b6-532f-4ef2-8644-5880a0b7b0f5</PreviousValue><NewValue>5fd7ac77-ee66-4fbf-9186-f895d55adb43</NewValue></Surname><ContactPersonTransactionLogging>');
-INSERT INTO `transactionlog` (`TransactionSequenceNo`,`DateTimeUpdated`,`WindowsUser`,`LogonUser`,`MachineName`,`BusinessObjectTypeName`,`CRUDAction`,`DirtyXML`) VALUES 
- (652,'2008-05-10 12:05:19','CHILLIrett','','BRETT','ContactPersonTransactionLogging','Updated','<ContactPersonTransactionLogging ID=ContactPersonID={eca0f3ba-56ab-40a0-9e35-cdb7640b9fcd}><Properties><Surname><PreviousValue>5fd7ac77-ee66-4fbf-9186-f895d55adb43</PreviousValue><NewValue>151ffb7e-173c-49e9-85ec-5e106dcfbc84</NewValue></Surname><ContactPersonTransactionLogging>'),
- (653,'2008-05-10 12:05:19','CHILLIrett','','BRETT','ContactPersonTransactionLogging','Updated','<ContactPersonTransactionLogging ID=ContactPersonID={eca0f3ba-56ab-40a0-9e35-cdb7640b9fcd}><Properties><Surname><PreviousValue>151ffb7e-173c-49e9-85ec-5e106dcfbc84</PreviousValue><NewValue>c4f5b04e-06e8-4254-97c1-c113d4d487cf</NewValue></Surname><ContactPersonTransactionLogging>'),
- (654,'2008-05-10 12:05:19','CHILLIrett','','BRETT','ContactPersonTransactionLogging','Deleted','<ContactPersonTransactionLogging ID=ContactPersonID={eca0f3ba-56ab-40a0-9e35-cdb7640b9fcd}><Properties><ContactPersonTransactionLogging>'),
- (655,'2008-05-10 12:05:19','CHILLIrett','','BRETT','ContactPersonTransactionLogging','Created','<ContactPersonTransactionLogging ID=ContactPersonID={4c50ae7f-deaf-4f77-b658-6dbb1fc68b42}><Properties><ContactPersonID><PreviousValue></PreviousValue><NewValue>{4C50AE7F-DEAF-4F77-B658-6DBB1FC68B42}</NewValue></ContactPersonID><Surname><PreviousValue></PreviousValue><NewValue>My Surname 1</NewValue></Surname><ContactPersonTransactionLogging>');
+INSERT INTO `transactionlog` (`TransactionSequenceNo`,`DateTimeUpdated`,`WindowsUser`,`LogonUser`,`MachineName`,`BusinessObjectTypeName`,`CRUDAction`,`DirtyXML`,`BusinessObjectToString`) VALUES 
+ (50,'2008-07-18 14:32:53','CHILLI\\Hagashen','MyUserName','NOOB-RAFT','ContactPersonTransactionLogging','Created','<ContactPersonTransactionLogging ID=\'ContactPersonID={04a8e09a-ebe1-4607-abee-59146c10176f}\'><Properties><ContactPersonID><PreviousValue></PreviousValue><NewValue>{04A8E09A-EBE1-4607-ABEE-59146C10176F}</NewValue></ContactPersonID><Surname><PreviousValue></PreviousValue><NewValue>5a70d22e-915a-49d5-a2a1-725771b16764</NewValue></Surname></Properties></ContactPersonTransactionLogging>','5a70d22e-915a-49d5-a2a1-725771b16764'),
+ (51,'2008-07-18 14:32:53','CHILLI\\Hagashen','MyUserName','NOOB-RAFT','ContactPersonTransactionLogging','Updated','<ContactPersonTransactionLogging ID=\'ContactPersonID={04a8e09a-ebe1-4607-abee-59146c10176f}\'><Properties><Surname><PreviousValue>5a70d22e-915a-49d5-a2a1-725771b16764</PreviousValue><NewValue>8c0921f8-6228-4f59-a001-a91666c2fac2</NewValue></Surname></Properties></ContactPersonTransactionLogging>','8c0921f8-6228-4f59-a001-a91666c2fac2'),
+ (52,'2008-07-18 14:32:53','CHILLI\\Hagashen','MyUserName','NOOB-RAFT','ContactPersonTransactionLogging','Updated','<ContactPersonTransactionLogging ID=\'ContactPersonID={04a8e09a-ebe1-4607-abee-59146c10176f}\'><Properties><Surname><PreviousValue>8c0921f8-6228-4f59-a001-a91666c2fac2</PreviousValue><NewValue>ac60eadd-afd5-402e-8101-82f201e33742</NewValue></Surname></Properties></ContactPersonTransactionLogging>','ac60eadd-afd5-402e-8101-82f201e33742');
+INSERT INTO `transactionlog` (`TransactionSequenceNo`,`DateTimeUpdated`,`WindowsUser`,`LogonUser`,`MachineName`,`BusinessObjectTypeName`,`CRUDAction`,`DirtyXML`,`BusinessObjectToString`) VALUES 
+ (53,'2008-07-18 14:32:53','CHILLI\\Hagashen','MyUserName','NOOB-RAFT','ContactPersonTransactionLogging','Updated','<ContactPersonTransactionLogging ID=\'ContactPersonID={04a8e09a-ebe1-4607-abee-59146c10176f}\'><Properties><Surname><PreviousValue>ac60eadd-afd5-402e-8101-82f201e33742</PreviousValue><NewValue>c0a36f89-188c-470b-b535-a0de38459e7b</NewValue></Surname></Properties></ContactPersonTransactionLogging>','c0a36f89-188c-470b-b535-a0de38459e7b'),
+ (54,'2008-07-18 14:32:53','CHILLI\\Hagashen','MyUserName','NOOB-RAFT','ContactPersonTransactionLogging','Updated','<ContactPersonTransactionLogging ID=\'ContactPersonID={04a8e09a-ebe1-4607-abee-59146c10176f}\'><Properties><Surname><PreviousValue>c0a36f89-188c-470b-b535-a0de38459e7b</PreviousValue><NewValue>83e7a805-714f-4a58-b0bc-3155f83209c2</NewValue></Surname></Properties></ContactPersonTransactionLogging>','83e7a805-714f-4a58-b0bc-3155f83209c2'),
+ (55,'2008-07-18 14:32:53','CHILLI\\Hagashen','MyUserName','NOOB-RAFT','ContactPersonTransactionLogging','Deleted','<ContactPersonTransactionLogging ID=\'ContactPersonID={04a8e09a-ebe1-4607-abee-59146c10176f}\'><Properties></Properties></ContactPersonTransactionLogging>','83e7a805-714f-4a58-b0bc-3155f83209c2');
+INSERT INTO `transactionlog` (`TransactionSequenceNo`,`DateTimeUpdated`,`WindowsUser`,`LogonUser`,`MachineName`,`BusinessObjectTypeName`,`CRUDAction`,`DirtyXML`,`BusinessObjectToString`) VALUES 
+ (56,'2008-07-18 14:32:53','CHILLI\\Hagashen','MyUserName','NOOB-RAFT','ContactPersonTransactionLogging','Created','<ContactPersonTransactionLogging ID=\'ContactPersonID={5c4eea3c-89fe-40b9-a40d-498f77155496}\'><Properties><ContactPersonID><PreviousValue></PreviousValue><NewValue>{5C4EEA3C-89FE-40B9-A40D-498F77155496}</NewValue></ContactPersonID><Surname><PreviousValue></PreviousValue><NewValue>My Surname 1</NewValue></Surname></Properties></ContactPersonTransactionLogging>','My Surname 1');
 /*!40000 ALTER TABLE `transactionlog` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
