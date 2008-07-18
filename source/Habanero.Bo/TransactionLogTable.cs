@@ -42,6 +42,7 @@ namespace Habanero.BO
         private readonly string _businessObjectTypeNameFieldName;
         private readonly string _crudActionFieldName;
         private readonly string _dirtyXmlFieldName;
+        private readonly ISecurityController _securityController;
 
         ///<summary>
         /// Constructs the new transactionlogTable with default table name and logging fields.
@@ -52,6 +53,18 @@ namespace Habanero.BO
                 "WindowsUser", "LogonUser", "MachineName", "BusinessObjectTypeName", "CRUDAction", "DirtyXML")
         {
 
+        }
+
+        /// <summary>
+        /// Constructs the new transactionlogTable with default table name and logging fields and a specific security controller for getting the currently logged on user.
+        /// </summary>
+        /// <param name="busObjToLog"></param>
+        /// <param name="securityController"></param>
+        public TransactionLogTable(BusinessObject busObjToLog,ISecurityController securityController)
+            : this(busObjToLog, "transactionLog", "DateTimeUpdated",
+                "WindowsUser", "LogonUser", "MachineName", "BusinessObjectTypeName", "CRUDAction", "DirtyXML")
+        {
+            _securityController = securityController;
         }
 
         /// <summary>
@@ -80,6 +93,29 @@ namespace Habanero.BO
             this._businessObjectTypeNameFieldName = businessObjectTypeNameFieldName;
             this._crudActionFieldName = crudActionFieldName;
             this._dirtyXmlFieldName = dirtyXMLFieldName;
+        }
+
+        /// <summary>
+        /// Constructor to initialise a new log table
+        /// </summary>
+        /// <param name="buObjToLog">the business object for which the transaction log is being created</param>
+        /// <param name="transactionLogTable">The log table name</param>
+        /// <param name="dateTimeUpdatedFieldName">Time updated field name</param>
+        /// <param name="windowsUserFieldName">Windows user field name</param>
+        /// <param name="logonUserFieldName">Logon user field name</param>
+        /// <param name="machineUpdateName">Machine update name</param>
+        /// <param name="businessObjectTypeNameFieldName">BO type field name</param>
+        /// <param name="crudActionFieldName">Crud action field name</param>
+        /// <param name="dirtyXMLFieldName">Dirty xml field name</param>
+        public TransactionLogTable(BusinessObject buObjToLog, string transactionLogTable, string dateTimeUpdatedFieldName,
+                                   string windowsUserFieldName, string logonUserFieldName, string machineUpdateName,
+                                   string businessObjectTypeNameFieldName, string crudActionFieldName,
+                                   string dirtyXMLFieldName,ISecurityController securityController):this(buObjToLog, transactionLogTable, dateTimeUpdatedFieldName,
+                                   windowsUserFieldName, logonUserFieldName, machineUpdateName,
+                                   businessObjectTypeNameFieldName, crudActionFieldName,
+                                   dirtyXMLFieldName)
+        {
+            _securityController = securityController;
         }
 
         ///// <summary>
@@ -152,21 +188,32 @@ namespace Habanero.BO
                          this._machineUpdateName + ", " +
                          this._businessObjectTypeNameFieldName + ", " +
                          this._crudActionFieldName + ", " +
-                         this._dirtyXmlFieldName + ") VALUES ( '" +
-                         DatabaseUtil.FormatDatabaseDateTime(DateTime.Now) + "', '" +
-                         GetLogonUserName() + "', '" +
-                         WindowsIdentity.GetCurrent().Name + "', '" +
-                         Environment.MachineName + "', '" +
-                         _buObjToLog.ClassName + "', '" +
-                         GetCrudAction(_buObjToLog) + "', '" +
-                         _buObjToLog.DirtyXML + "' )";
+                         this._dirtyXmlFieldName + ") VALUES ( ";
+
             tranSql.Statement.Append(sql);
+            tranSql.AddParameterToStatement(DateTime.Now);
+            tranSql.Statement.Append(", ");
+            tranSql.AddParameterToStatement(GetLogonUserName());
+            tranSql.Statement.Append(", ");
+            tranSql.AddParameterToStatement(WindowsIdentity.GetCurrent().Name);
+            tranSql.Statement.Append(", ");
+            tranSql.AddParameterToStatement(Environment.MachineName);
+            tranSql.Statement.Append(", ");
+            tranSql.AddParameterToStatement(_buObjToLog.ClassDef.ClassName);
+            tranSql.Statement.Append(", ");
+            tranSql.AddParameterToStatement(GetCrudAction(_buObjToLog));
+            tranSql.Statement.Append(", ");
+            tranSql.AddParameterToStatement(_buObjToLog.DirtyXML);
+            tranSql.Statement.Append(")");
+
             SqlStatementCollection sqlStatements = new SqlStatementCollection(tranSql);
             return sqlStatements;
         }
 
         private string GetLogonUserName()
         {
+            if (_securityController != null) return _securityController.CurrentUserName;
+            if (GlobalRegistry.SecurityController != null) return GlobalRegistry.SecurityController.CurrentUserName;
             return "";
         }
 

@@ -188,8 +188,8 @@ namespace Habanero.Test.BO
             myContact_1.Surname = "My Surname New";
 
             Assert.AreEqual(
-                "<ContactPersonTransactionLogging ID=" + myContact_1.ID +
-                "><Properties><Surname><PreviousValue>My Surname 1</PreviousValue><NewValue>My Surname New</NewValue></Surname><ContactPersonTransactionLogging>",
+                "<ContactPersonTransactionLogging ID='" + myContact_1.ID +
+                "'><Properties><Surname><PreviousValue>My Surname 1</PreviousValue><NewValue>My Surname New</NewValue></Surname></Properties></ContactPersonTransactionLogging>",
                 myContact_1.DirtyXML);
 
         }

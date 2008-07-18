@@ -403,8 +403,8 @@ namespace Habanero.BO
         {
             get
             {
-                return "<" + this.ClassName + " ID=" + this.ID + ">" +
-                       _boPropCol.DirtyXml + "<" + this.ClassName + ">";
+                return "<" + this.ClassName + " ID='" + this.ID + "'>" +
+                       _boPropCol.DirtyXml + "</" + this.ClassName + ">";
             }
         }
 
