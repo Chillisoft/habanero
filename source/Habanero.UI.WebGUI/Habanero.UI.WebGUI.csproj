@@ -101,6 +101,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="HabaneroAppWebGUI.cs" />
+    <Compile Include="HelpAboutBoxGiz.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ListViewGiz.cs">
       <SubType>Component</SubType>
     </Compile>

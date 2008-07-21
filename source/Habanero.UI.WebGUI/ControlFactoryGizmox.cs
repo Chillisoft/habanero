@@ -344,7 +344,7 @@ namespace Habanero.UI.WebGUI
 
         public IFormChilli CreateForm()
         {
-            throw new NotImplementedException();
+            return new FormGiz();
         }
 
         public ICheckBoxMapperStrategy CreateCheckBoxMapperStrategy()

@@ -28,7 +28,7 @@ namespace Habanero.UI.Base
         void Refresh();
         bool Focus();
         void PerformLayout();
-
+        void Close();
         IFormChilli MdiParent { get; set; }
         event EventHandler Closed;
     }

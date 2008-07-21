@@ -66,6 +66,7 @@
     <Compile Include="Grid\IEditableGridButtonsControl.cs" />
     <Compile Include="Grid\IGridControl.cs" />
     <Compile Include="Grid\IGridInitialiser.cs" />
+    <Compile Include="HelpAboutBoxManager.cs" />
     <Compile Include="ICollectionTabControlMapper.cs" />
     <Compile Include="Grid\EditableGridControlManager.cs" />
     <Compile Include="Grid\GridInitialiser.cs" />

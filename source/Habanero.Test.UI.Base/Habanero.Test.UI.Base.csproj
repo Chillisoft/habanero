@@ -131,6 +131,7 @@
     <Compile Include="Grid\TestEditableGrid.cs" />
     <Compile Include="TestFileChooser.cs" />
     <Compile Include="TestGlobalUIRegistry.cs" />
+    <Compile Include="TestHelpAboutBox.cs" />
     <Compile Include="TestLabel.cs" />
     <Compile Include="LayoutManager\TestLayoutManager.cs" />
     <Compile Include="TestListBox.cs" />
