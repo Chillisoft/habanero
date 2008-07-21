@@ -582,8 +582,7 @@ namespace Habanero.UI.Win
     }
 
 
-
-        internal class NumericUpDownMapperStrategyWin : INumericUpDownMapperStrategy
+    internal class NumericUpDownMapperStrategyWin : INumericUpDownMapperStrategy
         {
             private NumericUpDownMapper _mapper;
 

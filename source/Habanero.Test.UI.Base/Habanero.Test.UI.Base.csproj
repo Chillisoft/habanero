@@ -128,7 +128,6 @@
     <Compile Include="TestDefaultBOCreator.cs" />
     <Compile Include="TestDefaultBOEditorForm.cs" />
     <Compile Include="Grid\TestEditableGrid.cs" />
-    <Compile Include="TestDockStyle.cs" />
     <Compile Include="TestFileChooser.cs" />
     <Compile Include="TestGlobalUIRegistry.cs" />
     <Compile Include="TestLabel.cs" />

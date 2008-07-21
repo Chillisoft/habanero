@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="BOColTabControlManager.cs" />
     <Compile Include="ComboBoxManager.cs" />
+    <Compile Include="ButtonGroupControlManager.cs" />
     <Compile Include="ControlInterfaces\Events.cs" />
     <Compile Include="ControlInterfaces\IBOColTabControl.cs" />
     <Compile Include="ControlInterfaces\IBusinessObjectControl.cs" />

@@ -25,25 +25,32 @@ namespace Habanero.UI.WebGUI
 {
     public class ButtonGroupControlGiz : ControlGiz, IButtonGroupControl
     {
-        private readonly IControlFactory _controlFactory;
-        private readonly FlowLayoutManager _layoutManager;
+        private ButtonGroupControlManager _buttonGroupControlManager;
+        private IControlFactory _controlFactory;
+
         public ButtonGroupControlGiz(IControlFactory controlFactory)
         {
-            _layoutManager = new FlowLayoutManager(this, controlFactory);
-            _layoutManager.Alignment = FlowLayoutManager.Alignments.Right;
+            _buttonGroupControlManager = new ButtonGroupControlManager(this, controlFactory);
+
+            //_layoutManager = new FlowLayoutManager(this, controlFactory);
+            //_layoutManager.Alignment = FlowLayoutManager.Alignments.Right;
             _controlFactory = controlFactory;
-            IButton sampleBtn = _controlFactory.CreateButton();
-            this.Height = sampleBtn.Height + 10;
+            //IButton sampleBtn = _controlFactory.CreateButton();
+            //this.Height = sampleBtn.Height + 10;
         }
 
         public IButton AddButton(string buttonName)
         {
-            IButton button = _controlFactory.CreateButton();
-            button.Name = buttonName;
-            button.Text = buttonName;
-            _layoutManager.AddControl(button);
+            //IButton button = _controlFactory.CreateButton();
+            //button.Name = buttonName;
+            //button.Text = buttonName;
+            //_layoutManager.AddControl(button);
+            //RecalcButtonSizes();
+            //Controls.Add((Control) button);
+            //return button;
+
+            IButton button = _buttonGroupControlManager.AddButton(buttonName);
             RecalcButtonSizes();
-            Controls.Add((Control) button);
             return button;
         }
 
@@ -51,6 +58,7 @@ namespace Habanero.UI.WebGUI
         {
             get { return (IButton) this.Controls[buttonName]; }
         }
+
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(base.Controls); }
@@ -79,11 +87,14 @@ namespace Habanero.UI.WebGUI
         /// <param name="clickHandler">The event handler to be triggered on the button click</param>
         public IButton AddButton(string buttonName, string buttonText, EventHandler clickHandler)
         {
-            IButton button = this.AddButton(buttonName);
-            button.Name = buttonName;
-            button.Text = buttonText;
+            //IButton button = this.AddButton(buttonName);
+            //button.Name = buttonName;
+            //button.Text = buttonText;
+            //RecalcButtonSizes();
+            //button.Click += clickHandler;
+            //return button;
+            IButton button = _buttonGroupControlManager.AddButton(buttonName, buttonText, clickHandler);
             RecalcButtonSizes();
-            button.Click += clickHandler;
             return button;
         }
 
@@ -94,7 +105,7 @@ namespace Habanero.UI.WebGUI
         public void RecalcButtonSizes()
         {
             int maxButtonWidth = 0;
-            foreach (IButton btn in _layoutManager.ManagedControl.Controls)
+            foreach (IButton btn in _buttonGroupControlManager.LayoutManager.ManagedControl.Controls)
             {
                 ILabel lbl = _controlFactory.CreateLabel(btn.Text);
                 if (lbl.PreferredWidth + 10 > maxButtonWidth)
@@ -106,10 +117,12 @@ namespace Habanero.UI.WebGUI
             //{
             //    maxButtonWidth = Screen.PrimaryScreen.Bounds.Width / 16;
             //}
-            foreach (Button btn in _layoutManager.ManagedControl.Controls)
+            foreach (IButton btn in _buttonGroupControlManager.LayoutManager.ManagedControl.Controls)
             {
                 btn.Width = maxButtonWidth;
             }
         }
     }
+
+
 }

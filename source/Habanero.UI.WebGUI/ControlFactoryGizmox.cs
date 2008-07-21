@@ -371,6 +371,11 @@ namespace Habanero.UI.WebGUI
             return new NumericUpDownMapperStrategyGiz();
         }
 
+        public IScreen CreateScreen()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Creates a new DateTimePicker that is formatted to handle months
         /// and years

@@ -53,8 +53,8 @@ namespace Habanero.UI.Base
             South = 4
         }
 
-        //private readonly IControlChilli[] _controls;
-        //private readonly bool[] _splitters;
+        private readonly IControlChilli[] _controls;
+        private readonly bool[] _splitters;
 
         /// <summary>
         /// Constructor to initalise a new layout manager
@@ -66,8 +66,8 @@ namespace Habanero.UI.Base
         public BorderLayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
             : base(managedControl, controlFactory)
         {
-            //_controls = new IControlChilli[5];
-            //_splitters = new bool[5];
+            _controls = new IControlChilli[5];
+            _splitters = new bool[5];
         }
 
         protected override void RefreshControlPositions()

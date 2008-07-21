@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Windows.Forms;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
@@ -49,47 +50,69 @@ namespace Habanero.Test.UI.Base
         protected abstract IControlFactory GetControlFactory();
         protected abstract void AddControlToForm(IControlChilli cntrl);
 
-        //[TestFixture]
-        //public class TestButtonControlWin : TestButtonGroupControl
-        //{
-        //    protected override IControlFactory GetControlFactory()
-        //    {
-        //        return new ControlFactoryWin();
-        //    }
-        //    //protected override IReadOnlyGridControl CreateReadOnlyGridControl()
-        //    //{
-        //    //    ReadOnlyGridControlWin readOnlyGridControlWin = new ReadOnlyGridControlWin();
-        //    //    System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-        //    //    frm.Controls.Add(readOnlyGridControlWin);
-        //    //    return readOnlyGridControlWin;
-        //    //}
-        //[Test]
-        //public void TestSetDefaultButton_WinOnly()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
-        //    IButton btn = buttons.AddButton("Test");
-        //    System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-        //    frm.Controls.Add((System.Windows.Forms.Control)buttons);
-        //    //---------------Execute Test ----------------------
-        //    buttons.SetDefaultButton("Test");
-        //    //---------------Test Result -----------------------
-        //    Assert.AreSame(btn, frm.AcceptButton);
-        //}
-        //[Test]
-        //public void TestButtonWidthOneSmallButton_WinOnly()
-        //{
-        //    //---------------Set up test pack-------------------
+        [TestFixture]
+        public class TestButtonControlWin : TestButtonGroupControl
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
 
-        //    IButtonGroupControl buttonGroupControl = GetControlFactory().CreateButtonGroupControl();
-        //    //---------------Execute Test ----------------------
-        //    IButton btnTest = buttonGroupControl.AddButton("A");
-        //    ////---------------Test Result -----------------------
+            protected override void AddControlToForm(IControlChilli cntrl)
+            {
+                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
+                frm.Controls.Add((System.Windows.Forms.Control) cntrl);
+            }
 
-        //    Assert.AreEqual(Screen.PrimaryScreen.Bounds.Width / 16, btnTest.Width,
-        //                    "Button width is incorrect - when buttons are very small they should instead be 1 12th of screen width.");
-        //}
-        //}
+            //    //protected override IReadOnlyGridControl CreateReadOnlyGridControl()
+            //    //{
+            //    //    ReadOnlyGridControlWin readOnlyGridControlWin = new ReadOnlyGridControlWin();
+            //    //    System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
+            //    //    frm.Controls.Add(readOnlyGridControlWin);
+            //    //    return readOnlyGridControlWin;
+            //    //}
+            [Test]
+            public void TestSetDefaultButton_WinOnly()
+            {
+                //---------------Set up test pack-------------------
+                IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
+                IButton btn = buttons.AddButton("Test");
+                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
+                frm.Controls.Add((System.Windows.Forms.Control)buttons);
+                //---------------Execute Test ----------------------
+                buttons.SetDefaultButton("Test");
+                //---------------Test Result -----------------------
+                Assert.AreSame(btn, frm.AcceptButton);
+            }
+
+            [Test]
+            public void TestUseMnemonic_WinOnly()
+            {
+                //---------------Set up test pack-------------------
+                IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
+
+                //---------------Execute Test ----------------------
+                Button btn = (Button) buttons.AddButton("Test", delegate(object sender, EventArgs e) { });
+                //---------------Test Result -----------------------
+                Assert.IsTrue(btn.UseMnemonic);
+            }
+
+            [Test]
+            public void TestButtonWidthOneSmallButton_WinOnly()
+            {
+                //---------------Set up test pack-------------------
+
+                IButtonGroupControl buttonGroupControl = GetControlFactory().CreateButtonGroupControl();
+                //---------------Execute Test ----------------------
+                IButton btnTest = buttonGroupControl.AddButton("A");
+                ////---------------Test Result -----------------------
+
+                Assert.AreEqual(Screen.PrimaryScreen.Bounds.Width / 16, btnTest.Width,
+                                "Button width is incorrect - when buttons are very small they should instead be 1 16th of screen width.");
+            }
+            //}
+        }
+
         [TestFixture]
         public class TestButtonControlGiz : TestButtonGroupControl
         {
@@ -160,10 +183,7 @@ namespace Habanero.Test.UI.Base
             string buttonText = "Test";
             string buttonname = "buttonName";
             bool clicked = false;
-            IButton btnTest = buttons.AddButton(buttonname, buttonText, delegate
-                    {
-                        clicked = true;
-                    });
+            IButton btnTest = buttons.AddButton(buttonname, buttonText, delegate { clicked = true; });
 
             btnTest.PerformClick();
 
@@ -293,7 +313,7 @@ namespace Habanero.Test.UI.Base
             ////---------------Test Result -----------------------
 
             Assert.AreEqual(buttonGroupControl.Width - 5 - btnTest.Width, btnTest.Left,
-                            "Button should be right aligned.");
+                "Button should be right aligned.");
         }
 
         [Test]
@@ -308,7 +328,7 @@ namespace Habanero.Test.UI.Base
             ////---------------Test Result -----------------------
             //Wierd the button gonna be off the screen to the left maybe flow layout manager should do something else maybe not who knows
             Assert.AreEqual(buttonGroupControl.Width - 5 - btnTest.Width, btnTest.Left,
-                            "Button should be right aligned.");
+                "Button should be right aligned.");
         }
 
         [Test]

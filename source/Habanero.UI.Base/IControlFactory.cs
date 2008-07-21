@@ -316,6 +316,10 @@ namespace Habanero.UI.Base
         INumericUpDownMapperStrategy CreateNumericUpDownMapperStrategy();
     }
 
+    public interface IScreen
+    {
+    }
+
     /// <summary>
     /// Provides a set of strategies that can be applied to a control
     /// depending on the environment
