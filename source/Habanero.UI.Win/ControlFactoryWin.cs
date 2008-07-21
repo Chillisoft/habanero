@@ -330,7 +330,7 @@ namespace Habanero.UI.Win
 
         public IBOColTabControl CreateBOColTabControl()
         {
-            return new BOTabControlWin(this);
+            return new BOColTabControlWin(this);
         }
 
         /// <summary>

@@ -565,7 +565,7 @@ namespace Habanero.UI.WebGUI
 
         public virtual IBOColTabControl CreateBOColTabControl()
         {
-            return new BOTabControlGiz(this);
+            return new BOColTabControlGiz(this);
         }
 
         /// <summary>

@@ -21,7 +21,7 @@ using Habanero.Base;
 
 namespace Habanero.UI.Base
 {
-    public interface IBOColTabControl
+    public interface IBOColTabControl: IControlChilli
     {
         /// <summary>
         /// Sets the boControl that will be displayed on each tab page.  This must be called

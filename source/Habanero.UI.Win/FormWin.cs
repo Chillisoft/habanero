@@ -25,11 +25,10 @@ namespace Habanero.UI.Win
 {
     public class FormWin : Form, IFormChilli
     {
-        private IControlCollection _controls;
 
         IControlCollection IControlChilli.Controls
         {
-            get { return _controls; }
+            get { return new ControlCollectionWin(base.Controls); }
         }
         Base.DockStyle IControlChilli.Dock
         {

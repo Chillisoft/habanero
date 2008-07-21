@@ -34,16 +34,14 @@ namespace Habanero.UI.Win
             set { base.Dock = (System.Windows.Forms.DockStyle)value; }
         }
 
-        //TODO: Convert dockstyles between Giz windows etc
-
         public new ITabPageCollection TabPages
         {
             get { return new TabPageCollectionWin(base.TabPages); }
         }
 
-        public ITabPage SelectedTab
+        public new ITabPage SelectedTab
         {
-            get { return (ITabPage)TabPages[base.SelectedIndex]; }
+            get { return TabPages[base.SelectedIndex]; }
             set { base.SelectedIndex = TabPages.IndexOf(value); }
         }
     }

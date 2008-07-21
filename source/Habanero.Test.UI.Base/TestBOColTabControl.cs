@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Diagnostics;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -92,6 +93,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsNotNull(iboColTabControl.TabControl);
             Assert.IsInstanceOfType(typeof(ITabControl), iboColTabControl.TabControl);
+            Assert.IsInstanceOfType(typeof(IControlChilli), iboColTabControl);
             //Assert.IsNotNull(iboColTabControl.BOColTabControlManager);
             //---------------Tear down -------------------------
         }
@@ -337,9 +339,11 @@ namespace Habanero.Test.UI.Base
             IBusinessObjectControl busControl = GetBusinessObjectControlStub();
 
             //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
+            Assert.IsNull(boColTabControl.BusinessObjectControl);
 
+            //---------------Execute Test ----------------------
             boColTabControl.BusinessObjectControl = busControl;
+
             //---------------Test Result -----------------------
             Assert.IsNull(boColTabControl.BusinessObjectControl.BusinessObject);
         }
@@ -386,11 +390,15 @@ namespace Habanero.Test.UI.Base
             MyBO thirdBO = new MyBO();
             myBoCol.Add(thirdBO);
             boColTabControl.BusinessObjectCollection = myBoCol;
+
             //---------------Assert Precondition----------------
             Assert.AreEqual(firstBo, boColTabControl.BusinessObjectControl.BusinessObject);
+
             //---------------Execute Test ----------------------
             boColTabControl.TabControl.SelectedIndex = 2;
+
             //---------------Test Result -----------------------
+            Assert.AreNotSame(firstBo, boColTabControl.BusinessObjectControl.BusinessObject);
             Assert.AreEqual(thirdBO, boColTabControl.BusinessObjectControl.BusinessObject);
         }
 

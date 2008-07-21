@@ -45,6 +45,10 @@ namespace Habanero.UI.Base
             {
                 throw new LayoutManagerException("You cannot initialise the layout manager with a null control");
             }
+            if (managedControl.Controls == null)
+            {
+                throw new LayoutManagerException("You cannot initialise the layout manager with a control that has a null controls collection");
+            }
             if (managedControl.Controls.Count > 0)
             {
                 throw new LayoutManagerException("You cannot initialise the layout manager with a control that already contains controls");

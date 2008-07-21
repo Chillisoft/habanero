@@ -25,7 +25,7 @@ namespace Habanero.UI.WebGUI
     /// <summary>
     /// Manages a collection of tab pages that hold business object controls
     /// </summary>
-    public class BOTabControlGiz : UserControlGiz, IBOColTabControl
+    public class BOColTabControlGiz : UserControlGiz, IBOColTabControl
     {
         private readonly IControlFactory _controlFactory;
         private readonly ITabControl _tabControl;
@@ -34,7 +34,7 @@ namespace Habanero.UI.WebGUI
         /// <summary>
         /// Constructor to initialise a new tab control
         /// </summary>
-        public BOTabControlGiz(IControlFactory controlFactory)
+        public BOColTabControlGiz(IControlFactory controlFactory)
         {
             _controlFactory = controlFactory;
             BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(this);

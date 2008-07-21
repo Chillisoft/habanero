@@ -60,7 +60,7 @@ namespace Habanero.UI.Base
                 }
                 else
                 {
-                    throw new ArgumentException("boControl must be of type Control or one of its subtypes.");
+                    throw new ArgumentException("boControl must be of type IControlChilli or one of its subtypes.");
                 }
             }
             get { return _boControl; }
@@ -138,7 +138,10 @@ namespace Habanero.UI.Base
             {
                 _tabControl.SelectedTab.Controls.Clear();
                 _tabControl.SelectedTab.Controls.Add(_boControl);
-                _boControl.BusinessObject = GetBo(_tabControl.SelectedTab);
+                if (_boControl != null)
+                {
+                    _boControl.BusinessObject = GetBo(_tabControl.SelectedTab);
+                }
             }
         }
 

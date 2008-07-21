@@ -34,8 +34,6 @@ namespace Habanero.UI.WebGUI
             set { base.Dock = (Gizmox.WebGUI.Forms.DockStyle)value; }
         }
 
-        //TODO: Convert dockstyles between Giz windows etc
-
         public new ITabPageCollection TabPages
         {
             get { return new TabPageCollectionGiz(base.TabPages); }
@@ -43,7 +41,7 @@ namespace Habanero.UI.WebGUI
 
         public ITabPage SelectedTab
         {
-            get { return (ITabPage)TabPages[base.SelectedIndex]; }
+            get { return TabPages[base.SelectedIndex]; }
             set { base.SelectedIndex = TabPages.IndexOf(value); }
         }
     }
