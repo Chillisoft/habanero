@@ -103,18 +103,16 @@ namespace Habanero.BO
         {
             foreach (Relationship relationship in transaction.BusinessObject.Relationships)
             {
-                if (MustDereferenceRelatedObjects(relationship))
+                if (!MustDereferenceRelatedObjects(relationship)) continue;
+                IBusinessObjectCollection col = relationship.GetRelatedBusinessObjectCol();
+                for (int i = col.Count - 1; i >= 0; i--)
                 {
-                    IBusinessObjectCollection col = relationship.GetRelatedBusinessObjectCol();
-                    for (int i = col.Count - 1; i >= 0; i--)
+                    BusinessObject bo = (BusinessObject) col[i];
+                    foreach (RelPropDef relPropDef in relationship.RelationshipDef.RelKeyDef)
                     {
-                        BusinessObject bo = (BusinessObject) col[i];
-                        foreach (RelPropDef relPropDef in relationship.RelationshipDef.RelKeyDef)
-                        {
-                            bo.SetPropertyValue(relPropDef.RelatedClassPropName, null);
-                        }
-                        ExecuteTransactionToDataSource(new TransactionalBusinessObjectDB(bo));
+                        bo.SetPropertyValue(relPropDef.RelatedClassPropName, null);
                     }
+                    ExecuteTransactionToDataSource(new TransactionalBusinessObjectDB(bo));
                 }
             }
         }
