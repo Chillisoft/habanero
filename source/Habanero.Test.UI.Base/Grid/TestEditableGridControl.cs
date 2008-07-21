@@ -29,6 +29,14 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
+    /// <summary>
+    /// TODO:
+    /// - ButtonsControl
+    ///   - still to attach handlers to Save and Cancel buttons, and test (may need database writing)
+    /// - ComboBox population
+    /// - FilterControl
+    /// - Custom methods like one that changes behaviour of combobox clicking and pressing delete button
+    /// </summary>
     public abstract class TestEditableGridControl
     {
         [SetUp]
@@ -220,6 +228,36 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void Test_CreateButtonsControl()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(gridControl.Buttons);
+            Assert.AreEqual(2, gridControl.Buttons.Controls.Count);
+           
+        }
+
+
+        [Test]
+        public void Test_CreateFilterControl()
+        {
+            //---------------Set up test pack-------------------
+
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(FilterModes.Filter, gridControl.FilterMode);
+            Assert.AreEqual(FilterModes.Filter, gridControl.FilterControl.FilterMode);
+        }
+
+        [Test]
         public void TestInitialise()
         {
             //---------------Set up test pack-------------------
@@ -392,89 +430,7 @@ namespace Habanero.Test.UI.Base
         //            AssertIsComboBoxColumnType(dataGridViewColumn);
         //        }
 
-
-        //[Test]
-        //public void TestSetCollection_IncorrectClassDef()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    LoadMyBoDefaultClassDef();
-        //    BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
-        //    IEditableGridControl editableGridControl = CreateEditableGridControl();
-
-        //    //---------------Execute Test ----------------------
-        //    editableGridControl.Initialise(Sample.CreateClassDefGiz());
-        //    try
-        //    {
-        //        editableGridControl.SetBusinessObjectCollection(col);
-        //        Assert.Fail(
-        //            "You cannot call set collection for a collection that has a different class def than is initialised");
-        //        ////---------------Test Result -----------------------
-        //    }
-        //    catch (ArgumentException ex)
-        //    {
-        //        StringAssert.Contains(
-        //            "You cannot call set collection for a collection that has a different class def than is initialised",
-        //            ex.Message);
-        //    }
-        //}
-
-        //[Test]
-        //public void TestSetCollection_Null_ClearsTheGrid()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    LoadMyBoDefaultClassDef();
-        //    BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
-        //    IEditableGridControl editableGridControl = CreateEditableGridControl();
-        //    AddControlToForm(editableGridControl);
-        //    editableGridControl.SetBusinessObjectCollection(col);
-        //    //----------------Assert Preconditions --------------
-
-        //    Assert.IsTrue(editableGridControl.Grid.Rows.Count > 0, "There should be items in teh grid b4 clearing");
-        //    //---------------Execute Test ----------------------
-        //    editableGridControl.SetBusinessObjectCollection(null);
-        //    //---------------Verify Result ---------------------
-        //    Assert.AreEqual(0, editableGridControl.Grid.Rows.Count,
-        //                    "There should be no items in the grid  after setting to null");
-        //    Assert.IsFalse(editableGridControl.Buttons.Enabled);
-        //    Assert.IsFalse(editableGridControl.FilterControl.Enabled);
-        //}
-
-
-        //[Test]
-        //public void TestSetCollection_InitialisesGridIfNotPreviouslyInitialised()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    LoadMyBoDefaultClassDef();
-        //    BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
-        //    IEditableGridControl editableGridControl = CreateEditableGridControl();
-
-        //    //---------------Execute Test ----------------------
-        //    editableGridControl.SetBusinessObjectCollection(col);
-        //    ////---------------Test Result -----------------------
-        //    Assert.AreEqual("default", editableGridControl.UiDefName);
-        //    Assert.AreEqual(col.ClassDef, editableGridControl.ClassDef);
-        //}
-
-        //[Test]
-        //public void TestSetCollection_NotInitialiseGrid_IfPreviouslyInitialised()
-        //{
-        //    //Verify that setting the collection for a grid that is already initialised
-        //    //does not cause it to be reinitialised.
-        //    //---------------Set up test pack-------------------
-        //    ClassDef.ClassDefs.Clear();
-        //    ClassDef classDef = LoadMyBoDefaultClassDef();
-        //    BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
-        //    string alternateUIDefName = "Alternate";
-        //    IEditableGridControl grid = CreateEditableGridControl();
-
-        //    grid.Initialise(classDef, alternateUIDefName);
-        //    //---------------Execute Test ----------------------
-        //    grid.SetBusinessObjectCollection(col);
-        //    ////---------------Test Result -----------------------
-        //    Assert.AreEqual(alternateUIDefName, grid.UiDefName);
-        //}
-
-        [Test]
+       [Test]
         public void Test_RaiseErrorIfControlFactoryNull()
         {
             //---------------Set up test pack-------------------
@@ -513,9 +469,9 @@ namespace Habanero.Test.UI.Base
             //---------------Verify Result ---------------------
             Assert.AreEqual(0, editableGridControl.Grid.Rows.Count,
                             "There should be no items in the grid  after setting to null");
-            //TODO: Uncomment when these have been added.
-            //Assert.IsFalse(editableGridControl.Buttons.Enabled);
-            //Assert.IsFalse(editableGridControl.FilterControl.Enabled);
+            
+            Assert.IsFalse(editableGridControl.Buttons.Enabled);
+            Assert.IsFalse(editableGridControl.FilterControl.Enabled);
         }
 
 
@@ -538,7 +494,7 @@ namespace Habanero.Test.UI.Base
                             "There should be one item in the grid  after setting to empty collection");
         }
 
-        [Test, Ignore("Still need to add buttons and filter control.")]
+        [Test]
         public void TestSetCollection_NullCol_ThenNonNullEnablesButtons()
         {
             //---------------Set up test pack-------------------
@@ -549,15 +505,15 @@ namespace Habanero.Test.UI.Base
             editableGridControl.SetBusinessObjectCollection(col);
             editableGridControl.SetBusinessObjectCollection(null);
             //----------------Assert Preconditions --------------
-            //TODO: Uncomment when these have been added.
-            //Assert.IsFalse(editableGridControl.Buttons.Enabled);
-            //Assert.IsFalse(editableGridControl.FilterControl.Enabled);
+          
+            Assert.IsFalse(editableGridControl.Buttons.Enabled);
+            Assert.IsFalse(editableGridControl.FilterControl.Enabled);
             //---------------Execute Test ----------------------
             editableGridControl.SetBusinessObjectCollection(col);
             //---------------Verify Result ---------------------
-            //TODO: Uncomment when these have been added.
-            // Assert.IsTrue(editableGridControl.Buttons.Enabled);
-            //Assert.IsTrue(editableGridControl.FilterControl.Enabled);
+           
+             Assert.IsTrue(editableGridControl.Buttons.Enabled);
+            Assert.IsTrue(editableGridControl.FilterControl.Enabled);
         }
 
         [Test]
@@ -700,6 +656,127 @@ namespace Habanero.Test.UI.Base
             AssertIsCheckBoxColumnType(dataGridViewColumn);
             //---------------Tear Down -------------------------        
         }
+
+
+        //[Test]
+        //public void TestAcceptance_FilterGrid()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    //Get Grid with 4 items
+        //    BusinessObjectCollection<MyBO> col;
+        //    IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col);
+        //    AddControlToForm(readOnlyGridControl);
+        //    ITextBox tb = readOnlyGridControl.FilterControl.AddStringFilterTextBox("Test Prop", "TestProp");
+        //    //--------------Assert PreConditions
+        //    Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
+        //    //---------------Execute Test ----------------------
+        //    //enter data in filter for 1 item
+        //    tb.Text = "b";
+        //    readOnlyGridControl.FilterControl.ApplyFilter();
+        //    //---------------Assert Result -----------------------
+        //    // verify that grid has only 1 item in it  
+        //    Assert.AreEqual(1, readOnlyGridControl.Grid.Rows.Count);
+        //}
+
+        //[Test]
+        //public void Test_Acceptance_Filter_When_On_Page2_Of_Pagination()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    //Get Grid with 4 items
+        //    BusinessObjectCollection<MyBO> col;
+        //    IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col);
+        //    AddControlToForm(readOnlyGridControl);
+        //    ITextBox tb = readOnlyGridControl.FilterControl.AddStringFilterTextBox("Test Prop", "TestProp");
+        //    //Set items per page to 3 items
+        //    readOnlyGridControl.Grid.ItemsPerPage = 3;
+        //    //Go to page 2 (pagination page)
+        //    readOnlyGridControl.Grid.CurrentPage = 2;
+
+        //    //--------------Assert PreConditions ---------------
+        //    Assert.AreEqual(2, readOnlyGridControl.Grid.CurrentPage);
+        //    //---------------Execute Test ----------------------
+        //    //enter data in filter for 1 item
+        //    tb.Text = "b";
+        //    readOnlyGridControl.FilterControl.ApplyFilter();
+        //    //---------------Test Result -----------------------
+        //    // verify that grid has moved back to page 1
+        //    Assert.AreEqual(1, readOnlyGridControl.Grid.CurrentPage);
+        //    //---------------Tear Down -------------------------          
+        //}
+
+        //[Test]
+        //public void TestFixBug_SearchGridSearchesTheGrid_DoesNotCallFilterOnGridbase()
+        //{
+        //    //FirstName is not in the grid def therefore if the grid calls the filter gridbase filter
+        //    // the dataview will try to filter with a column that does not exist this will raise an error
+        //    //---------------Set up test pack-------------------
+        //    //Clear all contact people from the DB
+        //    ContactPerson.DeleteAllContactPeople();
+        //    ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+        //    CreateContactPersonInDB();
+
+        //    //Create grid setup for search
+        //    IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+        //    ITextBox txtboxFirstName = readOnlyGridControl.FilterControl.AddStringFilterTextBox("FirstName", "FirstName");
+        //    readOnlyGridControl.Initialise(classDef);
+        //    readOnlyGridControl.FilterMode = FilterModes.Search;
+        //    //---------------Execute Test ----------------------
+        //    txtboxFirstName.Text = "FFF";
+        //    readOnlyGridControl.FilterControl.ApplyFilter();
+        //    //---------------Test Result -----------------------
+        //    Assert.IsTrue(true);//No error was thrown by the grid.
+        //    //---------------Tear Down -------------------------          
+        //}
+
+        //[Test]
+        //public void TestAcceptance_SearchGridSearchesTheGrid()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    //Clear all contact people from the DB
+        //    ContactPerson.DeleteAllContactPeople();
+        //    ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+        //    //Create data in the database with the 5 contact people two with Search in surname
+        //    CreateContactPersonInDB();
+        //    CreateContactPersonInDB();
+        //    CreateContactPersonInDB();
+        //    CreateContactPersonInDB_With_SSSSS_InSurname();
+        //    CreateContactPersonInDB_With_SSSSS_InSurname();
+        //    //Create grid setup for search
+        //    IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+        //    ITextBox txtbox = readOnlyGridControl.FilterControl.AddStringFilterTextBox("Surname", "Surname");
+        //    readOnlyGridControl.Initialise(classDef);
+        //    readOnlyGridControl.FilterMode = FilterModes.Search;
+
+        //    //--------------Assert PreConditions----------------            
+        //    //No items in the grid
+        //    Assert.AreEqual(0, readOnlyGridControl.Grid.Rows.Count);
+
+        //    //---------------Execute Test ----------------------
+        //    //set data in grid to a value that should return 2 people
+        //    string filterByValue = "SSSSS";
+        //    txtbox.Text = filterByValue;
+        //    //grid.filtercontrols.searchbutton.click
+        //    readOnlyGridControl.OrderBy = "Surname";
+        //    readOnlyGridControl.FilterControl.ApplyFilter();
+
+        //    //---------------Test Result -----------------------
+        //    StringAssert.Contains(filterByValue,
+        //                          readOnlyGridControl.FilterControl.GetFilterClause().GetFilterClauseString());
+        //    //verify that there are 2 people in the grid.
+        //    Assert.AreEqual(2, readOnlyGridControl.Grid.Rows.Count);
+
+        //    BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+        //    col.Load("Surname like %" + filterByValue + "%", "Surname");
+        //    Assert.AreEqual(col.Count, readOnlyGridControl.Grid.Rows.Count);
+        //    int rowNum = 0;
+        //    foreach (ContactPersonTestBO person in col)
+        //    {
+        //        object rowID = readOnlyGridControl.Grid.Rows[rowNum++].Cells["ID"].Value;
+        //        Assert.AreEqual(person.ID.ToString(), rowID.ToString());
+        //    }
+        //    //---------------Tear Down -------------------------          
+        //}
+
 
         private ClassDef LoadMyBoDefaultClassDef()
         {

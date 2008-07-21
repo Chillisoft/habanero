@@ -23,6 +23,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
+using Habanero.UI.Base.FilterControl;
 using Habanero.UI.Base.Grid;
 
 namespace Habanero.UI.WebGUI
@@ -32,6 +33,9 @@ namespace Habanero.UI.WebGUI
         private readonly IControlFactory _controlFactory;
         private readonly IEditableGrid _grid;
         private readonly EditableGridControlManager _editableGridManager;
+        private IEditableGridButtonsControl _buttons;
+        private IFilterControl _filterControl;
+ 
 
         public EditableGridControlGiz(IControlFactory controlFactory)
         {
@@ -40,6 +44,8 @@ namespace Habanero.UI.WebGUI
             _controlFactory = controlFactory;
             _editableGridManager = new EditableGridControlManager(this, controlFactory);
             _grid = _controlFactory.CreateEditableGrid();
+            _filterControl = _controlFactory.CreateFilterControl();
+            _buttons = _controlFactory.CreateEditableGridButtonsControl();
             BorderLayoutManager manager = controlFactory.CreateBorderLayoutManager(this);
             manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
         }
@@ -88,8 +94,8 @@ namespace Habanero.UI.WebGUI
                 //TODO: weakness where user could call _control.Grid.Set..(null) directly and bypass the disabling.
                 _grid.SetBusinessObjectCollection(null);
                 _grid.AllowUserToAddRows = false;
-                //this.Buttons.Enabled = false;
-                //this.FilterControl.Enabled = false;
+                this.Buttons.Enabled = false;
+                this.FilterControl.Enabled = false;
                 return;
             }
             if (this.ClassDef == null)
@@ -114,8 +120,30 @@ namespace Habanero.UI.WebGUI
 
             _grid.SetBusinessObjectCollection(boCollection);
 
-            //this.Buttons.Enabled = true;
-            //this.FilterControl.Enabled = true;
+            this.Buttons.Enabled = true;
+            this.FilterControl.Enabled = true;
+        }
+
+        public IEditableGridButtonsControl Buttons
+        {
+            get { return _buttons; }
+        }
+
+        /// <summary>
+        /// returns the filter control for the readonly grid
+        /// </summary>
+        public IFilterControl FilterControl
+        {
+            get { return _filterControl; }
+        }
+
+        /// <summary>
+        /// gets and sets the filter modes for the grid i.e. Filter or search <see cref="FilterModes"/>
+        /// </summary>
+        public FilterModes FilterMode
+        {
+            get { return _filterControl.FilterMode; }
+            set { _filterControl.FilterMode = value; }
         }
     }
 }

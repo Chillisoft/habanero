@@ -17,35 +17,25 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using Habanero.Base;
-using Habanero.BO;
-using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base.FilterControl;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Habanero.UI.Base
 {
-    public interface IEditableGridControl:IGridControl
+    /// <summary>
+    /// Provides a set of buttons for an editable grid control
+    /// </summary>
+    public interface IEditableGridButtonsControl:IButtonGroupControl
     {
         /// <summary>
-        /// Sets the business object collection to display.  Loading of
-        /// the collection needs to be done before it is assigned to the
-        /// grid.  This method assumes a default ui definition is to be
-        /// used, that is a 'ui' element without a 'name' attribute.
+        /// Fires when the Save button is clicked
         /// </summary>
-        /// <param name="boCollection">The new business object collection
-        /// to be shown in the grid</param>
-        void SetBusinessObjectCollection(IBusinessObjectCollection boCollection);
-
-        IEditableGridButtonsControl Buttons { get; }
+        event EventHandler SaveClicked;
 
         /// <summary>
-        /// returns the filter control for the readonly grid
+        /// Fires when the Cancel button is clicked
         /// </summary>
-        IFilterControl FilterControl { get; }
-
-        /// <summary>
-        /// gets and sets the filter modes for the grid i.e. Filter or search <see cref="FilterModes"/>
-        /// </summary>
-        FilterModes FilterMode { get; set; }
+        event EventHandler CancelClicked;
     }
 }

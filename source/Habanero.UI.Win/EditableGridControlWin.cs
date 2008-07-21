@@ -20,6 +20,7 @@
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
+using Habanero.UI.Base.FilterControl;
 using Habanero.UI.Base.Grid;
 
 namespace Habanero.UI.Win
@@ -29,6 +30,7 @@ namespace Habanero.UI.Win
         private readonly IControlFactory _controlFactory;
         private readonly IEditableGrid _grid;
         private readonly EditableGridControlManager _editableGridManager;
+        private IFilterControl _filterControl;
 
         public EditableGridControlWin(IControlFactory controlFactory)
         {
@@ -79,6 +81,28 @@ namespace Habanero.UI.Win
         public void SetBusinessObjectCollection(IBusinessObjectCollection boCollection)
         {
             throw new System.NotImplementedException();
+        }
+
+        public IEditableGridButtonsControl Buttons
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        /// <summary>
+        /// returns the filter control for the readonly grid
+        /// </summary>
+        public IFilterControl FilterControl
+        {
+            get { return _filterControl; }
+        }
+
+        /// <summary>
+        /// gets and sets the filter modes for the grid i.e. Filter or search <see cref="FilterModes"/>
+        /// </summary>
+        public FilterModes FilterMode
+        {
+            get { return _filterControl.FilterMode; }
+            set { _filterControl.FilterMode=value; }
         }
     }
 }
