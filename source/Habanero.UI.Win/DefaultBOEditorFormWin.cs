@@ -75,8 +75,8 @@ namespace Habanero.UI.Win
             _panelFactoryInfo = factory.CreatePanel();
             _boPanel = _panelFactoryInfo.Panel;
             _buttons = _controlFactory.CreateButtonGroupControl();
-            _buttons.AddButton("&Cancel", CancelButtonHandler);
-            IButton okbutton = _buttons.AddButton("&OK", OKButtonHandler);
+            _buttons.AddButton("Cancel", CancelButtonHandler);
+            IButton okbutton = _buttons.AddButton("OK", OKButtonHandler);
             okbutton.NotifyDefault(true);
             this.AcceptButton = (ButtonWin)okbutton;
             this.Load += delegate { FocusOnFirstControl(); };
@@ -174,7 +174,7 @@ namespace Habanero.UI.Win
 
         public IButtonGroupControl Buttons
         {
-            get { throw new NotImplementedException(); }
+            get { return _buttons; }
         }
 
         bool IDefaultBOEditorForm.ShowDialog()

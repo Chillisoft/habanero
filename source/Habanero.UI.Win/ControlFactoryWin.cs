@@ -298,7 +298,7 @@ namespace Habanero.UI.Win
         public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string name,
                                                        PostObjectPersistingDelegate action)
         {
-            throw new NotImplementedException();
+            return new DefaultBOEditorFormWin(bo, name, this, action);
         }
 
         public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo)

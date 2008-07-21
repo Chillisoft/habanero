@@ -49,10 +49,11 @@ namespace Habanero.UI.Win
             //button.Text = buttonName;
             //_layoutManager.AddControl(button);
             //RecalcButtonSizes();
-            //Controls.Add((Control) button);
+            
             //return button;
 
             IButton button = _buttonGroupControlManager.AddButton(buttonName);
+            Controls.Add((Control)button);
             RecalcButtonSizes();
             return button;
         }
@@ -79,7 +80,7 @@ namespace Habanero.UI.Win
             //button.Click += clickHandler;
             //return button;
             IButton button = AddButton(buttonName, buttonName, clickHandler);
-            
+            button.Click += clickHandler;
             return button;
         }
 
@@ -99,6 +100,7 @@ namespace Habanero.UI.Win
             //button.Click += clickHandler;
             //return button;
             IButton button = _buttonGroupControlManager.AddButton(buttonName, buttonText, clickHandler);
+            //Controls.Add((Control)button);
             RecalcButtonSizes();
             ((Button)button).UseMnemonic = true;
             return button;
