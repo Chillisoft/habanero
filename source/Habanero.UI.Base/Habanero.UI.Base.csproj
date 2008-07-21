@@ -63,6 +63,7 @@
     <Compile Include="Grid\IDataGridViewCheckBoxColumn.cs" />
     <Compile Include="Grid\IDataGridViewImageColumn.cs" />
     <Compile Include="Grid\IDataGridViewTextBoxColumn.cs" />
+    <Compile Include="Grid\IEditableGridButtonsControl.cs" />
     <Compile Include="Grid\IGridControl.cs" />
     <Compile Include="Grid\IGridInitialiser.cs" />
     <Compile Include="ICollectionTabControlMapper.cs" />

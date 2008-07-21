@@ -87,6 +87,7 @@
     </Compile>
     <Compile Include="Grid\TestDataGridViewColumn.cs" />
     <Compile Include="Grid\TestDataGridViewDateTimePickerColumn.cs" />
+    <Compile Include="Grid\TestEditableGridButtonsControl.cs" />
     <Compile Include="Grid\TestEditableGridControl.cs" />
     <Compile Include="Grid\TestGridInitialiser.cs" />
     <Compile Include="Grid\TestReadOnlyGrid.cs" />

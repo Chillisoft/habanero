@@ -29,6 +29,7 @@ using Habanero.UI.Base;
 using Habanero.UI.Base.ControlInterfaces;
 using Habanero.UI.Base.FilterControl;
 using Habanero.UI.Base.Grid;
+using Habanero.UI.WebGUI.Grid;
 using Habanero.Util.File;
 using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
@@ -369,6 +370,11 @@ namespace Habanero.UI.WebGUI
         public INumericUpDownMapperStrategy CreateNumericUpDownMapperStrategy()
         {
             return new NumericUpDownMapperStrategyGiz();
+        }
+
+        public IEditableGridButtonsControl CreateEditableGridButtonsControl()
+        {
+            return new EditableGridButtonsControlGiz(this);
         }
 
         public IScreen CreateScreen()

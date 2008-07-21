@@ -94,6 +94,9 @@
     </Compile>
     <Compile Include="Grid\DataGridViewCellStyleGiz.cs" />
     <Compile Include="Grid\DataGridViewColumnGiz.cs" />
+    <Compile Include="Grid\EditableGridButtonsControlGiz.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GroupBoxGiz.cs">
       <SubType>Component</SubType>
     </Compile>

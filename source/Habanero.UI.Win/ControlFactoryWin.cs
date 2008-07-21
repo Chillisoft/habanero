@@ -421,6 +421,11 @@ namespace Habanero.UI.Win
             return new NumericUpDownMapperStrategyWin();
         }
 
+        public IEditableGridButtonsControl CreateEditableGridButtonsControl()
+        {
+            throw new NotImplementedException();
+        }
+
         public IComboBox CreateComboBox()
         {
             return new ComboBoxWin();

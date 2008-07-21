@@ -314,6 +314,7 @@ namespace Habanero.UI.Base
         ILookupComboBoxMapperStrategy CreateLookupComboBoxDefaultMapperStrategy();
         ILookupComboBoxMapperStrategy CreateLookupKeyPressMapperStrategy();
         INumericUpDownMapperStrategy CreateNumericUpDownMapperStrategy();
+        IEditableGridButtonsControl CreateEditableGridButtonsControl();
     }
 
     public interface IScreen

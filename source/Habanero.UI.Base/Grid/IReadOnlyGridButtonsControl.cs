@@ -27,17 +27,24 @@ namespace Habanero.UI.Base
         ///// Returns the button with buttonName
         ///// </summary>
         //IButton this[string buttonName] { get; }
-        event EventHandler DeleteClicked;
+
         /// <summary>
-        /// Fires when the delete button is clicked
+        /// Fires when the Delete button is clicked
         /// </summary>
-        event EventHandler AddClicked;
+        event EventHandler DeleteClicked;
+
         /// <summary>
         /// Fires when the Add button is clicked
         /// </summary>
-        event EventHandler EditClicked;
+        event EventHandler AddClicked;
+
         /// <summary>
         /// Fires when the Edit button is clicked
+        /// </summary>
+        event EventHandler EditClicked;
+        
+        /// <summary>
+        /// Indicates whether the default delete button is visible
         /// </summary>
         bool ShowDefaultDeleteButton { get; set; }
     }
