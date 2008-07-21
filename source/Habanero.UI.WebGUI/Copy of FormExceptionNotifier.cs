@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------------
-// Copyright (C) 2008 Chillisoft Solutions
+// Copyright (C) 2007 Chillisoft Solutions
 // 
 // This file is part of the Habanero framework.
 // 
@@ -16,7 +16,6 @@
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
-
 #pragma warning disable DoNotCallOverridableMethodsInConstructor
 using System;
 using System.Collections.Generic;
@@ -179,7 +178,7 @@ namespace Habanero.UI.WebGUI
                 TextBoxGiz messageTextBox = new TextBoxGiz();
                 messageTextBox.Text = message;
                 messageTextBox.Multiline = true;
-                messageTextBox.ScrollBars = Gizmox.WebGUI.Forms.ScrollBars.Both;
+                messageTextBox.ScrollBars = ScrollBars.Both;
                 messageTextBox.ReadOnly = true;
                 messageTextBox.Font = new Font(messageTextBox.Font.FontFamily, 10);
                 return messageTextBox;
@@ -197,7 +196,7 @@ namespace Habanero.UI.WebGUI
                 _errorDetails = new TextBoxGiz();
                 _errorDetails.Text = ExceptionUtilities.GetExceptionString(_exception, 0, false);
                 _errorDetails.Multiline = true;
-                _errorDetails.ScrollBars = Gizmox.WebGUI.Forms.ScrollBars.Both;
+                _errorDetails.ScrollBars = ScrollBars.Both;
                 _showStackTrace = new CheckBoxGiz();
                 _showStackTrace.Text = "&Show stack trace";
                 _showStackTrace.CheckedChanged += ShowStackTraceClicked;

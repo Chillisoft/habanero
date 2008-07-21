@@ -22,6 +22,7 @@ using System.Collections;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 using KeyPressEventHandler=Habanero.UI.Base.ControlInterfaces.KeyPressEventHandler;
+using ScrollBars=Habanero.UI.Base.ScrollBars;
 
 namespace Habanero.UI.Win
 {
@@ -35,6 +36,12 @@ namespace Habanero.UI.Win
         {
             get { return (Base.DockStyle)base.Dock; }
             set { base.Dock = (System.Windows.Forms.DockStyle)value; }
+        }
+
+        ScrollBars ITextBox.ScrollBars
+        {
+            get { return (ScrollBars)ScrollBars; }
+            set { ScrollBars = (System.Windows.Forms.ScrollBars)value; }
         }
     }
 }

@@ -87,17 +87,12 @@ namespace Habanero.UI.Forms
             _form = new Form();
             _form.Padding = new Padding(5,5,5,5);
             ButtonControl buttons = new ButtonControl();
-            Button cancelButton = buttons.AddButton("Cancel", new EventHandler(CancelButtonClickHandler));
-            Button okButton = buttons.AddButton("OK", new EventHandler(OKButtonClickHandler));
+            Button cancelButton = buttons.AddButton("Cancel", CancelButtonClickHandler);
+            Button okButton = buttons.AddButton("OK", OKButtonClickHandler);
 
             ResizeForm(buttons, okButton);
             BorderLayoutManager borderLayoutManager = new BorderLayoutManager(_form);
             borderLayoutManager.BorderSize = 5;
-            //GridLayoutManager manager = new GridLayoutManager(_form);
-            //manager.SetGridSize(2, 1);
-            //manager.FixAllRowsBasedOnContents();
-            //manager.AddControl(_controlToNest);
-            //manager.AddControl(buttons);
             borderLayoutManager.AddControl(_controlToNest, BorderLayoutManager.Position.Centre);
             borderLayoutManager.AddControl(buttons, BorderLayoutManager.Position.South);
 
@@ -115,17 +110,16 @@ namespace Habanero.UI.Forms
             okButton.NotifyDefault(true);
             _form.CancelButton = cancelButton;
             bool formResizing = false;
-            EventHandler resizeEventHandler = delegate(object sender, EventArgs e)
+            EventHandler resizeEventHandler = delegate
             {
                 if (!formResizing)
                 {
-                    formResizing = true;
                     ResizeForm(buttons, okButton);
                     formResizing = false;
                 }
             };
             EventHandler formCloseEventHandler = null;
-            formCloseEventHandler = delegate(object sender, EventArgs e)
+            formCloseEventHandler = delegate
             {
                 _controlToNest.Resize -= resizeEventHandler;
                 _form.Closed -= formCloseEventHandler;

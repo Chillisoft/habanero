@@ -78,6 +78,8 @@
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
     <Compile Include="ButtonsControl\TestButtonGroupControl.cs" />
+    <Compile Include="TestOKCancelDialog.cs" />
+    <Compile Include="TestTextBox.cs" />
     <Compile Include="Controllers\TestComboBoxCollectionController.cs" />
     <Compile Include="FilterController\TestCompositeFilterClause.cs" />
     <Compile Include="FilterController\TestDataViewNullFilterClause.cs" />
@@ -132,6 +134,7 @@
     <Compile Include="TestFileChooser.cs" />
     <Compile Include="TestGlobalUIRegistry.cs" />
     <Compile Include="TestHelpAboutBox.cs" />
+    <Compile Include="TestInputFormTextBox.cs" />
     <Compile Include="TestLabel.cs" />
     <Compile Include="LayoutManager\TestLayoutManager.cs" />
     <Compile Include="TestListBox.cs" />

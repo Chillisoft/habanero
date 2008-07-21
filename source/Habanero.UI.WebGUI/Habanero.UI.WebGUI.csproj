@@ -113,6 +113,7 @@
     <Compile Include="NumericUpDownGiz.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="OKCancelDialogFactoryGiz.cs" />
     <Compile Include="ProgressBarGiz.cs">
       <SubType>Component</SubType>
     </Compile>

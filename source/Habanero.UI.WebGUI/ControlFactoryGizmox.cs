@@ -377,6 +377,11 @@ namespace Habanero.UI.WebGUI
             return new EditableGridButtonsControlGiz(this);
         }
 
+        public IOKCancelDialogFactory CreateOKCancelDialogFactory()
+        {
+            return new OKCancelDialogFactoryGiz(this);
+        }
+
         public IScreen CreateScreen()
         {
             throw new NotImplementedException();
@@ -642,7 +647,7 @@ namespace Habanero.UI.WebGUI
             tb.Multiline = true;
             tb.AcceptsReturn = true;
             tb.Height = tb.Height*numLines;
-            tb.ScrollBars = ScrollBars.Vertical;
+            tb.ScrollBars = Gizmox.WebGUI.Forms.ScrollBars.Vertical;
             return tb;
         }
 

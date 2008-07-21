@@ -22,6 +22,7 @@ using System.Collections;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 using KeyPressEventHandler=Habanero.UI.Base.ControlInterfaces.KeyPressEventHandler;
+using ScrollBars=Habanero.UI.Base.ScrollBars;
 
 namespace Habanero.UI.WebGUI
 {
@@ -38,6 +39,11 @@ namespace Habanero.UI.WebGUI
             set { base.Dock = (Gizmox.WebGUI.Forms.DockStyle)value; }
         }
 
+        ScrollBars ITextBox.ScrollBars
+        {
+            get { return (ScrollBars) ScrollBars; }
+            set { ScrollBars = (Gizmox.WebGUI.Forms.ScrollBars) value; }
+        }
     }
 
 }

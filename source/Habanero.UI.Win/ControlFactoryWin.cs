@@ -285,7 +285,7 @@ namespace Habanero.UI.Win
             tb.Multiline = true;
             tb.AcceptsReturn = true;
             tb.Height = tb.Height*numLines;
-            tb.ScrollBars = ScrollBars.Vertical;
+            tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             return tb;
         }
 
@@ -424,6 +424,11 @@ namespace Habanero.UI.Win
         public IEditableGridButtonsControl CreateEditableGridButtonsControl()
         {
             throw new NotImplementedException();
+        }
+
+        public IOKCancelDialogFactory CreateOKCancelDialogFactory()
+        {
+            return new OKCancelDialogFactoryWin(this);
         }
 
         public IComboBox CreateComboBox()

@@ -120,6 +120,7 @@
     <Compile Include="NumericUpDownWin.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="OKCancelDialogFactoryWin.cs" />
     <Compile Include="PanelWin.cs">
       <SubType>Component</SubType>
     </Compile>

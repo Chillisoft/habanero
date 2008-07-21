@@ -32,7 +32,7 @@ namespace Habanero.UI.Base
         void PerformClick();
 
         /// <summary>
-        /// Event handler for the click event
+        /// Notifies the button that it is the default button on its form.
         /// </summary>
         /// <param name="b"></param>
         void NotifyDefault(bool b);

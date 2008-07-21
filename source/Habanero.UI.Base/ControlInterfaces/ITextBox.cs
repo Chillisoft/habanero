@@ -22,6 +22,14 @@ using Habanero.UI.Base.ControlInterfaces;
 
 namespace Habanero.UI.Base
 {
+    public enum ScrollBars
+    {
+        None,
+        Horizontal,
+        Vertical,
+        Both
+    }
+
     public interface ITextBox : IControlChilli
     {
         bool Multiline { get; set; }
@@ -29,7 +37,7 @@ namespace Habanero.UI.Base
         bool AcceptsReturn { get; set; }
 
         char PasswordChar { get; set; }
-        //TODO_Port:ScrollBars ScrollBars { get; set; }
+        ScrollBars ScrollBars { get; set; }
 
     }
 }
