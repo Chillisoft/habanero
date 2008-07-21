@@ -104,7 +104,10 @@ namespace Habanero.UI.Win
         public IBusinessObject CurrentBusinessObject
         {
             get { return BOColTabControlManager.CurrentBusinessObject; }
-            set { BOColTabControlManager.CurrentBusinessObject = value; }
+            set { BOColTabControlManager.CurrentBusinessObject = value;
+                
+                BOColTabControlManager.TabChanged(); //required for win because the tabchanged event is not fired.
+        }
         }
 
         private BOColTabControlManager BOColTabControlManager

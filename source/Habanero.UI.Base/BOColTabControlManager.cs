@@ -137,6 +137,7 @@ namespace Habanero.UI.Base
             if (_tabControl.SelectedTab != null)
             {
                 _tabControl.SelectedTab.Controls.Clear();
+                _boControl.Dock = DockStyle.Fill;
                 _tabControl.SelectedTab.Controls.Add(_boControl);
                 if (_boControl != null)
                 {
@@ -201,6 +202,7 @@ namespace Habanero.UI.Base
             {
                 if (value == null) return;
                 TabControl.SelectedIndex = _businessObjectCollection.IndexOf(value);
+                _boControl.BusinessObject = value;
             }
         }
 

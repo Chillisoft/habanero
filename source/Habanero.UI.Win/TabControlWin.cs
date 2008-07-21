@@ -34,16 +34,18 @@ namespace Habanero.UI.Win
             set { base.Dock = (System.Windows.Forms.DockStyle)value; }
         }
 
-        public new ITabPageCollection TabPages
+        ITabPageCollection ITabControl.TabPages
         {
-            get { return new TabPageCollectionWin(base.TabPages); }
+            get { return new TabPageCollectionWin(TabPages); }
         }
 
         public new ITabPage SelectedTab
         {
-            get { return TabPages[base.SelectedIndex]; }
-            set { base.SelectedIndex = TabPages.IndexOf(value); }
+            get { return new TabPageCollectionWin(TabPages)[SelectedIndex]; }
+            set { SelectedIndex = new TabPageCollectionWin(TabPages).IndexOf(value); }
         }
+
+
     }
 
     internal class TabPageCollectionWin : ITabPageCollection

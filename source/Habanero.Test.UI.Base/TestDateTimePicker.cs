@@ -32,7 +32,6 @@ namespace Habanero.Test.UI.Base
     /// This class tests the DateTimePicker control.
     ///  - The issue of the control being nullable or not is tested.
     /// </summary>
-    [TestFixture]
     public abstract class TestDateTimePicker
     {
         protected abstract IControlFactory GetControlFactory();

@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Diagnostics;
 using Habanero.Base;
 using Habanero.BO;
@@ -38,6 +39,7 @@ namespace Habanero.Test.UI.Base
         public void TestSetup()
         {
             ClassDef.ClassDefs.Clear();
+            MyBO.LoadDefaultClassDef();
         }
 
         [TestFixtureSetUp]
@@ -79,123 +81,122 @@ namespace Habanero.Test.UI.Base
             {
                 return new BusinessObjectControlGizStub();
             }
+
+            /// <summary>
+            /// This test doesn't work for Win as it doesn't raise an event when setting the SelectedIndex
+            /// </summary>
+            [Test]
+            public void TestBusinessObjectControlHasDifferentBOWhenTabChanges()
+            {
+                //---------------Set up test pack-------------------
+                IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
+
+                IBusinessObjectControl busControl = GetBusinessObjectControlStub();
+                boColTabControl.BusinessObjectControl = busControl;
+
+                BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
+                MyBO firstBo = new MyBO();
+                myBoCol.Add(firstBo);
+                myBoCol.Add(new MyBO());
+                MyBO thirdBO = new MyBO();
+                myBoCol.Add(thirdBO);
+                boColTabControl.BusinessObjectCollection = myBoCol;
+
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(firstBo, boColTabControl.BusinessObjectControl.BusinessObject);
+
+                //---------------Execute Test ----------------------
+                boColTabControl.TabControl.SelectedIndex = 2;
+
+                //---------------Test Result -----------------------
+                Assert.AreNotSame(firstBo, boColTabControl.BusinessObjectControl.BusinessObject);
+                Assert.AreEqual(thirdBO, boColTabControl.BusinessObjectControl.BusinessObject);
+            }
         }
 
 
         [Test]
         public void TestConstructor()
         {
-            //---------------Set up test pack-------------------
-
             //---------------Execute Test ----------------------
             IBOColTabControl iboColTabControl = GetControlFactory().CreateBOColTabControl();
             
             //---------------Test Result -----------------------
             Assert.IsNotNull(iboColTabControl.TabControl);
             Assert.IsInstanceOfType(typeof(ITabControl), iboColTabControl.TabControl);
-            Assert.IsInstanceOfType(typeof(IControlChilli), iboColTabControl);
-            //Assert.IsNotNull(iboColTabControl.BOColTabControlManager);
-            //---------------Tear down -------------------------
         }
 
-
-        //[Test]
-        //public void TestConstructor()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    ITabControl tabControl = GetControlFactory().CreateTabControl();
-        //    //---------------Execute Test ----------------------
-        //    BOColTabControlManager colTabCtlMapper = new BOColTabControlManager(tabControl, GetControlFactory());
-        //    //---------------Test Result -----------------------
-        //    Assert.IsNotNull(colTabCtlMapper);
-        //    Assert.IsNotNull(colTabCtlMapper.PageBoTable);
-        //    Assert.IsNotNull(colTabCtlMapper.BoPageTable);
-        //    Assert.AreSame(tabControl, colTabCtlMapper.TabControl);
-        //    //---------------Tear down -------------------------
-        //}
-
-
-        //TODO: check this is used
         [Test]
         public void TestSetBusinessObjectControl()
         {
             //---------------Set up test pack-------------------
             IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
+            IBusinessObjectControl busControl = GetBusinessObjectControlStub();
 
             //---------------Execute Test ----------------------
-            IBusinessObjectControl busControl = GetBusinessObjectControlStub();
             boColTabControl.BusinessObjectControl = busControl;
 
             //---------------Test Result -----------------------
             Assert.AreSame(busControl, boColTabControl.BusinessObjectControl);
-            //---------------Tear down -------------------------
         }
 
         [Test]
         public void TestSetCollection()
         {
             //---------------Set up test pack-------------------
-
-            MyBO.LoadDefaultClassDef();
             IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
-            IBusinessObjectControl busControl = GetBusinessObjectControlStub();
-            boColTabControl.BusinessObjectControl = busControl;
-            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
-            myBoCol.Add(new MyBO());
-            myBoCol.Add(new MyBO());
-            myBoCol.Add(new MyBO());
+            BusinessObjectCollection<MyBO> myBoCol = SetupColTabControlWith3ItemCollection(boColTabControl);
+
             //---------------Execute Test ----------------------
-
             boColTabControl.BusinessObjectCollection = myBoCol;
-            //---------------Test Result -----------------------
 
+            //---------------Test Result -----------------------
+            Assert.AreSame(myBoCol, boColTabControl.BusinessObjectCollection);
+            Assert.AreEqual(myBoCol.Count, boColTabControl.TabControl.TabPages.Count);
+        }
+
+        [Test]
+        public void TestSetCollectionTwice()
+        {
+            //---------------Set up test pack-------------------
+            IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
+            BusinessObjectCollection<MyBO> myBoCol = SetupColTabControlWith3ItemCollection(boColTabControl);
+
+            //---------------Execute Test ----------------------
+            boColTabControl.BusinessObjectCollection = myBoCol;
+            boColTabControl.BusinessObjectCollection = myBoCol;
+
+            //---------------Test Result -----------------------
             Assert.AreSame(myBoCol, boColTabControl.BusinessObjectCollection);
             Assert.AreEqual(3, boColTabControl.TabControl.TabPages.Count);
-            //---------------Tear down -------------------------
         }
 
         [Test]
         public void TestGetBo()
         {
             //---------------Set up test pack-------------------
-
-            MyBO.LoadDefaultClassDef();
             IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
-            IBusinessObjectControl busControl = GetBusinessObjectControlStub();
-            boColTabControl.BusinessObjectControl = busControl;
-            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
-            MyBO testBo = new MyBO();
-            myBoCol.Add(new MyBO());
-            myBoCol.Add(testBo);
-            myBoCol.Add(new MyBO());
-            //---------------Execute Test ----------------------
+            BusinessObjectCollection<MyBO> myBoCol = SetupColTabControlWith3ItemCollection(boColTabControl);
 
+            //---------------Execute Test ----------------------
             boColTabControl.BusinessObjectCollection= myBoCol;
+
             //---------------Test Result -----------------------
-            Assert.AreSame(testBo, boColTabControl.GetBo(boColTabControl.TabControl.TabPages[1]));
-            //---------------Tear down -------------------------
+            Assert.AreSame(myBoCol[1], boColTabControl.GetBo(boColTabControl.TabControl.TabPages[1]));
         }
 
         [Test]
         public void TestGetTabPage()
         {
             //---------------Set up test pack-------------------
-
-
-            MyBO.LoadDefaultClassDef();
             IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
+            BusinessObjectCollection<MyBO> myBoCol = SetupColTabControlWith3ItemCollection(boColTabControl);
 
-            IBusinessObjectControl busControl = GetBusinessObjectControlStub();
-            boColTabControl.BusinessObjectControl = busControl;
-            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
-            MyBO testBo = new MyBO();
-            myBoCol.Add(new MyBO());
-            myBoCol.Add(new MyBO());
-            myBoCol.Add(testBo);
             //---------------Execute Test ----------------------
             boColTabControl.BusinessObjectCollection = myBoCol;
+
             //---------------Test Result -----------------------
-            Assert.AreSame(boColTabControl.TabControl.TabPages[2], boColTabControl.GetTabPage(testBo));
+            Assert.AreSame(boColTabControl.TabControl.TabPages[2], boColTabControl.GetTabPage(myBoCol[2]));
             //---------------Tear down -------------------------
         }
 
@@ -211,94 +212,64 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestCurrentBusinessObject_ReturnsNullWhenCollectionIsSetAndThenSetToNull()
         {
-
-            MyBO.LoadDefaultClassDef();
             //---------------Set up test pack-------------------
             IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
-
-            IBusinessObjectControl busControl = GetBusinessObjectControlStub();
-            boColTabControl.BusinessObjectControl = busControl;
-
-            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
-            myBoCol.Add(new MyBO());
-            myBoCol.Add(new MyBO());
-            myBoCol.Add(new MyBO());
+            BusinessObjectCollection<MyBO> myBoCol = SetupColTabControlWith3ItemCollection(boColTabControl);
             boColTabControl.BusinessObjectCollection = myBoCol;
+
             //---------------Assert Precondition----------------
             Assert.IsNotNull(boColTabControl.BusinessObjectCollection);
+
             //---------------Execute Test ----------------------
             boColTabControl.BusinessObjectCollection = null;
+
             //---------------Test Result -----------------------
             Assert.IsNull(boColTabControl.CurrentBusinessObject);
             Assert.IsNull(boColTabControl.BusinessObjectCollection);
         }
 
         [Test]
-        public void TestCurrentBusinessObject_CurrentBusinessObjectIsSetToFirstObjectInCollection()
+        public void TestCurrentBusinessObject_IsSetToFirstObjectInCollection()
         {
-            MyBO.LoadDefaultClassDef();
             //---------------Set up test pack-------------------
             IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
-
-            IBusinessObjectControl busControl = GetBusinessObjectControlStub();
-            boColTabControl.BusinessObjectControl = busControl;
-
-            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
-            MyBO firstBo = new MyBO();
-            myBoCol.Add(firstBo);
-            myBoCol.Add(new MyBO());
-            myBoCol.Add(new MyBO());
+            BusinessObjectCollection<MyBO> myBoCol = SetupColTabControlWith3ItemCollection(boColTabControl);
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             boColTabControl.BusinessObjectCollection = myBoCol;
             //---------------Test Result -----------------------
-            Assert.AreEqual(firstBo,boColTabControl.CurrentBusinessObject);
+            Assert.AreEqual(myBoCol[0],boColTabControl.CurrentBusinessObject);
         }
 
         [Test]
-        public void TestCurrentBusinessObject_CurrentBusinessObjectChangesWhenTabIsChanged()
+        public void TestCurrentBusinessObject_ChangesWhenTabIsChanged()
         {
-            MyBO.LoadDefaultClassDef();
             //---------------Set up test pack-------------------
             IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
-
-            IBusinessObjectControl busControl = GetBusinessObjectControlStub();
-            boColTabControl.BusinessObjectControl = busControl;
-
-            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
-            MyBO thirdBO = new MyBO();
-            myBoCol.Add(new MyBO());
-            myBoCol.Add(new MyBO());
-            myBoCol.Add(thirdBO);
+            BusinessObjectCollection<MyBO> myBoCol = SetupColTabControlWith3ItemCollection(boColTabControl);
             boColTabControl.BusinessObjectCollection = myBoCol;
-            //---------------Assert Precondition----------------
+
             //---------------Execute Test ----------------------
             boColTabControl.TabControl.SelectedTab = boColTabControl.TabControl.TabPages[2];
+
             //---------------Test Result -----------------------
-            Assert.AreEqual(thirdBO, boColTabControl.CurrentBusinessObject);
+            Assert.AreEqual(myBoCol[2], boColTabControl.CurrentBusinessObject);
         }
 
         [Test]
         public void TestCurrentBusinessObject_SettingCurrentBusinessObjectChangesSelectedTab()
         {
-            MyBO.LoadDefaultClassDef();
             //---------------Set up test pack-------------------
             IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
-
-            IBusinessObjectControl busControl = GetBusinessObjectControlStub();
-            boColTabControl.BusinessObjectControl = busControl;
-
-            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
-            MyBO firstBO = new MyBO();
-            myBoCol.Add(firstBO);
-            myBoCol.Add(new MyBO());
-            MyBO thirdBO = new MyBO();
-            myBoCol.Add(thirdBO);
+            BusinessObjectCollection<MyBO> myBoCol = SetupColTabControlWith3ItemCollection(boColTabControl);
             boColTabControl.BusinessObjectCollection = myBoCol;
+
             //---------------Assert Precondition----------------
-            Assert.AreEqual(firstBO, boColTabControl.CurrentBusinessObject);
+            Assert.AreEqual(myBoCol[0], boColTabControl.CurrentBusinessObject);
+
             //---------------Execute Test ----------------------
-            boColTabControl.CurrentBusinessObject = thirdBO;
+            boColTabControl.CurrentBusinessObject = myBoCol[2];
+
             //---------------Test Result -----------------------
             Assert.AreEqual(2, boColTabControl.TabControl.SelectedIndex);
         }
@@ -306,25 +277,18 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestCurrentBusinessObject_SettingCurrentBusinessObjectToNullHasNoEffect()
         {
-            MyBO.LoadDefaultClassDef();
             //---------------Set up test pack-------------------
             IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
-
-            IBusinessObjectControl busControl = GetBusinessObjectControlStub();
-            boColTabControl.BusinessObjectControl = busControl;
-
-            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
-            MyBO firstBO = new MyBO();
-            myBoCol.Add(firstBO);
-            myBoCol.Add(new MyBO());
-            MyBO thirdBO = new MyBO();
-            myBoCol.Add(thirdBO);
+            BusinessObjectCollection<MyBO> myBoCol = SetupColTabControlWith3ItemCollection(boColTabControl);
             boColTabControl.BusinessObjectCollection = myBoCol;
-            boColTabControl.CurrentBusinessObject = thirdBO;
+            boColTabControl.CurrentBusinessObject = myBoCol[2];
+
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, boColTabControl.TabControl.SelectedIndex);
+
             //---------------Execute Test ----------------------
             boColTabControl.CurrentBusinessObject = null;
+
             //---------------Test Result -----------------------
             Assert.AreEqual(2, boColTabControl.TabControl.SelectedIndex);
         }
@@ -332,10 +296,8 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestBusinessObjectControlHasNullBusinessObjectByDefault()
         {
-            MyBO.LoadDefaultClassDef();
             //---------------Set up test pack-------------------
             IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
-
             IBusinessObjectControl busControl = GetBusinessObjectControlStub();
 
             //---------------Assert Precondition----------------
@@ -351,163 +313,124 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestBusinessObjectControlIsSetWhenCollectionIsSet()
         {
-            MyBO.LoadDefaultClassDef();
             //---------------Set up test pack-------------------
             IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
-
-            IBusinessObjectControl busControl = GetBusinessObjectControlStub();
-            boColTabControl.BusinessObjectControl = busControl;
-
-            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
-            MyBO firstBo = new MyBO();
-            myBoCol.Add(firstBo);
-            myBoCol.Add(new MyBO());
-            myBoCol.Add(new MyBO());
+            BusinessObjectCollection<MyBO> myBoCol = SetupColTabControlWith3ItemCollection(boColTabControl);
+            
             //---------------Assert Precondition----------------
             Assert.IsNull(boColTabControl.BusinessObjectControl.BusinessObject);
+
             //---------------Execute Test ----------------------
             boColTabControl.BusinessObjectCollection = myBoCol;
+
             //---------------Test Result -----------------------
-            Assert.AreEqual(firstBo, boColTabControl.BusinessObjectControl.BusinessObject);
+            Assert.AreSame(myBoCol[0], boColTabControl.BusinessObjectControl.BusinessObject);
         }
 
-        //TODO - found out why the win version is not firing and make sure this
-        //  won't affect working apps
-        [Test, Ignore("The SelectedIndexChanged is not firing on the Win side.")]
-        public void TestBusinessObjectControlHasDifferentBOWhenTabChanges()
+        [Test]
+        public void TestBusinessObjectControlIsSetWhenCurrentBusinessObjectIsChanged()
         {
-            MyBO.LoadDefaultClassDef();
             //---------------Set up test pack-------------------
             IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
+            BusinessObjectCollection<MyBO> myBoCol = SetupColTabControlWith3ItemCollection(boColTabControl);
+            boColTabControl.BusinessObjectCollection = myBoCol;
 
+            //---------------Execute Test ----------------------
+            boColTabControl.CurrentBusinessObject = myBoCol[1];
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(myBoCol[1], boColTabControl.BusinessObjectControl.BusinessObject);
+        }
+
+        [Test]
+        public void TestInitialLayout()
+        {
+            //---------------Set up test pack-------------------
+            IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
             IBusinessObjectControl busControl = GetBusinessObjectControlStub();
             boColTabControl.BusinessObjectControl = busControl;
-
             BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
             MyBO firstBo = new MyBO();
             myBoCol.Add(firstBo);
-            myBoCol.Add(new MyBO());
-            MyBO thirdBO = new MyBO();
-            myBoCol.Add(thirdBO);
-            boColTabControl.BusinessObjectCollection = myBoCol;
-
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(firstBo, boColTabControl.BusinessObjectControl.BusinessObject);
 
             //---------------Execute Test ----------------------
-            boColTabControl.TabControl.SelectedIndex = 2;
+            boColTabControl.BusinessObjectCollection = myBoCol;
 
             //---------------Test Result -----------------------
-            Assert.AreNotSame(firstBo, boColTabControl.BusinessObjectControl.BusinessObject);
-            Assert.AreEqual(thirdBO, boColTabControl.BusinessObjectControl.BusinessObject);
+            Assert.AreEqual(1, boColTabControl.TabControl.TabPages[0].Controls.Count);
+            Assert.AreSame(busControl, boColTabControl.TabControl.TabPages[0].Controls[0]);
+            Assert.AreEqual(DockStyle.Fill, busControl.Dock);
+            Assert.AreEqual(firstBo.ToString(), boColTabControl.TabControl.TabPages[0].Text);
         }
 
-        //TODO: still need to do further testing that the bocontrol is correctly placed, has
-        //  the right objects, and also that the tabs get cleared when collections changed
-        //  Also review the old tests below.
-
-        //[
-        //    Test,
-        //    ExpectedException(typeof(ArgumentException),
-        //        "boControl must be of type Control or one of its subtypes.")]
-        //public void TestCheckForControlSubClass()
-        //{
-        //    Mock mock = new DynamicMock(typeof(IBusinessObjectControl));
-        //    IBusinessObjectControl mockBoControl = (IBusinessObjectControl)mock.MockInstance;
-        //    BoTabColControl testControl = new BoTabColControl();
-        //    testControl.SetBusinessObjectControl(mockBoControl);
-        //}
-
-        //[Test]
-        //public void TestNumberOfTabs()
-        //{
-        //    Assert.AreEqual(2, itsTabColControl.TabControl.TabPages.Count);
-        //}
-
-        //[Test]
-        //public void TestCorrespondingBO()
-        //{
-        //    Assert.AreSame(itsBo1, itsTabColControl.GetBo(itsTabColControl.TabControl.TabPages[0]));
-        //    Assert.AreSame(itsBo2, itsTabColControl.GetBo(itsTabColControl.TabControl.TabPages[1]));
-        //}
-
-        //[Test]
-        //public void TestCorrespondingBONull()
-        //{
-        //    Assert.IsNull(itsTabColControl.GetBo(new TabPage()));
-        //}
-
-
-        //[Test]
-        //public void TestGetBoWithNullTab()
-        //{
-        //    Assert.IsNull(itsTabColControl.GetBo(null));
-        //}
-
-        //[Test]
-        //public void TestCorrespondingTabPage()
-        //{
-        //    Assert.AreSame(itsTabColControl.TabControl.TabPages[0], itsTabColControl.GetTabPage(itsBo1));
-        //    Assert.AreSame(itsTabColControl.TabControl.TabPages[1], itsTabColControl.GetTabPage(itsBo2));
-        //}
-
-        //[Test]
-        //public void TestSettingCollectionTwice()
-        //{
-        //    BoTabColControl tabColControl = new BoTabColControl();
-        //    tabColControl.SetBusinessObjectControl(new NullBusinessObjectControl());
-        //    tabColControl.SetCollection(itsCol);
-        //    tabColControl.SetCollection(itsCol);
-        //    Assert.AreEqual(2, itsTabColControl.TabControl.TabPages.Count);
-        //}
-
-        //[Test]
-        //public void TestCurrentBusinessObject()
-        //{
-        //    itsTabColControl.TabControl.SelectedTab = itsTabColControl.TabControl.TabPages[1];
-        //    Assert.AreSame(itsBo2, itsTabColControl.CurrentBusinessObject);
-        //    itsTabColControl.CurrentBusinessObject = itsBo1;
-        //    Assert.AreSame(itsTabColControl.TabControl.TabPages[0], itsTabColControl.TabControl.SelectedTab);
-        //}
-
-
-        //private class NullBusinessObjectControl : Control, IBusinessObjectControl
-        //{
-        //    public void SetBusinessObject(BusinessObject bo)
-        //    {
-        //    }
-        //}
-    }
-
-    internal class BusinessObjectControlGizStub : ControlGiz, IBusinessObjectControl
-    {
-        private IBusinessObject _bo;
-
-        /// <summary>
-        /// Specifies the business object being represented
-        /// </summary>
-        /// <param name="value">The business object</param>
-        public IBusinessObject BusinessObject
+        [Test]
+        public void TestLayoutAfterChangingBusinessObject()
         {
-            get { return _bo; }
-            set { _bo = value; }
+            //---------------Set up test pack-------------------
+            IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
+            IBusinessObjectControl busControl = GetBusinessObjectControlStub();
+            boColTabControl.BusinessObjectControl = busControl;
+            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
+            MyBO firstBo = new MyBO();
+            myBoCol.Add(firstBo);
+            MyBO secondBo = new MyBO();
+            myBoCol.Add(secondBo);
+            myBoCol.Add(new MyBO());
+            boColTabControl.BusinessObjectCollection = myBoCol;
+
+            //---------------Execute Test ----------------------
+            boColTabControl.CurrentBusinessObject = secondBo;
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, boColTabControl.TabControl.TabPages[1].Controls.Count);
+            Assert.AreSame(busControl, boColTabControl.TabControl.TabPages[1].Controls[0]);
         }
-    }
 
-
-    internal class BusinessObjectControlWinStub : ControlWin, IBusinessObjectControl
-    {
-        private IBusinessObject _bo;
-
-        /// <summary>
-        /// Specifies the business object being represented
-        /// </summary>
-        /// <param name="value">The business object</param>
-        public IBusinessObject BusinessObject
+        private BusinessObjectCollection<MyBO> SetupColTabControlWith3ItemCollection(IBOColTabControl boColTabControl)
         {
-            get { return _bo; }
-            set { _bo = value; }
+            IBusinessObjectControl busControl = GetBusinessObjectControlStub();
+            boColTabControl.BusinessObjectControl = busControl;
+            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
+            myBoCol.Add(new MyBO());
+            myBoCol.Add(new MyBO());
+            myBoCol.Add(new MyBO());
+            return myBoCol;
         }
+
+        private class BusinessObjectControlGizStub : ControlGiz, IBusinessObjectControl
+        {
+            private IBusinessObject _bo;
+
+            /// <summary>
+            /// Specifies the business object being represented
+            /// </summary>
+            /// <param name="value">The business object</param>
+            public IBusinessObject BusinessObject
+            {
+                get { return _bo; }
+                set { _bo = value; }
+            }
+        }
+
+        private class BusinessObjectControlWinStub : ControlWin, IBusinessObjectControl
+        {
+            private IBusinessObject _bo;
+
+            /// <summary>
+            /// Specifies the business object being represented
+            /// </summary>
+            /// <param name="value">The business object</param>
+            public IBusinessObject BusinessObject
+            {
+                get { return _bo; }
+                set { _bo = value; }
+            }
+        }
+
     }
+
+
+
+ 
 
 }

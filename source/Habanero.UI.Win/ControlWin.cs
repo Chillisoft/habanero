@@ -22,7 +22,6 @@ using System.Collections;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 
-
 namespace Habanero.UI.Win
 {
     public class ControlWin : Control, IControlChilli
@@ -41,8 +40,8 @@ namespace Habanero.UI.Win
         /// </summary>
         Base.DockStyle IControlChilli.Dock
         {
-            get { return (Base.DockStyle)base.Dock; }
-            set { base.Dock = (System.Windows.Forms.DockStyle)value; }
+            get { return (Base.DockStyle)Enum.Parse(typeof(Base.DockStyle), base.Dock.ToString()); }
+            set { base.Dock = (System.Windows.Forms.DockStyle)Enum.Parse(typeof(System.Windows.Forms.DockStyle), value.ToString()); }
         }
     }
 }

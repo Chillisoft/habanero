@@ -111,7 +111,6 @@
     <Compile Include="Mappers\TestTextBoxMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestBOColTabControl.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="TestControlCollection.cs" />
     <Compile Include="FilterController\TestDataViewFilterClauseFactory.cs" />
@@ -129,6 +128,7 @@
     <Compile Include="TestDefaultBOCreator.cs" />
     <Compile Include="TestDefaultBOEditorForm.cs" />
     <Compile Include="Grid\TestEditableGrid.cs" />
+    <Compile Include="TestDockStyle.cs" />
     <Compile Include="TestFileChooser.cs" />
     <Compile Include="TestGlobalUIRegistry.cs" />
     <Compile Include="TestLabel.cs" />
