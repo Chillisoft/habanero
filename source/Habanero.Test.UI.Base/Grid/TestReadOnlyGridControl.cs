@@ -729,9 +729,7 @@ namespace Habanero.Test.UI.Base
             LoadMyBoDefaultClassDef();
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
-            Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
-            frm.Controls.Add((Gizmox.WebGUI.Forms.Control) readOnlyGridControl);
-
+            AddControlToForm(readOnlyGridControl);
             //---------------Execute Test ----------------------
             readOnlyGridControl.Initialise(Sample.CreateClassDefGiz());
             try

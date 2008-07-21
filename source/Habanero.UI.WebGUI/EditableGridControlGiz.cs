@@ -85,21 +85,25 @@ namespace Habanero.UI.WebGUI
         {
             if (boCollection == null)
             {
+                //TODO: weakness where user could call _control.Grid.Set..(null) directly and bypass the disabling.
                 _grid.SetBusinessObjectCollection(null);
+                _grid.AllowUserToAddRows = false;
+                //this.Buttons.Enabled = false;
+                //this.FilterControl.Enabled = false;
                 return;
             }
-            //if (this.ClassDef == null)
-            //{
-            //    Initialise(boCollection.ClassDef);
-            //}
-            //else
-            //{
-            //    if (this.ClassDef != boCollection.ClassDef)
-            //    {
-            //        throw new ArgumentException(
-            //            "You cannot call set collection for a collection that has a different class def than is initialised");
-            //    }
-            //}
+            if (this.ClassDef == null)
+            {
+                Initialise(boCollection.ClassDef);
+            }
+            else
+            {
+                if (this.ClassDef != boCollection.ClassDef)
+                {
+                    throw new ArgumentException(
+                        "You cannot call set collection for a collection that has a different class def than is initialised");
+                }
+            }
             //if (this.BusinessObjectCreator is DefaultBOCreator)
             //{
             //    this.BusinessObjectCreator = new DefaultBOCreator(boCollection);

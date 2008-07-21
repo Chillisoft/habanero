@@ -83,8 +83,6 @@ namespace Habanero.UI.Base
 
             _gridLoader(_gridBase, _boCol);
 
-//            _gridBase.AllowUserToAddRows = false;
-
             if (_gridBase.Rows.Count > 0)
             {
                 SelectedBusinessObject = null;

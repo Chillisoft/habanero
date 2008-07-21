@@ -189,6 +189,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------
         }
 
+
         [Test]
         public void TestSetCollectionOnGrid_NoOfRows()
         {
@@ -201,9 +202,12 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             editableGrid.SetBusinessObjectCollection(col);
             //---------------Test Result -----------------------
-            Assert.AreEqual(col.Count + 1, editableGrid.Rows.Count, "should be 4 item 4 adding item");
+            Assert.AreEqual(col.Count + 1, editableGrid.Rows.Count, "should be 4 item 1 adding item");
             //---------------Tear Down -------------------------    
         }
+
+
+
 
         [Test]
         public void TestSetupColumnAsTextBoxType()

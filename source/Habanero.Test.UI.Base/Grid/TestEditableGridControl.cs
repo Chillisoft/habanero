@@ -496,6 +496,134 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void TestSetCollection_Null_ClearsTheGrid()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IEditableGridControl editableGridControl = CreateEditableGridControl();
+            AddControlToForm(editableGridControl);
+            editableGridControl.Grid.Columns.Add("TestProp", "TestProp");
+            editableGridControl.SetBusinessObjectCollection(col);
+            //----------------Assert Preconditions --------------
+
+            Assert.IsTrue(editableGridControl.Grid.Rows.Count > 0, "There should be items in teh grid b4 clearing");
+            //---------------Execute Test ----------------------
+            editableGridControl.SetBusinessObjectCollection(null);
+            //---------------Verify Result ---------------------
+            Assert.AreEqual(0, editableGridControl.Grid.Rows.Count,
+                            "There should be no items in the grid  after setting to null");
+            //TODO: Uncomment when these have been added.
+            //Assert.IsFalse(editableGridControl.Buttons.Enabled);
+            //Assert.IsFalse(editableGridControl.FilterControl.Enabled);
+        }
+
+
+
+        [Test] public void TestSetCollection_Empty_HasOnlyOneRow()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            IEditableGridControl editableGridControl = CreateEditableGridControl();
+            AddControlToForm(editableGridControl);
+           
+            //----------------Assert Preconditions --------------
+
+          
+            //---------------Execute Test ----------------------
+            editableGridControl.SetBusinessObjectCollection(col);
+            //---------------Verify Result ---------------------
+            Assert.AreEqual(1, editableGridControl.Grid.Rows.Count,
+                            "There should be one item in the grid  after setting to empty collection");
+        }
+
+        [Test, Ignore("Still need to add buttons and filter control.")]
+        public void TestSetCollection_NullCol_ThenNonNullEnablesButtons()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IEditableGridControl editableGridControl = CreateEditableGridControl();
+            AddControlToForm(editableGridControl);
+            editableGridControl.SetBusinessObjectCollection(col);
+            editableGridControl.SetBusinessObjectCollection(null);
+            //----------------Assert Preconditions --------------
+            //TODO: Uncomment when these have been added.
+            //Assert.IsFalse(editableGridControl.Buttons.Enabled);
+            //Assert.IsFalse(editableGridControl.FilterControl.Enabled);
+            //---------------Execute Test ----------------------
+            editableGridControl.SetBusinessObjectCollection(col);
+            //---------------Verify Result ---------------------
+            //TODO: Uncomment when these have been added.
+            // Assert.IsTrue(editableGridControl.Buttons.Enabled);
+            //Assert.IsTrue(editableGridControl.FilterControl.Enabled);
+        }
+
+        [Test]
+        public void TestSetCollection_InitialisesGridIfNotPreviouslyInitialised()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IEditableGridControl editableGridControl = CreateEditableGridControl();
+
+            //---------------Execute Test ----------------------
+            editableGridControl.SetBusinessObjectCollection(col);
+            ////---------------Test Result -----------------------
+            Assert.AreEqual("default", editableGridControl.UiDefName);
+            Assert.AreEqual(col.ClassDef, editableGridControl.ClassDef);
+        }
+
+        [Test]
+        public void TestSetCollection_NotInitialiseGrid_IfPreviouslyInitialised()
+        {
+            //Verify that setting the collection for a grid that is already initialised
+            //does not cause it to be reinitialised.
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = LoadMyBoDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            string alternateUIDefName = "Alternate";
+            IEditableGridControl editableGridControl = CreateEditableGridControl();
+
+            editableGridControl.Initialise(classDef, alternateUIDefName);
+            //---------------Execute Test ----------------------
+            editableGridControl.SetBusinessObjectCollection(col);
+            ////---------------Test Result -----------------------
+            Assert.AreEqual(alternateUIDefName, editableGridControl.UiDefName);
+        }
+
+        [Test]
+        public void TestSetCollection_IncorrectClassDef()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IEditableGridControl editableGridControl = CreateEditableGridControl();
+            //Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
+            //frm.Controls.Add((Gizmox.WebGUI.Forms.Control)readOnlyGridControl);
+            AddControlToForm(editableGridControl);
+            //---------------Execute Test ----------------------
+            editableGridControl.Initialise(Sample.CreateClassDefGiz());
+            try
+            {
+                editableGridControl.SetBusinessObjectCollection(col);
+                Assert.Fail(
+                    "You cannot call set collection for a collection that has a different class def than is initialised");
+                ////---------------Test Result -----------------------
+            }
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains(
+                    "You cannot call set collection for a collection that has a different class def than is initialised",
+                    ex.Message);
+            }
+        }
+
+
+
+        [Test]
         public void TestSetCollection_NumberOfGridRows_Correct()
         {
             //---------------Set up test pack-------------------
