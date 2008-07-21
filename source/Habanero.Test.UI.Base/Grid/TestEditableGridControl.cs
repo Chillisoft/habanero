@@ -472,6 +472,7 @@ namespace Habanero.Test.UI.Base
             
             Assert.IsFalse(editableGridControl.Buttons.Enabled);
             Assert.IsFalse(editableGridControl.FilterControl.Enabled);
+            Assert.IsFalse(editableGridControl.Grid.AllowUserToAddRows);
         }
 
 
@@ -492,6 +493,7 @@ namespace Habanero.Test.UI.Base
             //---------------Verify Result ---------------------
             Assert.AreEqual(1, editableGridControl.Grid.Rows.Count,
                             "There should be one item in the grid  after setting to empty collection");
+            Assert.IsTrue(editableGridControl.Grid.AllowUserToAddRows);
         }
 
         [Test]
@@ -508,12 +510,14 @@ namespace Habanero.Test.UI.Base
           
             Assert.IsFalse(editableGridControl.Buttons.Enabled);
             Assert.IsFalse(editableGridControl.FilterControl.Enabled);
+            Assert.AreEqual(0, editableGridControl.Grid.Rows.Count);
             //---------------Execute Test ----------------------
             editableGridControl.SetBusinessObjectCollection(col);
             //---------------Verify Result ---------------------
-           
-             Assert.IsTrue(editableGridControl.Buttons.Enabled);
+            Assert.IsTrue(editableGridControl.Buttons.Enabled);
             Assert.IsTrue(editableGridControl.FilterControl.Enabled);
+            Assert.AreEqual(5, editableGridControl.Grid.Rows.Count);
+            Assert.IsTrue(editableGridControl.Grid.AllowUserToAddRows);
         }
 
         [Test]
@@ -592,7 +596,7 @@ namespace Habanero.Test.UI.Base
             editableGrid.Columns.Add("TestProp", "TestProp");
 
             //--------------Assert PreConditions----------------   
-            Assert.AreEqual(4, col.Count);
+            Assert.AreEqual(1, editableGrid.Rows.Count);
 
             //---------------Execute Test ----------------------
             editableGridControl.SetBusinessObjectCollection(col);
@@ -657,26 +661,41 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------        
         }
 
+        [Test, Ignore("Get cancel button to call reject changes on grid")]
+        public void TestButtonsControl_ClickCancelRestoresGridToOriginalState()
+        {
+            //---------------Set up test pack-------------------
+            //Get Grid with 4 items
+            BusinessObjectCollection<MyBO> col;
+            IEditableGridControl gridControl = GetGridWith_5_Rows(out col);
+            AddControlToForm(gridControl);
+            //--------------Assert PreConditions
+            Assert.AreEqual(5, gridControl.Grid.Rows.Count);
+            //---------------Execute Test ----------------------
+            gridControl.Buttons["Cancel"].PerformClick();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, gridControl.Grid.Rows.Count);
+        }
 
-        //[Test]
-        //public void TestAcceptance_FilterGrid()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    //Get Grid with 4 items
-        //    BusinessObjectCollection<MyBO> col;
-        //    IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col);
-        //    AddControlToForm(readOnlyGridControl);
-        //    ITextBox tb = readOnlyGridControl.FilterControl.AddStringFilterTextBox("Test Prop", "TestProp");
-        //    //--------------Assert PreConditions
-        //    Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
-        //    //---------------Execute Test ----------------------
-        //    //enter data in filter for 1 item
-        //    tb.Text = "b";
-        //    readOnlyGridControl.FilterControl.ApplyFilter();
-        //    //---------------Assert Result -----------------------
-        //    // verify that grid has only 1 item in it  
-        //    Assert.AreEqual(1, readOnlyGridControl.Grid.Rows.Count);
-        //}
+        [Test]
+        public void TestAcceptance_FilterGrid()
+        {
+            //---------------Set up test pack-------------------
+            //Get Grid with 4 items
+            BusinessObjectCollection<MyBO> col;
+            IEditableGridControl gridControl = GetGridWith_5_Rows(out col);
+            //AddControlToForm(readOnlyGridControl);
+            ITextBox tb = gridControl.FilterControl.AddStringFilterTextBox("Test Prop", "TestProp");
+            //--------------Assert PreConditions
+            Assert.AreEqual(5, gridControl.Grid.Rows.Count);
+            //---------------Execute Test ----------------------
+            //enter data in filter for 1 item
+            tb.Text = "b";
+            gridControl.FilterControl.ApplyFilter();
+            //---------------Assert Result -----------------------
+            // verify that grid has only 2 items in it (includes new row)
+            Assert.AreEqual(2, gridControl.Grid.Rows.Count);
+        }
 
         //[Test]
         //public void Test_Acceptance_Filter_When_On_Page2_Of_Pagination()
@@ -684,7 +703,7 @@ namespace Habanero.Test.UI.Base
         //    //---------------Set up test pack-------------------
         //    //Get Grid with 4 items
         //    BusinessObjectCollection<MyBO> col;
-        //    IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col);
+        //    IReadOnlyGridControl readOnlyGridControl = GetGridWith_5_Rows(out col);
         //    AddControlToForm(readOnlyGridControl);
         //    ITextBox tb = readOnlyGridControl.FilterControl.AddStringFilterTextBox("Test Prop", "TestProp");
         //    //Set items per page to 3 items
@@ -805,6 +824,21 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             col.Add(cp, cp2, cp3, cp4);
             return col;
+        }
+
+        private IEditableGridControl GetGridWith_5_Rows(out BusinessObjectCollection<MyBO> col)
+        {
+            LoadMyBoDefaultClassDef();
+            col = CreateCollectionWith_4_Objects();
+            IEditableGridControl gridControl = CreateEditableGridControl();
+            SetupGridColumnsForMyBo(gridControl.Grid);
+            gridControl.SetBusinessObjectCollection(col);
+            return gridControl;
+        }
+
+        private static void SetupGridColumnsForMyBo(IGridBase gridBase)
+        {
+            gridBase.Columns.Add("TestProp", "TestProp");
         }
     }
 }

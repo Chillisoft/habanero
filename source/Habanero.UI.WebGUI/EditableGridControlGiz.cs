@@ -21,6 +21,7 @@ using System;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.Base.FilterControl;
@@ -44,10 +45,51 @@ namespace Habanero.UI.WebGUI
             _controlFactory = controlFactory;
             _editableGridManager = new EditableGridControlManager(this, controlFactory);
             _grid = _controlFactory.CreateEditableGrid();
-            _filterControl = _controlFactory.CreateFilterControl();
             _buttons = _controlFactory.CreateEditableGridButtonsControl();
+            _filterControl = _controlFactory.CreateFilterControl();
+            InitialiseButtons();
+            InitialiseFilterControl();
+            
             BorderLayoutManager manager = controlFactory.CreateBorderLayoutManager(this);
             manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
+        }
+
+        private void InitialiseButtons()
+        {
+            _buttons.CancelClicked += Buttons_CancelClicked;
+            //_buttons.EditClicked += Buttons_EditClicked;
+            //_buttons.DeleteClicked += Buttons_DeleteClicked;
+            //_buttons.Name = "ButtonControl";
+        }
+
+        private void InitialiseFilterControl()
+        {
+            _filterControl.Filter += _filterControl_OnFilter;
+        }
+
+        private void _filterControl_OnFilter(object sender, EventArgs e)
+        {
+            //this.Grid.CurrentPage = 1;
+            //if (FilterMode == FilterModes.Search)
+            //{
+            //    BusinessObjectCollection<BusinessObject> collection =
+            //        new BusinessObjectCollection<BusinessObject>(this.ClassDef);
+            //    string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
+            //    if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
+            //    {
+            //        if (!string.IsNullOrEmpty(searchClause))
+            //        {
+            //            searchClause += " AND ";
+            //        }
+            //        searchClause += AdditionalSearchCriteria;
+            //    }
+            //    collection.Load(searchClause, OrderBy);
+            //    SetBusinessObjectCollection(collection);
+            //}
+            //else
+            {
+                this.Grid.ApplyFilter(_filterControl.GetFilterClause());
+            }
         }
 
         public IGridBase Grid
@@ -122,6 +164,7 @@ namespace Habanero.UI.WebGUI
 
             this.Buttons.Enabled = true;
             this.FilterControl.Enabled = true;
+            _grid.AllowUserToAddRows = true;
         }
 
         public IEditableGridButtonsControl Buttons
@@ -144,6 +187,13 @@ namespace Habanero.UI.WebGUI
         {
             get { return _filterControl.FilterMode; }
             set { _filterControl.FilterMode = value; }
+        }
+
+        private void Buttons_CancelClicked(object sender, EventArgs e)
+        {
+            //TODO - until RestoreAll is done on BOCol, simply do what old EditableGrid did
+            //  and call RejectChanges on the DataTable of the grid
+            throw new NotImplementedException();
         }
     }
 }
