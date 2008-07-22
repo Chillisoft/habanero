@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Data;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.BO;
@@ -31,11 +32,34 @@ namespace Habanero.UI.WebGUI
         {
             this.AllowUserToAddRows = true;
             this.SelectionMode = DataGridViewSelectionMode.CellSelect;
+
         }
 
         public override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
         {
             return new EditableDataSetProvider(col);
+        }
+
+        /// <summary>
+        /// Restore the grid to its previous saved state.
+        /// </summary>
+        public void RejectChanges()
+        {
+            if (this.DataSource is DataView)
+            {
+                ((DataView)this.DataSource).Table.RejectChanges();
+            }
+        }
+
+        /// <summary>
+        /// Saves the changes made to the data in the grid.
+        /// </summary>
+        public void SaveChanges()
+        {
+            if (this.DataSource is DataView)
+            {
+                ((DataView)this.DataSource).Table.AcceptChanges();
+            }
         }
     }
 }

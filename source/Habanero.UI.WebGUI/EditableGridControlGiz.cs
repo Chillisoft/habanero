@@ -57,10 +57,12 @@ namespace Habanero.UI.WebGUI
         private void InitialiseButtons()
         {
             _buttons.CancelClicked += Buttons_CancelClicked;
-            //_buttons.EditClicked += Buttons_EditClicked;
+            _buttons.SaveClicked += Buttons_SaveClicked;
             //_buttons.DeleteClicked += Buttons_DeleteClicked;
             //_buttons.Name = "ButtonControl";
         }
+
+      
 
         private void InitialiseFilterControl()
         {
@@ -191,9 +193,12 @@ namespace Habanero.UI.WebGUI
 
         private void Buttons_CancelClicked(object sender, EventArgs e)
         {
-            //TODO - until RestoreAll is done on BOCol, simply do what old EditableGrid did
-            //  and call RejectChanges on the DataTable of the grid
-            throw new NotImplementedException();
+           this._grid.RejectChanges();
+        }  
+        
+        private void Buttons_SaveClicked(object sender, EventArgs e)
+        {
+            this._grid.SaveChanges();
         }
     }
 }

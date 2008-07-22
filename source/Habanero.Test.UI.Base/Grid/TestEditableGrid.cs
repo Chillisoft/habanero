@@ -189,6 +189,82 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------
         }
 
+        [Test]
+        public void TestRejectChanges()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+            AddControlToForm(editableGrid);
+            SetupGridColumnsForMyBo(editableGrid);
+            editableGrid.SetBusinessObjectCollection(col);
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(5,editableGrid.Rows.Count);
+            Assert.AreEqual("b", editableGrid.Rows[0].Cells[0].Value);
+            //---------------Execute Test ----------------------
+            editableGrid.Rows[0].Cells[0].Value = "test";
+            //---------------Assert Precondition----------------
+            Assert.AreEqual("test", editableGrid.Rows[0].Cells[0].Value);
+            //---------------Execute Test ----------------------
+            editableGrid.RejectChanges();
+            //---------------Test Result -----------------------
+            Assert.AreEqual("b", editableGrid.Rows[0].Cells[0].Value);
+        }
+
+        [Test]
+        public void TestSaveChanges()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            //---------------Clean from previous tests----------
+            string originalText = "testsavechanges";
+            string newText = "testsavechanges_edited";
+            MyBO oldBO1 = BOLoader.Instance.GetBusinessObject<MyBO>("TestProp='" + originalText + "'");
+            if (oldBO1 != null)
+            {
+                oldBO1.Delete();
+                oldBO1.Save();
+            }
+            MyBO oldBO2 = BOLoader.Instance.GetBusinessObject<MyBO>("TestProp='" + newText + "'");
+            if (oldBO2 != null)
+            {
+                oldBO2.Delete();
+                oldBO2.Save();
+            }
+            
+            MyBO bo = new MyBO();
+            bo.TestProp = originalText;
+            bo.Save();
+
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            col.Add(bo);
+
+            IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+            AddControlToForm(editableGrid);
+            SetupGridColumnsForMyBo(editableGrid);
+            editableGrid.SetBusinessObjectCollection(col);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, editableGrid.Rows.Count);
+            Assert.AreEqual(originalText, editableGrid.Rows[0].Cells[0].Value);
+            MyBO nullBO = BOLoader.Instance.GetBusinessObject<MyBO>("TestProp='" + newText + "'");
+            Assert.IsNull(nullBO);
+            //---------------Execute Test ----------------------
+            editableGrid.Rows[0].Cells[0].Value = newText;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(newText, editableGrid.Rows[0].Cells[0].Value);
+            //---------------Execute Test ----------------------
+            editableGrid.SaveChanges();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(newText, editableGrid.Rows[0].Cells[0].Value);
+            MyBO savedBO = BOLoader.Instance.GetBusinessObject<MyBO>("TestProp='" + newText + "'");
+            Assert.IsNotNull(savedBO);
+            //---------------Tear Down--------------------------
+            savedBO.Delete();
+            savedBO.Save();
+        }
+
 
         [Test]
         public void TestSetCollectionOnGrid_NoOfRows()

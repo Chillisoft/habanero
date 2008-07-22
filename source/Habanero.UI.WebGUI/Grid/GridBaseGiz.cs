@@ -48,6 +48,7 @@ namespace Habanero.UI.WebGUI
 
         public GridBaseGiz()
         {
+            
             _manager = new GridBaseManager(this);
             this.SelectionChanged += delegate { FireBusinessObjectSelected(); };
             _manager.CollectionChanged += delegate { FireCollectionChanged(); };

@@ -37,7 +37,7 @@ namespace Habanero.Test.UI.Base
     /// - FilterControl
     /// - Custom methods like one that changes behaviour of combobox clicking and pressing delete button
     /// </summary>
-    public abstract class TestEditableGridControl
+    public abstract class TestEditableGridControl : TestUsingDatabase
     {
         [SetUp]
         public void SetupTest()
@@ -50,7 +50,7 @@ namespace Habanero.Test.UI.Base
         {
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
-            // base.SetupDBConnection();
+            base.SetupDBConnection();
         }
 
         [TearDown]
@@ -661,7 +661,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------        
         }
 
-        [Test, Ignore("Get cancel button to call reject changes on grid")]
+        [Test]
         public void TestButtonsControl_ClickCancelRestoresGridToOriginalState()
         {
             //---------------Set up test pack-------------------
@@ -669,12 +669,69 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> col;
             IEditableGridControl gridControl = GetGridWith_5_Rows(out col);
             AddControlToForm(gridControl);
-            //--------------Assert PreConditions
+            //---------------Assert Precondition----------------
             Assert.AreEqual(5, gridControl.Grid.Rows.Count);
+            Assert.AreEqual("b", gridControl.Grid.Rows[0].Cells[1].Value);
+            //---------------Execute Test ----------------------
+            gridControl.Grid.Rows[0].Cells[1].Value = "test";
+            //---------------Assert Precondition----------------
+            Assert.AreEqual("test", gridControl.Grid.Rows[0].Cells[1].Value);
             //---------------Execute Test ----------------------
             gridControl.Buttons["Cancel"].PerformClick();
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, gridControl.Grid.Rows.Count);
+            Assert.AreEqual("b", gridControl.Grid.Rows[0].Cells[1].Value);
+        }
+
+        [Test]
+        public void TestButtonsControl_ClickSaveAcceptsChanges()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            //---------------Clean from previous tests----------
+            string originalText = "testsavechanges";
+            string newText = "testsavechanges_edited";
+            MyBO oldBO1 = BOLoader.Instance.GetBusinessObject<MyBO>("TestProp='" + originalText + "'");
+            if (oldBO1 != null)
+            {
+                oldBO1.Delete();
+                oldBO1.Save();
+            }
+            MyBO oldBO2 = BOLoader.Instance.GetBusinessObject<MyBO>("TestProp='" + newText + "'");
+            if (oldBO2 != null)
+            {
+                oldBO2.Delete();
+                oldBO2.Save();
+            }
+
+            MyBO bo = new MyBO();
+            bo.TestProp = originalText;
+            bo.Save();
+
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            col.Add(bo);
+
+            IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
+            AddControlToForm(gridControl.Grid);
+            SetupGridColumnsForMyBo(gridControl.Grid);
+            gridControl.Grid.SetBusinessObjectCollection(col);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, gridControl.Grid.Rows.Count);
+            Assert.AreEqual(originalText, gridControl.Grid.Rows[0].Cells[0].Value);
+            MyBO nullBO = BOLoader.Instance.GetBusinessObject<MyBO>("TestProp='" + newText + "'");
+            Assert.IsNull(nullBO);
+            //---------------Execute Test ----------------------
+            gridControl.Grid.Rows[0].Cells[0].Value = newText;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(newText, gridControl.Grid.Rows[0].Cells[0].Value);
+            //---------------Execute Test ----------------------
+            gridControl.Buttons["Save"].PerformClick();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(newText, gridControl.Grid.Rows[0].Cells[0].Value);
+            MyBO savedBO = BOLoader.Instance.GetBusinessObject<MyBO>("TestProp='" + newText + "'");
+            Assert.IsNotNull(savedBO);
+            //---------------Tear Down--------------------------
+            savedBO.Delete();
+            savedBO.Save();
         }
 
         [Test]

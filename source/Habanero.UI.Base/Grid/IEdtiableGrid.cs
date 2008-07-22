@@ -33,5 +33,15 @@ namespace Habanero.UI.Base
         //bool AllowUserToAddRows { get; }
 
         //bool AllowUserToDeleteRows { get; }
+        
+        /// <summary>
+        /// Restore the grid to its previous saved state.
+        /// </summary>
+        void RejectChanges();
+
+        /// <summary>
+        /// Saves the changes made to the data in the grid.
+        /// </summary>
+        void SaveChanges();
     }
 }
