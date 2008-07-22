@@ -88,6 +88,7 @@
     <Compile Include="IFormControl.cs" />
     <Compile Include="IFormController.cs" />
     <Compile Include="IListView.cs" />
+    <Compile Include="InputFormComboBox.cs" />
     <Compile Include="InputFormTextBox.cs" />
     <Compile Include="IOKCancelDialogFactory.cs" />
     <Compile Include="LayoutManagers\ColumnLayoutManager.cs" />

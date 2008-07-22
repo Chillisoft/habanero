@@ -79,6 +79,7 @@
     </Compile>
     <Compile Include="ButtonsControl\TestButtonGroupControl.cs" />
     <Compile Include="TestDialogResult.cs" />
+    <Compile Include="TestInputFormComboBox.cs" />
     <Compile Include="TestOKCancelDialog.cs" />
     <Compile Include="TestTextBox.cs" />
     <Compile Include="Controllers\TestComboBoxCollectionController.cs" />
