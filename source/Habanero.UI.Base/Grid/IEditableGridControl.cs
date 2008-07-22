@@ -47,5 +47,7 @@ namespace Habanero.UI.Base
         /// gets and sets the filter modes for the grid i.e. Filter or search <see cref="FilterModes"/>
         /// </summary>
         FilterModes FilterMode { get; set; }
+
+    
     }
 }

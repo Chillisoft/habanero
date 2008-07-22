@@ -36,7 +36,9 @@ namespace Habanero.UI.WebGUI
         private readonly EditableGridControlManager _editableGridManager;
         private IEditableGridButtonsControl _buttons;
         private IFilterControl _filterControl;
- 
+        private string _orderBy;
+        private string _additionalSearchCriteria;
+
 
         public EditableGridControlGiz(IControlFactory controlFactory)
         {
@@ -71,24 +73,24 @@ namespace Habanero.UI.WebGUI
 
         private void _filterControl_OnFilter(object sender, EventArgs e)
         {
-            //this.Grid.CurrentPage = 1;
-            //if (FilterMode == FilterModes.Search)
-            //{
-            //    BusinessObjectCollection<BusinessObject> collection =
-            //        new BusinessObjectCollection<BusinessObject>(this.ClassDef);
-            //    string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
-            //    if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
-            //    {
-            //        if (!string.IsNullOrEmpty(searchClause))
-            //        {
-            //            searchClause += " AND ";
-            //        }
-            //        searchClause += AdditionalSearchCriteria;
-            //    }
-            //    collection.Load(searchClause, OrderBy);
-            //    SetBusinessObjectCollection(collection);
-            //}
-            //else
+            this.Grid.CurrentPage = 1;
+            if (FilterMode == FilterModes.Search)
+            {
+                BusinessObjectCollection<BusinessObject> collection =
+                    new BusinessObjectCollection<BusinessObject>(this.ClassDef);
+                string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
+                if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
+                {
+                    if (!string.IsNullOrEmpty(searchClause))
+                    {
+                        searchClause += " AND ";
+                    }
+                    searchClause += AdditionalSearchCriteria;
+                }
+                collection.Load(searchClause, OrderBy);
+                SetBusinessObjectCollection(collection);
+            }
+            else
             {
                 this.Grid.ApplyFilter(_filterControl.GetFilterClause());
             }
@@ -189,6 +191,27 @@ namespace Habanero.UI.WebGUI
         {
             get { return _filterControl.FilterMode; }
             set { _filterControl.FilterMode = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets the default order by clause used for loading the grid when the <see cref="FilterMode"/>
+        /// is Search see <see cref="FilterModes"/>
+        /// </summary>
+        public string OrderBy
+        {
+            get { return _orderBy; }
+            set { _orderBy = value;}
+        }
+
+        /// <summary>
+        /// Gets and sets the standard search criteria used for loading the grid when the <see cref="FilterMode"/>
+        /// is Search see <see cref="FilterModes"/>. This search criteria will be And (ed) to any search criteria returned
+        /// by the FilterControl.
+        /// </summary>
+        public string AdditionalSearchCriteria
+        {
+            get { return _additionalSearchCriteria; }
+            set { _additionalSearchCriteria = value; }
         }
 
         private void Buttons_CancelClicked(object sender, EventArgs e)

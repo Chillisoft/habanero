@@ -445,6 +445,34 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
+        public static ClassDef LoadClassDefOrganisationTestBORelationship()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" />
+                    <property  name=""FirstName"" compulsory=""true"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+                    <property  name=""OrganisationID"" type=""Guid"" >
+                      <businessObjectLookupList class=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" />
+                    </property>
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""OrganisationID"" property=""OrganisationID"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+                    </ui>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
 
         #region Properties
 

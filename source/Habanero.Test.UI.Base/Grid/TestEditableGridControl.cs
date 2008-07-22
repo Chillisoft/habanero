@@ -23,6 +23,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
+using Habanero.UI.Base.Grid;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
 using NUnit.Framework;
@@ -31,8 +32,6 @@ namespace Habanero.Test.UI.Base
 {
     /// <summary>
     /// TODO:
-    /// - ButtonsControl
-    ///   - still to attach handlers to Save and Cancel buttons, and test (may need database writing)
     /// - ComboBox population
     /// - FilterControl
     /// - Custom methods like one that changes behaviour of combobox clicking and pressing delete button
@@ -63,6 +62,7 @@ namespace Habanero.Test.UI.Base
         protected abstract void AssertIsTextBoxColumnType(IDataGridViewColumn dataGridViewColumn);
         protected abstract void AssertIsCheckBoxColumnType(IDataGridViewColumn dataGridViewColumn);
         protected abstract void AssertIsComboBoxColumnType(IDataGridViewColumn dataGridViewColumn);
+        protected abstract void AssertComboBoxItemCount(IDataGridViewColumn dataGridViewColumn, int expectedCount);
         protected abstract IEditableGridControl CreateEditableGridControl();
 
         //[TestFixture]
@@ -156,6 +156,13 @@ namespace Habanero.Test.UI.Base
                 DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz) dataGridViewColumn;
                 Assert.IsInstanceOfType
                     (typeof (Gizmox.WebGUI.Forms.DataGridViewComboBoxColumn), dataGridViewColumnGiz.DataGridViewColumn);
+            }
+
+            protected override void AssertComboBoxItemCount(IDataGridViewColumn dataGridViewColumn, int expectedCount)
+            {
+                DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz)dataGridViewColumn;
+                Assert.AreEqual(expectedCount,
+                    ((Gizmox.WebGUI.Forms.DataGridViewComboBoxColumn)dataGridViewColumnGiz.DataGridViewColumn).Items.Count);
             }
 
             protected override IEditableGridControl CreateEditableGridControl()
@@ -391,44 +398,44 @@ namespace Habanero.Test.UI.Base
             AssertIsComboBoxColumnType(dataGridViewColumn);
         }
 
-        //TODO: Combo Fill with items as per classdef.
+        //TODO: Working on this - seems there is a problem with the Gizmox version
+        [Test, Ignore("Having trouble assigning datatable in grid initialiser - will return to this when Win version is done")]
+        public void TestSetupComboBoxFromClassDef_SetsItemsInComboBox()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPerson.DeleteAllContactPeople();
+            OrganisationTestBO.ClearAllFromDB();
+            OrganisationTestBO.CreateSavedOrganisation();
+            OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
 
-        //TODO: Working on this
-        //        [Test]
-        //        public void TestSetupComboBoxFromClassDef_SetsItemsInComboBox()
-        //        {
-        //            //---------------Set up test pack-------------------
-        //            ClassDef classDef = ContactPersonTestBO.LoadClassDefOrganisationRelationship();
-        //            ContactPersonTestBO person = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.LoadAll();
 
-        ////            OrganisationTestBO.LoadDefaultClassDef();
-        ////            CreateSavedOrganisation();
-        ////            CreateSavedOrganisation();
+            IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
+            GridInitialiser gridInitialiser = new GridInitialiser(gridControl, GetControlFactory());
 
-        //            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-        //            col.LoadAll();
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(0, gridControl.Grid.Columns.Count);
+            Assert.AreEqual(1, classDef.UIDefCol.Count);
+            string uiDefName = "default";
+            UIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
+            Assert.IsNotNull(uiGridDef);
+            Assert.AreEqual(1, uiGridDef.Count);
+            Assert.AreEqual(1, col.Count);
+            Assert.AreEqual(2, BOLoader.Instance.GetBusinessObjectCol<OrganisationTestBO>("", null).Count);
 
-        //            IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
-        //            GridInitialiser gridInitialiser = new GridInitialiser(gridControl, GetControlFactory());
-
-        //            //--------------Assert PreConditions----------------            
-        //            Assert.AreEqual(0, gridControl.Grid.Columns.Count);
-        //            Assert.AreEqual(1, classDef.UIDefCol.Count);
-        //            string uiDefName = "default";
-        //            UIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
-        //            Assert.IsNotNull(uiGridDef);
-        //            Assert.AreEqual(1, uiGridDef.Count);
-
-        //            Assert.AreEqual(1,col.Count);
-
-        //            //---------------Execute Test ----------------------
-        //            gridInitialiser.InitialiseGrid(classDef, uiDefName);
-        //            gridControl.
-        //            //---------------Test Result -----------------------
-        //            Assert.AreEqual(2, gridControl.Grid.Columns.Count, "Should have ID column and should have comboBoxColumn");
-        //            IDataGridViewColumn dataGridViewColumn = gridControl.Grid.Columns[1];
-        //            AssertIsComboBoxColumnType(dataGridViewColumn);
-        //        }
+            //---------------Execute Test ----------------------
+            gridInitialiser.InitialiseGrid(classDef, uiDefName);
+          
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, gridControl.Grid.Columns.Count, "Should have ID column and should have comboBoxColumn");
+            IDataGridViewColumn dataGridViewColumn = gridControl.Grid.Columns[1];
+            AssertIsComboBoxColumnType(dataGridViewColumn);
+            AssertComboBoxItemCount(dataGridViewColumn, 2);
+        }
 
        [Test]
         public void Test_RaiseErrorIfControlFactoryNull()
@@ -754,104 +761,108 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(2, gridControl.Grid.Rows.Count);
         }
 
-        //[Test]
-        //public void Test_Acceptance_Filter_When_On_Page2_Of_Pagination()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    //Get Grid with 4 items
-        //    BusinessObjectCollection<MyBO> col;
-        //    IReadOnlyGridControl readOnlyGridControl = GetGridWith_5_Rows(out col);
-        //    AddControlToForm(readOnlyGridControl);
-        //    ITextBox tb = readOnlyGridControl.FilterControl.AddStringFilterTextBox("Test Prop", "TestProp");
-        //    //Set items per page to 3 items
-        //    readOnlyGridControl.Grid.ItemsPerPage = 3;
-        //    //Go to page 2 (pagination page)
-        //    readOnlyGridControl.Grid.CurrentPage = 2;
+        [Test]
+        public void Test_Acceptance_Filter_When_On_Page2_Of_Pagination()
+        {
+            //---------------Set up test pack-------------------
+            //Get Grid with 4 items
+            BusinessObjectCollection<MyBO> col;
+            IEditableGridControl gridControl = GetGridWith_5_Rows(out col);
+            AddControlToForm(gridControl);
+            ITextBox tb = gridControl.FilterControl.AddStringFilterTextBox("Test Prop", "TestProp");
+            //Set items per page to 3 items
+            gridControl.Grid.ItemsPerPage = 3;
+            //Go to page 2 (pagination page)
+            gridControl.Grid.CurrentPage = 2;
 
-        //    //--------------Assert PreConditions ---------------
-        //    Assert.AreEqual(2, readOnlyGridControl.Grid.CurrentPage);
-        //    //---------------Execute Test ----------------------
-        //    //enter data in filter for 1 item
-        //    tb.Text = "b";
-        //    readOnlyGridControl.FilterControl.ApplyFilter();
-        //    //---------------Test Result -----------------------
-        //    // verify that grid has moved back to page 1
-        //    Assert.AreEqual(1, readOnlyGridControl.Grid.CurrentPage);
-        //    //---------------Tear Down -------------------------          
-        //}
+            //--------------Assert PreConditions ---------------
+            Assert.AreEqual(2, gridControl.Grid.CurrentPage);
+            //---------------Execute Test ----------------------
+            //enter data in filter for 1 item
+            tb.Text = "b";
+            gridControl.FilterControl.ApplyFilter();
+            //---------------Test Result -----------------------
+            // verify that grid has moved back to page 1
+            Assert.AreEqual(1, gridControl.Grid.CurrentPage);
+            //---------------Tear Down -------------------------          
+        }
 
-        //[Test]
-        //public void TestFixBug_SearchGridSearchesTheGrid_DoesNotCallFilterOnGridbase()
-        //{
-        //    //FirstName is not in the grid def therefore if the grid calls the filter gridbase filter
-        //    // the dataview will try to filter with a column that does not exist this will raise an error
-        //    //---------------Set up test pack-------------------
-        //    //Clear all contact people from the DB
-        //    ContactPerson.DeleteAllContactPeople();
-        //    ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
-        //    CreateContactPersonInDB();
+        [Test]
+        public void TestFixBug_SearchGridSearchesTheGrid_DoesNotCallFilterOnGridbase()
+        {
+            //FirstName is not in the grid def therefore if the grid calls the filter gridbase filter
+            // the dataview will try to filter with a column that does not exist this will raise an error
+            //---------------Set up test pack-------------------
+            //Clear all contact people from the DB
+            ContactPerson.DeleteAllContactPeople();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            CreateContactPersonInDB();
 
-        //    //Create grid setup for search
-        //    IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
-        //    ITextBox txtboxFirstName = readOnlyGridControl.FilterControl.AddStringFilterTextBox("FirstName", "FirstName");
-        //    readOnlyGridControl.Initialise(classDef);
-        //    readOnlyGridControl.FilterMode = FilterModes.Search;
-        //    //---------------Execute Test ----------------------
-        //    txtboxFirstName.Text = "FFF";
-        //    readOnlyGridControl.FilterControl.ApplyFilter();
-        //    //---------------Test Result -----------------------
-        //    Assert.IsTrue(true);//No error was thrown by the grid.
-        //    //---------------Tear Down -------------------------          
-        //}
+            //Create grid setup for search
+            IEditableGridControl gridControl = CreateEditableGridControl();
 
-        //[Test]
-        //public void TestAcceptance_SearchGridSearchesTheGrid()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    //Clear all contact people from the DB
-        //    ContactPerson.DeleteAllContactPeople();
-        //    ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
-        //    //Create data in the database with the 5 contact people two with Search in surname
-        //    CreateContactPersonInDB();
-        //    CreateContactPersonInDB();
-        //    CreateContactPersonInDB();
-        //    CreateContactPersonInDB_With_SSSSS_InSurname();
-        //    CreateContactPersonInDB_With_SSSSS_InSurname();
-        //    //Create grid setup for search
-        //    IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
-        //    ITextBox txtbox = readOnlyGridControl.FilterControl.AddStringFilterTextBox("Surname", "Surname");
-        //    readOnlyGridControl.Initialise(classDef);
-        //    readOnlyGridControl.FilterMode = FilterModes.Search;
+            ITextBox txtboxFirstName = gridControl.FilterControl.AddStringFilterTextBox("FirstName", "FirstName");
+            gridControl.Initialise(classDef);
+            gridControl.FilterMode = FilterModes.Search;
+            //---------------Execute Test ----------------------
+            txtboxFirstName.Text = "FFF";
+            gridControl.FilterControl.ApplyFilter();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(true);//No error was thrown by the grid.
+            //---------------Tear Down -------------------------          
+        }
 
-        //    //--------------Assert PreConditions----------------            
-        //    //No items in the grid
-        //    Assert.AreEqual(0, readOnlyGridControl.Grid.Rows.Count);
 
-        //    //---------------Execute Test ----------------------
-        //    //set data in grid to a value that should return 2 people
-        //    string filterByValue = "SSSSS";
-        //    txtbox.Text = filterByValue;
-        //    //grid.filtercontrols.searchbutton.click
-        //    readOnlyGridControl.OrderBy = "Surname";
-        //    readOnlyGridControl.FilterControl.ApplyFilter();
 
-        //    //---------------Test Result -----------------------
-        //    StringAssert.Contains(filterByValue,
-        //                          readOnlyGridControl.FilterControl.GetFilterClause().GetFilterClauseString());
-        //    //verify that there are 2 people in the grid.
-        //    Assert.AreEqual(2, readOnlyGridControl.Grid.Rows.Count);
+        [Test]
+        public void TestAcceptance_SearchGridSearchesTheGrid()
+        {
+            //---------------Set up test pack-------------------
+            //Clear all contact people from the DB
+            ContactPerson.DeleteAllContactPeople();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            //Create data in the database with the 5 contact people two with Search in surname
+            CreateContactPersonInDB();
+            CreateContactPersonInDB();
+            CreateContactPersonInDB();
+            CreateContactPersonInDB_With_SSSSS_InSurname();
+            CreateContactPersonInDB_With_SSSSS_InSurname();
+            //Create grid setup for search
+            IEditableGridControl gridControl = CreateEditableGridControl();
+            ITextBox txtbox = gridControl.FilterControl.AddStringFilterTextBox("Surname", "Surname");
+            gridControl.Initialise(classDef);
+            gridControl.FilterMode = FilterModes.Search;
 
-        //    BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-        //    col.Load("Surname like %" + filterByValue + "%", "Surname");
-        //    Assert.AreEqual(col.Count, readOnlyGridControl.Grid.Rows.Count);
-        //    int rowNum = 0;
-        //    foreach (ContactPersonTestBO person in col)
-        //    {
-        //        object rowID = readOnlyGridControl.Grid.Rows[rowNum++].Cells["ID"].Value;
-        //        Assert.AreEqual(person.ID.ToString(), rowID.ToString());
-        //    }
-        //    //---------------Tear Down -------------------------          
-        //}
+            //--------------Assert PreConditions----------------            
+            //No items in the grid
+            Assert.AreEqual(1, gridControl.Grid.Rows.Count);
+
+            //---------------Execute Test ----------------------
+            //set data in grid to a value that should return 2 people
+            string filterByValue = "SSSSS";
+            txtbox.Text = filterByValue;
+            //grid.filtercontrols.searchbutton.click
+            gridControl.OrderBy = "Surname";
+            gridControl.FilterControl.ApplyFilter();
+
+            //---------------Test Result -----------------------
+            StringAssert.Contains(filterByValue,
+                                  gridControl.FilterControl.GetFilterClause().GetFilterClauseString());
+            //verify that there are 2 people in the grid.
+            Assert.AreEqual(3, gridControl.Grid.Rows.Count);
+
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.Load("Surname like %" + filterByValue + "%", "Surname");
+            Assert.AreEqual(col.Count+1, gridControl.Grid.Rows.Count);
+            int rowNum = 0;
+            foreach (ContactPersonTestBO person in col)
+            {
+                object rowID = gridControl.Grid.Rows[rowNum++].Cells["ID"].Value;
+                Assert.AreEqual(person.ID.ToString(), rowID.ToString());
+            }
+            //---------------Tear Down -------------------------   
+            ContactPerson.DeleteAllContactPeople();
+        }
 
 
         private ClassDef LoadMyBoDefaultClassDef()
@@ -896,6 +907,22 @@ namespace Habanero.Test.UI.Base
         private static void SetupGridColumnsForMyBo(IGridBase gridBase)
         {
             gridBase.Columns.Add("TestProp", "TestProp");
+        }
+
+        private static ContactPersonTestBO CreateContactPersonInDB()
+        {
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            contactPersonTestBO.Surname = Guid.NewGuid().ToString("N");
+            contactPersonTestBO.Save();
+            return contactPersonTestBO;
+        }
+
+        private static ContactPersonTestBO CreateContactPersonInDB_With_SSSSS_InSurname()
+        {
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            contactPersonTestBO.Surname = Guid.NewGuid().ToString("N") + "SSSSS";
+            contactPersonTestBO.Save();
+            return contactPersonTestBO;
         }
     }
 }

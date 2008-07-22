@@ -43,6 +43,19 @@ namespace Habanero.UI.Base
         /// access a range of functionality for the grid
         /// (eg. myGridWithButtons.Grid.AddBusinessObject(...)).
         /// </summary>    
-        IGridBase Grid { get; }        
+        IGridBase Grid { get; }
+
+        /// <summary>
+        /// Gets and sets the default order by clause used for loading the grid when the <see cref="FilterModes"/>
+        /// is Search see <see cref="FilterModes"/>
+        /// </summary>
+        string OrderBy { get; set; }
+
+        /// <summary>
+        /// Gets and sets the standard search criteria used for loading the grid when the <see cref="FilterMode"/>
+        /// is Search see <see cref="FilterModes"/>. This search criteria will be And (ed) to any search criteria returned
+        /// by the FilterControl.
+        /// </summary>
+        string AdditionalSearchCriteria { get; set; }
     }
 }

@@ -17,10 +17,14 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-namespace Habanero.UI.Base.Grid
+namespace Habanero.UI.Base
 {
     public interface IDataGridViewComboBoxColumn : IDataGridViewColumn
     {
-        
+        //IComboBoxObjectCollection Items { get;}
+
+        object DataSource { get; set; }
+        string ValueMember { get; set; }
+        string DisplayMember { get; set; }
     }
 }

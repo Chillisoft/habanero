@@ -74,5 +74,20 @@ namespace Habanero.Test.BO
         {
             get { return (Guid)this.GetPropertyValue("OrganisationID"); }
         }
+
+        public static void ClearAllFromDB()
+        {
+            BusinessObjectCollection<OrganisationTestBO> col = new BusinessObjectCollection<OrganisationTestBO>();
+            col.LoadAll();
+
+            col.ForEach(delegate(OrganisationTestBO obj) { obj.Delete(); });
+            col.SaveAll();
+        }
+
+        public static void CreateSavedOrganisation()
+        {
+            OrganisationTestBO bo = new OrganisationTestBO();
+            bo.Save();
+        }
     }
 }

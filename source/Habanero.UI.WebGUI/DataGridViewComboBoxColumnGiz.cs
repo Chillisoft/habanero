@@ -21,6 +21,7 @@ using System;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 using Habanero.UI.Base.Grid;
+using Habanero.UI.WebGUI.Grid;
 using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.WebGUI
@@ -29,9 +30,32 @@ namespace Habanero.UI.WebGUI
     {
         private readonly DataGridViewComboBoxColumn _dataGridViewComboBoxColumn;
 
-        public DataGridViewComboBoxColumnGiz(DataGridViewComboBoxColumn dataGridViewComboBoxColumn) : base(dataGridViewComboBoxColumn)
+        public DataGridViewComboBoxColumnGiz(DataGridViewComboBoxColumn dataGridViewComboBoxColumn)
+            : base(dataGridViewComboBoxColumn)
         {
             _dataGridViewComboBoxColumn = dataGridViewComboBoxColumn;
+        }
+
+        //public IComboBoxObjectCollection Items
+        //{
+        //    get { return (IComboBoxObjectCollection)_dataGridViewComboBoxColumn.Items; }
+        //}
+        public object DataSource
+        {
+            get { return _dataGridViewComboBoxColumn.DataSource; }
+            set { _dataGridViewComboBoxColumn.DataSource = value; }
+        }
+
+        public string ValueMember
+        {
+            get { return _dataGridViewComboBoxColumn.ValueMember; }
+            set { _dataGridViewComboBoxColumn.ValueMember = value; }
+        }
+
+        public string DisplayMember
+        {
+            get { return _dataGridViewComboBoxColumn.DisplayMember; }
+            set { _dataGridViewComboBoxColumn.DisplayMember = value; }
         }
     }
 }

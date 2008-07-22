@@ -31,6 +31,8 @@ namespace Habanero.UI.Win
         private readonly IEditableGrid _grid;
         private readonly EditableGridControlManager _editableGridManager;
         private IFilterControl _filterControl;
+        private string _orderBy;
+        private string _additionalSearchCriteria;
 
         public EditableGridControlWin(IControlFactory controlFactory)
         {
@@ -103,6 +105,28 @@ namespace Habanero.UI.Win
         {
             get { return _filterControl.FilterMode; }
             set { _filterControl.FilterMode=value; }
+        }
+
+
+        /// <summary>
+        /// Gets and sets the default order by clause used for loading the grid when the <see cref="FilterMode"/>
+        /// is Search see <see cref="FilterModes"/>
+        /// </summary>
+        public string OrderBy
+        {
+            get { return _orderBy; }
+            set { _orderBy = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets the standard search criteria used for loading the grid when the <see cref="FilterMode"/>
+        /// is Search see <see cref="FilterModes"/>. This search criteria will be And (ed) to any search criteria returned
+        /// by the FilterControl.
+        /// </summary>
+        public string AdditionalSearchCriteria
+        {
+            get { return _additionalSearchCriteria; }
+            set { _additionalSearchCriteria = value; }
         }
     }
 }
