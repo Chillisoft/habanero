@@ -146,6 +146,7 @@ namespace Habanero.UI.Forms
         {
             _form.DialogResult = DialogResult.Cancel;
             _form.Close();
+            
         }
 
         /// <summary>

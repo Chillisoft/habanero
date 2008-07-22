@@ -41,5 +41,10 @@ namespace Habanero.UI.Win
             get { throw new NotImplementedException(); }
             set { this.MdiParent = (Form) value; }
         }
+
+        Base.DialogResult IFormChilli.ShowDialog()
+        {
+            return (Base.DialogResult)base.ShowDialog();
+        }
     }
 }

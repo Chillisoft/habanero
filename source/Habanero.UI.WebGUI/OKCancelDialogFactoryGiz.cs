@@ -52,6 +52,7 @@ namespace Habanero.UI.WebGUI
             private readonly IControlFactory _controlFactory;
             private IButton _okButton;
             private IPanel _contentPanel;
+            private IButton _cancelButton;
 
             public OKCancelPanelGiz(IControlFactory controlFactory)
             {
@@ -66,13 +67,18 @@ namespace Habanero.UI.WebGUI
                 buttonGroupControl.Dock = DockStyle.Bottom;
                 _okButton = buttonGroupControl.AddButton("OK");
                 _okButton.NotifyDefault(true);
-                buttonGroupControl.AddButton("Cancel");
+                _cancelButton = buttonGroupControl.AddButton("Cancel");
                 this.Controls.Add((Control)buttonGroupControl);
             }
 
             public IButton OKButton
             {
                 get { return _okButton; }
+            }
+
+            public IButton CancelButton
+            {
+                get { return _cancelButton; }
             }
 
             public IPanel ContentPanel

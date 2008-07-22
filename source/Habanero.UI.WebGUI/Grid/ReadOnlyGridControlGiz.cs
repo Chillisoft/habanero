@@ -140,7 +140,7 @@ namespace Habanero.UI.WebGUI
                     MessageBox.Show("Are you certain you want to delete the object '" + selectedBo + "'",
                             "Delete Object", MessageBoxButtons.YesNo, delegate(object msgBoxSender, EventArgs e1)
                                   {
-                                      if (((Form) msgBoxSender).DialogResult == DialogResult.Yes)
+                                      if (((Form)msgBoxSender).DialogResult == Gizmox.WebGUI.Forms.DialogResult.Yes)
                                       {
                                           try
                                           {

@@ -141,7 +141,7 @@ namespace Habanero.UI.Win
                 _panelFactoryInfo.ControlMappers.ApplyChangesToBusinessObject();
                 TransactionCommitter committer = CreateSaveTransaction();
                 committer.CommitTransaction();
-                DialogResult = DialogResult.OK;
+                DialogResult = System.Windows.Forms.DialogResult.OK;
                 Close();
                 if (_action != null)
                 {
@@ -168,7 +168,7 @@ namespace Habanero.UI.Win
         {
             _panelFactoryInfo.ControlMappers.BusinessObject = null;
             _bo.Restore();
-            DialogResult = DialogResult.Cancel;
+            DialogResult = System.Windows.Forms.DialogResult.Cancel;
             Close();
         }
 
@@ -180,7 +180,7 @@ namespace Habanero.UI.Win
         bool IDefaultBOEditorForm.ShowDialog()
         {
             {
-                if (this.ShowDialog() == DialogResult.OK)
+                if (this.ShowDialog() == (System.Windows.Forms.DialogResult)Base.DialogResult.OK)
                 {
                     return true;
                 }

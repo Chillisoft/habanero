@@ -51,7 +51,7 @@ namespace Habanero.UI.WebGUI
             this._uxWizardControl.CancelButton.Click += CancelButton_OnClick;
             InitializeComponent();
             WizardControl.WizardController = _wizardController;
-            DialogResult = DialogResult.Cancel;
+            DialogResult = Gizmox.WebGUI.Forms.DialogResult.Cancel;
             this.Closing += WizardFormGiz_Closing;
         }
 
@@ -107,7 +107,7 @@ namespace Habanero.UI.WebGUI
 
         private void _uxWizardControl_Finished(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.OK;
+            DialogResult = Gizmox.WebGUI.Forms.DialogResult.OK;
             Close();
         }
 
@@ -146,7 +146,7 @@ namespace Habanero.UI.WebGUI
             form.StartPosition = FormStartPosition.CenterParent;
             if (showDialog)
             {
-                return form.ShowDialog() == DialogResult.OK;
+                return form.ShowDialog() == (Gizmox.WebGUI.Forms.DialogResult)Base.DialogResult.OK;
             }
             else
             {

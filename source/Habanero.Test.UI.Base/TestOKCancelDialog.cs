@@ -1,15 +1,16 @@
+using System.Windows.Forms;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
 using NUnit.Framework;
+using DockStyle=Habanero.UI.Base.DockStyle;
 
 namespace Habanero.Test.UI.Base
 {
     public abstract class TestOKCancelDialog
     {
-        //TODO: refactor - WIN and GIZ are copied and pasetd.
+        //TODO: refactor - WIN and GIZ are copied and pasted.
         protected abstract IControlFactory GetControlFactory();
-
 
 
         [TestFixture]
@@ -33,8 +34,10 @@ namespace Habanero.Test.UI.Base
             public void TestCreateOKCancelForm()
             {
                 //---------------Set up test pack-------------------
-                IOKCancelDialogFactory okCancelDialogFactory = GetControlFactory().CreateOKCancelDialogFactory();                //---------------Execute Test ----------------------
+                IOKCancelDialogFactory okCancelDialogFactory = GetControlFactory().CreateOKCancelDialogFactory();
+                    //---------------Execute Test ----------------------
                 IFormChilli dialogForm = okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel());
+
                 //---------------Test Result -----------------------
                 Assert.AreEqual(1, dialogForm.Controls.Count);
                 Assert.AreEqual(DockStyle.Fill, dialogForm.Controls[0].Dock);
@@ -47,10 +50,37 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 IOKCancelDialogFactory okCancelDialogFactory = GetControlFactory().CreateOKCancelDialogFactory();
                 //---------------Execute Test ----------------------
-                FormWin dialogForm = (FormWin)okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel());
+                FormWin dialogForm = (FormWin) okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel());
                 //---------------Test Result -----------------------
-                IButtonGroupControl buttons = (IButtonGroupControl)dialogForm.Controls[0].Controls[1];
+                IButtonGroupControl buttons = (IButtonGroupControl) dialogForm.Controls[0].Controls[1];
                 Assert.AreSame(buttons["OK"], dialogForm.AcceptButton);
+                //---------------Tear Down -------------------------
+            }
+
+            [Test]
+            public void TestDialogResultWhenOkClicked()
+            {
+                //---------------Set up test pack-------------------
+                OKCancelDialogFactoryWin okCancelDialogFactory = (OKCancelDialogFactoryWin) GetControlFactory().CreateOKCancelDialogFactory();
+                FormWin dialogForm = (FormWin) okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel());
+
+                //---------------Execute Test ----------------------
+                okCancelDialogFactory.OkButton_ClickHandler(dialogForm);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(dialogForm.DialogResult, System.Windows.Forms.DialogResult.OK);
+                //---------------Tear Down -------------------------
+            }
+            [Test]
+            public void TestDialogResultWhenCancelClicked()
+            {
+                //---------------Set up test pack-------------------
+                OKCancelDialogFactoryWin okCancelDialogFactory = (OKCancelDialogFactoryWin)GetControlFactory().CreateOKCancelDialogFactory();
+                FormWin dialogForm = (FormWin)okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel());
+
+                //---------------Execute Test ----------------------
+                okCancelDialogFactory.CancelButton_ClickHandler(dialogForm);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(dialogForm.DialogResult, System.Windows.Forms.DialogResult.Cancel);
                 //---------------Tear Down -------------------------
             }
         }
@@ -94,9 +124,5 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(DockStyle.Fill, nestedControl.Dock);
             //---------------Tear Down -------------------------
         }
-
     }
-
-
-   
 }

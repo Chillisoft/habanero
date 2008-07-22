@@ -9,5 +9,6 @@ namespace Habanero.UI.Base
     public interface IOKCancelPanel: IPanel
     {
         IButton OKButton { get; }
+        IButton CancelButton { get; }
     }
 }

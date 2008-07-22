@@ -201,7 +201,7 @@ namespace Habanero.UI.WebGUI
         {
             _panelFactoryInfo.ControlMappers.BusinessObject = null;
             _bo.Restore();
-            DialogResult = DialogResult.Cancel;
+            DialogResult = Gizmox.WebGUI.Forms.DialogResult.Cancel;
             Close();
         }
 
@@ -242,7 +242,7 @@ namespace Habanero.UI.WebGUI
                 //    }
                 //}
 
-                DialogResult = DialogResult.OK;
+                DialogResult = Gizmox.WebGUI.Forms.DialogResult.OK;
                 Close();
                 if (_action != null)
                 {
@@ -300,7 +300,7 @@ namespace Habanero.UI.WebGUI
         /// <returns>True if the edit was a success, false if not</returns>
          bool IDefaultBOEditorForm.ShowDialog() 
          {
-            if (this.ShowDialog() == DialogResult.OK)
+             if (this.ShowDialog() == (Gizmox.WebGUI.Forms.DialogResult) Base.DialogResult.OK)
             {
                 return true;
             }

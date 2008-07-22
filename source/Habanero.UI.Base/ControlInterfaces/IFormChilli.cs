@@ -21,7 +21,18 @@ using System;
 
 namespace Habanero.UI.Base
 {
-    
+    public enum DialogResult
+    {
+        None = 0,
+        OK = 1,
+        Cancel = 2,
+        Abort = 3,
+        Retry = 4,
+        Ignore = 5,
+        Yes = 6,
+        No = 7
+    }    
+
     public interface IFormChilli : IControlChilli
     {
         void Show();
@@ -31,5 +42,7 @@ namespace Habanero.UI.Base
         void Close();
         IFormChilli MdiParent { get; set; }
         event EventHandler Closed;
+        DialogResult ShowDialog();
     }
+
 }

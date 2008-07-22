@@ -87,7 +87,8 @@ namespace Habanero.UI.Forms
             messagePanel.Height = _textBox.Height + 40;
             messagePanel.Width = ControlFactory.CreateLabel(_message, true).PreferredWidth + 20;
             _textBox.Width = messagePanel.Width - 30;
-            return new OKCancelDialog(messagePanel).ShowDialog();
+            OKCancelDialog dialog = new OKCancelDialog(messagePanel);
+            return dialog.ShowDialog();
         }
 
         /// <summary>

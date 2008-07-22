@@ -1,14 +1,14 @@
+using System.Windows.Forms;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
 using NUnit.Framework;
+using ScrollBars=Habanero.UI.Base.ScrollBars;
 
 namespace Habanero.Test.UI.Base
 {
     public abstract class TestInputFormTextBox
     {
-        protected abstract IControlFactory GetControlFactory();
-
         [TestFixture]
         public class TestInputFormTextBoxGiz : TestInputFormTextBox
         {
@@ -27,6 +27,8 @@ namespace Habanero.Test.UI.Base
                 return new ControlFactoryWin();
             }
         }
+
+        protected abstract IControlFactory GetControlFactory();
 
         [Test]
         public void TestSimpleConstructor()
@@ -81,56 +83,28 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------
         }
 
-
+        [Test]
+        public void TestLayout()
+        {
+            //---------------Set up test pack-------------------
+            const string message = "testMessage";
+            const int numLines = 1;
+            InputFormTextBox inputFormTextBox = new InputFormTextBox(GetControlFactory(), message, numLines);
+            //---------------Execute Test ----------------------
+            IPanel panel = inputFormTextBox.createControlPanel();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, panel.Controls.Count);
+            Assert.IsInstanceOfType(typeof (ILabel), panel.Controls[0]);
+            Assert.IsInstanceOfType(typeof (ITextBox), panel.Controls[1]);
+            Assert.Greater(panel.Controls[0].Top, panel.Top);
+            Assert.IsFalse(panel.Controls[0].Font.Bold);
+            Assert.AreEqual(panel.Width, panel.Controls[1].Width + 30);
+            int width = GetControlFactory().CreateLabel(message, true).PreferredWidth + 20;
+            Assert.AreEqual(panel.Width, width);
+            //---------------Tear Down -------------------------
+        }
     }
 
 
-    public class InputFormTextBox
-    {
-        private readonly IControlFactory _controlFactory;
-        private readonly string _message;
-        private readonly ITextBox _textBox;
 
-        /// <summary>
-        /// Initialises the form with a message to display to the user.
-        /// </summary>
-        /// <param name="controlFactory">The <see cref="IControlFactory"/> to use to create the form</param>
-        /// <param name="message">The message to display</param>
-        /// <param name="numLines">The number of lines to make available</param>
-        /// <param name="passwordChar">The Char to use if the Textbox is to be used as a password field</param>
-        public InputFormTextBox(IControlFactory controlFactory, string message, int numLines, char passwordChar)
-        {
-            _controlFactory = controlFactory;
-            _message = message;
-            _textBox = _controlFactory.CreateTextBox();
-            _textBox.PasswordChar = passwordChar;
-            if (numLines > 1)
-            {
-                _textBox.Multiline = true;
-                _textBox.Height = _textBox.Height*numLines;
-                _textBox.ScrollBars = ScrollBars.Vertical;
-            }
-        }
-
-        public InputFormTextBox(IControlFactory controlFactory, string message, int numLines)
-            : this(controlFactory, message, numLines, (char) 0)
-        {
-        }
-
-        public InputFormTextBox(IControlFactory factory, string message) : this(factory, message, 1)
-        {
-        }
-
-        public ITextBox TextBox
-        {
-            get { return _textBox; }
-        }
-
-        public string Message
-        {
-            get { return _message; }
-        }
-
-        //TODO: ShowDialog - this needs an OKCancelDialogFactory first.
-    }
 }

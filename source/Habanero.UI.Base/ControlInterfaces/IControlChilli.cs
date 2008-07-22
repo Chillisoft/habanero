@@ -23,7 +23,6 @@ using Habanero.UI.Base.ControlInterfaces;
 
 namespace Habanero.UI.Base
 {
-
     ///// <summary>
     ///// Border style types
     ///// </summary>
@@ -52,7 +51,8 @@ namespace Habanero.UI.Base
         Left = 5
     }
 
-    public interface IControlChilli 
+
+    public interface IControlChilli
     {
         /// <summary>
         /// Occurs on clicking the button etc.
@@ -79,6 +79,7 @@ namespace Habanero.UI.Base
 
         event EventHandler Resize;
         event EventHandler VisibleChanged;
+
         /// <summary>
         /// Gets/Sets the width position
         /// </summary>
@@ -88,6 +89,7 @@ namespace Habanero.UI.Base
         int Width { get; set; }
 
         IControlCollection Controls { get; }
+
         /// <summary>
         /// Gets or sets the control visability.  
         /// </summary>
@@ -114,6 +116,7 @@ namespace Habanero.UI.Base
         [System.ComponentModel.DesignerSerializationVisibility(
             System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         int Top { get; set; }
+
         /// <summary>
         /// Gets/Sets the bottom position
         /// </summary>
@@ -137,6 +140,7 @@ namespace Habanero.UI.Base
         [System.ComponentModel.DesignerSerializationVisibility(
             System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         int Right { get; }
+
         /// <summary>
         /// Gets or sets the text associated with this control.  
         /// </summary>
@@ -144,6 +148,7 @@ namespace Habanero.UI.Base
         [System.ComponentModel.Localizable(true)]
         [System.ComponentModel.Bindable(true)]
         string Text { get; set; }
+
         /// <summary>
         /// Gets or sets the name associated with this control.  
         /// </summary>
@@ -169,11 +174,13 @@ namespace Habanero.UI.Base
         /// </value>
         [System.ComponentModel.DefaultValue(true)]
         bool TabStop { get; set; }
+
         /// <summary>
         /// Gets or sets the size.
         /// </summary>
         /// <value></value>
         Size Size { get; set; }
+
         /// <summary>
         /// Activates the control.  
         /// </summary>
@@ -199,7 +206,7 @@ namespace Habanero.UI.Base
         /// <summary>Gets or sets the size that is the upper limit that can specify.</summary>
         /// <returns>An ordered pair of type <see cref="T:System.Drawing.Size"></see> representing the width and height of a rectangle.</returns>
         /// <filterpriority>1</filterpriority>
-        [System.ComponentModel.AmbientValue(typeof(Size), "0, 0")]
+        [System.ComponentModel.AmbientValue(typeof (Size), "0, 0")]
         Size MaximumSize { get; set; }
 
         /// <summary>Gets or sets the size that is the lower limit that can specify.</summary>
@@ -232,12 +239,12 @@ namespace Habanero.UI.Base
 
         /// <summary>Invalidates the entire surface of the control and causes the control to be redrawn.</summary>
         void Invalidate();
-        
+
         /// <summary>
         /// Gets or sets the control location.
         /// </summary>
         /// <value></value>
-        Point Location{ get; set; }
+        Point Location { get; set; }
 
         ///// <summary>
         ///// Gets or sets the border style.
@@ -251,6 +258,5 @@ namespace Habanero.UI.Base
         /// See <see cref="DockStyle"/>
         /// </summary>
         DockStyle Dock { get; set; }
-        
     }
 }
