@@ -48,11 +48,11 @@ namespace Habanero.Test
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("Radius", typeof (int), PropReadWriteRule.ReadWrite, "Radius", null);
+                new PropDef("Radius", typeof(int), PropReadWriteRule.ReadWrite, null);
             lPropDefCol.Add(propDef);
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
-            ClassDef lClassDef = new ClassDef(typeof(CircleNoPrimaryKey), null, "Circle", lPropDefCol, keysCol, relDefCol, null);
+            ClassDef lClassDef = new ClassDef(typeof(CircleNoPrimaryKey), null, "circle_table", lPropDefCol, keysCol, relDefCol, null);
             //ClassDef lClassDef = new ClassDef(typeof(CircleNoPrimaryKey), null, lPropDefCol, keysCol, relDefCol);
             
             lClassDef.SuperClassDef = new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
@@ -70,7 +70,7 @@ namespace Habanero.Test
             ClassDef shapeClassDef = Shape.GetClassDef();
             ClassDef circleClassDef = GetClassDef();
             circleClassDef.SuperClassDef = new SuperClassDef(shapeClassDef, ORMapping.SingleTableInheritance);
-            circleClassDef.SuperClassDef.Discriminator = "ShapeType";
+            circleClassDef.SuperClassDef.Discriminator = "ShapeType_field";
             return circleClassDef;
         }
 

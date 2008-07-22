@@ -49,10 +49,10 @@ namespace Habanero.Test.General
             _classDefShape = Shape.GetClassDef();
             _classDefCircleNoPrimaryKey = CircleNoPrimaryKey.GetClassDef();
             _classDefCircleNoPrimaryKey.SuperClassDef = new SuperClassDef(_classDefShape, ORMapping.SingleTableInheritance);
-            _classDefCircleNoPrimaryKey.SuperClassDef.Discriminator = "ShapeType";
+            _classDefCircleNoPrimaryKey.SuperClassDef.Discriminator = "ShapeType_field";
             _classDefFilledCircleNoPrimaryKey = FilledCircleNoPrimaryKey.GetClassDef();
             _classDefFilledCircleNoPrimaryKey.SuperClassDef = new SuperClassDef(_classDefCircleNoPrimaryKey, ORMapping.SingleTableInheritance);
-            _classDefFilledCircleNoPrimaryKey.SuperClassDef.Discriminator = "ShapeType";
+            _classDefFilledCircleNoPrimaryKey.SuperClassDef.Discriminator = "ShapeType_field";
         }
 
         protected override void SetStrID()
@@ -100,7 +100,7 @@ namespace Habanero.Test.General
         [Test]
         public void TestCircleSelectSql()
         {
-            Assert.AreEqual("SELECT `Shape`.`Colour`, `Shape`.`Radius`, `Shape`.`ShapeID`, `Shape`.`ShapeName` FROM `Shape` WHERE `ShapeType` = 'FilledCircleNoPrimaryKey' AND `ShapeID` = ?Param0",
+            Assert.AreEqual("SELECT `Shape_table`.`Colour`, `Shape_table`.`Radius`, `Shape_table`.`ShapeID_field`, `Shape_table`.`ShapeName` FROM `Shape_table` WHERE `ShapeType_field` = 'FilledCircleNoPrimaryKey' AND `ShapeID_field` = ?Param0",
                             _selectSql.Statement.ToString(),//.Substring(0, 76),
                             "select statement is incorrect for Single Table inheritance");
         }
@@ -111,7 +111,7 @@ namespace Habanero.Test.General
             Assert.AreEqual(1, _insertSql.Count,
                             "There should only be one insert Sql statement when using Single Table Inheritance.");
             Assert.AreEqual(
-                "INSERT INTO `Shape` (`ShapeType`, `Colour`, `Radius`, `ShapeID`, `ShapeName`) VALUES (?Param0, ?Param1, ?Param2, ?Param3, ?Param4)",
+                "INSERT INTO `Shape_table` (`ShapeType_field`, `Colour`, `Radius`, `ShapeID_field`, `ShapeName`) VALUES (?Param0, ?Param1, ?Param2, ?Param3, ?Param4)",
                 _insertSql[0].Statement.ToString(), "Concrete Table Inheritance insert Sql seems to be incorrect.");
             Assert.AreEqual("FilledCircleNoPrimaryKey", ((IDbDataParameter)_insertSql[0].Parameters[0]).Value,
                             "Discriminator has incorrect value");
@@ -131,7 +131,7 @@ namespace Habanero.Test.General
             Assert.AreEqual(1, _updateSql.Count,
                             "There should only be one update sql statement when using single table inheritance.");
             Assert.AreEqual(
-                "UPDATE `Shape` SET `Colour` = ?Param0, `Radius` = ?Param1, `ShapeName` = ?Param2 WHERE `ShapeID` = ?Param3",
+                "UPDATE `Shape_table` SET `Colour` = ?Param0, `Radius` = ?Param1, `ShapeName` = ?Param2 WHERE `ShapeID_field` = ?Param3",
                 _updateSql[0].Statement.ToString());
             Assert.AreEqual(3, ((IDbDataParameter) _updateSql[0].Parameters[0]).Value,
                             "Parameter Colour has incorrect value");
@@ -150,7 +150,7 @@ namespace Habanero.Test.General
         {
             Assert.AreEqual(1, _deleteSql.Count,
                             "There should only be one delete sql statement when using single table inheritance.");
-            Assert.AreEqual("DELETE FROM `Shape` WHERE `ShapeID` = ?Param0", _deleteSql[0].Statement.ToString(),
+            Assert.AreEqual("DELETE FROM `Shape_table` WHERE `ShapeID_field` = ?Param0", _deleteSql[0].Statement.ToString(),
                             "Delete Sql for single table inheritance is incorrect.");
             Assert.AreEqual(_filledCircleId, ((IDbDataParameter) _deleteSql[0].Parameters[0]).Value,
                             "Parameter ShapeID has incorrect value for delete sql when using Single Table inheritance.");

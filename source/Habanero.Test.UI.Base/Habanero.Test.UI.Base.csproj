@@ -91,7 +91,6 @@
     </Compile>
     <Compile Include="Grid\TestDataGridViewColumn.cs" />
     <Compile Include="Grid\TestDataGridViewDateTimePickerColumn.cs" />
-    <Compile Include="Grid\TestEditableGridButtonsControl.cs" />
     <Compile Include="Grid\TestEditableGridControl.cs" />
     <Compile Include="Grid\TestGridInitialiser.cs" />
     <Compile Include="Grid\TestReadOnlyGrid.cs" />
@@ -135,7 +134,6 @@
     <Compile Include="Grid\TestEditableGrid.cs" />
     <Compile Include="TestFileChooser.cs" />
     <Compile Include="TestGlobalUIRegistry.cs" />
-    <Compile Include="TestHelpAboutBox.cs" />
     <Compile Include="TestInputFormTextBox.cs" />
     <Compile Include="TestLabel.cs" />
     <Compile Include="LayoutManager\TestLayoutManager.cs" />

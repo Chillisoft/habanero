@@ -51,12 +51,12 @@ namespace Habanero.Test
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("Colour", typeof(int), PropReadWriteRule.ReadWrite, "Colour", null);
+                new PropDef("Colour", typeof(int), PropReadWriteRule.ReadWrite, null);
             lPropDefCol.Add(propDef);
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             //ClassDef lClassDef = new ClassDef(typeof (FilledCircleNoPrimaryKey), null, lPropDefCol, keysCol, relDefCol);
-            ClassDef lClassDef = new ClassDef(typeof(FilledCircleNoPrimaryKey), null, "FilledCircle", lPropDefCol, keysCol, relDefCol, null);
+            ClassDef lClassDef = new ClassDef(typeof(FilledCircleNoPrimaryKey), null, "FilledCircle_table", lPropDefCol, keysCol, relDefCol, null);
             lClassDef.SuperClassDef = new SuperClassDef(Circle.GetClassDef(), ORMapping.ConcreteTableInheritance);
             ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
@@ -70,12 +70,12 @@ namespace Habanero.Test
 
         public static ClassDef GetClassDefWithSingleInheritanceHierarchy()
         {
-            return GetClassDefWithSingleInheritanceHierarchy("ShapeType");
+            return GetClassDefWithSingleInheritanceHierarchy("ShapeType_field");
         }
 
         public static ClassDef GetClassDefWithSingleInheritanceHierarchyDifferentDiscriminators()
         {
-            return GetClassDefWithSingleInheritanceHierarchy("CircleType");
+            return GetClassDefWithSingleInheritanceHierarchy("CircleType_field");
         }
 
         private static ClassDef GetClassDefWithSingleInheritanceHierarchy(string filledCircleDiscriminator)
@@ -83,7 +83,7 @@ namespace Habanero.Test
             ClassDef shapeClassDef = Shape.GetClassDef();
             ClassDef circleClassDef = CircleNoPrimaryKey.GetClassDef();
             circleClassDef.SuperClassDef = new SuperClassDef(shapeClassDef, ORMapping.SingleTableInheritance);
-            circleClassDef.SuperClassDef.Discriminator = "ShapeType";
+            circleClassDef.SuperClassDef.Discriminator = "ShapeType_field";
             ClassDef filledCircleClassDef = GetClassDef();
             filledCircleClassDef.SuperClassDef = new SuperClassDef(circleClassDef, ORMapping.SingleTableInheritance);
             filledCircleClassDef.SuperClassDef.Discriminator = filledCircleDiscriminator;

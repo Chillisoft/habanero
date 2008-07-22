@@ -580,8 +580,8 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             catch (BusObjDuplicateConcurrencyControlException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("Surname"));
-                Assert.IsTrue(ex.Message.Contains("FirstName"));
+                StringAssert.Contains("Surname", ex.Message);
+                StringAssert.Contains("FirstName", ex.Message);
             }
             finally
             {

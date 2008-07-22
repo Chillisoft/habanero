@@ -113,35 +113,32 @@ namespace Habanero.BO.ConcurrencyControl
 
         private void CheckConcurrencyControl(VerificationStage verificationStage)
         {
-            if (!_busObj.State.IsNew) //you cannot have concurrency control issues on a new object 
-                // all you can have is duplicate data issues.
+            if (_busObj.State.IsNew) return;
+            using (IDataReader dr = BOLoader.Instance.LoadDataReader(_busObj, _busObj.GetDatabaseConnection(), null)
+                )
             {
-                using (IDataReader dr = BOLoader.Instance.LoadDataReader(_busObj, _busObj.GetDatabaseConnection(), null)
-                    )
+                // If this object no longer exists in the database
+                // then we have a concurrency conflict since it has been deleted by another process.
+                // If our objective was to delete it as well then no worries else throw error.
+                bool drHasData = dr.Read();
+                if (! (drHasData) && !_busObj.State.IsDeleted)
                 {
-                    // If this object no longer exists in the database
-                    // then we have a concurrency conflict since it has been deleted by another process.
-                    // If our objective was to delete it as well then no worries else throw error.
-                    bool drHasData = dr.Read();
-                    if (! (drHasData) && !_busObj.State.IsDeleted)
-                    {
-                        //The object you are trying to save has been deleted by another user.
-                        throw new BusObjDeleteConcurrencyControlException(_busObj.ClassName, _busObj.ID.ToString(),
-                                                                          _busObj);
-                    }
-                    else
-                    {
-                        int versionNumberBusinessObject = (int) _versionNumber.Value;
-                        int versionNumberDB = (int) dr[_versionNumber.DatabaseFieldName];
+                    //The object you are trying to save has been deleted by another user.
+                    throw new BusObjDeleteConcurrencyControlException(_busObj.ClassName, _busObj.ID.ToString(),
+                                                                      _busObj);
+                }
+                else
+                {
+                    int versionNumberBusinessObject = (int) _versionNumber.Value;
+                    int versionNumberDB = (int) dr[_versionNumber.DatabaseFieldName];
 
-                        if (versionNumberDB != versionNumberBusinessObject)
-                        {
-                            string dateLastUpdatedInDB = dr[_dateLastUpdated.DatabaseFieldName].ToString();
-                            string userNameLastUpdated = (string) dr[_userLastUpdated.DatabaseFieldName];
-                            string machineLastUpdated = (string) dr[_machineLastUpdated.DatabaseFieldName];
-                            ThrowConcurrencyException(verificationStage, userNameLastUpdated, machineLastUpdated,
-                                                      dateLastUpdatedInDB);
-                        }
+                    if (versionNumberDB != versionNumberBusinessObject)
+                    {
+                        string dateLastUpdatedInDB = dr[_dateLastUpdated.DatabaseFieldName].ToString();
+                        string userNameLastUpdated = (string) dr[_userLastUpdated.DatabaseFieldName];
+                        string machineLastUpdated = (string) dr[_machineLastUpdated.DatabaseFieldName];
+                        ThrowConcurrencyException(verificationStage, userNameLastUpdated, machineLastUpdated,
+                                                  dateLastUpdatedInDB);
                     }
                 }
             }

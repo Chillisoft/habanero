@@ -290,7 +290,7 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""ContactPersonTransactionLogging"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
@@ -334,7 +334,7 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""ContactPersonTransactionLogging"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
                     <key name=""SurnameKey"">
                       <prop name=""Surname"" />
                     </key>

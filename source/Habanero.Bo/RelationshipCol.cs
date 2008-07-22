@@ -22,7 +22,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using log4net;
 
 namespace Habanero.BO
 {
@@ -32,8 +31,8 @@ namespace Habanero.BO
     public class RelationshipCol : IRelationshipCol
     {
       //  private static readonly ILog log = LogManager.GetLogger("Habanero.BO.RelationshipCol");
-        private IBusinessObject _bo;
-        private Dictionary<string, IRelationship> _relationships;
+        private readonly IBusinessObject _bo;
+        private readonly Dictionary<string, IRelationship> _relationships;
 
         /// <summary>
         /// Constructor to initialise a new relationship, specifying the

@@ -38,10 +38,10 @@ namespace Habanero.Test.General
             ClassDef.ClassDefs.Clear();
 
             this.SetupDBConnection();
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from filledcircle;");
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from circle;");
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from filledcircle_table;");
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from circle_table;");
             DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from circle_concrete;");
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from shape;");
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from shape_table;");
             SetupInheritanceSpecifics();
             objCircle = new Circle();
             SetStrID();

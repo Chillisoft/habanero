@@ -383,7 +383,7 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""ContactPersonPessimisticLockingDB"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
 					<property  name=""DateTimeLocked"" type=""DateTime"" />
 					<property  name=""UserLocked"" />
 					<property  name=""Locked"" type=""Boolean""/>

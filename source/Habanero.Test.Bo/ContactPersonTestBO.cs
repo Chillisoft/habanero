@@ -48,10 +48,10 @@ namespace Habanero.Test.BO
                 itsLoader.LoadClass(
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
-					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
-                    <property  name=""FirstName"" />
-					<property  name=""DateOfBirth"" type=""DateTime"" />
+					<property name=""ContactPersonID"" type=""Guid"" />
+					<property name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property name=""FirstName"" databaseField=""FirstName_field"" />
+					<property name=""DateOfBirth"" type=""DateTime"" />
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
@@ -67,10 +67,10 @@ namespace Habanero.Test.BO
                 itsLoader.LoadClass(
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
-					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
-                    <property  name=""FirstName"" />
-					<property  name=""DateOfBirth"" type=""DateTime"" />
+					<property name=""ContactPersonID"" type=""Guid"" />
+					<property name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property name=""FirstName"" databaseField=""FirstName_field"" />
+					<property name=""DateOfBirth"" type=""DateTime"" />
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
@@ -96,10 +96,10 @@ namespace Habanero.Test.BO
 //                itsLoader.LoadClass(
 //                    @"
 //				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
-//					<property  name=""ContactPersonID"" type=""Guid"" />
-//					<property  name=""Surname"" compulsory=""true"" />
-//                    <property  name=""FirstName"" />
-//					<property  name=""DateOfBirth"" type=""DateTime"" />
+//					<property name=""ContactPersonID"" type=""Guid"" />
+//					<property name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+//                    <property name=""FirstName"" databaseField=""FirstName_field"" />
+//					<property name=""DateOfBirth"" type=""DateTime"" />
 //					<primaryKey>
 //						<prop name=""ContactPersonID"" />
 //					</primaryKey>
@@ -132,8 +132,8 @@ namespace Habanero.Test.BO
                 itsLoader.LoadClass(
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
-					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
+					<property name=""ContactPersonID"" type=""Guid"" />
+					<property name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
 					<primaryKey isObjectID=""false"" >
 						<prop name=""Surname"" />
 					</primaryKey>
@@ -149,8 +149,8 @@ namespace Habanero.Test.BO
                 itsLoader.LoadClass(
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
-					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
+					<property name=""ContactPersonID"" type=""Guid"" />
+					<property name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
 					<primaryKey isObjectID=""false"" >
 						<prop name=""ContactPersonID"" />
                         <prop name=""Surname"" />
@@ -168,9 +168,9 @@ namespace Habanero.Test.BO
                 itsLoader.LoadClass(
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
-					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
-                    <property name=""FirstName"" />
+					<property name=""ContactPersonID"" type=""Guid"" />
+					<property name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property name=""FirstName"" databaseField=""FirstName_field"" />
                     <key name=""AlternateKey"">
                         <prop name=""Surname"" />
                         <prop name=""FirstName"" />
@@ -192,9 +192,9 @@ namespace Habanero.Test.BO
                 itsLoader.LoadClass(
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
-					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
-                    <property name=""FirstName"" />
+					<property name=""ContactPersonID"" type=""Guid"" />
+					<property name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property name=""FirstName"" databaseField=""FirstName_field"" />
                     <primaryKey isObjectID=""false""  >
                         <prop name=""Surname"" />
                         <prop name=""FirstName"" />
@@ -213,8 +213,8 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
-                    <property  name=""FirstName"" compulsory=""true"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property  name=""FirstName"" databaseField=""FirstName_field"" compulsory=""true"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
@@ -233,8 +233,8 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
-                    <property  name=""FirstName"" compulsory=""true"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property  name=""FirstName"" databaseField=""FirstName_field"" compulsory=""true"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
                     <property  name=""OrganisationID"" type=""Guid"" />
 					<primaryKey>
@@ -256,8 +256,8 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
-                    <property  name=""FirstName"" compulsory=""true"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property  name=""FirstName"" databaseField=""FirstName_field"" compulsory=""true"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
                     <property  name=""OrganisationID"" type=""Guid"" />
 					<primaryKey>
@@ -281,8 +281,8 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
-                    <property  name=""FirstName"" compulsory=""true"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property  name=""FirstName"" databaseField=""FirstName_field"" compulsory=""true"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
                     <property  name=""OrganisationID"" type=""Guid"" />
 					<primaryKey>
@@ -318,8 +318,8 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
-                    <property  name=""FirstName"" compulsory=""true"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property  name=""FirstName"" databaseField=""FirstName_field"" compulsory=""true"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
                     <property  name=""OrganisationID"" type=""Guid"" />
 					<primaryKey>
@@ -343,8 +343,8 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
-                    <property  name=""FirstName"" compulsory=""true"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property  name=""FirstName"" databaseField=""FirstName_field"" compulsory=""true"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
                     <property  name=""OrganisationID"" type=""Guid"" />
 					<primaryKey>
@@ -367,8 +367,8 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
-                    <property  name=""FirstName"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property  name=""FirstName"" databaseField=""FirstName_field"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
                     <property  name=""Image"" type=""System.Drawing.Bitmap"" assembly=""System.Drawing"" />
 					<primaryKey>
@@ -388,8 +388,8 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
-                    <property  name=""FirstName"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property  name=""FirstName"" databaseField=""FirstName_field"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
@@ -425,8 +425,8 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
-                    <property  name=""FirstName"" compulsory=""true"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property  name=""FirstName"" databaseField=""FirstName_field"" compulsory=""true"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
                     <property  name=""OrganisationID"" type=""Guid"" >
                       <businessObjectLookupList class=""Organisation"" assembly=""Habanero.Test"" />

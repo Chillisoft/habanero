@@ -166,11 +166,11 @@ namespace Habanero.Test
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("Surname", "System", "String", PropReadWriteRule.ReadWrite, "Surname", null, true, false);
+                new PropDef("Surname", "System", "String", PropReadWriteRule.ReadWrite, "Surname_field", null, true, false);
             propDef.PropRule = new PropRuleString("ContactPerson-" + propDef.PropertyName, "", 2, 50, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("FirstName", typeof (String), PropReadWriteRule.ReadWrite, null);
+            propDef = new PropDef("FirstName", typeof(String), PropReadWriteRule.ReadWrite, "FirstName_field", null);
             lPropDefCol.Add(propDef);
 
             propDef = new PropDef("DateOfBirth", typeof (DateTime), PropReadWriteRule.WriteOnce, null);
@@ -316,7 +316,7 @@ namespace Habanero.Test
         {
             string sql = "DELETE FROM contact_person_address";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
-             sql = "DELETE FROM contact_person";
+            sql = "DELETE FROM contact_person";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 
@@ -355,7 +355,12 @@ namespace Habanero.Test
             ClassDef.RelationshipDefCol = new RelationshipDefCol();
             ClassDef.RelationshipDefCol.Add(relDef);
 
-            ((RelationshipCol)Relationships).Add(new MultipleRelationship(this, relDef, Props));
+            Relationships.Add(new MultipleRelationship(this, relDef, Props));
+        }
+
+        public override string ToString()
+        {
+            return this.ID.ToString();
         }
     }
 }

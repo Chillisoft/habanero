@@ -28,6 +28,7 @@ namespace Habanero.Test.General
     {
         public TestCarsOwnedRelationship()
         {
+            SetupDBConnection();
         }
 
         public static void RunTest()

@@ -129,22 +129,34 @@ namespace Habanero.Test.BO
                 cp.FirstName = Guid.NewGuid().ToString("N");
                 cp.Save();
                 BusinessObject.AllLoadedBusinessObjects().Clear();
-
+                GCCollectAll();
 
                 SelectQuery query = new SelectQuery(new Criteria("Surname", Criteria.Op.Equals, cp.Surname));
-                query.Fields.Add("Surname", new QueryField("Surname", "Surname", ""));
+                query.Fields.Add("Surname", new QueryField("Surname", "Surname_field", ""));
                 query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", ""));
                 query.Source = cp.ClassDef.TableName;
 
                 //---------------Execute Test ----------------------
                 ContactPersonTestBO loadedCp =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(query);
+
                 //---------------Test Result -----------------------
                 Assert.AreNotSame(loadedCp, cp);
                 Assert.AreEqual(cp.ContactPersonID, loadedCp.ContactPersonID);
                 Assert.AreEqual(cp.Surname, loadedCp.Surname);
                 Assert.IsTrue(String.IsNullOrEmpty(loadedCp.FirstName), "Firstname is not being loaded"); // not being loaded
-                //---------------Tear Down -------------------------
+                Assert.IsFalse(loadedCp.State.IsNew);
+                Assert.IsFalse(loadedCp.State.IsDeleted);
+                Assert.IsFalse(loadedCp.State.IsDirty);
+                Assert.IsTrue(loadedCp.State.IsValid());
+            }
+
+            //Test After load not yet done.
+
+            private static void GCCollectAll()
+            {
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
             }
 
 
@@ -165,7 +177,7 @@ namespace Habanero.Test.BO
                 //---------------Tear Down -------------------------          
             }
 
-            [Test, Ignore("Currently working on this")]
+            [Test]
             public void TestGetBusinessObject_ReturnsSubType_TwoLevelsDeep_Fresh()
             {
                 //---------------Set up test pack-------------------
@@ -182,7 +194,7 @@ namespace Habanero.Test.BO
                 //---------------Tear Down -------------------------          
             }
 
-            [Test, Ignore("Currently working on this")]
+            [Test]
             public void TestGetBusinessObject_ReturnsSubType_TwoLevelsDeep_DiscriminatorShared_Fresh()
             {
                 //---------------Set up test pack-------------------
@@ -308,21 +320,22 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestGetBusinessObjectWhenNotExists()
+        public void TestGetBusinessObjectWhenNotExists_NotLoadedViaKey()
         {
             //---------------Set up test pack-------------------
             SetupDataAccessor();
             ContactPersonTestBO.LoadDefaultClassDef();
+            Criteria criteria = new Criteria("ContactPersonID", Criteria.Op.Equals, Guid.NewGuid().ToString("N"));
+               
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCP =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(new ContactPersonTestBO().PrimaryKey);
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+
             //---------------Test Result -----------------------
             Assert.IsNull(loadedCP);
-            //---------------Tear Down -------------------------          
         }
-
 
         [Test]
         public void TestGetBusinessObject_SelectQuery()
@@ -334,7 +347,7 @@ namespace Habanero.Test.BO
             cp.Surname = Guid.NewGuid().ToString("N");
             cp.Save();
             SelectQuery query = new SelectQuery(new Criteria("Surname", Criteria.Op.Equals, cp.Surname));
-            query.Fields.Add("Surname", new QueryField("Surname", "Surname", ""));
+            query.Fields.Add("Surname", new QueryField("Surname", "Surname_field", ""));
             query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", ""));
             query.Source = cp.ClassDef.TableName;
 
@@ -356,7 +369,7 @@ namespace Habanero.Test.BO
             cp.Surname = Guid.NewGuid().ToString("N");
             cp.Save();
             SelectQuery query = new SelectQuery(new Criteria("Surname", Criteria.Op.Equals, cp.Surname));
-            query.Fields.Add("Surname", new QueryField("Surname", "Surname", ""));
+            query.Fields.Add("Surname", new QueryField("Surname", "Surname_field", ""));
             query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", ""));
             query.Source = cp.ClassDef.TableName;
 
@@ -810,7 +823,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------     
         }
 
-        [Test, Ignore("Mark - working")]
+        [Test]
         public void TestGetBusinessObjectCollection_SortOrder_ThroughRelationship()
         {
             //---------------Set up test pack-------------------
@@ -855,7 +868,7 @@ namespace Habanero.Test.BO
         }
 
 
-        [Test, Ignore("Mark - working")]
+        [Test]
         public void TestLoadThroughRelationship_Multiple()
         {
             //---------------Set up test pack-------------------
@@ -874,7 +887,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        [Test, Ignore("Mark - working")]
+        [Test]
         public void TestLoadThroughRelationship_Single()
         {
             //---------------Set up test pack-------------------
@@ -1027,6 +1040,84 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreSame(loadedFilledCircle, filledCircle);
+        }
+
+
+        [Test]
+        [ExpectedException(typeof(BusObjDeleteConcurrencyControlException))]
+        public void TestTryLoadDeletedObject_RaiseError()
+        {
+
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO personToDelete = new ContactPersonTestBO();
+            personToDelete.FirstName = Guid.NewGuid().ToString("B");
+            personToDelete.Surname = Guid.NewGuid().ToString("B");
+            personToDelete.Save();
+
+            personToDelete.Delete();
+            personToDelete.Save();
+
+            //Ensure that a fresh object is loaded from DB
+            ContactPerson.ClearContactPersonCol();
+
+            //--------Execute------------------------------------------------------
+            BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(personToDelete.ID);
+        }
+        [Test]
+        [ExpectedException(typeof(BusObjDeleteConcurrencyControlException))]
+        public void TestTryLoadDeletedObject_Untyped_RaiseError()
+        {
+
+            //---------------Set up test pack-------------------
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO personToDelete = new ContactPersonTestBO();
+            personToDelete.FirstName = Guid.NewGuid().ToString("B");
+            personToDelete.Surname = Guid.NewGuid().ToString("B");
+            personToDelete.Save();
+
+            personToDelete.Delete();
+            personToDelete.Save();
+
+            //Ensure that a fresh object is loaded from DB
+            ContactPerson.ClearContactPersonCol();
+
+            //--------Execute------------------------------------------------------
+            BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, personToDelete.ID);
+        }
+
+        /// <summary>
+        /// Tests to ensure that if the object has been edited in the object manager by 
+        /// another user the one we get back is always the latest.
+        /// </summary>
+        [Test, Ignore("To fix this")]
+        public void TestAlwaysGetTheFreshestObject()
+        {
+            //------------------------------Setup Test
+            ContactPerson originalContactPerson = new ContactPerson();
+            originalContactPerson.Surname = "FirstSurname";
+            originalContactPerson.Save();
+
+            ContactPerson.ClearContactPersonCol();
+
+            //load second object from DB to ensure that it is now in the object manager
+            ContactPerson myContact2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(originalContactPerson.ID);
+
+            //-----------------------------Execute Test-------------------------
+            //Edit first object and save
+            originalContactPerson.Surname = "SecondSurname";
+            originalContactPerson.Save(); //
+
+            ContactPerson myContact3 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(originalContactPerson.ID);
+
+            //-----------------------------Assert Result-----------------------
+            Assert.AreSame(myContact3, myContact2);
+            //The two surnames should be equal since the myContact3 was refreshed
+            // when it was loaded.
+            Assert.AreEqual(originalContactPerson.Surname, myContact3.Surname);
+            //Just to check the myContact2 should also match since it is physically the 
+            // same object as myContact3
+            Assert.AreEqual(originalContactPerson.Surname, myContact2.Surname);
         }
     }
 

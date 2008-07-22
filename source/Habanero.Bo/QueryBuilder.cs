@@ -94,8 +94,10 @@ namespace Habanero.BO
                 if (query.Fields.ContainsKey(orderField.FullName)) continue;
 
                 RelationshipDef relationshipDef = ((ClassDef)query.ClassDef).GetRelationship(orderField.Source);
-                IPropDef relatedPropDef = relationshipDef.RelatedObjectClassDef.GetPropDef(orderField.Name);
-                QueryField queryField = new QueryField(orderField.Name, relatedPropDef.DatabaseFieldName, orderField.Source);
+                ClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
+                IPropDef relatedPropDef = relatedObjectClassDef.GetPropDef(orderField.Name);
+                string tableName = relatedObjectClassDef.GetTableName(relatedPropDef);
+                QueryField queryField = new QueryField(orderField.Name, relatedPropDef.DatabaseFieldName, tableName);
                 query.Fields.Add(orderField.FullName, queryField);
             }
 

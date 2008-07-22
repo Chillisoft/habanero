@@ -59,8 +59,8 @@ namespace Habanero.Test.General
 			ISqlStatement sqlStatement = BusinessObjectCollection<Circle>.CreateLoadSqlStatement(
                 circle, Circle.GetClassDef(), relKey.RelationshipExpression(), -1, "", null);
 			string sql = sqlStatement.Statement.ToString();
-			Assert.AreEqual("SELECT `Circle`.`CircleID`, `Circle`.`Radius`, `Shape`.`ShapeID`, `Shape`.`ShapeName` FROM `Circle`, `Shape` " + 
-				"WHERE `Shape`.`ShapeID` = `Circle`.`ShapeID` AND `Shape`.`ShapeID` = ?Param0", sql);
+			Assert.AreEqual("SELECT `circle_table`.`CircleID_field`, `circle_table`.`Radius`, `Shape_table`.`ShapeID_field`, `Shape_table`.`ShapeName` FROM `circle_table`, `Shape_table` " + 
+				"WHERE `Shape_table`.`ShapeID_field` = `circle_table`.`ShapeID_field` AND `Shape_table`.`ShapeID_field` = ?Param0", sql);
 		}
 
 	}

@@ -235,8 +235,8 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""ContactPersonOptimisticLockingVersionNumberDB"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
-                    <property  name=""FirstName"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property  name=""FirstName"" databaseField=""FirstName_field"" />
 					<property  name=""DateLastUpdated"" type=""DateTime"" />
 					<property  name=""UserLastUpdated"" />
 					<property  name=""VersionNumber"" type=""Int32""/>

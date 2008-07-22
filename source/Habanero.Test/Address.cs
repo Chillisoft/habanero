@@ -27,13 +27,11 @@ namespace Habanero.Test
 {
     public class Address: BusinessObject
     {
+        private bool _isDeletable = true;
+
         #region Constructors
 
         public Address()
-        {
-        }
-
-        internal Address(BOPrimaryKey id) : base(id)
         {
         }
 
@@ -108,32 +106,7 @@ namespace Habanero.Test
             return propDefCol;
         }
 
-        /// <summary>
-        /// returns the Address identified by id.
-        /// </summary>
-        /// <remarks>
-        /// If the Address is already leaded then an identical copy of it will be returned.
-        /// </remarks>
-        /// <param name="id">The object primary Key</param>
-        /// <returns>The loaded business object</returns>
-        /// <exception cref="Habanero.BO.BusObjDeleteConcurrencyControlException">
-        ///  if the object has been deleted already</exception>
-        public static Address GetCar(BOPrimaryKey id)
-        {
-            Address myAddress = (Address)BOLoader.Instance.GetLoadedBusinessObject(id);
-            if (myAddress == null)
-            {
-                myAddress = new Address(id);
-                // AddToLoadedBusinessObjectCol(myCar);
-            }
-            return myAddress;
-        }
-
         #endregion //Constructors
-
-        #region persistance
-
-        #endregion /persistance
 
         #region Properties
 
@@ -226,5 +199,16 @@ namespace Habanero.Test
         }
 
         #endregion
+
+        public void SetDeletable(bool isDeletable)
+        {
+            _isDeletable = isDeletable;
+        }
+
+        public override bool IsDeletable(out string message)
+        {
+            message = "";
+            return _isDeletable;
+        }
     }
 }

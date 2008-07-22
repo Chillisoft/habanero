@@ -34,9 +34,6 @@ namespace Habanero.Test
         {
         }
 
-        internal Car(BOPrimaryKey id) : base(id)
-        {
-        }
 
         public Car(ClassDef classDef) : base(classDef)
         {
@@ -72,7 +69,7 @@ namespace Habanero.Test
             RelationshipDefCol relDefCol = CreateRelationshipDefCol(lPropDefCol);
 
 
-            ClassDef lClassDef = new ClassDef(typeof (Car), primaryKey, lPropDefCol, keysCol, relDefCol);
+            ClassDef lClassDef = new ClassDef(typeof (Car), primaryKey, "car_table", lPropDefCol, keysCol, relDefCol);
             ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
@@ -138,27 +135,6 @@ namespace Habanero.Test
             return lPropDefCol;
         }
 
-        /// <summary>
-        /// returns the Car identified by id.
-        /// </summary>
-        /// <remarks>
-        /// If the Car is already leaded then an identical copy of it will be returned.
-        /// </remarks>
-        /// <param name="id">The object primary Key</param>
-        /// <returns>The loaded business object</returns>
-        /// <exception cref="Habanero.BO.BusObjDeleteConcurrencyControlException">
-        ///  if the object has been deleted already</exception>
-        public static Car GetCar(BOPrimaryKey id)
-        {
-            Car myCar = (Car)BOLoader.Instance.GetLoadedBusinessObject(id);
-            if (myCar == null)
-            {
-                myCar = new Car(id);
-                // AddToLoadedBusinessObjectCol(myCar);
-            }
-            return myCar;
-        }
-
         #endregion //Constructors
 
         #region persistance
@@ -203,7 +179,7 @@ namespace Habanero.Test
 
         public static void DeleteAllCars()
         {
-            string sql = "DELETE FROM Car";
+            string sql = "DELETE FROM car_table";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 

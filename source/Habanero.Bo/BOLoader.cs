@@ -17,7 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-#pragma warning disable MemberCouldBeMadeStatic
+// ReSharper disable MemberCanBeMadeStatic
 using System;
 using System.Data;
 using System.Security.Permissions;
@@ -56,6 +56,7 @@ namespace Habanero.BO
         /// business object was not found in the database</exception>
         public virtual bool Refresh(BusinessObject obj)
         {
+            
             return Refresh(obj, null);
         }
 
@@ -400,20 +401,17 @@ namespace Habanero.BO
             {
                 return null;
             }
-            else if (col.Count > 1)
+            if (col.Count > 1)
             {
                 throw new UserException("Loading a '" + classDef.DisplayName + "' with criteria '" + criteria +
                                         "' returned more than one record when only one was expected.");
             }
-            else
+            IBusinessObject bo = col[0];
+            if (!bo.State.IsEditing)
             {
-                IBusinessObject bo = col[0];
-                if (!bo.State.IsEditing)
-                {
-                    ((BusinessObject)bo).AfterLoad();
-                }
-                return (T) bo;
+                ((BusinessObject)bo).AfterLoad();
             }
+            return (T) bo;
         }
 
         #endregion //Single Business Object Methods
@@ -468,10 +466,7 @@ namespace Habanero.BO
                     }
                     return loadedBusinessObject;
                 }
-                else
-                {
-                    BusinessObject.AllLoadedBusinessObjects().Remove(id);
-                }
+                BusinessObject.AllLoadedBusinessObjects().Remove(id);
             }
             return null;
         }
@@ -667,16 +662,13 @@ namespace Habanero.BO
                 return connection.LoadDataReader(selectSql);
                 //return DatabaseConnection.CurrentConnection.LoadDataReader(selectSql);
             }
-            else
-            {
-                obj.ParseParameterInfo(searchExpression);
-                selectSql.Statement.Append(obj.SelectSqlWithNoSearchClauseIncludingWhere());
-                searchExpression.SqlExpressionString(selectSql, connection.LeftFieldDelimiter,
-                                                     connection.RightFieldDelimiter);
-                //searchExpression.SqlExpressionString(selectSql, DatabaseConnection.CurrentConnection.LeftFieldDelimiter,
-                //                                     DatabaseConnection.CurrentConnection.RightFieldDelimiter);
-                return obj.GetDatabaseConnection().LoadDataReader(selectSql);
-            }
+            obj.ParseParameterInfo(searchExpression);
+            selectSql.Statement.Append(obj.SelectSqlWithNoSearchClauseIncludingWhere());
+            searchExpression.SqlExpressionString(selectSql, connection.LeftFieldDelimiter,
+                                                 connection.RightFieldDelimiter);
+            //searchExpression.SqlExpressionString(selectSql, DatabaseConnection.CurrentConnection.LeftFieldDelimiter,
+            //                                     DatabaseConnection.CurrentConnection.RightFieldDelimiter);
+            return obj.GetDatabaseConnection().LoadDataReader(selectSql);
         }
 
         /// <summary>

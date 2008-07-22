@@ -40,7 +40,7 @@ namespace Habanero.Test.General
         {
             CircleNoPrimaryKey.GetClassDef().SuperClassDef =
                 new SuperClassDef(Shape.GetClassDef(), ORMapping.SingleTableInheritance);
-            CircleNoPrimaryKey.GetClassDef().SuperClassDef.Discriminator = "ShapeType";
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef.Discriminator = "ShapeType_field";
         }
 
         protected override void SetStrID()
@@ -86,7 +86,7 @@ namespace Habanero.Test.General
         {
             Assert.AreEqual(1, itsInsertSql.Count,
                             "There should only be one insert Sql statement when using Single Table Inheritance.");
-            Assert.AreEqual("INSERT INTO `Shape` (`ShapeType`, `Radius`, `ShapeID`, `ShapeName`) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
+            Assert.AreEqual("INSERT INTO `Shape_table` (`ShapeType_field`, `Radius`, `ShapeID_field`, `ShapeName`) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
                             itsInsertSql[0].Statement.ToString(),
                             "Concrete Table Inheritance insert Sql seems to be incorrect.");
             Assert.AreEqual(4, itsInsertSql[0].Parameters.Count, "There should be 4 parameters.");
@@ -107,7 +107,7 @@ namespace Habanero.Test.General
             Assert.AreEqual(1, itsUpdateSql.Count,
                             "There should only be one update sql statement when using single table inheritance.");
             Assert.AreEqual(
-                "UPDATE `Shape` SET `Radius` = ?Param0, `ShapeName` = ?Param1 WHERE `ShapeID` = ?Param2",
+                "UPDATE `Shape_table` SET `Radius` = ?Param0, `ShapeName` = ?Param1 WHERE `ShapeID_field` = ?Param2",
                 itsUpdateSql[0].Statement.ToString());
             // Is Object ID so doesn't get changed
             //Assert.AreEqual(strID, ((IDbDataParameter) _updateSql[0].Parameters[1]).Value,
@@ -125,7 +125,7 @@ namespace Habanero.Test.General
         {
             Assert.AreEqual(1, itsDeleteSql.Count,
                             "There should only be one delete sql statement when using single table inheritance.");
-            Assert.AreEqual("DELETE FROM `Shape` WHERE `ShapeID` = ?Param0", itsDeleteSql[0].Statement.ToString(),
+            Assert.AreEqual("DELETE FROM `Shape_table` WHERE `ShapeID_field` = ?Param0", itsDeleteSql[0].Statement.ToString(),
                             "Delete Sql for single table inheritance is incorrect.");
             Assert.AreEqual(strID, ((IDbDataParameter) itsDeleteSql[0].Parameters[0]).Value,
                             "Parameter ShapeID has incorrect value for delete sql when using Single Table inheritance.");
@@ -135,7 +135,7 @@ namespace Habanero.Test.General
         public void TestSelectSql()
         {
             Assert.AreEqual(
-                    "SELECT `Shape`.`Radius`, `Shape`.`ShapeID`, `Shape`.`ShapeName` FROM `Shape` WHERE `ShapeType` = 'CircleNoPrimaryKey' AND `ShapeID` = ?Param0",
+                    "SELECT `Shape_table`.`Radius`, `Shape_table`.`ShapeID_field`, `Shape_table`.`ShapeName` FROM `Shape_table` WHERE `ShapeType_field` = 'CircleNoPrimaryKey' AND `ShapeID_field` = ?Param0",
                     selectSql.Statement.ToString(), "Select sql is incorrect for single table inheritance.");
          
             Assert.AreEqual(strID, ((IDbDataParameter) selectSql.Parameters[0]).Value,
@@ -206,7 +206,7 @@ namespace Habanero.Test.General
         public void TestUniqueKeyValidationForSubTypesOfSingleTableInheritanceStructure()
         {
             //---------------Set up test pack-------------------
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from filledcircle; delete from circle; delete from shape");
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from filledcircle_table; delete from circle_table; delete from shape_table");
             Shape shape = new Shape();
             shape.ShapeName = "MyShape";
             shape.Save();
@@ -227,7 +227,7 @@ namespace Habanero.Test.General
         {
             //---------------Set up test pack-------------------
            // ClassDef.ClassDefs.Clear();
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from filledcircle; delete from circle; delete from shape");
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from filledcircle_table; delete from circle_table; delete from shape_table");
             MyBO.LoadClassDefWithShape_SingleTableInheritance_Relationship();
 
             MyBO bo = new MyBO();

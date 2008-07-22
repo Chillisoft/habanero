@@ -17,9 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -223,8 +220,9 @@ namespace Habanero.Test.BO
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
+            StringAssert.Contains("[contact_person].[Surname_field] FROM [contact_person_address]", statementString);
             StringAssert.Contains("JOIN [contact_person] ON [contact_person_address].[ContactPersonID] = [contact_person].[ContactPersonID]", statementString);
-            StringAssert.EndsWith("ORDER BY [contact_person].[Surname] ASC", statementString);
+            StringAssert.EndsWith("ORDER BY [contact_person].[Surname_field] ASC", statementString);
         }
 
         [Test]
@@ -242,7 +240,7 @@ namespace Habanero.Test.BO
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.Contains("JOIN [ContactPersonCompositeKey] ON [Car].[Driver_FK1] = [ContactPersonCompositeKey].[PK1_Prop1] AND [Car].[Driver_FK2] = [ContactPersonCompositeKey].[PK1_Prop2] ", statementString);
+            StringAssert.Contains("JOIN [ContactPersonCompositeKey] ON [car_table].[Driver_FK1] = [ContactPersonCompositeKey].[PK1_Prop1] AND [car_table].[Driver_FK2] = [ContactPersonCompositeKey].[PK1_Prop2] ", statementString);
             StringAssert.EndsWith("ORDER BY [ContactPersonCompositeKey].[Surname] ASC", statementString);
         }
 
@@ -347,7 +345,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
-            StringAssert.Contains("JOIN [Shape] ON [Circle].[CircleID] = [Shape].[ShapeID]", statement.Statement.ToString());
+            StringAssert.Contains("JOIN [Shape_table] ON [circle_table].[CircleID_field] = [Shape_table].[ShapeID_field]", statement.Statement.ToString());
         }
 
         [Test]
@@ -362,8 +360,8 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
-            StringAssert.Contains("JOIN [Circle] ON [FilledCircle].[FilledCircleID] = [Circle].[CircleID]" + 
-                " JOIN [Shape] ON [Circle].[CircleID] = [Shape].[ShapeID]", statement.Statement.ToString());
+            StringAssert.Contains("JOIN [circle_table] ON [FilledCircle_table].[FilledCircleID_field] = [circle_table].[CircleID_field]" +
+                " JOIN [Shape_table] ON [circle_table].[CircleID_field] = [Shape_table].[ShapeID_field]", statement.Statement.ToString());
         }
 
         public class DatabaseConnectionStub_LimitClauseAtEnd : DatabaseConnection

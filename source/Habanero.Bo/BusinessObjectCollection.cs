@@ -751,10 +751,22 @@ namespace Habanero.BO
         /// <param name="bo">The business object to remove</param>
         public new virtual bool Remove(TBusinessObject bo)
         {
-            bool removed = base.Remove(bo);
-            _lookupTable.Remove(bo.ID.ToString());
-            bo.Deleted -= BusinessObjectDeletedHandler;
-            this.FireBusinessObjectRemoved(bo);
+            return RemoveInternal(bo);
+        }
+
+        /// <summary>
+        /// Removes the specified business object from the collection. This is used when refreshing
+        /// a collection so that any overriden behaviour (from overriding Remove) is not applied
+        /// when loading and refreshing.
+        /// </summary>
+        /// <param name="businessObject"></param>
+        /// <returns></returns>
+        internal bool RemoveInternal(TBusinessObject businessObject)
+        {
+            bool removed = base.Remove(businessObject);
+            _lookupTable.Remove(businessObject.ID.ToString());
+            businessObject.Deleted -= BusinessObjectDeletedHandler;
+            this.FireBusinessObjectRemoved(businessObject);
             return removed;
         }
 
@@ -1341,5 +1353,6 @@ namespace Habanero.BO
             BORegistry.DataAccessor.BusinessObjectLoader.Refresh(this);
         }
 
+       
     }
 }

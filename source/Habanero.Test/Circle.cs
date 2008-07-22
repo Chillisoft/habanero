@@ -48,15 +48,15 @@ namespace Habanero.Test
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("Radius", typeof (int), PropReadWriteRule.ReadWrite, "Radius", null);
+                new PropDef("Radius", typeof (int), PropReadWriteRule.ReadWrite, null);
             lPropDefCol.Add(propDef);
-            lPropDefCol.Add("CircleID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
+            lPropDefCol.Add("CircleID", typeof(Guid), PropReadWriteRule.WriteOnce, "CircleID_field", null);
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
             primaryKey.IsObjectID = true;
             primaryKey.Add(lPropDefCol["CircleID"]);
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
-            ClassDef lClassDef = new ClassDef(typeof (Circle), primaryKey, lPropDefCol, keysCol, relDefCol);
+            ClassDef lClassDef = new ClassDef(typeof (Circle), primaryKey, "circle_table", lPropDefCol, keysCol, relDefCol);
             
             lClassDef.SuperClassDef = new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
 

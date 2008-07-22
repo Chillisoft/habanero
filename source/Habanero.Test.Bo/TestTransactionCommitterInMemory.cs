@@ -104,6 +104,9 @@ namespace Habanero.Test.BO
             firstTransactionCommitter.AddBusinessObject(cp);
             firstTransactionCommitter.CommitTransaction();
 
+            //---------------Assert Preconditions--------------
+            Assert.AreEqual(1, dataStore.Count);
+
             //---------------Execute Test ----------------------
             cp.Delete();
             ITransactionCommitter secondTransactionCommitter = new TransactionCommitterInMemory(dataStore);
@@ -112,8 +115,8 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(0, dataStore.Count);
-            Assert.IsNull(loader.GetBusinessObject<ContactPersonTestBO>(cp.PrimaryKey));
-            //---------------Tear Down -------------------------
+//            Assert.IsNull(loader.GetBusinessObject<ContactPersonTestBO>(cp.PrimaryKey));
+
         }
 
         [Test, ExpectedException(typeof(BusinessObjectReferentialIntegrityException)), Ignore(" new data store memory")]

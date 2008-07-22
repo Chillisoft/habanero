@@ -386,7 +386,7 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""ContactPersonNumberGenerator"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
 					<property  name=""GeneratedNumber"" compulsory=""true"" databaseField=""PK3_Prop""/>
                     <key>
                         <prop name=""GeneratedNumber"" /> 

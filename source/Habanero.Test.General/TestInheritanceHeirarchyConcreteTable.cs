@@ -67,7 +67,7 @@ namespace Habanero.Test.General
         public void TestCircleSelectSql()
         {
             Assert.AreEqual(
-                "SELECT `FilledCircle`.`Colour`, `FilledCircle`.`FilledCircleID`, `FilledCircle`.`Radius`, `FilledCircle`.`ShapeName` FROM `FilledCircle` WHERE `FilledCircleID` = ?Param0",
+                "SELECT `FilledCircle_table`.`Colour`, `FilledCircle_table`.`FilledCircleID_field`, `FilledCircle_table`.`Radius`, `FilledCircle_table`.`ShapeName` FROM `FilledCircle_table` WHERE `FilledCircleID_field` = ?Param0",
                 _selectSql.Statement.ToString(), "select statement is incorrect for Concrete Table inheritance");
         }
 
@@ -77,7 +77,7 @@ namespace Habanero.Test.General
             Assert.AreEqual(1, _insertSql.Count,
                             "There should only be one insert statement for concrete table inheritance.");
             Assert.AreEqual(
-                "INSERT INTO `FilledCircle` (`Colour`, `FilledCircleID`, `Radius`, `ShapeName`) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
+                "INSERT INTO `FilledCircle_table` (`Colour`, `FilledCircleID_field`, `Radius`, `ShapeName`) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
                 _insertSql[0].Statement.ToString(), "Concrete Table Inheritance insert Sql seems to be incorrect.");
             Assert.AreEqual(_filledCircleId, ((IDbDataParameter) _insertSql[0].Parameters[1]).Value,
                             "Parameter FilledCircleID has incorrect value");
@@ -95,7 +95,7 @@ namespace Habanero.Test.General
             Assert.AreEqual(1, _updateSql.Count,
                             "There should only be one update statement for concrete table inheritance.");
             Assert.AreEqual(
-                "UPDATE `FilledCircle` SET `Colour` = ?Param0, `Radius` = ?Param1, `ShapeName` = ?Param2 WHERE `FilledCircleID` = ?Param3",
+                "UPDATE `FilledCircle_table` SET `Colour` = ?Param0, `Radius` = ?Param1, `ShapeName` = ?Param2 WHERE `FilledCircleID_field` = ?Param3",
                 _updateSql[0].Statement.ToString(), "Concrete Table Inheritance update Sql seems to be incorrect.");
             Assert.AreEqual(3, ((IDbDataParameter) _updateSql[0].Parameters[0]).Value,
                             "Parameter Colour has incorrect value");
@@ -112,7 +112,7 @@ namespace Habanero.Test.General
         {
             Assert.AreEqual(1, _deleteSql.Count,
                             "There should only be one delete statement for concrete table inheritance.");
-            Assert.AreEqual("DELETE FROM `FilledCircle` WHERE `FilledCircleID` = ?Param0",
+            Assert.AreEqual("DELETE FROM `FilledCircle_table` WHERE `FilledCircleID_field` = ?Param0",
                             _deleteSql[0].Statement.ToString(),
                             "Concrete Table Inheritance delete Sql seems to be incorrect.");
             Assert.AreEqual(_filledCircleId, ((IDbDataParameter) _deleteSql[0].Parameters[0]).Value,
@@ -123,7 +123,7 @@ namespace Habanero.Test.General
         public void TestSelectSql()
         {
             Assert.AreEqual(
-                "SELECT `FilledCircle`.`Colour`, `FilledCircle`.`FilledCircleID`, `FilledCircle`.`Radius`, `FilledCircle`.`ShapeName` FROM `FilledCircle` WHERE `FilledCircleID` = ?Param0",
+                "SELECT `FilledCircle_table`.`Colour`, `FilledCircle_table`.`FilledCircleID_field`, `FilledCircle_table`.`Radius`, `FilledCircle_table`.`ShapeName` FROM `FilledCircle_table` WHERE `FilledCircleID_field` = ?Param0",
                 _selectSql.Statement.ToString(), "Select sql is incorrect for concrete table inheritance.");
             Assert.AreEqual(_filledCircleId, ((IDbDataParameter) _selectSql.Parameters[0]).Value,
                             "Parameter CircleID is incorrect in select where clause for concrete table inheritance.");

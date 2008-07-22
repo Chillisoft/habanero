@@ -110,9 +110,9 @@ namespace Habanero.Test.BO
             Assert.AreEqual(startingFields + 1, selectQuery.Fields.Count);
             Assert.IsTrue(selectQuery.Fields.ContainsKey("ContactPerson.Surname"));
             QueryField newField = selectQuery.Fields["ContactPerson.Surname"];
-            Assert.AreEqual("ContactPerson", newField.SourceName);
+            Assert.AreEqual("contact_person", newField.SourceName);
             Assert.AreEqual("Surname", newField.PropertyName);
-            Assert.AreEqual("Surname", newField.FieldName);
+            Assert.AreEqual("Surname_field", newField.FieldName);
             //---------------Tear Down -------------------------
         }
 
@@ -182,7 +182,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(3, selectQuery.Fields.Count);
             Assert.IsTrue(selectQuery.Fields.ContainsKey("ShapeID"));
-            Assert.AreEqual("Shape", selectQuery.Source);
+            Assert.AreEqual("Shape_table", selectQuery.Source);
         }
 
         [Test]
@@ -199,8 +199,8 @@ namespace Habanero.Test.BO
             Assert.AreEqual(3, selectQuery.Fields.Count);
             Assert.IsTrue(selectQuery.Fields.ContainsKey("ShapeID"));
             Assert.IsTrue(selectQuery.Fields.ContainsKey("ShapeName"));
-            Assert.IsTrue(selectQuery.Fields.ContainsKey("ShapeType"));
-            Assert.AreEqual("Shape", selectQuery.Source);
+            Assert.IsTrue(selectQuery.Fields.ContainsKey("ShapeType_field"));
+            Assert.AreEqual("Shape_table", selectQuery.Source);
         }
 
 

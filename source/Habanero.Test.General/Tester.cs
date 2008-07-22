@@ -106,13 +106,14 @@ namespace Habanero.Test.General
             updateContactPersonID = myContact.ID;
         }
 
-        private void createDeleteContactPersonTestPack()
+        private ContactPerson createDeleteContactPersonTestPack()
         {
             ContactPerson myContact = new ContactPerson();
             myContact.FirstName = "To Be deleted";
             myContact.Surname = "To Be deleted";
             myContact.Save();
             deleteContactPersonID = myContact.ID;
+            return myContact;
         }
 
 
@@ -120,14 +121,14 @@ namespace Habanero.Test.General
         [Test]
         public void TestUpdateExistingContactPerson()
         {
-            ContactPerson myContactPerson = ContactPerson.GetContactPerson(updateContactPersonID);
+            ContactPerson myContactPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(updateContactPersonID);
             myContactPerson.FirstName = "NewFirstName";
             myContactPerson.Save();
 
             //waitForDB();
             ContactPerson.ClearContactPersonCol();
             //Reload the person and make sure that the changes have been made.
-            ContactPerson myNewContactPerson = ContactPerson.GetContactPerson(updateContactPersonID);
+            ContactPerson myNewContactPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(updateContactPersonID);
             Assert.AreEqual("NewFirstName", myNewContactPerson.FirstName,
                             "The firstName was not updated");
         }
@@ -154,7 +155,7 @@ namespace Habanero.Test.General
             IPrimaryKey id = mContactPTestSave.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, mContactPTestSave.ID);
 
-            ContactPerson mySecondContactPerson = ContactPerson.GetContactPerson(id);
+            ContactPerson mySecondContactPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(id);
             Assert.IsFalse(mContactPTestSave.State.IsNew); // this object is recovered from the DB
             // and is thus not new.
             Assert.AreEqual(mContactPTestSave.ID.ToString(), mySecondContactPerson.ID.ToString());
@@ -192,12 +193,6 @@ namespace Habanero.Test.General
             Assert.IsTrue(myContact.State.IsNew);
         }
 
-        [Test]
-        [ExpectedException(typeof(BusObjDeleteConcurrencyControlException))]
-        public void TestDeleteContactPerson()
-        {
-            ContactPerson mySecondContactPerson = ContactPerson.GetContactPerson(mContactPDeleted.ID);
-        }
 
         [Test]
         public void TestEditTwoInstancesContactPerson()
@@ -212,7 +207,7 @@ namespace Habanero.Test.General
             IPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
 
-            ContactPerson mySecondContactPerson = ContactPerson.GetContactPerson(id);
+            ContactPerson mySecondContactPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(id);
 
             Assert.AreEqual(myContact.ID,
                             mySecondContactPerson.ID);
@@ -295,7 +290,7 @@ namespace Habanero.Test.General
             //Ensure that we have two physical instances of the same logical contact person
             
            BOLoader.Instance.ClearLoadedBusinessObjects();//Ensure that a fresh object is loaded from DB
-            ContactPerson myContact2 = ContactPerson.GetContactPerson(myContact.ID);
+           ContactPerson myContact2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(myContact.ID);
 
             myContact.Surname = "New Surname"; //edit first object
             myContact2.Surname = "New Surname2"; //edit second object
@@ -314,37 +309,7 @@ namespace Habanero.Test.General
             mContactPersonUpdateConcurrency.Surname = "New Surname 3";
         }
 
-
-
-        /// <summary>
-        /// Tests to ensure that if the object has been edited in the object manager by 
-        /// another user the one we get back is always the latest.
-        /// </summary>
-        [Test]
-        public void TestAlwaysGetTheFreshestObject()
-        {
-            ContactPerson originalContactPerson = new ContactPerson();
-            originalContactPerson.Surname = "FirstSurname";
-            originalContactPerson.Save();
-
-            ContactPerson.ClearContactPersonCol();
-
-            //load second object from DB to ensure that it is now in the object manager
-            ContactPerson myContact2 = ContactPerson.GetContactPerson(originalContactPerson.ID);
-
-            //Edit first object and save
-            originalContactPerson.Surname = "SecondSurname";
-            originalContactPerson.Save(); //
-
-            ContactPerson myContact3 = ContactPerson.GetContactPerson(originalContactPerson.ID);
-
-            //The two surnames should be equal since the myContact3 was refreshed
-            // when it was loaded.
-            Assert.AreEqual(originalContactPerson.Surname, myContact3.Surname);
-            //Just to check the myContact2 should also match since it is physically the 
-            // same object as myContact3
-            Assert.AreEqual(originalContactPerson.Surname, myContact2.Surname);
-        }
+ 
 
         /// <summary>
         /// Tests to ensure that if the new object that is being saved to the database is always

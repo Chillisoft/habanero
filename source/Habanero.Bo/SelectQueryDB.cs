@@ -224,7 +224,7 @@ namespace Habanero.BO
             string tableAndFieldName;
             if (!string.IsNullOrEmpty(orderField.Source))
             {
-                string relatedTableName = GetRelatedTableName(queryField.SourceName);
+                string relatedTableName = queryField.SourceName;
                 tableAndFieldName = DelimitField(relatedTableName, queryField.FieldName);
             }
             else
@@ -234,12 +234,12 @@ namespace Habanero.BO
             StringUtilities.AppendMessage(orderByClause, tableAndFieldName + " " + direction, ", ");
         }
 
-        private string GetRelatedTableName(string relationshipName)
-        {
-            RelationshipDef relationshipDef = ((ClassDef) this.ClassDef).GetRelationship(relationshipName);
-            ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
-            return DelimitTable(relatedClassDef.TableName);
-        }
+        //private string GetRelatedTableName(string relationshipName)
+        //{
+        //    RelationshipDef relationshipDef = ((ClassDef) this.ClassDef).GetRelationship(relationshipName);
+        //    ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
+        //    return DelimitTable(relatedClassDef.TableName);
+        //}
 
         private void AppendWhereClause(StringBuilder builder, SqlStatement statement)
         {

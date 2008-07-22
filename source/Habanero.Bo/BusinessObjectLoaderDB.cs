@@ -20,6 +20,7 @@
 using System;
 using System.Data;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
@@ -46,19 +47,51 @@ namespace Habanero.BO
             //_dataStoreInMemory = new DataStoreInMemory();
         }
 
+        #region IBusinessObjectLoader Members
+
+        /// <summary>
+        /// Loads a business object of type T, using the Primary key given as the criteria
+        /// </summary>
+        /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="primaryKey">The primary key to use to load the business object</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
         public T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new()
         {
             //T foundBO = _dataStoreInMemory.Find<T>(primaryKey);
             //if (foundBO != null) return foundBO;
-            return GetBusinessObject<T>(Criteria.FromPrimaryKey(primaryKey));
+            T businessObject = GetBusinessObject<T>(Criteria.FromPrimaryKey(primaryKey));
+            if (businessObject != null) return businessObject;
+            
+            throw new BusObjDeleteConcurrencyControlException(
+                string.Format("A Error has occured since the object you are trying to refresh has been deleted by another user." 
+                              + " There are no records in the database for the Class: {0} identified by {1} \n", typeof (T).Name, primaryKey) );
         }
 
+        /// <summary>
+        /// Loads a business object of the type identified by a <see cref="ClassDef"/>, using the Primary key given as the criteria
+        /// </summary>
+        /// <param name="classDef">The ClassDef of the object to load.</param>
+        /// <param name="primaryKey">The primary key to use to load the business object</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
         public IBusinessObject GetBusinessObject(IClassDef classDef, IPrimaryKey primaryKey)
         {
-            return GetBusinessObject(classDef, Criteria.FromPrimaryKey(primaryKey));
+            IBusinessObject businessObject = GetBusinessObject(classDef, Criteria.FromPrimaryKey(primaryKey));
+            if (businessObject != null) return businessObject;
+
+            throw new BusObjDeleteConcurrencyControlException(
+                string.Format("A Error has occured since the object you are trying to refresh has been deleted by another user."
+                              + " There are no records in the database for the Class: {0} identified by {1} \n", classDef.ClassNameFull, primaryKey));
+ 
         }
 
-
+        /// <summary>
+        /// Returns the business object of the type provided that meets the search criteria.  
+        /// An exception is thrown if more than one business object is found that matches the criteria.  
+        /// If that situation could arise, rather use GetBusinessObjectCol.
+        /// </summary>
+        /// <param name="criteria">The search criteria</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         public T GetBusinessObject<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(ClassDef.ClassDefs[typeof (T)]);
@@ -66,19 +99,32 @@ namespace Habanero.BO
             return GetBusinessObject<T>(selectQuery);
         }
 
+        /// <summary>
+        /// Returns the business object of the type provided that meets the search criteria.  
+        /// An exception is thrown if more than one business object is found that matches the criteria.  
+        /// If that situation could arise, rather use GetBusinessObjectCol.
+        /// </summary>
+        /// <param name="selectQuery">The select query</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         public T GetBusinessObject<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new()
         {
             SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
             ISqlStatement statement = selectQueryDB.CreateSqlStatement();
+            IClassDef correctSubClassDef = null;
+            T loadedBo = null;
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
             {
                 try
                 {
                     if (dr.Read())
                     {
-                        T bo = LoadBOFromReader<T>(dr, selectQueryDB);
-                        bo = GetCorrectInstanceType(bo, dr);
-                        return bo;
+                        loadedBo = LoadBOFromReader<T>(dr, selectQueryDB);
+
+                        //Checks to see if the loaded object is the base of a single table inheritance structure
+                        // and has a sub type
+                        correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
+                        if (correctSubClassDef == null) return loadedBo;
                     }
                 }
                 finally
@@ -89,9 +135,25 @@ namespace Habanero.BO
                     }
                 }
             }
-            return null;
+            // loads an object of the correct sub type (for single table inheritance)
+            if (correctSubClassDef != null)
+            {
+                IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
+                loadedBo = (T) subClassBusinessObject;
+            }
+
+            return loadedBo;
         }
 
+        /// <summary>
+        /// Returns the business object of the type provided that meets the search criteria.  
+        /// An exception is thrown if more than one business object is found that matches the criteria.  
+        /// If that situation could arise, rather use GetBusinessObjectCol.
+        /// </summary>
+        /// <param name="classDef">The class def of the business object being loaded</param>
+        /// <param name="criteria">The load criteria of the object being loaded.</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         public IBusinessObject GetBusinessObject(IClassDef classDef, Criteria criteria)
         {
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
@@ -99,19 +161,30 @@ namespace Habanero.BO
             return GetBusinessObject(classDef, selectQuery);
         }
 
-        public IBusinessObject GetBusinessObject(IClassDef classDef, ISelectQuery selectQuery) 
+        /// <summary>
+        /// Loads a business object of the type identified by a <see cref="ClassDef"/>, 
+        /// using the SelectQuery given. It's important to make sure that the ClassDef parameter given
+        /// has the properties defined in the fields of the select query.  
+        /// This method allows you to define a custom query to load a business object
+        /// </summary>
+        /// <param name="classDef">The ClassDef of the object to load.</param>
+        /// <param name="selectQuery">The select query to use to load from the data source</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        public IBusinessObject GetBusinessObject(IClassDef classDef, ISelectQuery selectQuery)
         {
             SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
             ISqlStatement statement = selectQueryDB.CreateSqlStatement();
+            IClassDef correctSubClassDef = null;
+            IBusinessObject loadedBo = null;
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
             {
                 try
                 {
                     if (dr.Read())
                     {
-                        IBusinessObject bo = LoadBOFromReader(classDef, dr, selectQueryDB);
-                        bo = GetCorrectInstanceType(bo, dr);
-                        return bo;
+                        loadedBo = LoadBOFromReader(classDef, dr, selectQueryDB);
+                        correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
+                        if (correctSubClassDef == null) return loadedBo;
                     }
                 }
                 finally
@@ -122,10 +195,21 @@ namespace Habanero.BO
                     }
                 }
             }
-            return null;
+            if (correctSubClassDef != null)
+            {
+                IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
+                loadedBo = subClassBusinessObject;
+            }
+            return loadedBo;
         }
 
-   
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the criteria given. 
+        /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <returns>The loaded collection</returns>
         public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria)
             where T : class, IBusinessObject, new()
         {
@@ -135,6 +219,12 @@ namespace Habanero.BO
             return col;
         }
 
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the criteria given. 
+        /// </summary>
+        /// <param name="classDef">The ClassDef for the collection to load</param>
+        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <returns>The loaded collection</returns>
         public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria)
         {
             IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
@@ -154,9 +244,9 @@ namespace Habanero.BO
         {
             SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
             ISqlStatement statement = selectQuery.CreateSqlStatement();
-            BusinessObjectCollection<T> updatedCol = collection.Clone();
-            updatedCol.SelectQuery = collection.SelectQuery;
-            updatedCol.Clear();
+            BusinessObjectCollection<T> clonedCol = collection.Clone();
+            collection.Clear();
+
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
             {
                 try
@@ -164,7 +254,18 @@ namespace Habanero.BO
                     while (dr.Read())
                     {
                         T loadedBo = LoadBOFromReader<T>(dr, selectQuery);
-                        updatedCol.Add(loadedBo);
+                        //If the origional collection had the new business object then
+                        // use add internal this adds without any events being raised etc.
+                        //else adds via the Add method (normal add) this raises events such that the 
+                        // user interface can be updated.
+                        if (clonedCol.Contains(loadedBo))
+                        {
+                            collection.AddInternal(loadedBo);
+                        }
+                        else
+                        {
+                            collection.Add(loadedBo);
+                        }
                     }
                 }
                 finally
@@ -172,10 +273,14 @@ namespace Habanero.BO
                     if (dr != null && !dr.IsClosed) dr.Close();
                 }
             }
-            collection.ForEach(delegate(T obj) { if (!updatedCol.Contains(obj)) collection.Remove(obj); });
-            updatedCol.ForEach(delegate(T obj) { if (!collection.Contains(obj)) collection.Add(obj); });
         }
 
+        /// <summary>
+        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
+        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
+        /// only fire for the new objects added to the collection, not for the ones that already existed).
+        /// </summary>
+        /// <param name="collection">The collection to refresh</param>
         public void Refresh(IBusinessObjectCollection collection)
         {
             SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
@@ -208,33 +313,59 @@ namespace Habanero.BO
             }
         }
 
+        /// <summary>
+        /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
+        /// fields defined in the relationship.
+        /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="relationship">The relationship that defines the criteria that must be loaded.  For example, a Person might have
+        /// a Relationship called Addresses, which defines the PersonID property as the relationship property. In this case, calling this method
+        /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
+        /// PersonID</param>
+        /// <returns>The loaded RelatedBusinessObjectCollection</returns>
         public RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IRelationship relationship)
             where T : class, IBusinessObject, new()
         {
             RelatedBusinessObjectCollection<T> relatedCol = new RelatedBusinessObjectCollection<T>(relationship);
             Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
-            GetBusinessObjectCollection<T>(relationshipCriteria, relationship.OrderCriteria).ForEach(delegate(T obj) { relatedCol.Add(obj); });
+            GetBusinessObjectCollection<T>(relationshipCriteria, relationship.OrderCriteria).ForEach(
+                delegate(T obj) { relatedCol.Add(obj); });
             relatedCol.SelectQuery.Criteria = relationshipCriteria;
             relatedCol.SelectQuery.OrderCriteria = relationship.OrderCriteria;
             return relatedCol;
         }
 
+        /// <summary>
+        /// Loads a business object of type T using the relationship given. The relationship will be converted into a
+        /// Criteria object that defines the relationship and this will be used to load the related object.
+        /// </summary>
+        /// <typeparam name="T">The type of the business object to load</typeparam>
+        /// <param name="relationship">The relationship to use to load the object</param>
+        /// <returns>An object of type T if one was found, otherwise null</returns>
         public T GetRelatedBusinessObject<T>(SingleRelationship relationship) where T : class, IBusinessObject, new()
         {
             return GetBusinessObject<T>(Criteria.FromRelationship(relationship));
         }
 
+        /// <summary>
+        /// Loads a business object using the relationship given. The relationship will be converted into a
+        /// Criteria object that defines the relationship and this will be used to load the related object.
+        /// </summary>
+        /// <param name="relationship">The relationship to use to load the object</param>
+        /// <returns>An object of the type defined by the relationship if one was found, otherwise null</returns>
         public IBusinessObject GetRelatedBusinessObject(SingleRelationship relationship)
         {
-            return GetBusinessObject(relationship.RelationshipDef.RelatedObjectClassDef, Criteria.FromRelationship(relationship));
+            return GetBusinessObject(relationship.RelationshipDef.RelatedObjectClassDef,
+                                     Criteria.FromRelationship(relationship));
         }
 
-
-
-     
-
-
-
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
+        /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <returns>The loaded collection</returns>
+        /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
         public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria)
             where T : class, IBusinessObject, new()
         {
@@ -245,7 +376,15 @@ namespace Habanero.BO
             return col;
         }
 
-        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria, OrderCriteria orderCriteria)
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
+        /// </summary>
+        /// <param name="classDef">The ClassDef for the collection to load</param>
+        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <returns>The loaded collection</returns>
+        /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
+        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria,
+                                                                     OrderCriteria orderCriteria)
         {
             IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
             col.SelectQuery.Criteria = criteria;
@@ -254,6 +393,15 @@ namespace Habanero.BO
             return col;
         }
 
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the SelectQuery given. It's important to make sure that T (meaning the ClassDef set up for T)
+        /// has the properties defined in the fields of the select query.  
+        /// This method allows you to define a custom query to load a businessobjectcollection so that you can perhaps load from multiple
+        /// tables using a join (if loading from a database source).
+        /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="selectQuery">The select query to use to load from the data source</param>
+        /// <returns>The loaded collection</returns>
         public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(ISelectQuery selectQuery)
             where T : class, IBusinessObject, new()
         {
@@ -263,18 +411,29 @@ namespace Habanero.BO
             return col;
         }
 
-        private IBusinessObjectCollection CreateCollectionOfType(Type BOType)
-        {
-            Type boColType = typeof(BusinessObjectCollection<>).MakeGenericType(BOType);
-            return (IBusinessObjectCollection)Activator.CreateInstance(boColType);
-        }
-
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the SelectQuery given. It's important to make sure that the ClassDef given
+        /// has the properties defined in the fields of the select query.  
+        /// This method allows you to define a custom query to load a businessobjectcollection so that you can perhaps load from multiple
+        /// tables using a join (if loading from a database source).
+        /// </summary>
+        /// <param name="classDef">The ClassDef for the collection to load</param>
+        /// <param name="selectQuery">The select query to use to load from the data source</param>
+        /// <returns>The loaded collection</returns>
         public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, ISelectQuery selectQuery)
         {
             IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
             col.SelectQuery = selectQuery;
             Refresh(col);
             return col;
+        }
+
+        #endregion
+
+        private static IBusinessObjectCollection CreateCollectionOfType(Type BOType)
+        {
+            Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(BOType);
+            return (IBusinessObjectCollection) Activator.CreateInstance(boColType);
         }
 
         private T LoadBOFromReader<T>(IDataRecord dataReader, ISelectQuery selectQuery)
@@ -287,7 +446,8 @@ namespace Habanero.BO
             T boFromAllLoadedObjects = null;
             if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(bo.PrimaryKey.GetObjectId()))
             {
-                boFromAllLoadedObjects = (T)BusinessObject.AllLoadedBusinessObjects()[bo.PrimaryKey.GetObjectId()].Target;
+                boFromAllLoadedObjects =
+                    (T) BusinessObject.AllLoadedBusinessObjects()[bo.PrimaryKey.GetObjectId()].Target;
                 if (boFromAllLoadedObjects == null)
                 {
                     BusinessObject.AllLoadedBusinessObjects().Remove(bo.PrimaryKey.GetObjectId());
@@ -298,21 +458,13 @@ namespace Habanero.BO
                 //todo: add ibo to the allloadedbusinessobjectscol.
             }
             if (boFromAllLoadedObjects != null) return boFromAllLoadedObjects;
+            ((BOState) bo.State).IsNew = false;
             return bo;
-        }
-
-        private T GetCorrectInstanceType<T>(T bo, IDataReader dataReader)
-            where T : class, IBusinessObject
-        {
-            IClassDef classDef = GetCorrectSubClassDef(bo, dataReader);
-            if (classDef == null) return bo;
-            IBusinessObject businessObject = GetBusinessObject(classDef, bo.ID);
-            return (T)businessObject;
         }
 
         private static ClassDef GetCorrectSubClassDef(IBusinessObject bo, IDataReader dataReader)
         {
-            ClassDef classDef = (ClassDef)bo.ClassDef;
+            ClassDef classDef = (ClassDef) bo.ClassDef;
             ClassDefCol subClasses = classDef.ImmediateChildren;
             foreach (ClassDef immediateChild in subClasses)
             {
@@ -322,7 +474,7 @@ namespace Habanero.BO
                     string discriminatorValue = Convert.ToString(dataReader[discriminatorFieldName]);
                     if (!String.IsNullOrEmpty(discriminatorValue))
                     {
-                        ClassDef subClassDef = subClasses.FindByClassName(discriminatorValue);
+                        ClassDef subClassDef = ClassDef.ClassDefs.FindByClassName(discriminatorValue);
                         if (subClassDef != null)
                         {
                             return subClassDef;
@@ -333,7 +485,6 @@ namespace Habanero.BO
             return null;
         }
 
-        
 
         private void PopulateBOFromReader(IBusinessObject bo, IDataRecord dr, ISelectQuery selectQuery)
         {
@@ -362,7 +513,8 @@ namespace Habanero.BO
             IBusinessObject boFromAllLoadedObjects = null;
             if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(bo.PrimaryKey.GetObjectId()))
             {
-                boFromAllLoadedObjects = (IBusinessObject) BusinessObject.AllLoadedBusinessObjects()[bo.PrimaryKey.GetObjectId()].Target;
+                boFromAllLoadedObjects =
+                    (IBusinessObject) BusinessObject.AllLoadedBusinessObjects()[bo.PrimaryKey.GetObjectId()].Target;
                 if (boFromAllLoadedObjects == null)
                 {
                     BusinessObject.AllLoadedBusinessObjects().Remove(bo.PrimaryKey.GetObjectId());
