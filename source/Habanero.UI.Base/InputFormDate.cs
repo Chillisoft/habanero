@@ -1,24 +1,23 @@
-using System.Collections.Generic;
+using System;
 
 namespace Habanero.UI.Base
 {
-    public class InputFormComboBox
+    public class InputFormDate
     {
         private readonly IControlFactory _controlFactory;
         private readonly string _message;
-        private IComboBox _comboBox;
+        private IDateTimePicker _dateTimePicker;
 
-        public InputFormComboBox(IControlFactory controlFactory, string message, List<object> choices)
+        public InputFormDate(IControlFactory controlFactory, string message)
         {
             _controlFactory = controlFactory;
             _message = message;
-            _comboBox = _controlFactory.CreateComboBox();
-            choices.ForEach(delegate(object item) { _comboBox.Items.Add(item); });
+            _dateTimePicker = _controlFactory.CreateDateTimePicker(DateTime.Now);
         }
 
-        public IControlFactory ControlFactory
+        public IDateTimePicker DateTimePicker
         {
-            get { return _controlFactory; }
+            get { return _dateTimePicker; }
         }
 
         public string Message
@@ -26,29 +25,25 @@ namespace Habanero.UI.Base
             get { return _message; }
         }
 
-        public IComboBox ComboBox
+        public DateTime Value
         {
-            get { return _comboBox; }
-        }
-
-        public object SelectedItem
-        {
-            get { return _comboBox.SelectedItem; }
-            set { _comboBox.SelectedItem = value; }
+            get { return this.DateTimePicker.Value; }
+            set { this.DateTimePicker.Value = value; }
         }
 
         public IPanel createControlPanel()
         {
+
             IPanel panel = _controlFactory.CreatePanel();
             ILabel label = _controlFactory.CreateLabel(_message, false);
             FlowLayoutManager flowLayoutManager = new FlowLayoutManager(panel, _controlFactory);
             flowLayoutManager.AddControl(label);
-            flowLayoutManager.AddControl(_comboBox);
-            panel.Height = _comboBox.Height + label.Height;
+            flowLayoutManager.AddControl(_dateTimePicker);
+            panel.Height = _dateTimePicker.Height + label.Height;
             panel.Width = _controlFactory.CreateLabel(_message, true).PreferredWidth + 20;
-            _comboBox.Width = panel.Width - 30;
             return panel;
         }
+
 
         //this is Currently untestable, the layout has been tested in the createControlPanel method. 
         public DialogResult ShowDialog()

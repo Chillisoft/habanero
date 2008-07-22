@@ -1,6 +1,5 @@
 using System;
 using System.Reflection;
-using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -141,7 +140,7 @@ namespace Habanero.UI.Win
                 _panelFactoryInfo.ControlMappers.ApplyChangesToBusinessObject();
                 TransactionCommitter committer = CreateSaveTransaction();
                 committer.CommitTransaction();
-                DialogResult = System.Windows.Forms.DialogResult.OK;
+                DialogResult = Base.DialogResult.OK;
                 Close();
                 if (_action != null)
                 {
@@ -168,13 +167,24 @@ namespace Habanero.UI.Win
         {
             _panelFactoryInfo.ControlMappers.BusinessObject = null;
             _bo.Restore();
-            DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            DialogResult = Base.DialogResult.Cancel;
             Close();
         }
 
         public IButtonGroupControl Buttons
         {
             get { return _buttons; }
+        }
+
+        public Base.DialogResult DialogResult
+        {
+            get { return (Base.DialogResult) base.DialogResult; }
+            set { base.DialogResult = (System.Windows.Forms.DialogResult)value; }
+        }
+
+        public IPanelFactoryInfo PanelFactoryInfo
+        {
+            get { return _panelFactoryInfo; }
         }
 
         bool IDefaultBOEditorForm.ShowDialog()

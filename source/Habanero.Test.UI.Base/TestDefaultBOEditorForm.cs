@@ -47,6 +47,7 @@ namespace Habanero.Test.UI.Base
             [Test]
             public void TestLayout()
             {
+                //---------------Test Result -----------------------
                 Assert.AreEqual(2, _defaultBOEditorForm.Controls.Count);
                 IControlChilli boCtl = _defaultBOEditorForm.Controls[0];
                 Assert.AreEqual(6, boCtl.Controls.Count);
@@ -59,18 +60,18 @@ namespace Habanero.Test.UI.Base
             [Test]
             public void TestSuccessfulEdit()
             {
-                //Setup-------------------------------
+                //---------------Set up test pack-------------------
                 _defaultBOEditorForm.Show();
                 _bo.SetPropertyValue("TestProp", "TestValue");
                 _bo.SetPropertyValue("TestProp2", "TestValue2");
                 PrepareMockForSave();
-                //Execute --------------------------
+                ///---------------Execute Test ----------------------
                 _defaultBOEditorForm.Buttons["OK"].PerformClick();
-                //Assert----------------------------
+                //---------------Test Result -----------------------
                 Assert.IsFalse(_defaultBOEditorForm.Visible);
-                //TODO_Port: Assert.AreEqual(DialogResult.OK, _defaultBOEditorForm.DialogResult);
+                Assert.AreEqual(DialogResult.OK, _defaultBOEditorForm.DialogResult);
                 Assert.AreEqual("TestValue", _bo.GetPropertyValue("TestProp"));
-                //TODO_Port: Assert.IsNull(_defaultBOEditorForm._panelFactoryInfo.ControlMappers.BusinessObject);
+                Assert.IsNull(_defaultBOEditorForm.PanelFactoryInfo.ControlMappers.BusinessObject);
                 //TearDown--------------------------
                 _defaultBOEditorForm.Dispose();
             }
@@ -78,12 +79,15 @@ namespace Habanero.Test.UI.Base
             [Test]
             public void TestUnsuccessfulEdit()
             {
+                //---------------Set up test pack-------------------
                 _defaultBOEditorForm.Show();
                 _bo.SetPropertyValue("TestProp", "TestValue");
                 _bo.SetPropertyValue("TestProp2", "TestValue2");
+                //---------------Execute Test ----------------------
                 _defaultBOEditorForm.Buttons["Cancel"].PerformClick();
+                //---------------Test Result -----------------------
                 Assert.IsFalse(_defaultBOEditorForm.Visible);
-                //Assert.AreEqual(DialogResult.Cancel, _defaultBOEditorForm.DialogResult);
+                Assert.AreEqual(DialogResult.Cancel, _defaultBOEditorForm.DialogResult);
                 object propertyValue = _bo.GetPropertyValue("TestProp");
                 Assert.AreEqual(null, propertyValue, propertyValue != null ? propertyValue.ToString() : null);
                 _defaultBOEditorForm.Dispose();
@@ -126,6 +130,7 @@ namespace Habanero.Test.UI.Base
             [Test]
             public void TestLayout()
             {
+                //---------------Test Result -----------------------
                 Assert.AreEqual(2, _defaultBOEditorForm.Controls.Count);
                 IControlChilli boCtl = _defaultBOEditorForm.Controls[0];
                 Assert.AreEqual(6, boCtl.Controls.Count);

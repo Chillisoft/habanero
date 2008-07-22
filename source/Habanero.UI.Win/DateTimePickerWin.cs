@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 

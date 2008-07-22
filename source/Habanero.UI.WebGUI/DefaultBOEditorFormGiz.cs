@@ -27,6 +27,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using log4net;
 
+
 namespace Habanero.UI.WebGUI
 {
     /// <summary>
@@ -201,7 +202,8 @@ namespace Habanero.UI.WebGUI
         {
             _panelFactoryInfo.ControlMappers.BusinessObject = null;
             _bo.Restore();
-            DialogResult = Gizmox.WebGUI.Forms.DialogResult.Cancel;
+            //DialogResult = Gizmox.WebGUI.Forms.DialogResult.Cancel;
+            DialogResult = Base.DialogResult.Cancel;
             Close();
         }
 
@@ -242,7 +244,7 @@ namespace Habanero.UI.WebGUI
                 //    }
                 //}
 
-                DialogResult = Gizmox.WebGUI.Forms.DialogResult.OK;
+                DialogResult = Base.DialogResult.OK;
                 Close();
                 if (_action != null)
                 {
@@ -276,6 +278,17 @@ namespace Habanero.UI.WebGUI
         public IButtonGroupControl Buttons
         {
             get { return _buttons; }
+        }
+
+        public Base.DialogResult DialogResult
+        {
+            get { return (Base.DialogResult) base.DialogResult; }
+            set { base.DialogResult = (Gizmox.WebGUI.Forms.DialogResult) value; }
+        }
+
+        public IPanelFactoryInfo PanelFactoryInfo
+        {
+            get { return _panelFactoryInfo; }
         }
 
         IControlCollection IControlChilli.Controls

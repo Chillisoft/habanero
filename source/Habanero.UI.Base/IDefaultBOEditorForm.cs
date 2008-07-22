@@ -29,6 +29,8 @@ namespace Habanero.UI.Base
             get;
         }
 
+        
+
         /// <summary>
         /// Pops the form up in a modal dialog.  If the BO is successfully edited and saved, returns true
         /// else returns false.
@@ -38,5 +40,9 @@ namespace Habanero.UI.Base
 
         void Show();
         void Dispose();
+
+        DialogResult DialogResult { get; set;}
+
+        IPanelFactoryInfo PanelFactoryInfo{ get;}
     }
 }

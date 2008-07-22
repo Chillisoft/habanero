@@ -36,7 +36,7 @@ namespace Habanero.Test.UI.Base
                 return new Habanero.UI.Win.ControlFactoryWin();
             }
 
-            [Test, Ignore("Currently working on this")]
+            [Test]
             public void Test_Constructor()
             {
                 //---------------Set up test pack-------------------
@@ -44,14 +44,37 @@ namespace Habanero.Test.UI.Base
                 helpAbout.Show();
                 //---------------Execute Test ----------------------
 
+                string programName = "Test";
+                string producedForName = "Chillisoft";
+                string producedByName = "Habanero";
+                string versionNumber = "1.00";
+
                 HelpAboutBoxManager aboutBoxManager =
-                    new HelpAboutBoxManager(GetControlFactory(), helpAbout, "Test", "Chillisoft", "Habanero", "1.00");
+                    new HelpAboutBoxManager(GetControlFactory(), helpAbout, programName, producedForName, producedByName, versionNumber);
 
                 //---------------Test Result -----------------------
-                helpAbout.Show();
+                IPanel panel = aboutBoxManager.MainPanel;
+                Assert.IsNotNull(panel);
+                Assert.AreEqual(8, panel.Controls.Count);
+                Assert.IsInstanceOfType(typeof(ILabel), panel.Controls[0]);
+                Assert.IsInstanceOfType(typeof(ILabel), panel.Controls[1]);
+                Assert.IsInstanceOfType(typeof(ILabel), panel.Controls[2]);
+                Assert.IsInstanceOfType(typeof(ILabel), panel.Controls[3]);
+                Assert.IsInstanceOfType(typeof(ILabel), panel.Controls[4]);
+                Assert.IsInstanceOfType(typeof(ILabel), panel.Controls[5]);
+                Assert.IsInstanceOfType(typeof(ILabel), panel.Controls[6]);
+                Assert.IsInstanceOfType(typeof(ILabel), panel.Controls[7]);
+
+                Assert.AreEqual("Programme Name:", panel.Controls[0].Text);
+                Assert.AreEqual(programName, panel.Controls[1].Text);
+                Assert.AreEqual("Produced For:", panel.Controls[2].Text);
+                Assert.AreEqual(producedForName, panel.Controls[3].Text);
+                Assert.AreEqual("Produced By:", panel.Controls[4].Text);
+                Assert.AreEqual(producedByName, panel.Controls[5].Text);
+                Assert.AreEqual("Version:", panel.Controls[6].Text);
+                Assert.AreEqual(versionNumber, panel.Controls[7].Text);
             }
         }
-    }
 
     [TestFixture]
     public class TestHelpAboutBoxWinGiz : TestHelpAboutBox
@@ -60,5 +83,8 @@ namespace Habanero.Test.UI.Base
         {
             return new Habanero.UI.WebGUI.ControlFactoryGizmox();
         }
+    }
+
+
     }
 }

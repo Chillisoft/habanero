@@ -145,7 +145,9 @@ namespace Habanero.UI.Win
         /// <returns>Returns a new DateTimePicker object</returns>
         public IDateTimePicker CreateDateTimePicker(DateTime defaultDate)
         {
-            throw new NotImplementedException();
+            DateTimePickerWin dateTimePickerWin = new DateTimePickerWin(this);
+            dateTimePickerWin.Value = defaultDate; 
+            return dateTimePickerWin;
         }
 
         /// <summary>

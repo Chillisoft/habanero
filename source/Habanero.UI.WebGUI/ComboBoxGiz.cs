@@ -127,6 +127,7 @@ namespace Habanero.UI.WebGUI
             public IEnumerator GetEnumerator()
             {
                 return _items.GetEnumerator();
+
             }
         }
 
