@@ -248,11 +248,16 @@ namespace Habanero.Test.General
             BOLoader.Instance.ClearLoadedBusinessObjects();
 
             //---------------Execute Test ----------------------
-            bo = BOLoader.Instance.GetBusinessObjectByID<MyBO>(bo.MyBoID);
+            bo = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(bo.ID);
             Shape shape = bo.Shape;
 
             //---------------Test Result -----------------------
             Assert.AreSame(typeof (CircleNoPrimaryKey), shape.GetType());
+            Assert.IsFalse(shape.State.IsNew);
+            Assert.IsFalse(shape.State.IsDeleted);
+            Assert.IsFalse(shape.State.IsEditing);
+            Assert.IsFalse(shape.State.IsDirty);
+            Assert.IsTrue(shape.State.IsValid());
         }
 
         [Test]

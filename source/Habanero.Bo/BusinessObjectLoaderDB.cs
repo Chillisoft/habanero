@@ -421,24 +421,48 @@ namespace Habanero.BO
             T bo = new T();
 
             PopulateBOFromReader(bo, dataReader, selectQuery);
+            IPrimaryKey key = bo.PrimaryKey;
 
-            T boFromAllLoadedObjects = null;
-            if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(bo.PrimaryKey.GetObjectId()))
+            T boFromAllLoadedObjects = (T) GetLoadedBusinessObject(key);
+
+            if (boFromAllLoadedObjects == null)
             {
-                boFromAllLoadedObjects =
-                    (T) BusinessObject.AllLoadedBusinessObjects()[bo.PrimaryKey.GetObjectId()].Target;
+                BusinessObject.AllLoadedBusinessObjects().Add(key.GetObjectId(), new WeakReference(bo));
+                return bo;
+            }
+            return boFromAllLoadedObjects;
+        }
+
+        private IBusinessObject LoadBOFromReader(IClassDef classDef, IDataReader dataReader, ISelectQuery selectQuery)
+        {
+            IBusinessObject bo = classDef.CreateNewBusinessObject();
+
+            PopulateBOFromReader(bo, dataReader, selectQuery);
+            IPrimaryKey key = bo.PrimaryKey;
+
+            IBusinessObject boFromAllLoadedObjects = GetLoadedBusinessObject(key);
+
+            if (boFromAllLoadedObjects == null)
+            {
+                BusinessObject.AllLoadedBusinessObjects().Add(key.GetObjectId(), new WeakReference(bo));
+                return bo;
+            }
+            return boFromAllLoadedObjects;
+        }
+
+        private static IBusinessObject GetLoadedBusinessObject(IPrimaryKey key)
+        {
+            if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(key.GetObjectId()))
+            {
+                IBusinessObject boFromAllLoadedObjects =
+                    (IBusinessObject)BusinessObject.AllLoadedBusinessObjects()[key.GetObjectId()].Target;
                 if (boFromAllLoadedObjects == null)
                 {
-                    BusinessObject.AllLoadedBusinessObjects().Remove(bo.PrimaryKey.GetObjectId());
+                    BusinessObject.AllLoadedBusinessObjects().Remove(key.GetObjectId());
                 }
+                return boFromAllLoadedObjects;
             }
-            else
-            {
-                BusinessObject.AllLoadedBusinessObjects().Add(bo.PrimaryKey.GetObjectId(), new WeakReference(bo));
-            }
-            if (boFromAllLoadedObjects != null) return boFromAllLoadedObjects;
-            ((BOState) bo.State).IsNew = false;
-            return bo;
+            return null;
         }
 
         private static ClassDef GetCorrectSubClassDef(IBusinessObject bo, IDataReader dataReader)
@@ -473,37 +497,7 @@ namespace Habanero.BO
                 }
                 i++;
             }
-        }
-
-        //TODO: NNB Critical refactor this to LoadFromReader
-        private IBusinessObject LoadBOFromReader(IClassDef classDef, IDataReader dataReader, ISelectQuery selectQuery)
-        {
-            IBusinessObject bo = classDef.CreateNewBusinessObject();
-            //int i = 0;
-            //foreach (QueryField field in selectQuery.Fields.Values)
-            //{
-            //    bo.Props[field.PropertyName].InitialiseProp(dataReader[i++]);
-            //}
-
-            PopulateBOFromReader(bo, dataReader, selectQuery);
-
-            IBusinessObject boFromAllLoadedObjects = null;
-            if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(bo.PrimaryKey.GetObjectId()))
-            {
-                boFromAllLoadedObjects =
-                    (IBusinessObject) BusinessObject.AllLoadedBusinessObjects()[bo.PrimaryKey.GetObjectId()].Target;
-                if (boFromAllLoadedObjects == null)
-                {
-                    BusinessObject.AllLoadedBusinessObjects().Remove(bo.PrimaryKey.GetObjectId());
-                }
-            }
-            else
-            {
-                //todo: add ibo to the allloadedbusinessobjectscol.
-                BusinessObject.AllLoadedBusinessObjects().Add(bo.PrimaryKey.GetObjectId(), new WeakReference(bo));
-            }
-            if (boFromAllLoadedObjects != null) return boFromAllLoadedObjects;
-            return bo;
+            ((BusinessObject)bo).SetState(BOState.States.isNew, false);
         }
     }
 }

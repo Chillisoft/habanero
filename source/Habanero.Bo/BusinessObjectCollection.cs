@@ -295,16 +295,14 @@ namespace Habanero.BO
                     while (dr.Read())
                     {
                         TBusinessObject bo = (TBusinessObject)BOLoader.Instance.GetBusinessObject(_sampleBo, dr);
-                        if (!Contains(bo))
+                        if (Contains(bo)) continue;
+                        if (oldCol.Contains(bo))
                         {
-                            if (oldCol.Contains(bo))
-                            {
-                                AddInternal(bo);
-                            }
-                            else
-                            {
-                                Add(bo);
-                            }
+                            AddInternal(bo);
+                        }
+                        else
+                        {
+                            Add(bo);
                         }
                     }
                 }

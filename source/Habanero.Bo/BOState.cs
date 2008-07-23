@@ -37,6 +37,7 @@ namespace Habanero.BO
             _bo = bo;
         }
         private States _flagState = States.isNew;
+
         /// <summary>
         /// An enumeration that describes the object's state
         /// </summary>

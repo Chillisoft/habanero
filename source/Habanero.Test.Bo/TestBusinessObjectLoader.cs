@@ -1014,6 +1014,11 @@ namespace Habanero.Test.BO
                 Assert.AreNotSame(loadedCircle, circle);
                 Assert.AreEqual(circle.Radius, loadedCircle.Radius);
                 Assert.AreEqual(circle.ShapeName, loadedCircle.ShapeName);
+                Assert.IsFalse(loadedCircle.State.IsNew);
+                Assert.IsFalse(loadedCircle.State.IsDeleted);
+                Assert.IsFalse(loadedCircle.State.IsEditing);
+                Assert.IsFalse(loadedCircle.State.IsDirty);
+                Assert.IsTrue(loadedCircle.State.IsValid());
             }
 
             [Test]
