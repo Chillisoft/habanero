@@ -34,38 +34,41 @@ using log4net;
 
 namespace Habanero.BO
 {
-
     /// <summary>
     /// Provides a super-class for business objects. This class contains all
     /// the common functionality used by business objects.
     /// </summary>
     public class BusinessObject : IBusinessObject
     {
-
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
+
+        #region IBusinessObject Members
 
         public event EventHandler<BOEventArgs> Updated;
         public event EventHandler<BOEventArgs> Saved;
         public event EventHandler<BOEventArgs> Deleted;
         public event EventHandler<BOEventArgs> Restored;
 
+        #endregion
+
         #region Fields
 
         private static readonly Dictionary<string, WeakReference> _allLoadedBusinessObjects =
             new Dictionary<string, WeakReference>();
 
+        protected BOPropCol _boPropCol;
+
         //set object as new by default.
         private BOState _boState;
+        protected IBusinessObjectUpdateLog _businessObjectUpdateLog;
 
         protected ClassDef _classDef;
-        protected BOPropCol _boPropCol;
+        protected IConcurrencyControl _concurrencyControl;
+        protected IDatabaseConnection _connection;
         protected BOKeyCol _keysCol;
         protected IPrimaryKey _primaryKey;
         protected IRelationshipCol _relationshipCol;
-        protected IConcurrencyControl _concurrencyControl;
         private ITransactionLog _transactionLog;
-        protected IDatabaseConnection _connection;
-        protected IBusinessObjectUpdateLog _businessObjectUpdateLog;
         //private bool _hasAutoIncrementingField;
 
         #endregion //Fields
@@ -95,6 +98,7 @@ namespace Habanero.BO
         {
         }
 
+        //TODO: Peter discuss options for removing the DB connection.
         /// <summary>
         /// Constructor that specifies a class definition and a database
         /// connection
@@ -109,7 +113,7 @@ namespace Habanero.BO
             {
                 _primaryKey.SetObjectID(myID);
             }
-            ClassDef currentClassDef = this.ClassDef;
+            ClassDef currentClassDef = ClassDef;
             if (currentClassDef != null)
             {
                 while (currentClassDef.IsUsingClassTableInheritance())
@@ -128,33 +132,6 @@ namespace Habanero.BO
                 }
             }
 
-            AddToLoadedObjectsCollection();
-        }
-
-        /// <summary>
-        /// Constructor that specifies a primary key ID
-        /// </summary>
-        /// <param name="id">The primary key ID</param>
-        protected BusinessObject(IPrimaryKey id) : this(id, null)
-        {
-        }
-
-        /// <summary>
-        /// Constructor that specifies a primary key ID and a database connection
-        /// </summary>
-        /// <param name="id">The primary key ID</param>
-        /// <param name="conn">A database connection</param>
-        protected BusinessObject(IPrimaryKey id, IDatabaseConnection conn)
-        {
-            //todo: Check if not already loaded in object manager if already loaded raise error
-            //TODO: think about moving these to after load
-            Initialise(conn, null);
-            _primaryKey = id;
-            if (!BOLoader.Instance.Load(this))
-            {
-                //If the item is not found then throw the appropriate exception
-                throw (new BusinessObjectNotFoundException());
-            }
             AddToLoadedObjectsCollection();
         }
 
@@ -197,11 +174,11 @@ namespace Habanero.BO
         {
             try
             {
-                if (this.ClassDef == null) return;
-                if (this.ID != null) AllLoadedBusinessObjects().Remove(this.ID.ToString());
+                if (ClassDef == null) return;
+                if (ID != null) AllLoadedBusinessObjects().Remove(ID.ToString());
                 if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
                     if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
-                        if (this.ID != null) AllLoadedBusinessObjects().Remove(this.ID.ToString());
+                        if (ID != null) AllLoadedBusinessObjects().Remove(ID.ToString());
                 if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
                 {
                     AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
@@ -250,7 +227,7 @@ namespace Habanero.BO
             }
             else
             {
-                _classDef = ClassDefinition.ClassDef.ClassDefs[this.GetType()];
+                _classDef = ClassDef.ClassDefs[GetType()];
             }
             ConstructFromClassDef(true);
         }
@@ -321,10 +298,9 @@ namespace Habanero.BO
         /// <returns>Returns a class definition</returns>
         protected virtual ClassDef ConstructClassDef()
         {
-            if (ClassDefinition.ClassDef.ClassDefs.Contains(this.GetType()))
-                return ClassDefinition.ClassDef.ClassDefs[this.GetType()];
-            else
-                return null;
+            if (ClassDef.ClassDefs.Contains(GetType()))
+                return ClassDef.ClassDefs[GetType()];
+            return null;
         }
 
         /// <summary>
@@ -349,52 +325,6 @@ namespace Habanero.BO
         #region Properties
 
         /// <summary>
-        /// Returns the primary key ID of this object.  If there is no primary key on this
-        /// class, the primary key of the nearest suitable parent is found and populated
-        /// with the values held for that key in this object.  This is a possible situation
-        /// in some forms of inheritance.
-        /// </summary>
-        public IPrimaryKey ID
-        {
-            get
-            {
-                if (_primaryKey == null)
-                {
-                    if (this.ClassDef == null)
-                    {
-                        throw new NullReferenceException(String.Format(
-                                                             "An error occurred while retrieving the class definitions for " +
-                                                             "'{0}'. Check that the class exists in that " +
-                                                             "namespace and assembly and that there are corresponding " +
-                                                             "class definitions for this class.", GetType()));
-                    }
-                    PrimaryKeyDef primaryKeyDef = this.ClassDef.GetPrimaryKeyDef();
-                    if (primaryKeyDef != null)
-                    {
-                        BOPrimaryKey parentPrimaryKey = new BOPrimaryKey(primaryKeyDef);
-                        foreach (PropDef propDef in parentPrimaryKey.KeyDef)
-                        {
-                            BOProp prop = new BOProp(propDef);
-                            prop.Value = this.Props[prop.PropertyName].Value;
-                            parentPrimaryKey.Add(prop);
-                        }
-                        return parentPrimaryKey;
-                    }
-                }
-                return _primaryKey;
-            }
-        }
-
-        /// <summary>
-        /// Sets the concurrency control object
-        /// </summary>
-        /// <param name="concurrencyControl">The concurrency control</param>
-        protected void SetConcurrencyControl(IConcurrencyControl concurrencyControl)
-        {
-            _concurrencyControl = concurrencyControl;
-        }
-
-        /// <summary>
         /// Returns an XML string that contains the changes in the object
         /// since the last persistance to the database
         /// </summary>
@@ -402,27 +332,9 @@ namespace Habanero.BO
         {
             get
             {
-                return "<" + this.ClassName + " ID='" + this.ID + "'>" +
-                       _boPropCol.DirtyXml + "</" + this.ClassName + ">";
+                return "<" + ClassName + " ID='" + ID + "'>" +
+                       _boPropCol.DirtyXml + "</" + ClassName + ">";
             }
-        }
-
-        /// <summary>
-        /// Sets the transaction log to that specified
-        /// </summary>
-        /// <param name="transactionLog">A transaction log</param>
-        protected void SetTransactionLog(ITransactionLog transactionLog)
-        {
-            _transactionLog = transactionLog;
-        }
-
-        /// <summary>
-        /// Sets the business object update log to the one specified
-        /// </summary>
-        /// <param name="businessObjectUpdateLog">A businessObject update log object</param>
-        protected void SetBusinessObjectUpdateLog(IBusinessObjectUpdateLog businessObjectUpdateLog)
-        {
-            _businessObjectUpdateLog = businessObjectUpdateLog;
         }
 
         /// <summary>
@@ -430,26 +342,8 @@ namespace Habanero.BO
         /// </summary>
         public RelationshipCol Relationships
         {
-            get { return (RelationshipCol)_relationshipCol; }
+            get { return (RelationshipCol) _relationshipCol; }
             set { _relationshipCol = value; }
-        }
-
-        /// <summary>
-        /// Gets and sets the collection of relationships
-        /// </summary>
-        IRelationshipCol IBusinessObject.Relationships
-        {
-            get { return _relationshipCol; }
-            set { _relationshipCol = value; }
-        }
-
-        /// <summary>
-        /// Returns or sets the class definition. Setting the classdef is not recommended
-        /// </summary>
-        IClassDef IBusinessObject.ClassDef
-        {
-            get { return _classDef; }
-            set { _classDef = (ClassDef) value; }
         }
 
 
@@ -496,6 +390,88 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// Returns the primary key ID of this object.  If there is no primary key on this
+        /// class, the primary key of the nearest suitable parent is found and populated
+        /// with the values held for that key in this object.  This is a possible situation
+        /// in some forms of inheritance.
+        /// </summary>
+        public IPrimaryKey ID
+        {
+            get
+            {
+                if (_primaryKey == null)
+                {
+                    if (ClassDef == null)
+                    {
+                        throw new NullReferenceException(String.Format(
+                                                             "An error occurred while retrieving the class definitions for " +
+                                                             "'{0}'. Check that the class exists in that " +
+                                                             "namespace and assembly and that there are corresponding " +
+                                                             "class definitions for this class.", GetType()));
+                    }
+                    PrimaryKeyDef primaryKeyDef = ClassDef.GetPrimaryKeyDef();
+                    if (primaryKeyDef != null)
+                    {
+                        BOPrimaryKey parentPrimaryKey = new BOPrimaryKey(primaryKeyDef);
+                        foreach (PropDef propDef in parentPrimaryKey.KeyDef)
+                        {
+                            BOProp prop = new BOProp(propDef);
+                            prop.Value = Props[prop.PropertyName].Value;
+                            parentPrimaryKey.Add(prop);
+                        }
+                        return parentPrimaryKey;
+                    }
+                }
+                return _primaryKey;
+            }
+        }
+
+        /// <summary>
+        /// Gets and sets the collection of relationships
+        /// </summary>
+        IRelationshipCol IBusinessObject.Relationships
+        {
+            get { return _relationshipCol; }
+            set { _relationshipCol = value; }
+        }
+
+        /// <summary>
+        /// Returns or sets the class definition. Setting the classdef is not recommended
+        /// </summary>
+        IClassDef IBusinessObject.ClassDef
+        {
+            get { return _classDef; }
+            set { _classDef = (ClassDef) value; }
+        }
+
+        /// <summary>
+        /// Sets the concurrency control object
+        /// </summary>
+        /// <param name="concurrencyControl">The concurrency control</param>
+        protected void SetConcurrencyControl(IConcurrencyControl concurrencyControl)
+        {
+            _concurrencyControl = concurrencyControl;
+        }
+
+        /// <summary>
+        /// Sets the transaction log to that specified
+        /// </summary>
+        /// <param name="transactionLog">A transaction log</param>
+        protected void SetTransactionLog(ITransactionLog transactionLog)
+        {
+            _transactionLog = transactionLog;
+        }
+
+        /// <summary>
+        /// Sets the business object update log to the one specified
+        /// </summary>
+        /// <param name="businessObjectUpdateLog">A businessObject update log object</param>
+        protected void SetBusinessObjectUpdateLog(IBusinessObjectUpdateLog businessObjectUpdateLog)
+        {
+            _businessObjectUpdateLog = businessObjectUpdateLog;
+        }
+
+        /// <summary>
         /// Returns the collection of BOKeys
         /// </summary>
         /// <returns>Returns a BOKeyCol object</returns>
@@ -511,7 +487,7 @@ namespace Habanero.BO
         internal string GetDebugOutput()
         {
             string output = "";
-            output += "Type: " + this.GetType().Name + Environment.NewLine;
+            output += "Type: " + GetType().Name + Environment.NewLine;
             foreach (DictionaryEntry entry in _boPropCol)
             {
                 BOProp prop = (BOProp) entry.Value;
@@ -554,6 +530,191 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// Returns the value under the property name specified
+        /// </summary>
+        /// <param name="propName">The property name</param>
+        /// <returns>Returns the value if found</returns>
+        public object GetPropertyValue(string propName)
+        {
+            if (propName == null) throw new ArgumentNullException("propName");
+
+            if (Props.Contains(propName))
+                return Props[propName].Value;
+            else
+                throw new InvalidPropertyNameException("Property '" + propName +
+                                                       "' does not exist on a business object of type '" +
+                                                       GetType().Name + "'");
+        }
+
+        /// <summary>
+        /// Returns the value under the property name specified, accessing it through the 'source'
+        /// </summary>
+        /// <param name="source">The source of the property ie - the relationship or C# property this property is on</param>
+        /// <param name="propName">The property name</param>
+        /// <returns>Returns the value if found</returns>
+        public object GetPropertyValue(string source, string propName)
+        {
+            if (String.IsNullOrEmpty(source)) return GetPropertyValue(propName);
+            return Relationships.GetRelatedObject(source).GetPropertyValue(propName);
+        }
+
+
+        /// <summary>
+        /// Sets a property value to a new value
+        /// </summary>
+        /// <param name="propName">The property name</param>
+        /// <param name="newPropValue">The new value to set to</param>
+        public void SetPropertyValue(string propName, object newPropValue)
+        {
+            IBOProp prop = Props[propName];
+            if (prop == null)
+            {
+                throw new InvalidPropertyNameException(String.Format(
+                                                           "The given property name '{0}' does not exist in the " +
+                                                           "collection of properties for the class '{1}'.",
+                                                           propName, ClassName));
+            }
+
+            if (!(newPropValue is Guid))
+            {
+                if (newPropValue is string && prop.PropertyType == typeof (Guid))
+                {
+                    Guid guidValue;
+                    if (StringUtilities.GuidTryParse((string) newPropValue, out guidValue))
+                    {
+                        newPropValue = guidValue;
+                    }
+                    else
+                    {
+                        if (ClassDef.GetPropDef(propName).HasLookupList())
+                        {
+                            Dictionary<string, object> lookupList =
+                                ClassDef.GetPropDef(propName).LookupList.GetLookupList();
+                            try
+                            {
+                                newPropValue = lookupList[(string) newPropValue];
+                            }
+                            catch (KeyNotFoundException ex)
+                            {
+                                throw new HabaneroApplicationException(
+                                    "You are trying to set the value for a lookup property " + propName + " to '" +
+                                    newPropValue + "' this value does not exist in the lookup list", ex);
+                            }
+                            if (newPropValue is IBusinessObject)
+                            {
+                                newPropValue = ((BusinessObject) (newPropValue))._primaryKey.GetAsGuid();
+                            }
+                        }
+                    }
+                }
+                if (newPropValue != null && newPropValue.Equals(DBNull.Value) && prop.PropertyType == typeof (bool))
+                {
+                    newPropValue = false;
+                }
+            }
+            if (DBNull.Value.Equals(newPropValue))
+            {
+                newPropValue = null;
+            }
+            if (prop.PropertyType.IsSubclassOf(typeof (CustomProperty)))
+            {
+                if (newPropValue != null && prop.PropertyType != newPropValue.GetType())
+                {
+                    newPropValue = Activator.CreateInstance(prop.PropertyType, new object[] {newPropValue, false});
+                }
+            }
+            if (newPropValue is IBusinessObject)
+            {
+                if (prop.PropertyType == typeof (Guid))
+                    newPropValue = ((BusinessObject) newPropValue)._primaryKey.GetAsGuid();
+                else newPropValue = ((BusinessObject) newPropValue).ID[0].Value.ToString();
+            }
+            else if (newPropValue is string && ClassDef.GetPropDef(propName).HasLookupList())
+            {
+                Dictionary<string, object> lookupList = ClassDef.GetPropDef(propName).LookupList.GetLookupList();
+                if (lookupList.ContainsKey((string) newPropValue))
+                    newPropValue = lookupList[(string) newPropValue];
+                if (newPropValue is IBusinessObject)
+                {
+                    if (prop.PropertyType == typeof (Guid))
+                        newPropValue = ((BusinessObject) newPropValue)._primaryKey.GetAsGuid();
+                    else newPropValue = ((BusinessObject) newPropValue).ID[0].Value.ToString();
+                }
+            }
+            // If the property will be changed by this set then
+            // check if object is already editing (i.e. another property value has 
+            // been changed if it is not then check that this object is still fresh
+            // if the object is not fresh then throw appropriate exception.
+            if (PropValueHasChanged(prop.Value, newPropValue))
+            {
+                if (!State.IsEditing)
+                {
+                    BeginEdit();
+                }
+                _boState.IsDirty = true;
+                prop.Value = newPropValue;
+                if (prop.IsValid)
+                {
+                    FireUpdatedEvent();
+                }
+            }
+        }
+
+        /// <summary>
+        /// The BOProps in this business object
+        /// </summary>
+        public BOPropCol Props
+        {
+            get { return _boPropCol; }
+        }
+
+        /// <summary>
+        /// Indicates whether all of the property values are valid
+        /// </summary>
+        /// <param name="invalidReason">A string to modify with a reason
+        /// for any invalid values</param>
+        /// <returns>Returns true if all are valid</returns>
+        public bool IsValid(out string invalidReason)
+        {
+            invalidReason = "";
+            if (State.IsDeleted) return true;
+
+            string customRuleErrors;
+            bool valid = Props.IsValid(out invalidReason);
+            valid &= AreCustomRulesValid(out customRuleErrors);
+            if (!String.IsNullOrEmpty(customRuleErrors))
+            {
+                invalidReason = customRuleErrors + Environment.NewLine + invalidReason;
+            }
+            return valid;
+        }
+
+        /// <summary>
+        /// Indicates whether all of the property values are valid
+        /// </summary>
+        /// <returns>Returns true if all are valid</returns>
+        public bool IsValid()
+        {
+            string invalidReason;
+            return IsValid(out invalidReason);
+        }
+
+        /// <summary>
+        /// The BOState object for this BusinessObject, which records the state information of the object
+        /// </summary>
+        public IBOState State
+        {
+            get { return _boState; }
+        }
+
+
+        public IPrimaryKey PrimaryKey
+        {
+            get { return _primaryKey; }
+            set { _primaryKey = value; }
+        }
+
+        /// <summary>
         /// Sets the object's state into editing mode.  The original state can
         /// be restored with Restore() and changes can be committed to the
         /// database by calling Save().
@@ -571,7 +732,7 @@ namespace Habanero.BO
         private void BeginEdit(bool delete)
         {
             string message;
-            if (!this.IsEditable(out message) && !delete)
+            if (!IsEditable(out message) && !delete)
             {
                 throw new BusObjEditableException(this, message);
             }
@@ -598,36 +759,6 @@ namespace Habanero.BO
         /// Returns the value under the property name specified
         /// </summary>
         /// <param name="propName">The property name</param>
-        /// <returns>Returns the value if found</returns>
-        public object GetPropertyValue(string propName)
-        {
-            if (propName == null) throw new ArgumentNullException("propName");
-
-            if (Props.Contains(propName))
-                return Props[propName].Value;
-            else
-                throw new InvalidPropertyNameException("Property '" + propName +
-                                                       "' does not exist on a business object of type '" +
-                                                       this.GetType().Name + "'");
-        }
-
-        /// <summary>
-        /// Returns the value under the property name specified, accessing it through the 'source'
-        /// </summary>
-        /// <param name="source">The source of the property ie - the relationship or C# property this property is on</param>
-        /// <param name="propName">The property name</param>
-        /// <returns>Returns the value if found</returns>
-        public object GetPropertyValue(string source, string propName)
-        {
-            if (String.IsNullOrEmpty(source)) return GetPropertyValue(propName);
-            return this.Relationships.GetRelatedObject(source).GetPropertyValue(propName);
-        }
-
-
-        /// <summary>
-        /// Returns the value under the property name specified
-        /// </summary>
-        /// <param name="propName">The property name</param>
         /// <returns>Returns a string</returns>
         internal string GetPropertyValueString(string propName)
         {
@@ -644,11 +775,11 @@ namespace Habanero.BO
         {
             object propertyValue = GetPropertyValue(propName);
 
-            if (Props[propName].PropertyType == typeof (Guid) && this.GetPropertyValue(propName) != null &&
-                !this.ID.Contains(propName))
+            if (Props[propName].PropertyType == typeof (Guid) && GetPropertyValue(propName) != null &&
+                !ID.Contains(propName))
             {
                 Guid myGuid = (Guid) propertyValue;
-                ILookupList lookupList = this.ClassDef.GetLookupList(propName);
+                ILookupList lookupList = ClassDef.GetLookupList(propName);
                 Dictionary<string, object> list = lookupList.GetLookupList();
 
                 foreach (KeyValuePair<string, object> pair in list)
@@ -702,7 +833,7 @@ namespace Habanero.BO
             }
             else if (ClassDef.GetPropDef(propName).HasLookupList())
             {
-                Dictionary<string, object> lookupList = this.ClassDef.GetLookupList(propName).GetLookupList();
+                Dictionary<string, object> lookupList = ClassDef.GetLookupList(propName).GetLookupList();
                 foreach (KeyValuePair<string, object> pair in lookupList)
                 {
                     if (pair.Value == null) continue;
@@ -744,7 +875,7 @@ namespace Habanero.BO
         /// <returns>Returns a string</returns>
         internal string GetPropertyStringValueToDisplay(string propName)
         {
-            object val = this.GetPropertyValueToDisplay(propName);
+            object val = GetPropertyValueToDisplay(propName);
             if (val != null)
             {
                 return val.ToString();
@@ -755,119 +886,11 @@ namespace Habanero.BO
             }
         }
 
-        /// <summary>
-        /// Sets a property value to a new value
-        /// </summary>
-        /// <param name="propName">The property name</param>
-        /// <param name="newPropValue">The new value to set to</param>
-        public void SetPropertyValue(string propName, object newPropValue)
-        {
-            IBOProp prop = Props[propName];
-            if (prop == null)
-            {
-                throw new InvalidPropertyNameException(String.Format(
-                                                           "The given property name '{0}' does not exist in the " +
-                                                           "collection of properties for the class '{1}'.",
-                                                           propName, ClassName));
-            }
-
-            if (!(newPropValue is Guid))
-            {
-                if (newPropValue is string && prop.PropertyType == typeof (Guid))
-                {
-                    Guid guidValue;
-                    if (StringUtilities.GuidTryParse((string) newPropValue, out guidValue))
-                    {
-                        newPropValue = guidValue;
-                    }
-                    else
-                    {
-                        if (this.ClassDef.GetPropDef(propName).HasLookupList())
-                        {
-                            Dictionary<string, object> lookupList =
-                                this.ClassDef.GetPropDef(propName).LookupList.GetLookupList();
-                            try
-                            {
-                                newPropValue = lookupList[(string) newPropValue];
-                            }
-                            catch (KeyNotFoundException ex)
-                            {
-                                throw new HabaneroApplicationException(
-                                    "You are trying to set the value for a lookup property " + propName + " to '" +
-                                    newPropValue + "' this value does not exist in the lookup list", ex);
-                            }
-                            if (newPropValue is IBusinessObject)
-                            {
-                                newPropValue = ((BusinessObject)(newPropValue))._primaryKey.GetAsGuid();
-                            }
-                        }
-                    }
-                }
-                if (newPropValue != null && newPropValue.Equals(DBNull.Value) && prop.PropertyType == typeof (bool))
-                {
-                    newPropValue = false;
-                }
-            }
-            if (DBNull.Value.Equals(newPropValue))
-            {
-                newPropValue = null;
-            }
-            if (prop.PropertyType.IsSubclassOf(typeof (CustomProperty)))
-            {
-                if (newPropValue != null && prop.PropertyType != newPropValue.GetType())
-                {
-                    newPropValue = Activator.CreateInstance(prop.PropertyType, new object[] {newPropValue, false});
-                }
-            }
-            if (newPropValue is IBusinessObject)
-            {
-                if (prop.PropertyType == typeof (Guid))
-                    newPropValue = ((BusinessObject) newPropValue)._primaryKey.GetAsGuid();
-                else newPropValue = ((BusinessObject) newPropValue).ID[0].Value.ToString();
-            }
-            else if (newPropValue is string && ClassDef.GetPropDef(propName).HasLookupList())
-            {
-                Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupList.GetLookupList();
-                if (lookupList.ContainsKey((string) newPropValue))
-                    newPropValue = lookupList[(string) newPropValue];
-                if (newPropValue is IBusinessObject)
-                {
-                    if (prop.PropertyType == typeof (Guid))
-                        newPropValue = ((BusinessObject)newPropValue)._primaryKey.GetAsGuid();
-                    else newPropValue = ((BusinessObject) newPropValue).ID[0].Value.ToString();
-                }
-            }
-            // If the property will be changed by this set then
-            // check if object is already editing (i.e. another property value has 
-            // been changed if it is not then check that this object is still fresh
-            // if the object is not fresh then throw appropriate exception.
-            if (PropValueHasChanged(prop.Value, newPropValue))
-            {
-                if (!State.IsEditing)
-                {
-                    BeginEdit();
-                }
-                _boState.IsDirty = true;
-                prop.Value = newPropValue;
-                if(prop.IsValid){
-                    FireUpdatedEvent();
-                }
-            }
-        }
-
         internal static bool PropValueHasChanged(object propValue, object newPropValue)
         {
             if (propValue == newPropValue) return false;
             if (propValue != null) return !propValue.Equals(newPropValue);
             else return (newPropValue != null && !string.IsNullOrEmpty(Convert.ToString(newPropValue)));
-        }
-
-        /// <summary>
-        /// The BOProps in this business object
-        /// </summary>
-        public BOPropCol Props
-        {
-            get { return _boPropCol; }
         }
 
         /// <summary>
@@ -881,55 +904,63 @@ namespace Habanero.BO
             prop.Value = propValue;
         }
 
-        /// <summary>
-        /// Indicates whether all of the property values are valid
-        /// </summary>
-        /// <param name="invalidReason">A string to modify with a reason
-        /// for any invalid values</param>
-        /// <returns>Returns true if all are valid</returns>
-        public bool IsValid(out string invalidReason)
-        {
-            invalidReason = "";
-            if (this.State.IsDeleted) return true;
-
-            string customRuleErrors;
-            bool valid = Props.IsValid(out invalidReason);
-            valid &= AreCustomRulesValid(out customRuleErrors);
-            if (!String.IsNullOrEmpty(customRuleErrors))
-            {
-                invalidReason = customRuleErrors + Environment.NewLine + invalidReason;
-            }
-            return valid;
-        }
-
-        /// <summary>
-        /// Indicates whether all of the property values are valid
-        /// </summary>
-        /// <returns>Returns true if all are valid</returns>
-        public bool IsValid()
-        {
-            string invalidReason;
-            return IsValid(out invalidReason);
-        }
-
-        /// <summary>
-        /// The BOState object for this BusinessObject, which records the state information of the object
-        /// </summary>
-        public IBOState State
-        {
-            get { return _boState; }
-        }
-
-
-        public IPrimaryKey PrimaryKey
-        {
-            get { return _primaryKey; }
-            set { _primaryKey = value; }
-        }
-
         #endregion //Editing Property Values
 
         #region Persistance
+
+        /// <summary>
+        /// Returns the database connection string
+        /// </summary>
+        protected virtual string ConnectionString
+        {
+            get { return _connection.ConnectionString; }
+        }
+
+        internal bool HasAutoIncrementingField
+        {
+            get { return _boPropCol.HasAutoIncrementingField; }
+        }
+
+        /// <summary>
+        /// Commits to the database any changes made to the object
+        /// </summary>
+        public void Save()
+        {
+            ITransactionCommitter committer =
+                BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(this);
+            committer.CommitTransaction();
+        }
+
+        /// <summary>
+        /// Cancel all edits made to the object since it was loaded from the 
+        /// database or last saved to the database
+        /// </summary>
+        public void Restore()
+        {
+            _boPropCol.RestorePropertyValues();
+            _boState.IsDeleted = false;
+            _boState.IsEditing = false;
+            _boState.IsDirty = false;
+            ReleaseWriteLocks();
+            FireUpdatedEvent();
+            FireRestoredEvent();
+        }
+
+        /// <summary>
+        /// Marks the business object for deleting.  Calling Save() will
+        /// then carry out the deletion from the database.
+        /// </summary>
+        public void Delete()
+        {
+            CheckIsDeletable();
+            if (!State.IsEditing)
+            {
+                BeginEdit(true);
+            }
+            _boState.IsDirty = true;
+            _boState.IsDeleted = true;
+        }
 
         /// <summary>
         /// This method returns the default Database Connection to use when initialising
@@ -966,20 +997,7 @@ namespace Habanero.BO
         /// <param name="connection">The database connection to set to</param>
         internal void SetDatabaseConnection(IDatabaseConnection connection)
         {
-            this._connection = connection;
-        }
-
-        /// <summary>
-        /// Returns the database connection string
-        /// </summary>
-        protected virtual string ConnectionString
-        {
-            get { return _connection.ConnectionString; }
-        }
-
-        internal bool HasAutoIncrementingField
-        {
-            get { return _boPropCol.HasAutoIncrementingField; }
+            _connection = connection;
         }
 
         /// <summary>
@@ -990,17 +1008,6 @@ namespace Habanero.BO
         {
         }
 
-
-        /// <summary>
-        /// Commits to the database any changes made to the object
-        /// </summary>
-        public void Save()
-        {
-            ITransactionCommitter committer =
-                BORegistry.DataAccessor.CreateTransactionCommitter();
-            committer.AddBusinessObject(this);
-            committer.CommitTransaction();
-        }
 
         /// <summary>
         /// Carries out updates to the object after changes have been
@@ -1040,7 +1047,7 @@ namespace Habanero.BO
             {
                 try
                 {
-                    AllLoadedBusinessObjects().Add(this.ID.GetObjectId(),
+                    AllLoadedBusinessObjects().Add(ID.GetObjectId(),
                                                    new WeakReference(this));
                 }
                 catch (IndexOutOfRangeException)
@@ -1094,36 +1101,6 @@ namespace Habanero.BO
             if (_primaryKey != null) AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
         }
 
-        /// <summary>
-        /// Cancel all edits made to the object since it was loaded from the 
-        /// database or last saved to the database
-        /// </summary>
-        public void Restore()
-        {
-            _boPropCol.RestorePropertyValues();
-            _boState.IsDeleted = false;
-            _boState.IsEditing = false;
-            _boState.IsDirty = false;
-            ReleaseWriteLocks();
-            FireUpdatedEvent();
-            FireRestoredEvent();
-        }
-
-        /// <summary>
-        /// Marks the business object for deleting.  Calling Save() will
-        /// then carry out the deletion from the database.
-        /// </summary>
-        public void Delete()
-        {
-            CheckIsDeletable();
-            if (!State.IsEditing)
-            {
-                BeginEdit(true);
-            }
-            _boState.IsDirty = true;
-            _boState.IsDeleted = true;
-        }
-
         private void CheckIsDeletable()
         {
             string errMsg;
@@ -1135,33 +1112,33 @@ namespace Habanero.BO
 
         private void FireUpdatedEvent()
         {
-            if (this.Updated != null)
+            if (Updated != null)
             {
-                this.Updated(this, new BOEventArgs(this));
+                Updated(this, new BOEventArgs(this));
             }
         }
 
         private void FireRestoredEvent()
         {
-            if (this.Restored != null)
+            if (Restored != null)
             {
-                this.Restored(this, new BOEventArgs(this));
+                Restored(this, new BOEventArgs(this));
             }
         }
 
         private void FireSaved()
         {
-            if (this.Saved != null)
+            if (Saved != null)
             {
-                this.Saved(this, new BOEventArgs(this));
+                Saved(this, new BOEventArgs(this));
             }
         }
 
         private void FireDeleted()
         {
-            if (this.Deleted != null)
+            if (Deleted != null)
             {
-                this.Deleted(this, new BOEventArgs(this));
+                Deleted(this, new BOEventArgs(this));
             }
         }
 
@@ -1190,7 +1167,7 @@ namespace Habanero.BO
             {
                 _concurrencyControl.CheckConcurrencyBeforePersisting();
             }
-            this.UpdatedConcurrencyControlPropertiesBeforePersisting();
+            UpdatedConcurrencyControlPropertiesBeforePersisting();
         }
 
         /// <summary>
@@ -1305,7 +1282,7 @@ namespace Habanero.BO
         /// <returns>Returns a sql string</returns>
         protected virtual string SelectSqlWithNoSearchClause()
         {
-            return new SelectStatementGenerator(this, this._connection).Generate(-1);
+            return new SelectStatementGenerator(this, _connection).Generate(-1);
         }
 
         /// <summary>
@@ -1336,7 +1313,7 @@ namespace Habanero.BO
         /// <returns>Returns a sql string</returns>
         protected internal string GetSelectSql(int limit)
         {
-            return new SelectStatementGenerator(this, this._connection).Generate(limit);
+            return new SelectStatementGenerator(this, _connection).Generate(limit);
         }
 
         /// <summary>
@@ -1373,7 +1350,7 @@ namespace Habanero.BO
 
         internal void SetState(BOState.States state, bool value)
         {
-           _boState.SetBOFlagValue(state, value);
+            _boState.SetBOFlagValue(state, value);
         }
     }
 }

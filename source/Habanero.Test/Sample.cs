@@ -35,11 +35,7 @@ namespace Habanero.Test
         private static Dictionary<string, object> itsLookupCollection;
         private static Dictionary<string, object> itsBOLookupCollection;
 
-        public Sample() : base()
-        {
-        }
-
-        public Sample(IDatabaseConnection conn) : base(conn)
+        public Sample()
         {
         }
 

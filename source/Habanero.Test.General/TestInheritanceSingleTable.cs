@@ -17,7 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System.Data;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -26,6 +25,19 @@ using NUnit.Framework;
 
 namespace Habanero.Test.General
 {
+    /// <summary>
+    /// This is testing inheritance implemented using the single table patterns (See Martin Fowler. Patterns of Enterprise Application Architecture).
+    /// The Base Class is Shape. CircleNoPrimaryKey Inherits From Shape. NB the Class must be loaded using the Class Def - GetClassDefWithSingleInheritance. 
+    /// Filled Circle (FilledCircleNoPrimaryKey) Inherits From CircleNoPrimaryKey.
+    ///     NB the Class must be loaded using the Class Def -  GetClassDefWithSingleInheritanceHierarchy.
+    ///     
+    /// The table used is shape_table. The Discriminator Fields are ShapeType_field and CircleType_field.
+    /// Shape has two Fields ShapeName and ShapeId.
+    /// 
+    /// CircleNoPrimaryKey has the additional field - Radius.
+    /// 
+    /// FilledCircleNoPrimaryKey has add field - Colour.
+    /// </summary>
     [TestFixture]
     public class TestInheritanceSingleTable : TestInheritanceBase
     {
@@ -33,7 +45,6 @@ namespace Habanero.Test.General
         public void SetupFixture()
         {
             SetupTestWithoutPrimaryKey();
-
         }
 
         protected override void SetupInheritanceSpecifics()
@@ -48,15 +59,60 @@ namespace Habanero.Test.General
             strID = (string) DatabaseUtil.PrepareValue(objCircle.GetPropertyValue("ShapeID"));
         }
 
-        [Test]
-        public void TestCircleIsUsingSingleTableInheritance()
+        [TestFixtureTearDown]
+        public void TearDown()
         {
-            Assert.AreEqual(ORMapping.SingleTableInheritance, CircleNoPrimaryKey.GetClassDef().SuperClassDef.ORMapping);
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+            BusinessObjectCollection<Shape> shapes = BOLoader.Instance.GetBusinessObjectCol<Shape>(
+                "ShapeName = 'MyShape' OR ShapeName = 'MyShapeChanged'", null);
+            foreach (Shape shape in shapes)
+            {
+                shape.Delete();
+                committer.AddBusinessObject(shape);
+            }
+
+            BusinessObjectCollection<CircleNoPrimaryKey> circles = BOLoader.Instance.GetBusinessObjectCol
+                <CircleNoPrimaryKey>(
+                "ShapeName = 'Circle' OR ShapeName = 'CircleChanged'", null);
+            foreach (CircleNoPrimaryKey circle in circles)
+
+            {
+                circle.Delete();
+                committer.AddBusinessObject(circle);
+            }
+            committer.CommitTransaction();
+        }
+
+        [Test]
+        public void TestCircleDeleteSql()
+        {
+            Assert.AreEqual(1, itsDeleteSql.Count,
+                            "There should only be one delete sql statement when using single table inheritance.");
+            Assert.AreEqual("DELETE FROM `Shape_table` WHERE `ShapeID_field` = ?Param0",
+                            itsDeleteSql[0].Statement.ToString(),
+                            "Delete Sql for single table inheritance is incorrect.");
+            Assert.AreEqual(strID, (itsDeleteSql[0].Parameters[0]).Value,
+                            "Parameter ShapeID has incorrect value for delete sql when using Single Table inheritance.");
+        }
+
+        [Test, ExpectedException(typeof (InvalidPropertyNameException))]
+        public void TestCircleDoesntHaveCircleID()
+        {
+            objCircle.GetPropertyValue("CircleID");
+        }
+
+        [Test]
+        public void TestCircleHasCorrectPropertyNames()
+        {
+            objCircle.GetPropertyValue("ShapeName");
+            objCircle.GetPropertyValue("Radius");
+            objCircle.GetPropertyValue("ShapeID");
         }
 
         [Test]
         public void TestCircleHasShapeIDAsPrimaryKey()
         {
+            Assert.AreEqual(1, objCircle.ID.Count);
             try
             {
                 objCircle.ID.Contains("ShapeID");
@@ -68,37 +124,29 @@ namespace Habanero.Test.General
         }
 
         [Test]
-        public void TestCircleHasCorrectPropertyNames()
-        {
-            objCircle.GetPropertyValue("ShapeName");
-            objCircle.GetPropertyValue("Radius");
-            objCircle.GetPropertyValue("ShapeID");
-        }
-
-        [Test, ExpectedException(typeof (InvalidPropertyNameException))]
-        public void TestCircleDoesntHaveCircleID()
-        {
-            objCircle.GetPropertyValue("CircleID");
-        }
-
-        [Test]
         public void TestCircleInsertSql()
         {
             Assert.AreEqual(1, itsInsertSql.Count,
                             "There should only be one insert Sql statement when using Single Table Inheritance.");
-            Assert.AreEqual("INSERT INTO `Shape_table` (`ShapeType_field`, `Radius`, `ShapeID_field`, `ShapeName`) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
-                            itsInsertSql[0].Statement.ToString(),
-                            "Concrete Table Inheritance insert Sql seems to be incorrect.");
+            Assert.AreEqual(
+                "INSERT INTO `Shape_table` (`ShapeType_field`, `Radius`, `ShapeID_field`, `ShapeName`) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
+                itsInsertSql[0].Statement.ToString(),
+                "Concrete Table Inheritance insert Sql seems to be incorrect.");
             Assert.AreEqual(4, itsInsertSql[0].Parameters.Count, "There should be 4 parameters.");
-            Assert.AreEqual("CircleNoPrimaryKey", ((IDbDataParameter)itsInsertSql[0].Parameters[0]).Value,
+            Assert.AreEqual("CircleNoPrimaryKey", (itsInsertSql[0].Parameters[0]).Value,
                             "Discriminator has incorrect value");
-            Assert.AreEqual(10, ((IDbDataParameter) itsInsertSql[0].Parameters[1]).Value,
+            Assert.AreEqual(10, (itsInsertSql[0].Parameters[1]).Value,
                             "Parameter Radius has incorrect value");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[0].Parameters[2]).Value,
+            Assert.AreEqual(strID, (itsInsertSql[0].Parameters[2]).Value,
                             "Parameter ShapeID has incorrect value");
-            Assert.AreEqual("MyShape", ((IDbDataParameter) itsInsertSql[0].Parameters[3]).Value,
+            Assert.AreEqual("MyShape", (itsInsertSql[0].Parameters[3]).Value,
                             "Parameter ShapeName has incorrect value");
+        }
 
+        [Test]
+        public void TestCircleIsUsingSingleTableInheritance()
+        {
+            Assert.AreEqual(ORMapping.SingleTableInheritance, CircleNoPrimaryKey.GetClassDef().SuperClassDef.ORMapping);
         }
 
         [Test]
@@ -112,34 +160,12 @@ namespace Habanero.Test.General
             // Is Object ID so doesn't get changed
             //Assert.AreEqual(strID, ((IDbDataParameter) _updateSql[0].Parameters[1]).Value,
             //                "Parameter ShapeID has incorrect value");
-            Assert.AreEqual("MyShape", ((IDbDataParameter) itsUpdateSql[0].Parameters[1]).Value,
+            Assert.AreEqual("MyShape", (itsUpdateSql[0].Parameters[1]).Value,
                             "Parameter ShapeName has incorrect value");
-            Assert.AreEqual(10, ((IDbDataParameter) itsUpdateSql[0].Parameters[0]).Value,
+            Assert.AreEqual(10, (itsUpdateSql[0].Parameters[0]).Value,
                             "Parameter Radius has incorrect value");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsUpdateSql[0].Parameters[2]).Value,
+            Assert.AreEqual(strID, (itsUpdateSql[0].Parameters[2]).Value,
                             "Parameter ShapeID has incorrect value");
-        }
-
-        [Test]
-        public void TestCircleDeleteSql()
-        {
-            Assert.AreEqual(1, itsDeleteSql.Count,
-                            "There should only be one delete sql statement when using single table inheritance.");
-            Assert.AreEqual("DELETE FROM `Shape_table` WHERE `ShapeID_field` = ?Param0", itsDeleteSql[0].Statement.ToString(),
-                            "Delete Sql for single table inheritance is incorrect.");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsDeleteSql[0].Parameters[0]).Value,
-                            "Parameter ShapeID has incorrect value for delete sql when using Single Table inheritance.");
-        }
-
-        [Test]
-        public void TestSelectSql()
-        {
-            Assert.AreEqual(
-                    "SELECT `Shape_table`.`Radius`, `Shape_table`.`ShapeID_field`, `Shape_table`.`ShapeName` FROM `Shape_table` WHERE `ShapeType_field` = 'CircleNoPrimaryKey' AND `ShapeID_field` = ?Param0",
-                    selectSql.Statement.ToString(), "Select sql is incorrect for single table inheritance.");
-         
-            Assert.AreEqual(strID, ((IDbDataParameter) selectSql.Parameters[0]).Value,
-                            "Parameter ShapeID is incorrect in select where clause for single table inheritance.");
         }
 
         // TODO: Would like to separate these tests out later, but needs a structure
@@ -202,11 +228,51 @@ namespace Habanero.Test.General
         }
 
 
-        [Test, ExpectedException(typeof(BusObjDuplicateConcurrencyControlException))]
-        public void TestUniqueKeyValidationForSubTypesOfSingleTableInheritanceStructure()
+        [Test]
+        public void TestLoadingRelatedObjectWithSingleTableInheritance()
         {
             //---------------Set up test pack-------------------
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from filledcircle_table; delete from circle_table; delete from shape_table");
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(
+                "delete from filledcircle_table; delete from circle_table; delete from shape_table");
+            //MyBO has a relationship to Shape. Shape potentially has a circle for single table inheritance.
+            MyBO.LoadClassDefWithShape_SingleTableInheritance_Relationship();
+
+            MyBO bo = new MyBO();
+            CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
+            circle.Radius = 5;
+            circle.ShapeName = "MyShape";
+            circle.Save();
+            bo.SetPropertyValue("ShapeID", circle.ShapeID);
+            bo.Save();
+
+            BOLoader.Instance.ClearLoadedBusinessObjects();
+
+            //---------------Execute Test ----------------------
+            bo = BOLoader.Instance.GetBusinessObjectByID<MyBO>(bo.MyBoID);
+            Shape shape = bo.Shape;
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof (CircleNoPrimaryKey), shape.GetType());
+        }
+
+        [Test]
+        public void TestSelectSql()
+        {
+            Assert.AreEqual(
+                "SELECT `Shape_table`.`Radius`, `Shape_table`.`ShapeID_field`, `Shape_table`.`ShapeName` FROM `Shape_table` WHERE `ShapeType_field` = 'CircleNoPrimaryKey' AND `ShapeID_field` = ?Param0",
+                selectSql.Statement.ToString(), "Select sql is incorrect for single table inheritance.");
+
+            Assert.AreEqual(strID, (selectSql.Parameters[0]).Value,
+                            "Parameter ShapeID is incorrect in select where clause for single table inheritance.");
+        }
+
+        [Test, ExpectedException(typeof (BusObjDuplicateConcurrencyControlException))]
+        public void TestUniqueKeyValidationForSubTypesOfSingleTableInheritanceStructure()
+        {
+            //Should not be allowed to save circle with the same shape name as shape.
+            //---------------Set up test pack-------------------
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(
+                "delete from filledcircle_table; delete from circle_table; delete from shape_table");
             Shape shape = new Shape();
             shape.ShapeName = "MyShape";
             shape.Save();
@@ -216,65 +282,10 @@ namespace Habanero.Test.General
 
             //---------------Execute Test ----------------------
             circle.Save();
-            //---------------Test Result -----------------------
-
-            //---------------Tear Down -------------------------
-        }
-
-
-        [Test]
-        public void TestLoadingRelatedObjectWithSingleTableInheritance()
-        {
-            //---------------Set up test pack-------------------
-           // ClassDef.ClassDefs.Clear();
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from filledcircle_table; delete from circle_table; delete from shape_table");
-            MyBO.LoadClassDefWithShape_SingleTableInheritance_Relationship();
-
-            MyBO bo = new MyBO();
-                        CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
-            circle.Radius = 5;
-            circle.ShapeName = "MyShape";
-            circle.Save();
-            bo.SetPropertyValue("ShapeID", circle.ShapeID);
-            bo.Save();
-
-            BOLoader.Instance.ClearLoadedBusinessObjects();
-            //---------------Execute Test ----------------------
-
-            bo = BOLoader.Instance.GetBusinessObjectByID<MyBO>(bo.MyBoID);
-            Shape shape = bo.Shape;
-            //---------------Test Result -----------------------
-            Assert.AreSame(typeof(CircleNoPrimaryKey), shape.GetType());
-            //---------------Tear Down -------------------------
         }
 
 
         // Provided in case the above test fails and the rows remain in the database
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
-            TransactionCommitterDB committer = new TransactionCommitterDB();
-            BusinessObjectCollection<Shape> shapes = BOLoader.Instance.GetBusinessObjectCol<Shape>(
-                "ShapeName = 'MyShape' OR ShapeName = 'MyShapeChanged'", null);
-            foreach (Shape shape in shapes)
-            {
-                shape.Delete();
-               committer.AddBusinessObject(shape);
-             
-            }
-           
-          BusinessObjectCollection<CircleNoPrimaryKey> circles = BOLoader.Instance.GetBusinessObjectCol<CircleNoPrimaryKey>(
-                "ShapeName = 'Circle' OR ShapeName = 'CircleChanged'", null);
-          foreach (CircleNoPrimaryKey circle in circles)
-
-            {
-                circle.Delete();
-                committer.AddBusinessObject(circle);
-            }
-            committer.CommitTransaction();
-        }
-
-
 
     }
 }

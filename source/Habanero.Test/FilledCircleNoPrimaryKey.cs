@@ -29,16 +29,13 @@ namespace Habanero.Test
     public class FilledCircleNoPrimaryKey : CircleNoPrimaryKey
     {
 
-        public static ClassDef GetClassDef()
+        public new static ClassDef GetClassDef()
         {
-            if (!ClassDef.IsDefined(typeof(FilledCircleNoPrimaryKey)))
+            if (ClassDef.IsDefined(typeof (FilledCircleNoPrimaryKey)))
             {
-                return CreateClassDef();
+                return ClassDef.ClassDefs[typeof (FilledCircleNoPrimaryKey)];
             }
-            else
-            {
-                return ClassDef.ClassDefs[typeof(FilledCircleNoPrimaryKey)];
-            }
+            return CreateClassDef();
         }
 
         protected override ClassDef ConstructClassDef()
@@ -47,7 +44,7 @@ namespace Habanero.Test
             return _classDef;
         }
 
-        private static ClassDef CreateClassDef()
+        private new static ClassDef CreateClassDef()
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =

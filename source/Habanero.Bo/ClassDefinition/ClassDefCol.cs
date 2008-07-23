@@ -216,13 +216,11 @@ namespace Habanero.BO.ClassDefinition
 			if (_instanceFlag)
 			{
 				return _classDefcol;
-			} else
-			{
-				return LoadColClassDef(new ClassDefCol());
-				//TODO: Is throwing an error correct? Maybe return null?
-				//throw new Generic.HabaneroApplicationException(
-				//    "The Class Definitions cannot be accessed before they have been loaded.");
 			}
+		    return LoadColClassDef(new ClassDefCol());
+		    //TODO: Is throwing an error correct? Maybe return null?
+		    //throw new Generic.HabaneroApplicationException(
+		    //    "The Class Definitions cannot be accessed before they have been loaded.");
 		}
 
 		/// <summary>

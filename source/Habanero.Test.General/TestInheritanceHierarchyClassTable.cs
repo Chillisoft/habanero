@@ -31,7 +31,7 @@ using NUnit.Framework;
 namespace Habanero.Test.General
 {
     [TestFixture]
-    public class TestInheritanceHeirarchyClassTable : TestInheritanceHeirarchyBase
+    public class TestInheritanceHierarchyClassTable : TestInheritanceHierarchyBase
     {
         [TestFixtureSetUp]
         public void SetupFixture()

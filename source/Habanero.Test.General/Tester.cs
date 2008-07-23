@@ -436,11 +436,6 @@ namespace Habanero.Test.General
         {
         }
 
-        internal TransactionLogStub(BOPrimaryKey id)
-            : base(id)
-        {
-        }
-
         public TransactionLogStub(ClassDef def)
             : base(def)
         {
@@ -536,7 +531,7 @@ namespace Habanero.Test.General
             TransactionLogStub myTransactionLogStub = (TransactionLogStub)BOLoader.Instance.GetLoadedBusinessObject(id);
             if (myTransactionLogStub == null)
             {
-                myTransactionLogStub = new TransactionLogStub(id);
+                myTransactionLogStub =  BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TransactionLogStub>(id);
             }
             return myTransactionLogStub;
         }

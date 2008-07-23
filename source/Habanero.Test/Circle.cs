@@ -28,14 +28,11 @@ namespace Habanero.Test
 
         public new static ClassDef GetClassDef()
         {
-            if (!ClassDef.IsDefined(typeof (Circle)))
-            {
-                return CreateClassDef();
-            }
-            else
+            if (ClassDef.IsDefined(typeof (Circle)))
             {
                 return ClassDef.ClassDefs[typeof (Circle)];
             }
+            return CreateClassDef();
         }
 
         protected override ClassDef ConstructClassDef()

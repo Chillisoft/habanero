@@ -21,6 +21,11 @@ using System;
 
 namespace Habanero.Base
 {
+    ///<summary>
+    /// This is an interface for the primary key for a business object.
+    /// The Primary Key inherits from IBOKey and as such will contain a collection
+    /// of IBOProps.
+    ///</summary>
     public interface IPrimaryKey : IBOKey
     {
         /// <summary>
@@ -37,9 +42,13 @@ namespace Habanero.Base
         string GetObjectNewID();
 
         /// <summary>
-        /// Get the original ObjectID
+        /// Get the original ObjectID. In the case of a new business object this will be the original GUID that the
+        ///   object was assigned. In the case where the Primary Key is the object ID this should always be 
+        ///     equal to <see cref="GetObjectId"/>  and <see cref="GetObjectNewID"/>.
+        /// In the case of a natural Key e.g. If name is used as a primary key then this will not be equal to
+        ///  <see cref="GetObjectId"/>  and <see cref="GetObjectNewID"/> in the case where the object is new.
         /// </summary>
-        /// <returns>Returns a string</returns>
+        /// <returns>Returns a string representing the objects ID</returns>
         string GetOrigObjectID();
 
         /// <summary>

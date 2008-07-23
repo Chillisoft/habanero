@@ -46,10 +46,6 @@ namespace Habanero.Test
             SetPropertyValue("PK3Prop", this.ID.GetObjectId());
         }
 
-        internal ContactPerson(IPrimaryKey id) : base(id)
-        {
-        }
-
         internal ContactPerson(IExpression searchExpression) : base(searchExpression)
         {
         }
@@ -219,7 +215,7 @@ namespace Habanero.Test
             ContactPerson myContactPerson = (ContactPerson)BOLoader.Instance.GetLoadedBusinessObject(id);
             if (myContactPerson == null)
             {
-                myContactPerson = new ContactPerson(id);
+                myContactPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(id);
             }
             return myContactPerson;
         }

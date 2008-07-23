@@ -77,16 +77,13 @@ namespace Habanero.BO
             {
                 return "ID=" + _newObjectID;
             }
-            else if (!IsObjectNew)
+            if (!IsObjectNew)
             {
                 return PersistedDatabaseWhereClause(null);
             }
-            else
-            {
-                //TODO: This exception breaks tests. Review.
-                //throw new InvalidObjectIdException("Error: _isObjectNew = true but the _newObjectID is not set");
-                return "";
-            }
+            //TODO: This exception breaks tests. Review.
+            //throw new InvalidObjectIdException("Error: _isObjectNew = true but the _newObjectID is not set");
+            return "";
         }
 
         /// <summary>
@@ -144,7 +141,7 @@ namespace Habanero.BO
 
         /// <summary>
         /// Returns the primary key of the super-class.  If not found, it
-        /// searches higher up the heirarchy and returns the higher primary
+        /// searches higher up the Hierarchy and returns the higher primary
         /// key or null if none is found.
         /// </summary>
         /// <param name="subClassDef">The class definition to search on</param>
@@ -155,10 +152,8 @@ namespace Habanero.BO
             while (subClassDef.SuperClassClassDef.PrimaryKeyDef == null)
             {
                 if (subClassDef.SuperClassClassDef == null) return null;
-                else
-                {
-                    subClassDef = subClassDef.SuperClassClassDef;
-                }
+
+                subClassDef = subClassDef.SuperClassClassDef;
             }
             return subClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(subClassObj.Props);
         }

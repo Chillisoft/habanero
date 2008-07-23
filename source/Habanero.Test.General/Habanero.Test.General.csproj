@@ -129,7 +129,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestInheritanceHeirarchySingleClass.cs" />
+    <Compile Include="TestInheritanceHierarchySingleClass.cs" />
     <Compile Include="TestInheritanceClassTableNoID.cs" />
     <Compile Include="TestInheritanceClassTableCopyID.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -182,16 +182,16 @@
     <Compile Include="TestInheritanceConcreteTable.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestInheritanceHeirarchyBase.cs">
+    <Compile Include="TestInheritanceHierarchyBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestInheritanceHeirarchyClassTable.cs">
+    <Compile Include="TestInheritanceHierarchyClassTable.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestInheritanceHeirarchyConcreteTable.cs">
+    <Compile Include="TestInheritanceHierarchyConcreteTable.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestInheritanceHeirarchySingleTable.cs">
+    <Compile Include="TestInheritanceHierarchySingleTable.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestInheritanceOverriding.cs" />
@@ -202,6 +202,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestPersistingAttributeProps.cs" />
+    <Compile Include="TestPrimaryKey.cs" />
     <Compile Include="TestShapeCircleRelationship.cs" />
   </ItemGroup>
   <ItemGroup>

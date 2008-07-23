@@ -37,12 +37,16 @@ namespace Habanero.Test
 
         #region Constructors
 
-        public ContactPersonCompositeKey() : base()
+        public string PK1Prop1
         {
+            get { return GetPropertyValueString(PK1_PROP1_NAME); }
+            set { SetPropertyValue(PK1_PROP1_NAME, value); }
         }
 
-        public ContactPersonCompositeKey(IPrimaryKey id) : base(id)
+        public string PK1Prop2
         {
+            get { return GetPropertyValueString(PK1_PROP2_NAME); }
+            set { SetPropertyValue(PK1_PROP2_NAME, value); }
         }
 
         public static void LoadClassDefs()
@@ -57,14 +61,11 @@ namespace Habanero.Test
 
         private static ClassDef GetClassDef()
         {
-            if (!ClassDef.IsDefined(typeof (ContactPersonCompositeKey)))
-            {
-                return CreateClassDef();
-            }
-            else
+            if (ClassDef.IsDefined(typeof (ContactPersonCompositeKey)))
             {
                 return ClassDef.ClassDefs[typeof (ContactPersonCompositeKey)];
             }
+            return CreateClassDef();
         }
 
         private static ClassDef CreateClassDef()
@@ -80,7 +81,7 @@ namespace Habanero.Test
             RelationshipDefCol relDefs = CreateRelationshipDefCol(lPropDefCol);
             ClassDef lClassDef =
                 new ClassDef(typeof (ContactPersonCompositeKey), primaryKey, lPropDefCol, keysCol, relDefs);
-            
+
             ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
@@ -103,7 +104,7 @@ namespace Habanero.Test
             relKeyDef.Add(lRelPropDef);
 
             RelationshipDef relDef = new MultipleRelationshipDef("Driver",
-                                                                 typeof (Car), relKeyDef, true, "", 
+                                                                 typeof (Car), relKeyDef, true, "",
                                                                  DeleteParentAction.DereferenceRelated);
 
             relDefCol.Add(relDef);
@@ -124,36 +125,27 @@ namespace Habanero.Test
             lPropDefCol.Add(propDef);
 
             //Create concurrency control properties
-            propDef = new PropDef("DateLastUpdated", typeof(DateTime), PropReadWriteRule.ReadWrite, DateTime.Now);
+            propDef = new PropDef("DateLastUpdated", typeof (DateTime), PropReadWriteRule.ReadWrite, DateTime.Now);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("UserLastUpdated", typeof(string), PropReadWriteRule.ReadWrite, null);
+            propDef = new PropDef("UserLastUpdated", typeof (string), PropReadWriteRule.ReadWrite, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("MachineLastUpdated", typeof(string), PropReadWriteRule.ReadWrite, null);
+            propDef = new PropDef("MachineLastUpdated", typeof (string), PropReadWriteRule.ReadWrite, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("VersionNumber", typeof(int), PropReadWriteRule.ReadWrite, 1);
+            propDef = new PropDef("VersionNumber", typeof (int), PropReadWriteRule.ReadWrite, 1);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef(PK1_PROP1_NAME, typeof(string), PropReadWriteRule.ReadWrite, "PK1_Prop1", null);
+            propDef = new PropDef(PK1_PROP1_NAME, typeof (string), PropReadWriteRule.ReadWrite, "PK1_Prop1", null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef(PK1_PROP2_NAME, typeof(string), PropReadWriteRule.ReadWrite, "PK1_Prop2", null);
+            propDef = new PropDef(PK1_PROP2_NAME, typeof (string), PropReadWriteRule.ReadWrite, "PK1_Prop2", null);
             lPropDefCol.Add(propDef);
 
             return lPropDefCol;
         }
-        public string PK1Prop1
-        {
-            get { return GetPropertyValueString(PK1_PROP1_NAME); }
-            set { SetPropertyValue(PK1_PROP1_NAME, value); }
-        }
-        public string PK1Prop2
-        {
-            get { return GetPropertyValueString(PK1_PROP2_NAME); }
-            set { SetPropertyValue(PK1_PROP2_NAME, value); }
-        }
+
         /// <summary>
         /// returns the ContactPerson identified by id.
         /// </summary>
@@ -167,10 +159,11 @@ namespace Habanero.Test
         public static ContactPersonCompositeKey GetContactPersonCompositeKey(IPrimaryKey id)
         {
             ContactPersonCompositeKey myContactPerson =
-                (ContactPersonCompositeKey)BOLoader.Instance.GetLoadedBusinessObject(id);
+                (ContactPersonCompositeKey) BOLoader.Instance.GetLoadedBusinessObject(id);
             if (myContactPerson == null)
             {
-                myContactPerson = new ContactPersonCompositeKey(id);
+                myContactPerson =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonCompositeKey>(id);
             }
             return myContactPerson;
         }
@@ -198,7 +191,7 @@ namespace Habanero.Test
 
         public static void DeleteAllContactPeople()
         {
-            string sql = "DELETE FROM ContactPersonCompositeKey";
+            const string sql = "DELETE FROM ContactPersonCompositeKey";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 

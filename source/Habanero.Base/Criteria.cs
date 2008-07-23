@@ -293,17 +293,15 @@ namespace Habanero.Base
             if (key.Count == 1)
             {
                 return new Criteria(key[0].PropertyName, Op.Equals, key[0].Value);
-            } else
-            {
-                Criteria lastCriteria = null;
-                foreach (IBOProp prop in key)
-                {
-                    Criteria propCriteria = new Criteria(prop.PropertyName, Op.Equals, prop.Value);
-                    if (lastCriteria == null) lastCriteria = propCriteria;
-                    else lastCriteria = new Criteria(lastCriteria, LogicalOp.And, propCriteria);
-                }
-                return lastCriteria;
             }
+            Criteria lastCriteria = null;
+            foreach (IBOProp prop in key)
+            {
+                Criteria propCriteria = new Criteria(prop.PropertyName, Op.Equals, prop.Value);
+                if (lastCriteria == null) lastCriteria = propCriteria;
+                else lastCriteria = new Criteria(lastCriteria, LogicalOp.And, propCriteria);
+            }
+            return lastCriteria;
         }
 
         /// <summary>
@@ -319,17 +317,15 @@ namespace Habanero.Base
             {
                 IRelProp relProp = relationship.RelKey[0];
                 return new Criteria(relProp.RelatedClassPropName, Op.Equals, relProp.BOProp.Value);
-            } else
-            {
-                Criteria lastCriteria = null;
-                foreach (IRelProp relProp in relationship.RelKey)
-                {
-                    Criteria propCriteria = new Criteria(relProp.RelatedClassPropName, Op.Equals, relProp.BOProp.Value);
-                    if (lastCriteria == null) lastCriteria = propCriteria;
-                    else lastCriteria = new Criteria(lastCriteria, LogicalOp.And, propCriteria);
-                }
-                return lastCriteria;
             }
+            Criteria lastCriteria = null;
+            foreach (IRelProp relProp in relationship.RelKey)
+            {
+                Criteria propCriteria = new Criteria(relProp.RelatedClassPropName, Op.Equals, relProp.BOProp.Value);
+                if (lastCriteria == null) lastCriteria = propCriteria;
+                else lastCriteria = new Criteria(lastCriteria, LogicalOp.And, propCriteria);
+            }
+            return lastCriteria;
         }
     }
 }

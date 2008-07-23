@@ -126,7 +126,7 @@ namespace Habanero.Test.BO.SqlGeneration
 
         
         [Test]
-        public void TestSingleTableInheritanceHeirarchy_DifferentDiscriminators()
+        public void TestSingleTableInheritanceHierarchy_DifferentDiscriminators()
         {
             //---------------Set up test pack-------------------
             FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchyDifferentDiscriminators();
@@ -146,7 +146,7 @@ namespace Habanero.Test.BO.SqlGeneration
         }
 
         [Test]
-        public void TestSingleTableInheritanceHeirarchy_SharedDiscriminators()
+        public void TestSingleTableInheritanceHierarchy_SharedDiscriminators()
         {
             //---------------Set up test pack-------------------
             FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();

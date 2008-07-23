@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -30,14 +29,11 @@ namespace Habanero.Test
 
         public static ClassDef GetClassDef()
         {
-            if (!ClassDef.IsDefined(typeof (Shape)))
-            {
-                return CreateClassDef();
-            }
-            else
+            if (ClassDef.IsDefined(typeof (Shape)))
             {
                 return ClassDef.ClassDefs[typeof (Shape)];
             }
+            return CreateClassDef();
         }
 
         protected override ClassDef ConstructClassDef()
@@ -63,7 +59,7 @@ namespace Habanero.Test
             KeyDef lKeyDef = new KeyDef();
             lKeyDef.Add(lPropDefCol["ShapeName"]);
             keysCol.Add(lKeyDef);
-            RelKeyDef relKeyDef = new RelKeyDef();
+//            RelKeyDef relKeyDef = new RelKeyDef();
 
             //RelPropDef lRelPropDef = new RelPropDef(propDef, "OwnerID");
             //relKeyDef.Add(lRelPropDef);
@@ -96,7 +92,7 @@ namespace Habanero.Test
             KeyDef lKeyDef = new KeyDef();
             lKeyDef.Add(lPropDefCol["ShapeName"]);
             keysCol.Add(lKeyDef);
-            RelKeyDef relKeyDef = new RelKeyDef();
+//            RelKeyDef relKeyDef = new RelKeyDef();
 
             //RelPropDef lRelPropDef = new RelPropDef(propDef, "OwnerID");
             //relKeyDef.Add(lRelPropDef);

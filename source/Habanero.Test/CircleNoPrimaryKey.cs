@@ -28,14 +28,11 @@ namespace Habanero.Test
 
         public new static ClassDef GetClassDef()
         {
-            if (!ClassDef.IsDefined(typeof(CircleNoPrimaryKey)))
+            if (ClassDef.IsDefined(typeof (CircleNoPrimaryKey)))
             {
-                return CreateClassDef();
+                return ClassDef.ClassDefs[typeof (CircleNoPrimaryKey)];
             }
-            else
-            {
-                return ClassDef.ClassDefs[typeof(CircleNoPrimaryKey)];
-            }
+            return CreateClassDef();
         }
 
         protected override ClassDef ConstructClassDef()
@@ -44,7 +41,7 @@ namespace Habanero.Test
             return _classDef;
         }
 
-        private static ClassDef CreateClassDef()
+        private new static ClassDef CreateClassDef()
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
@@ -65,12 +62,14 @@ namespace Habanero.Test
             get { return (int)GetPropertyValue("Radius"); }
             set { SetPropertyValue("Radius", value); }
         }
+
         public static ClassDef GetClassDefWithSingleInheritance()
         {
             ClassDef shapeClassDef = Shape.GetClassDef();
             ClassDef circleClassDef = GetClassDef();
             circleClassDef.SuperClassDef = new SuperClassDef(shapeClassDef, ORMapping.SingleTableInheritance);
             circleClassDef.SuperClassDef.Discriminator = "ShapeType_field";
+            circleClassDef.TableName = "shape_table";
             return circleClassDef;
         }
 

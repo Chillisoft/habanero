@@ -35,7 +35,7 @@ namespace Habanero.Test
 
         public MyBO() {}
 
-        public MyBO(IDatabaseConnection conn) : base(conn){}
+//        public MyBO(IDatabaseConnection conn) : base(conn){}
 
         protected override ClassDef ConstructClassDef()
         {
@@ -1276,9 +1276,7 @@ namespace Habanero.Test
         private bool _deletable = false; 
 
 
-        public MyBoNotEditableDeletable() { }
-
-        public MyBoNotEditableDeletable(IDatabaseConnection conn) : base(conn) { }
+//        public MyBoNotEditableDeletable() { }
 
         protected override ClassDef ConstructClassDef()
         {

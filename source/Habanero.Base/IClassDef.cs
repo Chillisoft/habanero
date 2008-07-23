@@ -107,7 +107,7 @@ namespace Habanero.Base
         /// Returns the name of the table that applies to the propdef given, taking into allowance
         /// any inheritance structure.
         /// </summary>
-        /// <param name="propDef">The propdef to map to a table name. This propdef must be part of this classdef heirarchy</param>
+        /// <param name="propDef">The propdef to map to a table name. This propdef must be part of this classdef Hierarchy</param>
         /// <returns></returns>
         string GetTableName(IPropDef propDef);
 

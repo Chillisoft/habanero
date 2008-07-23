@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Habanero.Base;
@@ -36,14 +37,11 @@ namespace Habanero.Test
             {
                 return;
             }
-            else
-            {
-                DatabaseConnection.CurrentConnection =
-                    new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
-                DatabaseConnection.CurrentConnection.ConnectionString =
-                    MyDBConnection.GetDatabaseConfig().GetConnectionString();
-                DatabaseConnection.CurrentConnection.GetConnection();
-            }
+            DatabaseConnection.CurrentConnection =
+                new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
+            DatabaseConnection.CurrentConnection.ConnectionString =
+                MyDBConnection.GetDatabaseConfig().GetConnectionString();
+            DatabaseConnection.CurrentConnection.GetConnection();
 
             BORegistry.DataAccessor = new DataAccessorDB();
         }
@@ -55,15 +53,12 @@ namespace Habanero.Test
             {
                 return;
             }
-            else
-            {
-                DatabaseConnection.CurrentConnection =
-                    new DatabaseConnectionOracle("System.Data.OracleClient", "System.Data.OracleClient.OracleConnection");
-                ConnectionStringOracleFactory oracleConnectionString = new ConnectionStringOracleFactory();
-                string connStr = oracleConnectionString.GetConnectionString("core1", "XE", "system", "system", "1521");
-                DatabaseConnection.CurrentConnection.ConnectionString = connStr;
-                DatabaseConnection.CurrentConnection.GetConnection();
-            }
+            DatabaseConnection.CurrentConnection =
+                new DatabaseConnectionOracle("System.Data.OracleClient", "System.Data.OracleClient.OracleConnection");
+            ConnectionStringOracleFactory oracleConnectionString = new ConnectionStringOracleFactory();
+            string connStr = oracleConnectionString.GetConnectionString("core1", "XE", "system", "system", "1521");
+            DatabaseConnection.CurrentConnection.ConnectionString = connStr;
+            DatabaseConnection.CurrentConnection.GetConnection();
             BORegistry.DataAccessor = new DataAccessorDB();
         }
 
@@ -123,6 +118,11 @@ namespace Habanero.Test
         protected static void WaitForDB()
         {
             Thread.Sleep(10000);
+        }
+        protected static void WaitForGC()
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
     }
 

@@ -36,10 +36,6 @@ namespace Habanero.Test
         {
         }
 
-        public Engine(BOPrimaryKey id) : base(id)
-        {
-        }
-
         protected internal static ClassDef GetClassDef()
         {
             if (!ClassDef.IsDefined(typeof (Engine)))
@@ -122,7 +118,7 @@ namespace Habanero.Test
             Engine myEngine = (Engine)BOLoader.Instance.GetLoadedBusinessObject(id);
             if (myEngine == null)
             {
-                myEngine = new Engine(id);
+                myEngine = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Engine>(id);
             }
             return myEngine;
         }

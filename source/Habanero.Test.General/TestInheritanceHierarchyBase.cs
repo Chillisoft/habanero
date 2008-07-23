@@ -23,7 +23,7 @@ using Habanero.DB;
 
 namespace Habanero.Test.General
 {
-    public abstract class TestInheritanceHeirarchyBase : TestUsingDatabase
+    public abstract class TestInheritanceHierarchyBase : TestUsingDatabase
     {
         protected BusinessObject _filledCircle;
         protected SqlStatementCollection _insertSql;

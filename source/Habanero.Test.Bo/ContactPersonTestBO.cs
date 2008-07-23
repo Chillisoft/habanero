@@ -39,8 +39,6 @@ namespace Habanero.Test.BO
 
         public ContactPersonTestBO() { }
 
-        internal ContactPersonTestBO(BOPrimaryKey id) : base(id) { }
-
         public static ClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -539,7 +537,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO myContactPersonTestBOTestBO = (ContactPersonTestBO)BOLoader.Instance.GetLoadedBusinessObject(id);
             if (myContactPersonTestBOTestBO == null)
             {
-                myContactPersonTestBOTestBO = new ContactPersonTestBO(id);
+                myContactPersonTestBOTestBO =  BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(id);
             }
             return myContactPersonTestBOTestBO;
         }

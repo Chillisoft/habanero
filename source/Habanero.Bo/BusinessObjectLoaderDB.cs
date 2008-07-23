@@ -57,14 +57,14 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
         public T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new()
         {
-            //T foundBO = _dataStoreInMemory.Find<T>(primaryKey);
-            //if (foundBO != null) return foundBO;
             T businessObject = GetBusinessObject<T>(Criteria.FromPrimaryKey(primaryKey));
             if (businessObject != null) return businessObject;
-            
+
             throw new BusObjDeleteConcurrencyControlException(
-                string.Format("A Error has occured since the object you are trying to refresh has been deleted by another user." 
-                              + " There are no records in the database for the Class: {0} identified by {1} \n", typeof (T).Name, primaryKey) );
+                string.Format(
+                    "A Error has occured since the object you are trying to refresh has been deleted by another user."
+                    + " There are no records in the database for the Class: {0} identified by {1} \n", typeof (T).Name,
+                    primaryKey));
         }
 
         /// <summary>
@@ -79,9 +79,10 @@ namespace Habanero.BO
             if (businessObject != null) return businessObject;
 
             throw new BusObjDeleteConcurrencyControlException(
-                string.Format("A Error has occured since the object you are trying to refresh has been deleted by another user."
-                              + " There are no records in the database for the Class: {0} identified by {1} \n", classDef.ClassNameFull, primaryKey));
- 
+                string.Format(
+                    "A Error has occured since the object you are trying to refresh has been deleted by another user."
+                    + " There are no records in the database for the Class: {0} identified by {1} \n",
+                    classDef.ClassNameFull, primaryKey));
         }
 
         /// <summary>
@@ -138,6 +139,7 @@ namespace Habanero.BO
             // loads an object of the correct sub type (for single table inheritance)
             if (correctSubClassDef != null)
             {
+                BusinessObject.AllLoadedBusinessObjects().Remove(loadedBo.ID.GetObjectId());
                 IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = (T) subClassBusinessObject;
             }
@@ -178,25 +180,16 @@ namespace Habanero.BO
             IBusinessObject loadedBo = null;
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
             {
-                try
+                if (dr.Read())
                 {
-                    if (dr.Read())
-                    {
-                        loadedBo = LoadBOFromReader(classDef, dr, selectQueryDB);
-                        correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
-                        if (correctSubClassDef == null) return loadedBo;
-                    }
-                }
-                finally
-                {
-                    if (dr != null && !dr.IsClosed)
-                    {
-                        dr.Close();
-                    }
+                    loadedBo = LoadBOFromReader(classDef, dr, selectQueryDB);
+                    correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
+                    if (correctSubClassDef == null) return loadedBo;
                 }
             }
             if (correctSubClassDef != null)
             {
+                BusinessObject.AllLoadedBusinessObjects().Remove(loadedBo.ID.GetObjectId());
                 IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = subClassBusinessObject;
             }
@@ -249,28 +242,21 @@ namespace Habanero.BO
 
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
             {
-                try
+                while (dr.Read())
                 {
-                    while (dr.Read())
+                    T loadedBo = LoadBOFromReader<T>(dr, selectQuery);
+                    //If the origional collection had the new business object then
+                    // use add internal this adds without any events being raised etc.
+                    //else adds via the Add method (normal add) this raises events such that the 
+                    // user interface can be updated.
+                    if (clonedCol.Contains(loadedBo))
                     {
-                        T loadedBo = LoadBOFromReader<T>(dr, selectQuery);
-                        //If the origional collection had the new business object then
-                        // use add internal this adds without any events being raised etc.
-                        //else adds via the Add method (normal add) this raises events such that the 
-                        // user interface can be updated.
-                        if (clonedCol.Contains(loadedBo))
-                        {
-                            collection.AddInternal(loadedBo);
-                        }
-                        else
-                        {
-                            collection.Add(loadedBo);
-                        }
+                        collection.AddInternal(loadedBo);
                     }
-                }
-                finally
-                {
-                    if (dr != null && !dr.IsClosed) dr.Close();
+                    else
+                    {
+                        collection.Add(loadedBo);
+                    }
                 }
             }
         }
@@ -290,17 +276,10 @@ namespace Habanero.BO
             updatedCol.Clear();
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
             {
-                try
+                while (dr.Read())
                 {
-                    while (dr.Read())
-                    {
-                        IBusinessObject loadedBo = LoadBOFromReader(collection.ClassDef, dr, selectQuery);
-                        updatedCol.Add(loadedBo);
-                    }
-                }
-                finally
-                {
-                    if (dr != null && !dr.IsClosed) dr.Close();
+                    IBusinessObject loadedBo = LoadBOFromReader(collection.ClassDef, dr, selectQuery);
+                    updatedCol.Add(loadedBo);
                 }
             }
             foreach (IBusinessObject obj in collection)
@@ -455,7 +434,7 @@ namespace Habanero.BO
             }
             else
             {
-                //todo: add ibo to the allloadedbusinessobjectscol.
+                BusinessObject.AllLoadedBusinessObjects().Add(bo.PrimaryKey.GetObjectId(), new WeakReference(bo));
             }
             if (boFromAllLoadedObjects != null) return boFromAllLoadedObjects;
             ((BOState) bo.State).IsNew = false;
@@ -468,19 +447,16 @@ namespace Habanero.BO
             ClassDefCol subClasses = classDef.ImmediateChildren;
             foreach (ClassDef immediateChild in subClasses)
             {
-                if (immediateChild.IsUsingSingleTableInheritance())
-                {
-                    string discriminatorFieldName = immediateChild.SuperClassDef.Discriminator;
-                    string discriminatorValue = Convert.ToString(dataReader[discriminatorFieldName]);
-                    if (!String.IsNullOrEmpty(discriminatorValue))
-                    {
-                        ClassDef subClassDef = ClassDef.ClassDefs.FindByClassName(discriminatorValue);
-                        if (subClassDef != null)
-                        {
-                            return subClassDef;
-                        }
-                    }
-                }
+                if (!immediateChild.IsUsingSingleTableInheritance()) continue;
+
+                string discriminatorFieldName = immediateChild.SuperClassDef.Discriminator;
+                string discriminatorValue = Convert.ToString(dataReader[discriminatorFieldName]);
+
+                if (String.IsNullOrEmpty(discriminatorValue)) continue;
+
+                ClassDef subClassDef = ClassDef.ClassDefs.FindByClassName(discriminatorValue);
+
+                if (subClassDef != null) return subClassDef;
             }
             return null;
         }
@@ -499,6 +475,7 @@ namespace Habanero.BO
             }
         }
 
+        //TODO: NNB Critical refactor this to LoadFromReader
         private IBusinessObject LoadBOFromReader(IClassDef classDef, IDataReader dataReader, ISelectQuery selectQuery)
         {
             IBusinessObject bo = classDef.CreateNewBusinessObject();
@@ -523,6 +500,7 @@ namespace Habanero.BO
             else
             {
                 //todo: add ibo to the allloadedbusinessobjectscol.
+                BusinessObject.AllLoadedBusinessObjects().Add(bo.PrimaryKey.GetObjectId(), new WeakReference(bo));
             }
             if (boFromAllLoadedObjects != null) return boFromAllLoadedObjects;
             return bo;
