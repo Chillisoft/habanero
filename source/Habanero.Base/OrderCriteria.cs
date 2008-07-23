@@ -65,8 +65,7 @@ namespace Habanero.Base
         /// <returns>This OrderCriteria, to allow chaining of adds (eg:  myOrderCriteria.Add("Name").Add("Age"))</returns>
         public OrderCriteria Add(string field)
         {
-            _fields.Add(new Field(field, SortDirection.Ascending));
-            return this;
+            return Add(field, SortDirection.Ascending);
         }
 
         /// <summary>
@@ -77,10 +76,9 @@ namespace Habanero.Base
         /// <returns>This OrderCriteria, to allow chaining of adds</returns>
         public OrderCriteria Add(string field, SortDirection sortDirection)
         {
-            _fields.Add(new Field(field, sortDirection));
+            _fields.Add(new Field(field, field, null, sortDirection));
             return this;
         }
-
 
         /// <summary>
         /// Adds a field to the fields to be sorted on.
@@ -104,7 +102,6 @@ namespace Habanero.Base
         /// </returns>
         public int Compare<T>(T bo1, T bo2) where T:IBusinessObject
         {
-            
             foreach (Field field in _fields)
             {
                 int compareResult = field.Compare(bo1, bo2);
@@ -172,30 +169,33 @@ namespace Habanero.Base
         /// <summary>
         /// Field represents one field in an OrderCriteria object.  Each Field has a name and SortDirection.
         /// </summary>
-        public class Field
+        public class Field : QueryField
 
         {
-            private readonly string _name;
             private readonly SortDirection _sortDirection;
-            private string _source;
 
             /// <summary>
             /// Creates a Field with the given name and SortDirection
             /// </summary>
-            /// <param name="name">The name of the field to sort on</param>
+            /// <param name="propertyName">The name of the property to sort on</param>
             /// <param name="sortDirection">The SortDirection option to use when sorting</param>
-            public Field(string name, SortDirection sortDirection)
+            public Field(string propertyName, string fieldName, Source source, SortDirection sortDirection)
+                : base(propertyName, fieldName, source)
             {
-                _name = name;
+
                 _sortDirection = sortDirection;
             }
 
             /// <summary>
-            /// The name of the field to sort on
+            /// Creates a Field with the given name and SortDirection
             /// </summary>
-            public string Name
+            /// <param name="propertyName">The name of the property to sort on</param>
+            /// <param name="sortDirection">The SortDirection option to use when sorting</param>
+            public Field(string propertyName, SortDirection sortDirection)
+                : this(propertyName, propertyName, null, sortDirection)
             {
-                get { return _name; }
+
+
             }
 
             /// <summary>
@@ -207,20 +207,11 @@ namespace Habanero.Base
             }
 
             /// <summary>
-            /// The source of the field (such as the relationship this field is on)
-            /// </summary>
-            public string Source
-            {
-                get { return _source; }
-                set { _source = value; }
-            }
-
-            /// <summary>
             /// Returns the full name of the order criteria - ie "Source.Name"
             /// </summary>
             public string FullName
             {
-                get { return String.IsNullOrEmpty(this.Source ) ? this.Name : this.Source + "." + this.Name; }
+                get { return this.Source == null || String.IsNullOrEmpty(this.Source.ToString()) ? this.PropertyName : this.Source + "." + this.PropertyName; }
             }
 
 
@@ -237,7 +228,7 @@ namespace Habanero.Base
             {
                 if (!(obj is Field)) return false;
                 Field objField = obj as Field;
-                return (_name.Equals(objField.Name) && _sortDirection.Equals(objField.SortDirection));
+                return (this.PropertyName.Equals(objField.PropertyName) && _sortDirection.Equals(objField.SortDirection));
             }
 
 
@@ -252,8 +243,8 @@ namespace Habanero.Base
             public override string ToString()
             {
                 string fieldAsString = "";
-                if (!String.IsNullOrEmpty(_source)) fieldAsString += _source + ".";
-                return fieldAsString + string.Format("{0} {1}", _name, (_sortDirection == SortDirection.Ascending ? "ASC" : "DESC"));
+                if (this.Source != null) fieldAsString += Source + ".";
+                return fieldAsString + string.Format("{0} {1}", PropertyName, (_sortDirection == SortDirection.Ascending ? "ASC" : "DESC"));
             }
 
             ///<summary>
@@ -302,9 +293,9 @@ namespace Habanero.Base
             /// The value returned is negated if the SortDirection is Descending</returns>
             public int Compare<T>(T bo1, T bo2) where T : IBusinessObject
             {
-                string fullPropName = String.IsNullOrEmpty(Source) ? Name : Source + "." + Name;
+                string fullPropName = this.FullName;
                 IPropertyComparer<T> comparer = bo1.ClassDef.CreatePropertyComparer<T>(fullPropName);
-                comparer.PropertyName = Name;
+                comparer.PropertyName = PropertyName;
                 comparer.Source = Source;
                 int compareResult = comparer.Compare(bo1, bo2);
                 if (compareResult != 0)
@@ -319,14 +310,14 @@ namespace Habanero.Base
                 string[] parts = sourceAndFieldName.Trim().Split('.');
                 if (parts.Length > 1)
                 {
-                    source = parts[0];
-                    fieldName = parts[1];
+                    source = String.Join(".", parts, 0, parts.Length -1 );
+                    fieldName = parts[parts.Length - 1];
                 } else
                 {
                     fieldName = parts[0];
                 }
-                Field field = new Field(fieldName, sortDirection);
-                if (!String.IsNullOrEmpty(source)) field.Source = source;
+                Source newSource = string.IsNullOrEmpty(source) ? null : new Source(source);
+                Field field = new Field(fieldName, fieldName, newSource, sortDirection);
                 return field;
             }
         }

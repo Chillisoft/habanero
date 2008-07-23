@@ -32,7 +32,7 @@ namespace Habanero.BO.Comparer
 		where TPropType : IComparable
     {
         private  string _propertyName;
-	    private  string _source;
+	    private  Source _source;
 
         /// <summary>
         /// Constructor to initialise a comparer, specifying the property
@@ -44,7 +44,7 @@ namespace Habanero.BO.Comparer
 		public PropertyComparer(string propName)
         {
             _propertyName = propName;
-            _source = "";
+            _source = null;
         }
 
 
@@ -54,7 +54,7 @@ namespace Habanero.BO.Comparer
             set { _propertyName = value; }
 	    }
 
-	    public string Source
+	    public Source Source
 	    {
 	        get { return _source; }
             set { _source = value;}

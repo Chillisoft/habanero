@@ -45,7 +45,7 @@ namespace Habanero.Test.BO
             Assert.IsNull(selectQuery.Criteria);
             Assert.AreEqual(0, selectQuery.Fields.Count);
             Assert.AreEqual(0, selectQuery.OrderCriteria.Fields.Count);
-            Assert.IsTrue(String.IsNullOrEmpty(selectQuery.Source));
+            Assert.IsNull(selectQuery.Source);
             //---------------Tear Down -------------------------
         }
 
@@ -81,7 +81,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             SelectQuery selectQuery = new SelectQuery();
             //---------------Execute Test ----------------------
-            string source = "testsource";
+            Source source = new Source("testsource");
             selectQuery.Source = source;
             //---------------Test Result -----------------------
             Assert.AreSame(source, selectQuery.Source);

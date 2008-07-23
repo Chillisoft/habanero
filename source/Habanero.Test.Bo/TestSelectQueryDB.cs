@@ -86,9 +86,9 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ISelectQuery selectQuery = new SelectQuery();
-            selectQuery.Fields.Add("Surname", new QueryField("Surname", "Surname", ""));
-            selectQuery.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", ""));
-            selectQuery.Source = "bob";
+            selectQuery.Fields.Add("Surname", new QueryField("Surname", "Surname", null));
+            selectQuery.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", null));
+            selectQuery.Source = new Source("bob");
             //---------------Execute Test ----------------------
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             ISqlStatement statement = query.CreateSqlStatement();
@@ -126,6 +126,23 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(classDef, "MyBoID, TestProp");
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.EndsWith("ORDER BY [MyBO].[MyBoID] ASC, [MyBO].[TestProp] ASC", statementString);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestCreateSqlStatement_WithOrderFields_WithoutBuilder()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.OrderCriteria = OrderCriteria.FromString("MyBoID, TestProp");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
@@ -136,6 +153,24 @@ namespace Habanero.Test.BO
             StringAssert.EndsWith("ORDER BY [MyBO].[MyBoID] ASC, [MyBO].[TestProp] ASC", statementString);
             //---------------Tear Down -------------------------          
         }
+
+        [Test]
+        public void TestCreateSqlStatement_WithOrderFields_WithoutBuilder_DifferentFieldNames()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDefWithDifferentTableAndFieldNames();
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            selectQuery.OrderCriteria = OrderCriteria.FromString("MyBoID, TestProp");
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.EndsWith("ORDER BY [my_bo].[my_bo_id] ASC, [my_bo].[test_prop] ASC", statementString);
+            //---------------Tear Down -------------------------          
+        }
+
 
 
         [Test]
@@ -161,8 +196,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
-            selectQuery.OrderCriteria = new OrderCriteria().Add("MyBoID", OrderCriteria.SortDirection.Descending);
-            selectQuery.OrderCriteria.Add("TestProp", OrderCriteria.SortDirection.Descending);
+            selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(classDef, "MyBoID DESC, TestProp DESC");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -179,9 +213,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
-            selectQuery.OrderCriteria = new OrderCriteria();
-            selectQuery.OrderCriteria.Add("MyBoID", OrderCriteria.SortDirection.Descending);
-            selectQuery.OrderCriteria.Add("TestProp", OrderCriteria.SortDirection.Ascending);
+            selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(classDef, "MyBoID DESC, TestProp ASC");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -207,33 +239,55 @@ namespace Habanero.Test.BO
         //}
 
         [Test]
-        public void TestCreateSqlStatement_WithOrder_IncludingSource()
+        public void TestCreateSqlStatement_WithOrder_ThroughRelationship()
         {
             //---------------Set up test pack-------------------
             new ContactPerson();
-            
-            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Address().ClassDef);
-            selectQuery.OrderCriteria = OrderCriteria.FromString("ContactPerson.Surname");
+
+            ClassDef addressClassDef = new Address().ClassDef;
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(addressClassDef);
+            selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(addressClassDef, "ContactPerson.Surname");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.Contains("[contact_person].[Surname_field] FROM [contact_person_address]", statementString);
             StringAssert.Contains("JOIN [contact_person] ON [contact_person_address].[ContactPersonID] = [contact_person].[ContactPersonID]", statementString);
             StringAssert.EndsWith("ORDER BY [contact_person].[Surname_field] ASC", statementString);
         }
 
         [Test]
-        public void TestCreateSqlStatement_WithOrder_IncludingSource_CompositeKey()
+        public void TestCreateSqlStatement_WithOrder_ThroughRelationship_TwoLevels()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef cpClassDef = new ContactPerson().ClassDef;
+            ClassDef carClassDef = new Car().ClassDef;
+            ClassDef engineClassDef = new Engine().ClassDef;
+
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(engineClassDef);
+            selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(engineClassDef, "Car.Owner.Surname");
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            string expectedJoinSql = "JOIN [car_table] ON [Table_Engine].[CAR_ID] = [car_table].[CAR_ID]";
+            expectedJoinSql += " JOIN [contact_person] ON [car_table].[OWNER_ID] = [contact_person].[ContactPersonID]";
+            StringAssert.Contains(expectedJoinSql, statementString);
+            StringAssert.EndsWith("ORDER BY [contact_person].[Surname_field] ASC", statementString);
+        }
+
+        [Test]
+        public void TestCreateSqlStatement_WithOrder_ThroughRelationship_CompositeKey()
         {
             //---------------Set up test pack-------------------
             Car car = new Car();
             ContactPersonCompositeKey person = new ContactPersonCompositeKey();
 
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(car.ClassDef);
-            selectQuery.OrderCriteria = OrderCriteria.FromString("Driver.Surname");
+            selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(car.ClassDef, "Driver.Surname");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -252,8 +306,8 @@ namespace Habanero.Test.BO
             SelectQuery selectQuery = new SelectQuery();
             selectQuery.Limit = 10;
             string fieldName = "Field1";
-            selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, ""));
-            selectQuery.Source = "Table1";
+            selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
+            selectQuery.Source = new Source("Table1");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement();
@@ -271,8 +325,8 @@ namespace Habanero.Test.BO
             SelectQuery selectQuery = new SelectQuery();
             selectQuery.Limit = 0;
             string fieldName = "Field1";
-            selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, ""));
-            selectQuery.Source = "Table1";
+            selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
+            selectQuery.Source = new Source("Table1");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement();
@@ -303,8 +357,8 @@ namespace Habanero.Test.BO
             SelectQuery selectQuery = new SelectQuery();
             selectQuery.Limit = 10;
             string fieldName = "Field1";
-            selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, ""));
-            selectQuery.Source = "Table1";
+            selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
+            selectQuery.Source = new Source("Table1");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement();
@@ -322,8 +376,8 @@ namespace Habanero.Test.BO
             SelectQuery selectQuery = new SelectQuery();
             selectQuery.Limit = 0;
             string fieldName = "Field1";
-            selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, ""));
-            selectQuery.Source = "Table1";
+            selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
+            selectQuery.Source = new Source("Table1");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement();

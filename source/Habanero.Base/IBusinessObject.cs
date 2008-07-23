@@ -58,7 +58,7 @@ namespace Habanero.Base
         /// <param name="source">The source of the property ie - the relationship or C# property this property is on</param>
         /// <param name="propName">The property name</param>
         /// <returns>Returns the value if found</returns>
-        object GetPropertyValue(string source, string propName);
+        object GetPropertyValue(Source source, string propName);
 
         /// <summary>
         /// Sets a property value to a new value

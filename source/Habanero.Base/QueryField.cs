@@ -26,19 +26,19 @@ namespace Habanero.Base
     public class QueryField
     {
         private readonly string _propertyName;
-        private readonly string _fieldName;
-        private readonly string _sourceName;
+        private string _fieldName;
+        private Source _source;
 
         /// <summary>
         /// Creates a QueryField with the given property name, field name and source name
         /// </summary>
         /// <param name="propertyName">The name of the property (as defined in the ClassDef) that this QueryField is for</param>
         /// <param name="fieldName">The name of the field in the data source that this QueryField is for</param>
-        /// <param name="sourceName">The name of the source (such as a table name) that this QueryField is from.</param>
-        public QueryField(string propertyName, string fieldName, string sourceName)
+        /// <param name="source">The source (such as a table) that this QueryField is from.</param>
+        public QueryField(string propertyName, string fieldName, Source source)
         {
             _propertyName = propertyName;
-            _sourceName = sourceName;
+            _source = source;
             _fieldName = fieldName;
         }
 
@@ -56,14 +56,16 @@ namespace Habanero.Base
         public string FieldName
         {
             get { return _fieldName; }
+            set { _fieldName = value; }
         }
 
         /// <summary>
         /// The name of the source (such as a table name) that this QueryField is from.
         /// </summary>
-        public string SourceName
+        public Source Source
         {
-            get { return _sourceName; }
+            get { return _source; }
+            set { _source = value; }
         }
     }
 }

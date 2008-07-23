@@ -83,7 +83,7 @@ namespace Habanero.Test.BO
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             PropertyComparer<Engine, string> comparer = new PropertyComparer<Engine, string>("CarRegNo");
-            comparer.Source = "Car";
+            comparer.Source = new Source("Car");
             int comparisonResult = comparer.Compare(engine1, engine2);
             //---------------Test Result -----------------------
             Assert.Greater(comparisonResult, 0, "engine1 should be greater as its car's regno is greater");

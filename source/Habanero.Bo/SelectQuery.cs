@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using Habanero.Base;
 
@@ -32,7 +33,7 @@ namespace Habanero.BO
     {
         private Criteria _criteria;
         private readonly Dictionary<string, QueryField> _fields = new Dictionary<string, QueryField>(5);
-        private string _source;
+        private Source _source;
         private OrderCriteria _orderCriteria = new OrderCriteria();
         private int _limit;
         private IClassDef _classDef;
@@ -78,7 +79,7 @@ namespace Habanero.BO
         /// <summary>
         /// The source of the data. In a database query this would be the first table listed in the FROM clause.
         /// </summary>
-        public string Source
+        public Source Source
         {
             get { return _source; }
             set { _source = value; }

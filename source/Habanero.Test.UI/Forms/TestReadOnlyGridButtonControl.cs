@@ -194,7 +194,7 @@ namespace Habanero.Test.UI.Forms
             ContactPerson bo = new ContactPerson();
             bo.Surname = "please delete me.";
             bo.Save();
-            itsContactPersonID = bo.ContactPersonID.Value;
+            itsContactPersonID = bo.ContactPersonID;
 
             BusinessObjectCollection<ContactPerson> boCol = new BusinessObjectCollection<ContactPerson>();
             boCol.Add(bo);
@@ -218,7 +218,7 @@ namespace Habanero.Test.UI.Forms
             ContactPerson person = new ContactPerson();
             person.Surname = "please delete me";
             person.Save();
-            itsContactPersonID = person.ContactPersonID.Value;
+            itsContactPersonID = person.ContactPersonID;
             person.AddPreventDeleteRelationship();
 
             Address address = new Address();

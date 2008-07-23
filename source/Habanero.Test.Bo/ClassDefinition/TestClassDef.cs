@@ -788,5 +788,35 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Tear down -------------------------
         }
 
+        [Test]
+        public void TestGet()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            
+            //---------------Execute Test ----------------------
+            ClassDef gotClassDef = ClassDef.Get<MyBO>();
+            //---------------Test Result -----------------------
+
+            Assert.AreSame(classDef, gotClassDef);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestGet_NonExistant()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+
+            //---------------Execute Test ----------------------
+            ClassDef gotClassDef = ClassDef.Get<ContactPerson>();
+            //---------------Test Result -----------------------
+
+            Assert.IsNull(gotClassDef);
+            //---------------Tear Down -------------------------
+        }
+
     }
 }

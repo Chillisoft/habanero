@@ -466,10 +466,14 @@ namespace Habanero.BO
         /// <param name="source">The source of the property ie - the relationship or C# property this property is on</param>
         /// <param name="propName">The property name</param>
         /// <returns>Returns the value if found</returns>
-        public object GetPropertyValue(string source, string propName)
+        public object GetPropertyValue(Source source, string propName)
         {
-            if (String.IsNullOrEmpty(source)) return GetPropertyValue(propName);
-            return Relationships.GetRelatedObject(source).GetPropertyValue(propName);
+            if (source == null || String.IsNullOrEmpty(source.Name)) return GetPropertyValue(propName);
+            string[] sources = source.Name.Split(new char[]{'.'},StringSplitOptions.RemoveEmptyEntries);
+            IBusinessObject businessObject = Relationships.GetRelatedObject(sources[0]);
+            string childSource = String.Join(".", sources, 1, sources.Length - 1);
+            Source newSource = string.IsNullOrEmpty(childSource) ? null : new Source(childSource);
+            return businessObject.GetPropertyValue(newSource, propName);
         }
 
 

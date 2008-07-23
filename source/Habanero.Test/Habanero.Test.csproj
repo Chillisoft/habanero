@@ -87,6 +87,7 @@
       <DependentUpon>TestResources.resx</DependentUpon>
     </Compile>
     <Compile Include="TestUsingDatabase.cs" />
+    <Compile Include="TestUtil.cs" />
     <Compile Include="Util\TestDateTimeUtilities.cs" />
     <Compile Include="Util\TestReflectionUtilities.cs" />
     <Compile Include="Util\File\CsvTestsSamples.cs" />

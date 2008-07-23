@@ -1159,6 +1159,10 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
-    
+
+        public static ClassDef Get<T>() where T: class, IBusinessObject
+        {
+            return ClassDefs[typeof (T)];
+        }
     }
 }

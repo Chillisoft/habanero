@@ -31,7 +31,7 @@ namespace Habanero.Base
             set;
         }
 
-        string Source
+        Source Source
         {
             get;
             set;

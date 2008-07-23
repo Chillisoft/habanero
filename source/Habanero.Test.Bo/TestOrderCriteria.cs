@@ -221,7 +221,7 @@ namespace Habanero.Test.BO
             OrderCriteria.Field field = new OrderCriteria.Field(name, OrderCriteria.SortDirection.Descending);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(name, field.Name);
+            Assert.AreEqual(name, field.PropertyName);
             Assert.AreEqual(OrderCriteria.SortDirection.Descending, field.SortDirection);
             //---------------Tear Down -------------------------
         }
@@ -246,7 +246,7 @@ namespace Habanero.Test.BO
             
             //---------------Execute Test ----------------------
             OrderCriteria.Field field = new OrderCriteria.Field("TestProp", OrderCriteria.SortDirection.Descending);
-            string source = Guid.NewGuid().ToString("N");
+            Source source = new Source(TestUtil.CreateRandomString());
             field.Source = source;
             //---------------Test Result -----------------------
             Assert.AreEqual(source, field.Source);
@@ -260,7 +260,7 @@ namespace Habanero.Test.BO
             string name = "TestProp";
             OrderCriteria.Field field = new OrderCriteria.Field(name, OrderCriteria.SortDirection.Descending);
             string source = Guid.NewGuid().ToString("N");
-            field.Source = source;
+            field.Source = new Source(source);
             //---------------Execute Test ----------------------
             string fieldAsString = field.ToString();
             //---------------Test Result -----------------------
@@ -276,22 +276,23 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             OrderCriteria.Field field = OrderCriteria.Field.FromString("TestProp dEsc");
             //---------------Test Result -----------------------
-            Assert.AreEqual("TestProp", field.Name);
+            Assert.AreEqual("TestProp", field.FieldName);
             Assert.AreEqual(OrderCriteria.SortDirection.Descending, field.SortDirection);
+            Assert.IsNull(field.Source);
 
             //---------------Tear Down -------------------------
         }
 
         [Test]
-        public void TestFieldFromString_WithSource()
+        public void TestField_FromString_WithSource()
         {
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
             OrderCriteria.Field field = OrderCriteria.Field.FromString("MyRelationship.TestProp dEsc");
             //---------------Test Result -----------------------
-            Assert.AreEqual("MyRelationship", field.Source);
-            Assert.AreEqual("TestProp", field.Name);
+            Assert.AreEqual(new Source("MyRelationship"), field.Source);
+            Assert.AreEqual("TestProp", field.PropertyName);
             Assert.AreEqual(OrderCriteria.SortDirection.Descending, field.SortDirection);
 
             //---------------Tear Down -------------------------
@@ -330,7 +331,50 @@ namespace Habanero.Test.BO
             Assert.Greater(comparisonResult, 0, "engine1 should be greater as its car's regno is greater");
             //---------------Tear Down -------------------------     
         }
- 
+
+        [Test]
+        public void TestField_Compare_ThroughRelationship_TwoLevels()
+        {
+            //---------------Set up test pack-------------------
+            ContactPerson contactPerson1 = ContactPerson.CreateSavedContactPerson();
+            contactPerson1.FirstName = "Bob";
+
+            ContactPerson contactPerson2 = ContactPerson.CreateSavedContactPerson();
+            contactPerson2.FirstName = "Andy";
+
+            Car car1 = new Car();
+            car1.CarRegNo = "2";
+            car1.OwnerID = contactPerson1.ContactPersonID;
+            Car car2 = new Car();
+            car2.CarRegNo = "5";
+            car2.OwnerID = contactPerson2.ContactPersonID;
+
+            Engine car1engine1 = new Engine();
+            car1engine1.CarID = car1.CarID;
+            car1engine1.EngineNo = "20";
+
+            Engine car2engine1 = new Engine();
+            car2engine1.CarID = car2.CarID;
+            car2engine1.EngineNo = "50";
+
+            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(contactPerson1);
+            committer.AddBusinessObject(contactPerson2);
+            committer.AddBusinessObject(car1);
+            committer.AddBusinessObject(car2);
+            committer.AddBusinessObject(car1engine1);
+            committer.AddBusinessObject(car2engine1);
+            committer.CommitTransaction();
+
+            OrderCriteria.Field field = OrderCriteria.Field.FromString("Car.Owner.FirstName");
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            int comparisonResult = field.Compare(car1engine1, car2engine1);
+            //---------------Test Result -----------------------
+            Assert.Greater(comparisonResult, 0, "engine1 should be greater as its car's regno is greater");
+            //---------------Tear Down -------------------------     
+        }
 
         [Test]
         public void TestToString()
@@ -356,8 +400,10 @@ namespace Habanero.Test.BO
             OrderCriteria orderCriteria = OrderCriteria.FromString("TestProp");
             //---------------Test Result -----------------------
             Assert.AreEqual(1, orderCriteria.Fields.Count);
-            Assert.AreEqual("TestProp", orderCriteria.Fields[0].Name);
-            Assert.AreEqual(OrderCriteria.SortDirection.Ascending, orderCriteria.Fields[0].SortDirection);
+            OrderCriteria.Field field = orderCriteria.Fields[0];
+            Assert.AreEqual("TestProp", field.PropertyName);
+            Assert.IsNull(field.Source);
+            Assert.AreEqual(OrderCriteria.SortDirection.Ascending, field.SortDirection);
             //---------------Tear Down -------------------------
         }
 
@@ -370,7 +416,7 @@ namespace Habanero.Test.BO
             OrderCriteria orderCriteria = OrderCriteria.FromString("TestProp DESC");
             //---------------Test Result -----------------------
             Assert.AreEqual(1, orderCriteria.Fields.Count);
-            Assert.AreEqual("TestProp", orderCriteria.Fields[0].Name);
+            Assert.AreEqual("TestProp", orderCriteria.Fields[0].PropertyName);
             Assert.AreEqual(OrderCriteria.SortDirection.Descending, orderCriteria.Fields[0].SortDirection);
             //---------------Tear Down -------------------------
         }
@@ -384,9 +430,9 @@ namespace Habanero.Test.BO
             OrderCriteria orderCriteria = OrderCriteria.FromString("TestProp DESC, TestProp2 ASC");
             //---------------Test Result -----------------------
             Assert.AreEqual(2, orderCriteria.Fields.Count);
-            Assert.AreEqual("TestProp", orderCriteria.Fields[0].Name);
+            Assert.AreEqual("TestProp", orderCriteria.Fields[0].PropertyName);
             Assert.AreEqual(OrderCriteria.SortDirection.Descending, orderCriteria.Fields[0].SortDirection);
-            Assert.AreEqual("TestProp2", orderCriteria.Fields[1].Name);
+            Assert.AreEqual("TestProp2", orderCriteria.Fields[1].PropertyName);
             Assert.AreEqual(OrderCriteria.SortDirection.Ascending, orderCriteria.Fields[1].SortDirection);
             //---------------Tear Down -------------------------
         }
@@ -440,13 +486,39 @@ namespace Habanero.Test.BO
         public void TestFromString_SortOrder_IsCaseInsensitive()
         {
             //---------------Set up test pack-------------------
-            
+
             //---------------Execute Test ----------------------
             OrderCriteria orderCriteria = OrderCriteria.FromString("TestProp dEsc, TestProp2 aSc");
             //---------------Test Result -----------------------
             Assert.AreEqual(2, orderCriteria.Fields.Count);
             Assert.AreEqual(OrderCriteria.SortDirection.Descending, orderCriteria.Fields[0].SortDirection);
             Assert.AreEqual(OrderCriteria.SortDirection.Ascending, orderCriteria.Fields[1].SortDirection);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestField_FromString_ThroughRelationship()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Execute Test ----------------------
+            OrderCriteria.Field field = OrderCriteria.Field.FromString("MyRelationship.TestProp");
+            //---------------Test Result -----------------------
+            Assert.AreEqual("TestProp", field.PropertyName);
+            Assert.AreEqual(new Source("MyRelationship"), field.Source);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestField_FromString_ThroughRelationship_TwoLevelsDeep()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Execute Test ----------------------
+            OrderCriteria.Field field = OrderCriteria.Field.FromString("MyRelationship.MySecondRelationship.TestProp");
+            //---------------Test Result -----------------------
+            Assert.AreEqual("TestProp", field.PropertyName);
+            Assert.AreEqual(new Source("MyRelationship.MySecondRelationship"), field.Source);
             //---------------Tear Down -------------------------
         }
 

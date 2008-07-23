@@ -24,13 +24,11 @@ using Habanero.DB;
 
 namespace Habanero.BO
 {
-
     /// <summary>
     /// Provides utility methods that create SelectQuery objects given a set of information.
     /// </summary>
     public class QueryBuilder
     {
-
         /// <summary>
         /// Creates a SelectQuery using the given classdef without any Criteria. All information in the ClassDef will be taken into account
         /// (such as inheritance structures).
@@ -54,10 +52,12 @@ namespace Habanero.BO
             ISelectQuery selectQuery = new SelectQuery();
             foreach (IPropDef propDef in classDef.PropDefColIncludingInheritance)
             {
-                selectQuery.Fields.Add(propDef.PropertyName, new QueryField(propDef.PropertyName, propDef.DatabaseFieldName, classDef.GetTableName(propDef)));
+                selectQuery.Fields.Add(propDef.PropertyName,
+                                       new QueryField(propDef.PropertyName, propDef.DatabaseFieldName,
+                                                      new Source(classDef.GetTableName(propDef))));
             }
             AddDiscriminatorFields(selectQuery, classDef);
-            selectQuery.Source = classDef.GetTableName();
+            selectQuery.Source = new Source(classDef.GetTableName());
             selectQuery.Criteria = criteria;
             selectQuery.ClassDef = classDef;
             return selectQuery;
@@ -65,7 +65,7 @@ namespace Habanero.BO
 
         private static void AddDiscriminatorFields(ISelectQuery selectQuery, IClassDef classDef)
         {
-            foreach (ClassDef thisClassDef in ((ClassDef)classDef).ImmediateChildren)
+            foreach (ClassDef thisClassDef in ((ClassDef) classDef).ImmediateChildren)
             {
                 if (thisClassDef.IsUsingSingleTableInheritance())
                 {
@@ -75,32 +75,79 @@ namespace Habanero.BO
                     {
                         if (!selectQuery.Fields.ContainsKey(discriminator))
                         {
-                            selectQuery.Fields.Add(discriminator, new QueryField(discriminator, discriminator, classDef.GetTableName()));
+                            selectQuery.Fields.Add(discriminator,
+                                                   new QueryField(discriminator, discriminator, new Source(classDef.GetTableName())));
                         }
                     }
                 }
             }
         }
 
-        /// <summary>
-        /// Goes through the OrderCritieria of a SelectQuery and adds to the query fields
-        /// any order fields that are not already included in the query fields.
-        /// </summary>
-        /// <param name="query">The query to modify - any order fields not in the query fields will be added to them</param>
-        public static void IncludeFieldsFromOrderCriteria(ISelectQuery query)
+        ///// <summary>
+        ///// Goes through the OrderCritieria of a SelectQuery and adds to the query fields
+        ///// any order fields that are not already included in the query fields.
+        ///// </summary>
+        ///// <param name="query">The query to modify - any order fields not in the query fields will be added to them</param>
+        //public static void IncludeFieldsFromOrderCriteria(ISelectQuery query)
+        //{
+        //    foreach (OrderCriteria.Field orderField in query.OrderCriteria.Fields)
+        //    {
+        //        if (query.Fields.ContainsKey(orderField.FullName)) continue;
+
+        //        RelationshipDef relationshipDef = ((ClassDef)query.ClassDef).GetRelationship(orderField.Source);
+        //        ClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
+        //        IPropDef relatedPropDef = relatedObjectClassDef.GetPropDef(orderField.Name);
+        //        string tableName = relatedObjectClassDef.GetTableName(relatedPropDef);
+        //        QueryField queryField = new QueryField(orderField.Name, relatedPropDef.DatabaseFieldName, tableName);
+        //        query.Fields.Add(orderField.FullName, queryField);
+        //    }
+        //}
+
+        public static OrderCriteria CreateOrderCriteria(ClassDef classDef, string orderByString)
         {
-            foreach (OrderCriteria.Field orderField in query.OrderCriteria.Fields)
+            OrderCriteria orderCriteria = OrderCriteria.FromString(orderByString);
+            foreach (OrderCriteria.Field field in orderCriteria.Fields)
             {
-                if (query.Fields.ContainsKey(orderField.FullName)) continue;
-
-                RelationshipDef relationshipDef = ((ClassDef)query.ClassDef).GetRelationship(orderField.Source);
-                ClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
-                IPropDef relatedPropDef = relatedObjectClassDef.GetPropDef(orderField.Name);
-                string tableName = relatedObjectClassDef.GetTableName(relatedPropDef);
-                QueryField queryField = new QueryField(orderField.Name, relatedPropDef.DatabaseFieldName, tableName);
-                query.Fields.Add(orderField.FullName, queryField);
+                IPropDef propDef = classDef.GetPropDef(field.PropertyName, false);
+                if (propDef != null)
+                {
+                    field.FieldName = propDef.DatabaseFieldName;
+                }
+                if (field.Source == null)
+                {
+                    field.Source = new Source("", classDef.GetTableName());
+                } else
+                {
+                    string sourceName = field.Source.Name;
+                    string entityName = GetEntityName(classDef, field, sourceName);
+                    field.Source.EntityName = entityName;
+                }
             }
+            return orderCriteria;
+        }
 
+        private static string GetEntityName(ClassDef classDef, QueryField field, string pathName)
+        {
+            if (string.IsNullOrEmpty(pathName))
+            {
+                IPropDef propDef = classDef.GetPropDef(field.PropertyName);
+                if (propDef != null)
+                {
+                    field.FieldName = propDef.DatabaseFieldName;
+                }
+                return classDef.GetTableName();
+                
+            }
+            string[] parts = pathName.Split(new char[]{';'}, StringSplitOptions.RemoveEmptyEntries);
+            string relationshipName = parts[0];
+            RelationshipDef relationshipDef = classDef.GetRelationship(relationshipName);
+            if (relationshipDef != null)
+            {
+                ClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
+                string childSourceName = string.Join(";", parts, 1, parts.Length - 1);
+                return GetEntityName(relatedObjectClassDef, field, childSourceName);
+            }
+            return null;
         }
     }
 }

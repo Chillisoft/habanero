@@ -76,9 +76,9 @@ namespace Habanero.Test
             mPropMachineLastUpdated = _boPropCol["MachineLastUpdated"];
             mPropVersionNumber = _boPropCol["VersionNumber"];
 
-            SetConcurrencyControl(new OptimisticLockingVersionNumberDB(this,mPropDateLastUpdated,
-                                                                     mPropUserLastUpdated, mPropMachineLastUpdated,
-                                                                     mPropVersionNumber));
+            //SetConcurrencyControl(new OptimisticLockingVersionNumberDB(this,mPropDateLastUpdated,
+            //                                                         mPropUserLastUpdated, mPropMachineLastUpdated,
+            //                                                         mPropVersionNumber));
             //SetTransactionLog(new TransactionLogTable("TransactionLog",
             //                                          "DateTimeUpdated",
             //                                          "WindowsUser",
@@ -246,9 +246,9 @@ namespace Habanero.Test
 
         #region Properties
 
-        public Guid? ContactPersonID
+        public Guid ContactPersonID
         {
-            get { return (Guid?)GetPropertyValue("ContactPersonID"); }
+            get { return (Guid)GetPropertyValue("ContactPersonID"); }
             set { SetPropertyValue("ContactPersonID", value); }
         }
 
@@ -350,6 +350,16 @@ namespace Habanero.Test
         public override string ToString()
         {
             return this.ID.ToString();
+        }
+
+        public static ContactPerson CreateSavedContactPerson()
+        {
+            ContactPerson cp = new ContactPerson();
+            cp.FirstName = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.CreateRandomString();
+            cp.Save();
+            return cp;
+
         }
     }
 }

@@ -226,6 +226,7 @@
     <Compile Include="PropReadWriteRule.cs" />
     <Compile Include="QueryField.cs" />
     <Compile Include="RSAPasswordCrypter.cs" />
+    <Compile Include="Source.cs" />
     <Compile Include="XMLWrapper.cs" />
   </ItemGroup>
   <ItemGroup>

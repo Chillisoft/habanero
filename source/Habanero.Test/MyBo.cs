@@ -159,6 +159,26 @@ namespace Habanero.Test
 			return itsClassDef;
         }
 
+        public static ClassDef LoadDefaultClassDefWithDifferentTableAndFieldNames()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"" table=""my_bo"" >
+					<property  name=""MyBoID"" databaseField=""my_bo_id"" />
+					<property  name=""TestProp"" databaseField=""test_prop"" />
+					<property  name=""TestProp2"" databaseField=""test_prop2"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+			                  
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
         public static ClassDef LoadDefaultClassDefGizmox()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -979,6 +999,8 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
+
+
         public static ClassDef LoadClassDefWithShape_SingleTableInheritance_Relationship()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -1138,6 +1160,28 @@ namespace Habanero.Test
 					<property  name=""MyRelatedBoID"" />
 					<property  name=""MyRelatedTestProp"" />
 					<property  name=""MyBoID"" />
+					<primaryKey>
+						<prop name=""MyRelatedBoID"" />
+					</primaryKey>
+					<relationship name=""MyRelationship"" type=""single"" relatedClass=""MyBO"" relatedAssembly=""Habanero.Test"">
+						<relatedProperty property=""MyBoID"" relatedProperty=""MyBoID"" />
+					</relationship>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static ClassDef LoadClassDefWithDifferentTableAndFieldNames()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""My_Related_Bo"">
+					<property  name=""MyRelatedBoID"" databaseField=""My_Related_Bo_ID""/>
+					<property  name=""MyRelatedTestProp"" databaseField=""My_Related_Test_Prop"" />
+					<property  name=""MyBoID"" databaseField=""My_Bo_ID"" />
 					<primaryKey>
 						<prop name=""MyRelatedBoID"" />
 					</primaryKey>

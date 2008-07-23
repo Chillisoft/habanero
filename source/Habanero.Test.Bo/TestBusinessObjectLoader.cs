@@ -71,9 +71,9 @@ namespace Habanero.Test.BO
             cp.Surname = Guid.NewGuid().ToString("N");
             cp.Save();
             SelectQuery query = new SelectQuery(new Criteria("Surname", Criteria.Op.Equals, cp.Surname));
-            query.Fields.Add("Surname", new QueryField("Surname", "Surname_field", ""));
-            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", ""));
-            query.Source = cp.ClassDef.TableName;
+            query.Fields.Add("Surname", new QueryField("Surname", "Surname_field", null));
+            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", null));
+            query.Source = new Source(cp.ClassDef.TableName);
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCp =
@@ -93,9 +93,9 @@ namespace Habanero.Test.BO
             cp.Surname = Guid.NewGuid().ToString("N");
             cp.Save();
             SelectQuery query = new SelectQuery(new Criteria("Surname", Criteria.Op.Equals, cp.Surname));
-            query.Fields.Add("Surname", new QueryField("Surname", "Surname_field", ""));
-            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", ""));
-            query.Source = cp.ClassDef.TableName;
+            query.Fields.Add("Surname", new QueryField("Surname", "Surname_field", null));
+            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", null));
+            query.Source = new Source(cp.ClassDef.TableName);
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCp =
@@ -208,9 +208,9 @@ namespace Habanero.Test.BO
             cp2.Save();
 
             SelectQuery query = new SelectQuery(new Criteria("DateOfBirth", Criteria.Op.GreaterThan, now));
-            query.Fields.Add("DateOfBirth", new QueryField("DateOfBirth", "DateOfBirth", ""));
-            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", ""));
-            query.Source = cp1.ClassDef.TableName;
+            query.Fields.Add("DateOfBirth", new QueryField("DateOfBirth", "DateOfBirth", null));
+            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", null));
+            query.Source = new Source(cp1.ClassDef.TableName);
             query.OrderCriteria = new OrderCriteria().Add("DateOfBirth");
 
             //---------------Execute Test ----------------------
@@ -240,9 +240,9 @@ namespace Habanero.Test.BO
             cp2.Save();
 
             SelectQuery query = new SelectQuery(new Criteria("DateOfBirth", Criteria.Op.GreaterThan, now));
-            query.Fields.Add("DateOfBirth", new QueryField("DateOfBirth", "DateOfBirth", ""));
-            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", ""));
-            query.Source = cp1.ClassDef.TableName;
+            query.Fields.Add("DateOfBirth", new QueryField("DateOfBirth", "DateOfBirth", null));
+            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", null));
+            query.Source = new Source(cp1.ClassDef.TableName);
             query.OrderCriteria = new OrderCriteria().Add("DateOfBirth");
 
             //---------------Execute Test ----------------------
@@ -319,7 +319,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             SetupDataAccessor();
 
-            ContactPersonTestBO.LoadDefaultClassDef();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = new ContactPersonTestBO();
             cp1.DateOfBirth = now;
@@ -331,7 +331,7 @@ namespace Habanero.Test.BO
             cp2.Save();
 
             Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, now);
-            OrderCriteria orderCriteria = OrderCriteria.FromString("Surname");
+            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(classDef, "Surname");
             //---------------Execute Test ----------------------
             BusinessObjectCollection<ContactPersonTestBO> col =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(criteria,
@@ -361,7 +361,7 @@ namespace Habanero.Test.BO
             cp2.Save();
 
             Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, now);
-            OrderCriteria orderCriteria = OrderCriteria.FromString("Surname");
+            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(classDef, "Surname");
             //---------------Execute Test ----------------------
             IBusinessObjectCollection col =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria,
@@ -592,9 +592,11 @@ namespace Habanero.Test.BO
             committer.AddBusinessObject(car2engine1);
             committer.CommitTransaction();
 
+            ClassDef classDef = ClassDef.ClassDefs[typeof (Engine)];
+
+            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(classDef, "Car.CarRegNo, EngineNo");
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            OrderCriteria orderCriteria = OrderCriteria.FromString("Car.CarRegNo, EngineNo");
             BusinessObjectCollection<Engine> engines =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Engine>(null, orderCriteria);
             //---------------Test Result -----------------------
@@ -605,6 +607,59 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------     
         }
 
+        [Test]
+        public void TestGetBusinessObjectCollection_SortOrder_ThroughRelationship_TwoLevels()
+        {
+            //---------------Set up test pack-------------------
+            SetupDataAccessor();
+            DeleteEnginesAndCars();
+            ContactPerson contactPerson1 = ContactPerson.CreateSavedContactPerson();
+            contactPerson1.FirstName = "Bob";
+            
+            ContactPerson contactPerson2 = ContactPerson.CreateSavedContactPerson();
+            contactPerson2.FirstName = "Andy";
+            
+            Car car1 = new Car();
+            car1.CarRegNo = "2";
+            car1.OwnerID = contactPerson1.ContactPersonID;
+            Car car2 = new Car();
+            car2.CarRegNo = "5";
+            car2.OwnerID = contactPerson2.ContactPersonID;
+
+            Engine car1engine1 = new Engine();
+            car1engine1.CarID = car1.CarID;
+            car1engine1.EngineNo = "20";
+
+            Engine car1engine2 = new Engine();
+            car1engine2.CarID = car1.CarID;
+            car1engine2.EngineNo = "10";
+
+            Engine car2engine1 = new Engine();
+            car2engine1.CarID = car2.CarID;
+            car2engine1.EngineNo = "50";
+
+            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(contactPerson1);
+            committer.AddBusinessObject(contactPerson2);
+            committer.AddBusinessObject(car1);
+            committer.AddBusinessObject(car2);
+            committer.AddBusinessObject(car1engine1);
+            committer.AddBusinessObject(car1engine2);
+            committer.AddBusinessObject(car2engine1);
+            committer.CommitTransaction();
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            OrderCriteria orderCriteria = OrderCriteria.FromString("Car.Owner.FirstName, EngineNo");
+            BusinessObjectCollection<Engine> engines =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Engine>(null, orderCriteria);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, engines.Count);
+            Assert.AreSame(car2engine1, engines[0]);
+            Assert.AreSame(car1engine2, engines[1]);
+            Assert.AreSame(car1engine1, engines[2]);
+            //---------------Tear Down -------------------------     
+        }
 
         [Test]
         public void TestLoadThroughRelationship_Multiple()
@@ -668,7 +723,7 @@ namespace Habanero.Test.BO
             Assert.Contains(cp, col);
             //---------------Tear Down -------------------------
         }
-
+        
         [Test]
         public void TestLoadWithOrderBy()
         {
@@ -687,11 +742,38 @@ namespace Habanero.Test.BO
             cp3.Surname = "bbbbb";
             cp3.Save();
             //---------------Execute Test ----------------------
+            OrderCriteria orderCriteria = new OrderCriteria().Add("Surname");
             BusinessObjectCollection<ContactPersonTestBO> col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(null,
-                                                                                                              new OrderCriteria
-                                                                                                                  ().Add
-                                                                                                                  ("Surname"));
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(null, orderCriteria);
+            //---------------Test Result -----------------------
+
+            Assert.AreSame(cp3, col[0]);
+            Assert.AreSame(cp1, col[1]);
+            Assert.AreSame(cp2, col[2]);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestLoadWithOrderBy_ManualOrderbyFieldName()
+        {
+            //---------------Set up test pack-------------------
+            SetupDataAccessor();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp1 = new ContactPersonTestBO();
+            cp1.Surname = "eeeee";
+            cp1.Save();
+
+            ContactPersonTestBO cp2 = new ContactPersonTestBO();
+            cp2.Surname = "ggggg";
+            cp2.Save();
+
+            ContactPersonTestBO cp3 = new ContactPersonTestBO();
+            cp3.Surname = "bbbbb";
+            cp3.Save();
+            //---------------Execute Test ----------------------
+            OrderCriteria orderCriteria = new OrderCriteria().Add(new OrderCriteria.Field("Surname", "Surname_field", null, OrderCriteria.SortDirection.Ascending));
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(null, orderCriteria);
             //---------------Test Result -----------------------
 
             Assert.AreSame(cp3, col[0]);
@@ -942,9 +1024,9 @@ namespace Habanero.Test.BO
                 GCCollectAll();
 
                 SelectQuery query = new SelectQuery(new Criteria("Surname", Criteria.Op.Equals, cp.Surname));
-                query.Fields.Add("Surname", new QueryField("Surname", "Surname_field", ""));
-                query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", ""));
-                query.Source = cp.ClassDef.TableName;
+                query.Fields.Add("Surname", new QueryField("Surname", "Surname_field", null));
+                query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", null));
+                query.Source = new Source(cp.ClassDef.TableName);
 
                 //---------------Execute Test ----------------------
                 ContactPersonTestBO loadedCp =

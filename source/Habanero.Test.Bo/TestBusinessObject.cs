@@ -433,7 +433,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            object engineNo = engine1.GetPropertyValue("", "EngineNo");
+            object engineNo = engine1.GetPropertyValue(null, "EngineNo");
             //---------------Test Result -----------------------
             Assert.AreEqual(engine1.EngineNo, engineNo);
             //---------------Tear Down -------------------------     
@@ -458,7 +458,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            object carregno = engine1.GetPropertyValue("Car", "CarRegNo");
+            object carregno = engine1.GetPropertyValue(new Source("Car"), "CarRegNo");
             //---------------Test Result -----------------------
             Assert.AreEqual(car1.CarRegNo, carregno);
             //---------------Tear Down -------------------------     

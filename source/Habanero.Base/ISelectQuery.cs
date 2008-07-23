@@ -42,7 +42,7 @@ namespace Habanero.Base
         /// <summary>
         /// The source of the data. In a database query this would be the first table listed in the FROM clause.
         /// </summary>
-        string Source { get; set; }
+        Source Source { get; set; }
 
         /// <summary>
         /// The fields to use to order a collection of objects when loading them.

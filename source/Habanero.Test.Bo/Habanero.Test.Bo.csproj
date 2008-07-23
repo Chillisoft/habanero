@@ -173,6 +173,7 @@
     <Compile Include="TestQueryBuilder.cs" />
     <Compile Include="TestSelectQuery.cs" />
     <Compile Include="TestSelectQueryDB.cs" />
+    <Compile Include="TestSource.cs" />
     <Compile Include="TestTransactionCommitter.cs" />
     <Compile Include="TestMultipleRelationship.cs" />
     <Compile Include="TestRelatedBusinessObjectCollection.cs" />

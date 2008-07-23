@@ -47,8 +47,6 @@ namespace Habanero.BO
             //_dataStoreInMemory = new DataStoreInMemory();
         }
 
-        #region IBusinessObjectLoader Members
-
         /// <summary>
         /// Loads a business object of type T, using the Primary key given as the criteria
         /// </summary>
@@ -396,8 +394,6 @@ namespace Habanero.BO
             Refresh(col);
             return col;
         }
-
-        #endregion
 
         private static IBusinessObjectCollection CreateCollectionOfType(Type BOType)
         {

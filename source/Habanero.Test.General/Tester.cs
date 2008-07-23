@@ -51,7 +51,7 @@ namespace Habanero.Test.General
 
             createUpdatedContactPersonTestPack();
 
-            createDeleteContactPersonTestPack();
+            
             mContactPersonUpdateConcurrency = new ContactPerson();
             mContactPersonUpdateConcurrency.Surname = "Update Concurrency";
             mContactPersonUpdateConcurrency.Save();
@@ -105,18 +105,6 @@ namespace Habanero.Test.General
             myContact.Save();
             updateContactPersonID = myContact.ID;
         }
-
-        private ContactPerson createDeleteContactPersonTestPack()
-        {
-            ContactPerson myContact = new ContactPerson();
-            myContact.FirstName = "To Be deleted";
-            myContact.Surname = "To Be deleted";
-            myContact.Save();
-            deleteContactPersonID = myContact.ID;
-            return myContact;
-        }
-
-
 
         [Test]
         public void TestUpdateExistingContactPerson()
@@ -283,23 +271,6 @@ namespace Habanero.Test.General
         }
 
         [Test]
-        [ExpectedException(typeof(BusObjOptimisticConcurrencyControlException))]
-        public void TestOptimisticConcurrencyControl()
-        {
-            ContactPerson myContact = mContactPersonUpdateConcurrency;
-            //Ensure that we have two physical instances of the same logical contact person
-            
-           BOLoader.Instance.ClearLoadedBusinessObjects();//Ensure that a fresh object is loaded from DB
-           ContactPerson myContact2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(myContact.ID);
-
-            myContact.Surname = "New Surname"; //edit first object
-            myContact2.Surname = "New Surname2"; //edit second object
-            Assert.IsFalse(ReferenceEquals(myContact, myContact2));
-            myContact.Save(); //save first
-            myContact2.Save(); //save second
-        }
-        
-        [Test]
             public void TestMultipleUpdates_NoConcurrencyErrors()
         {
             mContactPersonUpdateConcurrency.Surname = "New Surname";
@@ -308,8 +279,6 @@ namespace Habanero.Test.General
             mContactPersonUpdateConcurrency.Save();
             mContactPersonUpdateConcurrency.Surname = "New Surname 3";
         }
-
- 
 
         /// <summary>
         /// Tests to ensure that if the new object that is being saved to the database is always

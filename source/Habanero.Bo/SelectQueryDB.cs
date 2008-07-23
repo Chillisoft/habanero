@@ -59,7 +59,7 @@ namespace Habanero.BO
         /// <summary>
         /// The source of the data. In a database query this would be the first table listed in the FROM clause.
         /// </summary>
-        public string Source
+        public Source Source
         {
             get { return _selectQuery.Source; }
             set { _selectQuery.Source = value; }
@@ -108,25 +108,68 @@ namespace Habanero.BO
         {
             foreach (OrderCriteria.Field field in _selectQuery.OrderCriteria.Fields)
             {
-                if (!string.IsNullOrEmpty(field.Source))
+                string fieldSourceName = field.Source != null ? field.Source.Name : null;
+                if (!String.IsNullOrEmpty(fieldSourceName) && !fieldSourceName.Equals(this.Source.Name))
                 {
-                    RelationshipDef relationshipDef = ((ClassDef) this.ClassDef).GetRelationship(field.Source);
-                    string joinString = GetJoinStringForRelationship(relationshipDef);
-                    builder.Append(joinString);
+                    ClassDef currentClassDef = (ClassDef)this.ClassDef;
+                    string relationshipJoinTable = AddRelationshipJoin(builder, currentClassDef, field, fieldSourceName);
+                    field.Source.EntityName = relationshipJoinTable;
                 }
             }
         }
 
+        private string AddRelationshipJoin(StringBuilder builder, ClassDef currentClassDef, QueryField field, string fieldSourceName)
+        {
+            if (String.IsNullOrEmpty(fieldSourceName))
+            {
+                IPropDef propDef = currentClassDef.GetPropDef(field.PropertyName);
+                if (propDef != null)
+                {
+                    field.FieldName = propDef.DatabaseFieldName;
+                } 
+                return currentClassDef.GetTableName();
+            }
+            string[] parts = fieldSourceName.Split(new char[]{'.'}, StringSplitOptions.RemoveEmptyEntries);
+            string relationshipName = parts[0];
+            RelationshipDef relationshipDef = currentClassDef.GetRelationship(relationshipName);
+            if (relationshipDef != null)
+            {
+                string joinString = GetJoinStringForRelationship(relationshipDef, currentClassDef);
+                builder.Append(joinString);
+                ClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
+                if (relatedObjectClassDef != null)
+                {
+                    string childSourceName = string.Join(";", parts, 1, parts.Length - 1);
+                    string relationshipJoinTable = AddRelationshipJoin(builder, relatedObjectClassDef, field, childSourceName);
+                    if (String.IsNullOrEmpty(relationshipJoinTable))
+                    {
+                        relationshipJoinTable = relatedObjectClassDef.GetTableName();
+                    }
+                    return relationshipJoinTable;
+                }
+                else
+                {
+                    return currentClassDef.GetTableName();
+                }
+            }
+            return currentClassDef.GetTableName();
+        }
+
         private string GetJoinStringForRelationship(RelationshipDef relationshipDef)
+        {
+            return GetJoinStringForRelationship(relationshipDef, this.ClassDef);
+        }
+
+        private string GetJoinStringForRelationship(RelationshipDef relationshipDef, IClassDef classDef)
         {
             string joinString = "";
             foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
             {
                 ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
-                IPropDef ownerPropDef = this.ClassDef.GetPropDef(relPropDef.OwnerPropertyName);
+                IPropDef ownerPropDef = classDef.GetPropDef(relPropDef.OwnerPropertyName);
                 IPropDef relatedPropDef = relatedClassDef.GetPropDef(relPropDef.RelatedClassPropName);
                 joinString +=
-                    GetJoinString(joinString, this.ClassDef.TableName, ownerPropDef.DatabaseFieldName,
+                    GetJoinString(joinString, classDef.TableName, ownerPropDef.DatabaseFieldName,
                         relatedClassDef.TableName, relatedPropDef.DatabaseFieldName);
             }
             return joinString;
@@ -146,15 +189,15 @@ namespace Habanero.BO
             }
             string joinString = String.Format("{0} {1} = {2}",
                 firstBit,
-                DelimitField(joinFromTableName, joinFromFieldName),
-                DelimitField(joinToTableName, joinToFieldName));
+                DelimitField(new Source(joinFromTableName), joinFromFieldName),
+                DelimitField(new Source(joinToTableName), joinToFieldName));
             return joinString;
         }
 
 
         private void AppendFrom(StringBuilder builder)
         {
-            builder.AppendFormat(" FROM {0}", DelimitTable(_selectQuery.Source));
+            builder.AppendFormat(" FROM {0}", DelimitTable(_selectQuery.Source.EntityName));
             ClassDef currentClassDef = (ClassDef) _selectQuery.ClassDef;
             while (currentClassDef != null && currentClassDef.IsUsingClassTableInheritance())
             {
@@ -171,10 +214,10 @@ namespace Habanero.BO
 
         private void AppendFields(StringBuilder builder)
         {
-            QueryBuilder.IncludeFieldsFromOrderCriteria(_selectQuery);
+            //QueryBuilder.IncludeFieldsFromOrderCriteria(_selectQuery);
             foreach (QueryField field in _selectQuery.Fields.Values)
             {
-                builder.AppendFormat("{0}, ", DelimitField(field.SourceName, field.FieldName));
+                builder.AppendFormat("{0}, ", DelimitField(field.Source, field.FieldName));
             }
             builder.Remove(builder.Length - 2, 2);
         }
@@ -219,17 +262,22 @@ namespace Habanero.BO
         private void AppendOrderByField(StringBuilder orderByClause, OrderCriteria.Field orderField)
         {
             string direction = orderField.SortDirection == OrderCriteria.SortDirection.Ascending ? "ASC" : "DESC";
-            QueryField queryField = _selectQuery.Fields[orderField.FullName];
 
             string tableAndFieldName;
-            if (!string.IsNullOrEmpty(orderField.Source))
+            if (orderField.Source != null)
             {
-                string relatedTableName = queryField.SourceName;
-                tableAndFieldName = DelimitField(relatedTableName, queryField.FieldName);
+                tableAndFieldName = DelimitField(orderField.Source, orderField.FieldName);
             }
             else
             {
-                tableAndFieldName = DelimitField(queryField.SourceName, queryField.FieldName);
+                if (Fields.ContainsKey(orderField.PropertyName))
+                {
+                    QueryField queryField = Fields[orderField.PropertyName];
+                    tableAndFieldName = DelimitField(queryField.Source, queryField.FieldName);
+                } else
+                {
+                    tableAndFieldName = DelimitField(this.Source, orderField.FieldName);
+                }
             }
             StringUtilities.AppendMessage(orderByClause, tableAndFieldName + " " + direction, ", ");
         }
@@ -250,7 +298,7 @@ namespace Habanero.BO
                     _selectQuery.Criteria.ToString(delegate(string propName)
                     {
                         QueryField queryField = _selectQuery.Fields[propName];
-                        return DelimitField(queryField.SourceName, queryField.FieldName);
+                        return DelimitField(queryField.Source, queryField.FieldName);
                     }, delegate(object value)
                     {
                         string paramName = statement.ParameterNameGenerator.GetNextParameterName();
@@ -261,12 +309,12 @@ namespace Habanero.BO
             }
         }
 
-        private string DelimitField(string sourceName, string fieldName)
+        private string DelimitField(Source source, string fieldName)
         {
-            if (string.IsNullOrEmpty(sourceName))
+            if (source == null)
                 return SqlFormattingHelper.FormatFieldName(fieldName, DatabaseConnection.CurrentConnection);
             return
-                SqlFormattingHelper.FormatTableAndFieldName(sourceName, fieldName, DatabaseConnection.CurrentConnection);
+                SqlFormattingHelper.FormatTableAndFieldName(source.EntityName, fieldName, DatabaseConnection.CurrentConnection);
         }
 
         private string DelimitTable(string tableName)
