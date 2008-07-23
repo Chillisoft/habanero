@@ -59,7 +59,14 @@ namespace Habanero.UI.Win
         /// <param name="col">The collection to create the datasetprovider for</param>
         /// <returns></returns>
         public abstract IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col);
-    
+
+        public IDataGridViewCell CurrentCell
+        {
+            get { return new DataGridViewCellWin(base.CurrentCell); }
+            set { base.CurrentCell = ((DataGridViewCellWin)value).DataGridViewCell; }
+        }
+
+
         private void FireBusinessObjectSelected()
         {
             if (this.BusinessObjectSelected != null)
@@ -118,6 +125,11 @@ namespace Habanero.UI.Win
         public new IDataGridViewSelectedRowCollection SelectedRows
         {
             get { return new DataGridViewSelectedRowCollectionWin(base.SelectedRows); }
+        }
+
+        public new IDataGridViewSelectedCellCollection SelectedCells
+        {
+            get { return new DataGridViewSelectedCellCollectionWin(base.SelectedCells); }
         }
 
         public new IDataGridViewRow CurrentRow
@@ -318,6 +330,16 @@ namespace Habanero.UI.Win
             public void Clear()
             {
                 _rows.Clear();
+            }
+
+            /// <summary>Removes the row at the specified position from the collection.</summary>
+            /// <param name="index">The position of the row to remove.</param>
+            /// <exception cref="T:System.ArgumentOutOfRangeException">index is less than zero and greater than the number of rows in the collection minus one. </exception>
+            /// <exception cref="T:System.InvalidOperationException">The associated <see cref="IDataGridView"></see> control is performing one of the following actions that temporarily prevents new rows from being added:Selecting all cells in the control.Clearing the selection.-or-This method is being called from a handler for one of the following <see cref="IDataGridView"></see> events:<see cref="IDataGridView.CellEnter"></see><see cref="IDataGridView.CellLeave"></see><see cref="IDataGridView.CellValidating"></see><see cref="IDataGridView.CellValidated"></see><see cref="IDataGridView.RowEnter"></see><see cref="IDataGridView.RowLeave"></see><see cref="IDataGridView.RowValidated"></see><see cref="IDataGridView.RowValidating"></see>-or-index is equal to the number of rows in the collection and the <see cref="IDataGridView.AllowUserToAddRows"></see> property of the <see cref="IDataGridView"></see> is set to true.-or-The associated <see cref="IDataGridView"></see> control is bound to an <see cref="T:System.ComponentModel.IBindingList"></see> implementation with <see cref="P:System.ComponentModel.IBindingList.AllowRemove"></see> and <see cref="P:System.ComponentModel.IBindingList.SupportsChangeNotification"></see> property values that are not both true.</exception>
+            /// <filterpriority>1</filterpriority>
+            public void RemoveAt(int index)
+            {
+                _rows.RemoveAt(index);
             }
 
             ///<summary>
@@ -634,6 +656,42 @@ namespace Habanero.UI.Win
                 }
             }
         }
+
+        private class DataGridViewSelectedCellCollectionWin : IDataGridViewSelectedCellCollection
+        {
+            private readonly DataGridViewSelectedCellCollection _selectedCells;
+
+            public DataGridViewSelectedCellCollectionWin(DataGridViewSelectedCellCollection selectedCells)
+            {
+                _selectedCells = selectedCells;
+            }
+
+            public int Count
+            {
+                get { return _selectedCells.Count; }
+            }
+
+            public IDataGridViewCell this[int index]
+            {
+                get { return new DataGridViewCellWin(_selectedCells[index]); }
+            }
+
+            ///<summary>
+            ///Returns an enumerator that iterates through a collection.
+            ///</summary>
+            ///
+            ///<returns>
+            ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+            ///</returns>
+            ///<filterpriority>2</filterpriority>
+            public IEnumerator GetEnumerator()
+            {
+                foreach (DataGridViewCell cell in _selectedCells)
+                {
+                    yield return new DataGridViewCellWin(cell);
+                }
+            }
+        }
     }
 
     internal class DataGridViewCellStyleWin : IDataGridViewCellStyle
@@ -683,6 +741,11 @@ namespace Habanero.UI.Win
         public DataGridViewCellWin(DataGridViewCell cell)
         {
             _cell = cell;
+        }
+
+        public DataGridViewCell DataGridViewCell
+        {
+            get { return _cell; }
         }
 
         /// <summary>Gets the column index for this cell. </summary>

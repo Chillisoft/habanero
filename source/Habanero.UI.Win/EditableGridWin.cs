@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections;
 using System.Data;
 using System.Windows.Forms;
 using Habanero.Base;
@@ -27,9 +28,15 @@ namespace Habanero.UI.Win
 {
     public class EditableGridWin : GridBaseWin, IEditableGrid
     {
+        private bool _confirmDeletion;
+        private CheckUserConfirmsDeletion _checkUserConfirmsDeletionDelegate;
+        private DeleteKeyBehaviours _deleteKeyBehaviour;
+
         public EditableGridWin()
         {
+            this._confirmDeletion = false;
             this.AllowUserToAddRows = true;
+            this._deleteKeyBehaviour = DeleteKeyBehaviours.DeleteRow;
             this.SelectionMode = DataGridViewSelectionMode.CellSelect;
         }
 
@@ -64,6 +71,67 @@ namespace Habanero.UI.Win
             if (this.DataSource is DataView)
             {
                 ((DataView)this.DataSource).Table.AcceptChanges();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the boolean value that determines whether to confirm
+        /// deletion with the user when they have chosen to delete a row
+        /// </summary>
+        public bool ConfirmDeletion
+        {
+            get { return _confirmDeletion; }
+            set { _confirmDeletion = value; }
+        }
+
+        /// <summary>
+        /// Checks whether the user wants to delete selected rows.
+        /// </summary>
+        public CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate
+        {
+            get { return _checkUserConfirmsDeletionDelegate; }
+            set { _checkUserConfirmsDeletionDelegate = value; }
+        }
+
+        /// <summary>
+        /// Indicates what action should be taken when a selection of
+        /// cells is selected and the Delete key is pressed.  Note that
+        /// this has no correlation to how DataGridView handles the
+        /// Delete key when the full row has been selected.
+        /// </summary>
+        public DeleteKeyBehaviours DeleteKeyBehaviour
+        {
+            get { return _deleteKeyBehaviour; }
+            set { _deleteKeyBehaviour = value; }
+        }
+
+        /// <summary>
+        /// Carries out actions when the delete key is called on the grid
+        /// </summary>
+        public void DeleteKeyHandler()
+        {
+            //if (!CurrentCell.IsInEditMode)
+            {
+                if (_deleteKeyBehaviour == DeleteKeyBehaviours.DeleteRow && AllowUserToDeleteRows)
+                {
+                    if (ConfirmDeletion && CheckUserConfirmsDeletionDelegate())
+                    {
+                        ArrayList rowIndexes = new ArrayList();
+                        foreach (IDataGridViewCell cell in SelectedCells)
+                        {
+                            if (!rowIndexes.Contains(cell.RowIndex) && cell.RowIndex != NewRowIndex)
+                            {
+                                rowIndexes.Add(cell.RowIndex);
+                            }
+                        }
+                        rowIndexes.Sort();
+
+                        for (int row = rowIndexes.Count - 1; row >= 0; row--)
+                        {
+                            Rows.RemoveAt((int) rowIndexes[row]);
+                        }
+                    }
+                }
             }
         }
     }

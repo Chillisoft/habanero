@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Data;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
@@ -61,5 +62,45 @@ namespace Habanero.UI.WebGUI
                 ((DataView)this.DataSource).Table.AcceptChanges();
             }
         }
+
+        /// <summary>
+        /// Gets or sets the boolean value that determines whether to confirm
+        /// deletion with the user when they have chosen to delete a row
+        /// </summary>
+        public bool ConfirmDeletion
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        /// <summary>
+        /// Checks whether the user wants to delete selected rows.
+        /// </summary>
+        public CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        /// <summary>
+        /// Indicates what action should be taken when a selection of
+        /// cells is selected and the Delete key is pressed.  Note that
+        /// this has no correlation to how DataGridView handles the
+        /// Delete key when the full row has been selected.
+        /// </summary>
+        public DeleteKeyBehaviours DeleteKeyBehaviour
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        /// <summary>
+        /// Carries out actions when the delete key is called on the grid
+        /// </summary>
+        public void DeleteKeyHandler()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

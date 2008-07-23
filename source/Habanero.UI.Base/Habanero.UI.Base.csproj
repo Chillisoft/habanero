@@ -62,6 +62,7 @@
     <Compile Include="Grid\IDataGridViewCellStyle.cs" />
     <Compile Include="Grid\IDataGridViewCheckBoxColumn.cs" />
     <Compile Include="Grid\IDataGridViewImageColumn.cs" />
+    <Compile Include="Grid\IDataGridViewSelectedCellCollection.cs" />
     <Compile Include="Grid\IDataGridViewTextBoxColumn.cs" />
     <Compile Include="Grid\IEditableGridButtonsControl.cs" />
     <Compile Include="Grid\IGridControl.cs" />

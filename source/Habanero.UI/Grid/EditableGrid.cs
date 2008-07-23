@@ -140,6 +140,7 @@ namespace Habanero.UI.Grid
         /// <summary>
         /// If deletion is to be confirmed, checks deletion with the user before continuing
         /// </summary>
+        /// todo: Remeber to Port this to Win 
         private void ConfirmRowDeletion(object sender, DataGridViewRowCancelEventArgs e)
         {
             if (ConfirmDeletion && MessageBox.Show("Are you sure you want to delete the selected row(s)?",

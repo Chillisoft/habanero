@@ -296,6 +296,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <returns></returns>
         IDataGridViewComboBoxColumn CreateDataGridViewComboBoxColumn();
+
         /// <summary>
         /// Constructor that provides a specific list of optionsToDisplay to display
         /// </summary>

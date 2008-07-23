@@ -24,6 +24,29 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
+
+    /// <summary>
+    /// Checks whether the user wants to delete selected rows.
+    /// </summary>
+    public delegate bool CheckUserConfirmsDeletion();
+
+
+    /// <summary>
+    /// Indicates what action should be taken when a selection of
+    /// cells is selected and the Delete key is pressed.  Note that
+    /// this has no correlation to how DataGridView handles the
+    /// Delete key when the full row has been selected.
+    /// </summary>
+    public enum DeleteKeyBehaviours
+    {
+        /// <summary>Nothing is done</summary>
+        None,
+        /// <summary>Each row containing part of the selection is deleted</summary>
+        DeleteRow,
+        /// <summary>Clears the contents of the selected cells</summary>
+        ClearContents
+    }
+
     public interface IEditableGrid:IGridBase
     {
         //IDataGridViewColumnCollection Columns { get; }
@@ -43,5 +66,31 @@ namespace Habanero.UI.Base
         /// Saves the changes made to the data in the grid.
         /// </summary>
         void SaveChanges();
+        
+        /// <summary>
+        /// Gets or sets the boolean value that determines whether to confirm
+        /// deletion with the user when they have chosen to delete a row
+        /// </summary>
+        bool ConfirmDeletion { get; set; }
+
+        /// <summary>
+        /// Checks whether the user wants to delete selected rows.
+        /// </summary>
+        CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate{ get; set;}
+
+        /// <summary>
+        /// Indicates what action should be taken when a selection of
+        /// cells is selected and the Delete key is pressed.  Note that
+        /// this has no correlation to how DataGridView handles the
+        /// Delete key when the full row has been selected.
+        /// </summary>
+        DeleteKeyBehaviours DeleteKeyBehaviour { get; set; }
+
+        /// <summary>
+        /// Carries out actions when the delete key is called on the grid
+        /// </summary>
+        void DeleteKeyHandler();
+
+        
     }
 }

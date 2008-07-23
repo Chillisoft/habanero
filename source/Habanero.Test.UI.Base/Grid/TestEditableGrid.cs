@@ -28,6 +28,7 @@ using Habanero.Test.BO;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
+using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -58,7 +59,8 @@ namespace Habanero.Test.UI.Base
         protected abstract void AssertIsCheckBoxColumnType(IDataGridViewColumn dataGridViewColumn);
         protected abstract void AssertIsComboBoxColumnType(IDataGridViewColumn dataGridViewColumn);
         //protected abstract void AssertIsDateTimeColumnType(IDataGridViewColumn dataGridViewColumn);
-        protected abstract void AddControlToForm(IGridBase cntrl);
+        protected abstract IFormChilli AddControlToForm(IGridBase cntrl);
+        protected abstract IEditableGrid CreateEditableGrid();
 
 
         [TestFixture]
@@ -68,6 +70,370 @@ namespace Habanero.Test.UI.Base
             {
                 return new ControlFactoryWin();
             }
+
+            [Test]
+            public void TestConfirmDeletion_FalseByDefault()
+            {
+                //---------------Set up test pack-------------------
+                IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+               Assert.IsFalse(editableGrid.ConfirmDeletion);
+            }
+
+            [Test]
+            public void TestConfirmDeletion_SetToTrue()
+            {
+                //---------------Set up test pack-------------------
+                IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+
+                //---------------Assert Precondition----------------
+                Assert.IsFalse(editableGrid.ConfirmDeletion);
+                //---------------Execute Test ----------------------
+                editableGrid.ConfirmDeletion = true;
+                //---------------Test Result -----------------------
+                Assert.IsTrue(editableGrid.ConfirmDeletion);
+            }
+
+            private void SimulateDeleteKeyPress(IEditableGrid editableGrid)
+            {
+                // This four lines are the preferable approach (create an actual Delete key press)
+                //   using Nunit's testing framework (see TestControlMapperStrategyWin for a working example)
+                //   but there is some deep lying bug in Nunit (and there is no GridTester or equivalent)
+
+                //formWin.Show();
+                //FormTester box = new FormTester();
+                //KeyEventArgs eveArgsDelete = new KeyEventArgs(Keys.Delete);
+                //box.FireEvent("KeyUp", eveArgsDelete);
+
+                // Circumvent the above using this (which means that some code will go untested)
+                editableGrid.DeleteKeyHandler();
+            }
+
+            [Test]
+            public void TestConfirmDeletionFalse_NoMessageBox()
+            {
+                //---------------Set up test pack-------------------
+                IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+                bool delegateCalled = false;
+                editableGrid.CheckUserConfirmsDeletionDelegate += delegate
+                {
+                    delegateCalled = true;
+                    return false;
+                };
+
+                IFormChilli formWin = AddControlToForm(editableGrid);
+
+                //---------------Assert Precondition----------------
+                //---------------Execute Test ----------------------
+                SimulateDeleteKeyPress(editableGrid);
+                //---------------Test Result -----------------------
+                Assert.IsFalse(delegateCalled);
+            }
+
+            [Test]
+            public void TestConfirmDeletionTrue_ShowsMessageBox()
+            {
+                //---------------Set up test pack-------------------
+                IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+                editableGrid.ConfirmDeletion = true;
+                bool delegateCalled = false;
+                editableGrid.CheckUserConfirmsDeletionDelegate += delegate
+                {
+                    delegateCalled = true;
+                    return false;
+                };
+
+                IFormChilli formWin = AddControlToForm(editableGrid);
+
+                //---------------Assert Precondition----------------
+                Assert.IsTrue(editableGrid.ConfirmDeletion);
+                Assert.IsTrue(editableGrid.AllowUserToDeleteRows);
+                //---------------Execute Test ----------------------
+                SimulateDeleteKeyPress(editableGrid);
+
+                //---------------Test Result -----------------------
+                Assert.IsTrue(delegateCalled);
+            }
+
+            [Test]
+            public void TestConfirmDeletion_NoDeletionWhenAllowUserToDeleteRowsIsFalse()
+            {
+                //---------------Set up test pack-------------------
+                IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+                editableGrid.ConfirmDeletion = true;
+                editableGrid.AllowUserToDeleteRows = false;
+                bool delegateCalled = false;
+                editableGrid.CheckUserConfirmsDeletionDelegate += delegate
+                {
+                    delegateCalled = true;
+                    return false;
+                };
+
+                IFormChilli formWin = AddControlToForm(editableGrid);
+
+                //---------------Assert Precondition----------------
+                Assert.IsTrue(editableGrid.ConfirmDeletion);
+                Assert.IsFalse(editableGrid.AllowUserToDeleteRows);
+                //---------------Execute Test ----------------------
+                SimulateDeleteKeyPress(editableGrid);
+
+                //---------------Test Result -----------------------
+                Assert.IsFalse(delegateCalled);
+            }
+
+            [Test]
+            public void TestConfirmDeletion_NoDeletionWhenDeleteKeyBehaviourIsClearContents()
+            {
+                //---------------Set up test pack-------------------
+                IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+                editableGrid.ConfirmDeletion = true;
+                bool delegateCalled = false;
+                editableGrid.CheckUserConfirmsDeletionDelegate += delegate
+                {
+                    delegateCalled = true;
+                    return false;
+                };
+                editableGrid.DeleteKeyBehaviour = DeleteKeyBehaviours.ClearContents; 
+                IFormChilli formWin = AddControlToForm(editableGrid);
+
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(DeleteKeyBehaviours.ClearContents, editableGrid.DeleteKeyBehaviour);
+                //---------------Execute Test ----------------------
+                SimulateDeleteKeyPress(editableGrid);
+                //---------------Test Result -----------------------
+                Assert.IsFalse(delegateCalled);
+            }
+
+
+            [Test]
+            public void TestConfirmDeletion_NoDeletionWhenDeleteKeyBehaviourIsNone()
+            {
+                //---------------Set up test pack-------------------
+                IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+                editableGrid.ConfirmDeletion = true;
+                bool delegateCalled = false;
+                editableGrid.CheckUserConfirmsDeletionDelegate += delegate
+                {
+                    delegateCalled = true;
+                    return false;
+                };
+                editableGrid.DeleteKeyBehaviour = DeleteKeyBehaviours.None;
+                IFormChilli formWin = AddControlToForm(editableGrid);
+
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(DeleteKeyBehaviours.None, editableGrid.DeleteKeyBehaviour);
+                //---------------Execute Test ----------------------
+                SimulateDeleteKeyPress(editableGrid);
+                //---------------Test Result -----------------------
+                Assert.IsFalse(delegateCalled);
+            }
+
+            [Test]
+            public void TestConfirmDeletion_DeletionWhenDeleteKeyBehaviourIsDeleteRow()
+            {
+                //---------------Set up test pack-------------------
+                BusinessObjectCollection<MyBO> col;
+                IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
+                editableGrid.ConfirmDeletion = true;
+                bool delegateCalled = false;
+                editableGrid.CheckUserConfirmsDeletionDelegate += delegate
+                {
+                    delegateCalled = true;
+                    return false;
+                };
+               
+                IFormChilli formWin = AddControlToForm(editableGrid);
+                editableGrid.Rows[0].Cells[0].Selected = true;
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(DeleteKeyBehaviours.DeleteRow, editableGrid.DeleteKeyBehaviour);
+                //---------------Execute Test ----------------------
+                SimulateDeleteKeyPress(editableGrid);
+                //---------------Test Result -----------------------
+                Assert.IsTrue(delegateCalled);
+            }
+
+            [Test]
+            public void TestDeleteKeyBehaviours_IsDeleteRowByDefault()
+            {
+                //---------------Set up test pack-------------------
+                IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+                
+                //---------------Assert Precondition----------------
+              
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.AreEqual(DeleteKeyBehaviours.DeleteRow,editableGrid.DeleteKeyBehaviour);
+            }
+
+            [Test]
+            public void TestDeleteKeyBehaviours_ChangesValue()
+            {
+                //---------------Set up test pack-------------------
+                IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(DeleteKeyBehaviours.DeleteRow, editableGrid.DeleteKeyBehaviour);
+                //---------------Execute Test ----------------------
+                editableGrid.DeleteKeyBehaviour = DeleteKeyBehaviours.ClearContents;
+                //---------------Test Result -----------------------
+                Assert.AreEqual(DeleteKeyBehaviours.ClearContents, editableGrid.DeleteKeyBehaviour);
+            }
+
+            [Test]
+            public void TestDeleteKeyBehaviours_DeletesSelectedCells_OneRow_WhenUserConfirmsDeletion()
+            {
+                //---------------Set up test pack-------------------
+                BusinessObjectCollection<MyBO> col;
+                IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
+                editableGrid.ConfirmDeletion = true;
+                bool delegateCalled = false;
+                editableGrid.CheckUserConfirmsDeletionDelegate += delegate
+                {
+                    delegateCalled = true;
+                    return true;
+                };
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(5, editableGrid.Rows.Count);
+                //---------------Execute Test ----------------------
+                editableGrid.Rows[0].Cells[0].Selected = true;
+                SimulateDeleteKeyPress(editableGrid);
+
+                //---------------Test Result -----------------------
+                Assert.IsTrue(delegateCalled);
+                Assert.AreEqual(4, editableGrid.Rows.Count);
+            }
+
+            [Test]
+            public void TestDeleteKeyBehaviours_DeletesSelectedCells_ThreeRows_WhenUserConfirmsDeletion()
+            {
+                //---------------Set up test pack-------------------
+                BusinessObjectCollection<MyBO> col;
+                IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
+                editableGrid.ConfirmDeletion = true;
+                bool delegateCalled = false;
+                editableGrid.CheckUserConfirmsDeletionDelegate += delegate
+                {
+                    delegateCalled = true;
+                    return true;
+                };
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(5, editableGrid.Rows.Count);
+                //---------------Execute Test ----------------------
+                editableGrid.Rows[0].Cells[0].Selected = true;
+                editableGrid.Rows[1].Cells[0].Selected = true;
+                editableGrid.Rows[2].Cells[0].Selected = true;
+                SimulateDeleteKeyPress(editableGrid);
+
+                //---------------Test Result -----------------------
+                Assert.IsTrue(delegateCalled);
+                Assert.AreEqual(2, editableGrid.Rows.Count);
+            }
+
+
+
+            [Test]
+            public void TestDeleteKeyBehaviours_DeletesNoCells_WhenNoneSelected_WhenUserConfirmsDeletion()
+            {
+                //---------------Set up test pack-------------------
+                BusinessObjectCollection<MyBO> col;
+                IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
+                editableGrid.ConfirmDeletion = true;
+                bool delegateCalled = false;
+                editableGrid.CheckUserConfirmsDeletionDelegate += delegate
+                {
+                    delegateCalled = true;
+                    return true;
+                };
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(5, editableGrid.Rows.Count);
+                Assert.AreEqual(0, editableGrid.SelectedCells.Count);
+                //---------------Execute Test ----------------------
+                
+                SimulateDeleteKeyPress(editableGrid);
+
+                //---------------Test Result -----------------------
+                Assert.IsTrue(delegateCalled);
+                Assert.AreEqual(5, editableGrid.Rows.Count);
+            }
+
+            [Test, Ignore("The thing that makes this work is breaking the other tests")]
+            public void TestDeleteKeyBehaviours_NoDeleteWhen_IsInEditMode()
+            {
+                  //---------------Set up test pack-------------------
+                BusinessObjectCollection<MyBO> col;
+                IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
+                editableGrid.ConfirmDeletion = true;
+                bool delegateCalled = false;
+                editableGrid.CheckUserConfirmsDeletionDelegate += delegate
+                {
+                    delegateCalled = true;
+                    return true;
+                };
+                editableGrid.CurrentCell = editableGrid.Rows[0].Cells[0];
+                editableGrid.BeginEdit(true);
+                //---------------Assert Precondition----------------
+                Assert.IsTrue(editableGrid.CurrentCell.IsInEditMode);
+                //---------------Execute Test ----------------------
+                SimulateDeleteKeyPress(editableGrid);
+
+                //---------------Test Result -----------------------
+                Assert.IsFalse(delegateCalled);
+               
+            }
+
+            [Test, Ignore("Selecting row not working")]
+            public void TestDeleteKeyBehaviours_NoDeleteWhen_SelectedRowsNotZero()
+            {
+                //---------------Set up test pack-------------------
+                BusinessObjectCollection<MyBO> col;
+                IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
+                editableGrid.ConfirmDeletion = true;
+                bool delegateCalled = false;
+                editableGrid.CheckUserConfirmsDeletionDelegate += delegate
+                {
+                    delegateCalled = true;
+                    return true;
+                };
+                editableGrid.Rows[1].Selected=true;
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(1, editableGrid.SelectedRows.Count);
+                //---------------Execute Test ----------------------
+                SimulateDeleteKeyPress(editableGrid);
+
+                //---------------Test Result -----------------------
+                Assert.IsFalse(delegateCalled);
+            }
+
+            [Test, Ignore("Revisit this")]
+            public void TestDeleteKeyBehaviours_NoDeleteWhen_CurrentRowNotSet()
+            {
+                //---------------Set up test pack-------------------
+                BusinessObjectCollection<MyBO> col;
+                IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
+                editableGrid.ConfirmDeletion = true;
+                bool delegateCalled = false;
+                editableGrid.CheckUserConfirmsDeletionDelegate += delegate
+                {
+                    delegateCalled = true;
+                    return true;
+                };
+                //---------------Assert Precondition----------------
+                Assert.IsNull(editableGrid.CurrentRow);
+                //---------------Execute Test ----------------------
+                SimulateDeleteKeyPress(editableGrid);
+
+                //---------------Test Result -----------------------
+                Assert.IsFalse(delegateCalled);
+            }
+
+
+
 
             //protected override IGridBase CreateGridBaseStub()
             //{
@@ -85,10 +451,11 @@ namespace Habanero.Test.UI.Base
                 return row.Cells[propName];
             }
 
-            protected override void AddControlToForm(IGridBase gridBase)
+            protected override IFormChilli AddControlToForm(IGridBase gridBase)
             {
-                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-                frm.Controls.Add((System.Windows.Forms.Control)gridBase);
+                IFormChilli frm = GetControlFactory().CreateForm();
+                frm.Controls.Add((IControlChilli)gridBase);
+                return frm;
             }
 
             protected override void AssertIsTextBoxColumnType(IDataGridViewColumn dataGridViewColumn)
@@ -112,6 +479,13 @@ namespace Habanero.Test.UI.Base
                     dataGridViewColumnWin.DataGridViewColumn);
             }
 
+            protected override IEditableGrid CreateEditableGrid()
+            {
+                EditableGridWin editableGridWin = new EditableGridWin();
+                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
+                frm.Controls.Add(editableGridWin);
+                return editableGridWin;
+            }
         }
 
         [TestFixture]
@@ -145,6 +519,14 @@ namespace Habanero.Test.UI.Base
                     dataGridViewColumnGiz.DataGridViewColumn);
             }
 
+            protected override IEditableGrid CreateEditableGrid()
+            {
+                EditableGridGiz editableGridGiz = new EditableGridGiz();
+                Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
+                frm.Controls.Add(editableGridGiz);
+                return editableGridGiz;
+            }
+
 //            protected override void AssertIsDateTimeColumnType(IDataGridViewColumn dataGridViewColumn)
 //            {
 //                DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz) dataGridViewColumn;
@@ -159,10 +541,11 @@ namespace Habanero.Test.UI.Base
             //    return gridBase;
             //}
 
-            protected override void AddControlToForm(IGridBase gridBase)
+            protected override IFormChilli AddControlToForm(IGridBase gridBase)
             {
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
                 frm.Controls.Add((Gizmox.WebGUI.Forms.Control) gridBase);
+                return null;
             }
 
             private static Gizmox.WebGUI.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
@@ -379,6 +762,20 @@ namespace Habanero.Test.UI.Base
             AssertIsComboBoxColumnType(dataGridViewColumn);    
         }
 
+        private ClassDef LoadMyBoDefaultClassDef()
+        {
+            ClassDef classDef;
+            if (GetControlFactory() is ControlFactoryGizmox)
+            {
+                classDef = MyBO.LoadDefaultClassDefGizmox();
+            }
+            else
+            {
+                classDef = MyBO.LoadDefaultClassDef();
+            }
+            return classDef;
+        }
+
         private static IBusinessObjectCollection GetCol_BO_1ComboBoxItem(ClassDef classDef)
         {
             IBusinessObjectCollection col = new BusinessObjectCollection<BusinessObject>(classDef);
@@ -427,6 +824,17 @@ namespace Habanero.Test.UI.Base
             col.Add(cp, cp2, cp3, cp4);
             return col;
         }
+
+        private IEditableGrid GetGridWith_5_Rows(out BusinessObjectCollection<MyBO> col)
+        {
+            LoadMyBoDefaultClassDef();
+            col = CreateCollectionWith_4_Objects();
+            IEditableGrid grid = CreateEditableGrid();
+            SetupGridColumnsForMyBo(grid);
+            grid.SetBusinessObjectCollection(col);
+            return grid;
+        }
+
         private static void SetupGridColumnsForMyBo(IEditableGrid editableGrid, IDataGridViewColumn dataGridViewColumn)
         {
             editableGrid.Columns.Add(dataGridViewColumn);
