@@ -181,7 +181,8 @@ namespace Habanero.Test.BO
 			//itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
 			mock.ReplayAll();
 
-            MyBO bo = (MyBO) classDef.CreateNewBusinessObject(itsConnection);
+            //MyBO bo = (MyBO) classDef.CreateNewBusinessObject(itsConnection);
+            MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
 			//bo.SetPropertyValue("TestProp", "Hello") ;
 			//bo.Save() ;
 

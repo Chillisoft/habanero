@@ -46,10 +46,6 @@ namespace Habanero.Test
             SetPropertyValue("PK3Prop", this.ID.GetObjectId());
         }
 
-        internal ContactPerson(IExpression searchExpression) : base(searchExpression)
-        {
-        }
-
         public ContactPerson(ClassDef classDef) : base(classDef)
         {
         }
@@ -60,10 +56,7 @@ namespace Habanero.Test
             {
                 return CreateClassDef();
             }
-            else
-            {
-                return ClassDef.ClassDefs[typeof (ContactPerson)];
-            }
+            return ClassDef.ClassDefs[typeof (ContactPerson)];
         }
 
         protected override ClassDef ConstructClassDef()

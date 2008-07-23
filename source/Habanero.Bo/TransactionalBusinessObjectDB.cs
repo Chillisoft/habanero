@@ -56,14 +56,11 @@ namespace Habanero.BO
             {
                 return GetInsertSql();
             }
-            else if(IsDeleted)
+            if(IsDeleted)
             {
                 return GetDeleteSql();
             }
-            else
-            {
-                return GetUpdateSql();
-            }
+            return GetUpdateSql();
         }
 
         /// <summary>
@@ -72,7 +69,7 @@ namespace Habanero.BO
         /// <returns>Returns a collection of sql statements</returns>
         private SqlStatementCollection GetInsertSql()
         {
-            InsertStatementGenerator gen = new InsertStatementGenerator(BusinessObject, BusinessObject.GetDatabaseConnection());
+            InsertStatementGenerator gen = new InsertStatementGenerator(BusinessObject, DatabaseConnection.CurrentConnection);
             return gen.Generate();
         }
         /// <summary>
@@ -81,7 +78,7 @@ namespace Habanero.BO
         /// <returns>Returns a collection of sql statements</returns>
         private SqlStatementCollection GetDeleteSql()
         {
-            DeleteStatementGenerator generator = new DeleteStatementGenerator(BusinessObject, BusinessObject.GetDatabaseConnection());
+            DeleteStatementGenerator generator = new DeleteStatementGenerator(BusinessObject, DatabaseConnection.CurrentConnection);
             return generator.Generate();
         }
         /// <summary>
@@ -90,14 +87,14 @@ namespace Habanero.BO
         /// <returns>Returns a collection of sql statements</returns>
         private SqlStatementCollection GetUpdateSql()
         {
-            UpdateStatementGenerator gen = new UpdateStatementGenerator(BusinessObject, BusinessObject.GetDatabaseConnection());
+            UpdateStatementGenerator gen = new UpdateStatementGenerator(BusinessObject, DatabaseConnection.CurrentConnection);
             return gen.Generate();
         }
 
         private bool HasDuplicateObjectInDatabase(BOKey boKey, ISqlStatement checkDuplicateSql, out string errMsg)
         {
             errMsg = "";
-            IDatabaseConnection databaseConnection = BusinessObject.GetDatabaseConnection();
+            IDatabaseConnection databaseConnection = DatabaseConnection.CurrentConnection;
             using (IDataReader dr = databaseConnection.LoadDataReader(checkDuplicateSql))
             {
                 if (dr.Read()) //Database object with these criteria already exists
@@ -142,10 +139,10 @@ namespace Habanero.BO
                 if (!boKey.IsDirtyOrNew()) continue;
                 if (boKey is BOPrimaryKey && (this.BusinessObject.ClassDef.HasObjectID)) continue;
 
-                IDatabaseConnection databaseConnection = BusinessObject.GetDatabaseConnection();
+                IDatabaseConnection databaseConnection = DatabaseConnection.CurrentConnection;
                 SqlStatement checkDuplicateSql = new SqlStatement(databaseConnection);
                 SelectStatementGenerator generator =
-                    new SelectStatementGenerator(this.BusinessObject, this.BusinessObject.GetDatabaseConnection());
+                    new SelectStatementGenerator(this.BusinessObject, databaseConnection);
                 checkDuplicateSql.Statement.Append(generator.GenerateDuplicateSelect());
 
                 // Special case where super class and subclass have same ID name causes ambiguous field name

@@ -116,24 +116,14 @@ namespace Habanero.BO
             T loadedBo = null;
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
             {
-                try
+                if (dr.Read())
                 {
-                    if (dr.Read())
-                    {
-                        loadedBo = LoadBOFromReader<T>(dr, selectQueryDB);
+                    loadedBo = LoadBOFromReader<T>(dr, selectQueryDB);
 
-                        //Checks to see if the loaded object is the base of a single table inheritance structure
-                        // and has a sub type
-                        correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
-                        if (correctSubClassDef == null) return loadedBo;
-                    }
-                }
-                finally
-                {
-                    if (dr != null && !dr.IsClosed)
-                    {
-                        dr.Close();
-                    }
+                    //Checks to see if the loaded object is the base of a single table inheritance structure
+                    // and has a sub type
+                    correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
+                    if (correctSubClassDef == null) return loadedBo;
                 }
             }
             // loads an object of the correct sub type (for single table inheritance)
@@ -455,7 +445,7 @@ namespace Habanero.BO
             if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(key.GetObjectId()))
             {
                 IBusinessObject boFromAllLoadedObjects =
-                    (IBusinessObject)BusinessObject.AllLoadedBusinessObjects()[key.GetObjectId()].Target;
+                    (IBusinessObject) BusinessObject.AllLoadedBusinessObjects()[key.GetObjectId()].Target;
                 if (boFromAllLoadedObjects == null)
                 {
                     BusinessObject.AllLoadedBusinessObjects().Remove(key.GetObjectId());
@@ -497,7 +487,7 @@ namespace Habanero.BO
                 }
                 i++;
             }
-            ((BusinessObject)bo).SetState(BOState.States.isNew, false);
+            ((BusinessObject) bo).SetState(BOState.States.isNew, false);
         }
     }
 }

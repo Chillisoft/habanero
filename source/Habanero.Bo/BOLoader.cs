@@ -73,7 +73,8 @@ namespace Habanero.BO
         internal virtual bool Refresh(BusinessObject obj, IExpression searchExpression)
         {
             bool result;
-            using (IDataReader dr = LoadDataReader(obj, obj.GetDatabaseConnection(), searchExpression))
+//            using (IDataReader dr = LoadDataReader(obj, obj.GetDatabaseConnection(), searchExpression))
+            using (IDataReader dr = LoadDataReader(obj, DatabaseConnection.CurrentConnection, searchExpression))
             {
                 if (dr.Read())
                 {
@@ -85,7 +86,7 @@ namespace Habanero.BO
                         "A Error has occured since the object you are trying to refresh has been deleted by another user " +
                         "There are no records in the database for the Class: " + obj.ClassDef.ClassName +
                         " identified by " + obj.ID + " \n" + obj.SelectSqlStatement(null) + " \n" +
-                        obj.GetDatabaseConnection().ErrorSafeConnectString());
+                        DatabaseConnection.CurrentConnection.ErrorSafeConnectString());
                 }
             }
             if (result)
@@ -238,7 +239,8 @@ namespace Habanero.BO
         internal BusinessObject GetBusinessObject(IBusinessObject obj, IExpression searchExpression)
         {
             IDatabaseConnection databaseConnection = DatabaseConnection.CurrentConnection;
-            IBusinessObject lTempBusObj = ((BusinessObject)obj).ClassDef.CreateNewBusinessObject(databaseConnection);
+            //IBusinessObject lTempBusObj = ((BusinessObject)obj).ClassDef.CreateNewBusinessObject(databaseConnection);
+            IBusinessObject lTempBusObj = ((BusinessObject)obj).ClassDef.CreateNewBusinessObject();
             BusinessObject returnBO = null;
             IDataReader dr = LoadDataReader((BusinessObject) lTempBusObj, databaseConnection, searchExpression);
             string discriminatorFieldValue = "";
@@ -668,27 +670,7 @@ namespace Habanero.BO
                                                  connection.RightFieldDelimiter);
             //searchExpression.SqlExpressionString(selectSql, DatabaseConnection.CurrentConnection.LeftFieldDelimiter,
             //                                     DatabaseConnection.CurrentConnection.RightFieldDelimiter);
-            return obj.GetDatabaseConnection().LoadDataReader(selectSql);
-        }
-
-        /// <summary>
-        /// Returns the database connection for the given business object
-        /// </summary>
-        /// <param name="bo">The business object</param>
-        /// <returns>Returns the connection</returns>
-        public IDatabaseConnection GetDatabaseConnection(BusinessObject bo)
-        {
-            return bo.GetDatabaseConnection();
-        }
-
-        /// <summary>
-        /// Sets the database connection for a given business object
-        /// </summary>
-        /// <param name="bo">The business object</param>
-        /// <param name="connection">The connection</param>
-        public void SetDatabaseConnection(BusinessObject bo, IDatabaseConnection connection)
-        {
-            bo.SetDatabaseConnection(connection);
+            return connection.LoadDataReader(selectSql);
         }
 
         /// <summary>

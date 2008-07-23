@@ -621,19 +621,6 @@ namespace Habanero.BO.ClassDefinition
             return InstantiateBusinessObject(); //this.InstantiateBusinessObjectWithClassDef();
         }
 
-        /// <summary>
-        /// Creates a new business object using this class definition
-        /// and a provided database connection
-        /// </summary>
-        /// <param name="conn">A database connection</param>
-        /// <returns>Returns the new object</returns>
-        public IBusinessObject CreateNewBusinessObject(IDatabaseConnection conn)
-        {
-            BusinessObject newObj = InstantiateBusinessObject(); //this.InstantiateBusinessObjectWithClassDef();
-            newObj.SetDatabaseConnection(conn);
-            return newObj;
-        }
-
         #endregion //Creating BOs
 
         #region Type Initialisation

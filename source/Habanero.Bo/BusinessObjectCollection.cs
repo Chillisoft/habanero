@@ -322,7 +322,7 @@ namespace Habanero.BO
                                                              IExpression criteriaExpression, int limit,
                                                              string extraSearchCriteriaLiteral, string orderByClause)
         {
-            IDatabaseConnection boDatabaseConnection = businessObject.GetDatabaseConnection();
+            IDatabaseConnection boDatabaseConnection =  DatabaseConnection.CurrentConnection;
             ISqlStatement loadSqlStatement = new SqlStatement(boDatabaseConnection);
             loadSqlStatement.Statement.Append(businessObject.GetSelectSql(limit));
             if (criteriaExpression != null)

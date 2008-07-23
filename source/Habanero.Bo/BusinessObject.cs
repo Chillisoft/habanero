@@ -22,7 +22,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -64,12 +63,11 @@ namespace Habanero.BO
 
         protected ClassDef _classDef;
         protected IConcurrencyControl _concurrencyControl;
-        protected IDatabaseConnection _connection;
         protected BOKeyCol _keysCol;
         protected IPrimaryKey _primaryKey;
         protected IRelationshipCol _relationshipCol;
         private ITransactionLog _transactionLog;
-        //private bool _hasAutoIncrementingField;
+
 
         #endregion //Fields
 
@@ -78,15 +76,7 @@ namespace Habanero.BO
         /// <summary>
         /// Constructor to initialise a new business object
         /// </summary>
-        public BusinessObject() : this((IDatabaseConnection) null)
-        {
-        }
-
-        /// <summary>
-        /// Constructor that specifies a database connection
-        /// </summary>
-        /// <param name="conn">A database connection</param>
-        protected internal BusinessObject(IDatabaseConnection conn) : this((ClassDef) null, conn)
+        public BusinessObject(): this(null)
         {
         }
 
@@ -94,20 +84,9 @@ namespace Habanero.BO
         /// Constructor that specifies a class definition
         /// </summary>
         /// <param name="def">The class definition</param>
-        protected internal BusinessObject(ClassDef def) : this(def, null)
+        protected internal BusinessObject(ClassDef def) 
         {
-        }
-
-        //TODO: Peter discuss options for removing the DB connection.
-        /// <summary>
-        /// Constructor that specifies a class definition and a database
-        /// connection
-        /// </summary>
-        /// <param name="def">The class definition</param>
-        /// <param name="conn">A database connection</param>
-        protected internal BusinessObject(ClassDef def, IDatabaseConnection conn)
-        {
-            Initialise(conn, def);
+            Initialise(def);
             Guid myID = Guid.NewGuid();
             if (_primaryKey != null)
             {
@@ -136,38 +115,6 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Constructor that specifies a search expression
-        /// </summary>
-        /// <param name="searchExpression">A search expression</param>
-        protected BusinessObject(IExpression searchExpression)
-            : this(searchExpression, null)
-        {
-        }
-
-        /// <summary>
-        /// Constructor that specifies a search expression and a database
-        /// connection
-        /// </summary>
-        /// <param name="searchExpression">A search expression</param>
-        /// <param name="conn">A database connection</param>
-        protected BusinessObject(IExpression searchExpression, IDatabaseConnection conn)
-        {
-            //todo: Check if not already loaded in object manager if already loaded raise error
-            InitialiseDatabaseConnection(conn);
-            _boState.IsNew = false;
-            _boState.IsDeleted = false;
-            _boState.IsDirty = false;
-            _boState.IsEditing = false;
-
-            ConstructFromClassDef(false);
-            if (!BOLoader.Instance.Load(this, searchExpression))
-            {
-                //If the item is not found then throw the appropriate exception
-                throw (new BusinessObjectNotFoundException());
-            }
-        }
-
-        /// <summary>
         /// A destructor for the object
         /// </summary>
         ~BusinessObject()
@@ -187,61 +134,27 @@ namespace Habanero.BO
                         AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
                     }
                 }
-                ReleaseWriteLocks();
-//               ReleaseReadLocks();
             }
             catch (Exception ex)
             {
                 log.Error("Error disposing BusinessObject.", ex);
             }
-            ReleaseWriteLocks();
-//-            ReleaseReadLocks();
-            //if (this.ID != null) AllLoadedBusinessObjects().Remove(this.ID.ToString());
-            //if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
-            //{
-            //    if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
-            //    {
-            //        AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
-            //    }
-            //    ReleaseWriteLocks();
-            //    ReleaseReadLocks();
-            //} catch(Exception ex)
-            //{
-            //    log.Error("Error disposing BusinessObject.", ex);
-            //}
-            //ReleaseWriteLocks();
-            ////ReleaseReadLocks();
+            finally
+            {
+                ReleaseWriteLocks();
+//-            ReleaseReadLocks();                
+            }
         }
 
-        private void Initialise(IDatabaseConnection conn, ClassDef def)
+        private void Initialise(ClassDef def)
         {
             _boState = new BOState(this);
             _boState.IsDeleted = false;
             _boState.IsDirty = false;
             _boState.IsEditing = false;
             _boState.IsNew = true;
-            InitialiseDatabaseConnection(conn);
-            if (def != null)
-            {
-                _classDef = def;
-            }
-            else
-            {
-                _classDef = ClassDef.ClassDefs[GetType()];
-            }
+            _classDef = def ?? ClassDef.ClassDefs[GetType()];
             ConstructFromClassDef(true);
-        }
-
-        protected void InitialiseDatabaseConnection(IDatabaseConnection conn)
-        {
-            if (conn != null)
-            {
-                _connection = conn;
-            }
-            else
-            {
-                _connection = DefaultDatabaseConnection();
-            }
         }
 
         #endregion //Constructors
@@ -272,6 +185,12 @@ namespace Habanero.BO
                 classDefToUseForPrimaryKey = classDefToUseForPrimaryKey.SuperClassClassDef;
             }
 
+            SetPrimaryKeyForInheritedClass(classDefToUseForPrimaryKey);
+            _relationshipCol = _classDef.CreateRelationshipCol(_boPropCol, this);
+        }
+
+        private void SetPrimaryKeyForInheritedClass(ClassDef classDefToUseForPrimaryKey)
+        {
             if ((classDefToUseForPrimaryKey.SuperClassDef == null) ||
                 (classDefToUseForPrimaryKey.SuperClassDef.ORMapping == ORMapping.ConcreteTableInheritance) ||
                 (_classDef.SuperClassDef.ORMapping == ORMapping.ClassTableInheritance))
@@ -289,7 +208,6 @@ namespace Habanero.BO
                                   classDefToUseForPrimaryKey.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_boPropCol);
                 }
             }
-            _relationshipCol = _classDef.CreateRelationshipCol(_boPropCol, this);
         }
 
         /// <summary>
@@ -382,10 +300,7 @@ namespace Habanero.BO
                 {
                     return classDefToUseForPrimaryKey.SuperClassClassDef.TableName;
                 }
-                else
-                {
-                    return classDefToUseForPrimaryKey.TableName;
-                }
+                return classDefToUseForPrimaryKey.TableName;
             }
         }
 
@@ -540,10 +455,9 @@ namespace Habanero.BO
 
             if (Props.Contains(propName))
                 return Props[propName].Value;
-            else
-                throw new InvalidPropertyNameException("Property '" + propName +
-                                                       "' does not exist on a business object of type '" +
-                                                       GetType().Name + "'");
+            throw new InvalidPropertyNameException("Property '" + propName +
+                                                   "' does not exist on a business object of type '" +
+                                                   GetType().Name + "'");
         }
 
         /// <summary>
@@ -831,7 +745,7 @@ namespace Habanero.BO
 
                 return myGuid;
             }
-            else if (ClassDef.GetPropDef(propName).HasLookupList())
+            if (ClassDef.GetPropDef(propName).HasLookupList())
             {
                 Dictionary<string, object> lookupList = ClassDef.GetLookupList(propName).GetLookupList();
                 foreach (KeyValuePair<string, object> pair in lookupList)
@@ -845,15 +759,15 @@ namespace Habanero.BO
                     {
                         return pair.Key;
                     }
-                    else if (pair.Value is IBusinessObject)
+                    if (pair.Value is IBusinessObject)
                     {
                         BusinessObject bo = (BusinessObject) pair.Value;
                         if (String.Compare(bo.ID.ToString(), GetPropertyValueString(propName)) == 0)
                         {
                             return pair.Value.ToString();
                         }
-                        else if (bo.ID[0].Value != null &&
-                                 String.Compare(bo.ID[0].Value.ToString(), GetPropertyValueString(propName)) == 0)
+                        if (bo.ID[0].Value != null &&
+                            String.Compare(bo.ID[0].Value.ToString(), GetPropertyValueString(propName)) == 0)
                         {
                             return pair.Value.ToString();
                         }
@@ -861,10 +775,7 @@ namespace Habanero.BO
                 }
                 return propertyValue;
             }
-            else
-            {
-                return propertyValue;
-            }
+            return propertyValue;
         }
 
         /// <summary>
@@ -876,21 +787,14 @@ namespace Habanero.BO
         internal string GetPropertyStringValueToDisplay(string propName)
         {
             object val = GetPropertyValueToDisplay(propName);
-            if (val != null)
-            {
-                return val.ToString();
-            }
-            else
-            {
-                return "";
-            }
+            return val != null ? val.ToString() : "";
         }
 
         internal static bool PropValueHasChanged(object propValue, object newPropValue)
         {
             if (propValue == newPropValue) return false;
             if (propValue != null) return !propValue.Equals(newPropValue);
-            else return (newPropValue != null && !string.IsNullOrEmpty(Convert.ToString(newPropValue)));
+            return (newPropValue != null && !string.IsNullOrEmpty(Convert.ToString(newPropValue)));
         }
 
         /// <summary>
@@ -907,14 +811,6 @@ namespace Habanero.BO
         #endregion //Editing Property Values
 
         #region Persistance
-
-        /// <summary>
-        /// Returns the database connection string
-        /// </summary>
-        protected virtual string ConnectionString
-        {
-            get { return _connection.ConnectionString; }
-        }
 
         internal bool HasAutoIncrementingField
         {
@@ -971,33 +867,6 @@ namespace Habanero.BO
         protected virtual IDatabaseConnection DefaultDatabaseConnection()
         {
             return DatabaseConnection.CurrentConnection;
-        }
-
-        /// <summary>
-        /// Returns the database connection
-        /// </summary>
-        /// <returns>Returns an IDbConnection object</returns>
-        protected IDbConnection GetConnection()
-        {
-            return _connection.GetConnection();
-        }
-
-        /// <summary>
-        /// Returns the database connection
-        /// </summary>
-        /// <returns>Returns an IDatabaseConnection object</returns>
-        internal IDatabaseConnection GetDatabaseConnection()
-        {
-            return _connection;
-        }
-
-        /// <summary>
-        /// Sets the database connection
-        /// </summary>
-        /// <param name="connection">The database connection to set to</param>
-        internal void SetDatabaseConnection(IDatabaseConnection connection)
-        {
-            _connection = connection;
         }
 
         /// <summary>
@@ -1282,7 +1151,7 @@ namespace Habanero.BO
         /// <returns>Returns a sql string</returns>
         protected virtual string SelectSqlWithNoSearchClause()
         {
-            return new SelectStatementGenerator(this, _connection).Generate(-1);
+            return new SelectStatementGenerator(this, DatabaseConnection.CurrentConnection).Generate(-1);
         }
 
         /// <summary>
@@ -1313,7 +1182,7 @@ namespace Habanero.BO
         /// <returns>Returns a sql string</returns>
         protected internal string GetSelectSql(int limit)
         {
-            return new SelectStatementGenerator(this, _connection).Generate(limit);
+            return new SelectStatementGenerator(this, DatabaseConnection.CurrentConnection).Generate(limit);
         }
 
         /// <summary>

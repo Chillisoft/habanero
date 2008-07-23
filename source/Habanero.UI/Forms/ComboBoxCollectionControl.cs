@@ -225,10 +225,7 @@ namespace Habanero.UI.Forms
                 _oldSelectedIndex = -1;
                 return;
             }
-            else
-            {
-                this._panelFactoryInfo.Panel.Enabled = true;
-            }
+            this._panelFactoryInfo.Panel.Enabled = true;
             if (_oldSelectedIndex != -1 && _oldSelectedIndex != _collectionComboBox.SelectedIndex &&
                 SelectedBusinessObject.State.IsDirty)
             {
@@ -240,9 +237,10 @@ namespace Habanero.UI.Forms
                         _collectionComboBox.SelectedIndex = _oldSelectedIndex;
                     }
                 } else {
-                    if (_databaseConnection != null) {
-                        BOLoader.Instance.SetDatabaseConnection(SelectedBusinessObject, _databaseConnection);
-                    }
+                    //TODO: removed by soriya/brett
+                    //if (_databaseConnection != null) {
+                    //    BOLoader.Instance.SetDatabaseConnection(SelectedBusinessObject, _databaseConnection);
+                    //}
                     
                     SelectedBusinessObject.Save();
                 }

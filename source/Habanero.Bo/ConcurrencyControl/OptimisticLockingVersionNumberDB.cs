@@ -22,6 +22,7 @@ using System.Data;
 using System.Security;
 using System.Security.Principal;
 using Habanero.Base;
+using Habanero.DB;
 
 namespace Habanero.BO.ConcurrencyControl
 {
@@ -114,7 +115,7 @@ namespace Habanero.BO.ConcurrencyControl
         private void CheckConcurrencyControl(VerificationStage verificationStage)
         {
             if (_busObj.State.IsNew) return;
-            using (IDataReader dr = BOLoader.Instance.LoadDataReader(_busObj, _busObj.GetDatabaseConnection(), null)
+            using (IDataReader dr = BOLoader.Instance.LoadDataReader(_busObj, DatabaseConnection.CurrentConnection,  null)
                 )
             {
                 // If this object no longer exists in the database

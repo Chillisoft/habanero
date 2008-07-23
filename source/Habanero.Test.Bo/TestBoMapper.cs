@@ -135,7 +135,8 @@ namespace Habanero.Test.BO
 			ClassDef.ClassDefs.Clear();
 			itsClassDef = MyBO.LoadClassDefWithRelationship();
 			itsRelatedClassDef = MyRelatedBo.LoadClassDef();
-			MyBO bo1 = (MyBO)itsClassDef.CreateNewBusinessObject(connection);
+			//MyBO bo1 = (MyBO)itsClassDef.CreateNewBusinessObject(connection);
+			MyBO bo1 = (MyBO)itsClassDef.CreateNewBusinessObject();
 			MyRelatedBo relatedBo = (MyRelatedBo)itsRelatedClassDef.CreateNewBusinessObject();
 			Guid myRelatedBoGuid = relatedBo.ID.GetAsGuid();
 			bo1.SetPropertyValue("RelatedID", myRelatedBoGuid);
@@ -208,7 +209,8 @@ namespace Habanero.Test.BO
 			ClassDef.ClassDefs.Clear();
 			itsClassDef = MyBO.LoadClassDefWithRelationship();
 			itsRelatedClassDef = MyRelatedBo.LoadClassDef();
-			MyBO bo1 = (MyBO)itsClassDef.CreateNewBusinessObject(connection);
+			//MyBO bo1 = (MyBO)itsClassDef.CreateNewBusinessObject(connection);
+			MyBO bo1 = (MyBO)itsClassDef.CreateNewBusinessObject();
 			MyRelatedBo relatedBo = (MyRelatedBo)itsRelatedClassDef.CreateNewBusinessObject();
 			//			Guid myRelatedBoGuid = new Guid(relatedBo.ID.GetObjectId().Substring(3, 38));
 			//			bo1.SetPropertyValue("RelatedID", myRelatedBoGuid);
@@ -234,7 +236,8 @@ namespace Habanero.Test.BO
 
             ClassDef.ClassDefs.Clear();
             itsClassDef = MyBO.LoadDefaultClassDef();
-            MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject(connection);
+            //MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject(connection);
+            MyBO bo1 = (MyBO)itsClassDef.CreateNewBusinessObject();
 
             BOMapper mapper = new BOMapper(bo1);
             Assert.AreEqual("MyNameIsMyBo", mapper.GetPropertyValueToDisplay("-MyName-"));

@@ -118,7 +118,7 @@ namespace Habanero.BO.ConcurrencyControl
             if (!_busObj.State.IsNew) //you cannot have concurrency control issues on a new object 
             // all you can have is duplicate data issues.
             {
-                using (IDataReader dr = BOLoader.Instance.LoadDataReader(_busObj, _busObj.GetDatabaseConnection(), null))
+                using (IDataReader dr = BOLoader.Instance.LoadDataReader(_busObj, DatabaseConnection.CurrentConnection, null))
                 {
                     // If this object no longer exists in the database
                     // then we have a concurrency conflict since it has been deleted by another process.
@@ -232,7 +232,7 @@ namespace Habanero.BO.ConcurrencyControl
         /// <returns>Returns a collection of sql statements</returns>
         private SqlStatementCollection GetUpdateSql()
         {
-            UpdateStatementGenerator gen = new UpdateStatementGenerator(_busObj, _busObj.GetDatabaseConnection());
+            UpdateStatementGenerator gen = new UpdateStatementGenerator(_busObj, DatabaseConnection.CurrentConnection);
             return gen.Generate();
         }
 

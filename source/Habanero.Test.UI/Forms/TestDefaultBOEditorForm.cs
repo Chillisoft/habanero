@@ -55,7 +55,8 @@ namespace Habanero.Test.UI.Forms
         {
             _databaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
             IDatabaseConnection conn = (IDatabaseConnection) _databaseConnectionMockControl.MockInstance;
-            _bo = _classDefMyBo.CreateNewBusinessObject(conn);
+            //_bo = _classDefMyBo.CreateNewBusinessObject(conn);
+            _bo = _classDefMyBo.CreateNewBusinessObject();
             _defaultBOEditorForm = new DefaultBOEditorForm((BusinessObject) _bo);
         }
 

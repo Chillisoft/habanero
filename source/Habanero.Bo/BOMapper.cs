@@ -58,7 +58,8 @@ namespace Habanero.BO
             //return def.GetLookupList(_businessObject.GetDatabaseConnection());
             if (propDef != null && propDef.LookupList != null && propDef.HasLookupList())
             {
-                return propDef.LookupList.GetLookupList(_businessObject.GetDatabaseConnection());
+//                return propDef.LookupList.GetLookupList(_businessObject.GetDatabaseConnection());
+                return propDef.LookupList.GetLookupList();
             }
             else
             {

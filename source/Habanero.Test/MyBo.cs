@@ -1110,10 +1110,6 @@ namespace Habanero.Test
         {
         }
 
-        public MyRelatedBo(ClassDef def, IDatabaseConnection conn) : base(def, conn)
-        {
-        }
-
         protected override ClassDef ConstructClassDef()
         {
             return itsClassDef;

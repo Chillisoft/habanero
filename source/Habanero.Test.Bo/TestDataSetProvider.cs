@@ -77,11 +77,13 @@ namespace Habanero.Test.BO
 			itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
 			itsConnection = (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
             _collection = new BusinessObjectCollection<BusinessObject>(_classDef);
-            itsBo1 = _classDef.CreateNewBusinessObject(itsConnection);
+            //itsBo1 = _classDef.CreateNewBusinessObject(itsConnection);
+            itsBo1 = _classDef.CreateNewBusinessObject();
             itsBo1.SetPropertyValue("TestProp", "bo1prop1");
             itsBo1.SetPropertyValue("TestProp2", "s1");
             _collection.Add(itsBo1);
-            itsBo2 = _classDef.CreateNewBusinessObject(itsConnection);
+            //itsBo2 = _classDef.CreateNewBusinessObject(itsConnection);
+            itsBo2 = _classDef.CreateNewBusinessObject();
             itsBo2.SetPropertyValue("TestProp", "bo2prop1");
             itsBo2.SetPropertyValue("TestProp2", "s2");
             _collection.Add(itsBo2);

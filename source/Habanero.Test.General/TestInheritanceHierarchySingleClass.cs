@@ -481,7 +481,7 @@ namespace Habanero.Test.General
             //connectionControl.ExpectAndReturn("ExecuteSql", 3, new object[] { null, null });
 
             FilledCircleInheritsCircleNoPK myCircle = new FilledCircleInheritsCircleNoPK();
-            myCircle.SetDatabaseConnection(connection);
+//            myCircle.SetDatabaseConnection(connection);
             TransactionCommitterStub committer = new TransactionCommitterStub();
             committer.AddBusinessObject(myCircle);
             committer.CommitTransaction();

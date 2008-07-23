@@ -53,7 +53,8 @@ namespace Habanero.Test.UI.Forms
             ClassDef.ClassDefs.Clear();
             ClassDef itsClassDef = MyBO.LoadClassDefWithRelationship();
             ClassDef itsRelatedClassDef = MyRelatedBo.LoadClassDef();
-            itsMyBo = (MyBO) itsClassDef.CreateNewBusinessObject(connection);
+            //itsMyBo = (MyBO) itsClassDef.CreateNewBusinessObject(connection);
+            itsMyBo = (MyBO) itsClassDef.CreateNewBusinessObject();
             MyRelatedBo relatedBo = (MyRelatedBo) itsRelatedClassDef.CreateNewBusinessObject();
             Guid myRelatedBoGuid = relatedBo.ID.GetAsGuid();
             itsMyBo.SetPropertyValue("RelatedID", myRelatedBoGuid);

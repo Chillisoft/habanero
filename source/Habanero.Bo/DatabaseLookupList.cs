@@ -302,7 +302,7 @@ namespace Habanero.BO
         /// <returns>Returns a collection of string-Guid pairs</returns>
         public Dictionary<string, object> GetLookupList(BusinessObject bo)
         {
-            return this.GetLookupList(bo.GetDatabaseConnection());
+            return this.GetLookupList(DatabaseConnection.CurrentConnection);
         }
 		 
     }

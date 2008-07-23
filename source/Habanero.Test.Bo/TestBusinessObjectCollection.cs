@@ -159,9 +159,12 @@ namespace Habanero.Test.BO
         public void TestCreateLoadSqlStatement_LimitClauseAtBeginning()
         {
             MyBO bo1 = new MyBO();
-            bo1.SetDatabaseConnection(new MyDatabaseConnection());
+            MyDatabaseConnectionStub databaseConnectionStub = new MyDatabaseConnectionStub();
+            IDatabaseConnection connection = DatabaseConnection.CurrentConnection;
+            DatabaseConnection.CurrentConnection = databaseConnectionStub;
             ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
                 bo1, ClassDef.ClassDefs[typeof(MyBO)], null, 10, null, null);
+            DatabaseConnection.CurrentConnection = connection;
             Assert.AreEqual("SELECT TOP 10 MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO", statement.Statement.ToString());
         }
 
@@ -171,7 +174,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             MyBO.LoadDefaultClassDef();
             MyBO bo1 = new MyBO();
-            string criteria = "TestProp = ''";
+            const string criteria = "TestProp = ''";
             IExpression expression = Expression.CreateExpression(criteria);
             ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
                 bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null, null);
@@ -553,9 +556,9 @@ namespace Habanero.Test.BO
             Assert.IsTrue(cp1.State.IsDirty);
         }
 
-        public class MyDatabaseConnection : DatabaseConnection
+        public class MyDatabaseConnectionStub : DatabaseConnection
         {
-            public MyDatabaseConnection() : base("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection") { }
+            public MyDatabaseConnectionStub() : base("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection") { }
 
             public override string GetLimitClauseForBeginning(int limit)
             {
