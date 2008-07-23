@@ -453,8 +453,8 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
-					<property  name=""Surname"" compulsory=""true"" />
-                    <property  name=""FirstName"" compulsory=""true"" />
+					<property  name=""Surname"" compulsory=""true"" databaseField=""Surname_field"" />
+                    <property  name=""FirstName"" compulsory=""true"" databaseField=""FirstName_field"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
                     <property  name=""OrganisationID"" type=""Guid"" >
                       <businessObjectLookupList class=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" />

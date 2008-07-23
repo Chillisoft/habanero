@@ -360,7 +360,7 @@ namespace Habanero.UI.Win
 
         public IDataGridViewImageColumn CreateDataGridViewImageColumn()
         {
-            return null; //TODO port : return somethind
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -369,14 +369,12 @@ namespace Habanero.UI.Win
         /// <returns></returns>
         public IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn()
         {
-            //           return new DataGridViewCheckBoxColumnWin();
-            return null;
+            return new DataGridViewCheckBoxColumnWin(new DataGridViewCheckBoxColumn());
         }
 
         public IDataGridViewComboBoxColumn CreateDataGridViewComboBoxColumn()
         {
-            //           return new DataGridViewComboBoxColumn();
-            return null;
+            return new DataGridViewComboBoxColumnWin(new DataGridViewComboBoxColumn());
         }
 
         /// <summary>
@@ -425,7 +423,7 @@ namespace Habanero.UI.Win
 
         public IEditableGridButtonsControl CreateEditableGridButtonsControl()
         {
-            throw new NotImplementedException();
+            return new EditableGridButtonsControlWin(this);
         }
 
         public IOKCancelDialogFactory CreateOKCancelDialogFactory()

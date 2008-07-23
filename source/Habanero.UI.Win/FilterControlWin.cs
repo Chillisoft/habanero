@@ -122,7 +122,9 @@ namespace Habanero.UI.Win
         /// </summary>
         public void ApplyFilter()
         {
-            throw new NotImplementedException("not implemented on win");
+            //TODO: this is used by TestEditableGridControl, but should this behaviour be tested in the Win version?
+            //   ie. it gets the tests working, but perhaps the tests should be adapted depending on whether its win or giz
+            FireFilterEvent();
         }
 
         public string HeaderText
@@ -134,6 +136,14 @@ namespace Habanero.UI.Win
         public int CountOfFilters
         {
             get { return _filterControlManager.CountOfFilters; }
+        }
+
+        private void FireFilterEvent()
+        {
+            if (Filter != null)
+            {
+                Filter(this, new EventArgs());
+            }
         }
 
         public IButton FilterButton

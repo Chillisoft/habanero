@@ -61,35 +61,58 @@ namespace Habanero.Test.UI.Base
         protected abstract void AddControlToForm(IGridBase cntrl);
 
 
-        //[TestFixture]
-        //public class TestEditableGridWin : TestEditableGrid
-        //{
-        //    protected override IControlFactory GetControlFactory()
-        //    {
-        //        return new ControlFactoryWin();
-        //    }
+        [TestFixture]
+        public class TestEditableGridWin : TestEditableGrid
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
 
-        //    //protected override IGridBase CreateGridBaseStub()
-        //    //{
-        //    //    GridBaseWinStub gridBase = new GridBaseWinStub();
-        //    //    System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-        //    //    frm.Controls.Add(gridBase);
-        //    //    return gridBase;
-        //    //}
+            //protected override IGridBase CreateGridBaseStub()
+            //{
+            //    GridBaseWinStub gridBase = new GridBaseWinStub();
+            //    System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
+            //    frm.Controls.Add(gridBase);
+            //    return gridBase;
+            //}
 
-        //    private static System.Windows.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
-        //                                                                 IGridBase gridBase)
-        //    {
-        //        System.Windows.Forms.DataGridView dgv = (System.Windows.Forms.DataGridView) gridBase;
-        //        System.Windows.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
-        //        return row.Cells[propName];
-        //    }
+            private static System.Windows.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
+                                                                         IGridBase gridBase)
+            {
+                System.Windows.Forms.DataGridView dgv = (System.Windows.Forms.DataGridView)gridBase;
+                System.Windows.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
+                return row.Cells[propName];
+            }
 
-        //    protected override void AddControlToForm(IGridBase gridBase)
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
+            protected override void AddControlToForm(IGridBase gridBase)
+            {
+                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
+                frm.Controls.Add((System.Windows.Forms.Control)gridBase);
+            }
+
+            protected override void AssertIsTextBoxColumnType(IDataGridViewColumn dataGridViewColumn)
+            {
+                DataGridViewColumnWin dataGridViewColumnWin = (DataGridViewColumnWin)dataGridViewColumn;
+                Assert.IsInstanceOfType(typeof(System.Windows.Forms.DataGridViewTextBoxColumn),
+                    dataGridViewColumnWin.DataGridViewColumn);
+            }
+
+            protected override void AssertIsCheckBoxColumnType(IDataGridViewColumn dataGridViewColumn)
+            {
+                DataGridViewColumnWin dataGridViewColumnWin = (DataGridViewColumnWin)dataGridViewColumn;
+                Assert.IsInstanceOfType(typeof(System.Windows.Forms.DataGridViewCheckBoxColumn),
+                    dataGridViewColumnWin.DataGridViewColumn);
+            }
+
+            protected override void AssertIsComboBoxColumnType(IDataGridViewColumn dataGridViewColumn)
+            {
+                DataGridViewColumnWin dataGridViewColumnWin = (DataGridViewColumnWin)dataGridViewColumn;
+                Assert.IsInstanceOfType(typeof(System.Windows.Forms.DataGridViewComboBoxColumn),
+                    dataGridViewColumnWin.DataGridViewColumn);
+            }
+
+        }
 
         [TestFixture]
         public class TestEditableGridGiz : TestEditableGrid

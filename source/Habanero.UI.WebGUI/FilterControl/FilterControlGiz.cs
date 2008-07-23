@@ -42,6 +42,7 @@ namespace Habanero.UI.WebGUI
         private readonly GroupBoxGiz _gbox;
         private FilterModes _filterMode; //Note all this should move up to windows need to decide buttons etc on win
         private IPanel _controlPanel;
+
         public FilterControlGiz(IControlFactory controlFactory)
         {
             _controlFactory = controlFactory;

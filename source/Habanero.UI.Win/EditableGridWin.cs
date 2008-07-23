@@ -61,7 +61,10 @@ namespace Habanero.UI.Win
         /// </summary>
         public void SaveChanges()
         {
-            throw new System.NotImplementedException();
+            if (this.DataSource is DataView)
+            {
+                ((DataView)this.DataSource).Table.AcceptChanges();
+            }
         }
     }
 }

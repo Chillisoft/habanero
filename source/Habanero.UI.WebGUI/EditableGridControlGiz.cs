@@ -60,11 +60,7 @@ namespace Habanero.UI.WebGUI
         {
             _buttons.CancelClicked += Buttons_CancelClicked;
             _buttons.SaveClicked += Buttons_SaveClicked;
-            //_buttons.DeleteClicked += Buttons_DeleteClicked;
-            //_buttons.Name = "ButtonControl";
         }
-
-      
 
         private void InitialiseFilterControl()
         {

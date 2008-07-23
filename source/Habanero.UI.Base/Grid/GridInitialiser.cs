@@ -165,31 +165,37 @@ namespace Habanero.UI.Base
                 IDataGridViewColumn col;
                 if (gridColDef.GridControlTypeName == "DataGridViewComboBoxColumn")
                 {
-                    IDataGridViewComboBoxColumn comboBoxCol = _controlFactory.CreateDataGridViewComboBoxColumn();
-                    ////this._gridControl.Grid.Columns.Add(comboBoxCol);
+                IDataGridViewComboBoxColumn comboBoxCol = _controlFactory.CreateDataGridViewComboBoxColumn();
+                //this._gridControl.Grid.Columns.Add(comboBoxCol);
 
-                    //IPropDef propDef = GetPropDef(classDef, gridColDef);
-                    //ILookupList source = propDef.LookupList;  //TODO: what if lookuplist is null?
-                    //    //(ILookupList)_dataTable.Columns[colNum].ExtendedProperties["LookupList"];
-                    //if (source != null)
-                    //{
-                    //    DataTable table = new DataTable();
-                    //    table.Columns.Add("id");
-                    //    table.Columns.Add("str");
+                IPropDef propDef = GetPropDef(classDef, gridColDef);
+                ILookupList source = propDef.LookupList;
+                //(ILookupList)_dataTable.Columns[colNum].ExtendedProperties["LookupList"];
+                if (source != null)
+                {
+                    DataTable table = new DataTable();
+                    table.Columns.Add("id");
+                    table.Columns.Add("str");
 
-                    //    table.LoadDataRow(new object[] { "", "" }, true);
-                    //    foreach (KeyValuePair<string, object> pair in source.GetLookupList())
-                    //    {
-                    //        table.LoadDataRow(new object[] { pair.Value, pair.Key }, true);
-                    //    }
+                    table.LoadDataRow(new object[] { "", "" }, true);
+                    foreach (KeyValuePair<string, object> pair in source.GetLookupList())
+                    {
+                        table.LoadDataRow(new object[] { pair.Value, pair.Key }, true);
+                    }
 
-                    //    comboBoxCol.DataSource = table;
-                    //    comboBoxCol.ValueMember = "str";
-                    //    comboBoxCol.DisplayMember = "str";
-                    //}
-                    //comboBoxCol.DataPropertyName = gridColDef.PropertyName; //dataColumn.ColumnName;
-                    col = comboBoxCol;
-                    this._gridControl.Grid.Columns.Add(col);
+                    comboBoxCol.DataSource = table;
+                    //Bug: This null check has been placed because of a Gizmox bug 
+                    //  We posted this at: http://www.visualwebgui.com/Forums/tabid/364/forumid/29/threadid/12420/scope/posts/Default.aspx
+                    //  It is causing a StackOverflowException on ValueMember because the DataSource is still null
+                    if (comboBoxCol.DataSource != null)
+                    {
+                        comboBoxCol.ValueMember = "str";
+                        comboBoxCol.DisplayMember = "str";
+                    }
+                }
+                comboBoxCol.DataPropertyName = gridColDef.PropertyName; //dataColumn.ColumnName;
+                col = comboBoxCol;
+                this._gridControl.Grid.Columns.Add(col);
                 }
                 else if (gridColDef.GridControlTypeName == "DataGridViewCheckBoxColumn")
                 {

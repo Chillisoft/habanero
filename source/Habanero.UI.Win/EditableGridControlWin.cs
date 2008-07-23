@@ -17,7 +17,9 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.Base.FilterControl;
@@ -30,6 +32,7 @@ namespace Habanero.UI.Win
         private readonly IControlFactory _controlFactory;
         private readonly IEditableGrid _grid;
         private readonly EditableGridControlManager _editableGridManager;
+        private IEditableGridButtonsControl _buttons;
         private IFilterControl _filterControl;
         private string _orderBy;
         private string _additionalSearchCriteria;
@@ -39,8 +42,49 @@ namespace Habanero.UI.Win
             _controlFactory = controlFactory;
             _editableGridManager = new EditableGridControlManager(this, controlFactory);
             _grid = _controlFactory.CreateEditableGrid();
+            _buttons = _controlFactory.CreateEditableGridButtonsControl();
+            _filterControl = _controlFactory.CreateFilterControl();
+            InitialiseButtons();
+            InitialiseFilterControl();
+
             BorderLayoutManager manager = controlFactory.CreateBorderLayoutManager(this);
             manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
+        }
+
+        private void InitialiseButtons()
+        {
+            _buttons.CancelClicked += Buttons_CancelClicked;
+            _buttons.SaveClicked += Buttons_SaveClicked;
+        }
+
+        private void InitialiseFilterControl()
+        {
+            _filterControl.Filter += _filterControl_OnFilter;
+        }
+
+        private void _filterControl_OnFilter(object sender, EventArgs e)
+        {
+            //this.Grid.CurrentPage = 1;
+            if (FilterMode == FilterModes.Search)
+            {
+                BusinessObjectCollection<BusinessObject> collection =
+                    new BusinessObjectCollection<BusinessObject>(this.ClassDef);
+                string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
+                if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
+                {
+                    if (!string.IsNullOrEmpty(searchClause))
+                    {
+                        searchClause += " AND ";
+                    }
+                    searchClause += AdditionalSearchCriteria;
+                }
+                collection.Load(searchClause, OrderBy);
+                SetBusinessObjectCollection(collection);
+            }
+            else
+            {
+                this.Grid.ApplyFilter(_filterControl.GetFilterClause());
+            }
         }
 
         public IGridBase Grid
@@ -82,12 +126,45 @@ namespace Habanero.UI.Win
         /// to be shown in the grid</param>
         public void SetBusinessObjectCollection(IBusinessObjectCollection boCollection)
         {
-            throw new System.NotImplementedException();
+            if (boCollection == null)
+            {
+                //TODO: weakness where user could call _control.Grid.Set..(null) directly and bypass the disabling.
+                _grid.SetBusinessObjectCollection(null);
+                _grid.AllowUserToAddRows = false;
+                this.Buttons.Enabled = false;
+                this.FilterControl.Enabled = false;
+                return;
+            }
+            if (this.ClassDef == null)
+            {
+                Initialise(boCollection.ClassDef);
+            }
+            else
+            {
+                if (this.ClassDef != boCollection.ClassDef)
+                {
+                    throw new ArgumentException(
+                        "You cannot call set collection for a collection that has a different class def than is initialised");
+                }
+            }
+            //if (this.BusinessObjectCreator is DefaultBOCreator)
+            //{
+            //    this.BusinessObjectCreator = new DefaultBOCreator(boCollection);
+            //}
+            //if (this.BusinessObjectCreator == null) this.BusinessObjectCreator = new DefaultBOCreator(boCollection);
+            //if (this.BusinessObjectEditor == null) this.BusinessObjectEditor = new DefaultBOEditor(_controlFactory);
+            //if (this.BusinessObjectDeletor == null) this.BusinessObjectDeletor = new DefaultBODeletor();
+
+            _grid.SetBusinessObjectCollection(boCollection);
+
+            this.Buttons.Enabled = true;
+            this.FilterControl.Enabled = true;
+            _grid.AllowUserToAddRows = true;
         }
 
         public IEditableGridButtonsControl Buttons
         {
-            get { throw new System.NotImplementedException(); }
+            get { return _buttons; }
         }
 
         /// <summary>
@@ -127,6 +204,16 @@ namespace Habanero.UI.Win
         {
             get { return _additionalSearchCriteria; }
             set { _additionalSearchCriteria = value; }
+        }
+
+        private void Buttons_CancelClicked(object sender, EventArgs e)
+        {
+            this._grid.RejectChanges();
+        }
+
+        private void Buttons_SaveClicked(object sender, EventArgs e)
+        {
+            this._grid.SaveChanges();
         }
     }
 }
