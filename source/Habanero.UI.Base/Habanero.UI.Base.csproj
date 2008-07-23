@@ -96,6 +96,7 @@
     <Compile Include="IListViewItem.cs" />
     <Compile Include="IListViewItemCollection.cs" />
     <Compile Include="ISelectedListViewItemCollection.cs" />
+    <Compile Include="ReadOnlyGridButtonsControlManager.cs" />
     <Compile Include="Util\CustomValidationEventArgs.cs" />
     <Compile Include="Util\GlobalUIRegistry.cs" />
     <Compile Include="Grid\IDataGridView.cs" />

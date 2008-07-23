@@ -46,7 +46,7 @@ namespace Habanero.UI.WebGUI
 
         private readonly GridBaseManager _manager;
 
-        public GridBaseGiz()
+        protected GridBaseGiz()
         {
             
             _manager = new GridBaseManager(this);

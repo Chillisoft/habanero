@@ -35,7 +35,6 @@ namespace Habanero.UI.Win
         private IBusinessObjectEditor _businessObjectEditor;
         private IBusinessObjectCreator _businessObjectCreator;
         private IBusinessObjectDeletor _businessObjectDeletor;
-        private string _uiDefName = "";
         private ClassDef _classDef;
         private readonly IFilterControl _filterControl;
         private readonly IGridInitialiser _gridInitialiser;
@@ -72,7 +71,6 @@ namespace Habanero.UI.Win
 
         private void _filterControl_OnFilter(object sender, EventArgs e)
         {
-            this.Grid.CurrentPage = 1;
             if (FilterMode == FilterModes.Search)
             {
                 BusinessObjectCollection<BusinessObject> collection = new BusinessObjectCollection<BusinessObject>(this.ClassDef);
@@ -117,7 +115,7 @@ namespace Habanero.UI.Win
 
 
             _classDef = (ClassDef) classDef;
-            _uiDefName = uiDefName;
+            UiDefName = uiDefName;
 
             _gridInitialiser.InitialiseGrid(classDef, uiDefName);
         }
@@ -155,7 +153,7 @@ namespace Habanero.UI.Win
             {
                 if (_businessObjectEditor != null)
                 {
-                    _businessObjectEditor.EditObject(selectedBo, _uiDefName, delegate
+                    _businessObjectEditor.EditObject(selectedBo, UiDefName, delegate
                                                      {
                                                          this.Grid.RefreshGrid();
                                                      });
@@ -177,7 +175,7 @@ namespace Habanero.UI.Win
             newBo = _businessObjectCreator.CreateBusinessObject();
             if (_businessObjectEditor != null && newBo != null)
             {
-                _businessObjectEditor.EditObject(newBo, _uiDefName, delegate(IBusinessObject bo)
+                _businessObjectEditor.EditObject(newBo, UiDefName, delegate(IBusinessObject bo)
                     { this.Grid.SelectedBusinessObject = bo; });
             }
         }
@@ -233,10 +231,9 @@ namespace Habanero.UI.Win
 
         public string UiDefName
         {
-            get { return _uiDefName; }
-            set { _uiDefName = value; }
+            get { return _grid.GridBaseManager.UiDefName; }
+            set { _grid.GridBaseManager.UiDefName = value; }
         }
-
         public IClassDef ClassDef
         {
             get { return _classDef; }

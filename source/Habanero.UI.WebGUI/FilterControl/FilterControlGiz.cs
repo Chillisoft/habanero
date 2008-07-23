@@ -39,18 +39,19 @@ namespace Habanero.UI.WebGUI
         private IButton _filterButton;
         private IButton _clearButton;
         public event EventHandler Filter;
-        private readonly GroupBoxGiz _gbox;
+        private readonly IGroupBox _gbox;
         private FilterModes _filterMode; //Note all this should move up to windows need to decide buttons etc on win
         private IPanel _controlPanel;
 
         public FilterControlGiz(IControlFactory controlFactory)
         {
+
+            this.Height = 50;
             _controlFactory = controlFactory;
-            _gbox = new GroupBoxGiz();
-            this.Controls.Add(_gbox);
+            _gbox = _controlFactory.CreateGroupBox();
+            _controlFactory.CreateBorderLayoutManager(this).AddControl(_gbox, BorderLayoutManager.Position.Centre);
             _gbox.Text = "Filter the Grid";
-            _gbox.Dock = DockStyle.Fill;
-            _gbox.Height = 50;
+
             BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(_gbox);
             layoutManager.BorderSize = 20;
             IPanel filterButtonPanel = controlFactory.CreatePanel();
@@ -64,11 +65,9 @@ namespace Habanero.UI.WebGUI
             _controlPanel.Width = this.Width;
 
             layoutManager.AddControl(_controlPanel, BorderLayoutManager.Position.Centre);
+            _filterControlManager = new FilterControlManager(controlFactory, new FlowLayoutManager(_controlPanel, controlFactory));
 
-            FlowLayoutManager controlPanelLayoutManager = new FlowLayoutManager(_controlPanel, controlFactory);
 
-            _filterControlManager = new FilterControlManager(controlFactory, controlPanelLayoutManager);
-            this.Height = 50;
         }
 
         //public int CountOfFilterControls()

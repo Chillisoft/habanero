@@ -51,27 +51,59 @@ namespace Habanero.Test.UI.Base
         [TearDown]
         public void TearDownTest()
         {
+            CloseForm();
         }
 
         protected abstract void AddControlToForm(IControlChilli control);
         protected abstract void AddControlToForm(IControlChilli control, int formHeight);
         protected abstract IControlFactory GetControlFactory();
         protected abstract IReadOnlyGridControl CreateReadOnlyGridControl();
+        protected abstract IReadOnlyGridControl CreateReadOnlyGridControl(bool putOnForm);
+        protected abstract void CloseForm();
 
-        //[TestFixture]
-        //public class TestreadOnlyGridControlWin : TestReadonlyGridControl
-        //{
-        //    protected override IControlFactory GetControlFactory()
-        //    {
-        //        return new ControlFactoryWin();
-        //    }
-        //    protected override IReadOnlyGridControl CreateReadOnlyGridControl()
-        //    {
-        //        ReadOnlyGridControlWin readOnlyGridControlWin = new ReadOnlyGridControlWin();
-        //        System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-        //        frm.Controls.Add(readOnlyGridControlWin);
-        //        return readOnlyGridControlWin;
-        //    }
+        [TestFixture]
+        public class TestreadOnlyGridControlWin : TestReadonlyGridControl
+        {
+            private System.Windows.Forms.Form frm;
+            protected override IControlFactory GetControlFactory()
+            {
+                return new Habanero.UI.Win.ControlFactoryWin();
+            }
+             protected override IReadOnlyGridControl CreateReadOnlyGridControl()
+             {
+                 return CreateReadOnlyGridControl(false);
+             }
+            protected override IReadOnlyGridControl CreateReadOnlyGridControl(bool putOnForm)
+            {
+                Habanero.UI.Win.ReadOnlyGridControlWin readOnlyGridControlWin = new Habanero.UI.Win.ReadOnlyGridControlWin(GetControlFactory());
+                if (putOnForm)
+                {
+                    frm = new System.Windows.Forms.Form();
+                    frm.Controls.Add(readOnlyGridControlWin);
+                    frm.Show();
+                }
+                return readOnlyGridControlWin;
+            }
+
+            protected override void CloseForm()
+            {
+                if (frm != null)
+                {
+                    frm.Close();
+                    frm = null;
+                }
+            }
+
+            protected override void AddControlToForm(IControlChilli control)
+            {
+
+            }
+
+            protected override void AddControlToForm(IControlChilli control, int formHeight)
+            {
+
+            }
+
 //        [Test]
 //        public void TestWinInitialiseGrid()
 //        {
@@ -243,7 +275,7 @@ namespace Habanero.Test.UI.Base
 //
 //            //---------------Tear Down -------------------------          
 //        }
-        //}
+        }
 
         //[Test]
         //public void TestInitGrid_DefaultUIDef_VerifyColumnsSetupCorrectly()
@@ -315,14 +347,28 @@ namespace Habanero.Test.UI.Base
             {
                 return new ControlFactoryGizmox();
             }
-
             protected override IReadOnlyGridControl CreateReadOnlyGridControl()
             {
+                return CreateReadOnlyGridControl(true);
+            }
+            protected override IReadOnlyGridControl CreateReadOnlyGridControl(bool putOnForm)
+            {
+                //ALWAYS PUT ON FORM FOR GIZ
                 ReadOnlyGridControlGiz readOnlyGridControlGiz =
                     new ReadOnlyGridControlGiz(GlobalUIRegistry.ControlFactory);
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
                 frm.Controls.Add(readOnlyGridControlGiz);
                 return readOnlyGridControlGiz;
+            }
+
+            protected override void CloseForm()
+            {
+                
+            }
+
+            protected override void AddControlToForm(IControlChilli control)
+            {
+                AddControlToForm(control, 200);
             }
 
             [Test]
@@ -340,9 +386,31 @@ namespace Habanero.Test.UI.Base
                 //---------------Tear Down -------------------------          
             }
 
-            protected override void AddControlToForm(IControlChilli control)
+
+            [Test]
+            public void Test_Acceptance_Filter_When_On_Page2_Of_Pagination()
             {
-                AddControlToForm(control, 200);
+                //---------------Set up test pack-------------------
+                //Get Grid with 4 items
+                BusinessObjectCollection<MyBO> col;
+                IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col,true);
+                AddControlToForm(readOnlyGridControl);
+                ITextBox tb = readOnlyGridControl.FilterControl.AddStringFilterTextBox("Test Prop", "TestProp");
+                //Set items per page to 3 items
+                readOnlyGridControl.Grid.ItemsPerPage = 3;
+                //Go to page 2 (pagination page)
+                readOnlyGridControl.Grid.CurrentPage = 2;
+
+                //--------------Assert PreConditions ---------------
+                Assert.AreEqual(2, readOnlyGridControl.Grid.CurrentPage);
+                //---------------Execute Test ----------------------
+                //enter data in filter for 1 item
+                tb.Text = "b";
+                readOnlyGridControl.FilterControl.ApplyFilter();
+                //---------------Test Result -----------------------
+                // verify that grid has moved back to page 1
+                Assert.AreEqual(1, readOnlyGridControl.Grid.CurrentPage);
+                //---------------Tear Down -------------------------          
             }
         }
 
@@ -353,7 +421,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             //Get Grid with 4 items
             BusinessObjectCollection<MyBO> col;
-            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col);
+            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col,true);
             AddControlToForm(readOnlyGridControl);
             ITextBox tb = readOnlyGridControl.FilterControl.AddStringFilterTextBox("Test Prop", "TestProp");
             //--------------Assert PreConditions
@@ -367,31 +435,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, readOnlyGridControl.Grid.Rows.Count);
         }
 
-        [Test]
-        public void Test_Acceptance_Filter_When_On_Page2_Of_Pagination()
-        {
-            //---------------Set up test pack-------------------
-            //Get Grid with 4 items
-            BusinessObjectCollection<MyBO> col;
-            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col);
-            AddControlToForm(readOnlyGridControl);
-            ITextBox tb = readOnlyGridControl.FilterControl.AddStringFilterTextBox("Test Prop", "TestProp");
-            //Set items per page to 3 items
-            readOnlyGridControl.Grid.ItemsPerPage = 3;
-            //Go to page 2 (pagination page)
-            readOnlyGridControl.Grid.CurrentPage = 2;
-
-            //--------------Assert PreConditions ---------------
-            Assert.AreEqual(2, readOnlyGridControl.Grid.CurrentPage);
-            //---------------Execute Test ----------------------
-            //enter data in filter for 1 item
-            tb.Text = "b";
-            readOnlyGridControl.FilterControl.ApplyFilter();
-            //---------------Test Result -----------------------
-            // verify that grid has moved back to page 1
-            Assert.AreEqual(1, readOnlyGridControl.Grid.CurrentPage);
-            //---------------Tear Down -------------------------          
-        }
 
         [Test]
         public void TestFixBug_SearchGridSearchesTheGrid_DoesNotCallFilterOnGridbase()
@@ -405,7 +448,7 @@ namespace Habanero.Test.UI.Base
             CreateContactPersonInDB();
 
             //Create grid setup for search
-            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(false);
             ITextBox txtboxFirstName = readOnlyGridControl.FilterControl.AddStringFilterTextBox("FirstName", "FirstName");
             readOnlyGridControl.Initialise(classDef);
             readOnlyGridControl.FilterMode = FilterModes.Search;       
@@ -431,7 +474,7 @@ namespace Habanero.Test.UI.Base
             CreateContactPersonInDB_With_SSSSS_InSurname();
             CreateContactPersonInDB_With_SSSSS_InSurname();
             //Create grid setup for search
-            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(true);
             ITextBox txtbox = readOnlyGridControl.FilterControl.AddStringFilterTextBox("Surname", "Surname");
             readOnlyGridControl.Initialise(classDef);
             readOnlyGridControl.FilterMode = FilterModes.Search;
@@ -474,7 +517,7 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
-            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(false);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(FilterModes.Filter, readOnlyGridControl.FilterMode);
@@ -650,7 +693,6 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             Assert.AreEqual(alternateUIDefName, grid.UiDefName);
-            Assert.AreEqual(alternateUIDefName, ((ReadOnlyGridGiz)grid.Grid).GridBaseManager.UiDefName);
             Assert.AreEqual(classDef, grid.ClassDef);
             Assert.AreEqual(uiGridDef.Count + 1, grid.Grid.Columns.Count,
                             "There should be 1 ID column and 1 defined column in the alternateUIDef");
@@ -753,7 +795,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             LoadMyBoDefaultClassDef();
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
-            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(true);
             AddControlToForm(readOnlyGridControl);
             readOnlyGridControl.SetBusinessObjectCollection(col);
             //----------------Assert Preconditions --------------
@@ -826,7 +868,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             LoadMyBoDefaultClassDef();
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
-            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(true);
 
             AddControlToForm(readOnlyGridControl);
             IReadOnlyGrid readOnlyGrid = (IReadOnlyGrid) readOnlyGridControl.Grid;
@@ -944,10 +986,9 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
-            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col);
+            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col,true);
             BusinessObject bo = col[0];
-            Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
-            frm.Controls.Add((Gizmox.WebGUI.Forms.Control) readOnlyGridControl);
+            AddControlToForm(readOnlyGridControl);
             //---------------Execute Test ----------------------
             readOnlyGridControl.SelectedBusinessObject = bo;
 
@@ -960,7 +1001,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
-            IReadOnlyGridControl grid = GetGridWith_4_Rows(out col);
+            IReadOnlyGridControl grid = GetGridWith_4_Rows(out col,false);
             BusinessObject bo = col[0];
 
             //---------------Execute Test ----------------------
@@ -1037,7 +1078,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
-            IReadOnlyGridControl grid = GetGridWith_4_Rows(out col);
+            IReadOnlyGridControl grid = GetGridWith_4_Rows(out col,true);
             grid.SelectedBusinessObject = null;
             ObjectEditorStub objectEditor = new ObjectEditorStub();
             grid.BusinessObjectEditor = objectEditor;
@@ -1054,11 +1095,10 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
-            IReadOnlyGridControl grid = GetGridWith_4_Rows(out col);
+            IReadOnlyGridControl grid = GetGridWith_4_Rows(out col, true);
             grid.SelectedBusinessObject = col[2];
             ObjectEditorStub objectEditor = new ObjectEditorStub();
             grid.BusinessObjectEditor = objectEditor;
-
             //---------------Asserting Preconditions------------
             Assert.IsFalse(objectEditor.HasBeenCalled);
 
@@ -1079,7 +1119,7 @@ namespace Habanero.Test.UI.Base
             string alternateUIDefName = "Alternate";
             BusinessObjectCollection<MyBO> col;
             col = CreateCollectionWith_4_Objects();
-            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(true);
             readOnlyGridControl.Initialise(classDef, alternateUIDefName);
 
             readOnlyGridControl.SetBusinessObjectCollection(col);
@@ -1123,7 +1163,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
-            IReadOnlyGridControl grid = GetGridWith_4_Rows(out col);
+            IReadOnlyGridControl grid = GetGridWith_4_Rows(out col, false);
             ObjectEditorStub objectEditor = new ObjectEditorStub();
             grid.BusinessObjectEditor = objectEditor;
             ObjectCreatorStub objectCreator = new ObjectCreatorStub();
@@ -1147,7 +1187,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
-            IReadOnlyGridControl grid = GetGridWith_4_Rows(out col);
+            IReadOnlyGridControl grid = GetGridWith_4_Rows(out col,true);
             grid.Buttons.ShowDefaultDeleteButton = true;
             grid.SelectedBusinessObject = col[2];
             ObjectDeletorStub objectDeletor = new ObjectDeletorStub();
@@ -1207,7 +1247,7 @@ namespace Habanero.Test.UI.Base
             AddObjectToDelete(boInclude);
             boInclude.Save();
 
-            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl(true);
             grid.AdditionalSearchCriteria = "ContactPersonID <> " + boExclude.ContactPersonID.ToString("B");
             grid.Initialise(classDef);
             grid.FilterMode = FilterModes.Search;
@@ -1238,7 +1278,7 @@ namespace Habanero.Test.UI.Base
             AddObjectToDelete(boInclude);
             boInclude.Save();
 
-            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl(true);
             grid.AdditionalSearchCriteria = "ContactPersonID <> " + boExclude.ContactPersonID.ToString("B");
             grid.Initialise(classDef);
             grid.FilterMode = FilterModes.Search;
@@ -1261,7 +1301,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
-            IReadOnlyGridControl grid = GetGridWith_4_Rows(out col);
+            IReadOnlyGridControl grid = GetGridWith_4_Rows(out col,true);
             grid.Buttons.ShowDefaultDeleteButton = true;
             grid.SelectedBusinessObject = null;
             ObjectDeletorStub objectDeletor = new ObjectDeletorStub();
@@ -1515,11 +1555,11 @@ namespace Habanero.Test.UI.Base
             return col;
         }
 
-        private IReadOnlyGridControl GetGridWith_4_Rows(out BusinessObjectCollection<MyBO> col)
+        private IReadOnlyGridControl GetGridWith_4_Rows(out BusinessObjectCollection<MyBO> col, bool putOnForm)
         {
             LoadMyBoDefaultClassDef();
             col = CreateCollectionWith_4_Objects();
-            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(putOnForm);
             SetupGridColumnsForMyBo(readOnlyGridControl.Grid);
             readOnlyGridControl.SetBusinessObjectCollection(col);
             return readOnlyGridControl;

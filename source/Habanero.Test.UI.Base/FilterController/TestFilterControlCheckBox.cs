@@ -168,45 +168,6 @@ namespace Habanero.Test.UI.Base
 
             //---------------Tear Down -------------------------          
         }
-        [Test]
-        public void TestOnlyCheckBoxAreOnPanelWinForms()
-        {
-            //---------------Set up test pack-------------------
-            IControlFactory factory = new ControlFactoryWin();
-            IFilterControl filterControl = factory.CreateFilterControl();
-            //---------------Assert Preconditions --------------
-            Assert.AreEqual(0, filterControl.Controls.Count, "there is no group box for win filter control");
-            //IControlChilli gbox = filterControl.Controls[0];
-            //Assert.AreEqual(0, gbox.Controls.Count, "no controls on win form control");
-
-            //---------------Execute Test ----------------------
-            ICheckBox checkBox = filterControl.AddBooleanFilterCheckBox("Test2?", "TestColumn2", false);
-
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, filterControl.Controls.Count, "Only the check box should be added the check box does not need a seperate label");
-            Assert.IsTrue(filterControl.Controls.Contains(checkBox));
-            //---------------Tear Down -------------------------   
-        }
-
-        //[Test]
-        //public void TestOnlyCheckBoxAreOnPanelGiz()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    ControlFactoryGizmox controlFactory = new ControlFactoryGizmox();
-        //    IFilterControl filterControl = controlFactory.CreateFilterControl();
-        //    //---------------Assert Preconditions --------------
-        //    Assert.AreEqual(1, filterControl.Controls.Count, "the group box is all thats on the control");
-        //    IControlChilli gbox = filterControl.Controls[0];
-        //    Assert.AreEqual(2, gbox.Controls.Count, "buttons should be on giz control");
-
-        //    //---------------Execute Test ----------------------
-        //    ICheckBox checkBox = filterControl.AddBooleanFilterCheckBox("Test2?", "TestColumn2", false);
-
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual(3, gbox.Controls.Count, "Only the check box should be added the check box does not need a seperate label");
-        //    Assert.IsTrue(gbox.Controls.Contains(checkBox));
-        //}
 
         #endregion
 

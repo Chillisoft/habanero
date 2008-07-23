@@ -19,12 +19,7 @@
 
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
 using NUnit.Framework;
-//using Habanero.UI.Forms;
-//using Habanero.UI.Grid;
-//using NMock;
-//using NMock.Constraints;
 
 namespace Habanero.Test.UI.Base
 {
@@ -53,27 +48,26 @@ namespace Habanero.Test.UI.Base
         protected abstract IControlFactory GetControlFactory();
         //protected abstract IGridBase CreateReadOnlyGridControl();
 
-        //[TestFixture]
-        //public class TestReadOnlyGridButtonControlWin : TestReadOnlyGridButtonControl
-        //{
-        //    protected override IControlFactory GetControlFactory()
-        //    {
-        //        return new ControlFactoryWin();
-        //    }
-        
-            //protected override void AddControlToForm(IControlChilli cntrl)
-            //{
-            //    Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
-            //    frm.Controls.Add((Gizmox.WebGUI.Forms.Control) cntrl);
-            //}
+        [TestFixture]
+        public class TestReadOnlyGridButtonControlWin : TestReadOnlyGridButtonControl
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new Habanero.UI.Win.ControlFactoryWin();
+            }
 
-        //}
+            protected override void AddControlToForm(IControlChilli cntrl)
+            {
+
+            }
+
+        }
         [TestFixture]
         public class TestReadOnlyGridButtonControlGiz : TestReadOnlyGridButtonControl
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
             }
 
             protected override void AddControlToForm(IControlChilli cntrl)
@@ -188,6 +182,7 @@ namespace Habanero.Test.UI.Base
             IReadOnlyGridButtonsControl readOnlyGridButtonsControl = GetControlFactory().CreateReadOnlyGridButtonsControl();
             AddControlToForm(readOnlyGridButtonsControl);  
             IButton btn = readOnlyGridButtonsControl["Delete"];
+            btn.Visible = true;
             bool deleteClicked = false;
 
             readOnlyGridButtonsControl.DeleteClicked += delegate { deleteClicked = true; };

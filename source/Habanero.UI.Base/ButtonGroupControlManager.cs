@@ -31,7 +31,6 @@ namespace Habanero.UI.Base
             button.Name = buttonName;
             button.Text = buttonName;
             _layoutManager.AddControl(button);
-            //RecalcButtonSizes();
             _buttonGroupControl.Controls.Add(button);
             return button;
         }
@@ -48,7 +47,6 @@ namespace Habanero.UI.Base
             IButton button = this.AddButton(buttonName);
             button.Name = buttonName;
             button.Text = buttonText;
-            //RecalcButtonSizes();
             button.Click += clickHandler;
             return button;
         }

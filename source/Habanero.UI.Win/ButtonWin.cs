@@ -24,7 +24,7 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
-    internal class ButtonWin : Button, IButton
+    public class ButtonWin : Button, IButton
     {
         IControlCollection IControlChilli.Controls
         {

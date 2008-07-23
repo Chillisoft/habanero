@@ -34,24 +34,10 @@ namespace Habanero.UI.Win
         {
             _controlFactory = controlFactory;
             _buttonGroupControlManager = new ButtonGroupControlManager(this, controlFactory);
-
-            //_layoutManager = new FlowLayoutManager(this, controlFactory);
-            //_layoutManager.Alignment = FlowLayoutManager.Alignments.Right;
-            //_controlFactory = controlFactory;
-            //IButton sampleBtn = _controlFactory.CreateButton();
-            //this.Height = sampleBtn.Height + 10;
         }
 
         public IButton AddButton(string buttonName)
         {
-            //IButton button = _controlFactory.CreateButton();
-            //button.Name = buttonName;
-            //button.Text = buttonName;
-            //_layoutManager.AddControl(button);
-            //RecalcButtonSizes();
-            
-            //return button;
-
             IButton button = _buttonGroupControlManager.AddButton(buttonName);
             Controls.Add((Control)button);
             RecalcButtonSizes();
@@ -75,13 +61,8 @@ namespace Habanero.UI.Win
 
         public IButton AddButton(string buttonName, EventHandler clickHandler)
         {
-            //IButton button = this.AddButton(buttonName);
-           
-            //button.Click += clickHandler;
-            //return button;
-            IButton button = AddButton(buttonName, buttonName, clickHandler);
-            button.Click += clickHandler;
-            return button;
+             return AddButton(buttonName, buttonName, clickHandler);
+   
         }
 
         /// <summary>
@@ -93,14 +74,8 @@ namespace Habanero.UI.Win
         /// <param name="clickHandler">The event handler to be triggered on the button click</param>
         public IButton AddButton(string buttonName, string buttonText, EventHandler clickHandler)
         {
-            //IButton button = this.AddButton(buttonName);
-            //button.Name = buttonName;
-            //button.Text = buttonText;
-            //RecalcButtonSizes();
-            //button.Click += clickHandler;
-            //return button;
+
             IButton button = _buttonGroupControlManager.AddButton(buttonName, buttonText, clickHandler);
-            //Controls.Add((Control)button);
             RecalcButtonSizes();
             ((Button)button).UseMnemonic = true;
             return button;

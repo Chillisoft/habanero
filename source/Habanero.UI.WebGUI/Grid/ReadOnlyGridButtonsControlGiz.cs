@@ -22,52 +22,28 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
-    public class ReadOnlyGridButtonsControlGiz :ButtonGroupControlGiz, IReadOnlyGridButtonsControl
+    public class ReadOnlyGridButtonsControlGiz : ButtonGroupControlGiz, IReadOnlyGridButtonsControl
     {
-        private readonly IButton _deleteButton;
         public event EventHandler DeleteClicked;
         public event EventHandler AddClicked;
         public event EventHandler EditClicked;
+        private readonly ReadOnlyGridButtonsControlManager _manager;
+
+        public ReadOnlyGridButtonsControlGiz(IControlFactory controlFactory)
+            : base(controlFactory)
+        {
+            _manager = new ReadOnlyGridButtonsControlManager(this);
+            _manager.CreateDeleteButton(delegate { if (DeleteClicked != null) DeleteClicked(this, new EventArgs()); });
+            _manager.CreateEditButton(delegate { if (EditClicked != null) EditClicked(this, new EventArgs()); });
+            _manager.CreateAddButton(delegate { if (AddClicked != null) AddClicked(this, new EventArgs()); });
+        }
 
         public bool ShowDefaultDeleteButton
         {
-            get { return _deleteButton.Visible; }
-            set { _deleteButton.Visible = value; }
+            get { return _manager.DeleteButton.Visible; }
+            set { _manager.DeleteButton.Visible = value; }
         }
 
-        public ReadOnlyGridButtonsControlGiz(IControlFactory controlFactory) : base(controlFactory)
-        {
-            _deleteButton = AddButton("Delete", FireDeleteButtonClicked);
-            _deleteButton.Visible = false;
-           
-            IButton editButton = AddButton("Edit", FireEditButtonClicked);
-            editButton.Visible = true;
-            IButton addButton = AddButton("Add", FireAddButtonClicked);
-            addButton.Visible = true;
-            
-        }
-
-        void FireDeleteButtonClicked(object sender, EventArgs e)
-        {
-            if (DeleteClicked != null)
-            {
-                this.DeleteClicked(this, new EventArgs());
-            }
-        }
-        void FireAddButtonClicked(object sender, EventArgs e)
-        {
-            if (AddClicked != null)
-            {
-                this.AddClicked(this, new EventArgs());
-            }
-        }
-        void FireEditButtonClicked(object sender, EventArgs e)
-        {
-            if (EditClicked != null)
-            {
-                this.EditClicked(this, new EventArgs());
-            }
-        }
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(base.Controls); }

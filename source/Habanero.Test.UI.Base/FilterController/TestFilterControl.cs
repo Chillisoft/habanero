@@ -61,45 +61,34 @@ namespace Habanero.Test.UI.Base.FilterController
             }
 
             [Test]
-            public void TestApplyFilterWin()
+            public void Test_FilterModeHidesButtonPanel()
             {
                 //---------------Set up test pack-------------------
-
-                IFilterControl filterControl = new ControlFactoryWin().CreateFilterControl();
-
+                IControlFactory factory = GetControlFactory();
                 //---------------Execute Test ----------------------
-                try
-                {
-                    filterControl.ApplyFilter();
-                }
-
+                IFilterControl ctl = factory.CreateFilterControl();
                 //---------------Test Result -----------------------
-                catch (NotImplementedException ex)
-                {
-                    StringAssert.Contains("not implemented on win", ex.Message);
-                }
-                //---------------Tear Down -------------------------
+                System.Windows.Forms.Button filterButton = (System.Windows.Forms.Button)ctl.FilterButton;
+                Assert.IsFalse(filterButton.Parent.Visible);
+                //Assert.IsFalse(ctl.ClearButton.Visible);
+                //---------------Tear Down ------------------------- 
+
             }
-
             [Test]
-            public void TestClearFiltersWin()
+            public void Test_SetFilterModeSearch_MakesButtonPanelVisible()
             {
                 //---------------Set up test pack-------------------
-
-                IFilterControl filterControl = new ControlFactoryWin().CreateFilterControl();
-
+                IControlFactory factory = GetControlFactory();
+                IFilterControl ctl = factory.CreateFilterControl();
+                System.Windows.Forms.Control buttonControl = ((System.Windows.Forms.Button)ctl.FilterButton).Parent;
+                
+                //---------------Assert Preconditions --------------
+                Assert.IsFalse(buttonControl.Visible);
                 //---------------Execute Test ----------------------
-                try
-                {
-                    filterControl.ClearFilters();
-                }
-
+                ctl.FilterMode = FilterModes.Search;
                 //---------------Test Result -----------------------
-                catch (NotImplementedException ex)
-                {
-                    StringAssert.Contains("not implemented on win", ex.Message);
-                }
-                //---------------Tear Down -------------------------
+                Assert.IsTrue(buttonControl.Visible);
+                //---------------Tear Down -------------------------          
             }
         }
 
@@ -112,7 +101,7 @@ namespace Habanero.Test.UI.Base.FilterController
             }
 
             [Test]
-            public void Test_GizOnly_SetFilterModeSearchSetsText()
+            public void Test_SetFilterModeSearchSetsText()
             {
                 //---------------Set up test pack-------------------
                 IControlFactory factory = GetControlFactory();
@@ -127,7 +116,7 @@ namespace Habanero.Test.UI.Base.FilterController
             }
 
             [Test]
-            public void Test_GizOnly_SetFilterModeFilterSetsText()
+            public void Test_SetFilterModeFilterSetsText()
             {
                 //---------------Set up test pack-------------------
                 IControlFactory factory = GetControlFactory();
@@ -169,7 +158,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
 
             [Test]
-            public void Test_GizOnly_DefaultLayoutManager()
+            public void Test_DefaultLayoutManager()
             {
                 //---------------Set up test pack-------------------
                 IControlFactory factory = GetControlFactory();
@@ -337,7 +326,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, filterControl.FilterPanel.Controls.Count);
-            Assert.IsTrue(filterControl.FilterPanel.Controls.Contains(cb));
+            Assert.AreSame(cb, filterControl.FilterPanel.Controls[0]);
             //---------------Tear Down -------------------------          
         }
 

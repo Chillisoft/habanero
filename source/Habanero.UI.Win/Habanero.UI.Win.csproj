@@ -48,6 +48,7 @@
     <Compile Include="ButtonGroupControlWin.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CheckBoxStrategyWin.cs" />
     <Compile Include="CheckBoxWin.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -104,6 +105,9 @@
     <Compile Include="Grid\EditableGridButtonsControlWin.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GroupBoxWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="HabaneroAppWin.cs" />
     <Compile Include="HelpAboutBoxWin.cs">
       <SubType>Form</SubType>
@@ -117,17 +121,24 @@
     <Compile Include="ListBoxWin.Designer.cs">
       <DependentUpon>ListBoxWin.cs</DependentUpon>
     </Compile>
+    <Compile Include="ListComboBoxMapperStrategyWin.cs" />
+    <Compile Include="LookupComboBoxDefaultMapperStrategyWin.cs" />
+    <Compile Include="LookupComboBoxKeyPressMapperStrategyWin.cs" />
     <Compile Include="MultiSelectorWin.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MultiSelectorWin.Designer.cs">
       <DependentUpon>MultiSelectorWin.cs</DependentUpon>
     </Compile>
+    <Compile Include="NumericUpDownMapperStrategyWin.cs" />
     <Compile Include="NumericUpDownWin.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="OKCancelDialogFactoryWin.cs" />
     <Compile Include="PanelWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ReadOnlyGridButtonsControlWin.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ReadOnlyGridWin.cs">
@@ -145,6 +156,7 @@
     <Compile Include="TabPageWin.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="TextBoxMapperStrategyWin.cs" />
     <Compile Include="TextBoxWin.cs">
       <SubType>Component</SubType>
     </Compile>

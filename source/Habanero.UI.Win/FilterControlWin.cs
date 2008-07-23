@@ -33,14 +33,71 @@ namespace Habanero.UI.Win
         public event EventHandler Filter;
         private readonly FilterControlManager _filterControlManager;
         private FilterModes _filterMode;
-        //private readonly FlowLayoutManager _flowLayoutManager;
+        private IButton _filterButton;
+        private IButton _clearButton;
+        private IControlFactory _controlFactory;
+        private IGroupBox _gbox;
+        private IPanel _controlPanel;
+        private IPanel _filterButtonPanel;
 
         public FilterControlWin(IControlFactory controlFactory)
         {
-            FlowLayoutManager layoutManager = new FlowLayoutManager(this, controlFactory);
-            _filterControlManager = new FilterControlManager(controlFactory, layoutManager);
 
-            this.Height = 40;
+            this.Height = 50;
+            _controlFactory = controlFactory;
+            _gbox = _controlFactory.CreateGroupBox();
+            _controlFactory.CreateBorderLayoutManager(this).AddControl(_gbox, BorderLayoutManager.Position.Centre);
+            _gbox.Text = "Filter the Grid";
+
+            BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(_gbox);
+            layoutManager.BorderSize = 20;
+            _filterButtonPanel = controlFactory.CreatePanel();
+            _filterButtonPanel.Height = 50;
+            _filterButtonPanel.Width = 110;
+            _filterButtonPanel.Visible = false;
+            CreateFilterButtons(_filterButtonPanel);
+
+            layoutManager.AddControl(_filterButtonPanel, BorderLayoutManager.Position.West);
+
+            _controlPanel = controlFactory.CreatePanel();
+            _controlPanel.Width = this.Width;
+
+            layoutManager.AddControl(_controlPanel, BorderLayoutManager.Position.Centre);
+
+            this.Height = 50;
+            _filterControlManager = new FilterControlManager(controlFactory, new FlowLayoutManager(_controlPanel, controlFactory));
+
+        }
+        private void CreateFilterButtons(IPanel filterButtonPanel)
+        {
+            int buttonHeight = 20;
+            int buttonWidth = 45;
+            _filterButton = CreateFilterButton(buttonWidth, buttonHeight);
+            _clearButton = CreateClearButton(buttonWidth, buttonHeight);
+
+            FlowLayoutManager layoutManager = new FlowLayoutManager(filterButtonPanel, _controlFactory);
+            layoutManager.AddControl(_filterButton);
+            layoutManager.AddControl(_clearButton);
+        }
+        private IButton CreateClearButton(int buttonWidth, int buttonHeight)
+        {
+            IButton clearButton = _controlFactory.CreateButton();
+            clearButton.Width = buttonWidth;
+            clearButton.Height = buttonHeight;
+            clearButton.Top = _filterButton.Height + 2;
+            clearButton.Text = "Clear";
+            clearButton.Click += delegate { ClearFilters(); };
+            return clearButton;
+        }
+        private IButton CreateFilterButton(int buttonWidth, int buttonHeight)
+        {
+            IButton filterButton = _controlFactory.CreateButton();
+            filterButton.Width = buttonWidth;
+            filterButton.Height = buttonHeight;
+            filterButton.Top = 0;
+            filterButton.Text = "Filter";
+            filterButton.Click += delegate { FireFilterEvent(); };
+            return filterButton;
         }
 
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName)
@@ -127,10 +184,13 @@ namespace Habanero.UI.Win
             FireFilterEvent();
         }
 
+        /// <summary>
+        /// The header text that will be set above the filter defaults to 'Filter'
+        /// </summary>
         public string HeaderText
         {
-            get { throw new NotImplementedException("not implemented on win"); }
-            set { throw new NotImplementedException("not implemented on win"); }
+            get { return _gbox.Text; }
+            set { _gbox.Text = value; }
         }
 
         public int CountOfFilters
@@ -148,7 +208,7 @@ namespace Habanero.UI.Win
 
         public IButton FilterButton
         {
-            get { throw new NotImplementedException("not implemented on win"); }
+            get { return _filterButton; }
         }
 
         /// <summary>
@@ -156,13 +216,15 @@ namespace Habanero.UI.Win
         /// </summary>
         public IButton ClearButton
         {
-            get { throw new NotImplementedException("not implemented on win"); }
+            get { return _clearButton; }
         }
 
         public FilterModes FilterMode
         {
             get { return _filterMode; }
-            set { _filterMode = value; }
+            set { _filterMode = value;
+            _filterButtonPanel.Visible = (_filterMode == FilterModes.Search);
+        }
         }
 
         public IList FilterControls
@@ -192,7 +254,7 @@ namespace Habanero.UI.Win
 
         public IPanel FilterPanel
         {
-            get { return this; }
+            get { return _controlPanel; }
         }
 
         /// <summary>

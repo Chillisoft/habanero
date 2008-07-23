@@ -38,13 +38,19 @@ namespace Habanero.UI.Win
 
         private readonly GridBaseManager _manager;
 
-        public GridBaseWin()
+        protected GridBaseWin()
         {
             _manager = new GridBaseManager(this);
             this.SelectionChanged += delegate { FireBusinessObjectSelected(); };
             _manager.CollectionChanged += delegate{ FireCollectionChanged(); };
         }
-
+        /// <summary>
+        /// Returns the grid base manager for this grid
+        /// </summary>
+        public GridBaseManager GridBaseManager
+        {
+            get { return _manager; }
+        }
 
         /// <summary>
         /// Creates a dataset provider that is applicable to this grid. For example, a readonly grid would
