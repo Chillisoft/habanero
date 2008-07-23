@@ -51,7 +51,7 @@ namespace Habanero.BO
             if(_boCol != null)
             {
                 BORegistry.DataAccessor.BusinessObjectLoader.Refresh((BusinessObjectCollection<TBusinessObject>)_boCol);
-                // Peter-Working:  BOLoader.Instance.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderCriteria, "");
+                // Peter-Working: BOLoader.Instance.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderCriteria, "");
                 return _boCol;
             }
 

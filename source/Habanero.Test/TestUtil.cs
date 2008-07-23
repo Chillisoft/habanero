@@ -11,5 +11,11 @@ namespace Habanero.Test
             return Guid.NewGuid().ToString("N");
 
         }
+
+        public static void WaitForGC()
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
     }
 }

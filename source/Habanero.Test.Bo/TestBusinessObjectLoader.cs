@@ -913,6 +913,7 @@ namespace Habanero.Test.BO
         }
 
 
+
         #region Nested type: TestBusinessObjectLoaderDB
 
         [TestFixture]
@@ -1262,6 +1263,123 @@ namespace Habanero.Test.BO
                 //Just to check the myContact2 should also match since it is physically the 
                 // same object as myContact3
                 Assert.AreNotEqual(originalContactPerson.Surname, myContact2.Surname);
+            }
+
+
+            [Test]
+            public void TestAfterLoadCalled_GetBusinessObject()
+            {
+                //---------------Set up test pack-------------------
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
+                BOLoader.Instance.ClearLoadedBusinessObjects();
+                TestUtil.WaitForGC();
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                ContactPersonTestBO loadedCP =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cp.ID);
+                //---------------Test Result -----------------------
+                Assert.AreNotSame(cp, loadedCP);
+                Assert.IsTrue(loadedCP.AfterLoadCalled);
+            }
+
+            [Test]
+            public void TestAfterLoadCalled_GetBusinessObject_Untyped()
+            {
+                //---------------Set up test pack-------------------
+                ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
+                BOLoader.Instance.ClearLoadedBusinessObjects();
+                TestUtil.WaitForGC();
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                ContactPersonTestBO loadedCP =
+                    (ContactPersonTestBO)BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, cp.ID);
+                //---------------Test Result -----------------------
+                Assert.AreNotSame(cp, loadedCP);
+                Assert.IsTrue(loadedCP.AfterLoadCalled);
+            }
+
+            [Test]
+            public void TestAfterLoadCalled_GetCollection()
+            {
+                //---------------Set up test pack-------------------
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
+                BOLoader.Instance.ClearLoadedBusinessObjects();
+                TestUtil.WaitForGC();
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                Criteria criteria = new Criteria("ContactPersonID", Criteria.Op.Equals, cp.ContactPersonID.ToString("B"));
+                BusinessObjectCollection<ContactPersonTestBO> col =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(criteria);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, col.Count);
+                Assert.AreNotSame(cp, col[0]);
+                Assert.IsTrue(col[0].AfterLoadCalled);
+            }
+
+            [Test]
+            public void TestAfterLoadCalled_GetCollection_Untyped()
+            {
+                //---------------Set up test pack-------------------
+                ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
+                BOLoader.Instance.ClearLoadedBusinessObjects();
+                TestUtil.WaitForGC();
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                Criteria criteria = new Criteria("ContactPersonID", Criteria.Op.Equals, cp.ContactPersonID.ToString("B"));
+                IBusinessObjectCollection col =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, col.Count);
+                ContactPersonTestBO loadedCP = (ContactPersonTestBO)col[0];
+                Assert.AreNotSame(cp, loadedCP);
+                Assert.IsTrue(loadedCP.AfterLoadCalled);
+            }
+
+
+            [Test]
+            public void TestAfterLoadCalled_GetCollection_NotReloaded()
+            {
+                //---------------Set up test pack-------------------
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
+    
+                //---------------Assert Precondition----------------
+                Assert.IsFalse(cp.AfterLoadCalled);
+                //---------------Execute Test ----------------------
+                Criteria criteria = new Criteria("ContactPersonID", Criteria.Op.Equals, cp.ContactPersonID.ToString("B"));
+                BusinessObjectCollection<ContactPersonTestBO> col =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(criteria);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, col.Count);
+                Assert.AreSame(cp, col[0]);
+                Assert.IsTrue(col[0].AfterLoadCalled);
+            }
+
+            [Test]
+            public void TestAfterLoadCalled_GetCollection_Untyped_NotReloaded()
+            {
+                //---------------Set up test pack-------------------
+                ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
+                //---------------Assert Precondition----------------
+                Assert.IsFalse(cp.AfterLoadCalled);
+                //---------------Execute Test ----------------------
+                Criteria criteria = new Criteria("ContactPersonID", Criteria.Op.Equals, cp.ContactPersonID.ToString("B"));
+                IBusinessObjectCollection col =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, col.Count);
+                ContactPersonTestBO loadedCP = (ContactPersonTestBO)col[0];
+                Assert.AreSame(cp, loadedCP);
+                Assert.IsTrue(loadedCP.AfterLoadCalled);
             }
         }
 

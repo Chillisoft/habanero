@@ -17,8 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-#pragma warning disable DoNotCallOverridableMethodsInConstructor
-#pragma warning disable RedundantThisQualifier
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -168,6 +167,19 @@ namespace Habanero.BO
         protected virtual void ConstructFromClassDef(bool newObject)
         {
             if (_classDef == null) _classDef = ConstructClassDef();
+
+            CheckClassDefNotNull();
+
+            _boPropCol = _classDef.createBOPropertyCol(newObject);
+            _keysCol = _classDef.createBOKeyCol(_boPropCol);
+
+            SetPrimaryKeyForInheritedClass();
+
+            _relationshipCol = _classDef.CreateRelationshipCol(_boPropCol, this);
+        }
+
+        private void CheckClassDefNotNull()
+        {
             if (_classDef == null)
             {
                 throw new NullReferenceException(String.Format(
@@ -176,21 +188,12 @@ namespace Habanero.BO
                                                      "namespace and assembly and that there are corresponding " +
                                                      "class definitions for this class.", GetType()));
             }
-            _boPropCol = _classDef.createBOPropertyCol(newObject);
-            _keysCol = _classDef.createBOKeyCol(_boPropCol);
-            ClassDef classDefToUseForPrimaryKey = _classDef;
-            while (classDefToUseForPrimaryKey.SuperClassDef != null &&
-                   classDefToUseForPrimaryKey.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance)
-            {
-                classDefToUseForPrimaryKey = classDefToUseForPrimaryKey.SuperClassClassDef;
-            }
-
-            SetPrimaryKeyForInheritedClass(classDefToUseForPrimaryKey);
-            _relationshipCol = _classDef.CreateRelationshipCol(_boPropCol, this);
         }
 
-        private void SetPrimaryKeyForInheritedClass(ClassDef classDefToUseForPrimaryKey)
+        private void SetPrimaryKeyForInheritedClass()
         {
+            ClassDef classDefToUseForPrimaryKey = GetClassDefToUseForPrimaryKey();
+
             if ((classDefToUseForPrimaryKey.SuperClassDef == null) ||
                 (classDefToUseForPrimaryKey.SuperClassDef.ORMapping == ORMapping.ConcreteTableInheritance) ||
                 (_classDef.SuperClassDef.ORMapping == ORMapping.ClassTableInheritance))
@@ -289,12 +292,7 @@ namespace Habanero.BO
         {
             get
             {
-                ClassDef classDefToUseForPrimaryKey = _classDef;
-                while (classDefToUseForPrimaryKey.SuperClassDef != null &&
-                       classDefToUseForPrimaryKey.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance)
-                {
-                    classDefToUseForPrimaryKey = classDefToUseForPrimaryKey.SuperClassClassDef;
-                }
+                ClassDef classDefToUseForPrimaryKey = GetClassDefToUseForPrimaryKey();
                 if ((classDefToUseForPrimaryKey.SuperClassDef != null) &&
                     (classDefToUseForPrimaryKey.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance))
                 {
@@ -302,6 +300,17 @@ namespace Habanero.BO
                 }
                 return classDefToUseForPrimaryKey.TableName;
             }
+        }
+
+        private ClassDef GetClassDefToUseForPrimaryKey()
+        {
+            ClassDef classDefToUseForPrimaryKey = _classDef;
+            while (classDefToUseForPrimaryKey.SuperClassDef != null &&
+                   classDefToUseForPrimaryKey.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance)
+            {
+                classDefToUseForPrimaryKey = classDefToUseForPrimaryKey.SuperClassClassDef;
+            }
+            return classDefToUseForPrimaryKey;
         }
 
         /// <summary>
@@ -626,6 +635,9 @@ namespace Habanero.BO
         }
 
 
+        /// <summary>
+        /// The primary key for this business object 
+        /// </summary>
         public IPrimaryKey PrimaryKey
         {
             get { return _primaryKey; }
@@ -863,24 +875,12 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// This method returns the default Database Connection to use when initialising
-        /// an object of this type. The default is the DatabaseConnection.CurrentConnection object.
-        /// Override this method if you want to use another connection for this object specifically.
-        /// </summary>
-        /// <returns>The default Database Connection for this object.</returns>
-        protected virtual IDatabaseConnection DefaultDatabaseConnection()
-        {
-            return DatabaseConnection.CurrentConnection;
-        }
-
-        /// <summary>
         /// Extra preparation or steps to take out after loading the business
         /// object
         /// </summary>
         protected internal virtual void AfterLoad()
         {
         }
-
 
         /// <summary>
         /// Carries out updates to the object after changes have been

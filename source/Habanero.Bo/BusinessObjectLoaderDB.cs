@@ -121,7 +121,6 @@ namespace Habanero.BO
                     //Checks to see if the loaded object is the base of a single table inheritance structure
                     // and has a sub type
                     correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
-                    if (correctSubClassDef == null) return loadedBo;
                 }
             }
             // loads an object of the correct sub type (for single table inheritance)
@@ -232,7 +231,7 @@ namespace Habanero.BO
             {
                 while (dr.Read())
                 {
-                    T loadedBo = LoadBOFromReader<T>(dr, selectQuery);
+                    T loadedBo = (T) LoadBOFromReader(collection.ClassDef, dr, selectQuery);
                     //If the origional collection had the new business object then
                     // use add internal this adds without any events being raised etc.
                     //else adds via the Add method (normal add) this raises events such that the 
@@ -414,6 +413,7 @@ namespace Habanero.BO
             if (boFromAllLoadedObjects == null)
             {
                 BusinessObject.AllLoadedBusinessObjects().Add(key.GetObjectId(), new WeakReference(bo));
+                ((BusinessObject)(IBusinessObject)bo).AfterLoad();
                 return bo;
             }
             return boFromAllLoadedObjects;
@@ -431,8 +431,10 @@ namespace Habanero.BO
             if (boFromAllLoadedObjects == null)
             {
                 BusinessObject.AllLoadedBusinessObjects().Add(key.GetObjectId(), new WeakReference(bo));
+                ((BusinessObject)bo).AfterLoad();
                 return bo;
             }
+            ((BusinessObject)boFromAllLoadedObjects).AfterLoad();
             return boFromAllLoadedObjects;
         }
 

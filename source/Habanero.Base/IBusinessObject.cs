@@ -18,12 +18,48 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Provides an interface for business objects. This interface contains all the publically accessable
+    /// methods for Business Objects.
+    /// </summary>
     public interface IBusinessObject
     {
+        /// <summary>
+        /// The primary key for this business object 
+        /// </summary>
+        IPrimaryKey PrimaryKey { get; set; }
+
+        /// <summary>
+        /// Returns the primary key ID of this object.  If there is no primary key on this
+        /// class, the primary key of the nearest suitable parent is found and populated
+        /// with the values held for that key in this object.  This is a possible situation
+        /// in some forms of inheritance.
+        /// </summary>
+        IPrimaryKey ID { get; }
+
+        /// <summary>
+        /// Returns or sets the class definition. Setting the classdef is not recommended
+        /// </summary>
+        IClassDef ClassDef { get; set; }
+
+        /// <summary>
+        /// Gets and sets the collection of relationships
+        /// </summary>
+        IRelationshipCol Relationships { get; set; }
+
+        /// <summary>
+        /// The BOState object for this BusinessObject, which records the state information of the object
+        /// </summary>
+        IBOState State { get; }
+
+        /// <summary>
+        /// The BOProps in this business object
+        /// </summary>
+        BOPropCol Props { get; }
+
         ///<summary>
         /// This method can be overridden by a class that inherits from Business object.
         /// The method allows the Business object developer to add customised rules that determine.
@@ -84,56 +120,6 @@ namespace Habanero.Base
         /// </summary>
         void Delete();
 
-        /// <summary>
-        /// The primary key for this busines object 
-        /// </summary>
-        IPrimaryKey PrimaryKey { get; set; }
-
-        /// <summary>
-        /// Returns the primary key ID of this object.  If there is no primary key on this
-        /// class, the primary key of the nearest suitable parent is found and populated
-        /// with the values held for that key in this object.  This is a possible situation
-        /// in some forms of inheritance.
-        /// </summary>
-        IPrimaryKey ID
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Returns or sets the class definition. Setting the classdef is not recommended
-        /// </summary>
-        IClassDef ClassDef
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Gets and sets the collection of relationships
-        /// </summary>
-        IRelationshipCol Relationships
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// The BOState object for this BusinessObject, which records the state information of the object
-        /// </summary>
-        IBOState State
-        {
-            get;
-        }
-
-        /// <summary>
-        /// The BOProps in this business object
-        /// </summary>
-        BOPropCol Props
-        {
-            get;
-        }
-
         event EventHandler<BOEventArgs> Updated;
         event EventHandler<BOEventArgs> Saved;
         event EventHandler<BOEventArgs> Deleted;
@@ -152,7 +138,5 @@ namespace Habanero.Base
         /// </summary>
         /// <returns>Returns true if all are valid</returns>
         bool IsValid();
-
-
     }
 }
