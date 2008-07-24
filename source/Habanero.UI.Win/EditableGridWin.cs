@@ -110,7 +110,8 @@ namespace Habanero.UI.Win
         /// </summary>
         public void DeleteKeyHandler()
         {
-            //if (!CurrentCell.IsInEditMode)
+            
+            if ( !CurrentCell.IsInEditMode)
             {
                 if (_deleteKeyBehaviour == DeleteKeyBehaviours.DeleteRow && AllowUserToDeleteRows)
                 {

@@ -118,7 +118,8 @@ namespace Habanero.Test.UI.Base
             public void TestConfirmDeletionFalse_NoMessageBox()
             {
                 //---------------Set up test pack-------------------
-                IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+                BusinessObjectCollection<MyBO> col;
+                IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
                 bool delegateCalled = false;
                 editableGrid.CheckUserConfirmsDeletionDelegate += delegate
                 {
@@ -127,7 +128,7 @@ namespace Habanero.Test.UI.Base
                 };
 
                 IFormChilli formWin = AddControlToForm(editableGrid);
-
+                formWin.Show();
                 //---------------Assert Precondition----------------
                 //---------------Execute Test ----------------------
                 SimulateDeleteKeyPress(editableGrid);
@@ -139,7 +140,8 @@ namespace Habanero.Test.UI.Base
             public void TestConfirmDeletionTrue_ShowsMessageBox()
             {
                 //---------------Set up test pack-------------------
-                IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+                BusinessObjectCollection<MyBO> col;
+                IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
                 editableGrid.ConfirmDeletion = true;
                 bool delegateCalled = false;
                 editableGrid.CheckUserConfirmsDeletionDelegate += delegate
@@ -149,6 +151,7 @@ namespace Habanero.Test.UI.Base
                 };
 
                 IFormChilli formWin = AddControlToForm(editableGrid);
+                formWin.Show();
 
                 //---------------Assert Precondition----------------
                 Assert.IsTrue(editableGrid.ConfirmDeletion);
@@ -164,7 +167,8 @@ namespace Habanero.Test.UI.Base
             public void TestConfirmDeletion_NoDeletionWhenAllowUserToDeleteRowsIsFalse()
             {
                 //---------------Set up test pack-------------------
-                IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+                BusinessObjectCollection<MyBO> col;
+                IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
                 editableGrid.ConfirmDeletion = true;
                 editableGrid.AllowUserToDeleteRows = false;
                 bool delegateCalled = false;
@@ -175,7 +179,7 @@ namespace Habanero.Test.UI.Base
                 };
 
                 IFormChilli formWin = AddControlToForm(editableGrid);
-
+                formWin.Show();
                 //---------------Assert Precondition----------------
                 Assert.IsTrue(editableGrid.ConfirmDeletion);
                 Assert.IsFalse(editableGrid.AllowUserToDeleteRows);
@@ -190,7 +194,8 @@ namespace Habanero.Test.UI.Base
             public void TestConfirmDeletion_NoDeletionWhenDeleteKeyBehaviourIsClearContents()
             {
                 //---------------Set up test pack-------------------
-                IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+                BusinessObjectCollection<MyBO> col;
+                IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
                 editableGrid.ConfirmDeletion = true;
                 bool delegateCalled = false;
                 editableGrid.CheckUserConfirmsDeletionDelegate += delegate
@@ -200,7 +205,7 @@ namespace Habanero.Test.UI.Base
                 };
                 editableGrid.DeleteKeyBehaviour = DeleteKeyBehaviours.ClearContents; 
                 IFormChilli formWin = AddControlToForm(editableGrid);
-
+                formWin.Show();
                 //---------------Assert Precondition----------------
                 Assert.AreEqual(DeleteKeyBehaviours.ClearContents, editableGrid.DeleteKeyBehaviour);
                 //---------------Execute Test ----------------------
@@ -214,7 +219,8 @@ namespace Habanero.Test.UI.Base
             public void TestConfirmDeletion_NoDeletionWhenDeleteKeyBehaviourIsNone()
             {
                 //---------------Set up test pack-------------------
-                IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
+                BusinessObjectCollection<MyBO> col;
+                IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
                 editableGrid.ConfirmDeletion = true;
                 bool delegateCalled = false;
                 editableGrid.CheckUserConfirmsDeletionDelegate += delegate
@@ -224,7 +230,7 @@ namespace Habanero.Test.UI.Base
                 };
                 editableGrid.DeleteKeyBehaviour = DeleteKeyBehaviours.None;
                 IFormChilli formWin = AddControlToForm(editableGrid);
-
+                formWin.Show();
                 //---------------Assert Precondition----------------
                 Assert.AreEqual(DeleteKeyBehaviours.None, editableGrid.DeleteKeyBehaviour);
                 //---------------Execute Test ----------------------
@@ -248,6 +254,7 @@ namespace Habanero.Test.UI.Base
                 };
                
                 IFormChilli formWin = AddControlToForm(editableGrid);
+                formWin.Show();
                 editableGrid.Rows[0].Cells[0].Selected = true;
                 //---------------Assert Precondition----------------
                 Assert.AreEqual(DeleteKeyBehaviours.DeleteRow, editableGrid.DeleteKeyBehaviour);
@@ -298,6 +305,8 @@ namespace Habanero.Test.UI.Base
                     delegateCalled = true;
                     return true;
                 };
+                IFormChilli formWin = AddControlToForm(editableGrid);
+                formWin.Show();
                 //---------------Assert Precondition----------------
                 Assert.AreEqual(5, editableGrid.Rows.Count);
                 //---------------Execute Test ----------------------
@@ -322,6 +331,8 @@ namespace Habanero.Test.UI.Base
                     delegateCalled = true;
                     return true;
                 };
+                IFormChilli formWin = AddControlToForm(editableGrid);
+                formWin.Show();
                 //---------------Assert Precondition----------------
                 Assert.AreEqual(5, editableGrid.Rows.Count);
                 //---------------Execute Test ----------------------
@@ -350,6 +361,12 @@ namespace Habanero.Test.UI.Base
                     delegateCalled = true;
                     return true;
                 };
+                IFormChilli formWin = AddControlToForm(editableGrid);
+                formWin.Show();
+                foreach(IDataGridViewCell Cell in  editableGrid.SelectedCells )
+                {
+                    Cell.Selected = false;
+                }
                 //---------------Assert Precondition----------------
                 Assert.AreEqual(5, editableGrid.Rows.Count);
                 Assert.AreEqual(0, editableGrid.SelectedCells.Count);
@@ -362,7 +379,7 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual(5, editableGrid.Rows.Count);
             }
 
-            [Test, Ignore("The thing that makes this work is breaking the other tests")]
+            [Test]
             public void TestDeleteKeyBehaviours_NoDeleteWhen_IsInEditMode()
             {
                   //---------------Set up test pack-------------------
@@ -387,7 +404,7 @@ namespace Habanero.Test.UI.Base
                
             }
 
-            [Test, Ignore("Selecting row not working")]
+            [Test,Ignore("Still Working on this.....")]
             public void TestDeleteKeyBehaviours_NoDeleteWhen_SelectedRowsNotZero()
             {
                 //---------------Set up test pack-------------------
@@ -400,7 +417,10 @@ namespace Habanero.Test.UI.Base
                     delegateCalled = true;
                     return true;
                 };
+                IFormChilli formWin = AddControlToForm(editableGrid);
+                formWin.Show();
                 editableGrid.Rows[1].Selected=true;
+
                 //---------------Assert Precondition----------------
                 Assert.AreEqual(1, editableGrid.SelectedRows.Count);
                 //---------------Execute Test ----------------------
