@@ -180,12 +180,7 @@ namespace Habanero.Test.BO
 
             Assert.AreSame(address1, addressesAfterChangeOrder[0]);
             Assert.AreSame(address2, addressesAfterChangeOrder[1]);
-            //---------------Tear Down -------------------------     
         }
-
-
-
-
 
 
         [Test]

@@ -504,7 +504,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
             MyBO myBO = new MyBO();
-            IPrimaryKey primaryKey = myBO.PrimaryKey;
+            IPrimaryKey primaryKey = myBO.ID;
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -524,7 +524,7 @@ namespace Habanero.Test.BO
             cp.Surname = surnameValue;
             string firstNameValue = Guid.NewGuid().ToString();
             cp.FirstName = firstNameValue;
-            IPrimaryKey primaryKey = cp.PrimaryKey;
+            IPrimaryKey primaryKey = cp.ID;
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------

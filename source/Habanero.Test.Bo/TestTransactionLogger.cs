@@ -217,7 +217,7 @@ namespace Habanero.Test.BO
                 //---------------Tear Down -------------------------   
             finally
             {
-                string sql = "DELETE FROM Contact_Person where Surname = '" + AltSurname + "'";
+                string sql = "DELETE FROM Contact_Person where Surname_field = '" + AltSurname + "'";
                 DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
             }
         }

@@ -159,29 +159,55 @@ namespace Habanero.Test.General
             ContactPerson.DeleteAllContactPeople();
             BusinessObjectCollection<ContactPerson> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
-            ContactPerson contactPerson;
-            contactPerson = new ContactPerson();
+
+            //-----------------Set up ------------------------------------
+            const string addressLine = "Chillisoft";
+            IPrimaryKey contactPersonKey = CreateSavedContactPersonWithOneAddress(addressLine);
+
+            CreateSavedContactPerson();
+            ContactPerson.ClearContactPersonCol();
+            TestUtil.WaitForGC();
+
+            //------------------------Assert Precondition --------------------------------
+            Assert.AreEqual(0, BusinessObject.AllLoadedBusinessObjects().Count);
+
+            //------------------------Execute Test ---------------------------------------
+            ContactPerson contactPerson = ContactPerson.GetContactPerson(contactPersonKey);
+
+
+            myCol = ContactPerson.LoadBusinessObjCol();
+            Assert.AreEqual(2, myCol.Count);
+
+            myCol = ContactPerson.LoadBusinessObjCol("Addresses.AddressLine1 = '" + addressLine + "'", "Surname");
+
+            //-------------------------TestResult ---------------------------------------------------
+            Assert.AreEqual(1, myCol.Count);
+            Assert.AreSame(contactPerson, myCol[0]);
+        }
+
+        private static ContactPerson CreateSavedContactPerson()
+        {
+            ContactPerson contactPerson = new ContactPerson();
+            contactPerson.FirstName = "aa";
+            contactPerson.Surname = "abc";
+            contactPerson.Save();
+
+            return contactPerson;
+        }
+
+        private static IPrimaryKey CreateSavedContactPersonWithOneAddress(string addressLine)
+        {
+            ContactPerson contactPerson = new ContactPerson();
             contactPerson.FirstName = "a";
             contactPerson.Surname = "bb";
             contactPerson.Save();
             IPrimaryKey contactPersonKey = contactPerson.ID;
-            
+
             Address address = new Address();
-            address.AddressLine1 = "Chillisoft";
+            address.AddressLine1 = addressLine;
             address.ContactPersonID = contactPerson.ContactPersonID;
             address.Save();
-
-            contactPerson = new ContactPerson();
-            contactPerson.FirstName = "aa";
-            contactPerson.Surname = "abc";
-            contactPerson.Save();
-            ContactPerson.ClearContactPersonCol();
-            contactPerson = ContactPerson.GetContactPerson(contactPersonKey);
-            myCol = ContactPerson.LoadBusinessObjCol();
-            Assert.AreEqual(2, myCol.Count);
-            myCol = ContactPerson.LoadBusinessObjCol("Addresses.AddressLine1 = 'Chillisoft'", "Surname");
-            Assert.AreEqual(1, myCol.Count);
-            Assert.AreSame(contactPerson, myCol[0]);
+            return contactPersonKey;
         }
 
         [Test]

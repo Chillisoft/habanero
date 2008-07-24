@@ -27,10 +27,7 @@ namespace Habanero.Base
     /// </summary>
     public interface IBusinessObject
     {
-        /// <summary>
-        /// The primary key for this business object 
-        /// </summary>
-        IPrimaryKey PrimaryKey { get; set; }
+        //set; }
 
         /// <summary>
         /// Returns the primary key ID of this object.  If there is no primary key on this

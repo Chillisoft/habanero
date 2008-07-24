@@ -140,11 +140,7 @@ namespace Habanero.BO
             BOPropCol propCol = new BOPropCol();
             ClassDef classDef = ((BusinessObject)obj).ClassDef;
             Type boType = obj.GetType();
-            PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
-            if (primaryKeyDef == null)
-            {
-                primaryKeyDef = (PrimaryKeyDef) obj.ID.KeyDef;
-            }
+            PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef() ?? (PrimaryKeyDef) obj.ID.KeyDef;
 
             foreach (PropDef propDef in primaryKeyDef)
             {
@@ -458,8 +454,7 @@ namespace Habanero.BO
                 // Collection
                 if (weakRef.IsAlive && weakRef.Target != null)
                 {
-                    BusinessObject loadedBusinessObject;
-                    loadedBusinessObject = (BusinessObject) weakRef.Target;
+                    BusinessObject loadedBusinessObject = (BusinessObject) weakRef.Target;
                     //Apply concurrency Control Strategy to the Business Object
                     if (refreshIfReqNotCurrent && !loadedBusinessObject.State.IsNew)
                     {

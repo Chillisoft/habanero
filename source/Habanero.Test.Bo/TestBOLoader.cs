@@ -148,7 +148,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadClassDefWithCompositePrimaryKey();
             
             ContactPersonTestBO cp1 = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
-            ContactPersonTestBO cp2 = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cp1.PrimaryKey);
+            ContactPersonTestBO cp2 = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cp1.ID);
             Assert.AreEqual(cp1, cp2);
         }
 
@@ -235,7 +235,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDefWithCompositePrimaryKey();
             ContactPersonTestBO cpTemp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
-            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.PrimaryKey);
+            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ID);
             Assert.IsTrue(cp.AfterLoadCalled);
         }
         [Test]
@@ -247,7 +247,7 @@ namespace Habanero.Test.BO
             //-------------Execute test ---------------------
             cpTemp.Delete();
             cpTemp.Save();
-            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.PrimaryKey);
+            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ID);
             //-------------Test Result ---------------------
             Assert.IsNull(cp);
         }
@@ -274,15 +274,15 @@ namespace Habanero.Test.BO
                 throw;
             }
         }
-        [Test]
+        [Test, Ignore("Need to implement via a strategy")]
         public void TestBOLoader_RefreshObjects_WhenRetrievingFromObjectManager()
         {
             //-------------Setup Test Pack
             //Create and save a person
             ContactPersonTestBO cpTemp = CreateSavedContactPerson();
             //Clear the object manager so as to simulate a different user
-            ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
-            Assert.AreEqual(0, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
+            BusinessObject.ClearLoadedBusinessObjectBaseCol();
+            Assert.AreEqual(0, BusinessObject.AllLoadedBusinessObjects().Count);
             //Get the person from the object manager so as to ensure that they are loaded 
             // into the object manager.
             ContactPersonTestBO cpTemp2 =
@@ -299,7 +299,6 @@ namespace Habanero.Test.BO
             //-------------Test Result ---------------------
             Assert.AreEqual(cpTemp.Surname, cpTemp3.Surname);
             Assert.AreSame(cpTemp2.Surname, cpTemp3.Surname);
-
         }
         [Test]
         public void TestBOLoader_GetObjectFromObjectManager()
@@ -360,20 +359,9 @@ namespace Habanero.Test.BO
             //-------------Setup Test Pack ------------------
             ContactPersonTestBO contactPersonTestBO = CreateSavedContactPerson();
             //-------------Execute test ---------------------
-            IBusinessObject businessObject = BOLoader.Instance.GetLoadedBusinessObject(contactPersonTestBO.PrimaryKey);
+            IBusinessObject businessObject = BOLoader.Instance.GetLoadedBusinessObject(contactPersonTestBO.ID);
             //-------------Test Result ----------------------
             Assert.AreSame(contactPersonTestBO, businessObject);
-        }
-
-        [Test]
-        public void TestGetLoadedBusinessObject_DoesNotRefreshNewBo()
-        {
-            //-------------Setup Test Pack ------------------
-            ContactPerson contactPerson = new ContactPerson();
-            //-------------Execute test ---------------------
-            IBusinessObject businessObject = BOLoader.Instance.GetLoadedBusinessObject(contactPerson.PrimaryKey);
-            //-------------Test Result ----------------------
-            Assert.AreSame(contactPerson, businessObject);
         }
 
         #region HelperMethods

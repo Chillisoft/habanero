@@ -418,7 +418,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             cp.Save(); 
             //---------------Test Result -----------------------
-            ContactPersonTestBO loadedCP = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cp.PrimaryKey);
+            ContactPersonTestBO loadedCP = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cp.ID);
             Assert.IsNotNull(loadedCP);
             Assert.AreSame(cp, loadedCP);
             //---------------Tear Down -------------------------

@@ -201,9 +201,9 @@ namespace Habanero.BO
             base.Add(bo);
             _lookupTable.Add(bo.ID.ToString(), bo);
             bo.Deleted += BusinessObjectDeletedHandler;
-            if (bo.PrimaryKey != null)
+            if (bo.ID != null)
             {
-                bo.PrimaryKey.Updated += UpdateLookupTable;
+                bo.ID.Updated += UpdateLookupTable;
             }
         }
 
@@ -229,7 +229,7 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void BusinessObjectDeletedHandler(object sender, BOEventArgs e)
         {
-            this.Remove((TBusinessObject) e.BusinessObject);
+            this.RemoveInternal((TBusinessObject) e.BusinessObject);
         }
 
         /// <summary>

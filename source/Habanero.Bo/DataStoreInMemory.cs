@@ -34,7 +34,7 @@ namespace Habanero.BO
 
         public void Add(IBusinessObject businessObject)
         {
-            _objects.Add(businessObject.PrimaryKey, businessObject);
+            _objects.Add(businessObject.ID, businessObject);
         }
 
         public Dictionary<IPrimaryKey, IBusinessObject> AllObjects
@@ -66,14 +66,14 @@ namespace Habanero.BO
         {
             foreach (IBusinessObject bo in _objects.Values)
             {
-                if (bo.PrimaryKey.Equals(primaryKey)) return bo as T;
+                if (bo.ID.Equals(primaryKey)) return bo as T;
             }
             return null;
         }
 
         public void Remove(IBusinessObject businessObject)
         {
-            _objects.Remove(businessObject.PrimaryKey);
+            _objects.Remove(businessObject.ID);
         }
 
         public BusinessObjectCollection<T> FindAll<T>(Criteria criteria) where T : class, IBusinessObject, new()

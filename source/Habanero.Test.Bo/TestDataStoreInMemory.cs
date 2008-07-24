@@ -124,7 +124,7 @@ namespace Habanero.Test.BO
             dataStore.Add(cp);
 
             //---------------Execute Test ----------------------
-            ContactPersonTestBO loadedCP = dataStore.Find<ContactPersonTestBO>(cp.PrimaryKey);
+            ContactPersonTestBO loadedCP = dataStore.Find<ContactPersonTestBO>(cp.ID);
 
             //---------------Test Result -----------------------
             Assert.AreSame(cp.ID, loadedCP.ID);

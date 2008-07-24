@@ -129,7 +129,7 @@ namespace Habanero.BO
             if (this.BusinessObject.State.IsDeleted) return false;
 
             List<IBOKey> allKeys = new List<IBOKey>();
-            if (this.BusinessObject.PrimaryKey != null) allKeys.Add(this.BusinessObject.PrimaryKey);
+            if (this.BusinessObject.ID != null) allKeys.Add(this.BusinessObject.ID);
             foreach (BOKey key in this.BusinessObject.GetBOKeyCol())
             {
                 allKeys.Add(key);

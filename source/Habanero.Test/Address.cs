@@ -210,5 +210,10 @@ namespace Habanero.Test
             message = "";
             return _isDeletable;
         }
+
+        public override string ToString()
+        {
+            return ID.GetObjectId();
+        }
     }
 }

@@ -91,7 +91,24 @@ namespace Habanero.BO
             {
                 _primaryKey.SetObjectID(myID);
             }
-            ClassDef currentClassDef = ClassDef;
+            InitialisePrimaryKeyPropertiesBasedOnParentClass(myID);
+
+            if (_classDef == null)
+            {
+                throw new HabaneroDeveloperException("There is an error constructing a business object. Please refer to the system administrator",
+                    "The Class could not be constructed since no classdef could be loaded");
+            }
+            if (ID == null)
+            {
+                throw new HabaneroDeveloperException("There is an error constructing a business object. Please refer to the system administrator",
+                    "The Class could not be constructed since no _primaryKey has been created");
+            }
+//            AddToLoadedObjectsCollection();
+        }
+
+        private void InitialisePrimaryKeyPropertiesBasedOnParentClass(Guid myID)
+        {
+            ClassDef currentClassDef = _classDef;
             if (currentClassDef != null)
             {
                 while (currentClassDef.IsUsingClassTableInheritance())
@@ -109,8 +126,6 @@ namespace Habanero.BO
                     currentClassDef = currentClassDef.SuperClassClassDef;
                 }
             }
-
-            AddToLoadedObjectsCollection();
         }
 
         /// <summary>
@@ -121,7 +136,7 @@ namespace Habanero.BO
             try
             {
                 if (ClassDef == null) return;
-                if (ID != null) AllLoadedBusinessObjects().Remove(ID.ToString());
+                if (ID != null) AllLoadedBusinessObjects().Remove(ID.GetObjectId());
                 if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
                     if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
                         if (ID != null) AllLoadedBusinessObjects().Remove(ID.ToString());
@@ -145,15 +160,16 @@ namespace Habanero.BO
             }
         }
 
-        private void Initialise(ClassDef def)
+        private void Initialise(ClassDef classDef)
         {
             _boState = new BOState(this);
             _boState.IsDeleted = false;
             _boState.IsDirty = false;
             _boState.IsEditing = false;
             _boState.IsNew = true;
-            _classDef = def ?? ClassDef.ClassDefs[GetType()];
+            _classDef = classDef ?? ClassDef.ClassDefs[GetType()];
             ConstructFromClassDef(true);
+
         }
 
         #endregion //Constructors
@@ -638,10 +654,10 @@ namespace Habanero.BO
         /// <summary>
         /// The primary key for this business object 
         /// </summary>
-        public IPrimaryKey PrimaryKey
+        protected IPrimaryKey PrimaryKey
         {
             get { return _primaryKey; }
-            set { _primaryKey = value; }
+//            set { _primaryKey = value; }
         }
 
         /// <summary>
@@ -971,7 +987,7 @@ namespace Habanero.BO
 
         private void RemoveFromAllLoaded()
         {
-            if (_primaryKey != null) AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
+            AllLoadedBusinessObjects().Remove(ID.GetObjectId());
         }
 
         private void CheckIsDeletable()

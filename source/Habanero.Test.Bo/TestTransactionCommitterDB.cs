@@ -485,6 +485,7 @@ namespace Habanero.Test.BO
             AssertBOStateIsValidAfterDelete(contactPersonTestBO);
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void Test3LayerDeleteRelated()
         {
@@ -503,8 +504,8 @@ namespace Habanero.Test.BO
             TransactionCommitterDB committer = new TransactionCommitterDB();
             committer.AddBusinessObject(org);
             //---------------Execute Test ----------------------
-
             committer.CommitTransaction();
+
             //---------------Test Result -----------------------
             AssertBOStateIsValidAfterDelete(org);
             AssertBOStateIsValidAfterDelete(contactPersonTestBO);
@@ -728,10 +729,10 @@ namespace Habanero.Test.BO
         }
 
 
-        private static void AssertBOStateIsValidAfterDelete(BusinessObject mockBo)
+        private static void AssertBOStateIsValidAfterDelete(BusinessObject bo)
         {
-            Assert.IsTrue(mockBo.State.IsDeleted);
-            Assert.IsTrue(mockBo.State.IsNew);
+            Assert.IsTrue(bo.State.IsDeleted);
+            Assert.IsTrue(bo.State.IsNew);
         }
 
         private static void AssertBusinessObjectNotInDatabase(BusinessObject bo)

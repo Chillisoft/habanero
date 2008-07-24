@@ -406,7 +406,7 @@ namespace Habanero.BO
             T bo = new T();
 
             PopulateBOFromReader(bo, dataReader, selectQuery);
-            IPrimaryKey key = bo.PrimaryKey;
+            IPrimaryKey key = bo.ID;
 
             T boFromAllLoadedObjects = (T) GetLoadedBusinessObject(key);
 
@@ -424,7 +424,7 @@ namespace Habanero.BO
             IBusinessObject bo = classDef.CreateNewBusinessObject();
 
             PopulateBOFromReader(bo, dataReader, selectQuery);
-            IPrimaryKey key = bo.PrimaryKey;
+            IPrimaryKey key = bo.ID;
 
             IBusinessObject boFromAllLoadedObjects = GetLoadedBusinessObject(key);
 
