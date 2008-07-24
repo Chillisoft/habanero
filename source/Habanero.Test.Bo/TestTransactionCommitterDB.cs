@@ -499,11 +499,11 @@ namespace Habanero.Test.BO
             contactPersonTestBO.SetPropertyValue("OrganisationID", org.OrganisationID);
             org.Save();
             contactPersonTestBO.Save();
-            org.Delete();
 
+            //---------------Execute Test ----------------------
+            org.Delete();
             TransactionCommitterDB committer = new TransactionCommitterDB();
             committer.AddBusinessObject(org);
-            //---------------Execute Test ----------------------
             committer.CommitTransaction();
 
             //---------------Test Result -----------------------
