@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.BO
 {
@@ -91,7 +92,10 @@ namespace Habanero.BO
         public OrderCriteria OrderCriteria
         {
             get { return _orderCriteria; }
-            set { _orderCriteria = value; }
+            set { _orderCriteria = value;
+            if (this.Source == null) throw new HabaneroApplicationException("You cannot set an OrderCriteria for a SelectQuery if no Source has been set");
+                foreach (OrderCriteria.Field field in _orderCriteria.Fields) this.Source.JoinToSource(field.Source);
+            }
         }
 
         /// <summary>

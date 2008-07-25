@@ -108,28 +108,27 @@ namespace Habanero.BO
         {
             foreach (OrderCriteria.Field field in _selectQuery.OrderCriteria.Fields)
             {
-                string fieldSourceName = field.Source != null ? field.Source.Name : null;
-                if (!String.IsNullOrEmpty(fieldSourceName) && !fieldSourceName.Equals(this.Source.Name))
+                if (field.Source != null && !field.Source.Equals(this.Source))
                 {
                     ClassDef currentClassDef = (ClassDef)this.ClassDef;
-                    string relationshipJoinTable = AddRelationshipJoin(builder, currentClassDef, field, fieldSourceName);
+                    string relationshipJoinTable = AddRelationshipJoin(builder, currentClassDef, field, field.Source);
                     field.Source.EntityName = relationshipJoinTable;
                 }
             }
         }
 
-        private string AddRelationshipJoin(StringBuilder builder, ClassDef currentClassDef, QueryField field, string fieldSourceName)
+        private string AddRelationshipJoin(StringBuilder builder, ClassDef currentClassDef, QueryField field, Source fieldSource)
         {
-            if (String.IsNullOrEmpty(fieldSourceName))
+            if (fieldSource == null || String.IsNullOrEmpty(fieldSource.Name))
             {
-                IPropDef propDef = currentClassDef.GetPropDef(field.PropertyName);
+                IPropDef propDef = currentClassDef.GetPropDef(field.PropertyName, true);
                 if (propDef != null)
                 {
                     field.FieldName = propDef.DatabaseFieldName;
                 } 
                 return currentClassDef.GetTableName();
             }
-            string[] parts = fieldSourceName.Split(new char[]{'.'}, StringSplitOptions.RemoveEmptyEntries);
+            string[] parts = fieldSource.ToString().Split(new char[]{'.'}, StringSplitOptions.RemoveEmptyEntries);
             string relationshipName = parts[0];
             RelationshipDef relationshipDef = currentClassDef.GetRelationship(relationshipName);
             if (relationshipDef != null)
@@ -139,8 +138,8 @@ namespace Habanero.BO
                 ClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
                 if (relatedObjectClassDef != null)
                 {
-                    string childSourceName = string.Join(";", parts, 1, parts.Length - 1);
-                    string relationshipJoinTable = AddRelationshipJoin(builder, relatedObjectClassDef, field, childSourceName);
+                    Source childSource = Source.FromString(string.Join(";", parts, 1, parts.Length - 1));
+                    string relationshipJoinTable = AddRelationshipJoin(builder, relatedObjectClassDef, field, childSource);
                     if (String.IsNullOrEmpty(relationshipJoinTable))
                     {
                         relationshipJoinTable = relatedObjectClassDef.GetTableName();

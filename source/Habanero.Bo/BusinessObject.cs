@@ -494,11 +494,13 @@ namespace Habanero.BO
         public object GetPropertyValue(Source source, string propName)
         {
             if (source == null || String.IsNullOrEmpty(source.Name)) return GetPropertyValue(propName);
-            string[] sources = source.Name.Split(new char[]{'.'},StringSplitOptions.RemoveEmptyEntries);
-            IBusinessObject businessObject = Relationships.GetRelatedObject(sources[0]);
-            string childSource = String.Join(".", sources, 1, sources.Length - 1);
-            Source newSource = string.IsNullOrEmpty(childSource) ? null : new Source(childSource);
-            return businessObject.GetPropertyValue(newSource, propName);
+            IBusinessObject businessObject = Relationships.GetRelatedObject(source.Name);
+            if (source.Joins.Count > 0)
+            {
+                return businessObject.GetPropertyValue(source.Joins[0].ToSource, propName);
+            } 
+            return businessObject.GetPropertyValue(propName);
+            
         }
 
 

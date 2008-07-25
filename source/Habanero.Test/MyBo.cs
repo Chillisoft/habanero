@@ -1181,7 +1181,8 @@ namespace Habanero.Test
 				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""My_Related_Bo"">
 					<property  name=""MyRelatedBoID"" databaseField=""My_Related_Bo_ID""/>
 					<property  name=""MyRelatedTestProp"" databaseField=""My_Related_Test_Prop"" />
-					<property  name=""MyBoID"" databaseField=""My_Bo_ID"" />
+					<property  name=""MyRelatedTestProp2"" databaseField=""My_Related_Test_Prop2"" />
+                    <property  name=""MyBoID"" databaseField=""My_Bo_ID"" />
 					<primaryKey>
 						<prop name=""MyRelatedBoID"" />
 					</primaryKey>

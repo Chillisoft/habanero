@@ -190,5 +190,21 @@ namespace Habanero.Test
         }
 
         #endregion
+
+        public static Engine CreateSavedEngine(Car car, string engineno)
+        {
+            Engine engine = new Engine();
+            engine.CarID = car.CarID;
+            engine.EngineNo = engineno;
+            engine.Save();
+            return engine;
+        }
+
+        public static ClassDef LoadClassDef_IncludingCarAndOwner()
+        {
+            new ContactPerson();
+            new Car();
+           return new Engine().ClassDef;
+        }
     }
 }

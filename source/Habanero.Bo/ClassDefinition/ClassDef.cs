@@ -882,6 +882,30 @@ namespace Habanero.BO.ClassDefinition
             return GetPropDef(propertyName, true);
         }
 
+        public IPropDef GetPropDef(Source source, string propertyName, bool throwError)
+        {
+            if (source == null) return GetPropDef(propertyName, throwError);
+            if (!this.RelationshipDefCol.Contains(source.Name))
+            {
+                if (throwError)
+                {
+                    throw new ArgumentException("The ClassDef for " + this.ClassName + " does not contain a relationship with the name " +
+                                                source.Name + " and thus cannot retrieve the PropDef through this relationship");
+                }
+                return null;
+            }
+                
+            ClassDef relatedClassDef = this.RelationshipDefCol[source.Name].RelatedObjectClassDef;
+            if (source.Joins.Count > 0)
+            {
+                return relatedClassDef.GetPropDef(source.Joins[0].ToSource, propertyName, throwError);
+            }
+            else
+            {
+                return relatedClassDef.GetPropDef(propertyName, throwError);
+            }
+        }
+
         ///<summary>
         /// Retrieves the primary key definition for this class, traversing 
         /// the SuperClass structure to get the primary key definition if necessary
@@ -1164,5 +1188,7 @@ namespace Habanero.BO.ClassDefinition
         {
             return ClassDefs[typeof (T)];
         }
+
+     
     }
 }

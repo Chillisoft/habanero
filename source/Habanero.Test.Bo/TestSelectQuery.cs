@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -63,7 +64,41 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestOrderCriteria()
+        public void TestSetOrderCriteria()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            selectQuery.Source = new Source(TestUtil.CreateRandomString());
+            //---------------Execute Test ----------------------
+            OrderCriteria orderCriteria = new OrderCriteria().Add("testfield");
+            selectQuery.OrderCriteria = orderCriteria;
+            //---------------Test Result -----------------------
+            Assert.AreSame(orderCriteria, selectQuery.OrderCriteria);
+            Assert.AreEqual(0, selectQuery.Source.Joins.Count);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestSetOrderCriteria_AddsJoinToSource()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            selectQuery.Source = new Source(TestUtil.CreateRandomString());
+            string sourceName = "mysource";
+            OrderCriteria.Field orderField = new OrderCriteria.Field("testfield", "testfield", new Source(sourceName), OrderCriteria.SortDirection.Ascending);
+            OrderCriteria orderCriteria = new OrderCriteria().Add(orderField);
+
+            //---------------Execute Test ----------------------
+            selectQuery.OrderCriteria = orderCriteria;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, selectQuery.Source.Joins.Count);
+            Assert.AreEqual(selectQuery.Source, selectQuery.Source.Joins[0].FromSource);
+            Assert.AreEqual(sourceName, selectQuery.Source.Joins[0].ToSource.Name);
+        }
+
+
+        [Test, ExpectedException(typeof(HabaneroApplicationException), ExpectedMessage="You cannot set an OrderCriteria for a SelectQuery if no Source has been set")]
+        public void TestOrderCriteriaWithNoSource()
         {
             //---------------Set up test pack-------------------
             SelectQuery selectQuery = new SelectQuery();

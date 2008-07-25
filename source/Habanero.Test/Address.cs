@@ -215,5 +215,58 @@ namespace Habanero.Test
         {
             return ID.GetObjectId();
         }
+
+        public static Address CreateSavedAddress(ContactPerson contactPerson, string firstLine)
+        {
+            Address address = CreateUnsavedAddress(contactPerson, firstLine);
+            address.Save();
+            return address;
+        }
+
+        public static Address CreateSavedAddress(Guid contactPersonID, string firstLine)
+        {
+            Address address = CreateUnsavedAddress(contactPersonID, firstLine);
+            address.Save();
+            return address;
+        }
+
+        public static Address CreateSavedAddress(ContactPerson contactPerson)
+        {
+            Address address = CreateUnsavedAddress(contactPerson);
+            address.Save();
+            return address;
+        }
+
+        public static Address CreateSavedAddress(Guid contactPersonID)
+        {
+            Address address = CreateUnsavedAddress(contactPersonID);
+            address.Save();
+            return address;
+        }
+
+        private static Address CreateUnsavedAddress(Guid contactPersonID)
+        {
+            return CreateUnsavedAddress(contactPersonID, TestUtil.CreateRandomString());
+        }
+
+        private static Address CreateUnsavedAddress(ContactPerson contactPerson, string firstLine)
+        {
+            return CreateUnsavedAddress(contactPerson.ContactPersonID, firstLine);
+        
+        }
+
+        private static Address CreateUnsavedAddress(Guid contactPersonID, string firstLine)
+        {
+            Address address = new Address();
+            address.ContactPersonID = contactPersonID;
+            address.AddressLine1 = firstLine;
+            return address;
+        }
+
+        private static Address CreateUnsavedAddress(ContactPerson contactPerson)
+        {
+            return CreateUnsavedAddress(contactPerson.ContactPersonID);
+        }
+
     }
 }

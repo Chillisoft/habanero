@@ -108,7 +108,7 @@ namespace Habanero.BO
             OrderCriteria orderCriteria = OrderCriteria.FromString(orderByString);
             foreach (OrderCriteria.Field field in orderCriteria.Fields)
             {
-                IPropDef propDef = classDef.GetPropDef(field.PropertyName, false);
+                IPropDef propDef = classDef.GetPropDef(field.Source, field.PropertyName, false);
                 if (propDef != null)
                 {
                     field.FieldName = propDef.DatabaseFieldName;
@@ -118,7 +118,7 @@ namespace Habanero.BO
                     field.Source = new Source("", classDef.GetTableName());
                 } else
                 {
-                    string sourceName = field.Source.Name;
+                    string sourceName = field.Source.ToString();
                     string entityName = GetEntityName(classDef, field, sourceName);
                     field.Source.EntityName = entityName;
                 }

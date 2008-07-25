@@ -208,6 +208,88 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestCreateOrderCriteria_ThroughRelationship_TwoLevels()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            string orderByString = "Car.Owner.Surname";
+
+            //---------------Execute Test ----------------------
+            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(engineClassDef, orderByString);
+            //---------------Test Result -----------------------
+            OrderCriteria.Field field = orderCriteria.Fields[0];
+            Assert.AreEqual("Surname", field.PropertyName);
+            Assert.AreEqual("Surname_field", field.FieldName);
+            Assert.AreEqual(1, field.Source.Joins.Count);
+
+            Assert.AreEqual("Car.Owner", field.Source.ToString());
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestSetOrderCriteria_AddsJoinToSource()
+        {
+            //---------------Set up test pack-------------------
+            MyRelatedBo.LoadClassDefWithDifferentTableAndFieldNames();
+            ClassDef myBoClassdef = MyBO.LoadClassDefWithRelationship();
+
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(myBoClassdef);
+            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(myBoClassdef, "MyRelationship.MyRelatedTestProp");
+
+            //---------------Execute Test ----------------------
+            selectQuery.OrderCriteria = orderCriteria;
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, selectQuery.Source.Joins.Count);
+            Assert.AreEqual(selectQuery.Source, selectQuery.Source.Joins[0].FromSource);
+            Assert.AreEqual("MyRelationship", selectQuery.Source.Joins[0].ToSource.Name);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestSetOrderCriteria_AddsJoinToSource_OnlyOnce()
+        {
+            //---------------Set up test pack-------------------
+            MyRelatedBo.LoadClassDefWithDifferentTableAndFieldNames();
+            ClassDef myBoClassdef = MyBO.LoadClassDefWithRelationship();
+
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(myBoClassdef);
+            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(myBoClassdef, "MyRelationship.MyRelatedTestProp, MyRelationship.MyRelatedTestProp2");
+
+            //---------------Execute Test ----------------------
+            selectQuery.OrderCriteria = orderCriteria;
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, selectQuery.Source.Joins.Count);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestSetOrderCriteria_AddsJoinToSource_TwoLevels()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(engineClassDef);
+            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(engineClassDef, "Car.Owner.Surname");
+
+            //---------------Execute Test ----------------------
+            selectQuery.OrderCriteria = orderCriteria;
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, selectQuery.Source.Joins.Count);
+            Source carSource = selectQuery.Source.Joins[0].ToSource;
+            Assert.AreEqual("Car", carSource.Name);
+            Assert.AreEqual(1, carSource.Joins.Count);
+            Assert.AreSame(carSource, carSource.Joins[0].FromSource);
+            Assert.AreEqual("Owner", carSource.Joins[0].ToSource.Name);
+
+            //---------------Tear Down -------------------------
+        }
+
+
+
+        [Test]
         public void TestSingleTableInheritance_Fields()
         {
             //---------------Set up test pack-------------------

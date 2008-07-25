@@ -463,6 +463,23 @@ namespace Habanero.Test.BO
             Assert.AreEqual(car1.CarRegNo, carregno);
             //---------------Tear Down -------------------------     
         }
+
+        [Test]
+        public void TestGetPropertyValue_ThroughRelationship_TwoLevels()
+        {
+            //---------------Set up test pack-------------------
+            string surname = TestUtil.CreateRandomString();
+            ContactPerson owner = ContactPerson.CreateSavedContactPerson(surname);
+            Car car = Car.CreateSavedCar("5", owner);
+            Engine engine = Engine.CreateSavedEngine( car, "20");
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            object fetchedSurname = engine.GetPropertyValue(Source.FromString("Car.Owner"), "Surname");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(surname, fetchedSurname);
+            //---------------Tear Down -------------------------     
+        }
     }
 
 }

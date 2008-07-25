@@ -336,41 +336,17 @@ namespace Habanero.Test.BO
         public void TestField_Compare_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
-            ContactPerson contactPerson1 = ContactPerson.CreateSavedContactPerson();
-            contactPerson1.FirstName = "Bob";
+            ContactPerson contactPerson1 = ContactPerson.CreateSavedContactPerson("ZZZZ");
+            ContactPerson contactPerson2 = ContactPerson.CreateSavedContactPerson("AAAA");
+            Car car1 = Car.CreateSavedCar("2", contactPerson1);
+            Car car2 = Car.CreateSavedCar("5", contactPerson2);
+            Engine car1engine1 = Engine.CreateSavedEngine(car1, "20");
+            Engine car2engine1 = Engine.CreateSavedEngine(car2, "50");
+            OrderCriteria.Field field = OrderCriteria.Field.FromString("Car.Owner.Surname");
 
-            ContactPerson contactPerson2 = ContactPerson.CreateSavedContactPerson();
-            contactPerson2.FirstName = "Andy";
-
-            Car car1 = new Car();
-            car1.CarRegNo = "2";
-            car1.OwnerID = contactPerson1.ContactPersonID;
-            Car car2 = new Car();
-            car2.CarRegNo = "5";
-            car2.OwnerID = contactPerson2.ContactPersonID;
-
-            Engine car1engine1 = new Engine();
-            car1engine1.CarID = car1.CarID;
-            car1engine1.EngineNo = "20";
-
-            Engine car2engine1 = new Engine();
-            car2engine1.CarID = car2.CarID;
-            car2engine1.EngineNo = "50";
-
-            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
-            committer.AddBusinessObject(contactPerson1);
-            committer.AddBusinessObject(contactPerson2);
-            committer.AddBusinessObject(car1);
-            committer.AddBusinessObject(car2);
-            committer.AddBusinessObject(car1engine1);
-            committer.AddBusinessObject(car2engine1);
-            committer.CommitTransaction();
-
-            OrderCriteria.Field field = OrderCriteria.Field.FromString("Car.Owner.FirstName");
-
-            //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             int comparisonResult = field.Compare(car1engine1, car2engine1);
+
             //---------------Test Result -----------------------
             Assert.Greater(comparisonResult, 0, "engine1 should be greater as its car's regno is greater");
             //---------------Tear Down -------------------------     
@@ -518,7 +494,11 @@ namespace Habanero.Test.BO
             OrderCriteria.Field field = OrderCriteria.Field.FromString("MyRelationship.MySecondRelationship.TestProp");
             //---------------Test Result -----------------------
             Assert.AreEqual("TestProp", field.PropertyName);
-            Assert.AreEqual(new Source("MyRelationship.MySecondRelationship"), field.Source);
+            Source source = field.Source;
+            Assert.AreEqual(new Source("MyRelationship"), source);
+            Assert.AreEqual(1, source.Joins.Count);
+            Assert.AreSame(source, source.Joins[0].FromSource);
+            Assert.AreEqual(new Source("MySecondRelationship"), source.Joins[0].ToSource);
             //---------------Tear Down -------------------------
         }
 
@@ -527,6 +507,19 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             string orderBy = "ContactPerson.Surname";
+            OrderCriteria.Field orderCriteriaField = OrderCriteria.Field.FromString(orderBy + " ASC");
+            //---------------Execute Test ----------------------
+            string fullName = orderCriteriaField.FullName;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(orderBy, fullName);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void Test_Field_FullName_MultilevelSource()
+        {
+            //---------------Set up test pack-------------------
+            string orderBy = "Car.Owner.Surname";
             OrderCriteria.Field orderCriteriaField = OrderCriteria.Field.FromString(orderBy + " ASC");
             //---------------Execute Test ----------------------
             string fullName = orderCriteriaField.FullName;

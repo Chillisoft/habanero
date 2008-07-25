@@ -147,6 +147,7 @@ namespace Habanero.Test.General
             p.Surname = "abc";
             p.Save();
             ContactPerson.ClearContactPersonCol();
+            TestUtil.WaitForGC();
             p = ContactPerson.GetContactPerson(pKey);
             myCol = ContactPerson.LoadBusinessObjCol("Surname = 'bb'", "Surname");
             Assert.AreEqual(1, myCol.Count);

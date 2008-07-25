@@ -354,12 +354,36 @@ namespace Habanero.Test
 
         public static ContactPerson CreateSavedContactPerson()
         {
-            ContactPerson cp = new ContactPerson();
-            cp.FirstName = TestUtil.CreateRandomString();
-            cp.Surname = TestUtil.CreateRandomString();
+            ContactPerson cp = CreateUnsavedContactPerson();
             cp.Save();
             return cp;
 
+        }
+
+        private static ContactPerson CreateUnsavedContactPerson()
+        {
+            return  CreateUnsavedContactPerson(TestUtil.CreateRandomString());
+          
+        }
+
+        private static ContactPerson CreateUnsavedContactPerson(string surname)
+        {
+            return  CreateUnsavedContactPerson(surname, TestUtil.CreateRandomString());
+        }
+
+        private static ContactPerson CreateUnsavedContactPerson(string surname, string firstName)
+        {
+            ContactPerson cp = new ContactPerson();
+            cp.FirstName = firstName;
+            cp.Surname = surname;
+            return cp;
+        }
+
+        public static ContactPerson CreateSavedContactPerson(string surname)
+        {
+            ContactPerson cp = CreateUnsavedContactPerson(surname);
+            cp.Save();
+            return cp;
         }
     }
 }

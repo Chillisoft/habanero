@@ -305,19 +305,27 @@ namespace Habanero.Base
 
             private static Field CreateField(string sourceAndFieldName, SortDirection sortDirection)
             {
-                string fieldName;
-                string source = null;
+                //string source = null;
                 string[] parts = sourceAndFieldName.Trim().Split('.');
-                if (parts.Length > 1)
-                {
-                    source = String.Join(".", parts, 0, parts.Length -1 );
-                    fieldName = parts[parts.Length - 1];
-                } else
-                {
-                    fieldName = parts[0];
-                }
-                Source newSource = string.IsNullOrEmpty(source) ? null : new Source(source);
-                Field field = new Field(fieldName, fieldName, newSource, sortDirection);
+                string fieldName = parts[parts.Length-1];
+                Base.Source source = Base.Source.FromString(String.Join(".", parts, 0, parts.Length - 1));
+
+//                if (parts.Length > 2)
+//                {
+//                    string subSourceAndFieldName = String.Join(".", parts, 0, parts.Length -1 );
+//                    subField = CreateField(subSourceAndFieldName, sortDirection);
+////                    fieldName = parts[1];
+//                } else if (parts.Length == 2)
+//                {
+//                    source = parts[0];
+//                    //fieldName = parts[1];
+//                } else
+//                {
+//                    //fieldName = parts[0];
+//                }
+//                Source newSource = string.IsNullOrEmpty(source) ? null : new Source(source);
+                Field field = new Field(fieldName, fieldName, source, sortDirection);
+               // if (subField != null) field.Source.Joins.Add(new Source.Join(field.Source, subField.));
                 return field;
             }
         }

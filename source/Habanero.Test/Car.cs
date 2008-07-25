@@ -214,5 +214,32 @@ namespace Habanero.Test
         }
 
         #endregion
+
+        public static Car CreateSavedCar(string regno)
+        {
+            Car car = CreateUnsavedCar(regno);
+            car.Save();
+            return car;
+        }
+
+        public static Car CreateSavedCar(string regno, ContactPerson owner)
+        {
+            Car car = CreateUnsavedCar(regno, owner);
+            car.Save();
+            return car;
+        }
+
+        private static Car CreateUnsavedCar(string regno)
+        {
+            return CreateUnsavedCar(regno, null);
+        }
+
+        private static Car CreateUnsavedCar(string regno, ContactPerson owner)
+        {
+            Car car = new Car();
+            if (owner != null) car.OwnerID = owner.ContactPersonID;
+            car.CarRegNo = regno;
+            return car;
+        }
     }
 }

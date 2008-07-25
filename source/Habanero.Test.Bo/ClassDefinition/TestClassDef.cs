@@ -818,5 +818,66 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Tear Down -------------------------
         }
 
+        [Test]
+        public void TestGetPropDef_WithSource()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef myRelatedClassDef = MyRelatedBo.LoadClassDef();
+            ClassDef myBoClassDef = MyBO.LoadClassDefWithRelationship();
+            Source source = new Source("MyRelationship");
+            string myrelatedtestpropName = "MyRelatedTestProp";
+            //---------------Execute Test ----------------------
+            IPropDef myRelatedTestPropDef = myBoClassDef.GetPropDef(source, myrelatedtestpropName, false);
+            //---------------Test Result -----------------------
+            Assert.AreSame(myRelatedClassDef.PropDefcol[myrelatedtestpropName], myRelatedTestPropDef);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestGetPropDef_WithSource_TwoLevels()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+
+            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            ClassDef contactPersonClassDef = new ContactPerson().ClassDef;
+            Source source = Source.FromString("Car.Owner");
+            string surnamePropName = "Surname";
+            //---------------Execute Test ----------------------
+            IPropDef surnamePropDef = engineClassDef.GetPropDef(source, surnamePropName, false);
+            //---------------Test Result -----------------------
+            Assert.AreSame(contactPersonClassDef.PropDefcol[surnamePropName], surnamePropDef);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void TestGetPropDef_WithInvalidSource_ThrowError()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef myBoClassDef = MyBO.LoadDefaultClassDef();
+            Source source = new Source("MyRelationship");
+            string myrelatedtestpropName = "MyRelatedTestProp";
+            //---------------Execute Test ----------------------
+            myBoClassDef.GetPropDef(source, myrelatedtestpropName, true);
+        }
+
+        [Test]
+        public void TestGetPropDef_WithInvalidSource_NoThrowError()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef myBoClassDef = MyBO.LoadDefaultClassDef();
+            Source source = new Source("MyRelationship");
+            string myrelatedtestpropName = "MyRelatedTestProp";
+            //---------------Execute Test ----------------------
+            IPropDef myRelatedTestPropDef = myBoClassDef.GetPropDef(source, myrelatedtestpropName, false);
+            //---------------Test Result -----------------------
+            Assert.IsNull(myRelatedTestPropDef);
+            //---------------Tear Down -------------------------
+
+        }
+
     }
 }

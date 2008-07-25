@@ -574,8 +574,8 @@ namespace Habanero.Test.BO
         public static ContactPersonTestBO CreateSavedContactPersonNoAddresses()
         {
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-            contactPersonTestBO.Surname = Guid.NewGuid().ToString();
-            contactPersonTestBO.FirstName = Guid.NewGuid().ToString();
+            contactPersonTestBO.Surname = TestUtil.CreateRandomString();
+            contactPersonTestBO.FirstName = TestUtil.CreateRandomString();
             contactPersonTestBO.Save();
             return contactPersonTestBO;
         }
@@ -607,5 +607,74 @@ namespace Habanero.Test.BO
             return CreateContactPerson(out address);
         }
 
+        public static ContactPersonTestBO CreateSavedContactPerson(string surname, string firstName)
+        {
+            ContactPersonTestBO contact = CreateUnsavedContactPerson(surname, firstName);
+            contact.Save();
+            return contact;
+        }
+
+        public static ContactPersonTestBO CreateSavedContactPerson()
+        {
+            ContactPersonTestBO contact = CreateUnsavedContactPerson();
+            contact.Save();
+            return contact;
+        }
+
+        public static ContactPersonTestBO CreateSavedContactPerson(string surname)
+        {
+            ContactPersonTestBO contact = CreateUnsavedContactPerson(surname);
+            contact.Save();
+            return contact;
+
+        }
+
+        public static ContactPersonTestBO CreateSavedContactPerson(DateTime dateOfBirth)
+        {
+            ContactPersonTestBO contact = CreateUnsavedContactPerson(dateOfBirth);
+            contact.Save();
+            return contact;
+        }
+
+        public static ContactPersonTestBO CreateSavedContactPerson(DateTime dateOfBirth, string surname)
+        {
+            ContactPersonTestBO contact = CreateUnsavedContactPerson(dateOfBirth, surname);
+            contact.Save();
+            return contact;
+        }
+
+        private static ContactPersonTestBO CreateUnsavedContactPerson()
+        {
+            return CreateUnsavedContactPerson(TestUtil.CreateRandomString());
+        }
+
+        private static ContactPersonTestBO CreateUnsavedContactPerson(DateTime dateOfBirth)
+        {
+            ContactPersonTestBO contact = CreateUnsavedContactPerson();
+            contact.DateOfBirth = dateOfBirth;
+            return contact;
+        }
+
+        private static ContactPersonTestBO CreateUnsavedContactPerson(string surname)
+        {
+            return CreateUnsavedContactPerson(surname, TestUtil.CreateRandomString());
+        }
+
+        private static ContactPersonTestBO CreateUnsavedContactPerson(DateTime dateOfBirth, string surname)
+        {
+            ContactPersonTestBO contact = CreateUnsavedContactPerson(surname);
+            contact.DateOfBirth = dateOfBirth;
+            return contact;
+        }
+
+        public static ContactPersonTestBO CreateUnsavedContactPerson(string surname, string firstName)
+        {
+            ContactPersonTestBO contact = new ContactPersonTestBO();
+            contact.Surname = surname;
+            contact.FirstName = firstName;
+            return contact;
+        }
+
+       
     }
 }
