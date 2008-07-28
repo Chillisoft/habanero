@@ -24,6 +24,10 @@ using Habanero.Base;
 
 namespace Habanero.BO
 {
+    ///<summary>
+    /// This is a global registry used by the Business object layer.
+    /// This class allows you to set and get Globally accessable objects. E.g. DataAccessor
+    ///</summary>
     public class BORegistry
     {
         private static IDataAccessor _dataAccessor;

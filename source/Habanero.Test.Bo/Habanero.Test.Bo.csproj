@@ -129,6 +129,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestPack\AddressTestBO.cs" />
     <Compile Include="ClassDefinition\TestTriggerCol.cs" />
     <Compile Include="ClassDefinition\TestTrigger.cs" />
     <Compile Include="ClassDefinition\TestUIFormGrid.cs" />
@@ -155,7 +156,7 @@
     <Compile Include="ClassDefinition\TestRelPropDef.cs" />
     <Compile Include="Comparer\TestReflectedPropertyComparer.cs" />
     <Compile Include="Comparer\TestComparers.cs" />
-    <Compile Include="ContactPersonTestBO.cs" />
+    <Compile Include="TestPack\ContactPersonTestBO.cs" />
     <Compile Include="CriteriaManager\TestSqlCriteriaCreator.cs" />
     <Compile Include="OrganisationTestBO.cs" />
     <Compile Include="SqlGeneration\StatementGeneratorTestHelper.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="ConcurrencyControl\TestConcurrencyControl_PessimisticLockingDB.cs" />
     <Compile Include="TestBORegistry.cs" />
     <Compile Include="TestBusinessObjectLoader.cs" />
+    <Compile Include="TestBusObjectManager.cs" />
     <Compile Include="TestCriteria.cs" />
     <Compile Include="TestSqlFormatter.cs" />
     <Compile Include="TestDataStoreInMemory.cs" />

@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
@@ -169,7 +170,48 @@ namespace Habanero.BO
             GetBusinessObjectCollection<T>(relationshipCriteria, relationship.OrderCriteria).ForEach(
                 delegate(T obj) { relatedCol.Add(obj); });
             relatedCol.SelectQuery.Criteria = relationshipCriteria;
+            relatedCol.SelectQuery.OrderCriteria = relationship.OrderCriteria;
             return relatedCol;
+        }
+
+        /// <summary>
+        /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
+        /// fields defined in the relationship.
+        /// </summary>
+        /// <param name="type">The type of collection to load. This must be a class that implements IBusinessObject</typeparam>
+        /// <param name="relationship">The relationship that defines the criteria that must be loaded.  For example, a Person might have
+        /// a Relationship called Addresses, which defines the PersonID property as the relationship property. In this case, calling this method
+        /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
+        /// PersonID</param>
+        /// <returns>The loaded RelatedBusinessObjectCollection</returns>
+        public IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IRelationship relationship)
+        {
+            IBusinessObjectCollection relatedCol = CreateRelatedBusinessObjectCollection(type, relationship);
+            Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
+
+            IBusinessObjectCollection col = GetBusinessObjectCollection(relationship.RelatedObjectClassDef,
+                        relationshipCriteria, relationship.OrderCriteria);
+            foreach (IBusinessObject businessObject in col)
+            {
+                relatedCol.Add(businessObject);
+            }
+            relatedCol.SelectQuery.Criteria = relationshipCriteria;
+            relatedCol.SelectQuery.OrderCriteria = relationship.OrderCriteria;
+            return relatedCol;
+        }
+
+        ///<summary>
+        /// Creates a RelatedBusinessObjectCollection.
+        ///</summary>
+        /// <param name="boType">The type of BO to make a generic collection of</param>
+        /// <param name="relationship">The multiple relationship this collection is for</param>
+        ///<returns> A BusinessObjectCollection of the correct type. </returns>
+        private static IBusinessObjectCollection CreateRelatedBusinessObjectCollection(Type boType,
+                                                                                IRelationship relationship)
+        {
+            Type type = typeof(RelatedBusinessObjectCollection<>);
+            type = type.MakeGenericType(boType);
+            return (IBusinessObjectCollection)Activator.CreateInstance(type, relationship);
         }
 
         public T GetRelatedBusinessObject<T>(SingleRelationship relationship) where T : class, IBusinessObject, new()

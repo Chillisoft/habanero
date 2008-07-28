@@ -194,7 +194,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             //Create an entry in the number generator table for entry type to seed with seed = 0 and lockduration = 15 minutes.
 
-            string numberType = "tmp";
+            const string numberType = "tmp";
             BOSequenceNumberLocking.LoadNumberGenClassDef();
             BOSequenceNumberLocking.DeleteAllNumbers();
             INumberGenerator numGen = new NumberGeneratorPessimisticLocking(numberType);

@@ -22,6 +22,7 @@ using System.Data;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.ObjectManager;
 
 namespace Habanero.BO
 {
@@ -127,6 +128,7 @@ namespace Habanero.BO
             if (correctSubClassDef != null)
             {
                 BusinessObject.AllLoadedBusinessObjects().Remove(loadedBo.ID.GetObjectId());
+                BusObjectManager.Instance.Remove(loadedBo.ID);
                 IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = (T) subClassBusinessObject;
             }
@@ -145,6 +147,7 @@ namespace Habanero.BO
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         public IBusinessObject GetBusinessObject(IClassDef classDef, Criteria criteria)
         {
+            if (classDef == null) throw new ArgumentNullException("classDef");
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.Criteria = criteria;
             return GetBusinessObject(classDef, selectQuery);
@@ -177,6 +180,7 @@ namespace Habanero.BO
             if (correctSubClassDef != null)
             {
                 BusinessObject.AllLoadedBusinessObjects().Remove(loadedBo.ID.GetObjectId());
+                BusObjectManager.Instance.Remove(loadedBo.ID);
                 IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = subClassBusinessObject;
             }
@@ -302,6 +306,44 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
+        /// fields defined in the relationship.
+        /// </summary>
+        /// <param name="type">The type of collection to load. This must be a class that implements IBusinessObject</typeparam>
+        /// <param name="relationship">The relationship that defines the criteria that must be loaded.  For example, a Person might have
+        /// a Relationship called Addresses, which defines the PersonID property as the relationship property. In this case, calling this method
+        /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
+        /// PersonID</param>
+        /// <returns>The loaded RelatedBusinessObjectCollection</returns>
+        public IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IRelationship relationship)
+        {
+            IBusinessObjectCollection relatedCol = CreateRelatedBusinessObjectCollection(type, relationship);
+            Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
+
+            IBusinessObjectCollection col = GetBusinessObjectCollection(relationship.RelatedObjectClassDef, 
+                        relationshipCriteria, relationship.OrderCriteria);
+            foreach (IBusinessObject businessObject in col)
+            {
+                relatedCol.Add(businessObject);
+            }
+            relatedCol.SelectQuery.Criteria = relationshipCriteria;
+            relatedCol.SelectQuery.OrderCriteria = relationship.OrderCriteria;
+            return relatedCol;
+        }
+        ///<summary>
+        /// Creates a RelatedBusinessObjectCollection.
+        ///</summary>
+        /// <param name="boType">The type of BO to make a generic collection of</param>
+        /// <param name="relationship">The multiple relationship this collection is for</param>
+        ///<returns> A BusinessObjectCollection of the correct type. </returns>
+        private static IBusinessObjectCollection CreateRelatedBusinessObjectCollection(Type boType,
+                                                                                IRelationship relationship)
+        {
+            Type type = typeof(RelatedBusinessObjectCollection<>);
+            type = type.MakeGenericType(boType);
+            return (IBusinessObjectCollection)Activator.CreateInstance(type, relationship);
+        }
+        /// <summary>
         /// Loads a business object of type T using the relationship given. The relationship will be converted into a
         /// Criteria object that defines the relationship and this will be used to load the related object.
         /// </summary>
@@ -400,60 +442,42 @@ namespace Habanero.BO
             return (IBusinessObjectCollection) Activator.CreateInstance(boColType);
         }
 
-        private T LoadBOFromReader<T>(IDataRecord dataReader, ISelectQuery selectQuery)
+        private static T LoadBOFromReader<T>(IDataRecord dataReader, ISelectQuery selectQuery)
             where T : class, IBusinessObject, new()
         {
             T bo = new T();
 
-            PopulateBOFromReader(bo, dataReader, selectQuery);
-            IPrimaryKey key = bo.ID;
-
-            T boFromAllLoadedObjects = (T) GetLoadedBusinessObject(key);
-
-            if (boFromAllLoadedObjects == null)
-            {
-                BusinessObject.AllLoadedBusinessObjects().Add(key.GetObjectId(), new WeakReference(bo));
-                ((BusinessObject)(IBusinessObject)bo).AfterLoad();
-                return bo;
-            }
-            return boFromAllLoadedObjects;
+            return (T) GetLoadedBusinessObject(bo, dataReader, selectQuery);
         }
 
-        private IBusinessObject LoadBOFromReader(IClassDef classDef, IDataReader dataReader, ISelectQuery selectQuery)
+        private static IBusinessObject LoadBOFromReader(IClassDef classDef, IDataRecord dataReader, ISelectQuery selectQuery)
         {
             IBusinessObject bo = classDef.CreateNewBusinessObject();
 
+            return GetLoadedBusinessObject(bo, dataReader, selectQuery);
+        }
+
+        private static IBusinessObject GetLoadedBusinessObject(IBusinessObject bo, IDataRecord dataReader, ISelectQuery selectQuery)
+        {
             PopulateBOFromReader(bo, dataReader, selectQuery);
             IPrimaryKey key = bo.ID;
 
-            IBusinessObject boFromAllLoadedObjects = GetLoadedBusinessObject(key);
+            IBusinessObject boFromObjectManager = GetObjectFromObjectManager(key);
 
-            if (boFromAllLoadedObjects == null)
-            {
-                BusinessObject.AllLoadedBusinessObjects().Add(key.GetObjectId(), new WeakReference(bo));
-                ((BusinessObject)bo).AfterLoad();
-                return bo;
-            }
-            ((BusinessObject)boFromAllLoadedObjects).AfterLoad();
-            return boFromAllLoadedObjects;
+            if (boFromObjectManager != null) return boFromObjectManager;
+
+            BusObjectManager.Instance.Add(bo);
+            ((BusinessObject)bo).AfterLoad();
+            return bo;
         }
 
-        private static IBusinessObject GetLoadedBusinessObject(IPrimaryKey key)
+        private static IBusinessObject GetObjectFromObjectManager(IPrimaryKey key)
         {
-            if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(key.GetObjectId()))
-            {
-                IBusinessObject boFromAllLoadedObjects =
-                    (IBusinessObject) BusinessObject.AllLoadedBusinessObjects()[key.GetObjectId()].Target;
-                if (boFromAllLoadedObjects == null)
-                {
-                    BusinessObject.AllLoadedBusinessObjects().Remove(key.GetObjectId());
-                }
-                return boFromAllLoadedObjects;
-            }
-            return null;
+            BusObjectManager busObjectManager = BusObjectManager.Instance;
+            return busObjectManager.Contains(key) ? busObjectManager[key] : null;           
         }
 
-        private static ClassDef GetCorrectSubClassDef(IBusinessObject bo, IDataReader dataReader)
+        private static ClassDef GetCorrectSubClassDef(IBusinessObject bo, IDataRecord dataReader)
         {
             ClassDef classDef = (ClassDef) bo.ClassDef;
             ClassDefCol subClasses = classDef.ImmediateChildren;
@@ -474,7 +498,7 @@ namespace Habanero.BO
         }
 
 
-        private void PopulateBOFromReader(IBusinessObject bo, IDataRecord dr, ISelectQuery selectQuery)
+        private static void PopulateBOFromReader(IBusinessObject bo, IDataRecord dr, ISelectQuery selectQuery)
         {
             int i = 0;
             foreach (QueryField field in selectQuery.Fields.Values)

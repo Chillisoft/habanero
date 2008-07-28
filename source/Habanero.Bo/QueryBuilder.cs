@@ -20,7 +20,6 @@
 using System;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 
 namespace Habanero.BO
 {
@@ -49,6 +48,7 @@ namespace Habanero.BO
         /// <returns>A SelectQuery that can be used to load objects of the type the given ClassDef represents</returns>
         public static ISelectQuery CreateSelectQuery(IClassDef classDef, Criteria criteria)
         {
+            if (classDef == null) throw new ArgumentNullException("classDef");
             ISelectQuery selectQuery = new SelectQuery();
             foreach (IPropDef propDef in classDef.PropDefColIncludingInheritance)
             {
@@ -103,6 +103,14 @@ namespace Habanero.BO
         //    }
         //}
 
+        ///<summary>
+        /// Based on the class definition and the orderByString an OrderCriteria object is created.
+        /// The orderCriteria object is a set of order by fields including information on their 
+        /// business object properties and their dataSource. <see cref="OrderCriteria"/>
+        ///</summary>
+        ///<param name="classDef">The class definition to use for building the order criteria</param>
+        ///<param name="orderByString">The orderby string to use for creating the OrderCriteria.</param>
+        ///<returns>the newly created OrderCriteria object.</returns>
         public static OrderCriteria CreateOrderCriteria(ClassDef classDef, string orderByString)
         {
             OrderCriteria orderCriteria = OrderCriteria.FromString(orderByString);

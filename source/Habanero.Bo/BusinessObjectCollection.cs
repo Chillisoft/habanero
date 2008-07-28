@@ -121,13 +121,14 @@ namespace Habanero.BO
             {
                 if (_boClassDef == null)
                 {
-                    throw new UserException(String.Format("A business object collection is " +
+                    throw new HabaneroDeveloperException(String.Format("A business object collection is " +
                                                           "being created for the type '{0}', but no class definitions have " +
-                                                          "been loaded for this type.", typeof (TBusinessObject).Name));
+                                                          "been loaded for this type.", typeof (TBusinessObject).Name),
+                                                          "Class Definitions not loaded");
                 }
                 _sampleBo = _boClassDef.CreateNewBusinessObject();
                 BusinessObject.AllLoadedBusinessObjects().Remove(_sampleBo.ID.GetObjectId());
-            }
+            }  
             _lookupTable = new Hashtable();
             _selectQuery = QueryBuilder.CreateSelectQuery(_boClassDef);
         }
@@ -860,12 +861,9 @@ namespace Habanero.BO
                 TBusinessObject bo = (TBusinessObject) _lookupTable[key];
                 if (this.Contains(bo))
                     return (TBusinessObject) _lookupTable[key];
-                else return null;
-            }
-            else
-            {
                 return null;
             }
+            return null;
 //			foreach (BusinessObjectBase bo in this._list) {
 //				if (bo.StrID() == strID) {
 //					return bo;
@@ -895,10 +893,7 @@ namespace Habanero.BO
             {
                 return (TBusinessObject) _lookupTable[formattedSearchItem];
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         /// <summary>

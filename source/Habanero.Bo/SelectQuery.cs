@@ -17,14 +17,12 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.BO
 {
-
     /// <summary>
     /// A model of a Select Query that can be used to load data from a data store.  This includes the Fields to load, the source to load from
     /// (such as the database table name), the OrderCriteria to use (what fields must be sorted on), the Criteria to use (only objects that
@@ -32,12 +30,12 @@ namespace Habanero.BO
     /// </summary>
     public class SelectQuery : ISelectQuery
     {
-        private Criteria _criteria;
         private readonly Dictionary<string, QueryField> _fields = new Dictionary<string, QueryField>(5);
-        private Source _source;
-        private OrderCriteria _orderCriteria = new OrderCriteria();
-        private int _limit;
         private IClassDef _classDef;
+        private Criteria _criteria;
+        private int _limit;
+        private OrderCriteria _orderCriteria = new OrderCriteria();
+        private Source _source;
 
         ///<summary>
         /// Creates a SelectQuery with no Criteria and no fields.  In order to use the SelectQuery at least on field must be added
@@ -45,7 +43,6 @@ namespace Habanero.BO
         ///</summary>
         public SelectQuery()
         {
-            
         }
 
 
@@ -59,6 +56,7 @@ namespace Habanero.BO
             _criteria = criteria;
         }
 
+        #region ISelectQuery Members
 
         /// <summary>
         /// The Criteria to use when loading. Only objects that match these criteria will be loaded.
@@ -92,9 +90,14 @@ namespace Habanero.BO
         public OrderCriteria OrderCriteria
         {
             get { return _orderCriteria; }
-            set { _orderCriteria = value;
-            if (this.Source == null) throw new HabaneroApplicationException("You cannot set an OrderCriteria for a SelectQuery if no Source has been set");
-                foreach (OrderCriteria.Field field in _orderCriteria.Fields) this.Source.JoinToSource(field.Source);
+            set
+            {
+                _orderCriteria = value;
+                if (Source == null)
+                    throw new HabaneroApplicationException(
+                        "You cannot set an OrderCriteria for a SelectQuery if no Source has been set");
+                if (_orderCriteria == null) return;
+                foreach (OrderCriteria.Field field in _orderCriteria.Fields) Source.JoinToSource(field.Source);
             }
         }
 
@@ -116,5 +119,7 @@ namespace Habanero.BO
             get { return _classDef; }
             set { _classDef = value; }
         }
+
+        #endregion
     }
 }

@@ -27,7 +27,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
-    [TestFixture]
+    [TestFixture, Ignore("Currently removing this")]
     public class TestBOLoader : TestUsingDatabase
     {
         [TestFixtureSetUp]
@@ -179,7 +179,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
 
-            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
+//            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
 //            Assert.IsNotNull(cp.GetDatabaseConnection());
 //            BOLoader.Instance.SetDatabaseConnection(cp, null);
 //            Assert.IsNull(cp.GetDatabaseConnection());
@@ -274,7 +274,7 @@ namespace Habanero.Test.BO
                 throw;
             }
         }
-        [Test, Ignore("Need to implement via a strategy")]
+        [Test]
         public void TestBOLoader_RefreshObjects_WhenRetrievingFromObjectManager()
         {
             //-------------Setup Test Pack

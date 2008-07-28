@@ -22,7 +22,6 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.ConcurrencyControl;
 using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 
@@ -32,10 +31,10 @@ namespace Habanero.Test
     {
         #region Fields
 
-        protected IBOProp mPropDateLastUpdated = null;
-        protected IBOProp mPropUserLastUpdated = null;
-        protected IBOProp mPropMachineLastUpdated = null;
-        protected IBOProp mPropVersionNumber = null;
+        protected IBOProp mPropDateLastUpdated;
+        protected IBOProp mPropUserLastUpdated;
+        protected IBOProp mPropMachineLastUpdated;
+        protected IBOProp mPropVersionNumber;
 
         #endregion
 
@@ -52,11 +51,7 @@ namespace Habanero.Test
 
         protected static ClassDef GetClassDef()
         {
-            if (!ClassDef.IsDefined(typeof (ContactPerson)))
-            {
-                return CreateClassDef();
-            }
-            return ClassDef.ClassDefs[typeof (ContactPerson)];
+            return ClassDef.IsDefined(typeof (ContactPerson)) ? ClassDef.ClassDefs[typeof (ContactPerson)] : CreateClassDef();
         }
 
         protected override ClassDef ConstructClassDef()
@@ -205,11 +200,16 @@ namespace Habanero.Test
         ///  if the object has been deleted already</exception>
         public static ContactPerson GetContactPerson(IPrimaryKey id)
         {
-            ContactPerson myContactPerson = (ContactPerson)BOLoader.Instance.GetLoadedBusinessObject(id);
-            if (myContactPerson == null)
-            {
-                myContactPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(id);
-            }
+            //ContactPerson myContactPerson = null;
+            //if (BusObjectManager.Instance.Contains(id))
+            //{
+            //    myContactPerson = (ContactPerson) BusObjectManager.Instance[id];
+            //}
+
+            //if (myContactPerson == null)
+            //{
+            ContactPerson myContactPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(id);
+//            }
             return myContactPerson;
         }
 
@@ -289,7 +289,7 @@ namespace Habanero.Test
 
         public BusinessObjectCollection<Address> Addresses
         {
-            get { return ((RelationshipCol)this.Relationships).GetRelatedCollection<Address>("Addresses"); }
+            get { return this.Relationships.GetRelatedCollection<Address>("Addresses"); }
         }
 
         #endregion //Relationships
@@ -321,12 +321,15 @@ namespace Habanero.Test
 
         public static BusinessObjectCollection<ContactPerson> LoadBusinessObjCol()
         {
-            return LoadBusinessObjCol("", "");
+            GetClassDef();
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection < ContactPerson>(null, null);
+//            return LoadBusinessObjCol("", "");
         }
 
         public static BusinessObjectCollection<ContactPerson> LoadBusinessObjCol(string searchCriteria,
                                                                                               string orderByClause)
         {
+            //TODO: Replace this need to build up search criteria from strings. not yet done in new loader.
             BusinessObjectCollection<ContactPerson> bOCol = new BusinessObjectCollection<ContactPerson>(GetClassDef());
             bOCol.Load(searchCriteria, orderByClause);
             return bOCol;

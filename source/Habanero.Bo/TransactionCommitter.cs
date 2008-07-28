@@ -37,13 +37,13 @@ namespace Habanero.BO
 
         protected List<ITransactional> _executedTransactions = new List<ITransactional>();
 
-        protected bool _CommittSuccess = false;
+        protected bool _CommittSuccess;
         private bool _runningUpdatingBeforePersisting;
 
         ///<summary>
         /// Constructs the TransactionCommitter
         ///</summary>
-        public TransactionCommitter()
+        protected TransactionCommitter()
         {
             _executedTransactions = new List<ITransactional>();
         }
@@ -162,15 +162,14 @@ namespace Habanero.BO
             string allMessages = "";
             foreach (ITransactional transaction in _originalTransactions)
             {
-                string errMsg;
-                if (transaction is TransactionalBusinessObject)
-                {
-                    TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+                if (!(transaction is TransactionalBusinessObject)) continue;
 
-                    if (trnBusObj.HasDuplicateIdentifier(out errMsg))
-                    {
-                        allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
-                    }
+                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+
+                string errMsg;
+                if (trnBusObj.HasDuplicateIdentifier(out errMsg))
+                {
+                    allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
                 }
             }
 
@@ -186,15 +185,13 @@ namespace Habanero.BO
             string allMessages = "";
             foreach (ITransactional transaction in _originalTransactions)
             {
-                string errMsg;
-                if (transaction is TransactionalBusinessObject)
-                {
-                    TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+                if (!(transaction is TransactionalBusinessObject)) continue;
+                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
 
-                    if (!trnBusObj.IsValid(out errMsg))
-                    {
-                        allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
-                    }
+                string errMsg;
+                if (!trnBusObj.IsValid(out errMsg))
+                {
+                    allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
                 }
             }
 

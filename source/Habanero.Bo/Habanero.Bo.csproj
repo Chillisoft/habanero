@@ -137,6 +137,7 @@
     <Compile Include="ConcurrencyControl\PessimisticLockingDB.cs" />
     <Compile Include="NumberGenerator\NumberGenerator.cs" />
     <Compile Include="NumberGenerator\NumberGeneratorPessimisticLocking.cs" />
+    <Compile Include="ObjectManager\BusObjectManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

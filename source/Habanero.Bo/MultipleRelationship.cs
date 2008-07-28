@@ -46,7 +46,6 @@ namespace Habanero.BO
         }
 
         protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>()
-            
         {
             if(_boCol != null)
             {
@@ -55,9 +54,37 @@ namespace Habanero.BO
                 return _boCol;
             }
 
-            Type type = _relDef.RelatedObjectClassType;
-            Type collectionItemType = typeof (TBusinessObject);
+            Type relatedBusinessObjectType = _relDef.RelatedObjectClassType;
+            Type genericType = typeof (TBusinessObject);
 
+            CheckTypeCanBeCreated(relatedBusinessObjectType);
+
+            CheckTypeIsASubClassOfGenericType<TBusinessObject>(relatedBusinessObjectType, genericType);
+
+            IBusinessObjectCollection boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
+            // Peter-Working: boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
+
+            if (_relDef.KeepReferenceToRelatedObject)
+            {
+                _boCol = boCol;
+            }
+            return boCol;
+        }
+
+        private static void CheckTypeIsASubClassOfGenericType<TBusinessObject>(Type type, Type collectionItemType)
+        {
+            if (!(type == collectionItemType || type.IsSubclassOf(collectionItemType)))
+            {
+                throw new HabaneroArgumentException(String.Format(
+                                                        "An error occurred while attempting to load a related " +
+                                                        "business object collection of type '{0}' into a " +
+                                                        "collection of the specified generic type('{1}').",
+                                                        type, typeof(TBusinessObject)));
+            }
+        }
+
+        private static void CheckTypeCanBeCreated(Type type)
+        {
             //Check that the type can be created and raise appropriate error 
             try
             {
@@ -72,24 +99,6 @@ namespace Habanero.BO
                                                        "defined in the relationship and class definitions for the classes " +
                                                        "involved.", type), ex);
             }
-            if (!(type == collectionItemType || type.IsSubclassOf(collectionItemType)))
-            {
-                throw new HabaneroArgumentException(String.Format(
-                                                        "An error occurred while attempting to load a related " +
-                                                        "business object collection of type '{0}' into a " +
-                                                        "collection of the specified generic type('{1}').",
-                                                        type, typeof(TBusinessObject)));
-            }
-            IBusinessObjectCollection boCol;
-
-            boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
-            // Peter-Working: boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
-
-            if (_relDef.KeepReferenceToRelatedObject)
-            {
-                _boCol = boCol;
-            }
-            return boCol;
         }
     }
 }

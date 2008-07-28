@@ -42,7 +42,7 @@ namespace Habanero.BO
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to
         /// initialise the RelKey object</param>
-        public Relationship(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
+        protected Relationship(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
         {
             _relDef = lRelDef;
             _owningBo = owningBo;
@@ -99,7 +99,6 @@ namespace Habanero.BO
         public virtual IBusinessObjectCollection GetRelatedBusinessObjectCol()
         {
             return GetRelatedBusinessObjectColInternal();
-            
         }
 
         /// <summary>
@@ -117,15 +116,32 @@ namespace Habanero.BO
         protected abstract IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>()
             where TBusinessObject : BusinessObject, new() ;
 
+        
+
         protected virtual IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
         {
-            if (_boCol != null)
-            {
-                BOLoader.Instance.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderCriteria, "");
-                return _boCol;
-            }
+            //if (_boCol != null)
+            //{
+            //    //BOLoader.Instance.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderCriteria, "");
+            //    //TODO: Peters new code how the hell do we do this.
+            //    _boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection(this.RelationshipName)
+            //    return _boCol;
+            //}
 
             Type type = _relDef.RelatedObjectClassType;
+            CheckTypeCanBeCreated(type);
+            //TODO: Peter Changet to new BusinessoBjectLoader 
+//            IBusinessObjectCollection boCol = CreateRelatedBusinessObjectCollection(type, this);
+            IBusinessObjectCollection boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(type, this);
+//            if (_relDef.KeepReferenceToRelatedObject)
+//            {
+//                _boCol = boCol;
+//            }
+            return boCol;
+        }
+
+        private static void CheckTypeCanBeCreated(Type type)
+        {
             //Check that the type can be created and raise appropriate error 
             try
             {
@@ -140,19 +156,23 @@ namespace Habanero.BO
                                                        "defined in the relationship and class definitions for the classes " +
                                                        "involved.", type), ex);
             }
-            IBusinessObjectCollection boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection(type, this);
-
-            if (_relDef.KeepReferenceToRelatedObject)
-            {
-                _boCol = boCol;
-            }
-            return boCol;
         }
 
 
+        ///<summary>
+        /// The key that identifies this relationship i.e. the properties in the 
+        /// source object and how they are related to properties in the related object.
+        ///</summary>
         public IRelKey RelKey
         {
             get { return _relKey; }
+        }
+        /// <summary>
+        /// The class Definition for the related object.
+        /// </summary>
+        public IClassDef RelatedObjectClassDef
+        {
+            get { return _relDef.RelatedObjectClassDef; }
         }
     }
 }

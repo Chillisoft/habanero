@@ -614,7 +614,7 @@ namespace Habanero.BO
         ///</summary>
         ///<param name="classDef">The class definition to use in creating the BusinessObjectCollection. </param>
         ///<returns> A BusinessObjectCollection of the correct type. </returns>
-        private IBusinessObjectCollection CreateBusinessObjectCollection(ClassDef classDef)
+        private IBusinessObjectCollection CreateBusinessObjectCollection(IClassDef classDef)
         {
             if (classDef == null)
             {

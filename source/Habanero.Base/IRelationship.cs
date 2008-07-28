@@ -19,6 +19,9 @@
 
 namespace Habanero.Base
 {
+    ///<summary>
+    /// The interface used to implement relationships between two classes.
+    ///</summary>
     public interface IRelationship
     {
         /// <summary>
@@ -28,17 +31,27 @@ namespace Habanero.Base
         /// <returns>Returns a collection of business objects</returns>
         IBusinessObjectCollection GetRelatedBusinessObjectCol();
 
+        ///<summary>
+        /// The key that identifies this relationship i.e. the properties in the 
+        /// source object and how they are related to properties in the related object.
+        ///</summary>
         IRelKey RelKey
         {
             get;
         }
 
         ///<summary>
-        /// 
+        /// The criteria by which this relationship is ordered. I.e. by default all the
+        /// related objects are loaded in this order.
         ///</summary>
         OrderCriteria OrderCriteria
         {
             get;
         }
+
+        /// <summary>
+        /// The class Definition for the related object.
+        /// </summary>
+        IClassDef RelatedObjectClassDef { get; }
     }
 }

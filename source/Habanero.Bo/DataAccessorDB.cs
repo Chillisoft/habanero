@@ -22,21 +22,36 @@ using Habanero.DB;
 
 namespace Habanero.BO
 {
+    ///<summary>
+    /// A Data Accessor for Retrieving and committing data from a relational database.
+    ///</summary>
     public class DataAccessorDB : IDataAccessor
     {
-        private IBusinessObjectLoader _businessObjectLoader;
+        private readonly IBusinessObjectLoader _businessObjectLoader;
 
 
+        ///<summary>
+        /// The constructor for relational database data accessor. Sets up the appropriate
+        /// Business object loader for the databse using the current connection string.
+        ///</summary>
         public DataAccessorDB()
         {
             _businessObjectLoader = new BusinessObjectLoaderDB(DatabaseConnection.CurrentConnection);
         }
 
+        /// <summary>
+        /// The <see cref="IDataAccessor.BusinessObjectLoader"/> to use to load BusinessObjects
+        /// </summary>
         public IBusinessObjectLoader BusinessObjectLoader
         {
             get { return _businessObjectLoader; }
         }
 
+        /// <summary>
+        /// Creates a TransactionCommitter for you to use to persist BusinessObjects. A new TransactionCommitter is required
+        /// each time an object or set of objects is persisted.
+        /// </summary>
+        /// <returns></returns>
         public ITransactionCommitter CreateTransactionCommitter()
         {
             return new TransactionCommitterDB();

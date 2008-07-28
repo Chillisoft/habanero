@@ -17,7 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -64,6 +63,20 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_SetOrderCriteriaToNull_NoError()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            selectQuery.Source = new Source(TestUtil.CreateRandomString());
+            //---------------Execute Test ----------------------
+            selectQuery.OrderCriteria = null;
+
+            //---------------Test Result -----------------------
+            Assert.IsNull(selectQuery.OrderCriteria);
+
+        }
+
+        [Test]
         public void TestSetOrderCriteria()
         {
             //---------------Set up test pack-------------------
@@ -84,7 +97,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             SelectQuery selectQuery = new SelectQuery();
             selectQuery.Source = new Source(TestUtil.CreateRandomString());
-            string sourceName = "mysource";
+            const string sourceName = "mysource";
             OrderCriteria.Field orderField = new OrderCriteria.Field("testfield", "testfield", new Source(sourceName), OrderCriteria.SortDirection.Ascending);
             OrderCriteria orderCriteria = new OrderCriteria().Add(orderField);
 
@@ -129,7 +142,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             SelectQuery selectQuery = new SelectQuery();
             //---------------Execute Test ----------------------
-            int limit = 40;
+            const int limit = 40;
             selectQuery.Limit = limit;
             //---------------Test Result -----------------------
             Assert.AreEqual(limit, selectQuery.Limit);

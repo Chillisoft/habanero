@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
-using Habanero.BO;
 using NUnit.Framework;
 
 namespace Habanero.Test.General
@@ -30,10 +29,6 @@ namespace Habanero.Test.General
     [TestFixture]
     public class TestCarOwnerRelationship : TestUsingDatabase
     {
-        public TestCarOwnerRelationship()
-        {
-        }
-
         [TestFixtureSetUp]
         public void SetupTestFixture()
         {

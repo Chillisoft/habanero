@@ -20,6 +20,7 @@
 using System;
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 
@@ -42,14 +43,7 @@ namespace Habanero.Test
 
         protected static ClassDef GetClassDef()
         {
-            if (!ClassDef.IsDefined(typeof(Address)))
-            {
-                return CreateClassDef();
-            }
-            else
-            {
-                return ClassDef.ClassDefs[typeof(Address)];
-            }
+            return ClassDef.IsDefined(typeof (Address)) ? ClassDef.ClassDefs[typeof (Address)] : CreateClassDef();
         }
 
         protected override ClassDef ConstructClassDef()
@@ -69,13 +63,12 @@ namespace Habanero.Test
 
             RelationshipDefCol relDefCol = CreateRelationshipDefCol(propDefCol);
 
-
             ClassDef classDef = new ClassDef(typeof (Address),  primaryKey, "contact_person_address", propDefCol, keysCol, relDefCol);
             ClassDef.ClassDefs.Add(classDef);
             return classDef;
         }
 
-        private static RelationshipDefCol CreateRelationshipDefCol(PropDefCol lPropDefCol)
+        private static RelationshipDefCol CreateRelationshipDefCol(IPropDefCol lPropDefCol)
         {
             RelationshipDefCol relDefCol = new RelationshipDefCol();
 

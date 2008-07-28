@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
@@ -196,5 +197,17 @@ namespace Habanero.BO
         /// PersonID</param>
         /// <returns>The loaded RelatedBusinessObjectCollection</returns>
         RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IRelationship relationship) where T : class, IBusinessObject, new();
+
+        /// <summary>
+        /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
+        /// fields defined in the relationship.
+        /// </summary>
+        /// <param name="type">The type of collection to load. This must be a class that implements IBusinessObject</typeparam>
+        /// <param name="relationship">The relationship that defines the criteria that must be loaded.  For example, a Person might have
+        /// a Relationship called Addresses, which defines the PersonID property as the relationship property. In this case, calling this method
+        /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
+        /// PersonID</param>
+        /// <returns>The loaded RelatedBusinessObjectCollection</returns>
+        IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IRelationship relationship);
     }
 }

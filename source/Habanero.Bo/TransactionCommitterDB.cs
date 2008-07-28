@@ -65,13 +65,7 @@ namespace Habanero.BO
 
         private IDatabaseConnection GetDatabaseConnection()
         {
-            if (_databaseConnection != null)
-            {
-                return _databaseConnection;
-            } else
-            {
-                return DatabaseConnection.CurrentConnection;
-            }
+            return _databaseConnection ?? DatabaseConnection.CurrentConnection;
         }
 
         /// <summary>

@@ -77,13 +77,9 @@ namespace Habanero.BO
             {
                 return "ID=" + _newObjectID;
             }
-            if (!IsObjectNew)
-            {
-                return PersistedDatabaseWhereClause(null);
-            }
+            return !IsObjectNew ? PersistedDatabaseWhereClause(null) : "";
             //TODO: This exception breaks tests. Review.
             //throw new InvalidObjectIdException("Error: _isObjectNew = true but the _newObjectID is not set");
-            return "";
         }
 
         /// <summary>
