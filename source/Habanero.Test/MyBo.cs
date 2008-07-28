@@ -172,7 +172,6 @@ namespace Habanero.Test
 					<primaryKey>
 						<prop name=""MyBoID"" />
 					</primaryKey>
-			                  
 				</class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
@@ -998,6 +997,31 @@ namespace Habanero.Test
 			ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+        
+        public static ClassDef LoadClassDefWithRelationship_DifferentTableAndFieldNames()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+                <class name=""MyBO"" assembly=""Habanero.Test"" table=""my_bo"" >
+					<property  name=""MyBoID"" databaseField=""my_bo_id"" />
+					<property  name=""TestProp"" databaseField=""test_prop"" />
+					<property  name=""TestProp2"" databaseField=""test_prop2"" />
+                    <property  name=""RelatedID"" type=""Guid"" databaseField=""related_id""  />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+			        <relationship name=""MyRelationship"" type=""single"" relatedClass=""MyRelatedBo"" relatedAssembly=""Habanero.Test"">
+						<relatedProperty property=""RelatedID"" relatedProperty=""MyRelatedBoID"" />
+					</relationship>
+				</class>
+			");
+			ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        	
 
 
 

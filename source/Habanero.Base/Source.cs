@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.Base
 {
@@ -38,6 +39,24 @@ namespace Habanero.Base
         public virtual List<Join> Joins
         {
             get { return _joins; }
+        }
+
+        public Source ChildSource
+        {
+            get { if (Joins.Count == 0) return null;
+                return Joins[0].ToSource;
+        }
+        }
+
+        /// <summary>
+        /// Returns the furthermost child. 
+        /// </summary>
+        public Source ChildSourceLeaf
+        {
+            get {
+                if (ChildSource != null)  return ChildSource.ChildSourceLeaf;
+                return this;
+            }
         }
 
         public override string ToString()
@@ -138,7 +157,27 @@ namespace Habanero.Base
             }
             return baseSource;
         }
-    }
 
-   
+        public void MergeWith(Source sourceToMerge)
+        {
+            if (sourceToMerge == null) return;
+            if (String.IsNullOrEmpty(sourceToMerge.Name)) return;
+            if (!this.Equals(sourceToMerge))
+                throw new HabaneroDeveloperException("A source cannot merge with another source if they do not have the same base source.", "Please check your Source structures.");
+
+            if (sourceToMerge.ChildSource == null)
+                return;
+
+            if (!sourceToMerge.ChildSource.Equals(this.ChildSource))
+            {
+                Join newJoin = new Join(this, sourceToMerge.ChildSource);
+                foreach (Join.JoinField joinField in sourceToMerge.Joins[0].JoinFields)
+                {
+                    newJoin.JoinFields.Add(joinField);
+                }
+                this.Joins.Add(newJoin);
+            }
+            this.ChildSource.MergeWith(sourceToMerge.ChildSource);
+        }
+    }
 }

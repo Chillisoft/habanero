@@ -56,8 +56,6 @@ namespace Habanero.BO
             _criteria = criteria;
         }
 
-        #region ISelectQuery Members
-
         /// <summary>
         /// The Criteria to use when loading. Only objects that match these criteria will be loaded.
         /// </summary>
@@ -90,14 +88,14 @@ namespace Habanero.BO
         public OrderCriteria OrderCriteria
         {
             get { return _orderCriteria; }
-            set
+              set
             {
                 _orderCriteria = value;
                 if (Source == null)
                     throw new HabaneroApplicationException(
                         "You cannot set an OrderCriteria for a SelectQuery if no Source has been set");
                 if (_orderCriteria == null) return;
-                foreach (OrderCriteria.Field field in _orderCriteria.Fields) Source.JoinToSource(field.Source);
+                foreach (OrderCriteria.Field field in _orderCriteria.Fields) this.Source.MergeWith(field.Source);
             }
         }
 
@@ -120,6 +118,5 @@ namespace Habanero.BO
             set { _classDef = value; }
         }
 
-        #endregion
     }
 }

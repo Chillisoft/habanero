@@ -18,9 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -35,7 +34,6 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
         }
-
 
         //TODO: make the fields and order fields case insensitive
         [Test]
@@ -68,7 +66,6 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
-
         [Test]
         public void TestBuiltSource()
         {
@@ -96,83 +93,6 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
-        //TODO: busy removing this
-        //[Test]
-        //public void TestIncludeFieldsFromOrderCriteria()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    new ContactPerson();
-        //    ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Address().ClassDef);
-        //    selectQuery.OrderCriteria = OrderCriteria.FromString("ContactPerson.Surname");
-        //    int startingFields = selectQuery.Fields.Count;
-        //    //---------------Execute Test ----------------------
-        //    QueryBuilder.IncludeFieldsFromOrderCriteria(selectQuery);
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual(startingFields + 1, selectQuery.Fields.Count);
-        //    Assert.IsTrue(selectQuery.Fields.ContainsKey("ContactPerson.Surname"));
-        //    QueryField newField = selectQuery.Fields["ContactPerson.Surname"];
-        //    Assert.AreEqual("contact_person", newField.SourceName);
-        //    Assert.AreEqual("Surname", newField.PropertyName);
-        //    Assert.AreEqual("Surname_field", newField.FieldName);
-        //    //---------------Tear Down -------------------------
-        //}
-
-        //TODO: busy removing this
-        //[Test]
-        //public void TestIncludeFieldsFromOrderCriteria_AlreadyExisting()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    new ContactPerson();
-        //    ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Address().ClassDef);
-        //    selectQuery.OrderCriteria = OrderCriteria.FromString("AddressLine1");
-        //    int startingFields = selectQuery.Fields.Count;
-        //    //---------------Execute Test ----------------------
-        //    QueryBuilder.IncludeFieldsFromOrderCriteria(selectQuery);
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual(startingFields, selectQuery.Fields.Count);
-        //    //---------------Tear Down -------------------------
-        //}
-        //TODO: busy removing this
-        //[Test]
-        //public void TestOrderCriteria_FieldNameIsMappedFromPropertyName()
-        //{
-        //    //---------------Set up test pack-------------------
-            
-        //    ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Car().ClassDef);
-        //    string carregno = "CarRegNo";
-        //    selectQuery.OrderCriteria = OrderCriteria.FromString(carregno);
-        //    //---------------Execute Test ----------------------
-        //    QueryBuilder.IncludeFieldsFromOrderCriteria(selectQuery);
-        //    //---------------Test Result -----------------------
-        //    Assert.IsTrue(selectQuery.Fields.ContainsKey(carregno));
-        //    QueryField newField = selectQuery.Fields[carregno];
-        //    Assert.AreEqual(carregno, newField.PropertyName);
-        //    Assert.AreEqual("CAR_REG_NO", newField.FieldName);
-        //    //---------------Tear Down -------------------------
-        //}
-
-        //TODO: busy removing this
-        //[Test]
-        //public void TestOrderCriteria_FieldNameIsMappedFromPropertyName_OverRelationship()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    new Car();
-        //    ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Engine().ClassDef);
-        //    string carregno = "CarRegNo";
-
-        //    string car_carregno = "Car." + carregno;
-        //    selectQuery.OrderCriteria = OrderCriteria.FromString(car_carregno);
-        //    //---------------Execute Test ----------------------
-        //    QueryBuilder.IncludeFieldsFromOrderCriteria(selectQuery);
-        //    //---------------Test Result -----------------------
-        //    Assert.IsTrue(selectQuery.Fields.ContainsKey(car_carregno));
-        //    QueryField newField = selectQuery.Fields[car_carregno];
-        //    Assert.AreEqual(carregno, newField.PropertyName);
-        //    Assert.AreEqual("CAR_REG_NO", newField.FieldName);
-        //    //---------------Tear Down -------------------------
-        //}
-
-
         [Test]
         public void TestCreateOrderCriteria()
         {
@@ -183,9 +103,36 @@ namespace Habanero.Test.BO
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(classdef, "TestProp");
             //---------------Test Result -----------------------
             OrderCriteria.Field field = orderCriteria.Fields[0];
-            Assert.AreEqual("", field.Source.Name);
+            Assert.AreEqual(classdef.ClassName, field.Source.Name);
             Assert.AreEqual(classdef.GetTableName(), field.Source.EntityName);
             Assert.AreEqual(classdef.GetPropDef("TestProp").DatabaseFieldName, field.FieldName);
+            Assert.AreEqual(0, field.Source.Joins.Count);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestCreateOrderCriteria_InvalidProperty()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDefWithDifferentTableAndFieldNames();
+            string propName = "NonExistantTestProp";
+            ClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
+            //---------------Execute Test ----------------------
+            Exception exception = null;
+            try
+            {
+               
+                QueryBuilder.CreateOrderCriteria(classdef, propName);
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(InvalidPropertyNameException), exception);
+            StringAssert.Contains(String.Format(
+                                                           "The property definition for the property '{0}' could not be " +
+                                                           "found on a ClassDef of type '{1}'", propName, classdef.ClassNameFull), exception.Message);
             //---------------Tear Down -------------------------
         }
 
@@ -200,10 +147,16 @@ namespace Habanero.Test.BO
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(myBoClassdef, "MyRelationship.MyRelatedTestProp");
             //---------------Test Result -----------------------
             OrderCriteria.Field field = orderCriteria.Fields[0];
-
-            Assert.AreEqual("MyRelationship", field.Source.Name);
-            Assert.AreEqual(myRelatedBoClassDef.GetTableName(), field.Source.EntityName);
             Assert.AreEqual(myRelatedBoClassDef.GetPropDef("MyRelatedTestProp").DatabaseFieldName, field.FieldName);
+            Assert.AreEqual(myBoClassdef.ClassName, field.Source.Name);
+            Assert.AreEqual(myBoClassdef.GetTableName(), field.Source.EntityName);
+            Assert.AreEqual(1, field.Source.Joins.Count);
+            Source.Join relJoin = field.Source.Joins[0];
+            Assert.AreEqual("MyRelationship", relJoin.ToSource.Name);
+            Assert.AreEqual(myRelatedBoClassDef.GetTableName(), relJoin.ToSource.EntityName);
+            Assert.AreEqual(1, relJoin.JoinFields.Count);
+            Assert.AreEqual("RelatedID", relJoin.JoinFields[0].FromField.PropertyName);
+            Assert.AreEqual("MyRelatedBoID", relJoin.JoinFields[0].ToField.PropertyName);
             //---------------Tear Down -------------------------
         }
 
@@ -221,8 +174,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual("Surname", field.PropertyName);
             Assert.AreEqual("Surname_field", field.FieldName);
             Assert.AreEqual(1, field.Source.Joins.Count);
-
-            Assert.AreEqual("Car.Owner", field.Source.ToString());
+            Assert.AreEqual("Engine.Car.Owner", field.Source.ToString());
             //---------------Tear Down -------------------------
         }
 
@@ -231,7 +183,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             MyRelatedBo.LoadClassDefWithDifferentTableAndFieldNames();
-            ClassDef myBoClassdef = MyBO.LoadClassDefWithRelationship();
+            ClassDef myBoClassdef = MyBO.LoadClassDefWithRelationship_DifferentTableAndFieldNames();
 
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(myBoClassdef);
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(myBoClassdef, "MyRelationship.MyRelatedTestProp");
@@ -241,8 +193,14 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, selectQuery.Source.Joins.Count);
-            Assert.AreEqual(selectQuery.Source, selectQuery.Source.Joins[0].FromSource);
-            Assert.AreEqual("MyRelationship", selectQuery.Source.Joins[0].ToSource.Name);
+            Source.Join join = selectQuery.Source.Joins[0];
+            Assert.AreEqual(selectQuery.Source, join.FromSource);
+            Assert.AreEqual("MyRelationship", join.ToSource.Name);
+            Assert.AreEqual(1, join.JoinFields.Count);
+            Assert.AreEqual("RelatedID" ,join.JoinFields[0].FromField.PropertyName);
+            Assert.AreEqual("related_id", join.JoinFields[0].FromField.FieldName);
+            Assert.AreEqual("MyRelatedBoID", join.JoinFields[0].ToField.PropertyName);
+            Assert.AreEqual("My_Related_Bo_ID", join.JoinFields[0].ToField.FieldName);
             //---------------Tear Down -------------------------
         }
 
@@ -286,8 +244,6 @@ namespace Habanero.Test.BO
 
             //---------------Tear Down -------------------------
         }
-
-
 
         [Test]
         public void TestSingleTableInheritance_Fields()

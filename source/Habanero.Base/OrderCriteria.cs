@@ -142,7 +142,7 @@ namespace Habanero.Base
         {
             OrderCriteria orderCriteria = new OrderCriteria();
             if (string.IsNullOrEmpty(orderCriteriaString)) return orderCriteria;
-            orderCriteriaString = orderCriteriaString.Trim();
+            orderCriteriaString = orderCriteriaString.Trim(); 
             if (string.IsNullOrEmpty(orderCriteriaString)) return orderCriteria;
             string[] orderFields = orderCriteriaString.Split(',');
             foreach (string field in orderFields)
@@ -211,7 +211,19 @@ namespace Habanero.Base
             /// </summary>
             public string FullName
             {
-                get { return this.Source == null || String.IsNullOrEmpty(this.Source.ToString()) ? this.PropertyName : this.Source + "." + this.PropertyName; }
+                get
+                {
+                    return this.Source == null || String.IsNullOrEmpty(this.Source.ToString()) ? this.PropertyName : this.Source + "." + this.PropertyName;
+                }
+            }
+
+            private string FullNameExcludingPrimarySource
+            {
+                get
+                {
+                    if (this.Source == null || this.Source.ChildSource == null) return this.PropertyName;
+                    return this.Source.ChildSource + "." + this.PropertyName;
+                }
             }
 
 
@@ -293,15 +305,17 @@ namespace Habanero.Base
             /// The value returned is negated if the SortDirection is Descending</returns>
             public int Compare<T>(T bo1, T bo2) where T : IBusinessObject
             {
-                string fullPropName = this.FullName;
+                string fullPropName = this.FullNameExcludingPrimarySource;
                 IPropertyComparer<T> comparer = bo1.ClassDef.CreatePropertyComparer<T>(fullPropName);
                 comparer.PropertyName = PropertyName;
-                comparer.Source = Source;
+                comparer.Source = Source != null && Source.ChildSource != null ? Source.ChildSource :  null;
                 int compareResult = comparer.Compare(bo1, bo2);
                 if (compareResult != 0)
                     return SortDirection == SortDirection.Ascending ? compareResult : -compareResult;
                 return 0;
             }
+
+          
 
             private static Field CreateField(string sourceAndFieldName, SortDirection sortDirection)
             {

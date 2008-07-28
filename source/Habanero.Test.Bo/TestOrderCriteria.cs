@@ -201,7 +201,7 @@ namespace Habanero.Test.BO
             committer.AddBusinessObject(engine2);
             committer.CommitTransaction();
 
-            OrderCriteria orderCriteria = OrderCriteria.FromString("Car.CarRegNo, EngineNo");
+            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(engine1.ClassDef, "Car.CarRegNo, EngineNo");
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -322,7 +322,7 @@ namespace Habanero.Test.BO
             committer.AddBusinessObject(engine2);
             committer.CommitTransaction();
 
-            OrderCriteria.Field field = OrderCriteria.Field.FromString("Car.CarRegNo");
+            OrderCriteria.Field field = OrderCriteria.Field.FromString("Engine.Car.CarRegNo");
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -342,7 +342,7 @@ namespace Habanero.Test.BO
             Car car2 = Car.CreateSavedCar("5", contactPerson2);
             Engine car1engine1 = Engine.CreateSavedEngine(car1, "20");
             Engine car2engine1 = Engine.CreateSavedEngine(car2, "50");
-            OrderCriteria.Field field = OrderCriteria.Field.FromString("Car.Owner.Surname");
+            OrderCriteria.Field field = OrderCriteria.Field.FromString("Engine.Car.Owner.Surname");
 
             //---------------Execute Test ----------------------
             int comparisonResult = field.Compare(car1engine1, car2engine1);

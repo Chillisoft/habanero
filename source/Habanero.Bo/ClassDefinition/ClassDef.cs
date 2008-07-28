@@ -961,7 +961,7 @@ namespace Habanero.BO.ClassDefinition
             {
                 throw new InvalidPropertyNameException(String.Format(
                                                            "The property definition for the property '{0}' could not be " +
-                                                           "found.", propertyName));
+                                                           "found on a ClassDef of type '{1}'", propertyName, this.ClassNameFull));
             }
             else
             {

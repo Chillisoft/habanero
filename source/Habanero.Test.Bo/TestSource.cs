@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -167,10 +168,10 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             Source fromSource = new Source("FromSource", "FromSourceEntity");
             Source toSource = new Source("ToSource", "ToSourceEntity");
-            
+
             //---------------Execute Test ----------------------
             fromSource.JoinToSource(toSource);
-            
+
             //---------------Test Result -----------------------
 
             Assert.AreEqual(1, fromSource.Joins.Count);
@@ -209,6 +210,141 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(0, fromSource.Joins.Count);
         }
+
+        [Test]
+        public void TestMergeWith_Impossible()
+        {
+            //-------------Setup Test Pack ------------------
+            Source originalSource = new Source("FromSource", "FromSourceEntity");
+            Source toSource = new Source("ToSource", "ToSourceEntity");
+
+            //-------------Execute test ---------------------
+            Exception exception = null;
+            try
+            {
+                originalSource.MergeWith(toSource);
+            } catch (Exception ex) { exception = ex; }
+            //-------------Test Result ----------------------
+            Assert.IsNotNull(exception);
+            Assert.IsInstanceOfType(typeof(HabaneroDeveloperException), exception);
+            StringAssert.Contains("A source cannot merge with another source if they do not have the same base source.", exception.Message);
+        }
+
+        [Test]
+        public void TestMergeWith_EmptySource()
+        {
+            //-------------Setup Test Pack ------------------
+            Source fromSource = new Source("FromSource", "FromSourceEntity");
+            Source otherSource = new Source("", "FromSourceEntity");
+            otherSource.JoinToSource(new Source("ToSource", "ToSourceEntity"));
+
+            //-------------Execute test ---------------------
+            fromSource.MergeWith(otherSource);
+            //-------------Test Result ----------------------
+            Assert.AreEqual(0, fromSource.Joins.Count);
+        }
+
+        [Test]
+        public void TestMergeWith_NullSource()
+        {
+            //-------------Setup Test Pack ------------------
+            Source fromSource = new Source("FromSource", "FromSourceEntity");
+
+            //-------------Execute test ---------------------
+            fromSource.MergeWith(null);
+            //-------------Test Result ----------------------
+            Assert.AreEqual(0, fromSource.Joins.Count);
+        }
+
+        [Test]
+        public void TestMergeWith_Simple()
+        {
+            //-------------Setup Test Pack ------------------
+            Source fromSource = new Source("FromSource", "FromSourceEntity");
+            Source otherSource = new Source("FromSource", "FromSourceEntity");
+            otherSource.JoinToSource(new Source("ToSource", "ToSourceEntity"));
+
+            //-------------Execute test ---------------------
+            fromSource.MergeWith(otherSource);
+            //-------------Test Result ----------------------
+            Assert.AreSame(fromSource.ChildSource, otherSource.ChildSource);
+        }
+
+        [Test]
+        public void TestMergeWith_TwoLevels()
+        {
+            //-------------Setup Test Pack ------------------
+            Source originalSource = new Source("FromSource", "FromSourceEntity");
+            Source otherSource = new Source("FromSource", "FromSourceEntity");
+            Source childSource = new Source("ChildSource", "ChildSourceEntity");
+            Source grandchildSource = new Source("GrandChildSource", "GrandchildSourceEntity");
+            childSource.JoinToSource(grandchildSource);
+            otherSource.JoinToSource(childSource);
+
+            //-------------Execute test ---------------------
+            originalSource.MergeWith(otherSource);
+
+            //-------------Test Result ----------------------
+            Assert.AreSame(grandchildSource, originalSource.ChildSource.ChildSource);
+        }
+
+        [Test]
+        public void TestMergeWith_IncludesJoinFields()
+        {
+            //-------------Setup Test Pack ------------------
+            Source originalSource = new Source("FromSource", "FromSourceEntity");
+            Source otherSource = new Source("FromSource", "FromSourceEntity");
+            Source childSource = new Source("ToSource", "ToSourceEntity");
+            otherSource.JoinToSource(childSource);
+            QueryField field1 = new QueryField("Prop1", "Prop1Field", otherSource);
+            QueryField field2 = new QueryField("Prop1", "Prop1Field", childSource);
+            otherSource.Joins[0].JoinFields.Add(new Source.Join.JoinField(field1, field2));
+
+            //-------------Execute test ---------------------
+            originalSource.MergeWith(otherSource);
+
+            //-------------Test Result ----------------------
+            Assert.AreEqual(1, originalSource.Joins.Count);
+            Assert.AreEqual(1, originalSource.Joins[0].JoinFields.Count);
+            Assert.AreEqual(field1, originalSource.Joins[0].JoinFields[0].FromField);
+            Assert.AreEqual(field2, originalSource.Joins[0].JoinFields[0].ToField);
+        }
+
+        [Test]
+        public void TestMergeWith_EqualSource()
+        {
+            //-------------Setup Test Pack ------------------
+            Source originalSource = new Source("FromSource", "FromSourceEntity");
+            originalSource.JoinToSource(new Source("ToSource", "ToSourceEntity"));
+            Source otherSource = new Source("FromSource", "FromSourceEntity");
+            otherSource.JoinToSource(new Source("ToSource", "ToSourceEntity"));
+            //-------------Test Pre-conditions --------------
+
+            //-------------Execute test ---------------------
+            originalSource.MergeWith(otherSource);
+            //-------------Test Result ----------------------
+            Assert.AreEqual(1, originalSource.Joins.Count);
+        }
+
+        [Test]
+        public void TestMergeWith_EqualSource_DifferentChildSources()
+        {
+            //-------------Setup Test Pack ------------------
+            Source originalSource = new Source("FromSource", "FromSourceEntity");
+            originalSource.JoinToSource(new Source("ToSource", "ToSourceEntity"));
+            Source otherSource = new Source("FromSource", "FromSourceEntity");
+            Source childSource = new Source("ToSource", "ToSourceEntity");
+            otherSource.JoinToSource(childSource);
+            childSource.JoinToSource(new Source("GrandchildSource", "GrandchildSourceEntity"));
+            //-------------Test Pre-conditions --------------
+
+            //-------------Execute test ---------------------
+            originalSource.MergeWith(otherSource);
+            //-------------Test Result ----------------------
+            Assert.AreEqual(1, originalSource.Joins.Count);
+            Assert.AreEqual(1, originalSource.ChildSource.Joins.Count);
+        }
+
 
         [Test]
         public void TestFromString_SimpleCase()
@@ -321,6 +457,59 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, source.Joins.Count);
             Assert.AreSame(fromField, join.JoinFields[0].FromField);
             Assert.AreSame(toField, join.JoinFields[0].ToField);
+        }
+
+        [Test]
+        public void TestChildSource()
+        {
+            //-------------Setup Test Pack ------------------
+            Source source = new Source("MySource", "MY_TABLE");
+            Source joinSource = new Source("JoinSource", "MY_JOINED_TABLE");
+            source.Joins.Add(new Source.Join(source, joinSource));
+            //-------------Execute test ---------------------
+            Source childSource = source.ChildSource;
+            //-------------Test Result ----------------------
+            Assert.AreSame(joinSource, childSource);
+        }
+
+        [Test]
+        public void TestChildSource_NoChild()
+        {
+            //-------------Setup Test Pack ------------------
+            Source source = new Source("MySource", "MY_TABLE");
+
+            //-------------Execute test ---------------------
+            Source childSource = source.ChildSource;
+            //-------------Test Result ----------------------
+            Assert.IsNull(childSource);
+        }
+
+        [Test]
+        public void TestChildSourceLeaf()
+        {
+            //-------------Setup Test Pack ------------------
+            Source source = new Source("MySource", "MY_TABLE");
+            Source joinSource = new Source("JoinSource", "MY_JOINED_TABLE");
+            source.JoinToSource(joinSource);
+            Source joinSource2 = new Source("JoinSource2", "MY_JOINED_TABLE2");
+            joinSource.JoinToSource(joinSource2);
+
+            //-------------Execute test ---------------------
+            Source childSourceLeaf = source.ChildSourceLeaf;
+            //-------------Test Result ----------------------
+            Assert.AreSame(joinSource2, childSourceLeaf);
+        }
+
+        [Test]
+        public void TestChildSourceLeaf_NoChildren()
+        {
+            //-------------Setup Test Pack ------------------
+            Source source = new Source("MySource", "MY_TABLE");
+
+            //-------------Execute test ---------------------
+            Source childSourceLeaf = source.ChildSourceLeaf;
+            //-------------Test Result ----------------------
+            Assert.AreSame(source, childSourceLeaf);
         }
     }
 }

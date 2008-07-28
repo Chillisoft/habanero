@@ -716,7 +716,7 @@ namespace Habanero.Test.BO
             Engine car2engine1 = Engine.CreateSavedEngine(car2, "50");
 
             //---------------Execute Test ----------------------
-            OrderCriteria orderCriteria = OrderCriteria.FromString("Car.Owner.Surname, EngineNo");
+            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(car1engine1.ClassDef, "Car.Owner.Surname, EngineNo");
             BusinessObjectCollection<Engine> engines =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Engine>(null, orderCriteria);
 

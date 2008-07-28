@@ -96,9 +96,12 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             SelectQuery selectQuery = new SelectQuery();
-            selectQuery.Source = new Source(TestUtil.CreateRandomString());
             const string sourceName = "mysource";
-            OrderCriteria.Field orderField = new OrderCriteria.Field("testfield", "testfield", new Source(sourceName), OrderCriteria.SortDirection.Ascending);
+            selectQuery.Source = new Source(sourceName);
+            Source orderSource = new Source(sourceName);
+            string expectedSourceName = TestUtil.CreateRandomString();
+            orderSource.JoinToSource(new Source(expectedSourceName));
+            OrderCriteria.Field orderField = new OrderCriteria.Field("testfield", "testfield", orderSource, OrderCriteria.SortDirection.Ascending);
             OrderCriteria orderCriteria = new OrderCriteria().Add(orderField);
 
             //---------------Execute Test ----------------------
@@ -106,7 +109,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(1, selectQuery.Source.Joins.Count);
             Assert.AreEqual(selectQuery.Source, selectQuery.Source.Joins[0].FromSource);
-            Assert.AreEqual(sourceName, selectQuery.Source.Joins[0].ToSource.Name);
+            Assert.AreEqual(expectedSourceName, selectQuery.Source.Joins[0].ToSource.Name);
         }
 
 

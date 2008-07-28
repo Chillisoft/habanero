@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
@@ -57,7 +58,7 @@ namespace Habanero.BO
                                                       new Source(classDef.GetTableName(propDef))));
             }
             AddDiscriminatorFields(selectQuery, classDef);
-            selectQuery.Source = new Source(classDef.GetTableName());
+            selectQuery.Source = new Source(classDef.ClassName, classDef.GetTableName());
             selectQuery.Criteria = criteria;
             selectQuery.ClassDef = classDef;
             return selectQuery;
@@ -83,26 +84,6 @@ namespace Habanero.BO
             }
         }
 
-        ///// <summary>
-        ///// Goes through the OrderCritieria of a SelectQuery and adds to the query fields
-        ///// any order fields that are not already included in the query fields.
-        ///// </summary>
-        ///// <param name="query">The query to modify - any order fields not in the query fields will be added to them</param>
-        //public static void IncludeFieldsFromOrderCriteria(ISelectQuery query)
-        //{
-        //    foreach (OrderCriteria.Field orderField in query.OrderCriteria.Fields)
-        //    {
-        //        if (query.Fields.ContainsKey(orderField.FullName)) continue;
-
-        //        RelationshipDef relationshipDef = ((ClassDef)query.ClassDef).GetRelationship(orderField.Source);
-        //        ClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
-        //        IPropDef relatedPropDef = relatedObjectClassDef.GetPropDef(orderField.Name);
-        //        string tableName = relatedObjectClassDef.GetTableName(relatedPropDef);
-        //        QueryField queryField = new QueryField(orderField.Name, relatedPropDef.DatabaseFieldName, tableName);
-        //        query.Fields.Add(orderField.FullName, queryField);
-        //    }
-        //}
-
         ///<summary>
         /// Based on the class definition and the orderByString an OrderCriteria object is created.
         /// The orderCriteria object is a set of order by fields including information on their 
@@ -116,46 +97,44 @@ namespace Habanero.BO
             OrderCriteria orderCriteria = OrderCriteria.FromString(orderByString);
             foreach (OrderCriteria.Field field in orderCriteria.Fields)
             {
-                IPropDef propDef = classDef.GetPropDef(field.Source, field.PropertyName, false);
-                if (propDef != null)
+
+                IPropDef propDef = classDef.GetPropDef(field.Source, field.PropertyName, true);
+                //if (field.Source == null)
+                //{
+                //    field.Source = new Source(classDef.ClassName, classDef.GetTableName());
+                //}
+                field.FieldName = propDef.DatabaseFieldName;
+         
+                Source currentSource = field.Source;
+                field.Source = new Source(classDef.ClassName, classDef.GetTableName());
+                if (currentSource == null) continue;
+                field.Source.Joins.Add(new Source.Join(field.Source, currentSource));
+                currentSource = field.Source;
+                ClassDef currentClassDef = classDef;
+                while (currentSource != null) 
                 {
-                    field.FieldName = propDef.DatabaseFieldName;
-                }
-                if (field.Source == null)
-                {
-                    field.Source = new Source("", classDef.GetTableName());
-                } else
-                {
-                    string sourceName = field.Source.ToString();
-                    string entityName = GetEntityName(classDef, field, sourceName);
-                    field.Source.EntityName = entityName;
+                    Source childSource = currentSource.ChildSource;
+                    currentSource.EntityName = currentClassDef.GetTableName();
+                    if (childSource != null)
+                    {
+                        RelationshipDef relationshipDef = currentClassDef.GetRelationship(childSource.Name);
+                        foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
+                        {
+                            string ownerFieldName =
+                                currentClassDef.GetPropDef(relPropDef.OwnerPropertyName).DatabaseFieldName;
+                            string relatedFieldName =
+                                relationshipDef.RelatedObjectClassDef.GetPropDef(relPropDef.RelatedClassPropName).DatabaseFieldName;
+                            QueryField fromField = new QueryField(relPropDef.OwnerPropertyName, ownerFieldName, currentSource);
+                            QueryField toField = new QueryField(relPropDef.RelatedClassPropName, relatedFieldName, childSource);
+                            currentSource.Joins[0].JoinFields.Add(new Source.Join.JoinField(fromField, toField ));
+                        }
+                        currentClassDef = relationshipDef.RelatedObjectClassDef;
+                    }
+
+                    currentSource = childSource;
                 }
             }
             return orderCriteria;
-        }
-
-        private static string GetEntityName(ClassDef classDef, QueryField field, string pathName)
-        {
-            if (string.IsNullOrEmpty(pathName))
-            {
-                IPropDef propDef = classDef.GetPropDef(field.PropertyName);
-                if (propDef != null)
-                {
-                    field.FieldName = propDef.DatabaseFieldName;
-                }
-                return classDef.GetTableName();
-                
-            }
-            string[] parts = pathName.Split(new char[]{';'}, StringSplitOptions.RemoveEmptyEntries);
-            string relationshipName = parts[0];
-            RelationshipDef relationshipDef = classDef.GetRelationship(relationshipName);
-            if (relationshipDef != null)
-            {
-                ClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
-                string childSourceName = string.Join(";", parts, 1, parts.Length - 1);
-                return GetEntityName(relatedObjectClassDef, field, childSourceName);
-            }
-            return null;
         }
     }
 }

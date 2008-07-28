@@ -33,6 +33,7 @@ namespace Habanero.BO
     public class SelectQueryDB : ISelectQuery
     {
         private readonly ISelectQuery _selectQuery;
+        private SqlFormatter _sqlFormatter;
 
         ///<summary>
         /// Creates a SelectQueryDB, wrapping an ISelectQuery (Decorator pattern)
@@ -92,6 +93,18 @@ namespace Habanero.BO
         /// <returns>An ISqlStatement that can be executed against an IDatabaseConnection</returns>
         public ISqlStatement CreateSqlStatement()
         {
+            IDatabaseConnection databaseConnection = DatabaseConnection.CurrentConnection;
+            return CreateSqlStatement(new SqlFormatter(databaseConnection.LeftFieldDelimiter, databaseConnection.RightFieldDelimiter));
+        }
+
+        /// <summary>
+        /// Creates an ISqlStatement out of the SelectQuery given in the constructor, to be used to load 
+        /// from a database
+        /// </summary>
+        /// <returns>An ISqlStatement that can be executed against an IDatabaseConnection</returns>
+        public ISqlStatement CreateSqlStatement(SqlFormatter sqlFormatter)
+        {
+            _sqlFormatter = sqlFormatter;
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             StringBuilder builder = statement.Statement.Append("SELECT ");
             AppendLimitClauseAtBeginning(builder);
@@ -102,7 +115,6 @@ namespace Habanero.BO
             AppendLimitClauseAtEnd(builder);
             return statement;
         }
-
 
         private string AddRelationshipJoin(StringBuilder builder, ClassDef currentClassDef, QueryField field, Source fieldSource)
         {
@@ -189,7 +201,9 @@ namespace Habanero.BO
 
         private void AppendFrom(StringBuilder builder)
         {
-            builder.AppendFormat(" FROM {0}", DelimitTable(_selectQuery.Source.EntityName));
+            SourceDB source = new SourceDB(_selectQuery.Source);
+            builder.AppendFormat(" FROM {0}", source.CreateSQL(_sqlFormatter));
+            //builder.AppendFormat(" FROM {0}", DelimitTable(_selectQuery.Source.EntityName));
             ClassDef currentClassDef = (ClassDef) _selectQuery.ClassDef;
             while (currentClassDef != null && currentClassDef.IsUsingClassTableInheritance())
             {
@@ -202,13 +216,15 @@ namespace Habanero.BO
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
             if (_selectQuery.OrderCriteria == null) return;
-            foreach (OrderCriteria.Field field in _selectQuery.OrderCriteria.Fields)
-            {
-                if (field.Source == null || field.Source.Equals(this.Source)) continue;
-                currentClassDef = (ClassDef)this.ClassDef;
-                string relationshipJoinTable = AddRelationshipJoin(builder, currentClassDef, field, field.Source);
-                field.Source.EntityName = relationshipJoinTable;
-            }
+            //foreach (OrderCriteria.Field field in _selectQuery.OrderCriteria.Fields)
+            //{
+            //    if (field.Source != null && !field.Source.Equals(this.Source))
+            //    {
+            //        currentClassDef = (ClassDef)this.ClassDef;
+            //        string relationshipJoinTable = AddRelationshipJoin(builder, currentClassDef, field, field.Source);
+            //        field.Source.EntityName = relationshipJoinTable;
+            //    }
+            //}
         }
 
 
@@ -266,7 +282,7 @@ namespace Habanero.BO
             string tableAndFieldName;
             if (orderField.Source != null)
             {
-                tableAndFieldName = DelimitField(orderField.Source, orderField.FieldName);
+                tableAndFieldName = DelimitField(orderField.Source.ChildSourceLeaf, orderField.FieldName);
             }
             else
             {
@@ -311,15 +327,14 @@ namespace Habanero.BO
 
         private string DelimitField(Source source, string fieldName)
         {
-            if (source == null)
-                return SqlFormattingHelper.FormatFieldName(fieldName, DatabaseConnection.CurrentConnection);
-            return
-                SqlFormattingHelper.FormatTableAndFieldName(source.EntityName, fieldName, DatabaseConnection.CurrentConnection);
+            if (source == null) return _sqlFormatter.DelimitField(fieldName);
+            return string.Format("{0}.{1}", _sqlFormatter.DelimitTable(source.EntityName), _sqlFormatter.DelimitField(fieldName));
         }
 
         private string DelimitTable(string tableName)
         {
-            return SqlFormattingHelper.FormatTableName(tableName, DatabaseConnection.CurrentConnection);
+            return _sqlFormatter.DelimitTable(tableName);
         }
+
     }
 }
