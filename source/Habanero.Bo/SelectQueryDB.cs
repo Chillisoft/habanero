@@ -201,15 +201,13 @@ namespace Habanero.BO
                         superClassClassDef.GetTableName(), superClassPropDef.DatabaseFieldName));
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
-
+            if (_selectQuery.OrderCriteria == null) return;
             foreach (OrderCriteria.Field field in _selectQuery.OrderCriteria.Fields)
             {
-                if (field.Source != null && !field.Source.Equals(this.Source))
-                {
-                    currentClassDef = (ClassDef)this.ClassDef;
-                    string relationshipJoinTable = AddRelationshipJoin(builder, currentClassDef, field, field.Source);
-                    field.Source.EntityName = relationshipJoinTable;
-                }
+                if (field.Source == null || field.Source.Equals(this.Source)) continue;
+                currentClassDef = (ClassDef)this.ClassDef;
+                string relationshipJoinTable = AddRelationshipJoin(builder, currentClassDef, field, field.Source);
+                field.Source.EntityName = relationshipJoinTable;
             }
         }
 

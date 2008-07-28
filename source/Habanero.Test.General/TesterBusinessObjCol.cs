@@ -174,7 +174,7 @@ namespace Habanero.Test.General
             const string addressLine = "Chillisoft";
             IPrimaryKey contactPersonKey = CreateSavedContactPersonWithOneAddress(addressLine);
 
-            CreateSavedContactPerson();
+            ContactPerson.CreateSavedContactPerson();
             ContactPerson.ClearContactPersonCol();
             TestUtil.WaitForGC();
 
@@ -193,16 +193,6 @@ namespace Habanero.Test.General
             //-------------------------TestResult ---------------------------------------------------
             Assert.AreEqual(1, myCol.Count);
             Assert.AreSame(contactPerson, myCol[0]);
-        }
-
-        private static ContactPerson CreateSavedContactPerson()
-        {
-            ContactPerson contactPerson = new ContactPerson();
-            contactPerson.FirstName = "aa";
-            contactPerson.Surname = "abc";
-            contactPerson.Save();
-
-            return contactPerson;
         }
 
         private static IPrimaryKey CreateSavedContactPersonWithOneAddress(string addressLine)
