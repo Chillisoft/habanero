@@ -164,6 +164,7 @@
     <Compile Include="TestBORegistry.cs" />
     <Compile Include="TestBusinessObjectLoader.cs" />
     <Compile Include="TestCriteria.cs" />
+    <Compile Include="TestSqlFormatter.cs" />
     <Compile Include="TestDataStoreInMemory.cs" />
     <Compile Include="TestBusinessObjectLastUpdatePropertiesLog.cs" />
     <Compile Include="TestBusinessObjectUpdateLog.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="TestSelectQuery.cs" />
     <Compile Include="TestSelectQueryDB.cs" />
     <Compile Include="TestSource.cs" />
+    <Compile Include="TestSourceDB.cs" />
     <Compile Include="TestTransactionCommitter.cs" />
     <Compile Include="TestMultipleRelationship.cs" />
     <Compile Include="TestRelatedBusinessObjectCollection.cs" />

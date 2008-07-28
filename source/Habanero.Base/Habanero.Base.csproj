@@ -108,6 +108,7 @@
     <Compile Include="IClassDef.cs" />
     <Compile Include="IBusinessObjectUpdateLog.cs" />
     <Compile Include="IConcurrencyControl.cs" />
+    <Compile Include="ISqlFormatter.cs" />
     <Compile Include="IDBNumberGenerator.cs" />
     <Compile Include="IKeyDef.cs" />
     <Compile Include="InvalidPropertyException.cs" />
@@ -227,6 +228,7 @@
     <Compile Include="QueryField.cs" />
     <Compile Include="RSAPasswordCrypter.cs" />
     <Compile Include="Source.cs" />
+    <Compile Include="SqlFormatter.cs" />
     <Compile Include="XMLWrapper.cs" />
   </ItemGroup>
   <ItemGroup>

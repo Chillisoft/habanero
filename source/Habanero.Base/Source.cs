@@ -23,19 +23,19 @@ namespace Habanero.Base
             _entityName = entityName;
         }
 
-        public string Name
+        public virtual string Name
         {
             get { return _name; }
             set { _name = value; }
         }
 
-        public string EntityName
+        public virtual string EntityName
         {
             get { return _entityName; }
             set { _entityName = value; }
         }
 
-        public List<Join> Joins
+        public virtual List<Join> Joins
         {
             get { return _joins; }
         }
@@ -77,6 +77,7 @@ namespace Habanero.Base
         {
             private Source _fromSource;
             private Source _toSource;
+            private List<JoinField> _joinFields = new List<JoinField>( );
 
             public Join(Source fromSource, Source toSource)
             {
@@ -92,6 +93,33 @@ namespace Habanero.Base
             public Source ToSource
             {
                 get { return _toSource; }
+            }
+
+            public List<JoinField> JoinFields
+            {
+                get { return _joinFields; }
+            }
+
+            public class JoinField
+            {
+                private QueryField _fromField;
+                private QueryField _toField;
+
+                public JoinField(QueryField fromField, QueryField toField)
+                {
+                    _fromField = fromField;
+                    _toField = toField;
+                }
+
+                public QueryField FromField
+                {
+                    get { return _fromField; }
+                }
+
+                public QueryField ToField
+                {
+                    get { return _toField; }
+                }
             }
         }
 

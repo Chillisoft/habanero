@@ -27,6 +27,7 @@ namespace Habanero.BO
     ///</summary>
     public class BOState : IBOState
     {
+
         private readonly IBusinessObject _bo;
 
         ///<summary>

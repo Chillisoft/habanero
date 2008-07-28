@@ -97,39 +97,28 @@ namespace Habanero.BO
             AppendLimitClauseAtBeginning(builder);
             AppendFields(builder);
             AppendFrom(builder);
-            AppendJoins(builder);
             AppendWhereClause(builder, statement);
             AppendOrderByClause(builder);
             AppendLimitClauseAtEnd(builder);
             return statement;
         }
 
-        private void AppendJoins(StringBuilder builder)
-        {
-            foreach (OrderCriteria.Field field in _selectQuery.OrderCriteria.Fields)
-            {
-                if (field.Source != null && !field.Source.Equals(this.Source))
-                {
-                    ClassDef currentClassDef = (ClassDef)this.ClassDef;
-                    string relationshipJoinTable = AddRelationshipJoin(builder, currentClassDef, field, field.Source);
-                    field.Source.EntityName = relationshipJoinTable;
-                }
-            }
-        }
 
         private string AddRelationshipJoin(StringBuilder builder, ClassDef currentClassDef, QueryField field, Source fieldSource)
         {
+
+
             if (fieldSource == null || String.IsNullOrEmpty(fieldSource.Name))
             {
                 IPropDef propDef = currentClassDef.GetPropDef(field.PropertyName, true);
                 if (propDef != null)
                 {
                     field.FieldName = propDef.DatabaseFieldName;
-                } 
+                }
                 return currentClassDef.GetTableName();
             }
-            string[] parts = fieldSource.ToString().Split(new char[]{'.'}, StringSplitOptions.RemoveEmptyEntries);
-            string relationshipName = parts[0];
+
+            string relationshipName = fieldSource.Name;
             RelationshipDef relationshipDef = currentClassDef.GetRelationship(relationshipName);
             if (relationshipDef != null)
             {
@@ -138,7 +127,11 @@ namespace Habanero.BO
                 ClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
                 if (relatedObjectClassDef != null)
                 {
-                    Source childSource = Source.FromString(string.Join(";", parts, 1, parts.Length - 1));
+                    Source childSource = null;
+                    if (fieldSource.Joins.Count > 0)
+                    {
+                        childSource = fieldSource.Joins[0].ToSource;
+                    }
                     string relationshipJoinTable = AddRelationshipJoin(builder, relatedObjectClassDef, field, childSource);
                     if (String.IsNullOrEmpty(relationshipJoinTable))
                     {
@@ -146,10 +139,10 @@ namespace Habanero.BO
                     }
                     return relationshipJoinTable;
                 }
-                else
-                {
-                    return currentClassDef.GetTableName();
-                }
+            }
+            else
+            {
+                return currentClassDef.GetTableName();
             }
             return currentClassDef.GetTableName();
         }
@@ -207,6 +200,16 @@ namespace Habanero.BO
                     GetJoinString("", currentClassDef.GetTableName(), thisClassPropDef.DatabaseFieldName,
                         superClassClassDef.GetTableName(), superClassPropDef.DatabaseFieldName));
                 currentClassDef = currentClassDef.SuperClassClassDef;
+            }
+
+            foreach (OrderCriteria.Field field in _selectQuery.OrderCriteria.Fields)
+            {
+                if (field.Source != null && !field.Source.Equals(this.Source))
+                {
+                    currentClassDef = (ClassDef)this.ClassDef;
+                    string relationshipJoinTable = AddRelationshipJoin(builder, currentClassDef, field, field.Source);
+                    field.Source.EntityName = relationshipJoinTable;
+                }
             }
         }
 
