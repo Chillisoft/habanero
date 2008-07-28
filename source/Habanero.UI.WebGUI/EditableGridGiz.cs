@@ -27,6 +27,19 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Provides a grid on which the user can edit data and add new business objects directly.
+    /// Note that this grid does not provide any buttons or menus for users
+    /// to save the changes they have made, and all changes will be lost if the form
+    /// is closed and changes are not saved programmatically.  Either carry out a dirty check when the
+    /// parent form is closed and take appropriate save action using SaveChanges(), or use an
+    /// IEditableGridControl, which provides Save and Cancel buttons. 
+    /// </summary>
+    /// <remarks>
+    /// The support for some tailored features done in the Win versions is not available
+    /// here, including customised delete key behaviour and combobox clicking.  Potentially,
+    /// the option of confirming deletion before deleting a row could be implemented in the future.
+    /// </remarks>
     public class EditableGridGiz : GridBaseGiz, IEditableGrid
     {
         public EditableGridGiz()
@@ -86,7 +99,8 @@ namespace Habanero.UI.WebGUI
         /// Indicates what action should be taken when a selection of
         /// cells is selected and the Delete key is pressed.  Note that
         /// this has no correlation to how DataGridView handles the
-        /// Delete key when the full row has been selected.
+        /// Delete key when the full row has been selected, and the default delete
+        /// behaviour of the DataGridView is not overridden in this case.
         /// </summary>
         public DeleteKeyBehaviours DeleteKeyBehaviour
         {
@@ -102,5 +116,15 @@ namespace Habanero.UI.WebGUI
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Gets or sets whether clicking on a ComboBox cell causes the drop-down to
+        /// appear immediately.  Set this to false if the user should click twice
+        /// (first to select, then to edit).
+        /// </summary>
+        public bool ComboBoxClickOnce
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
     }
 }

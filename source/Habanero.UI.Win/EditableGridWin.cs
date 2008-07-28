@@ -17,27 +17,43 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections;
 using System.Data;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
+using Habanero.UI.Win.Util;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Provides a grid on which the user can edit data and add new business objects directly.
+    /// Note that this grid does not provide any buttons or menus for users
+    /// to save the changes they have made, and all changes will be lost if the form
+    /// is closed and changes are not saved programmatically.  Either carry out a dirty check when the
+    /// parent form is closed and take appropriate save action using SaveChanges(), or use an
+    /// IEditableGridControl, which provides Save and Cancel buttons. 
+    /// </summary>
     public class EditableGridWin : GridBaseWin, IEditableGrid
     {
         private bool _confirmDeletion;
         private CheckUserConfirmsDeletion _checkUserConfirmsDeletionDelegate;
         private DeleteKeyBehaviours _deleteKeyBehaviour;
+        private bool _comboBoxClickOnce;
 
         public EditableGridWin()
         {
-            this._confirmDeletion = false;
-            this.AllowUserToAddRows = true;
-            this._deleteKeyBehaviour = DeleteKeyBehaviours.DeleteRow;
-            this.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            _confirmDeletion = false;
+            AllowUserToAddRows = true;
+            _deleteKeyBehaviour = DeleteKeyBehaviours.DeleteRow;
+            SelectionMode = DataGridViewSelectionMode.CellSelect;
+            _comboBoxClickOnce = true;
+
+            UserDeletingRow += ConfirmRowDeletion;
+            CheckUserConfirmsDeletionDelegate += CheckUserWantsToDelete;
+            CellClick += CellClickHandler;
         }
 
         /// <summary>
@@ -54,7 +70,6 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Restore the grid to its previous saved state.
         /// </summary>
-        
         public void RejectChanges()
         {
             if (this.DataSource is DataView)
@@ -78,6 +93,7 @@ namespace Habanero.UI.Win
         /// Gets or sets the boolean value that determines whether to confirm
         /// deletion with the user when they have chosen to delete a row
         /// </summary>
+        /// /// TODO: shouldn't this be moved up to GridBase?
         public bool ConfirmDeletion
         {
             get { return _confirmDeletion; }
@@ -97,7 +113,8 @@ namespace Habanero.UI.Win
         /// Indicates what action should be taken when a selection of
         /// cells is selected and the Delete key is pressed.  Note that
         /// this has no correlation to how DataGridView handles the
-        /// Delete key when the full row has been selected.
+        /// Delete key when the full row has been selected, and the default delete
+        /// behaviour of the DataGridView is not overridden in this case.
         /// </summary>
         public DeleteKeyBehaviours DeleteKeyBehaviour
         {
@@ -106,12 +123,54 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
+        /// If deletion is to be confirmed, checks deletion with the user before continuing.
+        /// This applies only to the default delete behaviour where a full row is selected
+        /// by clicking on the column.
+        /// </summary>
+        private void ConfirmRowDeletion(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            if (ConfirmDeletion && !CheckUserConfirmsDeletionDelegate())
+            {
+                e.Cancel = true;
+            }
+        }
+
+        /// <summary>
+        /// A Microsoft-suggested override to catch key presses, since KeyPress does
+        /// not work correctly on DataGridView
+        /// </summary>
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            Keys key = (keyData & Keys.KeyCode);
+            if (key == Keys.Delete)
+            {
+                DeleteKeyHandler();
+                return this.ProcessDeleteKey(keyData);
+            }
+            return base.ProcessDialogKey(keyData);
+        }
+
+        /// <summary>
+        /// A Microsoft-suggested override to catch key presses, since KeyPress does
+        /// not work correctly on DataGridView
+        /// </summary>
+        protected override bool ProcessDataGridViewKey(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                DeleteKeyHandler();
+                return this.ProcessDeleteKey(e.KeyData);
+            }
+            return base.ProcessDataGridViewKey(e);
+        }
+
+        /// <summary>
         /// Carries out actions when the delete key is called on the grid
         /// </summary>
         public void DeleteKeyHandler()
         {
-            
-            if ( !CurrentCell.IsInEditMode)
+
+            if (CurrentCell != null && !CurrentCell.IsInEditMode && SelectedRows.Count == 0) //&& CurrentRow != null
             {
                 if (_deleteKeyBehaviour == DeleteKeyBehaviours.DeleteRow && AllowUserToDeleteRows)
                 {
@@ -133,7 +192,81 @@ namespace Habanero.UI.Win
                         }
                     }
                 }
+                else if (_deleteKeyBehaviour == DeleteKeyBehaviours.ClearContents)
+                {
+                    foreach (IDataGridViewCell cell in SelectedCells)
+                    {
+                        cell.Value = null;
+                    }
+                }
             }
+        }
+
+        /// <summary>
+        /// Gets or sets whether clicking on a ComboBox cell causes the drop-down to
+        /// appear immediately.  Set this to false if the user should click twice
+        /// (first to select, then to edit).
+        /// </summary>
+        public bool ComboBoxClickOnce
+        {
+            get { return _comboBoxClickOnce; }
+            set { _comboBoxClickOnce = value; }
+        }
+
+        /// <summary>
+        /// Displays a message box to the user to check if they want to proceed with
+        /// deleting the selected rows.
+        /// </summary>
+        /// <returns>Returns true if the user does want to delete</returns>
+        public static bool CheckUserWantsToDelete()
+        {
+            return MessageBox.Show(
+                "Are you sure you want to delete the selected row(s)?",
+                "Delete?",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Exclamation) == System.Windows.Forms.DialogResult.Yes;
+        }
+
+        /// <summary>
+        /// Carries out additional actions when a cell is clicked.  Specifically, if
+        /// a combobox cell is clicked, the cell goes into edit mode immediately.
+        /// </summary>
+        public void CellClickHandler(object sender, DataGridViewCellEventArgs e)
+        {
+            bool setToEditMode = CheckIfComboBoxShouldSetToEditMode(e.ColumnIndex, e.RowIndex);
+            if (setToEditMode)
+            {
+                DataGridViewColumn dataGridViewColumn = ((DataGridViewColumnWin) Columns[e.ColumnIndex]).DataGridViewColumn;
+                ControlsHelper.SafeGui(this, delegate { BeginEdit(true); });
+                if (EditingControl is DataGridViewComboBoxEditingControl)
+                {
+                    ((DataGridViewComboBoxEditingControl)EditingControl).DroppedDown = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks whether this is a comboboxcolumn and whether it should
+        /// begin edit immediately (to circumvent the pain of having to click
+        /// a cell multiple times to edit the value).  This method is typically
+        /// called by the cell click handler.
+        /// </summary>
+        /// <remarks>
+        /// This method was extracted from the handler in order to make testing
+        /// possible, since calling BeginEdit at testing time causes an STA thread
+        /// error.
+        /// </remarks>
+        public bool CheckIfComboBoxShouldSetToEditMode(int columnIndex, int rowIndex)
+        {
+            if (columnIndex > -1 && rowIndex > -1 && !CurrentCell.IsInEditMode && this.ComboBoxClickOnce)
+            {
+                DataGridViewColumn dataGridViewColumn = ((DataGridViewColumnWin) Columns[columnIndex]).DataGridViewColumn;
+                if (dataGridViewColumn is DataGridViewComboBoxColumn)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

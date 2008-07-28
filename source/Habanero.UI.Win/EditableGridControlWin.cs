@@ -48,7 +48,10 @@ namespace Habanero.UI.Win
             InitialiseFilterControl();
 
             BorderLayoutManager manager = controlFactory.CreateBorderLayoutManager(this);
+            manager.AddControl(_filterControl, BorderLayoutManager.Position.North);
             manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
+            manager.AddControl(_buttons, BorderLayoutManager.Position.South);
+            //TODO copy rest from readonly version
         }
 
         private void InitialiseButtons()

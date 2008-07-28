@@ -60,9 +60,15 @@ namespace Habanero.UI.Win
         /// <returns></returns>
         public abstract IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col);
 
-        public IDataGridViewCell CurrentCell
+        /// <summary>
+        /// gets and sets the currently selected cell for the datagridview.
+        /// </summary>
+        public new IDataGridViewCell CurrentCell
         {
-            get { return new DataGridViewCellWin(base.CurrentCell); }
+            get
+            {
+                return base.CurrentCell == null ? null : new DataGridViewCellWin(base.CurrentCell);
+            }
             set { base.CurrentCell = ((DataGridViewCellWin)value).DataGridViewCell; }
         }
 

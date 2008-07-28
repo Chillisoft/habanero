@@ -201,5 +201,7 @@ namespace Habanero.UI.Base
         bool BeginEdit(bool selectAll);
 
         IDataGridViewCell CurrentCell { set; get; }
+
+        bool MultiSelect { get; set; }
     }
 }
