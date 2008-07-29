@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System.Data;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -180,7 +181,7 @@ namespace Habanero.Test.General
         [Test]
         public void TestDatabaseReadWrite()
         {
-            Shape.ClearLoadedBusinessObjectBaseCol();
+            BusinessObject.ClearObjectManager();
             // Test inserting & selecting
             Shape shape = new Shape();
             shape.ShapeName = "MyShape";
@@ -240,21 +241,24 @@ namespace Habanero.Test.General
         [TestFixtureTearDown]
         public void TearDown()
         {
-            Shape shape = BOLoader.Instance.GetBusinessObject<Shape>(
-                "ShapeName = 'MyShape' OR ShapeName = 'MyShapeChanged'");
+            Criteria criteria1 = new Criteria("ShapeName", Criteria.Op.Equals, "MyShape");
+            Criteria criteria2 = new Criteria("ShapeName", Criteria.Op.Equals, "MyShapeChanged");
+            Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
+            Shape shape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(
+                criteria);
             if (shape != null)
             {
                 shape.Delete();
                 shape.Save();
             }
-
-            CircleNoPrimaryKey circle = BOLoader.Instance.GetBusinessObject<CircleNoPrimaryKey>(
-                "ShapeName = 'Circle' OR ShapeName = 'CircleChanged'");
-            if (circle != null)
-            {
-                circle.Delete();
-                circle.Save();
-            }
+            criteria1 = new Criteria("ShapeName", Criteria.Op.Equals, "Circle");
+            criteria2 = new Criteria("ShapeName", Criteria.Op.Equals, "CircleChanged");
+            criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
+            CircleNoPrimaryKey circle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<CircleNoPrimaryKey>(
+                criteria);
+            if (circle == null) return;
+            circle.Delete();
+            circle.Save();
         }
     }
 }

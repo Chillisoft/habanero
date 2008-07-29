@@ -73,6 +73,9 @@ namespace Habanero.Base
 			get;
 		}
 
+        ///<summary>
+        /// the select query that is used to load this business object collection.
+        ///</summary>
         ISelectQuery SelectQuery
         {
             get;
@@ -205,6 +208,15 @@ namespace Habanero.Base
         /// false for descending order</param>
         void Sort(string propertyName, bool isBoProperty, bool isAscending);
 
+        /// <summary>
+        /// Sorts the collection by the property specified. The second parameter
+        /// indicates whether this property is a business object property or
+        /// whether it is a property defined in the code.  For example, a full name
+        /// would be a code-calculated property that is not itself a business
+        /// object property, even though it uses the BO properties of first name
+        /// and surname, and the argument would thus be set as false.
+        /// </summary>
+        /// <param name="comparer">The property name to sort on</param>
         void Sort(IComparer comparer);
 
 

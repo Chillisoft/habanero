@@ -37,7 +37,7 @@ namespace Habanero.Test.General
         public void Setup()
         {
             //Ensure that a fresh object is loaded from DB
-            ContactPerson.ClearContactPersonCol();
+            ContactPerson.ClearObjectManager();
         }
 
         #endregion
@@ -292,7 +292,7 @@ namespace Habanero.Test.General
             contactPTestSave.Save(); //save the object to the DB
 
 
-            BusinessObject.ClearLoadedBusinessObjectBaseCol();
+            BusinessObject.ClearObjectManager();
             WaitForGC();
 
             //---------------------------Assert Precondition --------------------------

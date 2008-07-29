@@ -847,15 +847,17 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
             //---------------Clean from previous tests----------
-            string originalText = "testsavechanges";
-            string newText = "testsavechanges_edited";
-            MyBO oldBO1 = BOLoader.Instance.GetBusinessObject<MyBO>("TestProp='" + originalText + "'");
+            const string originalText = "testsavechanges";
+            const string newText = "testsavechanges_edited";
+            Criteria criteria = new Criteria("TestProp", Criteria.Op.Equals, originalText);
+            MyBO oldBO1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
             if (oldBO1 != null)
             {
                 oldBO1.Delete();
                 oldBO1.Save();
             }
-            MyBO oldBO2 = BOLoader.Instance.GetBusinessObject<MyBO>("TestProp='" + newText + "'");
+            criteria = new Criteria("TestProp", Criteria.Op.Equals, newText);
+            MyBO oldBO2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
             if (oldBO2 != null)
             {
                 oldBO2.Delete();
@@ -876,7 +878,8 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, editableGrid.Rows.Count);
             Assert.AreEqual(originalText, editableGrid.Rows[0].Cells[0].Value);
-            MyBO nullBO = BOLoader.Instance.GetBusinessObject<MyBO>("TestProp='" + newText + "'");
+            criteria = new Criteria("TestProp", Criteria.Op.Equals, newText);
+            MyBO nullBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
             Assert.IsNull(nullBO);
             //---------------Execute Test ----------------------
             editableGrid.Rows[0].Cells[0].Value = newText;
@@ -886,7 +889,8 @@ namespace Habanero.Test.UI.Base
             editableGrid.SaveChanges();
             //---------------Test Result -----------------------
             Assert.AreEqual(newText, editableGrid.Rows[0].Cells[0].Value);
-            MyBO savedBO = BOLoader.Instance.GetBusinessObject<MyBO>("TestProp='" + newText + "'");
+            criteria = new Criteria("TestProp", Criteria.Op.Equals, newText);
+            MyBO savedBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
             Assert.IsNotNull(savedBO);
             //---------------Tear Down--------------------------
             savedBO.Delete();

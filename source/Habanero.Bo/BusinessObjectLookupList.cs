@@ -35,7 +35,7 @@ namespace Habanero.BO
     /// value stored (for reasons of data integrity).
     /// The string-Guid pair collection will be created using each object's
     /// ToString() function and the object's Guid ID.<br/>
-    /// Note: this class does not provide criteria, so the entire collection
+    /// NB: this class does not provide criteria, so the entire collection
     /// will be loaded.
     /// </summary>
     public class BusinessObjectLookupList : ILookupList
@@ -47,7 +47,7 @@ namespace Habanero.BO
         private string _criteria;
         private Dictionary<string, object> _displayValueDictionary;
         private DateTime _lastCallTime;
-        private string _sort = null;
+        private string _sort;
 
         #region Constructors
 
@@ -90,7 +90,6 @@ namespace Habanero.BO
         /// <param name="timeout">The period after which the cache expires</param>
         public BusinessObjectLookupList(string assemblyName, string className, int timeout)
         {
-            
             _assemblyName = assemblyName;
             _className = className;
             _boType = null;
@@ -231,13 +230,10 @@ namespace Habanero.BO
                 _lastCallTime = DateTime.Now;
                 return _displayValueDictionary;
             }
-            else
-            {
-                IBusinessObjectCollection col = GetBusinessObjectCollection();
-                _displayValueDictionary = CreateDisplayValueDictionary(col, String.IsNullOrEmpty(Sort));
-                _lastCallTime = DateTime.Now;
-                return _displayValueDictionary;
-            }
+            IBusinessObjectCollection col = GetBusinessObjectCollection();
+            _displayValueDictionary = CreateDisplayValueDictionary(col, String.IsNullOrEmpty(Sort));
+            _lastCallTime = DateTime.Now;
+            return _displayValueDictionary;
         }
 
         ///<summary>
@@ -272,8 +268,8 @@ namespace Habanero.BO
             if (col == null)
             {
                 return new Dictionary<string, object>();
-            } 
-            else if (sortByDisplayValue)
+            }
+            if (sortByDisplayValue)
             {
                 SortedDictionary<string, object> sortedLookupList = new SortedDictionary<string, object>();
                 foreach (BusinessObject bo in col)
@@ -299,7 +295,7 @@ namespace Habanero.BO
                 }
                 return lookupList;
             }
-		}
+        }
 
         ///<summary>
         /// Returns a unique display value for an item of the given name, so that it can be added to the list without the risk of having duplicate entries.

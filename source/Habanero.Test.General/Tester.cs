@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO;
@@ -69,7 +68,7 @@ namespace Habanero.Test.General
             CreateDeletedPersonTestPack();
             CreateSaveContactPersonTestPack();
             //Ensure that a fresh object is loaded from DB
-            ContactPerson.ClearContactPersonCol();
+            BusinessObject.ClearObjectManager();
         }
 
         private void CreateSaveContactPersonTestPack()
@@ -114,7 +113,7 @@ namespace Habanero.Test.General
             myContactPerson.Save();
 
             //waitForDB();
-            ContactPerson.ClearContactPersonCol();
+            BusinessObject.ClearObjectManager();
             //Reload the person and make sure that the changes have been made.
             ContactPerson myNewContactPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(updateContactPersonID);
             Assert.AreEqual("NewFirstName", myNewContactPerson.FirstName,
@@ -209,19 +208,6 @@ namespace Habanero.Test.General
             Assert.AreEqual(myContact.Surname, mySecondContactPerson.Surname);
         }
 
-        [Test]
-        public void TestObjectBeingRemovedFromCollection()
-        {
-            ContactPerson myContact = new ContactPerson();
-            IPrimaryKey id = myContact.ID;
-#pragma warning disable RedundantAssignment
-            myContact = null; // clear the person s.t. the GC can collect
-#pragma warning restore RedundantAssignment
-
-            GC.Collect(); //Force the GC to collect
-            Dictionary<string, WeakReference> boCol = BusinessObject.AllLoadedBusinessObjects();
-            Assert.IsFalse(boCol.ContainsKey(id.ToString()), "Object has not been removed from the dictionary");
-        }
 
 //		[Test]
 //		[ExpectedException(typeof (InvalidPropertyValueException))]
@@ -412,14 +398,9 @@ namespace Habanero.Test.General
 
         private static ClassDef GetClassDef()
         {
-            if (!ClassDef.IsDefined(typeof (TransactionLogStub)))
-            {
-                return CreateClassDef();
-            }
-            else
-            {
-                return ClassDef.ClassDefs[typeof (TransactionLogStub)];
-            }
+            return ClassDef.IsDefined(typeof (TransactionLogStub)) 
+                ? ClassDef.ClassDefs[typeof (TransactionLogStub)] 
+                : CreateClassDef();
         }
 
         protected override ClassDef ConstructClassDef()
@@ -511,12 +492,12 @@ namespace Habanero.Test.General
 
         internal static void ClearTransactionLogCol()
         {
-            ClearLoadedBusinessObjectBaseCol();
+            ClearObjectManager();
         }
 
         internal static void DeleteAllTransactionLogs()
         {
-            string sql = "DELETE FROM TransactionLogStub";
+            const string sql = "DELETE FROM TransactionLogStub";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 
@@ -554,8 +535,7 @@ namespace Habanero.Test.General
                 while (dr.Read())
                 {
                     BOLoader.Instance.LoadProperties(lTransactionLogStub, dr);
-                    TransactionLogStub lTempPerson2;
-                    lTempPerson2 = (TransactionLogStub)BOLoader.Instance.GetLoadedBusinessObject(lTransactionLogStub.GetObjectNewID());
+                    TransactionLogStub lTempPerson2 = (TransactionLogStub)BOLoader.Instance.GetLoadedBusinessObject(lTransactionLogStub.GetObjectNewID());
                     if (lTempPerson2 == null)
                     {
                         bOCol.Add(lTransactionLogStub);

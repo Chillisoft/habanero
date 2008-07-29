@@ -123,11 +123,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>Returns the new RelKey object</returns>
         public RelKey CreateRelKey(BOPropCol lBoPropCol)
         {
-            RelKey lRelKey = new RelKey(this);
-            foreach (RelPropDef relPropDef in this)
-            {
-                lRelKey.Add(relPropDef.CreateRelProp(lBoPropCol));
-            }
+            RelKey lRelKey = new RelKey(this, lBoPropCol);
             return lRelKey;
         }
 
@@ -136,6 +132,9 @@ namespace Habanero.BO.ClassDefinition
 		//    return _relPropDefs.Values.GetEnumerator();
 		//}
 
+        ///<summary>
+        /// The number of property definitiosn defined in the relKeyDef
+        ///</summary>
         public int Count
         {
             get

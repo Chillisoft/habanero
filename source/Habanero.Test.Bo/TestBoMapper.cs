@@ -60,8 +60,8 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadClassDefWithBOLookup();
             ContactPersonTestBO.LoadDefaultClassDef();
-
-            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
+            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, "abc");
+            ContactPersonTestBO cp = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
             BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", cp);
             Assert.AreEqual(cp.ContactPersonID, bo.GetPropertyValue("TestProp2"));
@@ -76,8 +76,9 @@ namespace Habanero.Test.BO
             ClassDef classDef = MyBO.LoadClassDefWithBOLookup("Surname <> abc");
             ContactPersonTestBO.LoadDefaultClassDef();
 
-            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
-            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
+            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, "abc");
+            ContactPersonTestBO cp = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", cp);
             Assert.AreEqual(cp.ContactPersonID, bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));

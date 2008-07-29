@@ -160,8 +160,8 @@ namespace Habanero.Test.BO
         public void TestOrderItemChangeItemAndFind()
         {
             SetupTestData();
-            BOLoader.Instance.ClearLoadedBusinessObjects();
-            OrderItem.ClearLoadedBusinessObjectBaseCol();
+            BusinessObject.ClearObjectManager();
+            OrderItem.ClearObjectManager();
             OrderItem.ClearTable();
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
             col.LoadAll();

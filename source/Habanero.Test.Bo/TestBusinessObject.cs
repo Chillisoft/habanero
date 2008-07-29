@@ -103,8 +103,9 @@ namespace Habanero.Test.BO
             ClassDef classDef = MyBO.LoadClassDefWithBOLookup();
             ContactPersonTestBO.LoadDefaultClassDef();
 
-            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
-            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
+            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, "abc");
+            ContactPersonTestBO cp = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", cp);
             Assert.AreEqual(cp.ContactPersonID, bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
@@ -119,8 +120,9 @@ namespace Habanero.Test.BO
             ClassDef classDef = MyBO.LoadClassDefWithBOStringLookup();
             ContactPersonTestBO.LoadDefaultClassDef();
 
-            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
-            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
+            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, "abc");
+            ContactPersonTestBO cp = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", "abc");
             Assert.AreEqual(cp.ContactPersonID.ToString(), bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
@@ -134,8 +136,9 @@ namespace Habanero.Test.BO
             ClassDef classDef = MyBO.LoadClassDefWithBOStringLookup();
             ContactPersonTestBO.LoadDefaultClassDef();
 
-            BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
-            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
+            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, "abc");
+            BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", null);
             Assert.AreEqual(null, bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual(null, bo.GetPropertyValueToDisplay("TestProp2"));

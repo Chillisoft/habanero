@@ -103,26 +103,6 @@ namespace Habanero.Test
             return lPropDefCol;
         }
 
-        /// <summary>
-        /// returns the Engine identified by id.
-        /// </summary>
-        /// <remarks>
-        /// If the Contact person is already leaded then an identical copy of it will be returned.
-        /// </remarks>
-        /// <param name="id">The object primary Key</param>
-        /// <returns>The loaded business object</returns>
-        /// <exception cref="Habanero.BO.BusObjDeleteConcurrencyControlException">
-        ///  if the object has been deleted already</exception>
-        public static Engine GetEngine(BOPrimaryKey id)
-        {
-            Engine myEngine = (Engine)BOLoader.Instance.GetLoadedBusinessObject(id);
-            if (myEngine == null)
-            {
-                myEngine = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Engine>(id);
-            }
-            return myEngine;
-        }
-
         #endregion //Constructors
 
         #region persistance
@@ -157,7 +137,7 @@ namespace Habanero.Test
 
         internal static void ClearEngineCol()
         {
-            ClearLoadedBusinessObjectBaseCol();
+            ClearObjectManager();
         }
 
         public static void DeleteAllEngines()

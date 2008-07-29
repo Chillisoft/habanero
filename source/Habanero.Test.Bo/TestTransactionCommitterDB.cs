@@ -276,7 +276,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
             ContactPersonTestBO contactPersonCompositeKey = GetSavedContactPersonCompositeKey();
             string oldID = contactPersonCompositeKey.ID.GetObjectId();
-            Assert.IsNotNull(BusinessObject.AllLoadedBusinessObjects()[oldID]);
+            Assert.IsNotNull(BusObjectManager.Instance[oldID]);
             TransactionCommitterDB committer = new TransactionCommitterDB();
             committer.AddBusinessObject(contactPersonCompositeKey);
             contactPersonCompositeKey.FirstName = "newName";
@@ -284,8 +284,8 @@ namespace Habanero.Test.BO
             committer.CommitTransaction();
             //---------------Test Result -----------------------
             TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(contactPersonCompositeKey);
-            Assert.IsFalse(BusinessObject.AllLoadedBusinessObjects().ContainsKey(oldID));
-            Assert.IsNotNull(BusinessObject.AllLoadedBusinessObjects()[contactPersonCompositeKey.ID.GetObjectId()]);
+            Assert.IsFalse(BusObjectManager.Instance.Contains(oldID));
+            Assert.IsNotNull(BusObjectManager.Instance[contactPersonCompositeKey.ID.GetObjectId()]);
             //---------------Tear Down--------------------------
             contactPersonCompositeKey.Delete();
             contactPersonCompositeKey.Save();
@@ -321,8 +321,8 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             IPrimaryKey objectID = contactPersonCompositeKey.ID;
             Assert.AreEqual(objectID.GetOrigObjectID(), objectID.GetObjectId());
-            Assert.IsNotNull(BusinessObject.AllLoadedBusinessObjects()[objectID.GetOrigObjectID()]);
-            Assert.IsFalse(BusinessObject.AllLoadedBusinessObjects().ContainsKey(oldID));
+            Assert.IsNotNull(BusObjectManager.Instance[objectID.GetOrigObjectID()]);
+            Assert.IsFalse(BusObjectManager.Instance.Contains(oldID));
         }
 
         [Test]
@@ -615,8 +615,10 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(mockBo);
             BOLoader.Instance.Refresh(mockBo);
-            MockBO savedMockBO =
-                BOLoader.Instance.GetBusinessObject<MockBO>("MockBOID = '" + mockBo.MockBOID.ToString("B") + "'");
+            //MockBO savedMockBO =
+            //    BOLoader.Instance.GetBusinessObject<MockBO>("MockBOID = '" + mockBo.MockBOID.ToString("B") + "'");
+            Criteria criteria = new Criteria("MockBOID", Criteria.Op.Equals, mockBo.MockBOID);
+            MockBO savedMockBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MockBO>(criteria);
             Assert.AreSame(mockBo, savedMockBO);
         }
 

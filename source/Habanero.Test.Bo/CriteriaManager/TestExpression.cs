@@ -31,10 +31,6 @@ namespace Habanero.Test.BO.CriteriaManager
     [TestFixture]
     public class TestExpression : TestUsingDatabase
     {
-        public TestExpression()
-        {
-        }
-
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {

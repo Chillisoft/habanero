@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -297,6 +298,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+
         public static ClassDef LoadClassDefWithAddressesRelationship_PreventDelete_WithUIDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -503,87 +505,6 @@ namespace Habanero.Test.BO
             return Surname;
         }
 
-        /// <summary>
-        /// returns the ContactPersonTestBO identified by id.
-        /// </summary>
-        /// <remarks>
-        /// If the Contact person is already leaded then an identical copy of it will be returned.
-        /// </remarks>
-        /// <param name="id">The object primary Key</param>
-        /// <returns>The loaded business object</returns>
-        /// <exception cref="BusObjDeleteConcurrencyControlException">
-        ///  if the object has been deleted already</exception>
-        public static ContactPersonTestBO GetContactPerson(BOPrimaryKey id)
-        {
-            ContactPersonTestBO myContactPersonTestBOTestBO =
-                (ContactPersonTestBO) BOLoader.Instance.GetLoadedBusinessObject(id);
-            if (myContactPersonTestBOTestBO != null) return myContactPersonTestBOTestBO;
-            myContactPersonTestBOTestBO =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(id);
-            return myContactPersonTestBOTestBO;
-        }
-
-
-
-        #region Properties
-
-        public Guid ContactPersonID
-        {
-            get { return (Guid) GetPropertyValue("ContactPersonID"); }
-            set { SetPropertyValue("ContactPersonID", value); }
-        }
-
-        public string Surname
-        {
-            get { return (string) GetPropertyValue("Surname"); }
-            set { SetPropertyValue("Surname", value); }
-        }
-
-        public string FirstName
-        {
-            get { return (string) GetPropertyValue("FirstName"); }
-            set { SetPropertyValue("FirstName", value); }
-        }
-
-        public DateTime DateOfBirth
-        {
-            get { return (DateTime) GetPropertyValue("DateOfBirth"); }
-            set { SetPropertyValue("DateOfBirth", value); }
-        }
-
-        public RelatedBusinessObjectCollection<Address> Addresses
-        {
-            get
-            {
-                return
-                    (RelatedBusinessObjectCollection<Address>) Relationships.GetRelatedCollection<Address>("Addresses");
-            }
-        }
-
-        public bool AfterLoadCalled
-        {
-            get { return _afterLoadCalled; }
-            set { _afterLoadCalled = value; }
-        }
-
-        public RelatedBusinessObjectCollection<AddressTestBO> AddressTestBOs
-        {
-            get
-            {
-                return
-                   (RelatedBusinessObjectCollection<AddressTestBO>)Relationships.GetRelatedCollection<AddressTestBO>("AddressTestBOs");
-            }
-        }
-
-
-        protected internal override void AfterLoad()
-        {
-            base.AfterLoad();
-            _afterLoadCalled = true;
-        }
-
-        #endregion //Properties
-
         internal static void DeleteAllContactPeople()
         {
             string sql = "DELETE FROM contact_person_address";
@@ -597,18 +518,19 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             LoadFullClassDef();
 
-            string[] surnames = { "zzz", "abc", "abcd" };
-            string[] firstNames = { "a", "aa", "aa" };
+            string[] surnames = {"zzz", "abc", "abcd"};
+            string[] firstNames = {"a", "aa", "aa"};
 
             for (int i = 0; i < surnames.Length; i++)
             {
-                if (BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("surname = " + surnames[i]) == null)
-                {
-                    ContactPersonTestBO contact = new ContactPersonTestBO();
-                    contact.Surname = surnames[i];
-                    contact.FirstName = firstNames[i];
-                    contact.Save();
-                }
+                Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, surnames[i]);
+                if (BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria) !=
+                    null)
+                    continue;
+                ContactPersonTestBO contact = new ContactPersonTestBO();
+                contact.Surname = surnames[i];
+                contact.FirstName = firstNames[i];
+                contact.Save();
             }
             ClassDef.ClassDefs.Clear();
         }
@@ -627,6 +549,7 @@ namespace Habanero.Test.BO
             LoadClassDefWithAddressesRelationship_DeleteRelated();
             return CreateContactPerson(out address);
         }
+
         public static ContactPersonTestBO CreateContactPersonWithOneAddress_PreventDelete(out Address address)
         {
             LoadClassDefWithAddressesRelationship_PreventDelete();
@@ -640,7 +563,6 @@ namespace Habanero.Test.BO
             address.Save();
             Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
             return contactPersonTestBO;
-
         }
 
         public static ContactPersonTestBO CreateContactPersonWithOneAddress_DeleteDoNothing(out Address address)
@@ -668,7 +590,6 @@ namespace Habanero.Test.BO
             ContactPersonTestBO contact = CreateUnsavedContactPerson(surname);
             contact.Save();
             return contact;
-
         }
 
         public static ContactPersonTestBO CreateSavedContactPerson(DateTime dateOfBirth)
@@ -716,5 +637,65 @@ namespace Habanero.Test.BO
             contact.FirstName = firstName;
             return contact;
         }
+
+        #region Properties
+
+        public Guid ContactPersonID
+        {
+            get { return (Guid) GetPropertyValue("ContactPersonID"); }
+            set { SetPropertyValue("ContactPersonID", value); }
+        }
+
+        public string Surname
+        {
+            get { return (string) GetPropertyValue("Surname"); }
+            set { SetPropertyValue("Surname", value); }
+        }
+
+        public string FirstName
+        {
+            get { return (string) GetPropertyValue("FirstName"); }
+            set { SetPropertyValue("FirstName", value); }
+        }
+
+        public DateTime DateOfBirth
+        {
+            get { return (DateTime) GetPropertyValue("DateOfBirth"); }
+            set { SetPropertyValue("DateOfBirth", value); }
+        }
+
+        public RelatedBusinessObjectCollection<Address> Addresses
+        {
+            get
+            {
+                return
+                    (RelatedBusinessObjectCollection<Address>) Relationships.GetRelatedCollection<Address>("Addresses");
+            }
+        }
+
+        public bool AfterLoadCalled
+        {
+            get { return _afterLoadCalled; }
+            set { _afterLoadCalled = value; }
+        }
+
+        public RelatedBusinessObjectCollection<AddressTestBO> AddressTestBOs
+        {
+            get
+            {
+                return
+                    (RelatedBusinessObjectCollection<AddressTestBO>)
+                    Relationships.GetRelatedCollection<AddressTestBO>("AddressTestBOs");
+            }
+        }
+
+
+        protected internal override void AfterLoad()
+        {
+            base.AfterLoad();
+            _afterLoadCalled = true;
+        }
+
+        #endregion //Properties
     }
 }

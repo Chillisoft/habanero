@@ -48,7 +48,7 @@ namespace Habanero.Test
                     @"
 				<class name=""TestAutoInc"" assembly=""Habanero.Test"" table=""testautoinc"" >
 					<property  name=""testautoincid"" type=""Int32"" autoIncrementing=""true"" />
-					<property  name=""testfield"" />
+					<property  name=""testfield"" default=""testing"" />
 					<primaryKey isObjectID=""false"">
 						<prop name=""testautoincid"" />
 					</primaryKey>

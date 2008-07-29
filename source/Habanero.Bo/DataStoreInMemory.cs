@@ -20,21 +20,21 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.BO
 {
+    ///<summary>
+    /// This is an in memory datastore this is designed to be used primarily for testing.
+    ///</summary>
     public class DataStoreInMemory
     {
-        private Dictionary<IPrimaryKey, IBusinessObject> _objects = new Dictionary<IPrimaryKey, IBusinessObject>();
+        private readonly Dictionary<IPrimaryKey, IBusinessObject> _objects =
+            new Dictionary<IPrimaryKey, IBusinessObject>();
 
         public int Count
         {
             get { return _objects.Count; }
-        }
-
-        public void Add(IBusinessObject businessObject)
-        {
-            _objects.Add(businessObject.ID, businessObject);
         }
 
         public Dictionary<IPrimaryKey, IBusinessObject> AllObjects
@@ -42,24 +42,57 @@ namespace Habanero.BO
             get { return _objects; }
         }
 
+        public void Add(IBusinessObject businessObject)
+        {
+            _objects.Add(businessObject.ID, businessObject);
+        }
+
         public T Find<T>(Criteria criteria) where T : class, IBusinessObject
         {
-            foreach (IBusinessObject bo in _objects.Values)
-            {
-                T boAsT = bo as T;
-                if (boAsT == null) continue; ;
-                if (criteria.IsMatch(boAsT)) return boAsT;
-            }
-            return null;
+            return (T) Find(typeof (T), criteria);
+            //T currentBO = null;
+            //foreach (IBusinessObject bo in _objects.Values)
+            //{
+            //    T boAsT = bo as T;
+            //    if (boAsT == null) continue;
+            //    ;
+            //    if (!criteria.IsMatch(boAsT)) continue;
+
+            //    if (currentBO == null)
+            //    {
+            //        currentBO = boAsT;
+            //    }
+            //    else
+            //    {
+            //        throw new HabaneroDeveloperException("There was an error with loading the class '"
+            //                  + bo.ClassDef.ClassNameFull + "'", "Loading a '"
+            //                  + bo.ClassDef.ClassNameFull + "' with criteria '" + criteria
+            //                  + "' returned more than one record when only one was expected.");
+            //    }
+            //}
+            //return currentBO;
         }
 
         public IBusinessObject Find(Type BOType, Criteria criteria)
         {
+            IBusinessObject currentBO = null;
             foreach (IBusinessObject bo in _objects.Values)
             {
-                if (BOType.IsInstanceOfType(bo) && criteria.IsMatch(bo)) return bo;
+                if (!BOType.IsInstanceOfType(bo)) continue;
+                if (!criteria.IsMatch(bo)) continue;
+                if (currentBO == null)
+                {
+                    currentBO = bo;
+                }
+                else
+                {
+                    throw new HabaneroDeveloperException("There was an error with loading the class '"
+                              + bo.ClassDef.ClassNameFull + "'", "Loading a '"
+                              + bo.ClassDef.ClassNameFull + "' with criteria '" + criteria
+                              + "' returned more than one record when only one was expected.");
+                }
             }
-            return null;
+            return currentBO;
         }
 
         public T Find<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject
@@ -82,24 +115,21 @@ namespace Habanero.BO
             foreach (IBusinessObject bo in _objects.Values)
             {
                 T boAsT = bo as T;
-                if (boAsT == null) continue; ;
+                if (boAsT == null) continue;
                 if (criteria == null || criteria.IsMatch(boAsT)) col.Add(boAsT);
             }
             col.SelectQuery.Criteria = criteria;
             return col;
         }
 
-        public IBusinessObjectCollection FindAll(Type BOType, Criteria criteria) 
+        public IBusinessObjectCollection FindAll(Type BOType, Criteria criteria)
         {
             Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(BOType);
             IBusinessObjectCollection col = (IBusinessObjectCollection) Activator.CreateInstance(boColType);
             foreach (IBusinessObject bo in _objects.Values)
             {
-
-                if (BOType.IsInstanceOfType(bo))
-                {
-                    if (criteria == null || criteria.IsMatch(bo)) col.Add(bo);
-                }
+                if (!BOType.IsInstanceOfType(bo)) continue;
+                if (criteria == null || criteria.IsMatch(bo)) col.Add(bo);
             }
             col.SelectQuery.Criteria = criteria;
             return col;

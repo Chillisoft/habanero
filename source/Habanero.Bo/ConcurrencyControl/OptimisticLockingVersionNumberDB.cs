@@ -115,8 +115,8 @@ namespace Habanero.BO.ConcurrencyControl
         private void CheckConcurrencyControl(VerificationStage verificationStage)
         {
             if (_busObj.State.IsNew) return;
-            using (IDataReader dr = BOLoader.Instance.LoadDataReader(_busObj, DatabaseConnection.CurrentConnection,  null)
-                )
+//            BORegistry.DataAccessor.BusinessObjectLoader.
+            using (IDataReader dr = BOLoader.Instance.LoadDataReader(_busObj, DatabaseConnection.CurrentConnection,  null))
             {
                 // If this object no longer exists in the database
                 // then we have a concurrency conflict since it has been deleted by another process.
@@ -124,24 +124,20 @@ namespace Habanero.BO.ConcurrencyControl
                 bool drHasData = dr.Read();
                 if (! (drHasData) && !_busObj.State.IsDeleted)
                 {
-                    //The object you are trying to save has been deleted by another user.
+                    //The object you are trying to update has been deleted by another user.
                     throw new BusObjDeleteConcurrencyControlException(_busObj.ClassName, _busObj.ID.ToString(),
                                                                       _busObj);
                 }
-                else
-                {
-                    int versionNumberBusinessObject = (int) _versionNumber.Value;
-                    int versionNumberDB = (int) dr[_versionNumber.DatabaseFieldName];
+                int versionNumberBusinessObject = (int) _versionNumber.Value;
+                int versionNumberDB = (int) dr[_versionNumber.DatabaseFieldName];
 
-                    if (versionNumberDB != versionNumberBusinessObject)
-                    {
-                        string dateLastUpdatedInDB = dr[_dateLastUpdated.DatabaseFieldName].ToString();
-                        string userNameLastUpdated = (string) dr[_userLastUpdated.DatabaseFieldName];
-                        string machineLastUpdated = (string) dr[_machineLastUpdated.DatabaseFieldName];
-                        ThrowConcurrencyException(verificationStage, userNameLastUpdated, machineLastUpdated,
-                                                  dateLastUpdatedInDB);
-                    }
-                }
+                if (versionNumberDB == versionNumberBusinessObject) return;
+
+                string dateLastUpdatedInDB = dr[_dateLastUpdated.DatabaseFieldName].ToString();
+                string userNameLastUpdated = (string) dr[_userLastUpdated.DatabaseFieldName];
+                string machineLastUpdated = (string) dr[_machineLastUpdated.DatabaseFieldName];
+                ThrowConcurrencyException(verificationStage, userNameLastUpdated, machineLastUpdated,
+                                          dateLastUpdatedInDB);
             }
         }
 
@@ -202,7 +198,7 @@ namespace Habanero.BO.ConcurrencyControl
 
             try
             {
-                _operatingSystemUser.Value = WindowsIdentity.GetCurrent().Name;
+                _operatingSystemUser.Value = CurrentUser();
             }
             catch (SecurityException)
             {
@@ -228,11 +224,16 @@ namespace Habanero.BO.ConcurrencyControl
             {
                 //TODO Temp code possibly integrate with a system to get the user as
                 // per custom code for now use the OS user.
-                _userLastUpdated.Value = WindowsIdentity.GetCurrent().Name;
+                _userLastUpdated.Value = CurrentUser();
             }
             catch (SecurityException)
             {
             }
+        }
+
+        private static string CurrentUser()
+        {
+            return WindowsIdentity.GetCurrent() == null ? "" : WindowsIdentity.GetCurrent().Name;
         }
 
         /// <summary>

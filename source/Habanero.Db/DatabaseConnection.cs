@@ -256,15 +256,11 @@ namespace Habanero.DB
                 // connections could have readers still associated with them.
                 foreach (IDbConnection dbConnection in _connections)
                 {
-                    if (dbConnection.State == ConnectionState.Closed)
-                    {
-                        //} || dbConnection.State == ConnectionState.Broken) {
-                        dbConnection.Open();
-                        return dbConnection;
-                    }
+                    if (dbConnection.State != ConnectionState.Closed) continue;
+                    dbConnection.Open();
+                    return dbConnection;
                 }
                 IDbConnection newDbConnection = this.NewConnection;
-                //newDbConnection.Open() ;
                 _connections.Add(newDbConnection);
                 return newDbConnection;
             }

@@ -298,8 +298,9 @@ namespace Habanero.Base
             foreach (IBOProp prop in key)
             {
                 Criteria propCriteria = new Criteria(prop.PropertyName, Op.Equals, prop.Value);
-                if (lastCriteria == null) lastCriteria = propCriteria;
-                else lastCriteria = new Criteria(lastCriteria, LogicalOp.And, propCriteria);
+                lastCriteria = lastCriteria == null 
+                    ? propCriteria 
+                    : new Criteria(lastCriteria, LogicalOp.And, propCriteria);
             }
             return lastCriteria;
         }

@@ -117,8 +117,7 @@ namespace Habanero.Test.BO
 
 			Assert.IsTrue(_mockBo.GetPropertyValue("MockBOProp1") == null);
 
-			BusinessObjectCollection<MockBO> relatedObjects;
-			relatedObjects = rel.GetRelatedBusinessObjectCol<MockBO>();
+		    BusinessObjectCollection<MockBO> relatedObjects = rel.GetRelatedBusinessObjectCol<MockBO>();
 			Assert.IsTrue(relatedObjects.Count == 0);
 
 			//			_mockBo.SetPropertyValue("MockBOProp1",_mockBo.GetPropertyValue("MockBOID"));

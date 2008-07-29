@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -63,17 +64,22 @@ namespace Habanero.Test.General
         public void TearDown()
         {
             TransactionCommitterDB committer = new TransactionCommitterDB();
-            BusinessObjectCollection<Shape> shapes = BOLoader.Instance.GetBusinessObjectCol<Shape>(
-                "ShapeName = 'MyShape' OR ShapeName = 'MyShapeChanged'", null);
+            Criteria criteria1 = new Criteria("ShapeName", Criteria.Op.Equals, "MyShape");
+            Criteria criteria2 = new Criteria("ShapeName", Criteria.Op.Equals, "MyShapeChanged");
+            Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
+            BusinessObjectCollection<Shape> shapes = 
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Shape>(criteria, null);
             foreach (Shape shape in shapes)
             {
                 shape.Delete();
                 committer.AddBusinessObject(shape);
             }
-
-            BusinessObjectCollection<CircleNoPrimaryKey> circles = BOLoader.Instance.GetBusinessObjectCol
-                <CircleNoPrimaryKey>(
-                "ShapeName = 'Circle' OR ShapeName = 'CircleChanged'", null);
+                        criteria1 = new Criteria("ShapeName", Criteria.Op.Equals, "Circle");
+            criteria2 = new Criteria("ShapeName", Criteria.Op.Equals, "CircleChanged");
+            criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
+            BusinessObjectCollection<CircleNoPrimaryKey> circles 
+                = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                <CircleNoPrimaryKey>(criteria, null);
             foreach (CircleNoPrimaryKey circle in circles)
 
             {
@@ -245,7 +251,7 @@ namespace Habanero.Test.General
             bo.SetPropertyValue("ShapeID", circle.ShapeID);
             bo.Save();
 
-            BOLoader.Instance.ClearLoadedBusinessObjects();
+            BusinessObject.ClearObjectManager();
 
             //---------------Execute Test ----------------------
             bo = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(bo.ID);

@@ -73,7 +73,16 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
 
-            BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("FirstName = aa");
+            try
+            {
+                BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("FirstName = aa");
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (Exception ex)
+            {
+                StringAssert.Contains("expectedMessage", ex.Message);
+            }
         }
 
         [Test]
@@ -281,8 +290,8 @@ namespace Habanero.Test.BO
             //Create and save a person
             ContactPersonTestBO cpTemp = CreateSavedContactPerson();
             //Clear the object manager so as to simulate a different user
-            BusinessObject.ClearLoadedBusinessObjectBaseCol();
-            Assert.AreEqual(0, BusinessObject.AllLoadedBusinessObjects().Count);
+            BusinessObject.ClearObjectManager();
+            //BeingRemoved Assert.AreEqual(0, BusinessObject.AllLoadedBusinessObjects().Count);
             //Get the person from the object manager so as to ensure that they are loaded 
             // into the object manager.
             ContactPersonTestBO cpTemp2 =
@@ -307,13 +316,13 @@ namespace Habanero.Test.BO
             //Create and save a person
             ContactPersonTestBO cpTemp = CreateSavedContactPerson();
             //Clear the object manager so as to simulate a different user
-            ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
-            Assert.AreEqual(0, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
+            ContactPersonTestBO.ClearObjectManager();
+            //BeingRemoved Assert.AreEqual(0, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
             //Get the person from the object manager so as to ensure that they are loaded 
             // into the object manager.
             //-------------Execute test --------------------
             BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
-            Assert.AreEqual(1, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
+            //BeingRemoved Assert.AreEqual(1, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
 
         }
         [Test]
@@ -323,15 +332,15 @@ namespace Habanero.Test.BO
             //Create and save a person
             ContactPersonTestBO cpTemp = CreateSavedContactPerson();
             //Clear the object manager so as to simulate a different user
-            ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
-            Assert.AreEqual(0, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
+            ContactPersonTestBO.ClearObjectManager();
+            //BeingRemoved Assert.AreEqual(0, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
             //Get the person from the object manager so as to ensure that they are loaded 
             // into the object manager.
             //-------------Execute test --------------------
             BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
             BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
             //-------------Test Result ---------------------
-            Assert.AreEqual(1, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
+            //BeingRemoved Assert.AreEqual(1, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
         }
 
         [Test]
@@ -370,14 +379,14 @@ namespace Habanero.Test.BO
         {
             ContactPersonTestBO cpTemp = CreateSavedContactPerson();
             //Clear the loaded busiess object so that the we can simulate a user on another machine deleting this object
-            BOLoader.Instance.ClearLoadedBusinessObjects();
+            BusinessObject.ClearObjectManager();
             return cpTemp;
         }
 
         private static ContactPersonTestBO CreateSavedContactPerson()
         {
             ClassDef.ClassDefs.Clear();
-            BOLoader.Instance.ClearLoadedBusinessObjects();
+            BusinessObject.ClearObjectManager();
             ContactPersonTestBO.LoadDefaultClassDef();
             //Create a contact person
             ContactPersonTestBO cpTemp = new ContactPersonTestBO();

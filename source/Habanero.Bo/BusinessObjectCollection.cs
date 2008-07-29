@@ -127,7 +127,7 @@ namespace Habanero.BO
                                                           "Class Definitions not loaded");
                 }
                 _sampleBo = _boClassDef.CreateNewBusinessObject();
-                BusinessObject.AllLoadedBusinessObjects().Remove(_sampleBo.ID.GetObjectId());
+//                BusinessObject.AllLoadedBusinessObjects().Remove(_sampleBo.ID.GetObjectId());
             }  
             _lookupTable = new Hashtable();
             _selectQuery = QueryBuilder.CreateSelectQuery(_boClassDef);
@@ -284,37 +284,38 @@ namespace Habanero.BO
         [ReflectionPermission(SecurityAction.Demand)]
         public void Refresh()
         {
-            BusinessObjectCollection<TBusinessObject> oldCol = this.Clone();
-            Clear();
-            IDatabaseConnection boDatabaseConnection = DatabaseConnection.CurrentConnection;
-            ISqlStatement refreshSql = CreateLoadSqlStatement((BusinessObject) _sampleBo, _boClassDef,
-                _criteriaExpression, _limit, _extraSearchCriteriaLiteral, _orderByClause);
-            using (IDataReader dr = boDatabaseConnection.LoadDataReader(refreshSql))
-            {
-                try
-                {
-                    while (dr.Read())
-                    {
-                        TBusinessObject bo = (TBusinessObject)BOLoader.Instance.GetBusinessObject(_sampleBo, dr);
-                        if (Contains(bo)) continue;
-                        if (oldCol.Contains(bo))
-                        {
-                            AddInternal(bo);
-                        }
-                        else
-                        {
-                            Add(bo);
-                        }
-                    }
-                }
-                finally
-                {
-                    if (dr != null && !dr.IsClosed)
-                    {
-                        dr.Close();
-                    }
-                }
-            }
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(this);
+            //BusinessObjectCollection<TBusinessObject> oldCol = this.Clone();
+            //Clear();
+            //IDatabaseConnection boDatabaseConnection = DatabaseConnection.CurrentConnection;
+            //ISqlStatement refreshSql = CreateLoadSqlStatement((BusinessObject) _sampleBo, _boClassDef,
+            //    _criteriaExpression, _limit, _extraSearchCriteriaLiteral, _orderByClause);
+            //using (IDataReader dr = boDatabaseConnection.LoadDataReader(refreshSql))
+            //{
+            //    try
+            //    {
+            //        while (dr.Read())
+            //        {
+            //            TBusinessObject bo = (TBusinessObject)BOLoader.Instance.GetBusinessObject(_sampleBo, dr);
+            //            if (Contains(bo)) continue;
+            //            if (oldCol.Contains(bo))
+            //            {
+            //                AddInternal(bo);
+            //            }
+            //            else
+            //            {
+            //                Add(bo);
+            //            }
+            //        }
+            //    }
+            //    finally
+            //    {
+            //        if (dr != null && !dr.IsClosed)
+            //        {
+            //            dr.Close();
+            //        }
+            //    }
+            //}
         }
 
         #region Create Load Statement

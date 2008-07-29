@@ -158,13 +158,13 @@ namespace Habanero.Test
         ///  if the object has been deleted already</exception>
         public static ContactPersonCompositeKey GetContactPersonCompositeKey(IPrimaryKey id)
         {
+            //ContactPersonCompositeKey myContactPerson =
+            //    (ContactPersonCompositeKey) BOLoader.Instance.GetLoadedBusinessObject(id);
+            //if (myContactPerson == null)
+            //{
             ContactPersonCompositeKey myContactPerson =
-                (ContactPersonCompositeKey) BOLoader.Instance.GetLoadedBusinessObject(id);
-            if (myContactPerson == null)
-            {
-                myContactPerson =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonCompositeKey>(id);
-            }
+//            }
             return myContactPerson;
         }
 
@@ -186,7 +186,7 @@ namespace Habanero.Test
 
         public static void ClearContactPersonCol()
         {
-            ClearLoadedBusinessObjectBaseCol();
+            ClearObjectManager();
         }
 
         public static void DeleteAllContactPeople()

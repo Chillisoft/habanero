@@ -213,31 +213,6 @@ namespace Habanero.Test
             return myContactPerson;
         }
 
-        /// <summary>
-        /// returns the ContactPerson identified by the search criteria else returns null.
-        /// </summary>
-        /// <remarks>
-        /// If the Contact person is already leaded then an identical copy of it will be returned.
-        /// </remarks>
-        /// <param name="searchExpression">The object primary Key as a searchExpression or any of the objects
-        /// alternate keys propertyname value pairs</param>
-        /// <returns>The loaded business object or null</returns>
-        /// <exception cref="Habanero.BO.BusObjDeleteConcurrencyControlException">
-        ///  if the object has been deleted already</exception>
-        public static ContactPerson GetContactPerson(IExpression searchExpression)
-        {
-            ContactPerson myContactPerson =
-                (ContactPerson)BOLoader.Instance.GetLoadedBusinessObject(searchExpression.ExpressionString());
-
-            if (myContactPerson == null)
-            {
-                myContactPerson = new ContactPerson();
-                myContactPerson = (ContactPerson) BOLoader.Instance.GetBusinessObject(myContactPerson, searchExpression);
-                
-            }
-            return myContactPerson;
-        }
-
         #endregion //Constructors
 
         #region persistance
@@ -295,11 +270,6 @@ namespace Habanero.Test
         #endregion //Relationships
 
         #region ForTesting
-
-        public static void ClearContactPersonCol()
-        {
-            ClearLoadedBusinessObjectBaseCol();
-        }
 
         public static void DeleteAllContactPeople()
         {

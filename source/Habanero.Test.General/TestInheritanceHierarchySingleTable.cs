@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -43,29 +44,34 @@ namespace Habanero.Test.General
         [TearDown]
         public void TearDown()
         {
-            Shape shape = BOLoader.Instance.GetBusinessObject<Shape>(
-                "ShapeName = 'MyShape' OR ShapeName = 'MyShapeChanged'");
+                                    Criteria criteria1 = new Criteria("ShapeName", Criteria.Op.Equals, "MyShape");
+            Criteria criteria2 = new Criteria("ShapeName", Criteria.Op.Equals, "MyShapeChanged");
+            Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
+            Shape shape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(
+                criteria1);
             if (shape != null)
             {
                 shape.Delete();
                 shape.Save();
             }
-
-            CircleNoPrimaryKey circle = BOLoader.Instance.GetBusinessObject<CircleNoPrimaryKey>(
-                "ShapeName = 'Circle' OR ShapeName = 'CircleChanged'");
+            criteria1 = new Criteria("ShapeName", Criteria.Op.Equals, "Circle");
+            criteria2 = new Criteria("ShapeName", Criteria.Op.Equals, "CircleChanged");
+            criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
+            CircleNoPrimaryKey circle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<CircleNoPrimaryKey>(
+                criteria);
             if (circle != null)
             {
                 circle.Delete();
                 circle.Save();
             }
-
-            FilledCircleNoPrimaryKey filledCircle = BOLoader.Instance.GetBusinessObject<FilledCircleNoPrimaryKey>(
-                "ShapeName = 'FilledCircle' OR ShapeName = 'FilledCircleChanged'");
-            if (filledCircle != null)
-            {
-                filledCircle.Delete();
-                filledCircle.Save();
-            }
+            criteria1 = new Criteria("ShapeName", Criteria.Op.Equals, "FilledCircle");
+            criteria2 = new Criteria("ShapeName", Criteria.Op.Equals, "FilledCircleChanged");
+            criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
+            FilledCircleNoPrimaryKey filledCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<FilledCircleNoPrimaryKey>(
+                criteria);
+            if (filledCircle == null) return;
+            filledCircle.Delete();
+            filledCircle.Save();
         }
 
         #endregion

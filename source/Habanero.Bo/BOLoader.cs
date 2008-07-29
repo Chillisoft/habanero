@@ -184,19 +184,19 @@ namespace Habanero.BO
             if (tempBusObj == null || isReplacingSuperClassObject)
             {
                 tempBusObj = (BusinessObject) classDef.CreateNewBusinessObject();
-                BusinessObject.AllLoadedBusinessObjects().Remove(tempBusObj.ID.GetObjectId());
+//                BusinessObject.AllLoadedBusinessObjects().Remove(tempBusObj.ID.GetObjectId());
                 //InstantiateBusinessObject();
                 LoadFromDataReader(tempBusObj, dr);
                 try
                 {
                     if (isReplacingSuperClassObject)
                     {
-                        BusinessObject.AllLoadedBusinessObjects().Remove(tempBusObj.ID.GetObjectId());
+//                        BusinessObject.AllLoadedBusinessObjects().Remove(tempBusObj.ID.GetObjectId());
                     }
                     try
                     {
-                        BusinessObject.AllLoadedBusinessObjects().Add(tempBusObj.ID.GetObjectId(),
-                                                                      new WeakReference(tempBusObj));
+//                        BusinessObject.AllLoadedBusinessObjects().Add(tempBusObj.ID.GetObjectId(),
+//                                                                      new WeakReference(tempBusObj));
                     }
                     catch (IndexOutOfRangeException)
                     {
@@ -283,7 +283,7 @@ namespace Habanero.BO
             return returnBO;
         }
 
-        private bool IsBaseOfSingleTableInheritanceHierarchy(IDataReader dr, BusinessObject returnBO,
+        private bool IsBaseOfSingleTableInheritanceHierarchy(IDataRecord dr, BusinessObject returnBO,
                                                              bool isBaseOfSingleTableInheritanceHierarchy,
                                                              ref string discriminatorField)
         {
@@ -305,9 +305,7 @@ namespace Habanero.BO
         /// <returns>Returns true if the object was successfully loaded</returns>
         internal virtual bool Load(BusinessObject obj)
         {
-            bool loaded;
-
-            loaded = Refresh(obj);
+            bool loaded = Refresh(obj);
             obj.AfterLoad();
             return loaded;
         }
@@ -322,9 +320,7 @@ namespace Habanero.BO
         /// <returns>Returns true if the object was successfully loaded</returns>
         internal virtual bool Load(BusinessObject businessObject, IExpression searchExpression)
         {
-            bool loaded;
-
-            loaded = Refresh(businessObject, searchExpression);
+            bool loaded = Refresh(businessObject, searchExpression);
             businessObject.AfterLoad();
             return loaded;
         }
@@ -447,24 +443,24 @@ namespace Habanero.BO
         internal BusinessObject GetLoadedBusinessObject(string id, bool refreshIfReqNotCurrent)
         {
             //If the object is already in loaded then refresh it and return it if required.
-            if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(id))
-            {
-                WeakReference weakRef = BusinessObject.AllLoadedBusinessObjects()[id];
-                //If the reference is valid return object else remove object from 
-                // Collection
-                if (weakRef.IsAlive && weakRef.Target != null)
-                {
-                    BusinessObject loadedBusinessObject = (BusinessObject) weakRef.Target;
-                    //Apply concurrency Control Strategy to the Business Object
-                    if (refreshIfReqNotCurrent && !loadedBusinessObject.State.IsNew)
-                    {
-                        Instance.Refresh(loadedBusinessObject);
-                        //loadedBusinessObject.CheckConcurrencyOnGettingObjectFromObjectManager();
-                    }
-                    return loadedBusinessObject;
-                }
-                BusinessObject.AllLoadedBusinessObjects().Remove(id);
-            }
+            //if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(id))
+            //{
+            //    WeakReference weakRef = BusinessObject.AllLoadedBusinessObjects()[id];
+            //    //If the reference is valid return object else remove object from 
+            //    // Collection
+            //    if (weakRef.IsAlive && weakRef.Target != null)
+            //    {
+            //        BusinessObject loadedBusinessObject = (BusinessObject) weakRef.Target;
+            //        //Apply concurrency Control Strategy to the Business Object
+            //        if (refreshIfReqNotCurrent && !loadedBusinessObject.State.IsNew)
+            //        {
+            //            Instance.Refresh(loadedBusinessObject);
+            //            //loadedBusinessObject.CheckConcurrencyOnGettingObjectFromObjectManager();
+            //        }
+            //        return loadedBusinessObject;
+            //    }
+            //    BusinessObject.AllLoadedBusinessObjects().Remove(id);
+            //}
             return null;
         }
 
@@ -578,7 +574,7 @@ namespace Habanero.BO
             }
         }
 
-        private IBusinessObjectCollection GetBusinessObjectCollection(ClassDef classDef,
+        private IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef,
                                                                       IExpression searchExpression,
                                                                       string searchCriteria, OrderCriteria orderCriteria)
         {
@@ -673,7 +669,7 @@ namespace Habanero.BO
         /// </summary>
         public void ClearLoadedBusinessObjects()
         {
-            BusinessObject.ClearLoadedBusinessObjectBaseCol();
+            BusinessObject.ClearObjectManager();
         }
 
         #region Load By ID Methods

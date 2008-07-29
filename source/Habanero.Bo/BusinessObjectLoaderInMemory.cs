@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
@@ -150,6 +151,28 @@ namespace Habanero.BO
             {
                 if (!collection.Contains(obj)) collection.Add(obj);
             }
+        }
+
+        /// <summary>
+        /// Reloads a businessObject from the datasource using the id of the object.
+        /// A dirty object will not be refreshed from the database and the appropriate error will be raised.
+        /// Cancel all edits before refreshing the object or call see TODO: Refresh with refresh dirty objects = true.
+        /// </summary>
+        /// <exception cref="HabaneroDeveloperException">Exception thrown if the object is dirty and refresh is called.</exception>
+        /// <param name="businessObject">The businessObject to refresh</param>
+        public IBusinessObject Refresh(IBusinessObject businessObject)
+        {
+            if (businessObject.State.IsNew)
+            {
+                return businessObject;
+            }
+            if (businessObject.State.IsEditing)
+            {
+                throw new HabaneroDeveloperException("A Error has occured since the object being refreshed is being edited.",
+                    "A Error has occured since the object being refreshed is being edited. ID :- " +
+                    businessObject.ID.GetObjectId() + " Class : " + businessObject.ClassDef.ClassNameFull);
+            }
+            return businessObject;
         }
 
         /// <summary>

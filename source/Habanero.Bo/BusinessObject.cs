@@ -52,9 +52,6 @@ namespace Habanero.BO
 
         #region Fields
 
-        private static readonly Dictionary<string, WeakReference> _allLoadedBusinessObjects =
-            new Dictionary<string, WeakReference>();
-
         protected BOPropCol _boPropCol;
 
         //set object as new by default.
@@ -138,21 +135,21 @@ namespace Habanero.BO
                 if (ClassDef == null) return;
                 if (ID != null)
                 {
-                    AllLoadedBusinessObjects().Remove(ID.GetObjectId());
+//                    AllLoadedBusinessObjects().Remove(ID.GetObjectId());
                     BusObjectManager.Instance.Remove(this);
                 }
                 //TODO: All the code below To be removed
-                if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
-                    if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
-                        if (ID != null) AllLoadedBusinessObjects().Remove(ID.ToString());
-                if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
-                {
-                    AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
-                    if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
-                    {
-                        AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
-                    }
-                }
+                //if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
+                //    if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
+                //        if (ID != null) AllLoadedBusinessObjects().Remove(ID.ToString());
+                //if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
+                //{
+                //    AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
+                //    if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
+                //    {
+                //        AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
+                //    }
+                //}
             }
             catch (Exception ex)
             {
@@ -243,20 +240,10 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Returns a Hashtable containing the loaded business objects
-        /// </summary>
-        /// <returns></returns>
-        internal static Dictionary<string, WeakReference> AllLoadedBusinessObjects()
-        {
-            return _allLoadedBusinessObjects;
-        }
-
-        /// <summary>
         /// Clears the loaded objects collection
         /// </summary>
-        internal static void ClearLoadedBusinessObjectBaseCol()
+        internal static void ClearObjectManager()
         {
-            _allLoadedBusinessObjects.Clear();
             BusObjectManager.Instance.ClearLoadedObjects();
         }
 
@@ -851,7 +838,7 @@ namespace Habanero.BO
         /// <summary>
         /// Commits to the database any changes made to the object
         /// </summary>
-        public void Save()
+        public virtual void Save()
         {
             ITransactionCommitter committer =
                 BORegistry.DataAccessor.CreateTransactionCommitter();
@@ -907,12 +894,10 @@ namespace Habanero.BO
             {
                 SetStateAsPermanentlyDeleted();
                 BusObjectManager.Instance.Remove(this);
-                RemoveFromAllLoaded();
                 FireDeleted();
             }
             else
             {
-                RemoveFromAllLoaded();
                 BusObjectManager.Instance.Remove(this);
                 StorePersistedPropertyValues();
                 SetStateAsUpdated();
@@ -920,7 +905,6 @@ namespace Habanero.BO
                 {
                     BusObjectManager.Instance.Add(this);
                 }
-                AddToLoadedObjectsCollection();
 
                 FireSaved();
             }
@@ -933,20 +917,6 @@ namespace Habanero.BO
             _boPropCol.BackupPropertyValues();
         }
 
-
-        private void AddToLoadedObjectsCollection()
-        {
-            if (AllLoadedBusinessObjects().ContainsKey(ID.GetObjectId())) return;
-
-            try
-            {
-                AllLoadedBusinessObjects().Add(ID.GetObjectId(), new WeakReference(this));
-            }
-            catch (IndexOutOfRangeException)
-            {
-                //Hack some arbitary errro from generic.Dictionary
-            }
-        }
 
         private void SetStateAsUpdated()
         {
@@ -984,18 +954,6 @@ namespace Habanero.BO
             if (_businessObjectUpdateLog != null && (State.IsNew || (State.IsDirty && !State.IsDeleted)))
             {
                 _businessObjectUpdateLog.Update();
-            }
-        }
-
-        private void RemoveFromAllLoaded()
-        {
-            if (!AllLoadedBusinessObjects().ContainsKey(ID.GetObjectId())) return;
-
-            IBusinessObject boFromAllLoadedObjects =
-                (IBusinessObject) AllLoadedBusinessObjects()[ID.GetObjectId()].Target;
-            if (ReferenceEquals(boFromAllLoadedObjects, this))
-            {
-                AllLoadedBusinessObjects().Remove(ID.GetObjectId());
             }
         }
 

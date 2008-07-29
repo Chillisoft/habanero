@@ -118,8 +118,6 @@ namespace Habanero.BO
 
         private string AddRelationshipJoin(StringBuilder builder, ClassDef currentClassDef, QueryField field, Source fieldSource)
         {
-
-
             if (fieldSource == null || String.IsNullOrEmpty(fieldSource.Name))
             {
                 IPropDef propDef = currentClassDef.GetPropDef(field.PropertyName, true);
@@ -159,10 +157,10 @@ namespace Habanero.BO
             return currentClassDef.GetTableName();
         }
 
-        private string GetJoinStringForRelationship(RelationshipDef relationshipDef)
-        {
-            return GetJoinStringForRelationship(relationshipDef, this.ClassDef);
-        }
+        //private string GetJoinStringForRelationship(RelationshipDef relationshipDef)
+        //{
+        //    return GetJoinStringForRelationship(relationshipDef, this.ClassDef);
+        //}
 
         private string GetJoinStringForRelationship(RelationshipDef relationshipDef, IClassDef classDef)
         {
@@ -197,7 +195,6 @@ namespace Habanero.BO
                 DelimitField(new Source(joinToTableName), joinToFieldName));
             return joinString;
         }
-
 
         private void AppendFrom(StringBuilder builder)
         {
@@ -298,12 +295,12 @@ namespace Habanero.BO
             StringUtilities.AppendMessage(orderByClause, tableAndFieldName + " " + direction, ", ");
         }
 
-        //private string GetRelatedTableName(string relationshipName)
-        //{
-        //    RelationshipDef relationshipDef = ((ClassDef) this.ClassDef).GetRelationship(relationshipName);
-        //    ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
-        //    return DelimitTable(relatedClassDef.TableName);
-        //}
+        private string GetRelatedTableName(string relationshipName)
+        {
+            RelationshipDef relationshipDef = ((ClassDef)this.ClassDef).GetRelationship(relationshipName);
+            ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
+            return DelimitTable(relatedClassDef.TableName);
+        }
 
         private void AppendWhereClause(StringBuilder builder, SqlStatement statement)
         {

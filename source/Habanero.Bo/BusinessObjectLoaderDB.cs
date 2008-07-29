@@ -122,18 +122,29 @@ namespace Habanero.BO
                     //Checks to see if the loaded object is the base of a single table inheritance structure
                     // and has a sub type
                     correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
+                    if (dr.Read())
+                    {
+                        ThrowRetrieveDuplicateObjectException(statement, loadedBo);
+                    }
+                    if (correctSubClassDef == null) return loadedBo;
                 }
             }
             // loads an object of the correct sub type (for single table inheritance)
             if (correctSubClassDef != null)
             {
-                BusinessObject.AllLoadedBusinessObjects().Remove(loadedBo.ID.GetObjectId());
                 BusObjectManager.Instance.Remove(loadedBo.ID);
                 IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = (T) subClassBusinessObject;
             }
-
             return loadedBo;
+        }
+
+        private static void ThrowRetrieveDuplicateObjectException(ISqlStatement statement, IBusinessObject loadedBo)
+        {
+            throw new HabaneroDeveloperException("There was an error with loading the class '"
+                                                 + loadedBo.ClassDef.ClassNameFull + "'", "Loading a '"
+                                                                                          + loadedBo.ClassDef.ClassNameFull + "' with criteria '" + statement.Statement 
+                                                                                          + "' returned more than one record when only one was expected.");
         }
 
         /// <summary>
@@ -174,12 +185,17 @@ namespace Habanero.BO
                 {
                     loadedBo = LoadBOFromReader(classDef, dr, selectQueryDB);
                     correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
+                    
+                    if (dr.Read())
+                    {
+                        ThrowRetrieveDuplicateObjectException(statement, loadedBo);
+                    }
                     if (correctSubClassDef == null) return loadedBo;
                 }
             }
             if (correctSubClassDef != null)
             {
-                BusinessObject.AllLoadedBusinessObjects().Remove(loadedBo.ID.GetObjectId());
+//                BusinessObject.AllLoadedBusinessObjects().Remove(loadedBo.ID.GetObjectId());
                 BusObjectManager.Instance.Remove(loadedBo.ID);
                 IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = subClassBusinessObject;
@@ -281,6 +297,29 @@ namespace Habanero.BO
             {
                 if (!collection.Contains(obj)) collection.Add(obj);
             }
+        }
+
+        /// <summary>
+        /// Reloads a businessObject from the datasource using the id of the object.
+        /// A dirty object will not be refreshed from the database and the appropriate error will be raised.
+        /// Cancel all edits before refreshing the object or call see TODO: Refresh with refresh dirty objects = true.
+        /// </summary>
+        /// <exception cref="HabaneroDeveloperException">Exception thrown if the object is dirty and refresh is called.</exception>
+        /// <param name="businessObject">The businessObject to refresh</param>
+        public IBusinessObject Refresh(IBusinessObject businessObject)
+        {
+            if (businessObject.State.IsNew)
+            {
+                return businessObject;
+            }
+            if (businessObject.State.IsEditing)
+            {
+                throw new HabaneroDeveloperException("A Error has occured since the object being refreshed is being edited.",
+                    "A Error has occured since the object being refreshed is being edited. ID :- " +
+                    businessObject.ID.GetObjectId() + " - Class : " + businessObject.ClassDef.ClassNameFull);
+            }
+            businessObject = GetBusinessObject(businessObject.ClassDef, businessObject.ID);
+            return businessObject;
         }
 
         /// <summary>
@@ -464,11 +503,16 @@ namespace Habanero.BO
 
             IBusinessObject boFromObjectManager = GetObjectFromObjectManager(key);
 
-            if (boFromObjectManager != null) return boFromObjectManager;
+            if (boFromObjectManager == null)
+            {
+                BusObjectManager.Instance.Add(bo);
+                return bo;
+            }
 
-            BusObjectManager.Instance.Add(bo);
-            ((BusinessObject)bo).AfterLoad();
-            return bo;
+            if (boFromObjectManager.State.IsEditing) return boFromObjectManager;
+
+            PopulateBOFromReader(boFromObjectManager, dataReader, selectQuery);
+            return boFromObjectManager;
         }
 
         private static IBusinessObject GetObjectFromObjectManager(IPrimaryKey key)
@@ -497,7 +541,6 @@ namespace Habanero.BO
             return null;
         }
 
-
         private static void PopulateBOFromReader(IBusinessObject bo, IDataRecord dr, ISelectQuery selectQuery)
         {
             int i = 0;
@@ -505,11 +548,15 @@ namespace Habanero.BO
             {
                 if (bo.Props.Contains(field.PropertyName))
                 {
-                    bo.Props[field.PropertyName].InitialiseProp(dr[i]);
+                    IBOProp boProp = bo.Props[field.PropertyName];
+                    //TODO:                   if (!prop.PropDef.Persistable) continue; //BRETT/PETER TODO: to be changed
+                    boProp.InitialiseProp(dr[i]);
                 }
                 i++;
             }
-            ((BusinessObject) bo).SetState(BOState.States.isNew, false);
+            BusinessObject businessObject = ((BusinessObject) bo);
+            businessObject.SetState(BOState.States.isNew, false);
+            businessObject.AfterLoad();
         }
     }
 }

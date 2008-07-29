@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
+using Habanero.BO.ObjectManager;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -43,11 +44,12 @@ namespace Habanero.Test.BO
         {
             BORegistry.DataAccessor = new DataAccessorDB();
             ContactPersonTestBO.DeleteAllContactPeople();
-            ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
+//            ContactPersonTestBO.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO.CreateSampleData();
             ContactPersonTestBO.LoadDefaultClassDef();
-            BOLoader.Instance.ClearLoadedBusinessObjects();
-
+//            BusinessObject.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
            
         }
 
@@ -117,13 +119,10 @@ namespace Habanero.Test.BO
             contactPerson3.DateOfBirth = DateTime.Today.AddDays(1);
             contactPerson3.Save();
 
-            BusinessObjectLookupList businessObjectLookupList;
-            Dictionary<string, object> col;
-
-            //ContactPersonTestBO.ClearContactPersonCol();
-            businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPersonTestBO", "DateOfBirth < 'Today'", "");
-            col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
+            //ContactPersonTestBO.ClearObjectManager();
+            BusinessObjectLookupList businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
+                                    "ContactPersonTestBO", "DateOfBirth < 'Today'", "");
+            Dictionary<string, object> col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(1, col.Count);
             Assert.IsTrue(col.ContainsValue(contactPerson1));
             businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
@@ -162,7 +161,7 @@ namespace Habanero.Test.BO
             BusinessObjectLookupList businessObjectLookupList;
             Dictionary<string, object> col;
 
-            //ContactPersonTestBO.ClearContactPersonCol();
+            //ContactPersonTestBO.ClearObjectManager();
             businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
                 "ContactPersonTestBO", "DateOfBirth < 'Now'", "");
             col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);

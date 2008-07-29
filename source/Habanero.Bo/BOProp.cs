@@ -35,15 +35,15 @@ namespace Habanero.BO
     public class BOProp : IBOProp
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOProp");
-        protected object _currentValue = null;
+        protected object _currentValue;
         protected PropDef _propDef;
         protected bool _isValid = true;
         protected string _invalidReason = "";
         protected object _persistedValue;
         protected bool _origValueIsValid = true;
         protected string _origInvalidReason = "";
-        protected bool _isObjectNew = false;
-        protected bool _isDirty = false;
+        protected bool _isObjectNew;
+        protected bool _isDirty;
         protected string _displayName = "";
         protected object _valueBeforeLastEdit;
 
@@ -346,28 +346,20 @@ namespace Habanero.BO
                 }
                 if (_propDef.PropType == typeof (DateTime))
                 {
-                    if (!(Value == DBNull.Value))
-                    {
-                        return ((DateTime) PersistedPropertyValue).ToString("dd MMM yyyy HH:mm:ss:fff");
-                    }
-                        //Sql return ((DateTime)Value).ToString("dd MMM yyyy HH:mm:ss:fff");
-                    else
-                    {
-                        return PersistedPropertyValue.ToString();
-                    }
+                    return (Value == DBNull.Value) 
+                        ? PersistedPropertyValue.ToString() 
+                        : ((DateTime) PersistedPropertyValue).ToString("dd MMM yyyy HH:mm:ss:fff");
+                    //Sql return ((DateTime)Value).ToString("dd MMM yyyy HH:mm:ss:fff");
                 }
-                else if (_propDef.PropType == typeof (Guid))
+                if (_propDef.PropType == typeof (Guid))
                 {
                     return ((Guid) PersistedPropertyValue).ToString("B").ToUpper(CultureInfo.InvariantCulture);
                 }
-                else if ((_propDef.PropType == typeof (String)) && (PersistedPropertyValue is Guid))
+                if ((_propDef.PropType == typeof (String)) && (PersistedPropertyValue is Guid))
                 {
                     return ((Guid) PersistedPropertyValue).ToString("B").ToUpper(CultureInfo.InvariantCulture);
                 }
-                else
-                {
-                    return PersistedPropertyValue.ToString();
-                }
+                return PersistedPropertyValue.ToString();
             }
         }
 
@@ -384,38 +376,26 @@ namespace Habanero.BO
                     {
                         return "";
                     }
-                    else if (_propDef.PropType == typeof (DateTime))
+                    if (_propDef.PropType == typeof (DateTime))
                     {
-                        if (!(Value == DBNull.Value))
-                        {
-                            return ((DateTime) Value).ToString("dd MMM yyyy HH:mm:ss:fff");
-                        }
-                            //Sql return ((DateTime)Value).ToString("dd MMM yyyy HH:mm:ss:fff");
-                        else
-                        {
-                            return Value.ToString();
-                        }
+                        return (Value == DBNull.Value) 
+                            ? Value.ToString() 
+                            : ((DateTime) Value).ToString("dd MMM yyyy HH:mm:ss:fff");
                     }
-                    else if (_propDef.PropType == typeof (Guid))
+                    if (_propDef.PropType == typeof (Guid))
                     {
                         if (_currentValue is Guid)
                         {
                             return ((Guid) Value).ToString("B").ToUpper(CultureInfo.InvariantCulture);
                         }
-                        else
-                        {
-                            return
-                                (new Guid(Value.ToString())).ToString("B").ToUpper(CultureInfo.InvariantCulture);
-                        }
+                        return
+                            (new Guid(Value.ToString())).ToString("B").ToUpper(CultureInfo.InvariantCulture);
                     }
-                    else if ((_propDef.PropType == typeof (String)) && (_currentValue is Guid))
+                    if ((_propDef.PropType == typeof (String)) && (_currentValue is Guid))
                     {
                         return ((Guid) _currentValue).ToString("B").ToUpper(CultureInfo.InvariantCulture);
                     }
-                    else
-                    {
-                        return _currentValue.ToString();
-                    }
+                    return _currentValue.ToString();
                 }
                 catch (Exception exc)
                 {
@@ -486,19 +466,13 @@ namespace Habanero.BO
             {
                 return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " is NULL ";
             }
-            else
+            if (sql == null)
             {
-                if (sql == null)
-                {
-                    return DatabaseFieldName + " = '" + PersistedPropertyValueString + "'";
-                }
-                else
-                {
-                    string paramName = sql.ParameterNameGenerator.GetNextParameterName();
-                    sql.AddParameter(paramName, PersistedPropertyValue);
-                    return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " = " + paramName;
-                }
+                return DatabaseFieldName + " = '" + PersistedPropertyValueString + "'";
             }
+            string paramName = sql.ParameterNameGenerator.GetNextParameterName();
+            sql.AddParameter(paramName, PersistedPropertyValue);
+            return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " = " + paramName;
         }
 
         /// <summary>
@@ -519,24 +493,15 @@ namespace Habanero.BO
                 {
                     return DatabaseFieldName + " = '" + PropertyValueString + "'";
                 }
-                else
-                {
-                    return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " is NULL ";
-                }
+                return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " is NULL ";
             }
-            else
+            if (sql == null)
             {
-                if (sql == null)
-                {
-                    return DatabaseFieldName + " = '" + PropertyValueString + "'";
-                }
-                else
-                {
-                    String paramName = sql.ParameterNameGenerator.GetNextParameterName();
-                    sql.AddParameter(paramName, Value);
-                    return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " = " + paramName;
-                }
+                return DatabaseFieldName + " = '" + PropertyValueString + "'";
             }
+            String paramName = sql.ParameterNameGenerator.GetNextParameterName();
+            sql.AddParameter(paramName, Value);
+            return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " = " + paramName;
         }
 
         /// <summary>
@@ -573,14 +538,9 @@ namespace Habanero.BO
         {
             get
             {
-                if (HasDisplayName())
-                {
-                    return _displayName;
-                }
-                else
-                {
-                    return StringUtilities.DelimitPascalCase(PropertyName, " ");
-                }
+                return HasDisplayName() 
+                    ? _displayName 
+                    : StringUtilities.DelimitPascalCase(PropertyName, " ");
             }
             set
             {
@@ -589,16 +549,14 @@ namespace Habanero.BO
                 {
                     newDisplayName = newDisplayName.Substring(0, newDisplayName.Length - 1);
                 }
-                if (_displayName != newDisplayName)
+                if (_displayName == newDisplayName) return;
+                if (_invalidReason.Contains(String.Format("'{0}'", DisplayName)))
                 {
-                    if (_invalidReason.Contains(String.Format("'{0}'", DisplayName)))
-                    {
-                        _invalidReason = _invalidReason.Replace(
-                            String.Format("'{0}'", DisplayName),
-                            String.Format("'{0}'", newDisplayName));
-                    }
-                    _displayName = newDisplayName;
+                    _invalidReason = _invalidReason.Replace(
+                        String.Format("'{0}'", DisplayName),
+                        String.Format("'{0}'", newDisplayName));
                 }
+                _displayName = newDisplayName;
             }
         }
 

@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.ObjectManager;
@@ -26,6 +27,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
+    //test if state is editing then call after load else not got to do with refresh strategy.
     public abstract class TestBusinessObjectLoader
     {
         protected abstract void SetupDataAccessor();
@@ -37,7 +39,7 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
-            BusinessObject.AllLoadedBusinessObjects().Clear();
+            BusObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
         }
 
@@ -164,6 +166,36 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestMethod()
+        {
+            
+            
+            //---------------Assert Precondition----------------
+
+            
+
+            
+
+        }
+        [Test]
+        public void TestGetBusinessObjectByIDGuid()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
+            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, cp.Surname);
+
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO cp1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+            ContactPersonTestBO cp2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cp1.ID);
+            
+            //---------------Test Result -----------------------
+            Assert.AreSame(cp1, cp2);
+            Assert.AreSame(cp, cp2);
+        }
+
+        [Test]
         public void TestGetBusinessObject_CriteriaObject_Untyped()
         {
             //---------------Set up test pack-------------------
@@ -213,6 +245,62 @@ namespace Habanero.Test.BO
             BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(personToDelete.ClassDef, personToDelete.ID);
         }
 
+        [Test]
+        public void TestGetBusinessObjectDuplicatesException_IfTryLoadObjectWithCriteriaThatMatchMoreThanOne_Generic()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            
+            const string surname = "abc";
+            const string firstName = "aa";
+            ContactPersonTestBO.CreateSavedContactPerson("ZZ", "zzz");
+            ContactPersonTestBO.CreateSavedContactPerson(surname, firstName);
+            ContactPersonTestBO.CreateSavedContactPerson("aaaa", "aa");
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("FirstName", Criteria.Op.Equals, firstName);
+
+            try
+            {
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("There was an error with loading the class", ex.Message);
+                StringAssert.Contains("returned more than one record when only one was expected", ex.DeveloperMessage);
+            }
+        }
+        [Test]
+        public void TestGetBusinessObjectDuplicatesException_IfTryLoadObjectWithCriteriaThatMatchMoreThanOne()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+
+            const string surname = "abc";
+            const string firstName = "aa";
+            ContactPersonTestBO.CreateSavedContactPerson("ZZ", "zzz");
+            ContactPersonTestBO.CreateSavedContactPerson(surname, firstName);
+            ContactPersonTestBO.CreateSavedContactPerson("aaaa", "aa");
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("FirstName", Criteria.Op.Equals, firstName);
+
+            try
+            {
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, criteria);
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("There was an error with loading the class", ex.Message);
+                StringAssert.Contains("returned more than one record when only one was expected", ex.DeveloperMessage);
+            }
+        }
         [Test]
         public void TestGetBusinessObject_SingleCriteria()
         {
@@ -399,7 +487,7 @@ namespace Habanero.Test.BO
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
-            BusinessObject.AllLoadedBusinessObjects().Clear();
+            BusObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO loadedCp = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(singleCritieria);
             BusinessObjectCollection<ContactPersonTestBO> col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(collectionCriteria, orderCriteria);
 
@@ -420,7 +508,7 @@ namespace Habanero.Test.BO
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
-            BusinessObject.AllLoadedBusinessObjects().Clear();
+            BusObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO loadedCp = (ContactPersonTestBO)BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(cp1.ClassDef, singleCritieria);
             IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(cp1.ClassDef, collectionCriteria, orderCriteria);
 
@@ -935,51 +1023,118 @@ namespace Habanero.Test.BO
 
         #endregion //TestLoadInheritance
 
-        //public static void CreateSampleData()
-        //{
-        //    ClassDef.ClassDefs.Clear();
-        //    LoadFullClassDef();
+        [Test, ExpectedException(typeof(InvalidPropertyException))
+        , Ignore("Need a better errror than this if criteria property does not exist.")]
+        public void TestGetBusinessObjectByIDInt_PropNameNotCorrect()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            TestAutoInc.LoadClassDefWithAutoIncrementingID();
+            TestAutoInc autoInc = new TestAutoInc();
+            autoInc.Save();
 
-        //    string[] surnames = { "zzz", "abc", "abcd" };
-        //    string[] firstNames = { "a", "aa", "aa" };
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("TestAutoIncID", Criteria.Op.Equals, autoInc.TestAutoIncID);
+            TestAutoInc tai1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(criteria);
+            TestAutoInc tai2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(tai1.ID);
 
-        //    for (int i = 0; i < surnames.Length; i++)
-        //    {
-        //        if (BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("surname = " + surnames[i]) == null)
-        //        {
-        //            ContactPersonTestBO contact = new ContactPersonTestBO();
-        //            contact.Surname = surnames[i];
-        //            contact.FirstName = firstNames[i];
-        //            contact.Save();
-        //        }
-        //    }
-        //    ClassDef.ClassDefs.Clear();
-        //}
-        //[Test]
-        //public void TestGetBusinessObject()
-        //{
-        //    ClassDef.ClassDefs.Clear();
-        //    ContactPersonTestBO.LoadDefaultClassDef();
+            //---------------Test Result -----------------------
+            Assert.AreSame(tai1, tai2);
+            Assert.AreEqual("testing", tai2.TestField);
+        }
 
 
-        //    ContactPersonTestBO cp = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
-        //    Assert.AreEqual("abc", cp.Surname);
+        [Test]
+        public void TestBoLoader_NotRefreshBusinessObjectIfCurrentlyBeingEdited()
+        {
+            //-------------Setup Test Pack------------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cpTemp = ContactPersonTestBO.CreateSavedContactPerson();
+            BusObjectManager.Instance.ClearLoadedObjects();
 
+            ContactPersonTestBO cpLoaded =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cpTemp.ID);
+            cpLoaded.FirstName = TestUtil.CreateRandomString();
 
-        //    cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abcde");
-        //    Assert.IsNull(cp);
+            //-------------Assert Preconditon ---------------
+            Assert.IsTrue(cpLoaded.State.IsEditing);
 
-        //    cp = (ContactPersonTestBO)BOLoader.Instance.GetBusinessObject(new ContactPersonTestBO(), new Parameter("Surname = invalid"));
-        //    Assert.IsNull(cp);
-        //}
+            //-------------Execute Test ---------------------
+            try
+            {
+                BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cpLoaded);
+                Assert.Fail();
+            }
+            //-------------Test Result ---------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                Assert.IsTrue(ex.Message.Contains("A Error has occured since the object being refreshed is being edited."));
+                Assert.IsTrue(ex.DeveloperMessage.Contains("A Error has occured since the object being refreshed is being edited."));
+                Assert.IsTrue(ex.DeveloperMessage.Contains(cpLoaded.ID.GetObjectId()));
+                Assert.IsTrue(ex.DeveloperMessage.Contains(cpLoaded.ClassDef.ClassName));
+            }
+
+            //            //-------------Setup Test Pack ------------------
+            //            ContactPersonTestBO cpTemp = CreateSavedContactPerson();
+
+            //            //-------------Execute test ---------------------
+            //            string newSurnameValue = "New Surname";
+            //            cpTemp.Surname = newSurnameValue;
+            //            cpTemp.AfterLoadCalled = false;
+            //            Assert.IsFalse(cpTemp.AfterLoadCalled); 
+            //            ContactPersonTestBO cpTemp2 =
+            //                BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
+            //            //-------------Test Result ----------------------
+            //            Assert.AreSame(cpTemp2, cpTemp2);
+            //            Assert.AreEqual(newSurnameValue, cpTemp2.Surname);
+            //            Assert.IsFalse(cpTemp2.AfterLoadCalled, "After load should not be called for a dirty object being loaded from DB"); 
+        }
+        [Test]
+        public void TestRefresh_DoesNotRefreshNewBo()
+        {
+            //-------------Setup Test Pack ------------------
+            ContactPerson contactPerson = new ContactPerson();
+
+            //-------------Execute test ---------------------
+            IBusinessObject businessObject = BORegistry.DataAccessor.BusinessObjectLoader.Refresh(contactPerson);
+
+            //-------------Test Result ----------------------
+            Assert.AreSame(contactPerson, businessObject);
+            Assert.IsTrue(businessObject.State.IsNew);
+        }
+
+        //TODO: refresh dirty object if correct method called.
+        [Test]
+        public void Test_GetDirtyObject_DoesNotReloadFromDatabase()
+        {
+            //---------------Set up test pack-------------------
+            ContactPerson cp = ContactPerson.CreateSavedContactPerson();
+            BusObjectManager.Instance.ClearLoadedObjects();
+            ContactPerson cpLoaded 
+                = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(cp.ID);
+            string newSurname = TestUtil.CreateRandomString();
+            cpLoaded.Surname = newSurname;
+
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(cpLoaded.State.IsEditing);
+            Assert.AreEqual(newSurname, cpLoaded.Surname);
+
+            //---------------Execute Test ----------------------
+            ContactPerson cpLoaded2
+                    = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(cp.ID);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(cpLoaded2, cpLoaded);
+            Assert.AreEqual(newSurname, cpLoaded2.Surname);
+            Assert.IsTrue(cpLoaded.State.IsEditing);
+
+        }
 
         #region Nested type: TestBusinessObjectLoaderDB
 
         [TestFixture]
         public class TestBusinessObjectLoaderDB : TestBusinessObjectLoader
         {
-            //TODO: stop this using the BOLoader
-
             #region Setup/Teardown
 
             [SetUp]
@@ -1006,7 +1161,22 @@ namespace Habanero.Test.BO
             {
                 BORegistry.DataAccessor = new DataAccessorDB();
             }
+            [Test]
+            public void TestGetBusinessObjectByIDInt()
+            {
+                //---------------Set up test pack-------------------
+                ClassDef.ClassDefs.Clear();
+                TestAutoInc.LoadClassDefWithAutoIncrementingID();
 
+                //---------------Execute Test ----------------------
+                Criteria criteria = new Criteria("testautoincid", Criteria.Op.Equals, "1");
+                TestAutoInc tai1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(criteria);
+                TestAutoInc tai2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(tai1.ID);
+
+                //---------------Test Result -----------------------
+                Assert.AreSame(tai1, tai2);
+                Assert.AreEqual("testing", tai2.TestField);
+            }
             //[Test]
             //public void Test_BusinessObjectClearsItselfFromObjectManager()
             //{
@@ -1119,7 +1289,7 @@ namespace Habanero.Test.BO
                 Assert.IsTrue(col[0].AfterLoadCalled);
             }
 
-            [Test, Ignore("This needs to be part of the refresh object strategy. Currently no strategy is being implemented")]
+            [Test]
             public void TestAfterLoadCalled_GetCollection_NotReloaded()
             {
                 //---------------Set up test pack-------------------
@@ -1163,7 +1333,7 @@ namespace Habanero.Test.BO
                 Assert.IsTrue(loadedCP.AfterLoadCalled);
             }
 
-            [Test, Ignore("This needs to be part of the refresh object strategy. Currently no strategy is being implemented")]
+            [Test]
             public void TestAfterLoadCalled_GetCollection_Untyped_NotReloaded()
             {
                 //---------------Set up test pack-------------------
@@ -1190,20 +1360,22 @@ namespace Habanero.Test.BO
             ///  and the default strategy to reload has been replaced then one we do not get back is always the latest.
             /// Note: This behaviour is configurable using a strategy TestGetTheFreshestObject_Strategy test 
             /// </summary>
-            [Test]
+            [Test, Ignore("Need to implement via a strategy")]
             public void TestDontGetTheFreshestObject_Strategy()
             {
                 //------------------------------Setup Test
-                ContactPerson originalContactPerson = new ContactPerson();
+                ClassDef.ClassDefs.Clear();
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO originalContactPerson = new ContactPersonTestBO();
                 originalContactPerson.Surname = "FirstSurname";
                 originalContactPerson.Save();
                 IPrimaryKey origCPID = originalContactPerson.ID;
 
                 BusObjectManager.Instance.ClearLoadedObjects();
-                TestUtil.WaitForGC();
+
                 //load second object from DB to ensure that it is now in the object manager
-                ContactPerson myContact2 =
-                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(
+                ContactPersonTestBO myContact2 =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(
                         origCPID);
 
                 //-----------------------------Execute Test-------------------------
@@ -1211,8 +1383,8 @@ namespace Habanero.Test.BO
                 originalContactPerson.Surname = "SecondSurname";
                 originalContactPerson.Save();
 
-                ContactPerson myContact3 =
-                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(
+                ContactPersonTestBO myContact3 =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(
                         origCPID);
 
                 //-----------------------------Assert Result-----------------------
@@ -1400,42 +1572,44 @@ namespace Habanero.Test.BO
             ///  then one we get back is always the latest.
             /// Note: This behaviour is configurable using a strategy TestDontGetTheFreshestObject_Strategy test 
             /// </summary>
-            [Test, Ignore("To be implemented via a strategy")]
+            [Test]
             public void TestGetTheFreshestObject_Strategy()
             {
-                //------------------------------Setup Test
-                ContactPerson originalContactPerson = new ContactPerson();
+                //------------------------------Setup Test----------------------------
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO originalContactPerson = new ContactPersonTestBO();
                 originalContactPerson.Surname = "FirstSurname";
                 originalContactPerson.Save();
 
                 BusObjectManager.Instance.ClearLoadedObjects();
 
                 //load second object from DB to ensure that it is now in the object manager
-                ContactPerson myContact2 =
-                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(
+                ContactPersonTestBO myContact2 =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(
                         originalContactPerson.ID);
 
                 //-----------------------------Assert Precondition -----------------
-                Assert.AreEqual(1, BusObjectManager.Instance.Count);
                 Assert.AreNotSame(originalContactPerson, myContact2);
                 IPrimaryKey id = myContact2.ID;
                 Assert.IsTrue(BusObjectManager.Instance.Contains(id));
                 IBusinessObject boFromAllLoadedObjects =
                     BusObjectManager.Instance[id.GetObjectId()];
                 Assert.AreSame(boFromAllLoadedObjects, myContact2);
+                Assert.IsFalse(myContact2.State.IsEditing);
 
                 //-----------------------------Execute Test-------------------------
                 //Edit first object and save
                 originalContactPerson.Surname = "SecondSurname";
-                originalContactPerson.Save(); 
+                originalContactPerson.Save();
 
-                ContactPerson myContact3 =
-                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(
+                ContactPersonTestBO myContact3 =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(
                         originalContactPerson.ID);
 
                 //-----------------------------Assert Result-----------------------
+                Assert.IsFalse(myContact3.State.IsEditing);
                 Assert.AreNotSame(originalContactPerson, myContact3);
-                Assert.AreEqual(1, BusObjectManager.Instance.Count);
+                Assert.IsTrue(BusObjectManager.Instance.Contains(myContact3));
                 Assert.AreSame(myContact3, myContact2);
                 //The two surnames should be equal since the myContact3 was refreshed
                 // when it was loaded.
@@ -1584,6 +1758,89 @@ namespace Habanero.Test.BO
                 Assert.AreEqual(1, BusObjectManager.Instance.Count);
                 Assert.IsTrue(BusObjectManager.Instance.Contains(contactPerson));
             }
+
+            [Test]
+            public void Test_RefreshCallsAfterLoadNotCalledIfObjectNotReloaded()
+            {
+                //---------------Set up test pack---------------------
+                ClassDef.ClassDefs.Clear();
+                ContactPersonTestBO.LoadDefaultClassDef();
+
+                ContactPersonTestBO cp = new ContactPersonTestBO();
+                cp.Surname = Guid.NewGuid().ToString();
+                cp.Save();
+
+                //---------------Assert Precondition------------------
+                Assert.IsTrue(BusObjectManager.Instance.Contains(cp));
+                Assert.IsFalse(cp.AfterLoadCalled);
+
+                //---------------Execute Test ------------------------
+                BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cp);
+
+                //---------------Test Result -------------------------
+                Assert.IsTrue(cp.AfterLoadCalled);
+            }
+
+            [Test]
+            public void Test_RefreshCallsAfterLoadCalledIfObjectLoaded()
+            {
+                //---------------Set up test pack---------------------
+                ClassDef.ClassDefs.Clear();
+                ContactPersonTestBO.LoadDefaultClassDef();
+
+                ContactPersonTestBO cp = new ContactPersonTestBO();
+                cp.Surname = Guid.NewGuid().ToString();
+                cp.Save();
+                BusObjectManager.Instance.ClearLoadedObjects();
+
+                ContactPersonTestBO cpLoaded
+                    = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cp.ID);
+                string newFirstname = cp.FirstName = TestUtil.CreateRandomString();
+                cp.Save();
+                cpLoaded.AfterLoadCalled = false;
+
+                //---------------Assert Precondition------------------
+                Assert.IsFalse(cpLoaded.AfterLoadCalled);
+
+                //---------------Execute Test ------------------------
+                BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cpLoaded);
+
+                //---------------Test Result -------------------------
+                Assert.IsTrue(cpLoaded.AfterLoadCalled);
+                Assert.AreNotSame(cp, cpLoaded);
+
+                Assert.AreEqual(cp.FirstName, cpLoaded.FirstName);
+                Assert.AreEqual(newFirstname, cpLoaded.FirstName);
+            }
+
+            [Test]
+            public void TestBoLoader_RefreshBusinessObjectDeletedByAnotherUser()
+            {
+                //-------------Setup Test Pack------------------
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cpTemp = ContactPersonTestBO.CreateSavedContactPerson();
+                BusObjectManager.Instance.ClearLoadedObjects();
+
+                ContactPersonTestBO cpLoaded =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cpTemp.ID);
+                cpTemp.Delete();
+                cpTemp.Save();
+
+                //-------------Execute Test ---------------------
+                try
+                {
+                    BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cpLoaded);
+                    Assert.Fail();
+                }
+                //-------------Test Result ---------------------
+                catch (BusObjDeleteConcurrencyControlException ex)
+                {
+                    StringAssert.Contains("A Error has occured since the object you are trying to refresh has been deleted by another user.", ex.Message);
+                    StringAssert.Contains("There are no records in the database for the Class", ex.Message);
+                    StringAssert.Contains("ContactPersonTestBO", ex.Message);
+                    StringAssert.Contains(cpLoaded.ID.ToString(), ex.Message);
+                }
+            }
         }
 
         #endregion
@@ -1668,112 +1925,7 @@ namespace Habanero.Test.BO
         #endregion
     }
 
-
-//        [Test, ExpectedException(typeof(UserException))]
-//        public void TestGetBusinessObjectDuplicatesException_IfTryLoadObjectWithCriteriaThatMatchMoreThanOne()
-//        {
-//            ClassDef.ClassDefs.Clear();
-//            ContactPersonTestBO.LoadDefaultClassDef();
-
-//            BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("FirstName = aa");
-//        }
-
-//        [Test]
-//        public void TestGetBusinessObjectCollection()
-//        {
-//            ClassDef.ClassDefs.Clear();
-//            ContactPersonTestBO.LoadDefaultClassDef();
-
-//            OrderCriteria orderBySurname = OrderCriteria.FromString("Surname");
-//            BusinessObjectCollection<ContactPersonTestBO> col = BOLoader.Instance.GetBusinessObjectCol<ContactPersonTestBO>("FirstName = aa", orderBySurname);
-//            Assert.AreEqual(2, col.Count);
-//            Assert.AreEqual("abc", col[0].Surname);
-//            Assert.AreEqual("abcd", col[1].Surname);
-
-//            IBusinessObjectCollection col2 = BOLoader.Instance.GetBusinessObjectCol(typeof(ContactPersonTestBO), "FirstName = aa", orderBySurname);
-//            Assert.AreEqual(2, col.Count);
-//            Assert.AreEqual("abc", ((ContactPersonTestBO)col2[0]).Surname);
-//            Assert.AreEqual("abcd", ((ContactPersonTestBO)col2[1]).Surname);
-
-//            col = BOLoader.Instance.GetBusinessObjectCol<ContactPersonTestBO>("FirstName = aaaa", orderBySurname);
-//            Assert.AreEqual(0, col.Count);
-//        }
-
-//        // Also need to test this works with Sql Server and other Guid forms
-//        [Test]
-//        public void TestGetBusinessObjectByIDGuid()
-//        {
-//            ClassDef.ClassDefs.Clear();
-//            ContactPersonTestBO.LoadDefaultClassDef();
-
-//            ContactPersonTestBO cp1 = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
-//            ContactPersonTestBO cp2 = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cp1.ContactPersonID);
-//            Assert.AreEqual(cp1, cp2);
-//        }
-
-//        [Test]
-//        public void TestGetBusinessObjectByIDInt()
-//        {
-//            ClassDef.ClassDefs.Clear();
-//            TestAutoInc.LoadClassDefWithAutoIncrementingID();
-
-//            TestAutoInc tai1 = BOLoader.Instance.GetBusinessObject<TestAutoInc>("TestAutoIncID = 1");
-//            TestAutoInc tai2 = BOLoader.Instance.GetBusinessObjectByID<TestAutoInc>(tai1.TestAutoIncID.Value);
-//            Assert.AreEqual(tai1, tai2);
-//            Assert.AreEqual("testing", tai2.TestField);
-//        }
-
-//        // For this test we pretend for a moment that the Surname column is the primary key
-//        //   (can change this when we add a table with a real string primary key)
-//        [Test]
-//        public void TestGetBusinessObjectByIDString()
-//        {
-//            ClassDef.ClassDefs.Clear();
-//            ContactPersonTestBO.LoadClassDefWithSurnameAsPrimaryKey();
-
-//            ContactPersonTestBO cp1 = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
-//            ContactPersonTestBO cp2 = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cp1.Surname);
-//            Assert.AreEqual(cp1, cp2);
-
-//            cp1.Surname = "a b";
-//            cp1.Save();
-//            cp2 = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>("a b");
-//            Assert.AreEqual(cp1, cp2);
-//            cp1.Surname = "abc";
-//            cp1.Save();
-//        }
-
-//        [Test]
-//        public void TestGetBusinessObjectByIDPrimaryKey()
-//        {
-//            ClassDef.ClassDefs.Clear();
-//            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKey();
-
-//            ContactPersonTestBO cp1 = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
-//            ContactPersonTestBO cp2 = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cp1.PrimaryKey);
-//            Assert.AreEqual(cp1, cp2);
-//        }
-
-//        [Test, ExpectedException(typeof(InvalidPropertyException))]
-//        public void TestGetBusinessObjectByIDWithMultiplePrimaryKeys()
-//        {
-//            ClassDef.ClassDefs.Clear();
-//            ContactPersonCompositeKey.LoadClassDefs();
-
-//            BOLoader.Instance.GetBusinessObjectByID<ContactPersonCompositeKey>("someIDvalue");
-//        }
-
-//        [Test]
-//        public void TestLoadMethod()
-//        {
-//            ClassDef.ClassDefs.Clear();
-//            ContactPersonTestBO.LoadDefaultClassDef();
-
-//            ContactPersonTestBO cp1 = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
-//            cp1.Surname = "def";
-//            BOLoader.Instance.Load(cp1, new Parameter("Surname = abc"));
-//            Assert.AreEqual("abc", cp1.Surname);
-//        }
+    //Test persistable properties.
 
 //        [Test, Ignore("This functionality has been removed. Need to determine how to handle BO's loading from diff databases in future")]
 //        public void TestSetDatabaseConnection()
@@ -1785,217 +1937,5 @@ namespace Habanero.Test.BO
 ////            Assert.IsNotNull(cp.GetDatabaseConnection());
 ////            BOLoader.Instance.SetDatabaseConnection(cp, null);
 ////            Assert.IsNull(cp.GetDatabaseConnection());
-//        }
-
-//        [Test]
-//        public void TestBOLoaderRefreshCallsAfterLoad()
-//        {
-//            ClassDef.ClassDefs.Clear();
-//            ContactPersonTestBO.LoadDefaultClassDef();
-
-//            ContactPersonTestBO cp = new ContactPersonTestBO();
-//            cp.Surname = Guid.NewGuid().ToString();
-//            cp.Save();
-//            Assert.IsFalse(cp.AfterLoadCalled);
-
-//            BOLoader.Instance.Refresh(cp);
-
-//            Assert.IsTrue(cp.AfterLoadCalled);
-//        }
-
-
-//        [Test]
-//        public void TestBoLoaderCallsAfterLoad_LoadingCollection()
-//        {
-//            ClassDef.ClassDefs.Clear();
-//            //--------SetUp testpack --------------------------
-//            ContactPersonTestBO.LoadDefaultClassDef();
-//            OrderCriteria orderBySurname = OrderCriteria.FromString("Surname");
-//            //----Execute Test---------------------------------
-//            BusinessObjectCollection<ContactPersonTestBO> col = BOLoader.Instance.GetBusinessObjectCol<ContactPersonTestBO>("FirstName = aa", orderBySurname);
-//            //----Test Result----------------------------------
-//            Assert.AreEqual(2, col.Count);
-//            ContactPersonTestBO bo = col[0];
-//            Assert.IsTrue(bo.AfterLoadCalled);
-//        }
-
-//        [Test]
-//        public void TestBoLoaderCallsAfterLoad_ViaSearchCriteria()
-//        {
-//            ClassDef.ClassDefs.Clear();
-//            ContactPersonTestBO.LoadDefaultClassDef();
-
-//            ContactPersonTestBO cp = new ContactPersonTestBO();
-//            Assert.IsFalse(cp.AfterLoadCalled);
-//            cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc AND FirstName = aa");
-//            Assert.IsTrue(cp.AfterLoadCalled);
-//        }
-//        [Test]
-//        public void TestBoLoaderCallsAfterLoad_CompositePrimaryKey()
-//        {
-//            ClassDef.ClassDefs.Clear();
-//            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKey();
-//            ContactPersonTestBO cpTemp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
-//            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.PrimaryKey);
-//            Assert.IsTrue(cp.AfterLoadCalled);
-//        }
-//        [Test]
-//        public void TestBoLoader_LoadBusinessObjectDeletedByAnotherUser()
-//        {
-//            //-------------Setup Test Pack
-//            ContactPersonTestBO cpTemp = GetContactPersonSavedToDBButNotInObjectManager();
-
-//            //-------------Execute test ---------------------
-//            cpTemp.Delete();
-//            cpTemp.Save();
-//            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.PrimaryKey);
-//            //-------------Test Result ---------------------
-//            Assert.IsNull(cp);
-//        }
-//        [Test]
-//        [ExpectedException(typeof(BusObjDeleteConcurrencyControlException))]
-//        public void TestBoLoader_RefreshBusinessObjectDeletedByAnotherUser()
-//        {
-//            //-------------Setup Test Pack
-//            ContactPersonTestBO cpTemp = GetContactPersonSavedToDBButNotInObjectManager();
-
-//            //-------------Execute test ---------------------
-//            cpTemp.Delete();
-//            cpTemp.Save();
-//            //-------------Execute Test ---------------------
-//            try
-//            {
-//                BOLoader.Instance.Refresh(cpTemp);
-//                Assert.Fail();
-//            }
-//            //-------------Test Result ---------------------
-//            catch (BusObjDeleteConcurrencyControlException ex)
-//            {
-//                Assert.IsTrue(ex.Message.Contains("A Error has occured since the object you are trying to refresh has been deleted by another user "));
-//                throw;
-//            }
-//        }
-//        [Test]
-//        public void TestBOLoader_RefreshObjects_WhenRetrievingFromObjectManager()
-//        {
-//            //-------------Setup Test Pack
-//            //Create and save a person
-//            ContactPersonTestBO cpTemp = CreateSavedContactPerson();
-//            //Clear the object manager so as to simulate a different user
-//            ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
-//            Assert.AreEqual(0, BusObjectManager.Instance.Count);
-//            //Get the person from the object manager so as to ensure that they are loaded 
-//            // into the object manager.
-//            ContactPersonTestBO cpTemp2 =
-//                BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
-//            //Assert.AreEqual(1, BusObjectManager.Instance.Count);
-//            //-------------Execute test ---------------------
-//            cpTemp.Surname = "New Surname";
-//            cpTemp.Save();
-//            Assert.AreNotEqual(cpTemp2.Surname, cpTemp.Surname);
-
-//            ContactPersonTestBO cpTemp3 =
-//                BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
-//            //Assert.AreEqual(1, BusObjectManager.Instance.Count);
-//            //-------------Test Result ---------------------
-//            Assert.AreEqual(cpTemp.Surname, cpTemp3.Surname);
-//            Assert.AreSame(cpTemp2.Surname, cpTemp3.Surname);
-
-//        }
-//        [Test]
-//        public void TestBOLoader_GetObjectFromObjectManager()
-//        {
-//            //-------------Setup Test Pack
-//            //Create and save a person
-//            ContactPersonTestBO cpTemp = CreateSavedContactPerson();
-//            //Clear the object manager so as to simulate a different user
-//            ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
-//            Assert.AreEqual(0, BusObjectManager.Instance.Count);
-//            //Get the person from the object manager so as to ensure that they are loaded 
-//            // into the object manager.
-//            //-------------Execute test --------------------
-//            BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
-//            Assert.AreEqual(1, BusObjectManager.Instance.Count);
-
-//        }
-//        [Test]
-//        public void TestBOLoader_GetObjectFromObjectManager_Twice()
-//        {
-//            //-------------Setup Test Pack
-//            //Create and save a person
-//            ContactPersonTestBO cpTemp = CreateSavedContactPerson();
-//            //Clear the object manager so as to simulate a different user
-//            ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
-//            Assert.AreEqual(0, BusObjectManager.Instance.Count);
-//            //Get the person from the object manager so as to ensure that they are loaded 
-//            // into the object manager.
-//            //-------------Execute test --------------------
-//            BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
-//            BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
-//            //-------------Test Result ---------------------
-//            Assert.AreEqual(1, BusObjectManager.Instance.Count);
-//        }
-
-//        [Test]
-//        public void TestBOLoader_DoesNotRefreshDirtyObjects_WhenRetrievingFromObjectManager()
-//        {
-//            //-------------Setup Test Pack ------------------
-//            ContactPersonTestBO cpTemp = CreateSavedContactPerson();
-
-//            //-------------Execute test ---------------------
-//            string newSurnameValue = "New Surname";
-//            cpTemp.Surname = newSurnameValue;
-//            cpTemp.AfterLoadCalled = false;
-//            Assert.IsFalse(cpTemp.AfterLoadCalled); 
-//            ContactPersonTestBO cpTemp2 =
-//                BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
-//            //-------------Test Result ----------------------
-//            Assert.AreSame(cpTemp2, cpTemp2);
-//            Assert.AreEqual(newSurnameValue, cpTemp2.Surname);
-//            Assert.IsFalse(cpTemp2.AfterLoadCalled, "After load should not be called for a dirty object being loaded from DB"); 
-//        }
-
-//        [Test]
-//        public void TestGetLoadedBusinessObject()
-//        {
-//            //-------------Setup Test Pack ------------------
-//            ContactPersonTestBO contactPersonTestBO = CreateSavedContactPerson();
-//            //-------------Execute test ---------------------
-//            IBusinessObject businessObject = BOLoader.Instance.GetLoadedBusinessObject(contactPersonTestBO.PrimaryKey);
-//            //-------------Test Result ----------------------
-//            Assert.AreSame(contactPersonTestBO, businessObject);
-//        }
-
-//        [Test]
-//        public void TestGetLoadedBusinessObject_DoesNotRefreshNewBo()
-//        {
-//            //-------------Setup Test Pack ------------------
-//            ContactPerson contactPerson = new ContactPerson();
-//            //-------------Execute test ---------------------
-//            IBusinessObject businessObject = BOLoader.Instance.GetLoadedBusinessObject(contactPerson.PrimaryKey);
-//            //-------------Test Result ----------------------
-//            Assert.AreSame(contactPerson, businessObject);
-//        }
-
-//        #region HelperMethods
-
-//        private static ContactPersonTestBO GetContactPersonSavedToDBButNotInObjectManager()
-//        {
-//            ContactPersonTestBO cpTemp = CreateSavedContactPerson();
-//            //Clear the loaded busiess object so that the we can simulate a user on another machine deleting this object
-//            BusObjectManager.Instance.ClearLoadedObjects();
-//            return cpTemp;
-//        }
-
-//        private static ContactPersonTestBO CreateSavedContactPerson()
-//        {
-//            ClassDef.ClassDefs.Clear();
-//            BusObjectManager.Instance.ClearLoadedObjects();
-//            ContactPersonTestBO.LoadDefaultClassDef();
-//            //Create a contact person
-//            ContactPersonTestBO cpTemp = new ContactPersonTestBO();
-//            cpTemp.Surname = Guid.NewGuid().ToString();
-//            cpTemp.Save();
-//            return cpTemp;
 //        }
 }

@@ -22,6 +22,7 @@ using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.ConcurrencyControl;
 using Habanero.BO.Loaders;
+using Habanero.BO.ObjectManager;
 using Habanero.DB;
 
 namespace Habanero.BO
@@ -61,12 +62,12 @@ namespace Habanero.BO
             {
                 BOSequenceNumber.LoadNumberGenClassDef();
             }
+            Criteria criteria = new Criteria("NumberType", Criteria.Op.Equals, numberType);
             BOSequenceNumber sequenceBOSequenceNumber =
-                BOLoader.Instance.GetBusinessObject<BOSequenceNumber>(string.Format("NumberType = '{0}'", numberType));
-            if (sequenceBOSequenceNumber == null)
-            {
-                sequenceBOSequenceNumber = CreateSequenceForType(numberType);
-            }
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOSequenceNumber>(criteria);
+
+            if (sequenceBOSequenceNumber != null) return sequenceBOSequenceNumber;
+            sequenceBOSequenceNumber = CreateSequenceForType(numberType);
             return sequenceBOSequenceNumber;
         }
 

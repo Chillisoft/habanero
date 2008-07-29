@@ -80,10 +80,10 @@ namespace Habanero.Test.BO
             AddObjectToDelete(contactPerson);
             contactPerson.Save();
             //Clear object manager
-            ContactPersonOptimisticLockingVersionNumberDB.ClearLoadedBusinessObjectBaseCol();
+            BusinessObject.ClearObjectManager();
             //Load second object from DB
             ContactPersonOptimisticLockingVersionNumberDB duplicateContactPerson =
-                BOLoader.Instance.GetBusinessObjectByID<ContactPersonOptimisticLockingVersionNumberDB>(contactPerson.ContactPersonID);
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonOptimisticLockingVersionNumberDB>(contactPerson.ID);
             AddObjectToDelete(duplicateContactPerson);
 
             //---------------Execute Test ----------------------
@@ -113,10 +113,10 @@ namespace Habanero.Test.BO
             ContactPersonOptimisticLockingVersionNumberDB contactPerson = CreateSavedCntactPersonOptimisticLockingVersionNumberDB();
 
             //Clear object manager
-            ContactPersonOptimisticLockingVersionNumberDB.ClearLoadedBusinessObjectBaseCol();
+            BusinessObject.ClearObjectManager();
             //Load second object from DB
             ContactPersonOptimisticLockingVersionNumberDB duplicateContactPerson =
-                BOLoader.Instance.GetBusinessObjectByID<ContactPersonOptimisticLockingVersionNumberDB>(contactPerson.ContactPersonID);
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonOptimisticLockingVersionNumberDB>(contactPerson.ID);
             AddObjectToDelete(duplicateContactPerson);
 
             //---------------Execute Test ----------------------
@@ -148,10 +148,11 @@ namespace Habanero.Test.BO
             ContactPersonOptimisticLockingVersionNumberDB contactPersonDeleteConcurrency 
                 = CreateSavedCntactPersonOptimisticLockingVersionNumberDB();
             //Clear object manager
-            ContactPersonOptimisticLockingVersionNumberDB.ClearLoadedBusinessObjectBaseCol();
+            BusinessObject.ClearObjectManager();
             //Load second object from DB            
 
-            ContactPersonOptimisticLockingVersionNumberDB contactPerson2 = BOLoader.Instance.GetBusinessObjectByID <ContactPersonOptimisticLockingVersionNumberDB>(contactPersonDeleteConcurrency.ID);
+            ContactPersonOptimisticLockingVersionNumberDB contactPerson2 
+                = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonOptimisticLockingVersionNumberDB>(contactPersonDeleteConcurrency.ID);
             //---------Run TEST ---------------------------------
             contactPersonDeleteConcurrency.Delete();
             contactPerson2.Surname = "New Surname 2";

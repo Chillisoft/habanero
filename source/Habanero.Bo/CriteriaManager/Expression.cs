@@ -27,10 +27,10 @@ namespace Habanero.BO.CriteriaManager
     /// </summary>
     public class Expression : IExpression
     {
-        private IExpression _leftExpression;
-        private SqlOperator _sqlOperator;
-        private IExpression _rightExpression;
-        private static string[] _operators = new string[] {" OR ", " AND "};
+        private readonly IExpression _leftExpression;
+        private readonly SqlOperator _sqlOperator;
+        private readonly IExpression _rightExpression;
+        private static readonly string[] _operators = new string[] {" OR ", " AND "};
 
         /// <summary>
         /// Constructor to create a new expression.  If this is part of a linked
@@ -192,10 +192,7 @@ namespace Habanero.BO.CriteriaManager
             {
                 return new Parameter(expressionClause);
             }
-            else
-            {
-                return new Expression(expressionClause);
-            }
+            return new Expression(expressionClause);
         }
 
         /// <summary>

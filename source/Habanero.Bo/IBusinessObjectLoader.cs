@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
@@ -187,6 +188,15 @@ namespace Habanero.BO
         void Refresh(IBusinessObjectCollection collection);
 
         /// <summary>
+        /// Reloads a businessObject from the datasource using the id of the object.
+        /// A dirty object will not be refreshed from the database and the appropriate error will be raised.
+        /// Cancel all edits before refreshing the object or call see TODO: Refresh with refresh dirty objects = true.
+        /// </summary>
+        /// <exception cref="HabaneroDeveloperException">Exception thrown if the object is dirty and refresh is called.</exception>
+        /// <param name="businessObject">The businessObject to refresh</param>
+        IBusinessObject Refresh(IBusinessObject businessObject);
+
+        /// <summary>
         /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
         /// fields defined in the relationship.
         /// </summary>
@@ -209,5 +219,7 @@ namespace Habanero.BO
         /// PersonID</param>
         /// <returns>The loaded RelatedBusinessObjectCollection</returns>
         IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IRelationship relationship);
+
+
     }
 }

@@ -33,17 +33,24 @@ namespace Habanero.BO
     /// </summary>
     public class RelKey : IRelKey
     {
-        private RelKeyDef _relKeyDef;
-        private Dictionary<string, IRelProp> _relProps;
+        private readonly RelKeyDef _relKeyDef;
+        private readonly Dictionary<string, IRelProp> _relProps;
 
         /// <summary>
-        /// Constructor to initialise a new instance
+        /// Constructor to initialise a new instance. This initialises the RelKey and sets all its
+        /// relationship properties (IRelProp).
         /// </summary>
         /// <param name="lRelKeyDef">The relationship key definition</param>
-        public RelKey(RelKeyDef lRelKeyDef)
+        /// <param name="lBoPropCol">The properties of the business object that this relationship key
+        /// is being created form</param>
+        public RelKey(RelKeyDef lRelKeyDef, BOPropCol lBoPropCol)
         {
             _relKeyDef = lRelKeyDef;
             _relProps = new Dictionary<string, IRelProp>();
+            foreach (RelPropDef relPropDef in _relKeyDef)
+            {
+                this.Add(relPropDef.CreateRelProp(lBoPropCol));
+            }
         }
 
         /// <summary>
@@ -89,7 +96,7 @@ namespace Habanero.BO
         /// Adds the given RelProp to the key
         /// </summary>
         /// <param name="relProp">The RelProp object to add</param>
-        internal virtual void Add(RelProp relProp)
+        private void Add(IRelProp relProp)
         {
             if (_relProps.ContainsKey(relProp.OwnerPropertyName))
             {
@@ -140,14 +147,9 @@ namespace Habanero.BO
                 IExpression exp = null;
                 foreach (RelProp relProp in this)
                 {
-                    if (exp == null)
-                    {
-                        exp = relProp.RelatedPropExpression();
-                    }
-                    else
-                    {
-                        exp = new Expression(exp, new SqlOperator("AND"), relProp.RelatedPropExpression());
-                    }
+                    exp = exp == null 
+                        ? relProp.RelatedPropExpression() 
+                        : new Expression(exp, new SqlOperator("AND"), relProp.RelatedPropExpression());
                 }
                 return exp;
             }
@@ -168,6 +170,9 @@ namespace Habanero.BO
             return _relProps.Values.GetEnumerator();
         }
 
+        ///<summary>
+        /// The number of properties in this relationship key.
+        ///</summary>
         public int Count
         {
             get { return _relProps.Count; }

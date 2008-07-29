@@ -35,7 +35,7 @@ namespace Habanero.Test.BO
         {
             //Runs every time that any testmethod is executed
             ClassDef.ClassDefs.Clear();
-            BOLoader.Instance.ClearLoadedBusinessObjects();
+            BusinessObject.ClearObjectManager();
             BORegistry.DataAccessor = new DataAccessorDB();
         }
 
@@ -169,7 +169,7 @@ namespace Habanero.Test.BO
             //get the next number for invoice number
             numGen.NextNumber();
             //Clear all loaded objects from object manager
-            BOLoader.Instance.ClearLoadedBusinessObjects();
+            BusinessObject.ClearObjectManager();
             //---------------Execute Test ----------------------
             //Create a seperate instance of the number generator (simulating a simultaneous user).
             INumberGenerator numGen2 = new NumberGeneratorPessimisticLocking(numberType);
@@ -204,7 +204,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, num,"The first generated number should be 1");
             // set the datetime locked to > 15 minutes ago.
             UpdateDatabaseLockAsExpired(15);
-            BOLoader.Instance.ClearLoadedBusinessObjects();
+            BusinessObject.ClearObjectManager();
             //---------------Execute Test ----------------------
             //Create a seperate instance of the number generator.
             //try Get  number
