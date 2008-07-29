@@ -52,7 +52,7 @@ namespace Habanero.BO.CriteriaManager
         private CriteriaExpression _left;
         private CriteriaExpression _right;
         private String _expression;
-        private String[] _operators;
+        private readonly String[] _operators;
 
         /// <summary>
         /// A constructor that takes a given expression string and parses it
@@ -151,7 +151,7 @@ namespace Habanero.BO.CriteriaManager
             }
             //If this was a terminal criteria i.e. it has no more children then
             // this is the expression there will be no right and left expression.
-            if ((_expression == null) || (_expression.Length == 0))
+            if (string.IsNullOrEmpty(_expression))
             {
                 _expression = quotesRemovedExpression.PutBackQuotedSections().DropOuterQuotes().ToString();
             }
@@ -164,7 +164,7 @@ namespace Habanero.BO.CriteriaManager
         /// <param name="quote">The string in question</param>
         /// <param name="pos">The position in the string</param>
         /// <returns>Returns true if between brackets, false if not</returns>
-        private bool IsPosInsideBrackets(string quote, int pos)
+        private static bool IsPosInsideBrackets(string quote, int pos)
         {
             int bracketCount = 0;
             // ignore the first character because then the whole expression is inside brackets.
@@ -250,6 +250,5 @@ namespace Habanero.BO.CriteriaManager
         {
             return ((this.Left == null) && (this.Right == null));
         }
-
     }
 }

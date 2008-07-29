@@ -25,7 +25,6 @@ using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Base.FilterControl;
-using Habanero.UI.Base.Grid;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
 using NUnit.Framework;
@@ -192,7 +191,7 @@ namespace Habanero.Test.UI.Base
                 //return null;
 
                 FormGiz form = (FormGiz)GetControlFactory().CreateForm();
-                Gizmox.WebGUI.Forms.Form formGiz = (Gizmox.WebGUI.Forms.Form) form;
+                Gizmox.WebGUI.Forms.Form formGiz = form;
                 formGiz.Controls.Add((Gizmox.WebGUI.Forms.Control)cntrl);
 
                 return form;
@@ -449,7 +448,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, grid.Grid.Rows.Count);
             //---------------Execute Test ----------------------
             grid.Grid.SetBusinessObjectCollection(col);
-            string testvalue = "testvalue";
+            const string testvalue = "testvalue";
             grid.Grid.Rows[0].Cells[1].Value = testvalue;
 //            grid.ApplyChangesToBusinessObject();
             //---------------Test Result -----------------------
@@ -478,7 +477,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
 
 
-            string testvalue = "new test value";
+            const string testvalue = "new test value";
             grid.Grid.Rows[0].Cells[1].Value = testvalue;
             grid.Grid.Rows[1].Selected = true;
 //            grid.ApplyChangesToBusinessObject();
@@ -499,7 +498,7 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(0, gridControl.Grid.Columns.Count);
             Assert.AreEqual(1, classDef.UIDefCol.Count);
-            string uiDefName = "default";
+            const string uiDefName = "default";
             UIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
             Assert.IsNotNull(uiGridDef);
             Assert.AreEqual(1, uiGridDef.Count);
@@ -536,7 +535,7 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(0, gridControl.Grid.Columns.Count);
             Assert.AreEqual(1, classDef.UIDefCol.Count);
-            string uiDefName = "default";
+            const string uiDefName = "default";
             UIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
             Assert.IsNotNull(uiGridDef);
             Assert.AreEqual(1, uiGridDef.Count);
@@ -563,7 +562,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             try
             {
-                EditableGridControlGiz editableGridControlGiz = new EditableGridControlGiz(null);
+                new EditableGridControlGiz(null);
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------
@@ -667,7 +666,7 @@ namespace Habanero.Test.UI.Base
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = LoadMyBoDefaultClassDef();
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
-            string alternateUIDefName = "Alternate";
+            const string alternateUIDefName = "Alternate";
             IEditableGridControl editableGridControl = CreateEditableGridControl();
 
             editableGridControl.Initialise(classDef, alternateUIDefName);
@@ -745,7 +744,7 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(0, gridControl.Grid.Columns.Count);
             Assert.AreEqual(1, classDef.UIDefCol.Count);
-            string uiDefName = "default";
+            const string uiDefName = "default";
             UIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
             Assert.IsNotNull(uiGridDef);
             Assert.AreEqual(1, uiGridDef.Count);
@@ -770,7 +769,7 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(0, gridControl.Grid.Columns.Count);
             Assert.AreEqual(1, classDef.UIDefCol.Count);
-            string uiDefName = "default";
+            const string uiDefName = "default";
             UIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
             Assert.IsNotNull(uiGridDef);
             Assert.AreEqual(1, uiGridDef.Count);
@@ -934,7 +933,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Execute Test ----------------------
             //set data in grid to a value that should return 2 people
-            string filterByValue = "SSSSS";
+            const string filterByValue = "SSSSS";
             txtbox.Text = filterByValue;
             //grid.filtercontrols.searchbutton.click
             gridControl.OrderBy = "Surname";

@@ -18,9 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using Habanero.Base;
 
 namespace Habanero.Base
 {
@@ -30,17 +27,18 @@ namespace Habanero.Base
     /// </summary>
     public class Criteria
     {
+        #region Delegates
 
-        public const string DATE_FORMAT = "yyyy/MM/dd HH:mm:ss";
-    
-        private readonly Criteria _leftCriteria;
-        private readonly LogicalOp _logicalOp;
-        private readonly Criteria _rightCriteria;
-        private readonly string _propName;
-        private readonly Op _op;
-        private readonly object _value;
-        private readonly string[] Ops = { "=", ">", "<" } ;
-        private readonly string[] LogicalOps = {"AND", "OR"};
+        /// <summary>
+        /// For details of what this delegate is used for, see <see cref="PropNameConverterDelegate"/>
+        /// 
+        /// This delegate is designed to format a value of a criteria into a datasource equivalent. For example, in a database context,
+        /// this delegate might be used to return a parameter name and store the parameter value so that the criteria can be used as part
+        /// of a where clause in a parametrized SQL statement.
+        /// </summary>
+        /// <param name="parameterValue">The value of the criteria given, as an object. </param>
+        /// <returns>The string format of this criteria to append to the string.</returns>
+        public delegate string AddParameterDelegate(object parameterValue);
 
         ///<summary>
         /// When converting the Criteria expression to a string there are contexts that must be taken into account. The default implementation
@@ -53,16 +51,9 @@ namespace Habanero.Base
         /// <returns>The mapped property name ie the datasource equivalent of the property name (perhaps the field name on a database table)</returns>
         public delegate string PropNameConverterDelegate(string propName);
 
-        /// <summary>
-        /// For details of what this delegate is used for, see <see cref="PropNameConverterDelegate"/>
-        /// 
-        /// This delegate is designed to format a value of a criteria into a datasource equivalent. For example, in a database context,
-        /// this delegate might be used to return a parameter name and store the parameter value so that the criteria can be used as part
-        /// of a where clause in a parametrized SQL statement.
-        /// </summary>
-        /// <param name="parameterValue">The value of the criteria given, as an object. </param>
-        /// <returns>The string format of this criteria to append to the string.</returns>
-        public delegate string AddParameterDelegate(object parameterValue);
+        #endregion
+
+        #region LogicalOp enum
 
         ///<summary>
         /// A logical operator used to conjoin two criteria trees.
@@ -78,6 +69,10 @@ namespace Habanero.Base
             /// </summary>
             Or
         }
+
+        #endregion
+
+        #region Op enum
 
         /// <summary>
         /// An operator used on a leaf criteria - ie to check a property against a value
@@ -97,6 +92,21 @@ namespace Habanero.Base
             ///</summary>
             LessThan
         }
+
+        #endregion
+        /// <summary>
+        /// The default date format to be used.
+        /// </summary>
+        public const string DATE_FORMAT = "yyyy/MM/dd HH:mm:ss";
+
+        private readonly Criteria _leftCriteria;
+        private readonly LogicalOp _logicalOp;
+        private Op _op;
+        private string _propName;
+        private readonly Criteria _rightCriteria;
+        private object _value;
+        private readonly string[] LogicalOps = {"AND", "OR"};
+        private readonly string[] Ops = {"=", ">", "<"};
 
         /// <summary>
         /// Creates a leaf criteria (meaning it has no children in the tree structure).
@@ -123,6 +133,7 @@ namespace Habanero.Base
             _logicalOp = logicalOp;
             _rightCriteria = rightCriteria;
         }
+        
 
         /// <summary>
         /// Evaluates the businessObject passed in to see if it matches the criteria that have been set up
@@ -136,10 +147,11 @@ namespace Habanero.Base
             {
                 switch (_logicalOp)
                 {
-                    case LogicalOp.And: return _leftCriteria.IsMatch(businessObject) && _rightCriteria.IsMatch(businessObject);
-                    case LogicalOp.Or: return _leftCriteria.IsMatch(businessObject) || _rightCriteria.IsMatch(businessObject);
+                    case LogicalOp.And:
+                        return _leftCriteria.IsMatch(businessObject) && _rightCriteria.IsMatch(businessObject);
+                    case LogicalOp.Or:
+                        return _leftCriteria.IsMatch(businessObject) || _rightCriteria.IsMatch(businessObject);
                 }
-
             }
 
             object leftValue = businessObject.GetPropertyValue(_propName);
@@ -155,13 +167,16 @@ namespace Habanero.Base
                         return _value != null;
                     default:
                         return false;
-                } 
+                }
             }
 
             IComparable x = businessObject.GetPropertyValue(_propName) as IComparable;
             if (x == null)
             {
-                throw new InvalidOperationException(string.Format("Property '{0}' on class '{1}' does not implement IComparable and cannot be matched.", _propName, businessObject.GetType().FullName));
+                throw new InvalidOperationException(
+                    string.Format(
+                        "Property '{0}' on class '{1}' does not implement IComparable and cannot be matched.", _propName,
+                        businessObject.GetType().FullName));
             }
             IComparable y = _value as IComparable;
             switch (_op)
@@ -176,7 +191,7 @@ namespace Habanero.Base
                     return false;
             }
         }
-        
+
         ///<summary>
         ///Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
         ///</summary>
@@ -188,22 +203,22 @@ namespace Habanero.Base
         public override string ToString()
         {
             return ToString(delegate(string propName) { return propName; }, delegate(object value)
-            {
-                string valueString;
-                if (value is DateTime)
                 {
-                    valueString = ((DateTime)value).ToString(DATE_FORMAT);
-                }
-                else if (value is Guid)
-                {
-                    valueString = ((Guid)value).ToString("B");
-                }
-                else
-                {
-                    valueString = value.ToString();
-                }
-                return "'" + valueString + "'";
-            });
+                    string valueString;
+                    if (value is DateTime)
+                    {
+                        valueString = ((DateTime) value).ToString(DATE_FORMAT);
+                    }
+                    else if (value is Guid)
+                    {
+                        valueString = ((Guid) value).ToString("B");
+                    }
+                    else
+                    {
+                        valueString = value.ToString();
+                    }
+                    return "'" + valueString + "'";
+                });
         }
 
         /// <summary>
@@ -224,11 +239,11 @@ namespace Habanero.Base
             {
                 string leftCriteriaAsString = _leftCriteria.ToString(convertToFieldName, addParameter);
                 string rightCriteriaAsString = _rightCriteria.ToString(convertToFieldName, addParameter);
-                return string.Format("({0}) {1} ({2})", leftCriteriaAsString, LogicalOps[(int)_logicalOp], rightCriteriaAsString);
+                return string.Format("({0}) {1} ({2})", leftCriteriaAsString, LogicalOps[(int) _logicalOp],
+                                     rightCriteriaAsString);
             }
             string valueString = addParameter(_value);
-            return string.Format("{0} {1} {2}", convertToFieldName(_propName), Ops[(int)_op], valueString);
-
+            return string.Format("{0} {1} {2}", convertToFieldName(_propName), Ops[(int) _op], valueString);
         }
 
 
@@ -249,14 +264,11 @@ namespace Habanero.Base
             {
                 if (!otherCriteria.IsComposite()) return false;
                 if (!_leftCriteria.Equals(otherCriteria._leftCriteria)) return false;
-                if (_logicalOp != otherCriteria._logicalOp) return false;
-                if (!_rightCriteria.Equals(otherCriteria._rightCriteria)) return false;
-                return true;
+                return _logicalOp == otherCriteria._logicalOp && _rightCriteria.Equals(otherCriteria._rightCriteria);
             }
             if (_op != otherCriteria._op) return false;
             if (String.Compare(_propName, otherCriteria._propName) != 0) return false;
-            if (! _value.Equals(otherCriteria._value)) return false;
-            return true;
+            return _value.Equals(otherCriteria._value);
         }
 
         ///<summary>
@@ -298,9 +310,9 @@ namespace Habanero.Base
             foreach (IBOProp prop in key)
             {
                 Criteria propCriteria = new Criteria(prop.PropertyName, Op.Equals, prop.Value);
-                lastCriteria = lastCriteria == null 
-                    ? propCriteria 
-                    : new Criteria(lastCriteria, LogicalOp.And, propCriteria);
+                lastCriteria = lastCriteria == null
+                                   ? propCriteria
+                                   : new Criteria(lastCriteria, LogicalOp.And, propCriteria);
             }
             return lastCriteria;
         }
@@ -323,8 +335,9 @@ namespace Habanero.Base
             foreach (IRelProp relProp in relationship.RelKey)
             {
                 Criteria propCriteria = new Criteria(relProp.RelatedClassPropName, Op.Equals, relProp.BOProp.Value);
-                if (lastCriteria == null) lastCriteria = propCriteria;
-                else lastCriteria = new Criteria(lastCriteria, LogicalOp.And, propCriteria);
+                lastCriteria = lastCriteria == null 
+                        ? propCriteria 
+                        : new Criteria(lastCriteria, LogicalOp.And, propCriteria);
             }
             return lastCriteria;
         }

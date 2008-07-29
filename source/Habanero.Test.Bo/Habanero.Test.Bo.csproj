@@ -129,6 +129,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CriteriaParser.cs" />
+    <Compile Include="TestCriteriaParser.cs" />
     <Compile Include="TestPack\AddressTestBO.cs" />
     <Compile Include="ClassDefinition\TestTriggerCol.cs" />
     <Compile Include="ClassDefinition\TestTrigger.cs" />

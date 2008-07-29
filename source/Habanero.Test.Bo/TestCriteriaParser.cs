@@ -36,7 +36,7 @@ namespace Habanero.Test.BO
         public void TestCreateOperator()
         {
             //---------------Set up test pack-------------------
-            string operatorString = "=";
+            const string operatorString = "=";
 
             //---------------Execute Test ----------------------
             Criteria.Op op = CriteriaParser.CreateOperator(operatorString);
@@ -49,7 +49,7 @@ namespace Habanero.Test.BO
         public void TestCreateOperator_GreaterThan()
         {
             //---------------Set up test pack-------------------
-            string operatorString = ">";
+            const string operatorString = ">";
 
             //---------------Execute Test ----------------------
             Criteria.Op op = CriteriaParser.CreateOperator(operatorString);
@@ -62,7 +62,7 @@ namespace Habanero.Test.BO
         public void TestCreateOperator_LessThan()
         {
             //---------------Set up test pack-------------------
-            string operatorString = "<";
+            const string operatorString = "<";
 
             //---------------Execute Test ----------------------
             Criteria.Op op = CriteriaParser.CreateOperator(operatorString);
@@ -75,7 +75,7 @@ namespace Habanero.Test.BO
         public void TestCreateLogicalOperator()
         {
             //---------------Set up test pack-------------------
-            string operatorString = "and";
+            const string operatorString = "and";
             //---------------Execute Test ----------------------
             Criteria.LogicalOp op = CriteriaParser.CreateLogicalOperator(operatorString);
 
@@ -87,7 +87,7 @@ namespace Habanero.Test.BO
         public void TestCreateLogicalOperator_VariedCase()
         {
             //---------------Set up test pack-------------------
-            string operatorString = "AnD";
+            const string operatorString = "AnD";
             //---------------Execute Test ----------------------
             Criteria.LogicalOp op = CriteriaParser.CreateLogicalOperator(operatorString);
 
@@ -99,7 +99,7 @@ namespace Habanero.Test.BO
         public void TestCreateLogicalOperator_UnTrimmed()
         {
             //---------------Set up test pack-------------------
-            string operatorString = " and ";
+            const string operatorString = " and ";
             //---------------Execute Test ----------------------
             Criteria.LogicalOp op = CriteriaParser.CreateLogicalOperator(operatorString);
 
@@ -111,7 +111,7 @@ namespace Habanero.Test.BO
         public void TestCreateLogicalOperator_Or()
         {
             //---------------Set up test pack-------------------
-            string operatorString = "or";
+            const string operatorString = "or";
             //---------------Execute Test ----------------------
             Criteria.LogicalOp op = CriteriaParser.CreateLogicalOperator(operatorString);
 
@@ -123,7 +123,7 @@ namespace Habanero.Test.BO
         public void TestCreateLogicalOperator_Or_VariedCase()
         {
             //---------------Set up test pack-------------------
-            string operatorString = "oR";
+            const string operatorString = "oR";
             //---------------Execute Test ----------------------
             Criteria.LogicalOp op = CriteriaParser.CreateLogicalOperator(operatorString);
 
@@ -135,7 +135,7 @@ namespace Habanero.Test.BO
         public void TestCreateLogicalOperator_Or_UnTrimmed()
         {
             //---------------Set up test pack-------------------
-            string operatorString = " or ";
+            const string operatorString = " or ";
             //---------------Execute Test ----------------------
             Criteria.LogicalOp op = CriteriaParser.CreateLogicalOperator(operatorString);
 

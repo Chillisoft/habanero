@@ -18,8 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -313,7 +311,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             string surnameValue = Guid.NewGuid().ToString("N");
-            string surname = "Surname";
+            const string surname = "Surname";
             Criteria criteria = new Criteria(surname, Criteria.Op.Equals, surnameValue);
 
             //---------------Execute Test ----------------------
@@ -328,7 +326,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             DateTime dateTimeValue = DateTime.Now;
-            string datetimePropName = "DateTime";
+            const string datetimePropName = "DateTime";
             Criteria criteria = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
 
             //---------------Execute Test ----------------------
@@ -343,10 +341,10 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             string surnameValue = Guid.NewGuid().ToString("N");
-            string surname = "Surname";
+            const string surname = "Surname";
             Criteria surnameCriteria = new Criteria(surname, Criteria.Op.Equals, surnameValue);
             DateTime dateTimeValue = DateTime.Now;
-            string datetimePropName = "DateTime";
+            const string datetimePropName = "DateTime";
             Criteria dateTimeCriteria = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
 
             Criteria andCriteria = new Criteria(surnameCriteria, Criteria.LogicalOp.And, dateTimeCriteria);
@@ -364,10 +362,10 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             string surnameValue = Guid.NewGuid().ToString("N");
-            string surname = "Surname";
+            const string surname = "Surname";
             Criteria surnameCriteria = new Criteria(surname, Criteria.Op.Equals, surnameValue);
             DateTime dateTimeValue = DateTime.Now;
-            string datetimePropName = "DateTime";
+            const string datetimePropName = "DateTime";
             Criteria dateTimeCriteria = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
 
             Criteria andCriteria = new Criteria(surnameCriteria, Criteria.LogicalOp.And, dateTimeCriteria);
@@ -376,7 +374,7 @@ namespace Habanero.Test.BO
             string criteriaAsString = andCriteria.ToString(delegate(string propName) { return propName + "1"; }, delegate { return "param"; });
 
             //---------------Test Result -----------------------
-            string expectedString = "(Surname1 = param) AND (DateTime1 > param)";
+            const string expectedString = "(Surname1 = param) AND (DateTime1 > param)";
             StringAssert.AreEqualIgnoringCase(expectedString, criteriaAsString);
 
             //---------------Tear Down -------------------------
@@ -403,7 +401,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             DateTime dateTimeValue = DateTime.Now;
-            string datetimePropName = "DateTime";
+            const string datetimePropName = "DateTime";
             Criteria criteria1 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
            
             //---------------Execute Test ----------------------
@@ -418,7 +416,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             DateTime dateTimeValue = DateTime.Now;
-            string datetimePropName = "DateTime";
+            const string datetimePropName = "DateTime";
             Criteria criteria1 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
 
             //---------------Execute Test ----------------------
@@ -433,7 +431,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             DateTime dateTimeValue = DateTime.Now;
-            string datetimePropName = "DateTime";
+            const string datetimePropName = "DateTime";
             Criteria criteria1 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
             Criteria criteria2 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
             //---------------Execute Test ----------------------
@@ -448,7 +446,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             DateTime dateTimeValue = DateTime.Now;
-            string datetimePropName = "DateTime";
+            const string datetimePropName = "DateTime";
             Criteria criteria1 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
             Criteria criteria2 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue.AddDays(34));
             //---------------Execute Test ----------------------
@@ -464,7 +462,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             DateTime dateTimeValue1 = DateTime.Now;
             DateTime dateTimeValue2 = DateTime.Now.AddDays(20);
-            string datetimePropName = "DateTime";
+            const string datetimePropName = "DateTime";
             Criteria criteria1 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue1);
             Criteria criteria2 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue2);
             Criteria composite1 = new Criteria(criteria1, Criteria.LogicalOp.And, criteria2);
@@ -483,7 +481,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             DateTime dateTimeValue1 = DateTime.Now;
             DateTime dateTimeValue2 = DateTime.Now.AddDays(20);
-            string datetimePropName = "DateTime";
+            const string datetimePropName = "DateTime";
             Criteria criteria1 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue1);
             Criteria criteria2 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue2);
             Criteria composite1 = new Criteria(criteria1, Criteria.LogicalOp.And, criteria2);
@@ -557,10 +555,10 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             RelKeyDef relKeyDef = new RelKeyDef();
-            string propValue1 = "bob1";
+            const string propValue1 = "bob1";
             PropDef boPropDef1 = new PropDef("Prop1", typeof(String), PropReadWriteRule.ReadWrite, propValue1);
             relKeyDef.Add(new RelPropDef(boPropDef1, "RelatedProp1"));
-            string propValue2 = "bob2";
+            const string propValue2 = "bob2";
             PropDef boPropDef2 = new PropDef("Prop2", typeof(String), PropReadWriteRule.ReadWrite, propValue2);
             relKeyDef.Add(new RelPropDef(boPropDef2, "RelatedProp2"));
             RelationshipDef reldef =
