@@ -146,11 +146,11 @@ namespace Habanero.BO
         /// Loads a BusinessObjectCollection using the criteria given. 
         /// </summary>
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <param name="criteriaString">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteria) where T : class, IBusinessObject, new()
+        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString) where T : class, IBusinessObject, new()
         {
-            Criteria criteriaObject = CriteriaParser.CreateCriteria(criteria);
+            Criteria criteriaObject = CriteriaParser.CreateCriteria(criteriaString);
             return GetBusinessObjectCollection<T>(criteriaObject);
         }
 
@@ -185,13 +185,13 @@ namespace Habanero.BO
         /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
         /// </summary>
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <param name="criteriaString">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteria, string orderCriteria) where T : class, IBusinessObject, new()
+        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString, string orderCriteria) where T : class, IBusinessObject, new()
         {
             ClassDef classDef = ClassDef.ClassDefs[typeof(T)];
-            Criteria criteriaObject = CriteriaParser.CreateCriteria(criteria);
+            Criteria criteriaObject = CriteriaParser.CreateCriteria(criteriaString);
             OrderCriteria orderCriteriaObj = QueryBuilder.CreateOrderCriteria(classDef, orderCriteria);
             return GetBusinessObjectCollection<T>(criteriaObject, orderCriteriaObj);
         }
@@ -244,6 +244,7 @@ namespace Habanero.BO
         public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria, string orderCriteria)
         {
             Criteria criteria = CriteriaParser.CreateCriteria(searchCriteria);
+            QueryBuilder.PrepareCriteria(classDef, criteria);
             OrderCriteria orderCriteriaObj = QueryBuilder.CreateOrderCriteria(classDef, orderCriteria);
             return GetBusinessObjectCollection(classDef, criteria, orderCriteriaObj);
         }
@@ -251,6 +252,7 @@ namespace Habanero.BO
         public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria)
         {
             Criteria criteria = CriteriaParser.CreateCriteria(searchCriteria);
+            QueryBuilder.PrepareCriteria(classDef, criteria);
             return GetBusinessObjectCollection(classDef, criteria);
         }
 
@@ -263,9 +265,26 @@ namespace Habanero.BO
         /// <param name="collection">The collection to refresh</param>
         public void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new()
         {
-            BusinessObjectCollection<T> updatedCol = GetBusinessObjectCollection<T>(collection.SelectQuery.Criteria, collection.SelectQuery.OrderCriteria);
-            collection.ForEach(delegate(T obj) { if (!updatedCol.Contains(obj)) collection.RemoveInternal(obj); });
-            updatedCol.ForEach(delegate(T obj) { if (!collection.Contains(obj)) collection.Add(obj); });
+            QueryBuilder.PrepareCriteria(collection.ClassDef, collection.SelectQuery.Criteria);
+            BusinessObjectCollection<T> clonedCol = collection.Clone();
+            collection.Clear();
+
+            BusinessObjectCollection<T> updatedCol = GetBusinessObjectCollection<T>(collection.SelectQuery);
+            foreach (T loadedBo in updatedCol)
+            {
+
+
+                if (clonedCol.Contains(loadedBo))
+                {
+                    ((IBusinessObjectCollection)collection).AddWithoutEvents(loadedBo);
+                }
+                else
+                {
+                    collection.Add(loadedBo);
+                }
+            }
+            //collection.ForEach(delegate(T obj) { if (!updatedCol.Contains(obj)) collection.RemoveInternal(obj); });
+            //updatedCol.ForEach(delegate(T obj) { if (!collection.Contains(obj)) collection.Add(obj); });
         }
 
         /// <summary>
@@ -276,16 +295,30 @@ namespace Habanero.BO
         /// <param name="collection">The collection to refresh</param>
         public void Refresh(IBusinessObjectCollection collection)
         {
-            IBusinessObjectCollection updatedCol = GetBusinessObjectCollection(collection.ClassDef,
-                                                                               collection.SelectQuery.Criteria);
-            foreach (IBusinessObject obj in collection)
+            QueryBuilder.PrepareCriteria(collection.ClassDef, collection.SelectQuery.Criteria);
+            IBusinessObjectCollection clonedCol = collection.Clone();
+            collection.Clear();
+
+            IBusinessObjectCollection updatedCol = GetBusinessObjectCollection(collection.ClassDef, collection.SelectQuery.Criteria); 
+            foreach (BusinessObject loadedBo in updatedCol)
             {
-                if (!updatedCol.Contains(obj)) collection.Remove(obj);
+                if (clonedCol.Contains(loadedBo))
+                {
+                    collection.AddWithoutEvents(loadedBo);
+                }
+                else
+                {
+                    collection.Add(loadedBo);
+                }
             }
-            foreach (IBusinessObject obj in updatedCol)
-            {
-                if (!collection.Contains(obj)) collection.Add(obj);
-            }
+            //foreach (IBusinessObject obj in collection)
+            //{
+            //    if (!updatedCol.Contains(obj)) collection.Remove(obj);
+            //}
+            //foreach (IBusinessObject obj in updatedCol)
+            //{
+            //    if (!collection.Contains(obj)) collection.Add(obj);
+            //}
         }
 
         /// <summary>

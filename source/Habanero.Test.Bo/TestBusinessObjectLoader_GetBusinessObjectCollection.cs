@@ -78,14 +78,17 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, DateTime.Now);
-            string stringCriteria ="DateOfBirth = " + DateTime.Now;
+            DateTime now = DateTime.Now;
+            now = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, now);
+            string stringCriteria = "DateOfBirth = " + now;
 
             //---------------Execute Test ----------------------
             IBusinessObjectCollection col =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, stringCriteria);
 
             //---------------Test Result -----------------------
+            Assert.AreEqual(criteria.FieldValue, col.SelectQuery.Criteria.FieldValue);
             Assert.AreEqual(criteria, col.SelectQuery.Criteria);
         }
 
@@ -599,20 +602,18 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-//            DateTime now = DateTime.Now;
             const string firstName = "abab";
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zzzz", firstName);
             ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("aaaa", firstName);
-            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, now);
             const string criteria = "FirstName = '" + firstName + "'";
 
             //---------------Execute Test ----------------------
             IBusinessObjectCollection col =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(cp1.ClassDef, criteria);
-
+            col.Sort("Surname", true, true);
             //---------------Test Result -----------------------
             Assert.AreEqual(2, col.Count);
-            col.Sort("Surname", true, true);
+   
             Assert.AreSame(cp2, col[0]);
             Assert.AreSame(cp1, col[1]);
         }
@@ -624,14 +625,15 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             DateTime now = DateTime.Now;
+            now = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second);
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "zzzz");
             ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaaa");
-            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, now);
             string criteria = "DateOfBirth = '" + now + "'";
 
             //---------------Execute Test ----------------------
             IBusinessObjectCollection col =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(cp1.ClassDef, criteria);
+            col.Sort("Surname", true, true);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, col.Count);
@@ -669,16 +671,14 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             DateTime now = DateTime.Now;
+            now = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second);
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "zzzz");
             ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaaa");
-            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, now);
             string criteria = "DateOfBirth = '" + now + "'";
-            //            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(cp1.ClassDef, criteria,
-                                                                                         "Surname");
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.
+                GetBusinessObjectCollection(cp1.ClassDef, criteria, "Surname");
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, col.Count);
@@ -893,7 +893,7 @@ namespace Habanero.Test.BO
             string criteria = "DateOfBirth > " + now.AddHours(-1);
             IBusinessObjectCollection col =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
-            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(-1));
+            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(1));
 
             //---------------Assert Precondition ---------------
             Assert.AreEqual(2, col.Count);
@@ -1088,7 +1088,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(criteria, col.SelectQuery.Criteria);
             Assert.AreEqual("ContactPersonTestBO.Surname ASC", col.SelectQuery.OrderCriteria.ToString());
-            Assert.AreEqual(-1, col.SelectQuery.Limit);
+            Assert.AreEqual(0, col.SelectQuery.Limit);
         }
 
 
@@ -1105,9 +1105,9 @@ namespace Habanero.Test.BO
             col.Load(stringCriteria, "Surname");
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(criteria.ToString(), col.SelectQuery.Criteria.ToString());
+            Assert.AreEqual(criteria, col.SelectQuery.Criteria);
             Assert.AreEqual("ContactPersonTestBO.Surname ASC", col.SelectQuery.OrderCriteria.ToString());
-            Assert.AreEqual(-1, col.SelectQuery.Limit);
+            Assert.AreEqual(0, col.SelectQuery.Limit);
 
         }
 
@@ -1224,9 +1224,9 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             DateTime now = DateTime.Now;
+            now = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second);
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "zzzz");
             ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaaa");
-            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, now);
             string criteria = "DateOfBirth = '" + now + "'";
 
             //---------------Execute Test ----------------------
@@ -1268,11 +1268,10 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             DateTime now = DateTime.Now;
+            now = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second);
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now, "zzzz");
             ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now, "aaaa");
-            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, now);
             string criteria = "DateOfBirth = '" + now + "'";
-            //            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -1436,12 +1435,12 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             //            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-            col.LoadWithLimit(criteria, "Surname",2);
+            col.LoadWithLimit(criteria, "Surname", 2);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, col.Count);
             Assert.AreSame(cp1, col[0]);
-            Assert.AreSame(cp2, col[2]);
+            Assert.AreSame(cp2, col[1]);
         }
 
         [Test]

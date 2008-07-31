@@ -164,5 +164,7 @@ namespace Habanero.Base
         /// </param>
         /// <returns>The newly created BO property</returns>
         IBOProp CreateBOProp(bool assignDefaultValue);
+
+        object ConvertValueToPropertyType(object valueToConvert);
     }
 }

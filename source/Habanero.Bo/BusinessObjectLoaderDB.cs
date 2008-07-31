@@ -94,7 +94,9 @@ namespace Habanero.BO
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         public T GetBusinessObject<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
-            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(ClassDef.ClassDefs[typeof (T)]);
+            ClassDef classDef = ClassDef.ClassDefs[typeof (T)];
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            QueryBuilder.PrepareCriteria(classDef, criteria);
             selectQuery.Criteria = criteria;
             return GetBusinessObject<T>(selectQuery);
         }
@@ -160,6 +162,7 @@ namespace Habanero.BO
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            QueryBuilder.PrepareCriteria(classDef, criteria);
             selectQuery.Criteria = criteria;
             return GetBusinessObject(classDef, selectQuery);
         }
@@ -219,10 +222,11 @@ namespace Habanero.BO
             return col;
         }
 
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteria) where T : class, IBusinessObject, new()
+        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString) where T : class, IBusinessObject, new()
         {
-            Criteria criteriaObject = CriteriaParser.CreateCriteria(criteria);
-            return GetBusinessObjectCollection<T>(criteriaObject);
+            Criteria criteria = CriteriaParser.CreateCriteria(criteriaString);
+            QueryBuilder.PrepareCriteria(ClassDef.ClassDefs[typeof(T)], criteria);
+            return GetBusinessObjectCollection<T>(criteria);
         }
 
         /// <summary>
@@ -248,7 +252,10 @@ namespace Habanero.BO
         /// <param name="collection">The collection to refresh</param>
         public void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new()
         {
+            IClassDef classDef = collection.ClassDef;
             SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
+            QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
+
             ISqlStatement statement = selectQuery.CreateSqlStatement();
             BusinessObjectCollection<T> clonedCol = collection.Clone();
             collection.Clear();
@@ -264,7 +271,7 @@ namespace Habanero.BO
                     // user interface can be updated.
                     if (clonedCol.Contains(loadedBo))
                     {
-                        collection.AddInternal(loadedBo);
+                        ((IBusinessObjectCollection)collection).AddWithoutEvents(loadedBo);
                     }
                     else
                     {
@@ -284,25 +291,51 @@ namespace Habanero.BO
         {
             SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
             ISqlStatement statement = selectQuery.CreateSqlStatement();
-            IBusinessObjectCollection updatedCol = collection.Clone();
-            updatedCol.SelectQuery = collection.SelectQuery;
-            updatedCol.Clear();
+            QueryBuilder.PrepareCriteria(collection.ClassDef, selectQuery.Criteria);
+
+            IBusinessObjectCollection clonedCol = collection.Clone();
+            collection.Clear();
+
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
             {
                 while (dr.Read())
                 {
                     IBusinessObject loadedBo = LoadBOFromReader(collection.ClassDef, dr, selectQuery);
-                    updatedCol.Add(loadedBo);
+                    //If the origional collection had the new business object then
+                    // use add internal this adds without any events being raised etc.
+                    //else adds via the Add method (normal add) this raises events such that the 
+                    // user interface can be updated.
+                    if (clonedCol.Contains(loadedBo))
+                    {
+                        collection.AddWithoutEvents(loadedBo);
+                    }
+                    else
+                    {
+                        collection.Add(loadedBo);
+                    }
                 }
             }
-            foreach (IBusinessObject obj in collection)
-            {
-                if (!updatedCol.Contains(obj)) collection.Remove(obj);
-            }
-            foreach (IBusinessObject obj in updatedCol)
-            {
-                if (!collection.Contains(obj)) collection.Add(obj);
-            }
+
+
+            //IBusinessObjectCollection updatedCol = collection.Clone();
+            //updatedCol.SelectQuery = collection.SelectQuery;
+            //updatedCol.Clear();
+            //using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
+            //{
+            //    while (dr.Read())
+            //    {
+            //        IBusinessObject loadedBo = LoadBOFromReader(collection.ClassDef, dr, selectQuery);
+            //        updatedCol.Add(loadedBo);
+            //    }
+            //}
+            //foreach (IBusinessObject obj in collection)
+            //{
+            //    if (!updatedCol.Contains(obj)) collection.Remove(obj);
+            //}
+            //foreach (IBusinessObject obj in updatedCol)
+            //{
+            //    if (!collection.Contains(obj)) collection.Add(obj);
+            //}
         }
 
         /// <summary>
@@ -387,6 +420,7 @@ namespace Habanero.BO
         public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria, string orderCriteria)
         {
             Criteria criteria = CriteriaParser.CreateCriteria(searchCriteria);
+            QueryBuilder.PrepareCriteria(classDef, criteria);
             OrderCriteria orderCriteriaObj = QueryBuilder.CreateOrderCriteria(classDef, orderCriteria);
             return GetBusinessObjectCollection(classDef, criteria, orderCriteriaObj);
         }
@@ -401,6 +435,7 @@ namespace Habanero.BO
         public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria)
         {
             Criteria criteria = CriteriaParser.CreateCriteria(searchCriteria);
+            QueryBuilder.PrepareCriteria(classDef, criteria);
             return GetBusinessObjectCollection(classDef, criteria);
         }
 
@@ -462,15 +497,16 @@ namespace Habanero.BO
         /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
         /// </summary>
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <param name="criteriaString">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteria, string orderCriteria) where T : class, IBusinessObject, new()
+        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString, string orderCriteria) where T : class, IBusinessObject, new()
         {
             ClassDef classDef = ClassDef.ClassDefs[typeof (T)];
-            Criteria criteriaObject = CriteriaParser.CreateCriteria(criteria);
+            Criteria criteria = CriteriaParser.CreateCriteria(criteriaString);
+            QueryBuilder.PrepareCriteria(classDef, criteria);
             OrderCriteria orderCriteriaObj = QueryBuilder.CreateOrderCriteria(classDef, orderCriteria);
-            return GetBusinessObjectCollection<T>(criteriaObject, orderCriteriaObj);
+            return GetBusinessObjectCollection<T>(criteria, orderCriteriaObj);
         }
 
         /// <summary>
@@ -484,6 +520,7 @@ namespace Habanero.BO
                                                                      OrderCriteria orderCriteria)
         {
             IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
+            QueryBuilder.PrepareCriteria(classDef, criteria);
             col.SelectQuery.Criteria = criteria;
             col.SelectQuery.OrderCriteria = orderCriteria;
             Refresh(col);

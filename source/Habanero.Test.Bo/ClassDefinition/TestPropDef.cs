@@ -163,6 +163,35 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void TestConvertValueToPropertyType_StringToGuid()
+        {
+            //-------------Setup Test Pack ------------------
+            PropDef propDef = new PropDef("a", typeof (Guid), PropReadWriteRule.ReadWrite, null);
+            string guidString = Guid.NewGuid().ToString("B");
+            //-------------Execute test ---------------------
+            Guid convertedGuid = (Guid)propDef.ConvertValueToPropertyType(guidString);
+
+            //-------------Test Result ----------------------
+           Assert.AreEqual(new Guid(guidString), convertedGuid);
+
+        }
+
+        [Test]
+        public void TestConvertValueToPropertyType_IntToString()
+        {
+            //-------------Setup Test Pack ------------------
+            PropDef propDef = new PropDef("a", typeof(string), PropReadWriteRule.ReadWrite, null);
+            int intValue = 100;
+            //-------------Execute test ---------------------
+            String convertedIntValue = (String)propDef.ConvertValueToPropertyType(intValue);
+
+            //-------------Test Result ----------------------
+            Assert.AreEqual("100", convertedIntValue);
+
+        }
+
+
+        [Test]
         public void TestProtectedSets()
         {
             PropDefInheritor propDef = new PropDefInheritor();

@@ -126,9 +126,9 @@ namespace Habanero.BO
         /// Loads a BusinessObjectCollection using the criteria given. 
         /// </summary>
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <param name="criteriaString">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
-        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteria) where T : class, IBusinessObject, new();
+        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString) where T : class, IBusinessObject, new();
 
         /// <summary>
         /// Loads a BusinessObjectCollection using the criteria given. 
@@ -151,10 +151,10 @@ namespace Habanero.BO
         /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
         /// </summary>
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <param name="criteriaString">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
-        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteria, string orderCriteria) where T : class, IBusinessObject, new();
+        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString, string orderCriteria) where T : class, IBusinessObject, new();
 
         /// <summary>
         /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 

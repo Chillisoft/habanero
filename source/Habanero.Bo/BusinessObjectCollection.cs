@@ -40,8 +40,7 @@ namespace Habanero.BO
     /// class. The business objects contained in this collection must
     /// inherit from BusinessObject.
     /// </summary>
-    public class BusinessObjectCollection<TBusinessObject>
-        : List<TBusinessObject>, IBusinessObjectCollection
+    public class BusinessObjectCollection<TBusinessObject> : List<TBusinessObject>, IBusinessObjectCollection
         where TBusinessObject : class, IBusinessObject, new()
     {
         private readonly ClassDef _boClassDef;
@@ -190,11 +189,16 @@ namespace Habanero.BO
         public new void Add(TBusinessObject bo)
         {
             if (bo == null) throw new ArgumentNullException("bo");
-            AddInternal(bo);
+            AddWithoutEvents(bo);
             this.FireBusinessObjectAdded(bo);
         }
 
-        internal void AddInternal(TBusinessObject bo)
+        void IBusinessObjectCollection.AddWithoutEvents(IBusinessObject businessObject)
+        {
+            AddWithoutEvents(businessObject as TBusinessObject);
+        }
+
+        private void AddWithoutEvents(TBusinessObject bo)
         {
             if (bo == null) throw new ArgumentNullException("bo");
         
@@ -284,6 +288,7 @@ namespace Habanero.BO
         public void Refresh()
         {
             BORegistry.DataAccessor.BusinessObjectLoader.Refresh(this);
+ 
             //BusinessObjectCollection<TBusinessObject> oldCol = this.Clone();
             //Clear();
             //IDatabaseConnection boDatabaseConnection = DatabaseConnection.CurrentConnection;
@@ -299,7 +304,7 @@ namespace Habanero.BO
             //            if (Contains(bo)) continue;
             //            if (oldCol.Contains(bo))
             //            {
-            //                AddInternal(bo);
+            //                AddWithoutEvents(bo);
             //            }
             //            else
             //            {

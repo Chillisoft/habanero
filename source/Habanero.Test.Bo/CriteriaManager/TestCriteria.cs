@@ -32,6 +32,48 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
         }
+
+        [Test]
+        public void TestLeafProperties()
+        {
+            //-------------Setup Test Pack ------------------
+            //-------------Test Pre-conditions --------------
+
+            //-------------Execute test ---------------------
+            Criteria criteria = new Criteria("MyField", Criteria.Op.Equals, "MyValue");
+
+            //-------------Test Result ----------------------
+            Assert.IsNotNull(criteria.Field);
+            Assert.AreEqual("MyField", criteria.Field.PropertyName);
+            Assert.IsNull(criteria.Field.Source);
+            Assert.AreEqual("MyField", criteria.Field.FieldName);
+            Assert.AreEqual("MyValue", criteria.FieldValue);
+            Assert.AreEqual(Criteria.Op.Equals, criteria.ComparisonOperator);
+        }
+
+
+        [Test]
+        public void TestCompositeProperties()
+        {
+            //-------------Setup Test Pack ------------------
+            Criteria dobCriteria = new Criteria("DateOfBirth", Criteria.Op.Equals, "sfd");
+            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.Equals, "dfsd");
+            Criteria twoPropCriteria = new Criteria(dobCriteria, Criteria.LogicalOp.And, nameCriteria);
+            //-------------Test Pre-conditions --------------
+            
+            //-------------Execute test ---------------------
+            Criteria leftCriteria = twoPropCriteria.LeftCriteria;
+            Criteria rightCriteria = twoPropCriteria.RightCriteria;
+            Criteria.LogicalOp logicalOp = twoPropCriteria.LogicalOperator;
+            //-------------Test Result ----------------------
+
+            Assert.AreSame(dobCriteria, leftCriteria);
+            Assert.AreSame(nameCriteria, rightCriteria);
+            Assert.AreEqual(Criteria.LogicalOp.And, logicalOp);
+        }
+
+       
+
         [Test]
         public void TestCriteria_IsMatch_OneProp_Equals_NoMatch()
         {
@@ -337,6 +379,22 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestToString_WithSource()
+        {
+            //-------------Setup Test Pack ------------------
+            string propName = "PropName";
+            string propValue = "PropValue";
+            Criteria surnameCriteria = new Criteria(propName, Criteria.Op.Equals, propValue);
+            string sourceName = "SourceName";
+            surnameCriteria.Field.Source = new Source(sourceName);
+
+            //-------------Execute test ---------------------
+            string criteriaString = surnameCriteria.ToString();
+            //-------------Test Result ----------------------
+            Assert.AreEqual(string.Format("{0}.{1} = '{2}'", sourceName, propName, propValue), criteriaString);
+        }
+
+        [Test]
         public void TestToString_And()
         {
             //---------------Set up test pack-------------------
@@ -357,28 +415,8 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
-        [Test]
-        public void TestToString_UsingDelegates()
-        {
-            //---------------Set up test pack-------------------
-            string surnameValue = Guid.NewGuid().ToString("N");
-            const string surname = "Surname";
-            Criteria surnameCriteria = new Criteria(surname, Criteria.Op.Equals, surnameValue);
-            DateTime dateTimeValue = DateTime.Now;
-            const string datetimePropName = "DateTime";
-            Criteria dateTimeCriteria = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
 
-            Criteria andCriteria = new Criteria(surnameCriteria, Criteria.LogicalOp.And, dateTimeCriteria);
 
-            //---------------Execute Test ----------------------
-            string criteriaAsString = andCriteria.ToString(delegate(string propName) { return propName + "1"; }, delegate { return "param"; });
-
-            //---------------Test Result -----------------------
-            const string expectedString = "(Surname1 = param) AND (DateTime1 > param)";
-            StringAssert.AreEqualIgnoringCase(expectedString, criteriaAsString);
-
-            //---------------Tear Down -------------------------
-        }
 
         [Test]
         public void TestToString_Guid()

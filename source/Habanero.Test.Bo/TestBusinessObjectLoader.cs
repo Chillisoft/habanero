@@ -96,8 +96,14 @@ namespace Habanero.Test.BO
 
         private static SelectQuery CreateSelectQuery(ContactPersonTestBO cp)
         {
-            SelectQuery query = new SelectQuery(new Criteria("Surname", Criteria.Op.Equals, cp.Surname));
-            query.Fields.Add("Surname", new QueryField("Surname", "Surname_field", null));
+            string surname = "Surname";
+            string surnameField = "Surname_field";
+            Criteria criteria = new Criteria(surname, Criteria.Op.Equals, cp.Surname);
+            criteria.Field.Source = new Source(cp.ClassDef.TableName);
+            criteria.Field.FieldName = surnameField;
+            SelectQuery query = new SelectQuery(criteria);
+
+            query.Fields.Add(surname, new QueryField(surname, surnameField, null));
             query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", null));
             query.Source = new Source(cp.ClassDef.TableName);
             return query;
@@ -640,34 +646,20 @@ namespace Habanero.Test.BO
 
         #endregion //TestLoadInheritance
 
-        [Test, ExpectedException(typeof(InvalidPropertyException))]
+        [Test, ExpectedException(typeof(InvalidPropertyNameException))]
         public void TestGetBusinessObject_PropNameNotCorrect()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            TestAutoInc.LoadClassDefWithAutoIncrementingID();
-            //TestAutoInc autoInc = new TestAutoInc();
-            //autoInc.Save();
-
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
+            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("TestAutoIncID", Criteria.Op.Equals, "1");//"autoInc.TestAutoIncID);
-            BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(criteria);
+            Criteria criteria = new Criteria("NonExistantProperty", Criteria.Op.Equals, "1");
+            BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
 
         }
-        //[Test, ExpectedException(typeof(InvalidPropertyException))]
-        //public void TestGetBusinessObject_PropNameNotCorrect()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    ClassDef.ClassDefs.Clear();
-        //    TestAutoInc.LoadClassDefWithAutoIncrementingID();
-        //    //TestAutoInc autoInc = new TestAutoInc();
-        //    //autoInc.Save();
 
-        //    //---------------Execute Test ----------------------
-        //    Criteria criteria = new Criteria(, Criteria.Op.Equals, "1");//"autoInc.TestAutoIncID);
-        //    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>("TestAutoIncID");
-
-        //}
         [Test]
         public void TestBoLoader_NotRefreshBusinessObjectIfCurrentlyBeingEdited()
         {
@@ -794,6 +786,7 @@ namespace Habanero.Test.BO
                 ClassDef.ClassDefs.Clear();
                 TestAutoInc.LoadClassDefWithAutoIncrementingID();
                 TestAutoInc autoInc = new TestAutoInc();
+                autoInc.TestAutoIncID = int.MaxValue;
                 autoInc.Save();
 
                 //---------------Execute Test ----------------------
@@ -1044,10 +1037,11 @@ namespace Habanero.Test.BO
                 BusObjectManager.Instance.ClearLoadedObjects();
                 WaitForGC();
 
-                SelectQuery query = new SelectQuery(new Criteria("Surname", Criteria.Op.Equals, cp.Surname));
-                query.Fields.Add("Surname", new QueryField("Surname", "Surname_field", null));
-                query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", null));
-                query.Source = new Source(cp.ClassDef.TableName);
+                SelectQuery query = CreateSelectQuery(cp);
+//                new SelectQuery(new Criteria("Surname", Criteria.Op.Equals, cp.Surname)));
+//                query.Fields.Add("Surname", new QueryField("Surname", "Surname_field", null));
+//                query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", null));
+//                query.Source = new Source(cp.ClassDef.TableName);
 
                 //---------------Assert Precondition ---------------
                 //Object not loaded in all loaded business objects

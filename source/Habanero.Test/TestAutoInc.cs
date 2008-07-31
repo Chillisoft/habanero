@@ -31,7 +31,9 @@ namespace Habanero.Test
             {
                 return (int?) GetPropertyValue("testautoincid");
             }
+            set { SetPropertyValue("testautoincid", value); }
         }
+
         public string TestField
         {
             get

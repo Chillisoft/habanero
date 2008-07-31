@@ -307,12 +307,9 @@ namespace Habanero.BO
             if (_selectQuery.Criteria != null)
             {
                 builder.Append(" WHERE ");
+                CriteriaDB criteriaDB = new CriteriaDB(_selectQuery.Criteria);
                 string whereClause =
-                    _selectQuery.Criteria.ToString(delegate(string propName)
-                    {
-                        QueryField queryField = _selectQuery.Fields[propName];
-                        return DelimitField(queryField.Source, queryField.FieldName);
-                    }, delegate(object value)
+                    criteriaDB.ToString(_sqlFormatter, delegate(object value)
                     {
                         string paramName = statement.ParameterNameGenerator.GetNextParameterName();
                         statement.AddParameter(paramName, value);

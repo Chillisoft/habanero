@@ -27,31 +27,7 @@ namespace Habanero.Base
     /// </summary>
     public class Criteria
     {
-        #region Delegates
 
-        /// <summary>
-        /// For details of what this delegate is used for, see <see cref="PropNameConverterDelegate"/>
-        /// 
-        /// This delegate is designed to format a value of a criteria into a datasource equivalent. For example, in a database context,
-        /// this delegate might be used to return a parameter name and store the parameter value so that the criteria can be used as part
-        /// of a where clause in a parametrized SQL statement.
-        /// </summary>
-        /// <param name="parameterValue">The value of the criteria given, as an object. </param>
-        /// <returns>The string format of this criteria to append to the string.</returns>
-        public delegate string AddParameterDelegate(object parameterValue);
-
-        ///<summary>
-        /// When converting the Criteria expression to a string there are contexts that must be taken into account. The default implementation
-        /// (<see cref="Criteria.ToString()"/>) will not do any conversions of property names or values given other than to convert
-        /// DateTimes and Guids to sensible, universal string equivalents (see <see cref="Criteria.DATE_FORMAT"/>).
-        /// 
-        /// This delegate is designed to map a property name to a datasource name (such as to a field name on table).
-        ///</summary>
-        ///<param name="propName">The property name to map to the datasource equivalent</param>
-        /// <returns>The mapped property name ie the datasource equivalent of the property name (perhaps the field name on a database table)</returns>
-        public delegate string PropNameConverterDelegate(string propName);
-
-        #endregion
 
         #region LogicalOp enum
 
@@ -102,11 +78,15 @@ namespace Habanero.Base
         private readonly Criteria _leftCriteria;
         private readonly LogicalOp _logicalOp;
         private readonly Op _op;
-        private readonly string _propName;
         private readonly Criteria _rightCriteria;
-        private readonly object _value;
-        private readonly string[] LogicalOps = {"AND", "OR"};
-        private readonly string[] Ops = {"=", ">", "<"};
+        private object _fieldValue;
+        protected readonly string[] LogicalOps = {"AND", "OR"};
+        protected readonly string[] Ops = {"=", ">", "<"};
+        private QueryField _field;
+
+        protected Criteria()
+        {
+        }
 
         /// <summary>
         /// Creates a leaf criteria (meaning it has no children in the tree structure).
@@ -116,9 +96,9 @@ namespace Habanero.Base
         /// <param name="value">The value to compare to</param>
         public Criteria(string propName, Op op, object value)
         {
-            _propName = propName;
+            _field = new QueryField(propName, propName, null);
             _op = op;
-            _value = value;
+            _fieldValue = value;
         }
 
         /// <summary>
@@ -133,7 +113,38 @@ namespace Habanero.Base
             _logicalOp = logicalOp;
             _rightCriteria = rightCriteria;
         }
-        
+
+        public virtual QueryField Field
+        {
+            get { return _field; }
+        }
+
+        public virtual Criteria LeftCriteria
+        {
+            get { return _leftCriteria; }
+        }
+
+        public virtual Criteria RightCriteria
+        {
+            get { return _rightCriteria; }
+        }
+
+        public virtual LogicalOp LogicalOperator
+        {
+            get { return _logicalOp; }
+        }
+
+        public virtual object FieldValue
+        {
+            get { return _fieldValue; }
+            set { _fieldValue = value; }
+        }
+
+        public virtual Op ComparisonOperator
+        {
+            get { return _op; }
+        }
+
 
         /// <summary>
         /// Evaluates the businessObject passed in to see if it matches the criteria that have been set up
@@ -154,35 +165,36 @@ namespace Habanero.Base
                 }
             }
 
-            object leftValue = businessObject.GetPropertyValue(_propName);
+            //todo: criterias with relationships - this will pass the source through to the GetPropertyValue
+            object leftValue = businessObject.GetPropertyValue(_field.PropertyName);
             if (leftValue == null)
             {
                 switch (_op)
                 {
                     case Op.Equals:
-                        return _value == null;
+                        return _fieldValue == null;
                     case Op.GreaterThan:
                         return false;
                     case Op.LessThan:
-                        return _value != null;
+                        return _fieldValue != null;
                     default:
                         return false;
                 }
             }
 
-            IComparable x = businessObject.GetPropertyValue(_propName) as IComparable;
+            IComparable x = businessObject.GetPropertyValue(_field.PropertyName) as IComparable;
             if (x == null)
             {
                 throw new InvalidOperationException(
                     string.Format(
-                        "Property '{0}' on class '{1}' does not implement IComparable and cannot be matched.", _propName,
+                        "Property '{0}' on class '{1}' does not implement IComparable and cannot be matched.", _field.PropertyName,
                         businessObject.GetType().FullName));
             }
-            IComparable y = _value as IComparable;
+            IComparable y = _fieldValue as IComparable;
             switch (_op)
             {
                 case Op.Equals:
-                    return (businessObject.GetPropertyValue(_propName).Equals(_value));
+                    return (businessObject.GetPropertyValue(_field.PropertyName).Equals(_fieldValue));
                 case Op.GreaterThan:
                     return x.CompareTo(y) > 0;
                 case Op.LessThan:
@@ -202,48 +214,51 @@ namespace Habanero.Base
         ///<filterpriority>2</filterpriority>
         public override string ToString()
         {
-            return ToString(delegate(string propName) { return propName; }, delegate(object value)
-                {
-                    string valueString;
-                    if (value is DateTime)
-                    {
-                        valueString = ((DateTime) value).ToString(DATE_FORMAT);
-                    }
-                    else if (value is Guid)
-                    {
-                        valueString = ((Guid) value).ToString("B");
-                    }
-                    else
-                    {
-                        valueString = value.ToString();
-                    }
-                    return "'" + valueString + "'";
-                });
-        }
-
-        /// <summary>
-        /// Converts this Criteria object to a string, using the two delegates to convert the field name to a mapped field name
-        /// and the value in object form to a value in string form.
-        /// 
-        /// The <see cref="ToString()"/> method uses this method with a simple set of delegates that don't change the field name
-        /// and simply convert DateTimes and Guids to sensible string representations.
-        /// </summary>
-        /// <param name="convertToFieldName">The delegate to use to convert the property name to a field name. 
-        /// See <see cref="PropNameConverterDelegate"/></param>
-        /// <param name="addParameter">The delegate to use to convert the value in object form to a value in string form. 
-        /// See <see cref="AddParameterDelegate"/></param>
-        /// <returns>The Criteria in string form.</returns>
-        public string ToString(PropNameConverterDelegate convertToFieldName, AddParameterDelegate addParameter)
-        {
             if (IsComposite())
             {
-                string leftCriteriaAsString = _leftCriteria.ToString(convertToFieldName, addParameter);
-                string rightCriteriaAsString = _rightCriteria.ToString(convertToFieldName, addParameter);
-                return string.Format("({0}) {1} ({2})", leftCriteriaAsString, LogicalOps[(int) _logicalOp],
+                string leftCriteriaAsString =  LeftCriteria.ToString();
+                string rightCriteriaAsString = RightCriteria.ToString();
+                return string.Format("({0}) {1} ({2})", leftCriteriaAsString, LogicalOps[(int)LogicalOperator],
                                      rightCriteriaAsString);
             }
-            string valueString = addParameter(_value);
-            return string.Format("{0} {1} {2}", convertToFieldName(_propName), Ops[(int) _op], valueString);
+            string sourceName = Convert.ToString(_field.Source);
+            if (!String.IsNullOrEmpty(sourceName)) sourceName += ".";
+            return string.Format("{0}{1} {2} {3}", sourceName, Field.PropertyName, Ops[(int)ComparisonOperator], GetValueAsString());
+            //return ToString(delegate(string propName) { return propName; }, delegate(object value)
+            //    {
+            //        string valueString;
+            //        if (value is DateTime)
+            //        {
+            //            valueString = ((DateTime) value).ToString(DATE_FORMAT);
+            //        }
+            //        else if (value is Guid)
+            //        {
+            //            valueString = ((Guid) value).ToString("B");
+            //        }
+            //        else
+            //        {
+            //            valueString = value.ToString();
+            //        }
+            //        return "'" + valueString + "'";
+            //    });
+        }
+
+        private string GetValueAsString()
+        {
+            string valueString;
+            if (FieldValue is DateTime)
+            {
+                valueString = ((DateTime)FieldValue).ToString(DATE_FORMAT);
+            }
+            else if (FieldValue is Guid)
+            {
+                valueString = ((Guid)FieldValue).ToString("B");
+            }
+            else
+            {
+                valueString = FieldValue.ToString();
+            }
+            return "'" + valueString + "'";
         }
 
 
@@ -263,12 +278,12 @@ namespace Habanero.Base
             if (IsComposite())
             {
                 if (!otherCriteria.IsComposite()) return false;
-                if (!_leftCriteria.Equals(otherCriteria._leftCriteria)) return false;
-                return _logicalOp == otherCriteria._logicalOp && _rightCriteria.Equals(otherCriteria._rightCriteria);
+                if (!LeftCriteria.Equals(otherCriteria.LeftCriteria)) return false;
+                return LogicalOperator == otherCriteria.LogicalOperator && _rightCriteria.Equals(otherCriteria.RightCriteria);
             }
-            if (_op != otherCriteria._op) return false;
-            if (String.Compare(_propName, otherCriteria._propName) != 0) return false;
-            return _value.Equals(otherCriteria._value);
+            if (ComparisonOperator != otherCriteria.ComparisonOperator) return false;
+            if (String.Compare(Field.PropertyName, otherCriteria.Field.PropertyName) != 0) return false;
+            return _fieldValue.Equals(otherCriteria.FieldValue);
         }
 
         ///<summary>
@@ -291,7 +306,7 @@ namespace Habanero.Base
         /// <returns></returns>
         public bool IsComposite()
         {
-            return _leftCriteria != null;
+            return LeftCriteria != null;
         }
 
         /// <summary>

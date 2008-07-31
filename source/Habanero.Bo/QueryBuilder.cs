@@ -58,6 +58,7 @@ namespace Habanero.BO
             }
             AddDiscriminatorFields(selectQuery, classDef);
             selectQuery.Source = new Source(classDef.ClassName, classDef.GetTableName());
+            QueryBuilder.PrepareCriteria(classDef, criteria);
             selectQuery.Criteria = criteria;
             selectQuery.ClassDef = classDef;
             return selectQuery;
@@ -84,13 +85,13 @@ namespace Habanero.BO
         }
 
         ///<summary>
-        /// Based on the class definition and the orderByString an OrderCriteria object is created.
+        /// Based on the class definition and the orderByString an <see cref="OrderCriteria"/> object is created.
         /// The orderCriteria object is a set of order by fields including information on their 
-        /// business object properties and their dataSource. <see cref="OrderCriteria"/>
+        /// business object properties and their dataSource. 
         ///</summary>
         ///<param name="classDef">The class definition to use for building the order criteria</param>
-        ///<param name="orderByString">The orderby string to use for creating the OrderCriteria.</param>
-        ///<returns>the newly created OrderCriteria object.</returns>
+        ///<param name="orderByString">The orderby string to use for creating the <see cref="OrderCriteria"/>.</param>
+        ///<returns>the newly created <see cref="OrderCriteria"/> object.</returns>
         public static OrderCriteria CreateOrderCriteria(IClassDef classDef, string orderByString)
         {
             OrderCriteria orderCriteria = OrderCriteria.FromString(orderByString);
@@ -130,6 +131,33 @@ namespace Habanero.BO
                 }
             }
             return orderCriteria;
+        }
+
+        ///<summary>
+        /// Based on the class definition the given <see cref="Criteria"/> object is set up with the correct entity 
+        /// names and field names, in preparation for using it as part of a <see cref="SelectQuery"/> that has been built using
+        /// the <see cref="QueryBuilder"/> and the same <see cref="ClassDef"/>
+        ///</summary>
+        ///<param name="classDef">The class definition to use for preparing the <see cref="Criteria"/>.</param>
+        ///<param name="criteria">The <see cref="Criteria"/> to prepare for use with a <see cref="SelectQuery"/>.</param>
+        public static void PrepareCriteria(IClassDef classDef, Criteria criteria)
+        {
+            if (criteria == null) return;
+            if (criteria.IsComposite())
+            {
+                PrepareCriteria(classDef, criteria.LeftCriteria);
+                PrepareCriteria(classDef, criteria.RightCriteria);
+            }
+            else
+            {
+                QueryField field = criteria.Field;
+                IPropDef propDef = classDef.GetPropDef(field.PropertyName);
+                field.FieldName = propDef.DatabaseFieldName;
+                string tableName = classDef.GetTableName(propDef);
+                field.Source = new Source(classDef.ClassName, tableName);
+
+                criteria.FieldValue = propDef.ConvertValueToPropertyType(criteria.FieldValue);
+            }
         }
     }
 }

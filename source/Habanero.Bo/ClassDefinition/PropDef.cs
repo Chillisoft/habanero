@@ -1022,5 +1022,18 @@ namespace Habanero.BO.ClassDefinition
         }
 
         #endregion
+
+        public object ConvertValueToPropertyType(object valueToConvert)
+        {
+            if (this.PropertyType == typeof(Guid))
+            {
+                return new Guid(valueToConvert.ToString());
+            }
+            if (this.PropertyType == typeof(string) && valueToConvert is Guid)
+            {
+                return ((Guid)valueToConvert).ToString("B");
+            }
+            return Convert.ChangeType(valueToConvert, this.PropertyType);
+        }
     }
 }

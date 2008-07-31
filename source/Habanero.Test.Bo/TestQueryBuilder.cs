@@ -58,11 +58,14 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
             ClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, DateTime.Now);
+            Criteria criteria = new Criteria("TestProp", Criteria.Op.Equals, "bob");
+            Criteria preparedCriteria = new Criteria("TestProp", Criteria.Op.Equals, "bob");
+            QueryBuilder.PrepareCriteria(classdef, preparedCriteria);
             //---------------Execute Test ----------------------
             ISelectQuery query = QueryBuilder.CreateSelectQuery(classdef, criteria);
             //---------------Test Result -----------------------
-            Assert.AreEqual(criteria, query.Criteria);
+            Assert.AreSame(criteria, query.Criteria);
+            Assert.AreEqual(preparedCriteria.ToString(), query.Criteria.ToString());
             //---------------Tear Down -------------------------
         }
 
@@ -177,6 +180,114 @@ namespace Habanero.Test.BO
             Assert.AreEqual("Engine.Car.Owner", field.Source.ToString());
             //---------------Tear Down -------------------------
         }
+
+        [Test]
+        public void TestPrepareCriteria()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            Criteria criteria = new Criteria("EngineNo", Criteria.Op.Equals, 100);
+
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareCriteria(engineClassDef, criteria);
+
+            //---------------Test Result -----------------------
+            QueryField field = criteria.Field;
+            Assert.AreEqual("EngineNo", criteria.Field.PropertyName);
+            Assert.AreEqual("ENGINE_NO", criteria.Field.FieldName);
+            Assert.AreEqual("Engine", criteria.Field.Source.Name);
+            Assert.AreEqual("Table_Engine", criteria.Field.Source.EntityName);
+            Assert.AreEqual(0, criteria.Field.Source.Joins.Count);
+            Assert.AreEqual("Engine.EngineNo = '100'", criteria.ToString());
+        }
+
+        [Test]
+        public void TestPrepareCriteria_ConvertsValue_IntToString()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            Criteria criteria = new Criteria("EngineNo", Criteria.Op.Equals, 100);
+
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareCriteria(engineClassDef, criteria);
+
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(String), criteria.FieldValue);
+        }
+
+        [Test]
+        public void TestPrepareCriteria_ConvertsValue_StringToGuid()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            string carid = Guid.NewGuid().ToString("B");
+            Criteria criteria = new Criteria("CarID", Criteria.Op.Equals, carid);
+
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareCriteria(engineClassDef, criteria);
+
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(Guid), criteria.FieldValue);
+            Assert.AreEqual(carid, new Guid(criteria.FieldValue.ToString()).ToString("B"));
+        }
+
+
+        [Test]
+        public void TestPrepareCriteria_Null()
+        {
+            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            Criteria nullCriteria = null;
+            //-------------Execute test ---------------------
+            QueryBuilder.PrepareCriteria(engineClassDef, nullCriteria);
+            //-------------Test Result ----------------------
+            Assert.IsNull(nullCriteria);
+        }
+
+        [Test]
+        public void TestPrepareCriteria_Composite()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            Criteria criteria1 = new Criteria("EngineNo", Criteria.Op.Equals, 100);
+            Guid carId = Guid.NewGuid();
+            Criteria criteria2 = new Criteria("CarID", Criteria.Op.Equals, carId);
+            Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.And, criteria2);
+
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareCriteria(engineClassDef, criteria);
+
+            //---------------Test Result -----------------------
+            QueryField field = criteria.Field;
+            Assert.AreEqual("EngineNo", criteria1.Field.PropertyName);
+            Assert.AreEqual("ENGINE_NO", criteria1.Field.FieldName);
+            Assert.AreEqual("Engine", criteria1.Field.Source.Name);
+            Assert.AreEqual("Table_Engine", criteria1.Field.Source.EntityName);
+            Assert.AreEqual(0, criteria1.Field.Source.Joins.Count);
+
+            Assert.AreEqual("CarID", criteria2.Field.PropertyName);
+            Assert.AreEqual("CAR_ID", criteria2.Field.FieldName);
+            Assert.AreEqual("Engine", criteria2.Field.Source.Name);
+            Assert.AreEqual("Table_Engine", criteria2.Field.Source.EntityName);
+            Assert.AreEqual(0, criteria2.Field.Source.Joins.Count);
+
+            Assert.AreEqual("(Engine.EngineNo = '100') AND (Engine.CarID = '" + carId.ToString("B") + "')", criteria.ToString());
+        }
+
+        //[Test]
+        //public void TestCreateCriteria()
+        //{
+        //    //-------------Setup Test Pack ------------------
+        //    ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+        //    string propertyName = "EngineNo";
+        //    Criteria criteria = QueryBuilder.CreateCriteria(engineClassDef, )
+        //    QueryBuilder.CreateOrderCriteria()
+        //    //-------------Test Pre-conditions --------------
+
+        //    //-------------Execute test ---------------------
+
+        //    //-------------Test Result ----------------------
+
+        //}
 
         [Test]
         public void TestSetOrderCriteria_AddsJoinToSource()

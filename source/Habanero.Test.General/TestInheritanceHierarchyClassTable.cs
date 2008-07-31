@@ -237,6 +237,7 @@ namespace Habanero.Test.General
         [Test]
         public void TestDatabaseReadWrite()
         {
+            
             // Test inserting & selecting
             Shape shape = new Shape();
             shape.ShapeName = "MyShape";
