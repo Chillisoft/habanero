@@ -1,0 +1,224 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{18828910-F528-48F5-B56D-7C1658D0987A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Habanero.UI.Base</RootNamespace>
+    <AssemblyName>Habanero.UI.Base</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.6.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BOColTabControlManager.cs" />
+    <Compile Include="ComboBoxManager.cs" />
+    <Compile Include="ButtonGroupControlManager.cs" />
+    <Compile Include="ControlInterfaces\Events.cs" />
+    <Compile Include="ControlInterfaces\IBOColTabControl.cs" />
+    <Compile Include="ControlInterfaces\IBusinessObjectControl.cs" />
+    <Compile Include="ControlInterfaces\IDateRangeComboBox.cs" />
+    <Compile Include="ControlInterfaces\IFileChooser.cs" />
+    <Compile Include="ControlInterfaces\IListControl.cs" />
+    <Compile Include="ControlInterfaces\IUserControlChilli.cs" />
+    <Compile Include="ControlMappers\ComboBoxCollectionController.cs" />
+    <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
+    <Compile Include="DateTimePicker\DateTimePickerManager.cs" />
+    <Compile Include="FormController.cs" />
+    <Compile Include="Grid\IDataGridViewCellStyle.cs" />
+    <Compile Include="Grid\IDataGridViewCheckBoxColumn.cs" />
+    <Compile Include="Grid\IDataGridViewImageColumn.cs" />
+    <Compile Include="Grid\IDataGridViewTextBoxColumn.cs" />
+    <Compile Include="Grid\IEditableGridButtonsControl.cs" />
+    <Compile Include="Grid\IGridControl.cs" />
+    <Compile Include="Grid\IGridInitialiser.cs" />
+    <Compile Include="HelpAboutBoxManager.cs" />
+    <Compile Include="ICollectionTabControlMapper.cs" />
+    <Compile Include="Grid\EditableGridControlManager.cs" />
+    <Compile Include="Grid\GridInitialiser.cs" />
+    <Compile Include="Grid\IEditableGridControl.cs" />
+    <Compile Include="Grid\IEdtiableGrid.cs" />
+    <Compile Include="FileChooserManager.cs" />
+    <Compile Include="IColumnHeaderCollection.cs" />
+    <Compile Include="ControlMappers\ListViewCollectionController.cs" />
+    <Compile Include="ControlMappers\ListComboBoxMapper.cs" />
+    <Compile Include="ControlMappers\NumericUpDownCurrencyMapper.cs" />
+    <Compile Include="ControlMappers\NumericUpDownIntegerMapper.cs" />
+    <Compile Include="ControlMappers\NumericUpDownMapper.cs" />
+    <Compile Include="DateTimePicker\DateRangeComboBoxManager.cs" />
+    <Compile Include="DateTimePicker\DateTimePickerUtil.cs" />
+    <Compile Include="DefaultBODeletor.cs" />
+    <Compile Include="Grid\IDataGridViewColumn.cs" />
+    <Compile Include="Grid\IDataGridViewComboBoxColumn.cs" />
+    <Compile Include="IErrorProvider.cs" />
+    <Compile Include="IFormControl.cs" />
+    <Compile Include="IFormController.cs" />
+    <Compile Include="IListView.cs" />
+    <Compile Include="InputFormComboBox.cs" />
+    <Compile Include="InputFormTextBox.cs" />
+    <Compile Include="IOKCancelDialogFactory.cs" />
+    <Compile Include="LayoutManagers\ColumnLayoutManager.cs" />
+    <Compile Include="IListViewItem.cs" />
+    <Compile Include="IListViewItemCollection.cs" />
+    <Compile Include="ISelectedListViewItemCollection.cs" />
+    <Compile Include="Util\CustomValidationEventArgs.cs" />
+    <Compile Include="Util\GlobalUIRegistry.cs" />
+    <Compile Include="Grid\IDataGridView.cs" />
+    <Compile Include="Grid\IDataGridViewCell.cs" />
+    <Compile Include="Grid\IDataGridViewCellCollection.cs" />
+    <Compile Include="Grid\IDataGridViewRow.cs" />
+    <Compile Include="Util\HabaneroAppUI.cs" />
+    <Compile Include="ControlInterfaces\IControlCollection.cs" />
+    <Compile Include="Util\IUISettings.cs" />
+    <Compile Include="LayoutManagers\BorderLayoutManager.cs" />
+    <Compile Include="ControlMappers\CheckBoxMapper.cs" />
+    <Compile Include="ControlMappers\ComboBoxMapper.cs" />
+    <Compile Include="ControlMappers\ControlMapper.cs" />
+    <Compile Include="ControlMappers\ControlMapperCollection.cs" />
+    <Compile Include="DefaultBOEditor.cs" />
+    <Compile Include="Grid\DateDisplaySettings.cs" />
+    <Compile Include="ControlMappers\LookupComboBoxMapper.cs" />
+    <Compile Include="ControlMappers\TextBoxMapper.cs" />
+    <Compile Include="DefaultBOCreator.cs" />
+    <Compile Include="ControlInterfaces\IFormChilli.cs" />
+    <Compile Include="ControlInterfaces\IGroupBox.cs" />
+    <Compile Include="ControlInterfaces\IListView.cs" />
+    <Compile Include="ControlInterfaces\INumericUpDown.cs" />
+    <Compile Include="DateTimePicker\DateTimePickerController.cs" />
+    <Compile Include="FilterControl\DataViewCompositeFilterClause.cs" />
+    <Compile Include="FilterControl\DataViewDateFilterClause.cs" />
+    <Compile Include="FilterControl\DataViewFilterClause.cs" />
+    <Compile Include="FilterControl\DataViewFilterClauseFactory.cs" />
+    <Compile Include="FilterControl\DataViewIntegerFilterClause.cs" />
+    <Compile Include="FilterControl\DataViewNullFilterClause.cs" />
+    <Compile Include="FilterControl\DataViewStringFilterClause.cs" />
+    <Compile Include="FilterControl\FilterControlManager.cs" />
+    <Compile Include="Grid\IDataGridViewSelectedRowCollection.cs" />
+    <Compile Include="Grid\IReadOnlyGrid.cs" />
+    <Compile Include="ControlInterfaces\IButtonGroupControl.cs" />
+    <Compile Include="ControlMappers\IControlMapperCollection.cs" />
+    <Compile Include="ControlMappers\IControlMapper.cs" />
+    <Compile Include="ControlInterfaces\IDateTimePicker.cs" />
+    <Compile Include="Grid\IReadOnlyGridControl.cs" />
+    <Compile Include="Grid\IReadOnlyGridButtonsControl.cs" />
+    <Compile Include="IDefaultBOEditorForm.cs" />
+    <Compile Include="ControlInterfaces\IPanel.cs" />
+    <Compile Include="LayoutManagers\GridLayoutManager.cs" />
+    <Compile Include="PanelFactory\PanelFactory.cs" />
+    <Compile Include="PanelFactory\IPanelFactory.cs" />
+    <Compile Include="PanelFactory\IPanelFactoryInfo.cs" />
+    <Compile Include="ControlInterfaces\IProgressBar.cs" />
+    <Compile Include="ControlInterfaces\IRadioButton.cs" />
+    <Compile Include="ControlInterfaces\ISplitter.cs" />
+    <Compile Include="ControlInterfaces\ITabControl.cs" />
+    <Compile Include="ControlInterfaces\ITabPage.cs" />
+    <Compile Include="ControlInterfaces\ITabPageCollection.cs" />
+    <Compile Include="ControlInterfaces\IToolTip.cs" />
+    <Compile Include="ControlInterfaces\ITreeView.cs" />
+    <Compile Include="LayoutManagers\FlowLayoutManager.cs" />
+    <Compile Include="Grid\GridBaseManager.cs" />
+    <Compile Include="ControlInterfaces\IButton.cs" />
+    <Compile Include="ControlInterfaces\ICheckBox.cs" />
+    <Compile Include="ControlInterfaces\IControlChilli.cs" />
+    <Compile Include="ControlInterfaces\IComboBox.cs" />
+    <Compile Include="ControlInterfaces\IComboBoxObjectCollection.cs" />
+    <Compile Include="IControlFactory.cs" />
+    <Compile Include="FilterControl\IFilterControl.cs" />
+    <Compile Include="Grid\IDataGridViewColumnCollection.cs" />
+    <Compile Include="Grid\IDataGridViewRowCollection.cs" />
+    <Compile Include="Grid\IGridBase.cs" />
+    <Compile Include="ControlInterfaces\ILabel.cs" />
+    <Compile Include="ControlInterfaces\IListBox.cs" />
+    <Compile Include="ControlInterfaces\IListBoxObjectCollection.cs" />
+    <Compile Include="ControlInterfaces\IListBoxSelectedObjectCollection.cs" />
+    <Compile Include="MultiSelector\IMultiSelector.cs" />
+    <Compile Include="ControlInterfaces\ITextBox.cs" />
+    <Compile Include="LayoutManagers\LayoutManager.cs" />
+    <Compile Include="MultiSelector\MultiSelectorManager.cs" />
+    <Compile Include="MultiSelector\MultiSelectorModel.cs" />
+    <Compile Include="PanelFactory\PanelFactoryInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\UISettings.cs" />
+    <Compile Include="Util\ValidationCompareOperator.cs" />
+    <Compile Include="Util\ValidationDataType.cs" />
+    <Compile Include="Util\ValidationProvider.cs" />
+    <Compile Include="Util\ValidationRule.cs" />
+    <Compile Include="Util\ValidationUtil.cs" />
+    <Compile Include="Wizard\IWizardControl.cs" />
+    <Compile Include="Wizard\IWizardController.cs" />
+    <Compile Include="Wizard\IWizardStep.cs" />
+    <Compile Include="Wizard\WizardController.cs" />
+    <Compile Include="Wizard\WizardStepException.cs" />
+    <Compile Include="..\Common\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.BO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
+      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
+      <Name>Habanero.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Util\ValidationProvider.resx">
+      <DependentUpon>ValidationProvider.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>"$(SolutionDir)PostBuild.cmd" "$(SolutionDir)"  "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

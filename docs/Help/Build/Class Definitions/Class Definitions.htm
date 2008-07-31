@@ -1,0 +1,1443 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-za">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Habanero Class Definitions</title>
+
+<style type="text/css">
+table.code {
+  background-color: #EEEEEE;
+  border-collapse: collapse;
+  border-spacing: 0px;
+  border-color: #EEEEEE;
+  border: 1px;
+}
+
+td.codeclass {
+  background-color: #EFEACB;
+  padding:5px;
+  font-size: 10px;
+} 
+
+td.codeitself {
+  background-color: #F9F9F0;
+  padding:2;
+}
+
+td.specclass {
+  background-color: #F9F9F9;
+  font-size:10pt;
+  vertical-align: top;
+}
+
+a.specclasslink {
+	text-decoration:none;
+	color:black;
+}
+
+a.specclasslink:hover {
+	text-decoration:none;
+	color:black;
+}
+
+table.spec {
+  font-size:10pt;
+}
+
+td.specname {
+  border-right:1px solid silver; border-bottom:1px solid silver; border-left-color:silver; border-top-color:silver;
+  vertical-align: top;
+  width:120px;
+  font-size:8pt;
+}
+
+td.specvalue {
+  border-bottom:1px solid silver; border-left:1px solid silver; border-right-color:silver; border-top-color:silver;
+  vertical-align: top;
+  font-size:8pt;
+}
+
+td.specnamebottom {
+  border-right:1px solid silver; border-bottom:0px solid silver; border-left-color:silver; border-top-color:silver;
+  vertical-align: top;
+  font-size:8pt;
+}
+
+td.specvaluebottom {
+  border-bottom:0px solid silver; border-left:1px solid silver; border-right-color:silver; border-top-color:silver;
+  vertical-align: top;
+  font-size:8pt;
+}
+
+table.options {
+}
+
+td.options {
+  font-size:8pt;
+  vertical-align: top;
+}
+
+body, p {
+  color:black;
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:12px;
+}
+</style>
+    
+</head>
+
+<body>
+
+
+<hr>
+<table border="1" cellpadding="7" cellspacing="0" style="border-collapse: collapse" bordercolor="#CCCCCC" width="100%" id="AutoNumber3" bgcolor="#E4E4E4">
+  <tr>
+    <td width="100%">
+
+<font face="Verdana,Arial,Helvetica">
+
+    <b><font face="Verdana" size="4"><a name="AppendixI">Habanero Class 
+Definitions</a></font></b></font></td>
+  </tr>
+</table>
+
+
+
+<p><b>Class definitions for: Habanero v1.4.1</b></p>
+<p>This section covers a list of explanations, possible options and 
+limitations for all class definitions as listed in the class definitions XML 
+file (usually called &quot;classdefs.xml&quot;).&nbsp; The class definitions are 
+required in order for Habanero to run, and you need to include the definitions 
+for at least one valid class.</p>
+<p>This is a sample structure for a class definition file.&nbsp; Note that the 
+order of elements is enforced as per the Document Type Definition (DTD).&nbsp; See the 
+specifications further along for specific options and limitations.</p>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse: collapse" bordercolor="#808080" width="100%" id="AutoNumber4">
+  <tr>
+    <td width="100%" bgcolor="#EFEACB"><font size="2"><b>Sample</b></font><b><font size="2"> Structure:</font></b></td>
+  </tr>
+  <tr>
+    <td width="100%" bgcolor="#F9F9F0">
+    <pre><code>&lt;classes&gt;
+&lt;class name=&quot;class_name&quot; assembly=&quot;assembly_name&quot;&gt;
+  &lt;superClass class=&quot;class_inherited_from&quot; assembly=&quot;its_assembly&quot; /&gt;
+
+  &lt;property name=&quot;property_name&quot; /&gt;
+  &lt;property name=&quot;property_name&quot; type=&quot;Guid&quot; compulsory=&quot;true&quot;&gt;
+    &lt;rule name=&quot;rule name&quot; message=&quot;message for user if rule broken&quot; /&gt;
+      &lt;add key=&quot;min&quot; value=&quot;0&quot; /&gt;
+      &lt;add key=&quot;max&quot; value=&quot;300&quot; /&gt;
+    &lt;/rule&gt;
+    &lt;databaseLookupList sql=&quot;select display_field, value_field from table_name&quot; /&gt;
+  &lt;/property&gt;
+
+  &lt;key name=&quot;keydef name&quot; message=&quot;message to user&quot; ignoreIfNull=&quot;true&quot;&gt;
+    &lt;prop name=&quot;property_name&quot; /&gt;
+  &lt;/key&gt;
+
+  &lt;primaryKey&gt;
+    &lt;prop name=&quot;primary_key_name&quot; /&gt;
+  &lt;/primaryKey&gt;
+
+  &lt;relationship name=&quot;rel_name&quot; type=&quot;multiple&quot; relatedClass=&quot;class&quot; relatedAssembly=&quot;assembly&quot;&gt;
+    &lt;relatedProperty property=&quot;related_prop_name&quot; relatedProperty=&quot;related_prop_name&quot; /&gt;
+  &lt;/relationship&gt;
+
+  &lt;ui&gt;
+    &lt;grid&gt;
+      &lt;column property=&quot;property_name&quot; /&gt;
+      &lt;column heading=&quot;column_heading&quot; property=&quot;property_name&quot; width=&quot;100&quot; /&gt;
+    &lt;/grid&gt;
+    &lt;form height=&quot;400&quot; width=&quot;450&quot; heading=&quot;edit_form_heading&quot;&gt;
+      &lt;tab name=&quot;form_name&quot;&gt;
+        &lt;columnLayout width=&quot;350&quot;&gt;
+          &lt;field property=&quot;property_name&quot; /&gt;
+        &lt;/columnLayout&gt;
+        &lt;columnLayout&gt;
+          &lt;field label=&quot;label&quot; property=&quot;prop_name&quot; type=&quot;ComboBox&quot; mapperType=&quot;ListComboBoxMapper&quot;&gt;
+            &lt;parameter name=&quot;options&quot; value=&quot;F|M&quot; /&gt;
+            &lt;trigger target=&quot;prop_name&quot; conditionValue=&quot;value&quot; action=&quot;enable&quot; value=&quot;false&quot; &gt;
+          &lt;/field&gt;
+        &lt;/columnLayout&gt;
+      &lt;/tab&gt;
+      &lt;tab name=&quot;form_name2&quot;&gt;
+        &lt;field label=&quot;label&quot; property=&quot;prop_name&quot; type=&quot;TextBox&quot; editable=&quot;false&quot; /&gt;
+      &lt;/tab&gt;
+    &lt;/form&gt;
+  &lt;/ui&gt;	
+&lt;/class&gt;
+&lt;/classes&gt;</code></pre>
+    </td>
+  </tr>
+</table>
+<p>Here follows a list of all the class definition elements.&nbsp; For 
+clarification, &quot;attribs&quot; means attributes and  the default settings are 
+in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
+<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#808080" width="100%" id="AutoNumber4">
+  <tr>
+
+    <td width="100%" bgcolor="#D7EBF4" colspan="2"><b>Class Definition 
+    Specifications<font size="2"><br>
+&nbsp;</font></b><table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber8">
+      <tr>
+        <td width="25%">
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+        <font size="2"><a href="#add">add</a></font><br>
+</font>
+
+        <font size="2">
+        <a href="#businessObjectLookupList">businessObjectLookupList</a><br>
+        <a href="#class">class</a><br>
+        <a href="#classes">classes</a></font><br>
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+        <font size="2">
+        <a href="#column">column</a></font></font><br>
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+        <font size="2" face="Verdana,Arial,Helvetica"><a href="#columnLayout">columnLayout</a></font></td>
+        <td width="25%">
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+        <font size="2">
+        <a href="#databaseLookupList">databaseLookupList</a><br>
+        <a href="#field">field</a></font><br>
+        <font size="2"><a href="#form">form</a><br>
+        <a href="#grid">grid</a></font><br>
+<a href="#item">item</a><br>
+
+        <font size="2" face="Verdana,Arial,Helvetica">
+        <a href="#key">key</a></font></td>
+        <td width="25%">
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+        <a href="#parameter">parameter</a><font size="2"><br>
+        <a href="#primaryKey">primaryKey</a></font></font><br>
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+        <font size="2">
+        <a href="#prop">prop</a></font><br>
+        <font size="2"><a href="#property">property</a><br>
+        <a href="#relationship">relationship</a></font></font><br>
+        <font size="2">
+        <a href="#relatedProperty">relatedProperty</a></font></td>
+        <td width="25%" valign="top">
+        <font size="2" face="Verdana,Arial,Helvetica"><a href="#rule">rule</a><br>
+        <a href="#simpleLookupList">simpleLookupList</a><br>
+        <a href="#superClass">superClass</a></font><font size="2"><br>
+        <a href="#tab">tab</a><br>
+        <a href="#trigger">trigger</a><br>
+        </font><font size="2" face="Verdana,Arial,Helvetica">
+        <a href="#ui">ui</a></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td width="17%" class="specclass">
+    <b><a name="classes" class="specclasslink">classes</a> </b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">The root element of the xml document. Contains one 
+        class element for each class/table.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">class (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">-</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+  
+  <tr>
+    <td class="specclass">
+    <b><a name="class" class="specclasslink">class</a> </b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Contains a definition for each class/table.&nbsp; 
+        Holds property definitions, primary key definitions, relationships and 
+        how the data is displayed in the user interface.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">classes</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">property (1..*)<br>
+        primaryKey (1)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">superClass (1)<br>
+        key (1..*)<br>
+        relationship (1..*)<br>
+        ui (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>name</b> (name of the class in the assembly/project)<br>
+        <b>assembly</b> (name of the assembly/project)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>table</b> (table name in database, if omitted then
+        the table name is assumed to be the class name)</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+  <tr>
+  	<td class="specclass">
+    <b><a name="superClass" class="specclasslink">superClass</a></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Indicates which class this class inherits from and 
+        the type of inheritance used. ClassTableInheritance uses one database 
+        table per class in the inheritance structure. SingleTableInheritance 
+        maps all fields of all classes of an inheritance structure into a single 
+        table. ConcreteTableInheritance uses a table for each concrete class in 
+        the inheritance hierarchy.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">class</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>class</b> (the class name from which the class 
+        inherits)<br>
+        <b>assembly</b> (the assembly/project containing the super-class)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>orMapping</b> =<i>ClassTableInheritance</i>/SingleTableInheritance/ConcreteTableInheritance 
+        (the type of inheritance used)<br/>
+        <b>id</b> (in ClassTableInheritance, the property in the child class that has a 
+        copy of the parent's ID, use empty string if child has no primary key and just inherits parent's ID,
+        null value assumes child has a field with the name of the parent's ID that is not the child's ID)<br/>
+        <b>discriminator</b> (in SingleTableInheritance, sets the column in the parent's db table
+        that holds the type of the class in that row)
+        </td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="property" class="specclasslink">property</a></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Defines an individual property or field name in a 
+        class.&nbsp; Specifies what the data type is, whether there is a 
+        specific list of options to choose from or whether there are any property rules or 
+        limitations on the property values. At the very least, the property to 
+        be used for the primary key definition needs to be defined.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">class</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">rule (1)<br>
+        databaseLookupList (1)<br>
+        businessObjectLookupList (1)<br>
+        simpleLookupList (1)</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>name</b> (the name of the property as listed in the 
+        code)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>type</b> =<i>String</i>/Guid/Int32/Boolean/Decimal/DateTime/etc (the data 
+        type at code level, standard names like 'int' are also valid, you can add your own types if desired, 
+        Habanero.Util also provides LongText and ByteString to convert Clobs and 
+        Blobs to strings)<br>
+        <b>assembly</b> =<i>System</i> (the assembly to which the property type belongs)<br>
+        <b>databaseField</b> (if the field name is different to the property name)<br>
+        <b>default</b> (any default value to be assigned)<br>
+        <b>compulsory</b> =true/<i>false</i> (whether assigning a value is compulsory, 
+        will make the field's label bold and provide error messaging to the user 
+        if not completed)<br>
+        <b>readWriteRule</b> =<i>ReadWrite/</i>ReadOnly/WriteOnce 
+        (limitations on how often the value can be read or written to)<br>
+        <b>auto-incrementing</b> =true/<i>false</i> 
+        (whether this property is an auto-incrementing primary key, isObjectID must
+        be false on the primary key)<br/>
+        <b>length</b> (for strings, the maximum length the string can be)
+        </td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	  	<td class="specclass">
+    <b><a name="rule" class="specclasslink">rule</a></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Sets specific rules that a string value must 
+        adhere to.&nbsp; This element holds the name of the rule and a message 
+        to display to the user if the rule is broken.&nbsp; A single rule can 
+        therefore be a combination of several cases.&nbsp; You can also add 
+        rules of your own by creating a class that inherits from 
+        Habanero.BO.PropRuleBase, and specifying this class here. See the 'add' 
+        element for a list of rules currently available.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">property</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">add (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>name</b> (the name of the rule, for the user's 
+        reference)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>message</b> (to display to the user if the rule 
+        is broken, if this is left out, a default explanation will be provided)<br>
+        <b>class</b> (a class that carries out checking against a custom rule)<br>
+        <b>assembly</b> (the assembly holding the above class)</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	  	<td class="specclass">
+    <b><a name="add" class="specclasslink">add</a> </b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">A key-value pair that sets a single rule that the 
+        property value must adhere 
+        to.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">rule</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>key</b> (the name of the rule, eg. &quot;max&quot;)<br>
+        <b>value</b> (the value applicable to the rule, eg. &quot;300&quot;)
+        <br><br>
+        The following options are available, depending on the property type you 
+        specified:<br><br>
+        <table border="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#C0C0C0" width="100%" id="AutoNumber7" class="options">
+          <tr>
+            <td width="100" class="options">string</td>
+            <td class="options">minLength (minimum number of characters)<br>
+            maxLength (maximum number of characters)<br>
+            patternMatch (a regular expression to match to)</td>
+          </tr>
+          <tr>
+            <td class="options">DateTime</td>
+            <td class="options">min (earliest date allowed)<br>
+            max (latest date allowed)</td>
+          </tr>
+          <tr>
+            <td class="options">decimal/int</td>
+            <td class="options">min<br>
+            max</td>
+          </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">-</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	  	<td class="specclass">
+    <b><a name="databaseLookupList" class="specclasslink">databaseLookup-<br>List</a></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Provides a list of potential values for the property, using 
+        the objects loaded from the database with the given sql statement.&nbsp; 
+        Two fields must be provided to form a display-value pair - the first is the value to 
+        store and the second is the value to display to the user (eg. in a ComboBox or 
+        grid), which 
+        is useful when you are using Guids.&nbsp; The sql statement needs to be in the form of: &quot;select 
+         
+        valueField, displayField 
+        from tableName&quot;.&nbsp; An order-by clause can also be appended.&nbsp; 
+        The class and assembly will seldom need to be specified.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">property</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>sql</b> (the select sql statement to load the objects 
+        to populate the list, use escape characters for symbols like &lt;,&gt;)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>timeout</b> =<i>10000</i> (the period in 
+        milliseconds after which the cached copy expires)<b><br>
+        class</b> (the class for the objects being loaded)<br>
+        <b>assembly</b> (the assembly/project for the objects being loaded)</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	  	<td class="specclass">
+    <b><a name="simpleLookupList" class="specclasslink">simpleLookupList</a></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Provides a list of potential values for the 
+        property.&nbsp; You can  specify a list of options in the 
+        &quot;options&quot; attribute, separated by pipes, and/or you can include  sets of 
+        display-value pairs in  &quot;item&quot; elements, that have the advantage of 
+        displaying a different value to the one actually stored (eg. store a 
+        Guid in the database, but display a string in a 
+        ComboBox or grid).</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">property</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">item (0..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>options</b> (a list of options, eg. 
+        &quot;Male|Female|Not-specified&quot;)</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="item" class="specclasslink">item</a></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">A display-value pair  that serves as one 
+        option in a simpleLookupList.&nbsp; The display attribute appears to the user 
+        (eg. in the ComboBox or grid), while the value attribute is the value 
+        stored.&nbsp; This is a useful option when a Guid is being stored.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">simpleLookupList</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>display</b> (the value that will appear to the user in 
+        a form or grid)<br>
+        <b>value</b> (the value that will be stored for the property)
+        </td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">-</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	  	<td class="specclass">
+    <b><a name="businessObjectLookupList" class="specclasslink">businessObject-<br>LookupList</a></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Provides a list of potential values for the property, using 
+        the objects loaded from a particular business object type.  The primary key value
+        will be the actual value stored, while the 
+        value displayed to the user (eg. in the ComboBox or grid) will be that 
+        obtained from the object's ToString() method. You can also set criteria 
+        to limit which objects are loaded.&nbsp; This list is sorted by default, but you
+        can specify an alternative sort column or direction with the sort attribute.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">property</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>class</b> (the business object class  for the 
+        objects to be loaded)<br>
+        <b>assembly</b> (the assembly holding the above class)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>criteria</b> (a sql segment to be attached to a 
+        where-clause that limits which objects are loaded)<br>
+        <b>sort</b> (which property of the business object to sort on, format is: 
+        "property", "property asc", "property desc")
+        </td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+  	<td class="specclass">
+    <b><a name="key" class="specclasslink">key</a></b></td>
+    </font>
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Specifies a unique key for the class/table, 
+        which is a property or combination of properties which must be unique 
+        for each instance/row.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">class</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">prop (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>name</b> (a name that describes the key)<br>
+        <b>message</b> (to explain why a write operation violates the key, if 
+        not specified then a default message is provided)<br>
+        <b>ignoreIfNull</b> =true/<i>false</i> (whether to ignore the uniqueness 
+        check if any of the properties making up the key are null)</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+    </font>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="primaryKey" class="specclasslink">primaryKey</a></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Describes the primary key for the class, using  
+        properties that have been defined in the property elements. The &quot;prop&quot; 
+        sub-elements list the properties that the primary key is comprised of (a 
+        composite primary key will have more than one prop element).</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">class</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">prop (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>isObjectID</b> =<i>true</i>/false (whether this 
+        key has a single Guid property that is the object's ID, false for composite keys 
+        or non-Guids)</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="prop" class="specclasslink">prop</a></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Specifies the existing property definition being 
+        referred to in the composition of a primary key or alternate key</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">primaryKey, key</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>name</b> (the name of the existing property definition 
+        being referred to)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">-</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="relationship" class="specclasslink">relationship</a></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Describes a relationship between this class and 
+        another class (equivalent to foreign keys in a database). Note that the 
+        relationship is mapped between a particular property in one class and a 
+        primary key property in another class.&nbsp; For the delete action, 
+        DeleteRelated deletes all related objects when one is deleted, 
+        DereferenceRelated dereferences them instead, and Prevent prevents the 
+        object from being deleted when other objects related to it.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">class</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">relatedProperty (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>name</b> (the name of the relationship)<br>
+        <b>type</b> =single/multiple (if this class relates to one or many of the other 
+        class)<br>
+        <b>relatedClass</b> (the related class name)<br>
+        <b>relatedAssembly</b> (the assembly/project containing the related class)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>keepReference</b> =<i>true</i>/false 
+        (keep a reference in memory to the class, can set this to false if your 
+        application is very memory-intensive)<br>
+        <b>orderBy</b> (the field name(s) to append to the sql order-by clause)<br>
+        <b>deleteAction</b> =DeleteRelated/DereferenceRelated/<i>Prevent</i> (what action to take  when the related object is 
+        deleted)</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <a name="relatedProperty" class="specclasslink">
+    <b>relatedProperty </b></a></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Defines the properties on which relationship 
+        matching takes place.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">relationship</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>property</b> (the property in this class which relates to 
+        the other class)<br>
+        <b>relatedProperty</b> (the property in the other class being related to)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">-</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="ui" class="specclasslink">ui</a></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Defines how the class is displayed in user 
+        interfaces like grids and editing forms.&nbsp; If you will only use one 
+        set of UI definitions, you do not need to assign a &quot;name&quot; attribute.&nbsp; 
+        If you want to be able to choose between different sets of definitions 
+        at different times, assign different names and then use constructors in 
+        the IGridDataProvider implementations to choose the name of the 
+        definition to use.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">class</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">grid (1)<br>
+        form (1)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>name</b> =<i>default </i>(the name of the set of definitions)</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b>
+    <a name="grid" class="specclasslink">grid</a></b></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Defines how the class properties are displayed in 
+        a user interface grid, with one column element for each column 
+        to display.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">ui</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">column (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>sortColumn</b> (the column on which the grid is sorted, use
+        "PropertyName" or "PropertyName asc" or "PropertyName desc")</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="column" class="specclasslink">column</a></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Defines one column of data in a user interface 
+        grid.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">grid</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">parameter (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">
+        <b>property</b> (the name of the property being shown)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>heading</b> (the column heading as seen 
+        by the user, the property name will be used if this is not specified)<b><br>
+        type</b> =<i>DataGridViewTextBoxColumn </i>(the type of column to use, 
+        other standard types include DataGridViewCheckBoxColumn, DataGridViewComboBoxColumn, DataGridViewNumericUpDownColumn 
+        for decimals 
+        and DataGridViewDateTimeColumn, you can also specify custom types)<br>
+        <b>assembly</b> (of the control type, only specify this if you are using a custom 
+        type)<br>
+        <b>editable</b> =<i>true</i>/false (whether the property  can be edited 
+        directly on the grid, irrelevant if grid is read-only)<br>
+        <b>width</b> =<i>100</i> (in pixels)<br>
+        <b>alignment</b> =<i>left</i>/right/center/centre</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="form" class="specclasslink">form</a></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Defines how the class properties are displayed in 
+        a user interface editing form.&nbsp; Here you can list a set of tab, 
+        column or field elements, but not a combination of the three at the same 
+        level.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">ui</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">tab (1..*)<br>
+        columnLayout (1..*)<br>
+        field (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>title</b> (the window heading as it appears to 
+        the user)<br>
+        <b>width</b> =<i>300</i> (in pixels)<br>
+        <b>height</b> =<i>250</i> (in pixels)</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b>
+    <a name="tab" class="specclasslink">tab</a></b></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Creates a tab in the editing form window. Several 
+        tabs can be created, but if there is only one tab, then you don't need 
+        to include this element.&nbsp; Under this element you can have either 
+        columnLayout or field elements but not a combination of the two.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">form</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">columnLayout (1..*)<br>
+        field (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>name</b> (the name of the tab as it appears to the 
+        user)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">-</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass"><b>
+    <a name="columnLayout" class="specclasslink">columnLayout</a></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Holds a column of controls in an editing form.&nbsp; 
+        If you will only have one column, then you don't need to include this 
+        element.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">tab, form</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">field (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>width</b> (in pixels)</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="field" class="specclasslink">field</a></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Defines a control to edit a field/property in an editing form.&nbsp; 
+        "parameter" elements can be used to add further specifications for the 
+        control, and "trigger" elements can trigger a range of events (list all parameter elements
+        before triggers).</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">columnLayout, tab, form</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">parameter (1..*), trigger (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">
+        <b>property</b> (the property to edit)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>label</b> (the label to appear next to the 
+        control on the form, the property name will be used if this is not 
+        specified)<br>
+        <b>editable</b> =<i>true</i>/false<i><br>
+        </i><b>type</b> =<i>TextBox</i> (the class name of the type of 
+        control)<br>
+        <b>assembly</b> =<i>System.Windows.Forms</i> (the assembly of the 
+        control type)<br>
+        <b>mapperType</b> =<i>TextBoxMapper</i> (the class used to map the control 
+        to the business object property, Habanero provides mappers for the 
+        standard controls, you can leave this off for TextBox, ComboBox, 
+        CheckBox, DateTimePicker, ListView and NumericUpDown)<br>
+        <b>mapperAssembly</b> (specify this if you are using a custom mapper)</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b>
+    <a name="parameter" class="specclasslink">parameter</a></b></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Adds additional definitions for a control being 
+        displayed in a form or grid, such as the number of decimal places to show.
+        There is no error-checking on unsupported types, so this is a fully
+        flexible system that can be used for any purpose you wish - simply use the
+        GetParameterValue method on UIFormField or UIGridColumn to access the value.
+        Parameter names are case-sensitive.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">field, column</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>name</b> (the name of the type of setting - see below 
+        for examples)<br>
+        <b>value</b> (the values to apply to the above setting - see below)<br>
+        <br>
+        The following options are available for a form field element:<br>
+        <font size="2">
+        <table border="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#C0C0C0" width="100%" id="AutoNumber7" class="options">
+          <tr>
+            <td width="100" class="options">options</td>
+            <td class="options">pipe-separated list of choices in a ComboBox 
+            (specify the mapperType as &quot;ListComboBoxMapper&quot;)<br>
+            - eg. value=&quot;M|F&quot;</td>
+          </tr>
+          <tr>
+            <td class="options">numLines</td>
+            <td class="options">number of lines in a TextBox</td>
+          </tr>
+          <tr>
+            <td class="options">alignment</td>
+            <td class="options">text alignment, only applies to TextBox and NumericUpDown, options
+            are: left, right, center and centre</td>
+          </tr>
+          <tr>
+            <td class="options">isEmail</td>
+            <td class="options">if so, user can double-click on a valid email and open in default 
+            mail client, value=&quot;true&quot;</td>
+          </tr>
+          <tr>
+            <td class="options">colSpan</td>
+            <td class="options">the number of columns for the field control to 
+            span across</td>
+          </tr>
+          <tr>
+            <td class="options">rowSpan</td>
+            <td class="options">the number of rows for the field control to span 
+            across</td>
+          </tr>
+          <tr>
+            <td class="options">decimalPlaces</td>
+            <td class="options">the number of decimals to allow when 
+            NumericUpDownMoneyMapper is used</td>
+          </tr>
+          <tr>
+            <td class="options">rightClickEnabled</td>
+            <td class="options">whether a user can right-click on the ComboBox
+            to add additional options</td>
+          </tr>
+          <tr>
+            <td width="100" class="options">dateFormat</td>
+            <td class="options">the format of date displays, in the style of
+            DateTime.ToString() (eg. "dd MM yy"), including shortcuts, such as
+            "d", which uses the short date format of the culture of the user's
+            machine</td>
+          </tr>
+        </table>
+        </font>
+        <br/>
+        The following options are available for a grid column element:<br>
+        <font size="2">
+        <table border="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#C0C0C0" width="100%" id="AutoNumber7" class="options">
+          <tr>
+            <td width="100" class="options">dateFormat</td>
+            <td class="options">the format of date displays, in the style of
+            DateTime.ToString() (eg. "dd MM yy"), including shortcuts, such as
+            "d", which uses the short date format of the culture of the user's
+            machine</td>
+          </tr>
+        </table>
+        </font>
+        </td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">-</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+  
+  <tr>
+  	<td class="specclass">
+    <b>
+    <a name="trigger" class="specclasslink">trigger</a></b></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Carries out some action when a field control has its value changed.  For instance,
+        a trigger could cause a method to be executed or another field to be disabled.  A trigger usually has a
+        source control (triggeredBy) that fires the trigger when its value changes and a target control that is
+        affected by the change.  The trigger can be declared either on the source or the target and multiple
+        triggers are also permitted.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">field</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>action</b> (the type of action to carry out when the trigger fires)<br>
+        <br>
+        The following actions are available for a form field element:<br>
+        <font size="2">
+        <table border="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#C0C0C0" width="100%" id="AutoNumber7" class="options">
+          <tr>
+            <td width="100" class="options">assignLiteral</td>
+            <td class="options">Assign the given literal in "value" to the target property.  The value
+            will be converted to the type of the property.</td>
+          </tr>
+          <tr>
+            <td class="options">assignProperty</td>
+            <td class="options">Assign the value returned by a property to the target field.
+            The property must be listed in the class of the general BusinessObject being displayed
+            on the form.  List the name of the property in the "value" attribute.</td>
+          </tr>
+          <tr>
+            <td class="options">execute</td>
+            <td class="options">Execute a parameterless method found on the class of the general
+            BusinessObject being displayed on the form.  No target field required.</td>
+          </tr>
+          <tr>
+            <td class="options">filter</td>
+            <td class="options">As an example, if you have a Country ComboBox as your source
+            and a City ComboBox as your target, selecting the Country will filter City, showing
+            only those Cities with a CountryID matching the CountryID of the selected Country.
+            The target must use a BusinessObjectLookupList and must have a property with the
+            same name as the source's ID.</td>
+          </tr>
+          <tr>
+            <td class="options">filterReverse</td>
+            <td class="options">As with "filter", but with Country as the target - if you select
+            a City, the specific Country for that City will be selected.  Both source and 
+            target properties must use a BusinessObjectLookupList and the source must have a
+            property with the same name as the target's ID.</td>
+          </tr>
+          <tr>
+            <td class="options">enable</td>
+            <td class="options">Enables or disables the target property - the "value" attribute
+            must be "true" or "false" respectively.</td>
+          </tr>
+          <tr>
+            <td class="options">enableOnce</td>
+            <td class="options">As with "enable", but will only carry out the enabling or
+            disabling once, regardless of any further value changes in the source.</td>
+          </tr>
+        </table>
+        </font>
+        </td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">
+        	<b>triggeredBy</b> (the property name of the field that causes the trigger when its value
+        	changes, don't specify this if you are listing the trigger under the source field)<br>
+        	<b>target</b> (the property name of the field that is affected by a fired trigger, not
+        	required if you are listing the trigger under the target field or for actions like "execute")<br>
+        	<b>conditionValue</b> (a string literal value that the source control must have in order
+        	for the trigger to fire, the value will be converted to the type of the field's property,
+        	in the case of ComboBoxes this must be the string value as shown in the drop-down)<br>
+        	<b>value</b> (a field used by "action", see "action" above for further information)<br>
+        </td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+
+  </table>
+
+  
+  
+</body>
+</html>

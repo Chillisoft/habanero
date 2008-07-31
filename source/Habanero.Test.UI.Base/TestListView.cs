@@ -1,0 +1,110 @@
+//---------------------------------------------------------------------------------
+// Copyright (C) 2008 Chillisoft Solutions
+// 
+// This file is part of the Habanero framework.
+// 
+//     Habanero is a free framework: you can redistribute it and/or modify
+//     it under the terms of the GNU Lesser General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     The Habanero framework is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU Lesser General Public License for more details.
+// 
+//     You should have received a copy of the GNU Lesser General Public License
+//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
+//---------------------------------------------------------------------------------
+
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
+using Habanero.UI.Base;
+using Habanero.UI.WebGUI;
+using Habanero.UI.Win;
+using NUnit.Framework;
+
+namespace Habanero.Test.UI.Base
+{
+
+    public abstract class TestListView
+    {
+        protected abstract IControlFactory GetControlFactory();
+
+//        [TestFixture]
+//        public class TestListBoxWin : TestListView
+//        {
+//            protected override IControlFactory GetControlFactory()
+//            {
+//                return new ControlFactoryWin();
+//            }
+//        }
+
+        [TestFixture]
+        public class TestLisViewGiz : TestListView
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryGizmox();
+            }
+        }
+
+        [Test]
+        public void TestLisView()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Execute Test ----------------------
+            IControlChilli controlChilli = GetControlFactory().CreateListView();
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(controlChilli);
+            Assert.AreEqual(typeof(Habanero.UI.WebGUI.ListViewGiz), controlChilli.GetType());
+
+            //---------------Tear Down -------------------------   
+        }
+
+        //[Test]
+        //public void TestListView_SetCollection()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    ClassDef.ClassDefs.Clear();
+        //    IListView listView = GetControlFactory().CreateListView();
+        //    MyBO.LoadDefaultClassDefGizmox();
+        //    BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+        //    col.Add(new MyBO());
+        //    col.Add(new MyBO());
+        //    //---------------Execute Test ----------------------
+        //    listView.SetCollection(col);
+
+        //    //---------------Test Result -----------------------
+        //    Assert.AreEqual(2, listView.Items.Count);
+        //    //---------------Tear Down -------------------------   
+        //}
+
+        [Test]
+        public void TestLisView_SelectedItems()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IListView listView = GetControlFactory().CreateListView();
+            MyBO.LoadDefaultClassDefGizmox();
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            col.Add(new MyBO());
+            col.Add(new MyBO());
+            col.Add(new MyBO());
+            listView.SetCollection(col);
+            //---------------Execute Test ----------------------
+
+            listView.Items[0].Selected = true;
+            listView.Items[1].Selected = true;
+
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, listView.SelectedItems.Count);
+            //---------------Tear Down -------------------------   
+        }
+
+
+    }
+}
+

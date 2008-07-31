@@ -1,0 +1,84 @@
+﻿<project schemaVersion="1.6.0.2">
+    <assemblies>
+        <assembly assemblyPath=".\Build\Habanero.Base.dll" xmlCommentsPath=".\Build\Habanero.Base.xml" commentsOnly="False" />
+        <assembly assemblyPath=".\Build\Habanero.Bo.dll" xmlCommentsPath=".\Build\Habanero.Bo.xml" commentsOnly="False" />
+        <assembly assemblyPath=".\Build\Habanero.Db.dll" xmlCommentsPath=".\Build\Habanero.Db.xml" commentsOnly="False" />
+        <assembly assemblyPath=".\Build\Habanero.dll" xmlCommentsPath=".\Build\Habanero.xml" commentsOnly="False" />
+        <assembly assemblyPath=".\Build\Habanero.UI.dll" xmlCommentsPath=".\Build\Habanero.UI.xml" commentsOnly="False" />
+        <assembly assemblyPath=".\Build\Habanero.Util.dll" xmlCommentsPath=".\Build\Habanero.Util.xml" commentsOnly="False" />
+    </assemblies>
+    <namespaceSummaries>
+        <namespaceSummaryItem name="" isDocumented="False" />
+        <namespaceSummaryItem name="Blowfish_NET" isDocumented="False" />
+        <namespaceSummaryItem name="Habanero" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.Base" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.Base.Exceptions" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.Bo" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.BO" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.Bo.ClassDefinition" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.BO.ClassDefinition" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.BO.Comparer" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.Bo.CriteriaManager" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.BO.CriteriaManager" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.Bo.Loaders" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.BO.Loaders" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.Bo.SqlGeneration" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.BO.SqlGeneration" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.Db" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.DB" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.Ui.Base" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.UI.Base" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.Ui.Forms" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.UI.Forms" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.Ui.Grid" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.UI.Grid" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.Ui.Util" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.UI.Util" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.Util" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.Util.Comparer" isDocumented="True" />
+        <namespaceSummaryItem name="Habanero.Util.File" isDocumented="True" />
+    </namespaceSummaries>
+    <additionalContent>
+        <contentItem sourcePath=".\Build\Class Definitions\Class Definitions.htm" destPath="" excludeItems="False" />
+    </additionalContent>
+    <dependencies>
+        <dependencyItem depPath=".\Build\*.*" />
+    </dependencies>
+    <ProjectSummary>----</ProjectSummary>
+    <MissingTags>None</MissingTags>
+    <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
+    <HtmlHelp1xCompilerPath path="" />
+    <HtmlHelp2xCompilerPath path="" />
+    <OutputPath>.\Help\</OutputPath>
+    <SandcastlePath path="" />
+    <WorkingPath path="" />
+    <CleanIntermediates>True</CleanIntermediates>
+    <KeepLogFile>True</KeepLogFile>
+    <HelpFileFormat>HtmlHelp1x</HelpFileFormat>
+    <PurgeDuplicateTopics>True</PurgeDuplicateTopics>
+    <CppCommentsFixup>False</CppCommentsFixup>
+    <FrameworkVersion>2.0.50727</FrameworkVersion>
+    <BinaryTOC>True</BinaryTOC>
+    <IncludeFavorites>True</IncludeFavorites>
+    <Preliminary>False</Preliminary>
+    <RootNamespaceContainer>False</RootNamespaceContainer>
+    <RootNamespaceTitle />
+    <HelpTitle>Habanero v1.4.1</HelpTitle>
+    <HtmlHelpName>HabaneroDocumentation</HtmlHelpName>
+    <Language>en-ZA</Language>
+    <CopyrightHref>http://www.chillisoft.co.za/habanero/privacy_policy</CopyrightHref>
+    <CopyrightText>Copyright 2008. Chillisoft Solutions. All rights reserved.</CopyrightText>
+    <FeedbackEMailAddress>habanero@chillisoft.co.za</FeedbackEMailAddress>
+    <HeaderText />
+    <FooterText />
+    <ProjectLinkType>Local</ProjectLinkType>
+    <SdkLinkType>None</SdkLinkType>
+    <SdkLinkTarget>Blank</SdkLinkTarget>
+    <PresentationStyle>hana</PresentationStyle>
+    <NamingMethod>MemberName</NamingMethod>
+    <SyntaxFilters>Standard</SyntaxFilters>
+    <ShowFeedbackControl>False</ShowFeedbackControl>
+    <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <ContentSiteMap path="" />
+    <TopicFileTransform path="" />
+</project>

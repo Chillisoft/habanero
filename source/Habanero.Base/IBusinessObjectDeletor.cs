@@ -1,0 +1,35 @@
+//---------------------------------------------------------------------------------
+// Copyright (C) 2008 Chillisoft Solutions
+// 
+// This file is part of the Habanero framework.
+// 
+//     Habanero is a free framework: you can redistribute it and/or modify
+//     it under the terms of the GNU Lesser General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     The Habanero framework is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU Lesser General Public License for more details.
+// 
+//     You should have received a copy of the GNU Lesser General Public License
+//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
+//---------------------------------------------------------------------------------
+
+namespace Habanero.Base
+{
+    ///<summary>
+    /// This provides an interface that is used by standard habanero control such as read only grid for deleting business objects.
+    /// By default all these controls will use the DefaultBODeletor but a developer can set up any other custom deletor 
+    /// as required.
+    ///</summary>
+    public interface IBusinessObjectDeletor
+    {
+        ///<summary>
+        /// Deletes the business object.
+        ///</summary>
+        ///<param name="businessObject">The business object to delete</param>
+        void DeleteBusinessObject(IBusinessObject businessObject);
+    }
+}

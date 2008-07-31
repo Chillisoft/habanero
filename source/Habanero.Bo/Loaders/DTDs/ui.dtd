@@ -1,0 +1,6 @@
+#include grid.dtd
+#include form.dtd
+<!ELEMENT ui (grid?, form?)>
+<!ATTLIST ui
+	name NMTOKEN "default"
+>

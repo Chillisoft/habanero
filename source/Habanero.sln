@@ -1,0 +1,163 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.BO", "Habanero.Bo\Habanero.BO.csproj", "{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.DB", "Habanero.Db\Habanero.DB.csproj", "{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Base", "Habanero.Base\Habanero.Base.csproj", "{D04BB138-C144-4406-9A41-17192E7D44BF}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Util", "Habanero.Util\Habanero.Util.csproj", "{D3B50C81-590B-429F-9761-3B676D607DFF}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.BO", "Habanero.Test.Bo\Habanero.Test.BO.csproj", "{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.DB", "Habanero.Test.Db\Habanero.Test.DB.csproj", "{1484CDE2-0A30-466F-9FEA-E79CE2751489}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.General", "Habanero.Test.General\Habanero.Test.General.csproj", "{F30A2151-F894-44E4-8F71-492B8C245745}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero", "Habanero\Habanero.csproj", "{9B32C6E9-037A-4610-85CB-95C9A050CF7C}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.UI.Base", "Habanero.UI.Base\Habanero.UI.Base.csproj", "{18828910-F528-48F5-B56D-7C1658D0987A}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.UI.Base", "Habanero.Test.UI.Base\Habanero.Test.UI.Base.csproj", "{12A701DA-DAF5-4709-942E-17F1EFA381D8}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.UI.Win", "Habanero.UI.Win\Habanero.UI.Win.csproj", "{E761E05B-B9CC-4EAC-B940-C19E42D3819C}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.UI.WebGUI", "Habanero.UI.WebGUI\Habanero.UI.WebGUI.csproj", "{04E4FF45-6C20-46EB-A9AD-2B04895F6218}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.UI", "Habanero.UI\Habanero.UI.csproj", "{021389A1-76C4-4DD0-AD09-A13EB5C237E7}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.UI", "Habanero.Test.UI\Habanero.Test.UI.csproj", "{979540B1-0154-4870-8BD7-B70AA61492D7}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test", "Habanero.Test\Habanero.Test.csproj", "{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D04BB138-C144-4406-9A41-17192E7D44BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D04BB138-C144-4406-9A41-17192E7D44BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D04BB138-C144-4406-9A41-17192E7D44BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D04BB138-C144-4406-9A41-17192E7D44BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3B50C81-590B-429F-9761-3B676D607DFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3B50C81-590B-429F-9761-3B676D607DFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3B50C81-590B-429F-9761-3B676D607DFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3B50C81-590B-429F-9761-3B676D607DFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1484CDE2-0A30-466F-9FEA-E79CE2751489}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1484CDE2-0A30-466F-9FEA-E79CE2751489}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1484CDE2-0A30-466F-9FEA-E79CE2751489}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1484CDE2-0A30-466F-9FEA-E79CE2751489}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F30A2151-F894-44E4-8F71-492B8C245745}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F30A2151-F894-44E4-8F71-492B8C245745}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F30A2151-F894-44E4-8F71-492B8C245745}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F30A2151-F894-44E4-8F71-492B8C245745}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B32C6E9-037A-4610-85CB-95C9A050CF7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B32C6E9-037A-4610-85CB-95C9A050CF7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B32C6E9-037A-4610-85CB-95C9A050CF7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B32C6E9-037A-4610-85CB-95C9A050CF7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18828910-F528-48F5-B56D-7C1658D0987A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18828910-F528-48F5-B56D-7C1658D0987A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18828910-F528-48F5-B56D-7C1658D0987A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18828910-F528-48F5-B56D-7C1658D0987A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12A701DA-DAF5-4709-942E-17F1EFA381D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12A701DA-DAF5-4709-942E-17F1EFA381D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12A701DA-DAF5-4709-942E-17F1EFA381D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12A701DA-DAF5-4709-942E-17F1EFA381D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E761E05B-B9CC-4EAC-B940-C19E42D3819C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E761E05B-B9CC-4EAC-B940-C19E42D3819C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E761E05B-B9CC-4EAC-B940-C19E42D3819C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E761E05B-B9CC-4EAC-B940-C19E42D3819C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04E4FF45-6C20-46EB-A9AD-2B04895F6218}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04E4FF45-6C20-46EB-A9AD-2B04895F6218}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04E4FF45-6C20-46EB-A9AD-2B04895F6218}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04E4FF45-6C20-46EB-A9AD-2B04895F6218}.Release|Any CPU.Build.0 = Release|Any CPU
+		{021389A1-76C4-4DD0-AD09-A13EB5C237E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{021389A1-76C4-4DD0-AD09-A13EB5C237E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{021389A1-76C4-4DD0-AD09-A13EB5C237E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{021389A1-76C4-4DD0-AD09-A13EB5C237E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{979540B1-0154-4870-8BD7-B70AA61492D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{979540B1-0154-4870-8BD7-B70AA61492D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{979540B1-0154-4870-8BD7-B70AA61492D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{979540B1-0154-4870-8BD7-B70AA61492D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
