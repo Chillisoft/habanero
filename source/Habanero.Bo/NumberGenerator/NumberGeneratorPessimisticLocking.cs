@@ -60,8 +60,13 @@ namespace Habanero.BO
 
         private static BOSequenceNumberLocking LoadSequenceNumber(string numberType)
         {
+//            BOSequenceNumberLocking sequenceBOSequenceNumber =
+//                BOLoader.Instance.GetBusinessObject<BOSequenceNumberLocking>(string.Format("NumberType = '{0}'", numberType));
+            string searchCriteria = string.Format("NumberType = '{0}'", numberType);
+            Criteria criteria = CriteriaParser.CreateCriteria(searchCriteria);
             BOSequenceNumberLocking sequenceBOSequenceNumber =
-                BOLoader.Instance.GetBusinessObject<BOSequenceNumberLocking>(string.Format("NumberType = '{0}'", numberType));
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOSequenceNumberLocking>(criteria);
+            
             if (sequenceBOSequenceNumber == null)
             {
                 sequenceBOSequenceNumber = CreateSequenceForType(numberType);

@@ -244,7 +244,7 @@ namespace Habanero.BO
         public IBusinessObjectCollection GetBusinessObjectCollection()
         {
             ClassDef classDef = LookupBoClassDef;
-            return BOLoader.Instance.GetBusinessObjectCol(classDef, _criteria ?? "", OrderCriteria.FromString(_sort));
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, _criteria ?? "", _sort);
         }
 
         ///<summary>

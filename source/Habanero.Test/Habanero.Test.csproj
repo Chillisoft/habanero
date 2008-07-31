@@ -96,7 +96,6 @@
     <Compile Include="Util\TestByteString.cs" />
     <Compile Include="Util\TestDelayedMethodCall.cs" />
     <Compile Include="Util\TestEmailSender.cs" />
-    <Compile Include="Util\TestHabaneroStringBuilder.cs" />
     <Compile Include="Util\TestImageThumbnailCreator.cs" />
     <Compile Include="Util\TestJpgMetaData.cs" />
     <Compile Include="Util\TestLongText.cs" />

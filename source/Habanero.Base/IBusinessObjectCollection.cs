@@ -260,15 +260,15 @@ namespace Habanero.Base
         /// <param name="orderByClause">The order-by clause</param>
         void LoadAll(string orderByClause);
 
-        /// <summary>
-        /// Loads business objects that match the search criteria provided
-        /// and an extra criteria literal,
-        /// loaded in the order specified
-        /// </summary>
-        /// <param name="searchCriteria">The search criteria</param>
-        /// <param name="orderByClause">The order-by clause</param>
-        /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
-        void Load(string searchCriteria, string orderByClause, string extraSearchCriteriaLiteral);
+//        /// <summary>
+//        /// Loads business objects that match the search criteria provided
+//        /// and an extra criteria literal,
+//        /// loaded in the order specified
+//        /// </summary>
+//        /// <param name="searchCriteria">The search criteria</param>
+//        /// <param name="orderByClause">The order-by clause</param>
+//        /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
+//        void Load(string searchCriteria, string orderByClause, string extraSearchCriteriaLiteral);
 
         ///// <summary>
         ///// Loads business objects that match the search criteria provided in
@@ -300,18 +300,17 @@ namespace Habanero.Base
         ///// <param name="limit">The limit</param>
         //void LoadWithLimit(IExpression searchExpression, string orderByClause, int limit);
 
-        /// <summary>
-        /// Loads business objects that match the search criteria provided
-        /// and an extra criteria literal, 
-        /// loaded in the order specified, 
-        /// and limiting the number of objects loaded
-        /// </summary>
-        /// <param name="searchCriteria">The search expression</param>
-        /// <param name="orderByClause">The order-by clause</param>
-        /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
-        /// <param name="limit">The limit</param>
-        void LoadWithLimit(string searchCriteria, string orderByClause, string extraSearchCriteriaLiteral,
-                                  int limit);
+//        /// <summary>
+//        /// Loads business objects that match the search criteria provided
+//        /// and an extra criteria literal, 
+//        /// loaded in the order specified, 
+//        /// and limiting the number of objects loaded
+//        /// </summary>
+//        /// <param name="searchCriteria">The search expression</param>
+//        /// <param name="orderByClause">The order-by clause</param>
+//        /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
+//        /// <param name="limit">The limit</param>
+//        void LoadWithLimit(string searchCriteria, string orderByClause, int limit);
 
         ///// <summary>
         ///// Loads business objects that match the search criteria provided in

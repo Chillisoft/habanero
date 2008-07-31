@@ -88,7 +88,7 @@ namespace Habanero.UI.Forms
         private void InitialiseFactory(IBusinessObject bo)
         {
             _currentBusinessObject = (BusinessObject) bo;
-            _emailTextBoxDoubleClickedHandler = new EventHandler(EmailTextBoxDoubleClickedHandler);
+            _emailTextBoxDoubleClickedHandler = EmailTextBoxDoubleClickedHandler;
         }
 
         /// <summary>
@@ -572,9 +572,9 @@ namespace Habanero.UI.Forms
         {
             Trigger.CheckTriggerValid(trigger);
 
-            string sourceProperty = null;
+            string sourceProperty;
             string targetProperty = null;
-            Control sourceControl = null;
+            Control sourceControl;
             Control targetControl = null;
 
             if (trigger.TriggeredBy == null)
@@ -810,9 +810,10 @@ namespace Habanero.UI.Forms
                                     else targetCriteria = targetProperty + " = '" + targetValue + "'";
 
                                     Type targetType = TypeLoader.LoadType(targetLookup.AssemblyName, targetLookup.ClassName);
-                                    IBusinessObjectCollection targetCol =
-                                        BOLoader.Instance.GetBusinessObjectCol(targetType, targetCriteria, null);
-
+                                    ClassDef classDef = ClassDef.ClassDefs[targetType];
+//                                    IBusinessObjectCollection targetCol =
+//                                        BOLoader.Instance.GetBusinessObjectCol(targetType, targetCriteria, null);
+                                    IBusinessObjectCollection targetCol = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, targetCriteria, null);
                                     if (targetCol.Count > 0)
                                     {
                                         targetComboBox.SelectedItem = targetCol[0].ToString();

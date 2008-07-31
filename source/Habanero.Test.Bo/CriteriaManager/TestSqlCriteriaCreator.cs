@@ -23,7 +23,7 @@ using Habanero.DB;
 using Habanero.Test.BO.SqlGeneration;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.CriteriaManager
+namespace Habanero.Test.BO
 {
 
     [TestFixture]

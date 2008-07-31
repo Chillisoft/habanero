@@ -125,6 +125,14 @@ namespace Habanero.BO
         /// <summary>
         /// Loads a BusinessObjectCollection using the criteria given. 
         /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <returns>The loaded collection</returns>
+        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteria) where T : class, IBusinessObject, new();
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the criteria given. 
+        /// </summary>
         /// <param name="classDef">The ClassDef for the collection to load</param>
         /// <param name="criteria">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
@@ -138,6 +146,15 @@ namespace Habanero.BO
         /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
         BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : class, IBusinessObject, new();
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
+        /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <returns>The loaded collection</returns>
+        /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
+        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteria, string orderCriteria) where T : class, IBusinessObject, new();
 
         /// <summary>
         /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
@@ -169,6 +186,25 @@ namespace Habanero.BO
         /// <param name="selectQuery">The select query to use to load from the data source</param>
         /// <returns>The loaded collection</returns>
         IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, ISelectQuery selectQuery);
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the searchCriteria an given. It's important to make sure that the ClassDef given
+        /// has the properties defined in the fields of the select searchCriteria and orderCriteria.  
+        /// </summary>
+        /// <param name="classDef">The ClassDef for the collection to load</param>
+        /// <param name="searchCriteria">The select query to use to load from the data source</param>
+        /// <param name="orderCriteria">The order that the collections must be loaded in e.g. Surname, FirstName</param>
+        /// <returns>The loaded collection</returns>
+        IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria, string orderCriteria);
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the searchCriteria an given. It's important to make sure that the ClassDef given
+        /// has the properties defined in the fields of the select searchCriteria and orderCriteria.  
+        /// </summary>
+        /// <param name="classDef">The ClassDef for the collection to load</param>
+        /// <param name="searchCriteria">The select query to use to load from the data source</param>
+        /// <returns>The loaded collection</returns>
+        IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria);
 
         /// <summary>
         /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order

@@ -1,12 +1,11 @@
-using System;
-using Habanero.Base;
-using Habanero.BO.CriteriaManager;
-
-namespace Habanero.Test.BO
+namespace Habanero.Base
 {
+    ///<summary>
+    /// Parses a criteria string and creates a criteria object.
+    ///</summary>
     public static class CriteriaParser
     {
-        private static readonly string[] _operators = { "=", ">", "<" };
+//        private static readonly string[] _operators = { "=", ">", "<" };
 
         ///<summary>
         /// Creates a criteria object by parsing the criteriaString into a criteria
@@ -15,6 +14,7 @@ namespace Habanero.Test.BO
         ///<param name="criteriaString">The Criteria string that is being parsed.</param>
         public static Criteria CreateCriteria(string criteriaString)
         {
+            if (string.IsNullOrEmpty(criteriaString)) return null;
             CriteriaExpression criteriaExpression = new CriteriaExpression(criteriaString);
             Criteria criteria = GetCriteria(criteriaExpression);
             return criteria;
@@ -23,7 +23,7 @@ namespace Habanero.Test.BO
             //string propName = parts[0];
             //string operatorString = criteriaString.Substring(propName.Length, 1);
             //propName = propName.Trim();
-            //Criteria.Op op = CreateOperator(operatorString);
+            //Criteria.Op op = CreateComparisonOperator(operatorString);
             //object value = parts[1].Trim();
             //Criteria criteria = new Criteria(propName, op, value);
             //return criteria;
@@ -38,8 +38,8 @@ namespace Habanero.Test.BO
             if (criteriaExpression.Left.IsLeaf())
             {
                 criteria = GetCriteriaLeaf(criteriaExpression);
-                
-            } else
+            }
+            else
             {
                 Criteria leftCriteria = GetCriteria(criteriaExpression.Left);
                 Criteria rightCriteria = GetCriteria(criteriaExpression.Right);
@@ -54,17 +54,22 @@ namespace Habanero.Test.BO
             string propName = criteriaExpression.Left.Expression;
             string operatorString = criteriaExpression.Expression;
             object value = criteriaExpression.Right.Expression;
-            Criteria.Op op = CreateOperator(operatorString);
+            Criteria.Op op = CreateComparisonOperator(operatorString);
             return new Criteria(propName, op, value);
         }
 
-        public static Criteria.Op CreateOperator(string operatorString)
+        ///<summary>
+        /// Converts string comparison operators into <see cref="Criteria.Op"></see> Enums.
+        ///</summary>
+        ///<param name="operatorString">string operator</param>
+        ///<returns></returns>
+        public static Criteria.Op CreateComparisonOperator(string operatorString)
         {
             switch (operatorString)
             {
                 case "=":
                     return Criteria.Op.Equals;
-                case ">": 
+                case ">":
                     return Criteria.Op.GreaterThan;
                 case "<":
                     return Criteria.Op.LessThan;
@@ -73,6 +78,11 @@ namespace Habanero.Test.BO
             }
         }
 
+        ///<summary>
+        /// Converts Logic operators strings into logical operator enumerated type <see cref="Criteria.LogicalOp"/>
+        ///</summary>
+        ///<param name="operatorString"></param>
+        ///<returns></returns>
         public static Criteria.LogicalOp CreateLogicalOperator(string operatorString)
         {
             switch (operatorString.ToUpper().Trim())

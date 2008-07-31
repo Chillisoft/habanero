@@ -20,7 +20,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Security.Permissions;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -46,11 +45,11 @@ namespace Habanero.BO
         where TBusinessObject : class, IBusinessObject, new()
     {
         private readonly ClassDef _boClassDef;
-        private IExpression _criteriaExpression;
-        private string _orderByClause;
+//        private Criteria _criteriaExpression;
+//        private string _orderByClause;
         private readonly IBusinessObject _sampleBo;
-        private string _extraSearchCriteriaLiteral = "";
-        private int _limit = -1;
+//        private string _extraSearchCriteriaLiteral = "";
+//        private int _limit = -1;
         private readonly Hashtable _lookupTable;
         private readonly List<TBusinessObject> _createdBusinessObjects = new List<TBusinessObject>();
         private ISelectQuery _selectQuery;
@@ -600,7 +599,7 @@ namespace Habanero.BO
         /// <param name="orderByClause">The order-by clause</param>
         public void Load(string searchCriteria, string orderByClause)
         {
-            Load(searchCriteria, orderByClause, "");
+            LoadWithLimit(searchCriteria, orderByClause, -1);
         }
 
         /// <summary>
@@ -609,66 +608,51 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="searchExpression">The search expression</param>
         /// <param name="orderByClause">The order-by clause</param>
-        public void Load(IExpression searchExpression, string orderByClause)
+        public void Load(Criteria searchExpression, string orderByClause)
         {
-            Load(searchExpression, orderByClause, "");
+            LoadWithLimit(searchExpression, orderByClause, -1);
         }
 
 
-        /// <summary>
-        /// Loads business objects that match the search criteria provided
-        /// and an extra criteria literal,
-        /// loaded in the order specified
-        /// </summary>
-        /// <param name="searchCriteria">The search criteria</param>
-        /// <param name="orderByClause">The order-by clause</param>
-        /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
-        /// TODO ERIC - what is the last one?
-        public void Load(string searchCriteria, string orderByClause, string extraSearchCriteriaLiteral)
-        {
-            LoadWithLimit(searchCriteria, orderByClause, extraSearchCriteriaLiteral, -1);
-        }
+        ///// <summary>
+        ///// Loads business objects that match the search criteria provided
+        ///// and an extra criteria literal,
+        ///// loaded in the order specified
+        ///// </summary>
+        ///// <param name="searchCriteria">The search criteria</param>
+        ///// <param name="orderByClause">The order-by clause</param>
+        ///// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
+        //public void Load(string searchCriteria, string orderByClause, string extraSearchCriteriaLiteral)
+        //{
+        //    LoadWithLimit(searchCriteria, orderByClause, extraSearchCriteriaLiteral, -1);
+        //}
 
-        /// <summary>
-        /// Loads business objects that match the search criteria provided in
-        /// an expression and an extra criteria literal, 
-        /// loaded in the order specified
-        /// </summary>
-        /// <param name="searchExpression">The search expression</param>
-        /// <param name="orderByClause">The order-by clause</param>
-        /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
-        /// TODO ERIC - what is the last one?
-        public void Load(IExpression searchExpression, string orderByClause, string extraSearchCriteriaLiteral)
-        {
-            LoadWithLimit(searchExpression, orderByClause, extraSearchCriteriaLiteral, -1);
-        }
+        ///// <summary>
+        ///// Loads business objects that match the search criteria provided in
+        ///// an expression and an extra criteria literal, 
+        ///// loaded in the order specified
+        ///// </summary>
+        ///// <param name="searchExpression">The search expression</param>
+        ///// <param name="orderByClause">The order-by clause</param>
+        ///// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
+        ///// TODO ERIC - what is the last one?
+        //public void Load(IExpression searchExpression, string orderByClause, string extraSearchCriteriaLiteral)
+        //{
+        //    LoadWithLimit(searchExpression, orderByClause, extraSearchCriteriaLiteral, -1);
+        //}
 
-        /// <summary>
-        /// Loads business objects that match the search criteria provided, 
-        /// loaded in the order specified, 
-        /// and limiting the number of objects loaded
-        /// </summary>
-        /// <param name="searchCriteria">The search criteria</param>
-        /// <param name="orderByClause">The order-by clause</param>
-        /// <param name="limit">The limit</param>
-        public void LoadWithLimit(string searchCriteria, string orderByClause, int limit)
-        {
-            LoadWithLimit(searchCriteria, orderByClause, "", limit);
-        }
-
-        /// <summary>
-        /// Loads business objects that match the search criteria provided in
-        /// an expression, loaded in the order specified, 
-        /// and limiting the number of objects loaded
-        /// </summary>
-        /// <param name="searchExpression">The search expression</param>
-        /// <param name="orderByClause">The order-by clause</param>
-        /// <param name="limit">The limit</param>
-        public void LoadWithLimit(IExpression searchExpression, string orderByClause, int limit)
-        {
-            LoadWithLimit(searchExpression, orderByClause, "", limit);
-        }
-
+//        /// <summary>
+//        /// Loads business objects that match the search criteria provided, 
+//        /// loaded in the order specified, 
+//        /// and limiting the number of objects loaded
+//        /// </summary>
+//        /// <param name="searchCriteria">The search criteria</param>
+//        /// <param name="orderByClause">The order-by clause</param>
+//        /// <param name="limit">The limit</param>
+//        public void LoadWithLimit(string searchCriteria, string orderByClause, int limit)
+//        {
+//            LoadWithLimit(searchCriteria, orderByClause, limit);
+//        }
         /// <summary>
         /// Loads business objects that match the search criteria provided
         /// and an extra criteria literal, 
@@ -677,18 +661,30 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="searchCriteria">The search expression</param>
         /// <param name="orderByClause">The order-by clause</param>
-        /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
         /// <param name="limit">The limit</param>
-        public void LoadWithLimit(string searchCriteria, string orderByClause, string extraSearchCriteriaLiteral,
-                                  int limit)
+        public void LoadWithLimit(string searchCriteria, string orderByClause, int limit)
         {
-            IExpression criteriaExpression = null;
+            Criteria criteriaExpression = null;
             if (searchCriteria.Length > 0)
             {
-                criteriaExpression = Expression.CreateExpression(searchCriteria);
+                criteriaExpression = CriteriaParser.CreateCriteria(searchCriteria);
             }
-            LoadWithLimit(criteriaExpression, orderByClause, extraSearchCriteriaLiteral, limit);
+            LoadWithLimit(criteriaExpression, orderByClause, limit);
         }
+//        /// <summary>
+//        /// Loads business objects that match the search criteria provided in
+//        /// an expression, loaded in the order specified, 
+//        /// and limiting the number of objects loaded
+//        /// </summary>
+//        /// <param name="searchExpression">The search expression</param>
+//        /// <param name="orderByClause">The order-by clause</param>
+//        /// <param name="limit">The limit</param>
+//        public void LoadWithLimit(IExpression searchExpression, string orderByClause, int limit)
+//        {
+//            LoadWithLimit(searchExpression, orderByClause, limit);
+//        }
+
+
 
         /// <summary>
         /// Loads business objects that match the search criteria provided in
@@ -698,15 +694,13 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="searchExpression">The search expression</param>
         /// <param name="orderByClause">The order-by clause</param>
-        /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
         /// <param name="limit">The limit</param>
-        public void LoadWithLimit(IExpression searchExpression, string orderByClause, string extraSearchCriteriaLiteral,
-                                  int limit)
+        public void LoadWithLimit(Criteria searchExpression, string orderByClause, int limit)
         {
-            _criteriaExpression = searchExpression;
-            _orderByClause = orderByClause;
-            _extraSearchCriteriaLiteral = extraSearchCriteriaLiteral;
-            _limit = limit;
+            this.SelectQuery.Criteria = searchExpression;
+
+            this.SelectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(this.ClassDef, orderByClause);
+            this.SelectQuery.Limit = limit;
             Refresh();
         }
 
@@ -839,10 +833,21 @@ namespace Habanero.BO
         }
 
 
+        ///<summary>
+        /// The select query that is used to load this business object collection.
+        ///</summary>
         public ISelectQuery SelectQuery
         {
             get { return _selectQuery; }
-            set { _selectQuery = value; }
+            set
+            {
+                if (value == null)
+                {
+                    throw new HabaneroDeveloperException("A collections select query cannot be set to null", 
+                            "A collections select query cannot be set to null");
+                }
+                _selectQuery = value;
+            }
         }
 
         /// <summary>

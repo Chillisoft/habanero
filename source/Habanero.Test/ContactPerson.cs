@@ -292,7 +292,7 @@ namespace Habanero.Test
         public static BusinessObjectCollection<ContactPerson> LoadBusinessObjCol()
         {
             GetClassDef();
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection < ContactPerson>(null, null);
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection < ContactPerson>("");
 //            return LoadBusinessObjCol("", "");
         }
 

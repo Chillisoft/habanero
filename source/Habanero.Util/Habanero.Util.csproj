@@ -113,9 +113,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="File\TextFileLoader.cs" />
-    <Compile Include="HabaneroStringBuilder.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="File\CSVFileReader.cs">
       <SubType>Code</SubType>
     </Compile>

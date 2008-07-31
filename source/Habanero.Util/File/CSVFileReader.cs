@@ -19,6 +19,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.Util.File

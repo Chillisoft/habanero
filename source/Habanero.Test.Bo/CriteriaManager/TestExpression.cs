@@ -23,7 +23,7 @@ using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.CriteriaManager
+namespace Habanero.Test.BO
 {
     /// <summary>
     /// Summary description for TestExpression.

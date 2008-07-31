@@ -17,7 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System.Data;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -104,16 +103,16 @@ namespace Habanero.Test.General
             Assert.AreEqual("INSERT INTO `Shape_table` (`ShapeID_field`, `ShapeName`) VALUES (?Param0, ?Param1)",
                             itsInsertSql[0].Statement.ToString(),
                             "Class Table inheritance: First insert Sql statement is incorrect.");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[0].Parameters[0]).Value,
+            Assert.AreEqual(strID, itsInsertSql[0].Parameters[0].Value,
                             "Parameter ShapeID has incorrect value in first insert statement using class table inheritance");
-            Assert.AreEqual("MyShape", ((IDbDataParameter) itsInsertSql[0].Parameters[1]).Value,
+            Assert.AreEqual("MyShape", itsInsertSql[0].Parameters[1].Value,
                             "Parameter ShapeName has incorrect value in first insert statement using class table inheritance");
             Assert.AreEqual("INSERT INTO `circle_table` (`Radius`, `ShapeID_field`) VALUES (?Param0, ?Param1)",
                             itsInsertSql[1].Statement.ToString(),
                             "Class Table inheritance: Second Sql statement is incorrect.");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[1].Parameters[1]).Value,
+            Assert.AreEqual(strID, itsInsertSql[1].Parameters[1].Value,
                             "Parameter CircleID has incorrect value in second insert statement using class table inheritance.");
-            Assert.AreEqual(10, ((IDbDataParameter) itsInsertSql[1].Parameters[0]).Value,
+            Assert.AreEqual(10, itsInsertSql[1].Parameters[0].Value,
                             "Parameter Radius has incorrect value in second insert statement using class table inheritance.");
         }
 
@@ -138,16 +137,16 @@ namespace Habanero.Test.General
                             "Class table inheritance: first update sql statement is incorrect.");
             //Assert.AreEqual(strID, ((IDbDataParameter) _updateSql[0].Parameters[0]).Value,
             //                "Parameter ShapeID has incorrect value in first update statement using class table inheritance");
-            Assert.AreEqual("MyShape", ((IDbDataParameter) itsUpdateSql[0].Parameters[0]).Value,
+            Assert.AreEqual("MyShape", itsUpdateSql[0].Parameters[0].Value,
                             "Parameter ShapeName has incorrect value in first update statement using class table inheritance");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsUpdateSql[0].Parameters[1]).Value,
+            Assert.AreEqual(strID, itsUpdateSql[0].Parameters[1].Value,
                             "Parameter ShapeID in where clause has incorrect value in first update statement using class table inheritance");
             Assert.AreEqual("UPDATE `circle_table` SET `Radius` = ?Param0 WHERE `ShapeID_field` = ?Param1",
                             itsUpdateSql[1].Statement.ToString(),
                             "Class table inheritance: second update sql statement is incorrect.");
-            Assert.AreEqual(10, ((IDbDataParameter) itsUpdateSql[1].Parameters[0]).Value,
+            Assert.AreEqual(10, itsUpdateSql[1].Parameters[0].Value,
                             "Parameter Radius has incorrect value in second update statement using class table inheritance");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsUpdateSql[1].Parameters[1]).Value,
+            Assert.AreEqual(strID, itsUpdateSql[1].Parameters[1].Value,
                             "Parameter ShapeID has incorrect value in second update statement using class table inheritance");
         }
 
@@ -158,11 +157,11 @@ namespace Habanero.Test.General
                             "There should be 2 delete sql statements when using class table inheritance.");
             Assert.AreEqual("DELETE FROM `circle_table` WHERE `ShapeID_field` = ?Param0", itsDeleteSql[0].Statement.ToString(),
                             "Class table inheritance: first delete sql statement is incorrect.");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsDeleteSql[0].Parameters[0]).Value,
+            Assert.AreEqual(strID, itsDeleteSql[0].Parameters[0].Value,
                             "Parameter ShapeID has incorrect value in first delete statement in where clause.");
             Assert.AreEqual("DELETE FROM `Shape_table` WHERE `ShapeID_field` = ?Param0", itsDeleteSql[1].Statement.ToString(),
                             "Class table inheritance: second delete sql statement is incorrect.");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsDeleteSql[1].Parameters[0]).Value,
+            Assert.AreEqual(strID, itsDeleteSql[1].Parameters[0].Value,
                             "Parameter ShapeID has incorrect value in second delete statement in where clause.");
         }
 
@@ -172,7 +171,7 @@ namespace Habanero.Test.General
             Assert.AreEqual(
                 "SELECT `circle_table`.`Radius`, `Shape_table`.`ShapeID_field`, `Shape_table`.`ShapeName` FROM `circle_table`, `Shape_table` WHERE `Shape_table`.`ShapeID_field` = `circle_table`.`ShapeID_field` AND `ShapeID_field` = ?Param0",
                 selectSql.Statement.ToString(), "Select sql is incorrect for class table inheritance.");
-            Assert.AreEqual(strID, ((IDbDataParameter) selectSql.Parameters[0]).Value,
+            Assert.AreEqual(strID, selectSql.Parameters[0].Value,
                             "Parameter ShapeID is incorrect in select where clause for class table inheritance.");
         }
 

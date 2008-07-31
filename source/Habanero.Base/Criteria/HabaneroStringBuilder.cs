@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Habanero.Util
+namespace Habanero.Base
 {
     /// <summary>
     /// Wraps StringBuilder, adding some additional string manipulation
@@ -30,7 +30,7 @@ namespace Habanero.Util
     /// companyname = 'henry''s station' and ....<br/>
     /// companyname = 'brad and partners'<br/>
     /// companyname = 'peter (pty) ltd'<br/>
-    /// Note: Syntax like companyname = 'henry's station' will result in
+    /// NB: Syntax like companyname = 'henry's station' will result in
     /// incorrectly parsing of quoted sections, so it is essential that the 
     /// client of this class parses this to 'henry''s station' prior to 
     /// using this class.

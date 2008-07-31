@@ -18,9 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using Habanero.Util;
 
-namespace Habanero.BO.CriteriaManager
+
+namespace Habanero.Base
 {
     /// <summary>
     /// This class manages expressions that force certain criteria upon data
@@ -31,7 +31,7 @@ namespace Habanero.BO.CriteriaManager
     /// </summary>
     public class CriteriaExpression
     {
-        private static String[] _defaultOperators = new String[]
+        private static readonly String[] _defaultOperators = new String[]
             {
                 " OR ",
                 " AND ",
@@ -61,6 +61,7 @@ namespace Habanero.BO.CriteriaManager
         /// <param name="expression">The expression string to parse</param>
         public CriteriaExpression(String expression)
         {
+            if (string.IsNullOrEmpty(expression)) return;
             this._operators = _defaultOperators;
             this.parseExpression(new HabaneroStringBuilder(expression.Trim()));
         }
@@ -73,6 +74,7 @@ namespace Habanero.BO.CriteriaManager
         /// <param name="operators">The set of operators</param>
         public CriteriaExpression(String expression, String[] operators)
         {
+            if (string.IsNullOrEmpty(expression)) return;
             this._operators = operators;
             this.parseExpression(new HabaneroStringBuilder(expression.Trim()));
         }
@@ -98,13 +100,14 @@ namespace Habanero.BO.CriteriaManager
                 while ((bracketCount > 0) && (bracketSearchPos < expressionWithoutQuotes.Length - 1))
                 {
                     bracketSearchPos++;
-                    if (expressionWithoutQuotes[bracketSearchPos] == '(')
+                    switch (expressionWithoutQuotes[bracketSearchPos])
                     {
-                        bracketCount++;
-                    }
-                    else if (expressionWithoutQuotes[bracketSearchPos] == ')')
-                    {
-                        bracketCount--;
+                        case '(':
+                            bracketCount++;
+                            break;
+                        case ')':
+                            bracketCount--;
+                            break;
                     }
                 }
                 if (bracketSearchPos == expressionWithoutQuotes.Length - 1)
@@ -120,11 +123,9 @@ namespace Habanero.BO.CriteriaManager
                 foreach (String op in _operators)
                 {
                     int thisPos = expressionWithoutQuotes.IndexOf(op, bracketSearchPos);
-                    if ((thisPos != -1 && thisPos < pos) || pos == -1)
-                    {
-                        pos = thisPos;
-                        foundOperator = op;
-                    }
+                    if ((thisPos == -1 || thisPos >= pos) && pos != -1) continue;
+                    pos = thisPos;
+                    foundOperator = op;
                 }
                 if (pos != -1)
                 {
@@ -138,15 +139,13 @@ namespace Habanero.BO.CriteriaManager
                 foreach (String op in _operators)
                 {
                     int pos = expressionWithoutQuotes.IndexOf(op);
-                    if (pos != -1 && !IsPosInsideBrackets(expressionWithoutQuotes, pos))
-                    {
-                        _left = new CriteriaExpression(quotesRemovedExpression.Substring(0, pos)
-                            .PutBackQuotedSections().ToString().Trim(), _operators);
-                        _right = new CriteriaExpression(quotesRemovedExpression.Substring(pos + op.Length)
-                            .PutBackQuotedSections().ToString().Trim(), _operators);
-                        _expression = op;
-                        break;
-                    }
+                    if (pos == -1 || IsPosInsideBrackets(expressionWithoutQuotes, pos)) continue;
+                    _left = new CriteriaExpression(quotesRemovedExpression.Substring(0, pos)
+                                                       .PutBackQuotedSections().ToString().Trim(), _operators);
+                    _right = new CriteriaExpression(quotesRemovedExpression.Substring(pos + op.Length)
+                                                       .PutBackQuotedSections().ToString().Trim(), _operators);
+                    _expression = op;
+                    break;
                 }
             }
             //If this was a terminal criteria i.e. it has no more children then

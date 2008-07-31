@@ -540,7 +540,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsNotNull(uiGridDef);
             Assert.AreEqual(1, uiGridDef.Count);
             Assert.AreEqual(1, col.Count);
-            Assert.AreEqual(2, BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<OrganisationTestBO>(null, null).Count);
+            Assert.AreEqual(2, BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<OrganisationTestBO>("").Count);
 
             //---------------Execute Test ----------------------
             gridInitialiser.InitialiseGrid(classDef, uiDefName);

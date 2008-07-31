@@ -101,10 +101,10 @@ namespace Habanero.Base
 
         private readonly Criteria _leftCriteria;
         private readonly LogicalOp _logicalOp;
-        private Op _op;
-        private string _propName;
+        private readonly Op _op;
+        private readonly string _propName;
         private readonly Criteria _rightCriteria;
-        private object _value;
+        private readonly object _value;
         private readonly string[] LogicalOps = {"AND", "OR"};
         private readonly string[] Ops = {"=", ">", "<"};
 

@@ -74,7 +74,9 @@ namespace Habanero.Test.UI.Forms
         {
             if (itsAddressID != Guid.Empty)
             {
-                Address address = BOLoader.Instance.GetBusinessObjectByID<Address>(itsAddressID);
+                string key = "AddressID = " + itsAddressID.ToString("B");
+                Criteria criteria = CriteriaParser.CreateCriteria(key);
+                Address address = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Address>(criteria);
                 if (address != null)
                 {
                     address.Delete();
@@ -84,7 +86,9 @@ namespace Habanero.Test.UI.Forms
 
             if (itsContactPersonID != Guid.Empty)
             {
-                ContactPerson contactPerson = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(itsContactPersonID);
+                string key = "ContactPersonID = " + itsContactPersonID.ToString("B");
+                Criteria criteria = CriteriaParser.CreateCriteria(key);
+                ContactPerson contactPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(criteria);
                 if (contactPerson != null)
                 {
                     contactPerson.Delete();
@@ -194,7 +198,7 @@ namespace Habanero.Test.UI.Forms
             ContactPerson bo = new ContactPerson();
             bo.Surname = "please delete me.";
             bo.Save();
-            itsContactPersonID = bo.ContactPersonID;
+            IPrimaryKey contactPersonID = bo.ID;
 
             BusinessObjectCollection<ContactPerson> boCol = new BusinessObjectCollection<ContactPerson>();
             boCol.Add(bo);
@@ -208,8 +212,16 @@ namespace Habanero.Test.UI.Forms
             itsButtons.ClickButton("Delete");
             itsGridMock.Verify();
 
-            ContactPerson contactPerson = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(itsContactPersonID);
-            Assert.IsNull(contactPerson);
+            try
+            {
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(contactPersonID);
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjDeleteConcurrencyControlException ex)
+            {
+                StringAssert.Contains("has occured since the object you are trying to refresh", ex.Message);
+            }
         }
 
         [Test]
@@ -218,11 +230,11 @@ namespace Habanero.Test.UI.Forms
             ContactPerson person = new ContactPerson();
             person.Surname = "please delete me";
             person.Save();
-            itsContactPersonID = person.ContactPersonID;
+            IPrimaryKey contactPersonID = person.ID;
             person.AddPreventDeleteRelationship();
 
             Address address = new Address();
-            address.ContactPersonID = itsContactPersonID;
+            address.ContactPersonID = person.ContactPersonID;
             address.Save();
             itsAddressID = address.AddressID;
 
@@ -237,8 +249,8 @@ namespace Habanero.Test.UI.Forms
             itsButtons.ConfirmDeletion = false;
             itsButtons.ClickButton("Delete");
             itsGridMock.Verify();
-            
-            ContactPerson contactPerson = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(itsContactPersonID);
+
+            ContactPerson contactPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(contactPersonID);
             Assert.IsNotNull(contactPerson);
         }
 

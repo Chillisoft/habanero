@@ -129,8 +129,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CriteriaParser.cs" />
-    <Compile Include="TestCriteriaParser.cs" />
+    <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
+    <Compile Include="CriteriaManager\TestHabaneroStringBuilder.cs" />
+    <Compile Include="TestBusinessObjectLoader_GetBusinessObjectCollection.cs" />
     <Compile Include="TestPack\AddressTestBO.cs" />
     <Compile Include="ClassDefinition\TestTriggerCol.cs" />
     <Compile Include="ClassDefinition\TestTrigger.cs" />
@@ -167,7 +168,7 @@
     <Compile Include="TestBORegistry.cs" />
     <Compile Include="TestBusinessObjectLoader.cs" />
     <Compile Include="TestBusObjectManager.cs" />
-    <Compile Include="TestCriteria.cs" />
+    <Compile Include="CriteriaManager\TestCriteria.cs" />
     <Compile Include="TestSqlFormatter.cs" />
     <Compile Include="TestDataStoreInMemory.cs" />
     <Compile Include="TestBusinessObjectLastUpdatePropertiesLog.cs" />
@@ -187,7 +188,7 @@
     <Compile Include="SqlGeneration\TestDeleteStatementGenerator.cs" />
     <Compile Include="SqlGeneration\TestUpdateStatementGenerator.cs" />
     <Compile Include="TestBOKeyCol.cs" />
-    <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
+    <Compile Include="CriteriaManager\TestCriteriaExpression.cs" />
     <Compile Include="CriteriaManager\TestExpression.cs" />
     <Compile Include="Loaders\TestDtdsResource.cs" />
     <Compile Include="Loaders\TestXmlSuperClassLoader.cs" />

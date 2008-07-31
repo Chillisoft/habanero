@@ -478,11 +478,11 @@ namespace Habanero.Test.General
         ///  if the object has been deleted already</exception>
         public static TransactionLogStub GetTransactionLog(BOPrimaryKey id)
         {
-            TransactionLogStub myTransactionLogStub = (TransactionLogStub)BOLoader.Instance.GetLoadedBusinessObject(id);
-            if (myTransactionLogStub == null)
-            {
-                myTransactionLogStub =  BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TransactionLogStub>(id);
-            }
+            //TransactionLogStub myTransactionLogStub = (TransactionLogStub)BOLoader.Instance.GetLoadedBusinessObject(id);
+            //if (myTransactionLogStub == null)
+            //{
+            TransactionLogStub myTransactionLogStub = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TransactionLogStub>(id);
+//            }
             return myTransactionLogStub;
         }
 
@@ -511,42 +511,44 @@ namespace Habanero.Test.General
             return _primaryKey.GetObjectNewID();
         }
 
-        protected internal static BusinessObjectCollection<BusinessObject> LoadBusinessObjCol()
+        protected internal static BusinessObjectCollection<TransactionLogStub> LoadBusinessObjCol()
         {
             return LoadBusinessObjCol("", "");
         }
 
-        protected internal static BusinessObjectCollection<BusinessObject> LoadBusinessObjCol(string searchCriteria,
+        protected internal static BusinessObjectCollection<TransactionLogStub> LoadBusinessObjCol(string searchCriteria,
                                                                                   string orderByClause)
         {
-            TransactionLogStub lTransactionLogStub = new TransactionLogStub();
-            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
-            statement.Statement.Append(lTransactionLogStub.SelectSqlWithNoSearchClause());
-            if (searchCriteria.Length > 0)
-            {
-                statement.AppendCriteria("");
-                SqlCriteriaCreator creator =
-                    new SqlCriteriaCreator(Expression.CreateExpression(searchCriteria), lTransactionLogStub);
-                creator.AppendCriteriaToStatement(statement);
-            }
-            BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(lTransactionLogStub.ClassDef);
-            using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(statement, orderByClause))
-            {
-                while (dr.Read())
-                {
-                    BOLoader.Instance.LoadProperties(lTransactionLogStub, dr);
-                    TransactionLogStub lTempPerson2 = (TransactionLogStub)BOLoader.Instance.GetLoadedBusinessObject(lTransactionLogStub.GetObjectNewID());
-                    if (lTempPerson2 == null)
-                    {
-                        bOCol.Add(lTransactionLogStub);
-                    }
-                    else
-                    {
-                        bOCol.Add(lTempPerson2);
-                    }
-                }
-            }
-            return bOCol;
+            //TransactionLogStub lTransactionLogStub = new TransactionLogStub();
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<TransactionLogStub>(searchCriteria,
+                                                                                                      orderByClause);
+            //SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
+            //statement.Statement.Append(lTransactionLogStub.SelectSqlWithNoSearchClause());
+            //if (searchCriteria.Length > 0)
+            //{
+            //    statement.AppendCriteria("");
+            //    SqlCriteriaCreator creator =
+            //        new SqlCriteriaCreator(Expression.CreateExpression(searchCriteria), lTransactionLogStub);
+            //    creator.AppendCriteriaToStatement(statement);
+            //}
+            //BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(lTransactionLogStub.ClassDef);
+            //using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(statement, orderByClause))
+            //{
+            //    while (dr.Read())
+            //    {
+            //        BOLoader.Instance.LoadProperties(lTransactionLogStub, dr);
+            //        TransactionLogStub lTempPerson2 = (TransactionLogStub)BOLoader.Instance.GetLoadedBusinessObject(lTransactionLogStub.GetObjectNewID());
+            //        if (lTempPerson2 == null)
+            //        {
+            //            bOCol.Add(lTransactionLogStub);
+            //        }
+            //        else
+            //        {
+            //            bOCol.Add(lTempPerson2);
+            //        }
+            //    }
+            //}
+            //return bOCol;
         }
 
         #endregion

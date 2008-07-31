@@ -231,7 +231,7 @@ namespace Habanero.UI.Forms
             /// <returns>Returns the business object collection</returns>
 			public IBusinessObjectCollection GetCollection(IBusinessObject sampleBo)
             {
-                return BOLoader.Instance.GetBusinessObjectCol(sampleBo.GetType(), "", null);
+                return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(sampleBo.ClassDef, "", "");
             }
         }
 

@@ -519,7 +519,8 @@ namespace Habanero.Test.BO
             engine.SetPropertyValue(carIDProp, car.GetPropertyValue(carIDProp));
             engine.Save();
             //Verify test pack - i.e. that engine saved correctly
-            BOLoader.Instance.Refresh(engine);
+//            BOLoader.Instance.Refresh(engine);
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(engine);
             Assert.AreSame(engine.GetCar(), car);
 
             //---------------Execute Test ----------------------
@@ -614,7 +615,8 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(mockBo);
-            BOLoader.Instance.Refresh(mockBo);
+//            BOLoader.Instance.Refresh(mockBo);
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(mockBo);
             //MockBO savedMockBO =
             //    BOLoader.Instance.GetBusinessObject<MockBO>("MockBOID = '" + mockBo.MockBOID.ToString("B") + "'");
             Criteria criteria = new Criteria("MockBOID", Criteria.Op.Equals, mockBo.MockBOID);
@@ -674,7 +676,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(mockBo);
-            BOLoader.Instance.Refresh(mockBo);
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(mockBo);
             Assert.AreEqual(mockBOProp1, mockBo.MockBOProp1);
         }
 
@@ -693,7 +695,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(mockBo);
-            BOLoader.Instance.Refresh(mockBo);
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(mockBo);
             Assert.AreEqual(mockBOProp1, mockBo.MockBOProp1);
         }
 
@@ -711,7 +713,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(mockBo);
-            BOLoader.Instance.Refresh(mockBo);
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(mockBo);
             Assert.AreEqual(mockBOProp1, mockBo.MockBOProp1);
         }
 

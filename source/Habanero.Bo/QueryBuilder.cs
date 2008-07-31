@@ -19,7 +19,6 @@
 
 using System;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
@@ -92,17 +91,13 @@ namespace Habanero.BO
         ///<param name="classDef">The class definition to use for building the order criteria</param>
         ///<param name="orderByString">The orderby string to use for creating the OrderCriteria.</param>
         ///<returns>the newly created OrderCriteria object.</returns>
-        public static OrderCriteria CreateOrderCriteria(ClassDef classDef, string orderByString)
+        public static OrderCriteria CreateOrderCriteria(IClassDef classDef, string orderByString)
         {
             OrderCriteria orderCriteria = OrderCriteria.FromString(orderByString);
             foreach (OrderCriteria.Field field in orderCriteria.Fields)
             {
 
-                IPropDef propDef = classDef.GetPropDef(field.Source, field.PropertyName, true);
-                //if (field.Source == null)
-                //{
-                //    field.Source = new Source(classDef.ClassName, classDef.GetTableName());
-                //}
+                IPropDef propDef = ((ClassDef)classDef).GetPropDef(field.Source, field.PropertyName, true);
                 field.FieldName = propDef.DatabaseFieldName;
          
                 Source currentSource = field.Source;
@@ -110,7 +105,7 @@ namespace Habanero.BO
                 if (currentSource == null) continue;
                 field.Source.Joins.Add(new Source.Join(field.Source, currentSource));
                 currentSource = field.Source;
-                ClassDef currentClassDef = classDef;
+                ClassDef currentClassDef = (ClassDef) classDef;
                 while (currentSource != null) 
                 {
                     Source childSource = currentSource.ChildSource;

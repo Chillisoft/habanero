@@ -1,226 +1,595 @@
-//---------------------------------------------------------------------------------
-// Copyright (C) 2008 Chillisoft Solutions
-// 
-// This file is part of the Habanero framework.
-// 
-//     Habanero is a free framework: you can redistribute it and/or modify
-//     it under the terms of the GNU Lesser General Public License as published by
-//     the Free Software Foundation, either version 3 of the License, or
-//     (at your option) any later version.
-// 
-//     The Habanero framework is distributed in the hope that it will be useful,
-//     but WITHOUT ANY WARRANTY; without even the implied warranty of
-//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU Lesser General Public License for more details.
-// 
-//     You should have received a copy of the GNU Lesser General Public License
-//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
-//---------------------------------------------------------------------------------
-
 using System;
-using Habanero.BO.CriteriaManager;
+using Habanero.Base;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.CriteriaManager
+namespace Habanero.Test.BO
 {
-
     [TestFixture]
-    public class TestCriteriaParser
+    public class TestCriteriaParser //:TestBase
     {
-        [Test]
-        public void TestSimpleExpression()
+        #region Setup/Teardown
+
+        [SetUp]
+        public void SetupTest()
         {
-            CriteriaExpression tree = new CriteriaExpression("Name = 'Peter'");
-            Assert.AreEqual("=", tree.Expression);
-            Assert.AreEqual("Name", tree.Left.Expression);
-            Assert.AreEqual("Peter", tree.Right.Expression);
-            tree = new CriteriaExpression("Amount >= 0");
-            Assert.AreEqual(">=", tree.Expression);
-            Assert.AreEqual("Amount", tree.Left.Expression);
-            Assert.AreEqual("0", tree.Right.Expression);
+            //Runs every time that any testmethod is executed
+            //base.SetupTest();
+        }
+
+        [TearDown]
+        public void TearDownTest()
+        {
+            //runs every time any testmethod is complete
+            //base.TearDownTest();
+        }
+
+        #endregion
+
+        [TestFixtureSetUp]
+        public void TestFixtureSetup()
+        {
+            //Code that is executed before any test is run in this class. If multiple tests
+            // are executed then it will still only be called once.
         }
 
         [Test]
-        public void TestSimpleExpressionWithOperatorInQuotes()
+        public void TestCreateOperator()
         {
-            CriteriaExpression tree = new CriteriaExpression("Name = 'Peter = is not cool'");
-            Assert.AreEqual("=", tree.Expression);
-            Assert.AreEqual("Name", tree.Left.Expression);
-            Assert.AreEqual("Peter = is not cool", tree.Right.Expression);
+            //---------------Set up test pack-------------------
+            const string operatorString = "=";
+
+            //---------------Execute Test ----------------------
+            Criteria.Op op = CriteriaParser.CreateComparisonOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.Op.Equals, op);
         }
 
         [Test]
-        public void TestCompleteExpression()
+        public void TestCreateOperator_GreaterThan()
         {
-            CriteriaExpression tree = new CriteriaExpression("Name = 'Peter'");
-            Assert.AreEqual("(Name = Peter)", tree.CompleteExpression);
+            //---------------Set up test pack-------------------
+            const string operatorString = ">";
+
+            //---------------Execute Test ----------------------
+            Criteria.Op op = CriteriaParser.CreateComparisonOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.Op.GreaterThan, op);
         }
 
         [Test]
-        public void TestSimpleExpression_Like()
+        public void TestCreateOperator_LessThan()
         {
-            CriteriaExpression tree = new CriteriaExpression("Name like 'Pet%'");
-            Assert.AreEqual(" LIKE", tree.Expression);
-            Assert.AreEqual("Name", tree.Left.Expression);
-            Assert.AreEqual("Pet%", tree.Right.Expression);
+            //---------------Set up test pack-------------------
+            const string operatorString = "<";
+
+            //---------------Execute Test ----------------------
+            Criteria.Op op = CriteriaParser.CreateComparisonOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.Op.LessThan, op);
         }
 
         [Test]
-        public void TestSimpleExpression_NotLike()
+        public void TestCreateLogicalOperator()
         {
-            CriteriaExpression tree = new CriteriaExpression("Name not like 'Pet%'");
-            Assert.AreEqual(" NOT LIKE", tree.Expression);
-            Assert.AreEqual("Name", tree.Left.Expression);
-            Assert.AreEqual("Pet%", tree.Right.Expression);
+            //---------------Set up test pack-------------------
+            const string operatorString = "and";
+            //---------------Execute Test ----------------------
+            Criteria.LogicalOp op = CriteriaParser.CreateLogicalOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.LogicalOp.And, op);
         }
 
         [Test]
-        public void TestSimpleExpression_In()
+        public void TestCreateLogicalOperator_VariedCase()
         {
-            CriteriaExpression tree = new CriteriaExpression("Name in ('Peter', 'Mark')");
-            Assert.AreEqual(" IN", tree.Expression);
-            Assert.AreEqual("Name", tree.Left.Expression);
-            Assert.AreEqual("Peter', 'Mark", tree.Right.Expression);
+            //---------------Set up test pack-------------------
+            const string operatorString = "AnD";
+            //---------------Execute Test ----------------------
+            Criteria.LogicalOp op = CriteriaParser.CreateLogicalOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.LogicalOp.And, op);
         }
 
         [Test]
-        public void TestSimpleExpression_NotIn()
+        public void TestCreateLogicalOperator_UnTrimmed()
         {
-            CriteriaExpression tree = new CriteriaExpression("Name not in ('Peter', 'Mark')");
-            Assert.AreEqual(" NOT IN", tree.Expression);
-            Assert.AreEqual("Name", tree.Left.Expression);
-            Assert.AreEqual("Peter', 'Mark", tree.Right.Expression);
+            //---------------Set up test pack-------------------
+            const string operatorString = " and ";
+            //---------------Execute Test ----------------------
+            Criteria.LogicalOp op = CriteriaParser.CreateLogicalOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.LogicalOp.And, op);
         }
 
         [Test]
-        public void TestComplexExpression()
+        public void TestCreateLogicalOperator_Or()
         {
-            CriteriaExpression tree = new CriteriaExpression("Name = 'Peter' AND Age < 30");
-            Assert.AreEqual(" AND ", tree.Expression);
-            Assert.AreEqual("=", tree.Left.Expression);
-            Assert.AreEqual("Name", tree.Left.Left.Expression);
-            Assert.AreEqual("(Name = Peter)", tree.Left.CompleteExpression);
-            Assert.AreEqual("Peter", tree.Left.Right.Expression);
-            Assert.AreEqual("<", tree.Right.Expression);
-            Assert.AreEqual("Age", tree.Right.Left.Expression);
-            Assert.AreEqual("30", tree.Right.Right.Expression);
+            //---------------Set up test pack-------------------
+            const string operatorString = "or";
+            //---------------Execute Test ----------------------
+            Criteria.LogicalOp op = CriteriaParser.CreateLogicalOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.LogicalOp.Or, op);
         }
 
         [Test]
-        public void TestSettingOperators()
+        public void TestCreateLogicalOperator_Or_VariedCase()
         {
-            String[] operators = new String[]
-                {
-                    "OR",
-                    "AND"
-                };
-            CriteriaExpression tree = new CriteriaExpression("Name = 'Test'", operators);
-            Assert.AreEqual("Name = 'Test'", tree.CompleteExpression);
-            tree = new CriteriaExpression("Name = 'Test' and Field1 >= 1", operators);
-            Assert.AreEqual("Name = 'Test'", tree.Left.CompleteExpression);
-            Assert.AreEqual("Field1 >= 1", tree.Right.CompleteExpression);
-            tree = new CriteriaExpression("A = 1 and B = 2 or C = 3", operators);
-            Assert.AreEqual("((A = 1 AND B = 2) OR C = 3)", tree.CompleteExpression);
+            //---------------Set up test pack-------------------
+            const string operatorString = "oR";
+            //---------------Execute Test ----------------------
+            Criteria.LogicalOp op = CriteriaParser.CreateLogicalOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.LogicalOp.Or, op);
         }
 
         [Test]
-        public void TestWithBrackets()
+        public void TestCreateLogicalOperator_Or_UnTrimmed()
         {
-            String[] operators = new String[]
-                {
-                    "OR",
-                    "AND"
-                };
-            CriteriaExpression tree =
-                new CriteriaExpression("(Name = 'Test' AND Field1 >= 1) or Field2 <= 2", operators);
-            Assert.AreEqual("(Name = 'Test' AND Field1 >= 1)", tree.Left.CompleteExpression);
-            Assert.AreEqual("((Name = 'Test' AND Field1 >= 1) OR Field2 <= 2)", tree.CompleteExpression);
-            tree = new CriteriaExpression("((Name = 'Te' '(st' and Field1 >= 1) or Field2 <= 2)", operators);
-            Assert.AreEqual("(Name = 'Te' '(st' AND Field1 >= 1)", tree.Left.CompleteExpression);
-            Assert.AreEqual("((Name = 'Te' '(st' AND Field1 >= 1) OR Field2 <= 2)", tree.CompleteExpression);
+            //---------------Set up test pack-------------------
+            const string operatorString = " or ";
+            //---------------Execute Test ----------------------
+            Criteria.LogicalOp op = CriteriaParser.CreateLogicalOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.LogicalOp.Or, op);
         }
 
         [Test]
-        public void TestWithQuotes()
+        public void Test_CreateCriteria_Simple()
         {
-            String[] operators = new String[]
-                {
-                    "OR",
-                    "AND"
-                };
-            CriteriaExpression tree =
-                new CriteriaExpression("((Name = 'Te' '(st' and Field1 >= 1) or Field2 <= 2)", operators);
-            Assert.AreEqual("(Name = 'Te' '(st' AND Field1 >= 1)", tree.Left.CompleteExpression);
-            Assert.AreEqual("((Name = 'Te' '(st' AND Field1 >= 1) OR Field2 <= 2)", tree.CompleteExpression);
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
 
-            tree = new CriteriaExpression(" ((Name = 'Te' '(st' and Field1 >= 1) or Field2 <= 2) ", operators);
-            Assert.AreEqual("(Name = 'Te' '(st' AND Field1 >= 1)", tree.Left.CompleteExpression);
-            Assert.AreEqual("((Name = 'Te' '(st' AND Field1 >= 1) OR Field2 <= 2)", tree.CompleteExpression);
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname = surnameValue");
+            string criteriaAsString = criteria.ToString();
 
-            tree = new CriteriaExpression(" ((Name = 'Te' '(st' and Field1 >= 1) or Field2 <= 2)", operators);
-            Assert.AreEqual("(Name = 'Te' '(st' AND Field1 >= 1)", tree.Left.CompleteExpression);
-            Assert.AreEqual("((Name = 'Te' '(st' AND Field1 >= 1) OR Field2 <= 2)", tree.CompleteExpression);
-
-            tree = new CriteriaExpression(" (  (Name = 'Te' '(st' and Field1 >= 1) or Field2 <= 2)", operators);
-            Assert.AreEqual("(Name = 'Te' '(st' AND Field1 >= 1)", tree.Left.CompleteExpression);
-
-            Assert.AreEqual("((Name = 'Te' '(st' AND Field1 >= 1) OR Field2 <= 2)", tree.CompleteExpression);
-            Assert.AreEqual("Name = 'Te' '(st'", tree.Left.Left.CompleteExpression);
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("Surname = 'surnameValue'", criteriaAsString);
         }
 
         [Test]
-        public void TestWithAndOR()
+        public void Test_CreateCriteria_Simple_PropNameDiff()
         {
-            String[] operators = new String[]
-                {
-                    "OR",
-                    "AND"
-                };
-            CriteriaExpression tree =
-                new CriteriaExpression("((Name = 'Te' '(st' and Field1 >= 1) OR Field2 <= 2)", operators);
-            Assert.AreEqual("(Name = 'Te' '(st' AND Field1 >= 1)", tree.Left.CompleteExpression);
-            Assert.AreEqual("((Name = 'Te' '(st' AND Field1 >= 1) OR Field2 <= 2)", tree.CompleteExpression);
+            //---------------Set up test pack-------------------
+            const string propName = "OtherPropName";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria(propName + " = surnameValue");
+            string criteriaAsString = criteria.ToString();
+
+            StringAssert.AreEqualIgnoringCase(propName + " = 'surnameValue'", criteriaAsString);
         }
 
         [Test]
-        public void TestSetLeftAndRight()
+        public void Test_CreateCriteria_Simple_ValueDiff()
         {
-            CriteriaExpression tree = new CriteriaExpression("Name = 'Peter' AND Age < 30");
-            tree.Left = new CriteriaExpression("Height > 20");
-            tree.Right = new CriteriaExpression("Town = 'Durban'");
-            
-            Assert.AreEqual("(Height > 20)", tree.Left.CompleteExpression);
-            Assert.AreEqual("(Town = Durban)", tree.Right.CompleteExpression);
+            //---------------Set up test pack-------------------
+            string surnameValue = Guid.NewGuid().ToString("N");
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname = " + surnameValue + "");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("Surname = '" + surnameValue + "'", criteriaAsString);
+        }
+        [Test]
+        public void Test_CreateCriteria_Simple_WithGreaterThan()
+        {
+            //---------------Set up test pack-------------------
+            string surnameValue = Guid.NewGuid().ToString("N");
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname > " + surnameValue + "");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("Surname > '" + surnameValue + "'", criteriaAsString);
         }
 
         [Test]
-        public void TestWithDoubleBrackets()
+        public void Test_CreateCriteria_TwoParts()
         {
-            String[] operators = new String[]
-                {
-                    "OR",
-                    "AND"
-                };
-            CriteriaExpression tree =
-                new CriteriaExpression("(Name = 'Test' OR Field1 >= 1) AND (Field2 <= 2 OR Name = 'Test2')", operators);
-            //Test left side
-            CriteriaExpression leftExpression = tree.Left;
-            Assert.AreEqual("(Name = 'Test' OR Field1 >= 1)", leftExpression.CompleteExpression);
-            Assert.AreEqual("Name = 'Test'", leftExpression.Left.CompleteExpression);
-            Assert.AreEqual("OR", leftExpression.Expression);
-            Assert.AreEqual("Field1 >= 1", leftExpression.Right.CompleteExpression);
-            //Tes operator
-            Assert.AreEqual("AND", tree.Expression);
-            //Test right side
-            CriteriaExpression rightExpression = tree.Right;
-            Assert.AreEqual("(Field2 <= 2 OR Name = 'Test2')", rightExpression.CompleteExpression);
-            Assert.AreEqual("Field2 <= 2", rightExpression.Left.CompleteExpression);
-            Assert.AreEqual("OR", rightExpression.Expression);
-            Assert.AreEqual("Name = 'Test2'", rightExpression.Right.CompleteExpression);
-            //Test complete
-            Assert.AreEqual("((Name = 'Test' OR Field1 >= 1) AND (Field2 <= 2 OR Name = 'Test2'))", tree.CompleteExpression);
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("FirstName = firstNameValue and Surname = surnameValue");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("(FirstName = 'firstNameValue') AND (Surname = 'surnameValue')", criteriaAsString);
         }
 
+        [Test]
+        public void Test_CreateCriteria_TwoParts_WithOr()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("FirstName = firstNameValue or Surname = surnameValue");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("(FirstName = 'firstNameValue') OR (Surname = 'surnameValue')", criteriaAsString);
+        }
+
+        [Test]
+        public void Test_CreateCriteria_ThreeParts()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("FirstName = firstNameValue and MiddleName = middleNameValue and Surname = surnameValue");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("(FirstName = 'firstNameValue') AND ((MiddleName = 'middleNameValue') AND (Surname = 'surnameValue'))", criteriaAsString);
+        }
+
+        [Test]
+        public void Test_CreateCriteria_ThreeParts_WithBrackets()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("(FirstName = firstNameValue and MiddleName = middleNameValue) and Surname = surnameValue");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("((FirstName = 'firstNameValue') AND (MiddleName = 'middleNameValue')) AND (Surname = 'surnameValue')", criteriaAsString);
+        }
+
+        [Test]
+        public void Test_CreateCriteria_FourParts()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("FirstName = firstNameValue and MiddleName = middleNameValue " +
+                "and Surname = surnameValue and Nickname = nicknameValue");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("(FirstName = 'firstNameValue') AND ((MiddleName = 'middleNameValue') " +
+                "AND ((Surname = 'surnameValue') AND (Nickname = 'nicknameValue')))", criteriaAsString);
+        }
+
+        [Test]
+        public void Test_CreateCriteria_FourParts_WithBrackets()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("(FirstName = firstNameValue and MiddleName = middleNameValue) " +
+                "or (Surname = surnameValue and Nickname = nicknameValue)");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("((FirstName = 'firstNameValue') AND (MiddleName = 'middleNameValue')) " +
+                "OR ((Surname = 'surnameValue') AND (Nickname = 'nicknameValue'))", criteriaAsString);
+        }
+
+        //        [Test]
+//        public void TestCreateSimpleExpression()
+//        {
+//            Criteria exp =
+//                new Criteria(new Criteria("Field1", ">=", "value1"), Criteria.LogicalOp.And,
+//                             new Criteria("Field2", ">=", "value2"));
+//                Assert.AreEqual(exp.ExpressionString(), "(Field1 >= 'value1' AND Field2 >= 'value2')");
+//        }
+
+        //[Test]
+        //public void TestCreateDatabaseExpressionNoTableName()
+        //{
+        //    IExpression exp =
+        //        new Expression(new Parameter("Field1", ">=", "value1"), new SqlOperator("AND"),
+        //                       new Parameter("Field2", ">=", "value2"));
+        //    SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
+        //    exp.SqlExpressionString(st, "[", "]");
+        //    Assert.AreEqual("([Field1] >= ?Param0 AND [Field2] >= ?Param1)", st.Statement.ToString());
+        //    Assert.AreEqual("value1", ((IDbDataParameter)st.Parameters[0]).Value);
+        //    Assert.AreEqual("value2", ((IDbDataParameter)st.Parameters[1]).Value);
+        //}
+
+        //[Test]
+        //public void TestCreateDatabaseExpressionWithTableName()
+        //{
+        //    IExpression exp =
+        //        new Expression(new Parameter("Field1", "tbName", "DBField1", ">=", "value1"), new SqlOperator("OR"),
+        //                       new Parameter("Field2", "tbName", "DBField2", ">=", "value2"));
+        //    SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
+        //    exp.SqlExpressionString(st, "[", "]");
+        //    Assert.AreEqual("([tbName].[DBField1] >= ?Param0 OR [tbName].[DBField2] >= ?Param1)",
+        //                    st.Statement.ToString());
+        //    Assert.AreEqual("value1", ((IDbDataParameter)st.Parameters[0]).Value);
+        //    Assert.AreEqual("value2", ((IDbDataParameter)st.Parameters[1]).Value);
+        //}
+
+        //[Test]
+        //public void TestCreateDatabaseExpressionWithTableNameNoFieldSeparators()
+        //{
+        //    IExpression exp =
+        //        new Expression(new Parameter("Field1", "tb", "DBField1", ">=", "value1"), new SqlOperator("OR"),
+        //                       new Parameter("Field2", "tb", "DBField2", ">=", "value2"));
+        //    SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
+        //    exp.SqlExpressionString(st, "", "");
+        //    Assert.AreEqual("(tb.DBField1 >= ?Param0 OR tb.DBField2 >= ?Param1)", st.Statement.ToString());
+        //    Assert.AreEqual("value1", ((IDbDataParameter)st.Parameters[0]).Value);
+        //    Assert.AreEqual("value2", ((IDbDataParameter)st.Parameters[1]).Value);
+        //}
+
+        //[Test]
+        //public void TestCreateDatabaseExpressionWithInvertedCommas()
+        //{
+        //    IExpression exp =
+        //        new Expression(new Parameter("Field1", "tb", "DBField1", ">=", "value'1"), new SqlOperator("OR"),
+        //                       new Parameter("Field2", "tb", "DBField2", ">=", "value2"));
+        //    SqlStatement st1 = new SqlStatement(DatabaseConnection.CurrentConnection);
+        //    exp.SqlExpressionString(st1, "", "");
+        //    Assert.AreEqual("(tb.DBField1 >= ?Param0 OR tb.DBField2 >= ?Param1)", st1.Statement.ToString());
+        //    Assert.AreEqual("value'1", ((IDbDataParameter)st1.Parameters[0]).Value);
+        //    Assert.AreEqual("value2", ((IDbDataParameter)st1.Parameters[1]).Value);
+
+        //    exp =
+        //        new Expression(new Parameter("Field1", "tb", "DBField1", ">=", "value''1"), new SqlOperator("OR"),
+        //                       new Parameter("Field2", "tb", "DBField2", ">=", "value2"));
+        //    SqlStatement st2 = new SqlStatement(DatabaseConnection.CurrentConnection);
+        //    exp.SqlExpressionString(st2, "", "");
+        //    Assert.AreEqual("(tb.DBField1 >= ?Param0 OR tb.DBField2 >= ?Param1)", st2.Statement.ToString());
+        //    Assert.AreEqual("value''1", ((IDbDataParameter)st2.Parameters[0]).Value);
+        //    Assert.AreEqual("value2", ((IDbDataParameter)st2.Parameters[1]).Value);
+        //}
+
+        //[Test]
+        //public void TestCreateDatabaseExpressionWithInOperator()
+        //{
+        //    IExpression exp =
+        //        new Expression(new Parameter("Field1", "tb", "DBField1", "IN", "('a', 'zzz')"), new SqlOperator("OR"),
+        //                       new Parameter("Field2", "tb", "DBField2", "in", "('12 mar 2004', '27 mar 2004')"));
+        //    SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
+        //    exp.SqlExpressionString(st, "", "");
+        //    Assert.AreEqual("(tb.DBField1 IN ('a', 'zzz') OR tb.DBField2 IN ('12 mar 2004', '27 mar 2004'))",
+        //                    st.Statement.ToString());
+        //}
+
+        //[Test]
+        //public void TestCreateDatabaseExpressionTree()
+        //{
+        //    IExpression exp =
+        //        new Expression(new Parameter("Field1", "tb", "DBField1", "IN", "('a', 'zzz')"), new SqlOperator("OR"),
+        //                       new Parameter("Field2", "tb", "DBField2", "in", "('12 mar 2004', '27 mar 2004')"));
+        //    SqlStatement st1 = new SqlStatement(DatabaseConnection.CurrentConnection);
+        //    exp.SqlExpressionString(st1, "", "");
+        //    Assert.AreEqual("(tb.DBField1 IN ('a', 'zzz') OR tb.DBField2 IN ('12 mar 2004', '27 mar 2004'))",
+        //                    st1.Statement.ToString());
+
+        //    exp = new Expression(exp, new SqlOperator("And"), new Parameter("Field3", "=", "a"));
+        //    SqlStatement st2 = new SqlStatement(DatabaseConnection.CurrentConnection);
+        //    exp.SqlExpressionString(st2, "", "");
+        //    Assert.AreEqual(
+        //        "((tb.DBField1 IN ('a', 'zzz') OR tb.DBField2 IN ('12 mar 2004', '27 mar 2004')) AND Field3 = ?Param0)",
+        //        st2.Statement.ToString());
+        //    Assert.AreEqual("a", ((IDbDataParameter)st2.Parameters[0]).Value);
+        //}
+
+        //[Test]
+        //public void TestCreateDatabaseIsNull()
+        //{
+        //    IExpression exp =
+        //        new Expression(new Parameter("Field1", "tb", "DBField1", "Is", "Null"), new SqlOperator("OR"),
+        //                       new Parameter("Field2", "tb", "DBField2", "is", "Not null"));
+        //    SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
+        //    exp.SqlExpressionString(st, "", "");
+        //    Assert.AreEqual("(tb.DBField1 IS NULL OR tb.DBField2 IS NOT NULL)", st.Statement.ToString());
+        //}
+
+        //[Test]
+        //public void TestParameterParsing()
+        //{
+        //    IExpression exp = new Parameter("Field1 = 'test'");
+        //    Assert.AreEqual("Field1 = 'test'", exp.ExpressionString());
+        //}
+
+        //// peter - this functionality is unnecessary i think.
+        ////[Test]
+        ////public void TestParameterParsing2()
+        ////{
+        ////    IExpression exp = new Parameter("Field1 = 'test''");
+        ////    Assert.AreEqual("Field1 = 'test''", exp.ExpressionString());
+        ////    exp = new Parameter("Field1 = ''te'st'''");
+        ////    Assert.AreEqual("Field1 = ''te'st'''", exp.ExpressionString());
+        ////}
+
+        ////[Test]
+        ////public void TestParameterParsingSql()
+        ////{
+        ////    IExpression exp = new Parameter("Field1 = ''te'st'''");
+        ////    SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
+        ////    exp.SqlExpressionString(st, "", "");
+        ////    Assert.AreEqual("Field1 = ?Param0", st.Statement.ToString());
+        ////    Assert.AreEqual("'te'st''", ((IDbDataParameter) st.Parameters[0]).Value);
+        ////}
+
+        //[Test]
+        //public void TestExpressionParsingSql()
+        //{
+        //    IExpression exp = Expression.CreateExpression("Field1 = 'test' and Field2 = 'test2' or Field2 = 'test2'");
+        //    SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
+        //    exp.SqlExpressionString(st, "", "");
+        //    Assert.AreEqual("((Field1 = ?Param0 AND Field2 = ?Param1) OR Field2 = ?Param2)", st.Statement.ToString());
+        //    Assert.AreEqual("test", ((IDbDataParameter)st.Parameters[0]).Value);
+        //    Assert.AreEqual("test2", ((IDbDataParameter)st.Parameters[1]).Value);
+        //    Assert.AreEqual("test2", ((IDbDataParameter)st.Parameters[2]).Value);
+        //}
+
+        //[Test]
+        //public void TestExpressionParsingSqlSingleParameter()
+        //{
+        //    IExpression exp = Expression.CreateExpression("Field1 = 'test'");
+        //    SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
+        //    exp.SqlExpressionString(st, "", "");
+        //    Assert.AreEqual("Field1 = ?Param0", st.Statement.ToString());
+        //    Assert.AreEqual("test", ((IDbDataParameter)st.Parameters[0]).Value);
+        //}
+
+        //[Test]
+        //public void TestParameterSqlInfo()
+        //{
+        //    IParameterSqlInfo paramSql1 =
+        //        new MockParameterSqlInfo("testfieldname", "paramName", ParameterType.String, "tbl");
+        //    IExpression exp = Expression.CreateExpression("paramName = 'test'");
+        //    exp.SetParameterSqlInfo(paramSql1);
+        //    SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
+        //    exp.SqlExpressionString(st, "", "");
+        //    Assert.AreEqual("tbl.testfieldname = ?Param0", st.Statement.ToString());
+        //    Assert.AreEqual("test", ((IDbDataParameter)st.Parameters[0]).Value);
+        //}
+
+        //[Test]
+        //public void TestParameterSqlInfoWithMoreThanOne()
+        //{
+        //    IParameterSqlInfo paramSql1 =
+        //        new MockParameterSqlInfo("testfieldname", "paramName", ParameterType.String, "tbl");
+        //    IParameterSqlInfo paramSql2 =
+        //        new MockParameterSqlInfo("testfieldname2", "paramName2", ParameterType.Date, "tbl2");
+        //    IExpression exp = Expression.CreateExpression("paramName = 'test' and paramName2 = '10 Feb 2003'");
+        //    exp.SetParameterSqlInfo(paramSql2);
+        //    exp.SetParameterSqlInfo(paramSql1);
+        //    SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
+        //    exp.SqlExpressionString(st, "", "");
+        //    Assert.AreEqual("(tbl.testfieldname = ?Param0 AND tbl2.testfieldname2 = ?Param1)", st.Statement.ToString());
+        //    Assert.AreEqual("test", ((IDbDataParameter)st.Parameters[0]).Value);
+        //    Assert.AreEqual(new DateTime(2003, 02, 10), ((IDbDataParameter)st.Parameters[1]).Value);
+        //}
+
+        //[Test]
+        //public void TestOrInBracketsWithAndOutsideBrackets()
+        //{
+        //    IExpression exp = Expression.CreateExpression("param1 = 'test' AND (param2 = 3 or param2 = 4)");
+        //    SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
+        //    exp.SqlExpressionString(st, "", "");
+        //    Assert.AreEqual("(param1 = ?Param0 AND (param2 = ?Param1 OR param2 = ?Param2))", st.Statement.ToString());
+        //}
+
+        //[Test]
+        //public void TestAppendExpression()
+        //{
+        //    IExpression exp = Expression.CreateExpression("param1 = 'test' AND param2 = 3");
+        //    IExpression result = Expression.AppendExpression(exp, new SqlOperator("or"), "param2 = 4");
+
+        //    Assert.AreEqual("((param1 = 'test' AND param2 = '3') OR param2 = '4')",
+        //                    result.ExpressionString());
+        //}
+
+        //[Test]
+        //public void TestParameterConstructors()
+        //{
+        //    Parameter param = new Parameter("prop", "field", "=", "value");
+        //    Assert.AreEqual("prop = 'value'", param.ExpressionString());
+        //    Assert.AreEqual("[field]", param.FieldFullName("[", "]"));
+
+        //    param = new Parameter("prop", "table", "field", "=", "value", ParameterType.String);
+        //    Assert.AreEqual("prop = 'value'", param.ExpressionString());
+        //    Assert.AreEqual("[table].[field]", param.FieldFullName("[", "]"));
+        //}
+
+        //[Test]
+        //public void TestParameterTypes()
+        //{
+        //    Parameter param = new Parameter("prop", "table", "field", "=", "value", ParameterType.String);
+        //    Assert.AreEqual("value", param.GetParameterValueAsObject());
+
+        //    param = new Parameter("prop", "table", "field", "=", "true", ParameterType.Bool);
+        //    Assert.AreEqual(true, param.GetParameterValueAsObject());
+
+        //    param = new Parameter("prop", "table", "field", "=", "2007/2/1", ParameterType.Date);
+        //    Assert.AreEqual(new DateTime(2007, 2, 1), param.GetParameterValueAsObject());
+
+        //    param = new Parameter("prop", "table", "field", "=", "2.1", ParameterType.Number);
+        //    Assert.AreEqual(2.1, param.GetParameterValueAsObject());
+        //}
+
+        //[Test]
+        //public void TestGetSqlStringWithNoParameters()
+        //{
+        //    Parameter param = new Parameter("prop", "table", "field", "=", "value", ParameterType.String);
+        //    Assert.AreEqual("", param.GetSqlStringWithNoParameters());
+        //}
+
+        //[Test]
+        //public void TestSqlExpressionString()
+        //{
+        //    SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
+        //    SqlOperator op = new SqlOperator("OR");
+        //    op.SqlExpressionString(statement, "", "");
+        //    op.SetParameterSqlInfo(null);  //for test coverage :)
+        //}
+
+        //public static void RunTest()
+        //{
+        //    TestExpression expTest = new TestExpression();
+        //    expTest.TestExpressionParsingSql();
+        //}
+
+        //private class MockParameterSqlInfo : IParameterSqlInfo
+        //{
+        //    private String mFieldName;
+        //    private String mParameterName;
+        //    private ParameterType mParameterType;
+        //    private string mTableName;
+
+        //    public MockParameterSqlInfo(string fieldName, string parameterName, ParameterType parameterType,
+        //                                string tableName)
+        //    {
+        //        this.mFieldName = fieldName;
+        //        this.mParameterName = parameterName;
+        //        this.mParameterType = parameterType;
+        //        this.mTableName = tableName;
+        //    }
+
+        //    public ParameterType ParameterType
+        //    {
+        //        get { return this.mParameterType; }
+        //    }
+
+        //    public string FieldName
+        //    {
+        //        get { return this.mFieldName; }
+        //    }
+
+        //    public string ParameterName
+        //    {
+        //        get { return this.mParameterName; }
+        //    }
+
+        //    /// <summary>
+        //    /// Table name to be added to parameter.
+        //    /// </summary>
+        //    public string TableName
+        //    {
+        //        get { return this.mTableName; }
+        //    }
+        //}
     }
-
 }

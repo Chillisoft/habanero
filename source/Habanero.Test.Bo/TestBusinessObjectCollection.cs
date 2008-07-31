@@ -551,7 +551,6 @@ namespace Habanero.Test.BO
             Assert.IsTrue(cp1.State.IsDirty);
         }
 
-        //TODO: to implement proper refreshing
         [Test]
         public void TestRefreshCollectionRefreshesNonDirtyObjects()
         {
