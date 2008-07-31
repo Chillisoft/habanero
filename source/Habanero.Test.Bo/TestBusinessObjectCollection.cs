@@ -106,12 +106,10 @@ namespace Habanero.Test.BO
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
             newCP.Surname = Guid.NewGuid().ToString();
 
-
             //---------------Execute Test ----------------------
             newCP.Save();
             //---------------Test Result -----------------------
             Assert.IsTrue(_addedEventFired);
-            //---------------Tear Down -------------------------          
         }
 
         [Test]
@@ -132,7 +130,6 @@ namespace Habanero.Test.BO
             cpCol.Refresh();
             //---------------Test Result -----------------------
             Assert.IsFalse(_addedEventFired);
-            //---------------Tear Down -------------------------          
         }
 
         [Test]

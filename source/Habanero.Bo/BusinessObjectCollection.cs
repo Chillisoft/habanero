@@ -700,7 +700,8 @@ namespace Habanero.BO
             this.SelectQuery.Criteria = searchExpression;
 
             this.SelectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(this.ClassDef, orderByClause);
-            this.SelectQuery.Limit = limit;
+            if (limit > -1) this.SelectQuery.Limit = limit;
+
             Refresh();
         }
 
@@ -1344,14 +1345,5 @@ namespace Habanero.BO
         {
             return CreateBusinessObject();
         }
-
-
-        public void LoadAll_Loader()
-        {
-            this.SelectQuery.Criteria = null;
-            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(this);
-        }
-
-       
     }
 }

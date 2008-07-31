@@ -94,7 +94,7 @@ namespace Habanero.Test.BO
         public void TestCriteria()
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPersonTestBO", "surname='zzz'", "");
+                "ContactPersonTestBO", "Surname='zzz'", "");
             Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(1, col.Count);
         }

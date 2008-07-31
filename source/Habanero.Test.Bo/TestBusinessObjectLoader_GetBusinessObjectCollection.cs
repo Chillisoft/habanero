@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Habanero.Test.BO
 {
     [TestFixture]
-    public abstract class TestTestBusinessObjectLoader_GetBusinessObjectCollection //:TestBase
+    public abstract class TestBusinessObjectLoader_GetBusinessObjectCollection //:TestBase
     {
         #region Setup/Teardown
 
@@ -698,7 +698,7 @@ namespace Habanero.Test.BO
 
             //---------------Execute Test ----------------------
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-            col.LoadAll_Loader();
+            col.LoadAll();
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, col.Count);
@@ -932,7 +932,7 @@ namespace Habanero.Test.BO
         }
         [TestFixture]
         public class TestBusinessObjectLoader_GetBusinessObjectCollectionInMemory :
-            TestTestBusinessObjectLoader_GetBusinessObjectCollection
+            TestBusinessObjectLoader_GetBusinessObjectCollection
         {
             private DataStoreInMemory _dataStore;
 
@@ -949,7 +949,7 @@ namespace Habanero.Test.BO
         }
         [TestFixture]
         public class TestBusinessObjectLoader_GetBusinessObjectCollectionDB :
-            TestTestBusinessObjectLoader_GetBusinessObjectCollection
+            TestBusinessObjectLoader_GetBusinessObjectCollection
         {
             #region Setup/Teardown
 

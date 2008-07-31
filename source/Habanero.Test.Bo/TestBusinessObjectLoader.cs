@@ -641,25 +641,33 @@ namespace Habanero.Test.BO
         #endregion //TestLoadInheritance
 
         [Test, ExpectedException(typeof(InvalidPropertyException))]
-        public void TestGetBusinessObjectByIDInt_PropNameNotCorrect()
+        public void TestGetBusinessObject_PropNameNotCorrect()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             TestAutoInc.LoadClassDefWithAutoIncrementingID();
-            TestAutoInc autoInc = new TestAutoInc();
-            autoInc.Save();
+            //TestAutoInc autoInc = new TestAutoInc();
+            //autoInc.Save();
 
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("TestAutoIncID", Criteria.Op.Equals, autoInc.TestAutoIncID);
-            TestAutoInc tai1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(criteria);
-            TestAutoInc tai2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(tai1.ID);
+            Criteria criteria = new Criteria("TestAutoIncID", Criteria.Op.Equals, "1");//"autoInc.TestAutoIncID);
+            BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(criteria);
 
-            //---------------Test Result -----------------------
-            Assert.AreSame(tai1, tai2);
-            Assert.AreEqual("testing", tai2.TestField);
         }
+        //[Test, ExpectedException(typeof(InvalidPropertyException))]
+        //public void TestGetBusinessObject_PropNameNotCorrect()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    ClassDef.ClassDefs.Clear();
+        //    TestAutoInc.LoadClassDefWithAutoIncrementingID();
+        //    //TestAutoInc autoInc = new TestAutoInc();
+        //    //autoInc.Save();
 
+        //    //---------------Execute Test ----------------------
+        //    Criteria criteria = new Criteria(, Criteria.Op.Equals, "1");//"autoInc.TestAutoIncID);
+        //    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>("TestAutoIncID");
 
+        //}
         [Test]
         public void TestBoLoader_NotRefreshBusinessObjectIfCurrentlyBeingEdited()
         {
@@ -775,6 +783,25 @@ namespace Habanero.Test.BO
                 TestAutoInc tai2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(tai1.ID);
 
                 //---------------Test Result -----------------------
+                Assert.AreSame(tai1, tai2);
+                Assert.AreEqual("testing", tai2.TestField);
+            }
+
+            [Test]
+            public void TestGetBusinessObjectByIDIntSavenewAutoIncNumber()
+            {
+                //---------------Set up test pack-------------------
+                ClassDef.ClassDefs.Clear();
+                TestAutoInc.LoadClassDefWithAutoIncrementingID();
+                TestAutoInc autoInc = new TestAutoInc();
+                autoInc.Save();
+
+                //---------------Execute Test ----------------------
+                Criteria criteria = new Criteria("testautoincid", Criteria.Op.Equals, autoInc.TestAutoIncID);
+                TestAutoInc tai1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(criteria);
+                TestAutoInc tai2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(tai1.ID);
+
+                ////---------------Test Result -----------------------
                 Assert.AreSame(tai1, tai2);
                 Assert.AreEqual("testing", tai2.TestField);
             }
