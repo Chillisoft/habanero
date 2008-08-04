@@ -290,11 +290,5 @@ namespace Habanero.UI.Forms
         {
             get { return _buttons; }
         }
-
-        
-
-        
-
-        
     }
 }

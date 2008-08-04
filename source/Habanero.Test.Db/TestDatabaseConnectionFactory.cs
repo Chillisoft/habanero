@@ -28,9 +28,19 @@ namespace Habanero.Test.DB
     [TestFixture]
     public class TestDatabaseConnectionFactory
     {
-        public TestDatabaseConnectionFactory()
+        #region Firebird
+
+        [Test]
+        public void TestCreateConnectionFireBird()
         {
+            DatabaseConfig config = new DatabaseConfig(DatabaseConfig.Firebird, "test", "test", "test", "test", "1000");
+            DatabaseConnection connection = DatabaseConnectionFactory.CreateConnection(config);
+            Assert.AreEqual("FirebirdSql.Data.FirebirdClient", connection.TestConnection.GetType().Namespace);
         }
+
+        #endregion
+
+        #region MySql
 
         [Test]
         public void TestCreateConnectionMySql()
@@ -40,6 +50,10 @@ namespace Habanero.Test.DB
             Assert.AreEqual("MySql.Data.MySqlClient", connection.TestConnection.GetType().Namespace);
         }
 
+        #endregion
+
+        #region SqlServer
+
         [Test]
         public void TestCreateConnectionSqlServer()
         {
@@ -47,6 +61,10 @@ namespace Habanero.Test.DB
             DatabaseConnection connection = DatabaseConnectionFactory.CreateConnection(config);
             Assert.AreEqual("System.Data.SqlClient", connection.TestConnection.GetType().Namespace);
         }
+
+        #endregion
+
+        #region Oracle
 
         [Test]
         public void TestCreateConnectionOracle()
@@ -69,13 +87,21 @@ namespace Habanero.Test.DB
         }
         */
 
-		[Test]
-		public void TestCreateConnectionAccess()
-		{
-			DatabaseConfig config = new DatabaseConfig(DatabaseConfig.Access, "test", "test", "test", "test", "1000");
-			DatabaseConnection connection = DatabaseConnectionFactory.CreateConnection(config);
-			Assert.AreEqual("System.Data.OleDb", connection.TestConnection.GetType().Namespace);
-		}
+        #endregion
+
+        #region Access
+
+        [Test]
+        public void TestCreateConnectionAccess()
+        {
+            DatabaseConfig config = new DatabaseConfig(DatabaseConfig.Access, "test", "test", "test", "test", "1000");
+            DatabaseConnection connection = DatabaseConnectionFactory.CreateConnection(config);
+            Assert.AreEqual("System.Data.OleDb", connection.TestConnection.GetType().Namespace);
+        }
+
+        #endregion
+
+        #region PostgreSql
 
         [Test]
         public void TestCreateConnectionPostgreSql()
@@ -85,6 +111,10 @@ namespace Habanero.Test.DB
             Assert.AreEqual("Npgsql", connection.TestConnection.GetType().Namespace);
         }
 
+        #endregion
+
+        #region SQLite
+
         [Test, Ignore("Issue with SQLite 64-bit driver")]
         public void TestCreateConnectionSQLite()
         {
@@ -92,5 +122,8 @@ namespace Habanero.Test.DB
             DatabaseConnection connection = DatabaseConnectionFactory.CreateConnection(config);
             Assert.AreEqual("System.Data.SQLite", connection.TestConnection.GetType().Namespace);
         }
+
+        #endregion
+
     }
 }

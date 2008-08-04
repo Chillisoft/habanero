@@ -93,6 +93,10 @@ namespace Habanero.DB
                     return new ConnectionStringPostgreSqlFactory();
                 case DatabaseConfig.SQLite:
                     return new ConnectionStringSQLiteFactory();
+                case DatabaseConfig.Firebird:
+                    return new ConnectionStringFirebirdFactory(false);
+                case DatabaseConfig.FirebirdEmbedded:
+                    return new ConnectionStringFirebirdFactory(true);
                 default:
                     return null;
             }

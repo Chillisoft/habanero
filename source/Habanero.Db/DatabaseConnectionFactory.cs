@@ -133,6 +133,32 @@ namespace Habanero.DB
                     return new DatabaseConnectionSQLite(assemblyName, fullClassName, config.GetConnectionString());
                 }
             }
+            else if (string.Compare(config.Vendor, DatabaseConfig.Firebird, true) == 0)
+            {
+                if (String.IsNullOrEmpty(assemblyName))
+                {
+                    return
+                        new DatabaseConnectionFirebird("FirebirdSql.Data.FirebirdClient", "FirebirdSql.Data.FirebirdClient.FbConnection",
+                                                     config.GetConnectionString());
+                }
+                else
+                {
+                    return new DatabaseConnectionFirebird(assemblyName, fullClassName, config.GetConnectionString());
+                }
+            }//todo check this actual implementation
+            else if (string.Compare(config.Vendor, DatabaseConfig.FirebirdEmbedded, true) == 0)
+            {
+                if (String.IsNullOrEmpty(assemblyName))
+                {
+                    return
+                        new DatabaseConnectionFirebird("FirebirdSql.Data.FirebirdClient", "FirebirdSql.Data.FirebirdClient.FbConnection",
+                                                     config.GetConnectionString());
+                }
+                else
+                {
+                    return new DatabaseConnectionFirebird(assemblyName, fullClassName, config.GetConnectionString());
+                }
+            }
             else
             {
                 return null;

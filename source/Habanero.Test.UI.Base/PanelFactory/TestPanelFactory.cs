@@ -36,19 +36,19 @@ namespace Habanero.Test.UI.Base
 
         protected abstract void ApplyChangesToBusinessObject(IPanelFactoryInfo info);
 
-        //[TestFixture]
-        //public class TestPanelFactoryWin : TestPanelFactory
-        //{
-        //    protected override IControlFactory GetControlFactory()
-        //    {
-        //        return new Habanero.UI.Win.ControlFactoryWin();
-        //    }
+        [TestFixture]
+        public class TestPanelFactoryWin : TestPanelFactory
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new Habanero.UI.Win.ControlFactoryWin();
+            }
 
-        //    protected override void ApplyChangesToBusinessObject(IPanelFactoryInfo info)
-        //    {
-        //        // do nothing - on windows the changes should be applied automatically when a value in a control changes
-        //    }
-        //}
+            protected override void ApplyChangesToBusinessObject(IPanelFactoryInfo info)
+            {
+                // do nothing - on windows the changes should be applied automatically when a value in a control changes
+            }
+        }
 
         [TestFixture]
         public class TestPanelFactoryGiz : TestPanelFactory

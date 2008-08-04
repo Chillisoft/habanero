@@ -38,7 +38,7 @@ namespace Habanero.Test.DB
         private string password;
         private string encryptedPassword;
         private DatabaseConfig encryptedConfig;
-
+        
         [TestFixtureSetUp]
         public void FixtureSetup()
         {
@@ -54,7 +54,7 @@ namespace Habanero.Test.DB
             crypter = new RSAPasswordCrypter(rsa);
             password = "password";
             encryptedPassword = crypter.EncryptString(password);
-           
+            
         }
 
         [SetUp]

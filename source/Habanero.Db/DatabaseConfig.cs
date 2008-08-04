@@ -38,6 +38,8 @@ namespace Habanero.DB
 		public const string Access = "ACCESS";
         public const string PostgreSql = "POSTGRESQL";
         public const string SQLite = "SQLITE";
+        public const string Firebird = "FIREBIRD";
+        public const string FirebirdEmbedded = "FIREBIRDEMBEDDED";
 
         private String _vendor;
         private String _server;
@@ -170,7 +172,7 @@ namespace Habanero.DB
             get { return _passwordCrypter.DecryptString(Password);  }
         }
 
-        /// <summary>
+	    /// <summary>
         /// Sets the private key to use to decrypt the password.  The private key is in xml format.   
         /// </summary>
         /// <param name="xmlPrivateKey">The xml format of the RSA key (RSA.ToXmlString(true))</param>

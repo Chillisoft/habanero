@@ -24,6 +24,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
+using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -75,7 +76,7 @@ namespace Habanero.Test.UI.Base
              }
             protected override IReadOnlyGridControl CreateReadOnlyGridControl(bool putOnForm)
             {
-                Habanero.UI.Win.ReadOnlyGridControlWin readOnlyGridControlWin = new Habanero.UI.Win.ReadOnlyGridControlWin(GetControlFactory());
+                ReadOnlyGridControlWin readOnlyGridControlWin = new ReadOnlyGridControlWin(GetControlFactory());
                 if (putOnForm)
                 {
                     frm = new System.Windows.Forms.Form();
@@ -355,7 +356,7 @@ namespace Habanero.Test.UI.Base
             {
                 //ALWAYS PUT ON FORM FOR GIZ
                 ReadOnlyGridControlGiz readOnlyGridControlGiz =
-                    new ReadOnlyGridControlGiz(GlobalUIRegistry.ControlFactory);
+                    new ReadOnlyGridControlGiz(GetControlFactory());
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
                 frm.Controls.Add(readOnlyGridControlGiz);
                 return readOnlyGridControlGiz;
@@ -986,7 +987,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
-            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col,true);
+            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col, true);
             BusinessObject bo = col[0];
             AddControlToForm(readOnlyGridControl);
             //---------------Execute Test ----------------------
@@ -994,6 +995,56 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             Assert.AreEqual(bo, readOnlyGridControl.SelectedBusinessObject);
+        }
+
+        [Test]
+        public void _____TestSetBusinessObjectFiresBusinessObjectSelected2()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col, true);
+            BusinessObject bo = col[0];
+            //AddControlToForm(readOnlyGridControl);
+            readOnlyGridControl.SelectedBusinessObject = null;
+            bool gridItemSelected = false;
+            readOnlyGridControl.Grid.BusinessObjectSelected += (delegate { gridItemSelected = true; });
+            //---------------Assert pre conditions--------------
+            Assert.IsFalse(gridItemSelected);
+
+            //---------------Execute Test ----------------------
+            readOnlyGridControl.SelectedBusinessObject = bo;
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(gridItemSelected);
+        }
+
+        [Test]
+        public void _____TestSetBusinessObjectFiresBusinessObjectSelected()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            MyBO myBO1 = new MyBO();
+            col.Add(myBO1);
+            MyBO myBO2 = new MyBO();
+            col.Add(myBO2);
+            MyBO myBO3 = new MyBO();
+            col.Add(myBO3);
+            IReadOnlyGridControl readOnlyGridControl = GetControlFactory().CreateReadOnlyGridControl();
+            readOnlyGridControl.SetBusinessObjectCollection(col);
+            //AddControlToForm(readOnlyGridControl);
+            readOnlyGridControl.SelectedBusinessObject = null;
+            bool gridItemSelected = false;
+            readOnlyGridControl.Grid.BusinessObjectSelected += (delegate { gridItemSelected = true; });
+            //---------------Assert pre conditions--------------
+            Assert.IsFalse(gridItemSelected);
+            
+            //---------------Execute Test ----------------------
+            readOnlyGridControl.SelectedBusinessObject = myBO1;
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(gridItemSelected);
+            //---------------Tear down -------------------------
         }
 
         [Test]

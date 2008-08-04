@@ -95,8 +95,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectionStringFirebirdFactory.cs" />
     <Compile Include="ConnectionStringPostgreSqlFactory.cs" />
     <Compile Include="ConnectionStringSQLiteFactory.cs" />
+    <Compile Include="DatabaseConnectionFirebird.cs" />
     <Compile Include="DatabaseConnectionPostgreSql.cs" />
     <Compile Include="DatabaseConnectionSQLite.cs" />
     <Compile Include="InsertSqlStatement.cs" />

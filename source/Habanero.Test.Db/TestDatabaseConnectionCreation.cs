@@ -28,9 +28,7 @@ namespace Habanero.Test.DB
     [TestFixture]
     public class TestDatabaseConnectionCreation
     {
-        public TestDatabaseConnectionCreation()
-        {
-        }
+        #region MySql
 
         [Test]
         public void TestCreateDatabaseConnectionMySql()
@@ -42,6 +40,10 @@ namespace Habanero.Test.DB
             Assert.AreEqual("MySql.Data.MySqlClient", conn.TestConnection.GetType().Namespace,
                             "Namespace of mysqlconnection is wrong.");
         }
+
+        #endregion
+
+        #region SqlServer
 
         [Test]
         public void TestCreateDatabaseConnectionSqlServer()
@@ -55,6 +57,10 @@ namespace Habanero.Test.DB
                             "Namespace of Sql connection is wrong.");
         }
 
+        #endregion
+
+        #region Oracle
+
         //[Test]
         //public void TestCreateDatabaseConnectionOracle()
         //{
@@ -66,7 +72,7 @@ namespace Habanero.Test.DB
         //    Assert.AreEqual("Oracle.DataAccess.Client", conn.GetTestConnection().GetType().Namespace,
         //                    "Namespace of Oracle connection is wrong.");
         //}
-        
+
         [Test]
         public void TestCreateDatabaseConnectionOracleMicrosoft()
         {
@@ -79,6 +85,10 @@ namespace Habanero.Test.DB
                             "Namespace of Oracle connection is wrong.");
         }
 
+        #endregion
+
+        #region Access
+
         [Test]
         public void TestCreateDatabaseConnectionAccess()
         {
@@ -88,6 +98,10 @@ namespace Habanero.Test.DB
             Assert.AreEqual("System.Data.OleDb", conn.TestConnection.GetType().Namespace,
                             "Namespace of Access connection is wrong.");
         }
+
+        #endregion
+
+        #region PostgreSql
 
         [Test]
         public void TestCreateDatabaseConnectionPostgreSql()
@@ -99,6 +113,9 @@ namespace Habanero.Test.DB
                             "Namespace of PostgreSql connection is wrong.");
         }
 
+        #endregion
+
+        #region SQLite
         [Test, Ignore("Issue with SQLite 64-bit driver")]
         public void TestCreateDatabaseConnectionSQLite()
         {
@@ -107,7 +124,22 @@ namespace Habanero.Test.DB
                 new DatabaseConfig(DatabaseConfig.SQLite, "test", "test", "test", "test", "1000").GetConnectionString();
             Assert.AreEqual("System.Data.SQLite", conn.TestConnection.GetType().Namespace,
                             "Namespace of SQLite connection is wrong.");
+        } 
+        #endregion
+
+        #region Firebird
+
+        [Test]
+        public void TestCreateDatabaseConnectionFirebird()
+        {
+            DatabaseConnection conn =
+                new DatabaseConnectionFirebird("FirebirdSql.Data.FirebirdClient", "FirebirdSql.Data.FirebirdClient.FbConnection");
+            conn.ConnectionString =
+                new DatabaseConfig(DatabaseConfig.Firebird, "testserver", "testdatabase", "testusername", "testpassword", "3050").GetConnectionString();
+            Assert.AreEqual("FirebirdSql.Data.FirebirdClient", conn.TestConnection.GetType().Namespace,
+                            "Namespace of firebird connection is wrong.");
         }
 
+        #endregion
     }
 }

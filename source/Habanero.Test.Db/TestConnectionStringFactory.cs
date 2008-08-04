@@ -50,6 +50,9 @@ namespace Habanero.Test.DB
             Assert.AreSame(typeof(ConnectionStringSQLiteFactory),
                            ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetType(),
                            "GetFactory not creating correct type : SQLite.");
+            Assert.AreSame(typeof(ConnectionStringFirebirdFactory),
+                           ConnectionStringFactory.GetFactory(DatabaseConfig.Firebird).GetType(),
+                           "GetFactory not creating correct type : Firebird.");
         }
 
     	#region SqlServer
@@ -317,5 +320,56 @@ namespace Habanero.Test.DB
         }
 
         #endregion //SQLite
+
+        #region Firebird
+
+        [Test]
+        public void TestFirebird()
+        {
+            String conn =
+                ConnectionStringFactory.GetFactory(DatabaseConfig.Firebird).GetConnectionString("testserver", "testdatasource",
+                                                                                                "testuser", "testpassword",
+                                                                                                "");
+            Assert.AreEqual("Server=testserver;User=testuser;Password=testpassword;Database=testdatasource;ServerType=0", conn,
+                            "ConnectionStringFactory not working for Firebird");
+        }
+
+        [Test]
+        public void TestFirebirdEmbedded()
+        {
+            String conn =
+                ConnectionStringFactory.GetFactory(DatabaseConfig.FirebirdEmbedded).GetConnectionString("testserver", "testdatasource",
+                                                                                                "testuser", "testpassword",
+                                                                                                "");
+            Assert.AreEqual("Server=testserver;User=testuser;Password=testpassword;Database=testdatasource;ServerType=1", conn,
+                            "ConnectionStringFactory not working for Firebird");
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void TestFirebirdNoServerName()
+        {
+            String conn =
+                ConnectionStringFactory.GetFactory(DatabaseConfig.Firebird).GetConnectionString("", "testdb",
+                                                                                             "testusername",
+                                                                                             "testpassword", "testport");
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void TestFirebirdNoUserName()
+        {
+            String conn =
+                ConnectionStringFactory.GetFactory(DatabaseConfig.Firebird).GetConnectionString("sdf", "testdb", "",
+                                                                                             "testpassword", "testport");
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void TestFirebirdNoDatabaseName()
+        {
+            String conn =
+                ConnectionStringFactory.GetFactory(DatabaseConfig.Firebird).GetConnectionString("sdf", "", "sasdf",
+                                                                                             "testpassword", "testport");
+        }
+
+        #endregion //Firebird
     }
 }
