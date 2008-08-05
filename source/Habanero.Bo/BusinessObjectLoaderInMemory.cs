@@ -139,6 +139,7 @@ namespace Habanero.BO
         public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria)
             where T : class, IBusinessObject, new()
         {
+            QueryBuilder.PrepareCriteria(ClassDef.Get<T>(), criteria);
             return _dataStore.FindAll<T>(criteria);
         }
 
@@ -223,7 +224,15 @@ namespace Habanero.BO
         public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(ISelectQuery selectQuery)
             where T : class, IBusinessObject, new()
         {
-            return GetBusinessObjectCollection<T>(selectQuery.Criteria, selectQuery.OrderCriteria);
+            BusinessObjectCollection<T> businessObjectCollection = GetBusinessObjectCollection<T>(selectQuery.Criteria, selectQuery.OrderCriteria);
+            if (selectQuery.Limit >= 0)
+            {
+                while (businessObjectCollection.Count > selectQuery.Limit)
+                {
+                    businessObjectCollection.RemoveAt(selectQuery.Limit);
+                }
+            }
+            return businessObjectCollection;
         }
 
 

@@ -151,5 +151,17 @@ namespace Habanero.Test.BO
             Assert.AreEqual(limit, selectQuery.Limit);
             //---------------Tear Down -------------------------
         }
+
+        [Test]
+        public void TestLimit_NotSet()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Execute Test ----------------------
+            SelectQuery selectQuery = new SelectQuery();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(-1, selectQuery.Limit);
+            //---------------Tear Down -------------------------
+        }
     }
 }

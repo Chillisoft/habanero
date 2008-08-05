@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -118,8 +119,32 @@ namespace Habanero.Test.BO
             string statementString = statement.Statement.ToString();
             StringAssert.EndsWith("WHERE [MyBO].[TestProp] = ?Param0", statementString);
             Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
-            Assert.AreEqual( "test", statement.Parameters[0].Value);
+            Assert.AreEqual("test", statement.Parameters[0].Value);
             //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestCreateSqlStatement_WithCriteria_DateTimeToday()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWithDateTime();
+            Criteria criteria = new Criteria("TestDateTime", Criteria.Op.Equals, new DateTimeToday());
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            DateTime dateTimeBefore = DateTime.Today;
+            ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
+            DateTime dateTimeAfter = DateTime.Today;
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.EndsWith("WHERE [MyBO].[TestDateTime] = ?Param0", statementString);
+            Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
+            object value = statement.Parameters[0].Value;
+            Assert.IsInstanceOfType(typeof(DateTime), value);
+            DateTime dateTimeValue = (DateTime) value;
+            Assert.GreaterOrEqual(dateTimeBefore, dateTimeValue);
+            Assert.LessOrEqual(dateTimeAfter, dateTimeValue);
         }
 
 
@@ -324,7 +349,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtBeginning();
             SelectQuery selectQuery = new SelectQuery();
-            selectQuery.Limit = 0;
+            selectQuery.Limit = -1;
             string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");
@@ -374,7 +399,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtEnd();
             SelectQuery selectQuery = new SelectQuery();
-            selectQuery.Limit = 0;
+            selectQuery.Limit = -1;
             string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");

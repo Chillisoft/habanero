@@ -342,8 +342,6 @@ namespace Habanero.Test.BO
             TestUtil.WaitForGC();
         }
 
-
-
         [Test]
         public void TestGetRelatedBusinessObject()
         {

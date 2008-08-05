@@ -10,7 +10,6 @@ namespace Habanero.Test.BO
     public class TestCriteriaDB
     {
         
-        
         [Test]
         public void TestConstructor()
         {

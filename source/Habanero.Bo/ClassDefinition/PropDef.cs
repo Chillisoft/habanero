@@ -1033,6 +1033,22 @@ namespace Habanero.BO.ClassDefinition
             {
                 return ((Guid)valueToConvert).ToString("B");
             }
+            if (this.PropertyType == typeof (DateTime))
+            {
+                if (valueToConvert is String)
+                {
+                    string stringValueToConvert = (string) valueToConvert;
+                    if (stringValueToConvert.ToUpper() == "TODAY")
+                    {
+                        return new DateTimeToday();
+                    }
+                }
+                else if (valueToConvert is DateTimeToday)
+                {
+                    return valueToConvert;
+                }
+            }
+
             return Convert.ChangeType(valueToConvert, this.PropertyType);
         }
     }

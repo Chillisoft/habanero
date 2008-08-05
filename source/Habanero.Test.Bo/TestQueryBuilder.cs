@@ -216,6 +216,41 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestPrepareCriteria_ConvertsValue_StringToDateTime()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef myBoClassDef = MyBO.LoadClassDefWithDateTime();
+            const string dateTimeString = "01 Jan 2000 01:30:45";
+            DateTime dateTime = DateTime.Parse(dateTimeString);
+            Criteria criteria = new Criteria("TestDateTime", Criteria.Op.Equals, dateTimeString);
+
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareCriteria(myBoClassDef, criteria);
+
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(DateTime), criteria.FieldValue);
+            Assert.AreEqual(dateTime, criteria.FieldValue);
+        }
+
+        [Test]
+        public void TestPrepareCriteria_ConvertsValue_StringTodayToDateTimeToday()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef myBoClassDef = MyBO.LoadClassDefWithDateTime();
+            const string dateTimeString = "Today";
+            DateTimeToday dateTimeToday = new DateTimeToday();
+            Criteria criteria = new Criteria("TestDateTime", Criteria.Op.Equals, dateTimeString);
+
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareCriteria(myBoClassDef, criteria);
+
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(DateTimeToday), criteria.FieldValue);
+            Assert.AreEqual(dateTimeToday, criteria.FieldValue);
+        }
+
+        
+        [Test]
         public void TestPrepareCriteria_ConvertsValue_StringToGuid()
         {
             //---------------Set up test pack-------------------

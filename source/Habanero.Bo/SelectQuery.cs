@@ -33,7 +33,7 @@ namespace Habanero.BO
         private readonly Dictionary<string, QueryField> _fields = new Dictionary<string, QueryField>(5);
         private IClassDef _classDef;
         private Criteria _criteria;
-        private int _limit;
+        private int _limit = -1;
         private OrderCriteria _orderCriteria = new OrderCriteria();
         private Source _source;
 

@@ -237,7 +237,7 @@ namespace Habanero.BO
 
         private void AppendLimitClauseAtBeginning(StringBuilder builder)
         {
-            if (_selectQuery.Limit == 0) return;
+            if (_selectQuery.Limit < 0) return;
 
             string limitClauseAtBeginning =
                 DatabaseConnection.CurrentConnection.GetLimitClauseForBeginning(_selectQuery.Limit);
@@ -249,7 +249,7 @@ namespace Habanero.BO
 
         private void AppendLimitClauseAtEnd(StringBuilder builder)
         {
-            if (_selectQuery.Limit == 0) return;
+            if (_selectQuery.Limit < 0) return;
 
             string limitClauseAtEnd = DatabaseConnection.CurrentConnection.GetLimitClauseForEnd(_selectQuery.Limit);
             if (!String.IsNullOrEmpty(limitClauseAtEnd))
@@ -312,6 +312,10 @@ namespace Habanero.BO
                     criteriaDB.ToString(_sqlFormatter, delegate(object value)
                     {
                         string paramName = statement.ParameterNameGenerator.GetNextParameterName();
+                        if (value is DateTimeToday)
+                        {
+                            value = DateTimeToday.Value;
+                        }
                         statement.AddParameter(paramName, value);
                         return paramName;
                     });

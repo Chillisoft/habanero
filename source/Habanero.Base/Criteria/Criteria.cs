@@ -191,10 +191,14 @@ namespace Habanero.Base
                         businessObject.GetType().FullName));
             }
             IComparable y = _fieldValue as IComparable;
+            if (y is DateTimeToday)
+            {
+                y = DateTimeToday.Value;
+            }
             switch (_op)
             {
                 case Op.Equals:
-                    return (businessObject.GetPropertyValue(_field.PropertyName).Equals(_fieldValue));
+                    return x.Equals(y);
                 case Op.GreaterThan:
                     return x.CompareTo(y) > 0;
                 case Op.LessThan:

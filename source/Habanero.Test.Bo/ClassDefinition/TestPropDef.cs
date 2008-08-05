@@ -169,11 +169,11 @@ namespace Habanero.Test.BO.ClassDefinition
             PropDef propDef = new PropDef("a", typeof (Guid), PropReadWriteRule.ReadWrite, null);
             string guidString = Guid.NewGuid().ToString("B");
             //-------------Execute test ---------------------
-            Guid convertedGuid = (Guid)propDef.ConvertValueToPropertyType(guidString);
+            object convertedGuid = propDef.ConvertValueToPropertyType(guidString);
 
             //-------------Test Result ----------------------
+            Assert.IsInstanceOfType(typeof(Guid), convertedGuid);
            Assert.AreEqual(new Guid(guidString), convertedGuid);
-
         }
 
         [Test]
@@ -181,12 +181,79 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //-------------Setup Test Pack ------------------
             PropDef propDef = new PropDef("a", typeof(string), PropReadWriteRule.ReadWrite, null);
-            int intValue = 100;
+
             //-------------Execute test ---------------------
-            String convertedIntValue = (String)propDef.ConvertValueToPropertyType(intValue);
+            object convertedIntValue = propDef.ConvertValueToPropertyType(100);
 
             //-------------Test Result ----------------------
+            Assert.IsInstanceOfType(typeof(String), convertedIntValue);
             Assert.AreEqual("100", convertedIntValue);
+
+        }
+
+        [Test]
+        public void TestConvertValueToPropertyType_StringToDateTime()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("a", typeof(DateTime), PropReadWriteRule.ReadWrite, null);
+            const string dateTimeString = "01 Jan 2000 01:30:45";
+            DateTime dateTime = DateTime.Parse(dateTimeString);
+
+            //---------------Execute Test ----------------------
+            object convertedDateTimeValue = propDef.ConvertValueToPropertyType(dateTimeString);
+
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(DateTime), convertedDateTimeValue);
+            Assert.AreEqual(dateTime, convertedDateTimeValue);
+        }
+
+        [Test]
+        public void TestConvertValueToPropertyType_DateTimeAcceptsDateTimeToday()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("a", typeof(DateTime), PropReadWriteRule.ReadWrite, null);
+            DateTimeToday dateTimeToday = new DateTimeToday();
+
+            //---------------Execute Test ----------------------
+            object convertedDateTimeValue = propDef.ConvertValueToPropertyType(dateTimeToday);
+
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(DateTimeToday), convertedDateTimeValue);
+            Assert.AreEqual(dateTimeToday, convertedDateTimeValue);
+
+        }
+
+        [Test]
+        public void TestConvertValueToPropertyType_TodayStringToDateTimeToday()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("a", typeof(DateTime), PropReadWriteRule.ReadWrite, null);
+            const string dateTimeString = "Today";
+            DateTimeToday dateTimeToday = new DateTimeToday();
+
+            //---------------Execute Test ----------------------
+            object convertedDateTimeValue = propDef.ConvertValueToPropertyType(dateTimeString);
+
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(DateTimeToday), convertedDateTimeValue);
+            Assert.AreEqual(dateTimeToday, convertedDateTimeValue);
+
+        }
+
+        [Test]
+        public void TestConvertValueToPropertyType_TodayStringToDateTimeToday_VariedCase()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("a", typeof(DateTime), PropReadWriteRule.ReadWrite, null);
+            const string dateTimeString = "ToDaY";
+            DateTimeToday dateTimeToday = new DateTimeToday();
+
+            //---------------Execute Test ----------------------
+            object convertedDateTimeValue = propDef.ConvertValueToPropertyType(dateTimeString);
+
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(DateTimeToday), convertedDateTimeValue);
+            Assert.AreEqual(dateTimeToday, convertedDateTimeValue);
 
         }
 
