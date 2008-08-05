@@ -36,6 +36,19 @@ namespace Habanero.Test.UI.Base
 
         protected abstract void ApplyChangesToBusinessObject(IPanelFactoryInfo info);
 
+        protected abstract void SetupUserInterfaceMapper();
+
+        protected abstract void SetupClassDef();
+
+        protected ISampleUserInterfaceMapper _sampleUserInterfaceMapper;
+
+        [SetUp]
+        public void SetupTest()
+        {
+            SetupClassDef();
+            SetupUserInterfaceMapper();
+        }
+
         [TestFixture]
         public class TestPanelFactoryWin : TestPanelFactory
         {
@@ -43,10 +56,23 @@ namespace Habanero.Test.UI.Base
             {
                 return new Habanero.UI.Win.ControlFactoryWin();
             }
+            
+            protected override void SetupClassDef()
+            {
+                ClassDef.ClassDefs.Clear();
+                Sample.CreateClassDefWin();
+            }
 
             protected override void ApplyChangesToBusinessObject(IPanelFactoryInfo info)
             {
                 // do nothing - on windows the changes should be applied automatically when a value in a control changes
+                //Todo: Remove this line and get this passing for win. This feature should be tested in the mappers. Check this!
+                info.ControlMappers.ApplyChangesToBusinessObject();
+            }
+
+            protected override void SetupUserInterfaceMapper()
+            {
+                _sampleUserInterfaceMapper = new Sample.SampleUserInterfaceMapperWin();
             }
         }
 
@@ -58,8 +84,7 @@ namespace Habanero.Test.UI.Base
                 return new Habanero.UI.WebGUI.ControlFactoryGizmox();
             }
 
-            [SetUp]
-            public void SetupTest()
+            protected override void SetupClassDef()
             {
                 ClassDef.ClassDefs.Clear();
                 Sample.CreateClassDefGiz();
@@ -68,6 +93,11 @@ namespace Habanero.Test.UI.Base
             protected override void ApplyChangesToBusinessObject(IPanelFactoryInfo info)
             {
                 info.ControlMappers.ApplyChangesToBusinessObject();
+            }
+
+            protected override void SetupUserInterfaceMapper()
+            {
+                _sampleUserInterfaceMapper = new Sample.SampleUserInterfaceMapperGiz();
             }
         }
 
@@ -211,7 +241,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             IPanelFactory factory =
                 new PanelFactory
-                    (s, Sample.SampleUserInterfaceMapperGiz.SampleUserInterfaceMapper2Cols(), GetControlFactory());
+                    (s, _sampleUserInterfaceMapper.SampleUserInterfaceMapper2Cols(), GetControlFactory());
             IPanel pnl = factory.CreatePanel().Panel;
 
             //---------------Execute Test ----------------------
@@ -243,7 +273,7 @@ namespace Habanero.Test.UI.Base
             Sample s = new Sample();
             IPanelFactory factory =
                 new PanelFactory
-                    (s, Sample.SampleUserInterfaceMapperGiz.SampleUserInterfaceMapper3Props(), GetControlFactory());
+                    (s, _sampleUserInterfaceMapper.SampleUserInterfaceMapper3Props(), GetControlFactory());
             IPanelFactoryInfo info = factory.CreatePanel();
             IPanel pnl = info.Panel;
             ITextBox tb = (ITextBox) info.ControlMappers["SampleText"].Control;
@@ -259,7 +289,7 @@ namespace Habanero.Test.UI.Base
             Sample s = new Sample();
             IPanelFactory factory =
                 new PanelFactory
-                    (s, new Sample.SampleUserInterfaceMapperGiz().GetUIFormProperties(), GetControlFactory());
+                    (s, _sampleUserInterfaceMapper.GetUIFormProperties(), GetControlFactory());
             IPanel pnl = factory.CreatePanel().Panel;
             Assert.AreEqual(3, pnl.Controls.Count, "The panel should have 2 controls - one label and one text box plus error provider.");
             Assert.IsTrue(pnl.Controls[0] is ILabel);
@@ -272,20 +302,20 @@ namespace Habanero.Test.UI.Base
             Sample s = new Sample();
             IPanelFactory factory =
                 new PanelFactory
-                    (s, Sample.SampleUserInterfaceMapperGiz.SampleUserInterfaceMapper3Props(), GetControlFactory());
+                    (s, _sampleUserInterfaceMapper.SampleUserInterfaceMapper3Props(), GetControlFactory());
             IPanelFactoryInfo pnlInfo = factory.CreatePanel();
             IPanel pnl = pnlInfo.Panel;
             Assert.AreEqual(9, pnl.Controls.Count, "The panel should have 6 controls + 3 spaces for error provider.");
             Assert.AreEqual(3, pnlInfo.ControlMappers.Count, "The PanelInfo should have 3 mappers");
-            Assert.IsTrue(pnl.Controls[0] is ILabel);
+            Assert.IsInstanceOfType(typeof(ILabel), pnl.Controls[0]);
             int labelWidth = pnl.Controls[0].Width;
-            Assert.IsTrue(pnl.Controls[1] is ITextBox);
-            Assert.IsTrue(pnl.Controls[3] is ILabel);
+            Assert.IsInstanceOfType(typeof(ITextBox), pnl.Controls[1]);
+            Assert.IsInstanceOfType(typeof(ILabel), pnl.Controls[3]);
             Assert.AreEqual(labelWidth, pnl.Controls[3].Width);
-            Assert.IsTrue(pnl.Controls[4] is ITextBox);
-            Assert.IsTrue(pnl.Controls[6] is ILabel);
+            Assert.IsInstanceOfType(typeof(IDateTimePicker), pnl.Controls[4]);
+            Assert.IsInstanceOfType(typeof(ILabel), pnl.Controls[6]);
             Assert.AreEqual(labelWidth, pnl.Controls[6].Width);
-            Assert.IsTrue(pnl.Controls[7] is ITextBox);
+            Assert.IsInstanceOfType(typeof(ITextBox), pnl.Controls[7]);
         }
 
         [Test]
@@ -294,14 +324,14 @@ namespace Habanero.Test.UI.Base
             Sample s = new Sample();
             IPanelFactory factory =
                 new PanelFactory
-                    (s, Sample.SampleUserInterfaceMapperGiz.SampleUserInterfaceMapperPrivatePropOnly(),
+                    (s, _sampleUserInterfaceMapper.SampleUserInterfaceMapperPrivatePropOnly(),
                      GetControlFactory());
             IPanelFactoryInfo pnlInfo = factory.CreatePanel();
             IPanel pnl = pnlInfo.Panel;
             Assert.AreEqual(3, pnl.Controls.Count, "The panel should have 2 controls.");
             Assert.AreEqual(1, pnlInfo.ControlMappers.Count, "The PanelInfo should have 1 mappers");
-            Assert.IsTrue(pnl.Controls[0] is ILabel);
-            Assert.IsTrue(pnl.Controls[1] is ITextBox);
+            Assert.IsInstanceOfType(typeof(ILabel), pnl.Controls[0]);
+            Assert.IsInstanceOfType(typeof(ITextBox), pnl.Controls[1]);
 
             Assert.AreEqual('*', ((ITextBox) pnl.Controls[1]).PasswordChar);
         }
@@ -312,7 +342,7 @@ namespace Habanero.Test.UI.Base
             Sample s = new Sample();
             IPanelFactory factory =
                 new PanelFactory
-                    (s, Sample.SampleUserInterfaceMapperGiz.SampleUserInterfaceMapperDescribedPropOnly(null),
+                    (s, _sampleUserInterfaceMapper.SampleUserInterfaceMapperDescribedPropOnly(null),
                      GetControlFactory());
             IPanelFactoryInfo pnlInfo = factory.CreatePanel();
             IPanel pnl = pnlInfo.Panel;
@@ -338,7 +368,7 @@ namespace Habanero.Test.UI.Base
             IPanelFactory factory =
                 new PanelFactory
                     (s,
-                     Sample.SampleUserInterfaceMapperGiz.SampleUserInterfaceMapperDescribedPropOnly(controlToolTipText),
+                     _sampleUserInterfaceMapper.SampleUserInterfaceMapperDescribedPropOnly(controlToolTipText),
                      GetControlFactory());
             IPanelFactoryInfo pnlInfo = factory.CreatePanel();
             IPanel pnl = pnlInfo.Panel;
@@ -363,7 +393,7 @@ namespace Habanero.Test.UI.Base
             Sample s = new Sample();
             IPanelFactory factory =
                 new PanelFactory
-                    (s, Sample.SampleUserInterfaceMapperGiz.SampleUserInterfaceMapper2Tabs(), GetControlFactory());
+                    (s, _sampleUserInterfaceMapper.SampleUserInterfaceMapper2Tabs(), GetControlFactory());
             IPanelFactoryInfo factoryInfo = factory.CreatePanel();
             IPanel pnl = factoryInfo.Panel;
             Assert.AreEqual(1, pnl.Controls.Count, "The panel should have 1 control.");
@@ -381,7 +411,7 @@ namespace Habanero.Test.UI.Base
             Sample s = new Sample();
             IPanelFactory factory =
                 new PanelFactory
-                    (s, Sample.SampleUserInterfaceMapperGiz.SampleUserInterfaceMapper3Props(), GetControlFactory());
+                    (s, _sampleUserInterfaceMapper.SampleUserInterfaceMapper3Props(), GetControlFactory());
             IPanelFactoryInfo pnlInfo = factory.CreatePanel();
             Assert.AreEqual(300, pnlInfo.PreferredHeight);
             Assert.AreEqual(350, pnlInfo.PreferredWidth);
@@ -433,7 +463,7 @@ namespace Habanero.Test.UI.Base
             Sample s = new Sample();
             IPanelFactory factory =
                 new PanelFactory
-                    (s, Sample.SampleUserInterfaceMapperGiz.SampleUserInterfaceMapperColSpanning(), GetControlFactory());
+                    (s, _sampleUserInterfaceMapper.SampleUserInterfaceMapperColSpanning(), GetControlFactory());
             IPanel pnl = factory.CreatePanel().Panel;
             ILabel lbl = (ILabel) pnl.Controls[0];
             ITextBox tb = (ITextBox) pnl.Controls[1];
@@ -447,7 +477,7 @@ namespace Habanero.Test.UI.Base
             Sample s = new Sample();
             IPanelFactory factory =
                 new PanelFactory
-                    (s, Sample.SampleUserInterfaceMapperGiz.SampleUserInterfaceMapperRowSpanning(), GetControlFactory());
+                    (s, _sampleUserInterfaceMapper.SampleUserInterfaceMapperRowSpanning(), GetControlFactory());
             IPanel pnl = factory.CreatePanel().Panel;
             ITextBox tb = (ITextBox) pnl.Controls[1];
             Assert.IsTrue(tb.Multiline, "Textbox should be multiline if NumLines > 1");
@@ -469,7 +499,7 @@ namespace Habanero.Test.UI.Base
             Sample s = new Sample();
             IPanelFactory factory =
                 new PanelFactory
-                    (s, Sample.SampleUserInterfaceMapperGiz.SampleUserInterfaceMapperRowSpanning(), GetControlFactory());
+                    (s, _sampleUserInterfaceMapper.SampleUserInterfaceMapperRowSpanning(), GetControlFactory());
 
             //--------------Assert PreConditions----------------            
 
@@ -489,7 +519,7 @@ namespace Habanero.Test.UI.Base
 
             Sample s = new Sample();
             //---------------Execute Test ----------------------
-            IPanelFactory panelFactory = new PanelFactory(s, Sample.SampleUserInterfaceMapperGiz.SampleUserInterface_ReadWriteRule(), GetControlFactory());
+            IPanelFactory panelFactory = new PanelFactory(s, _sampleUserInterfaceMapper.SampleUserInterface_ReadWriteRule(), GetControlFactory());
             IPanelFactoryInfo  panelFactoryInfo = panelFactory.CreatePanel();
             //---------------Test Result -----------------------
             IControlMapperCollection mappers = panelFactoryInfo.ControlMappers;
@@ -507,7 +537,7 @@ namespace Habanero.Test.UI.Base
 
             Sample s = new Sample();
             //---------------Execute Test ----------------------
-            IPanelFactory panelFactory = new PanelFactory(s, Sample.SampleUserInterfaceMapperGiz.SampleUserInterface_WriteNewRule(), GetControlFactory());
+            IPanelFactory panelFactory = new PanelFactory(s, _sampleUserInterfaceMapper.SampleUserInterface_WriteNewRule(), GetControlFactory());
             IPanelFactoryInfo panelFactoryInfo = panelFactory.CreatePanel();
             //---------------Test Result -----------------------
             IControlMapperCollection mappers = panelFactoryInfo.ControlMappers;

@@ -576,7 +576,9 @@ namespace Habanero.UI.Win
 
         public ITextBox CreatePasswordTextBox()
         {
-            throw new System.NotImplementedException();
+            ITextBox tb = CreateTextBox();
+            tb.PasswordChar = '*';
+            return tb;
         }
 
         public IToolTip CreateToolTip()

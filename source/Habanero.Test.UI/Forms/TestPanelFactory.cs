@@ -58,7 +58,7 @@ namespace Habanero.Test.UI
         public void TestAlternateConstructor()
         {
             Sample s = new Sample();
-            PanelFactory factory = new PanelFactory(s, new Sample.SampleUserInterfaceMapper().GetUIFormProperties());
+            PanelFactory factory = new PanelFactory(s, new Sample.SampleUserInterfaceMapperWin().GetUIFormProperties());
             Panel pnl = factory.CreatePanel().Panel;
             Assert.AreEqual(2, pnl.Controls.Count, "The panel should have 2 controls - one label and one text box.");
             Assert.AreSame(typeof (Label), pnl.Controls[0].GetType());

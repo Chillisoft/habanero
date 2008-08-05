@@ -66,6 +66,7 @@
     <Compile Include="ColContactPeople.cs" />
     <Compile Include="ContactPerson.cs" />
     <Compile Include="ContactPersonCompositeKey.cs" />
+    <Compile Include="ISampleUserInterfaceMapper.cs" />
     <Compile Include="OrderItem.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="FilledCircle.cs" />

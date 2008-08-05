@@ -73,7 +73,15 @@ namespace Habanero.UI.Base
             //    SetValueOfDateTimePicker(Convert.ToDateTime(propValue));
             //}
             if (_businessObject == null) return;
-            _picker.Value = Convert.ToDateTime(_businessObject.GetPropertyValue(_propertyName));
+            //_picker.Value = Convert.ToDateTime(_businessObject.GetPropertyValue(_propertyName));
+            object propertyValue = GetPropertyValue();
+            if (propertyValue == null)
+            {
+                _picker.ValueOrNull = null;
+            } else
+            {
+                _picker.Value = Convert.ToDateTime(propertyValue);
+            }
         }
 
         ///// <summary>
