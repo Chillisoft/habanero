@@ -21,7 +21,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
-using Habanero.UI.Base;
+
 
 namespace Habanero.UI.Base.FilterControl
 {
@@ -327,17 +327,20 @@ namespace Habanero.UI.Base.FilterControl
 
             public override IFilterClause GetFilterClause()
             {
-                if (_textBox.Text.Length > 0)
-                {
-                    return
-                        _clauseFactory.CreateStringFilterClause(_columnName, _filterClauseOperator,
-                                                                _textBox.Text);
+               
+                    if (_textBox.Text.Length > 0)
+                    {
+                        return
+                            _clauseFactory.CreateStringFilterClause(_columnName, _filterClauseOperator,
+                                _textBox.Text);
+                    }
+                    else
+                    {
+                        
+                        return _clauseFactory.CreateNullFilterClause();
+                    }
                 }
-                else
-                {
-                    return _clauseFactory.CreateNullFilterClause();
-                }
-            }
+            
             public override void Clear()
             {
                 _textBox.Text = "";

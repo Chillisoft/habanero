@@ -311,7 +311,16 @@ namespace Habanero.UI.Base
             }
             if (filterClause != null)
             {
+                try
+                {
                     _dataTableDefaultView.RowFilter = filterClause.GetFilterClauseString();
+                }catch(Exception e)
+                {
+                    GlobalRegistry.UIExceptionNotifier.Notify(e,"Invalid character's in filter."
+                        , "Error In Filter String.");
+                }
+                
+              
             }
             else
             {
