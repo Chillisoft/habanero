@@ -113,7 +113,7 @@ namespace Habanero.UI.WebGUI
 
         private static void _uxWizardControl_MessagePosted(string message)
         {
-            MessageBox.Show(message);
+            MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         /// <summary>

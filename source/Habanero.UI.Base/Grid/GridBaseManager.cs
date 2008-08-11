@@ -311,7 +311,7 @@ namespace Habanero.UI.Base
             }
             if (filterClause != null)
             {
-                _dataTableDefaultView.RowFilter = filterClause.GetFilterClauseString();
+                    _dataTableDefaultView.RowFilter = filterClause.GetFilterClauseString();
             }
             else
             {

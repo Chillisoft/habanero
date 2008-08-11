@@ -66,6 +66,15 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void TestLike_WithSquareBracketFilter()
+        {
+            dv.RowFilter =
+                filterClauseFactory.CreateStringFilterClause("h a", FilterClauseOperator.OpLike, "[").
+                    GetFilterClauseString();
+            Assert.AreEqual(0, dv.Count);
+        }
+
+        [Test]
         public void Test_Search_CompositeEqualsWithAnd()
         {
             //---------------Set up test pack-------------------

@@ -368,6 +368,26 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void TestAcceptance_FilterGrid_WithSquareBracketFilter()
+        {
+            //---------------Set up test pack-------------------
+            //Get Grid with 4 items
+            BusinessObjectCollection<MyBO> col;
+            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col);
+            AddControlToForm(readOnlyGridControl);
+            ITextBox tb = readOnlyGridControl.FilterControl.AddStringFilterTextBox("Test Prop", "TestProp");
+            //--------------Assert PreConditions
+            Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
+            //---------------Execute Test ----------------------
+            //enter data in filter for 1 item
+            tb.Text = "[";
+            readOnlyGridControl.FilterControl.ApplyFilter();
+            //---------------Assert Result -----------------------
+            // verify that grid has only 1 item in it  
+            Assert.AreEqual(0, readOnlyGridControl.Grid.Rows.Count);
+        }
+
+        [Test]
         public void Test_Acceptance_Filter_When_On_Page2_Of_Pagination()
         {
             //---------------Set up test pack-------------------
