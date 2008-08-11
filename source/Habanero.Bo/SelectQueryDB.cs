@@ -116,66 +116,66 @@ namespace Habanero.BO
             return statement;
         }
 
-        private string AddRelationshipJoin(StringBuilder builder, ClassDef currentClassDef, QueryField field, Source fieldSource)
-        {
-            if (fieldSource == null || String.IsNullOrEmpty(fieldSource.Name))
-            {
-                IPropDef propDef = currentClassDef.GetPropDef(field.PropertyName, true);
-                if (propDef != null)
-                {
-                    field.FieldName = propDef.DatabaseFieldName;
-                }
-                return currentClassDef.GetTableName();
-            }
-
-            string relationshipName = fieldSource.Name;
-            RelationshipDef relationshipDef = currentClassDef.GetRelationship(relationshipName);
-            if (relationshipDef != null)
-            {
-                string joinString = GetJoinStringForRelationship(relationshipDef, currentClassDef);
-                builder.Append(joinString);
-                ClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
-                if (relatedObjectClassDef != null)
-                {
-                    Source childSource = null;
-                    if (fieldSource.Joins.Count > 0)
-                    {
-                        childSource = fieldSource.Joins[0].ToSource;
-                    }
-                    string relationshipJoinTable = AddRelationshipJoin(builder, relatedObjectClassDef, field, childSource);
-                    if (String.IsNullOrEmpty(relationshipJoinTable))
-                    {
-                        relationshipJoinTable = relatedObjectClassDef.GetTableName();
-                    }
-                    return relationshipJoinTable;
-                }
-            }
-            else
-            {
-                return currentClassDef.GetTableName();
-            }
-            return currentClassDef.GetTableName();
-        }
+//        private string AddRelationshipJoin(StringBuilder builder, ClassDef currentClassDef, QueryField field, Source fieldSource)
+//        {
+//            if (fieldSource == null || String.IsNullOrEmpty(fieldSource.Name))
+//            {
+//                IPropDef propDef = currentClassDef.GetPropDef(field.PropertyName, true);
+//                if (propDef != null)
+//                {
+//                    field.FieldName = propDef.DatabaseFieldName;
+//                }
+//                return currentClassDef.GetTableName();
+//            }
+//
+//            string relationshipName = fieldSource.Name;
+//            RelationshipDef relationshipDef = currentClassDef.GetRelationship(relationshipName);
+//            if (relationshipDef != null)
+//            {
+//                string joinString = GetJoinStringForRelationship(relationshipDef, currentClassDef);
+//                builder.Append(joinString);
+//                ClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
+//                if (relatedObjectClassDef != null)
+//                {
+//                    Source childSource = null;
+//                    if (fieldSource.Joins.Count > 0)
+//                    {
+//                        childSource = fieldSource.Joins[0].ToSource;
+//                    }
+//                    string relationshipJoinTable = AddRelationshipJoin(builder, relatedObjectClassDef, field, childSource);
+//                    if (String.IsNullOrEmpty(relationshipJoinTable))
+//                    {
+//                        relationshipJoinTable = relatedObjectClassDef.GetTableName();
+//                    }
+//                    return relationshipJoinTable;
+//                }
+//            }
+//            else
+//            {
+//                return currentClassDef.GetTableName();
+//            }
+//            return currentClassDef.GetTableName();
+//        }
 
         //private string GetJoinStringForRelationship(RelationshipDef relationshipDef)
         //{
         //    return GetJoinStringForRelationship(relationshipDef, this.ClassDef);
         //}
-
-        private string GetJoinStringForRelationship(RelationshipDef relationshipDef, IClassDef classDef)
-        {
-            string joinString = "";
-            foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
-            {
-                ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
-                IPropDef ownerPropDef = classDef.GetPropDef(relPropDef.OwnerPropertyName);
-                IPropDef relatedPropDef = relatedClassDef.GetPropDef(relPropDef.RelatedClassPropName);
-                joinString +=
-                    GetJoinString(joinString, classDef.TableName, ownerPropDef.DatabaseFieldName,
-                        relatedClassDef.TableName, relatedPropDef.DatabaseFieldName);
-            }
-            return joinString;
-        }
+//
+//        private string GetJoinStringForRelationship(RelationshipDef relationshipDef, IClassDef classDef)
+//        {
+//            string joinString = "";
+//            foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
+//            {
+//                ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
+//                IPropDef ownerPropDef = classDef.GetPropDef(relPropDef.OwnerPropertyName);
+//                IPropDef relatedPropDef = relatedClassDef.GetPropDef(relPropDef.RelatedClassPropName);
+//                joinString +=
+//                    GetJoinString(joinString, classDef.TableName, ownerPropDef.DatabaseFieldName,
+//                        relatedClassDef.TableName, relatedPropDef.DatabaseFieldName);
+//            }
+//            return joinString;
+//        }
 
         private string GetJoinString(string currentJointString, string joinFromTableName, string joinFromFieldName,
             string joinToTableName, string joinToFieldName)
@@ -295,12 +295,12 @@ namespace Habanero.BO
             StringUtilities.AppendMessage(orderByClause, tableAndFieldName + " " + direction, ", ");
         }
 
-        private string GetRelatedTableName(string relationshipName)
-        {
-            RelationshipDef relationshipDef = ((ClassDef)this.ClassDef).GetRelationship(relationshipName);
-            ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
-            return DelimitTable(relatedClassDef.TableName);
-        }
+//        private string GetRelatedTableName(string relationshipName)
+//        {
+//            RelationshipDef relationshipDef = ((ClassDef)this.ClassDef).GetRelationship(relationshipName);
+//            ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
+//            return DelimitTable(relatedClassDef.TableName);
+//        }
 
         private void AppendWhereClause(StringBuilder builder, SqlStatement statement)
         {
@@ -315,6 +315,10 @@ namespace Habanero.BO
                         if (value is DateTimeToday)
                         {
                             value = DateTimeToday.Value;
+                        }
+                        if (value is DateTimeNow)
+                        {
+                            value = DateTimeNow.Value;
                         }
                         statement.AddParameter(paramName, value);
                         return paramName;

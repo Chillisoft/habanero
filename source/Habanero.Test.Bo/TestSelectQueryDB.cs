@@ -146,8 +146,30 @@ namespace Habanero.Test.BO
             Assert.GreaterOrEqual(dateTimeBefore, dateTimeValue);
             Assert.LessOrEqual(dateTimeAfter, dateTimeValue);
         }
-
-
+        [Test]
+        public void TestCreateSqlStatement_WithCriteria_DateTimeNow()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWithDateTime();
+            Criteria criteria = new Criteria("TestDateTime", Criteria.Op.Equals, new DateTimeNow());
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            DateTime dateTimeBefore = DateTime.Today;
+            ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
+            DateTime dateTimeAfter = DateTime.Today.AddDays(1);
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.EndsWith("WHERE [MyBO].[TestDateTime] = ?Param0", statementString);
+            Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
+            object value = statement.Parameters[0].Value;
+            Assert.IsInstanceOfType(typeof(DateTime), value);
+                DateTime dateTimeValue = (DateTime)value;
+            Assert.GreaterOrEqual(dateTimeValue, dateTimeBefore);
+            Assert.LessOrEqual(dateTimeValue, dateTimeAfter);
+        }
+            
         [Test]
         public void TestCreateSqlStatement_WithOrderFields()
         {
@@ -283,10 +305,12 @@ namespace Habanero.Test.BO
             StringAssert.EndsWith("ORDER BY [contact_person].[Surname_field] ASC", statementString);
         }
 
+#pragma warning disable 168
         [Test]
         public void TestCreateSqlStatement_WithOrder_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
+
             ClassDef cpClassDef = new ContactPerson().ClassDef;
             ClassDef carClassDef = new Car().ClassDef;
             ClassDef engineClassDef = new Engine().ClassDef;
@@ -304,13 +328,13 @@ namespace Habanero.Test.BO
             StringAssert.Contains(expectedJoinSql, statementString);
             StringAssert.EndsWith("ORDER BY [contact_person].[Surname_field] ASC", statementString);
         }
-
+#pragma warning restore 168
         [Test]
         public void TestCreateSqlStatement_WithOrder_ThroughRelationship_CompositeKey()
         {
             //---------------Set up test pack-------------------
             Car car = new Car();
-            ContactPersonCompositeKey person = new ContactPersonCompositeKey();
+            new ContactPersonCompositeKey();
 
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(car.ClassDef);
             selectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(car.ClassDef, "Driver.Surname");
@@ -331,7 +355,7 @@ namespace Habanero.Test.BO
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtBeginning();
             SelectQuery selectQuery = new SelectQuery();
             selectQuery.Limit = 10;
-            string fieldName = "Field1";
+            const string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
@@ -350,7 +374,7 @@ namespace Habanero.Test.BO
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtBeginning();
             SelectQuery selectQuery = new SelectQuery();
             selectQuery.Limit = -1;
-            string fieldName = "Field1";
+            const string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
@@ -364,10 +388,6 @@ namespace Habanero.Test.BO
 
         public class DatabaseConnectionStub_LimitClauseAtBeginning : DatabaseConnectionStub
         {
-            public DatabaseConnectionStub_LimitClauseAtBeginning()
-            {
-            }
-
             public override string GetLimitClauseForBeginning(int limit)
             {
                 return "TOP ROWS " + limit;
@@ -381,7 +401,7 @@ namespace Habanero.Test.BO
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtEnd();
             SelectQuery selectQuery = new SelectQuery();
             selectQuery.Limit = 10;
-            string fieldName = "Field1";
+            const string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
@@ -400,7 +420,7 @@ namespace Habanero.Test.BO
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtEnd();
             SelectQuery selectQuery = new SelectQuery();
             selectQuery.Limit = -1;
-            string fieldName = "Field1";
+            const string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
@@ -445,10 +465,6 @@ namespace Habanero.Test.BO
 
         public class DatabaseConnectionStub_LimitClauseAtEnd : DatabaseConnectionStub
         {
-            public DatabaseConnectionStub_LimitClauseAtEnd()
-            {
-            }
-
             public override string GetLimitClauseForEnd(int limit)
             {
                 return "LIMIT " + limit;

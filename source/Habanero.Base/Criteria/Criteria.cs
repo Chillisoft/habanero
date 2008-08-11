@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.Base
 {
@@ -66,7 +67,11 @@ namespace Habanero.Base
             ///<summary>
             /// The less than (&lt;) operator
             ///</summary>
-            LessThan
+            LessThan,
+            NotEquals,
+            LessThanEqual,
+            GreaterThanEqual,
+            Like
         }
 
         #endregion
@@ -81,8 +86,8 @@ namespace Habanero.Base
         private readonly Criteria _rightCriteria;
         private object _fieldValue;
         protected readonly string[] LogicalOps = {"AND", "OR"};
-        protected readonly string[] Ops = {"=", ">", "<"};
-        private QueryField _field;
+        protected readonly string[] ComparisonOps = {"=", ">", "<", "<>", "<=", ">="};
+        private readonly QueryField _field;
 
         protected Criteria()
         {
@@ -176,9 +181,16 @@ namespace Habanero.Base
                     case Op.GreaterThan:
                         return false;
                     case Op.LessThan:
-                        return _fieldValue != null;
-                    default:
                         return false;
+                    case Op.NotEquals:
+                        return _fieldValue != null;
+                    case Op.LessThanEqual:
+                        return false;
+                    case Op.GreaterThanEqual:
+                        return false;
+                    default:
+                        throw new HabaneroDeveloperException("There is an application exception please contact your system administrator"
+                            , "The operator " + _op + " is not supported by the application");
                 }
             }
 
@@ -191,10 +203,8 @@ namespace Habanero.Base
                         businessObject.GetType().FullName));
             }
             IComparable y = _fieldValue as IComparable;
-            if (y is DateTimeToday)
-            {
-                y = DateTimeToday.Value;
-            }
+            y = ConvertDateTImeToday(y);
+            y = ConvertDateTimeNow(y);
             switch (_op)
             {
                 case Op.Equals:
@@ -203,9 +213,34 @@ namespace Habanero.Base
                     return x.CompareTo(y) > 0;
                 case Op.LessThan:
                     return x.CompareTo(y) < 0;
+                case Op.NotEquals:
+                    return !x.Equals(y);
+                case Op.LessThanEqual:
+                    return x.CompareTo(y) <= 0;
+                case Op.GreaterThanEqual:
+                    return x.CompareTo(y) >= 0;
                 default:
-                    return false;
+                    throw new HabaneroDeveloperException("There is an application exception please contact your system administrator"
+                        , "The operator " + _op + " is not supported by the application");
             }
+        }
+
+        private static IComparable ConvertDateTImeToday(IComparable y)
+        {
+            if (y is DateTimeToday)
+            {
+                y = DateTimeToday.Value;
+            }
+            return y;
+        }
+
+        private static IComparable ConvertDateTimeNow(IComparable y)
+        {
+            if (y is DateTimeNow)
+            {
+                y = DateTimeNow.Value;
+            }
+            return y;
         }
 
         ///<summary>
@@ -227,7 +262,7 @@ namespace Habanero.Base
             }
             string sourceName = Convert.ToString(_field.Source);
             if (!String.IsNullOrEmpty(sourceName)) sourceName += ".";
-            return string.Format("{0}{1} {2} {3}", sourceName, Field.PropertyName, Ops[(int)ComparisonOperator], GetValueAsString());
+            return string.Format("{0}{1} {2} {3}", sourceName, Field.PropertyName, ComparisonOps[(int)ComparisonOperator], GetValueAsString());
             //return ToString(delegate(string propName) { return propName; }, delegate(object value)
             //    {
             //        string valueString;

@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Address.cs" />
     <Compile Include="ArchitectureTest.cs" />
+    <Compile Include="Base\TestDateTimeNow.cs" />
     <Compile Include="Base\TestDateTimeToday.cs" />
     <Compile Include="Base\TestGlobalRegistry.cs" />
     <Compile Include="Base\TestHabaneroApp.cs" />

@@ -101,7 +101,7 @@ namespace Habanero.Base
                 sourceEntityName = formatter.DelimitTable(sourceEntityName);
                 separator = ".";
             }
-            return string.Format("{0}{1}{2} {3} {4}", sourceEntityName, separator, formatter.DelimitField(Field.FieldName), Ops[(int)ComparisonOperator], valueString);
+            return string.Format("{0}{1}{2} {3} {4}", sourceEntityName, separator, formatter.DelimitField(Field.FieldName), ComparisonOps[(int)ComparisonOperator], valueString);
         }
 
     

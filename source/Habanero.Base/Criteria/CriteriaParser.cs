@@ -1,3 +1,5 @@
+using Habanero.Base.Exceptions;
+
 namespace Habanero.Base
 {
     ///<summary>
@@ -73,8 +75,14 @@ namespace Habanero.Base
                     return Criteria.Op.GreaterThan;
                 case "<":
                     return Criteria.Op.LessThan;
+                case "<=":
+                    return Criteria.Op.LessThanEqual;
+                case ">=":
+                    return Criteria.Op.GreaterThanEqual;
+                case "<>":
+                    return Criteria.Op.NotEquals;
                 default:
-                    return Criteria.Op.Equals;
+                    throw new HabaneroDeveloperException("An error has occured in the application, please contact your system administrator.","Invalid operator used in a criteria string: "+operatorString);
             }
         }
 

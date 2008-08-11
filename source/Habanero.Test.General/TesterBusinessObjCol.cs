@@ -345,7 +345,7 @@ namespace Habanero.Test.General
 
             criteria = new Criteria("DateOfBirth", Criteria.Op.GreaterThan, "Today");
             myCol = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPerson>(criteria);
-//            myCol = ContactPerson.LoadBusinessObjCol("DateOfBirth >= 'TODAY'", "DateOfBirth");
+//            myCol = ContactPerson.LoadBusinessObjCol("DateOfBirth >= 'TODAY'", "DateOfBirth");//TODO >= not yet implemented.
             Assert.AreEqual(2, myCol.Count);
             Assert.AreSame(contactPerson2, myCol[0]);
             Assert.AreSame(contactPerson3, myCol[1]);

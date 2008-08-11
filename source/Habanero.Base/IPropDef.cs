@@ -165,6 +165,12 @@ namespace Habanero.Base
         /// <returns>The newly created BO property</returns>
         IBOProp CreateBOProp(bool assignDefaultValue);
 
+        ///<summary>
+        /// Converts the 'value to convert' to the appropriate type for the Property definition.
+        /// E.g. A string 'today' will be converted to a datetimetoday object.
+        ///</summary>
+        ///<param name="valueToConvert">The value requiring conversion.</param>
+        ///<returns>The converted property value</returns>
         object ConvertValueToPropertyType(object valueToConvert);
     }
 }

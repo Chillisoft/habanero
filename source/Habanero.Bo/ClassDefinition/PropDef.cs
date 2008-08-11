@@ -1042,8 +1042,16 @@ namespace Habanero.BO.ClassDefinition
                     {
                         return new DateTimeToday();
                     }
+                    if (stringValueToConvert.ToUpper() == "NOW")
+                    {
+                        return new DateTimeNow();
+                    }
                 }
                 else if (valueToConvert is DateTimeToday)
+                {
+                    return valueToConvert;
+                }
+                else if (valueToConvert is DateTimeNow)
                 {
                     return valueToConvert;
                 }

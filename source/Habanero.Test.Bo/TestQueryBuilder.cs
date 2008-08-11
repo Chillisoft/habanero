@@ -249,7 +249,23 @@ namespace Habanero.Test.BO
             Assert.AreEqual(dateTimeToday, criteria.FieldValue);
         }
 
-        
+        [Test]
+        public void TestPrepareCriteria_ConvertsValue_StringNowToDateTimeToday()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef myBoClassDef = MyBO.LoadClassDefWithDateTime();
+            const string dateTimeString = "Now";
+            Criteria criteria = new Criteria("TestDateTime", Criteria.Op.Equals, dateTimeString);
+
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareCriteria(myBoClassDef, criteria);
+
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(DateTimeNow), criteria.FieldValue);
+            DateTime dateTimeFieldValue = Convert.ToDateTime(criteria.FieldValue.ToString());
+            Assert.Greater(dateTimeFieldValue, DateTimeToday.Value);
+            Assert.Less(dateTimeFieldValue, DateTimeToday.Value.AddDays(1));
+        }
         [Test]
         public void TestPrepareCriteria_ConvertsValue_StringToGuid()
         {
