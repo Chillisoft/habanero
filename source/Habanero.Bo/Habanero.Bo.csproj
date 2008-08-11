@@ -343,6 +343,7 @@
     <Compile Include="TransactionalBusinessObjectDB.cs" />
     <Compile Include="TransactionCommitterDB.cs" />
     <Compile Include="TransactionCommitter.cs" />
+    <Compile Include="TransactionLogBusObj.cs" />
     <Compile Include="TransactionLogTable.cs">
       <SubType>Code</SubType>
     </Compile>

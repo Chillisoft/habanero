@@ -20,6 +20,8 @@
 using System;
 using System.Security.Principal;
 using Habanero.Base;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using Habanero.DB;
 
 namespace Habanero.BO
@@ -76,6 +78,7 @@ namespace Habanero.BO
         /// <param name="dateTimeUpdatedFieldName">Time updated field name</param>
         /// <param name="windowsUserFieldName">Windows user field name</param>
         /// <param name="logonUserFieldName">Logon user field name</param>
+        /// <param name="businessObjectToStringFieldName"></param>
         /// <param name="machineUpdateName">Machine update name</param>
         /// <param name="businessObjectTypeNameFieldName">BO type field name</param>
         /// <param name="crudActionFieldName">Crud action field name</param>
@@ -95,6 +98,36 @@ namespace Habanero.BO
             this._businessObjectTypeNameFieldName = businessObjectTypeNameFieldName;
             this._crudActionFieldName = crudActionFieldName;
             this._dirtyXmlFieldName = dirtyXMLFieldName;
+            LoadClassDef();
+        }
+
+        /// <summary>
+        /// Load ClassDef for accessing the transacionLog table through Business Object.
+        /// </summary>
+        public static void LoadClassDef()
+        {
+            XmlClassLoader xmlClassLoader = new XmlClassLoader();
+            ClassDef classDef =
+                xmlClassLoader.LoadClass(
+                    @"
+               <class name=""TransactionLogBusObj"" assembly=""Habanero.BO"" table=""transactionlog"">
+					<property  name=""TransactionSequenceNo"" type=""Int32"" autoIncrementing=""true"" />
+					<property  name=""DateTimeUpdated"" type=""DateTime"" />
+					<property  name=""WindowsUser""/>
+					<property  name=""LogonUser"" />
+					<property  name=""MachineUpdatedName"" databaseField=""MachineName""/>
+					<property  name=""BusinessObjectTypeName"" />
+                    <property  name=""BusinessObjectToString""/>
+					<property  name=""CRUDAction"" />
+					<property  name=""DirtyXMLLog"" databaseField=""DirtyXML""/>
+					<primaryKey isObjectID=""false"">
+						<prop name=""TransactionSequenceNo"" />
+					</primaryKey>
+			    </class>
+			");
+            if(!ClassDef.ClassDefs.Contains(classDef))
+                ClassDef.ClassDefs.Add(classDef);
+            return;
         }
 
         /// <summary>
@@ -121,36 +154,6 @@ namespace Habanero.BO
         {
             _securityController = securityController;
         }
-
-        ///// <summary>
-        ///// Record a transaction log for the specified business object
-        ///// </summary>
-        ///// <param name="busObj">The business object</param>
-        ///// <param name="logonUserName">The name of the user who carried 
-        ///// out the changes</param>
-        //public void RecordTransactionLog(BusinessObject busObj, string logonUserName)
-        //{
-        //    //TODO: Peter - make this proper parametrized Sql
-        //    SqlStatement tranSql = new SqlStatement(DatabaseConnection.CurrentConnection);
-        //    string sql = "INSERT INTO " + this._transactionLogTable + " (" +
-        //                 this._dateTimeUpdatedFieldName + ", " +
-        //                 this._logonUserFieldName + ", " +
-        //                 this._windowsUserFieldName + ", " +
-        //                 this._machineUpdateName + ", " +
-        //                 this._businessObjectTypeNameFieldName + ", " +
-        //                 this._crudActionFieldName + ", " +
-        //                 this._dirtyXmlFieldName + ") VALUES ( '" +
-        //                 DatabaseUtil.FormatDatabaseDateTime(DateTime.Now) + "', '" +
-        //                 logonUserName + "', '" +
-        //                 WindowsIdentity.GetCurrent().Name + "', '" +
-        //                 Environment.MachineName + "', '" +
-        //                 busObj.ClassName + "', '" +
-        //                 GetCrudAction(busObj) + "', '" +
-        //                 busObj.DirtyXML + "' )";
-        //    tranSql.Statement.Append(sql);
-        //    SqlStatementCollection sqlStatements = new SqlStatementCollection(tranSql);
-        //    DatabaseConnection.CurrentConnection.ExecuteSql(sqlStatements);
-        //}
 
         /// <summary>
         /// Returns the status of the business object specified, such as

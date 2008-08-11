@@ -3,6 +3,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -149,7 +150,7 @@ namespace Habanero.Test.BO
         public void TestAcceptanceTransactionLog_SaveMultipleTimes()
         {
             //---------------Cleanup databse ------------------
-            TransactionLogBusObj.DeleteAllTransactionLogsFromDatabase();
+            CleanDB();
             //---------------Set up test pack-------------------
             ContactPersonTransactionLogging cp = CreateUnsavedContactPersonTransactionLogging();
             cp.Save();
@@ -176,6 +177,13 @@ namespace Habanero.Test.BO
 
             //---------------Tear Down -------------------------          
         }
+
+        private static void CleanDB()
+        {
+            string sql = "DELETE FROM transactionlog";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+        }
+
         //Moved from tester class
         [Test]
         public void TestDirtyXml()
@@ -221,26 +229,26 @@ namespace Habanero.Test.BO
         }
         private static void LoadTransactionLogClassDef()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
-            ClassDef itsClassDef =
-                itsLoader.LoadClass(
-                    @"
-               <class name=""TransactionLogBusObj"" assembly=""Habanero.Test.BO"" table=""transactionlog"">
-					<property  name=""TransactionSequenceNo"" type=""Int32"" autoIncrementing=""true"" />
-					<property  name=""DateTimeUpdated"" type=""DateTime"" />
-					<property  name=""WindowsUser""/>
-					<property  name=""LogonUser"" />
-					<property  name=""MachineUpdatedName"" databaseField=""MachineName""/>
-					<property  name=""BusinessObjectTypeName"" />
-                    <property  name=""BusinessObjectToString""/>
-					<property  name=""CRUDAction"" />
-					<property  name=""DirtyXMLLog"" databaseField=""DirtyXML""/>
-					<primaryKey isObjectID=""false"">
-						<prop name=""TransactionSequenceNo"" />
-					</primaryKey>
-			    </class>
-			");
-            ClassDef.ClassDefs.Add(itsClassDef);
+//            XmlClassLoader itsLoader = new XmlClassLoader();
+//            ClassDef itsClassDef =
+//                itsLoader.LoadClass(
+//                    @"
+//               <class name=""TransactionLogBusObj"" assembly=""Habanero.Test.BO"" table=""transactionlog"">
+//					<property  name=""TransactionSequenceNo"" type=""Int32"" autoIncrementing=""true"" />
+//					<property  name=""DateTimeUpdated"" type=""DateTime"" />
+//					<property  name=""WindowsUser""/>
+//					<property  name=""LogonUser"" />
+//					<property  name=""MachineUpdatedName"" databaseField=""MachineName""/>
+//					<property  name=""BusinessObjectTypeName"" />
+//                    <property  name=""BusinessObjectToString""/>
+//					<property  name=""CRUDAction"" />
+//					<property  name=""DirtyXMLLog"" databaseField=""DirtyXML""/>
+//					<primaryKey isObjectID=""false"">
+//						<prop name=""TransactionSequenceNo"" />
+//					</primaryKey>
+//			    </class>
+//			");
+//            ClassDef.ClassDefs.Add(itsClassDef);
             return;
         }
 

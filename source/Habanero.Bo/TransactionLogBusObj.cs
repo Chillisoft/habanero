@@ -1,10 +1,12 @@
 using System;
-using Habanero.BO;
 using Habanero.DB;
 
-namespace Habanero.Test.BO
+namespace Habanero.BO
 {
-    internal class TransactionLogBusObj : BusinessObject
+    ///<summary>
+    /// Provides a BusinessObject to use the TransactionLog table.
+    ///</summary>
+    public class TransactionLogBusObj : BusinessObject
     {
 
         public string CrudAction
@@ -31,6 +33,12 @@ namespace Habanero.Test.BO
             set { SetPropertyValue("WindowsUser", value); }
         }
 
+        public string LogonUser
+        {
+            get { return GetPropertyValueString("LogonUser"); }
+            set { SetPropertyValue("LogonUser", value); }
+        }
+
         public string MachineUpdatedName
         {
             get { return GetPropertyValueString("MachineUpdatedName"); }
@@ -47,12 +55,6 @@ namespace Habanero.Test.BO
         {
             get { return GetPropertyValueString("BusinessObjectToString"); }
             set { SetPropertyValue("BusinessObjectToString", value); }
-        }
-
-        public static void DeleteAllTransactionLogsFromDatabase()
-        {
-            string sql = "DELETE FROM transactionlog";
-            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
     }
 }
