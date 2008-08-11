@@ -35,10 +35,10 @@ namespace Habanero.Test.Util
     [TestFixture]
     public class TestByteString : TestUsingDatabase
     {
-        private ClassDef itsClassDef;
+        private readonly ClassDef itsClassDef;
 
         //These unicode bytes spell 'test':   t - 116, e - 101, s - 115, t - 116
-        private byte[] itsByteArrSpelling_test = { 116, 0, 101, 0, 115, 0, 116, 0 };
+        private readonly byte[] itsByteArrSpelling_test = { 116, 0, 101, 0, 115, 0, 116, 0 };
 
         public TestByteString()
         {

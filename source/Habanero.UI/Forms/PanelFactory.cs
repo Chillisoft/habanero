@@ -42,7 +42,7 @@ namespace Habanero.UI.Forms
         private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.PanelFactory");
         private BusinessObject _currentBusinessObject;
         //private IUserInterfaceMapper[] _uiArray;
-        private UIForm _uiForm;
+        private readonly UIForm _uiForm;
         private Control _firstControl;
 
         private EventHandler _emailTextBoxDoubleClickedHandler;
@@ -199,10 +199,6 @@ namespace Habanero.UI.Forms
                     {
                         isCompulsory = propDef.Compulsory;
                     }
-                    else
-                    {
-                        isCompulsory = false;
-                    }
                     string labelCaption = field.GetLabel(classDef);
                     BOPropCol boPropCol = _currentBusinessObject.Props;
                     if (boPropCol.Contains(field.PropertyName))
@@ -235,7 +231,7 @@ namespace Habanero.UI.Forms
                     {
                         if (field.GetParameterValue("numLines") != null)
                         {
-                            int numLines = 0;
+                            int numLines;
                             try
                             {
                                 numLines = Convert.ToInt32(field.GetParameterValue("numLines"));
@@ -285,12 +281,12 @@ namespace Habanero.UI.Forms
                         //    }
                         //    editor.
                         //}
-                        editor.Enter += new EventHandler(DateTimePickerEnterHandler);
+                        editor.Enter += DateTimePickerEnterHandler;
                     }
                     if (ctl is NumericUpDown)
                     {
                         NumericUpDown upDown = (NumericUpDown) ctl;
-                        upDown.Enter += new EventHandler(UpDownEnterHandler);
+                        upDown.Enter += UpDownEnterHandler;
                     }
 
                     CheckGeneralParameters(field, ctl);
@@ -308,7 +304,7 @@ namespace Habanero.UI.Forms
                         {
                             colSpan = Convert.ToInt32(field.GetParameterValue("colSpan"));
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             throw new InvalidXmlDefinitionException("An error " +
                                 "occurred while reading the 'colSpan' parameter " +
@@ -325,7 +321,7 @@ namespace Habanero.UI.Forms
                         {
                             rowSpan = Convert.ToInt32(field.GetParameterValue("rowSpan"));
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             throw new InvalidXmlDefinitionException("An error " +
                                 "occurred while reading the 'rowSpan' parameter " +
@@ -383,7 +379,7 @@ namespace Habanero.UI.Forms
         /// <summary>
         /// Checks for a range of parameters that may apply to some or all fields
         /// </summary>
-        private void CheckGeneralParameters(UIFormField field, Control ctl)
+        private static void CheckGeneralParameters(UIFormField field, Control ctl)
         {
             if (field.GetParameterValue("alignment") != null)
             {
@@ -455,7 +451,7 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        private void UpDownEnterHandler(object sender, EventArgs e)
+        private static void UpDownEnterHandler(object sender, EventArgs e)
         {
             NumericUpDown upDown = (NumericUpDown) sender;
             upDown.Select(0, upDown.Text.Length);
@@ -467,7 +463,7 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        private void DateTimePickerEnterHandler(object sender, EventArgs e)
+        private static void DateTimePickerEnterHandler(object sender, EventArgs e)
         {
             DateTimePicker editor = (DateTimePicker) sender;
             //editor.se
@@ -480,7 +476,7 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        private void EmailTextBoxDoubleClickedHandler(object sender, EventArgs e)
+        private static void EmailTextBoxDoubleClickedHandler(object sender, EventArgs e)
         {
             TextBox tb = (TextBox) sender;
             if (tb.Text.IndexOf("@") != -1)
@@ -530,14 +526,9 @@ namespace Habanero.UI.Forms
         /// </summary>
         private static Control CreateControl(UIFormField field)
         {
-            if (field.ControlType != null)
-            {
-                return ControlFactory.CreateControl(field.ControlType);
-            }
-            else
-            {
-                return ControlFactory.CreateControl(field.ControlTypeName, field.ControlAssemblyName);
-            }
+            return field.ControlType != null 
+                ? ControlFactory.CreateControl(field.ControlType) 
+                : ControlFactory.CreateControl(field.ControlTypeName, field.ControlAssemblyName);
         }
 
         /// <summary>
@@ -726,8 +717,7 @@ namespace Habanero.UI.Forms
                                 }
                                 BusinessObjectLookupList lookupList = (BusinessObjectLookupList) ilookuplist;
                                 string oldCriteria = lookupList.Criteria;
-                                string newCriteria = oldCriteria;
-                                if (newCriteria == null) newCriteria = "";
+                                string newCriteria = oldCriteria ?? "";
                                 if (newCriteria.Length > 0) newCriteria += " AND ";
                                 if (sourceValue is Guid)
                                     newCriteria += sourceProperty + " = '" + ((Guid) sourceValue).ToString("B") + "'";

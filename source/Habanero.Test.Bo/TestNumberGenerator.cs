@@ -162,7 +162,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             //Create an instance of the number for a specific type of number (e.g. Invoice number)
-            string numberType = "tmp";
+            const string numberType = "tmp";
             BOSequenceNumberLocking.LoadNumberGenClassDef();
             INumberGenerator numGen = new NumberGeneratorPessimisticLocking(numberType);
             numGen.SetSequenceNumber(0);

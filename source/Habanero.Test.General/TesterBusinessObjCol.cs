@@ -232,7 +232,7 @@ namespace Habanero.Test.General
             Assert.AreEqual(2, myCol.Count);
 
             //criteria1 = new Criteria("Surname", Criteria.Op.Equals, "bb");
-            //criteria2 = new Criteria("Surname", Criteria.Op., "abc");
+            //criteria2 = new Criteria("Surname", Criteria.Op.Like, "abc");
             //criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
             //TODO: Loader does not have an operator like.
             myCol = ContactPerson.LoadBusinessObjCol("Surname = 'bb' or Surname like 'abc%'", "Surname");

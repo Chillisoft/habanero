@@ -20,7 +20,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.UI.Base.FilterControl;
@@ -28,22 +27,20 @@ using Habanero.UI.Base.FilterControl;
 namespace Habanero.UI.Win
 {
     // TODO: move this into FilterControl directory like Giz version
-    public class FilterControlWin : PanelWin, IFilterControl, IPanel
+    public class FilterControlWin : PanelWin, IFilterControl
     {
-        public event EventHandler Filter;
+        private readonly IControlFactory _controlFactory;
+        private readonly IPanel _controlPanel;
+        private readonly IPanel _filterButtonPanel;
         private readonly FilterControlManager _filterControlManager;
-        private FilterModes _filterMode;
-        private IButton _filterButton;
+        private readonly IGroupBox _gbox;
         private IButton _clearButton;
-        private IControlFactory _controlFactory;
-        private IGroupBox _gbox;
-        private IPanel _controlPanel;
-        private IPanel _filterButtonPanel;
+        private IButton _filterButton;
+        private FilterModes _filterMode;
 
         public FilterControlWin(IControlFactory controlFactory)
         {
-
-            this.Height = 50;
+            Height = 50;
             _controlFactory = controlFactory;
             _gbox = _controlFactory.CreateGroupBox();
             _controlFactory.CreateBorderLayoutManager(this).AddControl(_gbox, BorderLayoutManager.Position.Centre);
@@ -60,45 +57,18 @@ namespace Habanero.UI.Win
             layoutManager.AddControl(_filterButtonPanel, BorderLayoutManager.Position.West);
 
             _controlPanel = controlFactory.CreatePanel();
-            _controlPanel.Width = this.Width;
+            _controlPanel.Width = Width;
 
             layoutManager.AddControl(_controlPanel, BorderLayoutManager.Position.Centre);
 
-            this.Height = 50;
-            _filterControlManager = new FilterControlManager(controlFactory, new FlowLayoutManager(_controlPanel, controlFactory));
+            Height = 50;
+            _filterControlManager = new FilterControlManager(controlFactory,
+                                                             new FlowLayoutManager(_controlPanel, controlFactory));
+        }
 
-        }
-        private void CreateFilterButtons(IPanel filterButtonPanel)
-        {
-            int buttonHeight = 20;
-            int buttonWidth = 45;
-            _filterButton = CreateFilterButton(buttonWidth, buttonHeight);
-            _clearButton = CreateClearButton(buttonWidth, buttonHeight);
+        #region IFilterControl Members
 
-            FlowLayoutManager layoutManager = new FlowLayoutManager(filterButtonPanel, _controlFactory);
-            layoutManager.AddControl(_filterButton);
-            layoutManager.AddControl(_clearButton);
-        }
-        private IButton CreateClearButton(int buttonWidth, int buttonHeight)
-        {
-            IButton clearButton = _controlFactory.CreateButton();
-            clearButton.Width = buttonWidth;
-            clearButton.Height = buttonHeight;
-            clearButton.Top = _filterButton.Height + 2;
-            clearButton.Text = "Clear";
-            clearButton.Click += delegate { ClearFilters(); };
-            return clearButton;
-        }
-        private IButton CreateFilterButton(int buttonWidth, int buttonHeight)
-        {
-            IButton filterButton = _controlFactory.CreateButton();
-            filterButton.Width = buttonWidth;
-            filterButton.Height = buttonHeight;
-            filterButton.Top = 0;
-            filterButton.Text = "Filter";
-            filterButton.Click += delegate { FireFilterEvent(); };
-            return filterButton;
-        }
+        public event EventHandler Filter;
 
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName)
         {
@@ -115,7 +85,8 @@ namespace Habanero.UI.Win
         /// filtering</param>
         /// <returns>Returns the new TextBox added</returns>
         /// <param name="filterClauseOperator">Operator To Use For the filter clause</param>
-        public ITextBox AddStringFilterTextBox(string labelText, string propertyName, FilterClauseOperator filterClauseOperator)
+        public ITextBox AddStringFilterTextBox(string labelText, string propertyName,
+                                               FilterClauseOperator filterClauseOperator)
         {
             return _filterControlManager.AddStringFilterTextBox(labelText, propertyName, filterClauseOperator);
         }
@@ -161,14 +132,17 @@ namespace Habanero.UI.Win
         /// right side of the equation.</param>
         /// <param name="nullable">Must the date time picker be nullable</param>
         /// <returns>Returns the new DateTimePicker added</returns>
-        public IDateTimePicker AddDateFilterDateTimePicker(string label, string propertyName, DateTime defaultValue, FilterClauseOperator filterClauseOperator, bool nullable)
+        public IDateTimePicker AddDateFilterDateTimePicker(string label, string propertyName, DateTime defaultValue,
+                                                           FilterClauseOperator filterClauseOperator, bool nullable)
         {
             //_layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
             //DateTimePicker picker =
             //    _filterInputBoxCollection.AddDateFilterDateTimePicker(columnName, defaultValue, filterClauseOperator, ignoreTime, nullable);
             //_layoutManager.AddControl(picker);
             //return picker;
-            IDateTimePicker dtPicker = _filterControlManager.AddDateFilterDateTimePicker(propertyName, filterClauseOperator, nullable, defaultValue);
+            IDateTimePicker dtPicker = _filterControlManager.AddDateFilterDateTimePicker(propertyName,
+                                                                                         filterClauseOperator, nullable,
+                                                                                         defaultValue);
             return dtPicker;
         }
 
@@ -198,14 +172,6 @@ namespace Habanero.UI.Win
             get { return _filterControlManager.CountOfFilters; }
         }
 
-        private void FireFilterEvent()
-        {
-            if (Filter != null)
-            {
-                Filter(this, new EventArgs());
-            }
-        }
-
         public IButton FilterButton
         {
             get { return _filterButton; }
@@ -222,19 +188,21 @@ namespace Habanero.UI.Win
         public FilterModes FilterMode
         {
             get { return _filterMode; }
-            set { _filterMode = value;
-            _filterButtonPanel.Visible = (_filterMode == FilterModes.Search);
-        }
+            set
+            {
+                _filterMode = value;
+                _filterButtonPanel.Visible = (_filterMode == FilterModes.Search);
+            }
         }
 
         public IList FilterControls
         {
-            get {return this._filterControlManager.FilterControls; }
+            get { return _filterControlManager.FilterControls; }
         }
 
         public IControlChilli GetChildControl(string propertyName)
         {
-            return this._filterControlManager.GetChildControl(propertyName);
+            return _filterControlManager.GetChildControl(propertyName);
         }
 
         public void ClearFilters()
@@ -269,17 +237,64 @@ namespace Habanero.UI.Win
         /// <param name="includeEndDate">Includes all dates that match the end
         /// date exactly</param>
         /// <returns>Returns the new ComboBox added</returns>
-        public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, bool includeStartDate, bool includeEndDate)
+        public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, bool includeStartDate,
+                                                             bool includeEndDate)
         {
-            return _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, includeStartDate, includeEndDate);
-
+            return _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, includeStartDate,
+                                                                    includeEndDate);
         }
 
-        public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, List<DateRangeOptions> options, bool includeStartDate, bool includeEndDate)
+        public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName,
+                                                             List<DateRangeOptions> options, bool includeStartDate,
+                                                             bool includeEndDate)
         {
             return
                 _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, options, includeStartDate,
                                                                  includeEndDate);
+        }
+
+        #endregion
+
+        private void CreateFilterButtons(IPanel filterButtonPanel)
+        {
+            const int buttonHeight = 20;
+            const int buttonWidth = 45;
+            _filterButton = CreateFilterButton(buttonWidth, buttonHeight);
+            _clearButton = CreateClearButton(buttonWidth, buttonHeight);
+
+            FlowLayoutManager layoutManager = new FlowLayoutManager(filterButtonPanel, _controlFactory);
+            layoutManager.AddControl(_filterButton);
+            layoutManager.AddControl(_clearButton);
+        }
+
+        private IButton CreateClearButton(int buttonWidth, int buttonHeight)
+        {
+            IButton clearButton = _controlFactory.CreateButton();
+            clearButton.Width = buttonWidth;
+            clearButton.Height = buttonHeight;
+            clearButton.Top = _filterButton.Height + 2;
+            clearButton.Text = "Clear";
+            clearButton.Click += delegate { ClearFilters(); };
+            return clearButton;
+        }
+
+        private IButton CreateFilterButton(int buttonWidth, int buttonHeight)
+        {
+            IButton filterButton = _controlFactory.CreateButton();
+            filterButton.Width = buttonWidth;
+            filterButton.Height = buttonHeight;
+            filterButton.Top = 0;
+            filterButton.Text = "Filter";
+            filterButton.Click += delegate { FireFilterEvent(); };
+            return filterButton;
+        }
+
+        private void FireFilterEvent()
+        {
+            if (Filter != null)
+            {
+                Filter(this, new EventArgs());
+            }
         }
     }
 }

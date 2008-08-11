@@ -327,17 +327,11 @@ namespace Habanero.UI.Base.FilterControl
 
             public override IFilterClause GetFilterClause()
             {
-                if (_textBox.Text.Length > 0)
-                {
-                    return
-                        _clauseFactory.CreateStringFilterClause(_columnName, _filterClauseOperator,
-                                                                _textBox.Text);
-                }
-                else
-                {
-                    return _clauseFactory.CreateNullFilterClause();
-                }
+                return _textBox.Text.Length > 0 
+                    ? _clauseFactory.CreateStringFilterClause(_columnName, _filterClauseOperator,_textBox.Text) 
+                    : _clauseFactory.CreateNullFilterClause();
             }
+
             public override void Clear()
             {
                 _textBox.Text = "";
@@ -377,17 +371,12 @@ namespace Habanero.UI.Base.FilterControl
             {
                 if (_comboBox.SelectedIndex != -1 && _comboBox.SelectedItem.ToString().Length > 0)
                 {
-                    FilterClauseOperator op;
-                    if (_strictMatch) op = FilterClauseOperator.OpEquals;
-                    else op = FilterClauseOperator.OpLike;
+                    FilterClauseOperator op = _strictMatch ? FilterClauseOperator.OpEquals : FilterClauseOperator.OpLike;
                     return
                         _clauseFactory.CreateStringFilterClause(_columnName, op,
                                                                 _comboBox.SelectedItem.ToString());
                 }
-                else
-                {
-                    return _clauseFactory.CreateNullFilterClause();
-                }
+                return _clauseFactory.CreateNullFilterClause();
             }
 
             public override void Clear()
@@ -430,12 +419,9 @@ namespace Habanero.UI.Base.FilterControl
                         _clauseFactory.CreateStringFilterClause(_columnName,
                                                                 FilterClauseOperator.OpEquals, "true");
                 }
-                else
-                {
-                    return
-                        _clauseFactory.CreateStringFilterClause(_columnName,
-                                                                FilterClauseOperator.OpEquals, "false");
-                }
+                return
+                    _clauseFactory.CreateStringFilterClause(_columnName,
+                                                            FilterClauseOperator.OpEquals, "false");
             }
 
             public override void Clear()
@@ -480,10 +466,7 @@ namespace Habanero.UI.Base.FilterControl
                     return _clauseFactory.CreateCompositeFilterClause(
                         startClause, FilterClauseCompositeOperator.OpAnd, endClause);
                 }
-                else
-                {
-                    return _clauseFactory.CreateDateFilterClause(_columnName, _filterClauseOperator, date);
-                }
+                return _clauseFactory.CreateDateFilterClause(_columnName, _filterClauseOperator, date);
             }
 
             public override void Clear()
@@ -517,34 +500,18 @@ namespace Habanero.UI.Base.FilterControl
             {
                 if (_dateRangeComboBox.SelectedIndex > 0)
                 {
-                    FilterClauseOperator op;
-                    if (_filterIncludeStart)
-                    {
-                        op = FilterClauseOperator.OpGreaterThanOrEqualTo;
-                    }
-                    else
-                    {
-                        op = FilterClauseOperator.OpGreaterThan;
-                    }
+                    FilterClauseOperator op = _filterIncludeStart ? FilterClauseOperator.OpGreaterThanOrEqualTo : FilterClauseOperator.OpGreaterThan;
                     IFilterClause startClause = _clauseFactory.CreateDateFilterClause(_columnName, op, _dateRangeComboBox.StartDate);
-                    if (_filterIncludeEnd)
-                    {
-                        op = FilterClauseOperator.OpLessThanOrEqualTo;
-                    }
-                    else
-                    {
-                        op = FilterClauseOperator.OpLessThan;
-                    }
+                    op = _filterIncludeEnd 
+                        ? FilterClauseOperator.OpLessThanOrEqualTo 
+                        : FilterClauseOperator.OpLessThan;
                     IFilterClause endClause = _clauseFactory.CreateDateFilterClause(_columnName, op, _dateRangeComboBox.EndDate);
 
                     return
                         _clauseFactory.CreateCompositeFilterClause(startClause, FilterClauseCompositeOperator.OpAnd,
                                                                    endClause);
                 }
-                else
-                {
-                    return _clauseFactory.CreateNullFilterClause();
-                }
+                return _clauseFactory.CreateNullFilterClause();
             }
 
             public override IControlChilli FilterControl
