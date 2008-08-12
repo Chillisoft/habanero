@@ -58,7 +58,7 @@ namespace Habanero.BO
             }
             AddDiscriminatorFields(selectQuery, classDef);
             selectQuery.Source = new Source(classDef.ClassName, classDef.GetTableName());
-            QueryBuilder.PrepareCriteria(classDef, criteria);
+            PrepareCriteria(classDef, criteria);
             selectQuery.Criteria = criteria;
             selectQuery.ClassDef = classDef;
             return selectQuery;
@@ -68,18 +68,14 @@ namespace Habanero.BO
         {
             foreach (ClassDef thisClassDef in ((ClassDef) classDef).ImmediateChildren)
             {
-                if (thisClassDef.IsUsingSingleTableInheritance())
+                if (!thisClassDef.IsUsingSingleTableInheritance()) continue;
+                SuperClassDef superClassDef = thisClassDef.SuperClassDef;
+                string discriminator = superClassDef.Discriminator;
+                if (String.IsNullOrEmpty(discriminator)) continue;
+                if (!selectQuery.Fields.ContainsKey(discriminator))
                 {
-                    SuperClassDef superClassDef = thisClassDef.SuperClassDef;
-                    string discriminator = superClassDef.Discriminator;
-                    if (!String.IsNullOrEmpty(discriminator))
-                    {
-                        if (!selectQuery.Fields.ContainsKey(discriminator))
-                        {
-                            selectQuery.Fields.Add(discriminator,
-                                                   new QueryField(discriminator, discriminator, new Source(classDef.GetTableName())));
-                        }
-                    }
+                    selectQuery.Fields.Add(discriminator,
+                                           new QueryField(discriminator, discriminator, new Source(classDef.GetTableName())));
                 }
             }
         }
@@ -155,8 +151,10 @@ namespace Habanero.BO
                 field.FieldName = propDef.DatabaseFieldName;
                 string tableName = classDef.GetTableName(propDef);
                 field.Source = new Source(classDef.ClassName, tableName);
-
-                criteria.FieldValue = propDef.ConvertValueToPropertyType(criteria.FieldValue);
+                if (criteria.CanBeParametrised())
+                {
+                    criteria.FieldValue = propDef.ConvertValueToPropertyType(criteria.FieldValue);
+                }
             }
         }
     }

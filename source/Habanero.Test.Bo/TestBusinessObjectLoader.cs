@@ -53,7 +53,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            Criteria criteria = new Criteria("ContactPersonID", Criteria.Op.Equals, Guid.NewGuid().ToString("N"));
+            Criteria criteria = new Criteria("ContactPersonID", Criteria.ComparisonOp.Equals, Guid.NewGuid().ToString("N"));
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCP =
@@ -68,7 +68,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
-            Criteria criteria = new Criteria("ContactPersonID", Criteria.Op.Equals, Guid.NewGuid().ToString("N"));
+            Criteria criteria = new Criteria("ContactPersonID", Criteria.ComparisonOp.Equals, Guid.NewGuid().ToString("N"));
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCP =
@@ -98,7 +98,7 @@ namespace Habanero.Test.BO
         {
             string surname = "Surname";
             string surnameField = "Surname_field";
-            Criteria criteria = new Criteria(surname, Criteria.Op.Equals, cp.Surname);
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.Equals, cp.Surname);
             criteria.Field.Source = new Source(cp.ClassDef.TableName);
             criteria.Field.FieldName = surnameField;
             SelectQuery query = new SelectQuery(criteria);
@@ -161,7 +161,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
-            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, cp.Surname);
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, cp.Surname);
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCP =
@@ -190,7 +190,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
-            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, cp.Surname);
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, cp.Surname);
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO cp1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
@@ -207,7 +207,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
-            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, cp.Surname);
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, cp.Surname);
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCP = (ContactPersonTestBO)
@@ -265,7 +265,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.CreateSavedContactPerson("aaaa", "aa");
 
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("FirstName", Criteria.Op.Equals, firstName);
+            Criteria criteria = new Criteria("FirstName", Criteria.ComparisonOp.Equals, firstName);
 
             try
             {
@@ -293,7 +293,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.CreateSavedContactPerson("aaaa", "aa");
 
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("FirstName", Criteria.Op.Equals, firstName);
+            Criteria criteria = new Criteria("FirstName", Criteria.ComparisonOp.Equals, firstName);
 
             try
             {
@@ -319,7 +319,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.CreateSavedContactPerson("aaaa", "aaa");
 
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, surname);
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
             ContactPersonTestBO cp =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
 
@@ -653,7 +653,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("NonExistantProperty", Criteria.Op.Equals, "1");
+            Criteria criteria = new Criteria("NonExistantProperty", Criteria.ComparisonOp.Equals, "1");
             BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
 
         }
@@ -768,7 +768,7 @@ namespace Habanero.Test.BO
                 TestAutoInc.LoadClassDefWithAutoIncrementingID();
 
                 //---------------Execute Test ----------------------
-                Criteria criteria = new Criteria("testautoincid", Criteria.Op.Equals, "1");
+                Criteria criteria = new Criteria("testautoincid", Criteria.ComparisonOp.Equals, "1");
                 TestAutoInc tai1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(criteria);
                 TestAutoInc tai2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(tai1.ID);
 
@@ -788,7 +788,7 @@ namespace Habanero.Test.BO
                 autoInc.Save();
 
                 //---------------Execute Test ----------------------
-                Criteria criteria = new Criteria("testautoincid", Criteria.Op.Equals, autoInc.TestAutoIncID);
+                Criteria criteria = new Criteria("testautoincid", Criteria.ComparisonOp.Equals, autoInc.TestAutoIncID);
                 TestAutoInc tai1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(criteria);
                 TestAutoInc tai2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(tai1.ID);
 
@@ -952,8 +952,8 @@ namespace Habanero.Test.BO
                 Assert.IsTrue(BusObjectManager.Instance.Contains(savedContactPerson.ID));
 
                 //---------------Execute Test ----------------------
-                Criteria criteria1 = new Criteria("Surname", Criteria.Op.Equals, surname);
-                Criteria criteria2 = new Criteria("FirstName", Criteria.Op.Equals, firstName);
+                Criteria criteria1 = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
+                Criteria criteria2 = new Criteria("FirstName", Criteria.ComparisonOp.Equals, firstName);
                 Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.And, criteria2);
                 ContactPersonTestBO cp =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
@@ -1036,7 +1036,7 @@ namespace Habanero.Test.BO
                 WaitForGC();
 
                 SelectQuery query = CreateSelectQuery(cp);
-//                new SelectQuery(new Criteria("Surname", Criteria.Op.Equals, cp.Surname)));
+//                new SelectQuery(new Criteria("Surname", Criteria.ComparisonOp.Equals, cp.Surname)));
 //                query.Fields.Add("Surname", new QueryField("Surname", "Surname_field", null));
 //                query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", null));
 //                query.Source = new Source(cp.ClassDef.TableName);
@@ -1442,7 +1442,7 @@ namespace Habanero.Test.BO
                 cp2.DateOfBirth = now;
                 cp2.Surname = Guid.NewGuid().ToString("N");
                 cp2.Save();
-                Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, now);
+                Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
                 BusinessObjectCollection<ContactPersonTestBO> col =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(
                         criteria);

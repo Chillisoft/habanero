@@ -647,7 +647,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(0, boMan.Count);
 
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("ContactPersonID", Criteria.Op.Equals, contactPersonId);
+            Criteria criteria = new Criteria("ContactPersonID", Criteria.ComparisonOp.Equals, contactPersonId);
             IBusinessObjectCollection colContactPeople = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
 
             //---------------Test Result -----------------------
@@ -687,7 +687,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(0, boMan.Count);
 
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("ContactPersonID", Criteria.Op.Equals, contactPersonId);
+            Criteria criteria = new Criteria("ContactPersonID", Criteria.ComparisonOp.Equals, contactPersonId);
             IBusinessObjectCollection colContactPeople =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(criteria);
 

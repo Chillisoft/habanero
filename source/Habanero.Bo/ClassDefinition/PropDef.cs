@@ -23,7 +23,7 @@ using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
 using Habanero.Util;
 using Habanero.Util.File;
-using log4net;
+//using log4net;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -42,7 +42,7 @@ namespace Habanero.BO.ClassDefinition
     /// </futureEnhancements>
     public class PropDef : IPropDef
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.ClassDefinition.PropDef");
+//        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.ClassDefinition.PropDef");
         private string _propertyName;
         private string _description;
         private string _propTypeAssemblyName;
@@ -55,17 +55,16 @@ namespace Habanero.BO.ClassDefinition
         //fields is DATABASE_FIELD_NAME. 
         //This is also powerful for migrating systems 
         //where the database has already been set up.
-        //TODO: I changed this field from ReadOnly, was there any point to this. Please Review. (-Mark)
-        private object _defaultValue = null;
+        private object _defaultValue;
         private string _defaultValueString;
         private bool _hasDefaultValueBeenValidated;
         private IPropRule _propRule;
         private ILookupList _lookupList = new NullLookupList();
-        private bool _compulsory = false;
-        private bool _autoIncrementing = false;
+        private bool _compulsory;
+        private bool _autoIncrementing;
         private int _length;
         private string _displayName;
-        private bool _keepValuePrivate = false;
+        private bool _keepValuePrivate;
         private bool _persistable = true;
         private ClassDef _classDef;
         private string _unitOfMeasure = "";
@@ -418,14 +417,7 @@ namespace Habanero.BO.ClassDefinition
                 _propTypeName = typeName;
             }
             _propRWStatus = propRWStatus;
-            if (databaseFieldName != null)
-            {
-                _databaseFieldName = databaseFieldName;
-            }
-            else
-            {
-                _databaseFieldName = propertyName;
-            }
+            _databaseFieldName = databaseFieldName ?? propertyName;
             if (defaultValue != null)
             {
                 MyDefaultValue = defaultValue;
@@ -689,21 +681,14 @@ namespace Habanero.BO.ClassDefinition
                 }
             }
             errorMessage = "";
-            if (_propRule != null)
-            {
-                return _propRule.IsPropValueValid(displayName, GetNewValue(propValue), ref errorMessage);
-            }
-            else
-            {
-                return true;
-            }
+            return _propRule == null || _propRule.IsPropValueValid(displayName, GetNewValue(propValue), ref errorMessage);
         }
 
         private bool IsItemInList(string displayName, object propValue, ref string errorMessage)
         {
             if (!this.HasLookupList()) return true;
             if (propValue == null || string.IsNullOrEmpty(Convert.ToString(propValue))) return true;
-
+            //TODO: This needs to be fixed. Philosophy for lookup lists needs to be clarified and implemented.
             //Dictionary<string, object> lookupList = this.LookupList.GetLookupList();
             //bool hasItemInList = lookupList.ContainsKey(Convert.ToString(propValue))
             //        || lookupList.ContainsValue(Convert.ToString(propValue))
@@ -774,8 +759,7 @@ namespace Habanero.BO.ClassDefinition
 
         private string GetErrorMessage(object propValue, string displayName)
         {
-            string errorMessage;
-            errorMessage = String.Format("'{0}' for property '{1}' is not valid. ", propValue, displayName);
+            string errorMessage = String.Format("'{0}' for property '{1}' is not valid. ", propValue, displayName);
             errorMessage += "It is not a type of " + this.PropertyTypeName + ".";
             return errorMessage;
         }
@@ -804,10 +788,7 @@ namespace Habanero.BO.ClassDefinition
                 }
                 return new BOProp(this, defaultValue);
             }
-            else
-            {
-                return new BOProp(this);
-            }
+            return new BOProp(this);
         }
 
         #endregion //BOProps
@@ -949,14 +930,7 @@ namespace Habanero.BO.ClassDefinition
             {
                 _hasDefaultValueBeenValidated = false;
                 validateDefaultValue(value);
-                if (_defaultValue != null)
-                {
-                    _defaultValueString = _defaultValue.ToString();
-                }
-                else
-                {
-                    _defaultValueString = null;
-                }
+                _defaultValueString = _defaultValue != null ? _defaultValue.ToString() : null;
             }
         }
 
@@ -1023,8 +997,16 @@ namespace Habanero.BO.ClassDefinition
 
         #endregion
 
+        ///<summary>
+        /// Converts the 'value to convert' to the appropriate type for the Property definition.
+        /// E.g. A string 'today' will be converted to a datetimetoday object.
+        ///</summary>
+        ///<param name="valueToConvert">The value requiring conversion.</param>
+        ///<returns>The converted property value</returns>
         public object ConvertValueToPropertyType(object valueToConvert)
         {
+            if (valueToConvert == null) return null;
+
             if (this.PropertyType == typeof(Guid))
             {
                 return new Guid(valueToConvert.ToString());

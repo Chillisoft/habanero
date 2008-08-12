@@ -23,8 +23,8 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
-using Habanero.UI.Win;
+//using Habanero.UI.WebGUI;
+//using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -76,7 +76,7 @@ namespace Habanero.Test.UI.Base
              }
             protected override IReadOnlyGridControl CreateReadOnlyGridControl(bool putOnForm)
             {
-                ReadOnlyGridControlWin readOnlyGridControlWin = new ReadOnlyGridControlWin(GetControlFactory());
+                Habanero.UI.Win.ReadOnlyGridControlWin readOnlyGridControlWin = new Habanero.UI.Win.ReadOnlyGridControlWin(GetControlFactory());
                 if (putOnForm)
                 {
                     frm = new System.Windows.Forms.Form();
@@ -88,21 +88,21 @@ namespace Habanero.Test.UI.Base
 
             protected override void CloseForm()
             {
-                if (frm != null)
-                {
-                    frm.Close();
-                    frm = null;
-                }
+                if (frm == null) return;
+                frm.Close();
+                frm = null;
             }
 
             protected override void AddControlToForm(IControlChilli control)
             {
-
+                AddControlToForm(control, 400);
             }
 
             protected override void AddControlToForm(IControlChilli control, int formHeight)
             {
-
+                System.Windows.Forms.Form frmLocal = new System.Windows.Forms.Form();
+                frmLocal.Controls.Add((System.Windows.Forms.Control)control);
+                frmLocal.Height = formHeight;
             }
 
 //        [Test]
@@ -334,7 +334,7 @@ namespace Habanero.Test.UI.Base
         {
             public TestreadOnlyGridControlGiz()
             {
-                GlobalUIRegistry.ControlFactory = new ControlFactoryGizmox();
+                GlobalUIRegistry.ControlFactory = new Habanero.UI.WebGUI.ControlFactoryGizmox();
             }
 
             protected override void AddControlToForm(IControlChilli control, int formHeight)
@@ -346,7 +346,7 @@ namespace Habanero.Test.UI.Base
 
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
             }
             protected override IReadOnlyGridControl CreateReadOnlyGridControl()
             {
@@ -355,8 +355,8 @@ namespace Habanero.Test.UI.Base
             protected override IReadOnlyGridControl CreateReadOnlyGridControl(bool putOnForm)
             {
                 //ALWAYS PUT ON FORM FOR GIZ
-                ReadOnlyGridControlGiz readOnlyGridControlGiz =
-                    new ReadOnlyGridControlGiz(GetControlFactory());
+                Habanero.UI.WebGUI.ReadOnlyGridControlGiz readOnlyGridControlGiz =
+                    new Habanero.UI.WebGUI.ReadOnlyGridControlGiz(GetControlFactory());
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
                 frm.Controls.Add(readOnlyGridControlGiz);
                 return readOnlyGridControlGiz;
@@ -376,8 +376,8 @@ namespace Habanero.Test.UI.Base
             public void TestGizInitialiseGrid()
             {
                 //---------------Set up test pack-------------------
-                ReadOnlyGridControlGiz readOnlyGridControlGiz =
-                    new ReadOnlyGridControlGiz(GlobalUIRegistry.ControlFactory);
+                Habanero.UI.WebGUI.ReadOnlyGridControlGiz readOnlyGridControlGiz =
+                    new Habanero.UI.WebGUI.ReadOnlyGridControlGiz(GlobalUIRegistry.ControlFactory);
                 //--------------Assert PreConditions----------------    
                 Assert.IsFalse(readOnlyGridControlGiz.IsInitialised);
                 //---------------Execute Test ----------------------
@@ -578,20 +578,20 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        private static ContactPersonTestBO CreateContactPersonInDB()
+        private static void CreateContactPersonInDB()
         {
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             contactPersonTestBO.Surname = Guid.NewGuid().ToString("N");
             contactPersonTestBO.Save();
-            return contactPersonTestBO;
+            return;
         }
 
-        private static ContactPersonTestBO CreateContactPersonInDB_With_SSSSS_InSurname()
+        private static void CreateContactPersonInDB_With_SSSSS_InSurname()
         {
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             contactPersonTestBO.Surname = Guid.NewGuid().ToString("N") + "SSSSS";
             contactPersonTestBO.Save();
-            return contactPersonTestBO;
+            return;
         }
 
         [Test]
@@ -1019,7 +1019,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void _____TestSetBusinessObjectFiresBusinessObjectSelected()
+        public void TestSetBusinessObjectFiresBusinessObjectSelected()
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
@@ -1033,18 +1033,20 @@ namespace Habanero.Test.UI.Base
             IReadOnlyGridControl readOnlyGridControl = GetControlFactory().CreateReadOnlyGridControl();
             readOnlyGridControl.SetBusinessObjectCollection(col);
             //AddControlToForm(readOnlyGridControl);
+            AddControlToForm(readOnlyGridControl);
             readOnlyGridControl.SelectedBusinessObject = null;
             bool gridItemSelected = false;
             readOnlyGridControl.Grid.BusinessObjectSelected += (delegate { gridItemSelected = true; });
+
             //---------------Assert pre conditions--------------
             Assert.IsFalse(gridItemSelected);
-            
+            Assert.AreEqual(3, readOnlyGridControl.Grid.Rows.Count);
+
             //---------------Execute Test ----------------------
             readOnlyGridControl.SelectedBusinessObject = myBO1;
 
             //---------------Test Result -----------------------
             Assert.IsTrue(gridItemSelected);
-            //---------------Tear down -------------------------
         }
 
         [Test]
@@ -1442,7 +1444,7 @@ namespace Habanero.Test.UI.Base
         private ClassDef LoadMyBoDefaultClassDef()
         {
             ClassDef classDef;
-            if (GetControlFactory() is ControlFactoryGizmox)
+            if (GetControlFactory() is Habanero.UI.WebGUI.ControlFactoryGizmox)
             {
                 classDef = MyBO.LoadDefaultClassDefGizmox();
             }

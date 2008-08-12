@@ -7,8 +7,6 @@ namespace Habanero.Base
     ///</summary>
     public static class CriteriaParser
     {
-//        private static readonly string[] _operators = { "=", ">", "<" };
-
         ///<summary>
         /// Creates a criteria object by parsing the criteriaString into a criteria
         /// expression object.
@@ -20,18 +18,6 @@ namespace Habanero.Base
             CriteriaExpression criteriaExpression = new CriteriaExpression(criteriaString);
             Criteria criteria = GetCriteria(criteriaExpression);
             return criteria;
-
-            //string[] parts = criteriaString.Split(_operators,StringSplitOptions.None);
-            //string propName = parts[0];
-            //string operatorString = criteriaString.Substring(propName.Length, 1);
-            //propName = propName.Trim();
-            //Criteria.Op op = CreateComparisonOperator(operatorString);
-            //object value = parts[1].Trim();
-            //Criteria criteria = new Criteria(propName, op, value);
-            //return criteria;
-            ////Criteria.NewCriteria(criteriaString);
-            ////Criteria crit = Criteria.CreateCriteria(string);
-            ////Guid guid = new Guid();
         }
 
         private static Criteria GetCriteria(CriteriaExpression criteriaExpression)
@@ -56,31 +42,39 @@ namespace Habanero.Base
             string propName = criteriaExpression.Left.Expression;
             string operatorString = criteriaExpression.Expression;
             object value = criteriaExpression.Right.Expression;
-            Criteria.Op op = CreateComparisonOperator(operatorString);
-            return new Criteria(propName, op, value);
+            Criteria.ComparisonOp comparisonOp = CreateComparisonOperator(operatorString);
+            return new Criteria(propName, comparisonOp, value);
         }
 
         ///<summary>
-        /// Converts string comparison operators into <see cref="Criteria.Op"></see> Enums.
+        /// Converts string comparison operators into <see cref="Criteria.ComparisonOp"></see> Enums.
         ///</summary>
         ///<param name="operatorString">string operator</param>
         ///<returns></returns>
-        public static Criteria.Op CreateComparisonOperator(string operatorString)
+        public static Criteria.ComparisonOp CreateComparisonOperator(string operatorString)
         {
-            switch (operatorString)
+            switch (operatorString.Trim().ToUpper())
             {
                 case "=":
-                    return Criteria.Op.Equals;
+                    return Criteria.ComparisonOp.Equals;
                 case ">":
-                    return Criteria.Op.GreaterThan;
+                    return Criteria.ComparisonOp.GreaterThan;
                 case "<":
-                    return Criteria.Op.LessThan;
+                    return Criteria.ComparisonOp.LessThan;
                 case "<=":
-                    return Criteria.Op.LessThanEqual;
+                    return Criteria.ComparisonOp.LessThanEqual;
                 case ">=":
-                    return Criteria.Op.GreaterThanEqual;
+                    return Criteria.ComparisonOp.GreaterThanEqual;
                 case "<>":
-                    return Criteria.Op.NotEquals;
+                    return Criteria.ComparisonOp.NotEquals;
+                case "LIKE":
+                    return Criteria.ComparisonOp.Like;
+                case "NOT LIKE":
+                    return Criteria.ComparisonOp.NotLike;
+                case "IS":
+                    return Criteria.ComparisonOp.Is;
+                case "IS NOT":
+                    return Criteria.ComparisonOp.IsNot;
                 default:
                     throw new HabaneroDeveloperException("An error has occured in the application, please contact your system administrator.","Invalid operator used in a criteria string: "+operatorString);
             }
@@ -100,7 +94,8 @@ namespace Habanero.Base
                 case "OR":
                     return Criteria.LogicalOp.Or;
                 default:
-                    return Criteria.LogicalOp.And;
+                    throw new HabaneroDeveloperException("An error has occured in the application, please contact your system administrator.", "Invalid operator used in a criteria string: " + operatorString);
+
             }
         }
     }

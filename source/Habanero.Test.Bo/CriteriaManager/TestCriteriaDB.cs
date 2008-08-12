@@ -16,7 +16,7 @@ namespace Habanero.Test.BO
             //-------------Setup Test Pack ------------------
             const string surname = "Surname";
             string surnameValue = TestUtil.CreateRandomString();
-            Criteria criteria = new Criteria(surname, Criteria.Op.Equals, surnameValue);
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.Equals, surnameValue);
 
             //-------------Execute test ---------------------
             CriteriaDB criteriaDB = new CriteriaDB(criteria);
@@ -30,10 +30,10 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             string surnameValue = Guid.NewGuid().ToString("N");
             const string surname = "Surname";
-            CriteriaDB surnameCriteria = new CriteriaDB(new Criteria(surname, Criteria.Op.Equals, surnameValue));
+            CriteriaDB surnameCriteria = new CriteriaDB(new Criteria(surname, Criteria.ComparisonOp.Equals, surnameValue));
             DateTime dateTimeValue = DateTime.Now;
             const string datetimePropName = "DateTime";
-            CriteriaDB dateTimeCriteria = new CriteriaDB(new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue));
+            CriteriaDB dateTimeCriteria = new CriteriaDB(new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue));
 
             CriteriaDB andCriteria = new CriteriaDB(new Criteria(surnameCriteria, Criteria.LogicalOp.And, dateTimeCriteria));
 
@@ -54,7 +54,7 @@ namespace Habanero.Test.BO
             //-------------Setup Test Pack ------------------
             string surnameValue = Guid.NewGuid().ToString("N");
             const string surname = "Surname";
-            Criteria criteria = new Criteria(surname, Criteria.Op.Equals, surnameValue);
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.Equals, surnameValue);
             string surnameTable = "surname_table";
             criteria.Field.Source = new Source(surnameTable);
             CriteriaDB surnameCriteria = new CriteriaDB(criteria);
@@ -68,12 +68,30 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestToString_IsNullCriteria()
+        {
+            //-------------Setup Test Pack ------------------
+            const string surnameField = "Surname";
+            Criteria criteria = new Criteria(surnameField, Criteria.ComparisonOp.Is, null);
+            const string surnameTable = "surname_table";
+            criteria.Field.Source = new Source(surnameTable);
+            CriteriaDB surnameCriteria = new CriteriaDB(criteria);
+
+            //-------------Execute test ---------------------
+            string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>"), delegate(object value) { return Convert.ToString(value); });
+            //-------------Test Result ----------------------
+            
+            Assert.AreEqual(string.Format("<<{0}>>.<<{1}>> IS NULL", surnameTable, surnameField), tostring);
+
+        }
+
+        [Test]
         public void TestToString_NoSource()
         {
             //-------------Setup Test Pack ------------------
             string surnameValue = Guid.NewGuid().ToString("N");
             const string surname = "Surname";
-            Criteria criteria = new Criteria(surname, Criteria.Op.Equals, surnameValue);
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.Equals, surnameValue);
             CriteriaDB surnameCriteria = new CriteriaDB(criteria);
 
             //-------------Execute test ---------------------
@@ -89,7 +107,7 @@ namespace Habanero.Test.BO
             //-------------Setup Test Pack ------------------
             string surnameValue = Guid.NewGuid().ToString("N");
             const string surname = "Surname";
-            Criteria criteria = new Criteria(surname, Criteria.Op.Equals, surnameValue);
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.Equals, surnameValue);
             criteria.Field.Source = new Source("");
             CriteriaDB surnameCriteria = new CriteriaDB(criteria);
 
@@ -99,7 +117,5 @@ namespace Habanero.Test.BO
 
             Assert.AreEqual(string.Format("<<{0}>> = {1}", surname, surnameValue), tostring);
         }
-
-       
     }
 }

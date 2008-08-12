@@ -2,6 +2,10 @@ using System;
 
 namespace Habanero.Base
 {
+    ///<summary>
+    /// This class inherits from the criteria class and implements a <see cref="ToString(SqlFormatter, AddParameterDelegate)"/> behaviour.
+    /// This allows the formatting of a criteria object into a format specific for the database.
+    ///</summary>
     public class CriteriaDB : Criteria
     {
         #region Delegates
@@ -32,6 +36,10 @@ namespace Habanero.Base
 
         private readonly Criteria _criteria;
 
+        ///<summary>
+        /// Constructor for a Database critieria. takes the Criteria object that it wraps as a parameter.
+        ///</summary>
+        ///<param name="criteria">The criteria object being wrapped.</param>
         public CriteriaDB(Criteria criteria)
         {
             _criteria = criteria;
@@ -67,7 +75,7 @@ namespace Habanero.Base
             get { return _criteria.FieldValue; }
         }
 
-        public override Op ComparisonOperator
+        public override ComparisonOp ComparisonOperator
         {
             get { return _criteria.ComparisonOperator; }
         }
@@ -78,9 +86,10 @@ namespace Habanero.Base
         /// when adding the value to the string for use with parametrized SQL.  Also see <see cref="ISqlStatement"/>.
         /// 
         /// The <see cref="ToString()"/> method uses this method with a simple delegate that converts DateTimes and Guids 
-        /// to sensible string representations.
+        /// to sensible string representations and to 
         /// </summary>
-        /// See <see cref="PropNameConverterDelegate"/></param>
+        /// See <see cref="PropNameConverterDelegate"/>
+        /// <param name="formatter">A formatter for any specific database <see cref="SqlFormatter"/></param>
         /// <param name="addParameter">The delegate to use to convert the value in object form to a value in string form. 
         /// See <see cref="AddParameterDelegate"/></param>
         /// <returns>The Criteria in string form.</returns>
@@ -93,7 +102,14 @@ namespace Habanero.Base
                 return string.Format("({0}) {1} ({2})", leftCriteriaAsString, LogicalOps[(int)LogicalOperator],
                                      rightCriteriaAsString);
             }
-            string valueString = addParameter(FieldValue);
+            string valueString;
+            if (_criteria.CanBeParametrised())
+            {
+                valueString = addParameter(FieldValue);
+            } else
+            {
+                valueString = FieldValue == null ? "NULL" : Convert.ToString(FieldValue);
+            }
             string sourceEntityName = ""; if (Field.Source != null) sourceEntityName = Field.Source.EntityName;
             string separator = "";
             if (!String.IsNullOrEmpty(sourceEntityName))
@@ -101,9 +117,8 @@ namespace Habanero.Base
                 sourceEntityName = formatter.DelimitTable(sourceEntityName);
                 separator = ".";
             }
-            return string.Format("{0}{1}{2} {3} {4}", sourceEntityName, separator, formatter.DelimitField(Field.FieldName), ComparisonOps[(int)ComparisonOperator], valueString);
+            string fieldNameString = formatter.DelimitField(Field.FieldName);
+            return string.Format("{0}{1}{2} {3} {4}", sourceEntityName, separator, fieldNameString, ComparisonOperatorString(), valueString);
         }
-
-    
     }
 }

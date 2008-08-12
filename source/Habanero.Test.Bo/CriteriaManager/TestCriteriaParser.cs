@@ -40,10 +40,10 @@ namespace Habanero.Test.BO
             const string operatorString = "=";
 
             //---------------Execute Test ----------------------
-            Criteria.Op op = CriteriaParser.CreateComparisonOperator(operatorString);
+            Criteria.ComparisonOp comparisonOp = CriteriaParser.CreateComparisonOperator(operatorString);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(Criteria.Op.Equals, op);
+            Assert.AreEqual(Criteria.ComparisonOp.Equals, comparisonOp);
         }
 
         [Test]
@@ -53,10 +53,10 @@ namespace Habanero.Test.BO
             const string operatorString = ">";
 
             //---------------Execute Test ----------------------
-            Criteria.Op op = CriteriaParser.CreateComparisonOperator(operatorString);
+            Criteria.ComparisonOp comparisonOp = CriteriaParser.CreateComparisonOperator(operatorString);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(Criteria.Op.GreaterThan, op);
+            Assert.AreEqual(Criteria.ComparisonOp.GreaterThan, comparisonOp);
         }
 
         [Test]
@@ -66,10 +66,10 @@ namespace Habanero.Test.BO
             const string operatorString = ">=";
 
             //---------------Execute Test ----------------------
-            Criteria.Op op = CriteriaParser.CreateComparisonOperator(operatorString);
+            Criteria.ComparisonOp comparisonOp = CriteriaParser.CreateComparisonOperator(operatorString);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(Criteria.Op.GreaterThanEqual, op);
+            Assert.AreEqual(Criteria.ComparisonOp.GreaterThanEqual, comparisonOp);
         }
 
         [Test]
@@ -79,10 +79,10 @@ namespace Habanero.Test.BO
             const string operatorString = "<=";
 
             //---------------Execute Test ----------------------
-            Criteria.Op op = CriteriaParser.CreateComparisonOperator(operatorString);
+            Criteria.ComparisonOp comparisonOp = CriteriaParser.CreateComparisonOperator(operatorString);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(Criteria.Op.LessThanEqual, op);
+            Assert.AreEqual(Criteria.ComparisonOp.LessThanEqual, comparisonOp);
         }
 
         [Test]
@@ -92,10 +92,109 @@ namespace Habanero.Test.BO
             const string operatorString = "<>"; 
 
             //---------------Execute Test ----------------------
-            Criteria.Op op = CriteriaParser.CreateComparisonOperator(operatorString);
+            Criteria.ComparisonOp comparisonOp = CriteriaParser.CreateComparisonOperator(operatorString);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(Criteria.Op.NotEquals, op);
+            Assert.AreEqual(Criteria.ComparisonOp.NotEquals, comparisonOp);
+        }
+
+        [Test]
+        public void TestCreateOperator_Like()
+        {
+            //---------------Set up test pack-------------------
+            const string operatorString = "Like";
+
+            //---------------Execute Test ----------------------
+            Criteria.ComparisonOp comparisonOp = CriteriaParser.CreateComparisonOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.Like, comparisonOp);
+        }
+        [Test]
+        public void TestCreateOperator_NotLike()
+        {
+            //---------------Set up test pack-------------------
+            const string operatorString = "Not Like";
+
+            //---------------Execute Test ----------------------
+            Criteria.ComparisonOp comparisonOp = CriteriaParser.CreateComparisonOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.NotLike, comparisonOp);
+        }
+
+        [Test]
+        public void TestCreateOperator_Is()
+        {
+            //---------------Set up test pack-------------------
+            const string operatorString = "Is";
+
+            //---------------Execute Test ----------------------
+            Criteria.ComparisonOp comparisonOp = CriteriaParser.CreateComparisonOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.Is, comparisonOp);
+        }
+        [Test]
+        public void TestCreateOperator_IS()
+        {
+            //---------------Set up test pack-------------------
+            const string operatorString = "IS";
+
+            //---------------Execute Test ----------------------
+            Criteria.ComparisonOp comparisonOp = CriteriaParser.CreateComparisonOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.Is, comparisonOp);
+        }
+        [Test]
+        public void TestCreateOperator_is()
+        {
+            //---------------Set up test pack-------------------
+            const string operatorString = "is";
+
+            //---------------Execute Test ----------------------
+            Criteria.ComparisonOp comparisonOp = CriteriaParser.CreateComparisonOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.Is, comparisonOp);
+        }
+
+        [Test]
+        public void TestCreateOperator_IsNot()
+        {
+            //---------------Set up test pack-------------------
+            const string operatorString = "Is Not";
+
+            //---------------Execute Test ----------------------
+            Criteria.ComparisonOp comparisonOp = CriteriaParser.CreateComparisonOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.IsNot, comparisonOp);
+        }
+        [Test]
+        public void TestCreateOperator_isnot()
+        {
+            //---------------Set up test pack-------------------
+            const string operatorString = "Is Not";
+
+            //---------------Execute Test ----------------------
+            Criteria.ComparisonOp comparisonOp = CriteriaParser.CreateComparisonOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.IsNot, comparisonOp);
+        }
+        [Test]
+        public void TestCreateOperator_ISNOT()
+        {
+            //---------------Set up test pack-------------------
+            const string operatorString = "IS NOT";
+
+            //---------------Execute Test ----------------------
+            Criteria.ComparisonOp comparisonOp = CriteriaParser.CreateComparisonOperator(operatorString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.IsNot, comparisonOp);
         }
 
         [Test]
@@ -127,10 +226,10 @@ namespace Habanero.Test.BO
             const string operatorString = "<";
 
             //---------------Execute Test ----------------------
-            Criteria.Op op = CriteriaParser.CreateComparisonOperator(operatorString);
+            Criteria.ComparisonOp comparisonOp = CriteriaParser.CreateComparisonOperator(operatorString);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(Criteria.Op.LessThan, op);
+            Assert.AreEqual(Criteria.ComparisonOp.LessThan, comparisonOp);
         }
 
         [Test]
@@ -246,7 +345,7 @@ namespace Habanero.Test.BO
             string criteriaAsString = criteria.ToString();
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(Criteria.Op.Equals, criteria.ComparisonOperator);
+            Assert.AreEqual(Criteria.ComparisonOp.Equals, criteria.ComparisonOperator);
             StringAssert.AreEqualIgnoringCase("Surname = '" + surnameValue + "'", criteriaAsString);
         }
         [Test]
@@ -262,7 +361,7 @@ namespace Habanero.Test.BO
             string criteriaAsString = criteria.ToString();
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(Criteria.Op.GreaterThan, criteria.ComparisonOperator);
+            Assert.AreEqual(Criteria.ComparisonOp.GreaterThan, criteria.ComparisonOperator);
             StringAssert.AreEqualIgnoringCase("Surname > '" + surnameValue + "'", criteriaAsString);
         }
         [Test]
@@ -278,7 +377,7 @@ namespace Habanero.Test.BO
             string criteriaAsString = criteria.ToString();
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(Criteria.Op.LessThan, criteria.ComparisonOperator);
+            Assert.AreEqual(Criteria.ComparisonOp.LessThan, criteria.ComparisonOperator);
             StringAssert.AreEqualIgnoringCase("Surname < '" + surnameValue + "'", criteriaAsString);
         }
             
@@ -295,7 +394,7 @@ namespace Habanero.Test.BO
             string criteriaAsString = criteria.ToString();
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(Criteria.Op.NotEquals, criteria.ComparisonOperator);
+            Assert.AreEqual(Criteria.ComparisonOp.NotEquals, criteria.ComparisonOperator);
             StringAssert.AreEqualIgnoringCase("Surname <> '" + surnameValue + "'", criteriaAsString);
         }
 
@@ -313,8 +412,138 @@ namespace Habanero.Test.BO
             string criteriaAsString = criteria.ToString();
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(Criteria.Op.LessThanEqual,criteria.ComparisonOperator);
+            Assert.AreEqual(Criteria.ComparisonOp.LessThanEqual,criteria.ComparisonOperator);
             StringAssert.AreEqualIgnoringCase("Surname <= '" + surnameValue + "'", criteriaAsString);
+        }
+
+        [Test]
+        public void Test_CreateCriteria_Simple_WithLike()
+        {
+            //---------------Set up test pack-------------------
+            string surnameValue = Guid.NewGuid().ToString("N");
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname Like " + surnameValue + "");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.Like, criteria.ComparisonOperator);
+            StringAssert.AreEqualIgnoringCase("Surname LIKE '" + surnameValue + "'", criteriaAsString);
+        }
+        [Test]
+        public void Test_CreateCriteria_Simple_WithLike_UCase()
+        {
+            //---------------Set up test pack-------------------
+            string surnameValue = Guid.NewGuid().ToString("N");
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname LIKE " + surnameValue + "");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.Like, criteria.ComparisonOperator);
+            StringAssert.AreEqualIgnoringCase("Surname LIKE '" + surnameValue + "'", criteriaAsString);
+        }
+        [Test]
+        public void Test_CreateCriteria_Simple_WithLike_LCase()
+        {
+            //---------------Set up test pack-------------------
+            string surnameValue = Guid.NewGuid().ToString("N");
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname like " + surnameValue + "");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.Like, criteria.ComparisonOperator);
+            StringAssert.AreEqualIgnoringCase("Surname LIKE '" + surnameValue + "'", criteriaAsString);
+        }
+        [Test]
+        public void Test_CreateCriteria_Simple_WithNotLike()
+        {
+            //---------------Set up test pack-------------------
+            string surnameValue = Guid.NewGuid().ToString("N");
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname Not Like " + surnameValue + "");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.NotLike, criteria.ComparisonOperator);
+            StringAssert.AreEqualIgnoringCase("Surname NOT LIKE '" + surnameValue + "'", criteriaAsString);
+        }
+        [Test]
+        public void Test_CreateCriteria_Simple_WithNotLike_UCase()
+        {
+            //---------------Set up test pack-------------------
+            string surnameValue = Guid.NewGuid().ToString("N");
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname  NOT LIKE " + surnameValue + "");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.NotLike, criteria.ComparisonOperator);
+            StringAssert.AreEqualIgnoringCase("Surname NOT LIKE '" + surnameValue + "'", criteriaAsString);
+        }
+
+        [Test]
+        public void Test_CreateCriteria_Simple_WithNotLike_LCase()
+        {
+            //---------------Set up test pack-------------------
+            string surnameValue = Guid.NewGuid().ToString("N");
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname   not like " + surnameValue + "");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.NotLike, criteria.ComparisonOperator);
+            StringAssert.AreEqualIgnoringCase("Surname NOT LIKE '" + surnameValue + "'", criteriaAsString);
+        }
+
+        [Test]
+        public void Test_CreateCriteria_Simple_WithIs()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname Is Null");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.Is, criteria.ComparisonOperator);
+            StringAssert.AreEqualIgnoringCase("Surname IS NULL", criteriaAsString);
+        }
+
+        [Test]
+        public void Test_CreateCriteria_Simple_WithIsNot()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = CriteriaParser.CreateCriteria("Surname Is Not Null");
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(Criteria.ComparisonOp.IsNot, criteria.ComparisonOperator);
+            StringAssert.AreEqualIgnoringCase("Surname IS NOT NULL", criteriaAsString);
         }
 
         [Test]
@@ -328,7 +557,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             try
             {
-                Criteria criteria = CriteriaParser.CreateCriteria("Surname INALID " + surnameValue + "");
+                CriteriaParser.CreateCriteria("Surname INALID " + surnameValue + "");
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------
@@ -352,7 +581,7 @@ namespace Habanero.Test.BO
             string criteriaAsString = criteria.ToString();
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(Criteria.Op.GreaterThanEqual, criteria.ComparisonOperator);
+            Assert.AreEqual(Criteria.ComparisonOp.GreaterThanEqual, criteria.ComparisonOperator);
             StringAssert.AreEqualIgnoringCase("Surname >= '" + surnameValue + "'", criteriaAsString);
         }
 

@@ -49,12 +49,13 @@ namespace Habanero.Base
 
         #endregion
 
-        #region Op enum
+        #region ComparisonOp enum
 
         /// <summary>
-        /// An operator used on a leaf criteria - ie to check a property against a value
+        /// An operator used on a leaf criteria - ie a comparison operator to check a property against a value
+        /// e.g. &lt;, &gt;=, Like.
         /// </summary>
-        public enum Op
+        public enum ComparisonOp
         {
             ///<summary>
             /// The equals (=) operator
@@ -68,10 +69,34 @@ namespace Habanero.Base
             /// The less than (&lt;) operator
             ///</summary>
             LessThan,
+            ///<summary>
+            /// The Not Equals (&lt;&gt;) Operator.
+            ///</summary>
             NotEquals,
+            ///<summary>
+            /// The less than or equal (&lt;=) Operator.
+            ///</summary>
             LessThanEqual,
+            ///<summary>
+            /// The greater than or equal (&gt;=) Operator.
+            ///</summary>
             GreaterThanEqual,
-            Like
+            ///<summary>
+            /// The like (Like) Operator.
+            ///</summary>
+            Like,
+            ///<summary>
+            /// The Not Like Operator.
+            ///</summary>
+            NotLike,
+            ///<summary>
+            /// The IS operator used for IS NULL
+            ///</summary>
+            Is,
+            ///<summary>
+            /// The IS Not operator used for IS NOT NULL
+            ///</summary>
+            IsNot
         }
 
         #endregion
@@ -82,11 +107,11 @@ namespace Habanero.Base
 
         private readonly Criteria _leftCriteria;
         private readonly LogicalOp _logicalOp;
-        private readonly Op _op;
+        private readonly ComparisonOp _comparisonOp;
         private readonly Criteria _rightCriteria;
         private object _fieldValue;
         protected readonly string[] LogicalOps = {"AND", "OR"};
-        protected readonly string[] ComparisonOps = {"=", ">", "<", "<>", "<=", ">="};
+        protected readonly string[] ComparisonOps = {"=", ">", "<", "<>", "<=", ">=", "LIKE", "NOT LIKE", "IS", "IS NOT"};
         private readonly QueryField _field;
 
         protected Criteria()
@@ -97,12 +122,12 @@ namespace Habanero.Base
         /// Creates a leaf criteria (meaning it has no children in the tree structure).
         /// </summary>
         /// <param name="propName">The property whose value to check</param>
-        /// <param name="op">The operator to use to compare the property value to the given value</param>
+        /// <param name="comparisonOp">The operator to use to compare the property value to the given value</param>
         /// <param name="value">The value to compare to</param>
-        public Criteria(string propName, Op op, object value)
+        public Criteria(string propName, ComparisonOp comparisonOp, object value)
         {
             _field = new QueryField(propName, propName, null);
-            _op = op;
+            _comparisonOp = comparisonOp;
             _fieldValue = value;
         }
 
@@ -119,35 +144,55 @@ namespace Habanero.Base
             _rightCriteria = rightCriteria;
         }
 
+        ///<summary>
+        /// The query Field being used by this criteria object (Where the criteria object is a leaf).
+        /// the query field is a query field object representing the objects property as defined in the 
+        /// Constructor [Criteria(string propName, ComparisonOp op, object value)].
+        ///</summary>
         public virtual QueryField Field
         {
             get { return _field; }
         }
 
+        ///<summary>
+        /// The left critieria object (If this is not a leaf criteria)
+        ///</summary>
         public virtual Criteria LeftCriteria
         {
             get { return _leftCriteria; }
         }
 
+        ///<summary>
+        /// The right criteria object (If this is not a leaf criteria)
+        ///</summary>
         public virtual Criteria RightCriteria
         {
             get { return _rightCriteria; }
         }
 
+        ///<summary>
+        /// The logical operator being used for this criteria object (If this is not a leaf criteria)
+        ///</summary>
         public virtual LogicalOp LogicalOperator
         {
             get { return _logicalOp; }
         }
 
+        ///<summary>
+        /// Returns the field value being compared to for this criteria object (If this is a leaf criteria)
+        ///</summary>
         public virtual object FieldValue
         {
             get { return _fieldValue; }
             set { _fieldValue = value; }
         }
 
-        public virtual Op ComparisonOperator
+        ///<summary>
+        /// Returns the comparison operator being used by this Criteria object (If this is a leaf criteria)
+        ///</summary>
+        public virtual ComparisonOp ComparisonOperator
         {
-            get { return _op; }
+            get { return _comparisonOp; }
         }
 
 
@@ -174,54 +219,107 @@ namespace Habanero.Base
             object leftValue = businessObject.GetPropertyValue(_field.PropertyName);
             if (leftValue == null)
             {
-                switch (_op)
-                {
-                    case Op.Equals:
-                        return _fieldValue == null;
-                    case Op.GreaterThan:
-                        return false;
-                    case Op.LessThan:
-                        return false;
-                    case Op.NotEquals:
-                        return _fieldValue != null;
-                    case Op.LessThanEqual:
-                        return false;
-                    case Op.GreaterThanEqual:
-                        return false;
-                    default:
-                        throw new HabaneroDeveloperException("There is an application exception please contact your system administrator"
-                            , "The operator " + _op + " is not supported by the application");
-                }
+                return IsNullMatch();
             }
 
-            IComparable x = businessObject.GetPropertyValue(_field.PropertyName) as IComparable;
-            if (x == null)
+            IComparable boPropertyValue = businessObject.GetPropertyValue(_field.PropertyName) as IComparable;
+            if (boPropertyValue == null)
             {
                 throw new InvalidOperationException(
                     string.Format(
                         "Property '{0}' on class '{1}' does not implement IComparable and cannot be matched.", _field.PropertyName,
                         businessObject.GetType().FullName));
             }
-            IComparable y = _fieldValue as IComparable;
+            IComparable compareToValue = _fieldValue as IComparable;
+            compareToValue = ConvertDateTimeStringToValue(compareToValue);
+            return IsNonNullMatch(boPropertyValue, compareToValue);
+        }
+
+        private static IComparable ConvertDateTimeStringToValue(IComparable y)
+        {
             y = ConvertDateTImeToday(y);
             y = ConvertDateTimeNow(y);
-            switch (_op)
+            return y;
+        }
+
+        private bool IsNonNullMatch(IComparable boPropertyValue, IComparable compareToValue)
+        {
+            switch (_comparisonOp)
             {
-                case Op.Equals:
-                    return x.Equals(y);
-                case Op.GreaterThan:
-                    return x.CompareTo(y) > 0;
-                case Op.LessThan:
-                    return x.CompareTo(y) < 0;
-                case Op.NotEquals:
-                    return !x.Equals(y);
-                case Op.LessThanEqual:
-                    return x.CompareTo(y) <= 0;
-                case Op.GreaterThanEqual:
-                    return x.CompareTo(y) >= 0;
+                case ComparisonOp.Equals:
+                    return boPropertyValue.Equals(compareToValue);
+                case ComparisonOp.GreaterThan:
+                    return boPropertyValue.CompareTo(compareToValue) > 0;
+                case ComparisonOp.LessThan:
+                    return boPropertyValue.CompareTo(compareToValue) < 0;
+                case ComparisonOp.NotEquals:
+                    return !boPropertyValue.Equals(compareToValue);
+                case ComparisonOp.LessThanEqual:
+                    return boPropertyValue.CompareTo(compareToValue) <= 0;
+                case ComparisonOp.GreaterThanEqual:
+                    return boPropertyValue.CompareTo(compareToValue) >= 0;
+                case ComparisonOp.Like:
+                    return IsLikeMatch(boPropertyValue, compareToValue);
+                case ComparisonOp.NotLike:
+                    return !IsLikeMatch(boPropertyValue, compareToValue);
+                case ComparisonOp.Is:
+                    return boPropertyValue == null;//if boPropertyValue not null then always return false.
+                case ComparisonOp.IsNot:
+                    return boPropertyValue != null;//if boPropertyValue null then always return false.
                 default:
                     throw new HabaneroDeveloperException("There is an application exception please contact your system administrator"
-                        , "The operator " + _op + " is not supported by the application");
+                                                         , "The operator " + _comparisonOp + " is not supported by the application");
+            }
+        }
+
+        private static bool IsLikeMatch(IComparable boPropertyValue, IComparable compareToValue)
+        {
+            string compareValueStringWPct = compareToValue.ToString();
+            string compareValueString_WNoPct = compareValueStringWPct.TrimEnd('%').TrimStart('%');
+            if (!compareValueStringWPct.StartsWith("%") && !compareValueStringWPct.EndsWith("%"))
+            {
+                return boPropertyValue.Equals(compareValueString_WNoPct);
+            }
+            if (!compareValueStringWPct.StartsWith("%"))
+            {
+                return boPropertyValue.ToString().StartsWith(compareValueString_WNoPct);
+            }
+            if (!compareValueStringWPct.EndsWith("%"))
+            {
+                return boPropertyValue.ToString().EndsWith(compareValueString_WNoPct);
+            }
+            return boPropertyValue.ToString().Contains(compareValueString_WNoPct);
+        }
+
+        private bool IsNullMatch()
+        {
+            switch (_comparisonOp)
+            {
+                case ComparisonOp.Equals:
+                    return _fieldValue == null;
+                case ComparisonOp.GreaterThan:
+                    return false;
+                case ComparisonOp.LessThan:
+                    return false;
+                case ComparisonOp.NotEquals:
+                    return _fieldValue != null;
+                case ComparisonOp.LessThanEqual:
+                    return false;
+                case ComparisonOp.GreaterThanEqual:
+                    return false;
+                case ComparisonOp.Like:
+                    return _fieldValue == null;
+                case ComparisonOp.NotLike:
+                    return _fieldValue != null;
+                case ComparisonOp.Is:
+                    if (_fieldValue == null) return true;
+                    return _fieldValue.ToString().ToUpper() == "NULL";
+                case ComparisonOp.IsNot:
+                    if (_fieldValue == null) return false;
+                    return _fieldValue.ToString().ToUpper() != "NULL";
+                default:
+                    throw new HabaneroDeveloperException("There is an application exception please contact your system administrator"
+                                                         , "The operator " + _comparisonOp + " is not supported by the application");
             }
         }
 
@@ -262,7 +360,8 @@ namespace Habanero.Base
             }
             string sourceName = Convert.ToString(_field.Source);
             if (!String.IsNullOrEmpty(sourceName)) sourceName += ".";
-            return string.Format("{0}{1} {2} {3}", sourceName, Field.PropertyName, ComparisonOps[(int)ComparisonOperator], GetValueAsString());
+            string stringComparisonOp = ComparisonOperatorString();
+            return string.Format("{0}{1} {2} {3}", sourceName, Field.PropertyName, stringComparisonOp, GetValueAsString());
             //return ToString(delegate(string propName) { return propName; }, delegate(object value)
             //    {
             //        string valueString;
@@ -296,6 +395,10 @@ namespace Habanero.Base
             else
             {
                 valueString = FieldValue.ToString();
+            }
+            if (CannotBeParametrised())
+            {
+                return valueString.ToUpper();
             }
             return "'" + valueString + "'";
         }
@@ -358,12 +461,12 @@ namespace Habanero.Base
         {
             if (key.Count == 1)
             {
-                return new Criteria(key[0].PropertyName, Op.Equals, key[0].Value);
+                return new Criteria(key[0].PropertyName, ComparisonOp.Equals, key[0].Value);
             }
             Criteria lastCriteria = null;
             foreach (IBOProp prop in key)
             {
-                Criteria propCriteria = new Criteria(prop.PropertyName, Op.Equals, prop.Value);
+                Criteria propCriteria = new Criteria(prop.PropertyName, ComparisonOp.Equals, prop.Value);
                 lastCriteria = lastCriteria == null
                                    ? propCriteria
                                    : new Criteria(lastCriteria, LogicalOp.And, propCriteria);
@@ -383,17 +486,42 @@ namespace Habanero.Base
             if (relationship.RelKey.Count == 1)
             {
                 IRelProp relProp = relationship.RelKey[0];
-                return new Criteria(relProp.RelatedClassPropName, Op.Equals, relProp.BOProp.Value);
+                return new Criteria(relProp.RelatedClassPropName, ComparisonOp.Equals, relProp.BOProp.Value);
             }
             Criteria lastCriteria = null;
             foreach (IRelProp relProp in relationship.RelKey)
             {
-                Criteria propCriteria = new Criteria(relProp.RelatedClassPropName, Op.Equals, relProp.BOProp.Value);
+                Criteria propCriteria = new Criteria(relProp.RelatedClassPropName, ComparisonOp.Equals, relProp.BOProp.Value);
                 lastCriteria = lastCriteria == null 
                         ? propCriteria 
                         : new Criteria(lastCriteria, LogicalOp.And, propCriteria);
             }
             return lastCriteria;
+        }
+        /// <summary>
+        /// Indicates whether the sql operator is some variant of "IS" or "IN",
+        /// in which case a parameterised value is not used
+        /// </summary>
+        /// <returns>True if cannot use parameterised Value, false if required</returns>
+        public bool CannotBeParametrised()
+        {
+            return !CanBeParametrised();
+//            return (strOp == "IS" || strOp == "IS NOT" || strOp == "NOT IS" || strOp == "IN" || strOp == "NOT IN");
+        }
+
+        /// <summary>
+        /// Indicates whether the sql operator is some variant of "IS" or "IN",
+        /// in which case a parameterised value is not used
+        /// </summary>
+        /// <returns>True if cannot use parameterised Value, false if required</returns>
+        public bool CanBeParametrised()
+        {
+            return ComparisonOperator != ComparisonOp.Is && ComparisonOperator != ComparisonOp.IsNot;
+//            return (strOp == "IS" || strOp == "IS NOT" || strOp == "NOT IS" || strOp == "IN" || strOp == "NOT IN");
+        }
+        protected string ComparisonOperatorString()
+        {
+            return ComparisonOps[(int)ComparisonOperator];
         }
     }
 }

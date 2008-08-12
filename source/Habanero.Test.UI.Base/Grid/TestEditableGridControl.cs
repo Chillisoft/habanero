@@ -812,7 +812,7 @@ namespace Habanero.Test.UI.Base
             //---------------Clean from previous tests----------
             const string originalText = "testsavechanges";
             const string newText = "testsavechanges_edited";
-            Criteria criteria = new Criteria("TestProp", Criteria.Op.Equals, originalText);
+            Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, originalText);
             MyBO oldBO1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
             if (oldBO1 != null)
             {
@@ -840,7 +840,7 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, gridControl.Grid.Rows.Count);
             Assert.AreEqual(originalText, gridControl.Grid.Rows[0].Cells[0].Value);
-            criteria = new Criteria("TestProp", Criteria.Op.Equals, newText);
+            criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, newText);
             MyBO nullBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
 //            MyBO nullBO = BOLoader.Instance.GetBusinessObject<MyBO>("TestProp='" + newText + "'");
             Assert.IsNull(nullBO);
@@ -852,7 +852,7 @@ namespace Habanero.Test.UI.Base
             gridControl.Buttons["Save"].PerformClick();
             //---------------Test Result -----------------------
             Assert.AreEqual(newText, gridControl.Grid.Rows[0].Cells[0].Value);
-            criteria = new Criteria("TestProp", Criteria.Op.Equals, newText);
+            criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, newText);
             MyBO savedBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
 //            MyBO savedBO = BOLoader.Instance.GetBusinessObject<MyBO>("TestProp='" + newText + "'");
             Assert.IsNotNull(savedBO);

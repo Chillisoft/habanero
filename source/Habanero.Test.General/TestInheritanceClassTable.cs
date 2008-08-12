@@ -243,9 +243,9 @@ namespace Habanero.Test.General
         public void TearDown()
         {
             Criteria shapeCriteria = new Criteria(
-                new Criteria("ShapeName", Criteria.Op.Equals, "MyShape"), 
+                new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "MyShape"), 
                 Criteria.LogicalOp.Or,
-                new Criteria("ShapeName", Criteria.Op.Equals, "MyShapeChanged"));
+                new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "MyShapeChanged"));
             Shape shape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(shapeCriteria);
             if (shape != null)
             {
@@ -254,9 +254,9 @@ namespace Habanero.Test.General
             }
 
             Criteria criteria = new Criteria(
-                new Criteria("ShapeName", Criteria.Op.Equals, "Circle"),
+                new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "Circle"),
                 Criteria.LogicalOp.Or,
-                new Criteria("ShapeName", Criteria.Op.Equals, "CircleChanged"));
+                new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "CircleChanged"));
             Circle circle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Circle>(criteria);
             if (circle != null)
             {

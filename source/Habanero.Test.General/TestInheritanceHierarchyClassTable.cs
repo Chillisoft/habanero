@@ -341,8 +341,8 @@ namespace Habanero.Test.General
         [TestFixtureTearDown]
         public void TearDown()
         {
-                        Criteria criteria1 = new Criteria("ShapeName", Criteria.Op.Equals, "MyShape");
-            Criteria criteria2 = new Criteria("ShapeName", Criteria.Op.Equals, "MyShapeChanged");
+                        Criteria criteria1 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "MyShape");
+            Criteria criteria2 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "MyShapeChanged");
             Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
             Shape shape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(
                 criteria);
@@ -352,8 +352,8 @@ namespace Habanero.Test.General
                 shape.Save();
             }
 
-            criteria1 = new Criteria("ShapeName", Criteria.Op.Equals, "Circle");
-            criteria2 = new Criteria("ShapeName", Criteria.Op.Equals, "CircleChanged");
+            criteria1 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "Circle");
+            criteria2 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "CircleChanged");
             criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
             Circle circle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Circle>(
                 criteria);
@@ -363,8 +363,8 @@ namespace Habanero.Test.General
                 circle.Save();
             }
 
-            criteria1 = new Criteria("ShapeName", Criteria.Op.Equals, "FilledCircle");
-            criteria2 = new Criteria("ShapeName", Criteria.Op.Equals, "FilledCircleChanged");
+            criteria1 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "FilledCircle");
+            criteria2 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "FilledCircleChanged");
             criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
             FilledCircle filledCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<FilledCircle>(
                 criteria);

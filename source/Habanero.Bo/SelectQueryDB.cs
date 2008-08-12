@@ -46,12 +46,18 @@ namespace Habanero.BO
 
         #region ISelectQuery Members
 
+        /// <summary>
+        /// The Criteria to use when loading. Only objects that match these criteria will be loaded.
+        /// </summary>
         public Criteria Criteria
         {
             get { return _selectQuery.Criteria; }
             set { _selectQuery.Criteria = value; }
         }
 
+        /// <summary>
+        /// The fields to load from the data store.
+        /// </summary>
         public Dictionary<string, QueryField> Fields
         {
             get { return _selectQuery.Fields; }
@@ -304,27 +310,26 @@ namespace Habanero.BO
 
         private void AppendWhereClause(StringBuilder builder, SqlStatement statement)
         {
-            if (_selectQuery.Criteria != null)
-            {
-                builder.Append(" WHERE ");
-                CriteriaDB criteriaDB = new CriteriaDB(_selectQuery.Criteria);
-                string whereClause =
-                    criteriaDB.ToString(_sqlFormatter, delegate(object value)
-                    {
-                        string paramName = statement.ParameterNameGenerator.GetNextParameterName();
-                        if (value is DateTimeToday)
-                        {
-                            value = DateTimeToday.Value;
-                        }
-                        if (value is DateTimeNow)
-                        {
-                            value = DateTimeNow.Value;
-                        }
-                        statement.AddParameter(paramName, value);
-                        return paramName;
-                    });
-                builder.Append(whereClause);
-            }
+            if (_selectQuery.Criteria == null) return;
+            builder.Append(" WHERE ");
+            CriteriaDB criteriaDB = new CriteriaDB(_selectQuery.Criteria);
+            string whereClause =
+                criteriaDB.ToString(_sqlFormatter, delegate(object value)
+                       {
+                           string paramName = statement.ParameterNameGenerator.GetNextParameterName();
+                           if (value == null) value = "NULL";
+                           if (value is DateTimeToday)
+                           {
+                               value = DateTimeToday.Value;
+                           }
+                           if (value is DateTimeNow)
+                           {
+                               value = DateTimeNow.Value;
+                           }
+                           statement.AddParameter(paramName, value);
+                           return paramName;
+                       });
+            builder.Append(whereClause);
         }
 
         private string DelimitField(Source source, string fieldName)

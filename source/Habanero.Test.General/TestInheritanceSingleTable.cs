@@ -64,8 +64,8 @@ namespace Habanero.Test.General
         public void TearDown()
         {
             TransactionCommitterDB committer = new TransactionCommitterDB();
-            Criteria criteria1 = new Criteria("ShapeName", Criteria.Op.Equals, "MyShape");
-            Criteria criteria2 = new Criteria("ShapeName", Criteria.Op.Equals, "MyShapeChanged");
+            Criteria criteria1 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "MyShape");
+            Criteria criteria2 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "MyShapeChanged");
             Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
             BusinessObjectCollection<Shape> shapes = 
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Shape>(criteria, null);
@@ -74,8 +74,8 @@ namespace Habanero.Test.General
                 shape.Delete();
                 committer.AddBusinessObject(shape);
             }
-                        criteria1 = new Criteria("ShapeName", Criteria.Op.Equals, "Circle");
-            criteria2 = new Criteria("ShapeName", Criteria.Op.Equals, "CircleChanged");
+                        criteria1 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "Circle");
+            criteria2 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "CircleChanged");
             criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
             BusinessObjectCollection<CircleNoPrimaryKey> circles 
                 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection

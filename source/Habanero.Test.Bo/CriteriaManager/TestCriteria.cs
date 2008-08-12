@@ -40,7 +40,7 @@ namespace Habanero.Test.BO
             //-------------Test Pre-conditions --------------
 
             //-------------Execute test ---------------------
-            Criteria criteria = new Criteria("MyField", Criteria.Op.Equals, "MyValue");
+            Criteria criteria = new Criteria("MyField", Criteria.ComparisonOp.Equals, "MyValue");
 
             //-------------Test Result ----------------------
             Assert.IsNotNull(criteria.Field);
@@ -48,7 +48,7 @@ namespace Habanero.Test.BO
             Assert.IsNull(criteria.Field.Source);
             Assert.AreEqual("MyField", criteria.Field.FieldName);
             Assert.AreEqual("MyValue", criteria.FieldValue);
-            Assert.AreEqual(Criteria.Op.Equals, criteria.ComparisonOperator);
+            Assert.AreEqual(Criteria.ComparisonOp.Equals, criteria.ComparisonOperator);
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             DateTime dateTimeValue = DateTime.Now;
             const string datetimePropName = "DateTime";
-            Criteria criteria1 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
+            Criteria criteria1 = new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue);
 
             //---------------Execute Test ----------------------
             bool areEquals = criteria1.Equals(null);
@@ -72,7 +72,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             DateTime dateTimeValue = DateTime.Now;
             const string datetimePropName = "DateTime";
-            Criteria criteria1 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
+            Criteria criteria1 = new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue);
 
             //---------------Execute Test ----------------------
             bool areEquals = criteria1.Equals(6);
@@ -87,8 +87,8 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             DateTime dateTimeValue = DateTime.Now;
             const string datetimePropName = "DateTime";
-            Criteria criteria1 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
-            Criteria criteria2 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
+            Criteria criteria1 = new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue);
+            Criteria criteria2 = new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue);
             //---------------Execute Test ----------------------
             bool areEquals = criteria1.Equals(criteria2);
             //---------------Test Result -----------------------
@@ -102,8 +102,8 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             DateTime dateTimeValue = DateTime.Now;
             const string datetimePropName = "DateTime";
-            Criteria criteria1 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
-            Criteria criteria2 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue.AddDays(34));
+            Criteria criteria1 = new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue);
+            Criteria criteria2 = new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue.AddDays(34));
             //---------------Execute Test ----------------------
             bool areEquals = criteria1.Equals(criteria2);
             //---------------Test Result -----------------------
@@ -118,11 +118,11 @@ namespace Habanero.Test.BO
             DateTime dateTimeValue1 = DateTime.Now;
             DateTime dateTimeValue2 = DateTime.Now.AddDays(20);
             const string datetimePropName = "DateTime";
-            Criteria criteria1 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue1);
-            Criteria criteria2 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue2);
+            Criteria criteria1 = new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue1);
+            Criteria criteria2 = new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue2);
             Criteria composite1 = new Criteria(criteria1, Criteria.LogicalOp.And, criteria2);
 
-            Criteria criteria3 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue1);
+            Criteria criteria3 = new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue1);
             //---------------Execute Test ----------------------
             bool areEquals = composite1.Equals(criteria3);
             //---------------Test Result -----------------------
@@ -137,12 +137,12 @@ namespace Habanero.Test.BO
             DateTime dateTimeValue1 = DateTime.Now;
             DateTime dateTimeValue2 = DateTime.Now.AddDays(20);
             const string datetimePropName = "DateTime";
-            Criteria criteria1 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue1);
-            Criteria criteria2 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue2);
+            Criteria criteria1 = new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue1);
+            Criteria criteria2 = new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue2);
             Criteria composite1 = new Criteria(criteria1, Criteria.LogicalOp.And, criteria2);
 
-            Criteria criteria3 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue1);
-            Criteria criteria4 = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue2);
+            Criteria criteria3 = new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue1);
+            Criteria criteria4 = new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue2);
             Criteria composite2 = new Criteria(criteria3, Criteria.LogicalOp.And, criteria4);
             //---------------Execute Test ----------------------
             bool areEquals = composite1.Equals(composite2);
@@ -158,7 +158,7 @@ namespace Habanero.Test.BO
             //-------------Setup Test Pack ------------------
             const string propName = "PropName";
             const string propValue = "PropValue";
-            Criteria surnameCriteria = new Criteria(propName, Criteria.Op.Equals, propValue);
+            Criteria surnameCriteria = new Criteria(propName, Criteria.ComparisonOp.Equals, propValue);
             const string sourceName = "SourceName";
             surnameCriteria.Field.Source = new Source(sourceName);
 
@@ -174,8 +174,8 @@ namespace Habanero.Test.BO
         public void TestCompositeProperties()
         {
             //-------------Setup Test Pack ------------------
-            Criteria dobCriteria = new Criteria("DateOfBirth", Criteria.Op.Equals, "sfd");
-            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.Equals, "dfsd");
+            Criteria dobCriteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, "sfd");
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "dfsd");
             Criteria twoPropCriteria = new Criteria(dobCriteria, Criteria.LogicalOp.And, nameCriteria);
             //-------------Test Pre-conditions --------------
             
@@ -194,7 +194,7 @@ namespace Habanero.Test.BO
         public void TestIsComposite_False()
         {
             //---------------Set up test pack-------------------
-            Criteria criteria = new Criteria("bob", Criteria.Op.LessThan, "hello");
+            Criteria criteria = new Criteria("bob", Criteria.ComparisonOp.LessThan, "hello");
             //---------------Execute Test ----------------------
             bool isComposite = criteria.IsComposite();
             //---------------Test Result -----------------------
@@ -206,8 +206,8 @@ namespace Habanero.Test.BO
         public void TestIsComposite_True()
         {
             //---------------Set up test pack-------------------
-            Criteria dobCriteria = new Criteria("DateOfBirth", Criteria.Op.Equals, "sfd");
-            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.Equals, "dfsd");
+            Criteria dobCriteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, "sfd");
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "dfsd");
             Criteria twoPropCriteria = new Criteria(dobCriteria, Criteria.LogicalOp.And, nameCriteria);
             //---------------Execute Test ----------------------
             bool isComposite = twoPropCriteria.IsComposite();
@@ -228,8 +228,8 @@ namespace Habanero.Test.BO
             string surname = Guid.NewGuid().ToString("N");
             cp.Surname = surname;
 
-            Criteria dobCriteria = new Criteria("DateOfBirth", Criteria.Op.Equals, dob.AddDays(2));
-            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.Equals, surname);
+            Criteria dobCriteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, dob.AddDays(2));
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
 
             //---------------Execute Test ----------------------
             Criteria twoPropCriteria = new Criteria(dobCriteria, Criteria.LogicalOp.Or, nameCriteria);
@@ -245,7 +245,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             Guid guidValue = Guid.NewGuid();
-            Criteria guidCriteria = new Criteria("MyID", Criteria.Op.Equals, guidValue);
+            Criteria guidCriteria = new Criteria("MyID", Criteria.ComparisonOp.Equals, guidValue);
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -357,8 +357,8 @@ namespace Habanero.Test.BO
             string surname = Guid.NewGuid().ToString("N");
             cp.Surname = surname;
 
-            Criteria dobCriteria = new Criteria("DateOfBirth", Criteria.Op.Equals, dob);
-            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.Equals, surname);
+            Criteria dobCriteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, dob);
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
 
             //---------------Execute Test ----------------------
             Criteria twoPropCriteria = new Criteria(dobCriteria, Criteria.LogicalOp.And, nameCriteria);
@@ -374,10 +374,10 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             string surnameValue = Guid.NewGuid().ToString("N");
             const string surname = "Surname";
-            Criteria surnameCriteria = new Criteria(surname, Criteria.Op.Equals, surnameValue);
+            Criteria surnameCriteria = new Criteria(surname, Criteria.ComparisonOp.Equals, surnameValue);
             DateTime dateTimeValue = DateTime.Now;
             const string datetimePropName = "DateTime";
-            Criteria dateTimeCriteria = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
+            Criteria dateTimeCriteria = new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue);
 
             Criteria andCriteria = new Criteria(surnameCriteria, Criteria.LogicalOp.And, dateTimeCriteria);
             //---------------Execute Test ----------------------
@@ -406,7 +406,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, Guid.NewGuid().ToString("N"));
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, Guid.NewGuid().ToString("N"));
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
@@ -424,7 +424,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, cp.Surname);
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, cp.Surname);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
@@ -440,7 +440,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = null;
-            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.Equals, "surname");
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "surname");
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             bool isMatch = nameCriteria.IsMatch(cp);
@@ -457,7 +457,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = null;
-            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.Equals, null);
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, null);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             bool isMatch = nameCriteria.IsMatch(cp);
@@ -472,7 +472,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             string surnameValue = Guid.NewGuid().ToString("N");
             const string surname = "Surname";
-            Criteria criteria = new Criteria(surname, Criteria.Op.Equals, surnameValue);
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.Equals, surnameValue);
 
             //---------------Execute Test ----------------------
             string criteriaAsString = criteria.ToString();
@@ -500,7 +500,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.GreaterThan, DateTime.Now.AddDays(-1));
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, DateTime.Now.AddDays(-1));
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
@@ -518,7 +518,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.GreaterThan, DateTime.Now.AddDays(1));
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, DateTime.Now.AddDays(1));
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
@@ -537,7 +537,7 @@ namespace Habanero.Test.BO
             cp.DateOfBirth = DateTime.Today.AddDays(1);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.GreaterThan, dateTimeToday);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, dateTimeToday);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
@@ -556,7 +556,7 @@ namespace Habanero.Test.BO
             cp.DateOfBirth = DateTime.Today.AddDays(-1);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.GreaterThan, dateTimeToday);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, dateTimeToday);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
@@ -576,7 +576,7 @@ namespace Habanero.Test.BO
             cp.DateOfBirth = DateTime.Today.AddDays(1);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.GreaterThan, dateTimeToday);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, dateTimeToday);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
@@ -595,7 +595,7 @@ namespace Habanero.Test.BO
             cp.DateOfBirth = DateTime.Today.AddDays(-1);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.GreaterThan, dateTimeToday);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, dateTimeToday);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
@@ -609,7 +609,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = null;
-            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.GreaterThan, "bob");
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.GreaterThan, "bob");
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             bool isMatch = nameCriteria.IsMatch(cp);
@@ -624,7 +624,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             string surnameValue = Guid.NewGuid().ToString("N");
             const string surname = "Surname";
-            Criteria criteria = new Criteria(surname, Criteria.Op.GreaterThan, surnameValue);
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.GreaterThan, surnameValue);
 
             //---------------Execute Test ----------------------
             string criteriaAsString = criteria.ToString();
@@ -648,7 +648,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.LessThan, DateTime.Now.AddDays(1));
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThan, DateTime.Now.AddDays(1));
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
@@ -665,7 +665,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.LessThan, DateTime.Now.AddDays(-1));
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThan, DateTime.Now.AddDays(-1));
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
@@ -680,7 +680,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = null;
-            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.LessThan, "bob");
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.LessThan, "bob");
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             bool isMatch = nameCriteria.IsMatch(cp);
@@ -697,7 +697,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadClassDefWithImageProperty();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
-            Criteria nameCriteria = new Criteria("Image", Criteria.Op.LessThan, new System.Drawing.Bitmap(20, 20));
+            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThan, new System.Drawing.Bitmap(20, 20));
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             try
@@ -721,7 +721,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             string surnameValue = Guid.NewGuid().ToString("N");
             const string surname = "Surname";
-            Criteria criteria = new Criteria(surname, Criteria.Op.LessThan, surnameValue);
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.LessThan, surnameValue);
 
             //---------------Execute Test ----------------------
             string criteriaAsString = criteria.ToString();
@@ -741,7 +741,7 @@ namespace Habanero.Test.BO
             //-------------Test Pre-conditions --------------
 
             //-------------Execute test ---------------------
-            Criteria criteria = new Criteria("MyField", Criteria.Op.LessThanEqual, "MyValue");
+            Criteria criteria = new Criteria("MyField", Criteria.ComparisonOp.LessThanEqual, "MyValue");
 
             //-------------Test Result ----------------------
             Assert.IsNotNull(criteria.Field);
@@ -749,7 +749,7 @@ namespace Habanero.Test.BO
             Assert.IsNull(criteria.Field.Source);
             Assert.AreEqual("MyField", criteria.Field.FieldName);
             Assert.AreEqual("MyValue", criteria.FieldValue);
-            Assert.AreEqual(Criteria.Op.LessThanEqual, criteria.ComparisonOperator);
+            Assert.AreEqual(Criteria.ComparisonOp.LessThanEqual, criteria.ComparisonOperator);
         }
 
         [Test]
@@ -763,7 +763,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.LessThanEqual, DateTime.Now.AddDays(1));
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThanEqual, DateTime.Now.AddDays(1));
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
@@ -780,7 +780,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.LessThanEqual, cp.DateOfBirth);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThanEqual, cp.DateOfBirth);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
@@ -797,7 +797,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.LessThanEqual, DateTime.Now.AddDays(-1));
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThanEqual, DateTime.Now.AddDays(-1));
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
@@ -812,7 +812,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = null;
-            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.LessThanEqual, "bob");
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.LessThanEqual, "bob");
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             bool isMatch = nameCriteria.IsMatch(cp);
@@ -829,7 +829,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadClassDefWithImageProperty();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
-            Criteria nameCriteria = new Criteria("Image", Criteria.Op.LessThanEqual, new System.Drawing.Bitmap(20, 20));
+            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThanEqual, new System.Drawing.Bitmap(20, 20));
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             try
@@ -853,7 +853,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             string surnameValue = Guid.NewGuid().ToString("N");
             const string surname = "Surname";
-            Criteria criteria = new Criteria(surname, Criteria.Op.LessThanEqual, surnameValue);
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.LessThanEqual, surnameValue);
 
             //---------------Execute Test ----------------------
             string criteriaAsString = criteria.ToString();
@@ -873,7 +873,7 @@ namespace Habanero.Test.BO
             //-------------Test Pre-conditions --------------
 
             //-------------Execute test ---------------------
-            Criteria criteria = new Criteria("MyField", Criteria.Op.GreaterThanEqual, "MyValue");
+            Criteria criteria = new Criteria("MyField", Criteria.ComparisonOp.GreaterThanEqual, "MyValue");
 
             //-------------Test Result ----------------------
             Assert.IsNotNull(criteria.Field);
@@ -881,7 +881,7 @@ namespace Habanero.Test.BO
             Assert.IsNull(criteria.Field.Source);
             Assert.AreEqual("MyField", criteria.Field.FieldName);
             Assert.AreEqual("MyValue", criteria.FieldValue);
-            Assert.AreEqual(Criteria.Op.GreaterThanEqual, criteria.ComparisonOperator);
+            Assert.AreEqual(Criteria.ComparisonOp.GreaterThanEqual, criteria.ComparisonOperator);
         }
 
         [Test]
@@ -895,7 +895,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.GreaterThanEqual, DateTime.Now.AddDays(-1));
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThanEqual, DateTime.Now.AddDays(-1));
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
@@ -912,7 +912,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.GreaterThanEqual, cp.DateOfBirth);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThanEqual, cp.DateOfBirth);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
@@ -929,7 +929,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.GreaterThanEqual, DateTime.Now.AddDays(1));
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThanEqual, DateTime.Now.AddDays(1));
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
@@ -944,7 +944,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = null;
-            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.GreaterThanEqual, "bob");
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.GreaterThanEqual, "bob");
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             bool isMatch = nameCriteria.IsMatch(cp);
@@ -961,7 +961,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadClassDefWithImageProperty();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
-            Criteria nameCriteria = new Criteria("Image", Criteria.Op.GreaterThanEqual, new System.Drawing.Bitmap(20, 20));
+            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.GreaterThanEqual, new System.Drawing.Bitmap(20, 20));
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             try
@@ -984,7 +984,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             string surnameValue = Guid.NewGuid().ToString("N");
             const string surname = "Surname";
-            Criteria criteria = new Criteria(surname, Criteria.Op.GreaterThanEqual, surnameValue);
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.GreaterThanEqual, surnameValue);
 
             //---------------Execute Test ----------------------
             string criteriaAsString = criteria.ToString();
@@ -996,6 +996,7 @@ namespace Habanero.Test.BO
         
         #endregion
 
+
         #region NotEquals
         [Test]
         public void TestNotEquals()
@@ -1004,7 +1005,7 @@ namespace Habanero.Test.BO
             //-------------Test Pre-conditions --------------
 
             //-------------Execute test ---------------------
-            Criteria criteria = new Criteria("MyField", Criteria.Op.NotEquals, "MyValue");
+            Criteria criteria = new Criteria("MyField", Criteria.ComparisonOp.NotEquals, "MyValue");
 
             //-------------Test Result ----------------------
             Assert.IsNotNull(criteria.Field);
@@ -1012,7 +1013,7 @@ namespace Habanero.Test.BO
             Assert.IsNull(criteria.Field.Source);
             Assert.AreEqual("MyField", criteria.Field.FieldName);
             Assert.AreEqual("MyValue", criteria.FieldValue);
-            Assert.AreEqual(Criteria.Op.NotEquals, criteria.ComparisonOperator);
+            Assert.AreEqual(Criteria.ComparisonOp.NotEquals, criteria.ComparisonOperator);
         }
 
 
@@ -1027,7 +1028,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("Surname", Criteria.Op.NotEquals, Guid.NewGuid().ToString("N"));
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotEquals, Guid.NewGuid().ToString("N"));
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch, "The object should be a match since it matches the Not equals criteria given.");
@@ -1046,7 +1047,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("Surname", Criteria.Op.NotEquals, cp.Surname);
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotEquals, cp.Surname);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsFalse(isMatch, "The object should be a not match since it does not match the not equals criteria given");
@@ -1061,7 +1062,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = null;
-            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.NotEquals, "surname");
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.NotEquals, "surname");
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             bool isMatch = nameCriteria.IsMatch(cp);
@@ -1078,7 +1079,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = null;
-            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.NotEquals, null);
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.NotEquals, null);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             bool isMatch = nameCriteria.IsMatch(cp);
@@ -1093,7 +1094,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "Surname";
-            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.NotEquals, null);
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.NotEquals, null);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             bool isMatch = nameCriteria.IsMatch(cp);
@@ -1107,7 +1108,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             string surnameValue = Guid.NewGuid().ToString("N");
             const string surname = "Surname";
-            Criteria criteria = new Criteria(surname, Criteria.Op.NotEquals, surnameValue);
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.NotEquals, surnameValue);
 
             //---------------Execute Test ----------------------
             string criteriaAsString = criteria.ToString();
@@ -1119,26 +1120,772 @@ namespace Habanero.Test.BO
         #endregion
 
         #region Like
-
         [Test]
-        public void TestLike()
+        public void TestCriteria_Like()
         {
             //-------------Setup Test Pack ------------------
             //-------------Test Pre-conditions --------------
 
             //-------------Execute test ---------------------
-            Criteria criteria = new Criteria("MyField", Criteria.Op.Like, "MyValue");
+            Criteria criteria = new Criteria("MyField", Criteria.ComparisonOp.Like, "%MyValue%");
 
             //-------------Test Result ----------------------
             Assert.IsNotNull(criteria.Field);
             Assert.AreEqual("MyField", criteria.Field.PropertyName);
             Assert.IsNull(criteria.Field.Source);
             Assert.AreEqual("MyField", criteria.Field.FieldName);
-            Assert.AreEqual("MyValue", criteria.FieldValue);
-            Assert.AreEqual(Criteria.Op.Like, criteria.ComparisonOperator);
+            Assert.AreEqual("%MyValue%", criteria.FieldValue);
+            Assert.AreEqual(Criteria.ComparisonOp.Like, criteria.ComparisonOperator);
         }
 
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_Like()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "This is MyValue Surname";
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Like, "%MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_Like_ValuesIdentical()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "MyValue";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Like, "%MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_Like_ValuesStartsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "MyValue is surname";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Like, "%MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_Like_ValuesEndsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "surname is MyValue";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Like, "%MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_Like_CriteriaStartsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "This is MyValue Surname";
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Like, "MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it does not start with MyValue.");
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_Like_ValuesIdentical_CriteriaStartsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "MyValue";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Like, "MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since surname starts with MyValue.");
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_Like_ValuesStartsWith_CriteriaStartsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "MyValue is surname";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Like, "MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestCriteria_NotIsMatch_OneProp_Like_ValuesEndsWith_CriteriaStartsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "surname is MyValue";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Like, "MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_Like_CriteriaEndsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "This is MyValue Surname";
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Like, "%MyValue");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it does not end with MyValue.");
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_Like_ValuesIdentical_CriteriaEndsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "MyValue";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Like, "%MyValue");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since surname ends with MyValue.");
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_Like_ValuesStartsWith_CriteriaEndsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "MyValue is surname";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Like, "%MyValue");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since surname does not end with MyValue.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestCriteria_NotIsMatch_OneProp_Like_ValuesEndsWith_CriteriaEndsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "surname is MyValue";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Like, "%MyValue");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_Like_NoMatch()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "surname does not contain searchstring";
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Like, "%MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestIsMatch_NullValue_Like()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = null;
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Like, "bob%");
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            bool isMatch = nameCriteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestIsMatch_NullPropertyValue_Like_NullMatchValue()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = null;
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Like, null);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            bool isMatch = nameCriteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test, ExpectedException(typeof(InvalidOperationException))]
+        public void TestIsMatch_Like_Incomparable()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefWithImageProperty();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
+            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.Like, new System.Drawing.Bitmap(20, 20));
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            try
+            {
+                nameCriteria.IsMatch(cp);
+                Assert.Fail("expected InvalidOperationException because you Bitmap does not implement IComparable");
+
+                //---------------Test Result -----------------------
+            }
+            catch (InvalidOperationException ex)
+            {
+                StringAssert.Contains("does not implement IComparable and cannot be matched", ex.Message);
+                throw;
+            }
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void Test_ToString_LeafCriteria_String_Like()
+        {
+            //---------------Set up test pack-------------------
+            string surnameValue = Guid.NewGuid().ToString("N") + "%";
+            const string surname = "Surname";
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.Like, surnameValue);
+
+            //---------------Execute Test ----------------------
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("Surname Like '" + surnameValue + "'", criteriaAsString);
+        }
+
+
         #endregion
+
+        #region Not Like
+        [Test]
+        public void TestCriteria_NotLike()
+        {
+            //-------------Setup Test Pack ------------------
+            //-------------Test Pre-conditions --------------
+
+            //-------------Execute test ---------------------
+            Criteria criteria = new Criteria("MyField", Criteria.ComparisonOp.NotLike, "%MyValue%");
+
+            //-------------Test Result ----------------------
+            Assert.IsNotNull(criteria.Field);
+            Assert.AreEqual("MyField", criteria.Field.PropertyName);
+            Assert.IsNull(criteria.Field.Source);
+            Assert.AreEqual("MyField", criteria.Field.FieldName);
+            Assert.AreEqual("%MyValue%", criteria.FieldValue);
+            Assert.AreEqual(Criteria.ComparisonOp.NotLike, criteria.ComparisonOperator);
+        }
+
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_NotLike()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "This is MyValue Surname";
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotLike, "%MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_NotLike_ValuesIdentical()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "MyValue";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotLike, "%MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_NotLike_ValuesStartsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "MyValue is surname";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotLike, "%MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_NotLike_ValuesEndsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "surname is MyValue";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotLike, "%MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_NotLike_CriteriaStartsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "This is MyValue Surname";
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotLike, "MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it does not start with MyValue.");
+        }
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_NotLike_ValuesIdentical_CriteriaStartsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "MyValue";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotLike, "MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it matches the criteria given.");
+        }
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_NotLike_ValuesStartsWith_CriteriaStartsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "MyValue is surname";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotLike, "MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it matches the criteria given.");
+        }
+
+        [Test]
+        public void TestCriteria_NotIsMatch_OneProp_NotLike_ValuesEndsWith_CriteriaStartsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "surname is MyValue";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotLike, "MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+        }
+
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_NotLike_CriteriaEndsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "This is MyValue Surname";
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotLike, "%MyValue");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it does not end with MyValue.");
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_NotLike_ValuesIdentical_CriteriaEndsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "MyValue";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotLike, "%MyValue");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it matches the criteria given.");
+        }
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_NotLike_ValuesStartsWith_CriteriaEndsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "MyValue is surname";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotLike, "%MyValue");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since surname does not end with MyValue.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestCriteria_NotIsMatch_OneProp_NotLike_ValuesEndsWith_CriteriaEndsWith()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "surname is MyValue";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotLike, "%MyValue");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it matches the criteria given.");
+        }
+
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_NotLike_NoMatch()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "surname does not contain searchstring";
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotLike, "%MyValue%");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it does not contain the criteria given.");
+        }
+
+        [Test]
+        public void TestIsMatch_NullValue_NotLike()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = null;
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.NotLike, "bob%");
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            bool isMatch = nameCriteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since matches the criteria given.");
+        }
+
+        [Test]
+        public void TestIsMatch_NullPropertyValue_NotLike_NullMatchValue()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = null;
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.NotLike, null);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            bool isMatch = nameCriteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it matches the criteria given.");
+        }
+
+        [Test, ExpectedException(typeof(InvalidOperationException))]
+        public void TestIsMatch_NotLike_Incomparable()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefWithImageProperty();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
+            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.NotLike, new System.Drawing.Bitmap(20, 20));
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            try
+            {
+                nameCriteria.IsMatch(cp);
+                Assert.Fail("expected InvalidOperationException because you Bitmap does not implement IComparable");
+
+                //---------------Test Result -----------------------
+            }
+            catch (InvalidOperationException ex)
+            {
+                StringAssert.Contains("does not implement IComparable and cannot be matched", ex.Message);
+                throw;
+            }
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void Test_ToString_LeafCriteria_String_NotLike()
+        {
+            //---------------Set up test pack-------------------
+            string surnameValue = Guid.NewGuid().ToString("N") + "%";
+            const string surname = "Surname";
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.NotLike, surnameValue);
+
+            //---------------Execute Test ----------------------
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("Surname Not Like '" + surnameValue + "'", criteriaAsString);
+        }
+
+
+        #endregion
+
+        #region Is Not
+        [Test]
+        public void TestCriteria_IsNot()
+        {
+            //-------------Setup Test Pack ------------------
+            //-------------Test Pre-conditions --------------
+
+            //-------------Execute test ---------------------
+            Criteria criteria = new Criteria("MyField", Criteria.ComparisonOp.IsNot, "NULL");
+
+            //-------------Test Result ----------------------
+            Assert.IsNotNull(criteria.Field);
+            Assert.AreEqual("MyField", criteria.Field.PropertyName);
+            Assert.IsNull(criteria.Field.Source);
+            Assert.AreEqual("MyField", criteria.Field.FieldName);
+            Assert.AreEqual("NULL", criteria.FieldValue);
+            Assert.AreEqual(Criteria.ComparisonOp.IsNot, criteria.ComparisonOperator);
+            Assert.IsTrue(criteria.CannotBeParametrised());
+        }
+
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_ISNot()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = null;
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.IsNot, "NULL");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it does not matches the criteria given.");
+        }
+        [Test]
+        public void TestCriteria_NotIsMatch_OneProp_ISNot()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "MyValue";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.IsNot, "NULL"); 
+            bool isMatch = criteria.IsMatch(cp);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should  be a match since its surname is not null.");
+        }
+        [Test]
+        public void Test_ToString_LeafCriteria_String_IsNot()
+        {
+            //---------------Set up test pack-------------------
+            const string surname = "Surname";
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.IsNot, "Null");
+
+            //---------------Execute Test ----------------------
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("Surname IS NOT NULL", criteriaAsString);
+        }
+        #endregion
+
+        #region Is
+        [Test]
+        public void TestCriteria_IS()
+        {
+            //-------------Setup Test Pack ------------------
+            //-------------Test Pre-conditions --------------
+
+            //-------------Execute test ---------------------
+            Criteria criteria = new Criteria("MyField", Criteria.ComparisonOp.Is, "NULL");
+
+            //-------------Test Result ----------------------
+            Assert.IsNotNull(criteria.Field);
+            Assert.AreEqual("MyField", criteria.Field.PropertyName);
+            Assert.IsNull(criteria.Field.Source);
+            Assert.AreEqual("MyField", criteria.Field.FieldName);
+            Assert.AreEqual("NULL", criteria.FieldValue);
+            Assert.AreEqual(Criteria.ComparisonOp.Is, criteria.ComparisonOperator);
+            Assert.IsTrue(criteria.CannotBeParametrised());
+        }
+
+        [Test]
+        public void TestCriteria_IsMatch_OneProp_IS()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = null;
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Is, "NULL");
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestCriteria_NotIsMatch_OneProp_IS()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = "MyValue";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Is, "NULL"); 
+            bool isMatch = criteria.IsMatch(cp);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since its surname is not null.");
+        }
+        [Test]
+        public void Test_ToString_LeafCriteria_String_Is()
+        {
+            //---------------Set up test pack-------------------
+            const string surname = "Surname";
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.Is, "Null");
+
+            //---------------Execute Test ----------------------
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("Surname IS NULL", criteriaAsString);
+        }
+        #endregion
+
 
         [Test]
         public void TestOtherOperators()
@@ -1149,15 +1896,19 @@ namespace Habanero.Test.BO
 
             //---------------Execute Test ----------------------
             Assert.Fail("Todo");
+            //Todo:  
+            //                " NOT IN",
+            //                " IN"
+            //
+            //            Test using objects and enums TestCriteria
+            //test parsing from strings. TestCriteriaParser
+            //col.Load(New Criteria("Surname" , Op.Equals, "Powell") TestbusinessObjectCollection
+            //col.Load("Surname = Powell"); //Test what happens if we parse using an unsupported operator
+            //test for value is null
             //---------------Test Result -----------------------
 
         }
-        //Todo:   " IS NOT",
-//                " IS",
-//                " NOT LIKE",
-//                " LIKE",
-//                " NOT IN",
-//                " IN"
+
         #endregion //Comparison Operators
 
 
@@ -1175,7 +1926,7 @@ namespace Habanero.Test.BO
             cp.DateOfBirth = DateTime.Today;
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, dateTimeToday);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, dateTimeToday);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
@@ -1194,7 +1945,7 @@ namespace Habanero.Test.BO
             cp.DateOfBirth = DateTime.Today.AddDays(-1);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, dateTimeToday);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, dateTimeToday);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
@@ -1213,7 +1964,7 @@ namespace Habanero.Test.BO
             cp.DateOfBirth = DateTime.Today.AddDays(-1);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, dateTimeToday);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, dateTimeToday);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
@@ -1232,7 +1983,7 @@ namespace Habanero.Test.BO
             cp.DateOfBirth = DateTime.Today.AddDays(-1);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.LessThan, dateTimeToday);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThan, dateTimeToday);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
@@ -1251,7 +2002,7 @@ namespace Habanero.Test.BO
             cp.DateOfBirth = DateTime.Today.AddDays(1);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.LessThan, dateTimeToday);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThan, dateTimeToday);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
@@ -1270,7 +2021,7 @@ namespace Habanero.Test.BO
             cp.DateOfBirth = DateTime.Today.AddDays(-1);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.LessThan, dateTimeToday);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThan, dateTimeToday);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
@@ -1289,7 +2040,7 @@ namespace Habanero.Test.BO
             cp.DateOfBirth = DateTime.Today.AddDays(1);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.LessThan, dateTimeNow);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThan, dateTimeNow);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
@@ -1302,7 +2053,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             DateTime dateTimeValue = DateTime.Now;
             const string datetimePropName = "DateTime";
-            Criteria criteria = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
+            Criteria criteria = new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue);
 
             //---------------Execute Test ----------------------
             string criteriaAsString = criteria.ToString();

@@ -60,7 +60,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadClassDefWithBOLookup();
             ContactPersonTestBO.LoadDefaultClassDef();
-            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, "abc");
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
             ContactPersonTestBO cp = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
             BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", cp);
@@ -76,7 +76,7 @@ namespace Habanero.Test.BO
             ClassDef classDef = MyBO.LoadClassDefWithBOLookup("Surname <> abc");
             ContactPersonTestBO.LoadDefaultClassDef();
 
-            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, "abc");
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
             ContactPersonTestBO cp = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
             BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", cp);

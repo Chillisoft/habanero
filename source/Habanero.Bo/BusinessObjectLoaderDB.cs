@@ -222,6 +222,12 @@ namespace Habanero.BO
             return col;
         }
 
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the criteria given. 
+        /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="criteriaString">The criteria to use to load the business object collection</param>
+        /// <returns>The loaded collection</returns>
         public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString) where T : class, IBusinessObject, new()
         {
             Criteria criteria = CriteriaParser.CreateCriteria(criteriaString);

@@ -44,8 +44,8 @@ namespace Habanero.Test.General
         [TearDown]
         public void TearDown()
         {
-                                    Criteria criteria1 = new Criteria("ShapeName", Criteria.Op.Equals, "MyShape");
-            Criteria criteria2 = new Criteria("ShapeName", Criteria.Op.Equals, "MyShapeChanged");
+                                    Criteria criteria1 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "MyShape");
+            Criteria criteria2 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "MyShapeChanged");
             Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
             Shape shape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(
                 criteria1);
@@ -54,8 +54,8 @@ namespace Habanero.Test.General
                 shape.Delete();
                 shape.Save();
             }
-            criteria1 = new Criteria("ShapeName", Criteria.Op.Equals, "Circle");
-            criteria2 = new Criteria("ShapeName", Criteria.Op.Equals, "CircleChanged");
+            criteria1 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "Circle");
+            criteria2 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "CircleChanged");
             criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
             CircleNoPrimaryKey circle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<CircleNoPrimaryKey>(
                 criteria);
@@ -64,8 +64,8 @@ namespace Habanero.Test.General
                 circle.Delete();
                 circle.Save();
             }
-            criteria1 = new Criteria("ShapeName", Criteria.Op.Equals, "FilledCircle");
-            criteria2 = new Criteria("ShapeName", Criteria.Op.Equals, "FilledCircleChanged");
+            criteria1 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "FilledCircle");
+            criteria2 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "FilledCircleChanged");
             criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
             FilledCircleNoPrimaryKey filledCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<FilledCircleNoPrimaryKey>(
                 criteria);

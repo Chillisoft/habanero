@@ -81,7 +81,7 @@ namespace Habanero.Test.BO
             cp.Surname = Guid.NewGuid().ToString("N");
             DataStoreInMemory dataStore = new DataStoreInMemory();
             dataStore.Add(cp);
-            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, cp.Surname);
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, cp.Surname);
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCP = dataStore.Find<ContactPersonTestBO>(criteria);
@@ -101,7 +101,7 @@ namespace Habanero.Test.BO
             cp.Surname = Guid.NewGuid().ToString("N");
             DataStoreInMemory dataStore = new DataStoreInMemory();
             dataStore.Add(cp);
-            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, cp.Surname);
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, cp.Surname);
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCP = (ContactPersonTestBO) dataStore.Find(typeof(ContactPersonTestBO), criteria);
@@ -145,7 +145,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp2 = new ContactPersonTestBO();
             cp2.DateOfBirth = now;
             dataStore.Add(cp2);
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, now);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
 
             //---------------Execute Test ----------------------
             BusinessObjectCollection<ContactPersonTestBO> col = dataStore.FindAll<ContactPersonTestBO>(criteria);
@@ -172,7 +172,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp2 = new ContactPersonTestBO();
             cp2.DateOfBirth = now;
             dataStore.Add(cp2);
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, now);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
 
             //---------------Execute Test ----------------------
             IBusinessObjectCollection col = dataStore.FindAll(typeof(ContactPersonTestBO), criteria);

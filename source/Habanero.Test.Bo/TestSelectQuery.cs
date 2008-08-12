@@ -55,7 +55,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             SelectQuery selectQuery = new SelectQuery();
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("test", Criteria.Op.Equals, "testValue");
+            Criteria criteria = new Criteria("test", Criteria.ComparisonOp.Equals, "testValue");
             selectQuery.Criteria = criteria;
             //---------------Test Result -----------------------
             Assert.AreSame(criteria, selectQuery.Criteria);

@@ -76,7 +76,7 @@ namespace Habanero.BO
             {
                 BOSequenceNumber.LoadNumberGenClassDef(_tableName);
             }
-            Criteria criteria = new Criteria("NumberType", Criteria.Op.Equals, numberType);
+            Criteria criteria = new Criteria("NumberType", Criteria.ComparisonOp.Equals, numberType);
             BOSequenceNumber sequenceBOSequenceNumber =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOSequenceNumber>(criteria);
 

@@ -61,7 +61,26 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-
+        public static ClassDef LoadDefaultClassDef_W_IntegerProperty()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property name=""ContactPersonID"" type=""Guid"" />
+					<property name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property name=""FirstName"" databaseField=""FirstName_field"" />
+					<property name=""DateOfBirth"" type=""DateTime"" />
+					<property name=""IntegerProperty"" type=""Int32"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         public static ClassDef LoadDefaultClassDefWithUIDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -523,7 +542,7 @@ namespace Habanero.Test.BO
 
             for (int i = 0; i < surnames.Length; i++)
             {
-                Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, surnames[i]);
+                Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surnames[i]);
                 if (BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria) !=
                     null)
                     continue;
@@ -571,6 +590,16 @@ namespace Habanero.Test.BO
             return CreateContactPerson(out address);
         }
 
+        public static ContactPersonTestBO CreateSavedContactPerson(DateTime? dteBirth, string surname, string firstName)
+        {
+            ContactPersonTestBO contact = CreateUnsavedContactPerson(surname, firstName);
+            if (dteBirth != null)
+            {
+                contact.DateOfBirth = dteBirth.Value;
+            }
+            contact.Save();
+            return contact;
+        }
         public static ContactPersonTestBO CreateSavedContactPerson(string surname, string firstName)
         {
             ContactPersonTestBO contact = CreateUnsavedContactPerson(surname, firstName);

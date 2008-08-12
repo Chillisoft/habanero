@@ -58,8 +58,8 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
             ClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
-            Criteria criteria = new Criteria("TestProp", Criteria.Op.Equals, "bob");
-            Criteria preparedCriteria = new Criteria("TestProp", Criteria.Op.Equals, "bob");
+            Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, "bob");
+            Criteria preparedCriteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, "bob");
             QueryBuilder.PrepareCriteria(classdef, preparedCriteria);
             //---------------Execute Test ----------------------
             ISelectQuery query = QueryBuilder.CreateSelectQuery(classdef, criteria);
@@ -186,7 +186,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
-            Criteria criteria = new Criteria("EngineNo", Criteria.Op.Equals, 100);
+            Criteria criteria = new Criteria("EngineNo", Criteria.ComparisonOp.Equals, 100);
 
             //---------------Execute Test ----------------------
             QueryBuilder.PrepareCriteria(engineClassDef, criteria);
@@ -206,7 +206,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
-            Criteria criteria = new Criteria("EngineNo", Criteria.Op.Equals, 100);
+            Criteria criteria = new Criteria("EngineNo", Criteria.ComparisonOp.Equals, 100);
 
             //---------------Execute Test ----------------------
             QueryBuilder.PrepareCriteria(engineClassDef, criteria);
@@ -222,7 +222,7 @@ namespace Habanero.Test.BO
             ClassDef myBoClassDef = MyBO.LoadClassDefWithDateTime();
             const string dateTimeString = "01 Jan 2000 01:30:45";
             DateTime dateTime = DateTime.Parse(dateTimeString);
-            Criteria criteria = new Criteria("TestDateTime", Criteria.Op.Equals, dateTimeString);
+            Criteria criteria = new Criteria("TestDateTime", Criteria.ComparisonOp.Equals, dateTimeString);
 
             //---------------Execute Test ----------------------
             QueryBuilder.PrepareCriteria(myBoClassDef, criteria);
@@ -239,7 +239,7 @@ namespace Habanero.Test.BO
             ClassDef myBoClassDef = MyBO.LoadClassDefWithDateTime();
             const string dateTimeString = "Today";
             DateTimeToday dateTimeToday = new DateTimeToday();
-            Criteria criteria = new Criteria("TestDateTime", Criteria.Op.Equals, dateTimeString);
+            Criteria criteria = new Criteria("TestDateTime", Criteria.ComparisonOp.Equals, dateTimeString);
 
             //---------------Execute Test ----------------------
             QueryBuilder.PrepareCriteria(myBoClassDef, criteria);
@@ -255,7 +255,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef myBoClassDef = MyBO.LoadClassDefWithDateTime();
             const string dateTimeString = "Now";
-            Criteria criteria = new Criteria("TestDateTime", Criteria.Op.Equals, dateTimeString);
+            Criteria criteria = new Criteria("TestDateTime", Criteria.ComparisonOp.Equals, dateTimeString);
 
             //---------------Execute Test ----------------------
             QueryBuilder.PrepareCriteria(myBoClassDef, criteria);
@@ -272,7 +272,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             string carid = Guid.NewGuid().ToString("B");
-            Criteria criteria = new Criteria("CarID", Criteria.Op.Equals, carid);
+            Criteria criteria = new Criteria("CarID", Criteria.ComparisonOp.Equals, carid);
 
             //---------------Execute Test ----------------------
             QueryBuilder.PrepareCriteria(engineClassDef, criteria);
@@ -299,9 +299,9 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
-            Criteria criteria1 = new Criteria("EngineNo", Criteria.Op.Equals, 100);
+            Criteria criteria1 = new Criteria("EngineNo", Criteria.ComparisonOp.Equals, 100);
             Guid carId = Guid.NewGuid();
-            Criteria criteria2 = new Criteria("CarID", Criteria.Op.Equals, carId);
+            Criteria criteria2 = new Criteria("CarID", Criteria.ComparisonOp.Equals, carId);
             Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.And, criteria2);
 
             //---------------Execute Test ----------------------

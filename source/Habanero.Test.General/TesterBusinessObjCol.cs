@@ -159,7 +159,7 @@ namespace Habanero.Test.General
             p = ContactPerson.GetContactPerson(pKey);
             OrderCriteria orderCriteria = new OrderCriteria();
             orderCriteria.Add("Surname");
-            Criteria criteria1 = new Criteria("Surname", Criteria.Op.Equals, "bb");
+            Criteria criteria1 = new Criteria("Surname", Criteria.ComparisonOp.Equals, "bb");
 //            myCol = ContactPerson.LoadBusinessObjCol("Surname = 'bb'", "Surname");
             myCol = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPerson>(criteria1);
             Assert.AreEqual(1, myCol.Count);
@@ -221,8 +221,8 @@ namespace Habanero.Test.General
 
             BusinessObject.ClearObjectManager();
 
-            Criteria criteria1 = new Criteria("Surname", Criteria.Op.Equals, "bb");
-            Criteria criteria2 = new Criteria("Surname", Criteria.Op.Equals, "abc");
+            Criteria criteria1 = new Criteria("Surname", Criteria.ComparisonOp.Equals, "bb");
+            Criteria criteria2 = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
             Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
             OrderCriteria orderCriteria = new OrderCriteria();
             orderCriteria.Add("Surname");
@@ -231,8 +231,8 @@ namespace Habanero.Test.General
                                                                                                             orderCriteria);
             Assert.AreEqual(2, myCol.Count);
 
-            //criteria1 = new Criteria("Surname", Criteria.Op.Equals, "bb");
-            //criteria2 = new Criteria("Surname", Criteria.Op.Like, "abc");
+            //criteria1 = new Criteria("Surname", Criteria.ComparisonOp.Equals, "bb");
+            //criteria2 = new Criteria("Surname", Criteria.ComparisonOp.Like, "abc");
             //criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
             //TODO: Loader does not have an operator like.
             myCol = ContactPerson.LoadBusinessObjCol("Surname = 'bb' or Surname like 'abc%'", "Surname");
@@ -331,21 +331,24 @@ namespace Habanero.Test.General
 
 
             //ContactPerson.ClearObjectManager();
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.LessThan, "Today");
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThan, "Today");
 //            myCol = ContactPerson.LoadBusinessObjCol("DateOfBirth < 'Today'", "DateOfBirth");
             myCol = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPerson>(criteria);
             Assert.AreEqual(1, myCol.Count);
             Assert.AreSame(contactPerson1, myCol[0]);
 
-            criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, "Today");
+            criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, "Today");
 //            myCol = ContactPerson.LoadBusinessObjCol("DateOfBirth = today", "DateOfBirth");
             myCol = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPerson>(criteria);
             Assert.AreEqual(1, myCol.Count);
             Assert.AreSame(contactPerson2, myCol[0]);
 
-            criteria = new Criteria("DateOfBirth", Criteria.Op.GreaterThan, "Today");
+            criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, "Today");
             myCol = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPerson>(criteria);
-//            myCol = ContactPerson.LoadBusinessObjCol("DateOfBirth >= 'TODAY'", "DateOfBirth");//TODO >= not yet implemented.
+            Assert.AreEqual(1, myCol.Count);
+            Assert.AreSame(contactPerson3, myCol[0]);
+
+            myCol = ContactPerson.LoadBusinessObjCol("DateOfBirth >= 'TODAY'", "DateOfBirth");
             Assert.AreEqual(2, myCol.Count);
             Assert.AreSame(contactPerson2, myCol[0]);
             Assert.AreSame(contactPerson3, myCol[1]);
@@ -374,8 +377,8 @@ namespace Habanero.Test.General
 
             BusinessObject.ClearObjectManager();
 
-            Criteria criteria1 = new Criteria("Surname", Criteria.Op.Equals, "bb");
-            Criteria criteria2 = new Criteria("Surname", Criteria.Op.Equals, "abc");
+            Criteria criteria1 = new Criteria("Surname", Criteria.ComparisonOp.Equals, "bb");
+            Criteria criteria2 = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
             Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
             OrderCriteria orderCriteria = new OrderCriteria();
             orderCriteria.Add("Surname");

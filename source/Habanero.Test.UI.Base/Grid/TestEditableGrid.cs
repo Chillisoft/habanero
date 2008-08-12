@@ -849,14 +849,14 @@ namespace Habanero.Test.UI.Base
             //---------------Clean from previous tests----------
             const string originalText = "testsavechanges";
             const string newText = "testsavechanges_edited";
-            Criteria criteria = new Criteria("TestProp", Criteria.Op.Equals, originalText);
+            Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, originalText);
             MyBO oldBO1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
             if (oldBO1 != null)
             {
                 oldBO1.Delete();
                 oldBO1.Save();
             }
-            criteria = new Criteria("TestProp", Criteria.Op.Equals, newText);
+            criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, newText);
             MyBO oldBO2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
             if (oldBO2 != null)
             {
@@ -878,7 +878,7 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, editableGrid.Rows.Count);
             Assert.AreEqual(originalText, editableGrid.Rows[0].Cells[0].Value);
-            criteria = new Criteria("TestProp", Criteria.Op.Equals, newText);
+            criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, newText);
             MyBO nullBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
             Assert.IsNull(nullBO);
             //---------------Execute Test ----------------------
@@ -889,7 +889,7 @@ namespace Habanero.Test.UI.Base
             editableGrid.SaveChanges();
             //---------------Test Result -----------------------
             Assert.AreEqual(newText, editableGrid.Rows[0].Cells[0].Value);
-            criteria = new Criteria("TestProp", Criteria.Op.Equals, newText);
+            criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, newText);
             MyBO savedBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
             Assert.IsNotNull(savedBO);
             //---------------Tear Down--------------------------

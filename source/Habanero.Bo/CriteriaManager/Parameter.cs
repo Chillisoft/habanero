@@ -200,10 +200,7 @@ namespace Habanero.BO.CriteriaManager
                 return tableFieldNameLeftSeperator + _tableName + tableFieldNameRightSeperator + "." +
                        tableFieldNameLeftSeperator + _fieldName + tableFieldNameRightSeperator;
             }
-            else
-            {
-                return tableFieldNameLeftSeperator + _fieldName + tableFieldNameRightSeperator;
-            }
+            return tableFieldNameLeftSeperator + _fieldName + tableFieldNameRightSeperator;
         }
 
         /// <summary>

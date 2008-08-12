@@ -34,7 +34,7 @@ namespace Habanero.BO
     /// 
     /// To load a collection from scratch you might do this:
     /// <code>
-    ///   Criteria surnameCriteria = new Criterea("Surname", Criteria.Op.Equals, "Smith");
+    ///   Criteria surnameCriteria = new Criterea("Surname", Criteria.ComparisonOp.Equals, "Smith");
     ///   BusinessObjectCollection&lt;Person&gt; personCol = 
     ///          BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection&lt;Person&gt;(surnameCriteria);
     /// </code>

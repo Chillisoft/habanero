@@ -118,7 +118,6 @@ namespace Habanero.UI.Win
         {
             get
             {
-                
                 return new DataGridViewRowCollectionWin(base.Rows);
             }
         }

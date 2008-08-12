@@ -135,7 +135,7 @@ namespace Habanero.Test.BO
         {
         //    MockBO savedMockBO =
         //        BOLoader.Instance.GetBusinessObject<MockBO>("MockBOID = '" + mockBOID.ToString("B") + "'");
-            Criteria criteria = new Criteria("MockBOID", Criteria.Op.Equals, mockBOID);
+            Criteria criteria = new Criteria("MockBOID", Criteria.ComparisonOp.Equals, mockBOID);
             IBusinessObject savedMockBO =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MockBO>((criteria));
             Assert.IsNull(savedMockBO);
@@ -619,7 +619,7 @@ namespace Habanero.Test.BO
             BORegistry.DataAccessor.BusinessObjectLoader.Refresh(mockBo);
             //MockBO savedMockBO =
             //    BOLoader.Instance.GetBusinessObject<MockBO>("MockBOID = '" + mockBo.MockBOID.ToString("B") + "'");
-            Criteria criteria = new Criteria("MockBOID", Criteria.Op.Equals, mockBo.MockBOID);
+            Criteria criteria = new Criteria("MockBOID", Criteria.ComparisonOp.Equals, mockBo.MockBOID);
             MockBO savedMockBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MockBO>(criteria);
             Assert.AreSame(mockBo, savedMockBO);
         }

@@ -109,7 +109,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef();
-            Criteria criteria = new Criteria("TestProp", Criteria.Op.Equals, "test");
+            Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, "test");
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
@@ -128,7 +128,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadClassDefWithDateTime();
-            Criteria criteria = new Criteria("TestDateTime", Criteria.Op.Equals, new DateTimeToday());
+            Criteria criteria = new Criteria("TestDateTime", Criteria.ComparisonOp.Equals, new DateTimeToday());
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
@@ -151,7 +151,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadClassDefWithDateTime();
-            Criteria criteria = new Criteria("TestDateTime", Criteria.Op.Equals, new DateTimeNow());
+            Criteria criteria = new Criteria("TestDateTime", Criteria.ComparisonOp.Equals, new DateTimeNow());
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
