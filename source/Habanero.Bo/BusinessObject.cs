@@ -744,12 +744,7 @@ namespace Habanero.BO
                 {
                     BusinessObjectLookupList businessObjectLookupList = lookupList as BusinessObjectLookupList;
                     ClassDef classDef = businessObjectLookupList.LookupBoClassDef;
-                    BOLoader boLoader = BOLoader.Instance;
-                    IBusinessObject businessObject = boLoader.GetBusinessObjectByID(classDef, myGuid);
-                    if (businessObject != null)
-                    {
-                        return businessObject.ToString();
-                    }
+                    IBusinessObject businessObject = null;
                     PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
                     if (primaryKeyDef.IsObjectID)
                     {
@@ -758,7 +753,7 @@ namespace Habanero.BO
                         if (boPrimaryKey != null)
                         {
                             boPrimaryKey[0].Value = myGuid;
-                            businessObject = boLoader.GetLoadedBusinessObject(boPrimaryKey);
+                            businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, boPrimaryKey);
                         }
                         if (businessObject != null) return businessObject;
                     }

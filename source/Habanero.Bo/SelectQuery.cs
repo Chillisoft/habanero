@@ -88,7 +88,7 @@ namespace Habanero.BO
         public OrderCriteria OrderCriteria
         {
             get { return _orderCriteria; }
-              set
+            set
             {
                 _orderCriteria = value;
                 if (Source == null)

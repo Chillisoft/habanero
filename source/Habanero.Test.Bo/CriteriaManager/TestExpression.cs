@@ -148,7 +148,7 @@ namespace Habanero.Test.BO
                                new Parameter("Field2", "tb", "DBField2", "is", "Not null"));
             SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
-            Assert.AreEqual("(tb.DBField1 Is NULL OR tb.DBField2 Is NOT NULL)", st.Statement.ToString());
+            Assert.AreEqual("(tb.DBField1 IS NULL OR tb.DBField2 IS NOT NULL)", st.Statement.ToString());
         }
 
         [Test]

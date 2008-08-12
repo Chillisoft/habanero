@@ -520,19 +520,19 @@ namespace Habanero.Test.BO
         public void Test_CollectionLoad_RefreshLoadedCollection_Typed_LTEQCriteriaString()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
             DateTime now = DateTime.Now;
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now);
-            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now);
-            ContactPersonTestBO.CreateSavedContactPerson(DateTime.Now.AddDays(+3));
-            ContactPersonTestBO cpEqual = ContactPersonTestBO.CreateSavedContactPerson(now.AddHours(+1));
+            ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
+            ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
+            CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
+            ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.CreateRandomString(), 3);
 
-            string criteria = "DateOfBirth <= " + cpEqual.DateOfBirth;
+            string criteria = "IntegerProperty <= " + 3;
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
             col.Load(criteria, "");
-            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(-1));
-            ContactPersonTestBO cpExclude = ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(+1));
-            ContactPersonTestBO cpEqualNew = ContactPersonTestBO.CreateSavedContactPerson(cpEqual.DateOfBirth);
+            ContactPersonTestBO cp3 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 1);
+            ContactPersonTestBO cpExclude = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
+            ContactPersonTestBO cpEqualNew = CreateSavedContactPerson(TestUtil.CreateRandomString(), 3);
 
             //---------------Assert Precondition ---------------
             Assert.AreEqual(3, col.Count);
@@ -551,6 +551,15 @@ namespace Habanero.Test.BO
             Assert.Contains(cpEqual, col);
             Assert.Contains(cpEqualNew, col);
             Assert.IsFalse(col.Contains(cpExclude));
+        }
+
+        private static ContactPersonTestBO CreateSavedContactPerson(string surnameValue, int integerPropertyValue)
+        {
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = surnameValue;
+            cp.SetPropertyValue("IntegerProperty", integerPropertyValue);
+            cp.Save();
+            return cp;
         }
 
         [Test]
@@ -610,14 +619,14 @@ namespace Habanero.Test.BO
         public void Test_CollectionLoad_RefreshLoadedCollection_Typed_NotEQ_CriteriaString()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
             DateTime now = DateTime.Now;
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now);
-            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now);
-            ContactPersonTestBO.CreateSavedContactPerson(DateTime.Now.AddDays(+3));
-            ContactPersonTestBO cpEqual = ContactPersonTestBO.CreateSavedContactPerson(now.AddHours(+1));
+            ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
+            ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
+            CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
+            ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.CreateRandomString(), 3);
 
-            string criteria = "DateOfBirth <> " + cpEqual.DateOfBirth;
+            string criteria = "IntegerProperty <> " + 3;
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
             col.Load(criteria, "");
 
@@ -628,9 +637,9 @@ namespace Habanero.Test.BO
             Assert.IsFalse(col.Contains(cpEqual));
 
             //---------------Execute Test ----------------------
-            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(-1));
-            ContactPersonTestBO cpNotEqual = ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(+1));
-            ContactPersonTestBO cpEqualNew = ContactPersonTestBO.CreateSavedContactPerson(cpEqual.DateOfBirth);
+            ContactPersonTestBO cp3 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
+            ContactPersonTestBO cpNotEqual = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
+            ContactPersonTestBO cpEqualNew = CreateSavedContactPerson(TestUtil.CreateRandomString(), 3);
             col.Refresh();
 
             //---------------Test Result -----------------------
@@ -1199,14 +1208,14 @@ namespace Habanero.Test.BO
         public void Test_GetBusinesssObjectCollection_Untyped_GtCriteriaString()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
             DateTime now = DateTime.Now;
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now);
-            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now);
-            ContactPersonTestBO.CreateSavedContactPerson(DateTime.Now.AddDays(-3));
-            ContactPersonTestBO cpEqual = ContactPersonTestBO.CreateSavedContactPerson(now.AddHours(-1));
+            ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
+            ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
+            CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
+            ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.CreateRandomString(), 3);
 
-            string criteria = "DateOfBirth > " + cpEqual.DateOfBirth;
+            string criteria = "IntegerProperty > " + 3;
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -2133,19 +2142,19 @@ namespace Habanero.Test.BO
         public void TestRefreshLoadedCollection_Typed_LTEQCriteriaString()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
             DateTime now = DateTime.Now;
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now);
-            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now);
-            ContactPersonTestBO.CreateSavedContactPerson(DateTime.Now.AddDays(+3));
-            ContactPersonTestBO cpEqual = ContactPersonTestBO.CreateSavedContactPerson(now.AddHours(+1));
+            ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 1);
+            ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 1);
+            CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
+            ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
 
-            string criteria = "DateOfBirth <= " + cpEqual.DateOfBirth;
+            string criteria = "IntegerProperty <= " + 2;
             IBusinessObjectCollection col =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(criteria);
-            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(-1));
-            ContactPersonTestBO cpExclude = ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(+1));
-            ContactPersonTestBO cpEqualNew = ContactPersonTestBO.CreateSavedContactPerson(cpEqual.DateOfBirth);
+            ContactPersonTestBO cp3 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 1);
+            ContactPersonTestBO cpExclude = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
+            ContactPersonTestBO cpEqualNew = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
 
             //---------------Assert Precondition ---------------
             Assert.AreEqual(3, col.Count);
@@ -2254,18 +2263,18 @@ namespace Habanero.Test.BO
         public void TestRefreshLoadedCollection_Untyped_GTCriteriaString()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
             DateTime now = DateTime.Now;
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now);
-            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now);
-            ContactPersonTestBO.CreateSavedContactPerson(DateTime.Now.AddDays(-3));
-            ContactPersonTestBO cpEqual = ContactPersonTestBO.CreateSavedContactPerson(now.AddHours(-1));
+            ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
+            ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
+            CreateSavedContactPerson(TestUtil.CreateRandomString(), 1);
+            ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
 
-            string criteria = "DateOfBirth > " + cpEqual.DateOfBirth;
+            string criteria = "IntegerProperty > " + 2;
             IBusinessObjectCollection col =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
-            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(1));
-
+            ContactPersonTestBO cp3 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
+            CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
             //---------------Assert Precondition ---------------
             Assert.AreEqual(2, col.Count);
             Assert.IsFalse(col.Contains(cpEqual));
@@ -2387,19 +2396,19 @@ namespace Habanero.Test.BO
         public void TestRefreshLoadedCollection_Untyped_LTEQCriteriaString()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
             DateTime now = DateTime.Now;
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now);
-            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now);
-            ContactPersonTestBO.CreateSavedContactPerson(DateTime.Now.AddDays(+3));
-            ContactPersonTestBO cpEqual = ContactPersonTestBO.CreateSavedContactPerson(now.AddHours(+1));
+            ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
+            ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
+            CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
+            ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.CreateRandomString(), 3);
 
-            string criteria = "DateOfBirth <= " + cpEqual.DateOfBirth;
+            string criteria = "IntegerProperty <= " + 3;
             IBusinessObjectCollection col =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
-            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(-1));
-            ContactPersonTestBO cpEqualNew = ContactPersonTestBO.CreateSavedContactPerson(cpEqual.DateOfBirth);
-            ContactPersonTestBO cpExclude = ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(+1));
+            ContactPersonTestBO cp3 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
+            ContactPersonTestBO cpEqualNew = CreateSavedContactPerson(TestUtil.CreateRandomString(), 3);
+            ContactPersonTestBO cpExclude = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
 
             //---------------Assert Precondition ---------------
             Assert.AreEqual(3, col.Count);
