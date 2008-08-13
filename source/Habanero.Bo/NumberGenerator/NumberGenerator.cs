@@ -126,6 +126,8 @@ namespace Habanero.BO
     ///</summary>
     internal class BOSequenceNumber : BusinessObject
     {
+        private static string _tableName;
+
 //        internal static void LoadNumberGenClassDef()
 //        {
 //            XmlClassLoader itsLoader = new XmlClassLoader();
@@ -149,10 +151,13 @@ namespace Habanero.BO
         }
         internal static void LoadNumberGenClassDef(string tableName)
         {
-            if (string.IsNullOrEmpty(tableName)) {
-                tableName = "NumberGenerator"; }
+            if (string.IsNullOrEmpty(tableName))
+            {
+                tableName = "NumberGenerator";
+            }
+            _tableName = tableName;
             XmlClassLoader itsLoader = new XmlClassLoader();
-            string classDef = "<class name=\"BOSequenceNumber\" assembly=\"Habanero.BO\" table=\"" + tableName + "\">" +
+            string classDef = "<class name=\"BOSequenceNumber\" assembly=\"Habanero.BO\" table=\"" + _tableName + "\">" +
                               "<property  name=\"SequenceNumber\" type=\"Int32\" />" +
                               "<property  name=\"NumberType\"/>" +
                               "<primaryKey isObjectID=\"false\">" +
@@ -178,7 +183,8 @@ namespace Habanero.BO
 
         public static void DeleteAllNumbers()
         {
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");
+            //DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From " + _tableName);
         }
     }
 }

@@ -354,6 +354,44 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
+        [Test]
+        public void TestDifferentTableName()
+        {
+            //---------------Set up test pack-------------------
+            //Delete entry from database for the number type.
+            BOSequenceNumber.LoadNumberGenClassDef("another_number_generator");
+            BOSequenceNumber.DeleteAllNumbers();
+            //Create an instance of the number for a specific type of number (e.g. Invoice number)
+            //---------------Set up test pack-------------------
+            INumberGenerator numGen = new NumberGenerator("tmp", "another_number_generator");
+            //---------------Execute Test ----------------------
+            //get the next number for invoice number
+            int sequenceNumber = numGen.NextNumber();
+            //---------------Test Result -----------------------
+            //test number should be one.
+            Assert.AreEqual(1, sequenceNumber);
+            //---------------Tear Down -------------------------
+        }
+
+
+        [Test]
+        public void TestDifferentTableNameGetSecondNumber_FromSeperateNumberGeneratorInstance_AfterUpdate()
+        {
+            //---------------Clean Up --------------------------
+            BOSequenceNumber.LoadNumberGenClassDef("another_number_generator");
+            NumberGenerator numGen = new NumberGenerator("tmp", "another_number_generator");
+            numGen.SetSequenceNumber(0);
+            //---------------Set up test pack-------------------
+            //---------------Execute Test ----------------------
+            numGen.NextNumber();
+            numGen.Save();
+            numGen = new NumberGenerator("tmp", "another_number_generator");
+            int nextNum = numGen.NextNumber();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, nextNum);
+
+        }
+
         private static void SetNumberGeneratorSeedZero(string numberType)
         {
             INumberGenerator numGen = new NumberGenerator(numberType);
