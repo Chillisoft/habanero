@@ -37,6 +37,7 @@ namespace Habanero.BO
     /// </summary>
     public class NumberGenerator : INumberGenerator
     {
+        private readonly string _tableName;
         private readonly BOSequenceNumber _boSequenceNumber;
 
         ///<summary>
@@ -49,17 +50,31 @@ namespace Habanero.BO
             _boSequenceNumber = LoadSequenceNumber(numberType);
         }
 
+
+
+        /// Creates a number generator of the specified type. If no record is currently in the database for that type.
+        /// Then this will create an entry in the table with the seed number of zero.
+        ///</summary>
+        ///<param name="numberType">Type of number</param>
+        ///<param name="tableName">the table that the sequence number is being stored in.</param>
+        public NumberGenerator(string numberType, string tableName)
+        {
+            this._tableName = tableName;
+            _boSequenceNumber = LoadSequenceNumber(numberType);
+        }
+
+
         public int NextNumber()
         {
             _boSequenceNumber.SequenceNumber++;
             return _boSequenceNumber.SequenceNumber.Value;
         }
 
-        private static BOSequenceNumber LoadSequenceNumber(string numberType)
+        private BOSequenceNumber LoadSequenceNumber(string numberType)
         {
             if (!ClassDef.ClassDefs.Contains(typeof(BOSequenceNumber)))
             {
-                BOSequenceNumber.LoadNumberGenClassDef();
+                BOSequenceNumber.LoadNumberGenClassDef(_tableName);
             }
             BOSequenceNumber sequenceBOSequenceNumber =
                 BOLoader.Instance.GetBusinessObject<BOSequenceNumber>(string.Format("NumberType = '{0}'", numberType));
@@ -111,24 +126,48 @@ namespace Habanero.BO
     ///</summary>
     internal class BOSequenceNumber : BusinessObject
     {
+        private static string _tableName;
+//        internal static void LoadNumberGenClassDef()
+//        {
+//            XmlClassLoader itsLoader = new XmlClassLoader();
+//            ClassDef itsClassDef =
+//                itsLoader.LoadClass(
+//                    @"
+//               <class name=""BOSequenceNumber"" assembly=""Habanero.BO"" table=""NumberGenerator"">
+//					<property  name=""SequenceNumber"" type=""Int32"" />
+//                    <property  name=""NumberType""/>
+//                    <primaryKey isObjectID=""false"">
+//                        <prop name=""NumberType"" />
+//                    </primaryKey>
+//			    </class>
+//			");
+//            ClassDef.ClassDefs.Add(itsClassDef);
+//            return;
+//        }
+
         internal static void LoadNumberGenClassDef()
         {
+            LoadNumberGenClassDef(null);
+        }
+        internal static void LoadNumberGenClassDef(string tableName)
+        {
+            if (string.IsNullOrEmpty(tableName))
+            {
+                tableName = "NumberGenerator";
+            }
+            _tableName = tableName;
             XmlClassLoader itsLoader = new XmlClassLoader();
-            ClassDef itsClassDef =
-                itsLoader.LoadClass(
-                    @"
-               <class name=""BOSequenceNumber"" assembly=""Habanero.BO"" table=""NumberGenerator"">
-					<property  name=""SequenceNumber"" type=""Int32"" />
-                    <property  name=""NumberType""/>
-                    <primaryKey isObjectID=""false"">
-                        <prop name=""NumberType"" />
-                    </primaryKey>
-			    </class>
-			");
+            string classDef = "<class name=\"BOSequenceNumber\" assembly=\"Habanero.BO\" table=\"" + _tableName + "\">" +
+                              "<property  name=\"SequenceNumber\" type=\"Int32\" />" +
+                              "<property  name=\"NumberType\"/>" +
+                              "<primaryKey isObjectID=\"false\">" +
+                              "<prop name=\"NumberType\" />" +
+                              "</primaryKey>" +
+                              "</class>";
+            ClassDef itsClassDef = itsLoader.LoadClass(classDef);
             ClassDef.ClassDefs.Add(itsClassDef);
             return;
         }
-
 
         public virtual String NumberType
         {
@@ -144,7 +183,8 @@ namespace Habanero.BO
 
         public static void DeleteAllNumbers()
         {
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");
+            //DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From " + _tableName);
         }
     }
 }
