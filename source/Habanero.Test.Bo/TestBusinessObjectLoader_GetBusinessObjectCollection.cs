@@ -174,6 +174,97 @@ namespace Habanero.Test.BO
                 Assert.AreSame(cp, loadedCP);
                 Assert.IsTrue(loadedCP.AfterLoadCalled);
             }
+
+            [Test]
+            public void TestGetBusinessObjectCollection_Typed_LoadOfSubTypeDoesntLoadSuperTypedObjects()
+            {
+                //---------------Set up test pack-------------------
+                CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+                Shape shape = Shape.CreateSavedShape();
+                Criteria criteria = Criteria.FromPrimaryKey(shape.ID);
+                
+                //---------------Execute Test ----------------------
+                BusinessObjectCollection<CircleNoPrimaryKey> loadedCircles = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<CircleNoPrimaryKey>(criteria);
+
+                //---------------Test Result -----------------------
+                Assert.AreEqual(0, loadedCircles.Count);
+            }
+
+            [Test]
+            public void TestGetBusinessObjectCollection_Typed_LoadOfSubTypeDoesntLoadSuperTypedObjects_Fresh()
+            {
+                //---------------Set up test pack-------------------
+                CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+                Shape shape = Shape.CreateSavedShape();
+                Criteria criteria = Criteria.FromPrimaryKey(shape.ID);
+                BusObjectManager.Instance.ClearLoadedObjects();
+
+                //---------------Execute Test ----------------------
+                BusinessObjectCollection<CircleNoPrimaryKey> loadedCircles = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<CircleNoPrimaryKey>(criteria);
+
+                //---------------Test Result -----------------------
+                Assert.AreEqual(0, loadedCircles.Count);
+            }
+
+
+            #region Test that the load returns the correct sub type
+
+            [Test]
+            public void TestGetBusinessObjectCollection_Typed_ReturnsSubType_Fresh()
+            {
+                //---------------Set up test pack-------------------
+                CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+                CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
+                Criteria criteria = Criteria.FromPrimaryKey(circle.ID);
+                BusObjectManager.Instance.ClearLoadedObjects();
+
+                //---------------Execute Test ----------------------
+                BusinessObjectCollection<Shape> loadedShapes = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Shape>(criteria);
+
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, loadedShapes.Count);
+                Shape loadedShape = loadedShapes[0];
+                Assert.IsInstanceOfType(typeof(CircleNoPrimaryKey), loadedShape);
+            }
+
+            [Test, Ignore("TBI")]
+            public void TestGetBusinessObjectCollection_ReturnsSubType_TwoLevelsDeep_DiscriminatorShared_Fresh()
+            {
+                //---------------Set up test pack-------------------
+                SetupDataAccessor();
+
+                FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
+                FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
+                BusObjectManager.Instance.ClearLoadedObjects();
+
+                //---------------Execute Test ----------------------
+                Shape loadedShape =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(filledCircle.ID);
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOfType(typeof(FilledCircleNoPrimaryKey), loadedShape);
+                //---------------Tear Down -------------------------          
+            }
+
+            [Test, Ignore("TBI")]
+            public void TestGetBusinessObjectCollection_ReturnsSubType_TwoLevelsDeep_Fresh()
+            {
+                //---------------Set up test pack-------------------
+                SetupDataAccessor();
+
+                FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchyDifferentDiscriminators();
+                FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
+                BusObjectManager.Instance.ClearLoadedObjects();
+
+                //---------------Execute Test ----------------------
+                Shape loadedShape =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(filledCircle.ID);
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOfType(typeof(FilledCircleNoPrimaryKey), loadedShape);
+                //---------------Tear Down -------------------------          
+            }
+
+            #endregion //Test that the load returns the correct sub type
+
         }
 
         private static SelectQuery CreateManualSelectQueryOrderedByDateOfBirth(DateTime now, BusinessObject cp1)

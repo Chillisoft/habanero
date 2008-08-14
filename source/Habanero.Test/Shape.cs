@@ -123,5 +123,13 @@ namespace Habanero.Test
             get { return ShapeName; }
         }
 
+        public static Shape CreateSavedShape()
+        {
+            Shape shape = new Shape();
+            shape.ShapeName = TestUtil.CreateRandomString();
+            shape.Save();
+            return shape;
+        }
+
     }
 }

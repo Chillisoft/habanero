@@ -109,7 +109,32 @@ namespace Habanero.Test.General
             _selectSql.Statement.Append(_filledCircle.SelectSqlStatement(_selectSql));
         }
 
+        protected static Shape CreateSavedShape()
+        {
+            Shape shape = new Shape();
+            shape.ShapeName = "MyShape";
+            shape.Save();
+            return shape;
+        }
 
+        protected static CircleNoPrimaryKey CreateSavedCircle()
+        {
+            CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
+            circle.Radius = 5;
+            circle.ShapeName = "Circle";
+            circle.Save();
+            return circle;
+        }
+
+        protected static FilledCircleInheritsCircleNoPK CreateSavedFilledCircle()
+        {
+            FilledCircleInheritsCircleNoPK filledCircle = new FilledCircleInheritsCircleNoPK();
+            filledCircle.Colour = 3;
+            filledCircle.Radius = 7;
+            filledCircle.ShapeName = "FilledCircle";
+            filledCircle.Save();
+            return filledCircle;
+        }
 
         protected abstract void SetupInheritanceSpecifics();
         protected abstract void SetStrID();

@@ -104,33 +104,6 @@ namespace Habanero.Test.General
         //    Assert.AreEqual("SELECT * FROM FilledCircle, Circle, Shape WHERE Circle.CircleID = FilledCircle.CircleID AND Shape.ShapeID = Circle.ShapeID", FilledCircle.GetClassDef().SelectSql);
         //}
 
-        private static Shape CreateSavedShape()
-        {
-            Shape shape = new Shape();
-            shape.ShapeName = "MyShape";
-            shape.Save();
-            return shape;
-        }
-
-        private static CircleNoPrimaryKey CreateSavedCircle()
-        {
-            CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
-            circle.Radius = 5;
-            circle.ShapeName = "Circle";
-            circle.Save();
-            return circle;
-        }
-
-        private static FilledCircleInheritsCircleNoPK CreateSavedFilledCircle()
-        {
-            FilledCircleInheritsCircleNoPK filledCircle = new FilledCircleInheritsCircleNoPK();
-            filledCircle.Colour = 3;
-            filledCircle.Radius = 7;
-            filledCircle.ShapeName = "FilledCircle";
-            filledCircle.Save();
-            return filledCircle;
-        }
-
         [Test]
         public void TestCircleDeleteSql()
         {

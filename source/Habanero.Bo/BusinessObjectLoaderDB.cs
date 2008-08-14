@@ -131,13 +131,7 @@ namespace Habanero.BO
                     if (correctSubClassDef == null) return loadedBo;
                 }
             }
-            // loads an object of the correct sub type (for single table inheritance)
-            if (correctSubClassDef != null)
-            {
-                BusObjectManager.Instance.Remove(loadedBo.ID);
-                IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
-                loadedBo = (T) subClassBusinessObject;
-            }
+            loadedBo = GetLoadedBoOfSpecifiedType(loadedBo, correctSubClassDef);
             return loadedBo;
         }
 
@@ -256,12 +250,13 @@ namespace Habanero.BO
         /// </summary>
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="collection">The collection to refresh</param>
-        public void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new()
+        public void Refresh<T>(BusinessObjectCollection<T> collection) 
+            where T : class, IBusinessObject, new()
         {
             IClassDef classDef = collection.ClassDef;
             SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
             QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
-
+            
             ISqlStatement statement = selectQuery.CreateSqlStatement();
             BusinessObjectCollection<T> clonedCol = collection.Clone();
             collection.Clear();
@@ -275,6 +270,11 @@ namespace Habanero.BO
                     // use add internal this adds without any events being raised etc.
                     //else adds via the Add method (normal add) this raises events such that the 
                     // user interface can be updated.
+                    //Checks to see if the loaded object is the base of a single table inheritance structure
+                    // and has a sub type
+                    IClassDef correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
+                    // loads an object of the correct sub type (for single table inheritance)
+                    loadedBo = GetLoadedBoOfSpecifiedType(loadedBo, correctSubClassDef);
                     if (clonedCol.Contains(loadedBo))
                     {
                         ((IBusinessObjectCollection)collection).AddWithoutEvents(loadedBo);
@@ -285,6 +285,25 @@ namespace Habanero.BO
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// loads an object of the correct sub type (for single table inheritance)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="loadedBo"></param>
+        /// <param name="correctSubClassDef"></param>
+        /// <returns></returns>
+        private T GetLoadedBoOfSpecifiedType<T>(T loadedBo, IClassDef correctSubClassDef)
+            where T : class, IBusinessObject, new()
+        {
+            if (correctSubClassDef != null)
+            {
+                BusObjectManager.Instance.Remove((IPrimaryKey) loadedBo.ID);
+                IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, (IPrimaryKey) loadedBo.ID);
+                loadedBo = (T)subClassBusinessObject;
+            }
+            return loadedBo;
         }
 
         /// <summary>
