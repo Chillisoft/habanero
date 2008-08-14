@@ -89,8 +89,8 @@ namespace Habanero.Base
 
                 SetupDatabaseConnection();
                 SetupSettings();
-                Upgrade();
                 SetupClassDefs();
+                Upgrade();
             }
             catch (Exception ex) {
                 string errorMessage = "There was a problem starting the application.";
