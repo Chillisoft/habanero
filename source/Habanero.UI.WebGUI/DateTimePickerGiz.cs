@@ -24,6 +24,9 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Represents a DateTimePicker
+    /// </summary>
     public class DateTimePickerGiz : DateTimePicker, IDateTimePicker
     {
         private readonly DateTimePickerManager _manager;
@@ -41,16 +44,27 @@ namespace Habanero.UI.WebGUI
             _manager = new DateTimePickerManager(controlFactory, this, valueGetter, valueSetter);
         }
 
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(base.Controls); }
         }
+
+        /// <summary>
+        /// Gets or sets which control borders are docked to its parent
+        /// control and determines how a control is resized with its parent
+        /// </summary>
         Base.DockStyle IControlChilli.Dock
         {
             get { return (Base.DockStyle)base.Dock; }
             set { base.Dock = (Gizmox.WebGUI.Forms.DockStyle)value; }
         }
 
+        /// <summary>
+        /// Gets or sets the date/time value assigned to the control.
+        /// </summary>
         DateTime IDateTimePicker.Value
         {
             get { return _manager.Value; }
@@ -63,12 +77,20 @@ namespace Habanero.UI.WebGUI
         //    base.OnValueChanged(eventargs);
         //}
 
+        /// <summary>
+        /// Gets or sets the date/time value assigned to the control, but returns
+        /// null if there is no date set in the picker
+        /// </summary>
         public DateTime? ValueOrNull
         {
             get { return _manager.ValueOrNull; }
             set { _manager.ValueOrNull = value; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether a spin button control
+        /// (also known as an up-down control) is used to adjust the date/time value
+        /// </summary>
         public bool ShowUpDown
         {
             get { throw new NotImplementedException(); }

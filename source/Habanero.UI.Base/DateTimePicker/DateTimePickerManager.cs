@@ -24,6 +24,11 @@ using System.Text;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// This manager groups common logic for IDateTimePicker objects.
+    /// Do not use this object in working code - rather call CreateDateTimePicker
+    /// in the appropriate control factory.
+    /// </summary>
     public class DateTimePickerManager
     {
         private readonly IControlFactory _controlFactory;

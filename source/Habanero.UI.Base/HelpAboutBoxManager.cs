@@ -2,6 +2,11 @@ using System;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// This manager groups common logic for IHelpAboutBox objects.
+    /// Do not use this object in working code - rather call CreateHelpAboutBox
+    /// in the appropriate control factory.
+    /// </summary>
     public class HelpAboutBoxManager
     {
         private IFormChilli _formChilli;

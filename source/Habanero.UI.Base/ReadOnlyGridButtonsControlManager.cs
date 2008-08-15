@@ -4,6 +4,11 @@ using System.Text;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// This manager groups common logic for IReadOnlyGridButtonsControl objects.
+    /// Do not use this object in working code - rather call CreateReadOnlyGridButtonsControl
+    /// in the appropriate control factory.
+    /// </summary>
     public class ReadOnlyGridButtonsControlManager
     {
         private readonly IReadOnlyGridButtonsControl _buttonsControl;

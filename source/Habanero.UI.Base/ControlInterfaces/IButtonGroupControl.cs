@@ -21,29 +21,37 @@ using System;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Manages a group of buttons that display next to each other
+    /// </summary>
     public interface IButtonGroupControl:IControlChilli
     {
         /// <summary>
-        /// Adds a new button to the control by the name specified
+        /// Adds a new button to the control with a specified name
         /// </summary>
         /// <param name="buttonName">The name to appear on the button</param>
         /// <returns>Returns the Button object created</returns>
         IButton AddButton(string buttonName);
 
         /// <summary>
-        /// Adds a new button to the control by the name specified
+        /// Adds a new button to the control with a specified name and
+        /// with an attached event handler to carry out
+        /// further actions if the button is pressed
         /// </summary>
         /// <param name="buttonName">The name to appear on the button</param>
+        /// <param name="clickHandler">The method that handles the Click event</param>
         /// <returns>Returns the Button object created</returns>
-        /// <param name="clickHandler">The event handler to be triggered on the button click</param>
         IButton AddButton(string buttonName, EventHandler clickHandler);
+ 
         /// <summary>
-        /// Adds a new button to the control by the name specified
+        /// Adds a new button to the control with a specified name, specified text and
+        /// with an attached event handler to carry out
+        /// further actions if the button is pressed
         /// </summary>
         /// <param name="buttonName">The name that the button is created with</param>
-        /// <returns>Returns the Button object created</returns>
         /// <param name="buttonText">The text to appear on the button</param>
-        /// <param name="clickHandler">The event handler to be triggered on the button click</param>
+        /// <param name="clickHandler">The method that handles the Click event</param>
+        /// <returns>Returns the Button object created</returns>
         IButton AddButton(string buttonName, string buttonText, EventHandler clickHandler);
 
         /// <summary>

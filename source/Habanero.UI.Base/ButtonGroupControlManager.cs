@@ -3,6 +3,11 @@ using System.Collections.Generic;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// This manager groups common logic for IButtonGroupControl objects.
+    /// Do not use this object in working code - rather call CreateButtonGroupControl
+    /// in the appropriate control factory.
+    /// </summary>
     public class ButtonGroupControlManager
     {
         private IControlFactory _controlFactory;

@@ -23,6 +23,27 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Provides a selection of common date range options which a user
+    /// can select from, modifying a start date and end date depending
+    /// on the selection.  The options to choose from, such as
+    /// "Yesterday", "Last Week" or "This Year", can be modified by
+    /// the developer.  When adding this control, add an event handler
+    /// on the SelectionChangeCommitted event, and obtain the StartDate and
+    /// EndDate properties at this time.
+    /// <br/>
+    /// NOTE: The start and end dates are the two boundaries of a
+    /// potential range.  Whether they should be inclusive or exclusive
+    /// depends on the developer and how they are implemented.  For
+    /// instance, if today is Nov 13, Yesterday would provide a start
+    /// date of Nov 12, 12am and an end date of Nov 13, 12am.
+    /// <br/>
+    /// To add additional menu options that aren't available, simply add the
+    /// new text item to the ComboBox, using Items.Add.  When you pick up the
+    /// SelectionChangeCommitted event, check if the new text string is selected
+    /// in the Text property and use your own calculations instead of 
+    /// fetching the StartDate and EndDate.
+    /// </summary>
     public class DateRangeComboBoxWin : ComboBoxWin, IDateRangeComboBox
     {
         private DateRangeComboBoxManager _manager;
@@ -36,14 +57,17 @@ namespace Habanero.UI.Win
             _manager = new DateRangeComboBoxManager(this);
         }
 
+        /// <summary>
+        /// Constructor to initialiase a new ComboBox with a specific set
+        /// of date range options to display
+        /// </summary>
+        /// <param name="optionsToDisplay">A list of date range options</param>
         public DateRangeComboBoxWin(List<DateRangeOptions> optionsToDisplay)
         {
             _manager = new DateRangeComboBoxManager(this);
             _manager.OptionsToDisplay = optionsToDisplay;
             _manager.InitialiseValues();
-           
         }
-
 
         /// <summary>
         /// Gets and sets whether the date used to calculate date ranges

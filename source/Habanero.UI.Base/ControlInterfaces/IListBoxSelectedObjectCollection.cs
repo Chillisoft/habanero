@@ -21,8 +21,16 @@ using System.Collections;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Represents the collection of selected items in the ListBox
+    /// </summary>
     public interface IListBoxSelectedObjectCollection : IEnumerable
     {
+        /// <summary>
+        /// Adds an item to the list of selected items for a ListBox
+        /// </summary>
+        /// <param name="item">An object representing the item to add
+        /// to the collection of selected items</param>
         void Add(object item);
     }
 }

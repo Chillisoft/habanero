@@ -24,6 +24,11 @@ using Habanero.Util;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// This manager groups common logic for IDateRangeComboBox objects.
+    /// Do not use this object in working code - rather call CreateDateRangeComboBox
+    /// in the appropriate control factory.
+    /// </summary>
     public class DateRangeComboBoxManager
     {
         private readonly IComboBox _comboBox;

@@ -23,6 +23,9 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Represents a DateTimePicker
+    /// </summary>
     public class DateTimePickerWin : DateTimePicker, IDateTimePicker
     {
         private readonly DateTimePickerManager _manager;
@@ -39,17 +42,28 @@ namespace Habanero.UI.Win
             };
             _manager = new DateTimePickerManager(controlFactory, this, valueGetter, valueSetter);
         }
-        
+
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }
         }
+
+        /// <summary>
+        /// Gets or sets which control borders are docked to its parent
+        /// control and determines how a control is resized with its parent
+        /// </summary>
         Base.DockStyle IControlChilli.Dock
         {
             get { return (Base.DockStyle)base.Dock; }
             set { base.Dock = (System.Windows.Forms.DockStyle)value; }
         }
 
+        /// <summary>
+        /// Gets or sets the date/time value assigned to the control.
+        /// </summary>
         DateTime IDateTimePicker.Value
         {
             get { return _manager.Value; }
@@ -62,6 +76,10 @@ namespace Habanero.UI.Win
         //    base.OnValueChanged(eventargs);
         //}
 
+        /// <summary>
+        /// Gets or sets the date/time value assigned to the control, but returns
+        /// null if there is no date set in the picker
+        /// </summary>
         public DateTime? ValueOrNull
         {
             get { return _manager.ValueOrNull; }

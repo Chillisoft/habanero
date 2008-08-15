@@ -23,11 +23,12 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Manages a group of buttons that display next to each other
+    /// </summary>
     public class ButtonGroupControlWin : ControlWin, IButtonGroupControl
     {
         private readonly IControlFactory _controlFactory;
-        
-
         private ButtonGroupControlManager _buttonGroupControlManager;
 
         public ButtonGroupControlWin(IControlFactory controlFactory)
@@ -36,6 +37,11 @@ namespace Habanero.UI.Win
             _buttonGroupControlManager = new ButtonGroupControlManager(this, controlFactory);
         }
 
+        /// <summary>
+        /// Adds a new button to the control with a specified name
+        /// </summary>
+        /// <param name="buttonName">The name to appear on the button</param>
+        /// <returns>Returns the Button object created</returns>
         public IButton AddButton(string buttonName)
         {
             IButton button = _buttonGroupControlManager.AddButton(buttonName);
@@ -44,21 +50,44 @@ namespace Habanero.UI.Win
             return button;
         }
 
+        /// <summary>
+        /// A facility to index the buttons in the control so that they can
+        /// be accessed like an array (eg. button["name"])
+        /// </summary>
+        /// <param name="buttonName">The name of the button</param>
+        /// <returns>Returns the button found by that name, or null if not
+        /// found</returns>
         public IButton this[string buttonName]
         {
             get { return (IButton) this.Controls[buttonName]; }
         }
 
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }
         }
 
+        /// <summary>
+        /// Sets the default button in this control that would be chosen
+        /// if the user pressed Enter without changing the focus
+        /// </summary>
+        /// <param name="buttonName">The name of the button</param>
         public void SetDefaultButton(string buttonName)
         {
             this.FindForm().AcceptButton = (Button)this[buttonName];
         }
 
+        /// <summary>
+        /// Adds a new button to the control with a specified name and
+        /// with an attached event handler to carry out
+        /// further actions if the button is pressed
+        /// </summary>
+        /// <param name="buttonName">The name to appear on the button</param>
+        /// <param name="clickHandler">The method that handles the Click event</param>
+        /// <returns>Returns the Button object created</returns>
         public IButton AddButton(string buttonName, EventHandler clickHandler)
         {
              return AddButton(buttonName, buttonName, clickHandler);
@@ -66,12 +95,14 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Adds a new button to the control by the name specified
+        /// Adds a new button to the control with a specified name, specified text and
+        /// with an attached event handler to carry out
+        /// further actions if the button is pressed
         /// </summary>
         /// <param name="buttonName">The name that the button is created with</param>
-        /// <returns>Returns the Button object created</returns>
         /// <param name="buttonText">The text to appear on the button</param>
-        /// <param name="clickHandler">The event handler to be triggered on the button click</param>
+        /// <param name="clickHandler">The method that handles the Click event</param>
+        /// <returns>Returns the Button object created</returns>
         public IButton AddButton(string buttonName, string buttonText, EventHandler clickHandler)
         {
 

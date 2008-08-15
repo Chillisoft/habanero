@@ -21,6 +21,15 @@ using Habanero.Base;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Displays a business object collection in a tab control, with one
+    /// business object per tab.  Each tab holds a business control, provided
+    /// by the developer, that refreshes to display the business object for
+    /// the current tab.
+    /// <br/>
+    /// This control is suitable for a business object collection with a limited
+    /// number of objects.
+    /// </summary>
     public interface IBOColTabControl: IControlChilli
     {
         /// <summary>

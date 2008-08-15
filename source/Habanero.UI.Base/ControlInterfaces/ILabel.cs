@@ -21,14 +21,31 @@ using System.Drawing;
 
 namespace Habanero.UI.Base
 {
-    public interface ILabel:IControlChilli
+    /// <summary>
+    /// Represents a label
+    /// </summary>
+    public interface ILabel : IControlChilli
     {
+        /// <summary>
+        /// Gets the preferred width of the control
+        /// </summary>
         int PreferredWidth { get; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the control 
+        /// is automatically resized to display its entire contents
+        /// </summary>
         bool AutoSize { get; set; }
 
+        /// <summary>
+        /// Gets or sets the font of the text displayed by the control
+        /// </summary>
+        /// TODO: is this needed - it's in the IControl?
         Font Font { get; set; }
 
+        /// <summary>
+        /// Gets or sets the alignment of text in the label
+        /// </summary>
         ContentAlignment TextAlign { get; set; }
     }
 }

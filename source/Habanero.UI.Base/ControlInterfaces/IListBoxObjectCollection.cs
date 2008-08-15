@@ -21,12 +21,31 @@ using System.Collections;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Represents the collection of items in a ListBox
+    /// </summary>
     public interface IListBoxObjectCollection : IEnumerable
     {
+        /// <summary>
+        /// Adds an item to the list of items for a ListBox
+        /// </summary>
+        /// <param name="item">An object representing the item to add to the collection</param>
         void Add(object item);
 
+        /// <summary>
+        /// Gets the number of items in the collection
+        /// </summary>
         int Count { get; }
+
+        /// <summary>
+        /// Removes the specified object from the collection
+        /// </summary>
+        /// <param name="item">An object representing the item to remove from the collection</param>
         void Remove(object item);
+
+        /// <summary>
+        /// Removes all items from the collection
+        /// </summary>
         void Clear();
     }
 }

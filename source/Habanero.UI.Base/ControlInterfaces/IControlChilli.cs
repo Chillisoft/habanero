@@ -39,70 +39,101 @@ namespace Habanero.UI.Base
     //}
 
     /// <summary>
-    /// The DockStyle of a control, which indicates how to dock the control within its container.
+    /// Indicates how to dock the control within its container and how the control
+    /// resizes when its parent is resized 
     /// </summary>
     public enum DockStyle
     {
+        /// <summary>
+        /// The control is not docked.
+        /// </summary>
         None = 0,
+        /// <summary>
+        /// All the control's edges are docked to the all edges of its containing control and sized appropriately.
+        /// </summary>
         Fill = 1,
+        /// <summary>
+        /// The control's top edge is docked to the top of its containing control.
+        /// </summary>
         Top = 2,
+        /// <summary>
+        /// The control's right edge is docked to the right edge of its containing control.
+        /// </summary>
         Right = 3,
+        /// <summary>
+        /// The control's bottom edge is docked to the bottom of its containing control.
+        /// </summary>
         Bottom = 4,
+        /// <summary>
+        /// The control's left edge is docked to the left edge of its containing control.
+        /// </summary>
         Left = 5
     }
 
-
+    /// <summary>
+    /// Defines controls, which are components with visual representation
+    /// </summary>
     public interface IControlChilli
     {
         /// <summary>
-        /// Occurs on clicking the button etc.
+        /// Occurs when the control is clicked
         /// </summary>
         event EventHandler Click;
 
         /////// <summary>
-        /////// Occurs on key press.
+        /////// Occurs when a key is pressed while the control has focus
         /////// </summary>
         //event KeyPressEventHandler KeyPress;
         /////// <summary>
-        /////// Occurs on key Up.
+        /////// Occurs when a key is released while the control has focus
         /////// </summary>
         //event KeyPressEventHandler KeyUp;
         /////// <summary>
-        /////// Occurs on key Down.
+        /////// Occurs when a key is pressed while the control has focus
         /////// </summary>
         //event KeyPressEventHandler KeyDown;
 
         /// <summary>
-        /// Occurs when the control is double clicked.
+        /// Occurs when the control is double-clicked
         /// </summary>
         event EventHandler DoubleClick;
 
+        /// <summary>
+        /// Occurs when the control is resized
+        /// </summary>
         event EventHandler Resize;
+
+        /// <summary>
+        /// Occurs when the Visible property value changes
+        /// </summary>
         event EventHandler VisibleChanged;
 
         /// <summary>
-        /// Gets/Sets the width position
+        /// Gets or sets the width of the control
         /// </summary>
         [System.ComponentModel.Browsable(false)]
         [System.ComponentModel.DesignerSerializationVisibility(
             System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         int Width { get; set; }
 
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection Controls { get; }
 
         /// <summary>
-        /// Gets or sets the control visability.  
+        /// Gets or sets a value indicating whether the control is displayed
         /// </summary>
         [System.ComponentModel.DefaultValue(true)]
         bool Visible { get; set; }
 
         /// <summary>
-        /// The order in which tabbing through the form will tab to this control
+        /// Gets or sets the tab order of the control within its container
         /// </summary>
         int TabIndex { get; set; }
 
         /// <summary>
-        /// Gets/Sets the height position
+        /// Gets or sets the height of the control
         /// </summary>
         [System.ComponentModel.Browsable(false)]
         [System.ComponentModel.DesignerSerializationVisibility(
@@ -110,7 +141,8 @@ namespace Habanero.UI.Base
         int Height { get; set; }
 
         /// <summary>
-        /// Gets/Sets the top position
+        /// Gets or sets the distance, in pixels, between the top edge of the
+        /// control and the top edge of its container's client area
         /// </summary>
         [System.ComponentModel.Browsable(false)]
         [System.ComponentModel.DesignerSerializationVisibility(
@@ -118,7 +150,8 @@ namespace Habanero.UI.Base
         int Top { get; set; }
 
         /// <summary>
-        /// Gets/Sets the bottom position
+        /// Gets the distance, in pixels, between the bottom edge of the
+        /// control and the top edge of its container's client area
         /// </summary>
         [System.ComponentModel.Browsable(false)]
         [System.ComponentModel.DesignerSerializationVisibility(
@@ -126,7 +159,8 @@ namespace Habanero.UI.Base
         int Bottom { get; }
 
         /// <summary>
-        /// Gets/Sets the left position
+        /// Gets or sets the distance, in pixels, between the left edge of the
+        /// control and the left edge of its container's client area
         /// </summary>
         [System.ComponentModel.Browsable(false)]
         [System.ComponentModel.DesignerSerializationVisibility(
@@ -134,7 +168,8 @@ namespace Habanero.UI.Base
         int Left { set; get; }
 
         /// <summary>
-        /// Gets/Sets the right position
+        /// Gets the distance, in pixels, between the right edge of the
+        /// control and the left edge of its container's client area
         /// </summary>
         [System.ComponentModel.Browsable(false)]
         [System.ComponentModel.DesignerSerializationVisibility(
@@ -142,7 +177,7 @@ namespace Habanero.UI.Base
         int Right { get; }
 
         /// <summary>
-        /// Gets or sets the text associated with this control.  
+        /// Gets or sets the text associated with this control
         /// </summary>
         [System.ComponentModel.DefaultValue("")]
         [System.ComponentModel.Localizable(true)]
@@ -150,39 +185,48 @@ namespace Habanero.UI.Base
         string Text { get; set; }
 
         /// <summary>
-        /// Gets or sets the name associated with this control.  
+        /// Gets or sets the name of the control
         /// </summary>
         [System.ComponentModel.Browsable(false)]
         [System.ComponentModel.DefaultValue("")]
         string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the control enabled state.  
+        /// Gets or sets a value indicating whether the control can respond to user interaction
         /// </summary>
         [System.ComponentModel.DefaultValue(true)]
         bool Enabled { get; set; }
 
+        /// <summary>
+        /// Gets or sets the foreground color of the control
+        /// </summary>
         Color ForeColor { get; set; }
 
+        /// <summary>
+        /// Gets or sets the background color for the control
+        /// </summary>
         Color BackColor { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether tab stop is enabled.
+        /// Gets or sets a value indicating whether the user can give the
+        /// focus to this control using the TAB key
         /// </summary>
-        /// <value>
-        /// 	<c>true</c> if tab stop is enabled; otherwise, <c>false</c>.
+        /// <value>true if the user can give the focus to the control using the
+        /// TAB key; otherwise, false. The default is true.This property will
+        /// always return true for an instance of the Form class.
         /// </value>
         [System.ComponentModel.DefaultValue(true)]
         bool TabStop { get; set; }
 
         /// <summary>
-        /// Gets or sets the size.
+        /// Gets or sets the height and width of the control
         /// </summary>
-        /// <value></value>
+        /// <value>The System.Drawing.Size that represents the height
+        /// and width of the control in pixels</value>
         Size Size { get; set; }
 
         /// <summary>
-        /// Activates the control.  
+        /// Activates the control  
         /// </summary>
         void Select();
 
@@ -194,8 +238,9 @@ namespace Habanero.UI.Base
         ///// </value>
         //[System.ComponentModel.Browsable(false)]
         //bool HasControls { get; }
+
         /// <summary>
-        /// Gets a value indicating whether this control has children.
+        /// Gets a value indicating whether the control contains one or more child controls
         /// </summary>
         /// <value>
         /// 	<c>true</c> if this control has children; otherwise, <c>false</c>.
@@ -203,21 +248,30 @@ namespace Habanero.UI.Base
         [System.ComponentModel.Browsable(false)]
         bool HasChildren { get; }
 
-        /// <summary>Gets or sets the size that is the upper limit that can specify.</summary>
-        /// <returns>An ordered pair of type <see cref="T:System.Drawing.Size"></see> representing the width and height of a rectangle.</returns>
+        /// <summary>
+        /// Gets or sets the size that is the upper limit that
+        /// GetPreferredSize(System.Drawing.Size) can specify
+        /// </summary>
+        /// <returns>An ordered pair of type System.Drawing.Size
+        /// representing the width and height of a rectangle</returns>
         /// <filterpriority>1</filterpriority>
         [System.ComponentModel.AmbientValue(typeof (Size), "0, 0")]
         Size MaximumSize { get; set; }
 
-        /// <summary>Gets or sets the size that is the lower limit that can specify.</summary>
-        /// <returns>An ordered pair of type <see cref="T:System.Drawing.Size"></see> representing the width and height of a rectangle.</returns>
+        /// <summary>
+        /// Gets or sets the size that is the lower limit that
+        /// GetPreferredSize(System.Drawing.Size) can specify
+        /// </summary>
+        /// <returns>An ordered pair of type System.Drawing.Size
+        /// representing the width and height of a rectangle</returns>
         /// <filterpriority>1</filterpriority>
         Size MinimumSize { get; set; }
 
         /// <summary>
-        /// Gets or sets the font of the text displayed by the control.
+        /// Gets or sets the font of the text displayed by the control
         /// </summary>
-        /// <value></value>
+        /// <value>The System.Drawing.Font to apply to the text displayed
+        /// by the control. The default is the value of the DefaultFont property.</value>
         Font Font { get; set; }
 
         ///// <summary>
@@ -228,22 +282,27 @@ namespace Habanero.UI.Base
         //int BorderWidth { get; set; }
 
         /// <summary>
-        /// Suspends the layout.
+        /// Temporarily suspends the layout logic for the control
         /// </summary>
         void SuspendLayout();
 
         /// <summary>
-        /// Resumes the layout.
+        /// Resumes usual layout logic, optionally forcing an immediate
+        /// layout of pending layout requests
         /// </summary>
         void ResumeLayout(bool performLayout);
 
-        /// <summary>Invalidates the entire surface of the control and causes the control to be redrawn.</summary>
+        /// <summary>
+        /// Invalidates the entire surface of the control and causes the control to be redrawn
+        /// </summary>
         void Invalidate();
 
         /// <summary>
-        /// Gets or sets the control location.
+        /// Gets or sets the coordinates of the upper-left corner of the
+        /// control relative to the upper-left corner of its container
         /// </summary>
-        /// <value></value>
+        /// <value>The System.Drawing.Point that represents the upper-left
+        /// corner of the control relative to the upper-left corner of its container</value>
         Point Location { get; set; }
 
         ///// <summary>
@@ -253,9 +312,8 @@ namespace Habanero.UI.Base
         //ControlBorderStyle BorderStyle { get; set; }
 
         /// <summary>
-        /// Gets or sets the docking style of this control - this can be none, top, bottom, left, right or fill, 
-        /// depending on how you want your  control to dock inside its container control
-        /// See <see cref="DockStyle"/>
+        /// Gets or sets which control borders are docked to its parent
+        /// control and determines how a control is resized with its parent
         /// </summary>
         DockStyle Dock { get; set; }
     }

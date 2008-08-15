@@ -21,14 +21,19 @@ using System.Drawing;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Represents a CheckBox control
+    /// </summary>
     public interface ICheckBox:IControlChilli
     {
         /// <summary>
-        /// Is the check box checked
+        /// Gets or sets whether the CheckBox is checked
         /// </summary>
         bool Checked { get; set; }
+
         /// <summary>
-        /// alignment of the check box left or right
+        /// Gets or sets the horizontal and vertical alignment of the
+        /// check mark on a CheckBox control
         /// </summary>
         ContentAlignment CheckAlign { get; set; }
     }

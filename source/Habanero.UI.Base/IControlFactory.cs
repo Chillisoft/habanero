@@ -41,32 +41,41 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Creates a new empty ComboBox
         /// </summary>
-        /// <returns>Returns the new ComboBox object</returns>
         IComboBox CreateComboBox();
 
         IListBox CreateListBox();
         IMultiSelector<T> CreateMultiSelector<T>();
 
+        /// <summary>
+        /// Creates a button control
+        /// </summary>
         IButton CreateButton();
 
         /// <summary>
-        /// Creates a new button
+        /// Creates a button control
         /// </summary>
         /// <param name="text">The text to appear on the button</param>
-        /// <returns>Returns the new Button object</returns>
         IButton CreateButton(string text);
 
         /// <summary>
-        /// Creates a new button with an attached event handler to carry out
-        /// further instructions if the button is pressed
+        /// Creates a button control with an attached event handler to carry out
+        /// further actions if the button is pressed
         /// </summary>
         /// <param name="text">The text to appear on the button</param>
-        /// <param name="clickHandler">The method that handles the event</param>
-        /// <returns>Returns the new Button object</returns>
+        /// <param name="clickHandler">The method that handles the Click event</param>
         IButton CreateButton(string text, EventHandler clickHandler);
 
-
+        /// <summary>
+        /// Creates a CheckBox control
+        /// </summary>
         ICheckBox CreateCheckBox();
+
+        /// <summary>
+        /// Creates a CheckBox control with a specified initial checked state
+        /// </summary>
+        /// <param name="defaultValue">Whether the initial box is checked</param>
+        ICheckBox CreateCheckBox(bool defaultValue);
+
         ILabel CreateLabel();
         IControlChilli CreateControl();
         ILabel CreateLabel(string labelText);
@@ -75,7 +84,12 @@ namespace Habanero.UI.Base
         IPanel CreatePanel();
         IReadOnlyGrid CreateReadOnlyGrid();
         IReadOnlyGridControl CreateReadOnlyGridControl();
+
+        /// <summary>
+        /// Creates a control to manage a group of buttons that display next to each other
+        /// </summary>
         IButtonGroupControl CreateButtonGroupControl();
+
         IReadOnlyGridButtonsControl CreateReadOnlyGridButtonsControl();
 
         /// <summary>
@@ -175,13 +189,6 @@ namespace Habanero.UI.Base
         INumericUpDown CreateNumericUpDownCurrency();
 
         /// <summary>
-        /// Creates a new CheckBox with a specified initial checked state
-        /// </summary>
-        /// <param name="defaultValue">Whether the initial box is ticked</param>
-        /// <returns>Returns a new CheckBox object</returns>
-        ICheckBox CreateCheckBox(bool defaultValue);
-
-        /// <summary>
         /// Creates a new progress bar
         /// </summary>
         /// <returns>Returns a new ProgressBar object</returns>
@@ -263,7 +270,18 @@ namespace Habanero.UI.Base
         IEditableGrid CreateEditableGrid();
         IEditableGridControl CreateEditableGridControl();
         IFileChooser CreateFileChooser();
+
+        /// <summary>
+        /// Displays a business object collection in a tab control, with one
+        /// business object per tab.  Each tab holds a business control, provided
+        /// by the developer, that refreshes to display the business object for
+        /// the current tab.
+        /// <br/>
+        /// This control is suitable for a business object collection with a limited
+        /// number of objects.
+        /// </summary>
         IBOColTabControl CreateBOColTabControl();
+
         /// <summary>
         /// returns a control mapper strategy for the management of how
         /// business objects properties and their related controls update each other.

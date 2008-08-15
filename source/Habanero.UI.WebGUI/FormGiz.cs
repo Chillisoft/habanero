@@ -25,32 +25,54 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Represents a window or dialog box that makes up an application's user interface
+    /// </summary>
     public class FormGiz : Form, IFormChilli
     {
         private IControlCollection _controls;
 
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return _controls; }
         }
+
+        /// <summary>
+        /// Gets or sets which control borders are docked to its parent
+        /// control and determines how a control is resized with its parent
+        /// </summary>
         Base.DockStyle IControlChilli.Dock
         {
             get { return (Base.DockStyle)base.Dock; }
             set { base.Dock = (Gizmox.WebGUI.Forms.DockStyle)value; }
         }
-        
+
+        /// <summary>
+        /// Forces the form to invalidate its client area and
+        /// immediately redraw itself and any child controls.
+        /// Does nothing in the VWG environment.
+        /// </summary>
         public void Refresh()
         {
             // do nothing
         }
 
-        
+        /// <summary>
+        /// Gets or sets the current multiple document interface (MDI) parent form of this form
+        /// </summary>
         IFormChilli IFormChilli.MdiParent
         {
             get { throw new NotImplementedException(); }
             set { this.MdiParent = (Form)value; }
         }
 
+        /// <summary>
+        /// Shows the form as a modal dialog box with the currently active window set as its owner
+        /// </summary>
+        /// <returns>One of the DialogResult values</returns>
         Base.DialogResult IFormChilli.ShowDialog()
         {
             return (Base.DialogResult)base.ShowDialog();

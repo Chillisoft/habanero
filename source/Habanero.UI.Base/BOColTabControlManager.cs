@@ -24,6 +24,11 @@ using Habanero.BO;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// This manager groups common logic for IBOColTabControl objects.
+    /// Do not use this object in working code - rather call CreateBOColTabControl
+    /// in the appropriate control factory.
+    /// </summary>
     public class BOColTabControlManager
     {
         private ITabControl _tabControl;

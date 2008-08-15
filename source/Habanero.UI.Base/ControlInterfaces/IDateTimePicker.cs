@@ -21,18 +21,43 @@ using System;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Represents a DateTimePicker
+    /// </summary>
     public interface IDateTimePicker : IControlChilli
     {
+        /// <summary>
+        /// Gets or sets the date/time value assigned to the control.
+        /// </summary>
         DateTime Value { get; set; }
 
+        /// <summary>
+        /// Gets or sets the date/time value assigned to the control, but returns
+        /// null if there is no date set in the picker
+        /// </summary>
         DateTime? ValueOrNull { get; set; }
 
+        /// <summary>
+        /// Gets or sets the custom date/time format string
+        /// </summary>
         string CustomFormat { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether a spin button control
+        /// (also known as an up-down control) is used to adjust the date/time value
+        /// </summary>
         bool ShowUpDown { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether a check box is
+        /// displayed to the left of the selected date
+        /// </summary>
         bool ShowCheckBox { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the Value property has
+        /// been set with a valid date/time value and the displayed value is able to be updated
+        /// </summary>
         bool Checked { get; set; }
 
         event EventHandler Enter;

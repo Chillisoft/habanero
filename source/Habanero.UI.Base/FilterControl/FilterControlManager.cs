@@ -25,6 +25,11 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Base.FilterControl
 {
+    /// <summary>
+    /// This manager groups common logic for IFilterControl objects.
+    /// Do not use this object in working code - rather call CreateFilterControl
+    /// in the appropriate control factory.
+    /// </summary>
     public class FilterControlManager
     {
         private readonly IControlFactory _controlFactory;

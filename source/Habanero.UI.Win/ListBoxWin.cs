@@ -24,6 +24,9 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Represents a control to display a list of items
+    /// </summary>
     public partial class ListBoxWin : ListBox, IListBox
     {
         private readonly ListBoxSelectedObjectCollectionWin _selectedObjectCollection;
@@ -38,37 +41,52 @@ namespace Habanero.UI.Win
            
         }
 
+        /// <summary>
+        /// Gets the items of the ListBox
+        /// </summary>
         public new IListBoxObjectCollection Items
         {
-            get
-            {
-                return _objectCollection;
-            }
+            get { return _objectCollection; }
         }
 
+        /// <summary>
+        /// Gets a collection containing the currently selected items in the ListBox
+        /// </summary>
         public new IListBoxSelectedObjectCollection SelectedItems
         {
-            get
-            {
-                return _selectedObjectCollection;
-            }
+            get { return _selectedObjectCollection; }
         }
 
+        /// <summary>
+        /// Gets or sets the method in which items are selected in the ListBox
+        /// </summary>
         public new ListBoxSelectionMode SelectionMode
         {
             get { return (ListBoxSelectionMode)Enum.Parse(typeof(ListBoxSelectionMode), base.SelectionMode.ToString()); }
             set { base.SelectionMode = (SelectionMode)Enum.Parse(typeof(SelectionMode), value.ToString()); }
         }
+
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }
         }
+
+        /// <summary>
+        /// Gets or sets which control borders are docked to its parent
+        /// control and determines how a control is resized with its parent
+        /// </summary>
         Base.DockStyle IControlChilli.Dock
         {
             get { return (Base.DockStyle)base.Dock; }
             set { base.Dock = (System.Windows.Forms.DockStyle)value; }
         }
 
+        /// <summary>
+        /// Represents the collection of items in a ListBox
+        /// </summary>
         internal class ListBoxObjectCollectionWin : IListBoxObjectCollection
         {
             private readonly ObjectCollection _items;
@@ -78,29 +96,43 @@ namespace Habanero.UI.Win
                 this._items = items;
             }
 
+            /// <summary>
+            /// Adds an item to the list of items for a ListBox
+            /// </summary>
+            /// <param name="item">An object representing the item to add to the collection</param>
             public void Add(object item)
             {
                 _items.Add(item);
             }
 
+            /// <summary>
+            /// Gets the number of items in the collection
+            /// </summary>
             public int Count
             {
                 get { return _items.Count; }
             }
 
+            /// <summary>
+            /// Removes the specified object from the collection
+            /// </summary>
+            /// <param name="item">An object representing the item to remove from the collection</param>
             public void Remove(object item)
             {
                 _items.Remove(item);
             }
 
+            /// <summary>
+            /// Removes all items from the collection
+            /// </summary>
             public void Clear()
             {
                 _items.Clear();
             }
+
             ///<summary>
             ///Returns an enumerator that iterates through a collection.
             ///</summary>
-            ///
             ///<returns>
             ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
             ///</returns>
@@ -111,6 +143,9 @@ namespace Habanero.UI.Win
             }
         }
 
+        /// <summary>
+        /// Represents the collection of selected items in the ListBox
+        /// </summary>
         private class ListBoxSelectedObjectCollectionWin : IListBoxSelectedObjectCollection
         {
             private readonly SelectedObjectCollection _items;
@@ -119,6 +154,11 @@ namespace Habanero.UI.Win
                 this._items = items;
             }
 
+            /// <summary>
+            /// Adds an item to the list of selected items for a ListBox
+            /// </summary>
+            /// <param name="item">An object representing the item to add
+            /// to the collection of selected items</param>
             public void Add(object item)
             {
                 _items.Add(item);
@@ -127,7 +167,6 @@ namespace Habanero.UI.Win
             ///<summary>
             ///Returns an enumerator that iterates through a collection.
             ///</summary>
-            ///
             ///<returns>
             ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
             ///</returns>

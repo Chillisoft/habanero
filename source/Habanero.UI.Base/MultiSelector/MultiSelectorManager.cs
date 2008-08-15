@@ -23,8 +23,12 @@ using System.Collections.ObjectModel;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// This manager groups common logic for IMultiSelector objects.
+    /// Do not use this object in working code - rather call CreateMultiSelector
+    /// in the appropriate control factory.
+    /// </summary>
     public class MultiSelectorManager<T>
-
     {
         private readonly IMultiSelector<T> _multiSelector;
         private readonly MultiSelectorModel<T> _model;

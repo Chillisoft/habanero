@@ -24,19 +24,22 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Defines controls, which are components with visual representation
+    /// </summary>
     public class ControlWin : Control, IControlChilli
     {
-        
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>  
         IControlCollection IControlChilli.Controls
         {
-            get {
-                return new ControlCollectionWin(base.Controls); 
-            }
+            get { return new ControlCollectionWin(base.Controls); }
         }
+
         /// <summary>
-        /// Gets or sets the docking style of this control - this can be none, top, bottom, left, right or fill, 
-        /// depending on how you want your  control to dock inside its container control
-        /// See <see cref="Habanero.UI.Base.DockStyle"/>
+        /// Gets or sets which control borders are docked to its parent
+        /// control and determines how a control is resized with its parent
         /// </summary>
         Base.DockStyle IControlChilli.Dock
         {

@@ -23,8 +23,15 @@ using System.Text;
 
 namespace Habanero.UI.Base.ControlInterfaces
 {
+    /// <summary>
+    /// Provides a means to choose a file and makes the selected
+    /// path available to a control that needs it
+    /// </summary>
     public interface IFileChooser : IControlChilli
     {
+        /// <summary>
+        /// Gets or sets the selected file path
+        /// </summary>
         string SelectedFilePath { get; set;}
     }
 }

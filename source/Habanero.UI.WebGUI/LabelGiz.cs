@@ -24,8 +24,13 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Represents a label
+    /// </summary>
     public class LabelGiz : Label, ILabel
     {
+        private const int WIDTH_FACTOR = 6;
+
         public LabelGiz(string labelText)
         {
             base.Text = labelText;
@@ -35,15 +40,26 @@ namespace Habanero.UI.WebGUI
         {
         }
 
-        private const int WIDTH_FACTOR = 6;
+        /// <summary>
+        /// Gets the preferred width of the control
+        /// </summary>
         public int PreferredWidth
         {
             get { return this.Text.Length * WIDTH_FACTOR; }
         }
+
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(base.Controls); }
         }
+
+        /// <summary>
+        /// Gets or sets which control borders are docked to its parent
+        /// control and determines how a control is resized with its parent
+        /// </summary>
         Base.DockStyle IControlChilli.Dock
         {
             get { return (Base.DockStyle)base.Dock; }

@@ -23,26 +23,47 @@ using System.ComponentModel;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Specifies the selection behavior of a list box
+    /// </summary>
     public enum ListBoxSelectionMode
     {
+        /// <summary>
+        /// Multiple items can be selected, and the user can use the SHIFT, CTRL, and arrow keys to make selections
+        /// </summary>
         MultiExtended,
+        /// <summary>
+        /// Multiple items can be selected
+        /// </summary>
         MultiSimple,
+        /// <summary>
+        /// No items can be selected
+        /// </summary>
         None,
+        /// <summary>
+        /// Only one item can be selected
+        /// </summary>
         One
     }
+
+    /// <summary>
+    /// Represents a control to display a list of items
+    /// </summary>
     public interface IListBox : IListControl
     {
         /// <summary>
-        /// Occurs when the SelectedIndex property has changed.
+        /// Occurs when the SelectedIndex property has changed
         /// </summary>
         event EventHandler SelectedIndexChanged;
-
-
+        
         /// <summary>
-        /// Unselects all items in the <see cref="T:Gizmox.WebGUI.Forms.ListBox"></see>.
+        /// Unselects all items in the ListBox
         /// </summary>
         void ClearSelected();
 
+        /// <summary>
+        /// Gets the items of the ListBox
+        /// </summary>
         IListBoxObjectCollection Items { get; }
 
         ///// <summary>
@@ -57,7 +78,7 @@ namespace Habanero.UI.Base
         //int SelectedIndex { get; set; }
 
         /// <summary>
-        /// Gets or sets the currently selected item in the <see cref="T:Gizmox.WebGUI.Forms.ListBox"></see>.
+        /// Gets or sets the currently selected item in the ListBox
         /// </summary>
         ///	<returns>An object that represents the current selection in the control.</returns>
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
@@ -65,32 +86,40 @@ namespace Habanero.UI.Base
         , Bindable(true)]
         object SelectedItem { get; }
 
+        /// <summary>
+        /// Gets a collection containing the currently selected items in the ListBox
+        /// </summary>
         IListBoxSelectedObjectCollection SelectedItems { get; }
 
+        /// <summary>
+        /// Gets or sets the method in which items are selected in the ListBox
+        /// </summary>
         ListBoxSelectionMode SelectionMode { get; set; }
-        /// <summary>Selects or clears the selection for the specified item in a <see cref="T:Gizmox.WebGUI.Forms.ListBox"></see>.</summary>
+
+        /// <summary>
+        /// Selects or clears the selection for the specified item in a ListBox
+        /// </summary>
         /// <param name="value">true to select the specified item; otherwise, false. </param>
-        /// <param name="index">The zero-based index of the item in a <see cref="T:Gizmox.WebGUI.Forms.ListBox"></see> to select or clear the selection for. </param>
-        /// <exception cref="T:System.InvalidOperationException">The <see cref="P:Gizmox.WebGUI.Forms.ListBox.SelectionMode"></see> property was set to None.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">The specified index was outside the range of valid values. </exception>
+        /// <param name="index">The zero-based index of the item in a ListBox
+        /// to select or clear the selection for.</param>
         /// <filterpriority>1</filterpriority>
         void SetSelected(int index, bool value);
 
         /// <summary>
-        /// Finds the first item in the <see cref="T:Gizmox.WebGUI.Forms.ListBox"></see> that starts with the specified string.
+        /// Finds the first item in the ListBox that exactly matches the specified string
         /// </summary>
+        /// <param name="strValue">The text to search for. </param>
         ///	<returns>The zero-based index of the first item found; returns ListBox.NoMatches if no match is found.</returns>
-        ///	<param name="strValue">The text to search for. </param>
-        ///	<exception cref="T:System.ArgumentOutOfRangeException">The value of the s parameter is less than -1 or greater than or equal to the item count.</exception>
         int FindString(string strValue);
 
         /// <summary>
-        /// Finds the first item in the <see cref="T:Gizmox.WebGUI.Forms.ListBox"></see> that starts with the specified string. The search starts at a specific starting index.
+        /// Finds the first item in the System.Windows.Forms.ListBox that exactly
+        /// matches the specified string. The search starts at a specific starting index.
         /// </summary>
-        ///	<returns>The zero-based index of the first item found; returns ListBox.NoMatches if no match is found.</returns>
         ///	<param name="strValue">The text to search for. </param>
-        ///	<param name="intStartIndex">The zero-based index of the item before the first item to be searched. Set to negative one (-1) to search from the beginning of the control. </param>
-        ///	<exception cref="T:System.ArgumentOutOfRangeException">The startIndex parameter is less than zero or greater than or equal to the value of the <see cref="P:Gizmox.WebGUI.Forms.ListBox.ObjectCollection.Count"></see> property of the <see cref="T:Gizmox.WebGUI.Forms.ListBox.ObjectCollection"></see> class. </exception>
+        ///	<param name="intStartIndex">The zero-based index of the item before the first
+        /// item to be searched. Set to negative one (-1) to search from the beginning of the control.</param>
+        /// <returns>The zero-based index of the first item found; returns ListBox.NoMatches if no match is found.</returns>
         int FindString(string strValue, int intStartIndex);
 
         ///// <summary>
@@ -101,7 +130,7 @@ namespace Habanero.UI.Base
         //void SwapItems(int intIndexA, int intIndexB);
 
         /// <summary>
-        /// Gets or sets a value indicating whether the items in the <see cref="T:Gizmox.WebGUI.Forms.ListBox"></see> are sorted alphabetically.
+        /// Gets or sets a value indicating whether the items in the ListBox are sorted alphabetically
         /// </summary>
         ///	<returns>true if items in the control are sorted; otherwise, false. The default is false.</returns>
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>

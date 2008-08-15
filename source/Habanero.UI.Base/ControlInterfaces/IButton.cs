@@ -24,17 +24,22 @@ using System.Text;
 
 namespace Habanero.UI.Base
 {
-    public interface IButton:IControlChilli
+    /// <summary>
+    /// Represents a button control
+    /// </summary>
+    public interface IButton : IControlChilli
     {
         /// <summary>
-        /// Executes the click event on a button
+        /// Generates a Click event for a button
         /// </summary>
         void PerformClick();
 
         /// <summary>
-        /// Notifies the button that it is the default button on its form.
+        /// Notifies the Button whether it is the default button
+        /// so that it can adjust its appearance accordingly
         /// </summary>
-        /// <param name="b"></param>
+        /// <param name="b">true if the button is to have the appearance
+        /// of the default button; otherwise, false.</param>
         void NotifyDefault(bool b);
     }
 }

@@ -24,6 +24,11 @@ using Habanero.UI.Base.ControlInterfaces;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// This manager groups common logic for IFileChooser objects.
+    /// Do not use this object in working code - rather call CreateFileChooser
+    /// in the appropriate control factory.
+    /// </summary>
     public class FileChooserManager
     {
         private readonly IControlFactory _controlFactory;

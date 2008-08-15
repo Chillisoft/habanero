@@ -25,16 +25,23 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Represents a ComboBox control
+    /// </summary>
     public partial class ComboBoxWin : ComboBox, IComboBox
     {
-            private ComboBoxManager _manager;
-
+        private ComboBoxManager _manager;
 
         public ComboBoxWin()
         {
             InitializeComponent();
             _manager = new ComboBoxManager(this);
         }
+
+        /// <summary>
+        /// Gets an object representing the collection of the items
+        /// contained in this ComboBox
+        /// </summary>
         public new IComboBoxObjectCollection Items
         {
             get
@@ -44,6 +51,9 @@ namespace Habanero.UI.Win
             }
         }
 
+        /// <summary>
+        /// Gets or sets currently selected item in the ComboBox
+        /// </summary>
         object IComboBox.SelectedItem
         {
             get
@@ -57,6 +67,10 @@ namespace Habanero.UI.Win
             }
         }
 
+        /// <summary>
+        /// Gets or sets the value of the member property specified by
+        /// the ValueMember property
+        /// </summary>
         object IComboBox.SelectedValue
         {
             get
@@ -69,7 +83,9 @@ namespace Habanero.UI.Win
             }
         }
 
-
+        /// <summary>
+        /// Represents the collection of items in a ComboBox
+        /// </summary>
         internal class ComboBoxObjectCollectionWin : IComboBoxObjectCollection
         {
             private readonly ObjectCollection _items;
@@ -79,48 +95,86 @@ namespace Habanero.UI.Win
                 this._items = items;
             }
 
+            /// <summary>
+            /// Adds an item to the list of items for a ComboBox
+            /// </summary>
+            /// <param name="item">An object representing the item to add to the collection</param>
             public void Add(object item)
             {
                 _items.Add(item);
             }
 
+            /// <summary>
+            /// Gets the number of items in the collection
+            /// </summary>
             public int Count
             {
                 get { return _items.Count; }
             }
 
+            /// <summary>
+            /// Gets or sets the label to display
+            /// </summary>
             public string Label
             {
                 get { throw new System.NotImplementedException(); }
                 set { throw new System.NotImplementedException(); }
             }
 
+            /// <summary>
+            /// Removes the specified item from the ComboBox
+            /// </summary>
+            /// <param name="item">The System.Object to remove from the list</param>
             public void Remove(object item)
             {
                 _items.Remove(item);
             }
 
+            /// <summary>
+            /// Removes all items from the ComboBox
+            /// </summary>
             public void Clear()
             {
                 _items.Clear();
             }
 
+            /// <summary>
+            /// Populates the collection using the given BusinessObjectCollection
+            /// </summary>
+            /// <param name="collection">A BusinessObjectCollection</param>
             public void SetCollection(BusinessObjectCollection<BusinessObject> collection)
             {
                 throw new System.NotImplementedException();
             }
 
+            /// <summary>
+            /// Retrieves the item at the specified index within the collection
+            /// </summary>
+            /// <param name="index">The index of the item in the collection to retrieve</param>
+            /// <returns>An object representing the item located at the
+            /// specified index within the collection</returns>
             public object this[int index]
             {
                 get { return _items[index]; }
                 set { _items[index] = value; }
             }
 
+            /// <summary>
+            /// Determines if the specified item is located within the collection
+            /// </summary>
+            /// <param name="value">An object representing the item to locate in the collection</param>
+            /// <returns>true if the item is located within the collection; otherwise, false</returns>
             public bool Contains(object value)
             {
                 return _items.Contains(value);
             }
 
+            /// <summary>
+            /// Retrieves the index within the collection of the specified item
+            /// </summary>
+            /// <param name="value">An object representing the item to locate in the collection</param>
+            /// <returns>The zero-based index where the item is
+            /// located within the collection; otherwise, -1</returns>
             public int IndexOf(object value)
             {
                 return _items.IndexOf(value);
@@ -140,10 +194,18 @@ namespace Habanero.UI.Win
 
         }
 
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }
         }
+
+        /// <summary>
+        /// Gets or sets which control borders are docked to its parent
+        /// control and determines how a control is resized with its parent
+        /// </summary>
         Base.DockStyle IControlChilli.Dock
         {
             get { return (Base.DockStyle)base.Dock; }

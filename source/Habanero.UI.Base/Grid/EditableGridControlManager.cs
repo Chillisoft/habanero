@@ -25,6 +25,11 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base.Grid
 {
+    /// <summary>
+    /// This manager groups common logic for IEditableGridControl objects.
+    /// Do not use this object in working code - rather call CreateEditableGridControl
+    /// in the appropriate control factory.
+    /// </summary>
     public class EditableGridControlManager
     {
         private readonly IEditableGridControl _gridControl;

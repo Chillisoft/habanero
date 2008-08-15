@@ -23,7 +23,13 @@ using Habanero.UI.Base;
 namespace Habanero.UI.WebGUI
 {
     /// <summary>
-    /// Manages a collection of tab pages that hold business object controls
+    /// Displays a business object collection in a tab control, with one
+    /// business object per tab.  Each tab holds a business control, provided
+    /// by the developer, that refreshes to display the business object for
+    /// the current tab.
+    /// <br/>
+    /// This control is suitable for a business object collection with a limited
+    /// number of objects.
     /// </summary>
     public class BOColTabControlGiz : UserControlGiz, IBOColTabControl
     {
@@ -107,6 +113,10 @@ namespace Habanero.UI.WebGUI
             set { BOColTabControlManager.CurrentBusinessObject = value; }
         }
 
+        /// <summary>
+        /// Returns the manager that provides logic common to all
+        /// UI environments
+        /// </summary>
         private BOColTabControlManager BOColTabControlManager
         {
             get { return _boColTabControlManager; }

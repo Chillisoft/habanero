@@ -28,20 +28,18 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// This manager groups common logic for IEditableGridControl objects.
+    /// Do not use this object in working code.
+    /// </summary>
     public class GridBaseManager
     {
         private readonly IGridBase _gridBase;
-
         private IDataSetProvider _dataSetProvider;
-
         private IBusinessObjectCollection _boCol;
-
         private string _uiDefName;
-
         private DataView _dataTableDefaultView;
-
         public event EventHandler CollectionChanged;
-
         private GridLoaderDelegate _gridLoader;
         private IClassDef _classDef;
 

@@ -197,17 +197,6 @@ namespace Habanero.UI.Win
             return ctl;
         }
 
-
-        /// <summary>
-        /// Creates a new CheckBox with a specified initial checked state
-        /// </summary>
-        /// <param name="defaultValue">Whether the initial box is ticked</param>
-        /// <returns>Returns a new CheckBox object</returns>
-        public ICheckBox CreateCheckBox(bool defaultValue)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Creates a new progress bar
         /// </summary>
@@ -329,6 +318,15 @@ namespace Habanero.UI.Win
             return new FileChooserWin(this);
         }
 
+        /// <summary>
+        /// Displays a business object collection in a tab control, with one
+        /// business object per tab.  Each tab holds a business control, provided
+        /// by the developer, that refreshes to display the business object for
+        /// the current tab.
+        /// <br/>
+        /// This control is suitable for a business object collection with a limited
+        /// number of objects.
+        /// </summary>
         public IBOColTabControl CreateBOColTabControl()
         {
             return new BOColTabControlWin(this);
@@ -430,6 +428,9 @@ namespace Habanero.UI.Win
             return new OKCancelDialogFactoryWin(this);
         }
 
+        /// <summary>
+        /// Creates a new empty ComboBox
+        /// </summary>
         public IComboBox CreateComboBox()
         {
             return new ComboBoxWin();
@@ -446,19 +447,17 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Creates a new Button
+        /// Creates a button control
         /// </summary>
-        /// <returns>Returns the new Button object</returns>
         public IButton CreateButton()
         {
             return new ButtonWin();
         }
 
         /// <summary>
-        /// Creates a new button
+        /// Creates a button control
         /// </summary>
         /// <param name="text">The text to appear on the button</param>
-        /// <returns>Returns the new Button object</returns>
         public IButton CreateButton(string text)
         {
             IButton button = CreateButton();
@@ -467,12 +466,11 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Creates a new button with an attached event handler to carry out
-        /// further instructions if the button is pressed
+        /// Creates a button control with an attached event handler to carry out
+        /// further actions if the button is pressed
         /// </summary>
         /// <param name="text">The text to appear on the button</param>
-        /// <param name="clickHandler">The method that handles the event</param>
-        /// <returns>Returns the new Button object</returns>
+        /// <param name="clickHandler">The method that handles the Click event</param>
         public IButton CreateButton(string text, EventHandler clickHandler)
         {
             IButton button = CreateButton(text);
@@ -480,9 +478,22 @@ namespace Habanero.UI.Win
             return button;
         }
 
+        /// <summary>
+        /// Creates a CheckBox control
+        /// </summary>
         public ICheckBox CreateCheckBox()
         {
             return new CheckBoxWin();
+        }
+
+        /// <summary>
+        /// Creates a CheckBox control with a specified initial checked state
+        /// </summary>
+        /// <param name="defaultValue">Whether the initial box is checked</param>
+        public ICheckBox CreateCheckBox(bool defaultValue)
+        {
+            //TODO
+            throw new NotImplementedException();
         }
 
         public ILabel CreateLabel()
@@ -543,6 +554,9 @@ namespace Habanero.UI.Win
             return new ReadOnlyGridControlWin(this);
         }
 
+        /// <summary>
+        /// Creates a control to manage a group of buttons that display next to each other
+        /// </summary>
         public IButtonGroupControl CreateButtonGroupControl()
         {
             return new ButtonGroupControlWin(this);

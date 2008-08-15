@@ -23,25 +23,42 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Represents a window or dialog box that makes up an application's user interface
+    /// </summary>
     public class FormWin : Form, IFormChilli
     {
-
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }
         }
+
+        /// <summary>
+        /// Gets or sets which control borders are docked to its parent
+        /// control and determines how a control is resized with its parent
+        /// </summary>
         Base.DockStyle IControlChilli.Dock
         {
             get { return (Base.DockStyle)base.Dock; }
             set { base.Dock = (System.Windows.Forms.DockStyle)value; }
         }
 
+        /// <summary>
+        /// Gets or sets the current multiple document interface (MDI) parent form of this form
+        /// </summary>
         IFormChilli IFormChilli.MdiParent
         {
             get { throw new NotImplementedException(); }
             set { this.MdiParent = (Form) value; }
         }
 
+        /// <summary>
+        /// Shows the form as a modal dialog box with the currently active window set as its owner
+        /// </summary>
+        /// <returns>One of the DialogResult values</returns>
         Base.DialogResult IFormChilli.ShowDialog()
         {
             return (Base.DialogResult)base.ShowDialog();

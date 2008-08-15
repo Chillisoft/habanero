@@ -56,6 +56,9 @@ namespace Habanero.UI.WebGUI
             return tb;
         }
 
+        /// <summary>
+        /// Creates a new empty ComboBox
+        /// </summary>
         public virtual IComboBox CreateComboBox()
         {
             ComboBoxGiz comboBox = new ComboBoxGiz();
@@ -73,16 +76,18 @@ namespace Habanero.UI.WebGUI
             return new MultiSelectorGiz<T>();
         }
 
+        /// <summary>
+        /// Creates a button control
+        /// </summary>
         public virtual IButton CreateButton()
         {
             return new ButtonGiz();
         }
 
         /// <summary>
-        /// Creates a new button
+        /// Creates a button control
         /// </summary>
         /// <param name="text">The text to appear on the button</param>
-        /// <returns>Returns the new Button object</returns>
         public virtual IButton CreateButton(string text)
         {
             IButton btn = CreateButton();
@@ -94,12 +99,11 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// Creates a new button with an attached event handler to carry out
-        /// further instructions if the button is pressed
+        /// Creates a button control with an attached event handler to carry out
+        /// further actions if the button is pressed
         /// </summary>
         /// <param name="text">The text to appear on the button</param>
-        /// <param name="clickHandler">The method that handles the event</param>
-        /// <returns>Returns the new Button object</returns>
+        /// <param name="clickHandler">The method that handles the Click event</param>
         public virtual IButton CreateButton(string text, EventHandler clickHandler)
         {
             IButton btn = CreateButton(text);
@@ -152,6 +156,9 @@ namespace Habanero.UI.WebGUI
             return new ReadOnlyGridControlGiz(this);
         }
 
+        /// <summary>
+        /// Creates a control to manage a group of buttons that display next to each other
+        /// </summary>
         public virtual IButtonGroupControl CreateButtonGroupControl()
         {
             return new ButtonGroupControlGiz(this);
@@ -439,20 +446,19 @@ namespace Habanero.UI.WebGUI
             ctl.Minimum = decimal.MinValue;
             return ctl;
         }
+
         /// <summary>
-        /// Creates a new CheckBox
+        /// Creates a CheckBox control
         /// </summary>
-        /// <returns>Returns a new CheckBox object</returns>
         public virtual ICheckBox CreateCheckBox()
         {
             return CreateCheckBox(false);
         }
 
         /// <summary>
-        /// Creates a new CheckBox with a specified initial checked state
+        /// Creates a CheckBox control with a specified initial checked state
         /// </summary>
-        /// <param name="defaultValue">Whether the initial box is ticked</param>
-        /// <returns>Returns a new CheckBox object</returns>
+        /// <param name="defaultValue">Whether the initial box is checked</param>
         public virtual ICheckBox CreateCheckBox(bool defaultValue)
         {
             CheckBoxGiz cbx = new CheckBoxGiz();
@@ -579,6 +585,15 @@ namespace Habanero.UI.WebGUI
             return new FileChooserGiz(this);
         }
 
+        /// <summary>
+        /// Displays a business object collection in a tab control, with one
+        /// business object per tab.  Each tab holds a business control, provided
+        /// by the developer, that refreshes to display the business object for
+        /// the current tab.
+        /// <br/>
+        /// This control is suitable for a business object collection with a limited
+        /// number of objects.
+        /// </summary>
         public virtual IBOColTabControl CreateBOColTabControl()
         {
             return new BOColTabControlGiz(this);

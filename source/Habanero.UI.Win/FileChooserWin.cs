@@ -29,6 +29,10 @@ using Habanero.UI.Base.ControlInterfaces;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Provides a means to choose a file and makes the selected
+    /// path available to a control that needs it
+    /// </summary>
     public partial class FileChooserWin : UserControlWin, IFileChooser
     {
         private readonly IControlFactory _controlFactory;
@@ -40,11 +44,17 @@ namespace Habanero.UI.Win
             _fileChooserManager = new FileChooserManager(controlFactory, this);
         }
 
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }
         }
 
+        /// <summary>
+        /// Gets or sets the selected file path
+        /// </summary>
         public string SelectedFilePath
         {
             get { return _fileChooserManager.SelectedFilePath; }
