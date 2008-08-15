@@ -63,7 +63,7 @@ namespace Habanero.DB
             }
             else if (connectionNamespace == "FirebirdSql.Data.FirebirdClient")
             {
-                _prefixCharacter = "?";
+                _prefixCharacter = "@";
             }
             else
             {

@@ -133,10 +133,10 @@ namespace Habanero.Test.DB
             IDbConnection dbConn = DatabaseConnectionFactory.CreateConnection(config).TestConnection;
             ParameterNameGenerator gen = new ParameterNameGenerator(dbConn);
             //todo research prefix etc
-            Assert.AreEqual("?Param0", gen.GetNextParameterName());
-            Assert.AreEqual("?Param1", gen.GetNextParameterName());
+            Assert.AreEqual("@Param0", gen.GetNextParameterName());
+            Assert.AreEqual("@Param1", gen.GetNextParameterName());
             gen.Reset();
-            Assert.AreEqual("?Param0", gen.GetNextParameterName());
+            Assert.AreEqual("@Param0", gen.GetNextParameterName());
         }
 
         #endregion
