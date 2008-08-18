@@ -42,8 +42,9 @@ namespace Habanero.UI.Win
         {
             _manager = new GridBaseManager(this);
             this.SelectionChanged += delegate { FireBusinessObjectSelected(); };
-            _manager.CollectionChanged += delegate{ FireCollectionChanged(); };
+            _manager.CollectionChanged += delegate { FireCollectionChanged(); };
         }
+
         /// <summary>
         /// Returns the grid base manager for this grid
         /// </summary>
@@ -65,11 +66,8 @@ namespace Habanero.UI.Win
         /// </summary>
         public new IDataGridViewCell CurrentCell
         {
-            get
-            {
-                return base.CurrentCell == null ? null : new DataGridViewCellWin(base.CurrentCell);
-            }
-            set { base.CurrentCell = ((DataGridViewCellWin)value).DataGridViewCell; }
+            get { return base.CurrentCell == null ? null : new DataGridViewCellWin(base.CurrentCell); }
+            set { base.CurrentCell = ((DataGridViewCellWin) value).DataGridViewCell; }
         }
 
 
@@ -116,10 +114,7 @@ namespace Habanero.UI.Win
 
         public new IDataGridViewRowCollection Rows
         {
-            get
-            {
-                return new DataGridViewRowCollectionWin(base.Rows);
-            }
+            get { return new DataGridViewRowCollectionWin(base.Rows); }
         }
 
         public void Clear()
@@ -141,22 +136,27 @@ namespace Habanero.UI.Win
         {
             get
             {
-                if (base.CurrentRow == null) return null;
+                if (base.CurrentRow == null)
+                {
+                    return null;
+                }
                 return new DataGridViewRowWin(base.CurrentRow);
             }
         }
+
         public new IDataGridViewColumnCollection Columns
         {
-            get
-            {
-                return new DataGridViewColumnCollectionWin(base.Columns);
-            }
+            get { return new DataGridViewColumnCollectionWin(base.Columns); }
         }
 
         public IBusinessObject SelectedBusinessObject
         {
             get { return _manager.SelectedBusinessObject; }
-            set { _manager.SelectedBusinessObject = value; }
+            set
+            {
+                _manager.SelectedBusinessObject = value;
+                FireBusinessObjectSelected();
+            }
         }
 
         public IList<BusinessObject> SelectedBusinessObjects
@@ -165,7 +165,7 @@ namespace Habanero.UI.Win
             {
                 //DataGridViewRow row = new DataGridViewRow();
                 //row.DataBoundItem
-                 return _manager.SelectedBusinessObjects;
+                return _manager.SelectedBusinessObjects;
             }
         }
 
@@ -178,10 +178,11 @@ namespace Habanero.UI.Win
         {
             get { return new ControlCollectionWin(base.Controls); }
         }
+
         Base.DockStyle IControlChilli.Dock
         {
-            get { return (Base.DockStyle)base.Dock; }
-            set { base.Dock = (System.Windows.Forms.DockStyle)value; }
+            get { return (Base.DockStyle) base.Dock; }
+            set { base.Dock = (System.Windows.Forms.DockStyle) value; }
         }
 
         #region IGridBase Members
@@ -231,7 +232,6 @@ namespace Habanero.UI.Win
         /// <param name="rowNum"></param>
         public void ChangeToPageOfRow(int rowNum)
         {
-            
         }
 
 
@@ -255,7 +255,7 @@ namespace Habanero.UI.Win
         /// order ("false" sets it to descending order)</param>
         public void Sort(string columnName, bool ascending)
         {
-            _manager.SetSortColumn(columnName,  ascending);
+            _manager.SetSortColumn(columnName, ascending);
         }
 
         /// <summary>
@@ -293,7 +293,10 @@ namespace Habanero.UI.Win
 
             public DataGridViewRowCollectionWin(DataGridViewRowCollection rows)
             {
-                if (rows == null) throw new ArgumentNullException("rows");
+                if (rows == null)
+                {
+                    throw new ArgumentNullException("rows");
+                }
                 _rows = rows;
             }
 
@@ -304,7 +307,6 @@ namespace Habanero.UI.Win
 
             public IDataGridViewRow this[int index]
             {
-
                 get { return new DataGridViewRowWin(_rows[index]); }
             }
 
@@ -370,7 +372,10 @@ namespace Habanero.UI.Win
 
             public DataGridViewColumnCollectionWin(DataGridViewColumnCollection columns)
             {
-                if (columns == null) throw new ArgumentNullException("columns");
+                if (columns == null)
+                {
+                    throw new ArgumentNullException("columns");
+                }
                 _columns = columns;
             }
 
@@ -388,7 +393,7 @@ namespace Habanero.UI.Win
 
             public void Add(IDataGridViewColumn dataGridViewColumn)
             {
-                DataGridViewColumnWin col = (DataGridViewColumnWin)dataGridViewColumn;
+                DataGridViewColumnWin col = (DataGridViewColumnWin) dataGridViewColumn;
                 _columns.Add(col.DataGridViewColumn);
             }
 
@@ -404,7 +409,10 @@ namespace Habanero.UI.Win
                 get
                 {
                     DataGridViewColumn column = _columns[index];
-                    if (column == null) return null;
+                    if (column == null)
+                    {
+                        return null;
+                    }
                     return new DataGridViewColumnWin(column);
                 }
             }
@@ -414,7 +422,10 @@ namespace Habanero.UI.Win
                 get
                 {
                     DataGridViewColumn column = _columns[name];
-                    if (column == null) return null;
+                    if (column == null)
+                    {
+                        return null;
+                    }
                     return new DataGridViewColumnWin(column);
                 }
             }
@@ -461,7 +472,6 @@ namespace Habanero.UI.Win
 
             #endregion
         }
-
 
 
         private class DataGridViewRowWin : IDataGridViewRow
@@ -637,7 +647,7 @@ namespace Habanero.UI.Win
 
             public int Count
             {
-                get {return _selectedRows.Count; }
+                get { return _selectedRows.Count; }
             }
 
             public IDataGridViewRow this[int index]
@@ -719,7 +729,7 @@ namespace Habanero.UI.Win
         /// <filterpriority>1</filterpriority>
         public void ApplyStyle(IDataGridViewCellStyle dataGridViewCellStyle)
         {
-            _dataGridViewCellStyle.ApplyStyle(((DataGridViewCellStyleWin)dataGridViewCellStyle).DataGridViewCellStyle);
+            _dataGridViewCellStyle.ApplyStyle(((DataGridViewCellStyleWin) dataGridViewCellStyle).DataGridViewCellStyle);
         }
 
         /// <summary>Creates an exact copy of this <see cref="IDataGridViewCellStyle"></see>.</summary>
@@ -734,7 +744,7 @@ namespace Habanero.UI.Win
         /// <filterpriority>1</filterpriority>
         public string Format
         {
-            get { return _dataGridViewCellStyle.Format;  }
+            get { return _dataGridViewCellStyle.Format; }
             set { _dataGridViewCellStyle.Format = value; }
         }
     }
@@ -868,5 +878,4 @@ namespace Habanero.UI.Win
             get { return _cell.DefaultNewRowValue; }
         }
     }
-    
 }

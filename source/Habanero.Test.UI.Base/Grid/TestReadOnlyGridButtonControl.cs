@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using NUnit.Framework;
@@ -223,6 +224,29 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result ----------------------
             Assert.IsTrue(editClicked);
+        }
+
+        [Test]
+        public void TestGridFiringItemSelected()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            IReadOnlyGridControl readOnlyGridControl = GetControlFactory().CreateReadOnlyGridControl();
+            BusinessObjectCollection<MyBO> myBOS = new BusinessObjectCollection<MyBO>();
+            myBOS.Add(new MyBO());
+            MyBO bo = new MyBO();
+            myBOS.Add(bo);
+            myBOS.Add(new MyBO());
+            readOnlyGridControl.SetBusinessObjectCollection(myBOS);
+            bool gridItemSelected = false;
+            readOnlyGridControl.Grid.SelectedBusinessObject = null;
+            readOnlyGridControl.Grid.BusinessObjectSelected += (delegate { gridItemSelected = true; });
+            
+            //---------------Execute Test ----------------------
+            readOnlyGridControl.Grid.SelectedBusinessObject = bo;
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(gridItemSelected);
         }
 
     }
