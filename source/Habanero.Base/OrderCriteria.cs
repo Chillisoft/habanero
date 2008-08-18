@@ -275,7 +275,7 @@ namespace Habanero.Base
             }
 
             /// <summary>
-            /// Creates an Field object by parsing a string in the correct format.
+            /// Creates a Field object by parsing a string in the correct format.
             /// The format is:
             /// <para>&lt;field&gt; => &lt;fieldName&gt; [ ASC | DESC ] </para>
             /// For example: <code>Age DESC</code> or <code>Surname DESC</code>

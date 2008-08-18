@@ -323,6 +323,144 @@ namespace Habanero.Test.BO
             Assert.AreEqual("(Engine.EngineNo = '100') AND (Engine.CarID = '" + carId.ToString("B") + "')", criteria.ToString());
         }
 
+        [Test]
+        public void TestPrepareCriteria_ThroughRelationship()
+        {
+            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            const string carRegNoValue = "1234";
+            Criteria criteria = new Criteria("Car.CarRegNo", Criteria.ComparisonOp.Equals, carRegNoValue);
+            //-------------Execute test ---------------------
+            QueryBuilder.PrepareCriteria(engineClassDef, criteria);
+            //-------------Test Result ----------------------
+            Assert.IsFalse(criteria.IsComposite());
+            Assert.AreEqual(Criteria.ComparisonOp.Equals, criteria.ComparisonOperator);
+            Assert.AreEqual(carRegNoValue, criteria.FieldValue);
+            Assert.AreEqual("CarRegNo", criteria.Field.PropertyName);
+            Assert.AreEqual("CAR_REG_NO", criteria.Field.FieldName);
+            Assert.AreEqual("Engine.Car", criteria.Field.Source.ToString());
+        }
+
+        [Test]
+        public void TestPrepareSource()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            Source source = null;
+
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareSource(engineClassDef, ref source);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(source);
+            Assert.AreEqual("Engine", source.Name);
+            Assert.AreEqual("Table_Engine", source.EntityName);
+        }
+
+        [Test]
+        public void TestPrepareSource_ExistingSource()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            Source originalSource = new Source("Engine", "Table_Engine");
+            Source source = originalSource;
+
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareSource(engineClassDef, ref source);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(source);
+            Assert.AreSame(originalSource, source);
+            Assert.AreEqual("Engine", source.Name);
+            Assert.AreEqual("Table_Engine", source.EntityName);
+        }
+
+        [Test]
+        public void TestPrepareSource_ExistingSource_CompletesEntityName()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            Source originalSource = new Source("Engine", null);
+            Source source = originalSource;
+
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareSource(engineClassDef, ref source);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(source);
+            Assert.AreSame(originalSource, source);
+            Assert.AreEqual("Engine", source.Name);
+            Assert.AreEqual("Table_Engine", source.EntityName);
+        }
+
+        [Test]
+        public void TestPrepareSource_ExistingSource_Relationship_DoesntExist()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            Source originalSource = new Source("NotExistingRelationship", null);
+            Source source = originalSource;
+
+            //---------------Execute Test ----------------------
+            Exception exception = null;
+            try
+            {
+                QueryBuilder.PrepareSource(engineClassDef, ref source);
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+            
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(exception);
+            Assert.IsInstanceOfType(typeof(RelationshipNotFoundException), exception);
+            Assert.AreEqual("'Engine' does not have a relationship called 'NotExistingRelationship'.", exception.Message);
+        }
+
+        [Test]
+        public void TestPrepareSource_ExistingSource_RelationshipName()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            Source originalSource = new Source("Car", null);
+            Source source = originalSource;
+
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareSource(engineClassDef, ref source);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(source);
+            Assert.AreNotSame(originalSource, source);
+            Assert.AreEqual("Engine", source.Name);
+            Assert.AreEqual("Table_Engine", source.EntityName);
+            Assert.AreEqual(1, source.Joins.Count);
+            Source.Join join = source.Joins[0];
+            Source childSource = join.ToSource;
+            Assert.IsNotNull(childSource);
+            Assert.AreSame(originalSource, childSource);
+            Assert.AreEqual("Car", childSource.Name);
+            Assert.AreEqual("car_table", childSource.EntityName);
+            Assert.AreEqual(1, join.JoinFields.Count);
+            Source.Join.JoinField field = join.JoinFields[0];
+            QueryField fromField = field.FromField;
+            Assert.AreSame(source, fromField.Source);
+            Assert.AreEqual("CarID", fromField.PropertyName);
+            Assert.AreEqual("CAR_ID", fromField.FieldName);
+            QueryField toField = field.ToField;
+            Assert.AreSame(childSource, toField.Source);
+            Assert.AreEqual("CarID", toField.PropertyName);
+            Assert.AreEqual("CAR_ID", toField.FieldName);
+        }
+
+        //[Test]
+        //public void TestCreateCriteria()
+        //{
+        //    //-------------Setup Test Pack ------------------
+        //    ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+        //    string propertyName = "EngineNo";
+        //    Criteria criteria = QueryBuilder.CreateCriteria(engineClassDef, )
+        //    QueryBuilder.CreateOrderCriteria()
+        //    //-------------Test Pre-conditions --------------
 
         [Test]
         public void TestPrepareDiscriminatorCriteria()

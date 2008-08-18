@@ -169,6 +169,78 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestQueryField_FromString()
+        {
+            //---------------Set up test pack-------------------
+            string propertyName = "PropName";
+
+            //---------------Execute Test ----------------------
+
+            QueryField queryField = QueryField.FromString(propertyName);
+            //---------------Test Result -----------------------
+            Assert.AreEqual("PropName", queryField.PropertyName);
+            Assert.IsNull(queryField.Source);
+
+        }
+
+        [Test]
+        public void TestQueryField_FromString_WithSource()
+        {
+            //---------------Set up test pack-------------------
+            string propertyName = "SourceName.PropName";
+
+            //---------------Execute Test ----------------------
+
+            QueryField queryField = QueryField.FromString(propertyName);
+            //---------------Test Result -----------------------
+            Assert.AreEqual("PropName", queryField.PropertyName);
+            Assert.IsNotNull(queryField.Source);
+            Assert.AreEqual("SourceName", queryField.Source.Name);
+
+        }
+
+        [Test]
+        public void TestQueryField_FromString_WithSource_TwoLevels()
+        {
+            //---------------Set up test pack-------------------
+            string propertyName = "BaseSource.ChildSource.PropName";
+
+            //---------------Execute Test ----------------------
+
+            QueryField queryField = QueryField.FromString(propertyName);
+            //---------------Test Result -----------------------
+            Assert.AreEqual("PropName", queryField.PropertyName);
+            Source baseSource = queryField.Source;
+            Assert.IsNotNull(baseSource);
+            Assert.AreEqual("BaseSource", baseSource.Name);
+            Assert.AreEqual(1, baseSource.Joins.Count);
+            Source.Join join = baseSource.Joins[0];
+            Assert.AreSame(baseSource, join.FromSource);
+            Source childSource = join.ToSource;
+            Assert.IsNotNull(childSource);
+            Assert.AreEqual("ChildSource", childSource.Name);
+            Assert.AreEqual(0, childSource.Joins.Count);
+        }
+
+        [Test]
+        public void TestConstruct_WithSpecifiedSource()
+        {
+            //---------------Set up test pack-------------------
+            const string propvalue = "PropValue";
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("SourceName.PropName", Criteria.ComparisonOp.Equals, propvalue);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(criteria.IsComposite());
+            Assert.AreEqual(Criteria.ComparisonOp.Equals, criteria.ComparisonOperator);
+            Assert.AreEqual(propvalue, criteria.FieldValue);
+            Assert.AreEqual("PropName", criteria.Field.PropertyName);
+            Assert.AreEqual("PropName", criteria.Field.FieldName);
+            Assert.AreEqual("SourceName", criteria.Field.Source.ToString());
+        }
+
+        [Test]
         public void TestMergeCriteria_BothNull()
         {
             //---------------Execute Test ----------------------

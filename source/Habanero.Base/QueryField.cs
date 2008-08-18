@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+
 namespace Habanero.Base
 {
     /// <summary>
@@ -66,6 +68,24 @@ namespace Habanero.Base
         {
             get { return _source; }
             set { _source = value; }
+        }
+
+
+        ///<summary>
+        /// Creates a <see cref="QueryField"/> object by parsing a string in the correct format.
+        /// The format is:
+        /// <para>&lt;queryField&gt; => [&lt;source&gt;.]&lt;fieldName&gt; </para>
+        /// <para>&lt;source&gt; => [&lt;source&gt;.]&lt;sourceName&gt; </para>
+        /// For example: <code>Surname</code> or <code>ContactPerson.Company.Name</code>
+        ///</summary>
+        ///<param name="fieldString">The string in the correct format (see above)</param>
+        ///<returns>A <see cref="QueryField"/> created from the string</returns>
+        public static QueryField FromString(string fieldString)
+        {
+            string[] parts = fieldString.Trim().Split('.');
+            string propertyName = parts[parts.Length - 1];
+            Source source = Base.Source.FromString(String.Join(".", parts, 0, parts.Length - 1));
+            return new QueryField(propertyName, propertyName, source);
         }
     }
 }

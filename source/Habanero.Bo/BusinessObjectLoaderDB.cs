@@ -134,7 +134,11 @@ namespace Habanero.BO
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         public T GetBusinessObject<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new()
         {
-            QueryBuilder.PrepareCriteria(ClassDef.ClassDefs[typeof(T)], selectQuery.Criteria);
+            IClassDef classDef = ClassDef.Get<T>();
+            Source source = selectQuery.Source;
+            QueryBuilder.PrepareSource(classDef, ref source);
+            selectQuery.Source = source;
+            QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
             SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
             ISqlStatement statement = selectQueryDB.CreateSqlStatement();
             IClassDef correctSubClassDef = null;
@@ -194,6 +198,9 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public IBusinessObject GetBusinessObject(IClassDef classDef, ISelectQuery selectQuery)
         {
+            Source source = selectQuery.Source;
+            QueryBuilder.PrepareSource(classDef, ref source);
+            selectQuery.Source = source;
             QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
             SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
             ISqlStatement statement = selectQueryDB.CreateSqlStatement();

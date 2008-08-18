@@ -84,10 +84,11 @@ namespace Habanero.Test.BO
             col.SaveAll();
         }
 
-        public static void CreateSavedOrganisation()
+        public static OrganisationTestBO CreateSavedOrganisation()
         {
             OrganisationTestBO bo = new OrganisationTestBO();
             bo.Save();
+            return bo;
         }
     }
 }

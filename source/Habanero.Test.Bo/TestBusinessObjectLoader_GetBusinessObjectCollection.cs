@@ -1580,6 +1580,33 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestGetBusinessObjectCollection_CriteriaString_ThroughRelationship()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            //            DateTime now = DateTime.Now;
+            const string surname = "TestSurname";
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(surname);
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            cp1.OrganisationID = organisation.OrganisationID;
+            cp1.Save();
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(surname);
+            ContactPersonTestBO.CreateSavedContactPerson();
+            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            string criteria = string.Format("Organisation.OrganisationID = '{0}'", organisation.OrganisationID.ToString("B"));
+
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(cp1, col);
+        }
+
+
+        [Test]
         public void TestGetBusinessObjectCollection_CriteriaString_Date_Today()
         {
             //---------------Set up test pack-------------------

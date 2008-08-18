@@ -99,13 +99,13 @@ namespace Habanero.Test.BO
             string surname = "Surname";
             string surnameField = "Surname_field";
             Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.Equals, cp.Surname);
-            criteria.Field.Source = new Source(cp.ClassDef.TableName);
+            criteria.Field.Source = new Source(cp.ClassDef.ClassName);
             criteria.Field.FieldName = surnameField;
             SelectQuery query = new SelectQuery(criteria);
 
             query.Fields.Add(surname, new QueryField(surname, surnameField, null));
             query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", null));
-            query.Source = new Source(cp.ClassDef.TableName);
+            query.Source = new Source(cp.ClassDef.ClassName);
             return query;
         }
 

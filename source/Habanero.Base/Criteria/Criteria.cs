@@ -126,7 +126,7 @@ namespace Habanero.Base
         /// <param name="value">The value to compare to</param>
         public Criteria(string propName, ComparisonOp comparisonOp, object value)
         {
-            _field = new QueryField(propName, propName, null);
+            _field = QueryField.FromString(propName);
             _comparisonOp = comparisonOp;
             _fieldValue = value;
         }

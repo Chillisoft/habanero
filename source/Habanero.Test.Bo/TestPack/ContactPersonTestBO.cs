@@ -508,6 +508,9 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
+                    <relationship name=""Organisation"" type=""single"" relatedClass=""OrganisationTestBO"" relatedAssembly=""Habanero.Test.BO"">
+						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
+					</relationship>
 					<ui>
 						<grid>
 							<column heading=""OrganisationID"" property=""OrganisationID"" type=""DataGridViewComboBoxColumn"" />
@@ -696,8 +699,14 @@ namespace Habanero.Test.BO
             get
             {
                 return
-                    (RelatedBusinessObjectCollection<Address>) Relationships.GetRelatedCollection<Address>("Addresses");
+                    (RelatedBusinessObjectCollection<Address>)Relationships.GetRelatedCollection<Address>("Addresses");
             }
+        }
+
+        public Guid OrganisationID
+        {
+            get { return (Guid)GetPropertyValue("OrganisationID"); }
+            set { SetPropertyValue("OrganisationID", value); }
         }
 
         public bool AfterLoadCalled

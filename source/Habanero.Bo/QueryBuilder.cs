@@ -167,14 +167,63 @@ namespace Habanero.BO
             else
             {
                 QueryField field = criteria.Field;
-                IPropDef propDef = classDef.GetPropDef(field.PropertyName);
+                Source currentSource = field.Source;
+                IClassDef currentClassDef;
+                PrepareSource(classDef, ref currentSource, out currentClassDef);
+                field.Source = currentSource;
+                IPropDef propDef = currentClassDef.GetPropDef(field.PropertyName);
                 field.FieldName = propDef.DatabaseFieldName;
-                string tableName = classDef.GetTableName(propDef);
-                field.Source = new Source(classDef.ClassName, tableName);
+                field.Source.EntityName = currentClassDef.GetTableName(propDef);
                 if (criteria.CanBeParametrised())
                 {
                     criteria.FieldValue = propDef.ConvertValueToPropertyType(criteria.FieldValue);
                 }
+            }
+        }
+
+        public static void PrepareSource(IClassDef classDef, ref Source source)
+        {
+            IClassDef relatedClassDef;
+            PrepareSource(classDef, ref source, out relatedClassDef);
+        }
+
+        private static void PrepareSource(IClassDef classDef, ref Source source, out IClassDef relatedClassDef)
+        {
+            Source baseSource = new Source(classDef.ClassName, classDef.GetTableName());
+            if (source == null)
+            {
+                source = baseSource;
+                relatedClassDef = classDef;
+            }
+            else if (source.Name == baseSource.Name)
+            {
+                relatedClassDef = classDef;
+                source.EntityName = classDef.GetTableName();
+            }
+            else
+            {
+                ClassDef currentClassDef = (ClassDef)classDef;
+                string relationshipName = source.Name;
+                RelationshipDef relationshipDef = currentClassDef.GetRelationship(relationshipName);
+                if (relationshipDef == null)
+                {
+                    string message = string.Format("'{0}' does not have a relationship called '{1}'.",
+                        currentClassDef.ClassName, relationshipName);
+                    throw new RelationshipNotFoundException(message);
+                }
+                relatedClassDef = relationshipDef.RelatedObjectClassDef;
+                source.EntityName = relatedClassDef.GetTableName();
+                Source.Join join = new Source.Join(baseSource, source);
+                foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
+                {
+                    IPropDef ownerPropDef = currentClassDef.GetPropDef(relPropDef.OwnerPropertyName);
+                    QueryField ownerQueryField = new QueryField(ownerPropDef.PropertyName, ownerPropDef.DatabaseFieldName, baseSource);
+                    IPropDef relatedPropDef = relatedClassDef.GetPropDef(relPropDef.RelatedClassPropName);
+                    QueryField relatedQueryField = new QueryField(relatedPropDef.PropertyName, relatedPropDef.DatabaseFieldName, source);
+                    join.JoinFields.Add(new Source.Join.JoinField(ownerQueryField, relatedQueryField));
+                }
+                baseSource.Joins.Add(join);
+                source = baseSource;
             }
         }
 
