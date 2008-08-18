@@ -19,6 +19,9 @@
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Provides an empty control that can be used to create other controls
+    /// </summary>
     public interface IUserControlChilli : IControlChilli
     {
     }

@@ -21,10 +21,13 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Wraps a ComboBox in order to display and capture a property of the business object 
+    /// </summary>
     public class ListComboBoxMapper : ControlMapper
     {
-        private IComboBox _comboBox;
-        private IListComboBoxMapperStrategy _mapperStrategy;
+        private readonly IComboBox _comboBox;
+        private readonly IListComboBoxMapperStrategy _mapperStrategy;
 
         public ListComboBoxMapper(IControlChilli ctl, string propName, bool isReadOnly, IControlFactory factory)
             : base(ctl, propName, isReadOnly, factory)
@@ -34,6 +37,9 @@ namespace Habanero.UI.Base
             _mapperStrategy.AddItemSelectedEventHandler(this);
         }
 
+        /// <summary>
+        /// Updates the properties on the represented business object
+        /// </summary>
         public override void ApplyChangesToBusinessObject()
         {
             SetPropertyValue(_comboBox.SelectedItem);
@@ -47,6 +53,12 @@ namespace Habanero.UI.Base
             _comboBox.SelectedItem = GetPropertyValue();
         }
 
+        /// <summary>
+        /// Populates the Items list based on the pipe (|) seperated
+        /// string list.
+        /// </summary>
+        /// <param name="list">A pipe (|) seperated string representing 
+        /// the list of string options to populate the list e.g Mr|Mrs|Dr </param>
         public void SetList(string list)
         {
             foreach (string item in list.Split('|'))

@@ -54,7 +54,7 @@ namespace Habanero.Test.UI.Base
             {
                 //---------------Set up test pack-------------------
                 IComboBox cbx = GetControlFactory().CreateComboBox();
-                string propName = "SampleText";
+                const string propName = "SampleText";
                 ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
                 mapper.SetList("One|Two|Three|Four");
                 Sample s = new Sample();
@@ -73,7 +73,7 @@ namespace Habanero.Test.UI.Base
             {
                 //---------------Set up test pack-------------------
                 IComboBox cbx = GetControlFactory().CreateComboBox();
-                string propName = "SampleText";
+                const string propName = "SampleText";
                 ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
                 mapper.SetList("One|Two|Three|Four");
                 Sample s = new Sample();
@@ -92,7 +92,7 @@ namespace Habanero.Test.UI.Base
             {
                 //---------------Set up test pack-------------------
                 IComboBox cbx = GetControlFactory().CreateComboBox();
-                string propName = "SampleText";
+                const string propName = "SampleText";
                 ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
                 mapper.SetList("One|Two|Three|Four");
                 Sample s = new Sample();
@@ -113,7 +113,7 @@ namespace Habanero.Test.UI.Base
             {
                 //---------------Set up test pack-------------------
                 IComboBox cbx = GetControlFactory().CreateComboBox();
-                string propName = "SampleText";
+                const string propName = "SampleText";
                 ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
                 mapper.SetList("One|Two|Three|Four");
                 Sample s = new Sample();
@@ -136,7 +136,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IComboBox cbx = GetControlFactory().CreateComboBox();
-            string propName = "propname";
+            const string propName = "propname";
             //---------------Execute Test ----------------------
             ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
 
@@ -152,7 +152,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IComboBox cbx = GetControlFactory().CreateComboBox();
-            string propName = "propname";
+            const string propName = "propname";
             ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
 
             //---------------Execute Test ----------------------
@@ -169,7 +169,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IComboBox cbx = GetControlFactory().CreateComboBox();
-            string propName = "SampleText";
+            const string propName = "SampleText";
             ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
             mapper.SetList("One|Two|Three|Four");
             Sample s = new Sample();
@@ -187,7 +187,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IComboBox cbx = GetControlFactory().CreateComboBox();
-            string propName = "SampleText";
+            const string propName = "SampleText";
             ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
             mapper.SetList("One|Two|Three|Four");
             Sample s = new Sample();

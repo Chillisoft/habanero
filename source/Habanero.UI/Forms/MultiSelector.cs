@@ -30,7 +30,7 @@ namespace Habanero.UI.Forms
     /// </summary>
     public partial class MultiSelector<T> : UserControl
     {
-        private Model _model;
+        private readonly Model _model;
 
         /// <summary>
         /// A constructor to initialise a new selector

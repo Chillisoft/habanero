@@ -22,6 +22,9 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Wraps a DateTimePicker in order to display and capture a DateTime property of the business object 
+    /// </summary>
     public class DateTimePickerMapper : ControlMapper
     {
         private readonly IDateTimePicker _picker;
@@ -29,10 +32,10 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Constructor to initialise a new instance of the class
         /// </summary>
-        /// <param name="picker">The datepicker object to map</param>
+        /// <param name="picker">The DateTimePicker control to which the property is mapped</param>
         /// <param name="propName">The property name</param>
         /// <param name="isReadOnly">Whether this control is read only</param>
-        /// <param name="factory">the control factory to be used when creating the controlMapperStrategy</param>
+        /// <param name="factory">The control factory to be used when creating the controlMapperStrategy</param>
         public DateTimePickerMapper(IDateTimePicker picker, string propName, bool isReadOnly, IControlFactory factory)
             : base(picker, propName, isReadOnly, factory)
         {
@@ -40,11 +43,17 @@ namespace Habanero.UI.Base
             _propertyName = propName;
         }
 
+        /// <summary>
+        /// Gets the DateTimePicker control to which the property is mapped
+        /// </summary>
         public IDateTimePicker DateTimePicker
         {
             get { return _picker; }
         }
 
+        /// <summary>
+        /// Updates the properties on the represented business object
+        /// </summary>
         public override void ApplyChangesToBusinessObject()
         {
             object newValue = GetValueOfDateTimePicker();
@@ -58,22 +67,14 @@ namespace Habanero.UI.Base
         {
             return DateTimePickerUtil.GetValue(_picker);
         }
+
         /// <summary>
-        /// Updates the value in the control from its business object.
+        /// Updates the value on the control from the corresponding property
+        /// on the represented <see cref="IControlMapper.BusinessObject"/>
         /// </summary>
         protected  override void InternalUpdateControlValueFromBo()
         {
-            //object propValue = GetPropertyValue();
-            //if (propValue == null || propValue == DBNull.Value)
-            //{
-            //    _dateTimePicker.Text = "";
-            //}
-            //else
-            //{
-            //    SetValueOfDateTimePicker(Convert.ToDateTime(propValue));
-            //}
             if (_businessObject == null) return;
-            //_picker.Value = Convert.ToDateTime(_businessObject.GetPropertyValue(_propertyName));
             object propertyValue = GetPropertyValue();
             if (propertyValue == null)
             {
@@ -83,22 +84,5 @@ namespace Habanero.UI.Base
                 _picker.Value = Convert.ToDateTime(propertyValue);
             }
         }
-
-        ///// <summary>
-        ///// Returns the property value of the business object being mapped
-        ///// </summary>
-        ///// <returns>Returns the property value in appropriate object form</returns>
-        //protected virtual object GetPropertyValue()
-        //{
-        //    if (_businessObject != null)
-        //    {
-        //        BOMapper boMapper = new BOMapper(_businessObject);
-        //        return boMapper.GetPropertyValueToDisplay(_propertyName);
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
     }
 }

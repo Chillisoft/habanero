@@ -138,14 +138,11 @@ namespace Habanero.BO
                 BOMapper relatedBoMapper = new BOMapper((BusinessObject) relatedBo);
                 return relatedBoMapper.GetPropertyValueToDisplay(propertyName);
             }
-            else if (propertyName.IndexOf("-") != -1)
+            if (propertyName.IndexOf("-") != -1)
             {
                 return GetVirtualPropertyValue(propertyName);
             }
-            else
-            {
-                return _businessObject.GetPropertyValueToDisplay(propertyName);
-            }
+            return _businessObject.GetPropertyValueToDisplay(propertyName);
         }
 
         private object GetVirtualPropertyValue(string propertyName)

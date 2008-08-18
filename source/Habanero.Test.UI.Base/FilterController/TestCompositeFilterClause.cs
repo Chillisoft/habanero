@@ -18,7 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
-using Habanero.UI.Base.FilterControl;
+using Habanero.UI.Base;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.FilterController

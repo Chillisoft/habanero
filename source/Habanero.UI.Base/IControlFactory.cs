@@ -19,19 +19,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base.ControlInterfaces;
-using Habanero.UI.Base.FilterControl;
 using Habanero.UI.Base;
-using Habanero.UI.Base.Grid;
 
 namespace Habanero.UI.Base
 {
     public interface IControlFactory
     {
-
         /// <summary>
         /// Creates a filter control with the default layout manager
         /// </summary>
@@ -104,7 +100,7 @@ namespace Habanero.UI.Base
         /// <param name="name">The name of the panel</param>
         /// <returns>Returns a new Panel object</returns>
         /// <param name="controlFactory">the factory that this panel will use to create any controls on it</param>
-        IPanel CreatePanel(string name,IControlFactory controlFactory);
+        IPanel CreatePanel(string name, IControlFactory controlFactory);
 
         ///// <summary>
         ///// Creates a label
@@ -246,6 +242,7 @@ namespace Habanero.UI.Base
         /// <param name="wizardController"></param>
         /// <returns></returns>
         IWizardControl CreateWizardControl(IWizardController wizardController);
+
         /// <summary>
         /// Returns a BOEditor form. This is a form that the business object can be edited in.
         /// </summary>
@@ -264,7 +261,7 @@ namespace Habanero.UI.Base
         /// <returns></returns>
         IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo);
 
-        IListView CreateListView();
+//        IListView CreateListView(); //TODO: Port
 
 
         IEditableGrid CreateEditableGrid();
@@ -304,11 +301,13 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <returns></returns>
         IDataGridViewImageColumn CreateDataGridViewImageColumn();
+
         /// <summary>
         /// Creates a DataGridViewCheckBoxColumn for the appropriate userinterface framework
         /// </summary>
         /// <returns></returns>
         IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn();
+
         /// <summary>
         /// Creates a DataGridViewComboBoxColumn for the appropriate userinterface framework
         /// </summary>
@@ -355,7 +354,7 @@ namespace Habanero.UI.Base
         /// <param name="mapper">The business object mapper that maps the business object property to the control</param>
         /// <param name="boProp">The business object property being mapped to the control</param>
         void AddCurrentBOPropHandlers(ControlMapper mapper, IBOProp boProp);
-       
+
         /// <summary>
         /// Provides an interface for Removing handlers to updated events of current business object
         /// properties. It is essential that if the AddCurrentBoPropHandlers is implemented then this 
@@ -365,7 +364,7 @@ namespace Habanero.UI.Base
         /// <param name="mapper">The business object mapper that maps the business object property to the control</param>
         /// <param name="boProp">The business object property being mapped to the control</param>
         void RemoveCurrentBOPropHandlers(ControlMapper mapper, IBOProp boProp);
-        
+
         /// <summary>
         /// Provides an interface for handling the default key press behaviours on a control.
         /// This is typically used to change the handling of the enter key. I.e. A common behavioural
@@ -388,7 +387,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="mapper">The textbox mapper</param>
         /// <param name="boProp">The property being mapped</param>
-         void AddKeyPressEventHandler(TextBoxMapper mapper, IBOProp boProp);
+        void AddKeyPressEventHandler(TextBoxMapper mapper, IBOProp boProp);
     }
 
     /// <summary>
@@ -420,6 +419,7 @@ namespace Habanero.UI.Base
         /// for Web environment with low bandwidth we may choose to only update when the user saves.
         ///</summary>
         void RemoveCurrentHandlers(LookupComboBoxMapper mapper);
+
         void AddHandlers(LookupComboBoxMapper mapper);
     }
 

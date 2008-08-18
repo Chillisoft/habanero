@@ -24,7 +24,7 @@ using Habanero.UI.Base;
 namespace Habanero.UI.Win
 {
     /// <summary>
-    /// Represents a DateTimePicker
+    /// Represents a DateTimePicker control
     /// </summary>
     public class DateTimePickerWin : DateTimePicker, IDateTimePicker
     {

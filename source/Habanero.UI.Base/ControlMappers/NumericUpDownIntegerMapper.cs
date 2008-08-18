@@ -21,9 +21,11 @@ using System;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Wraps a NumericUpDown control in order to display and capture an integer property of the business object 
+    /// </summary>
     public class NumericUpDownIntegerMapper : NumericUpDownMapper
     {
-
         /// <summary>
         /// Constructor to initialise a new instance of the class
         /// </summary>
@@ -37,10 +39,11 @@ namespace Habanero.UI.Base
             _numericUpDown.DecimalPlaces = 0;
             _numericUpDown.Maximum = int.MaxValue;
             _numericUpDown.Minimum = int.MinValue;
-
         }
 
-
+        /// <summary>
+        /// Updates the properties on the represented business object
+        /// </summary>
         public override void ApplyChangesToBusinessObject()
         {
             SetPropertyValue(Convert.ToInt32(_numericUpDown.Value));

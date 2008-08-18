@@ -59,13 +59,13 @@ namespace Habanero.Test.UI.Base.Controllers
             MyBO myBO2 = new MyBO();
             myBOs.Add(myBO1,myBO2);
             IComboBox cmb = GetControlFactory().CreateComboBox();
-            ComboBoxCollectionController controller = new ComboBoxCollectionController(cmb,GetControlFactory());
+            ComboBoxCollectionSelector selector = new ComboBoxCollectionSelector(cmb,GetControlFactory());
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
-            controller.SetCollection(myBOs, false);
+            selector.SetCollection(myBOs, false);
             //---------------Verify Result -----------------------
-            Assert.AreEqual(myBOs, controller.Collection);
-            Assert.AreSame(cmb,controller.Control);
+            Assert.AreEqual(myBOs, selector.Collection);
+            Assert.AreSame(cmb,selector.Control);
             //---------------Tear Down -------------------------   
         }
 

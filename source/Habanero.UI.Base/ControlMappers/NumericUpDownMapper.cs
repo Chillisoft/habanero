@@ -21,10 +21,13 @@ using System;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Wraps a NumericUpDown control in order to display and capture a numeric property of the business object 
+    /// </summary>
     public abstract class NumericUpDownMapper : ControlMapper
     {
         protected INumericUpDown _numericUpDown;
-        private INumericUpDownMapperStrategy _mapperStrategy;
+        private readonly INumericUpDownMapperStrategy _mapperStrategy;
 
         /// <summary>
         /// Constructor to instantiate a new instance of the class
@@ -33,8 +36,8 @@ namespace Habanero.UI.Base
         /// <param name="propName">The property name</param>
         /// <param name="isReadOnly">Whether the control is read only.
         /// If so, it then becomes disabled.  If not,
-        /// handlers are assigned to manage key presses.</param>
-        /// <param name="factory">the control factory to be used when creating the controlMapperStrategy</param>
+        /// handlers are assigned to manage key presses, depending on the strategy assigned to this mapper.</param>
+        /// <param name="factory">The control factory to be used when creating the controlMapperStrategy</param>
         protected NumericUpDownMapper(IControlChilli ctl, string propName, bool isReadOnly, IControlFactory factory)
             : base(ctl, propName, isReadOnly, factory)
         {
@@ -43,13 +46,17 @@ namespace Habanero.UI.Base
             _mapperStrategy.ValueChanged(this);
         }
 
-
+        /// <summary>
+        /// Gets the <see cref="INumericUpDownMapperStrategy"/> that has been assigned to this mapper
+        /// </summary>
         public INumericUpDownMapperStrategy MapperStrategy
         {
             get { return _mapperStrategy; }
         }
+
         /// <summary>
-        /// Updates the value in the control from its business object.
+        /// Updates the value on the control from the corresponding property
+        /// on the represented <see cref="IControlMapper.BusinessObject"/>
         /// </summary>
         protected override void InternalUpdateControlValueFromBo()
         {

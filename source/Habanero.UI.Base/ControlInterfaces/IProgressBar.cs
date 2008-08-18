@@ -19,6 +19,9 @@
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Represents a progress bar control.
+    /// </summary>
     public interface IProgressBar
     {
     }

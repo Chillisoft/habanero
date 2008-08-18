@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.UI.Base;
 
-namespace Habanero.UI.Base.FilterControl
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// This manager groups common logic for IFilterControl objects.

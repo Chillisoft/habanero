@@ -28,8 +28,6 @@ namespace Habanero.Base
     /// </summary>
     public class Criteria
     {
-
-
         #region LogicalOp enum
 
         ///<summary>

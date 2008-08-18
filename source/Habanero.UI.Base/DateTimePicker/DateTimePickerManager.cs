@@ -18,26 +18,28 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
 
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// This manager groups common logic for IDateTimePicker objects.
+    /// This manager groups common logic for IDateTimePicker control.
     /// Do not use this object in working code - rather call CreateDateTimePicker
     /// in the appropriate control factory.
     /// </summary>
     public class DateTimePickerManager
     {
+        #region Delegates
+
+        public delegate DateTime ValueGetter();
+
+        public delegate void ValueSetter(DateTime value);
+
+        #endregion
+
         private readonly IControlFactory _controlFactory;
         private readonly IDateTimePicker _dateTimePicker;
         private readonly ValueGetter _valueGetter;
         private readonly ValueSetter _valueSetter;
-
-        public delegate DateTime ValueGetter();
-        public delegate void ValueSetter(DateTime value);
 
         //State Variables
         private bool _isNull;
@@ -47,7 +49,7 @@ namespace Habanero.UI.Base
         //private event EventHandler _valueChanged;
 
         public DateTimePickerManager(IControlFactory controlFactory, IDateTimePicker dateTimePicker,
-            ValueGetter valueGetter, ValueSetter valueSetter)
+                                     ValueGetter valueGetter, ValueSetter valueSetter)
         {
             if (valueGetter == null) throw new ArgumentNullException("valueGetter");
             if (valueSetter == null) throw new ArgumentNullException("valueSetter");
@@ -59,108 +61,10 @@ namespace Habanero.UI.Base
             //SetupDisplayBox();
         }
 
-        //#region Setup Controller
-        //    ///<summary>
-        //    /// Initialises a new instance of a DateTimePickerController.
-        //    ///</summary>
-        //    ///<param name="dateTimePicker">The DateTimePicker control(can be any implementation)</param>
-        //    public DateTimePickerController(IControlFactory controlFactory, IDateTimePicker dateTimePicker)
-        //    {
-        //        _controlFactory = controlFactory;
-        //        _dateTimePicker = dateTimePicker;
-        //        //_dateTimePicker.KeyDown += DateTimePicker_KeyDown;
-        //        //_dateTimePicker.ValueChanged += DateTimePicker_ValueChanged;
-        //        //_dateTimePicker.MouseUp += DateTimePicker_MouseUp;
-        //        //_dateTimePicker.GotFocus += DateTimePicker_GotFocus;
-        //        //_dateTimePicker.LostFocus += DateTimePicker_LostFocus;
-        //        _dateTimePicker.Resize += DateTimePicker_Resize;
-        //        //_dateTimePicker.EnabledChanged += DateTimePicker_ColorChanged;
-        //        //_dateTimePicker.BackColorChanged += DateTimePicker_ColorChanged;
-        //        //_dateTimePicker.ForeColorChanged += DateTimePicker_ColorChanged;
-        //        //_showCheckBoxPropInfo = _dateTimePicker.ShowCheckBox;
-        //        //_checkedPropInfo = _dateTimePicker.Checked;
-        //        _supportsCheckBox = _showCheckBoxPropInfo != null && _checkedPropInfo != null;
-        //        SetupDisplayBox();
-        //        NullDisplayValue = "";
-        //        Value = null;
-        //        UpdateFocusState();
-        //    }
-        //    ~DateTimePickerController()
-        //    {
-        //        //_dateTimePicker.KeyDown -= DateTimePicker_KeyDown;
-        //        //_dateTimePicker.ValueChanged -= DateTimePicker_ValueChanged;
-        //        //_dateTimePicker.MouseUp -= DateTimePicker_MouseUp;
-        //        //_dateTimePicker.GotFocus -= DateTimePicker_GotFocus;
-        //        //_dateTimePicker.LostFocus -= DateTimePicker_LostFocus;
-        //        _dateTimePicker.Resize -= DateTimePicker_Resize;
-        //        //_dateTimePicker.EnabledChanged -= DateTimePicker_ColorChanged;
-        //        //_dateTimePicker.BackColorChanged -= DateTimePicker_ColorChanged;
-        //        //_dateTimePicker.ForeColorChanged -= DateTimePicker_ColorChanged;
-                
-        //        //ControlsHelper.SafeGui(_dateTimePicker, delegate()
-        //        //                                            {
-        //                                                        try
-        //                                                        {
-        //                                                            _dateTimePicker.Controls.Clear();
-        //                                                        }
-        //                                                        catch
-        //                                                        {
-        //                                                        }
-        //        //                                            });
-        //        _dateTimePicker = null;
-        //    }
-        //private void SetupDisplayBox()
-        //{
-        //    //ControlsHelper.SafeGui(_dateTimePicker, delegate()
-        //    //{
-        //    _displayBox = _controlFactory.CreatePanel();
-        //    //_displayBox.BorderStyle = BorderStyle.None;
-        //    _displayBox.Location = new Point(2, 2);
-        //    ResizeDisplayBox();
-        //    _displayBox.BackColor = _dateTimePicker.BackColor;
-        //    _displayBox.ForeColor = _dateTimePicker.ForeColor;
-        //    //_displayBox.MouseUp += DateTimePicker_MouseUp;
-        //    //_displayBox.KeyDown += DateTimePicker_KeyDown;
-        //    _displayText = _controlFactory.CreateLabel();
-        //    _displayText.Location = new Point(0, 0);
-        //    _displayText.AutoSize = true;
-        //    _displayText.Text = "";
-        //    //_displayText.MouseUp += DateTimePicker_MouseUp;
-        //    //_displayText.KeyDown += DateTimePicker_KeyDown;
-        //    //_displayBox.Controls.Add(_displayText);
-        //    //_dateTimePicker.Controls.Add(_displayBox);
-        //    _displayBox.Visible = false;
-        //    //});
-        //}
-
-        //private void ResizeDisplayBox()
-        //{
-        //    _displayBox.Width = _dateTimePicker.Width - 22 - 2;
-        //    _displayBox.Height = _dateTimePicker.Height - 7;
-        //}
-
-        //    private void UpdateFocusState()
-        //    {
-        //        //if (_dateTimePicker.Focused)
-        //        //{
-        //        //    _displayBox.BackColor = SystemColors.Highlight;
-        //        //    _displayBox.ForeColor = SystemColors.HighlightText;
-        //        //}
-        //        //else
-        //        //{
-        //        //    _displayBox.BackColor = _dateTimePicker.BackColor;
-        //        //    _displayBox.ForeColor = _dateTimePicker.BackColor;
-        //        //}
-        //        //_displayText.BackColor = _displayBox.BackColor;
-        //        //_displayText.ForeColor = _displayBox.ForeColor;
-        //    }
-
-        //    #endregion //Setup Controller
-
         #region Properties
 
         ///<summary>
-        /// The DateTimePicker control being controlled
+        /// Gets the <see cref="IDateTimePicker"/> control
         ///</summary>
         public IDateTimePicker DateTimePicker
         {
@@ -176,6 +80,9 @@ namespace Habanero.UI.Base
         //    set { _displayText.Text = value ?? ""; }
         //}
 
+        /// <summary>
+        /// Gets or sets the nullable DateTime value in the control
+        /// </summary>
         public DateTime? ValueOrNull
         {
             get
@@ -184,17 +91,14 @@ namespace Habanero.UI.Base
                 {
                     return GetDateTimePickerValue();
                 }
-                else
-                {
-                    return null;
-                }
+                return null;
             }
             set
             {
                 if (ValueOrNull == value) return;
                 if (value != null)
                 {
-                    SetDateTimePickerValue((DateTime)value);
+                    SetDateTimePickerValue((DateTime) value);
                     ApplyValueFormat();
                 }
                 else
@@ -206,24 +110,21 @@ namespace Habanero.UI.Base
         }
 
         ///<summary>
-        /// The Value represented by the DateTimePicker
+        /// The non-nullable DateTime value represented by the DateTimePicker
         ///</summary>
         public DateTime Value
         {
-            get
-            {
-                return GetDateTimePickerValue();
-            }
+            get { return GetDateTimePickerValue(); }
             set
             {
                 if (ValueOrNull == value) return;
                 SetDateTimePickerValue(value);
 
                 //if (!CheckBoxVisible)
-                    //    {
-                    //        ApplyValueFormat();
-                    //    }
-                    //    FireValueChanged();
+                //    {
+                //        ApplyValueFormat();
+                //    }
+                //    FireValueChanged();
 
                 ApplyValueFormat();
                 FireValueChanged();
@@ -259,10 +160,7 @@ namespace Habanero.UI.Base
             {
                 return !CheckBoxChecked;
             }
-            else
-            {
-                return _isNull;
-            }
+            return _isNull;
         }
 
         private bool ApplyValueFormat()
@@ -307,23 +205,13 @@ namespace Habanero.UI.Base
 
         private bool CheckBoxVisible
         {
-            get
-            {
-                return _dateTimePicker.ShowCheckBox;
-            }
+            get { return _dateTimePicker.ShowCheckBox; }
         }
 
         private bool CheckBoxChecked
         {
-            get
-            {
-                return _dateTimePicker.Checked;
-                
-            }
-            set
-            {
-                _dateTimePicker.Checked = value;
-            }
+            get { return _dateTimePicker.Checked; }
+            set { _dateTimePicker.Checked = value; }
         }
 
         #endregion //Control State Methods
@@ -395,6 +283,107 @@ namespace Habanero.UI.Base
 
         #endregion //Control Events
 
+        //#region Setup Controller
+        //    ///<summary>
+        //    /// Initialises a new instance of a DateTimePickerController.
+        //    ///</summary>
+        //    ///<param name="dateTimePicker">The DateTimePicker control(can be any implementation)</param>
+        //    public DateTimePickerController(IControlFactory controlFactory, IDateTimePicker dateTimePicker)
+        //    {
+        //        _controlFactory = controlFactory;
+        //        _dateTimePicker = dateTimePicker;
+        //        //_dateTimePicker.KeyDown += DateTimePicker_KeyDown;
+        //        //_dateTimePicker.ValueChanged += DateTimePicker_ValueChanged;
+        //        //_dateTimePicker.MouseUp += DateTimePicker_MouseUp;
+        //        //_dateTimePicker.GotFocus += DateTimePicker_GotFocus;
+        //        //_dateTimePicker.LostFocus += DateTimePicker_LostFocus;
+        //        _dateTimePicker.Resize += DateTimePicker_Resize;
+        //        //_dateTimePicker.EnabledChanged += DateTimePicker_ColorChanged;
+        //        //_dateTimePicker.BackColorChanged += DateTimePicker_ColorChanged;
+        //        //_dateTimePicker.ForeColorChanged += DateTimePicker_ColorChanged;
+        //        //_showCheckBoxPropInfo = _dateTimePicker.ShowCheckBox;
+        //        //_checkedPropInfo = _dateTimePicker.Checked;
+        //        _supportsCheckBox = _showCheckBoxPropInfo != null && _checkedPropInfo != null;
+        //        SetupDisplayBox();
+        //        NullDisplayValue = "";
+        //        Value = null;
+        //        UpdateFocusState();
+        //    }
+        //    ~DateTimePickerController()
+        //    {
+        //        //_dateTimePicker.KeyDown -= DateTimePicker_KeyDown;
+        //        //_dateTimePicker.ValueChanged -= DateTimePicker_ValueChanged;
+        //        //_dateTimePicker.MouseUp -= DateTimePicker_MouseUp;
+        //        //_dateTimePicker.GotFocus -= DateTimePicker_GotFocus;
+        //        //_dateTimePicker.LostFocus -= DateTimePicker_LostFocus;
+        //        _dateTimePicker.Resize -= DateTimePicker_Resize;
+        //        //_dateTimePicker.EnabledChanged -= DateTimePicker_ColorChanged;
+        //        //_dateTimePicker.BackColorChanged -= DateTimePicker_ColorChanged;
+        //        //_dateTimePicker.ForeColorChanged -= DateTimePicker_ColorChanged;
+
+        //        //ControlsHelper.SafeGui(_dateTimePicker, delegate()
+        //        //                                            {
+        //                                                        try
+        //                                                        {
+        //                                                            _dateTimePicker.Controls.Clear();
+        //                                                        }
+        //                                                        catch
+        //                                                        {
+        //                                                        }
+        //        //                                            });
+        //        _dateTimePicker = null;
+        //    }
+        //private void SetupDisplayBox()
+        //{
+        //    //ControlsHelper.SafeGui(_dateTimePicker, delegate()
+        //    //{
+        //    _displayBox = _controlFactory.CreatePanel();
+        //    //_displayBox.BorderStyle = BorderStyle.None;
+        //    _displayBox.Location = new Point(2, 2);
+        //    ResizeDisplayBox();
+        //    _displayBox.BackColor = _dateTimePicker.BackColor;
+        //    _displayBox.ForeColor = _dateTimePicker.ForeColor;
+        //    //_displayBox.MouseUp += DateTimePicker_MouseUp;
+        //    //_displayBox.KeyDown += DateTimePicker_KeyDown;
+        //    _displayText = _controlFactory.CreateLabel();
+        //    _displayText.Location = new Point(0, 0);
+        //    _displayText.AutoSize = true;
+        //    _displayText.Text = "";
+        //    //_displayText.MouseUp += DateTimePicker_MouseUp;
+        //    //_displayText.KeyDown += DateTimePicker_KeyDown;
+        //    //_displayBox.Controls.Add(_displayText);
+        //    //_dateTimePicker.Controls.Add(_displayBox);
+        //    _displayBox.Visible = false;
+        //    //});
+        //}
+
+        //private void ResizeDisplayBox()
+        //{
+        //    _displayBox.Width = _dateTimePicker.Width - 22 - 2;
+        //    _displayBox.Height = _dateTimePicker.Height - 7;
+        //}
+
+        //    private void UpdateFocusState()
+        //    {
+        //        //if (_dateTimePicker.Focused)
+        //        //{
+        //        //    _displayBox.BackColor = SystemColors.Highlight;
+        //        //    _displayBox.ForeColor = SystemColors.HighlightText;
+        //        //}
+        //        //else
+        //        //{
+        //        //    _displayBox.BackColor = _dateTimePicker.BackColor;
+        //        //    _displayBox.ForeColor = _dateTimePicker.BackColor;
+        //        //}
+        //        //_displayText.BackColor = _displayBox.BackColor;
+        //        //_displayText.ForeColor = _displayBox.ForeColor;
+        //    }
+
+        //    #endregion //Setup Controller
+
+        /// <summary>
+        /// Handles the event of the DateTime value being changed
+        /// </summary>
         public void OnValueChanged(EventArgs eventArgs)
         {
             if (!CheckBoxVisible)

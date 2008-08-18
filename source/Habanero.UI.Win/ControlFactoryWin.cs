@@ -25,18 +25,17 @@ using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
-using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.Base.ControlInterfaces;
-using Habanero.UI.Base.FilterControl;
-using Habanero.UI.Base.Grid;
 using Habanero.Util.File;
-using KeyPressEventArgs=Habanero.UI.Base.ControlInterfaces.KeyPressEventArgs;
+using ScrollBars=System.Windows.Forms.ScrollBars;
 
 namespace Habanero.UI.Win
 {
     public class ControlFactoryWin : IControlFactory
     {
+        #region IControlFactory Members
+
         /// <summary>
         /// Creates a filter control with the default layout manager
         /// </summary>
@@ -57,16 +56,6 @@ namespace Habanero.UI.Win
             return new TextBoxWin();
         }
 
-
-        /// <summary>
-        /// Creates a TextBox that provides filtering of characters depending on the property type.
-        /// </summary>
-        /// <param name="propertyType">Type property being edited.</param>
-        /// <returns>Returns a new ITextBox object.</returns>
-        public ITextBox CreateTextBox(Type propertyType)
-        {
-            return new TextBoxWin();
-        }
 
         /// <summary>
         /// Creates a new empty TreeView
@@ -97,7 +86,7 @@ namespace Habanero.UI.Win
             else
             {
                 TypeLoader.LoadClassType(ref controlType, assemblyName, typeName,
-                    "field", "field definition");
+                                         "field", "field definition");
             }
 
             return CreateControl(controlType);
@@ -145,7 +134,7 @@ namespace Habanero.UI.Win
         public IDateTimePicker CreateDateTimePicker(DateTime defaultDate)
         {
             DateTimePickerWin dateTimePickerWin = new DateTimePickerWin(this);
-            dateTimePickerWin.Value = defaultDate; 
+            dateTimePickerWin.Value = defaultDate;
             return dateTimePickerWin;
         }
 
@@ -275,7 +264,7 @@ namespace Habanero.UI.Win
             tb.Multiline = true;
             tb.AcceptsReturn = true;
             tb.Height = tb.Height*numLines;
-            tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            tb.ScrollBars = ScrollBars.Vertical;
             return tb;
         }
 
@@ -296,10 +285,11 @@ namespace Habanero.UI.Win
             return new DefaultBOEditorFormWin(bo, "default", this);
         }
 
-        public IListView CreateListView()
-        {
-            throw new NotImplementedException();
-        }
+        //TODO: Port
+//        public IListView CreateListView()
+//        {
+//            throw new NotImplementedException();
+//        }
 
         public IEditableGrid CreateEditableGrid()
         {
@@ -582,11 +572,6 @@ namespace Habanero.UI.Win
             throw new NotImplementedException();
         }
 
-        public ITabPage createTabPage(string name)
-        {
-            throw new System.NotImplementedException();
-        }
-
 
         public ITextBox CreatePasswordTextBox()
         {
@@ -604,6 +589,22 @@ namespace Habanero.UI.Win
         {
             return new ControlWin();
         }
+
+        #endregion
+
+        /// <summary>
+        /// Creates a TextBox that provides filtering of characters depending on the property type.
+        /// </summary>
+        /// <param name="propertyType">Type property being edited.</param>
+        /// <returns>Returns a new ITextBox object.</returns>
+        public ITextBox CreateTextBox(Type propertyType)
+        {
+            return new TextBoxWin();
+        }
+
+        public ITabPage createTabPage(string name)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
-

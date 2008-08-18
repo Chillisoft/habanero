@@ -22,6 +22,9 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Represents a progress bar control.
+    /// </summary>
     public class ProgressBarGiz : ProgressBar, IProgressBar
     {
     }

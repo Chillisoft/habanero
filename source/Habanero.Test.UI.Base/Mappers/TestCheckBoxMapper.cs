@@ -50,7 +50,7 @@ namespace Habanero.Test.UI.Base
                 Assert.IsFalse(_cb.Checked);
                 //----------Execute test ------------------------------
                 _sampleBusinessObject.SampleBoolean = true;
-                _mapper.ApplyChanges();
+                _mapper.UpdateControlValueFromBusinessObject();
                 //----------verify test ------------------------------
                 Assert.IsTrue(_cb.Checked);
             }

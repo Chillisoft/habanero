@@ -20,7 +20,7 @@
 using Habanero.Base;
 using Habanero.Util;
 
-namespace Habanero.UI.Base.FilterControl
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// Manages a filter clause that filters which data to

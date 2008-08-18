@@ -25,7 +25,7 @@ using Habanero.UI.Base;
 namespace Habanero.UI.WebGUI
 {
     /// <summary>
-    /// Represents a DateTimePicker
+    /// Represents a DateTimePicker control
     /// </summary>
     public class DateTimePickerGiz : DateTimePicker, IDateTimePicker
     {

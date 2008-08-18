@@ -20,9 +20,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
-using Habanero.UI.Base.FilterControl;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
 using NUnit.Framework;
@@ -52,141 +52,6 @@ namespace Habanero.Test.UI.Base.FilterController
             //runs every time any testmethod is complete
         }
 
-        [TestFixture]
-        public class TestFilterControlWin : TestFilterControl
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
-
-            [Test]
-            public void Test_FilterModeHidesButtonPanel()
-            {
-                //---------------Set up test pack-------------------
-                IControlFactory factory = GetControlFactory();
-                //---------------Execute Test ----------------------
-                IFilterControl ctl = factory.CreateFilterControl();
-                //---------------Test Result -----------------------
-                System.Windows.Forms.Button filterButton = (System.Windows.Forms.Button)ctl.FilterButton;
-                Assert.IsFalse(filterButton.Parent.Visible);
-                //Assert.IsFalse(ctl.ClearButton.Visible);
-                //---------------Tear Down ------------------------- 
-
-            }
-            [Test]
-            public void Test_SetFilterModeSearch_MakesButtonPanelVisible()
-            {
-                //---------------Set up test pack-------------------
-                IControlFactory factory = GetControlFactory();
-                IFilterControl ctl = factory.CreateFilterControl();
-                System.Windows.Forms.Control buttonControl = ((System.Windows.Forms.Button)ctl.FilterButton).Parent;
-                
-                //---------------Assert Preconditions --------------
-                Assert.IsFalse(buttonControl.Visible);
-                //---------------Execute Test ----------------------
-                ctl.FilterMode = FilterModes.Search;
-                //---------------Test Result -----------------------
-                Assert.IsTrue(buttonControl.Visible);
-                //---------------Tear Down -------------------------          
-            }
-        }
-
-        [TestFixture]
-        public class TestFilterControlGizmox : TestFilterControl
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryGizmox();
-            }
-
-            [Test]
-            public void Test_SetFilterModeSearchSetsText()
-            {
-                //---------------Set up test pack-------------------
-                IControlFactory factory = GetControlFactory();
-                IFilterControl ctl = factory.CreateFilterControl();
-                //---------------Assert Preconditions --------------
-                Assert.AreEqual("Filter", ctl.FilterButton.Text);
-                //---------------Execute Test ----------------------
-                ctl.FilterMode = FilterModes.Search;
-                //---------------Test Result -----------------------
-                Assert.AreEqual("Search", ctl.FilterButton.Text);
-                //---------------Tear Down -------------------------          
-            }
-
-            [Test]
-            public void Test_SetFilterModeFilterSetsText()
-            {
-                //---------------Set up test pack-------------------
-                IControlFactory factory = GetControlFactory();
-                IFilterControl ctl = factory.CreateFilterControl();
-                ctl.FilterMode = FilterModes.Search;
-                //---------------Assert Preconditions --------------
-                Assert.AreEqual("Search", ctl.FilterButton.Text);
-                //---------------Execute Test ----------------------
-                ctl.FilterMode = FilterModes.Filter;
-                //---------------Test Result -----------------------
-                Assert.AreEqual("Filter", ctl.FilterButton.Text);
-            }
-
-            [Test]
-            public void TestFilterButtonAccessor()
-            {
-                //---------------Set up test pack-------------------
-
-                //---------------Execute Test ----------------------
-                IFilterControl filterControl = GetControlFactory().CreateFilterControl();
-
-                //---------------Test Result -----------------------
-                Assert.IsNotNull(filterControl.FilterButton);
-                //---------------Tear Down -------------------------
-            }
-
-            [Test]
-            public void TestClearButtonAccessor()
-            {
-                //---------------Set up test pack-------------------
-
-                //---------------Execute Test ----------------------
-                IFilterControl filterControl = GetControlFactory().CreateFilterControl();
-
-                //---------------Test Result -----------------------
-                Assert.IsNotNull(filterControl.ClearButton);
-                //---------------Tear Down -------------------------
-            }
-
-
-            [Test]
-            public void Test_DefaultLayoutManager()
-            {
-                //---------------Set up test pack-------------------
-                IControlFactory factory = GetControlFactory();
-
-                //---------------Execute Test ----------------------
-                //            IControlChilli control = factory.CreatePanel();
-                IFilterControl ctl = factory.CreateFilterControl();
-                //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof(FlowLayoutManager), ctl.LayoutManager);
-            }
-
-            [Test]
-            public void Test_SetFilterHeader()
-            {
-                //---------------Set up test pack-------------------
-                IFilterControl ctl = GetControlFactory().CreateFilterControl();
-                //---------------Assert Preconditions---------------
-                Assert.AreEqual("Filter the Grid", ctl.HeaderText);
-                //---------------Execute Test ----------------------
-                ctl.HeaderText = "Filter Assets";
-
-                //---------------Test Result -----------------------
-                Assert.AreEqual("Filter Assets", ctl.HeaderText);
-
-                //---------------Tear Down -------------------------          
-            }
-        }
-
 
         [Test]
         public void TestSetLayoutManager()
@@ -203,7 +68,127 @@ namespace Habanero.Test.UI.Base.FilterController
             //---------------Tear Down -------------------------          
         }
 
+        [Test]
+        public void MultipleFilters()
+        {
+            //---------------Set up test pack-------------------
+            IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+            ITextBox tb = filterControl.AddStringFilterTextBox("Test:", "TestColumn");
+            tb.Text = "testvalue";
+            IFilterClause clause =
+                filterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpLike, "testvalue");
 
+            ITextBox tb2 = filterControl.AddStringFilterTextBox("Test2:", "TestColumn2");
+            tb2.Text = "testvalue2";
+            //---------------Execute Test ----------------------
+
+            string filterClause = filterControl.GetFilterClause().GetFilterClauseString();
+            //---------------Test Result -----------------------
+            IFilterClause clause2 =
+                filterClauseFactory.CreateStringFilterClause("TestColumn2", FilterClauseOperator.OpLike, "testvalue2");
+
+            IFilterClause compositeClause =
+                filterClauseFactory.CreateCompositeFilterClause(clause, FilterClauseCompositeOperator.OpAnd, clause2);
+
+            Assert.AreEqual(compositeClause.GetFilterClauseString(),
+                            filterClause);
+            //---------------Tear Down ------------------------- 
+        }
+
+        [Test]
+        public void TestAdd_DateRangeFilterComboBox()
+        {
+            //---------------Set up test pack-------------------
+
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+            //---------------Execute Test ----------------------
+            IDateRangeComboBox dr1 = filterControl.AddDateRangeFilterComboBox("test", "test", true, true);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, filterControl.CountOfFilters);
+            Assert.IsTrue(filterControl.FilterPanel.Controls.Contains(dr1));
+        }
+
+        [Test]
+        public void TestAdd_DateRangeFilterComboBoxInclusive()
+        {
+            //---------------Set up test pack-------------------
+
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+            IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
+            DateTime testDate = new DateTime(2007, 1, 2, 3, 4, 5, 6);
+
+            //---------------Execute Test ----------------------
+            IDateRangeComboBox dr1 = filterControl.AddDateRangeFilterComboBox("test", "test", true, true);
+            dr1.UseFixedNowDate = true;
+            dr1.FixedNowDate = testDate;
+            dr1.SelectedItem = "Today";
+            IFilterClause clause1 =
+                filterClauseFactory.CreateDateFilterClause("test", FilterClauseOperator.OpGreaterThanOrEqualTo,
+                                                           new DateTime(2007, 1, 2, 0, 0, 0));
+            IFilterClause clause2 =
+                filterClauseFactory.CreateDateFilterClause("test", FilterClauseOperator.OpLessThanOrEqualTo,
+                                                           new DateTime(2007, 1, 2, 3, 4, 5));
+            IFilterClause compClause =
+                filterClauseFactory.CreateCompositeFilterClause(clause1, FilterClauseCompositeOperator.OpAnd, clause2);
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(compClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
+        }
+
+        [Test]
+        public void TestAdd_DateRangeFilterComboBoxExclusive()
+        {
+            //---------------Set up test pack-------------------
+
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+            IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
+            DateTime testDate = new DateTime(2007, 1, 2, 3, 4, 5, 6);
+
+            //---------------Execute Test ----------------------
+            IDateRangeComboBox dr1 = filterControl.AddDateRangeFilterComboBox("test", "test", false, false);
+            dr1.UseFixedNowDate = true;
+            dr1.FixedNowDate = testDate;
+            dr1.SelectedItem = "Today";
+            IFilterClause clause1 =
+                filterClauseFactory.CreateDateFilterClause("test", FilterClauseOperator.OpGreaterThan,
+                                                           new DateTime(2007, 1, 2, 0, 0, 0));
+            IFilterClause clause2 =
+                filterClauseFactory.CreateDateFilterClause("test", FilterClauseOperator.OpLessThan,
+                                                           new DateTime(2007, 1, 2, 3, 4, 5));
+            IFilterClause compClause =
+                filterClauseFactory.CreateCompositeFilterClause(clause1, FilterClauseCompositeOperator.OpAnd, clause2);
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(compClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
+        }
+
+        [Test]
+        public void TestAdd_DateRangeFilterComboBoxOverload()
+        {
+            //---------------Set up test pack-------------------
+
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+            List<DateRangeOptions> options = new List<DateRangeOptions>();
+            options.Add(DateRangeOptions.Today);
+            options.Add(DateRangeOptions.Yesterday);
+
+            //---------------Execute Test ----------------------
+            IDateRangeComboBox dateRangeCombo =
+                filterControl.AddDateRangeFilterComboBox("test", "test", options, true, false);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, dateRangeCombo.Items.Count);
+        }
+
+
+        private static IComboBox GetFilterComboBox_2Items(IFilterControl filterControl)
+        {
+            IList options = new ArrayList();
+            options.Add("1");
+            options.Add("2");
+            return filterControl.AddStringFilterComboBox("Test:", "TestColumn", options, true);
+        }
 
         #region TextBoxFilter
 
@@ -223,7 +208,6 @@ namespace Habanero.Test.UI.Base.FilterController
 
             //---------------Tear Down -------------------------          
         }
-
 
         #endregion
 
@@ -276,7 +260,7 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             //---------------Set up test pack-------------------
             IFilterControl filterControl = GetControlFactory().CreateFilterControl();
-            IComboBox tbExpected = filterControl.AddStringFilterComboBox("Test:", "TestColumn", new string[] { ""}, false);
+            IComboBox tbExpected = filterControl.AddStringFilterComboBox("Test:", "TestColumn", new string[] {""}, false);
             filterControl.AddStringFilterTextBox("Test2:", "TestColumn2");
             //---------------Execute Test ----------------------
             IComboBox tbReturned = (IComboBox) filterControl.GetChildControl("TestColumn");
@@ -332,7 +316,6 @@ namespace Habanero.Test.UI.Base.FilterController
 
         #endregion
 
- 
         [Test]
         public void TestGetTextBoxFilterClause()
         {
@@ -540,128 +523,148 @@ namespace Habanero.Test.UI.Base.FilterController
 
         #endregion
 
+        #region Nested type: TestFilterControlGizmox
 
-        [Test]
-        public void MultipleFilters()
+        [TestFixture]
+        public class TestFilterControlGizmox : TestFilterControl
         {
-            //---------------Set up test pack-------------------
-            IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
-            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
-            ITextBox tb = filterControl.AddStringFilterTextBox("Test:", "TestColumn");
-            tb.Text = "testvalue";
-            IFilterClause clause =
-                filterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpLike, "testvalue");
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryGizmox();
+            }
 
-            ITextBox tb2 = filterControl.AddStringFilterTextBox("Test2:", "TestColumn2");
-            tb2.Text = "testvalue2";
-            //---------------Execute Test ----------------------
 
-            string filterClause = filterControl.GetFilterClause().GetFilterClauseString();
-            //---------------Test Result -----------------------
-            IFilterClause clause2 =
-                filterClauseFactory.CreateStringFilterClause("TestColumn2", FilterClauseOperator.OpLike, "testvalue2");
+            [Test]
+            public void Test_DefaultLayoutManager()
+            {
+                //---------------Set up test pack-------------------
+                IControlFactory factory = GetControlFactory();
 
-            IFilterClause compositeClause =
-                filterClauseFactory.CreateCompositeFilterClause(clause, FilterClauseCompositeOperator.OpAnd, clause2);
+                //---------------Execute Test ----------------------
+                //            IControlChilli control = factory.CreatePanel();
+                IFilterControl ctl = factory.CreateFilterControl();
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOfType(typeof (FlowLayoutManager), ctl.LayoutManager);
+            }
 
-            Assert.AreEqual(compositeClause.GetFilterClauseString(),
-                            filterClause);
-            //---------------Tear Down ------------------------- 
+            [Test]
+            public void Test_SetFilterHeader()
+            {
+                //---------------Set up test pack-------------------
+                IFilterControl ctl = GetControlFactory().CreateFilterControl();
+                //---------------Assert Preconditions---------------
+                Assert.AreEqual("Filter the Grid", ctl.HeaderText);
+                //---------------Execute Test ----------------------
+                ctl.HeaderText = "Filter Assets";
+
+                //---------------Test Result -----------------------
+                Assert.AreEqual("Filter Assets", ctl.HeaderText);
+
+                //---------------Tear Down -------------------------          
+            }
+
+            [Test]
+            public void Test_SetFilterModeFilterSetsText()
+            {
+                //---------------Set up test pack-------------------
+                IControlFactory factory = GetControlFactory();
+                IFilterControl ctl = factory.CreateFilterControl();
+                ctl.FilterMode = FilterModes.Search;
+                //---------------Assert Preconditions --------------
+                Assert.AreEqual("Search", ctl.FilterButton.Text);
+                //---------------Execute Test ----------------------
+                ctl.FilterMode = FilterModes.Filter;
+                //---------------Test Result -----------------------
+                Assert.AreEqual("Filter", ctl.FilterButton.Text);
+            }
+
+            [Test]
+            public void Test_SetFilterModeSearchSetsText()
+            {
+                //---------------Set up test pack-------------------
+                IControlFactory factory = GetControlFactory();
+                IFilterControl ctl = factory.CreateFilterControl();
+                //---------------Assert Preconditions --------------
+                Assert.AreEqual("Filter", ctl.FilterButton.Text);
+                //---------------Execute Test ----------------------
+                ctl.FilterMode = FilterModes.Search;
+                //---------------Test Result -----------------------
+                Assert.AreEqual("Search", ctl.FilterButton.Text);
+                //---------------Tear Down -------------------------          
+            }
+
+            [Test]
+            public void TestClearButtonAccessor()
+            {
+                //---------------Set up test pack-------------------
+
+                //---------------Execute Test ----------------------
+                IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+
+                //---------------Test Result -----------------------
+                Assert.IsNotNull(filterControl.ClearButton);
+                //---------------Tear Down -------------------------
+            }
+
+            [Test]
+            public void TestFilterButtonAccessor()
+            {
+                //---------------Set up test pack-------------------
+
+                //---------------Execute Test ----------------------
+                IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+
+                //---------------Test Result -----------------------
+                Assert.IsNotNull(filterControl.FilterButton);
+                //---------------Tear Down -------------------------
+            }
         }
 
-        [Test]
-        public void TestAdd_DateRangeFilterComboBox()
+        #endregion
+
+        #region Nested type: TestFilterControlWin
+
+        [TestFixture]
+        public class TestFilterControlWin : TestFilterControl
         {
-            //---------------Set up test pack-------------------
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
 
-            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
-            //---------------Execute Test ----------------------
-            IDateRangeComboBox dr1 = filterControl.AddDateRangeFilterComboBox("test", "test", true, true);
+            [Test]
+            public void Test_FilterModeHidesButtonPanel()
+            {
+                //---------------Set up test pack-------------------
+                IControlFactory factory = GetControlFactory();
+                //---------------Execute Test ----------------------
+                IFilterControl ctl = factory.CreateFilterControl();
+                //---------------Test Result -----------------------
+                Button filterButton = (Button) ctl.FilterButton;
+                Assert.IsFalse(filterButton.Parent.Visible);
+                //Assert.IsFalse(ctl.ClearButton.Visible);
+                //---------------Tear Down ------------------------- 
+            }
 
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, filterControl.CountOfFilters);
-            Assert.IsTrue(filterControl.FilterPanel.Controls.Contains(dr1));
-        }
-        
-        [Test]
-        public void TestAdd_DateRangeFilterComboBoxInclusive()
-        {
-            //---------------Set up test pack-------------------
+            [Test]
+            public void Test_SetFilterModeSearch_MakesButtonPanelVisible()
+            {
+                //---------------Set up test pack-------------------
+                IControlFactory factory = GetControlFactory();
+                IFilterControl ctl = factory.CreateFilterControl();
+                Control buttonControl = ((Button) ctl.FilterButton).Parent;
 
-            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
-            IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
-            DateTime testDate = new DateTime(2007, 1, 2, 3, 4, 5, 6);
-
-            //---------------Execute Test ----------------------
-            IDateRangeComboBox dr1 = filterControl.AddDateRangeFilterComboBox("test", "test", true, true);
-            dr1.UseFixedNowDate = true;
-            dr1.FixedNowDate = testDate;
-            dr1.SelectedItem = "Today";
-            IFilterClause clause1 =
-                filterClauseFactory.CreateDateFilterClause("test", FilterClauseOperator.OpGreaterThanOrEqualTo,
-                                                           new DateTime(2007, 1, 2, 0, 0, 0));
-            IFilterClause clause2 =
-                filterClauseFactory.CreateDateFilterClause("test", FilterClauseOperator.OpLessThanOrEqualTo,
-                                                           new DateTime(2007, 1, 2, 3, 4, 5));
-            IFilterClause compClause =
-                filterClauseFactory.CreateCompositeFilterClause(clause1, FilterClauseCompositeOperator.OpAnd, clause2);
-            //---------------Test Result -----------------------
-
-            Assert.AreEqual(compClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
-        }
-
-        [Test]
-        public void TestAdd_DateRangeFilterComboBoxExclusive()
-        {
-            //---------------Set up test pack-------------------
-
-            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
-            IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
-            DateTime testDate = new DateTime(2007, 1, 2, 3, 4, 5, 6);
-
-            //---------------Execute Test ----------------------
-            IDateRangeComboBox dr1 = filterControl.AddDateRangeFilterComboBox("test", "test", false, false);
-            dr1.UseFixedNowDate = true;
-            dr1.FixedNowDate = testDate;
-            dr1.SelectedItem = "Today";
-            IFilterClause clause1 =
-                filterClauseFactory.CreateDateFilterClause("test", FilterClauseOperator.OpGreaterThan,
-                                                           new DateTime(2007, 1, 2, 0, 0, 0));
-            IFilterClause clause2 =
-                filterClauseFactory.CreateDateFilterClause("test", FilterClauseOperator.OpLessThan,
-                                                           new DateTime(2007, 1, 2, 3, 4, 5));
-            IFilterClause compClause =
-                filterClauseFactory.CreateCompositeFilterClause(clause1, FilterClauseCompositeOperator.OpAnd, clause2);
-            //---------------Test Result -----------------------
-
-            Assert.AreEqual(compClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
+                //---------------Assert Preconditions --------------
+                Assert.IsFalse(buttonControl.Visible);
+                //---------------Execute Test ----------------------
+                ctl.FilterMode = FilterModes.Search;
+                //---------------Test Result -----------------------
+                Assert.IsTrue(buttonControl.Visible);
+                //---------------Tear Down -------------------------          
+            }
         }
 
-        [Test]
-        public void TestAdd_DateRangeFilterComboBoxOverload()
-        {
-            //---------------Set up test pack-------------------
-
-            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
-            List<DateRangeOptions> options = new List<DateRangeOptions>();
-            options.Add(DateRangeOptions.Today);
-            options.Add(DateRangeOptions.Yesterday);
-
-            //---------------Execute Test ----------------------
-            IDateRangeComboBox dateRangeCombo =
-                filterControl.AddDateRangeFilterComboBox("test", "test", options, true, false);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(3, dateRangeCombo.Items.Count);
-        }
-
-
-        private static IComboBox GetFilterComboBox_2Items(IFilterControl filterControl)
-        {
-            IList options = new ArrayList();
-            options.Add("1");
-            options.Add("2");
-            return filterControl.AddStringFilterComboBox("Test:", "TestColumn", options, true);
-        }
+        #endregion
 
 //
 //        [Test]

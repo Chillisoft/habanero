@@ -23,15 +23,13 @@ using Habanero.BO;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Maps a TextBox object in a user interface.  Note that there are some
-    /// limitations with using a TextBox for numbers.  For greater control 
+    /// Wraps a TextBox control in order to display and capture a property of the business object.
+    /// There are some  limitations with using a TextBox for numbers.  For greater control 
     /// of user input with numbers, you should consider using a NumericUpDown 
-    /// control.
+    /// control, failing this the appropriate <see cref="ITextBoxMapperStrategy"/> can be used.
     /// </summary>
     public class TextBoxMapper : ControlMapper
     {
-      
-
         private readonly ITextBox _textBox;
         private string _oldText;
         private readonly ITextBoxMapperStrategy _textBoxMapperStrategy;
@@ -49,16 +47,26 @@ namespace Habanero.UI.Base
             _textBox = tb;
             _textBoxMapperStrategy = factory.CreateTextBoxMapperStrategy();
 
-            //_textBox.Enabled = false;
-            //_textBox.TextChanged += ValueChangedHandler;
             _oldText = "";
         }
 
+        /// <summary>
+        /// Returns the <see cref="ITextBoxMapperStrategy"/> being used by this mapper.
+        /// </summary>
         public ITextBoxMapperStrategy TextBoxMapperStrategy
         {
             get { return _textBoxMapperStrategy; }
         }
 
+        /// <summary>
+        /// Gets and sets the business object that has a property
+        /// being mapped by this mapper.  In other words, this property
+        /// does not return the exact business object being shown in the
+        /// control, but rather the business object shown in the
+        /// form.  Where the business object has been amended or
+        /// altered, the <see cref="ControlMapper.UpdateControlValueFromBusinessObject"/> method is automatically called here to 
+        /// implement the changes in the control itself.
+        /// </summary>
         public override BusinessObject BusinessObject
         {
             get { return base.BusinessObject; }
@@ -69,45 +77,6 @@ namespace Habanero.UI.Base
             }
         }
 
-        ///// <summary>
-        ///// A handler to carry out changes to the business object when the
-        ///// value has changed in the user interface
-        ///// </summary>
-        ///// <param name="sender">The object that notified of the event</param>
-        ///// <param name="e">Attached arguments regarding the event</param>
-        //private void ValueChangedHandler(object sender, EventArgs e)
-        //{
-
-        //    string value = _textBox.Text;
-
-
-        //    //if (IsDecimalType())
-        //    //{
-        //    //    if (value.EndsWith(".")) return;
-        //    //}
-        //    //if (IsDecimalType() || IsIntegerType())
-        //    //{
-        //    //    if (value.EndsWith("-")) return;
-        //    //    if (value.Length == 0)
-        //    //    {
-        //    //        value = null;
-        //    //    }
-        //    //}
-
-        //    if (!_isEditable) return;
-
-        //    try
-        //    {
-        //        SetPropertyValue(value);
-        //        //_businessObject.SetPropertyValue(_propertyName, value);
-        //    }
-        //    catch (FormatException)
-        //    {
-        //        _textBox.Text = _oldText;
-        //    }
-        //    _oldText = _textBox.Text;
-        //}
-
         /// <summary>
         /// Updates the interface when the value has been changed in the
         /// object being represented
@@ -117,6 +86,9 @@ namespace Habanero.UI.Base
             _textBox.Text = Convert.ToString(GetPropertyValue());
         }
 
+        /// <summary>
+        /// Updates the properties on the represented business object
+        /// </summary>
         public override void ApplyChangesToBusinessObject()
         {
             string value = _textBox.Text;

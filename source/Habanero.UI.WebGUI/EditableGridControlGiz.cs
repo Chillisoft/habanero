@@ -24,7 +24,6 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.Base.FilterControl;
 using Habanero.UI.Base.Grid;
 
 namespace Habanero.UI.WebGUI

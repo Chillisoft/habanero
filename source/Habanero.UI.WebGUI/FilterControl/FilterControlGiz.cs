@@ -25,7 +25,6 @@ using System.Collections.Generic;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
-using Habanero.UI.Base.FilterControl;
 using DockStyle=Gizmox.WebGUI.Forms.DockStyle;
 
 #endregion

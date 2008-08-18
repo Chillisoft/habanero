@@ -27,11 +27,9 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Base.ControlInterfaces;
-using Habanero.UI.Base.FilterControl;
-using Habanero.UI.Base.Grid;
 using Habanero.UI.WebGUI.Grid;
 using Habanero.Util.File;
-using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
+using ScrollBars=Gizmox.WebGUI.Forms.ScrollBars;
 
 namespace Habanero.UI.WebGUI
 {
@@ -39,6 +37,7 @@ namespace Habanero.UI.WebGUI
     {
         public const int TEXTBOX_HEIGHT = 20;
 
+        #region IControlFactory Members
 
         /// <summary>
         /// Creates a filter control with the default layout manager
@@ -62,7 +61,7 @@ namespace Habanero.UI.WebGUI
         public virtual IComboBox CreateComboBox()
         {
             ComboBoxGiz comboBox = new ComboBoxGiz();
-            comboBox.Height = TEXTBOX_HEIGHT; 
+            comboBox.Height = TEXTBOX_HEIGHT;
             return comboBox;
         }
 
@@ -256,7 +255,7 @@ namespace Habanero.UI.WebGUI
 
             if (String.IsNullOrEmpty(typeName) || String.IsNullOrEmpty(assemblyName))
             {
-                controlType = typeof(TextBox);
+                controlType = typeof (TextBox);
             }
             else
             {
@@ -287,10 +286,10 @@ namespace Habanero.UI.WebGUI
                 try
                 {
                     ctl = (IControlChilli) Activator.CreateInstance(controlType);
-                } catch (MissingMethodException )
+                }
+                catch (MissingMethodException)
                 {
                     ctl = (IControlChilli) Activator.CreateInstance(controlType, new object[] {this});
-                    
                 }
                 PropertyInfo infoFlatStyle =
                     ctl.GetType().GetProperty("FlatStyle", BindingFlags.Public | BindingFlags.Instance);
@@ -303,12 +302,10 @@ namespace Habanero.UI.WebGUI
             {
                 throw new UnknownTypeNameException(
                     string.Format(
-                    "The control type name {0} does not inherit from {1}.", controlType.FullName, typeof(Control)));
+                        "The control type name {0} does not inherit from {1}.", controlType.FullName, typeof (Control)));
             }
             return ctl;
         }
-
-
 
 
         /// <summary>
@@ -389,11 +386,6 @@ namespace Habanero.UI.WebGUI
             return new OKCancelDialogFactoryGiz(this);
         }
 
-        public IScreen CreateScreen()
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Creates a new DateTimePicker that is formatted to handle months
         /// and years
@@ -407,22 +399,6 @@ namespace Habanero.UI.WebGUI
             return editor;
         }
 
-
-        /// <summary>
-        /// Creates a new numeric up-down control
-        /// </summary>
-        /// <returns>Returns a new NumericUpDown object</returns>
-        private INumericUpDown CreateNumericUpDown()
-        {
-            INumericUpDown ctl = new NumericUpDownGiz();
-            ctl.Height = GetStandardHeight();// set the NumericUpDown to the default height of a text box on this machine.
-            return ctl;
-        }
-
-        private static int GetStandardHeight()
-        {
-            return TEXTBOX_HEIGHT;
-        }
 
         public virtual INumericUpDown CreateNumericUpDownInteger()
         {
@@ -464,7 +440,8 @@ namespace Habanero.UI.WebGUI
             CheckBoxGiz cbx = new CheckBoxGiz();
             cbx.Checked = defaultValue;
             cbx.FlatStyle = FlatStyle.Standard;
-            cbx.Height = CreateTextBox().Height;// set the CheckBoxGiz to the default height of a text box on this machine.
+            cbx.Height = CreateTextBox().Height;
+                // set the CheckBoxGiz to the default height of a text box on this machine.
             cbx.CheckAlign = ContentAlignment.MiddleLeft;
             cbx.Width = cbx.Height;
             cbx.BackColor = SystemColors.Control;
@@ -546,6 +523,7 @@ namespace Habanero.UI.WebGUI
         {
             return new DefaultBOEditorFormGiz(bo, uiDefName, this);
         }
+
         /// <summary>
         /// Returns a BOEditor form. This is a form that the business object can be edited in.
         /// </summary>
@@ -554,7 +532,8 @@ namespace Habanero.UI.WebGUI
         /// <param name="action">Action to be performed when the editing is complete. Typically used if you want to update
         ///   a grid, list etc in an asynchronous environment.</param>
         /// <returns></returns>
-        public virtual IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName, PostObjectPersistingDelegate action)
+        public virtual IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName,
+                                                               PostObjectPersistingDelegate action)
         {
             return new DefaultBOEditorFormGiz(bo, uiDefName, this, action);
         }
@@ -564,10 +543,10 @@ namespace Habanero.UI.WebGUI
             return new DefaultBOEditorFormGiz(bo, "default", this);
         }
 
-        public virtual IListView CreateListView()
-        {
-            return new ListViewGiz();
-        }
+//        public virtual IListView CreateListView()
+//        {
+//            return new ListViewGiz();
+//        }
 
 
         public virtual IEditableGrid CreateEditableGrid()
@@ -624,7 +603,7 @@ namespace Habanero.UI.WebGUI
 
         public virtual IDataGridViewImageColumn CreateDataGridViewImageColumn()
         {
-            return new GridBaseGiz.DataGridViewImageColumnGiz( new DataGridViewImageColumn());
+            return new GridBaseGiz.DataGridViewImageColumnGiz(new DataGridViewImageColumn());
         }
 
         /// <summary>
@@ -633,17 +612,12 @@ namespace Habanero.UI.WebGUI
         /// <returns></returns>
         public virtual IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn()
         {
-            return new DataGridViewCheckBoxColumnGiz( new DataGridViewCheckBoxColumn());
+            return new DataGridViewCheckBoxColumnGiz(new DataGridViewCheckBoxColumn());
         }
 
         public virtual IDataGridViewComboBoxColumn CreateDataGridViewComboBoxColumn()
         {
             return new DataGridViewComboBoxColumnGiz(new DataGridViewComboBoxColumn());
-        }
-
-        public IDataGridViewColumn CreateDataGridViewTextBoxColumn()
-        {
-            return new DataGridViewTextBoxColumn() as IDataGridViewColumn;
         }
 
 
@@ -662,7 +636,7 @@ namespace Habanero.UI.WebGUI
             tb.Multiline = true;
             tb.AcceptsReturn = true;
             tb.Height = tb.Height*numLines;
-            tb.ScrollBars = Gizmox.WebGUI.Forms.ScrollBars.Vertical;
+            tb.ScrollBars = ScrollBars.Vertical;
             return tb;
         }
 
@@ -671,18 +645,52 @@ namespace Habanero.UI.WebGUI
         {
             return new WizardControlGiz(wizardController, this);
         }
+
+        #endregion
+
+        public IScreen CreateScreen()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Creates a new numeric up-down control
+        /// </summary>
+        /// <returns>Returns a new NumericUpDown object</returns>
+        private INumericUpDown CreateNumericUpDown()
+        {
+            INumericUpDown ctl = new NumericUpDownGiz();
+            ctl.Height = GetStandardHeight();
+                // set the NumericUpDown to the default height of a text box on this machine.
+            return ctl;
+        }
+
+        private static int GetStandardHeight()
+        {
+            return TEXTBOX_HEIGHT;
+        }
+
+        public IDataGridViewColumn CreateDataGridViewTextBoxColumn()
+        {
+            return new DataGridViewTextBoxColumn() as IDataGridViewColumn;
+        }
     }
 
     internal class NumericUpDownMapperStrategyGiz : INumericUpDownMapperStrategy
     {
+        #region INumericUpDownMapperStrategy Members
+
         public void ValueChanged(NumericUpDownMapper mapper)
         {
-            
         }
+
+        #endregion
     }
 
     internal class LookupComboBoxKeyPressMapperStrategyGiz : ILookupComboBoxMapperStrategy
     {
+        #region ILookupComboBoxMapperStrategy Members
+
         public void RemoveCurrentHandlers(LookupComboBoxMapper mapper)
         {
             throw new NotImplementedException();
@@ -692,44 +700,58 @@ namespace Habanero.UI.WebGUI
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 
     internal class LookupComboBoxMapperStrategyGiz : ILookupComboBoxMapperStrategy
     {
-        public void AddItemSelectedEventHandler(LookupComboBoxMapper mapper)
-        {
-            
-        }
+        #region ILookupComboBoxMapperStrategy Members
 
         public void RemoveCurrentHandlers(LookupComboBoxMapper mapper)
         {
         }
 
         public void AddHandlers(LookupComboBoxMapper mapper)
+        {
+        }
+
+        #endregion
+
+        public void AddItemSelectedEventHandler(LookupComboBoxMapper mapper)
         {
         }
     }
 
     internal class ListComboBoxMapperStrategyGiz : IListComboBoxMapperStrategy
     {
+        #region IListComboBoxMapperStrategy Members
+
         public void AddItemSelectedEventHandler(ListComboBoxMapper mapper)
         {
         }
+
+        #endregion
     }
 
     internal class CheckBoxMapperStrategyGiz : ICheckBoxMapperStrategy
     {
+        #region ICheckBoxMapperStrategy Members
+
         public void AddClickEventHandler(CheckBoxMapper mapper)
         {
-            
         }
+
+        #endregion
     }
 
     /// <summary>
     /// Provides a set of strategies that can be applied to a control
     /// </summary>
-    internal class ControlMapperStrategyGiz  : IControlMapperStrategy
+    internal class ControlMapperStrategyGiz : IControlMapperStrategy
     {
+        #region IControlMapperStrategy Members
+
         /// <summary>
         /// Provides an interface for Adding handlers to updated events of current business object
         /// property. This provides the ability to implement various strategies for updating the 
@@ -753,7 +775,6 @@ namespace Habanero.UI.WebGUI
         public virtual void RemoveCurrentBOPropHandlers(ControlMapper mapper, IBOProp boProp)
         {
             //Does nothing for gizmox due to overheads of server based events
-         
         }
 
         /// <summary>
@@ -768,6 +789,8 @@ namespace Habanero.UI.WebGUI
         {
             //Does nothing for gizmox due to overheads of server based events
         }
+
+        #endregion
     }
 
     /// <summary>
@@ -775,6 +798,8 @@ namespace Habanero.UI.WebGUI
     /// </summary>
     internal class TextBoxMapperStrategyGiz : ITextBoxMapperStrategy
     {
+        #region ITextBoxMapperStrategy Members
+
         /// <summary>
         /// Adds key press event handlers that carry out actions like
         /// limiting the characters input, depending on the type of the
@@ -786,5 +811,7 @@ namespace Habanero.UI.WebGUI
         {
             //Would require heavy event handling, so unsuitable for WebGUI at the moment
         }
+
+        #endregion
     }
 }

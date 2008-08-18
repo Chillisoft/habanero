@@ -13,7 +13,7 @@ namespace Habanero.UI.Win
                 checkBox.Click += delegate(object sender, EventArgs e)
                 {
                     mapper.ApplyChangesToBusinessObject();
-                    mapper.ApplyChanges();
+                    mapper.UpdateControlValueFromBusinessObject();
                 };
             }
         }

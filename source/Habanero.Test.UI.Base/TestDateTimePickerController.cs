@@ -21,7 +21,6 @@ using System;
 using System.Windows.Forms;
 using Habanero.UI;
 using Habanero.UI.Base;
-using Habanero.UI.Base.Habanero.UI.Win;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
 using NUnit.Framework;
@@ -80,10 +79,10 @@ namespace Habanero.Test.UI.Base
             return GetControlFactory().CreateDateTimePicker();
         }
 
-        private DateTimePickerController GetDateTimePickerController(IDateTimePicker dateTimePicker)
-        {
-            return new DateTimePickerController(GetControlFactory(), dateTimePicker);
-        }
+//        private DateTimePickerController GetDateTimePickerController(IDateTimePicker dateTimePicker)
+//        {
+////            return new DateTimePickerController(GetControlFactory(), dateTimePicker);
+//        }
 
         //-----------------------------------TO BE MOVED TO GIZ AS WELL----------------------------
         

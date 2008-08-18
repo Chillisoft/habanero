@@ -22,7 +22,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 
-namespace Habanero.UI.Base.FilterControl
+namespace Habanero.UI.Base
 {
     public interface IFilterControl : IControlChilli
     {

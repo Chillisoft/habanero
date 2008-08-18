@@ -20,9 +20,8 @@
 using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.UI;
 
-namespace Habanero.UI.Base.FilterControl
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// Manages a filter clause that filters which data to
@@ -62,7 +61,7 @@ namespace Habanero.UI.Base.FilterControl
         /// <returns>Returns a string</returns>
         protected override string CreateValueClause(string stringLikeDelimiter, string dateTimeDelimiter)
         {
-            return dateTimeDelimiter + ((DateTime)_filterValue).ToString("dd MMM yyyy HH:mm:ss") + dateTimeDelimiter;
+            return dateTimeDelimiter + ((DateTime) _filterValue).ToString("dd MMM yyyy HH:mm:ss") + dateTimeDelimiter;
         }
     }
 }

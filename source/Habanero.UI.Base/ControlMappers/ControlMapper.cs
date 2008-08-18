@@ -24,7 +24,6 @@ using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
-using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 using Habanero.Util.File;
 using log4net;
@@ -32,20 +31,20 @@ using log4net;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// This provides a super class for objects that map user interface
-    /// controls
+    /// A superclass to model a mapper that wraps a control in
+    /// order to display and capture information related to a business object 
     /// </summary>
     public abstract class ControlMapper : IControlMapper
     {
         protected static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.ControlMapper");
-        protected IControlChilli _control;
-        protected string _propertyName;
-        protected readonly bool _isReadOnly;
-        private readonly IControlFactory _factory;
-        protected bool _isEditable;
-        protected BusinessObject _businessObject;
-        protected Hashtable _attributes;
         private readonly IErrorProvider _errorProvider;
+        private readonly IControlFactory _factory;
+        protected readonly bool _isReadOnly;
+        protected Hashtable _attributes;
+        protected BusinessObject _businessObject;
+        protected IControlChilli _control;
+        protected bool _isEditable;
+        protected string _propertyName;
 
         /// <summary>
         /// Constructor to instantiate a new instance of the class
@@ -72,11 +71,15 @@ namespace Habanero.UI.Base
             UpdateIsEditable();
         }
 
-        private void AddKeyPressHandlers()
+        /// <summary>
+        /// Gets the error provider for this control <see cref="IErrorProvider"/>
+        /// </summary>
+        public IErrorProvider ErrorProvider
         {
-            IControlMapperStrategy mapperStrategy = _factory.CreateControlMapperStrategy();
-            mapperStrategy.AddKeyPressEventHandler(_control);
+            get { return _errorProvider; }
         }
+
+        #region IControlMapper Members
 
         /// <summary>
         /// Returns the control being mapped
@@ -84,11 +87,6 @@ namespace Habanero.UI.Base
         public IControlChilli Control
         {
             get { return _control; }
-        }
-
-        public IErrorProvider ErrorProvider
-        {
-            get { return _errorProvider; }
         }
 
         /// <summary>
@@ -100,12 +98,12 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Gets and sets the broader business object that has a property
+        /// Gets and sets the business object that has a property
         /// being mapped by this mapper.  In other words, this property
         /// does not return the exact business object being shown in the
-        /// control, but rather the broader business object shown in the
+        /// control, but rather the business object shown in the
         /// form.  Where the business object has been amended or
-        /// altered, the UpdateControlValueFromBo() method is automatically called here to 
+        /// altered, the <see cref="UpdateControlValueFromBusinessObject"/> method is automatically called here to 
         /// implement the changes in the control itself.
         /// </summary>
         public virtual BusinessObject BusinessObject
@@ -122,22 +120,44 @@ namespace Habanero.UI.Base
             }
         }
 
+        /// <summary>
+        /// Updates the properties on the represented business object
+        /// </summary>
+        public abstract void ApplyChangesToBusinessObject();
+
+        /// <summary>
+        /// Updates the value on the control from the corresponding property
+        /// on the represented <see cref="IControlMapper.BusinessObject"/>
+        /// </summary>
+        public virtual void UpdateControlValueFromBusinessObject()
+        {
+            InternalUpdateControlValueFromBo();
+        }
+
+        #endregion
+
+        private void AddKeyPressHandlers()
+        {
+            IControlMapperStrategy mapperStrategy = _factory.CreateControlMapperStrategy();
+            mapperStrategy.AddKeyPressEventHandler(_control);
+        }
+
         private void RemoveCurrentBOPropHandlers()
         {
             IControlMapperStrategy mapperStrategy = _factory.CreateControlMapperStrategy();
             mapperStrategy.RemoveCurrentBOPropHandlers(this, CurrentBOProp());
         }
 
-
-        public abstract void ApplyChangesToBusinessObject();
-
-        public virtual void UpdateControlValueFromBusinessObject()
-        {
-            InternalUpdateControlValueFromBo();
-        }
-
+        /// <summary>
+        /// Updates the value on the control from the corresponding property
+        /// on the represented <see cref="IControlMapper.BusinessObject"/>
+        /// </summary>
         protected abstract void InternalUpdateControlValueFromBo();
 
+        /// <summary>
+        /// An overridable method to provide custom logic to carry out
+        /// when the business object is changed
+        /// </summary>
         protected virtual void OnBusinessObjectChanged()
         {
         }
@@ -148,16 +168,16 @@ namespace Habanero.UI.Base
             mapperStrategy.AddCurrentBOPropHandlers(this, CurrentBOProp());
         }
 
+        /// <summary>
+        /// Returns the <see cref="IBOProp"/> object being mapped to this control
+        /// </summary>
         public IBOProp CurrentBOProp()
         {
             if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
             {
                 return _businessObject.Props[_propertyName];
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
 
@@ -243,9 +263,9 @@ namespace Habanero.UI.Base
 
 
         /// <summary>
-        /// Creates a new control mapper of a specified type.  If no 'mapperType'
+        /// Creates a new control mapper of a specified type.  If no 'mapperTypeName'
         /// has been specified, an appropriate mapper for standard controls will
-        /// be assigned as appropriate.
+        /// be assigned, depending on the type of control.
         /// </summary>
         /// <param name="mapperTypeName">The class name of the mapper type
         /// (e.g. ComboBoxMapper).  The current namespace of this
@@ -254,7 +274,7 @@ namespace Habanero.UI.Base
         /// located</param>
         /// <param name="ctl">The control to be mapped</param>
         /// <param name="propertyName">The property name</param>
-        /// <param name="isReadOnly">Whether the control is read only</param>
+        /// <param name="isReadOnly">Whether the control is read-only</param>
         /// <returns>Returns a new object which is a subclass of ControlMapper</returns>
         /// <exception cref="UnknownTypeNameException">An exception is
         /// thrown if the mapperTypeName does not provide a type that is
@@ -272,7 +292,7 @@ namespace Habanero.UI.Base
                 if (ctl is IComboBox) mapperTypeName = "LookupComboBoxMapper";
                 else if (ctl is ICheckBox) mapperTypeName = "CheckBoxMapper";
                 else if (ctl is IDateTimePicker) mapperTypeName = "DateTimePickerMapper";
-                else if (ctl is IListView) mapperTypeName = "ListViewCollectionController";
+//                else if (ctl is IListView) mapperTypeName = "ListViewCollectionSelector"; TODO: Port
                 else if (ctl is INumericUpDown) mapperTypeName = "NumericUpDownIntegerMapper";
                 else
                 {
@@ -338,23 +358,23 @@ namespace Habanero.UI.Base
                 BOMapper boMapper = new BOMapper(_businessObject);
                 return boMapper.GetPropertyValueToDisplay(_propertyName);
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
+        /// <summary>
+        /// Sets the property value to that provided.  If the property value
+        /// is invalid, the error provider will be given the reason why the
+        /// value is invalid.
+        /// </summary>
         protected virtual void SetPropertyValue(object value)
         {
-            if (_businessObject != null)
+            if (_businessObject == null) return;
+            BOMapper boMapper = new BOMapper(_businessObject);
+            boMapper.SetDisplayPropertyValue(_propertyName, value);
+            IBOProp prop = _businessObject.Props[_propertyName];
+            if (prop != null)
             {
-                BOMapper boMapper = new BOMapper(_businessObject);
-                boMapper.SetDisplayPropertyValue(_propertyName, value);
-                IBOProp prop = _businessObject.Props[_propertyName];
-                if (prop != null)
-                {
-                    _errorProvider.SetError(_control, prop.InvalidReason);
-                }
+                _errorProvider.SetError(_control, prop.InvalidReason);
             }
         }
 
@@ -363,7 +383,9 @@ namespace Habanero.UI.Base
         /// These attributes are passed to the control mapper via a hashtable
         /// so that the control mapper can adjust its behaviour accordingly.
         /// </summary>
-        /// <param name="attributes">A hashtable of attributes</param>
+        /// <param name="attributes">A hashtable of attributes, which consists
+        /// of name-value pairs, where name is the attribute name.  This is usually
+        /// set in the XML definitions for the class's user interface.</param>
         public void SetPropertyAttributes(Hashtable attributes)
         {
             _attributes = attributes;
@@ -371,7 +393,8 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Initialises the control using the attributes already provided
+        /// Initialises the control using the attributes already provided, using
+        /// <see cref="SetPropertyAttributes"/>.
         /// </summary>
         protected virtual void InitialiseWithAttributes()
         {

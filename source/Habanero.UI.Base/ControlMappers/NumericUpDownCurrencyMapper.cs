@@ -19,6 +19,10 @@
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Wraps a NumericUpDown control in order to display and capture a currency
+    /// property of the business object, where values are rounded to two decimal places
+    /// </summary>
     public class NumericUpDownCurrencyMapper : NumericUpDownMapper
     {
         /// <summary>
@@ -36,6 +40,9 @@ namespace Habanero.UI.Base
             _numericUpDown.Minimum = decimal.MinValue;
         }
 
+        /// <summary>
+        /// Updates the properties on the represented business object
+        /// </summary>
         public override void ApplyChangesToBusinessObject()
         {
             SetPropertyValue(_numericUpDown.Value);

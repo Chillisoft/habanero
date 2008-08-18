@@ -23,19 +23,27 @@ using System.Drawing.Design;
 
 namespace Habanero.UI.Base
 {
-    public interface IListControl:IControlChilli
+    /// <summary>
+    /// Provides a common implementation of members for the ListBox and ComboBox classes
+    /// </summary>
+    public interface IListControl : IControlChilli
     {
-        /// <summary>Occurs when the <see cref="P:Gizmox.WebGUI.Forms.ListControl.SelectedValue"></see> property changes.</summary>
+        /// <summary>Occurs when the SelectedValue property changes.</summary>
         /// <filterpriority>1</filterpriority>
         event EventHandler SelectedValueChanged;
 
         /// <summary>Returns the text representation of the specified item.</summary>
-        /// <returns>If the <see cref="P:Gizmox.WebGUI.Forms.ListControl.DisplayMember"></see> property is not specified, the value returned by <see cref="M:Gizmox.WebGUI.Forms.ListControl.GetItemText(System.Object)"></see> is the value of the item's ToString method. Otherwise, the method returns the string value of the member specified in the <see cref="P:Gizmox.WebGUI.Forms.ListControl.DisplayMember"></see> property for the object specified in the item parameter.</returns>
+        /// <returns>If the DisplayMember property is not specified, the value returned
+        /// by ListControl.GetItemText(System.Object) is the value of the item's ToString 
+        /// method. Otherwise, the method returns the string value of the member specified
+        /// in the ListControl.DisplayMember property for the object specified in the item parameter.</returns>
         /// <param name="item">The object from which to get the contents to display. </param>
         /// <filterpriority>1</filterpriority>
         string GetItemText(object item);
 
-        /// <summary>Gets or sets the property to display for this <see cref="T:Gizmox.WebGUI.Forms.ListControl"></see>.</summary>
+        /// <summary>
+        /// Gets or sets the property to display for this ListControl
+        /// </summary>
         /// <returns>A <see cref="T:System.String"></see> specifying the name of an object property that is contained in the collection specified by the <see cref="P:Gizmox.WebGUI.Forms.ListControl.DataSource"></see> property. The default is an empty string (""). </returns>
         /// <filterpriority>1</filterpriority>
         [DefaultValue("")]

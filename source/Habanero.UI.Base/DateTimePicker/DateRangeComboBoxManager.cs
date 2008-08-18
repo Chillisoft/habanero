@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Habanero.Util;
 
 namespace Habanero.UI.Base
@@ -172,11 +171,8 @@ namespace Habanero.UI.Base
             {
                 return _dateRangePairs[option];
             }
-            else
-            {
-                throw new ArgumentException("A date range option string is being " +
-                    "accessed, but the given date range option does not exist.");
-            }
+            throw new ArgumentException("A date range option string is being " +
+                                        "accessed, but the given date range option does not exist.");
         }
 
         /// <summary>

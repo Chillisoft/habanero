@@ -20,22 +20,20 @@
 using System;
 using Habanero.Base;
 using Habanero.BO;
-using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.Base.FilterControl;
 using Habanero.UI.Base.Grid;
 
 namespace Habanero.UI.Win
 {
     public class EditableGridControlWin : UserControlWin, IEditableGridControl
     {
+        private readonly IEditableGridButtonsControl _buttons;
         private readonly IControlFactory _controlFactory;
-        private readonly IEditableGrid _grid;
         private readonly EditableGridControlManager _editableGridManager;
-        private IEditableGridButtonsControl _buttons;
-        private IFilterControl _filterControl;
-        private string _orderBy;
+        private readonly IFilterControl _filterControl;
+        private readonly IEditableGrid _grid;
         private string _additionalSearchCriteria;
+        private string _orderBy;
 
         public EditableGridControlWin(IControlFactory controlFactory)
         {
@@ -54,41 +52,7 @@ namespace Habanero.UI.Win
             //TODO copy rest from readonly version
         }
 
-        private void InitialiseButtons()
-        {
-            _buttons.CancelClicked += Buttons_CancelClicked;
-            _buttons.SaveClicked += Buttons_SaveClicked;
-        }
-
-        private void InitialiseFilterControl()
-        {
-            _filterControl.Filter += _filterControl_OnFilter;
-        }
-
-        private void _filterControl_OnFilter(object sender, EventArgs e)
-        {
-            //this.Grid.CurrentPage = 1;
-            if (FilterMode == FilterModes.Search)
-            {
-                BusinessObjectCollection<BusinessObject> collection =
-                    new BusinessObjectCollection<BusinessObject>(this.ClassDef);
-                string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
-                if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
-                {
-                    if (!string.IsNullOrEmpty(searchClause))
-                    {
-                        searchClause += " AND ";
-                    }
-                    searchClause += AdditionalSearchCriteria;
-                }
-                collection.Load(searchClause, OrderBy);
-                SetBusinessObjectCollection(collection);
-            }
-            else
-            {
-                this.Grid.ApplyFilter(_filterControl.GetFilterClause());
-            }
-        }
+        #region IEditableGridControl Members
 
         public IGridBase Grid
         {
@@ -98,7 +62,6 @@ namespace Habanero.UI.Win
         public void Initialise(IClassDef classDef)
         {
             _editableGridManager.Initialise(classDef);
-            
         }
 
         public void Initialise(IClassDef classDef, string uiDefName)
@@ -134,17 +97,17 @@ namespace Habanero.UI.Win
                 //TODO: weakness where user could call _control.Grid.Set..(null) directly and bypass the disabling.
                 _grid.SetBusinessObjectCollection(null);
                 _grid.AllowUserToAddRows = false;
-                this.Buttons.Enabled = false;
-                this.FilterControl.Enabled = false;
+                Buttons.Enabled = false;
+                FilterControl.Enabled = false;
                 return;
             }
-            if (this.ClassDef == null)
+            if (ClassDef == null)
             {
                 Initialise(boCollection.ClassDef);
             }
             else
             {
-                if (this.ClassDef != boCollection.ClassDef)
+                if (ClassDef != boCollection.ClassDef)
                 {
                     throw new ArgumentException(
                         "You cannot call set collection for a collection that has a different class def than is initialised");
@@ -160,8 +123,8 @@ namespace Habanero.UI.Win
 
             _grid.SetBusinessObjectCollection(boCollection);
 
-            this.Buttons.Enabled = true;
-            this.FilterControl.Enabled = true;
+            Buttons.Enabled = true;
+            FilterControl.Enabled = true;
             _grid.AllowUserToAddRows = true;
         }
 
@@ -184,7 +147,7 @@ namespace Habanero.UI.Win
         public FilterModes FilterMode
         {
             get { return _filterControl.FilterMode; }
-            set { _filterControl.FilterMode=value; }
+            set { _filterControl.FilterMode = value; }
         }
 
 
@@ -209,14 +172,52 @@ namespace Habanero.UI.Win
             set { _additionalSearchCriteria = value; }
         }
 
+        #endregion
+
+        private void InitialiseButtons()
+        {
+            _buttons.CancelClicked += Buttons_CancelClicked;
+            _buttons.SaveClicked += Buttons_SaveClicked;
+        }
+
+        private void InitialiseFilterControl()
+        {
+            _filterControl.Filter += _filterControl_OnFilter;
+        }
+
+        private void _filterControl_OnFilter(object sender, EventArgs e)
+        {
+            //this.Grid.CurrentPage = 1;
+            if (FilterMode == FilterModes.Search)
+            {
+                BusinessObjectCollection<BusinessObject> collection =
+                    new BusinessObjectCollection<BusinessObject>(ClassDef);
+                string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
+                if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
+                {
+                    if (!string.IsNullOrEmpty(searchClause))
+                    {
+                        searchClause += " AND ";
+                    }
+                    searchClause += AdditionalSearchCriteria;
+                }
+                collection.Load(searchClause, OrderBy);
+                SetBusinessObjectCollection(collection);
+            }
+            else
+            {
+                Grid.ApplyFilter(_filterControl.GetFilterClause());
+            }
+        }
+
         private void Buttons_CancelClicked(object sender, EventArgs e)
         {
-            this._grid.RejectChanges();
+            _grid.RejectChanges();
         }
 
         private void Buttons_SaveClicked(object sender, EventArgs e)
         {
-            this._grid.SaveChanges();
+            _grid.SaveChanges();
         }
     }
 }

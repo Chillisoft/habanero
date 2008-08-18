@@ -17,11 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.Base;
-using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base.Grid
 {
@@ -33,10 +29,9 @@ namespace Habanero.UI.Base.Grid
     public class EditableGridControlManager
     {
         private readonly IEditableGridControl _gridControl;
-        private string _uiDefName;
+        private readonly IGridInitialiser _gridInitialiser;
         private IClassDef _classDef;
-        private IGridInitialiser _gridInitialiser;
-
+        private string _uiDefName;
 
         public EditableGridControlManager(IEditableGridControl gridControl, IControlFactory controlFactory)
         {

@@ -17,9 +17,10 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-namespace Habanero.WebGUI
+namespace Habanero.UI.Base  
 {
-    public interface IListView
-    {
-    }
+    //TODO: Port
+//    public interface IListView
+//    {
+//    }
 }

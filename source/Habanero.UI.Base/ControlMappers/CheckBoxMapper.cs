@@ -22,7 +22,7 @@ using System;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// This mapper represents a CheckBox object in a user interface
+    /// Wraps a CheckBox in order to display and capture a boolean property of the business object 
     /// </summary>
     public class CheckBoxMapper : ControlMapper
     {
@@ -45,7 +45,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Updates the appearance of the object when the value of the
+        /// Updates the appearance of the control when the value of the
         /// property has changed internally
         /// </summary>
         protected override void InternalUpdateControlValueFromBo()
@@ -66,8 +66,8 @@ namespace Habanero.UI.Base
             }
         }
         /// <summary>
-        /// The event handler that is called when the user has checked or
-        /// unchecked the CheckBox.
+        /// The event handler that is called to update the property on the 
+        /// Business Object when the user has checked or unchecked the CheckBox.
         /// </summary>
         public override void ApplyChangesToBusinessObject()
         {
@@ -93,11 +93,11 @@ namespace Habanero.UI.Base
             }
         }
 
-        public void ApplyChanges()
-        {
-            InternalUpdateControlValueFromBo();
-        }
-
+        /// <summary>
+        /// Gets the custom strategy that is applied to this mapper by the
+        /// control factory, which determines how the Click event is handled.
+        /// See <see cref="ICheckBoxMapperStrategy"/>.
+        /// </summary>
         public ICheckBoxMapperStrategy GetStrategy()
         {
             return _strategy;

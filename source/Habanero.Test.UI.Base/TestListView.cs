@@ -48,20 +48,20 @@ namespace Habanero.Test.UI.Base
                 return new ControlFactoryGizmox();
             }
         }
-
-        [Test]
-        public void TestLisView()
-        {
-            //---------------Set up test pack-------------------
-            //---------------Execute Test ----------------------
-            IControlChilli controlChilli = GetControlFactory().CreateListView();
-
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(controlChilli);
-            Assert.AreEqual(typeof(Habanero.UI.WebGUI.ListViewGiz), controlChilli.GetType());
-
-            //---------------Tear Down -------------------------   
-        }
+        //TODO: Port
+//        [Test]
+//        public void TestListViewConstructor()
+//        {
+//            //---------------Set up test pack-------------------
+//            //---------------Execute Test ----------------------
+//            IControlChilli controlChilli = GetControlFactory().CreateListView();
+//
+//            //---------------Test Result -----------------------
+//            Assert.IsNotNull(controlChilli);
+//            Assert.AreEqual(typeof(Habanero.UI.WebGUI.ListViewGiz), controlChilli.GetType());
+//
+//            //---------------Tear Down -------------------------   
+//        }
 
         //[Test]
         //public void TestListView_SetCollection()
@@ -81,28 +81,28 @@ namespace Habanero.Test.UI.Base
         //    //---------------Tear Down -------------------------   
         //}
 
-        [Test]
-        public void TestLisView_SelectedItems()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            IListView listView = GetControlFactory().CreateListView();
-            MyBO.LoadDefaultClassDefGizmox();
-            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
-            col.Add(new MyBO());
-            col.Add(new MyBO());
-            col.Add(new MyBO());
-            listView.SetCollection(col);
-            //---------------Execute Test ----------------------
+        //[Test]
+        //public void TestLisView_SelectedItems()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    ClassDef.ClassDefs.Clear();
+        //    IListView listView = GetControlFactory().CreateListView();
+        //    MyBO.LoadDefaultClassDefGizmox();
+        //    BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+        //    col.Add(new MyBO());
+        //    col.Add(new MyBO());
+        //    col.Add(new MyBO());
+        //    listView.SetCollection(col);
+        //    //---------------Execute Test ----------------------
 
-            listView.Items[0].Selected = true;
-            listView.Items[1].Selected = true;
+        //    listView.Items[0].Selected = true;
+        //    listView.Items[1].Selected = true;
 
 
-            //---------------Test Result -----------------------
-            Assert.AreEqual(2, listView.SelectedItems.Count);
-            //---------------Tear Down -------------------------   
-        }
+        //    //---------------Test Result -----------------------
+        //    Assert.AreEqual(2, listView.SelectedItems.Count);
+        //    //---------------Tear Down -------------------------   
+        //}
 
 
     }

@@ -41,10 +41,7 @@ namespace Habanero.UI.Base
             {
                 return (DateTime)val;
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         /// <summary>

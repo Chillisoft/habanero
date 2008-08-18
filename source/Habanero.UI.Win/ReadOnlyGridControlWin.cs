@@ -18,30 +18,34 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.Base.FilterControl;
-using Habanero.UI.Win;
 
 namespace Habanero.UI.Win
 {
-    public class ReadOnlyGridControlWin : ControlWin, IReadOnlyGridControl, System.ComponentModel.ISupportInitialize
+    public class ReadOnlyGridControlWin : ControlWin, IReadOnlyGridControl, ISupportInitialize
     {
-        private readonly IControlFactory _controlFactory;
-        private readonly ReadOnlyGridWin _grid;
-        private readonly IReadOnlyGridButtonsControl _buttons;
-        private IBusinessObjectEditor _businessObjectEditor;
-        private IBusinessObjectCreator _businessObjectCreator;
-        private IBusinessObjectDeletor _businessObjectDeletor;
-        private ClassDef _classDef;
-        private readonly IFilterControl _filterControl;
-        private readonly IGridInitialiser _gridInitialiser;
-        private string _orderBy;
-        private string _additionalSearchCriteria;
+        #region Delegates
 
         public delegate void RefreshGridDelegate();
+
+        #endregion
+
+        private readonly IReadOnlyGridButtonsControl _buttons;
+
+        private readonly IControlFactory _controlFactory;
+        private readonly IFilterControl _filterControl;
+        private readonly ReadOnlyGridWin _grid;
+        private readonly IGridInitialiser _gridInitialiser;
+        private string _additionalSearchCriteria;
+        private IBusinessObjectCreator _businessObjectCreator;
+        private IBusinessObjectDeletor _businessObjectDeletor;
+        private IBusinessObjectEditor _businessObjectEditor;
+        private ClassDef _classDef;
+        private string _orderBy;
 
         /// <summary>
         /// Constructor to initialise a new grid
@@ -50,7 +54,7 @@ namespace Habanero.UI.Win
         {
             _controlFactory = controlFactory;
             _filterControl = _controlFactory.CreateFilterControl();
-            _grid = new ReadOnlyGridWin();  //TODO use control factory and test this
+            _grid = new ReadOnlyGridWin(); //TODO use control factory and test this
             _buttons = _controlFactory.CreateReadOnlyGridButtonsControl();
             _gridInitialiser = new GridInitialiser(this, _controlFactory);
             InitialiseButtons();
@@ -64,41 +68,7 @@ namespace Habanero.UI.Win
             _grid.Name = "GridControl";
         }
 
-        private void InitialiseFilterControl()
-        {
-            _filterControl.Filter += _filterControl_OnFilter;
-        }
-
-        private void _filterControl_OnFilter(object sender, EventArgs e)
-        {
-            if (FilterMode == FilterModes.Search)
-            {
-                BusinessObjectCollection<BusinessObject> collection = new BusinessObjectCollection<BusinessObject>(this.ClassDef);
-                string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
-                if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
-                {
-                    if (!string.IsNullOrEmpty(searchClause))
-                    {
-                        searchClause += " AND ";
-                    }
-                    searchClause += AdditionalSearchCriteria;
-                }
-                collection.Load(searchClause, OrderBy);
-                SetBusinessObjectCollection(collection);
-            }
-            else
-            {
-                this.Grid.ApplyFilter(_filterControl.GetFilterClause());
-            }
-        }
-
-        private void InitialiseButtons()
-        {
-            _buttons.AddClicked += Buttons_AddClicked;
-            _buttons.EditClicked += Buttons_EditClicked;
-            _buttons.DeleteClicked += Buttons_DeleteClicked;
-            _buttons.Name = "ButtonControl";
-        }
+        #region IReadOnlyGridControl Members
 
         /// <summary>
         /// initiliase the grid to the with the 'default' UIdef.
@@ -118,66 +88,6 @@ namespace Habanero.UI.Win
             UiDefName = uiDefName;
 
             _gridInitialiser.InitialiseGrid(classDef, uiDefName);
-        }
-
-        private void Buttons_DeleteClicked(object sender, EventArgs e)
-        {
-            if (this.Grid.GetBusinessObjectCollection() == null)
-            {
-                throw new GridDeveloperException("You cannot call delete since the grid has not been set up");
-            }
-            IBusinessObject selectedBo = SelectedBusinessObject;
-
-            if (selectedBo != null)
-            {
-                _grid.SelectedBusinessObject = null;
-                try
-                {
-                    _businessObjectDeletor.DeleteBusinessObject(selectedBo);
-                }
-                catch (Exception ex)
-                {
-                    GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem deleting", "Problem Deleting");
-                }
-            }
-        }
-
-        private void Buttons_EditClicked(object sender, EventArgs e)
-        {
-            if (this.Grid.GetBusinessObjectCollection() == null)
-            {
-                throw new GridDeveloperException("You cannot call edit since the grid has not been set up");
-            }
-            IBusinessObject selectedBo = SelectedBusinessObject;
-            if (selectedBo != null)
-            {
-                if (_businessObjectEditor != null)
-                {
-                    _businessObjectEditor.EditObject(selectedBo, UiDefName, delegate
-                                                     {
-                                                         this.Grid.RefreshGrid();
-                                                     });
-                }
-            }
-        }
-
-        private void Buttons_AddClicked(object sender, EventArgs e)
-        {
-            if (this.Grid.GetBusinessObjectCollection() == null)
-            {
-                throw new GridDeveloperException("You cannot call add since the grid has not been set up");
-            }
-            IBusinessObject newBo;
-            if (_businessObjectCreator == null)
-            {
-                throw new GridDeveloperException("You cannot call add as there is no business object creator set up for the grid");
-            }
-            newBo = _businessObjectCreator.CreateBusinessObject();
-            if (_businessObjectEditor != null && newBo != null)
-            {
-                _businessObjectEditor.EditObject(newBo, UiDefName, delegate(IBusinessObject bo)
-                    { this.Grid.SelectedBusinessObject = bo; });
-            }
         }
 
 
@@ -234,6 +144,7 @@ namespace Habanero.UI.Win
             get { return _grid.GridBaseManager.UiDefName; }
             set { _grid.GridBaseManager.UiDefName = value; }
         }
+
         public IClassDef ClassDef
         {
             get { return _classDef; }
@@ -252,8 +163,8 @@ namespace Habanero.UI.Win
 
         public FilterModes FilterMode
         {
-            get { return this._filterControl.FilterMode; }
-            set { this._filterControl.FilterMode = value; }
+            get { return _filterControl.FilterMode; }
+            set { _filterControl.FilterMode = value; }
         }
 
         /// <summary>
@@ -284,8 +195,8 @@ namespace Habanero.UI.Win
             {
                 //TODO: weakness where user could call _control.Grid.Set..(null) directly and bypass the disabling.
                 _grid.SetBusinessObjectCollection(null);
-                this.Buttons.Enabled = false;
-                this.FilterControl.Enabled = false;
+                Buttons.Enabled = false;
+                FilterControl.Enabled = false;
                 return;
             }
             if (_classDef == null)
@@ -300,18 +211,18 @@ namespace Habanero.UI.Win
                         "You cannot call set collection for a collection that has a different class def than is initialised");
                 }
             }
-            if (this.BusinessObjectCreator is DefaultBOCreator)
+            if (BusinessObjectCreator is DefaultBOCreator)
             {
-                this.BusinessObjectCreator = new DefaultBOCreator(boCollection);
+                BusinessObjectCreator = new DefaultBOCreator(boCollection);
             }
-            if (this.BusinessObjectCreator == null) this.BusinessObjectCreator = new DefaultBOCreator(boCollection);
-            if (this.BusinessObjectEditor == null) this.BusinessObjectEditor = new DefaultBOEditor(_controlFactory);
-            if (this.BusinessObjectDeletor == null) this.BusinessObjectDeletor = new DefaultBODeletor();
+            if (BusinessObjectCreator == null) BusinessObjectCreator = new DefaultBOCreator(boCollection);
+            if (BusinessObjectEditor == null) BusinessObjectEditor = new DefaultBOEditor(_controlFactory);
+            if (BusinessObjectDeletor == null) BusinessObjectDeletor = new DefaultBODeletor();
 
             _grid.SetBusinessObjectCollection(boCollection);
 
-            this.Buttons.Enabled = true;
-            this.FilterControl.Enabled = true;
+            Buttons.Enabled = true;
+            FilterControl.Enabled = true;
         }
 
         /// <summary>
@@ -327,13 +238,17 @@ namespace Habanero.UI.Win
             _gridInitialiser.InitialiseGrid();
         }
 
+        #endregion
+
+        #region ISupportInitialize Members
+
         ///<summary>
         ///Signals the object that initialization is starting.
         ///</summary>
         ///
         public void BeginInit()
         {
-            ((System.ComponentModel.ISupportInitialize)this.Grid).BeginInit();
+            ((ISupportInitialize) Grid).BeginInit();
         }
 
         ///<summary>
@@ -342,7 +257,104 @@ namespace Habanero.UI.Win
         ///
         public void EndInit()
         {
-            ((System.ComponentModel.ISupportInitialize)this.Grid).EndInit();
+            ((ISupportInitialize) Grid).EndInit();
+        }
+
+        #endregion
+
+        private void InitialiseFilterControl()
+        {
+            _filterControl.Filter += _filterControl_OnFilter;
+        }
+
+        private void _filterControl_OnFilter(object sender, EventArgs e)
+        {
+            if (FilterMode == FilterModes.Search)
+            {
+                BusinessObjectCollection<BusinessObject> collection =
+                    new BusinessObjectCollection<BusinessObject>(ClassDef);
+                string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
+                if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
+                {
+                    if (!string.IsNullOrEmpty(searchClause))
+                    {
+                        searchClause += " AND ";
+                    }
+                    searchClause += AdditionalSearchCriteria;
+                }
+                collection.Load(searchClause, OrderBy);
+                SetBusinessObjectCollection(collection);
+            }
+            else
+            {
+                Grid.ApplyFilter(_filterControl.GetFilterClause());
+            }
+        }
+
+        private void InitialiseButtons()
+        {
+            _buttons.AddClicked += Buttons_AddClicked;
+            _buttons.EditClicked += Buttons_EditClicked;
+            _buttons.DeleteClicked += Buttons_DeleteClicked;
+            _buttons.Name = "ButtonControl";
+        }
+
+        private void Buttons_DeleteClicked(object sender, EventArgs e)
+        {
+            if (Grid.GetBusinessObjectCollection() == null)
+            {
+                throw new GridDeveloperException("You cannot call delete since the grid has not been set up");
+            }
+            IBusinessObject selectedBo = SelectedBusinessObject;
+
+            if (selectedBo != null)
+            {
+                _grid.SelectedBusinessObject = null;
+                try
+                {
+                    _businessObjectDeletor.DeleteBusinessObject(selectedBo);
+                }
+                catch (Exception ex)
+                {
+                    GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem deleting", "Problem Deleting");
+                }
+            }
+        }
+
+        private void Buttons_EditClicked(object sender, EventArgs e)
+        {
+            if (Grid.GetBusinessObjectCollection() == null)
+            {
+                throw new GridDeveloperException("You cannot call edit since the grid has not been set up");
+            }
+            IBusinessObject selectedBo = SelectedBusinessObject;
+            if (selectedBo != null)
+            {
+                if (_businessObjectEditor != null)
+                {
+                    _businessObjectEditor.EditObject(selectedBo, UiDefName, delegate { Grid.RefreshGrid(); });
+                }
+            }
+        }
+
+        private void Buttons_AddClicked(object sender, EventArgs e)
+        {
+            if (Grid.GetBusinessObjectCollection() == null)
+            {
+                throw new GridDeveloperException("You cannot call add since the grid has not been set up");
+            }
+            IBusinessObject newBo;
+            if (_businessObjectCreator == null)
+            {
+                throw new GridDeveloperException(
+                    "You cannot call add as there is no business object creator set up for the grid");
+            }
+            newBo = _businessObjectCreator.CreateBusinessObject();
+            if (_businessObjectEditor != null && newBo != null)
+            {
+                _businessObjectEditor.EditObject(newBo, UiDefName,
+                                                 delegate(IBusinessObject bo) { Grid.SelectedBusinessObject = bo; });
+            }
         }
     }
 }

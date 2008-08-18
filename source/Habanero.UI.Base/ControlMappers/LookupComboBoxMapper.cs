@@ -22,20 +22,17 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
-using Habanero.UI.Base.ControlInterfaces;
 
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// This class provides mapping from a lookup-list to a
-    /// user interface ComboBox.  This mapper is used when you have specified
-    /// a lookup-list for a property definition in the class definitions.
+    /// Wraps a ComboBox in order to display and capture a lookup property of the business object 
     /// </summary>
     public class LookupComboBoxMapper : ComboBoxMapper
     {
+        private EventHandler _keyPressHandler;
         private ILookupComboBoxMapperStrategy _mapperStrategy;
         private EventHandler _selectedIndexChangedHandler;
-        private EventHandler _keyPressHandler;
 
 
         //private readonly IControlFactory _controlFactory;
@@ -47,9 +44,9 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="cbx">The ComboBox to map</param>
         /// <param name="propName">The property name</param>
-		/// <param name="isReadOnly">Whether this control is read only</param>
-		/// <param name="factory">the control factory to be used when creating the controlMapperStrategy</param>
-		public LookupComboBoxMapper(IComboBox cbx, string propName, bool isReadOnly, IControlFactory factory)
+        /// <param name="isReadOnly">Whether this control is read only</param>
+        /// <param name="factory">The control factory to be used when creating the controlMapperStrategy</param>
+        public LookupComboBoxMapper(IComboBox cbx, string propName, bool isReadOnly, IControlFactory factory)
             : base(cbx, propName, isReadOnly, factory)
         {
             //_controlFactory = controlFactory;
@@ -69,6 +66,68 @@ namespace Habanero.UI.Base
             //                          };
         }
 
+        /// <summary>
+        /// Gets and sets the lookup list used to populate the items in the
+        /// ComboBox.  This method is typically called by SetupLookupList().
+        /// </summary>
+        /// <param name="value">The items used to populate the list</param>
+        public override Dictionary<string, object> LookupList
+        {
+            get { return _collection; }
+            set
+            {
+                //int width = _comboBox.Width;
+                //int chars = 0;
+                //ILabel lbl = _controlFactory.CreateLabel("", false);
+                _collection = value;
+
+                _comboBox.Items.Clear();
+                _comboBox.Items.Add(new ComboPair("", null));
+                foreach (KeyValuePair<string, object> pair in LookupList)
+                {
+                    _comboBox.Items.Add(new ComboPair(pair.Key, pair.Value));
+                }
+                //_comboBox.ValueMember = "Value";
+                //_comboBox.DisplayMember = "Key";
+                //_comboBox.DataSource = table;
+                //TODO Port: the dropdownwidth must be set for windows to a more sensible number based on pixels.
+                // _comboBox.DropDownWidth = 25;
+                // _comboBox.DropDownWidth = chars;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the strategy assigned to this mapper
+        /// </summary>
+        public ILookupComboBoxMapperStrategy MapperStrategy
+        {
+            get { return _mapperStrategy; }
+            set
+            {
+                _mapperStrategy = value;
+                _mapperStrategy.RemoveCurrentHandlers(this);
+                _mapperStrategy.AddHandlers(this);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the KeyPress event handler assigned to this mapper
+        /// </summary>
+        public EventHandler KeyPressHandler
+        {
+            get { return _keyPressHandler; }
+            set { _keyPressHandler = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the SelectedIndexChanged event handler assigned to this mapper
+        /// </summary>
+        public EventHandler SelectedIndexChangedHandler
+        {
+            get { return _selectedIndexChangedHandler; }
+            set { _selectedIndexChangedHandler = value; }
+        }
+
         //
         //		private void ComboBoxDoubleClickHandler(object sender, EventArgs e) {
         //
@@ -76,8 +135,8 @@ namespace Habanero.UI.Base
 
 
         /// <summary>
-        /// Updates the interface when the value has been changed in the
-        /// object being represented
+        /// Updates the value on the control from the corresponding property
+        /// on the represented <see cref="IControlMapper.BusinessObject"/>
         /// </summary>
         protected override void InternalUpdateControlValueFromBo()
         {
@@ -113,19 +172,20 @@ namespace Habanero.UI.Base
                     if (pair.Value == null) continue;
                     if (pair.Value is IBusinessObject)
                     {
-                        BusinessObject pairValueBo = (BusinessObject)pair.Value;
+                        BusinessObject pairValueBo = (BusinessObject) pair.Value;
                         if (pairValueBo.ClassDef.PrimaryKeyDef.IsObjectID
                             && pairValueBo.ID.GetAsGuid().Equals(boPropertyValue))
                         {
                             _comboBox.SelectedItem = pair.Key;
                             break;
                         }
-                        else if (boPropertyValue != null && String.Compare(pairValueBo.ID.ToString(), boPropertyValue.ToString()) == 0)
+                        if (boPropertyValue != null &&
+                            String.Compare(pairValueBo.ID.ToString(), boPropertyValue.ToString()) == 0)
                         {
                             _comboBox.SelectedItem = pair.Key;
                             break;
                         }
-                        else if (boPropertyValue != null &&
+                        if (boPropertyValue != null &&
                             pairValueBo.ID[0].Value != null &&
                             String.Compare(pairValueBo.ID[0].Value.ToString(), boPropertyValue.ToString()) == 0)
                         {
@@ -146,11 +206,9 @@ namespace Habanero.UI.Base
                             found = pair.Value.Equals(boPropertyValue);
                         }
                     }
-                    if (found)
-                    {
-                        _comboBox.SelectedItem = pair.Key;
-                        break;
-                    }
+                    if (!found) continue;
+                    _comboBox.SelectedItem = pair.Key;
+                    break;
                 }
                 //_comboBox.SelectionStart = 0;
                 //_comboBox.SelectionLength = 0;
@@ -181,13 +239,12 @@ namespace Habanero.UI.Base
         private void SetupLookupList()
         {
             if (_businessObject == null)
-            {   
+            {
                 Dictionary<string, object> emptyList = new Dictionary<string, object>();
-                LookupList = emptyList;             
+                LookupList = emptyList;
             }
-            Dictionary<string, object> col;
             BOMapper mapper = new BOMapper(_businessObject);
-            col = mapper.GetLookupList(_propertyName);
+            Dictionary<string, object> col = mapper.GetLookupList(_propertyName);
             //if (!_isRightClickInitialised)
             //{
             //    //SetupRightClickBehaviour();
@@ -219,77 +276,22 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// This method is called by SetupLookupList() and populates the
-        /// ComboBox with the collection of items provided
+        /// Returns the property value of the business object being mapped
         /// </summary>
-        /// <param name="value">The items used to populate the list</param>
-        public override Dictionary<string, object> LookupList
-        {
-            get { return _collection; }
-            set
-            {
-                //int width = _comboBox.Width;
-                //int chars = 0;
-                //ILabel lbl = _controlFactory.CreateLabel("", false);
-                _collection = value;
-
-                _comboBox.Items.Clear();
-                _comboBox.Items.Add(new ComboPair("", null));
-                foreach (KeyValuePair<string, object> pair in LookupList)
-                {
-                    //TODO Port
-                    //lbl.Text = pair.Key;
-                    //if (lbl.PreferredWidth > width)
-                    //{
-                    //    width = lbl.PreferredWidth;
-                    //}
-                    //if (pair.Key.Length > chars)
-                    //{
-                    //    chars = pair.Key.Length;
-                    //}
-                    //_comboBox.Items.Add(pair.Key);
-                    _comboBox.Items.Add(new ComboPair(pair.Key, pair.Value));
-                }
-                //_comboBox.ValueMember = "Value";
-                //_comboBox.DisplayMember = "Key";
-                //_comboBox.DataSource = table;
-                //TODO Port: the dropdownwidth must be set for windows to a more sensible number based on pixels.
-                // _comboBox.DropDownWidth = 25;
-                // _comboBox.DropDownWidth = chars;
-            }
-        }
-
-        public ILookupComboBoxMapperStrategy MapperStrategy
-        {
-            get { return _mapperStrategy; }
-            set
-            {
-                _mapperStrategy = value;
-                _mapperStrategy.RemoveCurrentHandlers(this);
-                _mapperStrategy.AddHandlers(this);
-            }
-        }
-
-
+        /// <returns>Returns the property value in appropriate object form</returns>
         protected override object GetPropertyValue()
         {
             if (_propertyName.IndexOf(".") != -1 || _propertyName.IndexOf("-") != -1)
             {
                 return base.GetPropertyValue();
             }
-            else if (_businessObject != null)
-            {
-                return _businessObject.GetPropertyValue(_propertyName);
-            }
-            else 
-            {
-                return null;
-            }
+            return _businessObject == null 
+                ? null
+                : _businessObject.GetPropertyValue(_propertyName);
         }
 
         /// <summary>
-        /// An overridden method from the parent that simply redirects to
-        /// SetupLookupList()
+        /// Sets up the items to be listed in the ComboBox
         /// </summary>
         protected override void SetupComboBoxItems()
         {
@@ -297,74 +299,55 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Initialises the control using the attributes already provided
+        /// Initialises the control using the attributes already provided, using
+        /// <see cref="ControlMapper.SetPropertyAttributes"/>.
         /// </summary>
         protected override void InitialiseWithAttributes()
         {
             if (_attributes["rightClickEnabled"] != null)
             {
-                string rightClickEnabled = (string)_attributes["rightClickEnabled"];
+                string rightClickEnabled = (string) _attributes["rightClickEnabled"];
                 if (rightClickEnabled != "true" && rightClickEnabled != "false")
                 {
                     throw new InvalidXmlDefinitionException("An error " +
-                        "occurred while reading the 'rightClickEnabled' parameter " +
-                        "from the class definitions.  The 'value' " +
-                        "attribute must hold either 'true' or 'false'.");
+                                                            "occurred while reading the 'rightClickEnabled' parameter " +
+                                                            "from the class definitions.  The 'value' " +
+                                                            "attribute must hold either 'true' or 'false'.");
                 }
                 //_allowRightClick = Convert.ToBoolean(rightClickEnabled);
             }
         }
 
         /// <summary>
-        /// updates the business object with the value selected in the combo box
+        /// Updates the properties on the represented business object
         /// </summary>
         public override void ApplyChangesToBusinessObject()
         {
-            if (_businessObject != null && _comboBox.SelectedIndex != -1)
+            if (_businessObject == null || _comboBox.SelectedIndex == -1) return;
+            string selectedOption = (string) _comboBox.SelectedItem;
+            object newValue = !string.IsNullOrEmpty(selectedOption) 
+                                  ? LookupList[selectedOption] 
+                                  : null;
+            if (newValue != null)
             {
-                string selectedOption = (string)_comboBox.SelectedItem;
-                Object newValue;
-                if (selectedOption != null && selectedOption.Length > 0)
+                object propertyValue = GetPropertyValue();
+                if (newValue.Equals(Guid.Empty))
                 {
-                    newValue = LookupList[selectedOption];
-                }
-                else
-                {
-                    newValue = null;
-                }
-                if (newValue != null)
-                {
-                    object propertyValue = GetPropertyValue();
-                    if (newValue.Equals(Guid.Empty))
+                    if (propertyValue != null)
                     {
-                        if (propertyValue != null)
-                        {
-                            SetPropertyValue(null);
-                        }
-                    }
-                    else if (propertyValue == null ||
-                             !newValue.Equals(propertyValue))
-                    {
-                        SetPropertyValue(newValue);
+                        SetPropertyValue(null);
                     }
                 }
-                else
+                else if (propertyValue == null ||
+                         !newValue.Equals(propertyValue))
                 {
-                    SetPropertyValue(null);
+                    SetPropertyValue(newValue);
                 }
             }
-        }
-
-        public EventHandler KeyPressHandler
-        {
-            get { return _keyPressHandler; }
-            set { _keyPressHandler = value; }
-        }
-
-        public EventHandler SelectedIndexChangedHandler
-        {
-            get { return _selectedIndexChangedHandler; }
-            set { _selectedIndexChangedHandler = value; }
+            else
+            {
+                SetPropertyValue(null);
+            }
         }
     }
 }

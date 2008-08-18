@@ -19,7 +19,6 @@
 
 using Habanero.Base;
 using Habanero.UI.Base;
-using Habanero.UI.Base.FilterControl;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
 using NUnit.Framework;
@@ -29,17 +28,12 @@ namespace Habanero.Test.UI.Base
     [TestFixture]
     public class TestFilterControlCheckBox
     {
+        #region Setup/Teardown
+
         [SetUp]
         public void SetupTest()
         {
             //Runs every time that any testmethod is executed
-        }
-
-        [TestFixtureSetUp]
-        public void TestFixtureSetup()
-        {
-            //Code that is executed before any test is run in this class. If multiple tests
-            // are executed then it will still only be called once.
         }
 
         [TearDown]
@@ -47,17 +41,14 @@ namespace Habanero.Test.UI.Base
         {
             //runs every time any testmethod is complete
         }
-        #region Tests
-        [Test]
-        public void TestAddCheckBoxGizmox()
-        {
-            TestAddCheckBox(new ControlFactoryGizmox());
-        }
 
-        [Test]
-        public void TestAddCheckBoxWinForms()
+        #endregion
+
+        [TestFixtureSetUp]
+        public void TestFixtureSetup()
         {
-            TestAddCheckBox(new ControlFactoryWin());
+            //Code that is executed before any test is run in this class. If multiple tests
+            // are executed then it will still only be called once.
         }
 
         public void TestAddCheckBox(IControlFactory factory)
@@ -72,22 +63,12 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsNotNull(cb);
             Assert.IsTrue(cb is ICheckBox);
-            ICheckBox cBox = (ICheckBox)cb  ;
+            ICheckBox cBox = (ICheckBox) cb;
             Assert.AreEqual(labelName, cBox.Text);
 
             //---------------Tear Down -------------------------          
         }
 
-        [Test]
-        public void TestAddStringFilterCheckBoxGiz()
-        {
-            TestAddStringFilterCheckBox(new ControlFactoryGizmox());
-        }
-        [Test]
-        public void TestAddStringFilterCheckBoxWinForms()
-        {
-            TestAddStringFilterCheckBox(new ControlFactoryWin());
-        }
         public void TestAddStringFilterCheckBox(IControlFactory factory)
         {
             //---------------Set up test pack-------------------
@@ -102,17 +83,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(clause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
 
             //---------------Tear Down -------------------------          
-        }
-        [Test]
-        public void TestGetCheckBoxFilterClauseWinForms()
-        {
-            TestGetCheckBoxFilterClause(new ControlFactoryWin());
-        }
-
-        [Test]
-        public void TestGetCheckBoxFilterClauseGiz()
-        {
-            TestGetCheckBoxFilterClause(new ControlFactoryGizmox());
         }
 
         public void TestGetCheckBoxFilterClause(IControlFactory factory)
@@ -132,18 +102,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(clause.GetFilterClauseString(), filterClauseString);
 
             //---------------Tear Down -------------------------          
-        }
-
-        [Test]
-        public void TestTwoCheckBoxFilterWinForms()
-        {
-            TestTwoCheckBoxFilter(new ControlFactoryWin());
-        }
-
-        [Test]
-        public void TestTwoCheckBoxFilterGiz()
-        {
-            TestTwoCheckBoxFilter(new ControlFactoryGizmox());
         }
 
         public void TestTwoCheckBoxFilter(IControlFactory factory)
@@ -169,8 +127,52 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        #endregion
+        [Test]
+        public void TestAddCheckBoxGizmox()
+        {
+            TestAddCheckBox(new ControlFactoryGizmox());
+        }
 
+        [Test]
+        public void TestAddCheckBoxWinForms()
+        {
+            TestAddCheckBox(new ControlFactoryWin());
+        }
 
+        [Test]
+        public void TestAddStringFilterCheckBoxGiz()
+        {
+            TestAddStringFilterCheckBox(new ControlFactoryGizmox());
+        }
+
+        [Test]
+        public void TestAddStringFilterCheckBoxWinForms()
+        {
+            TestAddStringFilterCheckBox(new ControlFactoryWin());
+        }
+
+        [Test]
+        public void TestGetCheckBoxFilterClauseGiz()
+        {
+            TestGetCheckBoxFilterClause(new ControlFactoryGizmox());
+        }
+
+        [Test]
+        public void TestGetCheckBoxFilterClauseWinForms()
+        {
+            TestGetCheckBoxFilterClause(new ControlFactoryWin());
+        }
+
+        [Test]
+        public void TestTwoCheckBoxFilterGiz()
+        {
+            TestTwoCheckBoxFilter(new ControlFactoryGizmox());
+        }
+
+        [Test]
+        public void TestTwoCheckBoxFilterWinForms()
+        {
+            TestTwoCheckBoxFilter(new ControlFactoryWin());
+        }
     }
 }

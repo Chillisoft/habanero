@@ -25,7 +25,7 @@ using Habanero.UI.Base;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Manages a collection of objects that are sub-types of ControlMapper
+    /// Manages a collection of mappers that are sub-types of ControlMapper
     /// </summary>
     public class ControlMapperCollection : IControlMapperCollection, ICollection
     {
@@ -130,9 +130,8 @@ namespace Habanero.UI.Base
 
         /// <summary>
         /// Gets and sets the business object being represented by
-        /// the mapper collection.  Changes are applied to the business
-        /// object represented by this collection and to each BO within the
-        /// collection.
+        /// the mapper collection.  Updates the business object for 
+        /// every control mapper in this collection.
         /// </summary>
         public BusinessObject BusinessObject
         {
@@ -148,7 +147,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Enables or Disables all the controls managed in this control mapper collection.
+        /// Enables or disables all the controls managed in this control mapper collection.
         /// </summary>
         public bool ControlsEnabled
         {
@@ -163,8 +162,7 @@ namespace Habanero.UI.Base
 
 
         /// <summary>
-        /// Sets the property of the business object that the mapper is mapped to
-        /// to the value set in the control.
+        /// Updates the business object properties being mapped by the mappers in this collection
         /// </summary>
         public void ApplyChangesToBusinessObject()
         {

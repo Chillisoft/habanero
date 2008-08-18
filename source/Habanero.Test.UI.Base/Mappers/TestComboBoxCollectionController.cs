@@ -56,7 +56,7 @@ namespace Habanero.Test.UI.Base.Mappers
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             IControlFactory controlFactory = GetControlFactory();
             //---------------Execute Test ----------------------
-            ComboBoxCollectionController mapper = new ComboBoxCollectionController(cmbox, controlFactory);
+            ComboBoxCollectionSelector mapper = new ComboBoxCollectionSelector(cmbox, controlFactory);
             //---------------Test Result -----------------------
             Assert.IsNotNull(mapper);
             Assert.AreSame(cmbox, mapper.Control);
@@ -72,7 +72,7 @@ namespace Habanero.Test.UI.Base.Mappers
             ClassDef.ClassDefs.Clear();
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             IControlFactory controlFactory = GetControlFactory();
-            ComboBoxCollectionController mapper = new ComboBoxCollectionController(cmbox, controlFactory);
+            ComboBoxCollectionSelector mapper = new ComboBoxCollectionSelector(cmbox, controlFactory);
             MyBO.LoadDefaultClassDef();
             BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
             myBoCol.Add(new MyBO());
@@ -92,7 +92,7 @@ namespace Habanero.Test.UI.Base.Mappers
             ClassDef.ClassDefs.Clear();
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             IControlFactory controlFactory = GetControlFactory();
-            ComboBoxCollectionController mapper = new ComboBoxCollectionController(cmbox, controlFactory);
+            ComboBoxCollectionSelector mapper = new ComboBoxCollectionSelector(cmbox, controlFactory);
             MyBO.LoadDefaultClassDef();
             BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
             MyBO selectedBO = new MyBO();
@@ -113,7 +113,7 @@ namespace Habanero.Test.UI.Base.Mappers
             ClassDef.ClassDefs.Clear();
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             IControlFactory controlFactory = GetControlFactory();
-            ComboBoxCollectionController mapper = new ComboBoxCollectionController(cmbox, controlFactory);
+            ComboBoxCollectionSelector mapper = new ComboBoxCollectionSelector(cmbox, controlFactory);
             MyBO.LoadDefaultClassDef();
             BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
             MyBO addedBo = new MyBO();
@@ -134,7 +134,7 @@ namespace Habanero.Test.UI.Base.Mappers
             ClassDef.ClassDefs.Clear();
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             IControlFactory controlFactory = GetControlFactory();
-            ComboBoxCollectionController mapper = new ComboBoxCollectionController(cmbox, controlFactory);
+            ComboBoxCollectionSelector mapper = new ComboBoxCollectionSelector(cmbox, controlFactory);
             MyBO.LoadDefaultClassDef();
             BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
             MyBO removedBo = new MyBO();
