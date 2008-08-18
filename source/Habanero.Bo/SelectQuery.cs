@@ -36,6 +36,7 @@ namespace Habanero.BO
         private int _limit = -1;
         private OrderCriteria _orderCriteria = new OrderCriteria();
         private Source _source;
+        private Criteria _discriminatorCriteria;
 
         ///<summary>
         /// Creates a SelectQuery with no Criteria and no fields.  In order to use the SelectQuery at least on field must be added
@@ -118,5 +119,12 @@ namespace Habanero.BO
             set { _classDef = value; }
         }
 
+        ///<summary>
+        ///</summary>
+        public Criteria DiscriminatorCriteria
+        {
+            get { return _discriminatorCriteria; }
+            set { _discriminatorCriteria = value; }
+        }
     }
 }

@@ -209,16 +209,38 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestImmediateChildren()
         {
+             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             ClassDef parentClassDef;
             ClassDef childClassDef;
             ClassDef grandchildClassDef;
             LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, out grandchildClassDef);
 
-
+             //---------------Execute Test ----------------------
             ClassDefCol children = parentClassDef.ImmediateChildren;
+             //---------------Test Result -----------------------
             Assert.AreEqual(1, children.Count);
             Assert.IsTrue(children.Contains(childClassDef));
+        }
+
+        [Test]
+        public void TestAllChildren()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef parentClassDef;
+            ClassDef childClassDef;
+            ClassDef grandchildClassDef;
+            LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, out grandchildClassDef);
+
+            //---------------Execute Test ----------------------
+            ClassDefCol children = parentClassDef.AllChildren;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, children.Count);
+            Assert.IsTrue(children.Contains(childClassDef));
+            Assert.IsTrue(children.Contains(grandchildClassDef));
+            //---------------Tear Down -------------------------
+
         }
 
         [Test]

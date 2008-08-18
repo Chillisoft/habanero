@@ -181,8 +181,10 @@ namespace Habanero.Test.General
         public void TestDatabaseReadWrite()
         {
             // Test inserting & selecting
+            
             Shape shape = new Shape();
-            shape.ShapeName = "MyShape";
+            string shapeName = "MyShape";
+            shape.ShapeName = shapeName;
             shape.Save();
 
             BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
@@ -201,7 +203,7 @@ namespace Habanero.Test.General
             shapes.LoadAll("ShapeName");
             Assert.AreEqual(2, shapes.Count);
             Assert.AreEqual("Circle", shapes[0].ShapeName);
-            Assert.AreEqual("MyShape", shapes[1].ShapeName);
+            Assert.AreEqual(shapeName, shapes[1].ShapeName);
 
             circles.LoadAll();
             Assert.AreEqual(1, circles.Count);

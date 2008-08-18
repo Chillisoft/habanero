@@ -523,5 +523,13 @@ namespace Habanero.Base
         {
             return ComparisonOps[(int)ComparisonOperator];
         }
+
+        public static Criteria MergeCriteria(Criteria criteria1, Criteria criteria2)
+        {
+            if ((criteria1 == null) && (criteria2 == null)) return null;
+            if (criteria2 == null) return criteria1;
+            if (criteria1 == null) return criteria2;
+            return new Criteria(criteria1, LogicalOp.And, criteria2);
+        }
     }
 }

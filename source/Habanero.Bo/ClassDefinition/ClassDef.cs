@@ -150,9 +150,9 @@ namespace Habanero.BO.ClassDefinition
                         RelationshipDefCol relationshipDefCol,
                         UIDefCol uiDefCol)
             :
-                            this(
-                            classType, null, null, null, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol,
-                            uiDefCol)
+                this(
+                classType, null, null, null, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol,
+                uiDefCol)
         {
         }
 
@@ -165,9 +165,9 @@ namespace Habanero.BO.ClassDefinition
                         KeyDefCol keyDefCol,
                         RelationshipDefCol relationshipDefCol)
             :
-                            this(
-                            classType, null, null, null, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol,
-                            null)
+                this(
+                classType, null, null, null, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol,
+                null)
         {
         }
 
@@ -190,7 +190,8 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// As before, but excludes the table name
         /// </summary>
-        public ClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
+        public ClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol,
+                        RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
             : this(assemblyName, className, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol)
         {
         }
@@ -198,14 +199,17 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// As before, but excludes the table name
         /// </summary>
-        public ClassDef(string assemblyName, string className, string displayName, PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
+        public ClassDef(string assemblyName, string className, string displayName, PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol,
+                        KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
             : this(
                 null, assemblyName, className, null, displayName, primaryKeyDef, propDefCol, keyDefCol,
                 relationshipDefCol, uiDefCol)
         {
         }
 
-        private ClassDef(Type classType, string assemblyName, string className, string tableName, string displayName, PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
+        private ClassDef(Type classType, string assemblyName, string className, string tableName, string displayName,
+                         PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol,
+                         UIDefCol uiDefCol)
         {
             if (classType != null)
                 MyClassType = classType;
@@ -417,7 +421,7 @@ namespace Habanero.BO.ClassDefinition
         public PrimaryKeyDef PrimaryKeyDef
         {
             get { return _primaryKeyDef; }
-            protected set { _primaryKeyDef = value;  }
+            protected set { _primaryKeyDef = value; }
         }
 
         /// <summary>
@@ -431,7 +435,6 @@ namespace Habanero.BO.ClassDefinition
                 if (_primaryKeyDef == null) return true;
                 return _primaryKeyDef.IsObjectID;
             }
-
         }
 
         /// <summary>
@@ -539,11 +542,11 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <returns>Returns a new business object</returns>
         private BusinessObject InstantiateBusinessObject()
-        // This was internal, but it's been made private because you should rather use CreateNewBusinessObject
+            // This was internal, but it's been made private because you should rather use CreateNewBusinessObject
         {
             try
             {
-                return (BusinessObject)Activator.CreateInstance(MyClassType, true);
+                return (BusinessObject) Activator.CreateInstance(MyClassType, true);
             }
             catch (MissingMethodException ex)
             {
@@ -605,7 +608,7 @@ namespace Habanero.BO.ClassDefinition
             BOKeyCol keyCol = _keysCol.CreateBOKeyCol(col);
             if (this.SuperClassClassDef != null)
             {
-                ClassDef superClassClassDef = (ClassDef)this.SuperClassDef.SuperClassClassDef;
+                ClassDef superClassClassDef = (ClassDef) this.SuperClassDef.SuperClassClassDef;
 
                 keyCol.Add(superClassClassDef.createBOKeyCol(col));
             }
@@ -679,7 +682,7 @@ namespace Habanero.BO.ClassDefinition
             {
                 if (this.SuperClassDef != null)
                 {
-                    return (ClassDef)this.SuperClassDef.SuperClassClassDef;
+                    return (ClassDef) this.SuperClassDef.SuperClassClassDef;
                 }
                 else
                 {
@@ -737,6 +740,29 @@ namespace Habanero.BO.ClassDefinition
                     if (def._superClassDef != null && def._superClassDef.SuperClassClassDef == this)
                     {
                         children.Add(def);
+                    }
+                }
+                return children;
+            }
+        }
+
+        /// <summary>
+        /// Returns all children of this class based on the loaded inheritance hierachies
+        /// </summary>
+        public ClassDefCol AllChildren
+        {
+            get
+            {
+                ClassDefCol children = new ClassDefCol();
+                ClassDefCol immediateChildren = ImmediateChildren;
+                if (immediateChildren.Count == 0) return children;
+
+                foreach (ClassDef def in immediateChildren)
+                {
+                    children.Add(def);
+                    foreach (ClassDef child in def.AllChildren)
+                    {
+                        children.Add(child);
                     }
                 }
                 return children;
@@ -894,7 +920,7 @@ namespace Habanero.BO.ClassDefinition
                 }
                 return null;
             }
-                
+
             ClassDef relatedClassDef = this.RelationshipDefCol[source.Name].RelatedObjectClassDef;
             if (source.Joins.Count > 0)
             {
@@ -982,8 +1008,8 @@ namespace Habanero.BO.ClassDefinition
         public override bool Equals(object obj)
         {
             if (obj == null) return false;
-            if (obj.GetType() != typeof(ClassDef)) return false;
-            ClassDef otherClsDef = (ClassDef)obj;
+            if (obj.GetType() != typeof (ClassDef)) return false;
+            ClassDef otherClsDef = (ClassDef) obj;
             //TODO this is a rough and ready equals test later need to improve
             if (PropDefcol == null) return false;
             if (PropDefcol.Count != otherClsDef.PropDefcol.Count)
@@ -1015,7 +1041,7 @@ namespace Habanero.BO.ClassDefinition
                                                 this.RelationshipDefCol, uiDefClone);
             newClassDef.TableName = this.TableName;
             newClassDef.DisplayName = this.DisplayName;
-           
+
             return newClassDef;
         }
 
@@ -1034,6 +1060,7 @@ namespace Habanero.BO.ClassDefinition
                 return false;
             }
         }
+
 
         ///<summary>
         /// traverses the inheritance hierachy to find the base class of this type in the case 
@@ -1069,13 +1096,13 @@ namespace Habanero.BO.ClassDefinition
                 //If there are some alternative relationships to traverse through then
                 //  go through each alternative and check if there is a related object and return the first one
                 // else get the related object
-                
-                string[] parts = relationshipName.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+
+                string[] parts = relationshipName.Split(new char[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
                 List<string> relNames = new List<string>(parts);
                 List<Type> relatedPropertyTypes = new List<Type>();
                 relNames.ForEach(delegate(string relationship)
                 {
-                    if(RelationshipDefCol.Contains(relationship))
+                    if (RelationshipDefCol.Contains(relationship))
                     {
                         RelationshipDef relationshipDef = RelationshipDefCol[relationship];
                         ClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
@@ -1089,13 +1116,13 @@ namespace Habanero.BO.ClassDefinition
                 Type currentPropertyType = null;
                 relatedPropertyTypes.ForEach(delegate(Type propertyType)
                 {
-                    if(currentPropertyType==null)
+                    if (currentPropertyType == null)
                     {
                         currentPropertyType = propertyType;
                     }
-                    else if(currentPropertyType != propertyType)
+                    else if (currentPropertyType != propertyType)
                     {
-                        currentPropertyType = typeof(object);
+                        currentPropertyType = typeof (object);
                     }
                 });
 
@@ -1110,7 +1137,7 @@ namespace Habanero.BO.ClassDefinition
             }
             else if (propertyName.IndexOf("-") != -1)
             {
-                return typeof(object);
+                return typeof (object);
             }
             else
             {
@@ -1121,7 +1148,7 @@ namespace Habanero.BO.ClassDefinition
                 }
                 else
                 {
-                    return typeof(object);
+                    return typeof (object);
                 }
             }
         }
@@ -1133,11 +1160,11 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         ///<param name="propertyName">The property to get the type for.</param>
         ///<returns>The type of the specified property</returns>
-        public IPropertyComparer<T> CreatePropertyComparer<T>(string propertyName) where T:IBusinessObject
+        public IPropertyComparer<T> CreatePropertyComparer<T>(string propertyName) where T : IBusinessObject
         {
-            Type comparerType = typeof(PropertyComparer<,>);
-            comparerType = comparerType.MakeGenericType(typeof(T), GetPropertyType(propertyName));
-            IPropertyComparer<T> comparer = (IPropertyComparer<T>)Activator.CreateInstance(comparerType, propertyName);
+            Type comparerType = typeof (PropertyComparer<,>);
+            comparerType = comparerType.MakeGenericType(typeof (T), GetPropertyType(propertyName));
+            IPropertyComparer<T> comparer = (IPropertyComparer<T>) Activator.CreateInstance(comparerType, propertyName);
             return comparer;
         }
 
@@ -1177,18 +1204,17 @@ namespace Habanero.BO.ClassDefinition
             if (superClassClassDef != null)
             {
                 return superClassClassDef.GetTableName(propDef);
-            } else
+            }
+            else
             {
                 return "";
             }
         }
 
 
-        public static ClassDef Get<T>() where T: class, IBusinessObject
+        public static ClassDef Get<T>() where T : class, IBusinessObject
         {
             return ClassDefs[typeof (T)];
         }
-
-     
     }
 }

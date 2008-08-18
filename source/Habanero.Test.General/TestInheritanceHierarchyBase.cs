@@ -36,10 +36,7 @@ namespace Habanero.Test.General
         public void SetupTest()
         {
             this.SetupDBConnection();
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from filledcircle_table;");
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from circle_table;");
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from circle_concrete;");
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from shape_table;");
+            ClearTables();
             SetupInheritanceSpecifics();
             _filledCircle = new FilledCircle();
             SetStrID();
@@ -55,9 +52,18 @@ namespace Habanero.Test.General
             _selectSql.Statement.Append(_filledCircle.SelectSqlStatement(_selectSql));
         }
 
+        private void ClearTables()
+        {
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from filledcircle_table;");
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from circle_table;");
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from circle_concrete;");
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from shape_table;");
+        }
+
         public void SetupTestForFilledCircleNoPK()
         {
             this.SetupDBConnection();
+            ClearTables();
             SetupInheritanceSpecifics();
             _filledCircle = new FilledCircleNoPrimaryKey();
             SetStrID();
@@ -76,6 +82,7 @@ namespace Habanero.Test.General
         public void SetupTestForFilledCircleInheritsCircleNoPK()
         {
             this.SetupDBConnection();
+            ClearTables();
             SetupInheritanceSpecifics();
             _filledCircle = new FilledCircleInheritsCircleNoPK();
             SetStrID();
@@ -94,6 +101,7 @@ namespace Habanero.Test.General
         public void SetupTestForFilledCircleNoPrimaryKeyInheritsCircle()
         {
             this.SetupDBConnection();
+            ClearTables();
             SetupInheritanceSpecifics();
             _filledCircle = new FilledCircleNoPrimaryKeyInheritsCircle();
             SetStrID();

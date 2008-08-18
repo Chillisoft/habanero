@@ -463,6 +463,23 @@ namespace Habanero.Test.BO
                 " JOIN [Shape_table] ON [circle_table].[CircleID_field] = [Shape_table].[ShapeID_field]", statement.Statement.ToString());
         }
 
+        [Test]
+        public void TestSingleTableInheritance_DiscriminatorInWhere()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef circleClassDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(circleClassDef);
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
+            //---------------Test Result -----------------------
+            StringAssert.Contains("[Shape_table].[ShapeType_field] = ?Param0", statement.Statement.ToString());
+            Assert.AreEqual(1, statement.Parameters.Count);
+            Assert.AreEqual("CircleNoPrimaryKey", statement.Parameters[0].Value);
+            //---------------Tear Down -------------------------
+
+        }
+
         public class DatabaseConnectionStub_LimitClauseAtEnd : DatabaseConnectionStub
         {
             public override string GetLimitClauseForEnd(int limit)

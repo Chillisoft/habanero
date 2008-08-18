@@ -323,21 +323,22 @@ namespace Habanero.Test.BO
             Assert.AreEqual("(Engine.EngineNo = '100') AND (Engine.CarID = '" + carId.ToString("B") + "')", criteria.ToString());
         }
 
-        //[Test]
-        //public void TestCreateCriteria()
-        //{
-        //    //-------------Setup Test Pack ------------------
-        //    ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
-        //    string propertyName = "EngineNo";
-        //    Criteria criteria = QueryBuilder.CreateCriteria(engineClassDef, )
-        //    QueryBuilder.CreateOrderCriteria()
-        //    //-------------Test Pre-conditions --------------
 
-        //    //-------------Execute test ---------------------
-
-        //    //-------------Test Result ----------------------
-
-        //}
+        [Test]
+        public void TestPrepareDiscriminatorCriteria()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef circleClassDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+            SelectQuery selectQuery = (SelectQuery)QueryBuilder.CreateSelectQuery(circleClassDef);
+            Criteria discCriteria = selectQuery.DiscriminatorCriteria;
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareDiscriminatorCriteria(circleClassDef, discCriteria);
+            //---------------Test Result -----------------------
+            Assert.AreEqual("ShapeType_field", discCriteria.Field.PropertyName);
+            Assert.AreEqual("ShapeType_field", discCriteria.Field.FieldName);
+            Assert.AreEqual("Shape", discCriteria.Field.Source.Name);
+            Assert.AreEqual("Shape_table", discCriteria.Field.Source.EntityName);
+        }
 
         [Test]
         public void TestSetOrderCriteria_AddsJoinToSource()
@@ -416,8 +417,11 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(circleClassDef);
             //---------------Test Result -----------------------
-            Assert.AreEqual(3, selectQuery.Fields.Count);
+            Assert.AreEqual(4, selectQuery.Fields.Count);
             Assert.IsTrue(selectQuery.Fields.ContainsKey("ShapeID"));
+            Assert.IsTrue(selectQuery.Fields.ContainsKey("ShapeName"));
+            Assert.IsTrue(selectQuery.Fields.ContainsKey("Radius"));
+            Assert.IsTrue(selectQuery.Fields.ContainsKey("ShapeType_field"));
             Assert.AreEqual("Shape_table", selectQuery.Source.EntityName);
         }
 
@@ -427,16 +431,60 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef circleClassDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
             ClassDef shapeClassDef = circleClassDef.SuperClassClassDef;
+            Criteria expectedShapeCriteria = new Criteria("ShapeType_field", Criteria.ComparisonOp.Is, "null");
+            Criteria expectedCircleCriteria = new Criteria("ShapeType_field", Criteria.ComparisonOp.Equals, "CircleNoPrimaryKey");
+            Criteria expected = new Criteria(expectedShapeCriteria, Criteria.LogicalOp.Or, expectedCircleCriteria);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(shapeClassDef);
+            SelectQuery selectQuery = (SelectQuery) QueryBuilder.CreateSelectQuery(shapeClassDef);
             //---------------Test Result -----------------------
             Assert.AreEqual(3, selectQuery.Fields.Count);
             Assert.IsTrue(selectQuery.Fields.ContainsKey("ShapeID"));
             Assert.IsTrue(selectQuery.Fields.ContainsKey("ShapeName"));
             Assert.IsTrue(selectQuery.Fields.ContainsKey("ShapeType_field"));
+
+            Assert.AreEqual(expected, selectQuery.DiscriminatorCriteria);
             Assert.AreEqual("Shape_table", selectQuery.Source.EntityName);
+        }
+
+        [Test]
+        public void TestSingleTableInheritance_SubTypeHasDiscriminator()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef circleClassDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+            Criteria expected = new Criteria("ShapeType_field", Criteria.ComparisonOp.Equals, "CircleNoPrimaryKey");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            SelectQuery selectQuery = (SelectQuery) QueryBuilder.CreateSelectQuery(circleClassDef);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expected, selectQuery.DiscriminatorCriteria);
+            Criteria discCriteria = selectQuery.DiscriminatorCriteria;
+            Assert.AreEqual("ShapeType_field", discCriteria.Field.PropertyName);
+            Assert.AreEqual("ShapeType_field", discCriteria.Field.FieldName);
+            Assert.AreEqual("Shape", discCriteria.Field.Source.Name);
+            Assert.AreEqual("Shape_table", discCriteria.Field.Source.EntityName);
+        }
+
+        [Test]
+        public void TestSingleTableInheritance_TwoLevelsDeep()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef filledCircleClassDef = FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
+            ClassDef shapeClassDef = filledCircleClassDef.SuperClassClassDef.SuperClassClassDef;
+            Criteria expectedShapeCriteria = new Criteria("ShapeType_field", Criteria.ComparisonOp.Is, "null");
+            Criteria expectedCircleCriteria = new Criteria("ShapeType_field", Criteria.ComparisonOp.Equals, "CircleNoPrimaryKey");
+            Criteria expectedFilledCircleCriteria = new Criteria("ShapeType_field", Criteria.ComparisonOp.Equals, "FilledCircleNoPrimaryKey");
+            Criteria shapeOrCircleCriteria = new Criteria(expectedShapeCriteria, Criteria.LogicalOp.Or, expectedCircleCriteria);
+            Criteria expected = new Criteria(shapeOrCircleCriteria, Criteria.LogicalOp.Or, expectedFilledCircleCriteria);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            SelectQuery selectQuery = (SelectQuery)QueryBuilder.CreateSelectQuery(shapeClassDef);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expected, selectQuery.DiscriminatorCriteria);
         }
 
 

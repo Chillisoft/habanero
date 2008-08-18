@@ -90,6 +90,12 @@ namespace Habanero.BO
             set { _selectQuery.ClassDef = value; }
         }
 
+        public Criteria DiscriminatorCriteria
+        {
+            get { return _selectQuery.DiscriminatorCriteria; }
+            set { _selectQuery.DiscriminatorCriteria = value; }
+        }
+
         #endregion
 
         /// <summary>
@@ -310,9 +316,11 @@ namespace Habanero.BO
 
         private void AppendWhereClause(StringBuilder builder, SqlStatement statement)
         {
-            if (_selectQuery.Criteria == null) return;
+            Criteria fullCriteria = Criteria.MergeCriteria(_selectQuery.Criteria, _selectQuery.DiscriminatorCriteria);
+
+            if (fullCriteria == null) return;
             builder.Append(" WHERE ");
-            CriteriaDB criteriaDB = new CriteriaDB(_selectQuery.Criteria);
+            CriteriaDB criteriaDB = new CriteriaDB(fullCriteria);
             string whereClause =
                 criteriaDB.ToString(_sqlFormatter, delegate(object value)
                        {
@@ -329,6 +337,7 @@ namespace Habanero.BO
                            statement.AddParameter(paramName, value);
                            return paramName;
                        });
+
             builder.Append(whereClause);
         }
 

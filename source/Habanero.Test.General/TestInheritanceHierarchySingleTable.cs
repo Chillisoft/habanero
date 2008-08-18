@@ -163,10 +163,6 @@ namespace Habanero.Test.General
         [Test]
         public void TestDatabaseReadWrite()
         {
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from filledcircle_table;");
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from circle_table;");
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from circle_concrete;");
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from shape_table;");
             // Test inserting & selecting
             Shape shape = new Shape();
             shape.ShapeName = "MyShape";

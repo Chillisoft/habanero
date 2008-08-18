@@ -67,5 +67,9 @@ namespace Habanero.Base
             get;
             set;
         }
+
+        ///<summary>
+        ///</summary>
+        Criteria DiscriminatorCriteria { get; set; }
     }
 }

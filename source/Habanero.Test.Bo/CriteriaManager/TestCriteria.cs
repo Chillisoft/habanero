@@ -168,6 +168,65 @@ namespace Habanero.Test.BO
             Assert.AreEqual(string.Format("{0}.{1} = '{2}'", sourceName, propName, propValue), criteriaString);
         }
 
+        [Test]
+        public void TestMergeCriteria_BothNull()
+        {
+            //---------------Execute Test ----------------------
+            Criteria newCriteria = Criteria.MergeCriteria(null, null);
+            //---------------Test Result -----------------------
+            Assert.IsNull(newCriteria);
+            //---------------Tear Down -------------------------
+
+        }
+
+        [Test]
+        public void TestMergeCriteria_FirstNull()
+        {
+            //-------------Setup Test Pack ------------------
+            const string propName = "PropName";
+            const string propValue = "PropValue";
+            Criteria surnameCriteria = new Criteria(propName, Criteria.ComparisonOp.Equals, propValue);
+            //---------------Execute Test ----------------------
+            Criteria newCriteria = Criteria.MergeCriteria(surnameCriteria, null);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(surnameCriteria, newCriteria);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestMergeCriteria_SecondNull()
+        {
+            //-------------Setup Test Pack ------------------
+            const string propName = "PropName";
+            const string propValue = "PropValue";
+            Criteria surnameCriteria = new Criteria(propName, Criteria.ComparisonOp.Equals, propValue);
+            //---------------Execute Test ----------------------
+            Criteria newCriteria = Criteria.MergeCriteria(null, surnameCriteria);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(surnameCriteria, newCriteria);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestMergeCriteria()
+        {
+            //-------------Setup Test Pack ------------------
+            const string propName = "PropName";
+            const string propValue = "PropValue";
+            Criteria criteria1 = new Criteria(propName, Criteria.ComparisonOp.Equals, propValue);
+            const string propName2 = "PropName2";
+            const string propValue2 = "PropValue2";
+            Criteria criteria2 = new Criteria(propName2, Criteria.ComparisonOp.Equals, propValue2);
+            Criteria expectedCriteria = new Criteria(criteria1, Criteria.LogicalOp.And, criteria2);
+            //---------------Execute Test ----------------------
+
+            Criteria newCriteria = Criteria.MergeCriteria(criteria1, criteria2);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedCriteria, newCriteria);
+            //---------------Tear Down -------------------------
+        }
+
         #region Composite Properties
 
         [Test]

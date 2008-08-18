@@ -20,6 +20,7 @@
 using System;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
+using System.Collections.Generic;
 
 namespace Habanero.BO
 {
@@ -49,33 +50,52 @@ namespace Habanero.BO
         public static ISelectQuery CreateSelectQuery(IClassDef classDef, Criteria criteria)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
-            ISelectQuery selectQuery = new SelectQuery();
+            SelectQuery selectQuery = new SelectQuery();
             foreach (IPropDef propDef in classDef.PropDefColIncludingInheritance)
             {
                 selectQuery.Fields.Add(propDef.PropertyName,
                                        new QueryField(propDef.PropertyName, propDef.DatabaseFieldName,
                                                       new Source(classDef.GetTableName(propDef))));
             }
-            AddDiscriminatorFields(selectQuery, classDef);
+            Criteria discriminatorCriteria = null;
+            AddDiscriminatorFields(selectQuery, classDef, ref discriminatorCriteria);
+            selectQuery.DiscriminatorCriteria = discriminatorCriteria;
             selectQuery.Source = new Source(classDef.ClassName, classDef.GetTableName());
             PrepareCriteria(classDef, criteria);
+            PrepareDiscriminatorCriteria(classDef, discriminatorCriteria);
             selectQuery.Criteria = criteria;
             selectQuery.ClassDef = classDef;
             return selectQuery;
         }
 
-        private static void AddDiscriminatorFields(ISelectQuery selectQuery, IClassDef classDef)
+        private static void AddDiscriminatorFields(ISelectQuery selectQuery, IClassDef classDef, ref Criteria criteria)
         {
-            foreach (ClassDef thisClassDef in ((ClassDef) classDef).ImmediateChildren)
+            ClassDefCol classDefsToSearch = ((ClassDef)classDef).AllChildren;
+            classDefsToSearch.Add((ClassDef) classDef);
+            List<Criteria> discriminatorCriteriaList = new List<Criteria>();
+            string discriminator = null;
+            foreach (ClassDef thisClassDef in classDefsToSearch)
             {
                 if (!thisClassDef.IsUsingSingleTableInheritance()) continue;
                 SuperClassDef superClassDef = thisClassDef.SuperClassDef;
-                string discriminator = superClassDef.Discriminator;
+                discriminator = superClassDef.Discriminator;
                 if (String.IsNullOrEmpty(discriminator)) continue;
                 if (!selectQuery.Fields.ContainsKey(discriminator))
                 {
                     selectQuery.Fields.Add(discriminator,
                                            new QueryField(discriminator, discriminator, new Source(classDef.GetTableName())));
+                }
+                discriminatorCriteriaList.Add(new Criteria(discriminator, Criteria.ComparisonOp.Equals, thisClassDef.ClassName));
+            }
+
+            if (discriminatorCriteriaList.Count > 0)
+            {
+                if (!((ClassDef)classDef).IsUsingSingleTableInheritance())
+                    criteria = new Criteria(discriminator, Criteria.ComparisonOp.Is, "null");
+                foreach (Criteria discCriteria in discriminatorCriteriaList)
+                {
+                    if (criteria == null) { criteria = discCriteria; continue; }
+                    criteria = new Criteria(criteria, Criteria.LogicalOp.Or, discCriteria); 
                 }
             }
         }
@@ -98,7 +118,7 @@ namespace Habanero.BO
                 field.FieldName = propDef.DatabaseFieldName;
          
                 Source currentSource = field.Source;
-                field.Source = new Source(classDef.ClassName, classDef.GetTableName());
+                field.Source = new Source(classDef.ClassName, classDef.GetTableName(propDef));
                 if (currentSource == null) continue;
                 field.Source.Joins.Add(new Source.Join(field.Source, currentSource));
                 currentSource = field.Source;
@@ -155,6 +175,26 @@ namespace Habanero.BO
                 {
                     criteria.FieldValue = propDef.ConvertValueToPropertyType(criteria.FieldValue);
                 }
+            }
+        }
+
+        ///<summary>
+        ///</summary>
+        ///<param name="classDef"></param>
+        ///<param name="criteria"></param>
+        public static void PrepareDiscriminatorCriteria(IClassDef classDef, Criteria criteria)
+        {
+            if (criteria == null) return;
+            if (criteria.IsComposite())
+            {
+                PrepareDiscriminatorCriteria(classDef, criteria.LeftCriteria);
+                PrepareDiscriminatorCriteria(classDef, criteria.RightCriteria);
+            }
+            else
+            {
+                criteria.Field.FieldName = criteria.Field.PropertyName;
+                criteria.Field.Source = new Source(((ClassDef) classDef).GetBaseClassOfSingleTableHierarchy().ClassName,
+                                                   classDef.GetTableName());
             }
         }
     }

@@ -313,7 +313,7 @@ namespace Habanero.BO
             IClassDef classDef = collection.ClassDef;
             SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
             QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
-            
+
             ISqlStatement statement = selectQuery.CreateSqlStatement();
             BusinessObjectCollection<T> clonedCol = collection.Clone();
             collection.Clear();
@@ -689,7 +689,7 @@ namespace Habanero.BO
         private static ClassDef GetCorrectSubClassDef(IBusinessObject bo, IDataRecord dataReader)
         {
             ClassDef classDef = (ClassDef) bo.ClassDef;
-            ClassDefCol subClasses = classDef.ImmediateChildren;
+            ClassDefCol subClasses = classDef.AllChildren;
             foreach (ClassDef immediateChild in subClasses)
             {
                 if (!immediateChild.IsUsingSingleTableInheritance()) continue;
@@ -701,7 +701,7 @@ namespace Habanero.BO
 
                 ClassDef subClassDef = ClassDef.ClassDefs.FindByClassName(discriminatorValue);
 
-                if (subClassDef != null) return subClassDef;
+                if (subClassDef != null && subClassDef != bo.ClassDef) return subClassDef;
             }
             return null;
         }
