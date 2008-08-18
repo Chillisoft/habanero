@@ -99,7 +99,6 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = GetContactPerson();
 
             DataStoreInMemory dataStore = new DataStoreInMemory();
-            IBusinessObjectLoader loader = new BusinessObjectLoaderInMemory(dataStore);
             ITransactionCommitter firstTransactionCommitter = new TransactionCommitterInMemory(dataStore);
             firstTransactionCommitter.AddBusinessObject(cp);
             firstTransactionCommitter.CommitTransaction();

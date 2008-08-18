@@ -21,6 +21,7 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.ObjectManager;
 using Habanero.DB;
 
 namespace Habanero.Test
@@ -137,7 +138,7 @@ namespace Habanero.Test
 
         internal static void ClearEngineCol()
         {
-            ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
         }
 
         public static void DeleteAllEngines()

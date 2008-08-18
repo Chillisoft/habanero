@@ -25,8 +25,6 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Comparer;
-using Habanero.BO.CriteriaManager;
-using Habanero.DB;
 
 namespace Habanero.BO
 {
@@ -43,13 +41,25 @@ namespace Habanero.BO
     public class BusinessObjectCollection<TBusinessObject> : List<TBusinessObject>, IBusinessObjectCollection
         where TBusinessObject : class, IBusinessObject, new()
     {
+        #region StronglyTypedComperer
+        private class StronglyTypedComperer<T> : IComparer<T>
+        {
+            private readonly IComparer _comparer;
+
+            public StronglyTypedComperer(IComparer comparer)
+            {
+                _comparer = comparer;
+            }
+
+            public int Compare(T x, T y)
+            {
+                return _comparer.Compare(x, y);
+            }
+        }
+        #endregion
         private readonly ClassDef _boClassDef;
-//        private Criteria _criteriaExpression;
-//        private string _orderByClause;
         private readonly IBusinessObject _sampleBo;
-//        private string _extraSearchCriteriaLiteral = "";
-//        private int _limit = -1;
-        private readonly Hashtable _lookupTable;
+        private readonly Hashtable _keyObjectHashTable;
         private readonly List<TBusinessObject> _createdBusinessObjects = new List<TBusinessObject>();
         private ISelectQuery _selectQuery;
 
@@ -125,9 +135,8 @@ namespace Habanero.BO
                                                           "Class Definitions not loaded");
                 }
                 _sampleBo = _boClassDef.CreateNewBusinessObject();
-//                BusinessObject.AllLoadedBusinessObjects().Remove(_sampleBo.ID.GetObjectId());
             }  
-            _lookupTable = new Hashtable();
+            _keyObjectHashTable = new Hashtable();
             _selectQuery = QueryBuilder.CreateSelectQuery(_boClassDef);
         }
 
@@ -171,9 +180,9 @@ namespace Habanero.BO
         }
 
         ///// <summary>
-        ///// Calls the BusinessObjectRemoved() handler
+        ///// Calls the BusinessObjectEdited() handler
         ///// </summary>
-        ///// <param name="bo">The business object removed</param>
+        ///// <param name="bo">The business object that was edited</param>
         //public void FireBusinessObjectEdited(TBusinessObject bo)
         //{
         //    if (this.BusinessObjectEdited != null)
@@ -203,11 +212,11 @@ namespace Habanero.BO
             if (bo == null) throw new ArgumentNullException("bo");
         
             base.Add(bo);
-            _lookupTable.Add(bo.ID.ToString(), bo);
+            _keyObjectHashTable.Add(bo.ID.ToString(), bo);
             bo.Deleted += BusinessObjectDeletedHandler;
             if (bo.ID != null)
             {
-                bo.ID.Updated += UpdateLookupTable;
+                bo.ID.Updated += UpdateHashTable;
             }
         }
 
@@ -215,14 +224,14 @@ namespace Habanero.BO
         /// Updates the lookup table when a primary key property has
         /// changed
         /// </summary>
-        private void UpdateLookupTable(object sender, BOKeyEventArgs e)
+        private void UpdateHashTable(object sender, BOKeyEventArgs e)
         {
             string oldID = e.BOKey.PropertyValueStringBeforeLastEdit();
-            if (_lookupTable.Contains(oldID))
+            if (_keyObjectHashTable.Contains(oldID))
             {
-                BusinessObject bo = (BusinessObject) _lookupTable[oldID];
-                _lookupTable.Remove(oldID);
-                _lookupTable.Add(bo.ID.ToString(), bo);
+                BusinessObject bo = (BusinessObject) _keyObjectHashTable[oldID];
+                _keyObjectHashTable.Remove(oldID);
+                _keyObjectHashTable.Add(bo.ID.ToString(), bo);
             }
         }
 
@@ -243,10 +252,6 @@ namespace Habanero.BO
         public void Add(BusinessObjectCollection<TBusinessObject> col)
         {
             Add((List<TBusinessObject>) col);
-            //foreach (TBusinessObject bo in col)
-            //{
-            //    this.Add(bo);
-            //}
         }
 
         /// <summary>
@@ -288,291 +293,7 @@ namespace Habanero.BO
         public void Refresh()
         {
             BORegistry.DataAccessor.BusinessObjectLoader.Refresh(this);
- 
-            //BusinessObjectCollection<TBusinessObject> oldCol = this.Clone();
-            //Clear();
-            //IDatabaseConnection boDatabaseConnection = DatabaseConnection.CurrentConnection;
-            //ISqlStatement refreshSql = CreateLoadSqlStatement((BusinessObject) _sampleBo, _boClassDef,
-            //    _criteriaExpression, _limit, _extraSearchCriteriaLiteral, _orderByClause);
-            //using (IDataReader dr = boDatabaseConnection.LoadDataReader(refreshSql))
-            //{
-            //    try
-            //    {
-            //        while (dr.Read())
-            //        {
-            //            TBusinessObject bo = (TBusinessObject)BOLoader.Instance.GetBusinessObject(_sampleBo, dr);
-            //            if (Contains(bo)) continue;
-            //            if (oldCol.Contains(bo))
-            //            {
-            //                AddWithoutEvents(bo);
-            //            }
-            //            else
-            //            {
-            //                Add(bo);
-            //            }
-            //        }
-            //    }
-            //    finally
-            //    {
-            //        if (dr != null && !dr.IsClosed)
-            //        {
-            //            dr.Close();
-            //        }
-            //    }
-            //}
         }
-
-        #region Create Load Statement
-
-        internal static ISqlStatement CreateLoadSqlStatement(BusinessObject businessObject, ClassDef classDef,
-                                                             IExpression criteriaExpression, int limit,
-                                                             string extraSearchCriteriaLiteral, string orderByClause)
-        {
-            IDatabaseConnection boDatabaseConnection =  DatabaseConnection.CurrentConnection;
-            ISqlStatement loadSqlStatement = new SqlStatement(boDatabaseConnection);
-            loadSqlStatement.Statement.Append(businessObject.GetSelectSql(limit));
-            if (criteriaExpression != null)
-            {
-                IExpression loadCriteria = criteriaExpression.Clone();
-                DetermineJoins(loadSqlStatement, classDef, loadCriteria, ref orderByClause, boDatabaseConnection);
-                loadSqlStatement.AppendWhere();
-                SqlCriteriaCreator creator = new SqlCriteriaCreator(loadCriteria, classDef, boDatabaseConnection);
-                creator.AppendCriteriaToStatement(loadSqlStatement);
-            } else
-            {
-                DetermineJoins(loadSqlStatement, classDef, null, ref orderByClause, boDatabaseConnection);
-            }
-            if (!String.IsNullOrEmpty(extraSearchCriteriaLiteral))
-            {
-                loadSqlStatement.AppendWhere();
-                loadSqlStatement.Statement.Append(extraSearchCriteriaLiteral);
-            }
-
-            if (limit > 0)
-            {
-                string limitClause = boDatabaseConnection.GetLimitClauseForEnd(limit);
-                if (!String.IsNullOrEmpty(limitClause)) loadSqlStatement.Statement.Append(" " + limitClause);
-            }
-            loadSqlStatement.AppendOrderBy(orderByClause);
-            return loadSqlStatement;
-        }
-
-        private static void DetermineJoins(ISqlStatement sqlStatement, ClassDef classDef, IExpression criteriaExpression, 
-            ref string orderByClause, IDatabaseConnection databaseConnection)
-        {
-            List<string> joinedRelationshipTables = new List<string>();
-            DetermineCriteriaParameterJoins(sqlStatement, classDef, databaseConnection, criteriaExpression, joinedRelationshipTables);
-            DetermineOrderByParameterJoins(sqlStatement, classDef, databaseConnection, ref orderByClause, joinedRelationshipTables);
-        }
-
-        private static void DetermineOrderByParameterJoins(ISqlStatement sqlStatement, ClassDef classDef, 
-            IDatabaseConnection databaseConnection, ref string orderByClause, List<string> joinedRelationshipTables)
-        {
-            if (String.IsNullOrEmpty(orderByClause)) return;
-            //if (orderByClause.IndexOf(".") == -1) return;
-            string[] orderByParameters = orderByClause.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
-            List<string> reconstructedParameters = new List<string>();
-            List<string> orderByColumns = new List<string>();
-            foreach (string thisOrderByParameter in orderByParameters)
-            {
-                string orderByParameter = thisOrderByParameter.Trim();
-                bool isRelationshipParameter = IsRelationshipParameter(orderByParameter);
-                string[] parts = orderByParameter.Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length > 0)
-                {
-                    string parameterName = parts[0];
-                    if (isRelationshipParameter)
-                    {
-                        string fullTableName;
-                        IPropDef propDef;
-                        InsertJoinsForRelatedProperty(sqlStatement, classDef, parameterName, databaseConnection,
-                                                      ref joinedRelationshipTables, out fullTableName, out propDef);
-                        if (propDef == null)
-                        {
-                            throw new HabaneroDeveloperException("An application error has occured please contact your system administrator", "The prop def for '" + parameterName + "' is null");
-                        }
-                        string newParameterName = SqlFormattingHelper.FormatTableAndFieldName(
-                            fullTableName, propDef.DatabaseFieldName, databaseConnection);
-                        //string newParameterName = fullTableName + "." + propDef.DatabaseFieldName;
-                        parts[0] = newParameterName;
-                        orderByParameter = String.Join(" ", parts);
-                    } else
-                    {
-                        IPropDef propDef = classDef.GetPropDef(parameterName, false);
-                        if (propDef != null)
-                        {
-                            string fullTableName = classDef.GetTableName(propDef);
-                            string newParameterName = SqlFormattingHelper.FormatTableAndFieldName(
-                                fullTableName, propDef.DatabaseFieldName, databaseConnection);
-                            parts[0] = newParameterName;
-                            orderByParameter = String.Join(" ", parts);
-                        }
-                    }
-                    orderByColumns.Add(parts[0]);
-                }
-                reconstructedParameters.Add(orderByParameter);
-            }
-            orderByClause = String.Join(", ", reconstructedParameters.ToArray());
-            if (orderByColumns.Count > 0)
-            {
-                //This code adds the order by fields to the select statement, this is specifically required by SQL Server
-                sqlStatement.AddSelectFields(orderByColumns);
-            }
-            return;
-        }
-        
-        private static void DetermineCriteriaParameterJoins(ISqlStatement sqlStatement, ClassDef classDef, IDatabaseConnection databaseConnection, IExpression criteriaExpression, List<string> joinedRelationshipTables)
-        {
-            if (criteriaExpression == null) return;
-            List<Parameter> relationshipParameters = new List<Parameter>();
-            AnalyzeExpressionForRelationshipParameters(criteriaExpression, ref relationshipParameters);
-            Dictionary<string, IParameterSqlInfo> relationshipParameterInformation =
-                new Dictionary<string, IParameterSqlInfo>();
-            foreach (Parameter parameter in relationshipParameters)
-            {
-                string parameterName = parameter.ParameterName;
-                string fullTableName;
-                IPropDef propDef;
-                InsertJoinsForRelatedProperty(sqlStatement, classDef, parameterName, databaseConnection,
-                                              ref joinedRelationshipTables, out fullTableName, out propDef);
-
-                if (propDef != null && !relationshipParameterInformation.ContainsKey(parameterName))
-                {
-                    PropDefParameterSQLInfo parameterSQLInfo = new PropDefParameterSQLInfo(
-                        parameterName, propDef, fullTableName);
-                    relationshipParameterInformation.Add(parameterName, parameterSQLInfo);
-                }
-            }
-            foreach (KeyValuePair<string, IParameterSqlInfo> keyValuePair in relationshipParameterInformation)
-            {
-                criteriaExpression.SetParameterSqlInfo(keyValuePair.Value);
-            }
-        }
-
-        /// <summary>
-        /// This method adds the necessary joins to a sql statement for a Related Property for the specified class.
-        /// For example: If the class is 'Invoice' and the "Parameter Name" is 'Order.Customer.Name' then joins 
-        /// will be added to the sql statement from the 'Invoice' table to the 'Order' table to the 'Customer' table 
-        /// so that the 'Name' field can be used.
-        /// </summary>
-        /// <param name="sqlStatement">The SQL Statement to be updated with the joins if necessary.</param>
-        /// <param name="classDef">The classDef for which the SQL Statement is being built.</param>
-        /// <param name="parameterName">The parameter that is being used</param>
-        /// <param name="databaseConnection">The database connection to use to format the SQL.</param>
-        /// <param name="alreadyJoinedRelationshipTables">A List of full table names that have already 
-        /// been joined for this SQL Statement (This is used to avoid adding a duplicate join).</param>
-        /// <param name="fullTableName">A return parameter to get the constructed Alias for this joined table.</param>
-        /// <param name="propDef">A return parameter to get the propDef that represents the related property.</param>
-        private static void InsertJoinsForRelatedProperty(ISqlStatement sqlStatement, ClassDef classDef, string parameterName, 
-            IDatabaseConnection databaseConnection, ref List<string> alreadyJoinedRelationshipTables, out string fullTableName, out IPropDef propDef)
-        {
-            string[] parts = parameterName.Split('.');
-            string propertyName = parts[parts.Length - 1];
-            ClassDef currentClassDef = classDef;
-            fullTableName = currentClassDef.InheritedTableName;
-            for (int i = 0; i < parts.Length - 1; i++)
-            {
-                string relationshipName = parts[i];
-                string previousFullTableName = fullTableName;
-                fullTableName += relationshipName;
-                RelationshipDef relationshipDef = currentClassDef.GetRelationship(relationshipName);
-                if (relationshipDef != null)
-                {
-                    if (relationshipDef.RelatedObjectClassDef == null)
-                    {
-                        throw new SqlStatementException(String.Format(
-                                                            "The relationship '{0}' of the class '{1}' referred to in " +
-                                                            "the Business Object Collection load criteria in the parameter " +
-                                                            "'{2}' refers to the class '{3}' from the assembly '{4}'. " +
-                                                            "This related class is not found in the loaded class definitions.",
-                                                            relationshipName, currentClassDef.ClassName,
-                                                            parameterName,
-                                                            relationshipDef.RelatedObjectClassName,
-                                                            relationshipDef.RelatedObjectAssemblyName));
-                    }
-                    currentClassDef = relationshipDef.RelatedObjectClassDef;
-                }
-                else
-                {
-                    throw new SqlStatementException(String.Format("The relationship '{0}' of the class '{1}'" +
-                                                                  " referred to in the Business Object Collection load criteria in the parameter '{2}' does not exist.",
-                                                                  relationshipName, currentClassDef.ClassName,
-                                                                  parameterName));
-                }
-                if (alreadyJoinedRelationshipTables.Contains(fullTableName))
-                {
-                    //Dont add join
-                }
-                else
-                {
-                    //Add join
-                    string joinTableAs =
-                        SqlFormattingHelper.FormatTableName(currentClassDef.InheritedTableName, databaseConnection);
-                    joinTableAs += " AS ";
-                    joinTableAs += SqlFormattingHelper.FormatTableName(fullTableName, databaseConnection);
-                    string joinCriteria = "";
-                    foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
-                    {
-                        joinCriteria += SqlFormattingHelper.FormatTableAndFieldName(
-                            previousFullTableName, relPropDef.OwnerPropertyName, databaseConnection);
-                        joinCriteria += " = ";
-                        joinCriteria += SqlFormattingHelper.FormatTableAndFieldName(
-                            fullTableName, relPropDef.RelatedClassPropName, databaseConnection);
-                    }
-                    sqlStatement.AddJoin("LEFT JOIN", joinTableAs, joinCriteria);
-                    alreadyJoinedRelationshipTables.Add(fullTableName);
-                }
-            }
-            propDef = null;
-            if (currentClassDef != null)
-            {
-                propDef = currentClassDef.GetPropDef(propertyName, false);
-            }
-        }
-
-        private static void AnalyzeExpressionForRelationshipParameters(IExpression criteriaExpression, ref List<Parameter> parameters)
-        {
-            if (criteriaExpression is Expression)
-            {
-                Expression expression = criteriaExpression as Expression;
-                GetRelationshipParameters(expression.LeftExpression, ref parameters);
-                GetRelationshipParameters(expression.RightExpression, ref parameters);
-            }
-            else if (criteriaExpression is Parameter)
-            {
-                GetRelationshipParameters(criteriaExpression, ref parameters);
-            }
-        }
-
-        private static void GetRelationshipParameters(IExpression expression, ref List<Parameter> parameters)
-        {
-            if (expression is Parameter)
-            {
-                Parameter parameter = (Parameter) expression;
-                if (IsRelationshipParameter(parameter))
-                {
-                    parameters.Add(parameter);
-                }
-            }
-            else
-            {
-                AnalyzeExpressionForRelationshipParameters(expression, ref parameters);
-            }
-        }
-
-        private static bool IsRelationshipParameter(Parameter parameter)
-        {
-            string parameterName = parameter.ParameterName;
-            return IsRelationshipParameter(parameterName);
-        }
-
-        private static bool IsRelationshipParameter(string parameterName)
-        {
-            return parameterName.Contains(".");
-        }
-
-        #endregion //Create Load Statement
-
         #region Load Methods
 
         /// <summary>
@@ -640,7 +361,6 @@ namespace Habanero.BO
         ///// <param name="searchExpression">The search expression</param>
         ///// <param name="orderByClause">The order-by clause</param>
         ///// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
-        ///// TODO ERIC - what is the last one?
         //public void Load(IExpression searchExpression, string orderByClause, string extraSearchCriteriaLiteral)
         //{
         //    LoadWithLimit(searchExpression, orderByClause, extraSearchCriteriaLiteral, -1);
@@ -728,7 +448,7 @@ namespace Habanero.BO
         public new void Clear()
         {
             base.Clear();
-            _lookupTable.Clear();
+            _keyObjectHashTable.Clear();
         }
 
         /// <summary>
@@ -740,7 +460,7 @@ namespace Habanero.BO
             TBusinessObject boToRemove = this[index];
             Remove(boToRemove);
             //base.RemoveAt(index);
-            //_lookupTable.Remove(boToRemove.ID.ToString());
+            //_keyObjectHashTable.Remove(boToRemove.ID.ToString());
             //boToRemove.Deleted -= BusinessObjectDeletedHandler;
             //this.FireBusinessObjectRemoved(boToRemove);
         }
@@ -764,7 +484,7 @@ namespace Habanero.BO
         internal bool RemoveInternal(TBusinessObject businessObject)
         {
             bool removed = base.Remove(businessObject);
-            _lookupTable.Remove(businessObject.ID.ToString());
+            _keyObjectHashTable.Remove(businessObject.ID.ToString());
             businessObject.Deleted -= BusinessObjectDeletedHandler;
             this.FireBusinessObjectRemoved(businessObject);
             return removed;
@@ -858,7 +578,7 @@ namespace Habanero.BO
 
         /// <summary>
         /// Finds a business object that has the key string specified.<br/>
-        /// Note: the format of the search term is strict, so that a Guid ID
+        /// The format of the search term is strict, so that a Guid ID
         /// may be stored as "boIDname=########-####-####-####-############".
         /// In the case of such Guid ID's, rather use the FindByGuid() function.
         /// Composite primary keys may be stored otherwise, such as a
@@ -868,11 +588,11 @@ namespace Habanero.BO
         /// <returns>Returns the business object if found, or null if not</returns>
         public TBusinessObject Find(string key)
         {
-            if (_lookupTable.ContainsKey(key))
+            if (_keyObjectHashTable.ContainsKey(key))
             {
-                TBusinessObject bo = (TBusinessObject) _lookupTable[key];
+                TBusinessObject bo = (TBusinessObject) _keyObjectHashTable[key];
                 if (this.Contains(bo))
-                    return (TBusinessObject) _lookupTable[key];
+                    return (TBusinessObject) _keyObjectHashTable[key];
                 return null;
             }
             return null;
@@ -901,9 +621,9 @@ namespace Habanero.BO
             string formattedSearchItem =
                 string.Format("{0}={1}", _boClassDef.GetPrimaryKeyDef().KeyName, searchTerm.ToString("B"));
 
-            if (_lookupTable.ContainsKey(formattedSearchItem))
+            if (_keyObjectHashTable.ContainsKey(formattedSearchItem))
             {
-                return (TBusinessObject) _lookupTable[formattedSearchItem];
+                return (TBusinessObject) _keyObjectHashTable[formattedSearchItem];
             }
             return null;
         }
@@ -1048,22 +768,7 @@ namespace Habanero.BO
             this.Sort(new StronglyTypedComperer<TBusinessObject>(comparer));
         }
 
-        #region StronglyTypedComperer 
-        private class StronglyTypedComperer<T> : IComparer<T>
-        {
-            private readonly IComparer _comparer;
 
-            public StronglyTypedComperer(IComparer comparer)
-            {
-                _comparer = comparer;
-            }
-
-            public int Compare(T x, T y)
-            {
-                return _comparer.Compare(x, y);
-            }
-        }
-        #endregion
 
         /// <summary>
         /// Returns a list containing all the objects sorted by the property
@@ -1165,12 +870,9 @@ namespace Habanero.BO
 
         #region IBusinessObjectCollection Members
 
-        // TODO ERIC: are these really necessary? and if so, why aren't all of them copied
-        // across from IBusinessObjectCollection?
-
         /// <summary>
         /// Finds a business object that has the key string specified.<br/>
-        /// Note: the format of the search term is strict, so that a Guid ID
+        /// The format of the search term is strict, so that a Guid ID
         /// may be stored as "boIDname=########-####-####-####-############".
         /// In the case of such Guid ID's, rather use the FindByGuid() function.
         /// Composite primary keys may be stored otherwise, such as a
@@ -1326,19 +1028,21 @@ namespace Habanero.BO
         {
             TBusinessObject newBO = (TBusinessObject) Activator.CreateInstance(typeof (TBusinessObject));
             EventHandler<BOEventArgs> savedEventHandler = null;
+            EventHandler<BOEventArgs> savedEventHandler1 = savedEventHandler;
             savedEventHandler = delegate(object sender, BOEventArgs e)
                                     {
                                         if (CreatedBusinessObjects.Remove((TBusinessObject) e.BusinessObject))
                                         {
                                             Add((TBusinessObject) e.BusinessObject);
-                                            e.BusinessObject.Saved -= savedEventHandler;
+                                            e.BusinessObject.Saved -= savedEventHandler1;
                                         }
                                     };
             EventHandler<BOEventArgs> restoredEventHandler = null;
+            EventHandler<BOEventArgs> restoredEventHandler1 = restoredEventHandler;
             restoredEventHandler = delegate(object sender, BOEventArgs e)
                                        {
                                            CreatedBusinessObjects.Remove((TBusinessObject) e.BusinessObject);
-                                           e.BusinessObject.Updated -= restoredEventHandler;
+                                           e.BusinessObject.Updated -= restoredEventHandler1;
                                        };
             newBO.Restored += restoredEventHandler;
             newBO.Saved += savedEventHandler;

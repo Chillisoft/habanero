@@ -295,7 +295,7 @@ namespace Habanero.DB
         /// <param name="criteria">The criteria clause</param>
         public void AppendCriteria(string criteria)
         {
-            if (criteria != null && criteria.Length > 0)
+            if (!string.IsNullOrEmpty(criteria))
             {
                 AppendWhere();
                 this.Statement.Append(criteria);
@@ -352,7 +352,7 @@ namespace Habanero.DB
         /// <param name="orderByCriteria">The order-by clause</param>
         public void AppendOrderBy(string orderByCriteria)
         {
-            if (orderByCriteria != null && orderByCriteria.Length > 0)
+            if (!string.IsNullOrEmpty(orderByCriteria))
             {
                 this.Statement.Append(ORDER_BY_CLAUSE_TOKEN + orderByCriteria);
             }
@@ -408,10 +408,7 @@ namespace Habanero.DB
                 }
                 return true;
             }
-            else
-            {
-                return base.Equals(obj);
-            }
+            return base.Equals(obj);
         }
 
         #region Utility Methods

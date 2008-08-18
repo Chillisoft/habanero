@@ -115,51 +115,52 @@ namespace Habanero.BO.ConcurrencyControl
         /// loaded by the object manager</exception>
         public void CheckConcurrencyBeforeBeginEditing()
         {
-            if (!_busObj.State.IsNew) //you cannot have concurrency control issues on a new object 
-            // all you can have is duplicate data issues.
-            {
-                using (IDataReader dr = BOLoader.Instance.LoadDataReader(_busObj, DatabaseConnection.CurrentConnection, null))
-                {
-                    // If this object no longer exists in the database
-                    // then we have a concurrency conflict since it has been deleted by another process.
-                    // If our objective was to delete it as well then no worries else throw error.
-                    bool drHasData = dr.Read();
-                    if (!(drHasData))
-                    {
-                        //The object you are trying to edit has been deleted by another user.
-                        throw new BusObjDeleteConcurrencyControlException(_busObj.ClassName, 
-                                _busObj.ID.ToString(), _busObj);
-                    }
-                    bool locked;
-                    if (dr[_boPropLocked.DatabaseFieldName] == DBNull.Value)
-                    {
-                        locked = false;
-                    }
-                    else
-                    {
-                        locked = Convert.ToBoolean(dr[_boPropLocked.DatabaseFieldName]);
-                    }
-                    DateTime dateLocked = CastToDateTime(dr, this._boPropDateLocked.DatabaseFieldName);
-                    if (locked && (LockDurationValid(dateLocked)))
-                    {
-                        string userLocked = (string)dr[this._boPropUserLocked.DatabaseFieldName];
-                        string machineLocked = (string)dr[this._boPropMachineLocked.DatabaseFieldName];
-                        throw new BusObjPessimisticConcurrencyControlException(_busObj.ClassName, userLocked,
-                                                                               machineLocked, dateLocked,
-                                                                               this._busObj.ID.ToString(),
-                                                                               this._busObj);
-                    }
-                }
-                _boPropLocked.Value = true;
-                SetOperatingSystemUser();
-                SetMachineName();
-                SetUserName();
-                SetDateTimeLocked();
-                UpdateLockingToDB();
-                return;
-            }
-        }
+            if (_busObj.State.IsNew) return;
+            IDatabaseConnection connection = DatabaseConnection.CurrentConnection;
+            if (connection == null) return;
 
+            if (!(BORegistry.DataAccessor.BusinessObjectLoader is BusinessObjectLoaderDB)) return;
+            ISqlStatement statement = GetSQLStatement();
+            using (IDataReader dr = connection.LoadDataReader(statement))
+            {
+                // If this object no longer exists in the database
+                // then we have a concurrency conflict since it has been deleted by another process.
+                // If our objective was to delete it as well then no worries else throw error.
+                bool drHasData = dr.Read();
+                if (!(drHasData))
+                {
+                    //The object you are trying to edit has been deleted by another user.
+                    throw new BusObjDeleteConcurrencyControlException(_busObj.ClassName, 
+                                                                      _busObj.ID.ToString(), _busObj);
+                }
+                bool locked = !(dr[_boPropLocked.DatabaseFieldName] == DBNull.Value) && Convert.ToBoolean(dr[_boPropLocked.DatabaseFieldName]);
+                DateTime dateLocked = CastToDateTime(dr, this._boPropDateLocked.DatabaseFieldName);
+                if (locked && (LockDurationValid(dateLocked)))
+                {
+                    string userLocked = (string)dr[this._boPropUserLocked.DatabaseFieldName];
+                    string machineLocked = (string)dr[this._boPropMachineLocked.DatabaseFieldName];
+                    throw new BusObjPessimisticConcurrencyControlException(_busObj.ClassName, userLocked,
+                                                                           machineLocked, dateLocked,
+                                                                           this._busObj.ID.ToString(),
+                                                                           this._busObj);
+                }
+            }
+            _boPropLocked.Value = true;
+            SetOperatingSystemUser();
+            SetMachineName();
+            SetUserName();
+            SetDateTimeLocked();
+            UpdateLockingToDB();
+            return;
+        }
+        private ISqlStatement GetSQLStatement()
+        {
+            BusinessObjectLoaderDB boLoaderDB = (BusinessObjectLoaderDB)BORegistry.DataAccessor.BusinessObjectLoader;
+            ISelectQuery selectQuery = boLoaderDB.GetSelectQuery(_busObj.ClassDef, _busObj.ID);
+
+            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
+            return selectQueryDB.CreateSqlStatement();
+        }
         private bool LockDurationValid(DateTime dateLocked)
         {
             return dateLocked > DateTime.Now.AddMinutes(-1 * this._lockDurationInMinutes);
@@ -194,7 +195,7 @@ namespace Habanero.BO.ConcurrencyControl
 
             try
             {
-                _boPropOperatingSystemUser.Value = WindowsIdentity.GetCurrent().Name;
+                _boPropOperatingSystemUser.Value = GetOperatinSystemUser();
             }
             catch (SecurityException)
             {
@@ -212,7 +213,11 @@ namespace Habanero.BO.ConcurrencyControl
             {
             }
         }
-
+        private static string GetOperatinSystemUser()
+        {
+            WindowsIdentity currentUser = WindowsIdentity.GetCurrent();
+            return currentUser == null ? "" : currentUser.Name;
+        }
         private void SetUserName()
         {
             if ((_boPropUserLocked == null)) return;
@@ -220,7 +225,7 @@ namespace Habanero.BO.ConcurrencyControl
             {
                 //TODO Temp code possibly integrate with a system to get the user as
                 // per custom code for now use the OS user.
-                _boPropUserLocked.Value = WindowsIdentity.GetCurrent().Name;
+                _boPropUserLocked.Value = GetOperatinSystemUser();
             }
             catch (SecurityException)
             {

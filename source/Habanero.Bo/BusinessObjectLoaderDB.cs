@@ -53,7 +53,7 @@ namespace Habanero.BO
         /// </summary>
         /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="primaryKey">The primary key to use to load the business object</param>
-        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new()
         {
             T businessObject = GetBusinessObject<T>(Criteria.FromPrimaryKey(primaryKey));
@@ -71,7 +71,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="classDef">The ClassDef of the object to load.</param>
         /// <param name="primaryKey">The primary key to use to load the business object</param>
-        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public IBusinessObject GetBusinessObject(IClassDef classDef, IPrimaryKey primaryKey)
         {
             IBusinessObject businessObject = GetBusinessObject(classDef, Criteria.FromPrimaryKey(primaryKey));
@@ -95,10 +95,33 @@ namespace Habanero.BO
         public T GetBusinessObject<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
             ClassDef classDef = ClassDef.ClassDefs[typeof (T)];
+            ISelectQuery selectQuery = GetSelectQuery(classDef, criteria);
+            return GetBusinessObject<T>(selectQuery);
+        }
+
+        ///<summary>
+        ///Create a select Query based on the class definition and the primary key.
+        ///</summary>
+        ///<param name="classDef">The class definition.</param>
+        ///<param name="primaryKey">The primary key of the object.</param>
+        ///<returns></returns>
+        public ISelectQuery GetSelectQuery(IClassDef classDef, IPrimaryKey primaryKey)
+        {
+            return GetSelectQuery(classDef, Criteria.FromPrimaryKey(primaryKey));
+        }
+
+        ///<summary>
+        ///Create a select Query based on the class definition and the search criteria.
+        ///</summary>
+        ///<param name="classDef">The class definition.</param>
+        ///<param name="criteria">The load criteria.</param>
+        ///<returns></returns>
+        private static ISelectQuery GetSelectQuery(IClassDef classDef, Criteria criteria)
+        {
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             QueryBuilder.PrepareCriteria(classDef, criteria);
             selectQuery.Criteria = criteria;
-            return GetBusinessObject<T>(selectQuery);
+            return selectQuery;
         }
 
         /// <summary>
@@ -111,6 +134,7 @@ namespace Habanero.BO
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         public T GetBusinessObject<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new()
         {
+            QueryBuilder.PrepareCriteria(ClassDef.ClassDefs[typeof(T)], selectQuery.Criteria);
             SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
             ISqlStatement statement = selectQueryDB.CreateSqlStatement();
             IClassDef correctSubClassDef = null;
@@ -124,10 +148,8 @@ namespace Habanero.BO
                     //Checks to see if the loaded object is the base of a single table inheritance structure
                     // and has a sub type
                     correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
-                    if (dr.Read())
-                    {
-                        ThrowRetrieveDuplicateObjectException(statement, loadedBo);
-                    }
+                    //Checks to see if there is a duplicate object meeting this criteria
+                    if (dr.Read()) ThrowRetrieveDuplicateObjectException(statement, loadedBo);
                     if (correctSubClassDef == null) return loadedBo;
                 }
             }
@@ -169,9 +191,10 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="classDef">The ClassDef of the object to load.</param>
         /// <param name="selectQuery">The select query to use to load from the data source</param>
-        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public IBusinessObject GetBusinessObject(IClassDef classDef, ISelectQuery selectQuery)
         {
+            QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
             SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
             ISqlStatement statement = selectQueryDB.CreateSqlStatement();
             IClassDef correctSubClassDef = null;
@@ -192,7 +215,6 @@ namespace Habanero.BO
             }
             if (correctSubClassDef != null)
             {
-//                BusinessObject.AllLoadedBusinessObjects().Remove(loadedBo.ID.GetObjectId());
                 BusObjectManager.Instance.Remove(loadedBo.ID);
                 IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = subClassBusinessObject;
@@ -200,6 +222,40 @@ namespace Habanero.BO
             return loadedBo;
         }
 
+        /// <summary>
+        /// Loads a business object of type T, using the SelectQuery given. It's important to make sure that T (meaning the ClassDef set up for T)
+        /// has the properties defined in the fields of the select query.  
+        /// This method allows you to define a custom query to load a business object
+        /// </summary>
+        /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="criteriaString">The select query to use to load from the data source</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
+        public T GetBusinessObject<T>(string criteriaString) where T : class, IBusinessObject, new()
+        {
+            Criteria criteria = GetCriteriaObject(ClassDef.ClassDefs[typeof(T)], criteriaString);
+            return GetBusinessObject<T>(criteria);
+        }
+
+        /// <summary>
+        /// Loads a business object of the type identified by a <see cref="ClassDef"/>, using the criteria given
+        /// </summary>
+        /// <param name="classDef">The ClassDef of the object to load.</param>
+        /// <param name="criteriaString">The criteria to use to load the business object must be of formst "PropName = criteriaValue" e.g. "Surname = Powell"</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an error is raised</returns>
+        public IBusinessObject GetBusinessObject(IClassDef classDef, string criteriaString)
+        {
+            Criteria criteria = GetCriteriaObject(classDef, criteriaString);
+            return GetBusinessObject(classDef, criteria);
+        }
+
+        private static Criteria GetCriteriaObject(IClassDef classDef, string criteriaString)
+        {
+            Criteria criteria = CriteriaParser.CreateCriteria(criteriaString);
+            QueryBuilder.PrepareCriteria(classDef, criteria);
+            return criteria;
+        }
+
+        #region GetBusinessObjectCollection
 
         /// <summary>
         /// Loads a BusinessObjectCollection using the criteria given. 
@@ -224,8 +280,9 @@ namespace Habanero.BO
         /// <returns>The loaded collection</returns>
         public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString) where T : class, IBusinessObject, new()
         {
-            Criteria criteria = CriteriaParser.CreateCriteria(criteriaString);
-            QueryBuilder.PrepareCriteria(ClassDef.ClassDefs[typeof(T)], criteria);
+            Criteria criteria = GetCriteriaObject(ClassDef.ClassDefs[typeof(T)], criteriaString);
+//            Criteria criteria = CriteriaParser.CreateCriteria(criteriaString);
+//            QueryBuilder.PrepareCriteria(ClassDef.ClassDefs[typeof(T)], criteria);
             return GetBusinessObjectCollection<T>(criteria);
         }
 
@@ -340,27 +397,6 @@ namespace Habanero.BO
                     }
                 }
             }
-
-
-            //IBusinessObjectCollection updatedCol = collection.Clone();
-            //updatedCol.SelectQuery = collection.SelectQuery;
-            //updatedCol.Clear();
-            //using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
-            //{
-            //    while (dr.Read())
-            //    {
-            //        IBusinessObject loadedBo = LoadBOFromReader(collection.ClassDef, dr, selectQuery);
-            //        updatedCol.Add(loadedBo);
-            //    }
-            //}
-            //foreach (IBusinessObject obj in collection)
-            //{
-            //    if (!updatedCol.Contains(obj)) collection.Remove(obj);
-            //}
-            //foreach (IBusinessObject obj in updatedCol)
-            //{
-            //    if (!collection.Contains(obj)) collection.Add(obj);
-            //}
         }
 
         /// <summary>
@@ -379,59 +415,11 @@ namespace Habanero.BO
             if (businessObject.State.IsEditing)
             {
                 throw new HabaneroDeveloperException("A Error has occured since the object being refreshed is being edited.",
-                    "A Error has occured since the object being refreshed is being edited. ID :- " +
-                    businessObject.ID.GetObjectId() + " - Class : " + businessObject.ClassDef.ClassNameFull);
+                                                     "A Error has occured since the object being refreshed is being edited. ID :- " +
+                                                     businessObject.ID.GetObjectId() + " - Class : " + businessObject.ClassDef.ClassNameFull);
             }
             businessObject = GetBusinessObject(businessObject.ClassDef, businessObject.ID);
             return businessObject;
-        }
-
-        /// <summary>
-        /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
-        /// fields defined in the relationship.
-        /// </summary>
-        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        /// <param name="relationship">The relationship that defines the criteria that must be loaded.  For example, a Person might have
-        /// a Relationship called Addresses, which defines the PersonID property as the relationship property. In this case, calling this method
-        /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
-        /// PersonID</param>
-        /// <returns>The loaded RelatedBusinessObjectCollection</returns>
-        public RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IRelationship relationship)
-            where T : class, IBusinessObject, new()
-        {
-            RelatedBusinessObjectCollection<T> relatedCol = new RelatedBusinessObjectCollection<T>(relationship);
-            Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
-            GetBusinessObjectCollection<T>(relationshipCriteria, relationship.OrderCriteria).ForEach(
-                delegate(T obj) { relatedCol.Add(obj); });
-            relatedCol.SelectQuery.Criteria = relationshipCriteria;
-            relatedCol.SelectQuery.OrderCriteria = relationship.OrderCriteria;
-            return relatedCol;
-        }
-
-        /// <summary>
-        /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
-        /// fields defined in the relationship.
-        /// </summary>
-        /// <param name="type">The type of collection to load. This must be a class that implements IBusinessObject</typeparam>
-        /// <param name="relationship">The relationship that defines the criteria that must be loaded.  For example, a Person might have
-        /// a Relationship called Addresses, which defines the PersonID property as the relationship property. In this case, calling this method
-        /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
-        /// PersonID</param>
-        /// <returns>The loaded RelatedBusinessObjectCollection</returns>
-        public IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IRelationship relationship)
-        {
-            IBusinessObjectCollection relatedCol = CreateRelatedBusinessObjectCollection(type, relationship);
-            Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
-
-            IBusinessObjectCollection col = GetBusinessObjectCollection(relationship.RelatedObjectClassDef, 
-                        relationshipCriteria, relationship.OrderCriteria);
-            foreach (IBusinessObject businessObject in col)
-            {
-                relatedCol.Add(businessObject);
-            }
-            relatedCol.SelectQuery.Criteria = relationshipCriteria;
-            relatedCol.SelectQuery.OrderCriteria = relationship.OrderCriteria;
-            return relatedCol;
         }
 
         /// <summary>
@@ -439,13 +427,14 @@ namespace Habanero.BO
         /// has the properties defined in the fields of the select searchCriteria and orderCriteria.  
         /// </summary>
         /// <param name="classDef">The ClassDef for the collection to load</param>
-        /// <param name="searchCriteria">The select query to use to load from the data source</param>
+        /// <param name="criteriaString">The select query to use to load from the data source</param>
         /// <param name="orderCriteria">The order that the collections must be loaded in e.g. Surname, FirstName</param>
         /// <returns>The loaded collection</returns>
-        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria, string orderCriteria)
+        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string criteriaString, string orderCriteria)
         {
-            Criteria criteria = CriteriaParser.CreateCriteria(searchCriteria);
-            QueryBuilder.PrepareCriteria(classDef, criteria);
+            Criteria criteria = GetCriteriaObject(classDef, criteriaString);
+//            Criteria criteria = CriteriaParser.CreateCriteria(searchCriteria);
+//            QueryBuilder.PrepareCriteria(classDef, criteria);
             OrderCriteria orderCriteriaObj = QueryBuilder.CreateOrderCriteria(classDef, orderCriteria);
             return GetBusinessObjectCollection(classDef, criteria, orderCriteriaObj);
         }
@@ -455,68 +444,16 @@ namespace Habanero.BO
         /// has the properties defined in the fields of the select searchCriteria and orderCriteria.  
         /// </summary>
         /// <param name="classDef">The ClassDef for the collection to load</param>
-        /// <param name="searchCriteria">The select query to use to load from the data source</param>
+        /// <param name="criteriaString">The select query to use to load from the data source</param>
         /// <returns>The loaded collection</returns>
-        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria)
+        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string criteriaString)
         {
-            Criteria criteria = CriteriaParser.CreateCriteria(searchCriteria);
-            QueryBuilder.PrepareCriteria(classDef, criteria);
+            Criteria criteria = GetCriteriaObject(classDef, criteriaString);
+//            Criteria criteria = CriteriaParser.CreateCriteria(searchCriteria);
+//            QueryBuilder.PrepareCriteria(classDef, criteria);
             return GetBusinessObjectCollection(classDef, criteria);
         }
 
-        ///<summary>
-        /// Creates a RelatedBusinessObjectCollection.
-        ///</summary>
-        /// <param name="boType">The type of BO to make a generic collection of</param>
-        /// <param name="relationship">The multiple relationship this collection is for</param>
-        ///<returns> A BusinessObjectCollection of the correct type. </returns>
-        private static IBusinessObjectCollection CreateRelatedBusinessObjectCollection(Type boType,
-                                                                                IRelationship relationship)
-        {
-            Type type = typeof(RelatedBusinessObjectCollection<>);
-            type = type.MakeGenericType(boType);
-            return (IBusinessObjectCollection)Activator.CreateInstance(type, relationship);
-        }
-        /// <summary>
-        /// Loads a business object of type T using the relationship given. The relationship will be converted into a
-        /// Criteria object that defines the relationship and this will be used to load the related object.
-        /// </summary>
-        /// <typeparam name="T">The type of the business object to load</typeparam>
-        /// <param name="relationship">The relationship to use to load the object</param>
-        /// <returns>An object of type T if one was found, otherwise null</returns>
-        public T GetRelatedBusinessObject<T>(SingleRelationship relationship) where T : class, IBusinessObject, new()
-        {
-            return GetBusinessObject<T>(Criteria.FromRelationship(relationship));
-        }
-
-        /// <summary>
-        /// Loads a business object using the relationship given. The relationship will be converted into a
-        /// Criteria object that defines the relationship and this will be used to load the related object.
-        /// </summary>
-        /// <param name="relationship">The relationship to use to load the object</param>
-        /// <returns>An object of the type defined by the relationship if one was found, otherwise null</returns>
-        public IBusinessObject GetRelatedBusinessObject(SingleRelationship relationship)
-        {
-            return GetBusinessObject(relationship.RelationshipDef.RelatedObjectClassDef,
-                                     Criteria.FromRelationship(relationship));
-        }
-
-        /// <summary>
-        /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
-        /// </summary>
-        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        /// <param name="criteria">The criteria to use to load the business object collection</param>
-        /// <returns>The loaded collection</returns>
-        /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria)
-            where T : class, IBusinessObject, new()
-        {
-            BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
-            col.SelectQuery.Criteria = criteria;
-            col.SelectQuery.OrderCriteria = orderCriteria;
-            Refresh(col);
-            return col;
-        }
 
         /// <summary>
         /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
@@ -527,9 +464,10 @@ namespace Habanero.BO
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
         public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString, string orderCriteria) where T : class, IBusinessObject, new()
         {
-            ClassDef classDef = ClassDef.ClassDefs[typeof (T)];
-            Criteria criteria = CriteriaParser.CreateCriteria(criteriaString);
-            QueryBuilder.PrepareCriteria(classDef, criteria);
+            ClassDef classDef = ClassDef.ClassDefs[typeof(T)];
+            Criteria criteria = GetCriteriaObject(classDef, criteriaString);
+//            Criteria criteria = CriteriaParser.CreateCriteria(criteriaString);
+//            QueryBuilder.PrepareCriteria(classDef, criteria);
             OrderCriteria orderCriteriaObj = QueryBuilder.CreateOrderCriteria(classDef, orderCriteria);
             return GetBusinessObjectCollection<T>(criteria, orderCriteriaObj);
         }
@@ -586,6 +524,121 @@ namespace Habanero.BO
             Refresh(col);
             return col;
         }
+        #endregion
+
+
+        #region GetRelatedBusinessObjectCollection
+
+        /// <summary>
+        /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
+        /// fields defined in the relationship.
+        /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="relationship">The relationship that defines the criteria that must be loaded.  For example, a Person might have
+        /// a Relationship called Addresses, which defines the PersonID property as the relationship property. In this case, calling this method
+        /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
+        /// PersonID</param>
+        /// <returns>The loaded RelatedBusinessObjectCollection</returns>
+        public RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IRelationship relationship)
+            where T : class, IBusinessObject, new()
+        {
+            RelatedBusinessObjectCollection<T> relatedCol = new RelatedBusinessObjectCollection<T>(relationship);
+            Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
+            GetBusinessObjectCollection<T>(relationshipCriteria, relationship.OrderCriteria).ForEach(
+                delegate(T obj) { relatedCol.Add(obj); });
+            relatedCol.SelectQuery.Criteria = relationshipCriteria;
+            relatedCol.SelectQuery.OrderCriteria = relationship.OrderCriteria;
+            return relatedCol;
+        }
+
+        /// <summary>
+        /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
+        /// fields defined in the relationship.
+        /// </summary>
+        /// <param name="type">The type of collection to load. This must be a class that implements IBusinessObject</typeparam>
+        /// <param name="relationship">The relationship that defines the criteria that must be loaded.  For example, a Person might have
+        /// a Relationship called Addresses, which defines the PersonID property as the relationship property. In this case, calling this method
+        /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
+        /// PersonID</param>
+        /// <returns>The loaded RelatedBusinessObjectCollection</returns>
+        public IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IRelationship relationship)
+        {
+            IBusinessObjectCollection relatedCol = CreateRelatedBusinessObjectCollection(type, relationship);
+            Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
+
+            IBusinessObjectCollection col = GetBusinessObjectCollection(relationship.RelatedObjectClassDef, 
+                                                                        relationshipCriteria, relationship.OrderCriteria);
+            foreach (IBusinessObject businessObject in col)
+            {
+                relatedCol.Add(businessObject);
+            }
+            relatedCol.SelectQuery.Criteria = relationshipCriteria;
+            relatedCol.SelectQuery.OrderCriteria = relationship.OrderCriteria;
+            return relatedCol;
+        }
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
+        /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <returns>The loaded collection</returns>
+        /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
+        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria)
+            where T : class, IBusinessObject, new()
+        {
+            BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
+            col.SelectQuery.Criteria = criteria;
+            col.SelectQuery.OrderCriteria = orderCriteria;
+            Refresh(col);
+            return col;
+        }
+
+        ///<summary>
+        /// Creates a RelatedBusinessObjectCollection.
+        ///</summary>
+        /// <param name="boType">The type of BO to make a generic collection of</param>
+        /// <param name="relationship">The multiple relationship this collection is for</param>
+        ///<returns> A BusinessObjectCollection of the correct type. </returns>
+        private static IBusinessObjectCollection CreateRelatedBusinessObjectCollection(Type boType,
+                                                                                IRelationship relationship)
+        {
+            Type type = typeof(RelatedBusinessObjectCollection<>);
+            type = type.MakeGenericType(boType);
+            return (IBusinessObjectCollection)Activator.CreateInstance(type, relationship);
+        }
+
+        #endregion
+
+
+        #region GetRelatedBusinessObject
+
+        /// <summary>
+        /// Loads a business object of type T using the relationship given. The relationship will be converted into a
+        /// Criteria object that defines the relationship and this will be used to load the related object.
+        /// </summary>
+        /// <typeparam name="T">The type of the business object to load</typeparam>
+        /// <param name="relationship">The relationship to use to load the object</param>
+        /// <returns>An object of type T if one was found, otherwise null</returns>
+        public T GetRelatedBusinessObject<T>(SingleRelationship relationship) where T : class, IBusinessObject, new()
+        {
+            return GetBusinessObject<T>(Criteria.FromRelationship(relationship));
+        }
+
+        /// <summary>
+        /// Loads a business object using the relationship given. The relationship will be converted into a
+        /// Criteria object that defines the relationship and this will be used to load the related object.
+        /// </summary>
+        /// <param name="relationship">The relationship to use to load the object</param>
+        /// <returns>An object of the type defined by the relationship if one was found, otherwise null</returns>
+        public IBusinessObject GetRelatedBusinessObject(SingleRelationship relationship)
+        {
+            return GetBusinessObject(relationship.RelationshipDef.RelatedObjectClassDef,
+                                     Criteria.FromRelationship(relationship));
+        }
+
+        #endregion
+
 
         private static IBusinessObjectCollection CreateCollectionOfType(Type BOType)
         {

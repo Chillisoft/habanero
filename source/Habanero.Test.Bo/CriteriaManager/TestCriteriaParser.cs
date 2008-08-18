@@ -305,6 +305,27 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_CreateCriteria_Invalid()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                CriteriaParser.CreateCriteria("surnameValue");
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("The criteria string surnameValue is not a valid criteria string", ex.DeveloperMessage);
+            }
+            //---------------Test Result -----------------------
+        }
+
+        [Test]
         public void Test_CreateCriteria_Simple()
         {
             //---------------Set up test pack-------------------

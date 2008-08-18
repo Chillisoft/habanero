@@ -118,7 +118,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDefWithDifferentTableAndFieldNames();
-            string propName = "NonExistantTestProp";
+            const string propName = "NonExistantTestProp";
             ClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
             //---------------Execute Test ----------------------
             Exception exception = null;
@@ -133,9 +133,10 @@ namespace Habanero.Test.BO
             }
             //---------------Test Result -----------------------
             Assert.IsInstanceOfType(typeof(InvalidPropertyNameException), exception);
-            StringAssert.Contains(String.Format(
-                                                           "The property definition for the property '{0}' could not be " +
-                                                           "found on a ClassDef of type '{1}'", propName, classdef.ClassNameFull), exception.Message);
+            if (exception != null)
+                StringAssert.Contains(String.Format(
+                                          "The property definition for the property '{0}' could not be " +
+                                          "found on a ClassDef of type '{1}'", propName, classdef.ClassNameFull), exception.Message);
             //---------------Tear Down -------------------------
         }
 
@@ -168,7 +169,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
-            string orderByString = "Car.Owner.Surname";
+            const string orderByString = "Car.Owner.Surname";
 
             //---------------Execute Test ----------------------
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(engineClassDef, orderByString);
@@ -192,7 +193,6 @@ namespace Habanero.Test.BO
             QueryBuilder.PrepareCriteria(engineClassDef, criteria);
 
             //---------------Test Result -----------------------
-            QueryField field = criteria.Field;
             Assert.AreEqual("EngineNo", criteria.Field.PropertyName);
             Assert.AreEqual("ENGINE_NO", criteria.Field.FieldName);
             Assert.AreEqual("Engine", criteria.Field.Source.Name);
@@ -287,7 +287,7 @@ namespace Habanero.Test.BO
         public void TestPrepareCriteria_Null()
         {
             ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
-            Criteria nullCriteria = null;
+            const Criteria nullCriteria = null;
             //-------------Execute test ---------------------
             QueryBuilder.PrepareCriteria(engineClassDef, nullCriteria);
             //-------------Test Result ----------------------
@@ -308,7 +308,6 @@ namespace Habanero.Test.BO
             QueryBuilder.PrepareCriteria(engineClassDef, criteria);
 
             //---------------Test Result -----------------------
-            QueryField field = criteria.Field;
             Assert.AreEqual("EngineNo", criteria1.Field.PropertyName);
             Assert.AreEqual("ENGINE_NO", criteria1.Field.FieldName);
             Assert.AreEqual("Engine", criteria1.Field.Source.Name);

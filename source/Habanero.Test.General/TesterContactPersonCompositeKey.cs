@@ -20,6 +20,7 @@
 using System;
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ObjectManager;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -292,7 +293,7 @@ namespace Habanero.Test.General
             contactPTestSave.Save(); //save the object to the DB
 
 
-            BusinessObject.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
             WaitForGC();
 
             //---------------------------Assert Precondition --------------------------

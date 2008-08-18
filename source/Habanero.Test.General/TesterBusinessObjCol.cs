@@ -76,7 +76,7 @@ namespace Habanero.Test.General
             p.FirstName = "a";
             p.Surname = "bb";
             p.Save();
-            BusinessObject.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
             myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(1, myCol.Count);
         }
@@ -99,7 +99,7 @@ namespace Habanero.Test.General
             p.Surname = "bb";
             p.Save();
             IPrimaryKey pKey = p.ID;
-            BusinessObject.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
             // ReSharper disable RedundantAssignment
             p = null;
 // ReSharper restore RedundantAssignment
@@ -127,7 +127,7 @@ namespace Habanero.Test.General
             p.FirstName = "aa";
             p.Surname = "abc";
             p.Save();
-            BusinessObject.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
             p = ContactPerson.GetContactPerson(pKey);
 
             OrderCriteria orderCriteria = new OrderCriteria();
@@ -154,7 +154,7 @@ namespace Habanero.Test.General
             p.FirstName = "aa";
             p.Surname = "abc";
             p.Save();
-            BusinessObject.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
             p = ContactPerson.GetContactPerson(pKey);
             OrderCriteria orderCriteria = new OrderCriteria();
@@ -178,7 +178,7 @@ namespace Habanero.Test.General
             IPrimaryKey contactPersonKey = CreateSavedContactPersonWithOneAddress(addressLine);
 
             ContactPerson.CreateSavedContactPerson();
-            BusinessObject.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
 
             //------------------------Assert Precondition --------------------------------
@@ -219,7 +219,7 @@ namespace Habanero.Test.General
             p.Surname = "abcd";
             p.Save();
 
-            BusinessObject.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
 
             Criteria criteria1 = new Criteria("Surname", Criteria.ComparisonOp.Equals, "bb");
             Criteria criteria2 = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
@@ -254,7 +254,7 @@ namespace Habanero.Test.General
             p.FirstName = "aa";
             p.Surname = "abc";
             p.Save();
-            BusinessObject.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
             p = ContactPerson.GetContactPerson(pKey);
 //            myCol = ContactPerson.LoadBusinessObjCol("", "Surname Desc");
             OrderCriteria orderCriteria = new OrderCriteria();
@@ -375,7 +375,7 @@ namespace Habanero.Test.General
             p.Surname = "abcd";
             p.Save();
 
-            BusinessObject.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
 
             Criteria criteria1 = new Criteria("Surname", Criteria.ComparisonOp.Equals, "bb");
             Criteria criteria2 = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
@@ -387,7 +387,7 @@ namespace Habanero.Test.General
                                                                                                             orderCriteria);
             Assert.AreEqual(2, myCol.Count);
             //ensure that a new object is created to edit. to simulate multi user editing of objects.
-            BusinessObject.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
             p = ContactPerson.GetContactPerson(pKey);
 
             p.Surname = "zzz";

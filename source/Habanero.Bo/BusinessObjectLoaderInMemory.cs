@@ -49,7 +49,7 @@ namespace Habanero.BO
         /// </summary>
         /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="primaryKey">The primary key to use to load the business object</param>
-        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new()
         {
             if (_dataStore.AllObjects.ContainsKey(primaryKey))
@@ -67,7 +67,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="classDef">The ClassDef of the object to load.</param>
         /// <param name="primaryKey">The primary key to use to load the business object</param>
-        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public IBusinessObject GetBusinessObject(IClassDef classDef, IPrimaryKey primaryKey)
         {
             if (_dataStore.AllObjects.ContainsKey(primaryKey))
@@ -85,7 +85,7 @@ namespace Habanero.BO
         /// </summary>
         /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="criteria">The criteria to use to load the business object</param>
-        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public T GetBusinessObject<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
             return _dataStore.Find<T>(criteria);
@@ -96,7 +96,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="classDef">The ClassDef of the object to load.</param>
         /// <param name="criteria">The criteria to use to load the business object</param>
-        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public IBusinessObject GetBusinessObject(IClassDef classDef, Criteria criteria)
         {
             return _dataStore.Find(classDef.ClassType, criteria);
@@ -109,7 +109,7 @@ namespace Habanero.BO
         /// </summary>
         /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="selectQuery">The select query to use to load from the data source</param>
-        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public T GetBusinessObject<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new()
         {
             return _dataStore.Find<T>(selectQuery.Criteria);
@@ -123,10 +123,20 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="classDef">The ClassDef of the object to load.</param>
         /// <param name="selectQuery">The select query to use to load from the data source</param>
-        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public IBusinessObject GetBusinessObject(IClassDef classDef, ISelectQuery selectQuery)
         {
             return _dataStore.Find(classDef.ClassType, selectQuery.Criteria);
+        }
+
+        public T GetBusinessObject<T>(string criteriaString) where T : class, IBusinessObject, new()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IBusinessObject GetBusinessObject(IClassDef classDef, string criteriaString)
+        {
+            throw new NotImplementedException();
         }
 
 

@@ -18,10 +18,12 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 
 namespace Habanero.Base
 {
+    ///<summary>
+    /// interface for a property definition.
+    ///</summary>
     public interface IPropDef
     {
         ///<summary>

@@ -16,14 +16,21 @@ namespace Habanero.Base
         {
             if (string.IsNullOrEmpty(criteriaString)) return null;
             CriteriaExpression criteriaExpression = new CriteriaExpression(criteriaString);
+
+            if (criteriaExpression == null || criteriaExpression.Left == null || criteriaExpression.Right == null || criteriaExpression.Expression == null)
+            {
+                throw new HabaneroDeveloperException("There is an application error please contact your system administrator", 
+                        "The criteria string " + criteriaString + " is not a valid criteria string");
+            }
             Criteria criteria = GetCriteria(criteriaExpression);
             return criteria;
         }
 
         private static Criteria GetCriteria(CriteriaExpression criteriaExpression)
         {
+
             Criteria criteria;
-            if (criteriaExpression.Left.IsLeaf())
+            if (criteriaExpression.Left.IsLeaf())//I.e. the left is a prop name.
             {
                 criteria = GetCriteriaLeaf(criteriaExpression);
             }

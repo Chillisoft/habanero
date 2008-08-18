@@ -21,6 +21,7 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.ObjectManager;
 using Habanero.DB;
 
 namespace Habanero.Test
@@ -186,7 +187,7 @@ namespace Habanero.Test
 
         public static void ClearContactPersonCol()
         {
-            ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
         }
 
         public static void DeleteAllContactPeople()

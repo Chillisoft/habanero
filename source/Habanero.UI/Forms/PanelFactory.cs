@@ -29,7 +29,7 @@ using Habanero.UI;
 using Habanero.UI.Grid;
 using Habanero.Util;
 using Habanero.Util.File;
-using log4net;
+//using log4net;
 
 namespace Habanero.UI.Forms
 {
@@ -39,7 +39,7 @@ namespace Habanero.UI.Forms
     /// </summary>
     public class PanelFactory
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.PanelFactory");
+//        private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.PanelFactory");
         private BusinessObject _currentBusinessObject;
         //private IUserInterfaceMapper[] _uiArray;
         private readonly UIForm _uiForm;
@@ -435,15 +435,15 @@ namespace Habanero.UI.Forms
             return editable;
         }
 
-        /// <summary>
-        /// A handler to deal with the case of an entered panel
-        /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private void PanelEnteredHandler(object sender, EventArgs e)
-        {
-            _firstControl.Focus();
-        }
+//        /// <summary>
+//        /// A handler to deal with the case of an entered panel
+//        /// </summary>
+//        /// <param name="sender">The object that notified of the event</param>
+//        /// <param name="e">Attached arguments regarding the event</param>
+//        private void PanelEnteredHandler(object sender, EventArgs e)
+//        {
+//            _firstControl.Focus();
+//        }
 
         /// <summary>
         /// A handler to deal with the press of an Enter key when the control
@@ -465,7 +465,7 @@ namespace Habanero.UI.Forms
         /// <param name="e">Attached arguments regarding the event</param>
         private static void DateTimePickerEnterHandler(object sender, EventArgs e)
         {
-            DateTimePicker editor = (DateTimePicker) sender;
+//            DateTimePicker editor = (DateTimePicker) sender;
             //editor.se
             //editor.SelectAll() ;
         }
@@ -786,30 +786,30 @@ namespace Habanero.UI.Forms
                             else sourceCriteria = sourceProperty + " = '" + sourceValue + "'";
 
                             Type sourceType = TypeLoader.LoadType(sourceLookup.AssemblyName, sourceLookup.ClassName);
-                            IBusinessObjectCollection sourceCol =
-                                BOLoader.Instance.GetBusinessObjectCol(sourceType, sourceCriteria, null);
-
-                            if (sourceCol.Count > 0)
-                            {
-                                object targetValue = ((BusinessObject)sourceCol[0]).Props[targetProperty].Value;
-                                if (targetValue != null && targetValue != DBNull.Value)
-                                {
-                                    string targetCriteria;
-                                    if (targetValue is Guid)
-                                        targetCriteria = targetProperty + " = '" + ((Guid) targetValue).ToString("B") + "'";
-                                    else targetCriteria = targetProperty + " = '" + targetValue + "'";
-
-                                    Type targetType = TypeLoader.LoadType(targetLookup.AssemblyName, targetLookup.ClassName);
-                                    ClassDef classDef = ClassDef.ClassDefs[targetType];
-//                                    IBusinessObjectCollection targetCol =
-//                                        BOLoader.Instance.GetBusinessObjectCol(targetType, targetCriteria, null);
-                                    IBusinessObjectCollection targetCol = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, targetCriteria, null);
-                                    if (targetCol.Count > 0)
-                                    {
-                                        targetComboBox.SelectedItem = targetCol[0].ToString();
-                                    }
-                                }
-                            }
+//                            IBusinessObjectCollection sourceCol =
+//                                BOLoader.Instance.GetBusinessObjectCol(sourceType, sourceCriteria, null);
+//
+//                            if (sourceCol.Count > 0)
+//                            {
+//                                object targetValue = ((BusinessObject)sourceCol[0]).Props[targetProperty].Value;
+//                                if (targetValue != null && targetValue != DBNull.Value)
+//                                {
+//                                    string targetCriteria;
+//                                    if (targetValue is Guid)
+//                                        targetCriteria = targetProperty + " = '" + ((Guid) targetValue).ToString("B") + "'";
+//                                    else targetCriteria = targetProperty + " = '" + targetValue + "'";
+//
+//                                    Type targetType = TypeLoader.LoadType(targetLookup.AssemblyName, targetLookup.ClassName);
+//                                    ClassDef classDef = ClassDef.ClassDefs[targetType];
+////                                    IBusinessObjectCollection targetCol =
+////                                        BOLoader.Instance.GetBusinessObjectCol(targetType, targetCriteria, null);
+//                                    IBusinessObjectCollection targetCol = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, targetCriteria, null);
+//                                    if (targetCol.Count > 0)
+//                                    {
+//                                        targetComboBox.SelectedItem = targetCol[0].ToString();
+//                                    }
+//                                }
+//                            }
                         }
                         else
                         {

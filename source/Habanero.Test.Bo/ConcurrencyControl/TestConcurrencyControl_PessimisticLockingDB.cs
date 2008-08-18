@@ -21,10 +21,12 @@ using System;
 using System.Security;
 using System.Security.Principal;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.ConcurrencyControl;
 using Habanero.BO.Loaders;
+using Habanero.BO.ObjectManager;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -33,6 +35,8 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestConcurrencyControl_PessimisticLockingDB : TestUsingDatabase
     {
+        #region Setup/Teardown
+
         [SetUp]
         public void SetupTest()
         {
@@ -40,6 +44,16 @@ namespace Habanero.Test.BO
             //Runs every time that any testmethod is executed
             //base.SetupTest();
         }
+
+        [TearDown]
+        public void TearDownTest()
+        {
+            //runs every time any testmethod is complete
+            //DeleteObjects();
+        }
+
+        #endregion
+
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
@@ -47,255 +61,15 @@ namespace Habanero.Test.BO
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
         }
-        [TearDown]
-        public void TearDownTest()
-        {
-            //runs every time any testmethod is complete
-            //DeleteObjects();
-        }
-        [Test, Ignore("To implement refresh logic")]
-        public void Test_Locking_InCheckConcurrencyControlBeforeBeginEditing()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-            //---------------Execute Test ----------------------
-            //execute CheckConcurrencyControl Begin Edit.
-            IConcurrencyControl concurrCntrl = cp.concurrencyControl();
-            concurrCntrl.CheckConcurrencyBeforeBeginEditing();
-            //---------------Test Result -----------------------
-            //Test that locked.
-            AssertIsLocked(cp);
-
-//            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cp);//load from DB
-            AssertIsLocked(cp);
-            Assert.AreEqual(GetUserName(), cp.UserLocked);
-            Assert.AreEqual(GetOperatingSystemUser(), cp.OperatingSystemUser);
-            Assert.AreEqual(GetMachineName(), cp.MachineLocked);
-            Assert.GreaterOrEqual( cp.DateTimeLocked, DateTime.Now.AddMinutes(-1));
-            Assert.LessOrEqual(cp.DateTimeLocked, DateTime.Now);
-        }
-
-        [Test]
-        public void Test_ThrowErrorIfCheckConcurrencyBeforeEditingTwice()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-            //---------------Execute Test ----------------------
-            IConcurrencyControl concurrCntrl = cp.concurrencyControl();
-            concurrCntrl.CheckConcurrencyBeforeBeginEditing();
-            try
-            {
-                concurrCntrl.CheckConcurrencyBeforeBeginEditing();
-                Assert.Fail();
-            }
-                //---------------Test Result -----------------------
-            catch(BusObjPessimisticConcurrencyControlException ex)
-            {
-                Assert.IsTrue(ex.Message.Contains("You cannot begin edits on the 'ContactPersonPessimisticLockingDB', as another user has started edits and therefore locked to this record."));
-            }
-        }
-
-        [Test]
-        public void Test_ThrowErrorIfObjectDeletedPriorToBeginEdits()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-            //---------------Execute Test ----------------------
-            ContactPerson.DeleteAllContactPeople();
-            try
-            {
-                IConcurrencyControl concurrCntrl = cp.concurrencyControl();
-                concurrCntrl.CheckConcurrencyBeforeBeginEditing();
-                Assert.Fail();
-            }
-                //---------------Test Result -----------------------
-            catch (BusObjDeleteConcurrencyControlException ex)
-            {
-                Assert.IsTrue(ex.Message.Contains("You cannot save the changes to 'ContactPersonPessimisticLockingDB', as another user has deleted the record"));
-            }
-        }
-
-        [Test]
-        public void Test_ThrowErrorIfSecondInstanceOfContactPersonBeginEdit()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-            BusinessObject.ClearObjectManager();
-            ContactPersonPessimisticLockingDB cp2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonPessimisticLockingDB>(cp.ID);
-            //---------------Execute Test ----------------------
-            string surname = cp.Surname;
-            cp.Surname = Guid.NewGuid().ToString();
-            try
-            {
-                cp2.Surname = Guid.NewGuid().ToString();
-                Assert.Fail();
-            }
-                //---------------Test Result -----------------------
-            catch (BusObjPessimisticConcurrencyControlException ex)
-            {
-                Assert.AreEqual(surname, cp2.Surname);
-                Assert.IsTrue(ex.Message.Contains("You cannot begin edits on the 'ContactPersonPessimisticLockingDB', as another user has started edits and therefore locked to this record."));
-            }
-        }
-
-        [Test, Ignore("Need to implement refresh")]
-        public void Test_SurnameNotUpdatedToDBWhenUpdatingLockingProps()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-            string surname = cp.Surname;
-            //---------------Execute Test ----------------------
-           
-            cp.Surname = Guid.NewGuid().ToString();
-            //TODO: BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cp);
-            Assert.AreEqual(surname, cp.Surname);
-            
-        }
-        [Test]
-        public void Test_UnLocking_WhenReleaseWriteLocksIsCalled()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-            IConcurrencyControl concurrCntrl = cp.concurrencyControl();
-            //Create Lock
-            concurrCntrl.CheckConcurrencyBeforeBeginEditing();
-            //---------------Execute Test ----------------------
-
-            concurrCntrl.ReleaseWriteLocks();
-
-            //---------------Test Result -----------------------
-            //Test that locked.
-            AssertIsNotLocked(cp);
-        }
-
-        [Test]
-        public void Test_UnLocking_WhenCancelEditsCalled()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-            IConcurrencyControl concurrCntrl = cp.concurrencyControl();
-            //Create Lock
-            concurrCntrl.CheckConcurrencyBeforeBeginEditing();
-            //---------------Execute Test ----------------------
-
-            cp.Restore();
-
-            //---------------Test Result -----------------------
-            //Test that locked.
-            AssertIsNotLocked(cp);
-        }
-        [Test]
-        public void Test_NotLockedIfLockDurationExceeded()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-            IConcurrencyControl concurrCntrl = cp.concurrencyControl();
-            //Create Lock
-            concurrCntrl.CheckConcurrencyBeforeBeginEditing();
-            int lockDuration = 15;
-            UpdateDatabaseLockAsExpired(lockDuration);
-            //---------------Execute Test ----------------------
-
-            concurrCntrl.CheckConcurrencyBeforeBeginEditing();
-
-            //---------------Test Result -----------------------
-            //Should not raise an error since the lock duration has been exceeded.
-        }
-
-        [Test]
-        public void Test_EditContactPersonTwiceDoesNotCauseProblems()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-            //---------------Execute Test ----------------------
-
-            cp.Surname = Guid.NewGuid().ToString();
-            cp.Surname = Guid.NewGuid().ToString();
-            //---------------Test Result -----------------------
-            //Should not raise an error since the lock duration has been exceeded.
-        }
-
-        [Test, Ignore("Need to implement refresh")]
-        public void Test_WhenContactPersonsavedReleaseLocks()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-            //---------------Execute Test ----------------------
-
-            cp.Surname = Guid.NewGuid().ToString();
-            cp.Save();
-            //---------------Test Result -----------------------
-            AssertIsNotLocked(cp);
-            //TODO: BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cp);//load from DB
-            AssertIsNotLocked(cp);
-        }
-        [Test]
-        public void Test_MultipleSavesNoProblem()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-            //---------------Execute Test ----------------------
-
-            cp.Surname = Guid.NewGuid().ToString();
-            cp.Save();
-            cp.Surname = Guid.NewGuid().ToString();
-            cp.Save();
-            //---------------Test Result -----------------------
-
-        }
-
-        [Test]
-        public void Test_WhenCleansUpObjectClearsItsLock()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-            IPrimaryKey id = cp.ID;
-            //---------------Execute Test ----------------------
-
-            cp.Surname = Guid.NewGuid().ToString();
-#pragma warning disable RedundantAssignment
-            cp = null;//so that garbage collector can work
-#pragma warning restore RedundantAssignment
-            GC.Collect(); //Force the GC to collect
-            GC.WaitForPendingFinalizers();
-            //WaitForDB();
-            //---------------Test Result -----------------------
-            BusinessObject.ClearObjectManager();
-            ContactPersonPessimisticLockingDB cp2 =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonPessimisticLockingDB>(id);
-            AssertIsNotLocked(cp2);
-        }
-
-        [Test]
-        public void Test_IfThisThreadLocksAndTimesOutBeforePersistingThenThrowErrorWhenPersisting()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-            cp.Surname = Guid.NewGuid().ToString();
-            IBOProp propDateTimeLocked = cp.Props["DateTimeLocked"];
-            int lockDuration = 15;
-            //---------------Execute Test ----------------------
-            propDateTimeLocked.Value = DateTime.Now.AddMinutes(-1*lockDuration - 1);
-            UpdateDatabaseLockAsExpired(lockDuration);
-            try
-            {
-                cp.Save();
-                Assert.Fail();
-            }
-            //---------------Test Result -----------------------
-            catch (BusObjPessimisticConcurrencyControlException ex)
-            {
-                Assert.IsTrue(ex.Message.Contains("The lock on the business object ContactPersonPessimisticLockingDB has a duration of 15 minutes and has been exceeded for the object"));
-            }
-        }
 
         private static void UpdateDatabaseLockAsExpired(int lockDuration)
         {
             SqlStatement sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection);
             sqlStatement.Statement.Append("UPDATE `contact_person` SET ");
-            sqlStatement.Statement.Append(SqlFormattingHelper.FormatFieldName("DateTimeLocked", DatabaseConnection.CurrentConnection));
+            sqlStatement.Statement.Append(SqlFormattingHelper.FormatFieldName("DateTimeLocked",
+                                                                              DatabaseConnection.CurrentConnection));
             sqlStatement.Statement.Append(" = ");
-            sqlStatement.AddParameterToStatement(DateTime.Now.AddMinutes(-1 * lockDuration -1));
+            sqlStatement.AddParameterToStatement(DateTime.Now.AddMinutes(-1*lockDuration - 1));
             DatabaseConnection.CurrentConnection.ExecuteSql(sqlStatement);
         }
 
@@ -308,6 +82,7 @@ namespace Habanero.Test.BO
         {
             Assert.IsFalse(Convert.ToBoolean(cp.BoPropLocked.Value));
         }
+
         private static ContactPersonPessimisticLockingDB CreateSavedContactPersonPessimisticLocking()
         {
             ContactPersonPessimisticLockingDB.LoadDefaultClassDef();
@@ -323,7 +98,7 @@ namespace Habanero.Test.BO
         {
             try
             {
-                return GetUserName();
+                return GetOperatinSystemUser();
             }
             catch (SecurityException)
             {
@@ -343,17 +118,280 @@ namespace Habanero.Test.BO
             return "";
         }
 
-        private static string GetUserName()
+        private static string GetOperatinSystemUser()
         {
             try
             {
-                return WindowsIdentity.GetCurrent() == null? "": WindowsIdentity.GetCurrent().Name;
+                WindowsIdentity currentUser = WindowsIdentity.GetCurrent();
+                return currentUser == null ? "" : currentUser.Name;
             }
             catch (SecurityException)
             {
             }
             return "";
         }
+
+        [Test]
+        public void Test_EditContactPersonTwiceDoesNotCauseProblems()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+            //---------------Execute Test ----------------------
+
+            cp.Surname = Guid.NewGuid().ToString();
+            cp.Surname = Guid.NewGuid().ToString();
+            //---------------Test Result -----------------------
+            //Should not raise an error since the lock duration has been exceeded.
+        }
+
+        [Test]
+        public void Test_IfThisThreadLocksAndTimesOutBeforePersistingThenThrowErrorWhenPersisting()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+            cp.Surname = Guid.NewGuid().ToString();
+            IBOProp propDateTimeLocked = cp.Props["DateTimeLocked"];
+            int lockDuration = 15;
+            //---------------Execute Test ----------------------
+            propDateTimeLocked.Value = DateTime.Now.AddMinutes(-1*lockDuration - 1);
+            UpdateDatabaseLockAsExpired(lockDuration);
+            try
+            {
+                cp.Save();
+                Assert.Fail();
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjPessimisticConcurrencyControlException ex)
+            {
+                Assert.IsTrue(
+                    ex.Message.Contains(
+                        "The lock on the business object ContactPersonPessimisticLockingDB has a duration of 15 minutes and has been exceeded for the object"));
+            }
+        }
+
+        [Test]
+        public void Test_Locking_InCheckConcurrencyControlBeforeBeginEditing()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+            //---------------Execute Test ----------------------
+            //execute CheckConcurrencyControl Begin Edit.
+            IConcurrencyControl concurrCntrl = cp.concurrencyControl();
+            concurrCntrl.CheckConcurrencyBeforeBeginEditing();
+            //---------------Test Result -----------------------
+            //Test that locked.
+            AssertIsLocked(cp);
+
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cp);//reload from DB
+            AssertIsLocked(cp);
+            Assert.AreEqual(GetOperatinSystemUser(), cp.UserLocked);
+            Assert.AreEqual(GetOperatingSystemUser(), cp.OperatingSystemUser);
+            Assert.AreEqual(GetMachineName(), cp.MachineLocked);
+            Assert.GreaterOrEqual(cp.DateTimeLocked, DateTime.Now.AddMinutes(-1));
+            Assert.LessOrEqual(cp.DateTimeLocked, DateTime.Now);
+        }
+
+        [Test]
+        public void Test_MultipleSavesNoProblem()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+            //---------------Execute Test ----------------------
+
+            cp.Surname = Guid.NewGuid().ToString();
+            cp.Save();
+            cp.Surname = Guid.NewGuid().ToString();
+            cp.Save();
+            //---------------Test Result -----------------------
+        }
+
+        [Test]
+        public void Test_NotLockedIfLockDurationExceeded()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+            IConcurrencyControl concurrCntrl = cp.concurrencyControl();
+            //Create Lock
+            concurrCntrl.CheckConcurrencyBeforeBeginEditing();
+            int lockDuration = 15;
+            UpdateDatabaseLockAsExpired(lockDuration);
+            //---------------Execute Test ----------------------
+
+            concurrCntrl.CheckConcurrencyBeforeBeginEditing();
+
+            //---------------Test Result -----------------------
+            //Should not raise an error since the lock duration has been exceeded.
+        }
+
+        [Test]
+        public void Test_SurnameNotUpdatedToDBWhenUpdatingLockingProps()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+            string surname = cp.Surname;
+            //---------------Execute Test ----------------------
+
+            cp.Surname = Guid.NewGuid().ToString();
+            BusObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonPessimisticLockingDB cp2 =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonPessimisticLockingDB>(cp.ID);
+
+            Assert.AreEqual(surname, cp2.Surname);
+            Assert.AreNotEqual(surname, cp.Surname);
+        }
+
+        [Test]
+        public void Test_ThrowErrorIfCheckConcurrencyBeforeEditingTwice()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+            //---------------Execute Test ----------------------
+            IConcurrencyControl concurrCntrl = cp.concurrencyControl();
+            concurrCntrl.CheckConcurrencyBeforeBeginEditing();
+            try
+            {
+                concurrCntrl.CheckConcurrencyBeforeBeginEditing();
+                Assert.Fail();
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjPessimisticConcurrencyControlException ex)
+            {
+                Assert.IsTrue(
+                    ex.Message.Contains(
+                        "You cannot begin edits on the 'ContactPersonPessimisticLockingDB', as another user has started edits and therefore locked to this record."));
+            }
+        }
+
+        [Test]
+        public void Test_ThrowErrorIfObjectDeletedPriorToBeginEdits()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+            //---------------Execute Test ----------------------
+            ContactPerson.DeleteAllContactPeople();
+            try
+            {
+                IConcurrencyControl concurrCntrl = cp.concurrencyControl();
+                concurrCntrl.CheckConcurrencyBeforeBeginEditing();
+                Assert.Fail();
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjDeleteConcurrencyControlException ex)
+            {
+                Assert.IsTrue(
+                    ex.Message.Contains(
+                        "You cannot save the changes to 'ContactPersonPessimisticLockingDB', as another user has deleted the record"));
+            }
+        }
+
+        [Test]
+        public void Test_ThrowErrorIfSecondInstanceOfContactPersonBeginEdit()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+            BusObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonPessimisticLockingDB cp2 =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonPessimisticLockingDB>(cp.ID);
+            //---------------Execute Test ----------------------
+            string surname = cp.Surname;
+            cp.Surname = Guid.NewGuid().ToString();
+            try
+            {
+                cp2.Surname = Guid.NewGuid().ToString();
+                Assert.Fail();
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjPessimisticConcurrencyControlException ex)
+            {
+                Assert.AreEqual(surname, cp2.Surname);
+                Assert.IsTrue(
+                    ex.Message.Contains(
+                        "You cannot begin edits on the 'ContactPersonPessimisticLockingDB', as another user has started edits and therefore locked to this record."));
+            }
+        }
+
+        [Test]
+        public void Test_UnLocking_WhenCancelEditsCalled()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+            IConcurrencyControl concurrCntrl = cp.concurrencyControl();
+            //Create Lock
+            concurrCntrl.CheckConcurrencyBeforeBeginEditing();
+            //---------------Execute Test ----------------------
+
+            cp.Restore();
+
+            //---------------Test Result -----------------------
+            //Test that locked.
+            AssertIsNotLocked(cp);
+        }
+
+        [Test]
+        public void Test_UnLocking_WhenReleaseWriteLocksIsCalled()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+            IConcurrencyControl concurrCntrl = cp.concurrencyControl();
+            //Create Lock
+            concurrCntrl.CheckConcurrencyBeforeBeginEditing();
+            //---------------Execute Test ----------------------
+
+            concurrCntrl.ReleaseWriteLocks();
+
+            //---------------Test Result -----------------------
+            //Test that locked.
+            AssertIsNotLocked(cp);
+        }
+
+        [Test]
+        public void Test_WhenCleansUpObjectClearsItsLock()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+            IPrimaryKey id = cp.ID;
+            //---------------Execute Test ----------------------
+
+            cp.Surname = Guid.NewGuid().ToString();
+#pragma warning disable RedundantAssignment
+            cp = null; //so that garbage collector can work
+#pragma warning restore RedundantAssignment
+            GC.Collect(); //Force the GC to collect
+            GC.WaitForPendingFinalizers();
+            //WaitForDB();
+            //---------------Test Result -----------------------
+            BusObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonPessimisticLockingDB cp2 =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonPessimisticLockingDB>(id);
+            AssertIsNotLocked(cp2);
+        }
+
+        [Test]
+        public void Test_WhenContactPersonsavedReleaseLocks()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+            //---------------Execute Test ----------------------
+
+            cp.Surname = Guid.NewGuid().ToString();
+            cp.Save();
+            //---------------Test Result -----------------------
+            AssertIsNotLocked(cp);
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cp);//load from DB
+            AssertIsNotLocked(cp);
+        }
+
+//        private static string GetUserName()
+//        {
+//            try
+//            {
+//                return WindowsIdentity.GetCurrent() == null? "": WindowsIdentity.GetCurrent().Name;
+//            }
+//            catch (SecurityException)
+//            {
+//            }
+//            return "";
+//        }
     }
 
     internal class ContactPersonPessimisticLockingDB : BusinessObject
@@ -371,7 +409,47 @@ namespace Habanero.Test.BO
             SetConcurrencyControl(new PessimisticLockingDB(this, 15, propDateLocked,
                                                            propUserLocked, propMachineLocked,
                                                            propOperatingSystemUserLocked, _boPropLocked));
+        }
 
+        public Guid ContactPersonID
+        {
+            get { return (Guid) GetPropertyValue("ContactPersonID"); }
+            set { SetPropertyValue("ContactPersonID", value); }
+        }
+
+        public string Surname
+        {
+            get { return (string) GetPropertyValue("Surname"); }
+            set { SetPropertyValue("Surname", value); }
+        }
+
+        public IBOProp BoPropLocked
+        {
+            get { return _boPropLocked; }
+        }
+
+        public string UserLocked
+        {
+            get { return (string) GetPropertyValue("UserLocked"); }
+            set { SetPropertyValue("UserLocked", value); }
+        }
+
+        public string OperatingSystemUser
+        {
+            get { return (string) GetPropertyValue("OperatingSystemUserLocked"); }
+            set { SetPropertyValue("OperatingSystemUserLocked", value); }
+        }
+
+        public string MachineLocked
+        {
+            get { return (string) GetPropertyValue("MachineLocked"); }
+            set { SetPropertyValue("MachineLocked", value); }
+        }
+
+        public DateTime? DateTimeLocked
+        {
+            get { return (DateTime?) GetPropertyValue("DateTimeLocked"); }
+            set { SetPropertyValue("DateTimeLocked", value); }
         }
 
         public static ClassDef LoadDefaultClassDef()
@@ -397,50 +475,11 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
-        public Guid ContactPersonID
-        {
-            get { return (Guid)GetPropertyValue("ContactPersonID"); }
-            set { this.SetPropertyValue("ContactPersonID", value); }
-        }
-
-        public string Surname
-        {
-            get { return (string)GetPropertyValue("Surname"); }
-            set { SetPropertyValue("Surname", value); }
-        }
-
         public override string ToString()
         {
             return Surname;
         }
 
-        public IBOProp BoPropLocked
-        {
-            get { return _boPropLocked; }
-        }
-
-        public string UserLocked
-        {
-            get { return (string)GetPropertyValue("UserLocked"); }
-            set { SetPropertyValue("UserLocked", value); }
-        }
-
-        public string OperatingSystemUser
-        {
-            get { return (string)GetPropertyValue("OperatingSystemUserLocked"); }
-            set { SetPropertyValue("OperatingSystemUserLocked", value); }
-        }
-
-        public string MachineLocked
-        {
-            get { return (string)GetPropertyValue("MachineLocked"); }
-            set { SetPropertyValue("MachineLocked", value); }
-        }
-        public DateTime? DateTimeLocked
-        {
-            get { return (DateTime?)GetPropertyValue("DateTimeLocked"); }
-            set { SetPropertyValue("DateTimeLocked", value); }
-        }
         public IConcurrencyControl concurrencyControl()
         {
             return _concurrencyControl;

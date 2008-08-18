@@ -21,6 +21,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.ObjectManager;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -251,7 +252,7 @@ namespace Habanero.Test.General
             bo.SetPropertyValue("ShapeID", circle.ShapeID);
             bo.Save();
 
-            BusinessObject.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
 
             //---------------Execute Test ----------------------
             bo = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(bo.ID);

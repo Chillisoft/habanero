@@ -543,9 +543,7 @@ namespace Habanero.Test.BO
             for (int i = 0; i < surnames.Length; i++)
             {
                 Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surnames[i]);
-                if (BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria) !=
-                    null)
-                    continue;
+                if (BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria) != null) continue;
                 ContactPersonTestBO contact = new ContactPersonTestBO();
                 contact.Surname = surnames[i];
                 contact.FirstName = firstNames[i];

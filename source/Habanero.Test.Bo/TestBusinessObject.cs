@@ -157,7 +157,7 @@ namespace Habanero.Test.BO
             Assert.IsFalse(propDef.PropRule.IsPropValueValid("TestProp", "abcdef", ref errorMessage), "Property value of length 6 must not pass");
             BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "abcde");
-            string reason = "";
+            string reason;
             Assert.IsTrue(bo.IsValid(out reason), "BO should be valid with a TestProp value of 'abcde' but returned : " + reason);
             bo.SetPropertyValue("TestProp", "abcdef");
             Assert.IsFalse(bo.IsValid(), "BO should not be valid with a TestProp value of 'abcdef'");

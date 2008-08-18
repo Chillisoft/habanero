@@ -32,21 +32,37 @@ namespace Habanero.BO
         private readonly Dictionary<IPrimaryKey, IBusinessObject> _objects =
             new Dictionary<IPrimaryKey, IBusinessObject>();
 
+        ///<summary>
+        /// Returns the number of objects in the memory store.
+        ///</summary>
         public int Count
         {
             get { return _objects.Count; }
         }
 
+        ///<summary>
+        /// Returns an Dictionary of all the objects in the memory store.
+        ///</summary>
         public Dictionary<IPrimaryKey, IBusinessObject> AllObjects
         {
             get { return _objects; }
         }
 
+        ///<summary>
+        /// Adds a new business object to the memory store.
+        ///</summary>
+        ///<param name="businessObject"></param>
         public void Add(IBusinessObject businessObject)
         {
             _objects.Add(businessObject.ID, businessObject);
         }
 
+        ///<summary>
+        /// Finds the object of type T that matches the criteria.
+        ///</summary>
+        ///<param name="criteria"></param>
+        ///<typeparam name="T"></typeparam>
+        ///<returns></returns>
         public T Find<T>(Criteria criteria) where T : class, IBusinessObject
         {
             return (T) Find(typeof (T), criteria);
@@ -73,6 +89,13 @@ namespace Habanero.BO
             //return currentBO;
         }
 
+        ///<summary>
+        /// Finds
+        ///</summary>
+        ///<param name="BOType"></param>
+        ///<param name="criteria"></param>
+        ///<returns></returns>
+        ///<exception cref="HabaneroDeveloperException"></exception>
         public IBusinessObject Find(Type BOType, Criteria criteria)
         {
             IBusinessObject currentBO = null;
@@ -95,6 +118,12 @@ namespace Habanero.BO
             return currentBO;
         }
 
+        ///<summary>
+        /// Finds an object of type T that has the primary key primaryKey.
+        ///</summary>
+        ///<param name="primaryKey"></param>
+        ///<typeparam name="T"></typeparam>
+        ///<returns></returns>
         public T Find<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject
         {
             foreach (IBusinessObject bo in _objects.Values)
@@ -104,11 +133,21 @@ namespace Habanero.BO
             return null;
         }
 
+        ///<summary>
+        /// Removes the object from the datastore.
+        ///</summary>
+        ///<param name="businessObject"></param>
         public void Remove(IBusinessObject businessObject)
         {
             _objects.Remove(businessObject.ID);
         }
 
+        ///<summary>
+        /// Find all object that match the criteria.
+        ///</summary>
+        ///<param name="criteria"></param>
+        ///<typeparam name="T"></typeparam>
+        ///<returns></returns>
         public BusinessObjectCollection<T> FindAll<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
             BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
@@ -122,6 +161,12 @@ namespace Habanero.BO
             return col;
         }
 
+        ///<summary>
+        /// find all objects of type boType that match the criteria.
+        ///</summary>
+        ///<param name="BOType"></param>
+        ///<param name="criteria"></param>
+        ///<returns></returns>
         public IBusinessObjectCollection FindAll(Type BOType, Criteria criteria)
         {
             Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(BOType);

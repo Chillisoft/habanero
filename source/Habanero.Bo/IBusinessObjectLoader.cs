@@ -49,7 +49,7 @@ namespace Habanero.BO
         /// </summary>
         /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="primaryKey">The primary key to use to load the business object</param>
-        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new();
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="classDef">The ClassDef of the object to load.</param>
         /// <param name="primaryKey">The primary key to use to load the business object</param>
-        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         IBusinessObject GetBusinessObject(IClassDef classDef, IPrimaryKey primaryKey);
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Habanero.BO
         /// </summary>
         /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="criteria">The criteria to use to load the business object</param>
-        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         T GetBusinessObject<T>(Criteria criteria) where T : class, IBusinessObject, new();
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="classDef">The ClassDef of the object to load.</param>
         /// <param name="criteria">The criteria to use to load the business object</param>
-        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         IBusinessObject GetBusinessObject(IClassDef classDef, Criteria criteria);
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Habanero.BO
         /// </summary>
         /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="selectQuery">The select query to use to load from the data source</param>
-        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, an error is raised</returns>
         T GetBusinessObject<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new();
 
         /// <summary>
@@ -94,8 +94,26 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="classDef">The ClassDef of the object to load.</param>
         /// <param name="selectQuery">The select query to use to load from the data source</param>
-        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         IBusinessObject GetBusinessObject(IClassDef classDef, ISelectQuery selectQuery);
+
+        /// <summary>
+        /// Loads a business object of type T, using the SelectQuery given. It's important to make sure that T (meaning the ClassDef set up for T)
+        /// has the properties defined in the fields of the select query.  
+        /// This method allows you to define a custom query to load a business object
+        /// </summary>
+        /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="criteriaString">The select query to use to load from the data source</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
+        T GetBusinessObject<T>(string criteriaString) where T : class, IBusinessObject, new();
+
+        /// <summary>
+        /// Loads a business object of the type identified by a <see cref="ClassDef"/>, using the criteria given
+        /// </summary>
+        /// <param name="classDef">The ClassDef of the object to load.</param>
+        /// <param name="criteriaString">The criteria to use to load the business object must be of formst "PropName = criteriaValue" e.g. "Surname = Powell"</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an error is raised</returns>
+        IBusinessObject GetBusinessObject(IClassDef classDef, string criteriaString);
 
         /// <summary>
         /// Loads a business object of type T using the relationship given. The relationship will be converted into a
@@ -255,6 +273,7 @@ namespace Habanero.BO
         /// PersonID</param>
         /// <returns>The loaded RelatedBusinessObjectCollection</returns>
         IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IRelationship relationship);
+
 
 
     }

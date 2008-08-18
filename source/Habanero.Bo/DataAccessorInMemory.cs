@@ -21,11 +21,17 @@ using Habanero.Base;
 
 namespace Habanero.BO
 {
+    ///<summary>
+    /// The data accessor used when using the in memory datastore.
+    ///</summary>
     public class DataAccessorInMemory : IDataAccessor
     {
         private readonly DataStoreInMemory _dataStore;
-        private IBusinessObjectLoader _businessObjectLoader;
+        private readonly IBusinessObjectLoader _businessObjectLoader;
 
+        ///<summary>
+        /// Creates a new in memory datastore.
+        ///</summary>
         public DataAccessorInMemory() : this(new DataStoreInMemory())
         {
             

@@ -178,7 +178,9 @@ namespace Habanero.Base
             /// Creates a Field with the given name and SortDirection
             /// </summary>
             /// <param name="propertyName">The name of the property to sort on</param>
+            /// <param name="source">The source for the field i.e. the primary object that the field is defined from.</param>
             /// <param name="sortDirection">The SortDirection option to use when sorting</param>
+            /// <param name="fieldName">The name of the field.</param>
             public Field(string propertyName, string fieldName, Source source, SortDirection sortDirection)
                 : base(propertyName, fieldName, source)
             {
@@ -291,8 +293,7 @@ namespace Habanero.Base
                     else throw new ArgumentException(string.Format("'{0}' is an invalid sort order. Valid options are ASC and DESC", parts[1]));
                     return CreateField(parts[0], sortDirection);
                 }
-                else
-                    return CreateField(parts[0], SortDirection.Ascending);
+                return CreateField(parts[0], SortDirection.Ascending);
             }
 
             /// <summary>
@@ -322,7 +323,7 @@ namespace Habanero.Base
                 //string source = null;
                 string[] parts = sourceAndFieldName.Trim().Split('.');
                 string fieldName = parts[parts.Length-1];
-                Base.Source source = Base.Source.FromString(String.Join(".", parts, 0, parts.Length - 1));
+                Source source = Base.Source.FromString(String.Join(".", parts, 0, parts.Length - 1));
                 Field field = new Field(fieldName, fieldName, source, sortDirection);
                 return field;
             }

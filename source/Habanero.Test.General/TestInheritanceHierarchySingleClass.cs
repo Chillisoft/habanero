@@ -402,15 +402,19 @@ namespace Habanero.Test.General
             filledCircles.LoadAll("ShapeName");
 
             //-------------Test Result ----------------------
+            Assert.AreEqual(3, shapes.Count);
             Assert.AreEqual("CircleChanged", shapes[0].ShapeName);
             Assert.AreEqual("FilledCircleChanged", shapes[1].ShapeName);
             Assert.AreEqual("MyShapeChanged", shapes[2].ShapeName);
+
+            Assert.AreEqual(2, circles.Count);
 
             Assert.AreEqual(10, circles[0].Radius);
             Assert.AreEqual(12, circles[1].Radius);
             Assert.AreEqual("CircleChanged", circles[0].ShapeName);
             Assert.AreEqual("FilledCircleChanged", circles[1].ShapeName);
 
+            Assert.AreEqual(1, filledCircles.Count);
             Assert.AreEqual(4, filledCircles[0].Colour);
             Assert.AreEqual(12, filledCircles[0].Radius);
             Assert.AreEqual("FilledCircleChanged", filledCircles[0].ShapeName);

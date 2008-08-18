@@ -776,7 +776,38 @@ namespace Habanero.Test.BO
                 Assert.AreSame(tai1, tai2);
                 Assert.AreEqual("testing", tai2.TestField);
             }
+            [Test]
+            public void TestGetBusinessObjectByIDInt_CriteriaString()
+            {
+                //---------------Set up test pack-------------------
+                ClassDef.ClassDefs.Clear();
+                TestAutoInc.LoadClassDefWithAutoIncrementingID();
 
+                //---------------Execute Test ----------------------
+                TestAutoInc tai1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>("testautoincid = 1");
+                TestAutoInc tai2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(tai1.ID);
+
+                //---------------Test Result -----------------------
+                Assert.IsNotNull(tai1);
+                Assert.AreSame(tai1, tai2);
+                Assert.AreEqual("testing", tai2.TestField);
+            }
+            [Test]
+            public void TestGetBusinessObjectByIDInt_CriteriaString_Untyped()
+            {
+                //---------------Set up test pack-------------------
+                ClassDef.ClassDefs.Clear();
+                ClassDef classDef = TestAutoInc.LoadClassDefWithAutoIncrementingID();
+
+                //---------------Execute Test ----------------------
+                TestAutoInc tai1 = (TestAutoInc) BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, "testautoincid = 1");
+                TestAutoInc tai2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TestAutoInc>(tai1.ID);
+
+                //---------------Test Result -----------------------
+                Assert.IsNotNull(tai1);
+                Assert.AreSame(tai1, tai2);
+                Assert.AreEqual("testing", tai2.TestField);
+            }
             [Test]
             public void TestGetBusinessObjectByIDIntSavenewAutoIncNumber()
             {
@@ -957,6 +988,74 @@ namespace Habanero.Test.BO
                 Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.And, criteria2);
                 ContactPersonTestBO cp =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+
+                //---------------Test Result -----------------------
+                Assert.AreSame(savedContactPerson, cp);
+
+                Assert.AreEqual(surname, cp.Surname);
+                Assert.AreEqual(firstName, cp.FirstName);
+                Assert.IsFalse(cp.State.IsNew);
+                Assert.IsFalse(cp.State.IsDirty);
+                Assert.IsFalse(cp.State.IsDeleted);
+            }
+
+            [Test]
+            public void TestGetBusinessObject_MultipleCriteria_CriteriaString()
+            {
+                //---------------Set up test pack-------------------
+                ClassDef.ClassDefs.Clear();
+                ContactPersonTestBO.LoadDefaultClassDef();
+                BusObjectManager.Instance.ClearLoadedObjects();
+                TestUtil.WaitForGC();
+
+                const string surname = "abc";
+                const string firstName = "aa";
+                ContactPersonTestBO.CreateSavedContactPerson("ZZ", "zzz");
+                ContactPersonTestBO savedContactPerson = ContactPersonTestBO.CreateSavedContactPerson(surname, firstName);
+                ContactPersonTestBO.CreateSavedContactPerson("aaaa", "aaa");
+
+                //---------------Assert Precondition----------------
+                //Object loaded in object manager
+                Assert.AreEqual(3, BusObjectManager.Instance.Count);
+                Assert.IsTrue(BusObjectManager.Instance.Contains(savedContactPerson.ID));
+
+                //---------------Execute Test ----------------------
+                ContactPersonTestBO cp =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>("Surname = " + surname + " AND FirstName = " + firstName);
+
+                //---------------Test Result -----------------------
+                Assert.AreSame(savedContactPerson, cp);
+
+                Assert.AreEqual(surname, cp.Surname);
+                Assert.AreEqual(firstName, cp.FirstName);
+                Assert.IsFalse(cp.State.IsNew);
+                Assert.IsFalse(cp.State.IsDirty);
+                Assert.IsFalse(cp.State.IsDeleted);
+            }
+
+            [Test]
+            public void TestGetBusinessObject_MultipleCriteria_CriteriaString_Untyped()
+            {
+                //---------------Set up test pack-------------------
+                ClassDef.ClassDefs.Clear();
+                ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+                BusObjectManager.Instance.ClearLoadedObjects();
+                TestUtil.WaitForGC();
+
+                const string surname = "abc";
+                const string firstName = "aa";
+                ContactPersonTestBO.CreateSavedContactPerson("ZZ", "zzz");
+                ContactPersonTestBO savedContactPerson = ContactPersonTestBO.CreateSavedContactPerson(surname, firstName);
+                ContactPersonTestBO.CreateSavedContactPerson("aaaa", "aaa");
+
+                //---------------Assert Precondition----------------
+                //Object loaded in object manager
+                Assert.AreEqual(3, BusObjectManager.Instance.Count);
+                Assert.IsTrue(BusObjectManager.Instance.Contains(savedContactPerson.ID));
+
+                //---------------Execute Test ----------------------
+                ContactPersonTestBO cp =
+                    (ContactPersonTestBO) BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, "Surname = " + surname + " AND FirstName = " + firstName);
 
                 //---------------Test Result -----------------------
                 Assert.AreSame(savedContactPerson, cp);

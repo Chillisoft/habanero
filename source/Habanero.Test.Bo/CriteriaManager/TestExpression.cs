@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Data;
 using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 using NUnit.Framework;
@@ -55,8 +54,8 @@ namespace Habanero.Test.BO
             SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "[", "]");
             Assert.AreEqual("([Field1] >= ?Param0 AND [Field2] >= ?Param1)", st.Statement.ToString());
-            Assert.AreEqual("value1", ((IDbDataParameter) st.Parameters[0]).Value);
-            Assert.AreEqual("value2", ((IDbDataParameter) st.Parameters[1]).Value);
+            Assert.AreEqual("value1", st.Parameters[0].Value);
+            Assert.AreEqual("value2", st.Parameters[1].Value);
         }
 
         [Test]
@@ -69,8 +68,8 @@ namespace Habanero.Test.BO
             exp.SqlExpressionString(st, "[", "]");
             Assert.AreEqual("([tbName].[DBField1] >= ?Param0 OR [tbName].[DBField2] >= ?Param1)",
                             st.Statement.ToString());
-            Assert.AreEqual("value1", ((IDbDataParameter) st.Parameters[0]).Value);
-            Assert.AreEqual("value2", ((IDbDataParameter) st.Parameters[1]).Value);
+            Assert.AreEqual("value1", st.Parameters[0].Value);
+            Assert.AreEqual("value2", st.Parameters[1].Value);
         }
 
         [Test]
@@ -82,8 +81,8 @@ namespace Habanero.Test.BO
             SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
             Assert.AreEqual("(tb.DBField1 >= ?Param0 OR tb.DBField2 >= ?Param1)", st.Statement.ToString());
-            Assert.AreEqual("value1", ((IDbDataParameter) st.Parameters[0]).Value);
-            Assert.AreEqual("value2", ((IDbDataParameter) st.Parameters[1]).Value);
+            Assert.AreEqual("value1", st.Parameters[0].Value);
+            Assert.AreEqual("value2", st.Parameters[1].Value);
         }
 
         [Test]
@@ -95,8 +94,8 @@ namespace Habanero.Test.BO
             SqlStatement st1 = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st1, "", "");
             Assert.AreEqual("(tb.DBField1 >= ?Param0 OR tb.DBField2 >= ?Param1)", st1.Statement.ToString());
-            Assert.AreEqual("value'1", ((IDbDataParameter) st1.Parameters[0]).Value);
-            Assert.AreEqual("value2", ((IDbDataParameter) st1.Parameters[1]).Value);
+            Assert.AreEqual("value'1", st1.Parameters[0].Value);
+            Assert.AreEqual("value2", st1.Parameters[1].Value);
 
             exp =
                 new Expression(new Parameter("Field1", "tb", "DBField1", ">=", "value''1"), new SqlOperator("OR"),
@@ -104,8 +103,8 @@ namespace Habanero.Test.BO
             SqlStatement st2 = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st2, "", "");
             Assert.AreEqual("(tb.DBField1 >= ?Param0 OR tb.DBField2 >= ?Param1)", st2.Statement.ToString());
-            Assert.AreEqual("value''1", ((IDbDataParameter) st2.Parameters[0]).Value);
-            Assert.AreEqual("value2", ((IDbDataParameter) st2.Parameters[1]).Value);
+            Assert.AreEqual("value''1", st2.Parameters[0].Value);
+            Assert.AreEqual("value2", st2.Parameters[1].Value);
         }
 
         [Test]
@@ -137,7 +136,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(
                 "((tb.DBField1 IN ('a', 'zzz') OR tb.DBField2 IN ('12 mar 2004', '27 mar 2004')) AND Field3 = ?Param0)",
                 st2.Statement.ToString());
-            Assert.AreEqual("a", ((IDbDataParameter) st2.Parameters[0]).Value);
+            Assert.AreEqual("a", st2.Parameters[0].Value);
         }
 
         [Test]
@@ -185,9 +184,9 @@ namespace Habanero.Test.BO
             SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
             Assert.AreEqual("((Field1 = ?Param0 AND Field2 = ?Param1) OR Field2 = ?Param2)", st.Statement.ToString());
-            Assert.AreEqual("test", ((IDbDataParameter) st.Parameters[0]).Value);
-            Assert.AreEqual("test2", ((IDbDataParameter) st.Parameters[1]).Value);
-            Assert.AreEqual("test2", ((IDbDataParameter) st.Parameters[2]).Value);
+            Assert.AreEqual("test", st.Parameters[0].Value);
+            Assert.AreEqual("test2", st.Parameters[1].Value);
+            Assert.AreEqual("test2", st.Parameters[2].Value);
         }
 
         [Test]
@@ -197,7 +196,7 @@ namespace Habanero.Test.BO
             SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
             Assert.AreEqual("Field1 = ?Param0", st.Statement.ToString());
-            Assert.AreEqual("test", ((IDbDataParameter) st.Parameters[0]).Value);
+            Assert.AreEqual("test", st.Parameters[0].Value);
         }
 
         [Test]
@@ -210,7 +209,7 @@ namespace Habanero.Test.BO
             SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
             Assert.AreEqual("tbl.testfieldname = ?Param0", st.Statement.ToString());
-            Assert.AreEqual("test", ((IDbDataParameter) st.Parameters[0]).Value);
+            Assert.AreEqual("test", st.Parameters[0].Value);
         }
 
         [Test]
@@ -226,8 +225,8 @@ namespace Habanero.Test.BO
             SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
             Assert.AreEqual("(tbl.testfieldname = ?Param0 AND tbl2.testfieldname2 = ?Param1)", st.Statement.ToString());
-            Assert.AreEqual("test", ((IDbDataParameter) st.Parameters[0]).Value);
-            Assert.AreEqual(new DateTime(2003, 02, 10), ((IDbDataParameter) st.Parameters[1]).Value);
+            Assert.AreEqual("test", st.Parameters[0].Value);
+            Assert.AreEqual(new DateTime(2003, 02, 10), st.Parameters[1].Value);
         }
 
         [Test]
@@ -301,10 +300,10 @@ namespace Habanero.Test.BO
 
         private class MockParameterSqlInfo : IParameterSqlInfo
         {
-            private String mFieldName;
-            private String mParameterName;
-            private ParameterType mParameterType;
-            private string mTableName;
+            private readonly String mFieldName;
+            private readonly String mParameterName;
+            private readonly ParameterType mParameterType;
+            private readonly string mTableName;
 
             public MockParameterSqlInfo(string fieldName, string parameterName, ParameterType parameterType,
                                         string tableName)

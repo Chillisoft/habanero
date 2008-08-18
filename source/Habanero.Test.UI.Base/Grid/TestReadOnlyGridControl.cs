@@ -486,7 +486,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Execute Test ----------------------
             //set data in grid to a value that should return 2 people
-            string filterByValue = "SSSSS";
+            const string filterByValue = "SSSSS";
             txtbox.Text = filterByValue;
             //grid.filtercontrols.searchbutton.click
             readOnlyGridControl.OrderBy = "Surname";
@@ -683,7 +683,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = LoadMyBoDefaultClassDef();
-            string alternateUIDefName = "Alternate";
+            const string alternateUIDefName = "Alternate";
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             UIDef uiDef = classDef.UIDefCol[alternateUIDefName];
             UIGrid uiGridDef = uiDef.UIGrid;
@@ -853,7 +853,7 @@ namespace Habanero.Test.UI.Base
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = LoadMyBoDefaultClassDef();
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
-            string alternateUIDefName = "Alternate";
+            const string alternateUIDefName = "Alternate";
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
 
             grid.Initialise(classDef, alternateUIDefName);
@@ -1010,7 +1010,7 @@ namespace Habanero.Test.UI.Base
             readOnlyGridControl.Grid.BusinessObjectSelected += (delegate { gridItemSelected = true; });
             //---------------Assert pre conditions--------------
             Assert.IsFalse(gridItemSelected);
-
+            Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
             //---------------Execute Test ----------------------
             readOnlyGridControl.SelectedBusinessObject = bo;
 
@@ -1025,21 +1025,23 @@ namespace Habanero.Test.UI.Base
             MyBO.LoadDefaultClassDef();
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             MyBO myBO1 = new MyBO();
+            myBO1.TestProp = "a";
             col.Add(myBO1);
             MyBO myBO2 = new MyBO();
+            myBO2.TestProp = "b";
             col.Add(myBO2);
             MyBO myBO3 = new MyBO();
+            myBO3.TestProp = "c";
             col.Add(myBO3);
-            IReadOnlyGridControl readOnlyGridControl = GetControlFactory().CreateReadOnlyGridControl();
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(true);
             readOnlyGridControl.SetBusinessObjectCollection(col);
-            //AddControlToForm(readOnlyGridControl);
-            AddControlToForm(readOnlyGridControl);
             readOnlyGridControl.SelectedBusinessObject = null;
             bool gridItemSelected = false;
             readOnlyGridControl.Grid.BusinessObjectSelected += (delegate { gridItemSelected = true; });
 
             //---------------Assert pre conditions--------------
             Assert.IsFalse(gridItemSelected);
+            Assert.AreEqual(3, col.Count);
             Assert.AreEqual(3, readOnlyGridControl.Grid.Rows.Count);
 
             //---------------Execute Test ----------------------
@@ -1169,9 +1171,8 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = LoadMyBoDefaultClassDef();
-            string alternateUIDefName = "Alternate";
-            BusinessObjectCollection<MyBO> col;
-            col = CreateCollectionWith_4_Objects();
+            const string alternateUIDefName = "Alternate";
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(true);
             readOnlyGridControl.Initialise(classDef, alternateUIDefName);
 
@@ -1192,9 +1193,8 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = LoadMyBoDefaultClassDef();
-            string alternateUIDefName = "Alternate";
-            BusinessObjectCollection<MyBO> col;
-            col = CreateCollectionWith_4_Objects();
+            const string alternateUIDefName = "Alternate";
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
             readOnlyGridControl.Initialise(classDef, alternateUIDefName);
 
@@ -1262,7 +1262,7 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
-            string orderByClause = "MyField";
+            const string orderByClause = "MyField";
             grid.OrderBy = orderByClause;
             //---------------Test Result -----------------------
             Assert.AreEqual(orderByClause, grid.OrderBy);
@@ -1277,7 +1277,7 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
             Assert.IsTrue(string.IsNullOrEmpty(grid.AdditionalSearchCriteria));
             //---------------Execute Test ----------------------
-            string searchByClause = "MyField <> 'my value'";
+            const string searchByClause = "MyField <> 'my value'";
             grid.AdditionalSearchCriteria = searchByClause;
             //---------------Test Result -----------------------
             Assert.AreEqual(searchByClause, grid.AdditionalSearchCriteria);
@@ -1337,7 +1337,7 @@ namespace Habanero.Test.UI.Base
             grid.FilterMode = FilterModes.Search;
 
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-            string surnameFilterText = "this one";
+            const string surnameFilterText = "this one";
             col.Load("Surname like %" + surnameFilterText + "%", "");
 
             //---------------Execute Test ----------------------
@@ -1582,15 +1582,15 @@ namespace Habanero.Test.UI.Base
 
         #region Utility Methods
 
-        private static IPropDef GetPropDef(ClassDef classDef, UIGridColumn gridColumn)
-        {
-            IPropDef propDef = null;
-            if (classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))
-            {
-                propDef = classDef.PropDefColIncludingInheritance[gridColumn.PropertyName];
-            }
-            return propDef;
-        }
+//        private static IPropDef GetPropDef(ClassDef classDef, UIGridColumn gridColumn)
+//        {
+//            IPropDef propDef = null;
+//            if (classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))
+//            {
+//                propDef = classDef.PropDefColIncludingInheritance[gridColumn.PropertyName];
+//            }
+//            return propDef;
+//        }
 
 
         private static BusinessObjectCollection<MyBO> CreateCollectionWith_4_Objects()

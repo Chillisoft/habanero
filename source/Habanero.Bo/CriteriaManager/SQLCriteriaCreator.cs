@@ -29,7 +29,7 @@ namespace Habanero.BO.CriteriaManager
     public class SqlCriteriaCreator
     {
         private IExpression _expression;
-        private IDatabaseConnection _connection;
+        private readonly IDatabaseConnection _connection;
 
         /// <summary>
         /// Constructor to initialise a new criteria creator

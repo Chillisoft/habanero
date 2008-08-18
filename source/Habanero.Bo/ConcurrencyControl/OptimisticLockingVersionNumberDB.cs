@@ -41,18 +41,21 @@ namespace Habanero.BO.ConcurrencyControl
     /// </summary>
     public class OptimisticLockingVersionNumberDB : IConcurrencyControl
     {
+        #region Nested type: VerificationStage
+
         private enum VerificationStage
         {
             BeforeBeginEdit,
             BeforePersist
         }
 
+        #endregion
         private readonly BusinessObject _busObj;
         private readonly IBOProp _dateLastUpdated;
-        private readonly IBOProp _userLastUpdated;
         private readonly IBOProp _machineLastUpdated;
-        private readonly IBOProp _versionNumber;
         private readonly IBOProp _operatingSystemUser;
+        private readonly IBOProp _userLastUpdated;
+        private readonly IBOProp _versionNumber;
 
         /// <summary>
         /// Constructor to initialise a new instance with details of the last
@@ -85,15 +88,17 @@ namespace Habanero.BO.ConcurrencyControl
         /// the update was done to be specified
         /// </summary>
         public OptimisticLockingVersionNumberDB(BusinessObject busObj,
-                                                BOProp dateLastUpdated,
-                                                BOProp userLastUpdated,
-                                                BOProp machineLastUpdated,
-                                                BOProp versionNumber,
-                                                BOProp operatingSystemUser)
+                                                IBOProp dateLastUpdated,
+                                                IBOProp userLastUpdated,
+                                                IBOProp machineLastUpdated,
+                                                IBOProp versionNumber,
+                                                IBOProp operatingSystemUser)
             : this(busObj, dateLastUpdated, userLastUpdated, machineLastUpdated, versionNumber)
         {
             _operatingSystemUser = operatingSystemUser;
         }
+
+        #region IConcurrencyControl Members
 
         /// <summary>
         /// Checks concurrency before persisting an object to the database
@@ -110,53 +115,6 @@ namespace Habanero.BO.ConcurrencyControl
         public void CheckConcurrencyBeforePersisting()
         {
             CheckConcurrencyControl(VerificationStage.BeforePersist);
-        }
-
-        private void CheckConcurrencyControl(VerificationStage verificationStage)
-        {
-            if (_busObj.State.IsNew) return;
-//            BORegistry.DataAccessor.BusinessObjectLoader.
-            using (IDataReader dr = BOLoader.Instance.LoadDataReader(_busObj, DatabaseConnection.CurrentConnection,  null))
-            {
-                // If this object no longer exists in the database
-                // then we have a concurrency conflict since it has been deleted by another process.
-                // If our objective was to delete it as well then no worries else throw error.
-                bool drHasData = dr.Read();
-                if (! (drHasData) && !_busObj.State.IsDeleted)
-                {
-                    //The object you are trying to update has been deleted by another user.
-                    throw new BusObjDeleteConcurrencyControlException(_busObj.ClassName, _busObj.ID.ToString(),
-                                                                      _busObj);
-                }
-                int versionNumberBusinessObject = (int) _versionNumber.Value;
-                int versionNumberDB = (int) dr[_versionNumber.DatabaseFieldName];
-
-                if (versionNumberDB == versionNumberBusinessObject) return;
-
-                string dateLastUpdatedInDB = dr[_dateLastUpdated.DatabaseFieldName].ToString();
-                string userNameLastUpdated = (string) dr[_userLastUpdated.DatabaseFieldName];
-                string machineLastUpdated = (string) dr[_machineLastUpdated.DatabaseFieldName];
-                ThrowConcurrencyException(verificationStage, userNameLastUpdated, machineLastUpdated,
-                                          dateLastUpdatedInDB);
-            }
-        }
-
-        private void ThrowConcurrencyException(VerificationStage verificationStage, string userNameLastUpdated,
-                                               string machineLastUpdated, string dateLastUpdatedInDB)
-        {
-            if (verificationStage == VerificationStage.BeforeBeginEdit)
-            {
-                throw new BusObjBeginEditConcurrencyControlException(_busObj.ClassName,
-                                                                     userNameLastUpdated,
-                                                                     machineLastUpdated,
-                                                                     DateTime.Parse(dateLastUpdatedInDB),
-                                                                     _busObj.ID.ToString(), _busObj);
-            }
-            throw new BusObjOptimisticConcurrencyControlException(_busObj.ClassName,
-                                                                  userNameLastUpdated,
-                                                                  machineLastUpdated,
-                                                                  DateTime.Parse(dateLastUpdatedInDB),
-                                                                  _busObj.ID.ToString(), _busObj);
         }
 
         /// <summary>
@@ -183,16 +141,101 @@ namespace Habanero.BO.ConcurrencyControl
         {
             _dateLastUpdated.Value = DateTime.Now;
 
-            GetUserName();
+            SetUserName();
 
-            GetMachineName();
+            SetMachineName();
             if (_versionNumber.Value == null) _versionNumber.Value = 0;
             _versionNumber.Value = (int) _versionNumber.Value + 1;
-            GetOperatingSystemUser();
+            SetOperatingSystemUser();
             //	TODO: maybe add thread identity on later.			threadIdentity = Thread.CurrentPrincipal.Identity.Name;
         }
 
-        private void GetOperatingSystemUser()
+        /// <summary>
+        /// Does nothing since optimistic locking is used and no locks are applied
+        /// </summary>
+        public void ReleaseWriteLocks()
+        {
+        }
+
+        ///<summary>
+        /// Makes any changes required to the concurrency control mechanism 
+        /// to assert that the transaction has failed and thus been rolled back.
+        ///</summary>
+        public void UpdateAsTransactionRolledBack()
+        {
+            if (_versionNumber.Value == null)
+            {
+                _versionNumber.Value = 0;
+                return;
+            }
+            _versionNumber.Value = (int) _versionNumber.Value - 1;
+        }
+
+        #endregion
+
+        private void CheckConcurrencyControl(VerificationStage verificationStage)
+        {
+            if (_busObj.State.IsNew) return; //If the object is new there cannot be a concurrency error.
+            IDatabaseConnection connection = DatabaseConnection.CurrentConnection;
+            if (connection == null) return;
+
+            if (!(BORegistry.DataAccessor.BusinessObjectLoader is BusinessObjectLoaderDB)) return;
+
+            ISqlStatement statement = GetSQLStatement();
+
+            using (IDataReader dr = connection.LoadDataReader(statement))
+            {
+                // If this object no longer exists in the database
+                // then we have a concurrency conflict since it has been deleted by another process.
+                // If our objective was to delete it as well then no worries else throw error.
+                bool drHasData = dr.Read();
+                if (!(drHasData) && !_busObj.State.IsDeleted)
+                {
+                    //The object you are trying to update has been deleted by another user.
+                    throw new BusObjDeleteConcurrencyControlException(_busObj.ClassName, _busObj.ID.ToString(),
+                                                                      _busObj);
+                }
+                int versionNumberBusinessObject = (int) _versionNumber.Value;
+                int versionNumberDB = (int) dr[_versionNumber.DatabaseFieldName];
+
+                if (versionNumberDB == versionNumberBusinessObject) return;
+
+                string dateLastUpdatedInDB = dr[_dateLastUpdated.DatabaseFieldName].ToString();
+                string userNameLastUpdated = (string) dr[_userLastUpdated.DatabaseFieldName];
+                string machineLastUpdated = (string) dr[_machineLastUpdated.DatabaseFieldName];
+                ThrowConcurrencyException(verificationStage, userNameLastUpdated, machineLastUpdated,
+                                          dateLastUpdatedInDB);
+            }
+        }
+
+        private ISqlStatement GetSQLStatement()
+        {
+            BusinessObjectLoaderDB boLoaderDB = (BusinessObjectLoaderDB) BORegistry.DataAccessor.BusinessObjectLoader;
+            ISelectQuery selectQuery = boLoaderDB.GetSelectQuery(_busObj.ClassDef, _busObj.ID);
+
+            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
+            return selectQueryDB.CreateSqlStatement();
+        }
+
+        private void ThrowConcurrencyException(VerificationStage verificationStage, string userNameLastUpdated,
+                                               string machineLastUpdated, string dateLastUpdatedInDB)
+        {
+            if (verificationStage == VerificationStage.BeforeBeginEdit)
+            {
+                throw new BusObjBeginEditConcurrencyControlException(_busObj.ClassName,
+                                                                     userNameLastUpdated,
+                                                                     machineLastUpdated,
+                                                                     DateTime.Parse(dateLastUpdatedInDB),
+                                                                     _busObj.ID.ToString(), _busObj);
+            }
+            throw new BusObjOptimisticConcurrencyControlException(_busObj.ClassName,
+                                                                  userNameLastUpdated,
+                                                                  machineLastUpdated,
+                                                                  DateTime.Parse(dateLastUpdatedInDB),
+                                                                  _busObj.ID.ToString(), _busObj);
+        }
+
+        private void SetOperatingSystemUser()
         {
             if ((_operatingSystemUser == null)) return;
 
@@ -205,7 +248,7 @@ namespace Habanero.BO.ConcurrencyControl
             }
         }
 
-        private void GetMachineName()
+        private void SetMachineName()
         {
             if ((_machineLastUpdated == null)) return;
             try
@@ -217,7 +260,7 @@ namespace Habanero.BO.ConcurrencyControl
             }
         }
 
-        private void GetUserName()
+        private void SetUserName()
         {
             if ((_userLastUpdated == null)) return;
             try
@@ -233,32 +276,10 @@ namespace Habanero.BO.ConcurrencyControl
 
         private static string CurrentUser()
         {
-            return WindowsIdentity.GetCurrent() == null ? "" : WindowsIdentity.GetCurrent().Name;
+            WindowsIdentity currentUser = WindowsIdentity.GetCurrent();
+            return currentUser == null ? "" : currentUser.Name;
         }
 
-        /// <summary>
-        /// Does nothing since optimistic locking is used and no locks are applied
-        /// </summary>
-        public void ReleaseWriteLocks()
-        {
-        }
 
-        #region IConcurrencyControl Members
-
-        ///<summary>
-        /// Makes any changes required to the concurrency control mechanism 
-        /// to assert that the transaction has failed and thus been rolled back.
-        ///</summary>
-        public void UpdateAsTransactionRolledBack()
-        {
-            if (_versionNumber.Value == null)
-            {
-                _versionNumber.Value = 0;
-                return;
-            }
-            _versionNumber.Value = (int)_versionNumber.Value - 1;
-        }
-
-        #endregion
     }
 }

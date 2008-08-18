@@ -19,6 +19,7 @@
 
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ObjectManager;
 using NUnit.Framework;
 
 namespace Habanero.Test.General
@@ -40,7 +41,7 @@ namespace Habanero.Test.General
         public void TestGetCarsDriven()
         {
             Car.DeleteAllCars();
-            BusinessObject.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
             ContactPersonCompositeKey.DeleteAllContactPeople();
             ContactPersonCompositeKey.ClearContactPersonCol();
 

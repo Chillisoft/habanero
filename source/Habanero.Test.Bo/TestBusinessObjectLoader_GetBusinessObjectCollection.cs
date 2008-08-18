@@ -612,7 +612,6 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-            DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
             ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
             CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
@@ -711,7 +710,6 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-            DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
             ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
             CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
@@ -1300,7 +1298,6 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-            DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
             ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
             CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
@@ -2234,7 +2231,6 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-            DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 1);
             ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 1);
             CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
@@ -2355,7 +2351,6 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-            DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
             ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
             CreateSavedContactPerson(TestUtil.CreateRandomString(), 1);
@@ -2488,7 +2483,6 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-            DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
             ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
             CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);

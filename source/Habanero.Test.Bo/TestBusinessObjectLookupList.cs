@@ -78,11 +78,9 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
             DeleteAllContactPeople();
-//            ContactPersonTestBO.ClearObjectManager();
             BusObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO.CreateSampleData();
             ContactPersonTestBO.LoadDefaultClassDef();
-//            BusinessObject.ClearObjectManager();
             BusObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
         }

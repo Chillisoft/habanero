@@ -5,74 +5,6 @@ using Habanero.Base.Exceptions;
 
 namespace Habanero.BO.ObjectManager
 {
-    //TODO: Remove this interface.
-    /////<summary>
-    ///// Provides an interface for object Manager. The object manager <see cref="BusObjectManager"/> is a class that contains weak references
-    ///// to all currently loaded business objects. The object manager is therefore used to ensure that the current user/session only
-    ///// ever has one reference to a particular business object. This is used to prevent instances where a business object loaded in
-    ///// two different ways by a single user is represented by two different objects in the system thus resulting in concurrency control 
-    ///// exceptions.
-    /////</summary>
-    //public interface IBusObjectManager
-    //{
-    //    /// <summary>
-    //    /// How many busiess objects are currently loaded. This is used primarily for debugging and testing.
-    //    /// </summary>
-    //    int Count { get; }
-
-    //    /// <summary>
-    //    /// Returns the business object identified by the objectID from the business object manager.
-    //    /// </summary>
-    //    /// <param name="objectID">The business object id of the object being returned. (usually bo.ID.GetObjectID</param>
-    //    /// <returns>The business object from the object manger.</returns>
-    //    IBusinessObject this[string objectID] { get; }
-
-    //    /// <summary>
-    //    /// Returns the business object identified by the objectID from the business object manager.
-    //    /// </summary>
-    //    /// <param name="objectID">The business object id of the object being returned. (bo.ID) </param>
-    //    /// <returns>The business object from the object manger.</returns>
-    //    IBusinessObject this[IPrimaryKey objectID] { get; }
-
-    //    /// <summary>
-    //    /// Add a business object to the object manager.
-    //    /// </summary>
-    //    /// <param name="businessObject"></param>
-    //    void Add(IBusinessObject businessObject);
-
-    //    /// <summary>
-    //    /// Checks whether the business object is currently loaded.
-    //    /// </summary>
-    //    /// <param name="businessObject">The business object being checked.</param>
-    //    /// <returns>Whether the busienss object is loadd or not</returns>
-    //    bool Contains(IBusinessObject businessObject);
-
-    //    /// <summary>
-    //    /// Checks whether the business object is currently loaded.
-    //    /// </summary>
-    //    /// <param name="id">The identity (bo.ID) of the object being checked.</param>
-    //    /// <returns>Whether the busienss object is loadd or not</returns>
-    //    bool Contains(IPrimaryKey id);
-
-    //    /// <summary>
-    //    /// Checks whether the business object is currently loaded.
-    //    /// </summary>
-    //    /// <param name="objectID">The string identity (usually bo.ID.GetObjectID()) of the object being checked.</param>
-    //    /// <returns>Whether the busienss object is loadd or not</returns>
-    //    bool Contains(string objectID);
-
-    //    /// <summary>
-    //    /// Removes the business object Business object managaer
-    //    /// </summary>
-    //    /// <param name="businessObject"></param>
-    //    void Remove(IBusinessObject businessObject);
-
-    //    /// <summary>
-    //    /// Clears all the currently loaded business objects from the object manager. This is only used in testing and debugging.
-    //    /// </summary>
-    //    void ClearLoadedObjects();
-    //}
-
     ///<summary>
     ///The object manager is a class that contains weak references
     /// to all currently loaded business objects. The object manager is therefore used to ensure that the current user/session only
@@ -80,7 +12,7 @@ namespace Habanero.BO.ObjectManager
     /// two different ways by a single user is represented by two different objects in the system thus resulting in concurrency control 
     /// exceptions.
     ///</summary>
-    public class BusObjectManager //: IBusObjectManager
+    public class BusObjectManager
     {
         private static readonly BusObjectManager _busObjectManager = new BusObjectManager();
 
@@ -93,7 +25,7 @@ namespace Habanero.BO.ObjectManager
         /// Returns the particular instance of the Business Object manager being used. 
         /// This implements the Singleton Design pattern.
         ///</summary>
-        internal static BusObjectManager Instance
+        public static BusObjectManager Instance
         {
             get { return _busObjectManager; }
         }
@@ -245,8 +177,10 @@ namespace Habanero.BO.ObjectManager
 
         /// <summary>
         /// Clears all the currently loaded business objects from the object manager. This is only used in testing and debugging.
+        /// NNB: this method should only ever be used for testing. E.g. where the tester wants to test concurrency control or 
+        /// to ensure that saving or loading from the data base is correct.
         /// </summary>
-        internal void ClearLoadedObjects()
+        public void ClearLoadedObjects()
         {
             _loadedBusinessObjects.Clear();
         }

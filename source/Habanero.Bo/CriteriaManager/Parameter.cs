@@ -29,9 +29,21 @@ namespace Habanero.BO.CriteriaManager
     /// </summary>
     public enum ParameterType
     {
+        ///<summary>
+        /// parameter type is string.
+        ///</summary>
         String = 1,     //Any string, text etc
+        ///<summary>
+        /// parameter type is Date
+        ///</summary>
         Date = 2,       //Any date datetime etc
+        ///<summary>
+        /// parameter type is Numeric long, int, double etc
+        ///</summary>
         Number = 3,     //Any number int long, double etc
+        ///<summary>
+        /// parameter type is boolean
+        ///</summary>
         Bool = 4,       //Boolean
     }
 
@@ -53,11 +65,11 @@ namespace Habanero.BO.CriteriaManager
     /// must be null or not null
     public class Parameter : IExpression
     {
-        private string _parameterName;
+        private readonly string _parameterName;
         private string _tableName = "";
         private string _fieldName;
-        private string _sqlOperator;
-        private string _parameterValue;
+        private readonly string _sqlOperator;
+        private readonly string _parameterValue;
         private ParameterType _parameterType = ParameterType.String;
         private const string _defaultValueSeperator = "'";
 

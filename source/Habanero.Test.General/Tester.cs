@@ -23,6 +23,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
+using Habanero.BO.ObjectManager;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -68,7 +69,7 @@ namespace Habanero.Test.General
             CreateDeletedPersonTestPack();
             CreateSaveContactPersonTestPack();
             //Ensure that a fresh object is loaded from DB
-            BusinessObject.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
         }
 
         private void CreateSaveContactPersonTestPack()
@@ -113,7 +114,7 @@ namespace Habanero.Test.General
             myContactPerson.Save();
 
             //waitForDB();
-            BusinessObject.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
             //Reload the person and make sure that the changes have been made.
             ContactPerson myNewContactPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(updateContactPersonID);
             Assert.AreEqual("NewFirstName", myNewContactPerson.FirstName,

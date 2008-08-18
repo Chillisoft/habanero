@@ -21,6 +21,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.ObjectManager;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -180,7 +181,7 @@ namespace Habanero.Test.General
         [Test]
         public void TestDatabaseReadWrite()
         {
-            BusinessObject.ClearObjectManager();
+            BusObjectManager.Instance.ClearLoadedObjects();
             // Test inserting & selecting
             Shape shape = new Shape();
             shape.ShapeName = "MyShape";
