@@ -176,9 +176,6 @@ namespace Habanero.Test
         public IBusinessObjectCollection GetCarsDriven()
         {
             return Relationships.GetRelatedCollection("Driver");
-            //			return Car.LoadBusinessObjCol("DriverFK1 = " + 
-            //					this.GetPropertyValueString(PK1_PROP1_NAME) +
-            //					" AND DriverFK2 = " + this.GetPropertyValueString(PK1_PROP2_NAME),"");
         }
 
         #endregion //Relationships

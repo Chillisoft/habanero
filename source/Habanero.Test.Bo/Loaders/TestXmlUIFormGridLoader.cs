@@ -42,23 +42,29 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestDefaults()
         {
+            //---------------Execute Test ----------------------
             UIFormGrid formGrid = loader.LoadUIFormGrid(@"
                 <formGrid relationship=""rel"" reverseRelationship=""correl"" type=""MyBO"" assembly=""Habanero.Test""/>");
+            //---------------Verify Result -----------------------
             Assert.AreEqual("rel", formGrid.RelationshipName);
             Assert.AreEqual("correl", formGrid.CorrespondingRelationshipName);
             Assert.AreEqual(typeof(MyBO), formGrid.GridType);
         }
-
+        
         [Test]
-        public void TestDefaultGridType()
-        {
-            UIFormGrid formGrid = loader.LoadUIFormGrid(@"<formGrid relationship=""rel"" reverseRelationship=""correl"" />");
-            Assert.AreEqual("EditableGrid", formGrid.GridType.Name);
+        public void TestGridType()
+        { 
+            //---------------Execute Test ----------------------
+            UIFormGrid formGrid = loader.LoadUIFormGrid(@"<formGrid relationship=""rel"" reverseRelationship=""correl"" type=""Habanero.UI.Win.EditableGridWin"" assembly=""Habanero.UI.Win"" />");
+            //---------------Verify Result -----------------------
+            Assert.AreEqual("EditableGridWin", formGrid.GridType.Name);
+            Assert.AreEqual("Habanero.UI.Win", formGrid.GridType.Assembly.GetName().Name);
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestGridTypeNotExists()
         {
+            //---------------Execute Test ----------------------
             loader.LoadUIFormGrid(@"
                 <formGrid relationship=""rel"" reverseRelationship=""correl"" type=""mygrid"" assembly=""somewhere""/>");
         }
