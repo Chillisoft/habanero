@@ -49,9 +49,10 @@ namespace Habanero.Test.General
 
         protected override void SetupInheritanceSpecifics()
         {
-            Circle.GetClassDef().SuperClassDef =
-                new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
-            Circle.GetClassDef().SuperClassDef.ID = "ShapeID";
+            //Circle.GetClassDef().SuperClassDef =
+            //    new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
+            //Circle.GetClassDef().SuperClassDef.ID = "ShapeID";
+            Circle.GetClassDefWithClassTableInheritance();
         }
 
         protected override void SetStrID()

@@ -81,7 +81,16 @@ namespace Habanero.Test
             circleClassDef.TableName = "circle_concrete";
             circleClassDef.SuperClassDef = new SuperClassDef(shapeClassDef, ORMapping.ConcreteTableInheritance);
             return circleClassDef;
-        
+
+        }
+
+        public static ClassDef GetClassDefWithClassTableInheritance()
+        {
+            ClassDef shapeClassDef = Shape.GetClassDef();
+            ClassDef circleClassDef = GetClassDef();
+            circleClassDef.SuperClassDef = new SuperClassDef(shapeClassDef, ORMapping.ClassTableInheritance);
+            circleClassDef.SuperClassDef.ID = "ShapeID";
+            return circleClassDef;
         }
 
         public static Circle CreateSavedCircle()

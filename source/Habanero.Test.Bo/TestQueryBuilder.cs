@@ -374,6 +374,21 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestPrepareSource_Inheritance_ClassTable()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef circleClassDef = Circle.GetClassDefWithClassTableInheritance();
+            Source source = null;
+
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareSource(circleClassDef, ref source);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(source);
+            Assert.AreEqual("Circle", source.Name);
+            Assert.AreEqual("circle_table", source.EntityName);
+        }
+
+        [Test]
         public void TestPrepareSource_ExistingSource()
         {
             //---------------Set up test pack-------------------

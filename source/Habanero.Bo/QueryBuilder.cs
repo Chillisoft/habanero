@@ -183,7 +183,7 @@ namespace Habanero.BO
             {
                 relatedClassDef = null;
                 //relatedClassDef = classDef;
-                //source.EntityName = classDef.GetTableName();
+                source.EntityName = baseSource.EntityName;                
             }
             else
             {
