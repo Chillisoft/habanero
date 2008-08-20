@@ -1605,6 +1605,46 @@ namespace Habanero.Test.BO
             Assert.Contains(cp1, col);
         }
 
+        [Test]
+        public void TestGetBusinessObjectCollection_CriteriaString_ThroughRelationship_TwoLevels()
+        {
+            //---------------Set up test pack-------------------
+            Engine.LoadClassDef_IncludingCarAndOwner();
+            //            DateTime now = DateTime.Now;
+            string surname;
+            string regno;
+            string engineNo;
+            Engine engine = CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
+            CreateEngineWithCarWithContact();
+            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            string criteria = string.Format("Car.Owner.Surname = '{0}'", surname);
+
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<Engine> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Engine>(criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(engine, col);
+        }
+
+        private Engine CreateEngineWithCarWithContact()
+        {
+            string surname;
+            string regno;
+            string engineNo;
+            return CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
+        }
+        private Engine CreateEngineWithCarWithContact(out string surname, out string regno, out string engineNo)
+        {
+            regno = TestUtil.CreateRandomString();
+            engineNo = TestUtil.CreateRandomString();
+            surname = TestUtil.CreateRandomString();
+            ContactPerson owner = ContactPerson.CreateSavedContactPerson(surname);
+            Car car = Car.CreateSavedCar(regno, owner);
+            return Engine.CreateSavedEngine(car, engineNo);
+        }
+
 
         [Test]
         public void TestGetBusinessObjectCollection_CriteriaString_Date_Today()

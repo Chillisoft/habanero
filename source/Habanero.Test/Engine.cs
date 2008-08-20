@@ -172,11 +172,11 @@ namespace Habanero.Test
 
         #endregion
 
-        public static Engine CreateSavedEngine(Car car, string engineno)
+        public static Engine CreateSavedEngine(Car car, string engineNo)
         {
             Engine engine = new Engine();
             engine.CarID = car.CarID;
-            engine.EngineNo = engineno;
+            engine.EngineNo = engineNo;
             engine.Save();
             return engine;
         }

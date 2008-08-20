@@ -114,37 +114,17 @@ namespace Habanero.BO
             foreach (OrderCriteria.Field field in orderCriteria.Fields)
             {
 
-                IPropDef propDef = ((ClassDef)classDef).GetPropDef(field.Source, field.PropertyName, true);
-                field.FieldName = propDef.DatabaseFieldName;
-         
-                Source currentSource = field.Source;
-                field.Source = new Source(classDef.ClassName, classDef.GetTableName(propDef));
-                if (currentSource == null) continue;
-                field.Source.Joins.Add(new Source.Join(field.Source, currentSource));
-                currentSource = field.Source;
-                ClassDef currentClassDef = (ClassDef) classDef;
-                while (currentSource != null) 
-                {
-                    Source childSource = currentSource.ChildSource;
-                    currentSource.EntityName = currentClassDef.GetTableName();
-                    if (childSource != null)
-                    {
-                        RelationshipDef relationshipDef = currentClassDef.GetRelationship(childSource.Name);
-                        foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
-                        {
-                            string ownerFieldName =
-                                currentClassDef.GetPropDef(relPropDef.OwnerPropertyName).DatabaseFieldName;
-                            string relatedFieldName =
-                                relationshipDef.RelatedObjectClassDef.GetPropDef(relPropDef.RelatedClassPropName).DatabaseFieldName;
-                            QueryField fromField = new QueryField(relPropDef.OwnerPropertyName, ownerFieldName, currentSource);
-                            QueryField toField = new QueryField(relPropDef.RelatedClassPropName, relatedFieldName, childSource);
-                            currentSource.Joins[0].JoinFields.Add(new Source.Join.JoinField(fromField, toField ));
-                        }
-                        currentClassDef = relationshipDef.RelatedObjectClassDef;
-                    }
+                //IPropDef propDef = ((ClassDef)classDef).GetPropDef(field.Source, field.PropertyName, true);
+                //field.FieldName = propDef.DatabaseFieldName;
 
-                    currentSource = childSource;
-                }
+                Source source = field.Source;
+                IClassDef relatedClassDef;
+                PrepareSource(classDef, ref source, out relatedClassDef);
+                field.Source = source;
+
+                IPropDef propDef = relatedClassDef.GetPropDef(field.PropertyName);
+                field.FieldName = propDef.DatabaseFieldName;
+                field.Source.ChildSourceLeaf.EntityName = relatedClassDef.GetTableName(propDef);
             }
             return orderCriteria;
         }
@@ -168,15 +148,19 @@ namespace Habanero.BO
             {
                 QueryField field = criteria.Field;
                 Source currentSource = field.Source;
-                IClassDef currentClassDef;
-                PrepareSource(classDef, ref currentSource, out currentClassDef);
+                IClassDef propParentClassDef;
+                PrepareSource(classDef, ref currentSource, out propParentClassDef);
                 field.Source = currentSource;
-                IPropDef propDef = currentClassDef.GetPropDef(field.PropertyName);
-                field.FieldName = propDef.DatabaseFieldName;
-                field.Source.EntityName = currentClassDef.GetTableName(propDef);
-                if (criteria.CanBeParametrised())
+                if (propParentClassDef != null)
                 {
-                    criteria.FieldValue = propDef.ConvertValueToPropertyType(criteria.FieldValue);
+                    IPropDef propDef = propParentClassDef.GetPropDef(field.PropertyName);
+                    field.FieldName = propDef.DatabaseFieldName;
+                    field.Source.ChildSourceLeaf.EntityName = propParentClassDef.GetTableName(propDef);
+                    //field.Source.EntityName = currentClassDef.GetTableName(propDef);
+                    if (criteria.CanBeParametrised())
+                    {
+                        criteria.FieldValue = propDef.ConvertValueToPropertyType(criteria.FieldValue);
+                    }
                 }
             }
         }
@@ -197,33 +181,52 @@ namespace Habanero.BO
             }
             else if (source.Name == baseSource.Name)
             {
-                relatedClassDef = classDef;
-                source.EntityName = classDef.GetTableName();
+                relatedClassDef = null;
+                //relatedClassDef = classDef;
+                //source.EntityName = classDef.GetTableName();
             }
             else
             {
                 ClassDef currentClassDef = (ClassDef)classDef;
-                string relationshipName = source.Name;
-                RelationshipDef relationshipDef = currentClassDef.GetRelationship(relationshipName);
-                if (relationshipDef == null)
-                {
-                    string message = string.Format("'{0}' does not have a relationship called '{1}'.",
-                        currentClassDef.ClassName, relationshipName);
-                    throw new RelationshipNotFoundException(message);
-                }
-                relatedClassDef = relationshipDef.RelatedObjectClassDef;
-                source.EntityName = relatedClassDef.GetTableName();
                 Source.Join join = new Source.Join(baseSource, source);
-                foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
-                {
-                    IPropDef ownerPropDef = currentClassDef.GetPropDef(relPropDef.OwnerPropertyName);
-                    QueryField ownerQueryField = new QueryField(ownerPropDef.PropertyName, ownerPropDef.DatabaseFieldName, baseSource);
-                    IPropDef relatedPropDef = relatedClassDef.GetPropDef(relPropDef.RelatedClassPropName);
-                    QueryField relatedQueryField = new QueryField(relatedPropDef.PropertyName, relatedPropDef.DatabaseFieldName, source);
-                    join.JoinFields.Add(new Source.Join.JoinField(ownerQueryField, relatedQueryField));
-                }
                 baseSource.Joins.Add(join);
+                Source currentSource = baseSource;
+                PrepareSourceTree(currentSource, ref currentClassDef);
+                relatedClassDef = currentClassDef;
                 source = baseSource;
+            }
+        }
+
+        private static void PrepareSourceTree(Source currentSource, ref ClassDef currentClassDef)
+        {
+            while (currentSource != null)
+            {
+                Source childSource = currentSource.ChildSource;
+                currentSource.EntityName = currentClassDef.GetTableName();
+                if (childSource != null)
+                {
+                    string relationshipName = childSource.Name;
+                    RelationshipDef relationshipDef = currentClassDef.GetRelationship(relationshipName);
+                    if (relationshipDef == null)
+                    {
+                        string message = string.Format("'{0}' does not have a relationship called '{1}'.",
+                                                       currentClassDef.ClassName, relationshipName);
+                        throw new RelationshipNotFoundException(message);
+                    }
+                    foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
+                    {
+                        string ownerFieldName =
+                            currentClassDef.GetPropDef(relPropDef.OwnerPropertyName).DatabaseFieldName;
+                        string relatedFieldName =
+                            relationshipDef.RelatedObjectClassDef.GetPropDef(relPropDef.RelatedClassPropName).DatabaseFieldName;
+                        QueryField fromField = new QueryField(relPropDef.OwnerPropertyName, ownerFieldName, currentSource);
+                        QueryField toField = new QueryField(relPropDef.RelatedClassPropName, relatedFieldName, childSource);
+                        currentSource.Joins[0].JoinFields.Add(new Source.Join.JoinField(fromField, toField));
+                    }
+                    currentClassDef = relationshipDef.RelatedObjectClassDef;
+                }
+
+                currentSource = childSource;
             }
         }
 

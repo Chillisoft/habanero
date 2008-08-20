@@ -51,7 +51,9 @@ namespace Habanero.Test
 
         protected static ClassDef GetClassDef()
         {
-            return ClassDef.IsDefined(typeof (ContactPerson)) ? ClassDef.ClassDefs[typeof (ContactPerson)] : CreateClassDef();
+            return ClassDef.IsDefined(typeof (ContactPerson)) 
+                ? ClassDef.ClassDefs[typeof (ContactPerson)] 
+                : CreateClassDef();
         }
 
         protected override ClassDef ConstructClassDef()

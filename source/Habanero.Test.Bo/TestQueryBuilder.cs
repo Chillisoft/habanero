@@ -341,6 +341,23 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestPrepareCriteria_ThroughRelationship_TwoLevels()
+        {
+            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            string surname = TestUtil.CreateRandomString();
+            Criteria criteria = new Criteria("Car.Owner.Surname", Criteria.ComparisonOp.Equals, surname);
+            //-------------Execute test ---------------------
+            QueryBuilder.PrepareCriteria(engineClassDef, criteria);
+            //-------------Test Result ----------------------
+            Assert.IsFalse(criteria.IsComposite());
+            Assert.AreEqual(Criteria.ComparisonOp.Equals, criteria.ComparisonOperator);
+            Assert.AreEqual(surname, criteria.FieldValue);
+            Assert.AreEqual("Surname", criteria.Field.PropertyName);
+            Assert.AreEqual("Surname_field", criteria.Field.FieldName);
+            Assert.AreEqual("Engine.Car.Owner", criteria.Field.Source.ToString());
+        }
+
+        [Test]
         public void TestPrepareSource()
         {
             //---------------Set up test pack-------------------
@@ -450,6 +467,59 @@ namespace Habanero.Test.BO
             Assert.AreSame(childSource, toField.Source);
             Assert.AreEqual("CarID", toField.PropertyName);
             Assert.AreEqual("CAR_ID", toField.FieldName);
+        }
+
+        [Test]
+        public void TestPrepareSource_ExistingSource_Relationship_TwoLevels()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
+            Source carSource = Source.FromString("Car.Owner");
+            Source source = carSource;
+
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareSource(engineClassDef, ref source);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(source);
+            Assert.AreNotSame(carSource, source);
+            Assert.AreEqual("Engine", source.Name);
+            Assert.AreEqual("Table_Engine", source.EntityName);
+            Assert.AreEqual(1, source.Joins.Count);
+            Source.Join join = source.Joins[0];
+            Source childSource = join.ToSource;
+            Assert.IsNotNull(childSource);
+            Assert.AreSame(carSource, childSource);
+            Assert.AreEqual("Car", childSource.Name);
+            Assert.AreEqual("car_table", childSource.EntityName);
+            Assert.AreEqual(1, join.JoinFields.Count);
+            Source.Join.JoinField joinField = join.JoinFields[0];
+            QueryField fromField = joinField.FromField;
+            Assert.AreSame(source, fromField.Source);
+            Assert.AreEqual("CarID", fromField.PropertyName);
+            Assert.AreEqual("CAR_ID", fromField.FieldName);
+            QueryField toField = joinField.ToField;
+            Assert.AreSame(childSource, toField.Source);
+            Assert.AreEqual("CarID", toField.PropertyName);
+            Assert.AreEqual("CAR_ID", toField.FieldName);
+
+            Assert.AreEqual(1, childSource.Joins.Count);
+            Source.Join childJoin = childSource.Joins[0];
+            Source grandChildSource = childJoin.ToSource;
+            Assert.IsNotNull(grandChildSource);
+            Assert.AreSame(carSource.ChildSource, grandChildSource);
+            Assert.AreEqual("Owner", grandChildSource.Name);
+            Assert.AreEqual("contact_person", grandChildSource.EntityName);
+            Assert.AreEqual(1, childJoin.JoinFields.Count);
+            Source.Join.JoinField childJoinField = childJoin.JoinFields[0];
+            QueryField childFromField = childJoinField.FromField;
+            Assert.AreSame(carSource, childFromField.Source);
+            Assert.AreEqual("OwnerId", childFromField.PropertyName);
+            Assert.AreEqual("OWNER_ID", childFromField.FieldName);
+            QueryField childToField = childJoinField.ToField;
+            Assert.AreSame(grandChildSource, childToField.Source);
+            Assert.AreEqual("ContactPersonID", childToField.PropertyName);
+            Assert.AreEqual("ContactPersonID", childToField.FieldName);
         }
 
         //[Test]
