@@ -1,5 +1,5 @@
 <Project EditorVersion="1.1.0" ProjectFileName="D:\Systems\Habanero\trunk\source\Habanero.Test.Structure.fsproj">
-  <ProjectSettings HabaneroDllPath="D:\Systems\Habanero\trunk" ProjectName="Habanero.Test.Structure" SolutionDirectory="D:\Systems\Habanero\trunk\source" BaseProjectName="ToBeDeleted" UiProjectName="ToBeDeleted" LogicProjectName="ToBeDeleted" BoProjectName="Habanero.Test.Structure" DefaultAssembly="Habanero.Test.Structure.BO">
+  <ProjectSettings HabaneroDllPath="D:\Systems\Habanero\trunk\bin" ProjectName="Habanero.Test.Structure" SolutionDirectory="D:\Systems\Habanero\trunk\source" BaseProjectName="ToBeDeleted" UiProjectName="ToBeDeleted" LogicProjectName="ToBeDeleted" BoProjectName="Habanero.Test.Structure" DefaultAssembly="Habanero.Test.Structure.BO">
     <CustomPropertyTypes />
     <CustomControlTypes />
     <CustomControlMapperTypes />
@@ -226,7 +226,61 @@
       <Uis />
       <CustomProperties />
     </Class>
-    <Class Assembly="Habanero.Test.Structure.BO" ClassName="OrganisatiionPerson" TableName="table_OrganisatiionPerson" DisplayName="Organisatiion Person">
+    <Class Assembly="Habanero.Test.Structure.BO" ClassName="Organisation" TableName="table_Organisation" DisplayName="Organisation">
+      <SuperClassDesc SuperClass="LegalEntity" HasSuperClass="True" />
+      <PrimaryKey>
+        <KeyProperties>
+          <KeyProperty PropertyName="OrganisationID" />
+        </KeyProperties>
+      </PrimaryKey>
+      <Properties>
+        <Property PropertyName="Name" DisplayName="Name" DatabaseFieldName="field_Name" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="DateFormed" DisplayName="Date Formed" DatabaseFieldName="field_Date_Formed" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="OrganisationID" DisplayName="Organisation I D" DatabaseFieldName="field_Organisation_ID" Compulsory="True" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </Properties>
+      <Relationships>
+        <Relationship RelationshipName="OrganisationPerson" RelationshipType="Multiple" RelatedClass="OrganisationPerson">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="OrganisationID" RelatedProperty="OrganisatiionID" />
+          </RelationshipProperties>
+        </Relationship>
+      </Relationships>
+      <Keys />
+      <Uis />
+      <CustomProperties />
+    </Class>
+    <Class Assembly="Habanero.Test.Structure.BO" ClassName="OrganisationPerson" TableName="table_OrganisationPerson" DisplayName="Organisation Person">
       <SuperClassDesc />
       <PrimaryKey IsObjectID="False">
         <KeyProperties>
@@ -274,60 +328,6 @@
         <Relationship RelationshipName="Person" RelatedClass="Person">
           <RelationshipProperties>
             <RelationshipProperty OwnerProperty="PersonID" RelatedProperty="PersonID" />
-          </RelationshipProperties>
-        </Relationship>
-      </Relationships>
-      <Keys />
-      <Uis />
-      <CustomProperties />
-    </Class>
-    <Class Assembly="Habanero.Test.Structure.BO" ClassName="Organisation" TableName="table_Organisation" DisplayName="Organisation">
-      <SuperClassDesc SuperClass="LegalEntity" HasSuperClass="True" />
-      <PrimaryKey>
-        <KeyProperties>
-          <KeyProperty PropertyName="OrganisationID" />
-        </KeyProperties>
-      </PrimaryKey>
-      <Properties>
-        <Property PropertyName="Name" DisplayName="Name" DatabaseFieldName="field_Name" PropertyType="String">
-          <PropertyRule>
-            <Parameters>
-              <KeyValuePair Key="maxLength" />
-              <KeyValuePair Key="minLength" />
-              <KeyValuePair Key="patternMatch" />
-              <KeyValuePair Key="patternMatchMessage" />
-            </Parameters>
-          </PropertyRule>
-          <LookupListSource>
-            <Items />
-          </LookupListSource>
-        </Property>
-        <Property PropertyName="DateFormed" DisplayName="Date Formed" DatabaseFieldName="field_Date_Formed" PropertyType="String">
-          <PropertyRule>
-            <Parameters>
-              <KeyValuePair Key="maxLength" />
-              <KeyValuePair Key="minLength" />
-              <KeyValuePair Key="patternMatch" />
-              <KeyValuePair Key="patternMatchMessage" />
-            </Parameters>
-          </PropertyRule>
-          <LookupListSource>
-            <Items />
-          </LookupListSource>
-        </Property>
-        <Property PropertyName="OrganisationID" DisplayName="Organisation I D" DatabaseFieldName="field_Organisation_ID" Compulsory="True" PropertyType="Guid">
-          <PropertyRule>
-            <Parameters />
-          </PropertyRule>
-          <LookupListSource>
-            <Items />
-          </LookupListSource>
-        </Property>
-      </Properties>
-      <Relationships>
-        <Relationship RelationshipName="OrganisationPerson" RelationshipType="Multiple" RelatedClass="OrganisatiionPerson">
-          <RelationshipProperties>
-            <RelationshipProperty OwnerProperty="OrganisationID" RelatedProperty="OrganisatiionID" />
           </RelationshipProperties>
         </Relationship>
       </Relationships>
@@ -450,7 +450,7 @@
             <RelationshipProperty OwnerProperty="PersonID" RelatedProperty="DriverID" />
           </RelationshipProperties>
         </Relationship>
-        <Relationship RelationshipName="OrganisationPerson" RelationshipType="Multiple" RelatedClass="OrganisatiionPerson">
+        <Relationship RelationshipName="OrganisationPerson" RelationshipType="Multiple" RelatedClass="OrganisationPerson">
           <RelationshipProperties>
             <RelationshipProperty OwnerProperty="PersonID" RelatedProperty="PersonID" />
           </RelationshipProperties>

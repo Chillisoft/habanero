@@ -14,13 +14,10 @@
 // Please do not modify this class directly!
 // ------------------------------------------------------------------------------
 
-namespace Habanero.Test.Structure.BO
+using System;
+
+namespace Habanero.Test.Structure
 {
-    using System;
-    using Habanero.BO;
-    using Habanero.Test.Structure.BO;
-    
-    
     public partial class Car : Vehicle
     {
         

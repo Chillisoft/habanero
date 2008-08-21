@@ -14,11 +14,11 @@
 // Please do not modify this class directly!
 // ------------------------------------------------------------------------------
 
-namespace Habanero.Test.Structure.BO
+namespace Habanero.Test.Structure
 {
     using System;
     using Habanero.BO;
-    using Habanero.Test.Structure.BO;
+    using Habanero.Test.Structure;
     
     
     public partial class Organisation : LegalEntity
@@ -63,11 +63,11 @@ namespace Habanero.Test.Structure.BO
         #endregion
         
         #region Relationships
-        public virtual BusinessObjectCollection<OrganisatiionPerson> OrganisationPerson
+        public virtual BusinessObjectCollection<OrganisationPerson> OrganisationPerson
         {
             get
             {
-                return Relationships.GetRelatedCollection<OrganisatiionPerson>("OrganisationPerson");
+                return Relationships.GetRelatedCollection<OrganisationPerson>("OrganisationPerson");
             }
         }
         #endregion

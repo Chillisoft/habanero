@@ -28,6 +28,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Habanero.Base">
+      <HintPath>..\..\bin\Habanero.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Habanero.BO">
+      <HintPath>..\..\bin\Habanero.BO.dll</HintPath>
+    </Reference>
+    <Reference Include="Habanero.DB">
+      <HintPath>..\..\bin\Habanero.DB.dll</HintPath>
+    </Reference>
+    <Reference Include="Habanero.Util">
+      <HintPath>..\..\bin\Habanero.Util.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.4.6.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
@@ -53,13 +65,13 @@
     <Compile Include="LegalEntity.Def.cs">
       <DependentUpon>LegalEntity.cs</DependentUpon>
     </Compile>
-    <Compile Include="OrganisatiionPerson.cs" />
-    <Compile Include="OrganisatiionPerson.Def.cs">
-      <DependentUpon>OrganisatiionPerson.cs</DependentUpon>
-    </Compile>
     <Compile Include="Organisation.cs" />
     <Compile Include="Organisation.Def.cs">
       <DependentUpon>Organisation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OrganisationPerson.cs" />
+    <Compile Include="OrganisationPerson.Def.cs">
+      <DependentUpon>OrganisationPerson.cs</DependentUpon>
     </Compile>
     <Compile Include="Part.cs" />
     <Compile Include="Part.Def.cs">
@@ -95,6 +107,10 @@
       <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
       <Name>Habanero.DB</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
+      <Project>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</Project>
+      <Name>Habanero.Test</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -106,8 +122,7 @@
   -->
   <!-- NB: These build events MUST be after the above project import  -->
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)ClassDefs.xml" "$(SolutionDir)ToBeDeleted\$(OutDir)"</PostBuildEvent>
     <PreBuildEvent />
   </PropertyGroup>
 </Project>

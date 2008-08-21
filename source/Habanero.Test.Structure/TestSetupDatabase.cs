@@ -14,7 +14,7 @@ namespace Habanero.Test.Structure
     [TestFixture]
     public class TestSetupDatabase
     {
-        [Test]//, Ignore("Not Part of this project")]
+        [Test, Ignore("Not Part of this project")]
         public void Test()
         {
             ClassDef.ClassDefs.Clear();
@@ -25,6 +25,6 @@ namespace Habanero.Test.Structure
             setupDatabase.ClearDatabase();
             setupDatabase.CreateDatabase(ClassDef.ClassDefs);
         }
-        
+
     }
 }

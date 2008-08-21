@@ -14,11 +14,11 @@
 // Please do not modify this class directly!
 // ------------------------------------------------------------------------------
 
-namespace Habanero.Test.Structure.BO
+namespace Habanero.Test.Structure
 {
     using System;
     using Habanero.BO;
-    using Habanero.Test.Structure.BO;
+    using Habanero.Test.Structure;
     
     
     public partial class Part : Entity

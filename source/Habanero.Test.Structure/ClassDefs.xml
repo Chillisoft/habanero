@@ -46,7 +46,19 @@
       <relatedProperty property="LegalEntityID" relatedProperty="OwnerID" />
     </relationship>
   </class>
-  <class name="OrganisatiionPerson" assembly="Habanero.Test.Structure.BO" table="table_OrganisatiionPerson">
+  <class name="Organisation" assembly="Habanero.Test.Structure.BO" table="table_Organisation">
+    <superClass class="LegalEntity" assembly="Habanero.Test.Structure.BO" />
+    <property name="Name" databaseField="field_Name" />
+    <property name="DateFormed" databaseField="field_Date_Formed" />
+    <property name="OrganisationID" type="Guid" databaseField="field_Organisation_ID" compulsory="true" />
+    <primaryKey>
+      <prop name="OrganisationID" />
+    </primaryKey>
+    <relationship name="OrganisationPerson" type="multiple" relatedClass="OrganisationPerson" relatedAssembly="Habanero.Test.Structure.BO">
+      <relatedProperty property="OrganisationID" relatedProperty="OrganisatiionID" />
+    </relationship>
+  </class>
+  <class name="OrganisationPerson" assembly="Habanero.Test.Structure.BO" table="table_OrganisationPerson">
     <property name="OrganisatiionID" type="Guid" databaseField="field_Organisatiion_ID" />
     <property name="PersonID" type="Guid" databaseField="field_Person_ID" />
     <property name="Relationship" databaseField="field_Relationship" />
@@ -59,18 +71,6 @@
     </relationship>
     <relationship name="Person" type="single" relatedClass="Person" relatedAssembly="Habanero.Test.Structure.BO">
       <relatedProperty property="PersonID" relatedProperty="PersonID" />
-    </relationship>
-  </class>
-  <class name="Organisation" assembly="Habanero.Test.Structure.BO" table="table_Organisation">
-    <superClass class="LegalEntity" assembly="Habanero.Test.Structure.BO" />
-    <property name="Name" databaseField="field_Name" />
-    <property name="DateFormed" databaseField="field_Date_Formed" />
-    <property name="OrganisationID" type="Guid" databaseField="field_Organisation_ID" compulsory="true" />
-    <primaryKey>
-      <prop name="OrganisationID" />
-    </primaryKey>
-    <relationship name="OrganisationPerson" type="multiple" relatedClass="OrganisatiionPerson" relatedAssembly="Habanero.Test.Structure.BO">
-      <relatedProperty property="OrganisationID" relatedProperty="OrganisatiionID" />
     </relationship>
   </class>
   <class name="Part" assembly="Habanero.Test.Structure.BO" table="table_Part">
@@ -94,7 +94,7 @@
     <relationship name="CarsDriven" type="multiple" relatedClass="Car" relatedAssembly="Habanero.Test.Structure.BO">
       <relatedProperty property="PersonID" relatedProperty="DriverID" />
     </relationship>
-    <relationship name="OrganisationPerson" type="multiple" relatedClass="OrganisatiionPerson" relatedAssembly="Habanero.Test.Structure.BO">
+    <relationship name="OrganisationPerson" type="multiple" relatedClass="OrganisationPerson" relatedAssembly="Habanero.Test.Structure.BO">
       <relatedProperty property="PersonID" relatedProperty="PersonID" />
     </relationship>
   </class>
