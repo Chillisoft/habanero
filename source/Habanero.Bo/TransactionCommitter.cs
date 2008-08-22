@@ -28,13 +28,65 @@ namespace Habanero.BO
     /// <summary>
     /// This base class manages and commits a collection of ITransactions to a datasource. 
     /// The sub classes of this class implement a specific strategy e.g. Committing to a 
-    /// database.
+    /// database, file, message queue, Webservice etc.
+    /// This provides an Implementation of the 'Unit of Work' Pattern 
+    /// (Fowler - Patterns of Enterprise Application Architecture 184 
+    ///   ‘Maintains a list of objects affected by a business transaction and co-ordinates 
+    ///   the writing out of changes and the detection and resolution of concurrency problems’).
+    /// 
+    /// The TransactionCommitter also implements the GOF Strategy Pattern and as such 
+    ///   the transaction committer can be implemented with a concrete class or the ITransactionCommitter
+    ///   can be implemented by the Application developer to provide any functionality required for the 
+    ///   updating of business objects to a datastore.
+    /// The TransactionCommitter works with the <see cref="TransactionalBusinessObject"/>. 
+    /// The <see cref="TransactionalBusinessObject"/> implements the GOF adaptor pattern. 
+    ///   As well as the Fowler - DataMapper 165 pattern. As such it
+    ///   wraps the business object and uses the Class definitions (MetaData Mapping Fowler 306) to map the
+    ///   business object to the Datastore. It also provides methods to call through to underlying Business
+    ///   object methods.
+    /// 
+    /// The TransactionCommitter and <see cref="TransactionalBusinessObject"/> also work together to ensure that 
+    ///   all concurrency control <see cref="IConcurrencyControl"/> strategies for the business object have been 
+    ///   implemented.
+    /// 
+    /// The Application developer can also add Transactions to the TransactionCommitter that are not Business objects
+    ///   these objects must implement the <see cref="ITransactional"/> interface. This is typically used 
+    ///   when the application developer needs to insert or updated a datasource that is not wrapped by a business object.
+    ///   E.g. The application developer may implement a NumberGenerator to generate a code e.g. Product code.
+    ///   The Habanero Framework uses this capability to write out <see cref="TransactionLogTable"/>.
+    /// When <see cref="CommitTransaction"/> is called all the objects in the TransactionCommitter are executed to the
+    ///   datasource in the case of the <see cref="TransactionCommitterDB"/> these are executed within an individual 
+    ///   transaction if the transaction fails then all updates to the database are rolled back.
+    /// 
+    /// In cases where a single object is edited and persisted the Transaction committer does not have to be 
+    ///   used by the Application developer. The architecture uses a convenience method
+    ///   <see cref="BusinessObject"/>  <see cref="BusinessObject.Save"/> this 
+    ///   creates the appropriate transactionCommitter and commits it.
+    /// 
+    /// The TransactionCommitter is very simple to use the Application developer can add the required objects to
+    ///   Transaction Committer. When the business transaction is complete the <see cref="CommitTransaction"/> is called.
+    /// <example>
+    ///        ContactPerson contactP = New ContactPerson();
+    ///        //set relevant data for contact person.
+    ///        committerDB.AddBusinessObject(contactP);
+    ///        committerDB.CommitTransaction();
+    /// </example>
     /// </summary>
     public abstract class TransactionCommitter : ITransactionCommitter
     {
+        /// <summary>
+        /// A list of all the transactions that are added to the transaction committer by the application developer.
+        /// </summary>
         private readonly List<ITransactional> _originalTransactions = new List<ITransactional>();
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.TransactionCommitter");
-
+        /// <summary>
+        /// A list of all transactions that are executed by the transaction committer.
+        /// The executed transactions may exceed the origionalTransactions due to the fact that the
+        /// Business object can add additional Business objects to the transaction. This is typically 
+        /// done when a business object has composite children objects and it controls the persisting of these children.
+        /// E.g. in the case where an Invoice has InvoiceLines the Invoice will add any of its lines that are dirty to 
+        /// the _executedTransactions list.
+        /// </summary>
         protected List<ITransactional> _executedTransactions = new List<ITransactional>();
 
         protected bool _CommittSuccess;
@@ -46,6 +98,50 @@ namespace Habanero.BO
         protected TransactionCommitter()
         {
             _executedTransactions = new List<ITransactional>();
+        }
+
+        ///<summary>
+        /// Add an object of type business object to the transaction.
+        /// The DBTransactionCommiter wraps this Business Object in the
+        /// appropriate Transactional Business Object
+        ///</summary>
+        ///<param name="bo"></param>
+        public virtual void AddBusinessObject(IBusinessObject bo)
+        {
+            TransactionalBusinessObject transaction = CreateTransactionalBusinessObject(bo);
+            this.AddTransaction(transaction);
+            if (_runningUpdatingBeforePersisting)
+            {
+                transaction.UpdateObjectBeforePersisting(this);
+            }
+        }
+
+        /// 
+        ///<summary>
+        /// This method adds an <see cref="ITransactional"/> to the list of transactions.
+        ///</summary>
+        ///<param name="transaction"></param>
+        public void AddTransaction(ITransactional transaction)
+        {
+            ITransactional foundTransactional = _originalTransactions.Find(delegate(ITransactional obj)
+                       {
+                           return obj.TransactionID() ==
+                                  transaction.TransactionID();
+                       });
+            if (foundTransactional != null) return;
+
+            _originalTransactions.Add(transaction);
+        }
+
+        ///<summary>
+        /// Commit the transactions to the datasource e.g. the database, file, memory DB
+        ///</summary>
+        ///<returns></returns>
+        public void CommitTransaction()
+        {
+            Begin();
+            Execute();
+            Commit();
         }
 
         /// <summary>
@@ -74,34 +170,6 @@ namespace Habanero.BO
             get { return _CommittSuccess; }
         }
 
-        /// 
-        ///<summary>
-        /// This method adds an ITransactional to the list of transactions.
-        ///</summary>
-        ///<param name="transaction"></param>
-        public void AddTransaction(ITransactional transaction)
-        {
-            ITransactional foundTransactional = _originalTransactions.Find(delegate(ITransactional obj)
-                       {
-                           return obj.TransactionID() ==
-                                  transaction.TransactionID();
-                       });
-            if (foundTransactional != null) return;
-
-            _originalTransactions.Add(transaction);
-        }
-
-        ///<summary>
-        /// Commit the transactions to the datasource e.g. the database, file, memory DB
-        ///</summary>
-        ///<returns></returns>
-        public void CommitTransaction()
-        {
-            Begin();
-            Execute();
-            Commit();
-        }
-
         /// <summary>
         /// Begins the transaction. First validates that all the objects in the transaction are valid.
         /// Once the objects are validated the Datasource transaction is started.
@@ -113,6 +181,11 @@ namespace Habanero.BO
             BeginDataSource();
         }
 
+        /// <summary>
+        /// If the transaction is a transactional business object then the Upate object before persisting method
+        /// of the transactional business object is called. The default behaviour of this is to call through to the 
+        ///  UpdateObjectBeforePersisting method of the business object.
+        /// </summary>
         private void UpdateObjectBeforePersisting()
         {
             _runningUpdatingBeforePersisting = true;
@@ -120,11 +193,9 @@ namespace Habanero.BO
             {
                 foreach (ITransactional transaction in _originalTransactions.ToArray())
                 {
-                    if (transaction is TransactionalBusinessObject)
-                    {
-                        TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
-                        trnBusObj.UpdateObjectBeforePersisting(this);
-                    }
+                    if (!(transaction is TransactionalBusinessObject)) continue;
+                    TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+                    trnBusObj.UpdateObjectBeforePersisting(this);
                 }
             }
             finally
@@ -142,21 +213,26 @@ namespace Habanero.BO
             CheckObjectsAreValid();
             ValidateObjectsCanBeDeleted();
             CheckForDuplicateObjects();
-            CheckForOptimisticConcurrencyErrors();
+            CheckForConcurrencyErrors();
         }
 
-        private void CheckForOptimisticConcurrencyErrors()
+        /// <summary>
+        /// Checks any Concurrency control errors for the <see cref="TransactionalBusinessObject"/>
+        /// </summary>
+        private void CheckForConcurrencyErrors()
         {
             foreach (ITransactional transaction in _originalTransactions)
             {
-                if (transaction is TransactionalBusinessObject)
-                {
-                    TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
-                    trnBusObj.CheckForConcurrencyErrors();
-                }
+                if (!(transaction is TransactionalBusinessObject)) continue;
+                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+                trnBusObj.CheckForConcurrencyErrors();
             }
         }
 
+        /// <summary>
+        /// Checks for any Duplicate objects by checking the objects <see cref="IPrimaryKey"/> and alternate keys 
+        /// <see cref="IKeyDef"/>.
+        /// </summary>
         private void CheckForDuplicateObjects()
         {
             string allMessages = "";
@@ -179,7 +255,9 @@ namespace Habanero.BO
             }
         }
 
-
+        /// <summary>
+        /// Check that the object is in a valid state i.e. no <see cref="IPropRule"/>'s are broken.
+        /// </summary>
         private void CheckObjectsAreValid()
         {
             string allMessages = "";
@@ -201,23 +279,25 @@ namespace Habanero.BO
             }
         }
 
+        /// <summary>
+        /// Verifies that any <see cref="TransactionalBusinessObject"/>'s that are marked for deletion
+        ///   can be deleted. <see cref="TransactionalBusinessObject.CheckCanDelete"/>
+        /// </summary>
         private void ValidateObjectsCanBeDeleted()
         {
             string allMessages = "";
             foreach (ITransactional transaction in _originalTransactions)
             {
-                if (transaction is TransactionalBusinessObject)
+                if (!(transaction is TransactionalBusinessObject)) continue;
+                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+
+                if (!trnBusObj.IsDeleted) continue;
+
+                string errMsg;
+
+                if (!trnBusObj.CheckCanDelete(out errMsg))
                 {
-                    TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
-
-                    if (!trnBusObj.IsDeleted) continue;
-
-                    string errMsg;
-
-                    if (!trnBusObj.CheckCanDelete(out errMsg))
-                    {
-                        allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
-                    }
+                    allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
                 }
             }
             if (!string.IsNullOrEmpty(allMessages))
@@ -252,7 +332,6 @@ namespace Habanero.BO
                 throw;
             }
         }
-
 
         /// <summary>
         /// Commits all the successfully executed statements to the datasource.
@@ -317,21 +396,7 @@ namespace Habanero.BO
             _executedTransactions.Add(transaction);
         }
 
-        ///<summary>
-        /// Add an object of type business object to the transaction.
-        /// The DBTransactionCommiter wraps this Business Object in the
-        /// appropriate Transactional Business Object
-        ///</summary>
-        ///<param name="bo"></param>
-        public virtual void AddBusinessObject(IBusinessObject bo)
-        {
-            TransactionalBusinessObject transaction = CreateTransactionalBusinessObject(bo);
-            this.AddTransaction(transaction);
-            if (_runningUpdatingBeforePersisting)
-            {
-                transaction.UpdateObjectBeforePersisting(this);
-            }
-        }
+
 
         /// <summary>
         /// Used to decorate a businessObject in a TransactionalBusinessObject. To be overridden in the concrete 

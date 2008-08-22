@@ -544,7 +544,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorDB();
             ContactPersonTestBO.DeleteAllContactPeople();
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
 
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -579,7 +579,7 @@ namespace Habanero.Test.BO
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
 
             ContactPersonTestBO cp1 = CreateContactPersonTestBO();
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
 
             CreateContactPersonTestBO();
             CreateContactPersonTestBO();

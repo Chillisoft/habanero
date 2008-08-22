@@ -18,7 +18,7 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
         }
 
@@ -88,7 +88,7 @@ namespace Habanero.Test.BO
                 //---------------Set up test pack-------------------
                 ContactPersonTestBO.LoadDefaultClassDef();
                 ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-                BusObjectManager.Instance.ClearLoadedObjects();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
                 TestUtil.WaitForGC();
                 //---------------Assert Precondition----------------
 
@@ -136,7 +136,7 @@ namespace Habanero.Test.BO
                 //---------------Set up test pack-------------------
                 ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
                 ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-                BusObjectManager.Instance.ClearLoadedObjects();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
                 TestUtil.WaitForGC();
                 //---------------Assert Precondition----------------
 
@@ -197,7 +197,7 @@ namespace Habanero.Test.BO
                 CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
                 Shape shape = Shape.CreateSavedShape();
                 Criteria criteria = Criteria.FromPrimaryKey(shape.ID);
-                BusObjectManager.Instance.ClearLoadedObjects();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
 
                 //---------------Execute Test ----------------------
                 BusinessObjectCollection<CircleNoPrimaryKey> loadedCircles = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<CircleNoPrimaryKey>(criteria);
@@ -216,7 +216,7 @@ namespace Habanero.Test.BO
                 CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
                 CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
                 Criteria criteria = Criteria.FromPrimaryKey(circle.ID);
-                BusObjectManager.Instance.ClearLoadedObjects();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
 
                 //---------------Execute Test ----------------------
                 BusinessObjectCollection<Shape> loadedShapes = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Shape>(criteria);
@@ -235,7 +235,7 @@ namespace Habanero.Test.BO
 
                 FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
                 FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
-                BusObjectManager.Instance.ClearLoadedObjects();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
 
                 //---------------Execute Test ----------------------
                 Shape loadedShape =
@@ -253,7 +253,7 @@ namespace Habanero.Test.BO
 
                 FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchyDifferentDiscriminators();
                 FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
-                BusObjectManager.Instance.ClearLoadedObjects();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
 
                 //---------------Execute Test ----------------------
                 Shape loadedShape =
@@ -1779,7 +1779,7 @@ namespace Habanero.Test.BO
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO loadedCp =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(singleCritieria);
             BusinessObjectCollection<ContactPersonTestBO> col =
@@ -1803,7 +1803,7 @@ namespace Habanero.Test.BO
             OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO loadedCp =
                 (ContactPersonTestBO)
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(cp1.ClassDef, singleCritieria);
@@ -2179,7 +2179,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             SetupDataAccessor();
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
 

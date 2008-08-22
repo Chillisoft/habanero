@@ -198,7 +198,7 @@ namespace Habanero.Test.BO
         public void Test3LayerDeleteRelated()
         {
             //---------------Set up test pack-------------------
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO.DeleteAllContactPeople();
             BORegistry.DataAccessor = new DataAccessorDB();
             OrganisationTestBO.LoadDefaultClassDef();
@@ -276,7 +276,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
             ContactPersonTestBO contactPersonCompositeKey = GetSavedContactPersonCompositeKey();
             string oldID = contactPersonCompositeKey.ID.GetObjectId();
-            Assert.IsNotNull(BusObjectManager.Instance[oldID]);
+            Assert.IsNotNull(BusinessObjectManager.Instance[oldID]);
             TransactionCommitterDB committer = new TransactionCommitterDB();
             committer.AddBusinessObject(contactPersonCompositeKey);
             contactPersonCompositeKey.FirstName = "newName";
@@ -284,8 +284,8 @@ namespace Habanero.Test.BO
             committer.CommitTransaction();
             //---------------Test Result -----------------------
             TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(contactPersonCompositeKey);
-            Assert.IsFalse(BusObjectManager.Instance.Contains(oldID));
-            Assert.IsNotNull(BusObjectManager.Instance[contactPersonCompositeKey.ID.GetObjectId()]);
+            Assert.IsFalse(BusinessObjectManager.Instance.Contains(oldID));
+            Assert.IsNotNull(BusinessObjectManager.Instance[contactPersonCompositeKey.ID.GetObjectId()]);
             //---------------Tear Down--------------------------
             contactPersonCompositeKey.Delete();
             contactPersonCompositeKey.Save();
@@ -321,8 +321,8 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             IPrimaryKey objectID = contactPersonCompositeKey.ID;
             Assert.AreEqual(objectID.GetOrigObjectID(), objectID.GetObjectId());
-            Assert.IsNotNull(BusObjectManager.Instance[objectID.GetOrigObjectID()]);
-            Assert.IsFalse(BusObjectManager.Instance.Contains(oldID));
+            Assert.IsNotNull(BusinessObjectManager.Instance[objectID.GetOrigObjectID()]);
+            Assert.IsFalse(BusinessObjectManager.Instance.Contains(oldID));
         }
 
         [Test]

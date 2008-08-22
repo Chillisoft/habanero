@@ -136,7 +136,7 @@ namespace Habanero.BO
                 if (ID != null)
                 {
 //                    AllLoadedBusinessObjects().Remove(ID.GetObjectId());
-                    BusObjectManager.Instance.Remove(this);
+                    BusinessObjectManager.Instance.Remove(this);
                 }
                 //TODO: All the code below To be removed
                 //if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
@@ -244,7 +244,7 @@ namespace Habanero.BO
         /// </summary>
         internal static void ClearObjectManager()
         {
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
         }
 
         #endregion //Business Object Loaders
@@ -888,17 +888,17 @@ namespace Habanero.BO
             if (State.IsDeleted)
             {
                 SetStateAsPermanentlyDeleted();
-                BusObjectManager.Instance.Remove(this);
+                BusinessObjectManager.Instance.Remove(this);
                 FireDeleted();
             }
             else
             {
-                BusObjectManager.Instance.Remove(this);
+                BusinessObjectManager.Instance.Remove(this);
                 StorePersistedPropertyValues();
                 SetStateAsUpdated();
-                if (!BusObjectManager.Instance.Contains(ID))
+                if (!BusinessObjectManager.Instance.Contains(ID))
                 {
-                    BusObjectManager.Instance.Add(this);
+                    BusinessObjectManager.Instance.Add(this);
                 }
 
                 FireSaved();

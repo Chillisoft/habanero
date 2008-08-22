@@ -81,7 +81,7 @@ namespace Habanero.Test.BO
             AddObjectToDelete(contactPerson);
             contactPerson.Save();
             //Clear object manager
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             //Load second object from DB
             ContactPersonOptimisticLockingVersionNumberDB duplicateContactPerson =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonOptimisticLockingVersionNumberDB>(contactPerson.ID);
@@ -114,7 +114,7 @@ namespace Habanero.Test.BO
             ContactPersonOptimisticLockingVersionNumberDB contactPerson = CreateSavedCntactPersonOptimisticLockingVersionNumberDB();
 
             //Clear object manager
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             //Load second object from DB
             ContactPersonOptimisticLockingVersionNumberDB duplicateContactPerson =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonOptimisticLockingVersionNumberDB>(contactPerson.ID);
@@ -149,7 +149,7 @@ namespace Habanero.Test.BO
             ContactPersonOptimisticLockingVersionNumberDB contactPersonDeleteConcurrency 
                 = CreateSavedCntactPersonOptimisticLockingVersionNumberDB();
             //Clear object manager
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             //Load second object from DB            
 
             ContactPersonOptimisticLockingVersionNumberDB contactPerson2 

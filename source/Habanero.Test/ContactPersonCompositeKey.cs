@@ -184,7 +184,7 @@ namespace Habanero.Test
 
         public static void ClearContactPersonCol()
         {
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
         }
 
         public static void DeleteAllContactPeople()

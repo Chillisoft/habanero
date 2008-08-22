@@ -293,7 +293,7 @@ namespace Habanero.Test.General
             contactPTestSave.Save(); //save the object to the DB
 
 
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             WaitForGC();
 
             //---------------------------Assert Precondition --------------------------

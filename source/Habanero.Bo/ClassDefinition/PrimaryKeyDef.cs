@@ -19,11 +19,24 @@
 
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO.Loaders;
 
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
-    /// Manages the definition of the primary key in a data set
+    /// Manages the definition of the primary key in a for a particular Business Object (e.g. Customer).
+    /// The Primary Key Definition defins the properties of the object that are used to map the business object
+    ///  to the database. The Primary key def is a mapping that is used to implement the 
+    ///  Identity Field (216) Pattern (Fowler - 'Patterns of Enterprise Application Architecture')
+    /// 
+    /// In most cases the PrimaryKeyDefinition will only have one property definition and this property definition 
+    ///  will be for an immutable property. In the ideal case this property definition will
+    ///  represent a property that is globally unique. In these cases the primaryKeyDef will have the flag mIsObjectID set to true. 
+    ///  However we have in many cases had to extend or replace existing systems
+    ///  that use mutable composite keys to identify objects in the database. The primary key definition allows you to define
+    ///  all of these scenarious.
+    /// The Application developer should not usually deal with this class since it is usually created based on the class definition modelled
+    ///   and stored in the ClassDef.Xml <see cref="XmlPrimaryKeyLoader"/>.
     /// </summary>
     public class PrimaryKeyDef : KeyDef
     {
@@ -32,7 +45,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Constructor to create a new primary key definition
         /// </summary>
-        public PrimaryKeyDef() : base()
+        public PrimaryKeyDef()
         {
             _ignoreIfNull = false; //you cannot ingnore nulls for a primary key.
         }
@@ -41,6 +54,8 @@ namespace Habanero.BO.ClassDefinition
         /// Adds a property definition to this key
         /// </summary>
         /// <param name="propDef">The property definition to add</param>
+        /// <exception cref="InvalidPropertyException">Thrown if the primary key definition is marked as and object id but more than one 
+        /// property definition is being added</exception>
         public override void Add(IPropDef propDef)
         {
             if (Count > 0 && mIsObjectID)
@@ -107,15 +122,7 @@ namespace Habanero.BO.ClassDefinition
         /// key definition</returns>
         public override BOKey CreateBOKey(BOPropCol lBOPropCol)
         {
-            BOPrimaryKey lBOKey;
-            if (mIsObjectID)
-            {
-                lBOKey = new BOObjectID(this);
-            }
-            else
-            {
-                lBOKey = new BOPrimaryKey(this);
-            }
+		    BOPrimaryKey lBOKey = mIsObjectID ? new BOObjectID(this) : new BOPrimaryKey(this);
             foreach (PropDef lPropDef in this)
             {
                 lBOKey.Add(lBOPropCol[lPropDef.PropertyName]);

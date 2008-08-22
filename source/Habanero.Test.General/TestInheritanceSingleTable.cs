@@ -254,7 +254,7 @@ namespace Habanero.Test.General
             bo.SetPropertyValue("ShapeID", circle.ShapeID);
             bo.Save();
 
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
 
             //---------------Execute Test ----------------------
             bo = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(bo.ID);

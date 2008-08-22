@@ -290,7 +290,7 @@ namespace Habanero.Test.BO
 //            //Create and save a person
 //            ContactPersonTestBO cpTemp = CreateSavedContactPerson();
 //            //Clear the object manager so as to simulate a different user
-//            BusObjectManager.Instance.ClearLoadedObjects();
+//            BusinessObjectManager.Instance.ClearLoadedObjects();
 //            //BeingRemoved Assert.AreEqual(0, BusinessObject.AllLoadedBusinessObjects().Count);
 //            //Get the person from the object manager so as to ensure that they are loaded 
 //            // into the object manager.
@@ -379,14 +379,14 @@ namespace Habanero.Test.BO
 //        {
 //            ContactPersonTestBO cpTemp = CreateSavedContactPerson();
 //            //Clear the loaded busiess object so that the we can simulate a user on another machine deleting this object
-//            BusObjectManager.Instance.ClearLoadedObjects();
+//            BusinessObjectManager.Instance.ClearLoadedObjects();
 //            return cpTemp;
 //        }
 //
 //        private static ContactPersonTestBO CreateSavedContactPerson()
 //        {
 //            ClassDef.ClassDefs.Clear();
-//            BusObjectManager.Instance.ClearLoadedObjects();
+//            BusinessObjectManager.Instance.ClearLoadedObjects();
 //            ContactPersonTestBO.LoadDefaultClassDef();
 //            //Create a contact person
 //            ContactPersonTestBO cpTemp = new ContactPersonTestBO();

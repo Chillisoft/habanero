@@ -669,7 +669,7 @@ namespace Habanero.BO
 //        /// </summary>
 //        public void ClearLoadedBusinessObjects()
 //        {
-//            BusObjectManager.Instance.ClearLoadedObjects();
+//            BusinessObjectManager.Instance.ClearLoadedObjects();
 //        }
 //
 //        #region Load By ID Methods

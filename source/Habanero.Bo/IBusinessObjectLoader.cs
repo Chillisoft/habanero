@@ -21,12 +21,14 @@ using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.ObjectManager;
 
 namespace Habanero.BO
 {
 
     /// <summary>
-    /// Defines methods for loading BusinessObjects and BusinessObjectCollections.  For a new type of data store (eg file based, or TCP, or
+    /// Defines methods for loading BusinessObjects and BusinessObjectCollections for any datastore e.g. Database 
+    /// XML File, CSV.  For any new type of data store (eg file based, or TCP, or
     /// web service based etc), this interface must be implemented. To enable saving to the data store a subclass of  
     /// <see cref="TransactionCommitter"/> must be implemented for your data store type, and class that implements  
     /// <see cref="IDataAccessor"/>  must be created that links these two classes by providing a method of getting the loader 
@@ -41,6 +43,10 @@ namespace Habanero.BO
     /// 
     /// You can pass in your own SelectQuery object if you wish to create a custom select query to load your object or collection.
     /// By default a SelectQuery is built up from the ClassDef loaded for the type, taking into account inheritance structures.
+    /// 
+    /// When loading one or more object from the datastore the Business Object loader should check to see if it is already loaded in 
+    /// the object manager first. If the object does not exist in the object manager then it must be loaded from the datastore and added
+    /// to the object manager <see cref="BusinessObjectManager"/>
     /// </summary>
     public interface IBusinessObjectLoader
     {

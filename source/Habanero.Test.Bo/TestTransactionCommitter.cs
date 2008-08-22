@@ -21,33 +21,21 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace Habanero.Test.BO
 {
     [TestFixture]
-    public class TestTransactionCommitter :TestUsingDatabase
+    public class TestTransactionCommitter : TestUsingDatabase
     {
-        private static readonly string _customRuleErrorMessage = "Broken Rule";
+        #region Setup/Teardown
 
         [SetUp]
         public void SetupTest()
         {
             //Runs every time that any testmethod is executed
             ClassDef.ClassDefs.Clear();
-            
-           
-        }
-
-        [TestFixtureSetUp]
-        public void TestFixtureSetup()
-        {
-            this.SetupDBConnection();
-            //Code that is executed before any test is run in this class. If multiple tests
-            // are executed then it will still only be called once.
         }
 
         [TearDown]
@@ -56,225 +44,17 @@ namespace Habanero.Test.BO
             //runs every time any testmethod is complete
         }
 
-        [Test]
-        public void TestAddTransactionsToATransactionCommiter()
+        #endregion
+
+        private const string _customRuleErrorMessage = "Broken Rule";
+
+        [TestFixtureSetUp]
+        public void TestFixtureSetup()
         {
-            //---------------Set up test pack-------------------
-            TransactionCommitter committer = new TransactionCommitterStub();
-
-            //---------------Execute Test ----------------------
-            committer.AddTransaction(new StubSuccessfullTransaction());
-            committer.AddTransaction(new StubSuccessfullTransaction());
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(2, committer.OriginalTransactions.Count);
+            SetupDBConnection();
+            //Code that is executed before any test is run in this class. If multiple tests
+            // are executed then it will still only be called once.
         }
-
-        [Test]
-        public void Test_CannotAddSameTransactionToCommitter()
-        {
-            //---------------Set up test pack-------------------
-            TransactionCommitter committer = new TransactionCommitterStub();
-            StubSuccessfullTransaction transaction = new StubSuccessfullTransaction();
-            committer.AddTransaction(transaction);
-
-            //--------------Assert PreConditions----------------            
-            Assert.AreEqual(1, committer.OriginalTransactions.Count);
-
-            //---------------Execute Test ----------------------
-            committer.AddTransaction(transaction);            
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, committer.OriginalTransactions.Count);
-     
-        }
-
-        [Test]
-        public void TestCommitAddedTransactions()
-        {
-            //---------------Set up test pack-------------------
-            TransactionCommitter committer = new TransactionCommitterStub();
-            StubSuccessfullTransaction transactional1 = new StubSuccessfullTransaction();
-            committer.AddTransaction(transactional1);
-            StubSuccessfullTransaction transactional2 = new StubSuccessfullTransaction();
-            committer.AddTransaction(transactional2);
-            //---------------Execute Test ----------------------
-            committer.CommitTransaction();
-            //---------------Test Result -----------------------
-            Assert.IsTrue(transactional1.Committed);
-            Assert.IsTrue(transactional2.Committed);
-        }
-
-
-        [Test, ExpectedException(typeof (NotImplementedException))]
-        public void TestRaisesException_onError()
-        {
-            //---------------Set up test pack-------------------
-            TransactionCommitter committerDB = new TransactionCommitterStubDB();
-            StubFailingTransaction trn = new StubFailingTransaction();
-            committerDB.AddTransaction(trn);
-            committerDB.AddTransaction(new StubSuccessfullTransaction());
-            //---------------Execute Test ----------------------
-            committerDB.CommitTransaction();
-            //---------------Test Result -----------------------
-        }
-
-        [Test]
-        public void TestRaisesException_onError_DoesNotCommit()
-        {
-            //---------------Set up test pack-------------------
-            TransactionCommitter committer = new TransactionCommitterStubDB();
-            StubDatabaseTransaction transactional1 = new StubDatabaseTransaction();
-            committer.AddTransaction(transactional1);
-            StubFailingTransaction transactional2 = new StubFailingTransaction();
-            committer.AddTransaction(transactional2);
-            //---------------Execute Test ----------------------
-            try
-            {
-                committer.CommitTransaction();
-                Assert.Fail("Failure should have occurred as a StubFailingTransaction was added");
-            }
-                //---------------Test Result -----------------------
-            catch (NotImplementedException)
-            {
-                Assert.IsFalse(transactional1.Committed);
-                Assert.IsFalse(transactional2.Committed);
-            }
-        }
-
-        [Test]
-        public void TestPersistSimpleBO_FailingCustomRules()
-        {
-            //---------------Set up test pack-------------------
-            MockBOWithCustomRule mockBO = new MockBOWithCustomRule();
-            TransactionCommitter committerDB = new TransactionCommitterStub();
-            committerDB.AddBusinessObject(mockBO);
-
-            //---------------Execute Test ----------------------
-            try
-            {
-                committerDB.CommitTransaction();
-            }
-            catch (BusObjectInAnInvalidStateException ex)
-                //---------------Test Result -----------------------
-            {
-                Assert.IsTrue(ex.Message.Contains(_customRuleErrorMessage));
-            }
-        }
-
-        [Test]
-        public void TestMessageTwoPersistSimpleBO_Failing()
-        {
-            //---------------Set up test pack-------------------
-            MockBOWithCustomRule mockBO = new MockBOWithCustomRule();
-            TransactionCommitter committerDB = new TransactionCommitterStub();
-            committerDB.AddBusinessObject(mockBO);
-
-            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-            contactPersonTestBO.Surname = null;
-            committerDB.AddBusinessObject(contactPersonTestBO);
-
-            //---------------Execute Test ----------------------
-            try
-            {
-                committerDB.CommitTransaction();
-            }
-            catch (BusObjectInAnInvalidStateException ex)
-                //---------------Test Result -----------------------
-            {
-                Assert.IsTrue(ex.Message.Contains(_customRuleErrorMessage));
-                Assert.IsTrue(ex.Message.Contains("Surname"));
-            }
-        }
-
-        [Test]
-        public void TestPersistSimpleBO_Update_NotUsingTransactionalBusinessObject()
-        {
-            //---------------Set up test pack-------------------
-            MockBO mockBo = CreateSavedMockBO();
-            Guid mockBOProp1 = Guid.NewGuid();
-            mockBo.MockBOProp1 = mockBOProp1;
-            TransactionCommitter committerDB = new TransactionCommitterStub();
-            committerDB.AddBusinessObject(mockBo);
-
-            //---------------Execute Test ----------------------
-            committerDB.CommitTransaction();
-
-            //---------------Test Result -----------------------
-            TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(mockBo);
-        }
- 
-
-
-        [Test]
-        public void TestAddBusinessObjectToTransactionInUpdateBeforePersisting()
-        {
-            //---------------Set up test pack-------------------
-
-            MockBOWithUpdateBeforePersisting mockBo = new MockBOWithUpdateBeforePersisting();
-            TransactionCommitterStub committer = new TransactionCommitterStub();
-            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
-            committer.AddTransaction(trnBusObj);
-            //---------------Execute Test ----------------------
-
-                committer.CommitTransaction();
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(2, committer.OriginalTransactions.Count);
-        }
-        [Test]
-        public void TestAddBusinessObjectToTransactionInUpdateBeforePersisting_2LevelsDeep()
-        {
-            //---------------Set up test pack-------------------
-
-            MockBOWithUpdateBeforePersisting_Level2 mockBo = new MockBOWithUpdateBeforePersisting_Level2();
-            TransactionCommitterStub committer = new TransactionCommitterStub();
-            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
-            committer.AddTransaction(trnBusObj);
-            //---------------Execute Test ----------------------
-
-                committer.CommitTransaction();
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(3, committer.OriginalTransactions.Count);
-        }
-        [Test]
-        public void TestAddBusinessObjectToTransaction_NotUpdateBeforePersisting_2LevelsDeep()
-        {
-            //---------------Set up test pack-------------------
-
-            MockBOWithUpdateBeforePersisting_Level2 mockBo = new MockBOWithUpdateBeforePersisting_Level2();
-            TransactionCommitterStub committer = new TransactionCommitterStub();
-            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
-            //---------------Execute Test ----------------------
-
-            committer.AddTransaction(trnBusObj);
-            
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, committer.OriginalTransactions.Count, 
-                    "There should only be the recently added business object not any of its object that are added in update before persist");
-        }
-
-        [Test]
-        public void TestUpdateBeforePersisting_ExecutedBeforeValidation()
-        {
-            //---------------Set up test pack-------------------
-
-            MockBOWithBeforeSaveUpdatesCompulsoryField mockBo = new MockBOWithBeforeSaveUpdatesCompulsoryField();
-            TransactionCommitterStub committer = new TransactionCommitterStub();
-            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
-            committer.AddTransaction(trnBusObj);
-            //---------------Execute Test ----------------------
-            committer.CommitTransaction();
-
-            //---------------Test Result -----------------------
-            //Business object will throw an exception if executed in the incorrect order.
-            Assert.AreEqual(1, committer.OriginalTransactions.Count);
-        }
-
-        #region HelperMethods
 
         private static MockBO CreateSavedMockBO()
         {
@@ -298,11 +78,9 @@ namespace Habanero.Test.BO
             }
         }
 
-        #endregion
-
         private class TransactionalBusinessObjectStub : TransactionalBusinessObject
         {
-            public TransactionalBusinessObjectStub(BusinessObject businessObject)
+            public TransactionalBusinessObjectStub(IBusinessObject businessObject)
                 : base(businessObject)
             {
             }
@@ -314,11 +92,9 @@ namespace Habanero.Test.BO
             }
         }
 
-        #region MockBOs
-
         private class MockBOWithBeforeSaveUpdatesCompulsoryField : MockBO
         {
-            private bool _updateBeforePersistingExecuted = false;
+            private bool _updateBeforePersistingExecuted;
 
             public MockBOWithBeforeSaveUpdatesCompulsoryField()
             {
@@ -369,6 +145,7 @@ namespace Habanero.Test.BO
                 transactionCommitter.AddTransaction(new StubSuccessfullTransaction());
             }
         }
+
         private class MockBOWithUpdateBeforePersisting_Level2 : MockBO
         {
             /// <summary>
@@ -384,11 +161,220 @@ namespace Habanero.Test.BO
             }
         }
 
-        #endregion
+        [Test]
+        public void Test_CannotAddSameTransactionToCommitter()
+        {
+            //---------------Set up test pack-------------------
+            TransactionCommitter committer = new TransactionCommitterStub();
+            StubSuccessfullTransaction transaction = new StubSuccessfullTransaction();
+            committer.AddTransaction(transaction);
+
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(1, committer.OriginalTransactions.Count);
+
+            //---------------Execute Test ----------------------
+            committer.AddTransaction(transaction);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, committer.OriginalTransactions.Count);
+        }
+
+        [Test]
+        public void TestAddBusinessObjectToTransaction_NotUpdateBeforePersisting_2LevelsDeep()
+        {
+            //---------------Set up test pack-------------------
+
+            MockBOWithUpdateBeforePersisting_Level2 mockBo = new MockBOWithUpdateBeforePersisting_Level2();
+            TransactionCommitterStub committer = new TransactionCommitterStub();
+            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
+            //---------------Execute Test ----------------------
+
+            committer.AddTransaction(trnBusObj);
+
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, committer.OriginalTransactions.Count,
+                            "There should only be the recently added business object not any of its object that are added in update before persist");
+        }
+
+        [Test]
+        public void TestAddBusinessObjectToTransactionInUpdateBeforePersisting()
+        {
+            //---------------Set up test pack-------------------
+
+            MockBOWithUpdateBeforePersisting mockBo = new MockBOWithUpdateBeforePersisting();
+            TransactionCommitterStub committer = new TransactionCommitterStub();
+            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
+            committer.AddTransaction(trnBusObj);
+            //---------------Execute Test ----------------------
+
+            committer.CommitTransaction();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, committer.OriginalTransactions.Count);
+        }
+
+        [Test]
+        public void TestAddBusinessObjectToTransactionInUpdateBeforePersisting_2LevelsDeep()
+        {
+            //---------------Set up test pack-------------------
+
+            MockBOWithUpdateBeforePersisting_Level2 mockBo = new MockBOWithUpdateBeforePersisting_Level2();
+            TransactionCommitterStub committer = new TransactionCommitterStub();
+            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
+            committer.AddTransaction(trnBusObj);
+            //---------------Execute Test ----------------------
+
+            committer.CommitTransaction();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, committer.OriginalTransactions.Count);
+        }
+
+        [Test]
+        public void TestAddTransactionsToATransactionCommiter()
+        {
+            //---------------Set up test pack-------------------
+            TransactionCommitter committer = new TransactionCommitterStub();
+
+            //---------------Execute Test ----------------------
+            committer.AddTransaction(new StubSuccessfullTransaction());
+            committer.AddTransaction(new StubSuccessfullTransaction());
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, committer.OriginalTransactions.Count);
+        }
+
+        [Test]
+        public void TestCommitAddedTransactions()
+        {
+            //---------------Set up test pack-------------------
+            TransactionCommitter committer = new TransactionCommitterStub();
+            StubSuccessfullTransaction transactional1 = new StubSuccessfullTransaction();
+            committer.AddTransaction(transactional1);
+            StubSuccessfullTransaction transactional2 = new StubSuccessfullTransaction();
+            committer.AddTransaction(transactional2);
+            //---------------Execute Test ----------------------
+            committer.CommitTransaction();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(transactional1.Committed);
+            Assert.IsTrue(transactional2.Committed);
+        }
+
+        [Test]
+        public void TestMessageTwoPersistSimpleBO_Failing()
+        {
+            //---------------Set up test pack-------------------
+            MockBOWithCustomRule mockBO = new MockBOWithCustomRule();
+            TransactionCommitter committerDB = new TransactionCommitterStub();
+            committerDB.AddBusinessObject(mockBO);
+
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
+            contactPersonTestBO.Surname = null;
+            committerDB.AddBusinessObject(contactPersonTestBO);
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                committerDB.CommitTransaction();
+            }
+            catch (BusObjectInAnInvalidStateException ex)
+                //---------------Test Result -----------------------
+            {
+                Assert.IsTrue(ex.Message.Contains(_customRuleErrorMessage));
+                Assert.IsTrue(ex.Message.Contains("Surname"));
+            }
+        }
+
+        [Test]
+        public void TestPersistSimpleBO_FailingCustomRules()
+        {
+            //---------------Set up test pack-------------------
+            MockBOWithCustomRule mockBO = new MockBOWithCustomRule();
+            TransactionCommitter committerDB = new TransactionCommitterStub();
+            committerDB.AddBusinessObject(mockBO);
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                committerDB.CommitTransaction();
+            }
+            catch (BusObjectInAnInvalidStateException ex)
+                //---------------Test Result -----------------------
+            {
+                Assert.IsTrue(ex.Message.Contains(_customRuleErrorMessage));
+            }
+        }
+
+        [Test]
+        public void TestPersistSimpleBO_Update_NotUsingTransactionalBusinessObject()
+        {
+            //---------------Set up test pack-------------------
+            MockBO mockBo = CreateSavedMockBO();
+            Guid mockBOProp1 = Guid.NewGuid();
+            mockBo.MockBOProp1 = mockBOProp1;
+            TransactionCommitter committerDB = new TransactionCommitterStub();
+            committerDB.AddBusinessObject(mockBo);
+
+            //---------------Execute Test ----------------------
+            committerDB.CommitTransaction();
+
+            //---------------Test Result -----------------------
+            TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(mockBo);
+        }
+
+        [Test, ExpectedException(typeof (NotImplementedException))]
+        public void TestRaisesException_onError()
+        {
+            //---------------Set up test pack-------------------
+            TransactionCommitter committerDB = new TransactionCommitterStubDB();
+            StubFailingTransaction trn = new StubFailingTransaction();
+            committerDB.AddTransaction(trn);
+            committerDB.AddTransaction(new StubSuccessfullTransaction());
+            //---------------Execute Test ----------------------
+            committerDB.CommitTransaction();
+            //---------------Test Result -----------------------
+        }
+
+        [Test]
+        public void TestRaisesException_onError_DoesNotCommit()
+        {
+            //---------------Set up test pack-------------------
+            TransactionCommitter committer = new TransactionCommitterStubDB();
+            StubDatabaseTransaction transactional1 = new StubDatabaseTransaction();
+            committer.AddTransaction(transactional1);
+            StubFailingTransaction transactional2 = new StubFailingTransaction();
+            committer.AddTransaction(transactional2);
+            //---------------Execute Test ----------------------
+            try
+            {
+                committer.CommitTransaction();
+                Assert.Fail("Failure should have occurred as a StubFailingTransaction was added");
+            }
+                //---------------Test Result -----------------------
+            catch (NotImplementedException)
+            {
+                Assert.IsFalse(transactional1.Committed);
+                Assert.IsFalse(transactional2.Committed);
+            }
+        }
+
+        [Test]
+        public void TestUpdateBeforePersisting_ExecutedBeforeValidation()
+        {
+            //---------------Set up test pack-------------------
+
+            MockBOWithBeforeSaveUpdatesCompulsoryField mockBo = new MockBOWithBeforeSaveUpdatesCompulsoryField();
+            TransactionCommitterStub committer = new TransactionCommitterStub();
+            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
+            committer.AddTransaction(trnBusObj);
+            //---------------Execute Test ----------------------
+            committer.CommitTransaction();
+
+            //---------------Test Result -----------------------
+            //Business object will throw an exception if executed in the incorrect order.
+            Assert.AreEqual(1, committer.OriginalTransactions.Count);
+        }
     }
-
-    
-
-   
-
 }

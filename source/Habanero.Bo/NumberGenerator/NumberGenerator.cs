@@ -20,9 +20,7 @@
 using System;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.ConcurrencyControl;
 using Habanero.BO.Loaders;
-using Habanero.BO.ObjectManager;
 using Habanero.DB;
 
 namespace Habanero.BO
@@ -38,8 +36,8 @@ namespace Habanero.BO
     /// </summary>
     public class NumberGenerator : INumberGenerator
     {
-        private readonly string _tableName;
         private readonly BOSequenceNumber _boSequenceNumber;
+        private readonly string _tableName;
 
         ///<summary>
         /// Creates a number generator of the specified type. If no record is currently in the database for that type.
@@ -48,7 +46,7 @@ namespace Habanero.BO
         ///<param name="numberType">Type of number</param>
         public NumberGenerator(string numberType)
         {
-            this._tableName = "";
+            _tableName = "";
             _boSequenceNumber = LoadSequenceNumber(numberType);
         }
 
@@ -60,9 +58,11 @@ namespace Habanero.BO
         ///<param name="tableName">the table that the sequence number is being stored in.</param>
         public NumberGenerator(string numberType, string tableName)
         {
-            this._tableName = tableName;
+            _tableName = tableName;
             _boSequenceNumber = LoadSequenceNumber(numberType);
         }
+
+        #region INumberGenerator Members
 
         public int NextNumber()
         {
@@ -70,9 +70,24 @@ namespace Habanero.BO
             return _boSequenceNumber.SequenceNumber.Value;
         }
 
+        public void SetSequenceNumber(int newSequenceNumber)
+        {
+            _boSequenceNumber.SequenceNumber = newSequenceNumber;
+            _boSequenceNumber.Save();
+        }
+
+        public void AddToTransaction(ITransactionCommitter transactionCommitter)
+        {
+            BusinessObject busObject = GetTransactionalBO();
+            busObject.UpdateObjectBeforePersisting(transactionCommitter);
+            transactionCommitter.AddBusinessObject(busObject);
+        }
+
+        #endregion
+
         private BOSequenceNumber LoadSequenceNumber(string numberType)
         {
-            if (!ClassDef.ClassDefs.Contains(typeof(BOSequenceNumber)))
+            if (!ClassDef.ClassDefs.Contains(typeof (BOSequenceNumber)))
             {
                 BOSequenceNumber.LoadNumberGenClassDef(_tableName);
             }
@@ -103,24 +118,12 @@ namespace Habanero.BO
             _boSequenceNumber.Save();
         }
 
-        public void SetSequenceNumber(int newSequenceNumber)
-        {
-            _boSequenceNumber.SequenceNumber = newSequenceNumber;
-            _boSequenceNumber.Save();
-        }
-
         private BusinessObject GetTransactionalBO()
         {
             return _boSequenceNumber;
         }
-
-        public void AddToTransaction(ITransactionCommitter transactionCommitter)
-        {
-            BusinessObject busObject = this.GetTransactionalBO();
-            busObject.UpdateObjectBeforePersisting(transactionCommitter);
-            transactionCommitter.AddBusinessObject(busObject);
-        }
     }
+
     ///<summary>
     /// A simple sequential number generator business object
     ///</summary>
@@ -145,10 +148,24 @@ namespace Habanero.BO
 //            ClassDef.ClassDefs.Add(itsClassDef);
 //            return;
 //        }
+
+        public virtual String NumberType
+        {
+            get { return ((String) (base.GetPropertyValue("NumberType"))); }
+            set { base.SetPropertyValue("NumberType", value); }
+        }
+
+        public virtual Int32? SequenceNumber
+        {
+            get { return ((Int32?) (base.GetPropertyValue("SequenceNumber"))); }
+            set { base.SetPropertyValue("SequenceNumber", value); }
+        }
+
         internal static void LoadNumberGenClassDef()
         {
             LoadNumberGenClassDef(null);
         }
+
         internal static void LoadNumberGenClassDef(string tableName)
         {
             if (string.IsNullOrEmpty(tableName))
@@ -167,18 +184,6 @@ namespace Habanero.BO
             ClassDef itsClassDef = itsLoader.LoadClass(classDef);
             ClassDef.ClassDefs.Add(itsClassDef);
             return;
-        }
-
-        public virtual String NumberType
-        {
-            get { return ((String)(base.GetPropertyValue("NumberType"))); }
-            set { base.SetPropertyValue("NumberType", value); }
-        }
-
-        public virtual Int32? SequenceNumber
-        {
-            get { return ((Int32?)(base.GetPropertyValue("SequenceNumber"))); }
-            set { base.SetPropertyValue("SequenceNumber", value); }
         }
 
         public static void DeleteAllNumbers()

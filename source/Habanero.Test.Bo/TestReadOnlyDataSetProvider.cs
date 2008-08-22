@@ -161,7 +161,7 @@ namespace Habanero.Test.BO
         public void TestOrderItemChangeItemAndFind()
         {
             SetupTestData();
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             OrderItem.ClearObjectManager();
             OrderItem.ClearTable();
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();

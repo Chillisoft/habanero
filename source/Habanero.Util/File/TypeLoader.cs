@@ -41,7 +41,7 @@ namespace Habanero.Util.File
         /// the assembly name or class name cannot be found</exception>
         public static Type LoadType(string assemblyName, string className)
         {
-            if (assemblyName == null || assemblyName.Length == 0)
+            if (string.IsNullOrEmpty(assemblyName))
             {
                 throw new ArgumentNullException("assemblyName", "A supplied assembly name was null. " +
                                                                 "There may be several reasons for this, including " +
@@ -70,11 +70,8 @@ namespace Habanero.Util.File
             {
                 try
                 {
-                    classAssembly = Assembly.LoadWithPartialName(assemblyName);
-                    if (classAssembly == null)
-                    {
-                        classAssembly = Assembly.LoadFrom(assemblyName + ".dll");
-                    }
+                    classAssembly = Assembly.LoadWithPartialName(assemblyName) ??
+                                    Assembly.LoadFrom(assemblyName + ".dll");
                     if (classAssembly == null)
                     {
                         throw new FileNotFoundException("Thrown manually");

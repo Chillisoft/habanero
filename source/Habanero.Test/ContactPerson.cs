@@ -203,9 +203,9 @@ namespace Habanero.Test
         public static ContactPerson GetContactPerson(IPrimaryKey id)
         {
             //ContactPerson myContactPerson = null;
-            //if (BusObjectManager.Instance.Contains(id))
+            //if (BusinessObjectManager.Instance.Contains(id))
             //{
-            //    myContactPerson = (ContactPerson) BusObjectManager.Instance[id];
+            //    myContactPerson = (ContactPerson) BusinessObjectManager.Instance[id];
             //}
 
             //if (myContactPerson == null)

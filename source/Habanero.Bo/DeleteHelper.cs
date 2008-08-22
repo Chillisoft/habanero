@@ -24,18 +24,30 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
 {
-	
+	/// <summary>
+	/// A helper class that encapsulates the deletiong checking for a specified business object.
+	/// This class finds all the relationships that are marked as prevent delete for this business object
+	/// and any of its children business object. It then checks if there are any children that are marked as 
+	/// prevent delete. If there are any business objects in these relationships that are not marked as deleted
+	/// then the <see cref="CheckCanDelete"/> method will return false.
+	/// </summary>
 	internal class DeleteHelper
 	{
-
+        /// <summary>
+        /// Checks if the business object <see cref="IBusinessObject"/> can be deleted.
+        /// If the object can be deleted then returns true else returns false with 
+        /// a list of reasons that the object cannot be deleted.
+        /// </summary>
+        /// <param name="bo">The Business object to check for deletion</param>
+        /// <param name="reason">The reasons that the object cannot be deleted</param>
+        /// <returns></returns>
 		public static bool CheckCanDelete(IBusinessObject bo, out string reason)
 		{
 		    if (bo == null) throw new ArgumentNullException("bo");
 		    reason = "";
 
 		    ClassDef classDef = (ClassDef) bo.ClassDef;
-			RelationshipDefCol relationshipDefCol;
-			relationshipDefCol = classDef.RelationshipDefCol;
+		    RelationshipDefCol relationshipDefCol = classDef.RelationshipDefCol;
 			MatchList listOfPaths = FindPreventDeleteRelationships(relationshipDefCol);
 			Dictionary<string, int> results = new Dictionary<string, int>();
 			CheckCanDeleteSafe(bo, new List<IBusinessObject>(), listOfPaths, "", ref results);
@@ -78,9 +90,8 @@ namespace Habanero.BO
 				if (relationship == null) continue;
 				if (pair.Value == null)
 				{
-					IBusinessObjectCollection boCol;
-					boCol = relationship.GetRelatedBusinessObjectCol();
-					if (boCol.Count > 0)
+				    IBusinessObjectCollection boCol = relationship.GetRelatedBusinessObjectCol();
+				    if (boCol.Count > 0)
 					{
 						if (!results.ContainsKey(thisRelationshipPath))
 						{
@@ -93,9 +104,8 @@ namespace Habanero.BO
 				}
 				else if (pair.Value.Count > 0)
 				{
-					IBusinessObjectCollection boCol;
-					boCol = relationship.GetRelatedBusinessObjectCol();
-					foreach (BusinessObject businessObject in boCol)
+				    IBusinessObjectCollection boCol = relationship.GetRelatedBusinessObjectCol();
+				    foreach (BusinessObject businessObject in boCol)
 					{
 						CheckCanDeleteSafe(businessObject, alreadyChecked, pair.Value, thisRelationshipPath, ref results);
 					}
@@ -127,7 +137,11 @@ namespace Habanero.BO
 
 		}
 
-		
+		/// <summary>
+		/// Returns a list of all relationships that are marked as prevent deletion.
+		/// </summary>
+		/// <param name="relationshipDefCol"></param>
+		/// <returns></returns>
 		public static MatchList FindPreventDeleteRelationships(RelationshipDefCol relationshipDefCol)
 		{
 			return FindRelationships<MultipleRelationshipDef>(relationshipDefCol, PreventDeleteRelationshipCondition);
@@ -136,12 +150,20 @@ namespace Habanero.BO
 		public delegate bool MatchesConditionDelegate<TRelationshipDef>(TRelationshipDef relationshipDef)
 			where TRelationshipDef : RelationshipDef;
 
+        /// <summary>
+        /// Returns a list of all relationships that match the Delegate relationship.
+        /// </summary>
+        /// <typeparam name="TRelationshipDef"></typeparam>
+        /// <param name="relationshipDefCol"></param>
+        /// <param name="matchesConditionDelegate"></param>
+        /// <returns></returns>
 		public static MatchList FindRelationships<TRelationshipDef>(RelationshipDefCol relationshipDefCol,
 			MatchesConditionDelegate<TRelationshipDef> matchesConditionDelegate)
 			where TRelationshipDef : RelationshipDef
 		{
 			return FindRelationshipsSafe(relationshipDefCol, matchesConditionDelegate, new List<RelationshipDefCol>());
 		}
+
 
 		private static MatchList FindRelationshipsSafe<TRelationshipDef>(RelationshipDefCol relationshipDefCol,
 			MatchesConditionDelegate<TRelationshipDef> matchesConditionDelegate, List<RelationshipDefCol> alreadyChecked)
@@ -157,28 +179,23 @@ namespace Habanero.BO
 				string relationshipName = relationshipDef.RelationshipName;
 				TRelationshipDef castedRelationshipDef =
 					relationshipDef as TRelationshipDef;
-				if (castedRelationshipDef != null)
-				{
-					bool matchesCondition;
-					matchesCondition = matchesConditionDelegate(castedRelationshipDef);
-					if (matchesCondition)
-					{
-						listOfPaths.Add(relationshipName, null);
-					} else
-					{
-						ClassDef classDef = relationshipDef.RelatedObjectClassDef;
-						if (classDef != null)
-						{
-							MatchList results;
-							results = FindRelationshipsSafe(classDef.RelationshipDefCol, matchesConditionDelegate, alreadyChecked);
-							if (results.Count > 0)
-							{
-								listOfPaths.Add(relationshipName, results);
-							}
-						}
-					}
-				}
-
+			    if (castedRelationshipDef == null) continue;
+			    bool matchesCondition = matchesConditionDelegate(castedRelationshipDef);
+			    if (matchesCondition)
+			    {
+			        listOfPaths.Add(relationshipName, null);
+			    } else
+			    {
+			        ClassDef classDef = relationshipDef.RelatedObjectClassDef;
+			        if (classDef != null)
+			        {
+			            MatchList results = FindRelationshipsSafe(classDef.RelationshipDefCol, matchesConditionDelegate, alreadyChecked);
+			            if (results.Count > 0)
+			            {
+			                listOfPaths.Add(relationshipName, results);
+			            }
+			        }
+			    }
 			}
 			return listOfPaths;
 		}
@@ -189,6 +206,9 @@ namespace Habanero.BO
 		}
 	}
 
+    /// <summary>
+    /// A Dictionary of all the items that match the list
+    /// </summary>
 	internal class MatchList : Dictionary<string, MatchList>
 	{
 		///<summary>

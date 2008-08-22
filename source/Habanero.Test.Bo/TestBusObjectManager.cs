@@ -19,7 +19,7 @@ namespace Habanero.Test.BO
             //Runs every time that any testmethod is executed
             //base.SetupTest();
             ClassDef.ClassDefs.Clear();
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
         }
 
         [TearDown]
@@ -53,10 +53,10 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
             //---------------Test Result -----------------------
             Assert.AreEqual(0, boMan.Count);
-//            Assert.IsInstanceOfType(typeof(BusObjectManager), boMan);
+//            Assert.IsInstanceOfType(typeof(BusinessObjectManager), boMan);
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
 
@@ -89,7 +89,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = TestUtil.CreateRandomString();
             boMan.Add(cp);
@@ -112,7 +112,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
@@ -129,7 +129,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-                        BusObjectManager boMan = BusObjectManager.Instance;
+                        BusinessObjectManager boMan = BusinessObjectManager.Instance;
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = TestUtil.CreateRandomString();
             boMan.Add(cp);
@@ -151,7 +151,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
             boMan.Add(cp);
@@ -176,7 +176,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
 
@@ -202,7 +202,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
 
@@ -230,7 +230,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();
 
@@ -251,7 +251,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = TestUtil.CreateRandomString();
@@ -280,7 +280,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
             cp.Surname = TestUtil.CreateRandomString();
             boMan.Add(cp);
 
@@ -309,7 +309,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
             boMan.Add(cp);
 
             //---------------Assert Precondition----------------
@@ -336,7 +336,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = TestUtil.CreateRandomString();
@@ -364,12 +364,12 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO originalContactPerson = new ContactPersonTestBO();
             ContactPersonTestBO copyContactPerson = new ContactPersonTestBO();
             copyContactPerson.ContactPersonID = originalContactPerson.ContactPersonID;
-            BusObjectManager.Instance.Add(copyContactPerson);
+            BusinessObjectManager.Instance.Add(copyContactPerson);
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boMan.Count);
@@ -390,12 +390,12 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO originalContactPerson = new ContactPersonTestBO();
             ContactPersonTestBO copyContactPerson = new ContactPersonTestBO();
             copyContactPerson.ContactPersonID = originalContactPerson.ContactPersonID;
-            BusObjectManager.Instance.Add(copyContactPerson);
+            BusinessObjectManager.Instance.Add(copyContactPerson);
 
             //---------------Assert Precondition----------------
             Assert.AreNotSame(originalContactPerson, copyContactPerson);
@@ -405,7 +405,7 @@ namespace Habanero.Test.BO
             Assert.IsFalse(boMan.Contains(originalContactPerson));
 
             //---------------Execute Test ----------------------
-            BusObjectManager.Instance.Remove(originalContactPerson);
+            BusinessObjectManager.Instance.Remove(originalContactPerson);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, boMan.Count);
@@ -422,12 +422,12 @@ namespace Habanero.Test.BO
             // The first object is saved. This must not remove the second instance of the object from the object manager and insert a itself.
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
             ContactPersonTestBO originalContactPerson = new ContactPersonTestBO();
             originalContactPerson.Surname = "FirstSurname";
             originalContactPerson.Save();
             IPrimaryKey origCPID = originalContactPerson.ID;
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
@@ -459,7 +459,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();
 
@@ -482,7 +482,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonCompositeKey.LoadClassDefs();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonCompositeKey cp = new ContactPersonCompositeKey();
             cp.PK1Prop1 = TestUtil.CreateRandomString();
@@ -508,7 +508,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonCompositeKey.LoadClassDefs();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonCompositeKey cp = new ContactPersonCompositeKey();
             cp.PK1Prop1 = TestUtil.CreateRandomString();
@@ -539,7 +539,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
             boMan.Add(cp);
@@ -565,7 +565,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();
             IPrimaryKey id = cp.ID;
@@ -599,7 +599,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();
             IPrimaryKey id = cp.ID;
@@ -634,7 +634,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();
             Guid contactPersonId = cp.ContactPersonID;
@@ -674,7 +674,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();
             Guid contactPersonId = cp.ContactPersonID;
@@ -714,7 +714,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithAddressTestBOsRelationship();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();
             AddressTestBO address = new AddressTestBO();
@@ -762,7 +762,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithAddressTestBOsRelationship();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();
             AddressTestBO address = new AddressTestBO();
@@ -806,7 +806,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithAddressTestBOsRelationship();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             AddressTestBO address;
             ContactPersonTestBO cp = CreateSavedCP_WithOneAddresss(out address);
@@ -851,7 +851,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithAddressTestBOsRelationship();
-            BusObjectManager boMan = BusObjectManager.Instance;
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
             ContactPersonTestBO originalContactPerson = CreateSavedCP();
             IPrimaryKey id = originalContactPerson.ID;
             originalContactPerson = null;
@@ -891,7 +891,7 @@ namespace Habanero.Test.BO
         public void Test3LayerLoadRelated()
         {
             //---------------Set up test pack-------------------
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO.DeleteAllContactPeople();
             BORegistry.DataAccessor = new DataAccessorDB();
             OrganisationTestBO.LoadDefaultClassDef();
@@ -906,7 +906,7 @@ namespace Habanero.Test.BO
             contactPersonTestBO.Save();
 
             //---------------Assert Preconditions --------------
-            Assert.AreEqual(3, BusObjectManager.Instance.Count);
+            Assert.AreEqual(3, BusinessObjectManager.Instance.Count);
 
             //---------------Execute Test ----------------------
             IBusinessObjectCollection colContactPeople = org.Relationships["ContactPeople"].GetRelatedBusinessObjectCol();
@@ -915,7 +915,7 @@ namespace Habanero.Test.BO
             Address loadedAdddress = (Address) colAddresses[0];
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(3, BusObjectManager.Instance.Count);
+            Assert.AreEqual(3, BusinessObjectManager.Instance.Count);
             Assert.AreEqual(1, colAddresses.Count);
             Assert.AreSame(contactPersonTestBO, loadedCP);
             Assert.AreSame(address, loadedAdddress);

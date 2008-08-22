@@ -69,7 +69,7 @@ namespace Habanero.Test.General
             CreateDeletedPersonTestPack();
             CreateSaveContactPersonTestPack();
             //Ensure that a fresh object is loaded from DB
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
         }
 
         private void CreateSaveContactPersonTestPack()
@@ -114,7 +114,7 @@ namespace Habanero.Test.General
             myContactPerson.Save();
 
             //waitForDB();
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             //Reload the person and make sure that the changes have been made.
             ContactPerson myNewContactPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(updateContactPersonID);
             Assert.AreEqual("NewFirstName", myNewContactPerson.FirstName,

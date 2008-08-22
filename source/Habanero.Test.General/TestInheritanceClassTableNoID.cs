@@ -181,7 +181,7 @@ namespace Habanero.Test.General
         [Test]
         public void TestDatabaseReadWrite()
         {
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             // Test inserting & selecting
             Shape shape = new Shape();
             shape.ShapeName = "MyShape";

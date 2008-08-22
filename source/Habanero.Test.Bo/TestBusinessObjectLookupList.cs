@@ -78,10 +78,10 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
             DeleteAllContactPeople();
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO.CreateSampleData();
             ContactPersonTestBO.LoadDefaultClassDef();
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
         }
 

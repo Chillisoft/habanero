@@ -6,28 +6,46 @@ using Habanero.Base.Exceptions;
 namespace Habanero.BO.ObjectManager
 {
     ///<summary>
-    ///The object manager is a class that contains weak references
+    /// The business object manager is a class that contains weak references
     /// to all currently loaded business objects. The object manager is therefore used to ensure that the current user/session only
-    /// ever has one reference to a particular business object. This is used to prevent instances where a business object loaded in
-    /// two different ways by a single user is represented by two different objects in the system thus resulting in concurrency control 
-    /// exceptions.
+    /// ever has one reference to a particular business object. This is used to prevent situations where a business object loaded in
+    /// two different ways by a single user is represented by two different instance objects in the system. Not having an object manager 
+    /// could result in concurrency control exceptions even when only one user has.
+    /// Whenever an object is requested to be loaded the Business Object loader first checks to see if the object already exists in the
+    ///  object manager if it does then the object from the object manager is returned else the newly loaded object is added to the
+    ///  object manager and then returned. NB: There are various strategies that the business object can implement to control the
+    ///  behaviour when the business object loader <see cref="BusinessObjectLoaderDB"/> gets a business object that is already in the object
+    ///  manager. The default behaviour is to refresh all the objects data if the object is not in edit mode. If the object is in edit mode 
+    ///  the default behaviour is to do nothing. This strategy helps to prevent Inconsistant read and Inconsistant write concurrency control
+    ///  errors.
+    /// When an object is deleted from the datasource or disposed of by the garbage collecter it is removed from the object manager.
+    /// When a new object is persisted for the first time it is updated to the object manager.
+    /// 
+    /// The BusinessObjectManager is an implementation of the Identity Map Pattern 
+    /// (See 216 Fowler 'Patters Of Enterprise Application Architecture' - 'Ensures that each object loaded only once by keeping every loaded
+    ///   object in a map. Looks up objects using the map when referring to them.'
+    /// 
+    /// This class should not be used by the end user of the Habanero framework except in tests where the user is writing tests 
+    /// where the application developer is testing for concurrency issues in which case the ClearLoadedObjects can be called.
+    /// 
+    /// Only one Business object manager will be loaded per user session. To implement this the Singleton Pattern from the GOF is used.
     ///</summary>
-    public class BusObjectManager
+    public class BusinessObjectManager
     {
-        private static readonly BusObjectManager _busObjectManager = new BusObjectManager();
+        private static readonly BusinessObjectManager _businessObjectManager = new BusinessObjectManager();
 
         private readonly Dictionary<string, WeakReference> _loadedBusinessObjects =
             new Dictionary<string, WeakReference>();
 
-        private BusObjectManager() {}
+        private BusinessObjectManager() {}
 
         ///<summary>
         /// Returns the particular instance of the Business Object manager being used. 
         /// This implements the Singleton Design pattern.
         ///</summary>
-        public static BusObjectManager Instance
+        public static BusinessObjectManager Instance
         {
-            get { return _busObjectManager; }
+            get { return _businessObjectManager; }
         }
 
         #region IBusObjectManager Members

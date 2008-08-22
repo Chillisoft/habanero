@@ -23,15 +23,24 @@ using Habanero.Base;
 namespace Habanero.BO
 {
     ///<summary>
-    /// This is a base class which is used as a wrapper (decorator around a business object)
+    /// This is a base class which is used as a wrapper (
+    ///   GOF Decorator/Wrapper - 'Design Patterns, Elements Of Reusable Object Oriented Software' 
+    ///   around a business object). This class is used so that the Business Object can be 
+    ///   isolated from any logic regarding updating changes to a datasource.
     /// This class along with the TransactionCommiter implement transactional and persistence 
-    /// strategies for the business object
+    /// strategies for the business object.
+    /// The TransactionBusinessObject also implements the DataMapper (165) and the MetaData mapping (306) patterns.
+    ///   Fowler - Patterns of Enterprise Application Architecture.
+    ///  
+    /// This class is used by the <see cref="TransactionCommitter"/>. The <see cref="TransactionCommitter"/> 
+    ///   class contans all the required explanations of how these classes work together.
     ///</summary>
     public class TransactionalBusinessObject : ITransactional
     {
         private readonly BusinessObject _businessObject;
 
         ///<summary>
+        /// Creates a TransactionalBusinessObject that wraps the <see cref="IBusinessObject"/>
         ///</summary>
         ///<param name="businessObject"></param>
         protected internal TransactionalBusinessObject(IBusinessObject businessObject)
@@ -67,7 +76,8 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// 
+        /// returns true if the underlying business object is new and deleted. I.e. it is in 
+        /// an invalid state which means that it has already been deleted from the database.
         /// </summary>
         /// <returns></returns>
         protected internal  bool IsNewAndDeleted()
@@ -112,16 +122,14 @@ namespace Habanero.BO
         ///<returns></returns>
         protected internal static string GetDuplicateObjectErrMsg(BOKey boKey, string classDisplayName)
         {
-            string errMsg;
             string propNames = "";
             foreach (BOProp prop in boKey.GetBOPropCol())
             {
                 if (propNames.Length > 0) propNames += ", ";
                 propNames += string.Format("{0} = {1}", prop.PropertyName, prop.Value);
             }
-            errMsg =
-                string.Format("A '{0}' already exists with the same identifier: {1}.",
-                              classDisplayName, propNames);
+            string errMsg = string.Format("A '{0}' already exists with the same identifier: {1}.",
+                                          classDisplayName, propNames);
             return errMsg;
         }
 
@@ -165,6 +173,11 @@ namespace Habanero.BO
             _businessObject.UpdateAsTransactionRolledBack();
         }
 
+        /// <summary>
+        /// Checks whether the Wrapped business object can be deleted.
+        /// </summary>
+        /// <param name="errMsg"></param>
+        /// <returns></returns>
         protected internal bool CheckCanDelete(out string errMsg)
         {
             return DeleteHelper.CheckCanDelete(this.BusinessObject, out errMsg);

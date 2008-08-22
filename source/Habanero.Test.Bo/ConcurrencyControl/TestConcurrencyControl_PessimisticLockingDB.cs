@@ -232,7 +232,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
 
             cp.Surname = Guid.NewGuid().ToString();
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonPessimisticLockingDB cp2 =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonPessimisticLockingDB>(cp.ID);
 
@@ -289,7 +289,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonPessimisticLockingDB cp2 =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonPessimisticLockingDB>(cp.ID);
             //---------------Execute Test ----------------------
@@ -360,7 +360,7 @@ namespace Habanero.Test.BO
             GC.WaitForPendingFinalizers();
             //WaitForDB();
             //---------------Test Result -----------------------
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonPessimisticLockingDB cp2 =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonPessimisticLockingDB>(id);
             AssertIsNotLocked(cp2);

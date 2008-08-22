@@ -27,25 +27,30 @@ using Habanero.BO.ObjectManager;
 namespace Habanero.BO
 {
     ///<summary>
+    /// This is an implementation of an <see cref="IBusinessObjectLoader"/>. This is used for loading objects from any database.
+    /// This class implements the Loading part of the Data Mapper (165) and more specifically the metadata mapping (306) (Fowler -
+    /// 'Patterns of Enterprise Application Architecture')
     ///For details of what this class does, see <see cref="IBusinessObjectLoader"/>.
     ///
     /// All queries (including custom SelectQuery objects) run by this loader will be done using parametrized sql for 
-    /// improved type safety and performance.
+    /// improved type safety, system security and performance.
     /// 
+    /// When loading one or more object from the datastore the Business Object loader should check to see if it is already loaded in 
+    /// the object manager first. If the object does not exist in the object manager then it must be loaded from the datastore and added
+    /// to the object manager <see cref="BusinessObjectManager"/>
     ///</summary>
     public class BusinessObjectLoaderDB : IBusinessObjectLoader
     {
-        //private readonly DataStoreInMemory _dataStoreInMemory;
         private readonly IDatabaseConnection _databaseConnection;
 
-        ///<summary>Creates a BusinessObjectLoaderDB. Because this is a loader the loads data from a Database, this constructor
+        ///<summary>
+        /// Creates a BusinessObjectLoaderDB. Because this is a loader the loads data from a Database, this constructor
         /// requires an IDatabaseConnection object to be passed to it.  This connection will be used for all loading.
         ///</summary>
         ///<param name="databaseConnection"></param>
         public BusinessObjectLoaderDB(IDatabaseConnection databaseConnection)
         {
             _databaseConnection = databaseConnection;
-            //_dataStoreInMemory = new DataStoreInMemory();
         }
 
         /// <summary>
@@ -222,7 +227,7 @@ namespace Habanero.BO
             }
             if (correctSubClassDef != null)
             {
-                BusObjectManager.Instance.Remove(loadedBo.ID);
+                BusinessObjectManager.Instance.Remove(loadedBo.ID);
                 IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = subClassBusinessObject;
             }
@@ -363,8 +368,8 @@ namespace Habanero.BO
         {
             if (correctSubClassDef != null)
             {
-                BusObjectManager.Instance.Remove((IPrimaryKey) loadedBo.ID);
-                IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, (IPrimaryKey) loadedBo.ID);
+                BusinessObjectManager.Instance.Remove(loadedBo.ID);
+                IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = (T)subClassBusinessObject;
             }
             return loadedBo;
@@ -409,7 +414,7 @@ namespace Habanero.BO
         /// <summary>
         /// Reloads a businessObject from the datasource using the id of the object.
         /// A dirty object will not be refreshed from the database and the appropriate error will be raised.
-        /// Cancel all edits before refreshing the object or call see TODO: Refresh with refresh dirty objects = true.
+        /// Cancel all edits before refreshing the object.
         /// </summary>
         /// <exception cref="HabaneroDeveloperException">Exception thrown if the object is dirty and refresh is called.</exception>
         /// <param name="businessObject">The businessObject to refresh</param>
@@ -677,7 +682,7 @@ namespace Habanero.BO
 
             if (boFromObjectManager == null)
             {
-                BusObjectManager.Instance.Add(bo);
+                BusinessObjectManager.Instance.Add(bo);
                 return bo;
             }
 
@@ -689,8 +694,8 @@ namespace Habanero.BO
 
         private static IBusinessObject GetObjectFromObjectManager(IPrimaryKey key)
         {
-            BusObjectManager busObjectManager = BusObjectManager.Instance;
-            return busObjectManager.Contains(key) ? busObjectManager[key] : null;           
+            BusinessObjectManager businessObjectManager = BusinessObjectManager.Instance;
+            return businessObjectManager.Contains(key) ? businessObjectManager[key] : null;           
         }
 
         private static ClassDef GetCorrectSubClassDef(IBusinessObject bo, IDataRecord dataReader)
