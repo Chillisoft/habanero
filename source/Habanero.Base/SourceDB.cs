@@ -25,7 +25,7 @@ namespace Habanero.Base
             set { _source.EntityName = value; }
         }
 
-        public override List<Join> Joins
+        public override JoinList Joins
         {
             get { return _source.Joins; }
         }

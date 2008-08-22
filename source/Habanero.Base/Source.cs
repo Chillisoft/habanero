@@ -11,7 +11,8 @@ namespace Habanero.Base
     {
         private string _name;
         private string _entityName;
-        private List<Join> _joins;
+        private JoinList _joins;
+        private JoinList _inheritanceJoins;
 
         public Source(string name) : this(name, name)
         {
@@ -19,7 +20,8 @@ namespace Habanero.Base
 
         public Source(string name, string entityName)
         {
-            _joins = new List<Join>();
+            _joins = new JoinList(this);
+            _inheritanceJoins = new JoinList(this);
             _name = name;
             _entityName = entityName;
         }
@@ -36,7 +38,7 @@ namespace Habanero.Base
             set { _entityName = value; }
         }
 
-        public virtual List<Join> Joins
+        public virtual JoinList Joins
         {
             get { return _joins; }
         }
@@ -57,6 +59,11 @@ namespace Habanero.Base
                 if (ChildSource != null)  return ChildSource.ChildSourceLeaf;
                 return this;
             }
+        }
+
+        public JoinList InheritanceJoins
+        {
+            get { return _inheritanceJoins; }
         }
 
         public override string ToString()
@@ -84,13 +91,76 @@ namespace Habanero.Base
 
         public void JoinToSource(Source toSource)
         {
-            if (toSource == null) return;
-            if (Joins.Exists(delegate(Join join1) { return join1.ToSource.Name.Equals(toSource.Name); })) return;
-            this.Joins.Add(new Join(this, toSource));
+            Joins.AddNewJoinTo(toSource);
         }
 
 
+        public class JoinList : List<Join>
+        {
+            private Source _fromSource;
 
+            public JoinList(Source fromSource)
+            {
+                if (fromSource == null)
+                {
+                    throw new ArgumentNullException("fromSource");
+                }
+                _fromSource = fromSource;
+            }
+
+            public Source FromSource
+            {
+                get { return _fromSource; }
+            }
+
+            public void MergeWith(JoinList joinListToMerge)
+            {
+                Source fromSourceToMerge = joinListToMerge.FromSource;
+                if (!_fromSource.Equals(fromSourceToMerge))
+                    throw new HabaneroDeveloperException(
+                        "A source's joins cannot merge with another source's joins " + 
+                        "if they do not have the same base source.",
+                        "Please check your Source structures. Base Source:" + this +
+                        ", Source to merge:" + fromSourceToMerge);
+                if (joinListToMerge.Count == 0) return;
+                Join inheritanceJoinToMerge = joinListToMerge[0];
+                Source toSourceToMerge = inheritanceJoinToMerge.ToSource;
+                Join inheritanceJoin = null;
+                Source toSource = null;
+                if (this.Count > 0)
+                {
+                    inheritanceJoin = this[0];
+                    toSource = inheritanceJoin.ToSource;
+                }
+                if (!Object.Equals(toSourceToMerge, toSource))
+                {
+                    toSource = toSourceToMerge;
+                    Join newJoin = this.AddNewJoinTo(toSourceToMerge);
+                    foreach (Join.JoinField joinField in inheritanceJoinToMerge.JoinFields)
+                    {
+                        newJoin.JoinFields.Add(joinField);
+                    }
+                }
+                if (toSource != null)
+                {
+                    toSource.MergeWith(toSourceToMerge);
+                }
+                
+            }
+
+            public Join AddNewJoinTo(Source toSource)
+            {
+                if (toSource == null) return null;
+                bool alreadyExists = this.Exists(delegate(Join join1)
+                {
+                    return join1.ToSource.Name.Equals(toSource.Name);
+                });
+                if (alreadyExists) return null;
+                Join join = new Join(_fromSource, toSource);
+                this.Add(join);
+                return join;
+            }
+        }
 
         public class Join
         {
@@ -166,19 +236,8 @@ namespace Habanero.Base
                 throw new HabaneroDeveloperException("A source cannot merge with another source if they do not have the same base source.", 
                         "Please check your Source structures. Base Source:" + this + " source to merge " + sourceToMerge);
 
-            if (sourceToMerge.ChildSource == null)
-                return;
-
-            if (!sourceToMerge.ChildSource.Equals(this.ChildSource))
-            {
-                Join newJoin = new Join(this, sourceToMerge.ChildSource);
-                foreach (Join.JoinField joinField in sourceToMerge.Joins[0].JoinFields)
-                {
-                    newJoin.JoinFields.Add(joinField);
-                }
-                this.Joins.Add(newJoin);
-            }
-            this.ChildSource.MergeWith(sourceToMerge.ChildSource);
+            this.InheritanceJoins.MergeWith(sourceToMerge.InheritanceJoins);
+            this.Joins.MergeWith(sourceToMerge.Joins);
         }
     }
 }

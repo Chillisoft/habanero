@@ -148,21 +148,6 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_Join_Constructor()
-        {
-            //---------------Set up test pack-------------------
-            Source fromSource = new Source("From");
-            Source toSource = new Source("To");
-            //---------------Execute Test ----------------------
-            Source.Join join = new Source.Join(fromSource, toSource);
-
-            //---------------Test Result -----------------------
-            Assert.AreSame(fromSource, join.FromSource);
-            Assert.AreSame(toSource, join.ToSource);
-            //---------------Tear Down -------------------------
-        }
-
-        [Test]
         public void TestJoinToSource()
         {
             //---------------Set up test pack-------------------
@@ -418,48 +403,6 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestJoinField_Constructor()
-        {
-            //-------------Setup Test Pack ------------------
-            string tableName = "MY_SOURCE";
-            Source source = new Source("MySource", tableName);
-            string joinTableName = "MY_JOINED_TABLE";
-            Source joinSource = new Source("JoinSource", joinTableName);
-            QueryField fromField = new QueryField("FromField", "FROM_FIELD", source);
-            QueryField toField = new QueryField("ToField", "TO_FIELD", joinSource);
-
-            //-------------Execute test ---------------------
-            Source.Join.JoinField joinField = new Source.Join.JoinField(fromField, toField); 
-            //-------------Test Result ----------------------
-            Assert.AreSame(fromField, joinField.FromField);
-            Assert.AreSame(toField, joinField.ToField);
-        }
-
-
-        [Test]
-        public void TestJoinStructure()
-        {
-            //-------------Setup Test Pack ------------------
-            string tableName = "MY_SOURCE";
-            Source source = new Source("MySource", tableName);
-            string joinTableName = "MY_JOINED_TABLE";
-            Source joinSource = new Source("JoinSource", joinTableName);
-
-            Source.Join join = new Source.Join(source, joinSource);
-            QueryField fromField = new QueryField("FromField", "FROM_FIELD", source);
-            QueryField toField = new QueryField("ToField", "TO_FIELD", joinSource);
-            
-            //-------------Execute test ---------------------
-            join.JoinFields.Add(new Source.Join.JoinField(fromField, toField));
-            source.Joins.Add(join);
-            //-------------Test Result ----------------------
-
-            Assert.AreEqual(1, source.Joins.Count);
-            Assert.AreSame(fromField, join.JoinFields[0].FromField);
-            Assert.AreSame(toField, join.JoinFields[0].ToField);
-        }
-
-        [Test]
         public void TestChildSource()
         {
             //-------------Setup Test Pack ------------------
@@ -511,5 +454,56 @@ namespace Habanero.Test.BO
             //-------------Test Result ----------------------
             Assert.AreSame(source, childSourceLeaf);
         }
+
+        [Test]
+        public void TestInheritanceJoinStructure()
+        {
+            //-------------Setup Test Pack ------------------
+            const string tableName = "MY_SOURCE";
+            Source source = new Source("MySource", tableName);
+            const string joinTableName = "MY_BASE_TABLE";
+            Source joinSource = new Source("MyBaseSource", joinTableName);
+
+            Source.Join join = new Source.Join(source, joinSource);
+            QueryField fromField = new QueryField("FromField", "FROM_FIELD", source);
+            QueryField toField = new QueryField("ToField", "TO_FIELD", joinSource);
+
+            //-------------Execute test ---------------------
+            join.JoinFields.Add(new Source.Join.JoinField(fromField, toField));
+            source.InheritanceJoins.Add(join);
+            //-------------Test Result ----------------------
+
+            Assert.AreEqual(1, source.InheritanceJoins.Count);
+            Assert.AreSame(join, source.InheritanceJoins[0]);
+            Assert.AreSame(fromField, join.JoinFields[0].FromField);
+            Assert.AreSame(toField, join.JoinFields[0].ToField);
+        }
+
+        //TODO: Write Tests for MergeWith with joins to multiple classes from one source
+
+        [Test]
+        public void TestMergeWith_IncludesInheritanceJoinFields()
+        {
+            //-------------Setup Test Pack ------------------
+            Source originalSource = new Source("FromSource", "FromSourceEntity");
+            Source otherSource = new Source("FromSource", "FromSourceEntity");
+            Source childSource = new Source("ToSource", "ToSourceEntity");
+            Source.Join join = new Source.Join(otherSource, childSource);
+            QueryField field1 = new QueryField("FromSourceProp1", "FromSourceProp1Field", otherSource);
+            QueryField field2 = new QueryField("ToSourceProp1", "ToSourceProp1Field", childSource);
+            otherSource.InheritanceJoins.Add(join);
+            join.JoinFields.Add(new Source.Join.JoinField(field1, field2));
+
+            //-------------Execute test ---------------------
+            originalSource.MergeWith(otherSource);
+
+            //-------------Test Result ----------------------
+            Assert.AreEqual(1, originalSource.InheritanceJoins.Count);
+            Assert.AreEqual(1, originalSource.InheritanceJoins[0].JoinFields.Count);
+            Assert.AreEqual(field1, originalSource.InheritanceJoins[0].JoinFields[0].FromField);
+            Assert.AreEqual(field2, originalSource.InheritanceJoins[0].JoinFields[0].ToField);
+        }
+
+        
     }
 }
