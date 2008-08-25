@@ -123,24 +123,6 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Returns the ObjectID <see cref="Habanero.BO.BOObjectID.GetObjectId()"/>
-        /// </summary>
-        /// <returns>Returns the ID as a string</returns>
-        public override string GetObjectNewID()
-        {
-            return GetObjectId();
-        }
-
-        /// <summary>
-        /// Returns an empty string
-        /// </summary>
-        /// <returns>Returns an empty string</returns>
-        public override string GetOrigObjectID()
-        {
-            return "";
-        }
-
-        /// <summary>
         /// Indicates whether to check for duplicates. This will always
         /// return false, since the objectID is guaranteed to be unique.
         /// </summary>

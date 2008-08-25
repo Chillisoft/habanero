@@ -31,18 +31,27 @@ namespace Habanero.BO
 {
     /// <summary>
     /// Contains the details of the key constraints for the particular
-    /// business object.  It is essentially a collection of BOProp objects
-    /// that behave together in some way (e.g. for a composite alternate
-    /// key, the combination of properties is required to be unique).
+    /// business object. The Key constraint can be a primary or Alternate Key. 
+    /// The primaryKey <see cref="PrimaryKeyDef"/> or alternate key can both be either 
+    /// composite/compound (more than one property) or not (only one property). 
+    /// The property can also be a meaningFull Key e.g. Surname or a meaningLess Key e.g PersonID
+    /// It is essentially a collection of Business Object Properties <see cref="BOProp"/>
+    ///  objects e.g. FirstName and Surname 
+    ///  that behave together in some way (e.g. for a composite alternate
+    ///  key, the combination of properties is required to be unique).
     /// </summary>
-    public class BOKey : IBOKey, IEnumerable<IBOProp>
+    public class BOKey : IBOKey
     {
-        private Dictionary<string, IBOProp> _props;
-        private KeyDef _keyDef;
+        private readonly Dictionary<string, IBOProp> _props;
+        private readonly KeyDef _keyDef;
 
         /// <summary>
-        /// Indicates that the value held by one of the properties in the
-        /// key has been changed
+        /// Indicates that the value held by one or more of the properties in the
+        /// key has been changed. This is especially critical for a primary key
+        /// that is a meaningFull Key and is not immutable. E.g. a User interface grid 
+        /// might be mapped to a particular business object via the string ID.
+        /// If the business object's mutable primary key is modified then the Grid would be 
+        /// required to catch this event so as to be able to update its mapping.
         /// </summary>
         public event EventHandler<BOKeyEventArgs> Updated;
 
@@ -67,7 +76,7 @@ namespace Habanero.BO
 
         /// <summary>
         /// Provides an indexing facility so the properties can be accessed
-        /// with square brackets like an array
+        /// with square brackets like an array using the property name.
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns the matching BOProp object or null if not found
@@ -89,7 +98,7 @@ namespace Habanero.BO
 
         /// <summary>
         /// Provides an indexing facility so the properties can be accessed
-        /// with square brackets like an array
+        /// with square brackets like an array using the properties ordinal position.
         /// </summary>
         /// <param name="index">The index position of the item to retrieve</param>
         /// <returns>Returns the matching BOProp object or null if not found
@@ -122,7 +131,7 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Adds a BOProp object to the key
+        /// Adds a <see cref="IBOProp"/> to the key
         /// </summary>
         /// <param name="boProp">The BOProp to add</param>
         internal virtual void Add(IBOProp boProp)
@@ -247,7 +256,7 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Indicates whether any of the properties are new
+        /// Indicates whether the Business object that contains this BOKey is new.
         /// </summary>
         protected virtual bool IsObjectNew
         {
@@ -259,11 +268,6 @@ namespace Habanero.BO
                     {
                         return true;
                     }
-                    // Eric: looks faulty
-                    //else
-                    //{
-                    //    return false;
-                    //}
                 }
                 return false;
             }
@@ -422,8 +426,8 @@ namespace Habanero.BO
             if (rhsIsNull && lhsIsNull)
             {
                 return true;
-            } 
-            else if (rhsIsNull || lhsIsNull)
+            }
+            if (rhsIsNull || lhsIsNull)
             {
                 return false;
             }

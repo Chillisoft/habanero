@@ -33,7 +33,6 @@ namespace Habanero.BO
     {
         //		BusinessObjectBase mBO;
         private Guid _newObjectID = Guid.Empty;
-        //		bool _isObjectNew;
 
         /// <summary>
         /// Constructor to initialise a new primary key
@@ -49,8 +48,6 @@ namespace Habanero.BO
         /// <param name="id">The ID to set to</param>
         public virtual void SetObjectID(Guid id)
         {
-            //TODO_Err:	check that id is not empty (Eric: is this done below?)
-
             //If the Business object is not new then you cannot set the objectID
             if (!IsObjectNew)
             {
@@ -80,36 +77,6 @@ namespace Habanero.BO
             return !IsObjectNew ? PersistedDatabaseWhereClause(null) : "";
             //TODO: This exception breaks tests. Review.
             //throw new InvalidObjectIdException("Error: _isObjectNew = true but the _newObjectID is not set");
-        }
-
-        /// <summary>
-        /// Returns the object ID as if the object had been persisted 
-        /// to the database, regardless of whether the object is new or not
-        /// </summary>
-        /// <returns>Returns a string</returns>
-        public virtual string GetObjectNewID()
-        {
-            return PersistedDatabaseWhereClause(null);
-        }
-
-        /// <summary>
-        /// Get the original ObjectID
-        /// </summary>
-        /// <returns>Returns a string</returns>
-        public  virtual string GetOrigObjectID()
-        {
-            if (this.IsObjectNew && _newObjectID == Guid.Empty)
-            {
-                return "";
-            }
-
-            if (this.IsObjectNew )
-            {
-                return "ID=" + _newObjectID;
-            }
-
-            return PersistedDatabaseWhereClause(null);
-
         }
 
         /// <summary>

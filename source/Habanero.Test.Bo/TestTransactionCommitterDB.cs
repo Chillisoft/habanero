@@ -320,8 +320,9 @@ namespace Habanero.Test.BO
             committer.CommitTransaction();
             //---------------Test Result -----------------------
             IPrimaryKey objectID = contactPersonCompositeKey.ID;
-            Assert.AreEqual(objectID.GetOrigObjectID(), objectID.GetObjectId());
-            Assert.IsNotNull(BusinessObjectManager.Instance[objectID.GetOrigObjectID()]);
+//            Assert.AreEqual(objectID.GetOrigObjectID(), objectID.GetObjectId());
+//            Assert.IsNotNull(BusinessObjectManager.Instance[objectID.GetOrigObjectID()]);
+            Assert.AreNotEqual(oldID, objectID);
             Assert.IsFalse(BusinessObjectManager.Instance.Contains(oldID));
         }
 

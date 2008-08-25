@@ -74,8 +74,6 @@ namespace Habanero.BO.ClassDefinition
         private string _className;
         private string _classNameFull;
         private Type _classType;
-        //private string _databaseName = "Default";
-        //private string _SelectSql = "";
         private string _tableName = "";
         private string _displayName = "";
 
@@ -87,13 +85,6 @@ namespace Habanero.BO.ClassDefinition
         private SuperClassDef _superClassDef;
         private UIDefCol _uiDefCol;
         private string _typeParameter;
-        //private bool _supportsSynchronisation;
-
-        //private static PropDef _versionNumberAtLastSyncPropDef =
-        //    new PropDef("SyncVersionNumberAtLastSync", typeof (int), PropReadWriteRule.ReadWrite, 0);
-
-        //private static PropDef _versionNumberPropDef =
-        //    new PropDef("SyncVersionNumber", typeof (int), PropReadWriteRule.ReadWrite, 0);
 
         #region Constructors
 
@@ -109,7 +100,7 @@ namespace Habanero.BO.ClassDefinition
         internal ClassDef(Type classType,
                           PrimaryKeyDef primaryKeyDef,
                           string tableName,
-                          PropDefCol propDefCol,
+                          IPropDefCol propDefCol,
                           KeyDefCol keyDefCol,
                           RelationshipDefCol relationshipDefCol)
             : this(classType, primaryKeyDef, tableName, propDefCol, keyDefCol, relationshipDefCol, null)
@@ -129,7 +120,7 @@ namespace Habanero.BO.ClassDefinition
         internal ClassDef(Type classType,
                           PrimaryKeyDef primaryKeyDef,
                           string tableName,
-                          PropDefCol propDefCol,
+                          IPropDefCol propDefCol,
                           KeyDefCol keyDefCol,
                           RelationshipDefCol relationshipDefCol,
                           UIDefCol uiDefCol)
@@ -145,7 +136,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public ClassDef(Type classType,
                         PrimaryKeyDef primaryKeyDef,
-                        PropDefCol propDefCol,
+                        IPropDefCol propDefCol,
                         KeyDefCol keyDefCol,
                         RelationshipDefCol relationshipDefCol,
                         UIDefCol uiDefCol)
@@ -161,7 +152,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public ClassDef(Type classType,
                         PrimaryKeyDef primaryKeyDef,
-                        PropDefCol propDefCol,
+                        IPropDefCol propDefCol,
                         KeyDefCol keyDefCol,
                         RelationshipDefCol relationshipDefCol)
             :
@@ -222,10 +213,7 @@ namespace Habanero.BO.ClassDefinition
             }
             //_databaseName = databaseName;
             _displayName = displayName ?? "";
-            if (tableName == null || tableName.Length == 0)
-                _tableName = _className;
-            else
-                _tableName = tableName;
+            _tableName = string.IsNullOrEmpty(tableName) ? _className : tableName;
             _primaryKeyDef = primaryKeyDef;
             _propDefCol = propDefCol;
             if (_propDefCol != null)
@@ -237,10 +225,7 @@ namespace Habanero.BO.ClassDefinition
             }
             _keysCol = keyDefCol;
             _relationshipDefCol = relationshipDefCol;
-            if (uiDefCol != null)
-                _uiDefCol = uiDefCol;
-            else
-                _uiDefCol = new UIDefCol();
+            _uiDefCol = uiDefCol ?? new UIDefCol();
         }
 
         #endregion Constructors
@@ -276,10 +261,7 @@ namespace Habanero.BO.ClassDefinition
                 {
                     return _className + "_" + this.TypeParameter;
                 }
-                else
-                {
-                    return _className;
-                }
+                return _className;
             }
             set
             {
@@ -338,10 +320,7 @@ namespace Habanero.BO.ClassDefinition
                 {
                     return _displayName;
                 }
-                else
-                {
-                    return StringUtilities.DelimitPascalCase(ClassName, " ");
-                }
+                return StringUtilities.DelimitPascalCase(ClassName, " ");
             }
             set { _displayName = value; }
         }
@@ -366,10 +345,7 @@ namespace Habanero.BO.ClassDefinition
                 {
                     return currentClassDef.SuperClassClassDef.TableName;
                 }
-                else
-                {
-                    return currentClassDef.TableName;
-                }
+                return currentClassDef.TableName;
             }
         }
 
@@ -588,8 +564,7 @@ namespace Habanero.BO.ClassDefinition
             {
                 return null;
             }
-            RelationshipCol relCol;
-            relCol = _relationshipDefCol.CreateRelationshipCol(propCol, bo);
+            RelationshipCol relCol = _relationshipDefCol.CreateRelationshipCol(propCol, bo);
             if (this.SuperClassClassDef != null)
             {
                 ClassDef superClassClassDef = (ClassDef) this.SuperClassDef.SuperClassClassDef;
@@ -684,10 +659,7 @@ namespace Habanero.BO.ClassDefinition
                 {
                     return (ClassDef) this.SuperClassDef.SuperClassClassDef;
                 }
-                else
-                {
-                    return null;
-                }
+                return null;
             }
         }
 
@@ -830,17 +802,11 @@ namespace Habanero.BO.ClassDefinition
             {
                 return this.PropDefcol[propertyName].LookupList;
             }
-            else
+            if (this.SuperClassDef != null)
             {
-                if (this.SuperClassDef != null)
-                {
-                    return this.SuperClassClassDef.GetLookupList(propertyName);
-                }
-                else
-                {
-                    return new NullLookupList();
-                }
+                return this.SuperClassClassDef.GetLookupList(propertyName);
             }
+            return new NullLookupList();
         }
 
         /// <summary>
@@ -860,10 +826,7 @@ namespace Habanero.BO.ClassDefinition
                 {
                     return currentClassDef.RelationshipDefCol[relationshipName];
                 }
-                else
-                {
-                    currentClassDef = currentClassDef.SuperClassClassDef;
-                }
+                currentClassDef = currentClassDef.SuperClassClassDef;
             }
             return null;
             //            throw new InvalidRelationshipAccessException(String.Format(
@@ -886,10 +849,7 @@ namespace Habanero.BO.ClassDefinition
                 {
                     return currentClassDef.UIDefCol[uiDefName];
                 }
-                else
-                {
-                    currentClassDef = currentClassDef.SuperClassClassDef;
-                }
+                currentClassDef = currentClassDef.SuperClassClassDef;
             }
             return null;
         }
@@ -908,6 +868,14 @@ namespace Habanero.BO.ClassDefinition
             return GetPropDef(propertyName, true);
         }
 
+        ///<summary>
+        /// Returns a particular property definition for a class definition.
+        ///</summary>
+        ///<param name="source"></param>
+        ///<param name="propertyName"></param>
+        ///<param name="throwError"></param>
+        ///<returns></returns>
+        ///<exception cref="ArgumentException"></exception>
         public IPropDef GetPropDef(Source source, string propertyName, bool throwError)
         {
             if (source == null) return GetPropDef(propertyName, throwError);
@@ -926,10 +894,7 @@ namespace Habanero.BO.ClassDefinition
             {
                 return relatedClassDef.GetPropDef(source.Joins[0].ToSource, propertyName, throwError);
             }
-            else
-            {
-                return relatedClassDef.GetPropDef(propertyName, throwError);
-            }
+            return relatedClassDef.GetPropDef(propertyName, throwError);
         }
 
         ///<summary>
@@ -974,25 +939,19 @@ namespace Habanero.BO.ClassDefinition
                     foundPropDef = currentClassDef.PropDefcol[propertyName];
                     break;
                 }
-                else
-                {
-                    currentClassDef = currentClassDef.SuperClassClassDef;
-                }
+                currentClassDef = currentClassDef.SuperClassClassDef;
             }
             if (foundPropDef != null)
             {
                 return foundPropDef;
             }
-            else if (throwError)
+            if (throwError)
             {
                 throw new InvalidPropertyNameException(String.Format(
                                                            "The property definition for the property '{0}' could not be " +
                                                            "found on a ClassDef of type '{1}'", propertyName, this.ClassNameFull));
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         #endregion //Returning defs
@@ -1130,27 +1089,18 @@ namespace Habanero.BO.ClassDefinition
                 {
                     return currentPropertyType;
                 }
-                else
-                {
-                    return typeof (object);
-                }
+                return typeof (object);
             }
-            else if (propertyName.IndexOf("-") != -1)
+            if (propertyName.IndexOf("-") != -1)
             {
                 return typeof (object);
             }
-            else
+            IPropDef propDef = this.GetPropDef(propertyName, false);
+            if (propDef != null && propDef.LookupList is NullLookupList)
             {
-                IPropDef propDef = this.GetPropDef(propertyName, false);
-                if (propDef != null && propDef.LookupList is NullLookupList)
-                {
-                    return propDef.PropertyType;
-                }
-                else
-                {
-                    return typeof (object);
-                }
+                return propDef.PropertyType;
             }
+            return typeof (object);
         }
 
         ///<summary>
@@ -1205,13 +1155,15 @@ namespace Habanero.BO.ClassDefinition
             {
                 return superClassClassDef.GetTableName(propDef);
             }
-            else
-            {
-                return "";
-            }
+            return "";
         }
 
 
+        ///<summary>
+        /// Returns the Class Defition for a <see cref="IBusinessObject"/> of type T.
+        ///</summary>
+        ///<typeparam name="T"></typeparam>
+        ///<returns></returns>
         public static ClassDef Get<T>() where T : class, IBusinessObject
         {
             return ClassDefs[typeof (T)];

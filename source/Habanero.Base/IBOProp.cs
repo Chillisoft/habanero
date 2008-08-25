@@ -21,6 +21,11 @@ using System;
 
 namespace Habanero.Base
 {
+    ///<summary>
+    /// Provides an interface for storing a single property of a <see cref="IBusinessObject"/>.
+    /// The property of a business object may represent a property such as FirstName, Surname.
+    /// Typically a <see cref="IBusinessObject"/> will have a collection of Properties.
+    ///</summary>
     public interface IBOProp
     {
         /// <summary>
@@ -35,13 +40,14 @@ namespace Habanero.Base
         IPropDef PropDef { get; }
 
         /// <summary>
-        /// Gets and sets the value for this property
+        /// Gets and sets the value for this property.
         /// </summary>
         object Value { get; set; }
 
         /// <summary>
-        /// Gets the value held before the value was last updated.
-        /// If the object has just been created, this v
+        /// Gets the value held before the value was last edited. If the property has been edited multiple times
+        ///   since being loaded or persisted to the database then this will not be equal to <see cref="PersistedPropertyValue"/>.
+        /// If the object has just been created, this value will be equal to the current <see cref="Value"/> of the property
         /// </summary>
         object ValueBeforeLastEdit { get; }
 
@@ -51,13 +57,14 @@ namespace Habanero.Base
         object PersistedPropertyValue { get; }
 
         /// <summary>
-        /// Indicates whether the property value is valid
+        /// Indicates whether the property value is valid. The property will be valid if the current value, See <see cref="Value"/>.
+        /// conforms to all the Property Rules for the property See <see cref="IPropRule"/>.
         /// </summary>
         bool IsValid { get; }
 
         /// <summary>
-        /// Returns a string which indicates why the property value may
-        /// be invalid
+        /// Returns a string which indicates why the property value is
+        /// be invalid See <see cref="IsValid"/>. If the Property is Valid then returns a null string.
         /// </summary>
         string InvalidReason { get; }
 
@@ -68,7 +75,7 @@ namespace Habanero.Base
         bool IsDirty { get; }
 
         /// <summary>
-        /// Returns the property type
+        /// Returns the property type. The property can be of any type but is typically a string, decimal etc.
         /// </summary>
         Type PropertyType { get; }
 
@@ -90,7 +97,7 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// Returns the database field name
+        /// Returns the database field name. This is the field name that the property is mapped to in the datasource.
         /// </summary>
         string DatabaseFieldName
         {
@@ -98,7 +105,7 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// Returns the property name
+        /// Returns the property name. This is the name of the property used in the business object layer e.g. Surname.
         /// </summary>
         string PropertyName
         {
@@ -108,7 +115,9 @@ namespace Habanero.Base
         /// <summary>
         /// Returns an XML string to describe changes between the property
         /// value and the persisted value.  It consists of an element with the 
-        /// property name, containing "PreviousValue" and "NewValue" elements
+        /// property name, containing "PreviousValue" and "NewValue" elements.
+        /// This can be used for a number of purposes but is typically used for
+        /// writing transaction logs or for Syunchronising distributed systems.
         /// </summary>
         string DirtyXml
         {
@@ -116,7 +125,8 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// Indicates whether the object is new
+        /// Indicates whether the <see cref="IBusinessObject"/> that this property is 
+        /// associated with is new (i.e. has never been persisted to the database.
         /// </summary>
         bool IsObjectNew
         {
@@ -134,25 +144,26 @@ namespace Habanero.Base
         }
 
         ///<summary>
-        /// Does the business object property have a specified display name or not.
+        /// Does the business object property have a specified display name or not. See <see cref="DisplayName"/>
         ///</summary>
         ///<returns>True if a display name has been set for this property, otherwise false.</returns>
         bool HasDisplayName();
 
         /// <summary>
-        /// Restores the property's original value as defined in PersistedValue
+        /// Restores the property's original value as defined in PersistedValue.
+        /// This is typically called when the edits to a <see cref="IBusinessObject"/> are cancelled.
         /// </summary>
         void RestorePropValue();
 
         /// <summary>
         /// Copies the current property value to PersistedValue.
         /// This is usually called when the object is persisted
-        /// to the database.
+        /// to the database or loaded from the database.
         /// </summary>
         void BackupPropValue();
 
         /// <summary>
-        /// Initialises the property with the specified value
+        /// Initialises the property with the specified value,
         /// </summary>
         /// <param name="propValue">The value to assign</param>
         void InitialiseProp(object propValue);

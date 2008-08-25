@@ -25,40 +25,34 @@ namespace Habanero.Base
     /// This is an interface for the primary key for a business object.
     /// The Primary Key inherits from IBOKey and as such will contain a collection
     /// of IBOProps.
+    /// The Primary Key Implements the Identity Field Pattern (Fowler (216) -
+    ///  'Patterns of Enterprise Application Architecture' - 
+    ///  'Saves the database ID Field in an object to maintain indentity between an in memory object and a database row')
+    ///  By allowing one or more field to be stored as the primary key this extends the Traditional Object relational mapping
+    ///   by allowing composite Primary keys (a common occurence when replacing existing systems).
+    ///   By mapping to Many IBoProps we can also track the dirty status and previous values of any
+    ///   the primary key properties and as such can handle cases of mutable primary keys. As a rule however it is always preferable
+    ///   for primary keys to be Immutable.
     ///</summary>
     public interface IPrimaryKey : IBOKey
     {
         /// <summary>
-        /// Returns the object's ID
+        /// Returns the object's ID as a string.
         /// </summary>
         /// <returns>Returns a string</returns>
         string GetObjectId();
 
         /// <summary>
-        /// Returns the object ID as if the object had been persisted 
-        /// regardless of whether the object is new or not
-        /// </summary>
-        /// <returns>Returns a string</returns>
-        string GetObjectNewID();
-
-        /// <summary>
-        /// Get the original ObjectID. In the case of a new business object this will be the original GUID that the
-        ///   object was assigned. In the case where the Primary Key is the object ID this should always be 
-        ///     equal to <see cref="GetObjectId"/>  and <see cref="GetObjectNewID"/>.
-        /// In the case of a natural Key e.g. If name is used as a primary key then this will not be equal to
-        ///  <see cref="GetObjectId"/>  and <see cref="GetObjectNewID"/> in the case where the object is new.
-        /// </summary>
-        /// <returns>Returns a string representing the objects ID</returns>
-        string GetOrigObjectID();
-
-        /// <summary>
-        /// Returns the ID as a Guid
+        /// Returns the ID as a Guid in cases where the <see cref="IBusinessObject"/> is using a Guid object ID./>
         /// </summary>
         /// <returns>Returns a Guid</returns>
         Guid GetAsGuid();
 
         /// <summary>
-        /// Sets the object's ID
+        /// Sets the object's ID this is used when a new object is constructed. The object is given a unique identifier.
+        /// If the object is later loaded from the database then this ID is replaced by the Database ID.
+        /// If the <see cref="IBusinessObject"/> has an object ID (i.e. Its primary key in the database is a Guid) then 
+        /// a new object will be inserted into the database using this Guid Value for the ID Field.
         /// </summary>
         /// <param name="id">The ID to set to</param>
         void SetObjectID(Guid id);

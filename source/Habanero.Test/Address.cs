@@ -173,10 +173,6 @@ namespace Habanero.Test
         #region ForCollections 
 
         //class
-        protected internal string GetObjectNewID()
-        {
-            return _primaryKey.GetObjectNewID();
-        }
 
         protected internal static BusinessObjectCollection<BusinessObject> LoadBusinessObjCol()
         {

@@ -23,8 +23,20 @@ using Habanero.Base.Exceptions;
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
-    /// Lists a property on which two classes in a relationship are
-    /// being matched
+    /// This class contains the definition of a property that participates in a relationship between two Classes.
+    /// This class collaborates with the <see cref="RelKeyDef"/>, the <see cref="ClassDef"/> 
+    ///   to provide a definition of the properties involved in the <see cref="RelationshipDef"/> between 
+    ///   two <see cref="IBusinessObject"/>. This provides
+    ///   an implementation of the Foreign Key Mapping pattern (Fowler (236) -
+    ///   'Patterns of Enterprise Application Architecture' - 'Maps an association between objects to a 
+    ///   foreign Key Reference between tables.')
+    /// the RelPropdef should not be used by the Application developer since it is usually constructed 
+    ///    based on the mapping in the ClassDef.xml file.
+    /// 
+    /// The RelPropDef is used by the RelKeyDef. The RelPropDef (Relationship Property Definition) defines
+    ///   the property definition <see cref="IPropDef"/> from the owner Business object defintion and the Property name that this
+    ///   Property Definition is mapped to. A <see cref="RelProp"/> is created from this definition for a particular 
+    ///   <see cref="IBusinessObject"/>.
     /// </summary>
     public class RelPropDef
     {

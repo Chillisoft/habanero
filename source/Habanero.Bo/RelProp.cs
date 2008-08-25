@@ -28,8 +28,8 @@ namespace Habanero.BO
     /// </summary>
     public class RelProp : IRelProp
     {
-        private IBOProp _boProp;
-        private RelPropDef _relPropDef;
+        private readonly IBOProp _boProp;
+        private readonly RelPropDef _relPropDef;
 
         /// <summary>
         /// Constructor to initialise a new property

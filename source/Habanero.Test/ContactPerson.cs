@@ -286,10 +286,6 @@ namespace Habanero.Test
         #region ForCollections //TODO: refactor this so that class construction occurs in its own 
 
         //class
-        protected internal string GetObjectNewID()
-        {
-            return _primaryKey.GetObjectNewID();
-        }
 
         public static BusinessObjectCollection<ContactPerson> LoadBusinessObjCol()
         {

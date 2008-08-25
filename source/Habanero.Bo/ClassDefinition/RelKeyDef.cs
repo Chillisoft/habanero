@@ -26,17 +26,30 @@ using Habanero.Base.Exceptions;
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
-    /// Lists a set of property definitions that indicate which properties
-    /// to match together for two classes in a relationship
+    /// This class contains the definition of a Foreign Key that defines the properties <see cref="RelPropDef"/> that
+    ///   that forms a relationship between two Classes. 
+    /// This class collaborates with the <see cref="RelPropDef"/>, the <see cref="ClassDef"/> 
+    ///   to provide a definition of the properties involved in the <see cref="RelationshipDef"/> between 
+    ///   two <see cref="IBusinessObject"/>. This provides
+    ///   an implementation of the Foreign Key Mapping pattern (Fowler (236) -
+    ///   'Patterns of Enterprise Application Architecture' - 'Maps an association between objects to a 
+    ///   foreign Key Reference between tables.')
+    /// the RelKeyDef should not be used by the Application developer since it is usually constructed 
+    ///    based on the mapping in the ClassDef.xml file.
+    /// 
+    /// The RelKeyDef (Relationship Key Definition) is a list of relationship Property Defs <see cref="RelPropDef"/> that 
+    ///   define the properties that form the persistant relationship definition (<see cref="RelationshipDef"/> between 
+    ///   two Business object defitions (<see cref="ClassDef"/>.
+    ///   <see cref="IBusinessObject"/>.
     /// </summary>
     public class RelKeyDef : IEnumerable<RelPropDef>
     {
-        private Dictionary<string, RelPropDef> _relPropDefs;
+        private readonly Dictionary<string, RelPropDef> _relPropDefs;
 
         /// <summary>
         /// Constructor to create a new RelKeyDef object
         /// </summary>
-        public RelKeyDef() : base()
+        public RelKeyDef()
         {
             _relPropDefs = new Dictionary<string, RelPropDef>();
         }
@@ -126,11 +139,6 @@ namespace Habanero.BO.ClassDefinition
             RelKey lRelKey = new RelKey(this, lBoPropCol);
             return lRelKey;
         }
-
-		//public IEnumerator GetEnumerator()
-		//{
-		//    return _relPropDefs.Values.GetEnumerator();
-		//}
 
         ///<summary>
         /// The number of property definitiosn defined in the relKeyDef

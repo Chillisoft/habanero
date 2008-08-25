@@ -35,8 +35,8 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class KeyDef : IKeyDef
     {
-        private Dictionary<string, IPropDef> _propDefs;
-        protected bool _ignoreIfNull = false;
+        private readonly Dictionary<string, IPropDef> _propDefs;
+        protected bool _ignoreIfNull;
         protected string _keyName = "";
         protected string _keyNameBuilt = "";
         protected string _keyNameForDisplay = "";
@@ -55,7 +55,6 @@ namespace Habanero.BO.ClassDefinition
 		public KeyDef()
 			: this("")
 		{
-            
 		}
 
 		/// <summary>
@@ -68,8 +67,8 @@ namespace Habanero.BO.ClassDefinition
         /// an underscore.</param>
         public KeyDef(string keyName)
         {
-            //TODO_Err check that keyName is valid. Eric: what is a valid keyname?
-            _propDefs = new Dictionary<string, IPropDef>();
+		    if (string.IsNullOrEmpty(keyName)) throw new ArgumentNullException("keyName");
+		    _propDefs = new Dictionary<string, IPropDef>();
             KeyName = keyName;
         }
 
@@ -81,7 +80,7 @@ namespace Habanero.BO.ClassDefinition
 		/// A method used by BOKey to determine whether to check for
 		/// duplicate keys.  If true, then the uniqueness check will be ignored
 		/// if any of the properties making up the key are null.<br/>
-		/// NOTE: If the BOKey is a primary key, then this cannot be
+		/// NNB: If the BOKey is a primary key, then this cannot be
 		/// set to true.
 		/// </summary>
 		public virtual bool IgnoreIfNull
@@ -98,15 +97,9 @@ namespace Habanero.BO.ClassDefinition
 		{
 			get
 			{
-			    if (_buildKeyName)
-			    {
-			        return _keyNameBuilt;
-			    } else
-			    {
-			        return _keyName;
-			    }
+			    return _buildKeyName ? _keyNameBuilt : _keyName;
 			}
-			 set
+		    set
 			{
 				_keyName = value;
 			    KeyNameForDisplay = value;
@@ -286,7 +279,8 @@ namespace Habanero.BO.ClassDefinition
 		
 		/// <summary>
         /// Indicates whether the key definition is valid based on
-        /// whether it contains one or more properties.
+        /// whether it contains one or more properties. 
+        /// I.e. The key is not valid if it does not contain any properties.
         /// </summary>
         /// <returns>Returns true if so, or false if no properties are
         /// stored</returns>
@@ -311,12 +305,6 @@ namespace Habanero.BO.ClassDefinition
             }
             return lBOKey;
         }
-
-		//public IEnumerator GetEnumerator()
-		//{
-		//    return _propDefs.Values.GetEnumerator();
-		//}
-
 
 		#region IEnumerable<PropDef> Members
 

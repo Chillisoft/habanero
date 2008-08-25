@@ -17,9 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -31,22 +29,6 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestQueryBuilderWithInheritance
     {
-        [Test]
-        public void TestPrepareSource_OneLevel()
-        {
-            //---------------Set up test pack-------------------
-            Entity.LoadDefaultClassDef();
-            ClassDef classDef = Part.LoadClassDef_WithClassTableInheritance();
-            Source source = null;
-            //---------------Execute Test ----------------------
-            QueryBuilder.PrepareSource(classDef, ref source);
-
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(source);
-            AssertPartInheritanceStructureCorrect(source);
-            //---------------Tear down -------------------------
-        }
-
         protected virtual void AssertPartInheritanceStructureCorrect(Source source)
         {
             Source correctPartSourceStructure = GetCorrectPartSourceStructure();
@@ -83,11 +65,11 @@ namespace Habanero.Test.BO
             foreach (Source.Join expectedJoin in expected)
             {
                 string joinToSourceName = expectedJoin.ToSource.Name;
-                Source.Join actualJoin = actual.Find(delegate(Source.Join join1)
-                {
-                    return join1.ToSource.Name == joinToSourceName;
-                });
-                Assert.IsNotNull(actualJoin, string.Format("Could not find a join from {0} to {1}", expected.FromSource.Name, joinToSourceName));
+                Source.Join actualJoin =
+                    actual.Find(delegate(Source.Join join1) { return join1.ToSource.Name == joinToSourceName; });
+                Assert.IsNotNull(actualJoin,
+                                 string.Format("Could not find a join from {0} to {1}", expected.FromSource.Name,
+                                               joinToSourceName));
                 AssertJoinsEqual(expectedJoin, actualJoin);
             }
         }
@@ -98,7 +80,8 @@ namespace Habanero.Test.BO
             AssertJoinFieldsListEqual(expectedJoin.JoinFields, actualJoin.JoinFields);
         }
 
-        private static void AssertJoinFieldsListEqual(List<Source.Join.JoinField> expectedJoinFields, List<Source.Join.JoinField> actualJoinFields)
+        private static void AssertJoinFieldsListEqual(List<Source.Join.JoinField> expectedJoinFields,
+                                                      List<Source.Join.JoinField> actualJoinFields)
         {
             Assert.AreEqual(expectedJoinFields.Count, actualJoinFields.Count);
 
@@ -107,19 +90,26 @@ namespace Habanero.Test.BO
                 string expectedJoinToPropertyName = expectedJoinField.ToField.PropertyName;
                 string expectedJoinFromPropertyName = expectedJoinField.FromField.PropertyName;
                 Source.Join.JoinField actualJoinField = actualJoinFields.Find(delegate(Source.Join.JoinField joinField)
-                {
-                    return joinField.FromField.PropertyName == expectedJoinFromPropertyName 
-                        && joinField.ToField.PropertyName == expectedJoinToPropertyName;
-                });
+                                                                                  {
+                                                                                      return
+                                                                                          joinField.FromField.
+                                                                                              PropertyName ==
+                                                                                          expectedJoinFromPropertyName
+                                                                                          &&
+                                                                                          joinField.ToField.PropertyName ==
+                                                                                          expectedJoinToPropertyName;
+                                                                                  });
                 Assert.IsNotNull(actualJoinField, string.Format(
-                    "Could not find a join field from {0}.{1} to {2}.{3}.",
-                    expectedJoinField.FromField.Source.Name, expectedJoinFromPropertyName,
-                    expectedJoinField.ToField.Source.Name, expectedJoinToPropertyName));
+                                                      "Could not find a join field from {0}.{1} to {2}.{3}.",
+                                                      expectedJoinField.FromField.Source.Name,
+                                                      expectedJoinFromPropertyName,
+                                                      expectedJoinField.ToField.Source.Name, expectedJoinToPropertyName));
                 AssertJoinFieldsEqual(expectedJoinField, actualJoinField);
             }
         }
 
-        private static void AssertJoinFieldsEqual(Source.Join.JoinField expectedJoinField, Source.Join.JoinField actualJoinField)
+        private static void AssertJoinFieldsEqual(Source.Join.JoinField expectedJoinField,
+                                                  Source.Join.JoinField actualJoinField)
         {
             AssertQueryFieldsEqual(expectedJoinField.FromField, actualJoinField.FromField);
             AssertQueryFieldsEqual(expectedJoinField.ToField, actualJoinField.ToField);
@@ -142,6 +132,22 @@ namespace Habanero.Test.BO
             Source.Join.JoinField joinField = new Source.Join.JoinField(partQueryField, entityQueryField);
             join.JoinFields.Add(joinField);
             return partSource;
+        }
+
+        [Test]
+        public void TestPrepareSource_OneLevel()
+        {
+            //---------------Set up test pack-------------------
+            Entity.LoadDefaultClassDef();
+            ClassDef classDef = Part.LoadClassDef_WithClassTableInheritance();
+            Source source = null;
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareSource(classDef, ref source);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(source);
+            AssertPartInheritanceStructureCorrect(source);
+            //---------------Tear down -------------------------
         }
 
         //[Test]

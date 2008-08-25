@@ -22,6 +22,17 @@ using System.Collections.Generic;
 
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Contains the details of the key constraints for the particular
+    /// business object. The Key constraint can be a primary or Alternate Key. 
+    /// The primaryKey  or alternate key can both be either 
+    /// composite/compound (more than one property) or not (only one property). 
+    /// The property can also be a meaningFull Key e.g. Surname or a meaningLess Key e.g PersonID
+    /// It is essentially a collection of Business Object Properties <see cref="IBOProp"/>
+    ///  objects e.g. FirstName and Surname 
+    ///  that behave together in some way (e.g. for a composite alternate
+    ///  key, the combination of properties is required to be unique).
+    /// </summary>
     public interface IBOKey : IEnumerable<IBOProp>
     {
         /// <summary>

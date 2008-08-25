@@ -22,13 +22,21 @@ using System.Collections.Generic;
 
 namespace Habanero.Base
 {
+    /// <summary>
+    /// The IKeyDef is a definition of an <see cref="IBusinessObject"/> key.
+    /// It is essentially a key name and a collection of property 
+    /// definitions that place certain limitations on the data
+    /// that the key can hold.  The property definitions can also relate
+    /// together in some way (e.g. for a composite alternate 
+    /// key, the combination of properties is required to be unique).
+    /// </summary>
     public interface IKeyDef: IEnumerable<IPropDef>
     {
         /// <summary>
         /// A method used by BOKey to determine whether to check for
         /// duplicate keys.  If true, then the uniqueness check will be ignored
         /// if any of the properties making up the key are null.<br/>
-        /// NOTE: If the BOKey is a primary key, then this cannot be
+        /// NB: If the BOKey is a primary key, then this cannot be
         /// set to true.
         /// </summary>
         bool IgnoreIfNull { get; set; }
@@ -46,7 +54,7 @@ namespace Habanero.Base
 
         /// <summary>
         /// Gets and sets the message to show to the user if a key validation
-        /// fails.  A default message will be provided if this is null.
+        /// fails.  A default message will be provided if this is nto set.
         /// </summary>
         string Message { get; set; }
     }

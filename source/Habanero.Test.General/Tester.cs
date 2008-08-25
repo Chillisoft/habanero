@@ -18,11 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Data;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.CriteriaManager;
 using Habanero.BO.ObjectManager;
 using Habanero.DB;
 using NUnit.Framework;
@@ -46,16 +44,15 @@ namespace Habanero.Test.General
         [TestFixtureSetUp]
         public void CreateTestPack()
         {
-            this.SetupDBConnection();
+            SetupDBConnection();
             ContactPerson.DeleteAllContactPeople();
 
             createUpdatedContactPersonTestPack();
 
-            
+
             mContactPersonUpdateConcurrency = new ContactPerson();
             mContactPersonUpdateConcurrency.Surname = "Update Concurrency";
             mContactPersonUpdateConcurrency.Save();
-
 
 
             mContactPBeginEditsConcurrency = new ContactPerson();
@@ -107,18 +104,23 @@ namespace Habanero.Test.General
         }
 
         [Test]
-        public void TestUpdateExistingContactPerson()
+        public void TestActivatorCreate()
         {
-            ContactPerson myContactPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(updateContactPersonID);
-            myContactPerson.FirstName = "NewFirstName";
-            myContactPerson.Save();
+            object contact = Activator.CreateInstance(typeof (ContactPerson), true);
+        }
 
-            //waitForDB();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            //Reload the person and make sure that the changes have been made.
-            ContactPerson myNewContactPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(updateContactPersonID);
-            Assert.AreEqual("NewFirstName", myNewContactPerson.FirstName,
-                            "The firstName was not updated");
+        [Test]
+        public void TestCancelEdits()
+        {
+            ContactPerson myContact = new ContactPerson();
+
+            Assert.IsFalse(myContact.IsValid());
+            myContact.Surname = "My Surname";
+            Assert.IsTrue(myContact.IsValid());
+            Assert.AreEqual("My Surname", myContact.Surname);
+            myContact.Restore();
+            Assert.IsFalse(myContact.IsValid());
+            Assert.IsTrue(myContact.Surname.Length == 0);
         }
 
         [Test]
@@ -132,29 +134,6 @@ namespace Habanero.Test.General
 
             Assert.AreEqual("Brad", myContact.FirstName);
             Assert.AreEqual(new DateTime(1980, 01, 22), myContact.DateOfBirth);
-        }
-
-        [Test]
-        public void TestSaveContactPerson()
-        {
-            Assert.IsFalse(mContactPTestSave.State.IsNew); // this object is saved and thus no longer
-            // new
-
-            IPrimaryKey id = mContactPTestSave.ID; //Save the objectsID so that it can be loaded from the Database
-            Assert.AreEqual(id, mContactPTestSave.ID);
-
-            ContactPerson mySecondContactPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(id);
-            Assert.IsFalse(mContactPTestSave.State.IsNew); // this object is recovered from the DB
-            // and is thus not new.
-            Assert.AreEqual(mContactPTestSave.ID.ToString(), mySecondContactPerson.ID.ToString());
-            Assert.AreEqual(mContactPTestSave.FirstName, mySecondContactPerson.FirstName);
-            Assert.AreEqual(mContactPTestSave.DateOfBirth, mySecondContactPerson.DateOfBirth);
-
-            //Add test to make certain that myContact person and contact person are not 
-            // pointing at the same physical object
-
-            mContactPTestSave.FirstName = "Change FirstName";
-            Assert.IsFalse(mContactPTestSave.FirstName == mySecondContactPerson.FirstName);
         }
 
         [Test]
@@ -195,7 +174,8 @@ namespace Habanero.Test.General
             IPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
 
-            ContactPerson mySecondContactPerson = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(id);
+            ContactPerson mySecondContactPerson =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(id);
 
             Assert.AreEqual(myContact.ID,
                             mySecondContactPerson.ID);
@@ -216,82 +196,6 @@ namespace Habanero.Test.General
 //			ContactPerson myContact = new ContactPerson();
 //			myContact.Surname = "MyPropertyIsTooLongByFarThisWill Cause and Error in Bus object";
 //		}
-
-        [Test]
-        [ExpectedException(typeof (BusObjectInAnInvalidStateException))]
-        public void TestObjectSurnameTooLong()
-        {
-            ContactPerson myContact = new ContactPerson();
-            myContact.Surname = "MyPropertyIsTooLongByFarThisWill Cause and Error in Bus object";
-            myContact.Save();
-        }
-
-        [Test]
-        [ExpectedException(typeof (BusObjectInAnInvalidStateException))]
-        public void TestObjectCompulsorySurnameNotSet()
-        {
-            ContactPerson myContact = new ContactPerson();
-            myContact.Save();
-        }
-
-        [Test]
-        public void TestCancelEdits()
-        {
-            ContactPerson myContact = new ContactPerson();
-
-            Assert.IsFalse(myContact.IsValid());
-            myContact.Surname = "My Surname";
-            Assert.IsTrue(myContact.IsValid());
-            Assert.AreEqual("My Surname", myContact.Surname);
-            myContact.Restore();
-            Assert.IsFalse(myContact.IsValid());
-            Assert.IsTrue(myContact.Surname.Length == 0);
-        }
-
-        [Test]
-        public void TestStateAfterApplyEdit()
-        {
-            ContactPerson myContact = new ContactPerson();
-            myContact.Surname = "Test Surname";
-            myContact.Save();
-            Assert.IsFalse(myContact.State.IsNew, "BO is still IsNew after being saved.");
-        }
-
-        [Test]
-            public void TestMultipleUpdates_NoConcurrencyErrors()
-        {
-            mContactPersonUpdateConcurrency.Surname = "New Surname";
-            mContactPersonUpdateConcurrency.Save();
-            mContactPersonUpdateConcurrency.Surname = "New Surname 2";
-            mContactPersonUpdateConcurrency.Save();
-            mContactPersonUpdateConcurrency.Surname = "New Surname 3";
-        }
-
-        /// <summary>
-        /// Tests to ensure that if the new object that is being saved to the database is always
-        /// unique.
-        /// </summary>
-        [Test]
-        [ExpectedException(typeof (BusObjDuplicateConcurrencyControlException))]
-        public void TestForDuplicateNewObjects()
-        {
-            //create the first object
-            ContactPerson myContact_1 = new ContactPerson();
-
-            //Edit first object and save
-            myContact_1.Surname = "My Surname";
-            myContact_1.SetPropertyValue("PK2Prop1", "PK2Prop1Value1");
-            myContact_1.SetPropertyValue("PK2Prop2", "PK2Prop1Value2");
-            myContact_1.Save(); //
-            //get the second new object from the object manager;
-            ContactPerson myContact_2 = new ContactPerson();
-            //set this new object to have the same 
-            // data as the already saved object
-            myContact_2.Surname = "My Surname";
-            myContact_2.SetPropertyValue("PK2Prop1", myContact_1.GetPropertyValue("PK2Prop1"));
-            myContact_2.SetPropertyValue("PK2Prop2", myContact_1.GetPropertyValue("PK2Prop2"));
-            myContact_2.Save(); //Should raise an errors
-        }
 
         /// <summary>
         /// Tests to ensure that if the new object that is being saved to the database is always
@@ -317,6 +221,32 @@ namespace Habanero.Test.General
 
             //set this new object to have the same 
             // data as the already saved object
+            myContact_2.SetPropertyValue("PK2Prop1", myContact_1.GetPropertyValue("PK2Prop1"));
+            myContact_2.SetPropertyValue("PK2Prop2", myContact_1.GetPropertyValue("PK2Prop2"));
+            myContact_2.Save(); //Should raise an errors
+        }
+
+        /// <summary>
+        /// Tests to ensure that if the new object that is being saved to the database is always
+        /// unique.
+        /// </summary>
+        [Test]
+        [ExpectedException(typeof (BusObjDuplicateConcurrencyControlException))]
+        public void TestForDuplicateNewObjects()
+        {
+            //create the first object
+            ContactPerson myContact_1 = new ContactPerson();
+
+            //Edit first object and save
+            myContact_1.Surname = "My Surname";
+            myContact_1.SetPropertyValue("PK2Prop1", "PK2Prop1Value1");
+            myContact_1.SetPropertyValue("PK2Prop2", "PK2Prop1Value2");
+            myContact_1.Save(); //
+            //get the second new object from the object manager;
+            ContactPerson myContact_2 = new ContactPerson();
+            //set this new object to have the same 
+            // data as the already saved object
+            myContact_2.Surname = "My Surname";
             myContact_2.SetPropertyValue("PK2Prop1", myContact_1.GetPropertyValue("PK2Prop1"));
             myContact_2.SetPropertyValue("PK2Prop2", myContact_1.GetPropertyValue("PK2Prop2"));
             myContact_2.Save(); //Should raise an errors
@@ -367,18 +297,82 @@ namespace Habanero.Test.General
             myContact_2.Save(); //Should raise an errors
         }
 
-
-
-        #region tests
-
         [Test]
-        public void TestActivatorCreate()
+        public void TestMultipleUpdates_NoConcurrencyErrors()
         {
-            object contact = Activator.CreateInstance(typeof (ContactPerson), true);
+            mContactPersonUpdateConcurrency.Surname = "New Surname";
+            mContactPersonUpdateConcurrency.Save();
+            mContactPersonUpdateConcurrency.Surname = "New Surname 2";
+            mContactPersonUpdateConcurrency.Save();
+            mContactPersonUpdateConcurrency.Surname = "New Surname 3";
         }
 
-        #endregion tests
+        [Test]
+        [ExpectedException(typeof (BusObjectInAnInvalidStateException))]
+        public void TestObjectCompulsorySurnameNotSet()
+        {
+            ContactPerson myContact = new ContactPerson();
+            myContact.Save();
+        }
 
+        [Test]
+        [ExpectedException(typeof (BusObjectInAnInvalidStateException))]
+        public void TestObjectSurnameTooLong()
+        {
+            ContactPerson myContact = new ContactPerson();
+            myContact.Surname = "MyPropertyIsTooLongByFarThisWill Cause and Error in Bus object";
+            myContact.Save();
+        }
+
+        [Test]
+        public void TestSaveContactPerson()
+        {
+            Assert.IsFalse(mContactPTestSave.State.IsNew); // this object is saved and thus no longer
+            // new
+
+            IPrimaryKey id = mContactPTestSave.ID; //Save the objectsID so that it can be loaded from the Database
+            Assert.AreEqual(id, mContactPTestSave.ID);
+
+            ContactPerson mySecondContactPerson =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(id);
+            Assert.IsFalse(mContactPTestSave.State.IsNew); // this object is recovered from the DB
+            // and is thus not new.
+            Assert.AreEqual(mContactPTestSave.ID.ToString(), mySecondContactPerson.ID.ToString());
+            Assert.AreEqual(mContactPTestSave.FirstName, mySecondContactPerson.FirstName);
+            Assert.AreEqual(mContactPTestSave.DateOfBirth, mySecondContactPerson.DateOfBirth);
+
+            //Add test to make certain that myContact person and contact person are not 
+            // pointing at the same physical object
+
+            mContactPTestSave.FirstName = "Change FirstName";
+            Assert.IsFalse(mContactPTestSave.FirstName == mySecondContactPerson.FirstName);
+        }
+
+        [Test]
+        public void TestStateAfterApplyEdit()
+        {
+            ContactPerson myContact = new ContactPerson();
+            myContact.Surname = "Test Surname";
+            myContact.Save();
+            Assert.IsFalse(myContact.State.IsNew, "BO is still IsNew after being saved.");
+        }
+
+        [Test]
+        public void TestUpdateExistingContactPerson()
+        {
+            ContactPerson myContactPerson =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(updateContactPersonID);
+            myContactPerson.FirstName = "NewFirstName";
+            myContactPerson.Save();
+
+            //waitForDB();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            //Reload the person and make sure that the changes have been made.
+            ContactPerson myNewContactPerson =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(updateContactPersonID);
+            Assert.AreEqual("NewFirstName", myNewContactPerson.FirstName,
+                            "The firstName was not updated");
+        }
     }
 
     /// <summary>
@@ -399,9 +393,9 @@ namespace Habanero.Test.General
 
         private static ClassDef GetClassDef()
         {
-            return ClassDef.IsDefined(typeof (TransactionLogStub)) 
-                ? ClassDef.ClassDefs[typeof (TransactionLogStub)] 
-                : CreateClassDef();
+            return ClassDef.IsDefined(typeof (TransactionLogStub))
+                       ? ClassDef.ClassDefs[typeof (TransactionLogStub)]
+                       : CreateClassDef();
         }
 
         protected override ClassDef ConstructClassDef()
@@ -433,7 +427,7 @@ namespace Habanero.Test.General
             primaryKey.IsObjectID = true;
             primaryKey.Add(lPropDefCol["TransactionSequenceNo"]);
             ClassDef lClassDef = new ClassDef(typeof (TransactionLogStub), primaryKey, lPropDefCol, keysCol, null);
-			ClassDef.ClassDefs.Add(lClassDef);
+            ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
 
@@ -482,7 +476,8 @@ namespace Habanero.Test.General
             //TransactionLogStub myTransactionLogStub = (TransactionLogStub)BOLoader.Instance.GetLoadedBusinessObject(id);
             //if (myTransactionLogStub == null)
             //{
-            TransactionLogStub myTransactionLogStub = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TransactionLogStub>(id);
+            TransactionLogStub myTransactionLogStub =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<TransactionLogStub>(id);
 //            }
             return myTransactionLogStub;
         }
@@ -507,10 +502,6 @@ namespace Habanero.Test.General
         #region ForCollections //TODO: refactor this so that class construction occurs in its own 
 
         //class
-        protected internal string GetObjectNewID()
-        {
-            return _primaryKey.GetObjectNewID();
-        }
 
         protected internal static BusinessObjectCollection<TransactionLogStub> LoadBusinessObjCol()
         {
@@ -518,11 +509,13 @@ namespace Habanero.Test.General
         }
 
         protected internal static BusinessObjectCollection<TransactionLogStub> LoadBusinessObjCol(string searchCriteria,
-                                                                                  string orderByClause)
+                                                                                                  string orderByClause)
         {
             //TransactionLogStub lTransactionLogStub = new TransactionLogStub();
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<TransactionLogStub>(searchCriteria,
-                                                                                                      orderByClause);
+            return
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<TransactionLogStub>(
+                    searchCriteria,
+                    orderByClause);
             //SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             //statement.Statement.Append(lTransactionLogStub.SelectSqlWithNoSearchClause());
             //if (searchCriteria.Length > 0)

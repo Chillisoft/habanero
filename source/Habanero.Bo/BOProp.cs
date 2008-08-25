@@ -29,9 +29,12 @@ using log4net;
 
 namespace Habanero.BO
 {
-    /// <summary>
-    /// Stores the object's property value at any given point in time
-    /// </summary>
+    ///<summary>
+    /// Stores the values (current Value, DatabaseValue etc) and 
+    ///  state (dirty, valid) of a property of a <see cref="IBusinessObject"/>.
+    /// The property of a business object may represent a property such as FirstName, Surname.
+    /// Typically a <see cref="IBusinessObject"/> will have a collection of Properties.
+    ///</summary>
     public class BOProp : IBOProp
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOProp");
@@ -49,7 +52,7 @@ namespace Habanero.BO
 
         /// <summary>
         /// Indicates that the value held by the property has been
-        /// changed
+        /// changed. This is fired any time that the current value of the property is set to a new value.
         /// </summary>
         public event EventHandler<BOPropEventArgs> Updated;
 
@@ -210,10 +213,6 @@ namespace Habanero.BO
             _isObjectNew = isObjectNew;
             //Set up origional properties s.t. property can be backed up and restored.
             BackupPropValue();
-            //_origInvalidReason = _invalidReason;
-            //_origValueIsValid = _isValid;
-            //_persistedValue = propValue;
-            //_valueBeforeLastEdit = propValue;
         }
 
         /// <summary>
@@ -255,22 +254,20 @@ namespace Habanero.BO
                 {
                     value = null;
                 }
-                if ((_currentValue == null) || (!_currentValue.Equals(value)))
+                if ((_currentValue != null) && (_currentValue.Equals(value))) return;
+                object newValue = null;
+                if (value != null)
                 {
-                    object newValue = null;
-                    if (value != null)
-                    {
-                        newValue = ((PropDef)this.PropDef).GetNewValue(value);
-                    }
-                    
-                    CheckReadWriteRule(newValue);
-                    _invalidReason = "";
-                    _isValid = _propDef.IsValueValid(DisplayName, newValue, ref _invalidReason);
-                    _valueBeforeLastEdit = _currentValue;
-                    _currentValue = newValue;
-                    FireBOPropValueUpdated();
-                    _isDirty = true;
+                    newValue = ((PropDef)this.PropDef).GetNewValue(value);
                 }
+                    
+                CheckReadWriteRule(newValue);
+                _invalidReason = "";
+                _isValid = _propDef.IsValueValid(DisplayName, newValue, ref _invalidReason);
+                _valueBeforeLastEdit = _currentValue;
+                _currentValue = newValue;
+                FireBOPropValueUpdated();
+                _isDirty = true;
             }
         }
 

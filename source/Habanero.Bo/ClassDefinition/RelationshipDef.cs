@@ -25,7 +25,28 @@ using Habanero.Util.File;
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
-    /// Describes the relationship between an object and some other object(s)
+    /// Defines the relationship between the ownming Business Object (<see cref="IBusinessObject"/> and the 
+    /// related Business Object.
+    /// This class collaborates with the <see cref="RelKeyDef"/>, the <see cref="ClassDef"/> 
+    ///   to provide a definition Relationship. This class along with the <see cref="RelKeyDef"/> and 
+    ///   <see cref="RelPropDef"/> provides
+    ///   an implementation of the Foreign Key Mapping pattern (Fowler (236) -
+    ///   'Patterns of Enterprise Application Architecture' - 'Maps an association between objects to a 
+    ///   foreign Key Reference between tables.')
+    /// The RelationshipDef should not be used by the Application developer since it is usually constructed 
+    ///    based on the mapping in the ClassDef.xml file.
+    /// 
+    /// The RelationshipDef (Relationship Definition) is used bay a <see cref="ClassDef"/> to define a particular
+    ///   relationship. Each relationship has a relationship name e.g. A relationship betwee a person and a department may
+    ///   manager, employee etc. The related Class e.g. A Department definition would contain a relationship definition to
+    ///   a Person Class. (to allow for the person class to be in a different assemply the assembly name is also stored.
+    ///   The list of properties the define the Foreign key mapping of relationship between these two classes is stored using
+    ///   the <see cref="RelKeyDef"/>. The Relationship also stores additional information such as <see cref="DeleteParentAction"/>
+    ///   and order critieria. The <see cref="DeleteParentAction"/> defines any constraints that the relationship should provide 
+    ///   in the case of the parent (relationship owner e.g. Depertment in our example) being deleted. E.g. If the department (parent)
+    ///   is being deleted you may want to delete all related object or prevent delete if there are any related objects.
+    ///   In cases where there are many related objects e.g. A Department can have many Employees the relationship may be required to 
+    ///   load in a specifically order e.g. by employee number. The order criteria is used for this.
     /// </summary>
     public abstract class RelationshipDef
     {
@@ -50,7 +71,7 @@ namespace Habanero.BO.ClassDefinition
         /// reference to the related object.  Could be false for memory-
         /// intensive applications.</param>
 		/// <param name="deleteParentAction">The required action when the parent is deleted e.g. Dereference related, delete related, prevent delete</param>
-		public RelationshipDef(string relationshipName,
+        protected RelationshipDef(string relationshipName,
 							   Type relatedObjectClassType,
 							   RelKeyDef relKeyDef,
                                bool keepReferenceToRelatedObject,
@@ -71,7 +92,7 @@ namespace Habanero.BO.ClassDefinition
         /// reference to the related object.  Could be false for memory-
         /// intensive applications.</param>
         ///<param name="deleteParentAction">The required action when the parent is deleted e.g. Dereference related, delete related, prevent delete</param>
-		public RelationshipDef(string relationshipName,
+        protected RelationshipDef(string relationshipName,
 								string relatedObjectAssemblyName,
 								string relatedObjectClassName,
 								RelKeyDef relKeyDef,
@@ -113,7 +134,7 @@ namespace Habanero.BO.ClassDefinition
 		#region Properties
 
 		/// <summary>
-		/// A name for the relationship
+		/// A name for the relationship e.g. Employee, Manager.
 		/// </summary>
 		public string RelationshipName
 		{
@@ -122,7 +143,8 @@ namespace Habanero.BO.ClassDefinition
 		}
 
 		/// <summary>
-		/// The assembly name of the related object type
+		/// The assembly name of the related object type. In cases where the related object is in a different assebly
+		/// the object will be constructed via reflection.
 		/// </summary>
 		public string RelatedObjectAssemblyName
 		{
@@ -131,7 +153,7 @@ namespace Habanero.BO.ClassDefinition
 		}
 
 		/// <summary>
-		/// The class name of the related object type
+		/// The class name of the related object type.
 		/// </summary>
 		public string RelatedObjectClassName
 		{
@@ -149,7 +171,7 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
-        /// The related key definition
+        /// The related key definition. <see cref="RelKeyDef"/>
         /// </summary>
         public RelKeyDef RelKeyDef
         {
@@ -158,15 +180,17 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
-        /// Whether to keep a reference to the related object.  Could be false 
-        /// for memory-intensive applications.
+        /// Whether to keep a reference to the related object or to reload every time the relationship is called.
+        /// Could be false for memory-intensive applications.
         /// </summary>
         public bool KeepReferenceToRelatedObject
         {
 			get { return _keepReferenceToRelatedObject; }
 			protected set { _keepReferenceToRelatedObject = value; }
         }
-
+        /// <summary>
+        /// The <see cref="ClassDef"/> for the related object.
+        /// </summary>
     	internal ClassDef RelatedObjectClassDef
     	{
     		get
@@ -224,11 +248,11 @@ namespace Habanero.BO.ClassDefinition
         #endregion Type Initialisation
 
         /// <summary>
-        /// Create and return a new Relationship
+        /// Create and return a new Relationship based on the relationship definition.
         /// </summary>
-        /// <param name="owningBo">The business object that will
-        /// manage this relationship</param>
-        /// <param name="lBOPropCol">The collection of properties</param>
+        /// <param name="owningBo">The business object that owns
+        /// this relationship e.g. The department</param>
+        /// <param name="lBOPropCol">The collection of properties of the Business object</param>
         /// <returns>The new relationship object created</returns>
         public abstract Relationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol);
     }
