@@ -72,11 +72,7 @@ namespace Habanero.BO.ClassDefinition
             _editable = editable;
             _width = width;
             _alignment = alignment;
-            _parameters = parameters;
-            if (_parameters == null)
-            {
-                _parameters = new Hashtable();
-            }
+            _parameters = parameters ?? new Hashtable();
         }
 
         /// <summary>
@@ -100,9 +96,9 @@ namespace Habanero.BO.ClassDefinition
 
 
         /// <summary>
-        /// Returns the heading
+        /// Returns the heading text that will be used for this column.
         /// </summary>
-        internal string Heading
+        public string Heading
         {
             get { return _heading; }
             set { _heading = value; }
@@ -229,14 +225,7 @@ namespace Habanero.BO.ClassDefinition
         /// TODO this should return a string
         public object GetParameterValue(string parameterName)
         {
-            if (_parameters.ContainsKey(parameterName))
-            {
-                return _parameters[parameterName];
-            }
-            else
-            {
-                return null;
-            }
+            return _parameters.ContainsKey(parameterName) ? _parameters[parameterName] : null;
         }
 
         ///<summary>
@@ -270,7 +259,7 @@ namespace Habanero.BO.ClassDefinition
         public static bool operator ==(UIGridColumn a, UIGridColumn b)
         {
             // If both are null, or both are same instance, return true.
-            if (System.Object.ReferenceEquals(a, b))
+            if (ReferenceEquals(a, b))
             {
                 return true;
             }

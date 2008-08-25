@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
+using Habanero.BO.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
@@ -156,7 +157,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(2, ClassDef.ClassDefs.Count);
         }
 
-        private string GetTestClassDefinition(string suffix)
+        private static string GetTestClassDefinition(string suffix)
         {
             string classDefString = String.Format(
                 @"
@@ -181,8 +182,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestLoadRepeatedClassDefs()
         {
-            XmlClassDefsLoader loader;
-            loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader());
+            XmlClassDefsLoader loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader());
             ClassDef.ClassDefs.Clear();
             ClassDef.LoadClassDefs(loader);
             Assert.AreEqual(2, ClassDef.ClassDefs.Count);
@@ -195,8 +195,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestLoadMultipleClassDefs()
         {
-            XmlClassDefsLoader loader;
-            loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader());
+            XmlClassDefsLoader loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader());
             ClassDef.ClassDefs.Clear();
             ClassDef.LoadClassDefs(loader);
             Assert.AreEqual(2, ClassDef.ClassDefs.Count);
@@ -604,7 +603,7 @@ namespace Habanero.Test.BO.ClassDefinition
                 ClassType = type;
             }
 
-            public void SetPropDefCol(PropDefCol col)
+            public void SetPropDefCol(IPropDefCol col)
             {
                 PropDefcol = col;
             }
@@ -672,7 +671,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestEqualsNull()
         {
             ClassDef classDef1 = LoadClassDef();
-            ClassDef classDef2 = null;
+            const ClassDef classDef2 = null;
             Assert.AreNotEqual(classDef1, classDef2);    
         }
 
@@ -755,11 +754,10 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = LoadClassDef();
-            string dateTimeProp = "TestDateTime";
-            string intProp = "TestInt";
-            string booleanProp = "TestBoolean";
-            PropDef propDef;
-            propDef = new PropDef(dateTimeProp, typeof(DateTime), PropReadWriteRule.ReadWrite, null);
+            const string dateTimeProp = "TestDateTime";
+            const string intProp = "TestInt";
+            const string booleanProp = "TestBoolean";
+            PropDef propDef = new PropDef(dateTimeProp, typeof(DateTime), PropReadWriteRule.ReadWrite, null);
             classDef.PropDefcol.Add(propDef);
             propDef = new PropDef(intProp, typeof(int), PropReadWriteRule.ReadWrite, null);
             classDef.PropDefcol.Add(propDef);
@@ -784,9 +782,8 @@ namespace Habanero.Test.BO.ClassDefinition
             ClassDef.ClassDefs.Clear();
             ClassDef relatedClassDef = MyRelatedBo.LoadClassDef();
             ClassDef classDef = MyBO.LoadClassDefWithRelationship();
-            string dateTimeProp = "TestDateTime";
-            PropDef propDef;
-            propDef = new PropDef(dateTimeProp, typeof(DateTime), PropReadWriteRule.ReadWrite, null);
+            const string dateTimeProp = "TestDateTime";
+            PropDef propDef = new PropDef(dateTimeProp, typeof(DateTime), PropReadWriteRule.ReadWrite, null);
             relatedClassDef.PropDefcol.Add(propDef);
             //---------------Execute Test ----------------------
             Type dateTimePropertyType = classDef.GetPropertyType("MyRelationship." + dateTimeProp);
@@ -830,7 +827,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            MyBO.LoadDefaultClassDef();
 
             //---------------Execute Test ----------------------
             ClassDef gotClassDef = ClassDef.Get<ContactPerson>();
@@ -848,7 +845,7 @@ namespace Habanero.Test.BO.ClassDefinition
             ClassDef myRelatedClassDef = MyRelatedBo.LoadClassDef();
             ClassDef myBoClassDef = MyBO.LoadClassDefWithRelationship();
             Source source = new Source("MyRelationship");
-            string myrelatedtestpropName = "MyRelatedTestProp";
+            const string myrelatedtestpropName = "MyRelatedTestProp";
             //---------------Execute Test ----------------------
             IPropDef myRelatedTestPropDef = myBoClassDef.GetPropDef(source, myrelatedtestpropName, false);
             //---------------Test Result -----------------------
@@ -865,7 +862,7 @@ namespace Habanero.Test.BO.ClassDefinition
             ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             ClassDef contactPersonClassDef = new ContactPerson().ClassDef;
             Source source = Source.FromString("Car.Owner");
-            string surnamePropName = "Surname";
+            const string surnamePropName = "Surname";
             //---------------Execute Test ----------------------
             IPropDef surnamePropDef = engineClassDef.GetPropDef(source, surnamePropName, false);
             //---------------Test Result -----------------------
@@ -880,7 +877,7 @@ namespace Habanero.Test.BO.ClassDefinition
             ClassDef.ClassDefs.Clear();
             ClassDef myBoClassDef = MyBO.LoadDefaultClassDef();
             Source source = new Source("MyRelationship");
-            string myrelatedtestpropName = "MyRelatedTestProp";
+            const string myrelatedtestpropName = "MyRelatedTestProp";
             //---------------Execute Test ----------------------
             myBoClassDef.GetPropDef(source, myrelatedtestpropName, true);
         }
@@ -892,7 +889,7 @@ namespace Habanero.Test.BO.ClassDefinition
             ClassDef.ClassDefs.Clear();
             ClassDef myBoClassDef = MyBO.LoadDefaultClassDef();
             Source source = new Source("MyRelationship");
-            string myrelatedtestpropName = "MyRelatedTestProp";
+            const string myrelatedtestpropName = "MyRelatedTestProp";
             //---------------Execute Test ----------------------
             IPropDef myRelatedTestPropDef = myBoClassDef.GetPropDef(source, myrelatedtestpropName, false);
             //---------------Test Result -----------------------

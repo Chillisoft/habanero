@@ -27,15 +27,18 @@ namespace Habanero.BO.ClassDefinition
     public enum ORMapping
     {
         /// <summary>
-        /// Uses one database table per class in the inheritance structure
+        /// Uses one database table per class in the inheritance structure.
+        /// As per (Fowler (285) - 'Patterns of Enterprise Application Architecture')
         /// </summary>
         ClassTableInheritance,
         /// <summary>
-        /// Maps all fields of all classes of an inheritance structure into a single table
+        /// Maps all fields of all classes of an inheritance structure into a single table.
+        /// As per (Fowler (278) - 'Patterns of Enterprise Application Architecture')
         /// </summary>
         SingleTableInheritance,
         /// <summary>
-        /// Uses a table for each concrete class in the inheritance hierarchy
+        /// Uses a table for each concrete class in the inheritance hierarchy.
+        /// As per (Fowler (293) - 'Patterns of Enterprise Application Architecture')
         /// </summary>
         ConcreteTableInheritance
     }

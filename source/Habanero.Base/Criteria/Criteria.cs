@@ -24,7 +24,9 @@ namespace Habanero.Base
 {
     /// <summary>
     /// A criteria expression that can be used to build up a criteria tree. The IsMatch method can then be
-    /// used to check whether a BusinessObject matches the criteria.
+    /// used to check whether a <see cref="IBusinessObject"/> matches the criteria.
+    /// The Criteria object collaborates with the <see cref="ISelectQuery"/> to provide the application developer 
+    /// as well as the framework developer. For more details See <see cref="ISelectQuery"/>
     /// </summary>
     public class Criteria
     {

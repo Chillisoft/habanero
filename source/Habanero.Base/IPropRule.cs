@@ -21,6 +21,14 @@ using System;
 
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Provides an interface for property rules that test the validity of
+    /// a property value.  If you would like to implement your own property
+    /// rule checker, implement this interface or inherit from PropRuleBase.
+    /// In the class definitions, in the 'rule'
+    /// element under the relevant 'property', specify the class and assembly
+    /// of your newly implemented class.
+    /// </summary>
     public interface IPropRule
     {
         /// <summary>

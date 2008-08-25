@@ -212,8 +212,8 @@ namespace Habanero.BO
             ClassDef classDefToUseForPrimaryKey = GetClassDefToUseForPrimaryKey();
 
             if ((classDefToUseForPrimaryKey.SuperClassDef == null) ||
-                (classDefToUseForPrimaryKey.SuperClassDef.ORMapping == ORMapping.ConcreteTableInheritance) ||
-                (_classDef.SuperClassDef.ORMapping == ORMapping.ClassTableInheritance))
+                (classDefToUseForPrimaryKey.IsUsingConcreteTableInheritance()) ||
+                (_classDef.IsUsingClassTableInheritance()))
             {
                 if (classDefToUseForPrimaryKey.PrimaryKeyDef != null)
                 {
@@ -299,12 +299,9 @@ namespace Habanero.BO
             get
             {
                 ClassDef classDefToUseForPrimaryKey = GetClassDefToUseForPrimaryKey();
-                if ((classDefToUseForPrimaryKey.SuperClassDef != null) &&
-                    (classDefToUseForPrimaryKey.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance))
-                {
-                    return classDefToUseForPrimaryKey.SuperClassClassDef.TableName;
-                }
-                return classDefToUseForPrimaryKey.TableName;
+                return (classDefToUseForPrimaryKey.IsUsingSingleTableInheritance()) 
+                        ? classDefToUseForPrimaryKey.SuperClassClassDef.TableName 
+                        : classDefToUseForPrimaryKey.TableName;
             }
         }
 
@@ -366,8 +363,7 @@ namespace Habanero.BO
         private ClassDef GetClassDefToUseForPrimaryKey()
         {
             ClassDef classDefToUseForPrimaryKey = _classDef;
-            while (classDefToUseForPrimaryKey.SuperClassDef != null &&
-                   classDefToUseForPrimaryKey.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance)
+            while (classDefToUseForPrimaryKey.IsUsingSingleTableInheritance())
             {
                 classDefToUseForPrimaryKey = classDefToUseForPrimaryKey.SuperClassClassDef;
             }

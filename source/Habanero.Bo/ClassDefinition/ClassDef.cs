@@ -30,9 +30,19 @@ using Habanero.Util.File;
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
-    /// Defines the properties of a class that need to be managed at a 
-    /// Business Object (BO) level.<br/><br/>
-    /// Required properties are:
+    /// Defines the business object class <see cref="BusinessObject"/>, 
+    ///   its properties <see cref="PropDefcol"/>,
+    ///   their related property rules <see cref="PropRuleBase"/>,
+    ///   its Primary and Alternate keys <see cref="PrimaryKeyDef"/> <see cref="KeyDefCol"/>, 
+    ///   its relationships <see cref="RelationshipDefCol"/>,
+    ///   any inheritance relationships <see cref="SuperClassDef"/>
+    ///   and the mappings of the <see cref="BusinessObject"/> to the user inteface <see cref="UIDefCol"/>.
+    /// The Definition includes the mapping of the <see cref="BusinessObject"/> 
+    ///   its properties and its relationships to the Database tables and fields.
+    /// The Class Definition (ClassDef) is loaded from the ClassDef.xml file at application startup.
+    /// The Class Definition class along with the ClassDef.xml implements the pattern
+    ///   MetaData Mapper (Fowler - (306) 'Patterns of Enterprise Application Architecture').
+    /// Required data is:
     /// <ul>
     /// <li>The primary key, which is the object identifier that uniquely
     ///     identifies the object in the database and object manager.
@@ -45,8 +55,6 @@ namespace Habanero.BO.ClassDefinition
     /// <li>All the properties and property types of the object that must
     ///     be recovered or persisted to the database.</li>
     /// <li>All the relationships of the object which it must manage.</li>
-    /// <li>All concurrency control rules</li>
-    /// <li>All transactional log rules</li>
     /// </ul>
     /// </summary>
     /// <remarks>
@@ -162,22 +170,6 @@ namespace Habanero.BO.ClassDefinition
         {
         }
 
-        ///// <summary>
-        ///// As before, but allows a database name to be specified
-        ///// </summary>
-        //public ClassDef(Type classType, PrimaryKeyDef primaryKeyDef, string tableName, PropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol)
-        //    : this(classType, null, null, tableName, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, null)
-        //{
-        //}
-
-        ///// <summary>
-        ///// As before, but allows a database name and a user interface 
-        ///// definition collection to be specified
-        ///// </summary>
-        //public ClassDef(Type classType, PrimaryKeyDef primaryKeyDef, string tableName, PropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
-        //    :this(classType,null,null,tableName, null,primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol,uiDefCol)
-        //{}
-
         /// <summary>
         /// As before, but excludes the table name
         /// </summary>
@@ -211,7 +203,6 @@ namespace Habanero.BO.ClassDefinition
                 _className = ClassDefCol.StripOutNameSpace(_classNameFull);
                 _classType = null;
             }
-            //_databaseName = databaseName;
             _displayName = displayName ?? "";
             _tableName = string.IsNullOrEmpty(tableName) ? _className : tableName;
             _primaryKeyDef = primaryKeyDef;
@@ -303,8 +294,7 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                //log.Debug(_tableName.ToLower());
-                return _tableName; //.ToLower() ;
+                return _tableName;
             }
             set { _tableName = value; }
         }
@@ -316,11 +306,9 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                if (!String.IsNullOrEmpty(_displayName))
-                {
-                    return _displayName;
-                }
-                return StringUtilities.DelimitPascalCase(ClassName, " ");
+                return String.IsNullOrEmpty(_displayName) 
+                    ? StringUtilities.DelimitPascalCase(ClassName, " ") 
+                    : _displayName;
             }
             set { _displayName = value; }
         }
@@ -484,32 +472,28 @@ namespace Habanero.BO.ClassDefinition
             {
                 ClassDef superClassDef = (ClassDef) SuperClassDef.SuperClassClassDef;
                 propCol.Add(superClassDef.createBOPropertyCol(newObject));
-                if (this.SuperClassDef.ORMapping == ORMapping.ConcreteTableInheritance)
+                switch (this.SuperClassDef.ORMapping)
                 {
-                    if (superClassDef.PrimaryKeyDef != null)
-                    {
-                        foreach (PropDef def in superClassDef.PrimaryKeyDef)
+                    case ORMapping.ConcreteTableInheritance:
+                        if (superClassDef.PrimaryKeyDef != null)
                         {
-                            propCol.Remove(def.PropertyName);
+                            foreach (PropDef def in superClassDef.PrimaryKeyDef)
+                            {
+                                propCol.Remove(def.PropertyName);
+                            }
                         }
-                    }
-                }
-                else if (this.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance)
-                {
-                    if (this.PrimaryKeyDef != null)
-                    {
-                        foreach (PropDef def in this.PrimaryKeyDef)
+                        break;
+                    case ORMapping.SingleTableInheritance:
+                        if (this.PrimaryKeyDef != null)
                         {
-                            propCol.Remove(def.PropertyName);
+                            foreach (PropDef def in this.PrimaryKeyDef)
+                            {
+                                propCol.Remove(def.PropertyName);
+                            }
                         }
-                    }
+                        break;
                 }
             }
-            //if (this.SupportsSynchronising)
-            //{
-            //    propCol.Add(_versionNumberPropDef.CreateBOProp(newObject));
-            //    propCol.Add(_versionNumberAtLastSyncPropDef.CreateBOProp(newObject));
-            //}
             return propCol;
         }
 
@@ -530,26 +514,6 @@ namespace Habanero.BO.ClassDefinition
                                                  "BusinessObject needs to have a parameterless constructor.", ex);
             }
         }
-
-        ///// <summary>
-        ///// Creates a new business object using this class definition
-        ///// </summary>
-        ///// <returns>Returns a new business object</returns>
-        //private BusinessObject InstantiateBusinessObjectWithClassDef()
-        //// This was internal, but it's been made private because you should rather use CreateNewBusinessObject
-        //{
-        //    try
-        //    {
-        //        return (BusinessObject)Activator.CreateInstance(MyClassType, new object[] { });
-        //    }
-        //    catch (MissingMethodException ex)
-        //    {
-        //        throw new MissingMethodException("Each class that implements " +
-        //             "BusinessObject needs to have a constructor with an argument " +
-        //             "to accept a ClassDef object and pass it to the base class " +
-        //             "(eg. public _className(ClassDef classDef) : base(classDef) {} )", ex);
-        //    }
-        //}
 
         /// <summary>
         /// Creates a new collection of relationships.
@@ -596,7 +560,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>Returns the new object</returns>
         public IBusinessObject CreateNewBusinessObject()
         {
-            return InstantiateBusinessObject(); //this.InstantiateBusinessObjectWithClassDef();
+            return InstantiateBusinessObject();
         }
 
         #endregion //Creating BOs
@@ -609,21 +573,6 @@ namespace Habanero.BO.ClassDefinition
             {
                 TypeLoader.LoadClassType(ref _classType, _assemblyName, _classNameFull,
                                          "class", "class definition");
-                //if (_classType == null && _assemblyName != null && _className != null)
-                //{
-                //    try
-                //    {
-                //        _classType = TypeLoader.LoadType(_assemblyName, _className);
-                //    }
-                //    catch (UnknownTypeNameException ex)
-                //    {
-                //        throw new UnknownTypeNameException("Unable to load the class type while " +
-                //            "attempting to load a type from a class definition, given the 'assembly' as: '" +
-                //            _assemblyName + "', and the 'class' as: '" + _className +
-                //            "'. Check that the class exists in the given assembly name and " +
-                //            "that spelling and capitalisation are correct.", ex);
-                //    }
-                //}
                 return _classType;
             }
             set
@@ -802,11 +751,9 @@ namespace Habanero.BO.ClassDefinition
             {
                 return this.PropDefcol[propertyName].LookupList;
             }
-            if (this.SuperClassDef != null)
-            {
-                return this.SuperClassClassDef.GetLookupList(propertyName);
-            }
-            return new NullLookupList();
+            return this.SuperClassDef == null 
+                ? new NullLookupList() 
+                : this.SuperClassClassDef.GetLookupList(propertyName);
         }
 
         /// <summary>

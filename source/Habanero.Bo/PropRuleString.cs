@@ -32,7 +32,7 @@ namespace Habanero.BO
     public class PropRuleString : PropRuleBase
     {
         private int _maxLength = -1;
-        private int _minLength = 0;
+        private int _minLength;
     	private string _patternMatch = ""; //regex pattern match
         private string _patternMatchMessage = "";
 
@@ -152,7 +152,7 @@ namespace Habanero.BO
 					}
                 }
             }
-            catch (InvalidXmlDefinitionException ex)
+            catch (InvalidXmlDefinitionException)
             {
                 throw;
             }

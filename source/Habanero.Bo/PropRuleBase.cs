@@ -45,7 +45,7 @@ namespace Habanero.BO
 		/// <param name="name">The name of the rule</param>
 		/// <param name="message">This rule's failure message</param>
 		///// <param name="parameters">The parameters for this rule.</param>
-		public PropRuleBase(string name, string message)
+		protected PropRuleBase(string name, string message)
 		{
 			_name = name;
 			_message = message;
@@ -71,7 +71,7 @@ namespace Habanero.BO
         /// Returns the list of parameters to the rule - individual pairs
         /// of rule type and rule value that make up the composite rule
         /// </summary>
-    	protected internal virtual Dictionary<string, object> Parameters
+    	public virtual Dictionary<string, object> Parameters
     	{
 			get { return _parameters; }
 			set
