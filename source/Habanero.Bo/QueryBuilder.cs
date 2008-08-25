@@ -184,8 +184,8 @@ namespace Habanero.BO
             }
             else if (source.Name == rootSource.Name)
             {
-                relatedClassDef = null;
-                //relatedClassDef = classDef;
+                //relatedClassDef = null;
+                relatedClassDef = classDef;
                 source.EntityName = rootSource.EntityName;
             }
             else

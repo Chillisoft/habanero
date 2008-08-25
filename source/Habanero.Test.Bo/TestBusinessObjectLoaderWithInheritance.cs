@@ -270,7 +270,7 @@ namespace Habanero.Test.BO
             Part loadedPart = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Part>(part.ID);
 
             //---------------Test Result -----------------------
-            Assert.AreSame(loadedPart, part);
+            Assert.AreSame(part, loadedPart);
         }
 
         [Test]
@@ -282,13 +282,14 @@ namespace Habanero.Test.BO
             string entityType = TestUtil.CreateRandomString();
             Part part = Part.CreateSavedPart();
             part.EntityType = entityType;
+            part.Save();
             Criteria criteria = new Criteria("EntityType", Criteria.ComparisonOp.Equals, entityType);
 
             //---------------Execute Test ----------------------
             Part loadedPart = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Part>(criteria);
 
             //---------------Test Result -----------------------
-            Assert.AreSame(loadedPart, part);
+            Assert.AreSame(part, loadedPart);
         }
 
         //[Test]
@@ -318,7 +319,7 @@ namespace Habanero.Test.BO
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<FilledCircle>(filledCircle.ID);
 
             //---------------Test Result -----------------------
-            Assert.AreSame(loadedFilledCircle, filledCircle);
+            Assert.AreSame(filledCircle, loadedFilledCircle);
         }
 
         [Test]
@@ -334,7 +335,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
 
-            Assert.AreSame(loadedCircle, circle);
+            Assert.AreSame(circle, loadedCircle);
         }
 
         [Test]
@@ -349,7 +350,7 @@ namespace Habanero.Test.BO
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<FilledCircleNoPrimaryKey>(filledCircle.ID);
 
             //---------------Test Result -----------------------
-            Assert.AreSame(loadedFilledCircle, filledCircle);
+            Assert.AreSame(filledCircle, loadedFilledCircle);
         }
 
         
@@ -365,7 +366,7 @@ namespace Habanero.Test.BO
             Circle loadedCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Circle>(circle.ID);
 
             //---------------Test Result -----------------------
-            Assert.AreSame(loadedCircle, circle);
+            Assert.AreSame(circle, loadedCircle);
         }
 
         [Test]
@@ -379,7 +380,7 @@ namespace Habanero.Test.BO
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<FilledCircle>(filledCircle.ID);
 
             //---------------Test Result -----------------------
-            Assert.AreSame(loadedFilledCircle, filledCircle);
+            Assert.AreSame(filledCircle, loadedFilledCircle);
         }
     }
 }
