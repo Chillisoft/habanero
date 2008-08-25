@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO;
@@ -29,99 +30,97 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestQueryBuilderWithInheritance
     {
-        protected virtual void AssertPartInheritanceStructureCorrect(Source source)
-        {
-            Source correctPartSourceStructure = GetCorrectPartSourceStructure();
-            AssertSourcesEqual(correctPartSourceStructure, source);
-            //Assert.AreEqual("Part", source.Name);
-            //Assert.AreEqual("table_Part", source.EntityName);
-            //Assert.AreEqual(0, source.Joins.Count);
-            //Assert.AreEqual(1, source.InheritanceJoins.Count);
-            //Source.Join inheritanceJoin = source.InheritanceJoins[0];
-            //Assert.AreEqual("Entity", inheritanceJoin.ToSource.Name);
-            //Assert.AreEqual("table_Entity", inheritanceJoin.ToSource.EntityName);
-            //Assert.AreEqual(1, inheritanceJoin.JoinFields);
-            //Source.Join.JoinField joinField = inheritanceJoin.JoinFields[0];
-            //Assert.AreEqual(source, joinField.FromField.Source);
-            //Assert.AreEqual("PartID", joinField.FromField.PropertyName);
-            //Assert.AreEqual("field_Part_ID", joinField.FromField.FieldName);
-            //Assert.AreEqual(inheritanceJoin.ToSource, joinField.ToField.Source);
-            //Assert.AreEqual("EntityID", joinField.FromField.PropertyName);
-            //Assert.AreEqual("field_Entity_ID", joinField.FromField.FieldName);
-        }
 
-        protected static void AssertSourcesEqual(Source expected, Source actual)
+        #region Utility Methods
+
+        protected static void AssertSourcesEqual(Source expected, Source actual, string context)
         {
             Assert.AreEqual(expected.Name, actual.Name);
             Assert.AreEqual(expected.EntityName, actual.EntityName);
-            AssertJoinListsEqual(expected.Joins, actual.Joins);
-            AssertJoinListsEqual(expected.InheritanceJoins, actual.InheritanceJoins);
+            AssertJoinListsEqual(expected.Joins, actual.Joins, context + ".Joins");
+            AssertJoinListsEqual(expected.InheritanceJoins, actual.InheritanceJoins, context + ".InheritanceJoins");
         }
 
-        private static void AssertJoinListsEqual(Source.JoinList expected, Source.JoinList actual)
+        private static void AssertJoinListsEqual(Source.JoinList expected, Source.JoinList actual, string context)
         {
-            Assert.AreEqual(expected.Count, actual.Count);
+            Assert.AreEqual(expected.Count, actual.Count, context + ".Count");
 
             foreach (Source.Join expectedJoin in expected)
             {
                 string joinToSourceName = expectedJoin.ToSource.Name;
-                Source.Join actualJoin =
-                    actual.Find(delegate(Source.Join join1) { return join1.ToSource.Name == joinToSourceName; });
-                Assert.IsNotNull(actualJoin,
-                                 string.Format("Could not find a join from {0} to {1}", expected.FromSource.Name,
-                                               joinToSourceName));
-                AssertJoinsEqual(expectedJoin, actualJoin);
+                Source.Join actualJoin = actual.Find(delegate(Source.Join join1)
+                {
+                    return join1.ToSource.Name == joinToSourceName;
+                });
+                Assert.IsNotNull(actualJoin, string.Format("{0}: Could not find a join from {1} to {2}", context, expected.FromSource.Name, joinToSourceName));
+                AssertJoinsEqual(expectedJoin, actualJoin, context + string.Format("(Join to '{0}')", joinToSourceName));
             }
         }
 
-        private static void AssertJoinsEqual(Source.Join expectedJoin, Source.Join actualJoin)
+        private static void AssertJoinsEqual(Source.Join expectedJoin, Source.Join actualJoin, string context)
         {
-            AssertSourcesEqual(expectedJoin.ToSource, actualJoin.ToSource);
-            AssertJoinFieldsListEqual(expectedJoin.JoinFields, actualJoin.JoinFields);
+            Assert.AreEqual(expectedJoin.FromSource, actualJoin.FromSource, context + ".FromSource");
+            AssertSourcesEqual(expectedJoin.ToSource, actualJoin.ToSource, context + ".ToSource");
+            AssertJoinFieldsListEqual(expectedJoin.JoinFields, actualJoin.JoinFields, context + ".JoinFields");
         }
 
-        private static void AssertJoinFieldsListEqual(List<Source.Join.JoinField> expectedJoinFields,
-                                                      List<Source.Join.JoinField> actualJoinFields)
+        private static void AssertJoinFieldsListEqual(List<Source.Join.JoinField> expectedJoinFields, List<Source.Join.JoinField> actualJoinFields, string context)
         {
-            Assert.AreEqual(expectedJoinFields.Count, actualJoinFields.Count);
+            Assert.AreEqual(expectedJoinFields.Count, actualJoinFields.Count, context + ".Count");
 
             foreach (Source.Join.JoinField expectedJoinField in expectedJoinFields)
             {
                 string expectedJoinToPropertyName = expectedJoinField.ToField.PropertyName;
                 string expectedJoinFromPropertyName = expectedJoinField.FromField.PropertyName;
                 Source.Join.JoinField actualJoinField = actualJoinFields.Find(delegate(Source.Join.JoinField joinField)
-                                                                                  {
-                                                                                      return
-                                                                                          joinField.FromField.
-                                                                                              PropertyName ==
-                                                                                          expectedJoinFromPropertyName
-                                                                                          &&
-                                                                                          joinField.ToField.PropertyName ==
-                                                                                          expectedJoinToPropertyName;
-                                                                                  });
+                {
+                    return joinField.FromField.PropertyName == expectedJoinFromPropertyName
+                           && joinField.ToField.PropertyName == expectedJoinToPropertyName;
+                });
+                string expectedJoinFieldDesc = String.Format("from {0}.{1} to {2}.{3}",
+                                                             expectedJoinField.FromField.Source.Name,
+                                                             expectedJoinFromPropertyName,
+                                                             expectedJoinField.ToField.Source.Name,
+                                                             expectedJoinToPropertyName);
                 Assert.IsNotNull(actualJoinField, string.Format(
-                                                      "Could not find a join field from {0}.{1} to {2}.{3}.",
-                                                      expectedJoinField.FromField.Source.Name,
-                                                      expectedJoinFromPropertyName,
-                                                      expectedJoinField.ToField.Source.Name, expectedJoinToPropertyName));
-                AssertJoinFieldsEqual(expectedJoinField, actualJoinField);
+                                                      "{0}: Could not find a join field {1}.", context, expectedJoinFieldDesc));
+                AssertJoinFieldsEqual(expectedJoinField, actualJoinField,
+                                      string.Format("{0}(JoinField {1})", context, expectedJoinFieldDesc));
             }
         }
 
-        private static void AssertJoinFieldsEqual(Source.Join.JoinField expectedJoinField,
-                                                  Source.Join.JoinField actualJoinField)
+        private static void AssertJoinFieldsEqual(Source.Join.JoinField expectedJoinField, Source.Join.JoinField actualJoinField, string context)
         {
-            AssertQueryFieldsEqual(expectedJoinField.FromField, actualJoinField.FromField);
-            AssertQueryFieldsEqual(expectedJoinField.ToField, actualJoinField.ToField);
+            AssertQueryFieldsEqual(expectedJoinField.FromField, actualJoinField.FromField, context + ".FromField");
+            AssertQueryFieldsEqual(expectedJoinField.ToField, actualJoinField.ToField, context + ".ToField");
         }
 
-        private static void AssertQueryFieldsEqual(QueryField expectedQueryField, QueryField actualQueryField)
+        private static void AssertQueryFieldsEqual(QueryField expectedQueryField, QueryField actualQueryField, string context)
         {
-            Assert.AreEqual(expectedQueryField.Source, actualQueryField.Source);
-            Assert.AreEqual(expectedQueryField.PropertyName, actualQueryField.PropertyName);
-            Assert.AreEqual(expectedQueryField.FieldName, actualQueryField.FieldName);
+            Assert.AreEqual(expectedQueryField.Source, actualQueryField.Source, context + ".Source");
+            Assert.AreEqual(expectedQueryField.PropertyName, actualQueryField.PropertyName, context + ".PropertyName");
+            Assert.AreEqual(expectedQueryField.FieldName, actualQueryField.FieldName, context + ".FieldName");
         }
 
+        #endregion
+        
+        [Test]
+        public void TestPrepareSource_OneLevel()
+        {
+            //---------------Set up test pack-------------------
+            Entity.LoadDefaultClassDef();
+            ClassDef classDef = Part.LoadClassDef_WithClassTableInheritance();
+            Source source = null;
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareSource(classDef, ref source);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(source);
+            Source correctPartSourceStructure = GetCorrectPartSourceStructure();
+            AssertSourcesEqual(correctPartSourceStructure, source, "Part");
+            //---------------Tear down -------------------------
+        }
+        
         protected virtual Source GetCorrectPartSourceStructure()
         {
             Source partSource = new Source("Part", "table_Part");
@@ -135,36 +134,33 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestPrepareSource_OneLevel()
+        public void TestPrepareSource_TwoLevels()
         {
             //---------------Set up test pack-------------------
             Entity.LoadDefaultClassDef();
-            ClassDef classDef = Part.LoadClassDef_WithClassTableInheritance();
+            Part.LoadClassDef_WithClassTableInheritance();
+            ClassDef classDef = Structure.Engine.LoadClassDef_WithClassTableInheritance();
             Source source = null;
             //---------------Execute Test ----------------------
             QueryBuilder.PrepareSource(classDef, ref source);
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(source);
-            AssertPartInheritanceStructureCorrect(source);
+            Source correctEngineSourceStructure = GetCorrectEngineSourceStructure();
+            AssertSourcesEqual(correctEngineSourceStructure, source, "Part");
             //---------------Tear down -------------------------
         }
 
-        //[Test]
-        //public void TestPrepareSource_TwoLevels()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    Entity.LoadDefaultClassDef();
-        //    Part.LoadClassDef_WithClassTableInheritance();
-        //    ClassDef classDef = Structure.Engine.LoadClassDef_WithClassTableInheritance();
-        //    Source source = null;
-        //    //---------------Execute Test ----------------------
-        //    QueryBuilder.PrepareSource(classDef, ref source);
-
-        //    //---------------Test Result -----------------------
-        //    Assert.IsNotNull(source);
-        //    AssertPartInheritanceStructureCorrect(source);
-        //    //---------------Tear down -------------------------
-        //}
+        protected virtual Source GetCorrectEngineSourceStructure()
+        {
+            Source engineSource = new Source("Engine", "table_Engine");
+            Source partSource = GetCorrectPartSourceStructure();
+            Source.Join join = engineSource.InheritanceJoins.AddNewJoinTo(partSource);
+            QueryField engineQueryField = new QueryField("EngineID", "field_Engine_ID", engineSource);
+            QueryField partQueryField = new QueryField("PartID", "field_Part_ID", partSource);
+            Source.Join.JoinField joinField = new Source.Join.JoinField(engineQueryField, partQueryField);
+            join.JoinFields.Add(joinField);
+            return engineSource;
+        }
     }
 }

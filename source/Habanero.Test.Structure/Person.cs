@@ -18,7 +18,7 @@ namespace Habanero.Test.Structure
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef = itsLoader.LoadClass(@"
-			  <class name=""Person"" assembly=""Habanero.Test.Structure.BO"" table=""table_Person"">
+			  <class name=""Person"" assembly=""Habanero.Test.Structure"" table=""table_Person"">
 			    <property name=""IDNumber"" databaseField=""field_ID_Number"" />
 			    <property name=""FirstName"" databaseField=""field_First_Name"" />
 			    <property name=""LastName"" databaseField=""field_Last_Name"" />
@@ -26,10 +26,10 @@ namespace Habanero.Test.Structure
 			    <primaryKey>
 			      <prop name=""PersonID"" />
 			    </primaryKey>
-			    <relationship name=""CarsDriven"" type=""multiple"" relatedClass=""Car"" relatedAssembly=""Habanero.Test.Structure.BO"">
+			    <relationship name=""CarsDriven"" type=""multiple"" relatedClass=""Car"" relatedAssembly=""Habanero.Test.Structure"">
 			      <relatedProperty property=""PersonID"" relatedProperty=""DriverID"" />
 			    </relationship>
-			    <relationship name=""OrganisationPerson"" type=""multiple"" relatedClass=""OrganisationPerson"" relatedAssembly=""Habanero.Test.Structure.BO"">
+			    <relationship name=""OrganisationPerson"" type=""multiple"" relatedClass=""OrganisationPerson"" relatedAssembly=""Habanero.Test.Structure"">
 			      <relatedProperty property=""PersonID"" relatedProperty=""PersonID"" />
 			    </relationship>
 			  </class>
@@ -42,8 +42,8 @@ namespace Habanero.Test.Structure
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef = itsLoader.LoadClass(@"
-			  <class name=""Person"" assembly=""Habanero.Test.Structure.BO"" table=""table_Person"">
-			    <superClass class=""LegalEntity"" assembly=""Habanero.Test.Structure.BO"" />
+			  <class name=""Person"" assembly=""Habanero.Test.Structure"" table=""table_Person"">
+			    <superClass class=""LegalEntity"" assembly=""Habanero.Test.Structure"" />
 			    <property name=""IDNumber"" databaseField=""field_ID_Number"" />
 			    <property name=""FirstName"" databaseField=""field_First_Name"" />
 			    <property name=""LastName"" databaseField=""field_Last_Name"" />
@@ -51,10 +51,10 @@ namespace Habanero.Test.Structure
 			    <primaryKey>
 			      <prop name=""PersonID"" />
 			    </primaryKey>
-			    <relationship name=""CarsDriven"" type=""multiple"" relatedClass=""Car"" relatedAssembly=""Habanero.Test.Structure.BO"">
+			    <relationship name=""CarsDriven"" type=""multiple"" relatedClass=""Car"" relatedAssembly=""Habanero.Test.Structure"">
 			      <relatedProperty property=""PersonID"" relatedProperty=""DriverID"" />
 			    </relationship>
-			    <relationship name=""OrganisationPerson"" type=""multiple"" relatedClass=""OrganisationPerson"" relatedAssembly=""Habanero.Test.Structure.BO"">
+			    <relationship name=""OrganisationPerson"" type=""multiple"" relatedClass=""OrganisationPerson"" relatedAssembly=""Habanero.Test.Structure"">
 			      <relatedProperty property=""PersonID"" relatedProperty=""PersonID"" />
 			    </relationship>
 			  </class>

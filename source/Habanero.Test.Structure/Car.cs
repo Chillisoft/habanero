@@ -14,7 +14,7 @@ namespace Habanero.Test.Structure
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef = itsLoader.LoadClass(@"
-			  <class name=""Car"" assembly=""Habanero.Test.Structure.BO"" table=""table_Car"">
+			  <class name=""Car"" assembly=""Habanero.Test.Structure"" table=""table_Car"">
 			    <property name=""CarID"" type=""Guid"" databaseField=""field_Car_ID"" />
 			    <property name=""RegistrationNo"" databaseField=""field_Registration_No"" />
 			    <property name=""Length"" type=""Double"" databaseField=""field_Length"" />
@@ -23,7 +23,7 @@ namespace Habanero.Test.Structure
 			    <primaryKey>
 			      <prop name=""CarID"" />
 			    </primaryKey>
-			    <relationship name=""Driver"" type=""single"" relatedClass=""Person"" relatedAssembly=""Habanero.Test.Structure.BO"">
+			    <relationship name=""Driver"" type=""single"" relatedClass=""Person"" relatedAssembly=""Habanero.Test.Structure"">
 			      <relatedProperty property=""DriverID"" relatedProperty=""PersonID"" />
 			    </relationship>
 			  </class>
@@ -36,8 +36,8 @@ namespace Habanero.Test.Structure
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef = itsLoader.LoadClass(@"
-			  <class name=""Car"" assembly=""Habanero.Test.Structure.BO"" table=""table_Car"">
-			    <superClass class=""Vehicle"" assembly=""Habanero.Test.Structure.BO"" />
+			  <class name=""Car"" assembly=""Habanero.Test.Structure"" table=""table_Car"">
+			    <superClass class=""Vehicle"" assembly=""Habanero.Test.Structure"" />
 			    <property name=""CarID"" type=""Guid"" databaseField=""field_Car_ID"" />
 			    <property name=""RegistrationNo"" databaseField=""field_Registration_No"" />
 			    <property name=""Length"" type=""Double"" databaseField=""field_Length"" />
@@ -46,7 +46,7 @@ namespace Habanero.Test.Structure
 			    <primaryKey>
 			      <prop name=""CarID"" />
 			    </primaryKey>
-			    <relationship name=""Driver"" type=""single"" relatedClass=""Person"" relatedAssembly=""Habanero.Test.Structure.BO"">
+			    <relationship name=""Driver"" type=""single"" relatedClass=""Person"" relatedAssembly=""Habanero.Test.Structure"">
 			      <relatedProperty property=""DriverID"" relatedProperty=""PersonID"" />
 			    </relationship>
 			  </class>

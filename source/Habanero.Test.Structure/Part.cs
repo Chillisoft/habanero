@@ -18,7 +18,7 @@ namespace Habanero.Test.Structure
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef = itsLoader.LoadClass(@"
-			  <class name=""Part"" assembly=""Habanero.Test.Structure.BO"" table=""table_Part"">
+			  <class name=""Part"" assembly=""Habanero.Test.Structure"" table=""table_Part"">
 			    <property name=""PartID"" type=""Guid"" databaseField=""field_Part_ID"" compulsory=""true"" />
 			    <property name=""ModelNo"" databaseField=""field_Model_No"" />
 			    <property name=""PartType"" databaseField=""field_Part_Type"" />
@@ -35,8 +35,8 @@ namespace Habanero.Test.Structure
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef = itsLoader.LoadClass(@"
-			  <class name=""Part"" assembly=""Habanero.Test.Structure.BO"" table=""table_Part"">
-			    <superClass class=""Entity"" assembly=""Habanero.Test.Structure.BO"" id=""PartID"" />
+			  <class name=""Part"" assembly=""Habanero.Test.Structure"" table=""table_Part"">
+			    <superClass class=""Entity"" assembly=""Habanero.Test.Structure"" id=""PartID"" />
 			    <property name=""PartID"" type=""Guid"" databaseField=""field_Part_ID"" compulsory=""true"" />
 			    <property name=""ModelNo"" databaseField=""field_Model_No"" />
 			    <property name=""PartType"" databaseField=""field_Part_Type"" />

@@ -18,7 +18,7 @@ namespace Habanero.Test.Structure
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef = itsLoader.LoadClass(@"
-			  <class name=""OrganisationPerson"" assembly=""Habanero.Test.Structure.BO"" table=""table_OrganisationPerson"">
+			  <class name=""OrganisationPerson"" assembly=""Habanero.Test.Structure"" table=""table_OrganisationPerson"">
 			    <property name=""OrganisatiionID"" type=""Guid"" databaseField=""field_Organisatiion_ID"" />
 			    <property name=""PersonID"" type=""Guid"" databaseField=""field_Person_ID"" />
 			    <property name=""Relationship"" databaseField=""field_Relationship"" />
@@ -26,10 +26,10 @@ namespace Habanero.Test.Structure
 			      <prop name=""OrganisatiionID"" />
 			      <prop name=""PersonID"" />
 			    </primaryKey>
-			    <relationship name=""Organisation"" type=""single"" relatedClass=""Organisation"" relatedAssembly=""Habanero.Test.Structure.BO"">
+			    <relationship name=""Organisation"" type=""single"" relatedClass=""Organisation"" relatedAssembly=""Habanero.Test.Structure"">
 			      <relatedProperty property=""OrganisatiionID"" relatedProperty=""OrganisationID"" />
 			    </relationship>
-			    <relationship name=""Person"" type=""single"" relatedClass=""Person"" relatedAssembly=""Habanero.Test.Structure.BO"">
+			    <relationship name=""Person"" type=""single"" relatedClass=""Person"" relatedAssembly=""Habanero.Test.Structure"">
 			      <relatedProperty property=""PersonID"" relatedProperty=""PersonID"" />
 			    </relationship>
 			  </class>

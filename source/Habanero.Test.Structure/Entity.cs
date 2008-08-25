@@ -18,7 +18,7 @@ namespace Habanero.Test.Structure
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef = itsLoader.LoadClass(@"
-			  <class name=""Entity"" assembly=""Habanero.Test.Structure.BO"" table=""table_Entity"">
+			  <class name=""Entity"" assembly=""Habanero.Test.Structure"" table=""table_Entity"">
 			    <property name=""EntityID"" type=""Guid"" databaseField=""field_Entity_ID"" compulsory=""true"" />
 			    <property name=""EntityType"" databaseField=""field_Entity_Type"" />
 			    <primaryKey>

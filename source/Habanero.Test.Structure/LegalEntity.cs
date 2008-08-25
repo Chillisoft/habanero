@@ -18,13 +18,13 @@ namespace Habanero.Test.Structure
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef = itsLoader.LoadClass(@"
-			  <class name=""LegalEntity"" assembly=""Habanero.Test.Structure.BO"" table=""table_LegalEntity"">
+			  <class name=""LegalEntity"" assembly=""Habanero.Test.Structure"" table=""table_LegalEntity"">
 			    <property name=""LegalEntityID"" type=""Guid"" databaseField=""field_Legal_Entity_ID"" />
 			    <property name=""LegalEntityType"" databaseField=""field_Legal_Entity_Type"" />
 			    <primaryKey>
 			      <prop name=""LegalEntityID"" />
 			    </primaryKey>
-			    <relationship name=""VehiclesOwned"" type=""multiple"" relatedClass=""Vehicle"" relatedAssembly=""Habanero.Test.Structure.BO"">
+			    <relationship name=""VehiclesOwned"" type=""multiple"" relatedClass=""Vehicle"" relatedAssembly=""Habanero.Test.Structure"">
 			      <relatedProperty property=""LegalEntityID"" relatedProperty=""OwnerID"" />
 			    </relationship>
 			  </class>
@@ -37,14 +37,14 @@ namespace Habanero.Test.Structure
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef = itsLoader.LoadClass(@"
-			  <class name=""LegalEntity"" assembly=""Habanero.Test.Structure.BO"" table=""table_LegalEntity"">
-			    <superClass class=""Entity"" assembly=""Habanero.Test.Structure.BO"" />
+			  <class name=""LegalEntity"" assembly=""Habanero.Test.Structure"" table=""table_LegalEntity"">
+			    <superClass class=""Entity"" assembly=""Habanero.Test.Structure"" />
 			    <property name=""LegalEntityID"" type=""Guid"" databaseField=""field_Legal_Entity_ID"" />
 			    <property name=""LegalEntityType"" databaseField=""field_Legal_Entity_Type"" />
 			    <primaryKey>
 			      <prop name=""LegalEntityID"" />
 			    </primaryKey>
-			    <relationship name=""VehiclesOwned"" type=""multiple"" relatedClass=""Vehicle"" relatedAssembly=""Habanero.Test.Structure.BO"">
+			    <relationship name=""VehiclesOwned"" type=""multiple"" relatedClass=""Vehicle"" relatedAssembly=""Habanero.Test.Structure"">
 			      <relatedProperty property=""LegalEntityID"" relatedProperty=""OwnerID"" />
 			    </relationship>
 			  </class>
