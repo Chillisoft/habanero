@@ -11,12 +11,12 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.Test.Structure
 {
-    [TestFixture]
+    [TestFixture, Ignore("Not Part of this project")]
     public class TestSetupDatabase
     {
         private SetupDatabase _setupDatabase;
 
-        [SetUpFixture]
+        [TestFixtureSetUp]
         public void SetupFixture()
         {
             DatabaseConfig databaseConfig = new DatabaseConfig("Mysql", "localhost", "habanero_temp", "root", "root", "3306");
@@ -38,7 +38,7 @@ namespace Habanero.Test.Structure
             _setupDatabase.CreateDatabase(ClassDef.ClassDefs);
         }
 
-        [Test]
+        [Test, Ignore("Not Part of this project")]
         public void TestCreateAll_NoInheritance()
         {
             Entity.LoadDefaultClassDef();
@@ -49,6 +49,21 @@ namespace Habanero.Test.Structure
             LegalEntity.LoadDefaultClassDef();
             Person.LoadDefaultClassDef();
             Organisation.LoadDefaultClassDef();
+            OrganisationPerson.LoadDefaultClassDef();
+            _setupDatabase.CreateDatabase(ClassDef.ClassDefs);
+        }
+
+        [Test, Ignore("Not Part of this project")]
+        public void TestCreateAll_ClassTableInheritance()
+        {
+            Entity.LoadDefaultClassDef();
+            Part.LoadClassDef_WithClassTableInheritance();
+            Engine.LoadClassDef_WithClassTableInheritance();
+            Vehicle.LoadClassDef_WithClassTableInheritance();
+            Car.LoadClassDef_WithClassTableInheritance();
+            LegalEntity.LoadClassDef_WithClassTableInheritance();
+            Person.LoadClassDef_WithClassTableInheritance();
+            Organisation.LoadClassDef_WithClassTableInheritance();
             OrganisationPerson.LoadDefaultClassDef();
             _setupDatabase.CreateDatabase(ClassDef.ClassDefs);
         }

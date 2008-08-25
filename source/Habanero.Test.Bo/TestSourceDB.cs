@@ -76,7 +76,7 @@ namespace Habanero.Test.BO
             Source source = new Source("MySource", "MY_SOURCE");
             Source joinSource = new Source("JoinSource", "MY_JOINED_TABLE");
 
-            Source.Join join = CreateJoin(source, joinSource);
+            Source.Join join = CreateAndAddJoin(source, joinSource);
 
             SourceDB sourceDB = new SourceDB(source);
   
@@ -96,7 +96,7 @@ namespace Habanero.Test.BO
             Source source = new Source("MySource", "MY_SOURCE");
             Source joinSource = new Source("JoinSource", "MY_JOINED_TABLE");
 
-            Source.Join join = CreateJoin(source, joinSource);
+            Source.Join join = CreateAndAddJoin(source, joinSource);
             QueryField fromField = new QueryField("FromField2", "FROM_FIELD2", source);
             QueryField toField = new QueryField("ToField2", "TO_FIELD2", joinSource);
             join.JoinFields.Add(new Source.Join.JoinField(fromField, toField));
@@ -124,7 +124,7 @@ namespace Habanero.Test.BO
             Source source = new Source("MySource", "MY_SOURCE");
             Source joinSource = new Source("JoinSource", "MY_JOINED_TABLE");
 
-            Source.Join join = CreateJoin(source, joinSource);
+            Source.Join join = CreateAndAddJoin(source, joinSource);
 
             SourceDB sourceDB = new SourceDB(source);
 
@@ -177,8 +177,8 @@ namespace Habanero.Test.BO
             Source joinSource = new Source("JoinSource", "MY_JOINED_TABLE");
             Source joinSource2 = new Source("JoinSource2", "MY_JOINED_TABLE_2");
 
-            Source.Join join = CreateJoin(source, joinSource);
-            Source.Join join2 = CreateJoin(joinSource, joinSource2);
+            Source.Join join = CreateAndAddJoin(source, joinSource);
+            Source.Join join2 = CreateAndAddJoin(joinSource, joinSource2);
 
             SourceDB sourceDB = new SourceDB(source);
 
@@ -202,8 +202,8 @@ namespace Habanero.Test.BO
             Source joinSource = new Source("JoinSource", "MY_JOINED_TABLE");
             Source joinSource2 = new Source("JoinSource2", "MY_JOINED_TABLE_2");
 
-            CreateJoin(source, joinSource);
-            CreateJoin(source, joinSource2);
+            CreateAndAddJoin(source, joinSource);
+            CreateAndAddJoin(source, joinSource2);
 
             SourceDB sourceDB = new SourceDB(source);
 
@@ -228,9 +228,9 @@ namespace Habanero.Test.BO
             Source branch1 = new Source("JoinBranch1", "MY_BRANCH_1");
             Source branch2 = new Source("JoinBranch2", "MY_BRANCH_2");
 
-            Source.Join join = CreateJoin(source, joinSource);
-            Source.Join branchJoin1 = CreateJoin(joinSource, branch1);
-            Source.Join branchJoin2 = CreateJoin(joinSource, branch2);
+            Source.Join join = CreateAndAddJoin(source, joinSource);
+            Source.Join branchJoin1 = CreateAndAddJoin(joinSource, branch1);
+            Source.Join branchJoin2 = CreateAndAddJoin(joinSource, branch2);
 
             SourceDB sourceDB = new SourceDB(source);
 
@@ -248,16 +248,72 @@ namespace Habanero.Test.BO
             Assert.AreEqual(expectedSql, sql);
         }
 
+        [Test]
+        public void TestCreateSQL_WithInheritanceJoin()
+        {
+            //-------------Setup Test Pack ------------------
+            Source source = new Source("MySource", "MY_SOURCE");
+            Source joinSource = new Source("JoinSource", "MY_JOINED_TABLE");
+
+            Source.Join join = CreateAndAddInheritanceJoin(source, joinSource);
+
+            SourceDB sourceDB = new SourceDB(source);
+
+            //-------------Execute test ---------------------
+            string sql = sourceDB.CreateSQL();
+            //-------------Test Result ----------------------
+            Source.Join.JoinField joinField = join.JoinFields[0];
+            string expectedSql = string.Format("({0} JOIN {1} ON {0}.{2} = {1}.{3})", source.EntityName, joinSource.EntityName,
+                joinField.FromField.FieldName, joinField.ToField.FieldName);
+            Assert.AreEqual(expectedSql, sql);
+        }
+
+        [Test]
+        public void TestCreateSQL_WithInheritanceJoin_TwoLevels()
+        {
+            //-------------Setup Test Pack ------------------
+            Source source = new Source("MySource", "MY_SOURCE");
+            Source joinSource = new Source("JoinSource", "MY_JOINED_TABLE");
+            Source joinSource2 = new Source("JoinSource2", "MY_JOINED_TABLE_2");
+
+            Source.Join join = CreateAndAddInheritanceJoin(source, joinSource);
+            Source.Join join2 = CreateAndAddInheritanceJoin(joinSource, joinSource2);
+
+            SourceDB sourceDB = new SourceDB(source);
+
+            //-------------Execute test ---------------------
+            string sql = sourceDB.CreateSQL();
+            //-------------Test Result ----------------------
+            Source.Join.JoinField joinField = join.JoinFields[0];
+            Source.Join.JoinField joinField2 = join2.JoinFields[0];
+            string expectedSql = string.Format("(({0} JOIN {1} ON {0}.{2} = {1}.{3}) JOIN {4} ON {1}.{5} = {4}.{6})",
+                sourceDB.EntityName,
+                joinSource.EntityName, joinField.FromField.FieldName, joinField.ToField.FieldName,
+                joinSource2.EntityName, joinField2.FromField.FieldName, joinField2.ToField.FieldName);
+            Assert.AreEqual(expectedSql, sql);
+        }
+
+        private static Source.Join CreateAndAddJoin(Source fromSource, Source toSource)
+        {
+            Source.Join join = CreateJoin(fromSource, toSource);
+            fromSource.Joins.Add(join);
+            return join;
+        }
+
+        private static Source.Join CreateAndAddInheritanceJoin(Source fromSource, Source toSource)
+        {
+            Source.Join join = CreateJoin(fromSource, toSource);
+            fromSource.InheritanceJoins.Add(join);
+            return join;
+        }
+
         private static Source.Join CreateJoin(Source fromSource, Source toSource)
         {
             Source.Join join = new Source.Join(fromSource, toSource);
             QueryField fromField = new QueryField("FromField", "FROM_FIELD", fromSource);
             QueryField toField = new QueryField("ToField", "TO_FIELD", toSource);
             join.JoinFields.Add(new Source.Join.JoinField(fromField, toField));
-            fromSource.Joins.Add(join);
             return join;
         }
-
-        
     }
 }

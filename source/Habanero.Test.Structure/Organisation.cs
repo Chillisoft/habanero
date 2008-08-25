@@ -38,7 +38,7 @@ namespace Habanero.Test.Structure
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef = itsLoader.LoadClass(@"
-			  <class name=""Organisation"" assembly=""Habanero.Test.Structure"" table=""table_Organisation"">
+			  <class name=""Organisation"" assembly=""Habanero.Test.Structure"" table=""table_class_Organisation"">
 			    <superClass class=""LegalEntity"" assembly=""Habanero.Test.Structure"" />
 			    <property name=""Name"" databaseField=""field_Name"" />
 			    <property name=""DateFormed"" databaseField=""field_Date_Formed"" />

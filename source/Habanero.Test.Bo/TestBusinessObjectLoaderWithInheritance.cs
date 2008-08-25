@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.ObjectManager;
@@ -19,7 +20,7 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
-            BusObjectManager.Instance.ClearLoadedObjects();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
         }
 
@@ -31,7 +32,7 @@ namespace Habanero.Test.BO
         #region Nested type: TestBusinessObjectLoaderDB
 
         [TestFixture]
-        public class TestBusinessObjectLoaderDB : TestBusinessObjectLoaderWithInheritance
+        public class TestBusinessObjectLoaderDBWithInheritance : TestBusinessObjectLoaderWithInheritance
         {
             #region Setup/Teardown
 
@@ -43,7 +44,7 @@ namespace Habanero.Test.BO
 
             #endregion
 
-            public TestBusinessObjectLoaderDB()
+            public TestBusinessObjectLoaderDBWithInheritance()
             {
                 new TestUsingDatabase().SetupDBConnection();
             }
@@ -61,7 +62,7 @@ namespace Habanero.Test.BO
 
                 CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
                 CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
-                BusObjectManager.Instance.ClearLoadedObjects();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
 
                 //---------------Execute Test ----------------------
                 Shape loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(circle.ID);
@@ -78,7 +79,7 @@ namespace Habanero.Test.BO
 
                 FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
                 FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
-                BusObjectManager.Instance.ClearLoadedObjects();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
 
                 //---------------Execute Test ----------------------
                 Shape loadedShape =
@@ -96,7 +97,7 @@ namespace Habanero.Test.BO
 
                 FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchyDifferentDiscriminators();
                 FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
-                BusObjectManager.Instance.ClearLoadedObjects();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
 
                 //---------------Execute Test ----------------------
                 Shape loadedShape =
@@ -114,7 +115,7 @@ namespace Habanero.Test.BO
                 Circle circle = Circle.CreateSavedCircle();
 
                 //---------------Execute Test ----------------------
-                BusObjectManager.Instance.ClearLoadedObjects();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
                 Circle loadedCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Circle>(circle.ID);
 
                 //---------------Test Result -----------------------
@@ -132,7 +133,7 @@ namespace Habanero.Test.BO
                 FilledCircle filledCircle = FilledCircle.CreateSavedFilledCircle();
 
                 //---------------Execute Test ----------------------
-                BusObjectManager.Instance.ClearLoadedObjects();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
                 FilledCircle loadedFilledCircle =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<FilledCircle>(filledCircle.ID);
 
@@ -151,7 +152,7 @@ namespace Habanero.Test.BO
                 Circle circle = Circle.CreateSavedCircle();
 
                 //---------------Execute Test ----------------------
-                BusObjectManager.Instance.ClearLoadedObjects();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
                 Circle loadedCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Circle>(circle.ID);
 
                 //---------------Test Result -----------------------
@@ -173,7 +174,7 @@ namespace Habanero.Test.BO
                 FilledCircle filledCircle = FilledCircle.CreateSavedFilledCircle();
 
                 //---------------Execute Test ----------------------
-                BusObjectManager.Instance.ClearLoadedObjects();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
                 FilledCircle loadedFilledCircle =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<FilledCircle>(filledCircle.ID);
 
@@ -192,7 +193,7 @@ namespace Habanero.Test.BO
                 CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
 
                 //---------------Execute Test ----------------------
-                BusObjectManager.Instance.ClearLoadedObjects();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
                 CircleNoPrimaryKey loadedCircle =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<CircleNoPrimaryKey>(circle.ID);
 
@@ -210,7 +211,7 @@ namespace Habanero.Test.BO
                 FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
 
                 //---------------Execute Test ----------------------
-                BusObjectManager.Instance.ClearLoadedObjects();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
                 FilledCircleNoPrimaryKey loadedFilledCircle =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<FilledCircleNoPrimaryKey>(
                         filledCircle.ID);
@@ -226,10 +227,10 @@ namespace Habanero.Test.BO
 
         #endregion
 
-        #region Nested type: TestBusinessObjectLoaderInMemory
+        #region Nested type: TestBusinessObjectLoaderInMemoryWithInheritance
 
         [TestFixture]
-        public class TestBusinessObjectLoaderInMemory : TestBusinessObjectLoaderWithInheritance
+        public class TestBusinessObjectLoaderInMemoryWithInheritance : TestBusinessObjectLoaderWithInheritance
         {
             private DataStoreInMemory _dataStore;
 
@@ -267,6 +268,24 @@ namespace Habanero.Test.BO
 
             //---------------Execute Test ----------------------
             Part loadedPart = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Part>(part.ID);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(loadedPart, part);
+        }
+
+        [Test]
+        public void TestLoad_ClassTableInheritance_WithCriteriaOnBase()
+        {
+            //---------------Set up test pack-------------------
+            Entity.LoadDefaultClassDef();
+            Part.LoadClassDef_WithClassTableInheritance();
+            string entityType = TestUtil.CreateRandomString();
+            Part part = Part.CreateSavedPart();
+            part.EntityType = entityType;
+            Criteria criteria = new Criteria("EntityType", Criteria.ComparisonOp.Equals, entityType);
+
+            //---------------Execute Test ----------------------
+            Part loadedPart = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Part>(criteria);
 
             //---------------Test Result -----------------------
             Assert.AreSame(loadedPart, part);

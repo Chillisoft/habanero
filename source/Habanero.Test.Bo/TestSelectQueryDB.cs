@@ -22,6 +22,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
+using Habanero.Test.Structure;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -440,11 +441,11 @@ namespace Habanero.Test.BO
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(circleClassDef);
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert Precondition----------------
-
+            Assert.AreEqual(1, selectQuery.Source.InheritanceJoins.Count);
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
-            StringAssert.Contains("JOIN [Shape_table] ON [circle_table].[CircleID_field] = [Shape_table].[ShapeID_field]", statement.Statement.ToString());
+            StringAssert.Contains("([circle_table] JOIN [Shape_table] ON [circle_table].[CircleID_field] = [Shape_table].[ShapeID_field])", statement.Statement.ToString());
         }
 
         [Test]
@@ -459,9 +460,31 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
-            StringAssert.Contains("JOIN [circle_table] ON [FilledCircle_table].[FilledCircleID_field] = [circle_table].[CircleID_field]" +
-                " JOIN [Shape_table] ON [circle_table].[CircleID_field] = [Shape_table].[ShapeID_field]", statement.Statement.ToString());
+            StringAssert.Contains("(([FilledCircle_table] JOIN [circle_table] ON [FilledCircle_table].[FilledCircleID_field] = [circle_table].[CircleID_field])" +
+                " JOIN [Shape_table] ON [circle_table].[CircleID_field] = [Shape_table].[ShapeID_field])", statement.Statement.ToString());
         }
+
+        [Test]
+        public void TestClassTable_LoadSubtypeWithCriteriaFromBaseType()
+        {
+            //---------------Set up test pack-------------------
+            Structure.Entity.LoadDefaultClassDef();
+            ClassDef classDef = Test.Structure.Part.LoadClassDef_WithClassTableInheritance();
+            string entityType = TestUtil.CreateRandomString();
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            Criteria criteria = new Criteria("EntityType", Criteria.ComparisonOp.Equals, entityType);
+            QueryBuilder.PrepareCriteria(classDef, criteria);
+            selectQuery.Criteria = criteria;
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
+            //---------------Test Result -----------------------
+            StringAssert.Contains("[table_Entity].[field_Entity_Type] = ?Param0", statement.Statement.ToString());
+
+            //---------------Tear Down -------------------------
+
+        }
+
 
         [Test]
         public void TestSingleTableInheritance_DiscriminatorInWhere()

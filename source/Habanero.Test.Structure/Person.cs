@@ -42,7 +42,7 @@ namespace Habanero.Test.Structure
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef = itsLoader.LoadClass(@"
-			  <class name=""Person"" assembly=""Habanero.Test.Structure"" table=""table_Person"">
+			  <class name=""Person"" assembly=""Habanero.Test.Structure"" table=""table_class_Person"">
 			    <superClass class=""LegalEntity"" assembly=""Habanero.Test.Structure"" />
 			    <property name=""IDNumber"" databaseField=""field_ID_Number"" />
 			    <property name=""FirstName"" databaseField=""field_First_Name"" />

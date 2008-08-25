@@ -61,7 +61,7 @@ namespace Habanero.Base
             }
         }
 
-        public JoinList InheritanceJoins
+        public virtual JoinList InheritanceJoins
         {
             get { return _inheritanceJoins; }
         }

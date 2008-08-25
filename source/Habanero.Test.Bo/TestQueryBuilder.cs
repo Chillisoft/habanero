@@ -326,6 +326,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestPrepareCriteria_ThroughRelationship()
         {
+             //---------------Set up test pack-------------------
             ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             const string carRegNoValue = "1234";
             Criteria criteria = new Criteria("Car.CarRegNo", Criteria.ComparisonOp.Equals, carRegNoValue);
@@ -343,6 +344,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestPrepareCriteria_ThroughRelationship_TwoLevels()
         {
+             //---------------Set up test pack-------------------
             ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             string surname = TestUtil.CreateRandomString();
             Criteria criteria = new Criteria("Car.Owner.Surname", Criteria.ComparisonOp.Equals, surname);
@@ -356,6 +358,26 @@ namespace Habanero.Test.BO
             Assert.AreEqual("Surname_field", criteria.Field.FieldName);
             Assert.AreEqual("Engine.Car.Owner", criteria.Field.Source.ToString());
         }
+
+        [Test]
+        public void TestPrepareCriteria_Twice()
+        {
+            //---------------Set up test pack-------------------
+            Structure.Entity.LoadDefaultClassDef();
+            ClassDef classDef = Test.Structure.Part.LoadClassDef_WithClassTableInheritance();
+            string entityType = TestUtil.CreateRandomString();
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            Criteria criteria = new Criteria("EntityType", Criteria.ComparisonOp.Equals, entityType);
+            QueryBuilder.PrepareCriteria(classDef, criteria);
+            selectQuery.Criteria = criteria;
+            //---------------Assert preconditions---------------
+            Assert.AreEqual("table_Entity", criteria.Field.Source.EntityName);            
+            //---------------Execute Test ----------------------
+            QueryBuilder.PrepareCriteria(classDef, criteria);
+            //---------------Test Result -----------------------
+            Assert.AreEqual("table_Entity", criteria.Field.Source.EntityName);            
+        }
+
 
         [Test]
         public void TestPrepareSource()

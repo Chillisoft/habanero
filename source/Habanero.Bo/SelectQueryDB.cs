@@ -213,17 +213,17 @@ namespace Habanero.BO
             SourceDB source = new SourceDB(_selectQuery.Source);
             builder.AppendFormat(" FROM {0}", source.CreateSQL(_sqlFormatter));
             //builder.AppendFormat(" FROM {0}", DelimitTable(_selectQuery.Source.EntityName));
-            ClassDef currentClassDef = (ClassDef) _selectQuery.ClassDef;
-            while (currentClassDef != null && currentClassDef.IsUsingClassTableInheritance())
-            {
-                ClassDef superClassClassDef = currentClassDef.SuperClassClassDef;
-                IPropDef superClassPropDef = superClassClassDef.GetPrimaryKeyDef()[0];
-                IPropDef thisClassPropDef = currentClassDef.GetPrimaryKeyDef()[0];
-                builder.Append(
-                    GetJoinString("", currentClassDef.GetTableName(), thisClassPropDef.DatabaseFieldName,
-                        superClassClassDef.GetTableName(), superClassPropDef.DatabaseFieldName));
-                currentClassDef = currentClassDef.SuperClassClassDef;
-            }
+            //ClassDef currentClassDef = (ClassDef) _selectQuery.ClassDef;
+            //while (currentClassDef != null && currentClassDef.IsUsingClassTableInheritance())
+            //{
+            //    ClassDef superClassClassDef = currentClassDef.SuperClassClassDef;
+            //    IPropDef superClassPropDef = superClassClassDef.GetPrimaryKeyDef()[0];
+            //    IPropDef thisClassPropDef = currentClassDef.GetPrimaryKeyDef()[0];
+            //    builder.Append(
+            //        GetJoinString("", currentClassDef.GetTableName(), thisClassPropDef.DatabaseFieldName,
+            //            superClassClassDef.GetTableName(), superClassPropDef.DatabaseFieldName));
+            //    currentClassDef = currentClassDef.SuperClassClassDef;
+            //}
             if (_selectQuery.OrderCriteria == null) return;
             //foreach (OrderCriteria.Field field in _selectQuery.OrderCriteria.Fields)
             //{

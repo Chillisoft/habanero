@@ -30,6 +30,11 @@ namespace Habanero.Base
             get { return _source.Joins; }
         }
 
+        public override JoinList InheritanceJoins
+        {
+            get { return _source.InheritanceJoins; }
+        }
+
         public string CreateSQL()
         {
             return CreateSQL(new SqlFormatter("", ""));
@@ -41,6 +46,10 @@ namespace Habanero.Base
             foreach (Join join in source.Joins)
             {
                 joinString += " " + GetJoinString(join, sqlFormatter);
+                if (join.ToSource.Joins.Count > 0)
+                {
+                    joinString += GetJoinString(join.ToSource, sqlFormatter);
+                }
             }
             return joinString;
         }
@@ -68,18 +77,34 @@ namespace Habanero.Base
                 }
                 
             }
-            if (join.ToSource.Joins.Count > 0)
-            {
-                joinString += GetJoinString(join.ToSource, sqlFormatter);
-            }
+            
             return joinString;
         }
 
         public string CreateSQL(SqlFormatter sqlFormatter)
         {
-            if (Joins.Count == 0) return sqlFormatter.DelimitTable(EntityName);
-            string joinString = GetJoinString(this, sqlFormatter);
-            return sqlFormatter.DelimitTable(this.EntityName) + joinString;
+            //if (Joins.Count == 0) return sqlFormatter.DelimitTable(EntityName);
+            return GetTableJoinString(this, sqlFormatter) +  GetJoinString(this, sqlFormatter);
+        }
+
+        private string GetTableJoinString(Source source, SqlFormatter sqlFormatter)
+        {
+            string joinString = sqlFormatter.DelimitTable(EntityName);
+            joinString = GetInheritanceJoinString(sqlFormatter, source, joinString);
+            return joinString;
+        }
+
+        private string GetInheritanceJoinString(SqlFormatter sqlFormatter, Source source, string joinString)
+        {
+            foreach (Join join in source.InheritanceJoins)
+            {
+                joinString = "(" + joinString + " " + GetJoinString(join, sqlFormatter) + ")";
+                if (join.ToSource.InheritanceJoins.Count > 0)
+                {
+                    joinString = GetInheritanceJoinString(sqlFormatter, join.ToSource, joinString);
+                }
+            }
+            return joinString;
         }
     }
 }

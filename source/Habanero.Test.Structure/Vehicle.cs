@@ -37,8 +37,8 @@ namespace Habanero.Test.Structure
         public static ClassDef LoadClassDef_WithClassTableInheritance()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
-            ClassDef itsClassDef = itsLoader.LoadClass( @"
-			  <class name=""Vehicle"" assembly=""Habanero.Test.Structure"" table=""table_Vehicle"">
+            ClassDef itsClassDef = itsLoader.LoadClass(@"
+			  <class name=""Vehicle"" assembly=""Habanero.Test.Structure"" table=""table_class_Vehicle"">
 			    <superClass class=""Entity"" assembly=""Habanero.Test.Structure"" />
 			    <property name=""VehicleID"" type=""Guid"" databaseField=""field_Vehicle_ID"" />
 			    <property name=""VehicleType"" databaseField=""field_Vehicle_Type"" />

@@ -31,6 +31,13 @@ namespace Habanero.Test.BO
     public class TestQueryBuilderWithInheritance
     {
 
+        [SetUp]
+        public void Setup()
+        {
+            ClassDef.ClassDefs.Clear();
+        }
+
+
         #region Utility Methods
 
         protected static void AssertSourcesEqual(Source expected, Source actual, string context)
@@ -123,7 +130,7 @@ namespace Habanero.Test.BO
         
         protected virtual Source GetCorrectPartSourceStructure()
         {
-            Source partSource = new Source("Part", "table_Part");
+            Source partSource = new Source("Part", "table_class_Part");
             Source entitySource = new Source("Entity", "table_Entity");
             Source.Join join = partSource.InheritanceJoins.AddNewJoinTo(entitySource);
             QueryField partQueryField = new QueryField("PartID", "field_Part_ID", partSource);
@@ -153,7 +160,7 @@ namespace Habanero.Test.BO
 
         protected virtual Source GetCorrectEngineSourceStructure()
         {
-            Source engineSource = new Source("Engine", "table_Engine");
+            Source engineSource = new Source("Engine", "table_class_Engine");
             Source partSource = GetCorrectPartSourceStructure();
             Source.Join join = engineSource.InheritanceJoins.AddNewJoinTo(partSource);
             QueryField engineQueryField = new QueryField("EngineID", "field_Engine_ID", engineSource);

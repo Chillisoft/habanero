@@ -60,7 +60,9 @@ namespace Habanero.BO
             Criteria discriminatorCriteria = null;
             AddDiscriminatorFields(selectQuery, classDef, ref discriminatorCriteria);
             selectQuery.DiscriminatorCriteria = discriminatorCriteria;
-            selectQuery.Source = new Source(classDef.ClassName, classDef.GetTableName());
+            Source source = null;
+            PrepareSource(classDef, ref source);
+            selectQuery.Source = source;
             PrepareCriteria(classDef, criteria);
             PrepareDiscriminatorCriteria(classDef, discriminatorCriteria);
             selectQuery.Criteria = criteria;
@@ -173,27 +175,49 @@ namespace Habanero.BO
 
         private static void PrepareSource(IClassDef classDef, ref Source source, out IClassDef relatedClassDef)
         {
-            Source baseSource = new Source(classDef.ClassName, classDef.GetTableName());
+            Source rootSource = new Source(classDef.ClassName, classDef.GetTableName());
+            CreateInheritanceJoins(classDef, rootSource);
             if (source == null)
             {
-                source = baseSource;
+                source = rootSource;
                 relatedClassDef = classDef;
             }
-            else if (source.Name == baseSource.Name)
+            else if (source.Name == rootSource.Name)
             {
                 relatedClassDef = null;
                 //relatedClassDef = classDef;
-                source.EntityName = baseSource.EntityName;                
+                source.EntityName = rootSource.EntityName;
             }
             else
             {
                 ClassDef currentClassDef = (ClassDef)classDef;
-                Source.Join join = new Source.Join(baseSource, source);
-                baseSource.Joins.Add(join);
-                Source currentSource = baseSource;
+                Source.Join join = new Source.Join(rootSource, source);
+                rootSource.Joins.Add(join);
+                Source currentSource = rootSource;
                 PrepareSourceTree(currentSource, ref currentClassDef);
                 relatedClassDef = currentClassDef;
-                source = baseSource;
+                source = rootSource;
+            }
+        }
+
+        private static void CreateInheritanceJoins(IClassDef classDef, Source rootSource)
+        {
+            ClassDef currentClassDef = (ClassDef) classDef;
+            while (currentClassDef.IsUsingClassTableInheritance())
+            {
+                ClassDef superClassDef = currentClassDef.SuperClassClassDef;
+                Source baseSource = new Source(superClassDef.ClassName, superClassDef.TableName);
+                Source.Join join = new Source.Join(rootSource, baseSource);
+                IPropDef basePrimaryKeyPropDef = superClassDef.PrimaryKeyDef[0];
+                IPropDef thisPrimaryKeyPropDef = currentClassDef.PrimaryKeyDef[0];
+                join.JoinFields.Add(new Source.Join.JoinField(
+                                        new QueryField(thisPrimaryKeyPropDef.PropertyName, thisPrimaryKeyPropDef.DatabaseFieldName,
+                                                       rootSource),
+                                        new QueryField(basePrimaryKeyPropDef.PropertyName, basePrimaryKeyPropDef.DatabaseFieldName,
+                                                       baseSource)));
+                rootSource.InheritanceJoins.Add(join);
+                rootSource = baseSource;
+                currentClassDef = superClassDef;
             }
         }
 
