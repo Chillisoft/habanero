@@ -67,7 +67,7 @@ namespace Habanero.BO.ClassDefinition
         /// an underscore.</param>
         public KeyDef(string keyName)
         {
-		    if (string.IsNullOrEmpty(keyName)) throw new ArgumentNullException("keyName");
+            //if (string.IsNullOrEmpty(keyName)) throw new ArgumentNullException("keyName");
 		    _propDefs = new Dictionary<string, IPropDef>();
             KeyName = keyName;
         }

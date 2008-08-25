@@ -984,7 +984,6 @@ namespace Habanero.BO.ClassDefinition
             }
             return true;
         }
-
         #endregion
 
         ///<summary>
@@ -1151,11 +1150,7 @@ namespace Habanero.BO.ClassDefinition
                 return GetTableName();
             }
             ClassDef superClassClassDef = SuperClassClassDef;
-            if (superClassClassDef != null)
-            {
-                return superClassClassDef.GetTableName(propDef);
-            }
-            return "";
+            return superClassClassDef != null ? superClassClassDef.GetTableName(propDef) : "";
         }
 
 
