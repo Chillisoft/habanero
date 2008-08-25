@@ -24,7 +24,7 @@ namespace Habanero.Base
 {
     /// <summary>
     /// A model of a Select Query that can be used to load data from a data store.  This includes the Fields to load, the source to load from
-    /// (such as the database table name), the OrderCriteria to use (what fields must be sorted on), the Criteria to use (only objects that
+    /// (such as the database table name), the OrderCriteria to use (what fields must  be sorted on), the Criteria to use (only objects that
     /// match the given criteria will be loaded), and the number of objects to load (defined by the Limit).
     /// The SelectQuery provides an implementation of the QueryObject Pattern (Fowler (316) - 'Patterns of Enterprise Application Architecture'
     ///   - 'An object that represents a database query'). The use of this object allows the Framework to generate the appropriate
