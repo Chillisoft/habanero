@@ -106,6 +106,7 @@ namespace Habanero.BO
         /// </summary>
         public static void LoadClassDef()
         {
+            if (ClassDef.ClassDefs.Contains("Habanero.BO", "TransactionLogBusObj")) return;
             XmlClassLoader xmlClassLoader = new XmlClassLoader();
             ClassDef classDef =
                 xmlClassLoader.LoadClass(
@@ -125,9 +126,7 @@ namespace Habanero.BO
 					</primaryKey>
 			    </class>
 			");
-            if(!ClassDef.ClassDefs.Contains(classDef))
-                ClassDef.ClassDefs.Add(classDef);
-            return;
+            ClassDef.ClassDefs.Add(classDef);
         }
 
         /// <summary>
