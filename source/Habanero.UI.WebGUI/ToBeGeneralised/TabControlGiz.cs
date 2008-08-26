@@ -22,23 +22,40 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Manages a related set of tab pages
+    /// </summary>
     public class TabControlGiz : TabControl, ITabControl
     {
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(base.Controls); }
         }
+
+        /// <summary>
+        /// Gets or sets which control borders are docked to its parent
+        /// control and determines how a control is resized with its parent
+        /// </summary>
         Base.DockStyle IControlChilli.Dock
         {
             get { return (Base.DockStyle)base.Dock; }
             set { base.Dock = (Gizmox.WebGUI.Forms.DockStyle)value; }
         }
 
+        /// <summary>
+        /// Gets the collection of tab pages in this tab control
+        /// </summary>
         public new ITabPageCollection TabPages
         {
             get { return new TabPageCollectionGiz(base.TabPages); }
         }
 
+        /// <summary>
+        /// Gets or sets the currently selected tab page
+        /// </summary>
         public ITabPage SelectedTab
         {
             get { return TabPages[base.SelectedIndex]; }
@@ -46,6 +63,9 @@ namespace Habanero.UI.WebGUI
         }
     }
 
+    /// <summary>
+    /// Contains the collection of controls that the TabPage uses
+    /// </summary>
     internal class TabPageCollectionGiz : ITabPageCollection
     {
         private readonly TabPageCollection _tabPages;
@@ -55,21 +75,35 @@ namespace Habanero.UI.WebGUI
             _tabPages = tabPages;
         }
 
+        /// <summary>
+        /// Adds a tab page to the collection
+        /// </summary>
         public void Add(ITabPage page)
         {
             _tabPages.Add((TabPage) page);
         }
 
+        /// <summary>
+        /// Indicates the tab page at the specified indexed location in the collection
+        /// </summary>
         public ITabPage this[int i]
         {
             get { return (ITabPage)_tabPages[i]; }
         }
 
+        /// <summary>
+        /// Indicates the number of tab pages in the collection
+        /// </summary>
         public int Count
         {
             get { return _tabPages.Count; }
         }
 
+        /// <summary>
+        /// Retrieves the index of the specified tab page in the collection
+        /// </summary>
+        /// <returns>A zero-based index value that represents the position of the specified
+        /// tab page in the collection</returns>
         public int IndexOf(ITabPage page)
         {
             for (int pagePos = 0; pagePos < _tabPages.Count; pagePos++)

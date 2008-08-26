@@ -42,10 +42,10 @@ namespace Habanero.Test.UI.Base
             itsOptions.Add(new TestT());
             itsOptions.Add(new TestT());
             itsOptions.Add(new TestT());
-            itsModel.Options = itsOptions;
+            itsModel.AllOptions = itsOptions;
             itsSelections = new List<TestT>();
             itsSelections.Add(itsOptions[1]);
-            itsModel.Selections = itsSelections;
+            itsModel.SelectedOptions = itsSelections;
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
             
             //---------------Execute Test ----------------------
-            model.Selections = null;
+            model.SelectedOptions = null;
             //---------------Test Result -----------------------
             Assert.AreEqual(0,model.SelectionsView.Count);
             //---------------Tear Down -------------------------          
@@ -79,7 +79,7 @@ namespace Habanero.Test.UI.Base
         }
 
         /// <summary>
-        /// Tests that a shallow copy of the list is made when you set the Options list.
+        /// Tests that a shallow copy of the list is made when you set the AllOptions list.
         /// </summary>
         [Test]
         public void TestOptionsCollectionIsIndependant()
@@ -115,13 +115,13 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestSetOptionsWhenSelectionsIsSet()
         {
-            itsModel.Options = itsOptions;
+            itsModel.AllOptions = itsOptions;
             Assert.AreEqual(3, itsModel.AvailableOptions.Count );
             Assert.AreEqual(1, itsModel.SelectionsView.Count);
 
             List<TestT> opts = new List<TestT>();
             opts.Add(new TestT());
-            itsModel.Options = opts;
+            itsModel.AllOptions = opts;
             Assert.AreEqual(0, itsModel.SelectionsView.Count );
         }
 

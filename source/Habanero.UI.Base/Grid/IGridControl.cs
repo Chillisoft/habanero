@@ -22,22 +22,36 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Provides a combination of grid, filter and buttons used to edit a
+    /// collection of business objects
+    /// </summary>
     public interface IGridControl : IControlChilli
     {
         /// <summary>
-        /// initiliase the grid to the with the 'default' UIdef.
+        /// Initiliases the grid structure using the default UI class definition (implicitly named "default")
         /// </summary>
+        /// <param name="classDef">The class definition of the business objects shown in the grid</param>
         void Initialise(IClassDef classDef);
 
-        void Initialise(IClassDef classDef, string uiDefName);
         /// <summary>
-        /// gets and sets the user interface defiition that will load the grid and will be used by the grid add and edit buttons.
+        /// Initialises the grid structure using the specified UI class definition
+        /// </summary>
+        /// <param name="classDef">The class definition of the business objects shown in the grid</param>
+        /// <param name="uiDefName">The UI definition with the given name</param>
+        void Initialise(IClassDef classDef, string uiDefName);
+
+        /// <summary>
+        /// Gets and sets the UI definition used to initialise the grid structure (the UI name is indicated
+        /// by the "name" attribute on the UI element in the class definitions
         /// </summary>
         string UiDefName { get; set; }
+
         /// <summary>
-        /// gets and sets the class definition that will load the grid and will be used by the grid add and edit buttons.
+        /// Gets and sets the class definition used to initialise the grid structure
         /// </summary>
         IClassDef ClassDef { get; set;}
+
         /// <summary>
         /// Returns the grid object held. This property can be used to
         /// access a range of functionality for the grid
@@ -47,13 +61,13 @@ namespace Habanero.UI.Base
 
         /// <summary>
         /// Gets and sets the default order by clause used for loading the grid when the <see cref="FilterModes"/>
-        /// is Search see <see cref="FilterModes"/>
+        /// is set to Search
         /// </summary>
         string OrderBy { get; set; }
 
         /// <summary>
-        /// Gets and sets the standard search criteria used for loading the grid when the <see cref="FilterMode"/>
-        /// is Search see <see cref="FilterModes"/>. This search criteria will be And (ed) to any search criteria returned
+        /// Gets and sets the standard search criteria used for loading the grid when the <see cref="FilterModes"/>
+        /// is set to Search. This search criteria will be appended with an AND to any search criteria returned
         /// by the FilterControl.
         /// </summary>
         string AdditionalSearchCriteria { get; set; }

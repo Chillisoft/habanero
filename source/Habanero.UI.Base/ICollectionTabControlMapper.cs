@@ -22,6 +22,10 @@ using Habanero.BO;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// TODO: is this used? or has it been replaced with BOColTabControl?
     public interface ICollectionTabControlMapper
     {
         /// <summary>

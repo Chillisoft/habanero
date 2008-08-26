@@ -17,19 +17,25 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
- namespace Habanero.UI.Base
+namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Represents a collection of cells in a DataGridViewRow
+    /// </summary>
     public interface IDataGridViewCellCollection
     {
         /// <summary>Adds a cell to the collection.</summary>
         /// <returns>The position in which to insert the new element.</returns>
         /// <param name="dataGridViewCell">A <see cref="IDataGridViewCell"></see> to add to the collection.</param>
-        /// <exception cref="T:System.InvalidOperationException">The row that owns this <see cref="IDataGridViewCellCollection"></see> already belongs to a <see cref="T:Gizmox.WebGUI.Forms.DataGridView"></see> control.-or-dataGridViewCell already belongs to a <see cref="T:Gizmox.WebGUI.Forms.DataGridViewRow"></see>.</exception>
+        /// <exception cref="T:System.InvalidOperationException">The row that owns this 
+        /// <see cref="IDataGridViewCellCollection"></see> already belongs to a DataGridView control.-or-
+        /// dataGridViewCell already belongs to a DataGridViewRow>.</exception>
         /// <filterpriority>1</filterpriority>
         int Add(IDataGridViewCell dataGridViewCell);
 
         /// <summary>Clears all cells from the collection.</summary>
-        /// <exception cref="T:System.InvalidOperationException">The row that owns this <see cref="IDataGridViewCellCollection"></see> already belongs to a <see cref="T:Gizmox.WebGUI.Forms.DataGridView"></see> control.</exception>
+        /// <exception cref="T:System.InvalidOperationException">The row that owns this 
+        /// <see cref="IDataGridViewCellCollection"></see> already belongs to a DataGridView control.</exception>
         /// <filterpriority>1</filterpriority>
         void Clear();
 
@@ -71,18 +77,24 @@
         ///// <filterpriority>1</filterpriority>
         //void RemoveAt(int index);
 
-        /// <summary>Gets or sets the cell at the provided index location. In C#, this property is the indexer for the <see cref="IDataGridViewCellCollection"></see> class.</summary>
+        /// <summary>Gets or sets the cell at the provided index location. In C#, this property is 
+        /// the indexer for the <see cref="IDataGridViewCellCollection"></see> class.</summary>
         /// <returns>The <see cref="IDataGridViewCell"></see> stored at the given index.</returns>
         /// <param name="index">The zero-based index of the cell to get or set.</param>
-        /// <exception cref="T:System.InvalidOperationException">The specified cell when setting this property already belongs to a <see cref="T:Gizmox.WebGUI.Forms.DataGridView"></see> control.-or-The specified cell when setting this property already belongs to a <see cref="T:Gizmox.WebGUI.Forms.DataGridViewRow"></see>.</exception>
+        /// <exception cref="T:System.InvalidOperationException">The specified cell when setting this 
+        /// property already belongs to a DataGridView control.-or-The specified cell when setting this 
+        /// property already belongs to a DataGridViewRow.</exception>
         /// <exception cref="T:System.ArgumentNullException">The specified value when setting this property is null.</exception>
         /// <filterpriority>1</filterpriority>
         IDataGridViewCell this[int index] { get;}// set; }
 
-        /// <summary>Gets or sets the cell in the column with the provided name. In C#, this property is the indexer for the <see cref="IDataGridViewCellCollection"></see> class.</summary>
+        /// <summary>Gets or sets the cell in the column with the provided name. In C#, this property is 
+        /// the indexer for the <see cref="IDataGridViewCellCollection"></see> class.</summary>
         /// <returns>The <see cref="IDataGridViewCell"></see> stored in the column with the given name.</returns>
         /// <param name="columnName">The name of the column in which to get or set the cell.</param>
-        /// <exception cref="T:System.InvalidOperationException">The specified cell when setting this property already belongs to a <see cref="T:Gizmox.WebGUI.Forms.DataGridView"></see> control.-or-The specified cell when setting this property already belongs to a <see cref="T:Gizmox.WebGUI.Forms.DataGridViewRow"></see>.</exception>
+        /// <exception cref="T:System.InvalidOperationException">The specified cell when setting this 
+        /// property already belongs to a DataGridView control.-or-The specified cell when setting this 
+        /// property already belongs to a DataGridViewRow".</exception>
         /// <exception cref="T:System.ArgumentException">columnName does not match the name of any columns in the control.</exception>
         /// <exception cref="T:System.ArgumentNullException">The specified value when setting this property is null.</exception>
         /// <filterpriority>1</filterpriority>

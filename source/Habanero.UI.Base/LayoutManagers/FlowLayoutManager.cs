@@ -31,7 +31,6 @@ namespace Habanero.UI.Base
     /// </summary>
     public class FlowLayoutManager : LayoutManager
     {
-
         private readonly List<IControlChilli> _controls;
         private readonly IList _newLinePositions;
         private Alignments _alignment;
@@ -48,7 +47,7 @@ namespace Habanero.UI.Base
         public enum Alignments
         {
             ///<summary>
-            /// Left alighn the controls
+            /// Left align the controls
             ///</summary>
             Left = 0,
             ///<summary>
@@ -65,6 +64,7 @@ namespace Habanero.UI.Base
         /// Constructor to initialise a new manager
         /// </summary>
         /// <param name="managedControl">The control to manage e.g. a Panel</param>
+        /// <param name="controlFactory">The factory which generates controls</param>
         public FlowLayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
             : base(managedControl, controlFactory)
         {
@@ -104,8 +104,6 @@ namespace Habanero.UI.Base
         /// <summary>
         /// A handler called when a control has had its visibility altered
         /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
         private void ControlVisibleChangedHandler(Object sender, EventArgs e)
         {
             RefreshControlPositions();
@@ -114,8 +112,6 @@ namespace Habanero.UI.Base
         /// <summary>
         /// A handler called when a control has been resized
         /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
         private void ControlResizedHandler(Object sender, EventArgs e)
         {
             RefreshControlPositions();

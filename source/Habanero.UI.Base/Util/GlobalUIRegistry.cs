@@ -20,8 +20,7 @@
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Maintains an application-wide store of UI-related
-    /// settings
+    /// Maintains an application-wide store of UI-related settings
     /// </summary>
     public class GlobalUIRegistry
     {

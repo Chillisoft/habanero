@@ -22,7 +22,7 @@ using System;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Defines the interface for a WizardStep.
+    /// Provides a single step in a wizard control
     /// </summary>
     public interface IWizardStep : IControlChilli
     {
@@ -35,13 +35,11 @@ namespace Habanero.UI.Base
         /// Verifies whether this step can be passed.
         /// </summary>
         /// <param name="message">Error message should moving on be disallowed. This message will be displayed to the user by the WizardControl.</param>
-        /// <returns></returns>
         bool CanMoveOn(out String message);
 
         /// <summary>
         /// Verifies whether the user can move back from this step.
         /// </summary>
-        /// <returns></returns>
         bool CanMoveBack();
 
         /// <summary>

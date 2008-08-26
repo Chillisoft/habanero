@@ -30,11 +30,15 @@ namespace Habanero.UI.WebGUI
 {
     /// <summary>
     /// Provides a multiselector control. The type to be displayed in the 
-    /// lists is set by the template type.
+    /// lists is set by the template type.  The multiselector helps the user to
+    /// select from an available list of options.  Unselected options appear on the
+    /// left and selected ones appear on the right.  The AvailableOptions consists
+    /// of all options, both selected and unselected - no object may appear in the
+    /// selected list if it is not also in the AvailableOptions list.  All list
+    /// control is managed through the Model object.
     /// </summary>
     public partial class MultiSelectorGiz<T> : UserControlGiz, IMultiSelector<T>
     {
-
         private readonly MultiSelectorManager<T> _manager;
 
         public MultiSelectorGiz()
@@ -43,33 +47,57 @@ namespace Habanero.UI.WebGUI
             _manager = new MultiSelectorManager<T>(this);
         }
 
-        public List<T> Options
+        /// <summary>
+        /// Gets and sets the complete list of options available to go in
+        /// either panel
+        /// </summary>
+        public List<T> AllOptions
         {
-            get { return _manager.Options; }
-            set { _manager.Options = value; }
+            get { return _manager.AllOptions; }
+            set { _manager.AllOptions = value; }
         }
 
+        /// <summary>
+        /// Gets the ListBox control that contains the available options that
+        /// have not been selected
+        /// </summary>
         public IListBox AvailableOptionsListBox
         {
             get { return _availableOptionsListbox; }
         }
 
+        /// <summary>
+        /// Gets the model that manages the options available or selected
+        /// </summary>
         public MultiSelectorModel<T> Model
         {
             get { return _manager.Model; }
         }
 
-        public List<T> Selections
+        ///<summary>
+        /// Gets or sets the list of items already selected (which is a subset of
+        /// all available options).  This list typically appears on the right-hand side.
+        ///</summary>
+        public List<T> SelectedOptions
         {
-            get { return _manager.Selections; }
-            set { _manager.Selections = value; }
+            get { return _manager.SelectedOptions; }
+            set { _manager.SelectedOptions = value; }
         }
 
+        /// <summary>
+        /// Gets the ListBox control that contains the options that have been
+        /// selected from those available
+        /// </summary>
         public IListBox SelectionsListBox
         {
             get { return _selectionsListbox; }
         }
 
+        /// <summary>
+        /// Gets the button control as indicated by the <see cref="MultiSelectorButton"/> enumeration.
+        /// </summary>
+        /// <param name="buttonType">The type of button</param>
+        /// <returns>Returns a button</returns>
         public IButton GetButton(MultiSelectorButton buttonType)
         {
             switch (buttonType)
@@ -88,6 +116,9 @@ namespace Habanero.UI.WebGUI
             }
         }
 
+        /// <summary>
+        /// Gets a view of the SelectedOptions collection
+        /// </summary>
         public ReadOnlyCollection<T> SelectionsView
         {
             get { return this._manager.SelectionsView; }

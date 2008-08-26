@@ -119,8 +119,6 @@ namespace Habanero.UI.Base {
             if (LoadClassDefs) ClassDef.LoadClassDefs(GetXmlClassDefsLoader());
         }
 
- 
-
         /// <summary>
         /// Sets up the class that stores the user interface
         /// settings

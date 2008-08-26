@@ -82,7 +82,7 @@ namespace Habanero.UI.Win
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(200, 369);
             this.groupBox1.TabIndex = 0;
-            this.groupBox1.Text = "Available Options";
+            this.groupBox1.Text = "Available AllOptions";
             // 
             // _availableOptionsListbox
             // 
@@ -105,7 +105,7 @@ namespace Habanero.UI.Win
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(200, 369);
             this.groupBox2.TabIndex = 1;
-            this.groupBox2.Text = "Selected Options";
+            this.groupBox2.Text = "Selected AllOptions";
             // 
             // _selectionsListbox
             // 

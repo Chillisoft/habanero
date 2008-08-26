@@ -26,6 +26,9 @@ using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Represents a column in a DataGridView control
+    /// </summary>
     public class DataGridViewColumnGiz : IDataGridViewColumn
     {
         private readonly DataGridViewColumn _dataGridViewColumn;
@@ -40,16 +43,10 @@ namespace Habanero.UI.WebGUI
             get { return _dataGridViewColumn; }
         }
 
-        /// <summary>Gets or sets the name of the data source property or database column to which the <see cref="IDataGridViewColumn"></see> is bound.</summary>
+        /// <summary>Gets or sets the name of the data source property or database column to which 
+        /// the <see cref="IDataGridViewColumn"></see> is bound.</summary>
         /// <returns>The name of the property or database column associated with the <see cref="IDataGridViewColumn"></see>.</returns>
         /// <filterpriority>1</filterpriority>
-        //Editor(
-        //    "Gizmox.WebGUI.Forms.Design.DataGridViewColumnDataPropertyNameEditor, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-        //    , typeof (UITypeEditor)), Gizmox.WebGUI.Forms.SRDescription("DataGridView_ColumnDataPropertyNameDescr"),
-        //DefaultValue(""),
-        //TypeConverter(
-        //    "IForms.Design.DataMemberFieldConverter, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-        //    ), Browsable(true)]
         public string DataPropertyName
         {
             get { return _dataGridViewColumn.DataPropertyName; }
@@ -76,7 +73,8 @@ namespace Habanero.UI.WebGUI
 
         /// <summary>Gets or sets a value indicating whether the user can edit the column's cells.</summary>
         /// <returns>true if the user cannot edit the column's cells; otherwise, false.</returns>
-        /// <exception cref="T:System.InvalidOperationException">This property is set to false for a column that is bound to a read-only data source. </exception>
+        /// <exception cref="T:System.InvalidOperationException">This property is set to false for 
+        /// a column that is bound to a read-only data source. </exception>
         /// <filterpriority>1</filterpriority>
         public bool ReadOnly
         {
@@ -85,8 +83,10 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>Gets or sets the sort mode for the column.</summary>
-        /// <returns>A <see cref="Base.DataGridViewColumnSortMode"></see> that specifies the criteria used to order the rows based on the cell values in a column.</returns>
-        /// <exception cref="System.InvalidOperationException">The value assigned to the property conflicts with <see cref="SelectionMode"></see>. </exception>
+        /// <returns>A <see cref="DataGridViewColumnSortMode"></see> that specifies the criteria used 
+        /// to order the rows based on the cell values in a column.</returns>
+        /// <exception cref="System.InvalidOperationException">The value assigned to the property 
+        /// conflicts with SelectionMode. </exception>
         /// <filterpriority>1</filterpriority>
         public DataGridViewColumnSortMode SortMode
         {
@@ -114,7 +114,8 @@ namespace Habanero.UI.WebGUI
 
         /// <summary>Gets or sets the current width of the column.</summary>
         /// <returns>The width, in pixels, of the column. The default is 100.</returns>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">The specified value when setting this property is greater than 65536.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">The specified value when setting 
+        /// this property is greater than 65536.</exception>
         /// <filterpriority>1</filterpriority>
         public int Width
         {
@@ -122,6 +123,8 @@ namespace Habanero.UI.WebGUI
             set { _dataGridViewColumn.Width = value; }
         }
 
+        /// <summary>Gets or sets a value indicating whether the column is visible.</summary>
+        /// <returns>true if the column is visible; otherwise, false.</returns>
         public bool Visible
         {
             get { return _dataGridViewColumn.Visible; }

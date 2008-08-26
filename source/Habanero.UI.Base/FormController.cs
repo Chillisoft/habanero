@@ -25,7 +25,11 @@ using Habanero.UI;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Provides a super-class for form controllers
+    /// Provides a controller for forms that keeps a reference to all open
+    /// forms so that a user can switch between them.  The specific advantage
+    /// of using a controller is that the state of the window can be maintained and
+    /// the form regeneration time is saved.  This controller can
+    /// be used to populate a "Window" menu item with open forms.
     /// </summary>
     public abstract class FormController
     {
@@ -46,9 +50,11 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Sets the default font size for the mdi forms.  Don't set this to get the default font size.
+        /// Sets the default font size for the mdi forms.
+        /// Don't set this if you want to get the default font size.
         /// </summary>
-        public float FontSize {
+        public float FontSize
+        {
             get { return _fontSize; }
             set { _fontSize = value; }
         }
@@ -116,7 +122,8 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="heading">The heading</param>
         /// <returns>Returns the control if found</returns>
-        protected IControlChilli GetControl(string heading) {
+        protected IControlChilli GetControl(string heading)
+        {
             IFormChilli frm = (IFormChilli)this._formsbyHeading[heading];
             if (frm != null)
             {

@@ -21,14 +21,40 @@ using System.Collections.Generic;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Represents a collection of DataGridViewColumn objects in a DataGridView control.
+    /// </summary>
     public interface IDataGridViewColumnCollection : IEnumerable<IDataGridViewColumn>
     {
+        /// <summary>
+        /// Gets the number of columns held in this collection
+        /// </summary>
         int Count { get; }
+
+        /// <summary>
+        /// Clears the collection
+        /// </summary>
         void Clear();
+
+        /// <summary>
+        /// Adds the given column to the collection
+        /// </summary>
         void Add(IDataGridViewColumn dataGridViewColumn);
+
+        /// <summary>
+        /// Adds a DataGridViewTextBoxColumn with the given column name and column header text to the collection
+        /// </summary>
+        /// <returns>The index of the column</returns>
         int Add(string columnName, string headerText);
 
+        /// <summary>
+        /// Gets or sets the column at the given index in the collection
+        /// </summary>
         IDataGridViewColumn this[int index] { get;}
+
+        /// <summary>
+        /// Gets or sets the column of the given name in the collection
+        /// </summary>
         IDataGridViewColumn this[string name] { get;}
     }
 }

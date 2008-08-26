@@ -51,28 +51,28 @@
 namespace Habanero.UI.Base
 {
 	/// <summary>
-	/// Date Type of the component.
+	/// Provides a list of available data types for the component of a validation
 	/// </summary>
 	public enum ValidationDataType
 	{
 		/// <summary>
-		/// Monetary data type.
+		/// Monetary data type
 		/// </summary>
 		Currency,
 		/// <summary>
-		/// DateTime data type.
+		/// DateTime data type
 		/// </summary>
 		Date,
 		/// <summary>
-		/// Double data type.
+		/// Double data type
 		/// </summary>
 		Double,
 		/// <summary>
-		/// Integer data type.
+		/// Integer data type
 		/// </summary>
 		Integer,
 		/// <summary>
-		/// Default - string data type.
+		/// Default - string data type
 		/// </summary>
 		String
 	}

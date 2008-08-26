@@ -30,6 +30,9 @@ using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Provides a DataGridView that is adapted to show business objects
+    /// </summary>
     public abstract class GridBaseWin : DataGridView, IGridBase
     {
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
@@ -46,7 +49,8 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Returns the grid base manager for this grid
+        /// Returns the grid base manager for this grid, which centralises common
+        /// logic for the different implementations
         /// </summary>
         public GridBaseManager GridBaseManager
         {
@@ -55,14 +59,14 @@ namespace Habanero.UI.Win
 
         /// <summary>
         /// Creates a dataset provider that is applicable to this grid. For example, a readonly grid would
-        /// return a read only datasetprovider, while an editable grid would return an editable one.
+        /// return a <see cref="ReadOnlyDataSetProvider"/>, while an editable grid would return an editable one.
         /// </summary>
         /// <param name="col">The collection to create the datasetprovider for</param>
-        /// <returns></returns>
+        /// <returns>Returns the data set provider</returns>
         public abstract IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col);
 
         /// <summary>
-        /// gets and sets the currently selected cell for the datagridview.
+        /// Gets or sets the currently selected cell
         /// </summary>
         public new IDataGridViewCell CurrentCell
         {
@@ -79,6 +83,14 @@ namespace Habanero.UI.Win
             }
         }
 
+        /// <summary>
+        /// Sets the business object collection displayed in the grid.  This
+        /// collection must be pre-loaded using the collection's Load() command.
+        /// The default UI definition will be used, that is a 'ui' element 
+        /// without a 'name' attribute.
+        /// </summary>
+        /// <param name="col">The collection of business objects to display.  This
+        /// collection must be pre-loaded.</param>
         public void SetBusinessObjectCollection(IBusinessObjectCollection col)
         {
             _manager.SetBusinessObjectCollection(col);
@@ -94,7 +106,7 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Returns the business object at the row specified
+        /// Returns the business object at the specified row number
         /// </summary>
         /// <param name="row">The row number in question</param>
         /// <returns>Returns the busines object at that row, or null
@@ -112,26 +124,41 @@ namespace Habanero.UI.Win
             }
         }
 
+        /// <summary>
+        /// Gets the collection of rows in the grid
+        /// </summary>
         public new IDataGridViewRowCollection Rows
         {
             get { return new DataGridViewRowCollectionWin(base.Rows); }
         }
 
+        /// <summary>
+        /// Clears the business object collection and the rows in the data table
+        /// </summary>
         public void Clear()
         {
             _manager.Clear();
         }
 
+        /// <summary>
+        /// Gets the collection of currently selected rows
+        /// </summary>
         public new IDataGridViewSelectedRowCollection SelectedRows
         {
             get { return new DataGridViewSelectedRowCollectionWin(base.SelectedRows); }
         }
 
+        /// <summary>
+        /// Gets the collection of currently selected cells
+        /// </summary>
         public new IDataGridViewSelectedCellCollection SelectedCells
         {
             get { return new DataGridViewSelectedCellCollectionWin(base.SelectedCells); }
         }
 
+        /// <summary>
+        /// Gets the currently selected row
+        /// </summary>
         public new IDataGridViewRow CurrentRow
         {
             get
@@ -144,11 +171,17 @@ namespace Habanero.UI.Win
             }
         }
 
+        /// <summary>
+        /// Gets a collection of columns set up for the grid
+        /// </summary>
         public new IDataGridViewColumnCollection Columns
         {
             get { return new DataGridViewColumnCollectionWin(base.Columns); }
         }
 
+        /// <summary>
+        /// Gets and sets the currently selected business object in the grid
+        /// </summary>
         public IBusinessObject SelectedBusinessObject
         {
             get { return _manager.SelectedBusinessObject; }
@@ -159,6 +192,9 @@ namespace Habanero.UI.Win
             }
         }
 
+        /// <summary>
+        /// Gets a List of currently selected business objects
+        /// </summary>
         public IList<BusinessObject> SelectedBusinessObjects
         {
             get
@@ -174,11 +210,18 @@ namespace Habanero.UI.Win
         //    get { return base.SelectedRows; }
         //}
 
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }
         }
 
+        /// <summary>
+        /// Gets or sets which control borders are docked to its parent
+        /// control and determines how a control is resized with its parent
+        /// </summary>
         Base.DockStyle IControlChilli.Dock
         {
             get { return (Base.DockStyle) base.Dock; }
@@ -187,49 +230,84 @@ namespace Habanero.UI.Win
 
         #region IGridBase Members
 
+        /// <summary>
+        /// Gets or sets the number of items per page used when the grid implements pagination
+        /// </summary>
         int IGridBase.ItemsPerPage
         {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets or sets the current page of the grid when the grid implements pagination
+        /// </summary>
         int IGridBase.CurrentPage
         {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets and sets the delegated grid loader for the grid.
+        /// <br/>
+        /// This allows the user to implememt a custom
+        /// loading strategy. This can be used to load a collection of business objects into a grid with images or buttons
+        /// that implement custom code. (Grids loaded with a custom delegate generally cannot be set up to filter 
+        /// (grid filters a dataview based on filter criteria),
+        /// but can be set up to search (a business object collection loaded with criteria).
+        /// For a grid to be filterable the grid must load with a dataview.
+        /// <br/>
+        /// If no grid loader is specified then the default grid loader is employed. This consists of parsing the collection into 
+        /// a dataview and setting this as the datasource.
+        /// </summary>
         public GridLoaderDelegate GridLoader
         {
             get { return _manager.GridLoader; }
             set { _manager.GridLoader = value; }
         }
 
+        /// <summary>
+        /// Gets the grid's DataSet provider, which loads the collection's
+        /// data into a DataSet suitable for the grid
+        /// </summary>
         public IDataSetProvider DataSetProvider
         {
             get { return _manager.DataSetProvider; }
         }
 
+        /// <summary>
+        /// Fires an event indicating that the selected business object
+        /// is being edited
+        /// </summary>
+        /// <param name="bo">The business object being edited</param>
+        /// TODO: this is badly named (why do we indicate the BO, but say "Selected") - this should be a
+        /// verb, as in FireBusinessObjectEdited
         public void SelectedBusinessObjectEdited(BusinessObject bo)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Handles the event of the currently selected business object being edited.
-        /// This is used only for internal testing
+        /// Occurs when a business object is being edited
         /// </summary>
         public event EventHandler<BOEventArgs> BusinessObjectEdited;
 
+        /// <summary>
+        /// Reloads the grid based on the grid returned by GetBusinessObjectCollection
+        /// </summary>
         public void RefreshGrid()
         {
             _manager.RefreshGrid();
         }
 
         /// <summary>
-        /// Not supported.  Does nothing.
+        /// When pagination is used, changes the current page to the one containing
+        /// the given row number
         /// </summary>
-        /// <param name="rowNum"></param>
+        /// <param name="rowNum">The row that you wish to show the page of.  For example, if your grid has
+        /// 30 rows and is set to 20 rows per page, calling ChangeToPageOfRow with an argument
+        /// of 25 will set the page to page 2 since row 25 is on page 2.</param>
         public void ChangeToPageOfRow(int rowNum)
         {
         }
@@ -249,10 +327,9 @@ namespace Habanero.UI.Win
         /// Sets the sort column and indicates whether
         /// it should be sorted in ascending or descending order
         /// </summary>
-        /// <param name="columnName">The column number to set</param>
+        /// <param name="columnName">The column number to sort on</param>
         /// object property</param>
-        /// <param name="ascending">Whether sorting should be done in ascending
-        /// order ("false" sets it to descending order)</param>
+        /// <param name="ascending">True for ascending order, false for descending order</param>
         public void Sort(string columnName, bool ascending)
         {
             _manager.SetSortColumn(columnName, ascending);
@@ -261,7 +338,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Applies a filter clause to the data table and updates the filter.
         /// The filter allows you to determine which objects to display using
-        /// some criteria.
+        /// some criteria.  This is typically generated by an <see cref="IFilterControl"/>.
         /// </summary>
         /// <param name="filterClause">The filter clause</param>
         public void ApplyFilter(IFilterClause filterClause)
@@ -287,6 +364,9 @@ namespace Habanero.UI.Win
         //    _manager.AddColumn(column);
         //}
 
+        /// <summary>
+        /// A collection of DataGridViewRow objects
+        /// </summary>
         private class DataGridViewRowCollectionWin : IDataGridViewRowCollection
         {
             private readonly DataGridViewRowCollection _rows;
@@ -300,11 +380,21 @@ namespace Habanero.UI.Win
                 _rows = rows;
             }
 
+            /// <summary>
+            /// Gets the number of rows in the collection
+            /// </summary>
             public int Count
             {
                 get { return _rows.Count; }
             }
 
+            /// <summary>Gets the <see cref="IDataGridViewRow"></see> at the specified index.</summary>
+            /// <returns>The <see cref="IDataGridViewRow"></see> at the specified index. Accessing
+            ///  a <see cref="IDataGridViewRow"></see> with this indexer causes the row to become unshared. 
+            /// To keep the row shared, use the SharedRow method. 
+            /// For more information, see Best Practices for Scaling the Windows Forms DataGridView Control.</returns>
+            /// <param name="index">The zero-based index of the <see cref="IDataGridViewRow"></see> to get.</param>
+            /// <filterpriority>1</filterpriority>
             public IDataGridViewRow this[int index]
             {
                 get { return new DataGridViewRowWin(_rows[index]); }
@@ -312,18 +402,18 @@ namespace Habanero.UI.Win
 
             /// <summary>Adds a new row to the collection, and populates the cells with the specified objects.</summary>
             /// <returns>The index of the new row.</returns>
-            /// <param name="values">A variable number of objects that populate the cells of the new <see cref="IDataGridViewRow"></see>.</param>
-            /// <exception cref="T:System.InvalidOperationException">The associated <see cref="IDataGridView"></see> control is 
-            /// performing one of the 
-            /// following actions that temporarily prevents new rows from being added:Selecting all cells in the control. 
-            /// Clearing the selection.-or-This method is being called from a handler for one of the following 
-            /// <see cref="IDataGridView"></see> events:<see cref="IDataGridView.CellEnter"></see><see cref="IDataGridView.CellLeave"></see><see cref="IDataGridView.CellValidating">
-            /// </see><see cref="IDataGridView.CellValidated"></see><see cref="IDataGridView.RowEnter"></see>
-            /// <see cref="IDataGridView.RowLeave"></see><see cref="IDataGridView.RowValidated"></see><see cref="IDataGridView.RowValidating"></see>
-            /// -or-The <see cref="IDataGridView.VirtualMode"></see> property of the <see cref="IDataGridView"></see> is set to true.- or 
-            /// -The <see cref="IDataGridView.DataSource"></see> property of the <see cref="IDataGridView"></see> is not null.
-            /// -or-The <see cref="IDataGridView"></see> has no columns. -or-The row returned by the <see cref="IDataGridView.RowTemplate"></see>
-            ///  property has more cells than there are columns in the control.-or-This operation would add a frozen row after unfrozen rows.</exception>
+            /// <param name="values">A variable number of objects that populate the cells of the
+            ///  new <see cref="IDataGridViewRow"></see>.</param>
+            /// <exception cref="T:System.InvalidOperationException">The associated <see cref="IDataGridView"></see> 
+            /// control is performing one of the following actions that temporarily prevents new rows from 
+            /// being added:Selecting all cells in the control.Clearing the selection.-or-This method is 
+            /// being called from a handler for one of the following <see cref="IDataGridView"></see>
+            ///  events: CellEnter, CellLeave, CellValidating, CellValidated, RowEnter, RowLeave, RowValidated,
+            /// RowValidating, -or-The VirtualMode property of the <see cref="IDataGridView"></see> is set to
+            ///  true.- or -The <see cref="IDataGridView.DataSource"></see> property of the
+            ///  <see cref="IDataGridView"></see> is not null.-or-The <see cref="IDataGridView"></see> has no
+            ///  columns. -or-The row returned by the RowTemplate property has more cells than there are columns 
+            /// in the control.-or-This operation would add a frozen row after unfrozen rows.</exception>
             /// <exception cref="T:System.ArgumentNullException">values is null.</exception>
             /// <filterpriority>1</filterpriority>
             public int Add(params object[] values)
@@ -366,6 +456,9 @@ namespace Habanero.UI.Win
             }
         }
 
+        /// <summary>
+        /// Represents a collection of DataGridViewColumn objects in a DataGridView control.
+        /// </summary>
         private class DataGridViewColumnCollectionWin : IDataGridViewColumnCollection
         {
             private readonly DataGridViewColumnCollection _columns;
@@ -381,22 +474,35 @@ namespace Habanero.UI.Win
 
             #region IDataGridViewColumnCollection Members
 
+            /// <summary>
+            /// Gets the number of columns held in this collection
+            /// </summary>
             public int Count
             {
                 get { return _columns.Count; }
             }
 
+            /// <summary>
+            /// Clears the collection
+            /// </summary>
             public void Clear()
             {
                 _columns.Clear();
             }
 
+            /// <summary>
+            /// Adds the given column to the collection
+            /// </summary>
             public void Add(IDataGridViewColumn dataGridViewColumn)
             {
                 DataGridViewColumnWin col = (DataGridViewColumnWin) dataGridViewColumn;
                 _columns.Add(col.DataGridViewColumn);
             }
 
+            /// <summary>
+            /// Adds a DataGridViewTextBoxColumn with the given column name and column header text to the collection
+            /// </summary>
+            /// <returns>The index of the column</returns>
             public int Add(string columnName, string headerText)
             {
                 int addedColumn = _columns.Add(columnName, headerText);
@@ -404,6 +510,9 @@ namespace Habanero.UI.Win
                 return addedColumn;
             }
 
+            /// <summary>
+            /// Gets or sets the column at the given index in the collection
+            /// </summary>
             public IDataGridViewColumn this[int index]
             {
                 get
@@ -417,6 +526,9 @@ namespace Habanero.UI.Win
                 }
             }
 
+            /// <summary>
+            /// Gets or sets the column of the given name in the collection
+            /// </summary>
             public IDataGridViewColumn this[string name]
             {
                 get
@@ -431,8 +543,6 @@ namespace Habanero.UI.Win
             }
 
             #endregion
-
-            #region IEnumerable<IDataGridViewColumn> Members
 
             ///<summary>
             ///Returns an enumerator that iterates through the collection.
@@ -450,10 +560,6 @@ namespace Habanero.UI.Win
                 }
             }
 
-            #endregion
-
-            #region IEnumerable Members
-
             ///<summary>
             ///Returns an enumerator that iterates through a collection.
             ///</summary>
@@ -469,11 +575,11 @@ namespace Habanero.UI.Win
                     yield return new DataGridViewColumnWin(column);
                 }
             }
-
-            #endregion
         }
 
-
+        /// <summary>
+        /// Represents a row in a DataGridView control
+        /// </summary>
         private class DataGridViewRowWin : IDataGridViewRow
         {
             private readonly DataGridViewRow _dataGridViewRow;
@@ -483,17 +589,32 @@ namespace Habanero.UI.Win
                 _dataGridViewRow = dataGridViewRow;
             }
 
+            /// <summary>Gets or sets a value indicating whether the row is selected. </summary>
+            /// <returns>true if the row is selected; otherwise, false.</returns>
+            /// <exception cref="T:System.InvalidOperationException">The row is in a <see cref="IDataGridView"></see>
+            ///  control and is a shared row.</exception>
             public bool Selected
             {
                 get { return _dataGridViewRow.Selected; }
                 set { _dataGridViewRow.Selected = value; }
             }
 
+            /// <summary>
+            /// Gets the relative position of the row within the DataGridView control
+            /// </summary>
             public int Index
             {
                 get { return _dataGridViewRow.Index; }
             }
 
+            /// <summary>Sets the values of the row's cells.</summary>
+            /// <returns>true if all values have been set; otherwise, false.</returns>
+            /// <param name="values">One or more objects that represent the cell values in the row.-or-An
+            ///  <see cref="T:System.Array"></see> of <see cref="T:System.Object"></see> values. </param>
+            /// <exception cref="T:System.ArgumentNullException">values is null. </exception>
+            /// <exception cref="T:System.InvalidOperationException">This method is called when the associated 
+            /// <see cref="IDataGridView"></see> is operating in virtual mode. -or-This row is a shared row.</exception>
+            /// <filterpriority>1</filterpriority>
             public bool SetValues(params object[] values)
             {
                 return this._dataGridViewRow.SetValues(values);
@@ -507,13 +628,18 @@ namespace Habanero.UI.Win
                 get { return new DataGridViewCellCollectionWin(_dataGridViewRow.Cells); }
             }
 
+            /// <summary>Gets the data-bound object that populated the row.</summary>
+            /// <returns>The data-bound <see cref="T:System.Object"></see>.</returns>
+            /// <filterpriority>1</filterpriority>
             public object DataBoundItem
             {
                 get { return _dataGridViewRow.DataBoundItem; }
             }
         }
 
-
+        /// <summary>
+        /// Represents a collection of cells in a DataGridViewRow
+        /// </summary>
         private class DataGridViewCellCollectionWin : IDataGridViewCellCollection
         {
             private readonly DataGridViewCellCollection _cells;
@@ -531,7 +657,9 @@ namespace Habanero.UI.Win
             /// <summary>Adds a cell to the collection.</summary>
             /// <returns>The position in which to insert the new element.</returns>
             /// <param name="dataGridViewCell">A <see cref="IDataGridViewCell"></see> to add to the collection.</param>
-            /// <exception cref="T:System.InvalidOperationException">The row that owns this <see cref="IDataGridViewCellCollection"></see> already belongs to a <see cref="System.Windows.DataGridView"></see> control.-or-dataGridViewCell already belongs to a <see cref="System.Windows.DataGridViewRow"></see>.</exception>
+            /// <exception cref="T:System.InvalidOperationException">The row that owns this 
+            /// <see cref="IDataGridViewCellCollection"></see> already belongs to a DataGridView control.-or-
+            /// dataGridViewCell already belongs to a DataGridViewRow>.</exception>
             /// <filterpriority>1</filterpriority>
             public int Add(IDataGridViewCell dataGridViewCell)
             {
@@ -539,7 +667,8 @@ namespace Habanero.UI.Win
             }
 
             /// <summary>Clears all cells from the collection.</summary>
-            /// <exception cref="T:System.InvalidOperationException">The row that owns this <see cref="IDataGridViewCellCollection"></see> already belongs to a <see cref="System.Windows.DataGridView"></see> control.</exception>
+            /// <exception cref="T:System.InvalidOperationException">The row that owns this 
+            /// <see cref="IDataGridViewCellCollection"></see> already belongs to a DataGridView control.</exception>
             /// <filterpriority>1</filterpriority>
             public void Clear()
             {
@@ -602,15 +731,27 @@ namespace Habanero.UI.Win
             //    throw new NotImplementedException();
             //}
 
+            /// <summary>Gets or sets the cell at the provided index location. In C#, this property is 
+            /// the indexer for the <see cref="IDataGridViewCellCollection"></see> class.</summary>
+            /// <returns>The <see cref="IDataGridViewCell"></see> stored at the given index.</returns>
+            /// <param name="index">The zero-based index of the cell to get or set.</param>
+            /// <exception cref="T:System.InvalidOperationException">The specified cell when setting this 
+            /// property already belongs to a DataGridView control.-or-The specified cell when setting this 
+            /// property already belongs to a DataGridViewRow.</exception>
+            /// <exception cref="T:System.ArgumentNullException">The specified value when setting this property is null.</exception>
+            /// <filterpriority>1</filterpriority>
             public IDataGridViewCell this[int index]
             {
                 get { return new DataGridViewCellWin(_cells[index]); }
             }
 
-            /// <summary>Gets or sets the cell in the column with the provided name. In C#, this property is the indexer for the <see cref="IDataGridViewCellCollection"></see> class.</summary>
+            /// <summary>Gets or sets the cell in the column with the provided name. In C#, this property is 
+            /// the indexer for the <see cref="IDataGridViewCellCollection"></see> class.</summary>
             /// <returns>The <see cref="IDataGridViewCell"></see> stored in the column with the given name.</returns>
             /// <param name="columnName">The name of the column in which to get or set the cell.</param>
-            /// <exception cref="T:System.InvalidOperationException">The specified cell when setting this property already belongs to a <see cref="System.Windows.DataGridView"></see> control.-or-The specified cell when setting this property already belongs to a <see cref="System.Windows.DataGridViewRow"></see>.</exception>
+            /// <exception cref="T:System.InvalidOperationException">The specified cell when setting this 
+            /// property already belongs to a DataGridView control.-or-The specified cell when setting this 
+            /// property already belongs to a DataGridViewRow".</exception>
             /// <exception cref="T:System.ArgumentException">columnName does not match the name of any columns in the control.</exception>
             /// <exception cref="T:System.ArgumentNullException">The specified value when setting this property is null.</exception>
             /// <filterpriority>1</filterpriority>
@@ -636,6 +777,9 @@ namespace Habanero.UI.Win
             }
         }
 
+        /// <summary>
+        /// Represents a collection of DataGridViewRow objects that are selected in a DataGridView
+        /// </summary>
         private class DataGridViewSelectedRowCollectionWin : IDataGridViewSelectedRowCollection
         {
             private readonly DataGridViewSelectedRowCollection _selectedRows;
@@ -645,11 +789,17 @@ namespace Habanero.UI.Win
                 _selectedRows = selectedRows;
             }
 
+            /// <summary>
+            /// Gets the total number of rows in the collection
+            /// </summary>
             public int Count
             {
                 get { return _selectedRows.Count; }
             }
 
+            /// <summary>
+            /// Gets the row at the specified index.
+            /// </summary>
             public IDataGridViewRow this[int index]
             {
                 get { return new DataGridViewRowWin(_selectedRows[index]); }
@@ -672,6 +822,9 @@ namespace Habanero.UI.Win
             }
         }
 
+        /// <summary>
+        /// Represents a collection of cells that are selected in a DataGridView
+        /// </summary>
         private class DataGridViewSelectedCellCollectionWin : IDataGridViewSelectedCellCollection
         {
             private readonly DataGridViewSelectedCellCollection _selectedCells;
@@ -681,11 +834,17 @@ namespace Habanero.UI.Win
                 _selectedCells = selectedCells;
             }
 
+            /// <summary>
+            /// Gets the total number of cells in the collection
+            /// </summary>
             public int Count
             {
                 get { return _selectedCells.Count; }
             }
 
+            /// <summary>
+            /// Gets the cell at the specified index.
+            /// </summary>
             public IDataGridViewCell this[int index]
             {
                 get { return new DataGridViewCellWin(_selectedCells[index]); }
@@ -709,6 +868,10 @@ namespace Habanero.UI.Win
         }
     }
 
+    /// <summary>
+    /// Represents the formatting and style information applied to individual cells 
+    /// within a DataGridView control.
+    /// </summary>
     internal class DataGridViewCellStyleWin : IDataGridViewCellStyle
     {
         private readonly DataGridViewCellStyle _dataGridViewCellStyle;
@@ -723,8 +886,10 @@ namespace Habanero.UI.Win
             get { return _dataGridViewCellStyle; }
         }
 
-        /// <summary>Applies the specified <see cref="IDataGridViewCellStyle"></see> to the current <see cref="IDataGridViewCellStyle"></see>.</summary>
-        /// <param name="dataGridViewCellStyle">The <see cref="IDataGridViewCellStyle"></see> to apply to the current <see cref="IDataGridViewCellStyle"></see>.</param>
+        /// <summary>Applies the specified <see cref="IDataGridViewCellStyle"></see> to the current 
+        /// <see cref="IDataGridViewCellStyle"></see>.</summary>
+        /// <param name="dataGridViewCellStyle">The <see cref="IDataGridViewCellStyle"></see> to apply 
+        /// to the current <see cref="IDataGridViewCellStyle"></see>.</param>
         /// <exception cref="T:System.ArgumentNullException">dataGridViewCellStyle is null.</exception>
         /// <filterpriority>1</filterpriority>
         public void ApplyStyle(IDataGridViewCellStyle dataGridViewCellStyle)
@@ -749,6 +914,9 @@ namespace Habanero.UI.Win
         }
     }
 
+    /// <summary>
+    /// Represents an individual cell in a DataGridView control
+    /// </summary>
     internal class DataGridViewCellWin : IDataGridViewCell
     {
         private readonly DataGridViewCell _cell;
@@ -787,10 +955,16 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>Gets the value of the cell as formatted for display.</summary>
-        /// <returns>The formatted value of the cell or null if the cell does not belong to a <see cref="IDataGridView"></see> control.</returns>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">The row containing the cell is a shared row.-or-The cell is a column header cell.</exception>
-        /// <exception cref="T:System.Exception">Formatting failed and either there is no handler for the <see cref="IDataGridView.DataError"></see> event of the <see cref="T:Gizmox.WebGUI.Forms.DataGridView"></see> control or the handler set the <see cref="P:Gizmox.WebGUI.Forms.DataGridViewDataErrorEventArgs.ThrowException"></see> property to true. The exception object can typically be cast to type <see cref="T:System.FormatException"></see>.</exception>
-        /// <exception cref="T:System.InvalidOperationException"><see cref="IDataGridViewCell.ColumnIndex"></see> is less than 0, indicating that the cell is a row header cell.</exception>
+        /// <returns>The formatted value of the cell or null if the cell does not belong to a <see cref="IDataGridView"></see> 
+        ///     control.</returns>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">The row containing the cell is a shared row.
+        /// -or-The cell is a column header cell.</exception>
+        /// <exception cref="T:System.Exception">Formatting failed and either there is no handler for the 
+        /// IDataGridView.DataError" event of the <see cref="IDataGridView"></see> control or the handler 
+        /// set the DataGridViewDataErrorEventArgs.ThrowException" property to true. The exception object can typically be cast 
+        /// to type <see cref="T:System.FormatException"></see>.</exception>
+        /// <exception cref="T:System.InvalidOperationException"><see cref="IDataGridViewCell.ColumnIndex"></see> 
+        /// is less than 0, indicating that the cell is a row header cell.</exception>
         /// <filterpriority>1</filterpriority>
         public object FormattedValue
         {
@@ -807,7 +981,8 @@ namespace Habanero.UI.Win
 
         /// <summary>Gets or sets a value indicating whether the cell's data can be edited. </summary>
         /// <returns>true if the cell's data can be edited; otherwise, false.</returns>
-        /// <exception cref="T:System.InvalidOperationException">There is no owning row when setting this property. -or-The owning row is shared when setting this property.</exception>
+        /// <exception cref="T:System.InvalidOperationException">There is no owning row when setting this property. 
+        /// -or-The owning row is shared when setting this property.</exception>
         /// <filterpriority>1</filterpriority>
         public bool ReadOnly
         {
@@ -825,7 +1000,8 @@ namespace Habanero.UI.Win
 
         /// <summary>Gets or sets a value indicating whether the cell has been selected. </summary>
         /// <returns>true if the cell has been selected; otherwise, false.</returns>
-        /// <exception cref="T:System.InvalidOperationException">There is no associated <see cref="IDataGridView"></see> when setting this property. -or-The owning row is shared when setting this property.</exception>
+        /// <exception cref="T:System.InvalidOperationException">There is no associated <see cref="IDataGridView"></see> 
+        /// when setting this property. -or-The owning row is shared when setting this property.</exception>
         /// <filterpriority>1</filterpriority>
         public bool Selected
         {
@@ -835,8 +1011,10 @@ namespace Habanero.UI.Win
 
         /// <summary>Gets or sets the value associated with this cell. </summary>
         /// <returns>Gets or sets the data to be displayed by the cell. The default is null.</returns>
-        /// <exception cref="T:System.InvalidOperationException"><see cref="System.Windows.Forms.DataGridViewCell.ColumnIndex"></see> is less than 0, indicating that the cell is a row header cell.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException"><see cref="System.Windows.Forms.DataGridViewCell.RowIndex"></see> is outside the valid range of 0 to the number of rows in the control minus 1.</exception>
+        /// <exception cref="T:System.InvalidOperationException"><see cref="IDataGridViewCell.ColumnIndex"></see>
+        ///  is less than 0, indicating that the cell is a row header cell.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException"><see cref="IDataGridViewCell.RowIndex"></see> 
+        /// is outside the valid range of 0 to the number of rows in the control minus 1.</exception>
         /// <filterpriority>1</filterpriority>
         public object Value
         {

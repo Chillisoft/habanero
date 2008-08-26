@@ -39,23 +39,35 @@ namespace Habanero.UI.Base.Grid
             _gridInitialiser = new GridInitialiser(gridControl, controlFactory);
         }
 
+        /// <summary>
+        /// See <see cref="IGridControl.UiDefName"/>
+        /// </summary>
         public string UiDefName
         {
             get { return _uiDefName; }
             set { _uiDefName = value; }
         }
 
+        /// <summary>
+        /// See <see cref="IGridControl.ClassDef"/>
+        /// </summary>
         public IClassDef ClassDef
         {
             get { return _classDef; }
             set { _classDef = value; }
         }
 
+        /// <summary>
+        /// See <see cref="IGridControl.Initialise(IClassDef)"/>
+        /// </summary>
         public void Initialise(IClassDef classDef)
         {
             _gridInitialiser.InitialiseGrid(classDef);
         }
 
+        /// <summary>
+        /// See <see cref="IGridControl.Initialise(IClassDef,string)"/>
+        /// </summary>
         public void Initialise(IClassDef classDef, string uiDefName)
         {
             _gridInitialiser.InitialiseGrid(classDef, uiDefName);

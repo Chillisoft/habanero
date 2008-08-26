@@ -28,13 +28,29 @@ namespace Habanero.UI.Base
     //[Serializable()]
     public enum DataGridViewColumnSortMode
     {
+        /// <summary>
+        /// The column can only be sorted programmatically, but it is not intended for sorting, 
+        /// so the column header will not include space for a sorting glyph.
+        /// </summary>
         NotSortable,
+        /// <summary>
+        /// The user can sort the column by clicking the column header unless the
+        /// column headers are used for selection. A sorting glyph will be displayed automatically.
+        /// </summary>
         Automatic,
+        /// <summary>
+        /// The column can only be sorted programmatically, and the column header will include space for a sorting glyph.
+        /// </summary>
         Programmatic
     }
+
+    /// <summary>
+    /// Represents a column in a DataGridView control
+    /// </summary>
     public interface IDataGridViewColumn
     {
-        /// <summary>Gets or sets the name of the data source property or database column to which the <see cref="IDataGridViewColumn"></see> is bound.</summary>
+        /// <summary>Gets or sets the name of the data source property or database column to which 
+        /// the <see cref="IDataGridViewColumn"></see> is bound.</summary>
         /// <returns>The name of the property or database column associated with the <see cref="IDataGridViewColumn"></see>.</returns>
         /// <filterpriority>1</filterpriority>
         [DefaultValue(""),TypeConverter("IForms.Design.DataMemberFieldConverter, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), Browsable(true)]
@@ -54,13 +70,16 @@ namespace Habanero.UI.Base
 
         /// <summary>Gets or sets a value indicating whether the user can edit the column's cells.</summary>
         /// <returns>true if the user cannot edit the column's cells; otherwise, false.</returns>
-        /// <exception cref="T:System.InvalidOperationException">This property is set to false for a column that is bound to a read-only data source. </exception>
+        /// <exception cref="T:System.InvalidOperationException">This property is set to false for 
+        /// a column that is bound to a read-only data source. </exception>
         /// <filterpriority>1</filterpriority>
         bool ReadOnly { get; set; }
 
         /// <summary>Gets or sets the sort mode for the column.</summary>
-        /// <returns>A <see cref="DataGridViewColumnSortMode"></see> that specifies the criteria used to order the rows based on the cell values in a column.</returns>
-        /// <exception cref="System.InvalidOperationException">The value assigned to the property conflicts with <see cref="IDataGridView.SelectionMode"></see>. </exception>
+        /// <returns>A <see cref="DataGridViewColumnSortMode"></see> that specifies the criteria used 
+        /// to order the rows based on the cell values in a column.</returns>
+        /// <exception cref="System.InvalidOperationException">The value assigned to the property 
+        /// conflicts with SelectionMode. </exception>
         /// <filterpriority>1</filterpriority>
         [DefaultValue(0)]
         DataGridViewColumnSortMode SortMode { get; set; }
@@ -79,7 +98,8 @@ namespace Habanero.UI.Base
 
         /// <summary>Gets or sets the current width of the column.</summary>
         /// <returns>The width, in pixels, of the column. The default is 100.</returns>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">The specified value when setting this property is greater than 65536.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">The specified value when setting 
+        /// this property is greater than 65536.</exception>
         /// <filterpriority>1</filterpriority>
         [RefreshProperties(RefreshProperties.Repaint), Localizable(true)]
         int Width { get; set; }

@@ -24,6 +24,10 @@ using Habanero.Base;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Manages a group of filter controls that create a filter clause used to limit
+    /// which rows of data to show on a DataGridView
+    /// </summary>
     public interface IFilterControl : IControlChilli
     {
         /// <summary>
@@ -31,20 +35,19 @@ namespace Habanero.UI.Base
         /// a string-value column will be filtered on.  This uses a "like"
         /// operator and accepts any strings that contain the provided clause.
         /// </summary>
-        /// <param name="labelText">The label to appear before the TextBox</param>
-        /// <param name="propertyName">The column of data on which to do the
-        /// filtering</param>
+        /// <param name="labelText">The label to appear before the control</param>
+        /// <param name="propertyName">The business object property on which to filter</param>
         /// <returns>Returns the new TextBox added</returns>
         ITextBox AddStringFilterTextBox(string labelText, string propertyName);
+
         /// <summary>
         /// Adds a TextBox filter in which users can specify text that
         /// a string-value column will be filtered on.
         /// </summary>
-        /// <param name="labelText">The label to appear before the TextBox</param>
-        /// <param name="propertyName">The column of data on which to do the
-        /// filtering</param>
+        /// <param name="labelText">The label to appear before the control</param>
+        /// <param name="propertyName">The business object property on which to filter</param>
+        /// <param name="filterClauseOperator">The operator to use for the filter clause</param>
         /// <returns>Returns the new TextBox added</returns>
-        /// <param name="filterClauseOperator">Operator To Use For the filter clause</param>
         ITextBox AddStringFilterTextBox(string labelText, string propertyName, FilterClauseOperator filterClauseOperator);
 
         /// <summary>
@@ -55,13 +58,13 @@ namespace Habanero.UI.Base
         IFilterClause GetFilterClause();
 
         /// <summary>
-        /// Adds a combo box filter control.
+        /// Adds a ComboBox filter control
         /// </summary>
-        /// <param name="labelText"></param>
-        /// <param name="propertyName">The property of the business object being filtered</param>
+        /// <param name="labelText">The label to appear before the control</param>
+        /// <param name="propertyName">The business object property on which to filter</param>
         /// <param name="options">The collection of items used to fill the combo box.</param>
-        /// <param name="strictMatch"></param>
-        /// <returns></returns>
+        /// <param name="strictMatch">Whether to filter the DataGridView column on a strict match or using a LIKE operator</param>
+        /// <returns>Returns the new ComboBox added</returns>
         IComboBox AddStringFilterComboBox(string labelText, string propertyName, ICollection options, bool strictMatch);
 
         /// <summary>
@@ -71,9 +74,8 @@ namespace Habanero.UI.Base
         /// usually converted to true/false string values by the Habanero
         /// object manager).
         /// </summary>
-        /// <param name="labelText">The text label to appear next to the CheckBox</param>
-        /// <param name="propertyName">The column of data on which to do the
-        /// filtering</param>
+        /// <param name="labelText">The label to appear before the control</param>
+        /// <param name="propertyName">The business object property on which to filter</param>
         /// <param name="defaultValue">Whether the CheckBox is checked</param>
         /// <returns>Returns the new CheckBox added</returns>
         ICheckBox AddBooleanFilterCheckBox(string labelText, string propertyName, bool defaultValue);
@@ -83,14 +85,13 @@ namespace Habanero.UI.Base
         /// chosen by the user.  The given operator compares the chosen date
         /// with the date shown in the given column name.
         /// </summary>
-        /// <param name="label">The label to appear before the editor</param>
-        /// <param name="propertyName">The column of data on which to do the
-        /// filtering</param>
+        /// <param name="label">The label to appear before the control</param>
+        /// <param name="propertyName">The business object property on which to filter</param>
         /// <param name="defaultValue">The default date or null</param>
         /// <param name="filterClauseOperator">The operator used to compare
         /// with the date chosen by the user.  The chosen date is on the
         /// right side of the equation.</param>
-        /// <param name="nullable">Must the date time picker be nullable</param>
+        /// <param name="nullable">Whether the datetime picker allows null values</param>
         /// <returns>Returns the new DateTimePicker added</returns>
         IDateTimePicker AddDateFilterDateTimePicker(string label, string propertyName, DateTime defaultValue, FilterClauseOperator filterClauseOperator, bool nullable);
 
@@ -100,14 +101,14 @@ namespace Habanero.UI.Base
         event EventHandler Filter;
 
         /// <summary>
-        ///Applies the filter that has been captured.
-        ///This allows an external control e.g. another button click to be used as the event that causes the filter to fire.
-        ///Typically used when the filter controls are being set manually
+        /// Applies the filter that has been captured.
+        /// This allows an external control (e.g. another button click) to be used as the event that causes the filter to fire.
+        /// Typically used when the filter controls are being set manually.
         /// </summary>
         void ApplyFilter();
 
         /// <summary>
-        /// The header text that will be set above the filter defaults to 'Filter'
+        /// The header text that will be set above the filter.  Defaults to 'Filter'.
         /// </summary>
         string HeaderText { get; set;}
 
@@ -117,34 +118,30 @@ namespace Habanero.UI.Base
         int CountOfFilters { get; }
 
         /// <summary>
-        /// Returns the filter button (this is the button that when clicked applies the filter.
+        /// Returns the filter button that when clicked applies the filter
         /// </summary>
         IButton FilterButton { get; }
 
         /// <summary>
-        /// Returns the clear button (this is the button that when clicked clears the filter.
+        /// Returns the clear button that when clicked clears the filter
         /// </summary>
-        IButton ClearButton
-        {
-            get;
-        }
+        IButton ClearButton { get; }
 
         /// <summary>
-        /// gets and sets the FilterMode <see cref="FilterModes"/>
+        /// Gets and sets the FilterMode <see cref="FilterModes"/>, which determines the
+        /// behaviour of the filter control
         /// </summary>
         FilterModes FilterMode { get; set; }
 
         /// <summary>
-        /// returns a collection of the controls used for filtering i.e. the textbox, combobox. This list excludes the labels etc.
+        /// Gets the collection of individual filters
         /// </summary>
         IList FilterControls { get; }
 
-
         /// <summary>
-        /// returns the control used for filtering i.e. the textbox, combobox.
+        /// Returns the filter control used to filter the column for the given property name
         /// </summary>
-        /// <param name="propertyName"></param>
-        /// <returns></returns>
+        /// <param name="propertyName">The property name on the business object</param>
         IControlChilli GetChildControl(string propertyName);
 
         /// <summary>
@@ -153,35 +150,38 @@ namespace Habanero.UI.Base
         void ClearFilters();
 
         /// <summary>
-        /// returns the layout manager used to lay the controls out on the filter control panel.
+        /// Returns the layout manager used to lay the controls out on the filter control panel.
         /// The default layout manager is the FlowLayoutManager.
         /// </summary>
         LayoutManager LayoutManager { get; set; }
 
         /// <summary>
-        /// returns the panel onto which the controls that will be used for filtering will be placed.
+        /// Returns the panel onto which the filter controls will be placed
         /// </summary>
         IPanel FilterPanel { get; }
 
-
-
-
         /// <summary>
-        /// Adds a ComboBox filter from which the user can choose an option, so that
-        /// only rows with that option in the specified column will be shown
+        /// Adds a DateRangeComboBox filter which provides common date ranges such as "Today" or "This Year",
+        /// so that the grid will only show rows having a date property in the given range
         /// </summary>
-        /// <param name="labelText">The label to appear before the ComboBox</param>
-        /// <param name="columnName">The column of data on which to do the
-        /// filtering</param>
-        /// <param name="includeStartDate">Includes all dates that match the start
-        /// date exactly</param>
-        /// <param name="includeEndDate">Includes all dates that match the end
-        /// date exactly</param>
-        /// <returns>Returns the new ComboBox added</returns>
+        /// <param name="labelText">The label to appear before the control</param>
+        /// <param name="columnName">The business object property on which to filter</param>
+        /// <param name="includeStartDate">Includes all dates that match the start date exactly</param>
+        /// <param name="includeEndDate">Includes all dates that match the end date exactly</param>
+        /// <returns>Returns the new DateRangeComboBox added</returns>
         IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, bool includeStartDate,
                                                       bool includeEndDate);
 
-
+        /// <summary>
+        /// Adds a DateRangeComboBox filter which provides common date ranges such as "Today" or "This Year",
+        /// so that the grid will only show rows having a date property in the given range
+        /// </summary>
+        /// <param name="labelText">The label to appear before the control</param>
+        /// <param name="columnName">The business object property on which to filter</param>
+        /// <param name="options">Provides a specific set of date range options to show</param>
+        /// <param name="includeStartDate">Includes all dates that match the start date exactly</param>
+        /// <param name="includeEndDate">Includes all dates that match the end date exactly</param>
+        /// <returns>Returns the new DateRangeComboBox added</returns>
         IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, List<DateRangeOptions> options, bool includeStartDate, bool includeEndDate);
     }
 }

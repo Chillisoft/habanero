@@ -28,8 +28,10 @@ using log4net;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Creates panels that display business object information in a user
-    /// interface
+    /// Creates panels for displaying business object details on a form.  Use
+    /// CreatePanel to create the panel and catch the <see cref="IPanelFactoryInfo" /> generated,
+    /// which contains all the information relating to the panel, including the controls, the
+    /// mappers, the business object and the panel control.
     /// </summary>
     public class PanelFactory : IPanelFactory
     {
@@ -108,7 +110,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Creates a panel to display a business object
         /// </summary>
-        /// <returns>Returns the object containing the panel</returns>
+        /// <returns>Returns the panel info object containing the panel</returns>
         public IPanelFactoryInfo CreatePanel()
         {
             IPanelFactoryInfo factoryInfo;
@@ -142,9 +144,9 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Creates a numer of panels in  panel to display a business object
+        /// Creates one panel for each UI Form definition of a business object
         /// </summary>
-        /// <returns>Returns the object containing the panel</returns>
+        /// <returns>Returns the list of panel info objects created</returns>
         /// TODO: improve tab order (ie make all tabs use one sequence rather than each starting a new sequence)
         public List<IPanelFactoryInfo> CreateOnePanelPerUIFormTab()
         {

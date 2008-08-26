@@ -21,18 +21,42 @@ using System;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Represents a spin box (also known as an up-down control) that displays numeric values
+    /// </summary>
     public interface INumericUpDown : IControlChilli
     {
+        /// <summary>
+        /// Occurs when the control is entered
+        /// </summary>
         event EventHandler Enter;
 
+        /// <summary>
+        /// Gets or sets the number of decimal places to display. The default is 0.
+        /// </summary>
         int DecimalPlaces { get; set; }
 
+        /// <summary>
+        /// Gets or sets the minimum allowed value
+        /// </summary>
         decimal Minimum { get; set; }
 
+        /// <summary>
+        /// Gets or sets the maximum value
+        /// </summary>
         decimal Maximum { get; set; }
 
+        /// <summary>
+        /// Gets or sets the value assigned
+        /// </summary>
         decimal Value { get; set; }
 
+        /// <summary>
+        /// Selects a range of text in the spin box (also known as an up-down control)
+        /// specifying the starting position and number of characters to select
+        /// </summary>
+        /// <param name="i">The position of the first character to be selected</param>
+        /// <param name="length">The total number of characters to be selected</param>
         void Select(int i, int length);
     }
 

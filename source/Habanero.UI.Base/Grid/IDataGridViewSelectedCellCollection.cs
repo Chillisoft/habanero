@@ -24,10 +24,19 @@ using System.Text;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Represents a collection of cells that are selected in a DataGridView
+    /// </summary>
     public interface IDataGridViewSelectedCellCollection:IEnumerable
     {
+        /// <summary>
+        /// Gets the total number of cells in the collection
+        /// </summary>
         int Count { get; }
 
+        /// <summary>
+        /// Gets the cell at the specified index.
+        /// </summary>
         IDataGridViewCell this[int index] { get; }
     }
 }

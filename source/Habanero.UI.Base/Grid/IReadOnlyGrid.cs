@@ -19,7 +19,13 @@
 
 namespace Habanero.UI.Base
 {
-    public interface IReadOnlyGrid:IGridBase
+    /// <summary>
+    /// Provides a grid on which a business object collection can be
+    /// listed but not edited.  If you would like more functionality,
+    /// including the ability to add, edit and delete the objects, use
+    /// <see cref="IReadOnlyGridControl"/> instead.
+    /// </summary>
+    public interface IReadOnlyGrid : IGridBase
     {
     }
 }

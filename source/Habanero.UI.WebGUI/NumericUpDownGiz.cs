@@ -24,18 +24,35 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Represents a spin box (also known as an up-down control) that displays numeric values
+    /// </summary>
     public class NumericUpDownGiz :NumericUpDown, INumericUpDown
     {
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(base.Controls); }
         }
+
+        /// <summary>
+        /// Gets or sets which control borders are docked to its parent
+        /// control and determines how a control is resized with its parent
+        /// </summary>
         Base.DockStyle IControlChilli.Dock
         {
             get { return (Base.DockStyle)base.Dock; }
             set { base.Dock = (Gizmox.WebGUI.Forms.DockStyle)value; }
         }
 
+        /// <summary>
+        /// Selects a range of text in the spin box (also known as an up-down control)
+        /// specifying the starting position and number of characters to select
+        /// </summary>
+        /// <param name="i">The position of the first character to be selected</param>
+        /// <param name="length">The total number of characters to be selected</param>
         public void Select(int i, object length)
         {
             throw new NotImplementedException();

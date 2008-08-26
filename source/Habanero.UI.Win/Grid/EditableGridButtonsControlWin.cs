@@ -7,9 +7,12 @@ using Habanero.UI.Win;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Provides a set of buttons for use on an <see cref="IEditableGridControl"/>.
+    /// By default, Save and Cancel buttons are available.
+    /// </summary>
     public class EditableGridButtonsControlWin : ButtonGroupControlWin, IEditableGridButtonsControl
     {
-
         /// <summary>
         /// Fires when the Save button is clicked
         /// </summary>

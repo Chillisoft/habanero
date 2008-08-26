@@ -99,38 +99,59 @@ namespace Habanero.UI.Base
             }
         }
 
-        public List<T> Options
+        /// <summary>
+        /// See <see cref="IMultiSelector{T}.AllOptions"/>
+        /// </summary>
+        public List<T> AllOptions
         {
-            get { return _model.Options; }
-            set { _model.Options = value; }
+            get { return _model.AllOptions; }
+            set { _model.AllOptions = value; }
         }
 
+        /// <summary>
+        /// See <see cref="IMultiSelector{T}.AvailableOptionsListBox"/>
+        /// </summary>
         private IListBox AvailableOptionsListBox
         {
             get { return _multiSelector.AvailableOptionsListBox; }
         }
 
+        /// <summary>
+        /// See <see cref="IMultiSelector{T}.Model"/>
+        /// </summary>
         public MultiSelectorModel<T> Model
         {
             get { return _model; }
         }
 
-        public List<T> Selections
+        /// <summary>
+        /// See <see cref="IMultiSelector{T}.SelectedOptions"/>
+        /// </summary>
+        public List<T> SelectedOptions
         {
-            get { return _model.Selections; }
-            set { _model.Selections = value; }
+            get { return _model.SelectedOptions; }
+            set { _model.SelectedOptions = value; }
         }
 
+        /// <summary>
+        /// See <see cref="IMultiSelector{T}.SelectionsListBox"/>
+        /// </summary>
         private IListBox SelectionsListBox
         {
             get { return _multiSelector.SelectionsListBox; }
         }
 
+        /// <summary>
+        /// See <see cref="IMultiSelector{T}.SelectionsView"/>
+        /// </summary>
         public ReadOnlyCollection<T> SelectionsView
         {
             get { return _model.SelectionsView; }
         }
 
+        /// <summary>
+        /// See <see cref="IMultiSelector{T}.GetButton"/>
+        /// </summary>
         private IButton GetButton(MultiSelectorButton buttonType)
         {
             return _multiSelector.GetButton(buttonType);

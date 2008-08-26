@@ -19,6 +19,10 @@
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Represents a splitter control that enables the user to resize docked controls.
+    /// Splitter has been replaced by SplitContainer and is provided only for compatibility with previous versions.
+    /// </summary>
     public interface ISplitter : IControlChilli
     {
     }

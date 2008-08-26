@@ -21,14 +21,29 @@ using System;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Manages a related set of tab pages
+    /// </summary>
     public interface ITabControl : IControlChilli
     {
+        /// <summary>
+        /// Gets the collection of tab pages in this tab control
+        /// </summary>
         ITabPageCollection TabPages { get; }
 
+        /// <summary>
+        /// Gets or sets the index of the currently selected tab page
+        /// </summary>
         int SelectedIndex { get; set; }
 
+        /// <summary>
+        /// Gets or sets the currently selected tab page
+        /// </summary>
         ITabPage SelectedTab { get; set; }
 
+        /// <summary>
+        /// Occurs when the SelectedIndex property is changed
+        /// </summary>
         event EventHandler SelectedIndexChanged;
     }
 }

@@ -23,10 +23,10 @@ using Habanero.UI.Base;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Manages the panel object for a user interface. This is a class that stores the information
-    /// regarding a panel that is being created by the panel factory e.g panel height. 
-    /// i.e. the panel factory creates this
-    ///    class which describes and contains the panel created by the factory.
+    /// Manages a panel that has been created to view or edit business object
+    /// details on a form.  This object is created when you call
+    /// <see cref="IPanelFactory.CreatePanel"/>, and contains references to the
+    /// controls, mappers, the panel control itself and the business object.
     /// </summary>
     public class PanelFactoryInfo : IPanelFactoryInfo
     {
@@ -47,8 +47,9 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Constructor to initialise a new instance of the class
         /// </summary>
-        /// <param name="panel">The panel object being managed</param>
+        /// <param name="panel">The panel control being managed</param>
         /// <param name="mappers">The control mappers collection</param>
+        /// <param name="uiDefName">The UI definition name to use</param>
         /// <param name="firstControlToFocus">The first control to focus on</param>
         public PanelFactoryInfo(IPanel panel, IControlMapperCollection mappers, string uiDefName, IControlChilli firstControlToFocus)
         {
@@ -67,7 +68,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Returns the panel object
+        /// Returns the panel control
         /// </summary>
         public IPanel Panel
         {
@@ -75,7 +76,8 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Returns the collection of control mappers
+        /// Returns the collection of control mappers, which map individual
+        /// controls to the properties on the business object
         /// </summary>
         public IControlMapperCollection ControlMappers
         {
@@ -108,42 +110,70 @@ namespace Habanero.UI.Base
             get { return _firstControlToFocus; }
         }
 
+        /// <summary>
+        /// Gets and sets the tooltip for the panel
+        /// </summary>
         public IToolTip ToolTip
         {
             get { return _toolTip; }
             set { _toolTip = value; }
         }
 
+        /// <summary>
+        /// Gets and sets the minimum height for the panel
+        /// </summary>
         public int MinimumPanelHeight
         {
             get { return _minimumPanelHeight; }
             set { _minimumPanelHeight = value; }
         }
 
+        /// <summary>
+        /// Gets and sets the minimum width for the panel
+        /// </summary>
         public int MinumumPanelWidth
         {
             get { return _minumumPanelWidth; }
             set { _minumumPanelWidth = value; }
         }
 
+        /// <summary>
+        /// Gets and sets the text for the panel tab
+        /// </summary>
         public string PanelTabText
         {
             get { return _panelTabTest; }
             set { _panelTabTest = value; }
         }
 
+        /// <summary>
+        /// Gets and sets the UIForm definition used to construct the
+        /// panel - this is taken from the class definitions for the
+        /// business object
+        /// </summary>
         public UIForm UIForm
         {
             get { return _uiForm; }
             set { _uiForm = value; }
         }
 
+        /// <summary>
+        /// Gets the UIFormTab definition used to construct the panel
+        /// for a single tab in the form.  By default, there is one
+        /// tab for a form, even if it has not been explicitly defined.
+        /// </summary>
         public UIFormTab UiFormTab
         {
             get { return _uiFormTab; }
             set { _uiFormTab = value; }
         }
 
+        /// <summary>
+        /// Gets the UI definition name as set in the "name" attribute.
+        /// Multiple definitions are permitted for a business object.  If none
+        /// is specified, the "default" definition will be used, which is a
+        /// UI definition without a "name" attribute.
+        /// </summary>
         public string UIDefName
         {
             get { return _uiDefName; }

@@ -21,7 +21,9 @@ using System.ComponentModel;
 
 namespace Habanero.UI.Base
 {
-
+    /// <summary>
+    /// Hosts a collection of DataGridViewTextBoxCell cells
+    /// </summary>
     public interface IDataGridViewTextBoxColumn
     {
         /// <summary>Gets or sets the maximum number of characters that can be entered into the text box.</summary>

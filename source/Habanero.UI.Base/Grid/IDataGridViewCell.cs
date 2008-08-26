@@ -22,6 +22,9 @@ using System.ComponentModel;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Represents an individual cell in a DataGridView control
+    /// </summary>
     public interface IDataGridViewCell
     {
         /// <summary>Gets the column index for this cell. </summary>
@@ -63,7 +66,8 @@ namespace Habanero.UI.Base
 
         /// <summary>Gets or sets a value indicating whether the cell's data can be edited. </summary>
         /// <returns>true if the cell's data can be edited; otherwise, false.</returns>
-        /// <exception cref="T:System.InvalidOperationException">There is no owning row when setting this property. -or-The owning row is shared when setting this property.</exception>
+        /// <exception cref="T:System.InvalidOperationException">There is no owning row when setting this property. 
+        /// -or-The owning row is shared when setting this property.</exception>
         /// <filterpriority>1</filterpriority>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         bool ReadOnly { get; set; }
@@ -76,15 +80,18 @@ namespace Habanero.UI.Base
 
         /// <summary>Gets or sets a value indicating whether the cell has been selected. </summary>
         /// <returns>true if the cell has been selected; otherwise, false.</returns>
-        /// <exception cref="T:System.InvalidOperationException">There is no associated <see cref="IDataGridView"></see> when setting this property. -or-The owning row is shared when setting this property.</exception>
+        /// <exception cref="T:System.InvalidOperationException">There is no associated <see cref="IDataGridView"></see> 
+        /// when setting this property. -or-The owning row is shared when setting this property.</exception>
         /// <filterpriority>1</filterpriority>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
         bool Selected { get; set; }
 
         /// <summary>Gets or sets the value associated with this cell. </summary>
         /// <returns>Gets or sets the data to be displayed by the cell. The default is null.</returns>
-        /// <exception cref="T:System.InvalidOperationException"><see cref="IDataGridViewCell.ColumnIndex"></see> is less than 0, indicating that the cell is a row header cell.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException"><see cref="IDataGridViewCell.RowIndex"></see> is outside the valid range of 0 to the number of rows in the control minus 1.</exception>
+        /// <exception cref="T:System.InvalidOperationException"><see cref="IDataGridViewCell.ColumnIndex"></see>
+        ///  is less than 0, indicating that the cell is a row header cell.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException"><see cref="IDataGridViewCell.RowIndex"></see> 
+        /// is outside the valid range of 0 to the number of rows in the control minus 1.</exception>
         /// <filterpriority>1</filterpriority>
         [Browsable(false)]
         object Value { get; set; }

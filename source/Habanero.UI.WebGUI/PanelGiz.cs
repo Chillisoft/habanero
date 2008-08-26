@@ -24,16 +24,23 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
-    public class PanelGiz:Panel, IPanel
+    /// <summary>
+    /// Used to group collections of controls
+    /// </summary>
+    public class PanelGiz : Panel, IPanel
     {
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
-            get
-            {
-                
-                return new ControlCollectionGiz(base.Controls);
-            }
+            get { return new ControlCollectionGiz(base.Controls); }
         }
+
+        /// <summary>
+        /// Gets or sets which control borders are docked to its parent
+        /// control and determines how a control is resized with its parent
+        /// </summary>
         Base.DockStyle IControlChilli.Dock
         {
             get { return (Base.DockStyle)base.Dock; }

@@ -56,7 +56,7 @@ using Habanero.UI.Base;
 namespace Habanero.UI.Base
 {
 	/// <summary>
-	/// Provider validation properties to controls that can be validated.
+	/// Provides validation properties to controls that can be validated
 	/// </summary>
 	public class ValidationProvider : IExtenderProvider
 	{
@@ -70,6 +70,7 @@ namespace Habanero.UI.Base
 	    }
 
 	    #region "public Validation Methods"
+
 		/// <summary>
 		/// Perform validation on all controls.
 		/// </summary>
@@ -92,6 +93,11 @@ namespace Habanero.UI.Base
 			return bIsValid;
 		}
 
+        /// <summary>
+        /// Perform validation on a specific control
+        /// </summary>
+        /// <param name="ctrl">The control to validate</param>
+        /// <returns>Returns true if valid, false if not</returns>
         public bool ValidateControl(IControlChilli ctrl)
         {
             bool bIsValid = true;
@@ -142,6 +148,9 @@ namespace Habanero.UI.Base
 			return sb.ToString();
 		}
 
+        /// <summary>
+        /// Gets validation error messages for a specific control
+        /// </summary>
         public string ValidationMessagesControl(IControlChilli ctrl, bool showErrorIcon)
         {
             StringBuilder sb = new StringBuilder();
@@ -171,11 +180,10 @@ namespace Habanero.UI.Base
 		#endregion
 
 		#region "private helper methods"
+
 		/// <summary>
 		/// Perform validation on specific control.
 		/// </summary>
-		/// <param name="ctrl"></param>
-		/// <returns></returns>
         private bool Validate(IControlChilli ctrl)
 		{
 			List<ValidationRule> vr = this.GetValidationRules(ctrl);
@@ -214,8 +222,6 @@ namespace Habanero.UI.Base
 		/// <summary>
 		/// Validate Data Type.
 		/// </summary>
-		/// <param name="ctrl"></param>
-		/// <returns></returns>
         private ValidationRule DataTypeValidate(IControlChilli ctrl)
 		{
             ValidationRule returnRule = new ValidationRule();
@@ -245,7 +251,6 @@ namespace Habanero.UI.Base
 		/// <summary>
 		/// Perform CompareValidate on a specific control.
 		/// </summary>
-		/// <param name="ctrl"></param>
 		/// <returns>true if control has no validation rule.</returns>
         private ValidationRule CompareValidate(IControlChilli ctrl)
 		{
@@ -274,8 +279,6 @@ namespace Habanero.UI.Base
 		/// <summary>
 		/// Perform Custom Validation on specific control.
 		/// </summary>
-		/// <param name="ctrl"></param>
-		/// <returns></returns>
         private ValidationRule CustomValidate(IControlChilli ctrl)
 		{
             ValidationRule returnRule = new ValidationRule();
@@ -294,10 +297,8 @@ namespace Habanero.UI.Base
 
 
 		/// <summary>
-		/// Perform Range Validation on specific control.
+		/// Perform Range Validation on a specific control.
 		/// </summary>
-		/// <param name="ctrl"></param>
-		/// <returns></returns>
         private ValidationRule RangeValidate(IControlChilli ctrl)
 		{
             List<ValidationRule> vr = _ValidationRules[ctrl];
@@ -339,8 +340,6 @@ namespace Habanero.UI.Base
 		/// <summary>
 		/// Perform Regular Expression Validation on a specific control.
 		/// </summary>
-		/// <param name="ctrl"></param>
-		/// <returns></returns>
         private ValidationRule RegularExpressionValidate(IControlChilli ctrl)
 		{
             List<ValidationRule> vr = _ValidationRules[ctrl];
@@ -372,8 +371,6 @@ namespace Habanero.UI.Base
 		/// <summary>
 		/// Perform RequiredField Validation on a specific control.
 		/// </summary>
-		/// <param name="ctrl"></param>
-		/// <returns></returns>
         private ValidationRule RequiredFieldValidate(IControlChilli ctrl)
 		{
             ValidationRule returnRule = new ValidationRule();
@@ -393,11 +390,10 @@ namespace Habanero.UI.Base
 		#endregion
 
 		#region "Properties"
+
 		/// <summary>
 		/// Set validation rule.
 		/// </summary>
-		/// <param name="inputComponent"></param>
-		/// <param name="vr"></param>
         public void SetValidationRule(IControlChilli inputComponent, ValidationRule vr)
 		{
 			if (inputComponent != null)
@@ -438,13 +434,12 @@ namespace Habanero.UI.Base
 		/// <summary>
 		/// Gets validation rules for a control.
 		/// </summary>
-		/// <param name="inputComponent"></param>
-		/// <returns></returns>
 		[DefaultValue(null), Category("Data")]
         public List<ValidationRule> GetValidationRules(IControlChilli inputComponent)
 		{
             return this._ValidationRules[inputComponent];
 		}
+
 		#endregion
 
 		#region "ErrorProvider properties delegation"
@@ -521,7 +516,7 @@ namespace Habanero.UI.Base
 		#region IExtenderProvider Members
 
 		/// <summary>
-		/// Determine if ValidationProvider support a component.
+		/// Determine if ValidationProvider supports a component.
 		/// </summary>
 		/// <param name="extendee"></param>
 		/// <returns></returns>
@@ -534,6 +529,11 @@ namespace Habanero.UI.Base
 
 		#endregion
 
+        /// <summary>
+        /// Determine if ValidationProvider supports the given component
+        /// </summary>
+        /// <param name="extendee"></param>
+        /// <returns></returns>
 	    public bool CanExtend(object extendee)
 	    {
 	        return CanExtend(extendee as IControlChilli);

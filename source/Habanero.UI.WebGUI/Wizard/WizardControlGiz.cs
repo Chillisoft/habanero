@@ -25,6 +25,10 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Provides the controls for a wizard, which guides users through a process one
+    /// step at a time.
+    /// </summary>
     public class WizardControlGiz : UserControlGiz, IWizardControl
     {
         private IControlChilli _currentControl;
@@ -40,6 +44,9 @@ namespace Habanero.UI.WebGUI
         public event Action<string> StepChanged;
 
 
+        /// <summary>
+        /// The panel that the controls are physically being placed on.
+        /// </summary>
         public IPanel WizardStepPanel
         {
             get { return _wizardStepPanel; }
@@ -134,8 +141,7 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         public IControlChilli CurrentControl
         {
-            get { return _currentControl;
-            }
+            get { return _currentControl; }
         }
 
         /// <summary>
@@ -167,6 +173,9 @@ namespace Habanero.UI.WebGUI
             }
         }
 
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(base.Controls); }
@@ -273,10 +282,12 @@ namespace Habanero.UI.WebGUI
                                                           "Wizard Step Error");
             }
         }
+
         private void uxPreviousButton_Click(object sender, EventArgs e)
         {
             Previous();
         }
+
         private void SetPreviousButtonState()
         {
             _previousButton.Enabled = !_wizardController.IsFirstStep();
@@ -285,6 +296,7 @@ namespace Habanero.UI.WebGUI
                 _previousButton.Enabled = _wizardController.GetCurrentStep().CanMoveBack();
             }
         }
+
         /// <summary>
         /// Calls the finish method on the controller to being the completion process.  If this is successful the Finished event is fired.
         /// </summary>

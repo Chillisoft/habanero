@@ -28,6 +28,10 @@ using Habanero.UI.Base.Grid;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Provides a combination of editable grid, filter and buttons used to edit a
+    /// collection of business objects
+    /// </summary>
     public class EditableGridControlGiz : UserControlGiz, IEditableGridControl
     {
         private readonly IControlFactory _controlFactory;
@@ -94,29 +98,50 @@ namespace Habanero.UI.WebGUI
             }
         }
 
+        /// <summary>
+        /// Returns the grid object held. This property can be used to
+        /// access a range of functionality for the grid
+        /// (eg. myGridWithButtons.Grid.AddBusinessObject(...)).
+        /// </summary>    
         public IGridBase Grid
         {
             get { return _grid; }
         }
 
+        /// <summary>
+        /// Initiliases the grid structure using the default UI class definition (implicitly named "default")
+        /// </summary>
+        /// <param name="classDef">The class definition of the business objects shown in the grid</param>
         public void Initialise(IClassDef classDef)
         {
             _editableGridManager.Initialise(classDef);
         }
 
 
+        /// <summary>
+        /// Initialises the grid structure using the specified UI class definition
+        /// </summary>
+        /// <param name="classDef">The class definition of the business objects shown in the grid</param>
+        /// <param name="uiDefName">The UI definition with the given name</param>
         public void Initialise(IClassDef classDef, string uiDefName)
         {
             _editableGridManager.Initialise(classDef, uiDefName);
         }
 
 
+        /// <summary>
+        /// Gets and sets the UI definition used to initialise the grid structure (the UI name is indicated
+        /// by the "name" attribute on the UI element in the class definitions
+        /// </summary>
         public string UiDefName
         {
             get { return _editableGridManager.UiDefName;  }
             set { _editableGridManager.UiDefName = value; }
         }
 
+        /// <summary>
+        /// Gets and sets the class definition used to initialise the grid structure
+        /// </summary>
         public IClassDef ClassDef
         {
             get { return _editableGridManager.ClassDef; }
@@ -126,7 +151,7 @@ namespace Habanero.UI.WebGUI
         /// <summary>
         /// Sets the business object collection to display.  Loading of
         /// the collection needs to be done before it is assigned to the
-        /// grid.  This method assumes a default ui definition is to be
+        /// grid.  This method assumes a default UI definition is to be
         /// used, that is a 'ui' element without a 'name' attribute.
         /// </summary>
         /// <param name="boCollection">The new business object collection
@@ -169,13 +194,16 @@ namespace Habanero.UI.WebGUI
             _grid.AllowUserToAddRows = true;
         }
 
+        /// <summary>
+        /// Gets the buttons control used to save and cancel changes
+        /// </summary>
         public IEditableGridButtonsControl Buttons
         {
             get { return _buttons; }
         }
 
         /// <summary>
-        /// returns the filter control for the readonly grid
+        /// Gets the filter control used to filter which rows are shown in the grid
         /// </summary>
         public IFilterControl FilterControl
         {
@@ -183,7 +211,7 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// gets and sets the filter modes for the grid i.e. Filter or search <see cref="FilterModes"/>
+        /// Gets and sets the filter modes for the grid (i.e. filter or search). See <see cref="FilterModes"/>.
         /// </summary>
         public FilterModes FilterMode
         {
@@ -192,8 +220,8 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// Gets and sets the default order by clause used for loading the grid when the <see cref="FilterMode"/>
-        /// is Search see <see cref="FilterModes"/>
+        /// Gets and sets the default order by clause used for loading the grid when the <see cref="FilterModes"/>
+        /// is set to Search
         /// </summary>
         public string OrderBy
         {
@@ -202,8 +230,8 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// Gets and sets the standard search criteria used for loading the grid when the <see cref="FilterMode"/>
-        /// is Search see <see cref="FilterModes"/>. This search criteria will be And (ed) to any search criteria returned
+        /// Gets and sets the standard search criteria used for loading the grid when the <see cref="FilterModes"/>
+        /// is set to Search. This search criteria will be appended with an AND to any search criteria returned
         /// by the FilterControl.
         /// </summary>
         public string AdditionalSearchCriteria

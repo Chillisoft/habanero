@@ -21,7 +21,13 @@ using System;
 
 namespace Habanero.UI.Base
 {
-    public interface IReadOnlyGridButtonsControl:IButtonGroupControl
+    /// <summary>
+    /// Provides a set of buttons for use on an <see cref="IReadOnlyGridControl"/>.
+    /// By default, Add and Edit buttons are available, but you can also make the standard
+    /// Delete button visible by setting the <see cref="ShowDefaultDeleteButton"/>
+    /// property to true.
+    /// </summary>
+    public interface IReadOnlyGridButtonsControl : IButtonGroupControl
     {
         ///// <summary>
         ///// Returns the button with buttonName
@@ -44,7 +50,8 @@ namespace Habanero.UI.Base
         event EventHandler EditClicked;
         
         /// <summary>
-        /// Indicates whether the default delete button is visible
+        /// Indicates whether the default delete button is visible.  This
+        /// is false by default.
         /// </summary>
         bool ShowDefaultDeleteButton { get; set; }
     }

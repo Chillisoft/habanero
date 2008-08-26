@@ -23,46 +23,46 @@ using Habanero.UI.Base;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// The filter modes that can be set up for the readonly grid.
-    /// FilteModes.Filter is a mode used where the grid is provided with a collection of all the 
-    /// business objects and the user can limit this grid by entering one or more filter criteria. 
-    /// This is very interactive and converts the collection provided to the grid into a <see cref="System.Data.DataView"/>.
-    /// The FilterModes.Search is a mode where the grid reloads the collection of business objects 
-    /// based on the criteria entered by the user. This is typically used where the number of items that could be 
-    /// loaded is large and for performance reasons you want to only load the collection with the items matching the 
-    /// search criteria (this can also be used where a custome load delegate implements an alternate loading mechanism <see cref="GridLoaderDelegate"/>
+    /// Provides filter modes that can be set up for a grid.
+    /// The default options is FilterModes.Filter.
     /// </summary>
     public enum FilterModes
     {
+        /// <summary>
+        /// Hides rows in a loaded collection that do not meet the filter criteria.  This is a
+        /// preferred option if the size of the unfiltered collection is not expected to cause a
+        /// deterioration in the performance of the system.
+        /// </summary>
         Filter,
+        /// <summary>
+        /// Reloads the collection shown in the grid, using the criteria as set by the filter.
+        /// This is a useful option if the collection in the grid is potentially large.
+        /// This can also be customised to use an alternate loading mechanism <see cref="GridLoaderDelegate"/>.
+        /// </summary>
         Search
     }
 
     /// <summary>
-    /// Manages a read-only grid with buttons (ie. a grid whose objects are
-    /// edited through an editing form rather than directly on the grid).
-    /// By default, an "Edit" and "Add" are added at 
-    /// the bottom of the grid, which open up dialogs to edit the selected
-    /// business object.<br/>
-    /// To supply the business object collection to display in the grid,
-    /// instantiate a new BusinessObjectCollection and load the collection
-    /// from the database using the Load() command.  After instantiating this
-    /// grid with the parameterless constructor, pass the collection with
-    /// SetBusinessObjectCollection().<br/>
-    /// To have further control of particular aspects of the buttons or
-    /// grid, access the standard functionality through the Grid and
-    /// Buttons properties (eg. myGridWithButtons.Buttons.AddButton(...)).
-    /// You can assign a non-default object editor or creator for the buttons,
-    /// using *.Buttons.BusinessObjectEditor and *.Buttons.BusinessObjectCreator.
+    /// Provides a combination of read-only grid, filter and buttons used to edit a
+    /// collection of business objects.
+    /// <br/>
+    /// Adding, editing and deleting objects is done by clicking the available
+    /// buttons in the button control (accessed through the Buttons property).
+    /// By default, this uses of a popup form for editing of the object, as defined
+    /// in the "form" element of the class definitions for that object.  You can
+    /// override the editing controls using the BusinessObjectEditor/Creator/Deletor
+    /// properties in this class.
+    /// <br/>
+    /// A filter control is placed above the grid and is used to filter which rows
+    /// are shown.
     /// </summary>
     public interface IReadOnlyGridControl : IGridControl 
     {
         IBusinessObject SelectedBusinessObject { get; set; }
 
         /// <summary>
-        /// Returns the button control held. This property can be used
-        /// to access a range of functionality for the button control
-        /// (eg. myGridWithButtons.Buttons.AddButton(...)).
+        /// Gets the button control, which contains a set of default buttons for
+        /// editing the objects and can be customised
         /// </summary>
         IReadOnlyGridButtonsControl Buttons { get; }
 
@@ -80,46 +80,47 @@ namespace Habanero.UI.Base
 
         /// <summary>
         /// Gets and sets the business object deletor used to delete the object when the delete button is clicked
-        /// If no deletor is set then the <see cref="DefaultBODeletor"/> is used.
+        /// If no deletor is set then the <see cref="DefaultBODeletor"/> is used.  The default delete button
+        /// is hidden unless programmatically shown (using Buttons.ShowDefaultDeleteButton).
         /// </summary>
         IBusinessObjectDeletor BusinessObjectDeletor { get; set; }
 
         /// <summary>
-        /// returns the filter control for the readonly grid
+        /// Gets the filter control for the readonly grid, which is used to filter
+        /// which rows are shown in the grid
         /// </summary>
         IFilterControl FilterControl { get; }
 
         /// <summary>
-        /// has one of the overloaded initialise methods been called for the grid.
+        /// Gets the value indicating whether one of the overloaded initialise
+        /// methods been called for the grid
         /// </summary>
         bool IsInitialised { get; }
 
         /// <summary>
-        /// gets and sets the filter modes for the grid i.e. Filter or search <see cref="FilterModes"/>
+        /// Gets and sets the filter modes for the grid (i.e. filter or search).  See <see cref="FilterModes"/>.
         /// </summary>
         FilterModes FilterMode { get; set; }
-
-
-     
 
         /// <summary>
         /// Sets the business object collection to display.  Loading of
         /// the collection needs to be done before it is assigned to the
-        /// grid.  This method assumes a default ui definition is to be
+        /// grid.  This method assumes a default UI definition is to be
         /// used, that is a 'ui' element without a 'name' attribute.
         /// </summary>
-        /// <param name="boCollection">The new business object collection
+        /// <param name="boCollection">The business object collection
         /// to be shown in the grid</param>
         void SetBusinessObjectCollection(IBusinessObjectCollection boCollection);
 
         /// <summary>
-        /// Initialises the grid based with no classDef. This is used where the columns are set up manually.
+        /// Initialises the grid without a ClassDef. This is used where the columns are set up manually.
         /// A typical case of when you would want to set the columns manually would be when the grid
-        ///  requires alternate columns e.g. images to indicate the state of the object or buttons/links.
-        /// The grid must already have at least one column added. At least one column must be a column with the name
-        /// "ID" This column is used to synchronise the grid with the business objects.
+        /// requires alternate columns, such as images to indicate the state of the object or buttons/links.
+        /// The grid must already have at least one column added with the name "ID". This column is used
+        /// to synchronise the grid with the business objects.
         /// </summary>
-        /// <exception cref="GridBaseInitialiseException"> in the case where the columns have not already been defined for the grid</exception>
+        /// <exception cref="GridBaseInitialiseException">Occurs where the columns have not
+        /// already been defined for the grid</exception>
         void Initialise();
     }
 }

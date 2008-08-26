@@ -57,9 +57,8 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Sets the grid's collection to the one specified
+        /// See <see cref="IGridBase.SetBusinessObjectCollection"/>
         /// </summary>
-        /// <param name="col">The collection to display in the grid</param>
         public void SetBusinessObjectCollection(IBusinessObjectCollection col)
         {
             if (_gridBase.Columns.Count <= 0)
@@ -89,11 +88,17 @@ namespace Habanero.UI.Base
             FireCollectionChanged();
         }
 
+        /// <summary>
+        /// See <see cref="IGridBase.DataSetProvider"/>
+        /// </summary>
         public IDataSetProvider DataSetProvider
         {
             get { return _dataSetProvider; }
         }
 
+        /// <summary>
+        /// Sets the default grid loader
+        /// </summary>
         public void DefaultGridLoader(IGridBase gridBase, IBusinessObjectCollection boCol)
         {
             if (boCol == null)
@@ -124,6 +129,9 @@ namespace Habanero.UI.Base
             return this._dataTableDefaultView;
         }
 
+        /// <summary>
+        /// See <see cref="IGridBase.SelectedBusinessObject"/>
+        /// </summary>
         public IBusinessObject SelectedBusinessObject
         {
             get
@@ -188,6 +196,9 @@ namespace Habanero.UI.Base
         //    _gridBase.SelectedBusinessObjectEdited(bo);
         //}
 
+        /// <summary>
+        /// See <see cref="IGridBase.SelectedBusinessObjects"/>
+        /// </summary>
         public IList<BusinessObject> SelectedBusinessObjects
         {
             get
@@ -204,18 +215,27 @@ namespace Habanero.UI.Base
             }
         }
 
+        /// <summary>
+        /// See <see cref="IGridBase.GridLoader"/>
+        /// </summary>
         public GridLoaderDelegate GridLoader
         {
             get { return this._gridLoader; }
             set { this._gridLoader = value; }
         }
 
+        /// <summary>
+        /// See <see cref="IGridControl.UiDefName"/>
+        /// </summary>
         public string UiDefName
         {
             get { return _uiDefName; }
             set { _uiDefName = value; }
         }
 
+        /// <summary>
+        /// See <see cref="IGridControl.ClassDef"/>
+        /// </summary>
         public IClassDef ClassDef
         {
             get { return _classDef; }
@@ -231,20 +251,16 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Returns the business object collection being displayed in the grid
+        /// See <see cref="IGridBase.GetBusinessObjectCollection"/>
         /// </summary>
-        /// <returns>Returns a business collection</returns>
         public IBusinessObjectCollection GetBusinessObjectCollection()
         {
             return _boCol;
         }
 
         /// <summary>
-        /// Returns the business object at the row specified
+        /// See <see cref="IGridBase.GetBusinessObjectAtRow"/>
         /// </summary>
-        /// <param name="rowIndex">The row Index in question</param>
-        /// <returns>Returns the busines object at that row, or null
-        /// if none is found</returns>
         public IBusinessObject GetBusinessObjectAtRow(int rowIndex)
         {
             int i = 0;
@@ -266,19 +282,14 @@ namespace Habanero.UI.Base
             return null;
         }
 
+        /// <summary>
+        /// See <see cref="IGridBase.Clear"/>
+        /// </summary>
         public void Clear()
         {
             SetBusinessObjectCollection(null);
         }
 
-        /// <summary>
-        /// Sets the sort column and indicates whether
-        /// it should be sorted in ascending or descending order
-        /// </summary>
-        /// <param name="columnName">The column number to set</param>
-        /// object property</param>
-        /// <param name="isAscending">Whether sorting should be done in ascending
-        /// order ("false" sets it to descending order)</param>
         public void SetSortColumn(string columnName, bool isAscending)
         {
             if (_gridBase.DataSource is DataView)
@@ -295,11 +306,8 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Applies a filter clause to the data table and updates the filter.
-        /// The filter allows you to determine which objects to display using
-        /// some criteria.
+        /// See <see cref="IGridBase.ApplyFilter"/>
         /// </summary>
-        /// <param name="filterClause">The filter clause</param>
         public void ApplyFilter(IFilterClause filterClause)
         {
             if (_dataTableDefaultView == null)
@@ -316,8 +324,9 @@ namespace Habanero.UI.Base
                 _dataTableDefaultView.RowFilter = null;
             }
         }
+        
         /// <summary>
-        /// refreshes the grid with the collection returned by the associated grid.GetBusinessObjectCollection
+        /// See <see cref="IGridBase.RefreshGrid"/>
         /// </summary>
         public void RefreshGrid()
         {
@@ -329,6 +338,9 @@ namespace Habanero.UI.Base
         }
     }
 
+    /// <summary>
+    /// Thrown when a failure occurs while setting up a grid
+    /// </summary>
     public class GridBaseSetUpException : Exception
     {
         public GridBaseSetUpException(SerializationInfo info, StreamingContext context) : base(info, context)
@@ -348,6 +360,10 @@ namespace Habanero.UI.Base
         }
     }
 
+    /// <summary>
+    /// Thrown when a failure occurs on a grid, indicating that Habanero developers
+    /// need to pay attention to aspects of the code
+    /// </summary>
     public class GridDeveloperException : HabaneroDeveloperException
     {
         public GridDeveloperException(string message) : base(message, "")
@@ -367,7 +383,9 @@ namespace Habanero.UI.Base
         }
     }
 
-
+    /// <summary>
+    /// Thrown when a failure occurred during the initialisation of a grid
+    /// </summary>
     public class GridBaseInitialiseException : HabaneroDeveloperException
     {
         public GridBaseInitialiseException(SerializationInfo info, StreamingContext context) : base(info, context)

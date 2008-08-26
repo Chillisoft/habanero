@@ -21,15 +21,22 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Manages a panel that has been created to view or edit business object
+    /// details on a form.  This object is created when you call
+    /// <see cref="IPanelFactory.CreatePanel"/>, and contains references to the
+    /// controls, mappers, the panel control itself and the business object.
+    /// </summary>
     public interface IPanelFactoryInfo
     {
         /// <summary>
-        /// Returns the panel object
+        /// Returns the panel control
         /// </summary>
         IPanel Panel { get; }
 
         /// <summary>
-        /// Returns the collection of control mappers
+        /// Returns the collection of control mappers, which map individual
+        /// controls to the properties on the business object
         /// </summary>
         IControlMapperCollection ControlMappers { get; }
 
@@ -48,18 +55,46 @@ namespace Habanero.UI.Base
         /// </summary>
         IControlChilli FirstControlToFocus { get; }
 
+        /// <summary>
+        /// Gets and sets the tooltip for the panel
+        /// </summary>
         IToolTip ToolTip { get; set; }
 
+        /// <summary>
+        /// Gets and sets the minimum height for the panel
+        /// </summary>
         int MinimumPanelHeight { get; set; }
 
+        /// <summary>
+        /// Gets and sets the minimum width for the panel
+        /// </summary>
         int MinumumPanelWidth { get; set; }
 
+        /// <summary>
+        /// Gets and sets the text for the panel tab
+        /// </summary>
         string PanelTabText { get; set; }
 
+        /// <summary>
+        /// Gets and sets the UIForm definition used to construct the
+        /// panel - this is taken from the class definitions for the
+        /// business object
+        /// </summary>
         UIForm UIForm { get; set; }
 
+        /// <summary>
+        /// Gets the UIFormTab definition used to construct the panel
+        /// for a single tab in the form.  By default, there is one
+        /// tab for a form, even if it has not been explicitly defined.
+        /// </summary>
         UIFormTab UiFormTab { get; set; }
 
+        /// <summary>
+        /// Gets the UI definition name as set in the "name" attribute.
+        /// Multiple definitions are permitted for a business object.  If none
+        /// is specified, the "default" definition will be used, which is a
+        /// UI definition without a "name" attribute.
+        /// </summary>
         string UIDefName { get; }
     }
 }

@@ -26,14 +26,14 @@ namespace Habanero.UI.Base
 {
 
     /// <summary>
-    /// Checks whether the user wants to delete selected rows.
+    /// Checks whether the user wants to delete selected rows
     /// </summary>
     public delegate bool CheckUserConfirmsDeletion();
 
     /// <summary>
     /// Indicates what action should be taken when a selection of
-    /// cells is selected and the Delete key is pressed.  Note that
-    /// this has no correlation to how DataGridView handles the
+    /// cells is selected and the Delete key is pressed.
+    /// This has no correlation to how DataGridView handles the
     /// Delete key when the full row has been selected.
     /// </summary>
     public enum DeleteKeyBehaviours
@@ -48,13 +48,13 @@ namespace Habanero.UI.Base
 
     /// <summary>
     /// Provides a grid on which the user can edit data and add new business objects directly.
-    /// Note that this grid does not provide any buttons or menus for users
+    /// <br/>
+    /// IMPORTANT: This grid does not provide any buttons or menus for users
     /// to save the changes they have made, and all changes will be lost if the form
     /// is closed and changes are not saved programmatically.  Either carry out a dirty check when the
     /// parent form is closed and take appropriate save action using SaveChanges(), or use an
     /// IEditableGridControl, which provides Save and Cancel buttons. 
     /// </summary>
-    /// TODO: Rename the file for this class (is misspelt)
     public interface IEditableGrid : IGridBase
     {
         //IDataGridViewColumnCollection Columns { get; }
@@ -66,12 +66,12 @@ namespace Habanero.UI.Base
         //bool AllowUserToDeleteRows { get; }
         
         /// <summary>
-        /// Restore the grid to its previous saved state.
+        /// Restore the objects in the grid to their last saved state
         /// </summary>
         void RejectChanges();
 
         /// <summary>
-        /// Saves the changes made to the data in the grid.
+        /// Saves the changes made to the data in the grid
         /// </summary>
         void SaveChanges();
         
@@ -82,28 +82,27 @@ namespace Habanero.UI.Base
         bool ConfirmDeletion { get; set; }
 
         /// <summary>
-        /// Checks whether the user wants to delete selected rows.
+        /// Gets or sets the delegate that checks whether the user wants to delete selected rows
         /// </summary>
         CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate{ get; set;}
 
         /// <summary>
         /// Indicates what action should be taken when a selection of
-        /// cells is selected and the Delete key is pressed.  Note that
-        /// this has no correlation to how DataGridView handles the
-        /// Delete key when the full row has been selected, and the default delete
-        /// behaviour of the DataGridView is not overridden in this case.
+        /// cells is selected and the Delete key is pressed.
+        /// This has no correlation to how DataGridView handles the
+        /// Delete key when the full row has been selected.
         /// </summary>
         DeleteKeyBehaviours DeleteKeyBehaviour { get; set; }
 
         /// <summary>
-        /// Carries out actions when the delete key is called on the grid
+        /// Carries out actions when the delete key on the keyboard is pressed
         /// </summary>
         void DeleteKeyHandler();
 
         /// <summary>
         /// Gets or sets whether clicking on a ComboBox cell causes the drop-down to
         /// appear immediately.  Set this to false if the user should click twice
-        /// (first to select, then to edit).
+        /// (first to select, then to edit), which is the default behaviour.
         /// </summary>
         bool ComboBoxClickOnce { get; set; }
     }

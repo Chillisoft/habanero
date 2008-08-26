@@ -22,24 +22,27 @@ using System;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Just stores constants used by both Win and Gizmox wizard controls.
+    /// Stores common constants used by wizard controls
     /// </summary>
     public abstract class WizardControl
     {
         public const int PADDING = 3;
     }
 
-
-    public interface IWizardControl:IControlChilli
+    /// <summary>
+    /// Provides the controls for a wizard, which guides users through a process one
+    /// step at a time.
+    /// </summary>
+    public interface IWizardControl : IControlChilli
     {
-        ///// <summary>
-        ///// Raised when the wizard is complete to notify the containing control or controlling object.
-        ///// </summary>
+        /// <summary>
+        /// Raised when the wizard is complete to notify the containing control or controlling object.
+        /// </summary>
         event EventHandler Finished;
 
-        ///// <summary>
-        ///// Raised when a message is communicated so the controlling object can display or log the message.
-        ///// </summary>
+        /// <summary>
+        /// Raised when a message is communicated so the controlling object can display or log the message.
+        /// </summary>
         event Action<string> MessagePosted;//TODO: Peter what the hell are these things 
 
         /// <summary>
@@ -61,13 +64,12 @@ namespace Habanero.UI.Base
         /// Gets or sets the WizardController.  Upon setting the controller, the Start() method is called to begin the wizard.
         /// </summary>
         IWizardController WizardController { get; set; }
+
         /// <summary>
         /// The panel that the controls are physically being placed on.
         /// </summary>
-        IPanel WizardStepPanel
-        {
-            get;
-        }
+        IPanel WizardStepPanel { get; }
+
         /// <summary>
         /// Gets the Cancel Button so that it can be programmatically interacted with.
         /// </summary>

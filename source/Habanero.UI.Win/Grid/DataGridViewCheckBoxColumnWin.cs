@@ -23,6 +23,9 @@ using Habanero.UI.Win;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Hosts a collection of DataGridViewCheckBoxCell objects
+    /// </summary>
     public class DataGridViewCheckBoxColumnWin : DataGridViewColumnWin, IDataGridViewCheckBoxColumn
     {
         private readonly DataGridViewCheckBoxColumn _dataGridViewCheckBoxColumn;
@@ -34,8 +37,9 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>Gets or sets the underlying value corresponding to a cell value of false, which appears as an unchecked box.</summary>
-        /// <returns>An <see cref="T:System.Object"></see> representing a value that the cells in this column will treat as a false value. The default is null.</returns>
-        /// <exception cref="T:System.InvalidOperationException">The value of the <see cref="IDataGridViewCheckBoxColumn.CellTemplate"></see> property is null. </exception>
+        /// <returns>An <see cref="T:System.Object"></see> representing a value that the cells in this column 
+        /// will treat as a false value. The default is null.</returns>
+        /// <exception cref="T:System.InvalidOperationException">The value of the CellTemplate property is null. </exception>
         /// <filterpriority>1</filterpriority>
         public object FalseValue
         {
@@ -43,9 +47,11 @@ namespace Habanero.UI.Win
             set { _dataGridViewCheckBoxColumn.FalseValue = value; }
         }
 
-        /// <summary>Gets or sets the underlying value corresponding to an indeterminate or null cell value, which appears as a disabled checkbox.</summary>
-        /// <returns>An <see cref="T:System.Object"></see> representing a value that the cells in this column will treat as an indeterminate value. The default is null.</returns>
-        /// <exception cref="T:System.InvalidOperationException">The value of the <see cref="IDataGridViewCheckBoxColumn.CellTemplate"></see> property is null. </exception>
+        /// <summary>Gets or sets the underlying value corresponding to an indeterminate or null cell value, 
+        /// which appears as a disabled checkbox.</summary>
+        /// <returns>An <see cref="T:System.Object"></see> representing a value that the cells in this column 
+        /// will treat as an indeterminate value. The default is null.</returns>
+        /// <exception cref="T:System.InvalidOperationException">The value of the CellTemplate property is null. </exception>
         /// <filterpriority>1</filterpriority>
         public object IndeterminateValue
         {
@@ -54,7 +60,8 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>Gets or sets a value indicating whether the hosted check box cells will allow three check states rather than two.</summary>
-        /// <returns>true if the hosted DataGridViewCheckBoxCell" objects are able to have a third, indeterminate, state; otherwise, false. The default is false.</returns>
+        /// <returns>true if the hosted DataGridViewCheckBoxCell" objects are able to have a third, 
+        /// indeterminate, state; otherwise, false. The default is false.</returns>
         /// <exception cref="T:System.InvalidOperationException">The value of the DataGridViewCheckBoxColumn.CellTemplate property is null.</exception>
         /// <filterpriority>1</filterpriority>
         public bool ThreeState

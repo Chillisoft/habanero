@@ -26,19 +26,34 @@ using ScrollBars=Habanero.UI.Base.ScrollBars;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Represents a TextBox control
+    /// </summary>
     public class TextBoxGiz : TextBox, ITextBox
     {
         private string _errorMessage = "";
+
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(base.Controls); }
         }
+
+        /// <summary>
+        /// Gets or sets which control borders are docked to its parent
+        /// control and determines how a control is resized with its parent
+        /// </summary>
         Base.DockStyle IControlChilli.Dock
         {
             get { return (Base.DockStyle)base.Dock; }
             set { base.Dock = (Gizmox.WebGUI.Forms.DockStyle)value; }
         }
 
+        /// <summary>
+        /// Gets or sets which scroll bars should appear in a multiline TextBox control
+        /// </summary>
         ScrollBars ITextBox.ScrollBars
         {
             get { return (ScrollBars) ScrollBars; }

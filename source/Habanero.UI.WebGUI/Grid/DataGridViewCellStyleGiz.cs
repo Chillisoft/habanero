@@ -25,6 +25,10 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI.Grid
 {
+    /// <summary>
+    /// Represents the formatting and style information applied to individual cells 
+    /// within a DataGridView control.
+    /// </summary>
     internal class DataGridViewCellStyleGiz : IDataGridViewCellStyle
     {
         private readonly DataGridViewCellStyle _dataGridViewCellStyle;
@@ -39,8 +43,10 @@ namespace Habanero.UI.WebGUI.Grid
             get { return _dataGridViewCellStyle; }
         }
 
-        /// <summary>Applies the specified <see cref="IDataGridViewCellStyle"></see> to the current <see cref="IDataGridViewCellStyle"></see>.</summary>
-        /// <param name="dataGridViewCellStyle">The <see cref="IDataGridViewCellStyle"></see> to apply to the current <see cref="IDataGridViewCellStyle"></see>.</param>
+        /// <summary>Applies the specified <see cref="IDataGridViewCellStyle"></see> to the current 
+        /// <see cref="IDataGridViewCellStyle"></see>.</summary>
+        /// <param name="dataGridViewCellStyle">The <see cref="IDataGridViewCellStyle"></see> to apply 
+        /// to the current <see cref="IDataGridViewCellStyle"></see>.</param>
         /// <exception cref="T:System.ArgumentNullException">dataGridViewCellStyle is null.</exception>
         /// <filterpriority>1</filterpriority>
         public void ApplyStyle(IDataGridViewCellStyle dataGridViewCellStyle)

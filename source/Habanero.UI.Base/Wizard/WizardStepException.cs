@@ -26,7 +26,6 @@ namespace Habanero.UI.Base
     /// </summary>
     public class WizardStepException : Exception
     {
-
         /// <summary>
         /// Initialises the WizardStepException
         /// </summary>
@@ -36,6 +35,10 @@ namespace Habanero.UI.Base
             
         }
     }
+
+    /// <summary>
+    /// Thrown when a wizard step is used but has not been initialised
+    /// </summary>
     public class WizardStepNotInitialised : WizardStepException
     {
         public WizardStepNotInitialised(string message) : base(message)

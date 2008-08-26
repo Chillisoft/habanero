@@ -20,13 +20,10 @@
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Manages the layout of controls in a user interface by having
+    /// Manages the layout of controls in a user interface by having a
     /// component assigned a compass position.  For instance, having the
     /// "east" position assigned will result in the control being placed
-    /// against the right border.<br/>
-    /// Unlike similar tools available in the dotNet framework, this
-    /// layout manager allows the controls to be added in any order and
-    /// still be positioned correctly.
+    /// against the right border.
     /// </summary>
     public abstract class BorderLayoutManager : LayoutManager
     {
@@ -37,18 +34,23 @@ namespace Habanero.UI.Base
         public enum Position
         {
             ///<summary>
+            /// Centre position
             ///</summary>
             Centre = 0,
             ///<summary>
+            /// East position (right)
             ///</summary>
             East = 1,
             ///<summary>
+            /// West position (left)
             ///</summary>
             West = 2,
             ///<summary>
+            /// North position (top)
             ///</summary>
             North = 3,
             ///<summary>
+            /// South position (bottom)
             ///</summary>
             South = 4
         }
@@ -75,19 +77,38 @@ namespace Habanero.UI.Base
            
         }
 
+        /// <summary>
+        /// Add a control to the layout
+        /// </summary>
+        /// <param name="control">The control to add</param>
+        /// <returns>Returns the control added</returns>
         public override IControlChilli AddControl(IControlChilli control)
         {
             this.ManagedControl.Controls.Add(control);
             return control;
         }
 
+        /// <summary>
+        /// Add a control to the layout at the specified position
+        /// </summary>
+        /// <param name="control">The control to add</param>
+        /// <param name="pos">The position at which to add the control</param>
+        /// <returns>Returns the control added</returns>
         public IControlChilli AddControl(IControlChilli control, Position pos)
         {
             AddControl(control,pos,false);
             return control;
         }
 
+        /// <summary>
+        /// Add a control to the layout
+        /// </summary>
+        /// <param name="control">The control to add</param>
+        /// /// <param name="pos">The position at which to add the control</param>
+        /// <param name="includeSplitter">True to include a splitter between the controls</param>
+        /// <returns>Returns the control added</returns>
         public abstract IControlChilli AddControl(IControlChilli control, Position pos, bool includeSplitter);
+
         protected abstract void SetupDockOfControl(IControlChilli control, Position pos);
 
  

@@ -52,9 +52,10 @@ using System.ComponentModel;
 namespace Habanero.UI.Base
 {
 	/// <summary>
-	/// ValidationRule is designed to be a simple as possible to
-	/// reduce overhead in run-time.  It's because each validation
-	/// rule can be attach to a control, so we can have a many
+	/// Provides a validation rule that checks if the value in a control
+	/// is valid.  ValidationRule is designed to be a simple as possible to
+	/// reduce overhead in run-time.  Because each validation
+	/// rule can be attach to a control, there could be many
 	/// instances of this class.
 	/// </summary>
 	public class ValidationRule : ICloneable

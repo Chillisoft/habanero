@@ -50,7 +50,7 @@ namespace Habanero.Test.UI.Base
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
 
                 //---------------Execute Test ----------------------
-                _selector.Options = CreateListWithTwoOptions();
+                _selector.AllOptions = CreateListWithTwoOptions();
 
                 //---------------Test Result -----------------------
                 Assert.IsFalse(_selector.GetButton(MultiSelectorButton.Select).Enabled);
@@ -62,7 +62,7 @@ namespace Habanero.Test.UI.Base
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                _selector.Options = CreateListWithTwoOptions();
+                _selector.AllOptions = CreateListWithTwoOptions();
                 //---------------Execute Test ----------------------
 
                 _selector.AvailableOptionsListBox.SelectedIndex = 0;
@@ -77,7 +77,7 @@ namespace Habanero.Test.UI.Base
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                _selector.Options = CreateListWithTwoOptions();
+                _selector.AllOptions = CreateListWithTwoOptions();
                 _selector.AvailableOptionsListBox.SelectedIndex = 0;
                 //---------------Execute Test ----------------------
                 _selector.AvailableOptionsListBox.SelectedIndex = -1;
@@ -92,9 +92,9 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
                 List<TestT> options = CreateListWithTwoOptions();
-                _selector.Options = options;
+                _selector.AllOptions = options;
                 //---------------Execute Test ----------------------
-                _selector.Selections = options;
+                _selector.SelectedOptions = options;
 
                 //---------------Test Result -----------------------
                 Assert.IsFalse(_selector.GetButton(MultiSelectorButton.Deselect).Enabled);
@@ -107,8 +107,8 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
                 List<TestT> options = CreateListWithTwoOptions();
-                _selector.Options = options;
-                _selector.Selections = options;
+                _selector.AllOptions = options;
+                _selector.SelectedOptions = options;
                 //---------------Execute Test ----------------------
 
                 _selector.SelectionsListBox.SelectedIndex = 0;
@@ -124,8 +124,8 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
                 List<TestT> options = CreateListWithTwoOptions();
-                _selector.Options = options;
-                _selector.Selections = options;
+                _selector.AllOptions = options;
+                _selector.SelectedOptions = options;
                 _selector.SelectionsListBox.SelectedIndex = 0;
                 //---------------Execute Test ----------------------
                 _selector.SelectionsListBox.SelectedIndex = -1;
@@ -151,7 +151,7 @@ namespace Habanero.Test.UI.Base
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
 
                 //---------------Execute Test ----------------------
-                _selector.Options = CreateListWithTwoOptions();
+                _selector.AllOptions = CreateListWithTwoOptions();
 
                 //---------------Test Result -----------------------
                 Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Select).Enabled);
@@ -163,7 +163,7 @@ namespace Habanero.Test.UI.Base
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                _selector.Options = CreateListWithTwoOptions();
+                _selector.AllOptions = CreateListWithTwoOptions();
                 //---------------Execute Test ----------------------
 
                 _selector.AvailableOptionsListBox.SelectedIndex = 0;
@@ -178,7 +178,7 @@ namespace Habanero.Test.UI.Base
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                _selector.Options = CreateListWithTwoOptions();
+                _selector.AllOptions = CreateListWithTwoOptions();
                 _selector.AvailableOptionsListBox.SelectedIndex = 0;
                 //---------------Execute Test ----------------------
                 _selector.AvailableOptionsListBox.SelectedIndex = -1;
@@ -192,7 +192,7 @@ namespace Habanero.Test.UI.Base
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-                _selector.Options = CreateListWithTwoOptions();
+                _selector.AllOptions = CreateListWithTwoOptions();
                 _selector.AvailableOptionsListBox.SelectedIndex = -1;
                 //---------------Execute Test ----------------------
 
@@ -210,9 +210,9 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
                 List<TestT> options = CreateListWithTwoOptions();
-                _selector.Options = options;
+                _selector.AllOptions = options;
                 //---------------Execute Test ----------------------
-                _selector.Selections = options;
+                _selector.SelectedOptions = options;
 
                 //---------------Test Result -----------------------
                 Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Deselect).Enabled);
@@ -225,8 +225,8 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
                 List<TestT> options = CreateListWithTwoOptions();
-                _selector.Options = options;
-                _selector.Selections = options;
+                _selector.AllOptions = options;
+                _selector.SelectedOptions = options;
                 //---------------Execute Test ----------------------
 
                 _selector.SelectionsListBox.SelectedIndex = 0;
@@ -242,8 +242,8 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
                 List<TestT> options = CreateListWithTwoOptions();
-                _selector.Options = options;
-                _selector.Selections = options;
+                _selector.AllOptions = options;
+                _selector.SelectedOptions = options;
                 _selector.SelectionsListBox.SelectedIndex = 0;
                 //---------------Execute Test ----------------------
                 _selector.SelectionsListBox.SelectedIndex = -1;
@@ -265,7 +265,7 @@ namespace Habanero.Test.UI.Base
             }
         }
 
-        #region Test Options List
+        #region Test AllOptions List
 
         [Test]
         public void TestCreateMultiSelector()
@@ -290,7 +290,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(0, _selector.AvailableOptionsListBox.Items.Count);
             Assert.AreEqual(0, _selector.SelectionsListBox.Items.Count);
             //---------------Execute Test ----------------------
-            _selector.Options = twoOptions;
+            _selector.AllOptions = twoOptions;
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, _selector.AvailableOptionsListBox.Items.Count);
@@ -306,7 +306,7 @@ namespace Habanero.Test.UI.Base
             List<TestT> twoOptions = CreateListWithTwoOptions();
 
             //---------------Execute Test ----------------------
-            _selector.Options = twoOptions;
+            _selector.AllOptions = twoOptions;
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, _selector.Model.OptionsView.Count);
@@ -319,7 +319,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-            _selector.Options = CreateListWithTwoOptions();
+            _selector.AllOptions = CreateListWithTwoOptions();
 
             //---------------Execute Test ----------------------
             _selector.Model.AddOption(new TestT());
@@ -334,7 +334,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-            _selector.Options = CreateListWithTwoOptions();
+            _selector.AllOptions = CreateListWithTwoOptions();
 
             //---------------Execute Test ----------------------
             _selector.Model.RemoveOption(_selector.Model.OptionsView[0]);
@@ -352,7 +352,7 @@ namespace Habanero.Test.UI.Base
             List<TestT> twoOptions = CreateListWithTwoOptions();
 
             //---------------Execute Test ----------------------
-            _selector.Model.Options = twoOptions;
+            _selector.Model.AllOptions = twoOptions;
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, _selector.AvailableOptionsListBox.Items.Count);
@@ -365,10 +365,10 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-            _selector.Model.Options = CreateListWithTwoOptions();
+            _selector.Model.AllOptions = CreateListWithTwoOptions();
 
             //---------------Execute Test ----------------------
-            _selector.Model.Options = new List<TestT>();
+            _selector.Model.AllOptions = new List<TestT>();
             //---------------Test Result -----------------------
             Assert.AreEqual(0, _selector.AvailableOptionsListBox.Items.Count);
             //---------------Tear Down -------------------------          
@@ -379,16 +379,16 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-            _selector.Model.Options = CreateListWithTwoOptions();
-            Assert.AreEqual(_selector.Options, _selector.Model.Options);
+            _selector.Model.AllOptions = CreateListWithTwoOptions();
+            Assert.AreEqual(_selector.AllOptions, _selector.Model.AllOptions);
             //---------------Execute Test ----------------------
-            _selector.Options = new List<TestT>();
+            _selector.AllOptions = new List<TestT>();
             //---------------Test Result -----------------------
-            Assert.AreEqual(_selector.Options, _selector.Model.Options);
+            Assert.AreEqual(_selector.AllOptions, _selector.Model.AllOptions);
             //---------------Tear Down ------------------------- 
         }
 
-        #endregion Test Options List
+        #endregion Test AllOptions List
 
         #region Test selections List
 
@@ -398,10 +398,10 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
             List<TestT> twoOptions = CreateListWithTwoOptions();
-            _selector.Options = twoOptions;
+            _selector.AllOptions = twoOptions;
 
             //---------------Execute Test ----------------------
-            _selector.Selections = twoOptions;
+            _selector.SelectedOptions = twoOptions;
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, _selector.SelectionsListBox.Items.Count);
@@ -415,10 +415,10 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
             List<TestT> twoOptions = CreateListWithTwoOptions();
-            _selector.Options = twoOptions;
+            _selector.AllOptions = twoOptions;
 
             //---------------Execute Test ----------------------
-            _selector.Selections = twoOptions;
+            _selector.SelectedOptions = twoOptions;
 
             //---------------Test Result -----------------------
             Assert.AreEqual(0, _selector.AvailableOptionsListBox.Items.Count);
@@ -432,11 +432,11 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
             List<TestT> twoOptions = CreateListWithTwoOptions();
-            _selector.Options = twoOptions;
-            _selector.Selections = twoOptions;
+            _selector.AllOptions = twoOptions;
+            _selector.SelectedOptions = twoOptions;
 
             //---------------Execute Test ----------------------
-            _selector.Selections = new List<TestT>();
+            _selector.SelectedOptions = new List<TestT>();
             //---------------Test Result -----------------------
             AssertNoneSelected(_selector);
 
@@ -448,12 +448,12 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-            _selector.Model.Selections = CreateListWithTwoOptions();
-            Assert.AreEqual(_selector.Selections, _selector.Model.Selections);
+            _selector.Model.SelectedOptions = CreateListWithTwoOptions();
+            Assert.AreEqual(_selector.SelectedOptions, _selector.Model.SelectedOptions);
             //---------------Execute Test ----------------------
-            _selector.Options = new List<TestT>();
+            _selector.AllOptions = new List<TestT>();
             //---------------Test Result -----------------------
-            Assert.AreEqual(_selector.Selections, _selector.Model.Selections);
+            Assert.AreEqual(_selector.SelectedOptions, _selector.Model.SelectedOptions);
             //---------------Tear Down ------------------------- 
         }
 
@@ -466,7 +466,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-            _selector.Options = CreateListWithTwoOptions();
+            _selector.AllOptions = CreateListWithTwoOptions();
 
             //---------------Execute Test ----------------------
             _selector.Model.Select(_selector.Model.OptionsView[0]);
@@ -482,7 +482,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-            _selector.Options = CreateListWithTwoOptions();
+            _selector.AllOptions = CreateListWithTwoOptions();
             _selector.Model.Select(_selector.Model.OptionsView[0]);
 
             //---------------Execute Test ----------------------
@@ -498,7 +498,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-            _selector.Options = CreateListWithTwoOptions();
+            _selector.AllOptions = CreateListWithTwoOptions();
 
             //---------------Execute Test ----------------------
             _selector.Model.SelectAll();
@@ -515,7 +515,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-            _selector.Options = CreateListWithTwoOptions();
+            _selector.AllOptions = CreateListWithTwoOptions();
             _selector.Model.SelectAll();
 
             //---------------Execute Test ----------------------
@@ -535,7 +535,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-            _selector.Options = CreateListWithTwoOptions();
+            _selector.AllOptions = CreateListWithTwoOptions();
             _selector.AvailableOptionsListBox.SelectedIndex = 0;
 
             //---------------Execute Test ----------------------
@@ -554,7 +554,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-            _selector.Options = CreateListWithTwoOptions();
+            _selector.AllOptions = CreateListWithTwoOptions();
             ReadOnlyCollection<TestT> options = _selector.Model.OptionsView;
             IListBox availableOptionsListbox = _selector.AvailableOptionsListBox;
             availableOptionsListbox.SelectedItems.Add(options[0]);
@@ -579,7 +579,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-            _selector.Options = CreateListWithTwoOptions();
+            _selector.AllOptions = CreateListWithTwoOptions();
             ReadOnlyCollection<TestT> options = _selector.Model.OptionsView;
             IListBox availableOptionsListbox = _selector.AvailableOptionsListBox;
             availableOptionsListbox.SelectedItems.Add(options[0]);
@@ -599,7 +599,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-            _selector.Options = CreateListWithTwoOptions();
+            _selector.AllOptions = CreateListWithTwoOptions();
             _selector.Model.Select(_selector.Model.OptionsView[0]);
             _selector.SelectionsListBox.SelectedIndex = 0;
 
@@ -620,7 +620,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
             List<TestT> options = CreateListWithTwoOptions();
-            _selector.Options = options;
+            _selector.AllOptions = options;
             _selector.Model.SelectAll();
             _selector.SelectionsListBox.SelectedItems.Add(options[0]);
             _selector.SelectionsListBox.SelectedItems.Add(options[1]);
@@ -637,7 +637,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-            _selector.Options = CreateListWithTwoOptions();
+            _selector.AllOptions = CreateListWithTwoOptions();
 
             //---------------Execute Test ----------------------
             _selector.GetButton(MultiSelectorButton.SelectAll).PerformClick();
@@ -652,7 +652,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
-            _selector.Options = CreateListWithTwoOptions();
+            _selector.AllOptions = CreateListWithTwoOptions();
             _selector.Model.SelectAll();
 
             //---------------Execute Test ----------------------

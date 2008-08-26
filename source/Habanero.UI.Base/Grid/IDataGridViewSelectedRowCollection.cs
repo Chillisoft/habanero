@@ -21,11 +21,19 @@ using System.Collections;
 
 namespace Habanero.UI.Base
 {
-
+    /// <summary>
+    /// Represents a collection of DataGridViewRow objects that are selected in a DataGridView
+    /// </summary>
     public interface IDataGridViewSelectedRowCollection : IEnumerable
     {
+        /// <summary>
+        /// Gets the total number of rows in the collection
+        /// </summary>
         int Count { get; }
 
+        /// <summary>
+        /// Gets the row at the specified index.
+        /// </summary>
         IDataGridViewRow this[int index] { get; }
     }
 }

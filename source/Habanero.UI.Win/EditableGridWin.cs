@@ -30,7 +30,8 @@ namespace Habanero.UI.Win
 {
     /// <summary>
     /// Provides a grid on which the user can edit data and add new business objects directly.
-    /// Note that this grid does not provide any buttons or menus for users
+    /// <br/>
+    /// IMPORTANT: This grid does not provide any buttons or menus for users
     /// to save the changes they have made, and all changes will be lost if the form
     /// is closed and changes are not saved programmatically.  Either carry out a dirty check when the
     /// parent form is closed and take appropriate save action using SaveChanges(), or use an
@@ -68,7 +69,7 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Restore the grid to its previous saved state.
+        /// Restore the objects in the grid to their last saved state
         /// </summary>
         public void RejectChanges()
         {
@@ -79,7 +80,7 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Saves the changes made to the data in the grid.
+        /// Saves the changes made to the data in the grid
         /// </summary>
         public void SaveChanges()
         {
@@ -101,7 +102,7 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Checks whether the user wants to delete selected rows.
+        /// Gets or sets the delegate that checks whether the user wants to delete selected rows
         /// </summary>
         public CheckUserConfirmsDeletion CheckUserConfirmsDeletionDelegate
         {
@@ -111,10 +112,9 @@ namespace Habanero.UI.Win
 
         /// <summary>
         /// Indicates what action should be taken when a selection of
-        /// cells is selected and the Delete key is pressed.  Note that
-        /// this has no correlation to how DataGridView handles the
-        /// Delete key when the full row has been selected, and the default delete
-        /// behaviour of the DataGridView is not overridden in this case.
+        /// cells is selected and the Delete key is pressed.
+        /// This has no correlation to how DataGridView handles the
+        /// Delete key when the full row has been selected.
         /// </summary>
         public DeleteKeyBehaviours DeleteKeyBehaviour
         {
@@ -165,7 +165,7 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Carries out actions when the delete key is called on the grid
+        /// Carries out actions when the delete key on the keyboard is pressed
         /// </summary>
         public void DeleteKeyHandler()
         {
@@ -205,7 +205,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets or sets whether clicking on a ComboBox cell causes the drop-down to
         /// appear immediately.  Set this to false if the user should click twice
-        /// (first to select, then to edit).
+        /// (first to select, then to edit), which is the default behaviour.
         /// </summary>
         public bool ComboBoxClickOnce
         {

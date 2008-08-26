@@ -19,12 +19,28 @@
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Represents a column of DataGridViewComboBoxCell objects
+    /// </summary>
     public interface IDataGridViewComboBoxColumn : IDataGridViewColumn
     {
         //IComboBoxObjectCollection Items { get;}
 
+        /// <summary>
+        /// Gets or sets the data source that populates the selections for the combo boxes
+        /// </summary>
         object DataSource { get; set; }
+
+        /// <summary>
+        /// Gets or sets a string that specifies the property or column from
+        /// which to get values that correspond to the selections in the drop-down list.
+        /// </summary>
         string ValueMember { get; set; }
+
+        /// <summary>
+        /// Gets or sets a string that specifies the property or column from which to
+        ///  retrieve strings for display in the combo boxes.
+        /// </summary>
         string DisplayMember { get; set; }
     }
 }

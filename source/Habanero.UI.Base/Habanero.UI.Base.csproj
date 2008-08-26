@@ -64,6 +64,7 @@
     <Compile Include="Grid\IDataGridViewImageColumn.cs" />
     <Compile Include="Grid\IDataGridViewSelectedCellCollection.cs" />
     <Compile Include="Grid\IDataGridViewTextBoxColumn.cs" />
+    <Compile Include="Grid\IEditableGrid.cs" />
     <Compile Include="Grid\IEditableGridButtonsControl.cs" />
     <Compile Include="Grid\IGridControl.cs" />
     <Compile Include="Grid\IGridInitialiser.cs" />
@@ -72,7 +73,6 @@
     <Compile Include="Grid\EditableGridControlManager.cs" />
     <Compile Include="Grid\GridInitialiser.cs" />
     <Compile Include="Grid\IEditableGridControl.cs" />
-    <Compile Include="Grid\IEdtiableGrid.cs" />
     <Compile Include="FileChooserManager.cs" />
     <Compile Include="IColumnHeaderCollection.cs" />
     <Compile Include="ControlMappers\ListViewCollectionSelector.cs" />

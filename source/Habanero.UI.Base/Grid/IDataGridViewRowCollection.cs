@@ -22,13 +22,20 @@ using System.ComponentModel;
 
 namespace Habanero.UI.Base
 {
-    public interface IDataGridViewRowCollection :IEnumerable
+    /// <summary>
+    /// A collection of DataGridViewRow objects
+    /// </summary>
+    public interface IDataGridViewRowCollection : IEnumerable
     {
+        /// <summary>
+        /// Gets the number of rows in the collection
+        /// </summary>
         int Count { get; }
 
         /// <summary>Gets the <see cref="IDataGridViewRow"></see> at the specified index.</summary>
-        /// <returns>The <see cref="IDataGridViewRow"></see> at the specified index. Accessing a <see cref="IDataGridViewRow"></see> with this indexer causes the row to become unshared. 
-        /// To keep the row shared, use the <see cref="IDataGridViewRowCollection.SharedRow(System.Int32)"></see> method. 
+        /// <returns>The <see cref="IDataGridViewRow"></see> at the specified index. Accessing
+        ///  a <see cref="IDataGridViewRow"></see> with this indexer causes the row to become unshared. 
+        /// To keep the row shared, use the SharedRow method. 
         /// For more information, see Best Practices for Scaling the Windows Forms DataGridView Control.</returns>
         /// <param name="index">The zero-based index of the <see cref="IDataGridViewRow"></see> to get.</param>
         /// <filterpriority>1</filterpriority>
@@ -36,8 +43,18 @@ namespace Habanero.UI.Base
 
         /// <summary>Adds a new row to the collection, and populates the cells with the specified objects.</summary>
         /// <returns>The index of the new row.</returns>
-        /// <param name="values">A variable number of objects that populate the cells of the new <see cref="IDataGridViewRow"></see>.</param>
-        /// <exception cref="T:System.InvalidOperationException">The associated <see cref="IDataGridView"></see> control is performing one of the following actions that temporarily prevents new rows from being added:Selecting all cells in the control.Clearing the selection.-or-This method is being called from a handler for one of the following <see cref="IDataGridView"></see> events:<see cref="IDataGridView.CellEnter"></see><see cref="IDataGridView.CellLeave"></see><see cref="IDataGridView.CellValidating"></see><see cref="IDataGridView.CellValidated"></see><see cref="IDataGridView.RowEnter"></see><see cref="IDataGridView.RowLeave"></see><see cref="IDataGridView.RowValidated"></see><see cref="IDataGridView.RowValidating"></see>-or-The <see cref="IDataGridView.VirtualMode"></see> property of the <see cref="IDataGridView"></see> is set to true.- or -The <see cref="IDataGridView.DataSource"></see> property of the <see cref="IDataGridView"></see> is not null.-or-The <see cref="IDataGridView"></see> has no columns. -or-The row returned by the <see cref="IDataGridView.RowTemplate"></see> property has more cells than there are columns in the control.-or-This operation would add a frozen row after unfrozen rows.</exception>
+        /// <param name="values">A variable number of objects that populate the cells of the
+        ///  new <see cref="IDataGridViewRow"></see>.</param>
+        /// <exception cref="T:System.InvalidOperationException">The associated <see cref="IDataGridView"></see> 
+        /// control is performing one of the following actions that temporarily prevents new rows from 
+        /// being added:Selecting all cells in the control.Clearing the selection.-or-This method is 
+        /// being called from a handler for one of the following <see cref="IDataGridView"></see>
+        ///  events: CellEnter, CellLeave, CellValidating, CellValidated, RowEnter, RowLeave, RowValidated,
+        /// RowValidating, -or-The VirtualMode property of the <see cref="IDataGridView"></see> is set to
+        ///  true.- or -The <see cref="IDataGridView.DataSource"></see> property of the
+        ///  <see cref="IDataGridView"></see> is not null.-or-The <see cref="IDataGridView"></see> has no
+        ///  columns. -or-The row returned by the RowTemplate property has more cells than there are columns 
+        /// in the control.-or-This operation would add a frozen row after unfrozen rows.</exception>
         /// <exception cref="T:System.ArgumentNullException">values is null.</exception>
         /// <filterpriority>1</filterpriority>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

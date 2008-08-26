@@ -38,8 +38,7 @@ namespace Habanero.UI.Base
     public delegate bool PermitComboBoxRightClickDelegate(Type boClassType, IControlMapper controlMapper);
 
     /// <summary>
-    /// An interface to model a class that stores application-wide
-    /// settings for the user interface
+    /// Provides a store of application-wide user interface settings
     /// </summary>
     public interface IUISettings
     {

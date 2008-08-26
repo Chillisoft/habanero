@@ -21,7 +21,11 @@ using Habanero.Base;
 
 namespace Habanero.UI.Base
 {
-
+    ///<summary>
+    /// Provides a controller that deletes business objects.  Where used, this
+    /// can be replaced with a customised version that inherits from
+    /// <see cref="IBusinessObjectDeletor"/>.
+    ///</summary>
     public class DefaultBODeletor : IBusinessObjectDeletor
     {
         public virtual void DeleteBusinessObject(IBusinessObject businessObject)

@@ -29,8 +29,9 @@ namespace Habanero.Base
     ///</summary>
     ///<param name="bo"></param>
     public delegate void PostObjectPersistingDelegate(IBusinessObject bo);
+
     /// <summary>
-    /// An interface to model an object editor
+    /// Provides a facility to edit business objects
     /// </summary>
     public interface IBusinessObjectEditor
     {
@@ -44,6 +45,7 @@ namespace Habanero.Base
         /// <returns>Returs true if edited successfully of false if the edits
         /// were cancelled</returns>
         bool EditObject(IBusinessObject obj, string uiDefName);
+
         /// <summary>
         /// Edits the given object
         /// </summary>
@@ -59,7 +61,7 @@ namespace Habanero.Base
     }
 
     /// <summary>
-    /// An interface to model an object editor
+    /// Provides a facility to edit business objects of a specific type
     /// </summary>
     public interface IBusinessObjectEditor<T> : IBusinessObjectEditor
     {

@@ -23,11 +23,16 @@ using System.Drawing;
 
 namespace Habanero.UI.Base
 {
-    /// <summary>Represents the formatting and style information applied to individual cells within a <see cref="IDataGridView"></see> control.</summary>
+    /// <summary>
+    /// Represents the formatting and style information applied to individual cells 
+    /// within a DataGridView control.
+    /// </summary>
     public interface IDataGridViewCellStyle
     {
-        /// <summary>Applies the specified <see cref="IDataGridViewCellStyle"></see> to the current <see cref="IDataGridViewCellStyle"></see>.</summary>
-        /// <param name="dataGridViewCellStyle">The <see cref="IDataGridViewCellStyle"></see> to apply to the current <see cref="IDataGridViewCellStyle"></see>.</param>
+        /// <summary>Applies the specified <see cref="IDataGridViewCellStyle"></see> to the current 
+        /// <see cref="IDataGridViewCellStyle"></see>.</summary>
+        /// <param name="dataGridViewCellStyle">The <see cref="IDataGridViewCellStyle"></see> to apply 
+        /// to the current <see cref="IDataGridViewCellStyle"></see>.</param>
         /// <exception cref="T:System.ArgumentNullException">dataGridViewCellStyle is null.</exception>
         /// <filterpriority>1</filterpriority>
         void ApplyStyle(IDataGridViewCellStyle dataGridViewCellStyle);

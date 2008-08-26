@@ -19,6 +19,9 @@
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Used to group collections of controls
+    /// </summary>
     public interface IPanel : IControlChilli
     {
     }

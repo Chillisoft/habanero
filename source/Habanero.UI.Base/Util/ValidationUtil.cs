@@ -56,8 +56,8 @@ namespace Habanero.UI.Base
 {
 	/// <summary>
 	/// Provide comparison of string data.  This class currently
-	/// implement System.Web.UI.WebControls validation so that
-	/// we don't have to write more codes.  Eventually, we may want
+	/// implements System.Web.UI.WebControls validation so that
+	/// we don't have to write more code.  Eventually, we may want
 	/// to implement out own code.
 	/// </summary>
 	internal class ValidationUtil : BaseCompareValidator

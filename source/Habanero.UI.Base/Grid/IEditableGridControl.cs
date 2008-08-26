@@ -24,27 +24,34 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
 {
-    public interface IEditableGridControl:IGridControl
+    /// <summary>
+    /// Provides a combination of editable grid, filter and buttons used to edit a
+    /// collection of business objects
+    /// </summary>
+    public interface IEditableGridControl : IGridControl
     {
         /// <summary>
         /// Sets the business object collection to display.  Loading of
         /// the collection needs to be done before it is assigned to the
-        /// grid.  This method assumes a default ui definition is to be
+        /// grid.  This method assumes a default UI definition is to be
         /// used, that is a 'ui' element without a 'name' attribute.
         /// </summary>
         /// <param name="boCollection">The new business object collection
         /// to be shown in the grid</param>
         void SetBusinessObjectCollection(IBusinessObjectCollection boCollection);
 
+        /// <summary>
+        /// Gets the buttons control used to save and cancel changes
+        /// </summary>
         IEditableGridButtonsControl Buttons { get; }
 
         /// <summary>
-        /// returns the filter control for the readonly grid
+        /// Gets the filter control used to filter which rows are shown in the grid
         /// </summary>
         IFilterControl FilterControl { get; }
 
         /// <summary>
-        /// gets and sets the filter modes for the grid i.e. Filter or search <see cref="FilterModes"/>
+        /// Gets and sets the filter modes for the grid (i.e. filter or search). See <see cref="FilterModes"/>.
         /// </summary>
         FilterModes FilterMode { get; set; }
 

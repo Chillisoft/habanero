@@ -24,9 +24,10 @@ using System.Text;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Provides a set of buttons for an editable grid control
+    /// Provides a set of buttons for use on an <see cref="IEditableGridControl"/>.
+    /// By default, Save and Cancel buttons are available.
     /// </summary>
-    public interface IEditableGridButtonsControl:IButtonGroupControl
+    public interface IEditableGridButtonsControl : IButtonGroupControl
     {
         /// <summary>
         /// Fires when the Save button is clicked

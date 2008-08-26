@@ -24,13 +24,14 @@ using System.Collections.ObjectModel;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// The model for the multiselector control. The type of the items in 
+    /// The model for the multiselector control, which manages the lists of
+    /// items in the multi-selector. The type of the items in 
     /// the lists is set by the template type.
     /// </summary>
     public class MultiSelectorModel<T>
     {
-        private List<T> _options;
-        private List<T> _selections;
+        private List<T> _allOptions;
+        private List<T> _selectedOptions;
         private List<T> _originalSelections;
 
         public event EventHandler OptionsChanged;
@@ -40,10 +41,10 @@ namespace Habanero.UI.Base
         public event EventHandler<ModelEventArgs<T>> Selected;
         public event EventHandler<ModelEventArgs<T>> Deselected;
 
-        ///<summary>
+        /// <summary>
         /// The Event Arguements for the Multiselector Model
-        ///</summary>
-        ///<typeparam name="T"></typeparam>
+        /// </summary>
+        /// <typeparam name="T">The object type used for the item</typeparam>
         public class ModelEventArgs<T> : EventArgs
         {
             private readonly T _item;
@@ -57,6 +58,9 @@ namespace Habanero.UI.Base
                 _item = item;
             }
 
+            /// <summary>
+            /// Gets the affected item
+            /// </summary>
             public T Item
             {
                 get { return _item; }
@@ -69,28 +73,28 @@ namespace Habanero.UI.Base
         public MultiSelectorModel()
         {
             _originalSelections = new List<T>();
-            _selections = new List<T>();
-            _options = new List<T>();
+            _selectedOptions = new List<T>();
+            _allOptions = new List<T>();
         }
 
         /// <summary>
         /// Sets the list of options (left hand side list).
         /// Note that this creates a shallow copy of the List.
         /// </summary>
-        public List<T> Options
+        public List<T> AllOptions
         {
-            get { return _options; }
+            get { return _allOptions; }
             set
             {
-                _options = ShallowCopy(value);
-                if (_selections != null)
+                _allOptions = ShallowCopy(value);
+                if (_selectedOptions != null)
                 {
-                    for (int i = _selections.Count - 1; i >= 0; i--)
+                    for (int i = _selectedOptions.Count - 1; i >= 0; i--)
                     {
                         //Remove all selections that dont exist in the options list
-                        if (!_options.Contains(_selections[i]))
+                        if (!_allOptions.Contains(_selectedOptions[i]))
                         {
-                            _selections.RemoveAt(i);
+                            _selectedOptions.RemoveAt(i);
                         }
                     }
                 }
@@ -105,28 +109,28 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Returns a view of the Options collection
+        /// Returns a view of the AllOptions collection
         /// </summary>
         public ReadOnlyCollection<T> OptionsView
         {
-            get { return _options.AsReadOnly(); }
+            get { return _allOptions.AsReadOnly(); }
         }
 
         /// <summary>
         /// Sets the list of selected items (right hand side list).
         /// </summary>
-        public List<T> Selections
+        public List<T> SelectedOptions
         {
-            get { return _selections; }
+            get { return _selectedOptions; }
             set
             {
-                _selections = value;
+                _selectedOptions = value;
                 if (value == null)
                 {
-                    _selections = new List<T>();
+                    _selectedOptions = new List<T>();
                 }
-                _originalSelections = ShallowCopy(_selections);
-                //_originalSelections = .GetRange(0, _selections.Count);
+                _originalSelections = ShallowCopy(_selectedOptions);
+                //_originalSelections = .GetRange(0, _selectedOptions.Count);
                 FireSelectionsChanged();
             }
         }
@@ -137,17 +141,17 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Returns a view of the Selections collection
+        /// Gets a view of the SelectedOptions collection
         /// </summary>
         public ReadOnlyCollection<T> SelectionsView
         {
             get
             {
-                if (_selections == null)
+                if (_selectedOptions == null)
                 {
                     return null;
                 }
-                return _selections.AsReadOnly();
+                return _selectedOptions.AsReadOnly();
             }
         }
 
@@ -159,11 +163,11 @@ namespace Habanero.UI.Base
 
         /// <summary>
         /// Returns the list of available options, which is the set 
-        /// of Options minus the set of Selections
+        /// of AllOptions minus the set of SelectedOptions
         /// </summary>
         public List<T> AvailableOptions
         {
-            get { return _options.FindAll(delegate(T obj) { return !_selections.Contains(obj); }); }
+            get { return _allOptions.FindAll(delegate(T obj) { return !_selectedOptions.Contains(obj); }); }
         }
 
         /// <summary>
@@ -172,7 +176,7 @@ namespace Habanero.UI.Base
         /// </summary>
         public List<T> Added
         {
-            get { return _selections.FindAll(delegate(T obj) { return !OriginalSelections.Contains(obj); }); }
+            get { return _selectedOptions.FindAll(delegate(T obj) { return !OriginalSelections.Contains(obj); }); }
         }
 
         /// <summary>
@@ -181,7 +185,7 @@ namespace Habanero.UI.Base
         /// </summary>
         public List<T> Removed
         {
-            get { return OriginalSelections.FindAll(delegate(T obj) { return !_selections.Contains(obj); }); }
+            get { return OriginalSelections.FindAll(delegate(T obj) { return !_selectedOptions.Contains(obj); }); }
         }
 
         /// <summary>
@@ -194,14 +198,14 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Selects an option, removing it from the Options and adding 
-        /// it to the Selections
+        /// Selects an option, removing it from the AllOptions and adding 
+        /// it to the SelectedOptions
         /// </summary>
         public void Select(T item)
         {
-            if (_options.Contains(item) && !_selections.Contains(item))
+            if (_allOptions.Contains(item) && !_selectedOptions.Contains(item))
             {
-                _selections.Add(item);
+                _selectedOptions.Add(item);
                 FireSelected(item);
             }
         }
@@ -221,12 +225,12 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Deselects an option, removing it from the Selections and 
-        /// adding it to the Options
+        /// Deselects an option, removing it from the SelectedOptions and 
+        /// adding it to the AllOptions
         /// </summary>
         public void Deselect(T item)
         {
-            if (_selections.Remove(item)) FireDeselected(item);
+            if (_selectedOptions.Remove(item)) FireDeselected(item);
         }
 
         private void FireDeselected(T item)
@@ -248,17 +252,17 @@ namespace Habanero.UI.Base
         /// </summary>
         public void DeselectAll()
         {
-            Deselect(ShallowCopy(_selections));
-            //_selections.FindAll(delegate { return true; }).ForEach(delegate(T obj) { Deselect(obj); });
+            Deselect(ShallowCopy(_selectedOptions));
+            //_selectedOptions.FindAll(delegate { return true; }).ForEach(delegate(T obj) { Deselect(obj); });
         }
 
         /// <summary>
-        /// Adds an option to the collection of Options
+        /// Adds an option to the collection of AllOptions
         /// </summary>
         /// <param name="item"></param>
         public void AddOption(T item)
         {
-            _options.Add(item);
+            _allOptions.Add(item);
             FireOptionAdded(item);
         }
 
@@ -274,7 +278,7 @@ namespace Habanero.UI.Base
         public void RemoveOption(T item)
         {
             Deselect(item);
-            _options.Remove(item);
+            _allOptions.Remove(item);
             FireOptionRemoved(item);
         }
 

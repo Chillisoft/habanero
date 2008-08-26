@@ -26,6 +26,12 @@ using Habanero.UI.Base.Grid;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Initialises the structure of a grid.  If a ClassDef is provided, the grid
+    /// is initialised using the UI definition provided for that class.  If no
+    /// ClassDef is provided, it is assumed that the grid will be set up in code
+    /// by the developer.
+    /// </summary>
     public class GridInitialiser : IGridInitialiser
     {
         private readonly IGridControl _gridControl;
@@ -39,14 +45,16 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Initialises the grid based with no classDef. This is used where the columns are set up manually.
-        /// A typical case of when you would want to set the columns manually would be when the grid
-        ///  requires alternate columns e.g. images to indicate the state of the object or buttons/links.
+        /// Initialises the grid without a ClassDef. This is typically used where the columns are set up manually
+        /// for purposes such as adding a column with images to indicate the state of the object or adding a
+        /// column with buttons/links.
+        /// <br/>
         /// The grid must already have at least one column added. At least one column must be a column with the name
-        /// "ID" This column is used to synchronise the grid with the business objects.
+        /// "ID", which is used to synchronise the grid with the business objects.
         /// </summary>
-        /// <exception cref="GridBaseInitialiseException"> in the case where the columns have not already been defined for the grid</exception>
-        /// <exception cref="GridBaseSetUpException">in the case where the grid has already been initialised</exception>
+        /// <exception cref="GridBaseInitialiseException">Thrown in the case where the columns
+        /// have not already been defined for the grid</exception>
+        /// <exception cref="GridBaseSetUpException">Thrown in the case where the grid has already been initialised</exception>
         public void InitialiseGrid()
         {
             if (_isInitialised) throw new GridBaseSetUpException("You cannot initialise the grid more than once");
@@ -67,14 +75,25 @@ namespace Habanero.UI.Base
             _isInitialised = true;
         }
 
+        /// <summary>
+        /// Initialises the grid with the default UI definition for the class,
+        /// as provided in the ClassDef
+        /// </summary>
+        /// <param name="classDef">The ClassDef used to initialise the grid</param>
         public void InitialiseGrid(IClassDef classDef)
         {
             InitialiseGrid(classDef, "default");
         }
 
+        /// <summary>
+        /// Initialises the grid with a specified alternate UI definition for the class,
+        /// as provided in the ClassDef
+        /// </summary>
+        /// <param name="classDef">The Classdef used to initialise the grid</param>
+        /// <param name="uiDefName">The name of the UI definition</param>
         public void InitialiseGrid(IClassDef classDef, string uiDefName)
         {
-//            if (_isInitialised) throw new GridBaseSetUpException("You cannot initialise the grid more than once");
+            //if (_isInitialised) throw new GridBaseSetUpException("You cannot initialise the grid more than once");
 
             UIGrid gridDef = GetGridDef((ClassDef) classDef, uiDefName);
             SetUpGridColumns((ClassDef) classDef, gridDef);
@@ -85,13 +104,16 @@ namespace Habanero.UI.Base
            
         }
 
+        /// <summary>
+        /// Gets the value indicating whether the grid has been initialised already
+        /// </summary>
         public bool IsInitialised
         {
             get { return _isInitialised; }
         }
 
         /// <summary>
-        /// returns the grid that this initialiser is initialising
+        /// Gets the grid that is being initialised
         /// </summary>
         public IGridControl Grid
         {
@@ -118,8 +140,6 @@ namespace Habanero.UI.Base
             }
             return gridDef;
         }
-
-
 
         private void SetUpGridColumns(ClassDef classDef, UIGrid gridDef)
         {

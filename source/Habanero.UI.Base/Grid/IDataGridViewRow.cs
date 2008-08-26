@@ -21,6 +21,9 @@ using System.ComponentModel;
 
 namespace Habanero.UI.Base  
 {
+    /// <summary>
+    /// Represents a row in a DataGridView control
+    /// </summary>
     public interface IDataGridViewRow
     {
         ///// <summary>Gets the error text for the row at the specified index.</summary>
@@ -99,23 +102,30 @@ namespace Habanero.UI.Base
 
         /// <summary>Gets or sets a value indicating whether the row is selected. </summary>
         /// <returns>true if the row is selected; otherwise, false.</returns>
-        /// <exception cref="T:System.InvalidOperationException">The row is in a <see cref="IDataGridView"></see> control and is a shared row.</exception>
+        /// <exception cref="T:System.InvalidOperationException">The row is in a <see cref="IDataGridView"></see>
+        ///  control and is a shared row.</exception>
         bool Selected { get; set; }
 
+        /// <summary>
+        /// Gets the relative position of the row within the DataGridView control
+        /// </summary>
         int Index { get; }
 
         ///// <summary>Gets or sets a value indicating whether the row is visible. </summary>
         ///// <returns>true if the row is visible; otherwise, false.</returns>
-        ///// <exception cref="T:System.InvalidOperationException">The row is in a <see cref="IDataGridView"></see> control and is a shared row.</exception>
+        ///// <exception cref="T:System.InvalidOperationException">The row is in a <see cref="IDataGridView"></see>
+        ///  control and is a shared row.</exception>
         ///// <filterpriority>1</filterpriority>
         //[Browsable(false)]
         //bool Visible { get; set; }
 
         /// <summary>Sets the values of the row's cells.</summary>
         /// <returns>true if all values have been set; otherwise, false.</returns>
-        /// <param name="values">One or more objects that represent the cell values in the row.-or-An <see cref="T:System.Array"></see> of <see cref="T:System.Object"></see> values. </param>
+        /// <param name="values">One or more objects that represent the cell values in the row.-or-An
+        ///  <see cref="T:System.Array"></see> of <see cref="T:System.Object"></see> values. </param>
         /// <exception cref="T:System.ArgumentNullException">values is null. </exception>
-        /// <exception cref="T:System.InvalidOperationException">This method is called when the associated <see cref="IDataGridView"></see> is operating in virtual mode. -or-This row is a shared row.</exception>
+        /// <exception cref="T:System.InvalidOperationException">This method is called when the associated 
+        /// <see cref="IDataGridView"></see> is operating in virtual mode. -or-This row is a shared row.</exception>
         /// <filterpriority>1</filterpriority>
         bool SetValues(params object[] values);
     }

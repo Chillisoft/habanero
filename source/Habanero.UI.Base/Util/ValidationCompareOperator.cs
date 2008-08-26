@@ -49,7 +49,7 @@
 namespace Habanero.UI.Base
 {
 	/// <summary>
-	/// Operations that can be perform in Compare Validation.
+	/// Operations that can be performed in a Compare validation
 	/// </summary>
 	public enum ValidationCompareOperator 
 	{
@@ -58,27 +58,27 @@ namespace Habanero.UI.Base
 		/// </summary>
 		DataTypeCheck,
 		/// <summary>
-		/// Compare is equal to ValueToCompare.
+		/// Compare object is equal to ValueToCompare object
 		/// </summary>
 		Equal,
 		/// <summary>
-		/// Compare is greater than ValueToCompare.
+        /// Compare object is greater than ValueToCompare object
 		/// </summary>
 		GreaterThan,
 		/// <summary>
-		/// Compare greater than or equal to ValueToCompare.
+        /// Compare object is greater than or equal to ValueToCompare object
 		/// </summary>
 		GreaterThanEqual,
 		/// <summary>
-		/// Compare is less than ValueToCompare.
+        /// Compare object is less than ValueToCompare object
 		/// </summary>
 		LessThan,
 		/// <summary>
-		/// Compare is greater than ValueToCompare.
+        /// Compare object is less than or equal to ValueToCompare object
 		/// </summary>
 		LessThanEqual,
 		/// <summary>
-		/// Compare is not equal to ValueToCompare.
+        /// Compare object is not equal to ValueToCompare object
 		/// </summary>
 		NotEqual
 	}

@@ -56,57 +56,51 @@ namespace Habanero.UI.Base
 	public delegate	void CustomValidationEventHandler(object sender, CustomValidationEventArgs e);
 
 	/// <summary>
-	/// Arguments of validation event.
+	/// Provides arguments for a validation event
 	/// </summary>
 	public class CustomValidationEventArgs : EventArgs
 	{
-		private object			_Value = null;
-		private ValidationRule	_ValidationRule = null;
+		private object _value = null;
+		private ValidationRule _validationRule = null;
 
-		/// <summary>
-		/// Default Ctor.
-		/// </summary>
-		/// <param name="Value"></param>
-		/// <param name="vr"></param>
 		public CustomValidationEventArgs(object Value, ValidationRule vr)
 		{
-			this._Value = Value;
-			this._ValidationRule = vr;
+			this._value = Value;
+			this._validationRule = vr;
 		}
 
 		/// <summary>
-		/// Value to validate.
+		/// Gets the value to validate
 		/// </summary>
 		public object Value
 		{
-			get { return _Value; }
+			get { return _value; }
 		}
 
 		/// <summary>
-		/// Get or set validity of attached validation rule.
+		/// Gets or sets the validity of the validation rule
 		/// </summary>
 		public bool IsValid
 		{
-			get { return this._ValidationRule.IsValid; }
-			set { this._ValidationRule.IsValid = value; }
+			get { return this._validationRule.IsValid; }
+			set { this._validationRule.IsValid = value; }
 		}
 
 		/// <summary>
-		/// Get or set error message to display when validation fail.
+		/// Gets or sets the error message to display when validation fails
 		/// </summary>
 		public string ErrorMessage
 		{
-			get { return this._ValidationRule.ErrorMessage; }
-			set { this._ValidationRule.ErrorMessage = value; }
+			get { return this._validationRule.ErrorMessage; }
+			set { this._validationRule.ErrorMessage = value; }
 		}
 
 		/// <summary>
-		/// Allow custom validation class to set IsValid and ErrorMessage
-		/// value.
+		/// Gets the validation rule
 		/// </summary>
 		public ValidationRule ValidationRule
 		{
-			get { return this._ValidationRule;}
+			get { return this._validationRule;}
 		}
 	}
 }

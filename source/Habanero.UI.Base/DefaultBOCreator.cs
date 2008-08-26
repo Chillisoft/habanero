@@ -26,7 +26,7 @@ namespace Habanero.UI.Base
 {
     /// <summary>
     /// Creates business objects.  The default creator is used by facilities
-    /// like readOnlyGridControl to create new business objects.  Inherit
+    /// like ReadOnlyGridControl to create new business objects.  Inherit
     /// from this class if you need to carry out additional steps at the time
     /// of creating a new business object.
     /// </summary>
@@ -38,7 +38,6 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Constructor to initialise a new object creator
         /// </summary> 
-        /// 
         /// <param name="classDef">The class definition</param>
         public DefaultBOCreator(ClassDef classDef)
         {
@@ -48,7 +47,6 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Constructor to initialise a new object creator
         /// </summary> 
-        /// 
         /// <param name="boCol">The collection this BO will be created as part of 
         /// (it will be added to the collection proper when it is saved)</param>
         public DefaultBOCreator(IBusinessObjectCollection boCol)
@@ -57,7 +55,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Just creates the object, without editing or saving it.
+        /// Creates the object, without editing or saving it.
         /// </summary>
         /// <returns></returns>
         public IBusinessObject CreateBusinessObject()

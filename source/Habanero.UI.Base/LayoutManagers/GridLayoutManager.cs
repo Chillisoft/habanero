@@ -337,7 +337,6 @@ namespace Habanero.UI.Base
         /// Returns the total height of the fixed-height rows added together
         /// </summary>
         /// <returns>Returns the total height</returns>
-        /// TODO ERIC - not used
         private int GetFixedHeight()
         {
             return GetFixedAmount(_rowHeights);
@@ -437,7 +436,6 @@ namespace Habanero.UI.Base
         /// Causes the fixed height of all the rows to be determined by the
         /// current or future contents
         /// </summary>
-        /// TODO ERIC - a column equivalent?
         public void FixAllRowsBasedOnContents()
         {
             _fixAllRowsBasedOnContents = true;
@@ -458,7 +456,6 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="columnNumber">The column in question</param>
         /// <returns>Returns the fixed width or -1</returns>
-        /// TODO ERIC - add a row equivalent?
         public int GetFixedColumnWidth(int columnNumber)
         {
             return this._columnWidths[columnNumber];

@@ -27,16 +27,25 @@ using DialogResult=Gizmox.WebGUI.Forms.DialogResult;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Provides a combination of read-only grid, filter and buttons used to edit a
+    /// collection of business objects.
+    /// <br/>
+    /// Adding, editing and deleting objects is done by clicking the available
+    /// buttons in the button control (accessed through the Buttons property).
+    /// By default, this uses of a popup form for editing of the object, as defined
+    /// in the "form" element of the class definitions for that object.  You can
+    /// override the editing controls using the BusinessObjectEditor/Creator/Deletor
+    /// properties in this class.
+    /// <br/>
+    /// A filter control is placed above the grid and is used to filter which rows
+    /// are shown.
+    /// </summary>
     public class ReadOnlyGridControlGiz : ControlGiz, IReadOnlyGridControl, ISupportInitialize
     {
-        #region Delegates
-
         public delegate void RefreshGridDelegate();
 
-        #endregion
-
         private readonly IReadOnlyGridButtonsControl _buttons;
-
         private readonly IControlFactory _controlFactory;
         private readonly IFilterControl _filterControl;
         private readonly ReadOnlyGridGiz _grid;
@@ -75,13 +84,19 @@ namespace Habanero.UI.WebGUI
         #region IReadOnlyGridControl Members
 
         /// <summary>
-        /// initiliase the grid to the with the 'default' UIdef.
+        /// Initiliases the grid structure using the default UI class definition (implicitly named "default")
         /// </summary>
+        /// <param name="classDef">The class definition of the business objects shown in the grid</param>
         public void Initialise(IClassDef classDef)
         {
             _gridInitialiser.InitialiseGrid(classDef);
         }
 
+        /// <summary>
+        /// Initialises the grid structure using the specified UI class definition
+        /// </summary>
+        /// <param name="classDef">The class definition of the business objects shown in the grid</param>
+        /// <param name="uiDefName">The UI definition with the given name</param>
         public void Initialise(IClassDef classDef, string uiDefName)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
@@ -93,12 +108,11 @@ namespace Habanero.UI.WebGUI
             _gridInitialiser.InitialiseGrid(ClassDef, uiDefName);
         }
 
-
         /// <summary>
         /// Returns the grid object held. This property can be used to
         /// access a range of functionality for the grid
         /// (eg. myGridWithButtons.Grid.AddBusinessObject(...)).
-        /// </summary>
+        /// </summary>    
         public IGridBase Grid
         {
             get { return _grid; }
@@ -115,55 +129,85 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// Returns the button control held. This property can be used
-        /// to access a range of functionality for the button control
-        /// (eg. myGridWithButtons.Buttons.AddButton(...)).
+        /// Gets the button control, which contains a set of default buttons for
+        /// editing the objects and can be customised
         /// </summary>
         public IReadOnlyGridButtonsControl Buttons
         {
             get { return _buttons; }
         }
 
+        /// <summary>
+        /// Gets and sets the business object editor used to edit the object when the edit button is clicked
+        /// If no editor is set then the <see cref="DefaultBOEditor"/> is used.
+        /// </summary>
         public IBusinessObjectEditor BusinessObjectEditor
         {
             get { return _businessObjectEditor; }
             set { _businessObjectEditor = value; }
         }
 
+        /// <summary>
+        /// Gets and sets the business object creator used to create the object when the add button is clicked.
+        /// If no creator is set then the <see cref="DefaultBOCreator"/> is used.
+        /// </summary>
         public IBusinessObjectCreator BusinessObjectCreator
         {
             get { return _businessObjectCreator; }
             set { _businessObjectCreator = value; }
         }
 
+        /// <summary>
+        /// Gets and sets the business object deletor used to delete the object when the delete button is clicked
+        /// If no deletor is set then the <see cref="DefaultBODeletor"/> is used.  The default delete button
+        /// is hidden unless programmatically shown (using Buttons.ShowDefaultDeleteButton).
+        /// </summary>
         public IBusinessObjectDeletor BusinessObjectDeletor
         {
             get { return _businessObjectDeletor; }
             set { _businessObjectDeletor = value; }
         }
 
+        /// <summary>
+        /// Gets and sets the UI definition used to initialise the grid structure (the UI name is indicated
+        /// by the "name" attribute on the UI element in the class definitions
+        /// </summary>
         public string UiDefName
         {
             get { return _grid.GridBaseManager.UiDefName; }
             set { _grid.GridBaseManager.UiDefName = value; }
         }
 
+        /// <summary>
+        /// Gets and sets the class definition used to initialise the grid structure
+        /// </summary>
         public IClassDef ClassDef
         {
             get { return _grid.GridBaseManager.ClassDef; }
             set { _grid.GridBaseManager.ClassDef = value; }
         }
 
+        /// <summary>
+        /// Gets the filter control for the readonly grid, which is used to filter
+        /// which rows are shown in the grid
+        /// </summary>
         public IFilterControl FilterControl
         {
             get { return _filterControl; }
         }
 
+        /// <summary>
+        /// Gets the value indicating whether one of the overloaded initialise
+        /// methods been called for the grid
+        /// </summary>
         public bool IsInitialised
         {
             get { return _gridInitialiser.IsInitialised; }
         }
 
+        /// <summary>
+        /// Gets and sets the filter modes for the grid (i.e. filter or search).  See <see cref="FilterModes"/>.
+        /// </summary>
         public FilterModes FilterMode
         {
             get { return _filterControl.FilterMode; }
@@ -171,8 +215,8 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// Gets and sets the default order by clause used for loading the grid when the <see cref="IReadOnlyGridControl.FilterMode"/>
-        /// is Search see <see cref="FilterModes"/>
+        /// Gets and sets the default order by clause used for loading the grid when the <see cref="FilterModes"/>
+        /// is set to Search
         /// </summary>
         public string OrderBy
         {
@@ -181,8 +225,8 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// Gets and sets the standard search criteria used for loading the grid when the <see cref="IReadOnlyGridControl.FilterMode"/>
-        /// is Search see <see cref="FilterModes"/>. This search criteria will be And (ed) to any search criteria returned
+        /// Gets and sets the standard search criteria used for loading the grid when the <see cref="FilterModes"/>
+        /// is set to Search. This search criteria will be appended with an AND to any search criteria returned
         /// by the FilterControl.
         /// </summary>
         public string AdditionalSearchCriteria
@@ -190,8 +234,15 @@ namespace Habanero.UI.WebGUI
             get { return _additionalSearchCriteria; }
             set { _additionalSearchCriteria = value; }
         }
-
-
+        
+        /// <summary>
+        /// Sets the business object collection to display.  Loading of
+        /// the collection needs to be done before it is assigned to the
+        /// grid.  This method assumes a default UI definition is to be
+        /// used, that is a 'ui' element without a 'name' attribute.
+        /// </summary>
+        /// <param name="boCollection">The business object collection
+        /// to be shown in the grid</param>
         public void SetBusinessObjectCollection(IBusinessObjectCollection boCollection)
         {
             if (boCollection == null)
@@ -228,13 +279,14 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// Initialises the grid based with no classDef. This is used where the columns are set up manually.
+        /// Initialises the grid without a ClassDef. This is used where the columns are set up manually.
         /// A typical case of when you would want to set the columns manually would be when the grid
-        ///  requires alternate columns e.g. images to indicate the state of the object or buttons/links.
-        /// The grid must already have at least one column added. At least one column must be a column with the name
-        /// "ID" This column is used to synchronise the grid with the business objects.
+        /// requires alternate columns, such as images to indicate the state of the object or buttons/links.
+        /// The grid must already have at least one column added with the name "ID". This column is used
+        /// to synchronise the grid with the business objects.
         /// </summary>
-        /// <exception cref="GridBaseInitialiseException"> in the case where the columns have not already been defined for the grid</exception>
+        /// <exception cref="GridBaseInitialiseException">Occurs where the columns have not
+        /// already been defined for the grid</exception>
         public void Initialise()
         {
             _gridInitialiser.InitialiseGrid();
@@ -242,12 +294,9 @@ namespace Habanero.UI.WebGUI
 
         #endregion
 
-        #region ISupportInitialize Members
-
         ///<summary>
         ///Signals the object that initialization is starting.
         ///</summary>
-        ///
         public void BeginInit()
         {
             ((ISupportInitialize) Grid).BeginInit();
@@ -256,13 +305,10 @@ namespace Habanero.UI.WebGUI
         ///<summary>
         ///Signals the object that initialization is complete.
         ///</summary>
-        ///
         public void EndInit()
         {
             ((ISupportInitialize) Grid).EndInit();
         }
-
-        #endregion
 
         private void InitialiseFilterControl()
         {
@@ -303,7 +349,6 @@ namespace Habanero.UI.WebGUI
         }
 
         private void Buttons_DeleteClicked(object sender, EventArgs e)
-
         {
             try
             {

@@ -20,7 +20,8 @@
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Defines the interface for a Wizard Controller that is used by the WizardControl.  This controls the behaviour of the wizard.
+    /// Controls the behaviour of a wizard, which guides users through a process one
+    /// step at a time.
     /// </summary>
     public interface IWizardController
     {

@@ -20,7 +20,11 @@
 namespace Habanero.UI.Base  
 {
     //TODO: Port
-//    public interface IListView
-//    {
-//    }
+    ///// <summary>
+    ///// Represents a list view control, which displays a collection of items
+    ///// that can be displayed using one of four different views
+    ///// </summary>
+    //public interface IListView
+    //{
+    //}
 }

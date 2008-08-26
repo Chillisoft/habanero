@@ -19,9 +19,23 @@
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Represents a small rectangular pop-up window that displays a brief
+    /// description of a control's purpose when the user rests the pointer on the control
+    /// </summary>
     public interface IToolTip
     {
+        /// <summary>
+        /// Associates ToolTip text with the specified control
+        /// </summary>
+        /// <param name="label">The Control to associate the ToolTip text with</param>
+        /// <param name="toolTipText">The ToolTip text to display when the pointer is on the control</param>
         void SetToolTip(IControlChilli label, string toolTipText);
+
+        /// <summary>
+        /// Retrieves the ToolTip text associated with the specified control
+        /// </summary>
+        /// <param name="controlChilli">The Control for which to retrieve the ToolTip text</param>
         string GetToolTip(IControlChilli controlChilli);
     }
 }

@@ -23,13 +23,14 @@ namespace Habanero.UI.Base
 {
     /// <summary>
     /// This allows you to add controls to a layout where the controls will be added to the columns from
-    /// left to right untill the number of columns is exceeded. When this happens the control will be 
+    /// left to right until the number of columns is exceeded. When this happens the control will be 
     /// added on the next row. The row height is determined by the heighest control in the row.
-    /// All controls added will have an identical width (managed control width - borders size)
+    /// All controls added will have an identical width (width = managed control width - borders size)
     /// </summary>
     public class ColumnLayoutManager : LayoutManager
     {
         private int _columnCount;
+
         /// <summary>
         /// Constructor to initialise a new layout manager
         /// </summary>
@@ -89,6 +90,7 @@ namespace Habanero.UI.Base
                 currentColumn++;
             }
         }
+
         /// <summary>
         /// Add a control to those being managed in the layout
         /// </summary>

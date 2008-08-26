@@ -6,9 +6,12 @@ using Habanero.UI.Base.Grid;
 
 namespace Habanero.UI.WebGUI.Grid
 {
+    /// <summary>
+    /// Provides a set of buttons for use on an <see cref="IEditableGridControl"/>.
+    /// By default, Save and Cancel buttons are available.
+    /// </summary>
     public class EditableGridButtonsControlGiz : ButtonGroupControlGiz, IEditableGridButtonsControl
     {
-        
         /// <summary>
         /// Fires when the Save button is clicked
         /// </summary>

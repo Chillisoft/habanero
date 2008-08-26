@@ -14,7 +14,6 @@ namespace Habanero.UI.Base
         private FlowLayoutManager _layoutManager;
         private IButtonGroupControl _buttonGroupControl;
         
-
         public ButtonGroupControlManager(IButtonGroupControl buttonGroupControl, IControlFactory controlFactory)
         {
             _buttonGroupControl = buttonGroupControl;
@@ -24,7 +23,7 @@ namespace Habanero.UI.Base
             IButton sampleBtn = _controlFactory.CreateButton();
             _buttonGroupControl.Height = sampleBtn.Height + 10;
         }
-
+        
         public FlowLayoutManager LayoutManager
         {
             get { return _layoutManager; }

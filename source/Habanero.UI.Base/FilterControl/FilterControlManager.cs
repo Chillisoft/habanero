@@ -44,22 +44,34 @@ namespace Habanero.UI.Base
             _clauseFactory = new DataViewFilterClauseFactory();
         }
 
+        /// <summary>
+        /// See <see cref="IFilterControl.CountOfFilters"/>
+        /// </summary>
         public int CountOfFilters
         {
             get { return _filterControls.Count; }
         }
 
+        /// <summary>
+        /// See <see cref="IFilterControl.FilterControls"/>
+        /// </summary>
         public IList FilterControls
         {
             get { return _filterControls; }
         }
 
+        /// <summary>
+        /// See <see cref="IFilterControl.LayoutManager"/>
+        /// </summary>
         public LayoutManager LayoutManager
         {
             get { return _layoutManager; }
             set { _layoutManager = value; }
         }
 
+        /// <summary>
+        /// See <see cref="IFilterControl.GetFilterClause"/>
+        /// </summary>
         public IFilterClause GetFilterClause()
         {
             if (_filterControls.Count == 0) return _clauseFactory.CreateNullFilterClause();
@@ -75,6 +87,9 @@ namespace Habanero.UI.Base
             return clause;
         }
 
+        /// <summary>
+        /// See <see cref="IFilterControl.AddStringFilterTextBox(string,string)"/>
+        /// </summary>
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName)
         {
 
@@ -96,14 +111,8 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Adds a TextBox filter in which users can specify text that
-        /// a string-value column will be filtered on.
+        /// See <see cref="IFilterControl.AddStringFilterTextBox(string,string,FilterClauseOperator)"/>
         /// </summary>
-        /// <param name="labelText">The label to appear before the TextBox</param>
-        /// <param name="propertyName">The column of data on which to do the
-        /// filtering</param>
-        /// <returns>Returns the new TextBox added</returns>
-        /// <param name="filterClauseOperator">Operator To Use For the filter clause</param>
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName, FilterClauseOperator filterClauseOperator)
         {
             ILabel label = _controlFactory.CreateLabel(labelText);
@@ -112,6 +121,10 @@ namespace Habanero.UI.Base
             _filterControls.Add(new FilterUIString(_clauseFactory, propertyName, textBox, filterClauseOperator));
             return textBox;
         }
+
+        /// <summary>
+        /// See <see cref="IFilterControl.AddStringFilterComboBox"/>
+        /// </summary>
         public IComboBox AddStringFilterComboBox(string labelText, string columnName, ICollection options, bool strictMatch)
         {
 
@@ -128,17 +141,8 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Adds a CheckBox filter that displays only rows whose boolean value
-        /// matches the on-off state of the CheckBox. The column of data must
-        /// have "true" or "false" as its values (boolean database fields are
-        /// usually converted to true/false string values by the Habanero
-        /// object manager).
+        /// See <see cref="IFilterControl.AddBooleanFilterCheckBox"/>
         /// </summary>
-        /// <param name="labelText">The text label to appear next to the CheckBox</param>
-        /// <param name="propertyName">The column of data on which to do the
-        /// filtering</param>
-        /// <param name="isChecked">Whether the CheckBox is checked</param>
-        /// <returns>Returns the new CheckBox added</returns>
         public ICheckBox AddBooleanFilterCheckBox(string labelText, string propertyName, bool isChecked)
         {
             ICheckBox cb = _controlFactory.CreateCheckBox();
@@ -151,23 +155,8 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Adds a date-time picker that filters a date column on the date
-        /// chosen by the user.  The given operator compares the chosen date
-        /// with the date shown in the given column name.  The standard
-        /// DateTimePicker does not support time picking, so any date supplied
-        /// or chosen will have its time values set to zero.
+        /// See <see cref="IFilterControl.AddDateFilterDateTimePicker"/>
         /// </summary>
-        /// <param name="columnName">The name of the date-time column to be 
-        /// filtered on</param>
-        /// <param name="defaultDate">The default date or null.  The filter clause will
-        /// set all times to zero.</param>
-        /// <param name="filterClauseOperator">The operator used to compare
-        /// with the date chosen by the user.  The chosen date is on the
-        /// right side of the equation.</param>
-        /// <param name="nullable">Must the date time picker be nullable</param>
-        /// <returns>Returns the new DateTimePicker object added</returns>
-        /// <remarks>A future improvement could provide another overload where you can
-        /// supply a timespan argument that is added onto any date taken from the picker.</remarks>
         public IDateTimePicker AddDateFilterDateTimePicker(string columnName, FilterClauseOperator filterClauseOperator, bool nullable, DateTime defaultDate)
         {
             IDateTimePicker dtPicker = _controlFactory.CreateDateTimePicker();
@@ -203,11 +192,8 @@ namespace Habanero.UI.Base
             //return dte;
         }
 
-
-
         /// <summary>
-        /// Clears all the filters on the filter control (sets to null where it can or to the
-        /// default value where null cannot be set (e.g. checkBox)
+        /// See <see cref="IFilterControl.ClearFilters"/>
         /// </summary>
         public void ClearFilters()
         {
@@ -217,6 +203,9 @@ namespace Habanero.UI.Base
             }
         }
 
+        /// <summary>
+        /// See <see cref="IFilterControl.GetChildControl"/>
+        /// </summary>
         public IControlChilli GetChildControl(string propertyName)
         {
             foreach (FilterUI filterUI in this._filterControls)
@@ -229,7 +218,9 @@ namespace Habanero.UI.Base
             return null;
         }
 
-
+        /// <summary>
+        /// See <see cref="IFilterControl.AddDateRangeFilterComboBox(string,string,bool,bool)"/>
+        /// </summary>
         public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, bool includeStartDate, bool includeEndDate)
         {
 
@@ -239,7 +230,9 @@ namespace Habanero.UI.Base
 
         }
 
-
+        /// <summary>
+        /// See <see cref="IFilterControl.AddDateRangeFilterComboBox(string,string,List{T},bool,bool)"/>
+        /// </summary>
         public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, List<DateRangeOptions> options, bool includeStartDate, bool includeEndDate)
         {
             IDateRangeComboBox dateRangeComboBox = _controlFactory.CreateDateRangeComboBox(options);

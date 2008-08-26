@@ -19,6 +19,9 @@
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Displays a hierarchical collection of labeled items, each represented by a TreeNode
+    /// </summary>
     public interface ITreeView : IControlChilli
     {
     }

@@ -21,34 +21,34 @@ namespace Habanero.Base
 {
 
     /// <summary>
-    /// An interface to model an object creator
+    /// Creates business objects.  This class provides the facility for a
+    /// custom creator that overrides default behaviour when creating a
+    /// business object.
     /// </summary>
     public interface IBusinessObjectCreator
     {
 
         /// <summary>
-        /// Just creates the object, without editing or saving it.
+        /// Creates the object, without editing or saving it.
         /// </summary>
         /// <returns></returns>
         IBusinessObject CreateBusinessObject();
-
-
     }
 
     ///<summary>
-    /// An abstract base class for your own ObjectCreators, created for convenience as it is strongly typed.
+    /// An abstract base class for Business Object creators, created for convenience as it is strongly typed.
     ///</summary>
     ///<typeparam name="T">The type of BO this creator creates.</typeparam>
     public abstract class BusinessObjectCreator<T> : IBusinessObjectCreator where T : IBusinessObject
     {
-        #region IBusinessObjectCreator Members
-
+        /// <summary>
+        /// Creates the object, without editing or saving it.
+        /// </summary>
+        /// <returns></returns>
         IBusinessObject IBusinessObjectCreator.CreateBusinessObject()
         {
             return CreateBusinessObject();
         }
-
-        #endregion
 
         /// <summary>
         /// Just creates the object, without editing or saving it.

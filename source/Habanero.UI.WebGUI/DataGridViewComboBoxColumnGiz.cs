@@ -26,6 +26,9 @@ using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Represents a column of DataGridViewComboBoxCell objects
+    /// </summary>
     public class DataGridViewComboBoxColumnGiz : DataGridViewColumnGiz, IDataGridViewComboBoxColumn
     {
         private readonly DataGridViewComboBoxColumn _dataGridViewComboBoxColumn;
@@ -40,18 +43,30 @@ namespace Habanero.UI.WebGUI
         //{
         //    get { return (IComboBoxObjectCollection)_dataGridViewComboBoxColumn.Items; }
         //}
+
+        /// <summary>
+        /// Gets or sets the data source that populates the selections for the combo boxes
+        /// </summary>
         public object DataSource
         {
             get { return _dataGridViewComboBoxColumn.DataSource; }
             set { _dataGridViewComboBoxColumn.DataSource = value; }
         }
 
+        /// <summary>
+        /// Gets or sets a string that specifies the property or column from
+        /// which to get values that correspond to the selections in the drop-down list.
+        /// </summary>
         public string ValueMember
         {
             get { return _dataGridViewComboBoxColumn.ValueMember; }
             set { _dataGridViewComboBoxColumn.ValueMember = value; }
         }
 
+        /// <summary>
+        /// Gets or sets a string that specifies the property or column from which to
+        ///  retrieve strings for display in the combo boxes.
+        /// </summary>
         public string DisplayMember
         {
             get { return _dataGridViewComboBoxColumn.DisplayMember; }

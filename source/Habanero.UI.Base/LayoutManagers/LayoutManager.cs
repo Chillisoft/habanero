@@ -25,7 +25,7 @@ namespace Habanero.UI.Base
 {
     /// <summary>
     /// A super-class for layout managers that dictate how and where controls
-    /// are placed in a designated user interface
+    /// are placed in user interface
     /// </summary>
     public abstract class LayoutManager : MarshalByRefObject
     {
@@ -64,7 +64,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// gets and sets the managed control
+        /// Gets and sets the managed control
         /// </summary>
         public IControlChilli ManagedControl
         {
@@ -76,8 +76,6 @@ namespace Habanero.UI.Base
         /// A handler to deal with the event where a control has been
         /// resized by the user
         /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
         private void ManagedControlResizeHandler(Object sender, EventArgs e)
         {
             RefreshControlPositions();
@@ -114,10 +112,17 @@ namespace Habanero.UI.Base
         /// </summary>
         protected abstract void RefreshControlPositions();
 
+        /// <summary>
+        /// Add a control to the layout
+        /// </summary>
+        /// <param name="label">The control to add</param>
+        /// <returns>Returns the control added</returns>
         public abstract IControlChilli AddControl(IControlChilli label);
-
-  
     }
+
+    /// <summary>
+    /// Thrown when an error occurs due to laying out or refreshing controls
+    /// </summary>
     public class LayoutManagerException : HabaneroDeveloperException
     {
         public LayoutManagerException(string message)
