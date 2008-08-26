@@ -143,6 +143,8 @@ namespace Habanero.UI.WebGUI
             }
         }
 
+
+
         /// <summary>
         /// Adds a TextBox filter in which users can specify text that
         /// a string-value column will be filtered on.  This uses a "like"
@@ -171,7 +173,6 @@ namespace Habanero.UI.WebGUI
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName,
                                                FilterClauseOperator filterClauseOperator)
         {
-            ;
             return _filterControlManager.AddStringFilterTextBox(labelText, propertyName, filterClauseOperator);
         }
 

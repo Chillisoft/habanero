@@ -26,6 +26,7 @@ using DockStyle=Gizmox.WebGUI.Forms.DockStyle;
 
 namespace Habanero.UI.WebGUI
 {
+
     public class BorderLayoutManagerGiz : BorderLayoutManager
     {
         private readonly IControlChilli[] _controls;

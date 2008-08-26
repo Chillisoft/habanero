@@ -23,7 +23,8 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
-    public class ButtonGroupControlGiz : ControlGiz, IButtonGroupControl
+    [MetadataTag("P")]
+    public class ButtonGroupControlGiz : PanelGiz, IButtonGroupControl
     {
         private ButtonGroupControlManager _buttonGroupControlManager;
         private IControlFactory _controlFactory;
@@ -37,21 +38,6 @@ namespace Habanero.UI.WebGUI
             _controlFactory = controlFactory;
             //IButton sampleBtn = _controlFactory.CreateButton();
             //this.Height = sampleBtn.Height + 10;
-        }
-
-        public IButton AddButton(string buttonName)
-        {
-            //IButton button = _controlFactory.CreateButton();
-            //button.Name = buttonName;
-            //button.Text = buttonName;
-            //_layoutManager.AddControl(button);
-            //RecalcButtonSizes();
-            //Controls.Add((Control) button);
-            //return button;
-
-            IButton button = _buttonGroupControlManager.AddButton(buttonName);
-            RecalcButtonSizes();
-            return button;
         }
 
         public IButton this[string buttonName]
@@ -68,6 +54,21 @@ namespace Habanero.UI.WebGUI
         {
             ///not implemented in GIz
         }
+
+        public IButton AddButton(string buttonName)
+        {
+            //IButton button = _controlFactory.CreateButton();
+            //button.Name = buttonName;
+            //button.Text = buttonName;
+            //_layoutManager.AddControl(button);
+            //RecalcButtonSizes();
+            //Controls.Add((Control) button);
+            //return button;
+
+            IButton button = _buttonGroupControlManager.AddButton(buttonName);
+            RecalcButtonSizes();
+            return button;
+        }  
 
         public IButton AddButton(string buttonName, EventHandler clickHandler)
         {

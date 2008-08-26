@@ -18,11 +18,12 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
-    public class ReadOnlyGridButtonsControlGiz :ButtonGroupControlGiz, IReadOnlyGridButtonsControl
+ public class ReadOnlyGridButtonsControlGiz :ButtonGroupControlGiz, IReadOnlyGridButtonsControl
     {
         private readonly IButton _deleteButton;
         public event EventHandler DeleteClicked;

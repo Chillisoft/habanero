@@ -21,13 +21,13 @@ using System;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.BO;
-using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.Base.FilterControl;
 
 namespace Habanero.UI.WebGUI
 {
-    public class ReadOnlyGridControlGiz : ControlGiz, IReadOnlyGridControl, System.ComponentModel.ISupportInitialize
+    [MetadataTag("P")]
+    public class ReadOnlyGridControlGiz : PanelGiz, IReadOnlyGridControl, System.ComponentModel.ISupportInitialize
     {
         private readonly IControlFactory _controlFactory;
         private readonly ReadOnlyGridGiz _grid;
@@ -60,12 +60,14 @@ namespace Habanero.UI.WebGUI
             InitialiseFilterControl();
 
             BorderLayoutManager borderLayoutManager = new BorderLayoutManagerGiz(this, _controlFactory);
+            borderLayoutManager.AddControl(_filterControl, BorderLayoutManager.Position.North);
             borderLayoutManager.AddControl(_grid, BorderLayoutManager.Position.Centre);
             borderLayoutManager.AddControl(_buttons, BorderLayoutManager.Position.South);
-            borderLayoutManager.AddControl(_filterControl, BorderLayoutManager.Position.North);
+            
             FilterMode = FilterModes.Filter;
             _grid.Name = "GridControl";
-        }
+       }
+
 
         private void InitialiseFilterControl()
         {
@@ -138,7 +140,7 @@ namespace Habanero.UI.WebGUI
                 if (selectedBo != null)
                 {
                     MessageBox.Show("Are you certain you want to delete the object '" + selectedBo + "'",
-                            "Delete Object", MessageBoxButtons.YesNo, delegate(object msgBoxSender, EventArgs e1)
+                            "Delete Object", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, delegate(object msgBoxSender, EventArgs e1)
                                   {
                                       if (((Form)msgBoxSender).DialogResult == Gizmox.WebGUI.Forms.DialogResult.Yes)
                                       {

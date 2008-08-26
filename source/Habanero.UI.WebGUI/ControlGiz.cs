@@ -23,6 +23,7 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
+    [MetadataTag("P")]
     public class ControlGiz : Control, IControlChilli
     {
         IControlCollection IControlChilli.Controls

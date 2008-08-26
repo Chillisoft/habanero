@@ -17,13 +17,12 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
+    [MetadataTag("P")]
     public class PanelGiz:Panel, IPanel
     {
         IControlCollection IControlChilli.Controls

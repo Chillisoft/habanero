@@ -30,6 +30,7 @@ namespace Habanero.UI.WebGUI
 
             this.ReadOnly = true;
             this.AllowUserToAddRows = false;
+            this.AllowUserToAddRows = false;
             this.AllowUserToDeleteRows = false;
             this.SelectionMode = Gizmox.WebGUI.Forms.DataGridViewSelectionMode.FullRowSelect;
         }

@@ -31,7 +31,6 @@ using Habanero.UI.Base.FilterControl;
 using Habanero.UI.Base.Grid;
 using Habanero.UI.WebGUI.Grid;
 using Habanero.Util.File;
-using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.WebGUI
 {
