@@ -415,6 +415,26 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestCreateSqlStatement_WithOrder_WithLimit_AtEnd()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtEnd();
+            SelectQuery selectQuery = new SelectQuery();
+            selectQuery.Limit = 10;
+            const string fieldName = "Field1";
+            selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
+            selectQuery.Source = new Source("Table1");
+            selectQuery.OrderCriteria = OrderCriteria.FromString(fieldName);
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.EndsWith(" LIMIT 10", statementString);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
         public void TestCreateSqlStatement_WithNoLimit_AtEnd()
         {
             //---------------Set up test pack-------------------

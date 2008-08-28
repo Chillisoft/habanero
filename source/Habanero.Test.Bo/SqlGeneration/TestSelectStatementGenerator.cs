@@ -17,7 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.SqlGeneration;
 using Habanero.DB;
@@ -71,17 +70,17 @@ namespace Habanero.Test.BO.SqlGeneration
         [Test]
         public void TestInsertStatementExcludesNonPersistableProps()
         {
-            string newPropName = "NewProp";
+            const string newPropName = "NewProp";
             MockBO bo = StatementGeneratorTestHelper.CreateMockBOWithExtraNonPersistableProp(newPropName);
 
             SelectStatementGenerator gen = new SelectStatementGenerator(bo, DatabaseConnection.CurrentConnection);
             string statement = gen.Generate(0);
-            Assert.IsFalse(statement.ToString().Contains(newPropName));
+            Assert.IsFalse(statement.Contains(newPropName));
         }
 
         public class MyDatabaseConnection : DatabaseConnection
         {
-            private bool _useStandardDelimiters = false;
+            private readonly bool _useStandardDelimiters;
 
             public MyDatabaseConnection() : this("test", "test") {}
 
@@ -102,8 +101,7 @@ namespace Habanero.Test.BO.SqlGeneration
             {
                 get
                 {
-                    if (_useStandardDelimiters) return base.LeftFieldDelimiter;
-                    else return "";
+                    return _useStandardDelimiters ? base.LeftFieldDelimiter : "";
                 }
             }
 
@@ -111,8 +109,7 @@ namespace Habanero.Test.BO.SqlGeneration
             {
                 get
                 {
-                    if (_useStandardDelimiters) return base.RightFieldDelimiter;
-                    else return "";
+                    return _useStandardDelimiters ? base.RightFieldDelimiter : "";
                 }
             }
         }

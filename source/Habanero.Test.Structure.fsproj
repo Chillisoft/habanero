@@ -1,12 +1,12 @@
 <Project EditorVersion="1.1.0" ProjectFileName="D:\Systems\Habanero\trunk\source\Habanero.Test.Structure.fsproj">
-  <ProjectSettings HabaneroDllPath="D:\Systems\Habanero\trunk\bin" ProjectName="Habanero.Test.Structure" SolutionDirectory="D:\Systems\Habanero\trunk\source" BaseProjectName="ToBeDeleted" UiProjectName="ToBeDeleted" LogicProjectName="ToBeDeleted" BoProjectName="Habanero.Test.Structure" DefaultAssembly="Habanero.Test.Structure.BO">
+  <ProjectSettings HabaneroDllPath="D:\Systems\Habanero\trunk\bin" ProjectName="Habanero.Test.Structure" SolutionDirectory="D:\Systems\Habanero\trunk\source" BaseProjectName="ToBeDeleted" UiProjectName="ToBeDeleted" LogicProjectName="ToBeDeleted" BoProjectName="Habanero.Test.Structure" DefaultAssembly="Habanero.Test.Structure">
     <CustomPropertyTypes />
     <CustomControlTypes />
     <CustomControlMapperTypes />
     <CustomGridControlTypes />
   </ProjectSettings>
   <Classes>
-    <Class Assembly="Habanero.Test.Structure.BO" ClassName="Car" TableName="table_Car" DisplayName="Car">
+    <Class Assembly="Habanero.Test.Structure" ClassName="Car" TableName="table_Car" DisplayName="Car">
       <SuperClassDesc SuperClass="Vehicle" HasSuperClass="True" />
       <PrimaryKey>
         <KeyProperties>
@@ -71,7 +71,7 @@
       <Uis />
       <CustomProperties />
     </Class>
-    <Class Assembly="Habanero.Test.Structure.BO" ClassName="Engine" TableName="table_Engine" DisplayName="Engine">
+    <Class Assembly="Habanero.Test.Structure" ClassName="Engine" TableName="table_Engine" DisplayName="Engine">
       <SuperClassDesc SuperClass="Part" HasSuperClass="True" InheritedIdProperty="EngineID" />
       <PrimaryKey>
         <KeyProperties>
@@ -150,7 +150,7 @@
       <Uis />
       <CustomProperties />
     </Class>
-    <Class Assembly="Habanero.Test.Structure.BO" ClassName="Entity" TableName="table_Entity" DisplayName="Entity">
+    <Class Assembly="Habanero.Test.Structure" ClassName="Entity" TableName="table_Entity" DisplayName="Entity">
       <SuperClassDesc />
       <PrimaryKey>
         <KeyProperties>
@@ -185,7 +185,7 @@
       <Uis />
       <CustomProperties />
     </Class>
-    <Class Assembly="Habanero.Test.Structure.BO" ClassName="LegalEntity" TableName="table_LegalEntity" DisplayName="Legal Entity">
+    <Class Assembly="Habanero.Test.Structure" ClassName="LegalEntity" TableName="table_LegalEntity" DisplayName="Legal Entity">
       <SuperClassDesc SuperClass="Entity" HasSuperClass="True" />
       <PrimaryKey>
         <KeyProperties>
@@ -226,7 +226,7 @@
       <Uis />
       <CustomProperties />
     </Class>
-    <Class Assembly="Habanero.Test.Structure.BO" ClassName="Organisation" TableName="table_Organisation" DisplayName="Organisation">
+    <Class Assembly="Habanero.Test.Structure" ClassName="Organisation" TableName="table_Organisation" DisplayName="Organisation">
       <SuperClassDesc SuperClass="LegalEntity" HasSuperClass="True" />
       <PrimaryKey>
         <KeyProperties>
@@ -280,7 +280,7 @@
       <Uis />
       <CustomProperties />
     </Class>
-    <Class Assembly="Habanero.Test.Structure.BO" ClassName="OrganisationPerson" TableName="table_OrganisationPerson" DisplayName="Organisation Person">
+    <Class Assembly="Habanero.Test.Structure" ClassName="OrganisationPerson" TableName="table_OrganisationPerson" DisplayName="Organisation Person">
       <SuperClassDesc />
       <PrimaryKey IsObjectID="False">
         <KeyProperties>
@@ -335,7 +335,7 @@
       <Uis />
       <CustomProperties />
     </Class>
-    <Class Assembly="Habanero.Test.Structure.BO" ClassName="Part" TableName="table_Part" DisplayName="Part">
+    <Class Assembly="Habanero.Test.Structure" ClassName="Part" TableName="table_Part" DisplayName="Part">
       <SuperClassDesc SuperClass="Entity" HasSuperClass="True" InheritedIdProperty="PartID" />
       <PrimaryKey>
         <KeyProperties>
@@ -383,7 +383,7 @@
       <Uis />
       <CustomProperties />
     </Class>
-    <Class Assembly="Habanero.Test.Structure.BO" ClassName="Person" TableName="table_Person" DisplayName="Person">
+    <Class Assembly="Habanero.Test.Structure" ClassName="Person" TableName="table_Person" DisplayName="Person">
       <SuperClassDesc SuperClass="LegalEntity" HasSuperClass="True" />
       <PrimaryKey>
         <KeyProperties>
@@ -460,7 +460,7 @@
       <Uis />
       <CustomProperties />
     </Class>
-    <Class Assembly="Habanero.Test.Structure.BO" ClassName="Vehicle" TableName="table_Vehicle" DisplayName="Vehicle">
+    <Class Assembly="Habanero.Test.Structure" ClassName="Vehicle" TableName="table_Vehicle" DisplayName="Vehicle">
       <SuperClassDesc SuperClass="Entity" HasSuperClass="True" />
       <PrimaryKey>
         <KeyProperties>
