@@ -327,12 +327,12 @@ namespace Habanero.BO
                 loadSqlStatement.Statement.Append(extraSearchCriteriaLiteral);
             }
 
+            loadSqlStatement.AppendOrderBy(orderByClause);
             if (limit > 0)
             {
                 string limitClause = boDatabaseConnection.GetLimitClauseForEnd(limit);
                 if (!String.IsNullOrEmpty(limitClause)) loadSqlStatement.Statement.Append(" " + limitClause);
             }
-            loadSqlStatement.AppendOrderBy(orderByClause);
             return loadSqlStatement;
         }
 

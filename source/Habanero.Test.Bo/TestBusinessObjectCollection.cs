@@ -142,8 +142,17 @@ namespace Habanero.Test.BO
         {
             MyBO bo1 = new MyBO();
             ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
-                bo1, ClassDef.ClassDefs[typeof (MyBO)], null, 10, null, null);
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], null, 10, null, null);
             Assert.AreEqual("SELECT `MyBO`.`MyBoID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` FROM `MyBO` limit 10", statement.Statement.ToString());
+        }
+
+        [Test]
+        public void TestCreateLoadSqlStatement_LimitClauseAtEnd_WithOrderBy()
+        {
+            MyBO bo1 = new MyBO();
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], null, 10, null, "TestProp");
+            Assert.AreEqual("SELECT `MyBO`.`MyBoID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` FROM `MyBO` ORDER BY `MyBO`.`TestProp` limit 10", statement.Statement.ToString());
         }
 
         [Test]
