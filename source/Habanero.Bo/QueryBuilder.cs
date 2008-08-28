@@ -209,12 +209,26 @@ namespace Habanero.BO
                 Source baseSource = new Source(superClassDef.ClassName, superClassDef.TableName);
                 Source.Join join = new Source.Join(rootSource, baseSource);
                 IPropDef basePrimaryKeyPropDef = superClassDef.PrimaryKeyDef[0];
-                IPropDef thisPrimaryKeyPropDef = currentClassDef.PrimaryKeyDef[0];
-                join.JoinFields.Add(new Source.Join.JoinField(
-                                        new QueryField(thisPrimaryKeyPropDef.PropertyName, thisPrimaryKeyPropDef.DatabaseFieldName,
-                                                       rootSource),
-                                        new QueryField(basePrimaryKeyPropDef.PropertyName, basePrimaryKeyPropDef.DatabaseFieldName,
-                                                       baseSource)));
+                if (currentClassDef.PrimaryKeyDef != null)
+                {
+                    IPropDef thisPrimaryKeyPropDef = currentClassDef.PrimaryKeyDef[0];
+                    join.JoinFields.Add(new Source.Join.JoinField(
+                                            new QueryField(thisPrimaryKeyPropDef.PropertyName,
+                                                           thisPrimaryKeyPropDef.DatabaseFieldName,
+                                                           rootSource),
+                                            new QueryField(basePrimaryKeyPropDef.PropertyName,
+                                                           basePrimaryKeyPropDef.DatabaseFieldName,
+                                                           baseSource)));
+                } else
+                {
+                    join.JoinFields.Add(new Source.Join.JoinField(
+                                            new QueryField(basePrimaryKeyPropDef.PropertyName,
+                                                           basePrimaryKeyPropDef.DatabaseFieldName,
+                                                           rootSource),
+                                            new QueryField(basePrimaryKeyPropDef.PropertyName,
+                                                           basePrimaryKeyPropDef.DatabaseFieldName,
+                                                           baseSource)));
+                }
                 rootSource.InheritanceJoins.Add(join);
                 rootSource = baseSource;
                 currentClassDef = superClassDef;

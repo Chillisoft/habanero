@@ -63,7 +63,30 @@ namespace Habanero.BO
         public Criteria Criteria
         {
             get { return _criteria; }
-            set { _criteria = value; }
+            set
+            {
+                _criteria = value;
+                if (Source == null)
+                    throw new HabaneroApplicationException(
+                        "You cannot set a Criteria for a SelectQuery if no Source has been set");
+                if (_criteria == null) return;
+                MergeCriteriaSource(_criteria);
+
+
+        }
+        }
+
+        private void MergeCriteriaSource(Criteria criteria)
+        {
+            if (criteria.IsComposite())
+            {
+                MergeCriteriaSource(criteria.LeftCriteria);
+                MergeCriteriaSource(criteria.RightCriteria);
+            }
+            else
+            {
+                this.Source.MergeWith(criteria.Field.Source);
+            }
         }
 
         /// <summary>

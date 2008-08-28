@@ -54,6 +54,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             SelectQuery selectQuery = new SelectQuery();
+            selectQuery.Source = new Source("bob");
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("test", Criteria.ComparisonOp.Equals, "testValue");
             selectQuery.Criteria = criteria;
@@ -61,6 +62,58 @@ namespace Habanero.Test.BO
             Assert.AreSame(criteria, selectQuery.Criteria);
             //---------------Tear Down -------------------------
         }
+
+        
+        [Test]
+        public void TestSetCriteria_AddsJoins()
+        {
+          //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            const string sourceName = "mysource";
+            selectQuery.Source = new Source(sourceName);
+            Source fieldSource = new Source(sourceName);
+            string expectedSourceName = TestUtil.CreateRandomString();
+            fieldSource.JoinToSource(new Source(expectedSourceName));
+            QueryField field = new QueryField("testfield", "testfield", fieldSource);
+            Criteria criteria = new Criteria(field, Criteria.ComparisonOp.Equals, "value");
+
+            //---------------Execute Test ----------------------
+            selectQuery.Criteria = criteria;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, selectQuery.Source.Joins.Count);
+            Assert.AreEqual(selectQuery.Source, selectQuery.Source.Joins[0].FromSource);
+            Assert.AreEqual(expectedSourceName, selectQuery.Source.Joins[0].ToSource.Name);
+        }
+
+        [Test]
+        public void TestSetCompoundCriteria_AddsJoins()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            const string sourceName = "mysource";
+            selectQuery.Source = new Source(sourceName);
+            Source field1Source = new Source(sourceName);
+            Source field2Source = new Source(sourceName); 
+            string expectedSourceName1 = TestUtil.CreateRandomString();
+            string expectedSourceName2 = TestUtil.CreateRandomString();
+            field1Source.JoinToSource(new Source(expectedSourceName1));
+            field2Source.JoinToSource(new Source(expectedSourceName2));
+            QueryField field1 = new QueryField("testfield", "testfield", field1Source);
+            QueryField field2 = new QueryField("testfield", "testfield", field2Source);
+            Criteria criteria1 = new Criteria(field1, Criteria.ComparisonOp.Equals, "value");
+            Criteria criteria2 = new Criteria(field2, Criteria.ComparisonOp.Equals, "value");
+            Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.And, criteria2);
+            //---------------Execute Test ----------------------
+            selectQuery.Criteria = criteria;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, selectQuery.Source.Joins.Count);
+            Assert.AreEqual(selectQuery.Source, selectQuery.Source.Joins[0].FromSource);
+            Assert.AreEqual(expectedSourceName1, selectQuery.Source.Joins[0].ToSource.Name);
+            Assert.AreEqual(selectQuery.Source, selectQuery.Source.Joins[1].FromSource);
+            Assert.AreEqual(expectedSourceName2, selectQuery.Source.Joins[1].ToSource.Name);
+        }
+
+
 
         [Test]
         public void Test_SetOrderCriteriaToNull_NoError()

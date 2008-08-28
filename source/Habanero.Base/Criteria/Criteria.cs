@@ -125,10 +125,9 @@ namespace Habanero.Base
         /// <param name="comparisonOp">The operator to use to compare the property value to the given value</param>
         /// <param name="value">The value to compare to</param>
         public Criteria(string propName, ComparisonOp comparisonOp, object value)
+            : this(QueryField.FromString(propName), comparisonOp, value)
         {
-            _field = QueryField.FromString(propName);
-            _comparisonOp = comparisonOp;
-            _fieldValue = value;
+ 
         }
 
         /// <summary>
@@ -142,6 +141,19 @@ namespace Habanero.Base
             _leftCriteria = leftCriteria;
             _logicalOp = logicalOp;
             _rightCriteria = rightCriteria;
+        }
+
+        /// <summary>
+        /// Creates a leaf criteria (meaning it has no children in the tree structure).
+        /// </summary>
+        /// <param name="field">The property whose value to check, as a <see cref="QueryField"/></param>
+        /// <param name="comparisonOp">The operator to use to compare the property value to the given value</param>
+        /// <param name="value">The value to compare to</param>
+        public Criteria(QueryField field, ComparisonOp comparisonOp, object value)
+        {
+            _field = field;
+            _comparisonOp = comparisonOp;
+            _fieldValue = value;
         }
 
         ///<summary>

@@ -51,6 +51,23 @@ namespace Habanero.Test.BO
             Assert.AreEqual(Criteria.ComparisonOp.Equals, criteria.ComparisonOperator);
         }
 
+
+        [Test]
+        public void TestLeafProperties_AlternateConstructor()
+        {
+            //-------------Setup Test Pack ------------------
+            QueryField field1 = new QueryField("MyField", "MyField", null);
+            //-------------Test Pre-conditions --------------
+
+            //-------------Execute test ---------------------
+            Criteria criteria = new Criteria(field1, Criteria.ComparisonOp.Equals, "MyValue");
+
+            //-------------Test Result ----------------------
+            Assert.AreSame(field1, criteria.Field);
+            Assert.AreEqual("MyValue", criteria.FieldValue);
+            Assert.AreEqual(Criteria.ComparisonOp.Equals, criteria.ComparisonOperator);
+        }
+
         [Test]
         public void TestEquals_Null()
         {

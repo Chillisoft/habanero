@@ -110,7 +110,7 @@ namespace Habanero.Base
             {
                 valueString = FieldValue == null ? "NULL" : Convert.ToString(FieldValue);
             }
-            string sourceEntityName = ""; if (Field.Source != null) sourceEntityName = Field.Source.EntityName;
+            string sourceEntityName = ""; if (Field.Source != null) sourceEntityName = Field.Source.ChildSourceLeaf.EntityName;
             string separator = "";
             if (!String.IsNullOrEmpty(sourceEntityName))
             {

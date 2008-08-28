@@ -147,5 +147,15 @@ namespace Habanero.Base
         /// <returns>Returns true if so, or false if there is no
         /// super class or another type of inheritance is being used</returns>
         bool IsUsingClassTableInheritance();
+
+        ///<summary>
+        /// Returns a particular property definition for a class definition.
+        ///</summary>
+        ///<param name="source"></param>
+        ///<param name="propertyName"></param>
+        ///<param name="throwError"></param>
+        ///<returns></returns>
+        ///<exception cref="ArgumentException"></exception>
+        IPropDef GetPropDef(Source source, string propertyName, bool throwError);
     }
 }
