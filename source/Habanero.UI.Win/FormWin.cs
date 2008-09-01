@@ -47,6 +47,16 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
+        /// Shows the form with the specified owner to the user.
+        /// </summary>
+        /// <param name="owner">Any object that implements System.Windows.Forms.IWin32Window and represents the top-level window that will own this form.</param>
+        /// <exception cref="System.ArgumentException">The form specified in the owner parameter is the same as the form being shown.</exception>
+        public void Show(IControlChilli owner)
+        {
+            base.Show((IWin32Window)owner);
+        }
+
+        /// <summary>
         /// Gets or sets the current multiple document interface (MDI) parent form of this form
         /// </summary>
         IFormChilli IFormChilli.MdiParent

@@ -95,6 +95,13 @@ namespace Habanero.UI.Base
         void Show();
 
         /// <summary>
+        /// Shows the form with the specified owner to the user.
+        /// </summary>
+        /// <param name="owner">Any object that implements System.Windows.Forms.IWin32Window and represents the top-level window that will own this form.</param>
+        /// <exception cref="System.ArgumentException">The form specified in the owner parameter is the same as the form being shown.</exception>
+        void Show(IControlChilli owner);
+
+        /// <summary>
         /// Forces the form to invalidate its client area and
         /// immediately redraw itself and any child controls
         /// </summary>
