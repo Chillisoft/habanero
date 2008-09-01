@@ -244,6 +244,13 @@ namespace Habanero.UI.Base
         IWizardControl CreateWizardControl(IWizardController wizardController);
 
         /// <summary>
+        /// Creates a form that will be used to display the wizard user interface.
+        /// </summary>
+        /// <param name="wizardController"></param>
+        /// <returns></returns>
+        IWizardForm CreateWizardForm(IWizardController wizardController);
+
+        /// <summary>
         /// Returns a BOEditor form. This is a form that the business object can be edited in.
         /// </summary>
         /// <param name="bo"></param>

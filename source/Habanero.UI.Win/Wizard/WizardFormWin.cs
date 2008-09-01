@@ -21,13 +21,14 @@ using System;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 using DialogResult=System.Windows.Forms.DialogResult;
+using FormStartPosition=System.Windows.Forms.FormStartPosition;
 
 namespace Habanero.UI.Win
 {
     /// <summary>
     /// A form that displays a wizard.  This form simply wraps the WizardControl in a form and handles communication with the user.
     /// </summary>
-    public partial class WizardFormWin : FormWin, IFormChilli
+    public partial class WizardFormWin : FormWin, IWizardForm
     {
         private readonly IWizardController _wizardController;
         private readonly WizardControlWin _uxWizardControl;

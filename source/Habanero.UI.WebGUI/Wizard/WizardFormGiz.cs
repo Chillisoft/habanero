@@ -20,13 +20,14 @@
 using System;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
+using FormStartPosition=Gizmox.WebGUI.Forms.FormStartPosition;
 
 namespace Habanero.UI.WebGUI
 {
     /// <summary>
     /// A form that displays a wizard.  This form simply wraps the WizardControl in a form and handles communication with the user.
     /// </summary>
-    public partial class WizardFormGiz : FormGiz, IFormChilli
+    public partial class WizardFormGiz : FormGiz, IWizardForm
     {
         private readonly IWizardController _wizardController;
         private readonly WizardControlGiz _uxWizardControl;

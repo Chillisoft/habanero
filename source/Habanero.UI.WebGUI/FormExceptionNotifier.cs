@@ -27,6 +27,7 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.Util;
+using FormStartPosition=Gizmox.WebGUI.Forms.FormStartPosition;
 
 namespace Habanero.UI.WebGUI
 {

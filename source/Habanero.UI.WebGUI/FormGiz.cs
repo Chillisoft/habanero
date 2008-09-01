@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
+using FormStartPosition=Habanero.UI.Base.FormStartPosition;
 
 namespace Habanero.UI.WebGUI
 {
@@ -76,6 +77,16 @@ namespace Habanero.UI.WebGUI
         Base.DialogResult IFormChilli.ShowDialog()
         {
             return (Base.DialogResult)base.ShowDialog();
+        }
+
+        /// <summary>
+        /// Gets or sets the form start position.
+        /// </summary>
+        /// <value></value>
+        Base.FormStartPosition IFormChilli.StartPosition
+        {
+            get { return (Base.FormStartPosition)base.StartPosition; }
+            set { base.StartPosition = (Gizmox.WebGUI.Forms.FormStartPosition)value; }
         }
     }
 }

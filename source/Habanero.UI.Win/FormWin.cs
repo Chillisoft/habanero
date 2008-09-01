@@ -63,5 +63,15 @@ namespace Habanero.UI.Win
         {
             return (Base.DialogResult)base.ShowDialog();
         }
+
+        /// <summary>
+        /// Gets or sets the form start position.
+        /// </summary>
+        /// <value></value>
+        Base.FormStartPosition IFormChilli.StartPosition
+        {
+            get { return (Base.FormStartPosition)base.StartPosition; }
+            set { base.StartPosition = (System.Windows.Forms.FormStartPosition)value; }
+        }
     }
 }

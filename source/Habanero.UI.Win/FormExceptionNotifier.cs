@@ -23,6 +23,7 @@ using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.UI.Base;
+using FormStartPosition=System.Windows.Forms.FormStartPosition;
 
 namespace Habanero.UI.Win
 {

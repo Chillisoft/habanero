@@ -269,9 +269,25 @@ namespace Habanero.UI.Win
         }
 
 
+        /// <summary>
+        /// Creates a control that can be places on a form or a panel to to implement a wizard user interface.
+        /// The wizard control will have a next and previous button and a panel to place the wizard step on.
+        /// </summary>
+        /// <param name="wizardController"></param>
+        /// <returns></returns>
         public IWizardControl CreateWizardControl(IWizardController wizardController)
         {
             return new WizardControlWin(wizardController, this);
+        }
+
+        /// <summary>
+        /// Creates a form that will be used to display the wizard user interface.
+        /// </summary>
+        /// <param name="wizardController"></param>
+        /// <returns></returns>
+        public IWizardForm CreateWizardForm(IWizardController wizardController)
+        {
+            return new WizardFormWin(wizardController, this);
         }
 
         public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string name,

@@ -524,6 +524,8 @@ namespace Habanero.UI.WebGUI
             return new DefaultBOEditorFormGiz(bo, uiDefName, this);
         }
 
+        
+
         /// <summary>
         /// Returns a BOEditor form. This is a form that the business object can be edited in.
         /// </summary>
@@ -641,9 +643,25 @@ namespace Habanero.UI.WebGUI
         }
 
 
+        /// <summary>
+        /// Creates a control that can be places on a form or a panel to to implement a wizard user interface.
+        /// The wizard control will have a next and previous button and a panel to place the wizard step on.
+        /// </summary>
+        /// <param name="wizardController"></param>
+        /// <returns></returns>
         public virtual IWizardControl CreateWizardControl(IWizardController wizardController)
         {
             return new WizardControlGiz(wizardController, this);
+        }
+
+        /// <summary>
+        /// Creates a form that will be used to display the wizard user interface.
+        /// </summary>
+        /// <param name="wizardController"></param>
+        /// <returns></returns>
+        public IWizardForm CreateWizardForm(IWizardController wizardController)
+        {
+            return new WizardFormGiz(wizardController, this);
         }
 
         #endregion

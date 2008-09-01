@@ -58,7 +58,31 @@ namespace Habanero.UI.Base
         /// The dialog box return value is No (usually sent from a button labeled No)
         /// </summary>
         No = 7
-    }    
+    }
+
+    public enum FormStartPosition
+    {
+        /// <summary>
+        /// The form is centered within the bounds of its parent form.
+        /// </summary>
+        CenterParent = 4,
+        /// <summary>
+        /// The form is centered on the current display, and has the dimensions specified in the form's size.
+        /// </summary>
+        CenterScreen = 1,
+        /// <summary>
+        /// The position of the form is determined by the System.Windows.Forms.Control.Location property.
+        /// </summary>
+        Manual = 0,
+        /// <summary>
+        /// The form is positioned at the Windows default location and has the bounds determined by Windows default.
+        /// </summary>
+        WindowsDefaultBounds = 3,
+        /// <summary>
+        /// The form is positioned at the Windows default location and has the dimensions specified in the form's size.
+        /// </summary>
+        WindowsDefaultLocation = 2
+    }
 
     /// <summary>
     /// Represents a window or dialog box that makes up an application's user interface
@@ -107,6 +131,12 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <returns>One of the DialogResult values</returns>
         DialogResult ShowDialog();
+
+        /// <summary>
+        /// Gets or sets the form start position.
+        /// </summary>
+        /// <value></value>
+        FormStartPosition StartPosition { get; set; }
     }
 
 }

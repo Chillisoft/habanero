@@ -183,6 +183,7 @@
     <Compile Include="Util\ValidationUtil.cs" />
     <Compile Include="Wizard\IWizardControl.cs" />
     <Compile Include="Wizard\IWizardController.cs" />
+    <Compile Include="Wizard\IWizardForm.cs" />
     <Compile Include="Wizard\IWizardStep.cs" />
     <Compile Include="Wizard\WizardController.cs" />
     <Compile Include="Wizard\WizardStepException.cs" />
