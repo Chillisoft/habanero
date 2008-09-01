@@ -173,6 +173,27 @@
     <Compile Include="..\Common\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
+    <Compile Include="Wizard\MessageWizardStepWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\MessageWizardStepWin.designer.cs">
+      <DependentUpon>MessageWizardStepWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\NullWizardStepWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\NullWizardStepWin.designer.cs">
+      <DependentUpon>NullWizardStepWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\WizardControlWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\WizardFormWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Wizard\WizardFormWin.designer.cs">
+      <DependentUpon>WizardFormWin.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
@@ -198,6 +219,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Wizard\MessageWizardStepWin.resx">
+      <DependentUpon>MessageWizardStepWin.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Wizard\WizardFormWin.resx">
+      <DependentUpon>WizardFormWin.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

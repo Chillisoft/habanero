@@ -271,7 +271,7 @@ namespace Habanero.UI.Win
 
         public IWizardControl CreateWizardControl(IWizardController wizardController)
         {
-            throw new NotImplementedException();
+            return new WizardControlWin(wizardController, this);
         }
 
         public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string name,

@@ -21,34 +21,402 @@ using System;
 using System.Collections.Generic;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
+using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.Wizard
 {
-  
+
     public abstract class TestWizardControl
     {
         protected abstract IControlFactory GetControlFactory();
 
-        //[TestFixture]
-        //public class TestWizardControlWin : TestWizardControl
-        //{
-        //    protected override IControlFactory GetControlFactory()
-        //    {
-        //        return new Habanero.UI.Win.ControlFactoryWin();
-        //    }
-        //}
+        protected abstract IWizardControllerStub CreateWizardControllerStub();
+
+        #region Testing Wizard Class Interfaces
+
+        public interface IWizardStepStub : IWizardStep
+        {
+            bool AllowMoveOn { get; set; }
+            bool IsInitialised { get; }
+            bool AllowCanMoveBack { get; set; }
+            new string HeaderText { get; set; }
+
+        }
+
+        public interface IWizardControllerStub : IWizardController
+        {
+            IWizardStepStub ControlForStep1 { get; }
+            bool CancelButtonEventFired { get; }
+            IWizardStepStub ControlForStep2 { get; }
+            bool FinishCalled { get; }
+            void ForTestingAddWizardStep(IWizardStep wizardStepStub);
+        }
+
+        internal class WizardControllerStub<T> : IWizardControllerStub
+    where T : IWizardStepStub, new()
+        {
+            private IWizardStepStub _controlForStep1 = new T();
+
+            private IWizardStepStub _controlForStep2 = new T();
+            private bool _finishCalled = false;
+            private readonly List<IWizardStep> _wizardSteps;
+            private int _currentStep = -1;
+            private bool _cancelButtonEventFired = false;
+
+            public IWizardStepStub ControlForStep1
+            {
+                get { return _controlForStep1; }
+                set { _controlForStep1 = value; }
+            }
+
+            public IWizardStepStub ControlForStep2
+            {
+                get { return _controlForStep2; }
+                set { _controlForStep2 = value; }
+            }
+
+            public bool FinishCalled
+            {
+                get { return _finishCalled; }
+                set { _finishCalled = value; }
+            }
+
+            public WizardControllerStub()
+            {
+                _wizardSteps = new List<IWizardStep>();
+                ControlForStep1.Name = "ControlForStep1";
+                ControlForStep2.Name = "ControlForStep2";
+                ControlForStep2.HeaderText = "This is wizard step 2";
+                _wizardSteps.Add(ControlForStep1);
+                _wizardSteps.Add(ControlForStep2);
+
+            }
+
+            public IWizardStep GetNextStep()
+            {
+                if (_currentStep < _wizardSteps.Count - 1)
+                    return _wizardSteps[++_currentStep];
+                else
+                    throw new WizardStepException("Invalid Wizard Step: " + (_currentStep + 1));
+            }
+
+            public IWizardStep GetPreviousStep()
+            {
+                if (_currentStep > 0)
+                    return _wizardSteps[--_currentStep];
+                else throw new WizardStepException("Invalid Wizard Step: " + (_currentStep - 1));
+            }
+
+
+            public IWizardStep GetFirstStep()
+            {
+                FinishCalled = false;
+                return _wizardSteps[_currentStep = 0];
+            }
+
+            public bool IsLastStep()
+            {
+                return (_currentStep == _wizardSteps.Count - 1);
+            }
+
+            public bool IsFirstStep()
+            {
+                return (_currentStep == 0);
+            }
+
+            public void Finish()
+            {
+                if (IsLastStep())
+                    FinishCalled = true;
+                else throw new WizardStepException("Invalid call to Finish(), not at last step");
+            }
+
+            public bool CanMoveOn(out string message)
+            {
+                return _wizardSteps[_currentStep].CanMoveOn(out message);
+            }
+
+            public int StepCount
+            {
+                get { return _wizardSteps.Count; }
+            }
+
+            /// <summary>
+            /// Gets or Sets the Current Step of the Wizard.
+            /// </summary>
+            public int CurrentStep
+            {
+                get { return _currentStep; }
+            }
+
+            public bool CancelButtonEventFired
+            {
+                get { return _cancelButtonEventFired; }
+            }
+
+            public IWizardStep GetCurrentStep()
+            {
+                return _wizardSteps[_currentStep];
+            }
+
+            /// <summary>
+            /// This provides a method which is called when the wizard is cancelled. The wizard controller can 
+            /// undo any changes that have occured up until that point so as to ensure that the objects are returned
+            /// to their original state.
+            /// </summary>
+            public void CancelWizard()
+            {
+                this._cancelButtonEventFired = true;
+            }
+
+            public void ForTestingAddWizardStep(IWizardStep step)
+            {
+                _wizardSteps.Add(step);
+            }
+        }
+
+
+        #endregion // Testing Wizard Class Interfaces
+
+        [TestFixture]
+        public class TestWizardControlWin : TestWizardControl
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
+
+            protected override IWizardControllerStub CreateWizardControllerStub()
+            {
+                return new WizardControllerStub<WizardStepStubWin>();
+            }
+
+            protected override IWizardStepStub CreateWizardStepStub()
+            {
+                return new WizardStepStubWin();
+            }
+
+            internal class WizardStepStubWin : ControlWin, IWizardStepStub
+            {
+                private bool _allowMoveOn = true;
+
+                private string _headerText;
+                private bool _allowCanMoveBack = true;
+                private bool _isInitialised;
+
+                public string HeaderText
+                {
+                    get { return _headerText; }
+                    set { _headerText = value; }
+                }
+
+                /// <summary>
+                /// Provides an interface for the developer to implement functionality to cancel any edits made as part of this
+                /// wizard step. The default wizard controller functionality is to call all wizard steps cancelStep methods when
+                /// its Cancel method is called.
+                /// </summary>
+                public void CancelStep()
+                {
+
+                }
+
+                public WizardStepStubWin()
+                    : this("")
+                {
+                }
+
+                public WizardStepStubWin(string headerText)
+                {
+                    _headerText = headerText;
+                }
+
+                public bool AllowCanMoveBack
+                {
+                    get { return _allowCanMoveBack; }
+                    set { _allowCanMoveBack = value; }
+                }
+
+                #region IWizardStep Members
+
+                public void InitialiseStep()
+                {
+                    _isInitialised = true;
+                }
+
+                public bool CanMoveOn(out string message)
+                {
+                    message = "";
+                    if (!AllowMoveOn) message = "Sorry, can't move on";
+                    return AllowMoveOn;
+                }
+
+                /// <summary>
+                /// Verifies whether the user can move back from this step.
+                /// </summary>
+                /// <returns></returns>
+                public bool CanMoveBack()
+                {
+                    return AllowCanMoveBack;
+                }
+
+                #endregion
+
+                public bool AllowMoveOn
+                {
+                    get { return _allowMoveOn; }
+                    set { _allowMoveOn = value; }
+                }
+
+                IControlCollection IControlChilli.Controls
+                {
+                    get
+                    {
+                        return null;
+
+                    }
+                }
+
+                public bool IsInitialised
+                {
+                    get { return _isInitialised; }
+                }
+
+                ///<summary>
+                ///Returns a <see cref="T:System.String"></see> containing the name of the <see cref="T:System.ComponentModel.Component"></see>, if any. This method should not be overridden.
+                ///</summary>
+                ///
+                ///<returns>
+                ///A <see cref="T:System.String"></see> containing the name of the <see cref="T:System.ComponentModel.Component"></see>, if any, or null if the <see cref="T:System.ComponentModel.Component"></see> is unnamed.
+                ///</returns>
+                ///
+                public override string ToString()
+                {
+                    return Name;
+                }
+            }
+        }
 
         [TestFixture]
         public class TestWizardControlGiz : TestWizardControl
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
+                return new ControlFactoryGizmox();
             }
+
+            protected override IWizardControllerStub CreateWizardControllerStub()
+            {
+                return new WizardControllerStub<WizardStepStubGiz>();
+            }
+
+            protected override IWizardStepStub CreateWizardStepStub()
+            {
+                return new WizardStepStubGiz();
+            }
+
+            public class WizardStepStubGiz : ControlGiz, IWizardStepStub
+            {
+                private bool _allowMoveOn = true;
+
+                private string _headerText;
+                private bool _allowCanMoveBack = true;
+                private bool _isInitialised;
+
+                public string HeaderText
+                {
+                    get { return _headerText; }
+                    set { _headerText = value; }
+                }
+
+                /// <summary>
+                /// Provides an interface for the developer to implement functionality to cancel any edits made as part of this
+                /// wizard step. The default wizard controller functionality is to call all wizard steps cancelStep methods when
+                /// its Cancel method is called.
+                /// </summary>
+                public void CancelStep()
+                {
+
+                }
+
+                public WizardStepStubGiz()
+                    : this("")
+                {
+                }
+
+                public WizardStepStubGiz(string headerText)
+                {
+                    _headerText = headerText;
+                }
+
+                public bool AllowCanMoveBack
+                {
+                    get { return _allowCanMoveBack; }
+                    set { _allowCanMoveBack = value; }
+                }
+
+                #region IWizardStep Members
+
+                public void InitialiseStep()
+                {
+                    _isInitialised = true;
+                }
+
+                public bool CanMoveOn(out string message)
+                {
+                    message = "";
+                    if (!AllowMoveOn) message = "Sorry, can't move on";
+                    return AllowMoveOn;
+                }
+
+                /// <summary>
+                /// Verifies whether the user can move back from this step.
+                /// </summary>
+                /// <returns></returns>
+                public bool CanMoveBack()
+                {
+                    return AllowCanMoveBack;
+                }
+
+                #endregion
+
+                public bool AllowMoveOn
+                {
+                    get { return _allowMoveOn; }
+                    set { _allowMoveOn = value; }
+                }
+
+                IControlCollection IControlChilli.Controls
+                {
+                    get
+                    {
+                        return null;
+
+                    }
+                }
+
+                public bool IsInitialised
+                {
+                    get { return _isInitialised; }
+                }
+
+                ///<summary>
+                ///Returns a <see cref="T:System.String"></see> containing the name of the <see cref="T:System.ComponentModel.Component"></see>, if any. This method should not be overridden.
+                ///</summary>
+                ///
+                ///<returns>
+                ///A <see cref="T:System.String"></see> containing the name of the <see cref="T:System.ComponentModel.Component"></see>, if any, or null if the <see cref="T:System.ComponentModel.Component"></see> is unnamed.
+                ///</returns>
+                ///
+                public override string ToString()
+                {
+                    return Name;
+                }
+            }
+
         }
 
-        private WizardControllerStub _controller;
+        private IWizardControllerStub _controller;
         private IWizardControl _wizardControl;
 
         private string _message;
@@ -56,17 +424,19 @@ namespace Habanero.Test.UI.Base.Wizard
         [TestFixtureSetUp]
         public void SetupFixture()
         {
-            _controller = new WizardControllerStub();
+            _controller = CreateWizardControllerStub();
             _wizardControl = GetControlFactory().CreateWizardControl(_controller);// new WizardControl(_controller);
         }
+
         [SetUp]
         public void SetupTest()
         {
             _controller.ControlForStep1.AllowMoveOn = true;
             _message = "";
             _wizardControl.Start();
-            
+
         }
+
         //TODO: Tests for layout management?
         [TearDown]
         public void TearDownTest()
@@ -77,7 +447,7 @@ namespace Habanero.Test.UI.Base.Wizard
         public void TestConstructWizardControl()
         {
             //---------------Set up test pack-------------------
-            WizardControllerStub wizardController = new WizardControllerStub();
+            IWizardControllerStub wizardController = CreateWizardControllerStub();
 
             //---------------Execute Test ----------------------
             IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
@@ -91,19 +461,19 @@ namespace Habanero.Test.UI.Base.Wizard
             Assert.Less(wizardControl.NextButton.Left, wizardControl.CancelButton.Left);
             Assert.AreEqual(0, wizardControl.PreviousButton.TabIndex);
             Assert.AreEqual(1, wizardControl.NextButton.TabIndex);
-            Assert.AreEqual(wizardControl.Height - wizardControl.NextButton.Height  - 62, wizardControl.WizardStepPanel.Height);
+            Assert.AreEqual(wizardControl.Height - wizardControl.NextButton.Height - 62, wizardControl.WizardStepPanel.Height);
         }
 
         [Test]
         public void TestCancelFiresEvent()
         {
             //---------------Set up test pack-------------------
-            WizardControllerStub wizardController = new WizardControllerStub();
+            IWizardControllerStub wizardController = CreateWizardControllerStub();
 
             IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
-            
+
             //--------------Assert PreConditions----------------            
-            Assert.IsFalse(wizardController.CancelButtonEventFired );
+            Assert.IsFalse(wizardController.CancelButtonEventFired);
             //---------------Execute Test ----------------------
 
             wizardControl.CancelButton.PerformClick();
@@ -122,7 +492,7 @@ namespace Habanero.Test.UI.Base.Wizard
         public void TestStart()
         {
             //Setup -----------------------------------------------------
-            WizardControllerStub  wizardController = new WizardControllerStub();
+            IWizardControllerStub wizardController = CreateWizardControllerStub();
             IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
             //Execute ---------------------------------------------------
             wizardControl.Start();
@@ -136,7 +506,7 @@ namespace Habanero.Test.UI.Base.Wizard
         public void TestHeaderLabelEnabledWhen_WizardStepTextSet()
         {
             //---------------Set up test pack-------------------
-            WizardControllerStub wizardController = new WizardControllerStub();
+            IWizardControllerStub wizardController = CreateWizardControllerStub();
             IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
             SetWizardControlSize(wizardControl);
             wizardControl.Start();
@@ -150,7 +520,7 @@ namespace Habanero.Test.UI.Base.Wizard
             IWizardStep currentStep = wizardController.GetCurrentStep();
             Assert.AreEqual("ControlForStep2", wizardControl.CurrentControl.Name);
             Assert.AreSame(currentStep, wizardControl.CurrentControl);
-            Assert.IsTrue(((WizardStepStub)currentStep).IsInitialised);
+            Assert.IsTrue(((IWizardStepStub)currentStep).IsInitialised);
             //Assert.IsTrue(wizardControl.HeadingLabel.Visible);
             //Assert.IsTrue(wizardControl.HeadingLabel.Text.Length > 0);
             //Assert.AreEqual(step.HeaderText, wizardControl.HeadingLabel.Text);
@@ -160,7 +530,7 @@ namespace Habanero.Test.UI.Base.Wizard
         public void TestHeaderLabelDisabledWhen_WizardStepTextSetBackToNull()
         {
             //---------------Set up test pack-------------------
-            WizardControllerStub wizardController = new WizardControllerStub();
+            IWizardControllerStub wizardController = CreateWizardControllerStub();
             IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
             SetWizardControlSize(wizardControl);
             wizardControl.Start();
@@ -192,7 +562,7 @@ namespace Habanero.Test.UI.Base.Wizard
         public void Test_SetWizardController_CallsStart()
         {
             //Setup ----------------------------------------------------
-            WizardControllerStub wizardController = new WizardControllerStub();
+            IWizardControllerStub wizardController = CreateWizardControllerStub();
             IWizardControl wizardControl = GetControlFactory().CreateWizardControl(_controller);
             wizardControl.Width = 300;
             //Execute ---------------------------------------------------
@@ -337,7 +707,7 @@ namespace Habanero.Test.UI.Base.Wizard
         public void TestNextClickAtLastStepCallsCanMoveOn()
         {
             //---------------Set up test pack-------------------
-            WizardControllerStub controller = new WizardControllerStub();
+            IWizardControllerStub controller = CreateWizardControllerStub();
             IWizardControl wizardControl = GetControlFactory().CreateWizardControl(controller);// new WizardControl(_controller);
             controller.ControlForStep1.AllowMoveOn = true;
             controller.ControlForStep2.AllowMoveOn = false;
@@ -385,20 +755,22 @@ namespace Habanero.Test.UI.Base.Wizard
         public void TestPreviousButtonDisabledIfCanMoveBackFalse()
         {
             //---------------Set up test pack-------------------
-            WizardControllerStub wizardController = new WizardControllerStub();
+            IWizardControllerStub wizardController = CreateWizardControllerStub();
             IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
             wizardController.ControlForStep2.AllowCanMoveBack = false;
             wizardControl.Start();
 
             //---------------Assert Preconditions ----------------------
-            Assert.IsFalse(wizardController.ControlForStep2.CanMoveBack());           
+            Assert.IsFalse(wizardController.ControlForStep2.CanMoveBack());
             //---------------Execute Test ----------------------
             wizardControl.Next();
             //---------------Assert result -----------------------
             Assert.AreSame(wizardControl.CurrentControl, wizardController.ControlForStep2);
-            Assert.IsFalse  (((WizardStepStub)wizardControl.CurrentControl).AllowCanMoveBack);
+            Assert.IsFalse(((IWizardStepStub)wizardControl.CurrentControl).AllowCanMoveBack);
             Assert.IsFalse(wizardControl.PreviousButton.Enabled);
         }
+
+        protected abstract IWizardStepStub CreateWizardStepStub();
 
         [Test]
         public void TestPreviousButtonDisabledIfCanMoveBackFalse_FromPreviousTep()
@@ -406,8 +778,8 @@ namespace Habanero.Test.UI.Base.Wizard
             //TODO: setup with 3 steps set step 2 allow move back false
             //and go next next next previous and then ensure that canMoveBack false
             //---------------Set up test pack-------------------
-            WizardControllerStub wizardController = new WizardControllerStub();
-            wizardController.ForTestingAddWizardStep(new WizardStepStub());
+            IWizardControllerStub wizardController = CreateWizardControllerStub();
+            wizardController.ForTestingAddWizardStep(CreateWizardStepStub());
 
             IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
             wizardController.ControlForStep2.AllowCanMoveBack = false;
@@ -421,7 +793,7 @@ namespace Habanero.Test.UI.Base.Wizard
             wizardControl.Previous();
             //---------------Assert result -----------------------
             Assert.AreSame(wizardControl.CurrentControl, wizardController.ControlForStep2);
-            Assert.IsFalse(((WizardStepStub)wizardControl.CurrentControl).AllowCanMoveBack);
+            Assert.IsFalse(((IWizardStepStub)wizardControl.CurrentControl).AllowCanMoveBack);
             Assert.IsFalse(wizardControl.PreviousButton.Enabled);
         }
 
@@ -429,7 +801,7 @@ namespace Habanero.Test.UI.Base.Wizard
         public void Test_SetStepResizesControl()
         {
             //---------------Set up test pack-------------------
-            WizardControllerStub wizardController = new WizardControllerStub();
+            IWizardControllerStub wizardController = CreateWizardControllerStub();
             IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
             wizardControl.Start();
             wizardController.ControlForStep2.Width = 10;
@@ -442,14 +814,14 @@ namespace Habanero.Test.UI.Base.Wizard
             wizardControl.Next();
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(wizardControl.Width- WizardControl.PADDING*2, wizardController.ControlForStep2.Width);
+            Assert.AreEqual(wizardControl.Width - WizardControl.PADDING * 2, wizardController.ControlForStep2.Width);
         }
 
         [Test, Ignore("The test is visually working but the tests are not picking up a change in width")]
         public void TestNextPreviousIn_theCorrectOrder()
         {
             //---------------Set up test pack-------------------
-            WizardControllerStub wizardController = new WizardControllerStub();
+            IWizardControllerStub wizardController = CreateWizardControllerStub();
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
@@ -459,204 +831,10 @@ namespace Habanero.Test.UI.Base.Wizard
             Assert.Less(wizardControl.NextButton.Left, wizardControl.PreviousButton.Left);
             //---------------Tear Down -------------------------          
         }
-        internal class WizardControllerStub : IWizardController
-        {
-            public WizardStepStub ControlForStep1 = new WizardStepStub();
-            
-            public WizardStepStub ControlForStep2 = new WizardStepStub("This is wizard step 2");
-            public bool FinishCalled = false;
-            private readonly List<IWizardStep> _wizardSteps;
-            private int _currentStep = -1;
-            private bool _cancelButtonEventFired = false;
-
-            public WizardControllerStub()
-            {
-                _wizardSteps = new List<IWizardStep>();
-                ControlForStep1.Name = "ControlForStep1";
-                ControlForStep2.Name = "ControlForStep2";
-                _wizardSteps.Add(ControlForStep1);
-                _wizardSteps.Add(ControlForStep2);
-                
-            }
-
-            public IWizardStep GetNextStep()
-            {
-                if (_currentStep < _wizardSteps.Count - 1)
-                    return _wizardSteps[++_currentStep];
-                else
-                    throw new WizardStepException("Invalid Wizard Step: " + (_currentStep + 1));
-            }
-
-            public IWizardStep GetPreviousStep()
-            {
-                if (_currentStep > 0)
-                    return _wizardSteps[--_currentStep];
-                else throw new WizardStepException("Invalid Wizard Step: " + (_currentStep - 1));
-            }
 
 
-            public IWizardStep GetFirstStep()
-            {
-                FinishCalled = false;
-                return _wizardSteps[_currentStep = 0];
-            }
-
-            public bool IsLastStep()
-            {
-                return (_currentStep == _wizardSteps.Count - 1);
-            }
-
-            public bool IsFirstStep()
-            {
-                return (_currentStep == 0);
-            }
-
-            public void Finish()
-            {
-                if (IsLastStep())
-                    FinishCalled = true;
-                else throw new WizardStepException("Invalid call to Finish(), not at last step");
-            }
-
-            public bool CanMoveOn(out string message)
-            {
-                return _wizardSteps[_currentStep].CanMoveOn(out message);
-            }
-
-            public int StepCount
-            {
-                get { return _wizardSteps.Count; }
-            }
-
-            /// <summary>
-            /// Gets or Sets the Current Step of the Wizard.
-            /// </summary>
-            public int CurrentStep
-            {
-                get { return _currentStep; }
-            }
-
-            public bool CancelButtonEventFired
-            {
-                get { return _cancelButtonEventFired; }
-            }
-
-            public IWizardStep GetCurrentStep()
-            {
-                return _wizardSteps[_currentStep];
-            }
-
-            /// <summary>
-            /// This provides a method which is called when the wizard is cancelled. The wizard controller can 
-            /// undo any changes that have occured up until that point so as to ensure that the objects are returned
-            /// to their original state.
-            /// </summary>
-            public void CancelWizard()
-            {
-                this._cancelButtonEventFired = true;
-            }
-
-            public void ForTestingAddWizardStep(IWizardStep step)
-            {
-                _wizardSteps.Add(step);
-            }
-        }
-
-        internal class WizardStepStub :ControlGiz, IWizardStep
-        {
-            private bool _allowMoveOn = true;
-
-            private readonly string _headerText;
-            private bool _allowCanMoveBack = true;
-            private bool _isInitialised;
-
-            public string HeaderText
-            {
-                get { return _headerText; }
-            }
-
-            /// <summary>
-            /// Provides an interface for the developer to implement functionality to cancel any edits made as part of this
-            /// wizard step. The default wizard controller functionality is to call all wizard steps cancelStep methods when
-            /// its Cancel method is called.
-            /// </summary>
-            public void CancelStep()
-            {
-                
-            }
-
-            public WizardStepStub() : this("")
-            {
-            }
-
-            public WizardStepStub(string headerText)
-            {
-                _headerText = headerText;
-            }
-
-            public bool AllowCanMoveBack
-            {
-                get { return _allowCanMoveBack; }
-                set { _allowCanMoveBack = value; }
-            }
-
-            #region IWizardStep Members
-
-            public void InitialiseStep()
-            {
-                _isInitialised = true;
-            }
-
-            public bool CanMoveOn(out string message)
-            {
-               message = "";
-               if (!AllowMoveOn) message = "Sorry, can't move on";
-                return AllowMoveOn;
-            }
-
-            /// <summary>
-            /// Verifies whether the user can move back from this step.
-            /// </summary>
-            /// <returns></returns>
-            public bool CanMoveBack()
-            {
-                return AllowCanMoveBack;
-            }
-
-            #endregion
-
-            public bool AllowMoveOn
-            {
-                get { return _allowMoveOn; }
-                set { _allowMoveOn = value; }
-            }
-
-            IControlCollection IControlChilli.Controls
-            {
-                get
-                {
-                    return null;
-
-                }
-            }
-
-            public bool IsInitialised
-            {
-                get { return _isInitialised; }
-            }
-
-            ///<summary>
-            ///Returns a <see cref="T:System.String"></see> containing the name of the <see cref="T:System.ComponentModel.Component"></see>, if any. This method should not be overridden.
-            ///</summary>
-            ///
-            ///<returns>
-            ///A <see cref="T:System.String"></see> containing the name of the <see cref="T:System.ComponentModel.Component"></see>, if any, or null if the <see cref="T:System.ComponentModel.Component"></see> is unnamed.
-            ///</returns>
-            ///
-            public override string ToString()
-            {
-                return Name;
-            }
-        }
+        
     }
+
+
 }
