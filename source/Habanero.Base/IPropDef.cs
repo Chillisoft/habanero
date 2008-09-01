@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 
 namespace Habanero.Base
 {
@@ -51,10 +52,21 @@ namespace Habanero.Base
         /// </summary>
         Type PropertyType { get; set; }
 
+        ///// <summary>
+        ///// Gets and sets the property rule relevant to this definition
+        ///// </summary>
+        //IPropRule PropRule { get; set; }
         /// <summary>
-        /// Gets and sets the property rule relevant to this definition
+        /// Returns a List of PropRules <see cref="IPropRule"/> for the Property Definition.
         /// </summary>
-        IPropRule PropRule { get; set; }
+        List<IPropRule> PropRules { get; }
+
+        ///<summary>
+        /// Adds an <see cref="IPropRule"/> to the <see cref="PropRules"/> for the 
+        /// Property Definiton.
+        ///</summary>
+        ///<param name="rule">The new rules to be added for the Property Definition.</param>
+        void AddPropRule(IPropRule rule);        
 
         /// <summary>
         /// The database field name - this allows you to have a 
@@ -174,5 +186,7 @@ namespace Habanero.Base
         ///<param name="valueToConvert">The value requiring conversion.</param>
         ///<returns>The converted property value</returns>
         object ConvertValueToPropertyType(object valueToConvert);
+
+
     }
 }

@@ -68,13 +68,13 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = CreateTestClassDef("");
-            string testPropertyName = "TestPropertyNoDisplay";
+            const string testPropertyName = "TestPropertyNoDisplay";
             PropDef propDef = new PropDef(testPropertyName, typeof(string), PropReadWriteRule.ReadWrite, null, null, false, false, 100,
                                           "", "This is a property for testing.");
             classDef.PropDefcol.Add(propDef);
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual("", propDef.DisplayName);
+            Assert.AreEqual("Test Property No Display", propDef.DisplayName);
 
             //---------------Execute Test ----------------------
             string actualDisplayNameFull = propDef.DisplayNameFull;

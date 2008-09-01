@@ -115,7 +115,7 @@ namespace Habanero.BO.ConcurrencyControl
         /// loaded by the object manager</exception>
         public void CheckConcurrencyBeforeBeginEditing()
         {
-            if (_busObj.State.IsNew) return;
+            if (_busObj.Status.IsNew) return;
             IDatabaseConnection connection = DatabaseConnection.CurrentConnection;
             if (connection == null) return;
 

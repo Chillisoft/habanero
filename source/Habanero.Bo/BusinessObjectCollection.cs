@@ -511,7 +511,7 @@ namespace Habanero.BO
             {
                 foreach (TBusinessObject child in this)
                 {
-                    if (child.State.IsDirty)
+                    if (child.Status.IsDirty)
                     {
                         return true;
                     }
@@ -842,7 +842,7 @@ namespace Habanero.BO
         {
             foreach (TBusinessObject bo in this)
             {
-                if (bo.State.IsDirty || bo.State.IsNew)
+                if (bo.Status.IsDirty || bo.Status.IsNew)
                 {
                     transaction.AddBusinessObject(bo);
                 }

@@ -78,7 +78,7 @@ namespace Habanero.Test.General
 			Assert.AreEqual(2, _person.Addresses.Count);
 			_person.Delete();
 			_person.Save();
-			Assert.IsTrue(_person.State.IsDeleted);
+			Assert.IsTrue(_person.Status.IsDeleted);
 			Assert.AreEqual(0, _person.Addresses.Count);
 		}
 	}

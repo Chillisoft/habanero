@@ -200,7 +200,7 @@ namespace Habanero.UI.Base
             //TODO: make this support single-table-inheritance.
             //if (_isEditable && _businessObject.ClassDef.PrimaryKeyDef.IsObjectID &&
             //    _businessObject.ID.Contains(_propertyName) &&
-            //    !_businessObject.State.IsNew)
+            //    !_businessObject.Status.IsNew)
             //{
             //    _isEditable = false;
             //}
@@ -227,10 +227,10 @@ namespace Habanero.UI.Base
                             }
                             break;
                         case PropReadWriteRule.WriteNew:
-                            _isEditable = _businessObject.State.IsNew;
+                            _isEditable = _businessObject.Status.IsNew;
                             break;
                         case PropReadWriteRule.WriteNotNew:
-                            _isEditable = !_businessObject.State.IsNew;
+                            _isEditable = !_businessObject.Status.IsNew;
                             break;
                     }
                 }

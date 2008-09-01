@@ -184,15 +184,15 @@ namespace Habanero.BO
         /// <returns>Returns a string</returns>
         private static string GetCrudAction(BusinessObject busObj)
         {
-            if (busObj.State.IsNew)
+            if (busObj.Status.IsNew)
             {
                 return "Created";
             }
-            else if (busObj.State.IsDeleted)
+            else if (busObj.Status.IsDeleted)
             {
                 return "Deleted";
             }
-            else if (busObj.State.IsDirty)
+            else if (busObj.Status.IsDirty)
             {
                 return "Updated";
             }

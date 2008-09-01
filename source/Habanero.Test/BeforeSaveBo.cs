@@ -135,7 +135,7 @@ namespace Habanero.Test
         ////}
         protected internal override void AfterSave()
         {
-            if (this.State.IsDeleted)
+            if (this.Status.IsDeleted)
             {
                 CombinedParts = "deleted";
             }

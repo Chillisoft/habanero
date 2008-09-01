@@ -67,8 +67,8 @@ namespace Habanero.Test.BO
             BusinessObjectUpdateLogStub businessObjectUpdateLog = myBusinessObjectUpdateLogBo.BusinessObjectUpdateLog as BusinessObjectUpdateLogStub;
             transactionCommitterStub.AddBusinessObject(myBusinessObjectUpdateLogBo);
             //-------------Test Pre-conditions --------------
-            Assert.IsTrue(myBusinessObjectUpdateLogBo.State.IsNew, "BusinessObject should be new");
-            Assert.IsFalse(myBusinessObjectUpdateLogBo.State.IsDeleted, "BusinessObject should not be deleted");
+            Assert.IsTrue(myBusinessObjectUpdateLogBo.Status.IsNew, "BusinessObject should be new");
+            Assert.IsFalse(myBusinessObjectUpdateLogBo.Status.IsDeleted, "BusinessObject should not be deleted");
             Assert.IsNotNull(businessObjectUpdateLog);
             Assert.IsFalse(businessObjectUpdateLog.Called, "BusinessObject Update Log should not have been called upon persisting.");
             //-------------Execute test ---------------------
@@ -92,9 +92,9 @@ namespace Habanero.Test.BO
             transactionCommitterStub.AddBusinessObject(myBusinessObjectUpdateLogBo);
 
             //-------------Test Pre-conditions --------------
-            Assert.IsFalse(myBusinessObjectUpdateLogBo.State.IsNew, "BusinessObject should not be new");
-            Assert.IsTrue(myBusinessObjectUpdateLogBo.State.IsDirty, "BusinessObject should be dirty");
-            Assert.IsFalse(myBusinessObjectUpdateLogBo.State.IsDeleted, "BusinessObject should not be deleted");
+            Assert.IsFalse(myBusinessObjectUpdateLogBo.Status.IsNew, "BusinessObject should not be new");
+            Assert.IsTrue(myBusinessObjectUpdateLogBo.Status.IsDirty, "BusinessObject should be dirty");
+            Assert.IsFalse(myBusinessObjectUpdateLogBo.Status.IsDeleted, "BusinessObject should not be deleted");
             Assert.IsNotNull(businessObjectUpdateLog);
             businessObjectUpdateLog.Called = false;
 
@@ -118,9 +118,9 @@ namespace Habanero.Test.BO
             transactionCommitterStub.AddBusinessObject(myBusinessObjectUpdateLogBo);
 
             //-------------Test Pre-conditions --------------
-            Assert.IsFalse(myBusinessObjectUpdateLogBo.State.IsNew, "BusinessObject should not be new");
-            Assert.IsFalse(myBusinessObjectUpdateLogBo.State.IsDirty, "BusinessObject should not be dirty");
-            Assert.IsFalse(myBusinessObjectUpdateLogBo.State.IsDeleted, "BusinessObject should not be deleted");
+            Assert.IsFalse(myBusinessObjectUpdateLogBo.Status.IsNew, "BusinessObject should not be new");
+            Assert.IsFalse(myBusinessObjectUpdateLogBo.Status.IsDirty, "BusinessObject should not be dirty");
+            Assert.IsFalse(myBusinessObjectUpdateLogBo.Status.IsDeleted, "BusinessObject should not be deleted");
             Assert.IsNotNull(businessObjectUpdateLog);
             businessObjectUpdateLog.Called = false;
 
@@ -145,8 +145,8 @@ namespace Habanero.Test.BO
             transactionCommitterStub.AddBusinessObject(myBusinessObjectUpdateLogBo);
 
             //-------------Test Pre-conditions --------------
-            Assert.IsFalse(myBusinessObjectUpdateLogBo.State.IsNew, "BusinessObject should not be new");
-            Assert.IsTrue(myBusinessObjectUpdateLogBo.State.IsDeleted, "BusinessObject should be deleted");
+            Assert.IsFalse(myBusinessObjectUpdateLogBo.Status.IsNew, "BusinessObject should not be new");
+            Assert.IsTrue(myBusinessObjectUpdateLogBo.Status.IsDeleted, "BusinessObject should be deleted");
             Assert.IsNotNull(businessObjectUpdateLog);
             businessObjectUpdateLog.Called = false;
 

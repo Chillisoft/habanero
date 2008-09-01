@@ -20,6 +20,7 @@
 using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
 using NUnit.Framework;
@@ -41,9 +42,9 @@ namespace Habanero.Test.BO.ClassDefinition
 
         private PropDef _propDef;
 
-        private class PropDefInheritor : PropDef
+        private class PropDefMock : PropDef
         {
-            public PropDefInheritor() : base("prop", typeof (MyBO), PropReadWriteRule.ReadWrite, null)
+            public PropDefMock() : base("prop", typeof (MyBO), PropReadWriteRule.ReadWrite, null)
             {
             }
 
@@ -92,11 +93,13 @@ namespace Habanero.Test.BO.ClassDefinition
                 ReadWriteRule = rule;
             }
 
+#pragma warning disable 168
             public bool IsPropValueValid(object value)
             {
                 string errors = "";
-                return IsValueValid(null, "test", ref errors);
+                return IsValueValid("test", ref errors);
             }
+#pragma warning restore 168
 
             public void SetPropType(Type type)
             {
@@ -118,6 +121,198 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(newUOM, propDef.UnitOfMeasure);
         }
 
+        [Test]
+        public void Test_AddPropRule()
+        {
+            //---------------Set up test pack-------------------
+            IPropDef propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, propDef.PropRules.Count);
+
+            //---------------Execute Test ----------------------
+            PropRuleString rule = new PropRuleString("StringRule", "My Message", 1, 3,"");
+            propDef.AddPropRule(rule);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, propDef.PropRules.Count);
+        }
+
+        [Test]
+        public void Test_AddTwoPropRules()
+        {
+            //---------------Set up test pack-------------------
+            IPropDef propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, propDef.PropRules.Count);
+
+            //---------------Execute Test ----------------------
+            PropRuleString rule = new PropRuleString("StringRule", "My Message", 1, 3, "");
+            propDef.AddPropRule(rule);
+            propDef.AddPropRule(new PropRuleString("StringRule", "My Message", 1, 3, ""));
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, propDef.PropRules.Count);
+        }
+
+        [Test]
+        public void Test_IsValueValid_OnePropRule_ValidValue()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
+            propDef.AddPropRule(new PropRuleString("StringRule", "My Message", 1, 3, ""));
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, propDef.PropRules.Count);
+
+            //---------------Execute Test ----------------------
+            string errMsg = "";
+            bool valid = propDef.IsValueValid("AB",ref errMsg);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(valid);
+            Assert.AreEqual("", errMsg);
+        }
+        [Test]
+        public void Test_IsValueValid_OnePropRule_InValidValue()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
+            propDef.AddPropRule(new PropRuleString("StringRule", "My Message", 1, 3, ""));
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, propDef.PropRules.Count);
+
+            //---------------Execute Test ----------------------
+            string errMsg = "";
+            bool valid = propDef.IsValueValid("Long String", ref errMsg);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(valid);
+            StringAssert.Contains("'Long String' for property 'Prop Name' is not valid for the rule 'StringRule'", errMsg);
+        }
+
+        [Test]
+        public void Test_IsValueValid_TwoPropRule_ValidValue()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
+            propDef.AddPropRule(new PropRuleString("StringRule", "Rule 1", 1, 3, ""));
+            propDef.AddPropRule(new PropRuleString("StringRule", "Rule 2", 3, 10, ""));
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, propDef.PropRules.Count);
+
+            //---------------Execute Test ----------------------
+            string errMsg = "";
+            bool valid = propDef.IsValueValid("ABC", ref errMsg);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(valid);
+            Assert.AreEqual("", errMsg);
+        }
+        [Test]
+        public void Test_IsValueValid_TwoPropRule_InValidValue_FailBothRules()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
+            propDef.AddPropRule(new PropRuleString("StringRule", "Rule 1", 1, 3, ""));
+            propDef.AddPropRule(new PropRuleString("StringRule", "Rule 2", 3, 10, ""));
+
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, propDef.PropRules.Count);
+
+            //---------------Execute Test ----------------------
+            string errMsg = "";
+            bool valid = propDef.IsValueValid("Too Long String by far", ref errMsg);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(valid);
+            StringAssert.Contains("'Too Long String by far' for property 'Prop Name' is not valid for the rule 'StringRule'", errMsg);
+            StringAssert.Contains("Rule 1", errMsg);
+            StringAssert.Contains("Rule 2", errMsg);
+        }
+        [Test]
+        public void Test_IsValueValid_TwoPropRule_InValidValue_FirstRulePass_SecondRuleFail()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
+            propDef.AddPropRule(new PropRuleString("StringRule", "Rule 1", 1, 3, ""));
+            propDef.AddPropRule(new PropRuleString("StringRule", "Rule 2", 3, 10, ""));
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, propDef.PropRules.Count);
+
+            //---------------Execute Test ----------------------
+            string errMsg = "";
+            bool valid = propDef.IsValueValid("AB", ref errMsg);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(valid);
+            StringAssert.Contains("'AB' for property 'Prop Name' is not valid for the rule 'StringRule'", errMsg);
+            StringAssert.Contains("Rule 2", errMsg);
+        }
+        [Test]
+        public void Test_IsValueValid_TwoPropRule_InValidValue_FirstRulePass_FirstRuleFail()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
+            propDef.AddPropRule(new PropRuleString("StringRule", "Rule 1", 1, 3, ""));
+            propDef.AddPropRule(new PropRuleString("StringRule", "Rule 2", 3, 10, ""));
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, propDef.PropRules.Count);
+
+            //---------------Execute Test ----------------------
+            string errMsg = "";
+            bool valid = propDef.IsValueValid("Long String", ref errMsg);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(valid);
+            StringAssert.Contains("'Long String' for property 'Prop Name' is not valid for the rule 'StringRule'", errMsg);
+            StringAssert.Contains("Rule 1", errMsg);
+        }
+        [Test]
+        public void Test_AddPropRule_Null()
+        {
+            //---------------Set up test pack-------------------
+            IPropDef propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, propDef.PropRules.Count);
+
+            //---------------Execute Test ----------------------
+
+            try
+            {
+                propDef.AddPropRule(null);
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroApplicationException ex)
+            {
+                StringAssert.Contains("You cannot add a null property rule to a property def", ex.Message);
+            }
+
+        }
+
+        [Test]
+        public void Test_SetDispayName()
+        {
+            //---------------Set up test pack-------------------
+            IPropDef propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string displayName = propDef.DisplayName;
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Prop Name", displayName);
+
+        }
         [Test]
         public void TestConvertValueToPropertyType_DateTimeAcceptsDateTimeNow()
         {
@@ -387,7 +582,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestProtectedSets()
         {
-            PropDefInheritor propDef = new PropDefInheritor();
+            PropDefMock propDef = new PropDefMock();
 
             Assert.AreEqual("prop", propDef.PropertyName);
             propDef.SetPropertyName("myprop");

@@ -237,15 +237,15 @@ namespace Habanero.UI.Base
                         isCompulsory = false;
                     }
                     string labelCaption = field.GetLabel(classDef);
-                    BOPropCol boPropCol = _currentBusinessObject.Props;
-                    if (boPropCol.Contains(field.PropertyName))
-                    {
-                        IBOProp boProp = boPropCol[field.PropertyName];
-                        if (!boProp.HasDisplayName())
-                        {
-                            boProp.DisplayName = labelCaption;
-                        }
-                    }
+//                    BOPropCol boPropCol = _currentBusinessObject.Props;
+//                    if (boPropCol.Contains(field.PropertyName))
+//                    {
+//                        IBOProp boProp = boPropCol[field.PropertyName];
+//                        if (!boProp.HasDisplayName())
+//                        {
+//                            boProp.DisplayName = labelCaption;
+//                        }
+//                    }
 
                     ILabel labelControl = _controlFactory.CreateLabel(labelCaption, isCompulsory);
                     controls[currentRow, currentColumn + 0] = new GridLayoutManager.ControlInfo(labelControl);
@@ -474,7 +474,7 @@ namespace Habanero.UI.Base
                     if (writeRule == "ReadOnly") editable = false;
                     if (writeRule == "WriteNew")
                     {
-                        if (_currentBusinessObject.State.IsNew)
+                        if (_currentBusinessObject.Status.IsNew)
                         {
                             editable = true;
                         }
@@ -483,7 +483,7 @@ namespace Habanero.UI.Base
                     }
                     if (writeRule == "WriteNotNew")
                     {
-                        if (_currentBusinessObject.State.IsNew)
+                        if (_currentBusinessObject.Status.IsNew)
                         {
                             editable = false;
                         }

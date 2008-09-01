@@ -140,24 +140,24 @@ namespace Habanero.Test.General
         public void TestDeleteFlagsSetContactPerson()
         {
             ContactPerson myContact = new ContactPerson();
-            Assert.IsTrue(myContact.State.IsNew); // this object is new
+            Assert.IsTrue(myContact.Status.IsNew); // this object is new
             myContact.DateOfBirth = new DateTime(1980, 01, 22);
             myContact.FirstName = "Brad";
             myContact.Surname = "Vincent4";
 
             myContact.Save(); //save the object to the DB
-            Assert.IsFalse(myContact.State.IsNew); // this object is saved and thus no longer
+            Assert.IsFalse(myContact.Status.IsNew); // this object is saved and thus no longer
             // new
-            Assert.IsFalse(myContact.State.IsDeleted);
+            Assert.IsFalse(myContact.Status.IsDeleted);
 
             IPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
             //Put a loop in to take up some time due to MSAccess 
             myContact.Delete();
-            Assert.IsTrue(myContact.State.IsDeleted);
+            Assert.IsTrue(myContact.Status.IsDeleted);
             myContact.Save();
-            Assert.IsTrue(myContact.State.IsDeleted);
-            Assert.IsTrue(myContact.State.IsNew);
+            Assert.IsTrue(myContact.Status.IsDeleted);
+            Assert.IsTrue(myContact.Status.IsNew);
         }
 
 
@@ -327,7 +327,7 @@ namespace Habanero.Test.General
         [Test]
         public void TestSaveContactPerson()
         {
-            Assert.IsFalse(mContactPTestSave.State.IsNew); // this object is saved and thus no longer
+            Assert.IsFalse(mContactPTestSave.Status.IsNew); // this object is saved and thus no longer
             // new
 
             IPrimaryKey id = mContactPTestSave.ID; //Save the objectsID so that it can be loaded from the Database
@@ -335,7 +335,7 @@ namespace Habanero.Test.General
 
             ContactPerson mySecondContactPerson =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(id);
-            Assert.IsFalse(mContactPTestSave.State.IsNew); // this object is recovered from the DB
+            Assert.IsFalse(mContactPTestSave.Status.IsNew); // this object is recovered from the DB
             // and is thus not new.
             Assert.AreEqual(mContactPTestSave.ID.ToString(), mySecondContactPerson.ID.ToString());
             Assert.AreEqual(mContactPTestSave.FirstName, mySecondContactPerson.FirstName);
@@ -354,7 +354,7 @@ namespace Habanero.Test.General
             ContactPerson myContact = new ContactPerson();
             myContact.Surname = "Test Surname";
             myContact.Save();
-            Assert.IsFalse(myContact.State.IsNew, "BO is still IsNew after being saved.");
+            Assert.IsFalse(myContact.Status.IsNew, "BO is still IsNew after being saved.");
         }
 
         [Test]

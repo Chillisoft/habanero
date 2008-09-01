@@ -131,12 +131,14 @@ namespace Habanero.BO
 
         public T GetBusinessObject<T>(string criteriaString) where T : class, IBusinessObject, new()
         {
-            throw new NotImplementedException();
+            Criteria criteriaObject = CriteriaParser.CreateCriteria(criteriaString);
+            return _dataStore.Find<T>(criteriaObject);
         }
 
         public IBusinessObject GetBusinessObject(IClassDef classDef, string criteriaString)
         {
-            throw new NotImplementedException();
+            Criteria criteriaObject = CriteriaParser.CreateCriteria(criteriaString);
+            return _dataStore.Find(classDef.ClassType, criteriaObject);
         }
 
 
@@ -349,11 +351,11 @@ namespace Habanero.BO
         /// <param name="businessObject">The businessObject to refresh</param>
         public IBusinessObject Refresh(IBusinessObject businessObject)
         {
-            if (businessObject.State.IsNew)
+            if (businessObject.Status.IsNew)
             {
                 return businessObject;
             }
-            if (businessObject.State.IsEditing)
+            if (businessObject.Status.IsEditing)
             {
                 throw new HabaneroDeveloperException("A Error has occured since the object being refreshed is being edited.",
                     "A Error has occured since the object being refreshed is being edited. ID :- " +

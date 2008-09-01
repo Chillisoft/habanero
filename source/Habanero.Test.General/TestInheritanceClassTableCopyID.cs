@@ -70,7 +70,7 @@ namespace Habanero.Test.General
         public void TestCircleIsNotDirty()
         {
             Circle circle = new Circle();
-            Assert.IsFalse(circle.State.IsDirty);
+            Assert.IsFalse(circle.Status.IsDirty);
         }
 
         [Test]

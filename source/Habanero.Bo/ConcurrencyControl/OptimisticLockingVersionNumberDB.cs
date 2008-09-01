@@ -175,7 +175,7 @@ namespace Habanero.BO.ConcurrencyControl
 
         private void CheckConcurrencyControl(VerificationStage verificationStage)
         {
-            if (_busObj.State.IsNew) return; //If the object is new there cannot be a concurrency error.
+            if (_busObj.Status.IsNew) return; //If the object is new there cannot be a concurrency error.
             IDatabaseConnection connection = DatabaseConnection.CurrentConnection;
             if (connection == null) return;
 
@@ -189,7 +189,7 @@ namespace Habanero.BO.ConcurrencyControl
                 // then we have a concurrency conflict since it has been deleted by another process.
                 // If our objective was to delete it as well then no worries else throw error.
                 bool drHasData = dr.Read();
-                if (!(drHasData) && !_busObj.State.IsDeleted)
+                if (!(drHasData) && !_busObj.Status.IsDeleted)
                 {
                     //The object you are trying to update has been deleted by another user.
                     throw new BusObjDeleteConcurrencyControlException(_busObj.ClassName, _busObj.ID.ToString(),

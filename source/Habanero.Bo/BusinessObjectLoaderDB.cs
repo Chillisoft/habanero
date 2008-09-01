@@ -420,11 +420,11 @@ namespace Habanero.BO
         /// <param name="businessObject">The businessObject to refresh</param>
         public IBusinessObject Refresh(IBusinessObject businessObject)
         {
-            if (businessObject.State.IsNew)
+            if (businessObject.Status.IsNew)
             {
                 return businessObject;
             }
-            if (businessObject.State.IsEditing)
+            if (businessObject.Status.IsEditing)
             {
                 throw new HabaneroDeveloperException("A Error has occured since the object being refreshed is being edited.",
                                                      "A Error has occured since the object being refreshed is being edited. ID :- " +
@@ -686,7 +686,7 @@ namespace Habanero.BO
                 return bo;
             }
 
-            if (boFromObjectManager.State.IsEditing) return boFromObjectManager;
+            if (boFromObjectManager.Status.IsEditing) return boFromObjectManager;
 
             PopulateBOFromReader(boFromObjectManager, dataReader, selectQuery);
             return boFromObjectManager;
@@ -732,7 +732,7 @@ namespace Habanero.BO
                 i++;
             }
             BusinessObject businessObject = ((BusinessObject) bo);
-            businessObject.SetState(BOState.States.isNew, false);
+            businessObject.SetStatus(BOStatus.Statuses.isNew, false);
             businessObject.AfterLoad();
         }
     }

@@ -578,7 +578,7 @@ namespace Habanero.Test.BO
             cpLoaded.FirstName = TestUtil.CreateRandomString();
 
             //-------------Assert Preconditon ---------------
-            Assert.IsTrue(cpLoaded.State.IsEditing);
+            Assert.IsTrue(cpLoaded.Status.IsEditing);
 
             //-------------Execute Test ---------------------
             try
@@ -606,7 +606,7 @@ namespace Habanero.Test.BO
 
             //-------------Test Result ----------------------
             Assert.AreSame(contactPerson, businessObject);
-            Assert.IsTrue(businessObject.State.IsNew);
+            Assert.IsTrue(businessObject.Status.IsNew);
         }
 
         //TODO: refresh dirty object if correct method called.
@@ -622,7 +622,7 @@ namespace Habanero.Test.BO
             cpLoaded.Surname = newSurname;
 
             //---------------Assert Precondition----------------
-            Assert.IsTrue(cpLoaded.State.IsEditing);
+            Assert.IsTrue(cpLoaded.Status.IsEditing);
             Assert.AreEqual(newSurname, cpLoaded.Surname);
 
             //---------------Execute Test ----------------------
@@ -632,7 +632,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreSame(cpLoaded2, cpLoaded);
             Assert.AreEqual(newSurname, cpLoaded2.Surname);
-            Assert.IsTrue(cpLoaded.State.IsEditing);
+            Assert.IsTrue(cpLoaded.Status.IsEditing);
 
         }
 
@@ -901,9 +901,9 @@ namespace Habanero.Test.BO
 
                 Assert.AreEqual(surname, cp.Surname);
                 Assert.AreEqual(firstName, cp.FirstName);
-                Assert.IsFalse(cp.State.IsNew);
-                Assert.IsFalse(cp.State.IsDirty);
-                Assert.IsFalse(cp.State.IsDeleted);
+                Assert.IsFalse(cp.Status.IsNew);
+                Assert.IsFalse(cp.Status.IsDirty);
+                Assert.IsFalse(cp.Status.IsDeleted);
             }
 
             [Test]
@@ -935,9 +935,9 @@ namespace Habanero.Test.BO
 
                 Assert.AreEqual(surname, cp.Surname);
                 Assert.AreEqual(firstName, cp.FirstName);
-                Assert.IsFalse(cp.State.IsNew);
-                Assert.IsFalse(cp.State.IsDirty);
-                Assert.IsFalse(cp.State.IsDeleted);
+                Assert.IsFalse(cp.Status.IsNew);
+                Assert.IsFalse(cp.Status.IsDirty);
+                Assert.IsFalse(cp.Status.IsDeleted);
             }
 
             [Test]
@@ -969,9 +969,9 @@ namespace Habanero.Test.BO
 
                 Assert.AreEqual(surname, cp.Surname);
                 Assert.AreEqual(firstName, cp.FirstName);
-                Assert.IsFalse(cp.State.IsNew);
-                Assert.IsFalse(cp.State.IsDirty);
-                Assert.IsFalse(cp.State.IsDeleted);
+                Assert.IsFalse(cp.Status.IsNew);
+                Assert.IsFalse(cp.Status.IsDirty);
+                Assert.IsFalse(cp.Status.IsDeleted);
             }
             
             [Test]
@@ -1009,10 +1009,10 @@ namespace Habanero.Test.BO
                 Assert.AreEqual(cp.Surname, loadedCp.Surname);
                 Assert.IsTrue(String.IsNullOrEmpty(loadedCp.FirstName), "Firstname is not being loaded");
                 // not being loaded
-                Assert.IsFalse(loadedCp.State.IsNew);
-                Assert.IsFalse(loadedCp.State.IsDeleted);
-                Assert.IsFalse(loadedCp.State.IsDirty);
-                Assert.IsTrue(loadedCp.State.IsValid());
+                Assert.IsFalse(loadedCp.Status.IsNew);
+                Assert.IsFalse(loadedCp.Status.IsDeleted);
+                Assert.IsFalse(loadedCp.Status.IsDirty);
+                Assert.IsTrue(loadedCp.Status.IsValid());
             }
 
             [Test]
@@ -1083,7 +1083,7 @@ namespace Habanero.Test.BO
                 IBusinessObject boFromAllLoadedObjects =
                     BusinessObjectManager.Instance[id.GetObjectId()];
                 Assert.AreSame(boFromAllLoadedObjects, myContact2);
-                Assert.IsFalse(myContact2.State.IsEditing);
+                Assert.IsFalse(myContact2.Status.IsEditing);
 
                 //-----------------------------Execute Test-------------------------
                 //Edit first object and save
@@ -1095,7 +1095,7 @@ namespace Habanero.Test.BO
                         originalContactPerson.ID);
 
                 //-----------------------------Assert Result-----------------------
-                Assert.IsFalse(myContact3.State.IsEditing);
+                Assert.IsFalse(myContact3.Status.IsEditing);
                 Assert.AreNotSame(originalContactPerson, myContact3);
                 Assert.IsTrue(BusinessObjectManager.Instance.Contains(myContact3));
                 Assert.AreSame(myContact3, myContact2);

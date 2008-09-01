@@ -24,7 +24,6 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.CriteriaManager;
 using Habanero.BO.ObjectManager;
 using Habanero.BO.SqlGeneration;
 using Habanero.DB;
@@ -36,6 +35,7 @@ namespace Habanero.BO
     /// <summary>
     /// Provides a super-class for business objects. This class contains all
     /// the common functionality used by business objects.
+    /// This Class implements the Layer SuperType - Fowler (xxx)
     /// </summary>
     public class BusinessObject : IBusinessObject
     {
@@ -55,7 +55,7 @@ namespace Habanero.BO
         protected BOPropCol _boPropCol;
 
         //set object as new by default.
-        private BOState _boState;
+        private BOStatus _boStatus;
         protected IBusinessObjectUpdateLog _businessObjectUpdateLog;
 
         protected ClassDef _classDef;
@@ -164,19 +164,14 @@ namespace Habanero.BO
 
         private void Initialise(ClassDef classDef)
         {
-            _boState = new BOState(this);
-            _boState.IsDeleted = false;
-            _boState.IsDirty = false;
-            _boState.IsEditing = false;
-            _boState.IsNew = true;
+            _boStatus = new BOStatus(this);
+            _boStatus.IsDeleted = false;
+            _boStatus.IsDirty = false;
+            _boStatus.IsEditing = false;
+            _boStatus.IsNew = true;
             _classDef = classDef ?? ClassDef.ClassDefs[GetType()];
             ConstructFromClassDef(true);
         }
-
-        #endregion //Constructors
-
-        #region Business Object Loaders
-
         /// <summary>
         /// Constructs the class
         /// </summary>
@@ -230,6 +225,15 @@ namespace Habanero.BO
             }
         }
 
+        private ClassDef GetClassDefToUseForPrimaryKey()
+        {
+            ClassDef classDefToUseForPrimaryKey = _classDef;
+            while (classDefToUseForPrimaryKey.IsUsingSingleTableInheritance())
+            {
+                classDefToUseForPrimaryKey = classDefToUseForPrimaryKey.SuperClassClassDef;
+            }
+            return classDefToUseForPrimaryKey;
+        }
         /// <summary>
         /// Constructs a class definition
         /// </summary>
@@ -238,7 +242,9 @@ namespace Habanero.BO
         {
             return ClassDef.ClassDefs.Contains(GetType()) ? ClassDef.ClassDefs[GetType()] : null;
         }
+        #endregion //Constructors
 
+        #region Business Object Loaders
         /// <summary>
         /// Clears the loaded objects collection
         /// </summary>
@@ -360,15 +366,6 @@ namespace Habanero.BO
             set { _classDef = (ClassDef) value; }
         }
 
-        private ClassDef GetClassDefToUseForPrimaryKey()
-        {
-            ClassDef classDefToUseForPrimaryKey = _classDef;
-            while (classDefToUseForPrimaryKey.IsUsingSingleTableInheritance())
-            {
-                classDefToUseForPrimaryKey = classDefToUseForPrimaryKey.SuperClassClassDef;
-            }
-            return classDefToUseForPrimaryKey;
-        }
 
         /// <summary>
         /// Sets the concurrency control object
@@ -442,7 +439,7 @@ namespace Habanero.BO
         /// E.g. Once an invoice is paid it is no longer editable. Or when a course is old it is no
         /// longer editable. This allows a UI developer to standise Code for enabling and disabling controls.
         /// These rules are applied to new object as well so if you want a new object 
-        /// to be editable then you must include this.State.IsNew in evaluating IsEditable.
+        /// to be editable then you must include this.Status.IsNew in evaluating IsEditable.
         /// </summary>
         public virtual bool IsEditable(out string message)
         {
@@ -456,7 +453,7 @@ namespace Habanero.BO
         /// The Deletable state of a business object. E.g. Invoices can never be delted once created. 
         /// Objects cannot be deteled once they have reached certain stages e.g. a customer order after it is accepted.
         /// These rules are applied to new object as well so if you want a new object 
-        /// to be deletable then you must include this.State.IsNew in evaluating IsDeletable.
+        /// to be deletable then you must include this.Status.IsNew in evaluating IsDeletable.
         ///</summary>
         public virtual bool IsDeletable(out string message)
         {
@@ -587,11 +584,11 @@ namespace Habanero.BO
             // if the object is not fresh then throw appropriate exception.
             if (PropValueHasChanged(prop.Value, newPropValue))
             {
-                if (!State.IsEditing)
+                if (!Status.IsEditing)
                 {
                     BeginEdit();
                 }
-                _boState.IsDirty = true;
+                _boStatus.IsDirty = true;
                 prop.Value = newPropValue;
                 if (prop.IsValid)
                 {
@@ -617,7 +614,7 @@ namespace Habanero.BO
         public bool IsValid(out string invalidReason)
         {
             invalidReason = "";
-            if (State.IsDeleted) return true;
+            if (Status.IsDeleted) return true;
 
             string customRuleErrors;
             bool valid = Props.IsValid(out invalidReason);
@@ -640,11 +637,11 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// The BOState object for this BusinessObject, which records the state information of the object
+        /// The IBOState <see cref="IBOStatus"/> object for this BusinessObject, which records the status information of the object
         /// </summary>
-        public IBOState State
+        public IBOStatus Status
         {
-            get { return _boState; }
+            get { return _boStatus; }
         }
 
 
@@ -672,7 +669,7 @@ namespace Habanero.BO
             }
             CheckNotEditing();
             CheckConcurrencyBeforeBeginEditing();
-            _boState.IsEditing = true;
+            _boStatus.IsEditing = true;
         }
 
         /// <summary>
@@ -683,7 +680,7 @@ namespace Habanero.BO
         /// place</exception>
         private void CheckNotEditing()
         {
-            if (State.IsEditing)
+            if (Status.IsEditing)
             {
                 throw new EditingException(ClassName, ID.ToString(), this);
             }
@@ -844,9 +841,9 @@ namespace Habanero.BO
         public void Restore()
         {
             _boPropCol.RestorePropertyValues();
-            _boState.IsDeleted = false;
-            _boState.IsEditing = false;
-            _boState.IsDirty = false;
+            _boStatus.IsDeleted = false;
+            _boStatus.IsEditing = false;
+            _boStatus.IsDirty = false;
             ReleaseWriteLocks();
             FireUpdatedEvent();
             FireRestoredEvent();
@@ -859,12 +856,12 @@ namespace Habanero.BO
         public void Delete()
         {
             CheckIsDeletable();
-            if (!State.IsEditing)
+            if (!Status.IsEditing)
             {
                 BeginEdit(true);
             }
-            _boState.IsDirty = true;
-            _boState.IsDeleted = true;
+            _boStatus.IsDirty = true;
+            _boStatus.IsDeleted = true;
         }
 
         /// <summary>
@@ -881,7 +878,7 @@ namespace Habanero.BO
         /// </summary>
         protected internal void UpdateStateAsPersisted()
         {
-            if (State.IsDeleted)
+            if (Status.IsDeleted)
             {
                 SetStateAsPermanentlyDeleted();
                 BusinessObjectManager.Instance.Remove(this);
@@ -911,22 +908,22 @@ namespace Habanero.BO
 
         private void SetStateAsUpdated()
         {
-            _boState.IsNew = false;
+            _boStatus.IsNew = false;
             if (!(_boPropCol == null))
             {
                 _boPropCol.SetIsObjectNew(false);
             }
-            _boState.IsDeleted = false;
-            _boState.IsDirty = false;
-            _boState.IsEditing = false;
+            _boStatus.IsDeleted = false;
+            _boStatus.IsDirty = false;
+            _boStatus.IsEditing = false;
         }
 
         private void SetStateAsPermanentlyDeleted()
         {
-            _boState.IsNew = true;
-            _boState.IsDeleted = true;
-            _boState.IsDirty = false;
-            _boState.IsEditing = false;
+            _boStatus.IsNew = true;
+            _boStatus.IsDeleted = true;
+            _boStatus.IsDirty = false;
+            _boStatus.IsEditing = false;
         }
 
         ///<summary>
@@ -942,7 +939,7 @@ namespace Habanero.BO
             {
                 transactionCommitter.AddTransaction(_transactionLog);
             }
-            if (_businessObjectUpdateLog != null && (State.IsNew || (State.IsDirty && !State.IsDeleted)))
+            if (_businessObjectUpdateLog != null && (Status.IsNew || (Status.IsDirty && !Status.IsDeleted)))
             {
                 _businessObjectUpdateLog.Update();
             }
@@ -1054,35 +1051,35 @@ namespace Habanero.BO
 
         #region Sql Statements
 
-        /// <summary>
-        /// Parses the parameter sql information into the given search
-        /// expression
-        /// </summary>
-        /// <param name="searchExpression">The search expression</param>
-        internal void ParseParameterInfo(IExpression searchExpression)
-        {
-            foreach (BOProp prop in _boPropCol)
-            {
-                IPropDef propDef = prop.PropDef;
-                ClassDef classDef = GetCorrespondingClassDef(propDef, _classDef);
-                PropDefParameterSQLInfo propDefParameterSQLInfo = new PropDefParameterSQLInfo(propDef, classDef);
-                searchExpression.SetParameterSqlInfo(propDefParameterSQLInfo);
-            }
-        }
-
-        private static ClassDef GetCorrespondingClassDef(IPropDef propDef, ClassDef classDef)
-        {
-            ClassDef currentClassDef = classDef;
-            while (!currentClassDef.PropDefcol.Contains(propDef))
-            {
-                currentClassDef = currentClassDef.SuperClassClassDef;
-                if (currentClassDef == null)
-                {
-                    return null;
-                }
-            }
-            return currentClassDef;
-        }
+//        /// <summary>
+//        /// Parses the parameter sql information into the given search
+//        /// expression
+//        /// </summary>
+//        /// <param name="searchExpression">The search expression</param>
+//        internal void ParseParameterInfo(IExpression searchExpression)
+//        {
+//            foreach (BOProp prop in _boPropCol)
+//            {
+//                IPropDef propDef = prop.PropDef;
+//                ClassDef classDef = GetCorrespondingClassDef(propDef, _classDef);
+//                PropDefParameterSQLInfo propDefParameterSQLInfo = new PropDefParameterSQLInfo(propDef, classDef);
+//                searchExpression.SetParameterSqlInfo(propDefParameterSQLInfo);
+//            }
+//        }
+//
+//        private static ClassDef GetCorrespondingClassDef(IPropDef propDef, ClassDef classDef)
+//        {
+//            ClassDef currentClassDef = classDef;
+//            while (!currentClassDef.PropDefcol.Contains(propDef))
+//            {
+//                currentClassDef = currentClassDef.SuperClassClassDef;
+//                if (currentClassDef == null)
+//                {
+//                    return null;
+//                }
+//            }
+//            return currentClassDef;
+//        }
 
         /// <summary>
         /// Returns the primary key's sql "where" clause
@@ -1193,11 +1190,12 @@ namespace Habanero.BO
         /// </summary>
         protected internal virtual void AfterSave()
         {
+            
         }
 
-        internal void SetState(BOState.States state, bool value)
+        internal void SetStatus(BOStatus.Statuses status, bool value)
         {
-            _boState.SetBOFlagValue(state, value);
+            _boStatus.SetBOFlagValue(status, value);
         }
     }
 }

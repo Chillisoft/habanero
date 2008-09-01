@@ -80,7 +80,7 @@ namespace Habanero.Test
                 BusinessObject thisBo = objectsToDelete[objectsToDelete.Count - 1];
                 try
                 {
-                    if (!thisBo.State.IsNew)
+                    if (!thisBo.Status.IsNew)
                     {
                         thisBo.Restore();
                         thisBo.Delete();

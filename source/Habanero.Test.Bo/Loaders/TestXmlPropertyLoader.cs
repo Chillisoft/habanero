@@ -53,7 +53,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("TestProp", def.DatabaseFieldName,
                             "The field name should be the same as the property name by default");
             Assert.AreEqual(false, def.AutoIncrementing, "autoIncrementing should be false by default");
-            Assert.AreEqual(null, def.DisplayName, "The display name is null");
+            Assert.AreEqual("Test Prop", def.DisplayName, "The display name is null");
             Assert.AreEqual(null, def.Description, "The description is null");
             Assert.AreEqual(false, def.KeepValuePrivate, "keepValuePrivate should be false by default");
         }
@@ -204,7 +204,8 @@ namespace Habanero.Test.BO.Loaders
             PropDef def =
                 itsLoader.LoadProperty(
                     @"<property  name=""TestProp""><rule name=""StringRule""><add key=""minLength"" value=""8""/><add key=""maxLength"" value=""8"" /></rule></property>");
-            Assert.AreEqual("PropRuleString", def.PropRule.GetType().Name);
+            Assert.AreEqual(1, def.PropRules.Count);
+            Assert.AreEqual("PropRuleString", def.PropRules[0].GetType().Name);
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
@@ -214,8 +215,8 @@ namespace Habanero.Test.BO.Loaders
             PropDef def =
                 itsLoader.LoadProperty(
                     @"<property  name=""TestProp""><rule name=""StringRule""><add key=""min"" value=""8""/></rule></property>");
-
-            Assert.IsNotNull(def.PropRule);
+            Assert.AreEqual(1, def.PropRules.Count);
+            Assert.IsNotNull(def.PropRules[0]);
            
         }
 

@@ -292,10 +292,10 @@ namespace Habanero.BO
                         {
                             e.Row[uiProperty.PropertyName] = newBo.GetPropertyValueToDisplay(uiProperty.PropertyName);
                         }
-                        if (newBo.Props.Contains(uiProperty.PropertyName))
-                        {
-                            newBo.Props[uiProperty.PropertyName].DisplayName = uiProperty.Heading;
-                        }
+//                        if (newBo.Props.Contains(uiProperty.PropertyName))
+//                        {
+//                            newBo.Props[uiProperty.PropertyName].DisplayName = uiProperty.Heading;
+//                        }
                     }
                 }
 
@@ -321,24 +321,24 @@ namespace Habanero.BO
             }
         }
 
-        /// <summary>
-        /// Adds a new row to the collection, containing the specified business
-        /// object
-        /// </summary>
-        /// <param name="newBo">The new business object</param>
-        private void AddNewRowToCollection(IBusinessObject newBo)
-        {
-            //log.Debug("Adding new row to col");
-            _collection.BusinessObjectAdded -= BusinessObjectAddedToCollectionHandler;
-            _table.RowChanged -= RowChangedHandler;
+        ///// <summary>
+        ///// Adds a new row to the collection, containing the specified business
+        ///// object
+        ///// </summary>
+        ///// <param name="newBo">The new business object</param>
+        //private void AddNewRowToCollection(IBusinessObject newBo)
+        //{
+        //    //log.Debug("Adding new row to col");
+        //    _collection.BusinessObjectAdded -= BusinessObjectAddedToCollectionHandler;
+        //    _table.RowChanged -= RowChangedHandler;
 
-            //log.Debug("Disabled handler, adding obj to col") ;
-            _collection.Add(newBo);
-            //log.Debug("Done adding obj to col, enabling handler") ;
-            _table.RowChanged += RowChangedHandler;
-            _collection.BusinessObjectAdded += BusinessObjectAddedToCollectionHandler;
-            //log.Debug("Done Adding new row to col");
-        }
+        //    //log.Debug("Disabled handler, adding obj to col") ;
+        //    _collection.Add(newBo);
+        //    //log.Debug("Done adding obj to col, enabling handler") ;
+        //    _table.RowChanged += RowChangedHandler;
+        //    _collection.BusinessObjectAdded += BusinessObjectAddedToCollectionHandler;
+        //    //log.Debug("Done Adding new row to col");
+        //}
 
         /// <summary>
         /// Handles the event of a new business object being added

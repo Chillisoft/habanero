@@ -258,7 +258,7 @@ namespace Habanero.Test.General
         public void TestDeleteFlagsSetContactPerson()
         {
             ContactPersonCompositeKey myContact = new ContactPersonCompositeKey();
-            Assert.IsTrue(myContact.State.IsNew); // this object is new
+            Assert.IsTrue(myContact.Status.IsNew); // this object is new
             myContact.SetPropertyValue("DateOfBirth", new DateTime(1980, 01, 22));
             myContact.SetPropertyValue("FirstName", "Brad");
             myContact.SetPropertyValue("Surname", "Vincent");
@@ -266,18 +266,18 @@ namespace Habanero.Test.General
             myContact.SetPropertyValue("PK1Prop2", Guid.NewGuid());
 
             myContact.Save(); //save the object to the DB
-            Assert.IsFalse(myContact.State.IsNew); // this object is saved and thus no longer
+            Assert.IsFalse(myContact.Status.IsNew); // this object is saved and thus no longer
             // new
-            Assert.IsFalse(myContact.State.IsDeleted);
+            Assert.IsFalse(myContact.Status.IsDeleted);
 
             IPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
             //Put a loop in to take up some time due to MSAccess 
             myContact.Delete();
-            Assert.IsTrue(myContact.State.IsDeleted);
+            Assert.IsTrue(myContact.Status.IsDeleted);
             myContact.Save();
-            Assert.IsTrue(myContact.State.IsDeleted);
-            Assert.IsTrue(myContact.State.IsNew);
+            Assert.IsTrue(myContact.Status.IsDeleted);
+            Assert.IsTrue(myContact.Status.IsNew);
         }
 
         [Test]
@@ -297,7 +297,7 @@ namespace Habanero.Test.General
             WaitForGC();
 
             //---------------------------Assert Precondition --------------------------
-            Assert.IsFalse(contactPTestSave.State.IsNew); // this object is saved and thus no longer
+            Assert.IsFalse(contactPTestSave.Status.IsNew); // this object is saved and thus no longer
             // new
 
             IPrimaryKey id = contactPTestSave.ID; //Save the objectsID so that it can be loaded from the Database
@@ -309,7 +309,7 @@ namespace Habanero.Test.General
             //-------------------------Assert Result ----------------------------------
             Assert.AreNotSame(contactPTestSave, secondContactPerson);
 
-            Assert.IsFalse(secondContactPerson.State.IsNew); // this object is recovered from the DB
+            Assert.IsFalse(secondContactPerson.Status.IsNew); // this object is recovered from the DB
             // and is thus not new.
 //            Assert.AreEqual(contactPTestSave.ID.ToString().ToUpper(), secondContactPerson.ID.ToString());
             Assert.AreEqual(contactPTestSave.GetPropertyValue("FirstName"),

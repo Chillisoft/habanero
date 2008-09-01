@@ -59,7 +59,7 @@ namespace Habanero.Test.BO
 
             //Test results
             Assert.AreEqual(bo.MyBoID, relatedBo.MyBoID);
-            Assert.IsTrue(relatedBo.State.IsNew);
+            Assert.IsTrue(relatedBo.Status.IsNew);
             Assert.AreEqual(1, col.CreatedBusinessObjects.Count);
         }
 
@@ -77,7 +77,7 @@ namespace Habanero.Test.BO
 
             //Test results
             Assert.AreEqual(contactPersonTestBO.ContactPersonID, address.ContactPersonID);
-            Assert.IsTrue(address.State.IsNew);
+            Assert.IsTrue(address.Status.IsNew);
             Assert.AreEqual(1, contactPersonTestBO.Addresses.CreatedBusinessObjects.Count);
         }
 

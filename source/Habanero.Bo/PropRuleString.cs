@@ -57,11 +57,11 @@ namespace Habanero.BO
         /// <summary>
         /// Constructor to initialise a new rule
         /// </summary>
-        /// <param name="name">The rule name</param>
+        /// <param name="ruleName">The rule name</param>
         /// <param name="message">This rule's failure message</param>
         /// <param name="parameters">The parameters for this rule.</param>
-        public PropRuleString(string name, string message, Dictionary<string, object> parameters)
-			: base(name, message)
+        public PropRuleString(string ruleName, string message, Dictionary<string, object> parameters)
+            : base(ruleName, message)
 		{
 			base.Parameters = parameters;
 		}
@@ -193,16 +193,7 @@ namespace Habanero.BO
                 return false;
             }
  
-            if (!CheckLengthRule(displayName, propValue, ref errorMessage))
-            {
-                return false;
-            }
-
-            if (!CheckPatternMatchRule(displayName, propValue, ref errorMessage))
-            {
-                return false;
-            }
-            return true;
+            return CheckLengthRule(displayName, propValue, ref errorMessage) && CheckPatternMatchRule(displayName, propValue, ref errorMessage);
         }
 
         /// <summary>

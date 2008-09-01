@@ -168,7 +168,7 @@ namespace Habanero.BO.Loaders
         /// <param name="def">The property definition</param>
         public void LoadRuleIntoProperty(string propertyRuleElement, PropDef def)
         {
-            def.PropRule = this.LoadRule(def.PropertyTypeName, propertyRuleElement);
+            def.AddPropRule( this.LoadRule(def.PropertyTypeName, propertyRuleElement));
         }
 
 		protected override object Create()
@@ -177,7 +177,7 @@ namespace Habanero.BO.Loaders
 		}
 
     	protected PropRuleBase CreatePropRule() {
-            if (_class != null && _class.Length > 0 && _assembly != null && _assembly.Length > 0) 
+            if (!string.IsNullOrEmpty(_class) && !string.IsNullOrEmpty(_assembly)) 
 			{
 				Type customPropRuleType = null;
 				TypeLoader.LoadClassType(ref customPropRuleType, _assembly, _class, 
@@ -193,21 +193,21 @@ namespace Habanero.BO.Loaders
                         return (PropRuleBase) Activator.CreateInstance(customPropRuleType, new object[] { _name, _message, _ruleParameters });
                     }
 				}
-                else
-				{
-					throw new TypeLoadException("The prop rule '" + _name + "' must inherit from PropRuleBase.");
-				}
+			    throw new TypeLoadException("The prop rule '" + _name + "' must inherit from PropRuleBase.");
 			}
             if (_propTypeName == typeof(int).Name) {
 				return _defClassFactory.CreatePropRuleInteger(_name, _message);
-            } else if (_propTypeName == typeof(string).Name ) {
-				return _defClassFactory.CreatePropRuleString(_name, _message);
-            } else if (_propTypeName == typeof(DateTime).Name ) {
-				return _defClassFactory.CreatePropRuleDate(_name, _message);
-            } else if (_propTypeName == typeof(Decimal).Name) {
-				return _defClassFactory.CreatePropRuleDecimal(_name, _message);
             }
-			throw new InvalidXmlDefinitionException("Could not load the Property Rule " +
+    	    if (_propTypeName == typeof(string).Name ) {
+    	        return _defClassFactory.CreatePropRuleString(_name, _message);
+    	    }
+    	    if (_propTypeName == typeof(DateTime).Name ) {
+    	        return _defClassFactory.CreatePropRuleDate(_name, _message);
+    	    }
+    	    if (_propTypeName == typeof(Decimal).Name) {
+    	        return _defClassFactory.CreatePropRuleDecimal(_name, _message);
+    	    }
+    	    throw new InvalidXmlDefinitionException("Could not load the Property Rule " +
 				"for this type('" + _propTypeName + "').");
         }
     }

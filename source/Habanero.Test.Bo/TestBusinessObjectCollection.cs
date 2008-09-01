@@ -230,7 +230,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
-            Assert.IsTrue(newCP.State.IsNew);
+            Assert.IsTrue(newCP.Status.IsNew);
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
         }
 
@@ -565,7 +565,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(3, col.Count);
             Assert.AreEqual(newSurname, cp1.Surname);
-            Assert.IsTrue(cp1.State.IsDirty);
+            Assert.IsTrue(cp1.Status.IsDirty);
         }
 
         [Test]
@@ -595,7 +595,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(newSurname, cp1.Surname);
             Assert.AreNotSame(secondInstanceOfCP1, cp1);
             Assert.AreNotEqual(newSurname, secondInstanceOfCP1.Surname);
-            Assert.IsFalse(cp1.State.IsDirty);
+            Assert.IsFalse(cp1.Status.IsDirty);
             //---------------Execute Test ----------------------
             col.Refresh();
 

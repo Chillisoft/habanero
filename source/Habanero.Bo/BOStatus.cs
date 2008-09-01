@@ -25,7 +25,7 @@ namespace Habanero.BO
     ///<summary>
     /// The current state of a business object.
     ///</summary>
-    public class BOState : IBOState
+    public class BOStatus : IBOStatus
     {
 
         private readonly IBusinessObject _bo;
@@ -33,17 +33,17 @@ namespace Habanero.BO
         ///<summary>
         ///</summary>
         ///<param name="bo"></param>
-        public BOState(IBusinessObject bo)
+        public BOStatus(IBusinessObject bo)
         {
             _bo = bo;
         }
-        private States _flagState = States.isNew;
+        private Statuses _flagState = Statuses.isNew;
 
         /// <summary>
         /// An enumeration that describes the object's state
         /// </summary>
         [Flags]
-        internal enum States
+        internal enum Statuses
         {
             /// <summary>The object is new</summary>
             isNew = 1,
@@ -61,11 +61,11 @@ namespace Habanero.BO
         /// </summary>
         public bool IsNew
         {
-            get { return GetBOFlagValue(States.isNew); }
+            get { return GetBOFlagValue(Statuses.isNew); }
             
             internal set
             {
-                SetBOFlagValue(States.isNew, value);
+                SetBOFlagValue(Statuses.isNew, value);
             }
         }
 
@@ -74,8 +74,8 @@ namespace Habanero.BO
         /// </summary>
         public bool IsDeleted
         {
-            get { return GetBOFlagValue(States.isDeleted); }
-            internal set { SetBOFlagValue(States.isDeleted, value); }
+            get { return GetBOFlagValue(Statuses.isDeleted); }
+            internal set { SetBOFlagValue(Statuses.isDeleted, value); }
         }
 
         /// <summary>
@@ -84,8 +84,8 @@ namespace Habanero.BO
         /// </summary>
         public bool IsEditing
         {
-            get { return GetBOFlagValue(States.isEditing); }
-            internal set { SetBOFlagValue(States.isEditing, value); }
+            get { return GetBOFlagValue(Statuses.isEditing); }
+            internal set { SetBOFlagValue(Statuses.isEditing, value); }
         }
 
         /// <summary>
@@ -94,8 +94,8 @@ namespace Habanero.BO
         /// </summary>
         public bool IsDirty
         {
-            get { return GetBOFlagValue(States.isDirty); }
-            internal set { SetBOFlagValue(States.isDirty, value); }
+            get { return GetBOFlagValue(Statuses.isDirty); }
+            internal set { SetBOFlagValue(Statuses.isDirty, value); }
         }
 
         /// <summary>
@@ -134,10 +134,10 @@ namespace Habanero.BO
         /// <summary>
         /// Indicates if the specified flag is currently set
         /// </summary>
-        /// <param name="objFlag">The flag in question. See the States
+        /// <param name="objFlag">The flag in question. See the Statuses
         /// enumeration for more detail.</param>
         /// <returns>Returns true if set, false if not</returns>
-        private bool GetBOFlagValue(States objFlag)
+        private bool GetBOFlagValue(Statuses objFlag)
         {
             return Convert.ToBoolean(_flagState & objFlag);
         }
@@ -145,10 +145,10 @@ namespace Habanero.BO
         /// <summary>
         /// Sets the flag value as specified
         /// </summary>
-        /// <param name="flag">The flag value to set. See the States
+        /// <param name="flag">The flag value to set. See the Statuses
         /// enumeration for more detail.</param>
         /// <param name="bValue">The value to set to</param>
-        internal void SetBOFlagValue(States flag, bool bValue)
+        internal void SetBOFlagValue(Statuses flag, bool bValue)
         {
             if (bValue)
             {

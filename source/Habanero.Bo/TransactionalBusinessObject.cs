@@ -63,7 +63,7 @@ namespace Habanero.BO
         /// </summary>
         protected internal virtual bool IsDeleted
         {
-            get { return _businessObject.State.IsDeleted; }
+            get { return _businessObject.Status.IsDeleted; }
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Habanero.BO
         /// <returns></returns>
         protected internal bool IsNew()
         {
-            return _businessObject.State.IsNew;
+            return _businessObject.Status.IsNew;
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Habanero.BO
         /// <returns></returns>
         protected internal  bool IsNewAndDeleted()
         {
-            return _businessObject.State.IsNew && (_businessObject.State.IsDeleted);
+            return _businessObject.Status.IsNew && (_businessObject.Status.IsDeleted);
         }
 
         ///<summary>

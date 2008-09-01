@@ -126,7 +126,7 @@ namespace Habanero.BO
             errMsg = "";
             //if (this.BusinessObject == null) return false;
             if (this.BusinessObject.GetBOKeyCol() == null) return false;
-            if (this.BusinessObject.State.IsDeleted) return false;
+            if (this.BusinessObject.Status.IsDeleted) return false;
 
             List<IBOKey> allKeys = new List<IBOKey>();
             if (this.BusinessObject.ID != null) allKeys.Add(this.BusinessObject.ID);

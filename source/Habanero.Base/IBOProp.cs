@@ -86,7 +86,7 @@ namespace Habanero.Base
         /// user recognises the property name as displayed to them,
         /// rather than as it is represented in the code.
         /// </summary>
-        string DisplayName { get; set; }
+        string DisplayName { get; }
 
         /// <summary>
         /// Returns the property value as a string
@@ -142,12 +142,6 @@ namespace Habanero.Base
         {
             get;
         }
-
-        ///<summary>
-        /// Does the business object property have a specified display name or not. See <see cref="DisplayName"/>
-        ///</summary>
-        ///<returns>True if a display name has been set for this property, otherwise false.</returns>
-        bool HasDisplayName();
 
         /// <summary>
         /// Restores the property's original value as defined in PersistedValue.

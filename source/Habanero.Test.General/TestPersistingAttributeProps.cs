@@ -67,7 +67,7 @@ namespace Habanero.Test.General
             //Get sql or save or whatever
             savePerson.Save();
             //check that non persistable not included in SQL.
-            Assert.IsFalse(savePerson.State.IsNew);
+            Assert.IsFalse(savePerson.Status.IsNew);
         }
 
         //[Test]

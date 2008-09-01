@@ -21,8 +21,8 @@
 using System;
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.Base;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 
 namespace Habanero.Test
@@ -118,7 +118,7 @@ namespace Habanero.Test
             return lClassDef;
         }
 
-        private static RelationshipDefCol CreateRelationshipDefCol(PropDefCol lPropDefCol)
+        private static RelationshipDefCol CreateRelationshipDefCol(IPropDefCol lPropDefCol)
         {
             RelationshipDefCol relDefCol = new RelationshipDefCol();
 
@@ -153,7 +153,7 @@ namespace Habanero.Test
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
                 new PropDef("Surname", "System", "String", PropReadWriteRule.ReadWrite, "Surname_field", null, true, false);
-            propDef.PropRule = new PropRuleString("ContactPerson-" + propDef.PropertyName, "", 2, 50, null);
+            propDef.AddPropRule(new PropRuleString("ContactPerson-" + propDef.PropertyName, "", 2, 50, null));
             lPropDefCol.Add(propDef);
 
             propDef = new PropDef("FirstName", typeof(String), PropReadWriteRule.ReadWrite, "FirstName_field", null);

@@ -23,11 +23,9 @@ using System;
 namespace Habanero.Base
 {
     /// <summary>
-    /// This class manages expressions that force certain criteria upon data
-    /// or equations.  An instance of this class could hold the entire
-    /// expression, or the expression may be broken up into manageable parts,
-    /// with each part in a different object, to form a linked list of
-    /// objects.
+    /// This class is a binary tree that consists of a left expression, a right expression
+    ///   and a join expression.
+    /// The criteria Exrpession can be created by parsing a criteria string.
     /// </summary>
     public class CriteriaExpression
     {

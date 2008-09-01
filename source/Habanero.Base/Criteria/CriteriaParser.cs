@@ -3,7 +3,8 @@ using Habanero.Base.Exceptions;
 namespace Habanero.Base
 {
     ///<summary>
-    /// Parses a criteria string and creates a criteria object.
+    /// Parses a criteria string and creates a criteria object <see cref="Criteria"/> 
+    ///   using CriteriaExpression.
     ///</summary>
     public static class CriteriaParser
     {

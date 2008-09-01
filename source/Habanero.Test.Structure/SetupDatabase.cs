@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Text;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -11,7 +9,7 @@ namespace Habanero.Test.Structure
 {
     public class SetupDatabase
     {
-        private IDatabaseConnection _databaseConnection;
+        private readonly IDatabaseConnection _databaseConnection;
         private List<string> _statements;
         
         public SetupDatabase(IDatabaseConnection databaseConnection)
@@ -49,7 +47,7 @@ namespace Habanero.Test.Structure
                     return;
                 }
             }
-            string sql = @"
+            const string sql = @"
                 CREATE TABLE `setting` (
                   `SettingName` varchar(50) NOT NULL default '',
                   `SettingValue` varchar(1000) NOT NULL default '',
@@ -84,8 +82,7 @@ namespace Habanero.Test.Structure
             {
                 return;
             }
-            string sqlStatement;
-            sqlStatement = "CREATE TABLE ";
+            string sqlStatement = "CREATE TABLE ";
             sqlStatement += SqlFormattingHelper.FormatTableName(classDef.TableName, _databaseConnection);
             sqlStatement += " (";
             foreach (PropDef propDef in classDef.PropDefcol)
@@ -109,7 +106,7 @@ namespace Habanero.Test.Structure
             _statements.Add(sqlStatement);
         }
 
-        private string GetFieldType(PropDef propDef)
+        private static string GetFieldType(PropDef propDef)
         {
             string fieldType = "varchar(50)";
             switch(propDef.PropertyTypeName.ToUpper())
@@ -119,7 +116,11 @@ namespace Habanero.Test.Structure
                     break;
                 case "STRING":
                     int length = 50;
-                    PropRuleString propRule = propDef.PropRule as PropRuleString;
+                    PropRuleString propRule = null;
+                    if (propDef.PropRules.Count > 0)
+                    {
+                        propRule = propDef.PropRules[0] as PropRuleString;
+                    }
                     if (propRule != null)
                     {
                         length = propRule.MaxLength;

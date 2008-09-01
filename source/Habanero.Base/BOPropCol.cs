@@ -26,16 +26,21 @@ using Habanero.Base.Exceptions;
 namespace Habanero.Base
 {
     /// <summary>
-    /// Manages a collection of BOProp objects
+    /// Manages a collection of BOProp objectsn (See <see cref="IBOProp"/>)
+    /// Typically this collection is created when the <see cref="IBusinessObject"/>
+    ///  is created. The collection is created based on Property Definition (<see cref="IPropDef"/>)
+    ///  for the Class definition (<see cref="IClassDef"/>) that defines the Business Object (<see cref="IBusinessObject"/>).
+    /// This collection in should thus not be used by the application developer.
+    /// This collection is typically controlled by an <see cref="IBusinessObject"/>
     /// </summary>
     public class BOPropCol 
     {
-        private Dictionary<string, IBOProp> _boProps;
+        private readonly Dictionary<string, IBOProp> _boProps;
 
         /// <summary>
         /// Constructor to initialise a new empty collection
         /// </summary>
-        public BOPropCol() : base()
+        public BOPropCol()
         {
             _boProps = new Dictionary<string, IBOProp>();
         }
@@ -204,11 +209,18 @@ namespace Habanero.Base
             get { return new SortedList(_boProps).Values; }
         }
 
+        ///<summary>
+        /// returns an enumerator for a collection of <see cref="IBOProp"/>s
+        ///</summary>
+        ///<returns></returns>
         public IEnumerator GetEnumerator()
         {
             return SortedValues.GetEnumerator();
         }
 
+        ///<summary>
+        /// Returns a count of the number of properties <see cref="IBOProp"/> in the properties collection.
+        ///</summary>
         public int Count
         {
             get
@@ -219,24 +231,22 @@ namespace Habanero.Base
 
         /// <summary>
         /// Indicates whether any of the properties in this collection are defined as autoincrementing fields.
+        /// An auto incrementing field is a field that relies on the database auto incrementing a number.
+        /// E.g. every time a new row is inserted into a table the value of the auto incrementing field is 
+        /// incremented. To update the business object accordingly this value needs to be updated to the 
+        /// matching property
         /// </summary>
         public bool HasAutoIncrementingField
         {
             get
             {
-                foreach (KeyValuePair<string, IBOProp> pair in _boProps)
+                foreach (KeyValuePair<string, IBOProp> keyValuePair in _boProps)
                 {
-                    if (pair.Value.PropDef.AutoIncrementing) return true;
+                    if (keyValuePair.Value.PropDef.AutoIncrementing) return true;
                 }
                 return false;
                
             }
         }
-
-//        public string AutoIncrementingPropertyName
-//        {
-//            get { return _autoIncrementingPropertyName; }
-//            set { _autoIncrementingPropertyName = value; }
-//        }
     }
 }

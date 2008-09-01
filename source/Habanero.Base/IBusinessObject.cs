@@ -50,7 +50,7 @@ namespace Habanero.Base
         /// <summary>
         /// The BOState object for this BusinessObject, which records the state information of the object
         /// </summary>
-        IBOState State { get; }
+        IBOStatus Status { get; }
 
         /// <summary>
         /// The BOProps in this business object
@@ -64,7 +64,7 @@ namespace Habanero.Base
         /// E.g. Once an invoice is paid it is no longer editable. Or when a course is old it is no
         /// longer editable. This allows a UI developer to standise Code for enabling and disabling controls.
         /// These rules are applied to new object as well so if you want a new object 
-        /// to be editable then you must include this.State.IsNew in evaluating IsEditable.
+        /// to be editable then you must include this.Status.IsNew in evaluating IsEditable.
         /// </summary>
         bool IsEditable(out string message);
 
@@ -74,7 +74,7 @@ namespace Habanero.Base
         /// The Deletable state of a business object. E.g. Invoices can never be delted once created. 
         /// Objects cannot be deteled once they have reached certain stages e.g. a customer order after it is accepted.
         /// These rules are applied to new object as well so if you want a new object 
-        /// to be deletable then you must include this.State.IsNew in evaluating IsDeletable.
+        /// to be deletable then you must include this.Status.IsNew in evaluating IsDeletable.
         ///</summary>
         bool IsDeletable(out string message);
 

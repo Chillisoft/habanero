@@ -106,7 +106,7 @@
     <Compile Include="IApplicationVersionUpgrader.cs" />
     <Compile Include="IBOKey.cs" />
     <Compile Include="IBOProp.cs" />
-    <Compile Include="IBOState.cs" />
+    <Compile Include="IBOStatus.cs" />
     <Compile Include="IBusinessObject.cs" />
     <Compile Include="IBusinessObjectCollection.cs" />
     <Compile Include="IBusinessObjectDeletor.cs" />

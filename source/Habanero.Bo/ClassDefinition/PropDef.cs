@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
@@ -32,12 +33,18 @@ namespace Habanero.BO.ClassDefinition
     /// the property name and information such as the 
     /// access rules for the property (i.e. write-once, read-many or 
     /// read-many-write-many).
+    /// Stores the <see cref="IPropRule"/>s for the Property Definition.
+    /// Contains functionality to determine whether a value is valid based on the 
+    /// Property rules.
     /// </summary>
     /// <futureEnhancements>
     /// TODO_Future:
     /// <ul>
-    /// <li>Add ability to calculated properties.</li>
+    /// <li>Add ability to store calculated properties.</li>
     /// <li>Lazy initialisation of properties.</li>
+    /// <li>Property definitions that reference properties from related Business objects 
+    ///     e.g. An Invoice Line has a property definition that references InvoiceDate through its
+    ///     relationship Invoice.</li>
     /// </ul>
     /// </futureEnhancements>
     public class PropDef : IPropDef
@@ -45,22 +52,27 @@ namespace Habanero.BO.ClassDefinition
 //        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.ClassDefinition.PropDef");
         private string _propertyName;
         private string _description;
-        private string _propTypeAssemblyName;
-        private string _propTypeName;
         private Type _propType;
         private PropReadWriteRule _propRWStatus;
-        private string _databaseFieldName; //This allows you to have a 
-        //database field name different from your property name. 
-        //We have customers whose standard for naming database 
-        //fields is DATABASE_FIELD_NAME. 
-        //This is also powerful for migrating systems 
-        //where the database has already been set up.
+
+        private string _propTypeAssemblyName;
+        private string _propTypeName;
         private object _defaultValue;
         private string _defaultValueString;
         private bool _hasDefaultValueBeenValidated;
-        private IPropRule _propRule;
-        private ILookupList _lookupList = new NullLookupList();
         private bool _compulsory;
+        private readonly List<IPropRule> _propRules = new List<IPropRule>();
+
+
+        private string _databaseFieldName; //This allows you to have a 
+                //database field name different from your property name. 
+                //We have customers whose standard for naming database 
+                //fields is DATABASE_FIELD_NAME. 
+                //This is also powerful for migrating systems 
+                //where the database has already been set up.
+
+        private ILookupList _lookupList = new NullLookupList();
+
         private bool _autoIncrementing;
         private int _length;
         private string _displayName;
@@ -430,6 +442,10 @@ namespace Habanero.BO.ClassDefinition
             _autoIncrementing = autoIncrementing;
             _length = length;
             _displayName = displayName;
+            if (string.IsNullOrEmpty(_displayName))
+            {
+                _displayName = StringUtilities.DelimitPascalCase(_propertyName, " ");
+            }
             _description = description;
             _keepValuePrivate = keepValuePrivate;
         }
@@ -507,13 +523,21 @@ namespace Habanero.BO.ClassDefinition
             set { MyPropertyType = value; }
         }
 
+//        /// <summary>
+//        /// Gets and sets the property rule relevant to this definition
+//        /// </summary>
+//        public virtual IPropRule PropRule
+//        {
+//            get { return _propRule; }
+//            set { _propRule = value; }
+//        }
+
         /// <summary>
-        /// Gets and sets the property rule relevant to this definition
+        /// Returns a List of PropRules <see cref="IPropRule"/> for the Property Definition.
         /// </summary>
-        public virtual IPropRule PropRule
+        public List<IPropRule> PropRules
         {
-            get { return _propRule; }
-            set { _propRule = value; }
+            get { return _propRules; }
         }
 
         /// <summary>
@@ -643,31 +667,26 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="propValue">The property value to be tested</param>
         /// <param name="errorMessage">A string which may be amended to reflect
         /// an error message if the value is not valid</param>
-        /// <param name="displayName">The name of the property as presented to the user
         /// in the user interface, clarifies error messaging</param>
         /// <returns>Returns true if valid, false if not</returns>
-        public bool IsValueValid(string displayName, Object propValue, ref string errorMessage)
+        public bool IsValueValid(object propValue, ref string errorMessage)
         {
-            if (displayName == null)
-            {
-                displayName = PropertyName;
-            }
             if (_compulsory)
             {
                 if (propValue == null || propValue == DBNull.Value
                     || (propValue is string && (string) propValue == String.Empty))
                 {
-                    errorMessage = String.Format("'{0}' is a compulsory field and has no value.", displayName);
+                    errorMessage = String.Format("'{0}' is a compulsory field and has no value.", DisplayName);
                     return false;
                 }
             }
             //Validate Type
-            if (!IsValueValidType(displayName, propValue, ref errorMessage))
+            if (!IsValueValidType(DisplayName, propValue, ref errorMessage))
             {
                 return false;
             }
             //Valid Item in list
-            if (!IsItemInList(displayName, propValue, ref errorMessage))
+            if (!IsItemInList(DisplayName, propValue, ref errorMessage))
             {
                 return false;
             }
@@ -676,12 +695,22 @@ namespace Habanero.BO.ClassDefinition
             {
                 if (((string) propValue).Length > _length)
                 {
-                    errorMessage = String.Format("'{0}' cannot be longer than {1} characters.", displayName, _length);
+                    errorMessage = String.Format("'{0}' cannot be longer than {1} characters.", DisplayName, _length);
                     return false;
                 }
             }
             errorMessage = "";
-            return _propRule == null || _propRule.IsPropValueValid(displayName, GetNewValue(propValue), ref errorMessage);
+            bool valid = true;
+            foreach (IPropRule propRule in _propRules)
+            {
+                string tmpErrMsg = "";
+                bool tmpValid;
+                tmpValid = (propRule == null ||
+                        propRule.IsPropValueValid(DisplayName, GetNewValue(propValue), ref tmpErrMsg));
+                valid = valid & tmpValid;
+                errorMessage = StringUtilities.AppendMessage(errorMessage, tmpErrMsg);
+            }
+            return valid;//_propRule == null || _propRule.IsPropValueValid(displayName, GetNewValue(propValue), ref errorMessage);
         }
 
         private bool IsItemInList(string displayName, object propValue, ref string errorMessage)
@@ -1040,6 +1069,17 @@ namespace Habanero.BO.ClassDefinition
             }
 
             return Convert.ChangeType(valueToConvert, this.PropertyType);
+        }
+
+        ///<summary>
+        /// Adds an <see cref="IPropRule"/> to the <see cref="PropRules"/> for the 
+        /// Property Definiton.
+        ///</summary>
+        ///<param name="rule">The new rules to be added for the Property Definition.</param>
+        public void AddPropRule(IPropRule rule)
+        {
+            if (rule == null) throw new HabaneroApplicationException("You cannot add a null property rule to a property def");
+            _propRules.Add(rule);
         }
     }
 }

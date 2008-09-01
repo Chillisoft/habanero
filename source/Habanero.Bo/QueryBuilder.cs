@@ -158,7 +158,6 @@ namespace Habanero.BO
                     IPropDef propDef = propParentClassDef.GetPropDef(field.PropertyName);
                     field.FieldName = propDef.DatabaseFieldName;
                     field.Source.ChildSourceLeaf.EntityName = propParentClassDef.GetTableName(propDef);
-                    //field.Source.EntityName = currentClassDef.GetTableName(propDef);
                     if (criteria.CanBeParametrised())
                     {
                         criteria.FieldValue = propDef.ConvertValueToPropertyType(criteria.FieldValue);
@@ -167,6 +166,11 @@ namespace Habanero.BO
             }
         }
 
+        ///<summary>
+        /// Uses the Class Definition to add the correct table name to the Source.
+        ///</summary>
+        ///<param name="classDef"></param>
+        ///<param name="source"></param>
         public static void PrepareSource(IClassDef classDef, ref Source source)
         {
             IClassDef relatedClassDef;
@@ -175,6 +179,8 @@ namespace Habanero.BO
 
         private static void PrepareSource(IClassDef classDef, ref Source source, out IClassDef relatedClassDef)
         {
+            relatedClassDef = null;
+            if (source != null && source.IsPrepared) return;
             Source rootSource = new Source(classDef.ClassName, classDef.GetTableName());
             CreateInheritanceJoins(classDef, rootSource);
             if (source == null)
@@ -198,6 +204,7 @@ namespace Habanero.BO
                 relatedClassDef = currentClassDef;
                 source = rootSource;
             }
+            source.IsPrepared = true;
         }
 
         private static void CreateInheritanceJoins(IClassDef classDef, Source rootSource)

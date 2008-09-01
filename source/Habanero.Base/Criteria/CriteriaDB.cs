@@ -3,7 +3,7 @@ using System;
 namespace Habanero.Base
 {
     ///<summary>
-    /// This class inherits from the criteria class and implements a <see cref="ToString(SqlFormatter, AddParameterDelegate)"/> behaviour.
+    /// This class inherits from the <see cref="Criteria"/> class and implements a <see cref="ToString(SqlFormatter, AddParameterDelegate)"/> behaviour.
     /// This allows the formatting of a criteria object into a format specific for the database.
     ///</summary>
     public class CriteriaDB : Criteria

@@ -97,7 +97,7 @@
   <ItemGroup>
     <Compile Include="BOLoader.cs" />
     <Compile Include="BORegistry.cs" />
-    <Compile Include="BOState.cs" />
+    <Compile Include="BOStatus.cs" />
     <Compile Include="BusinessObjectLoaderDB.cs" />
     <Compile Include="BusinessObjectLastUpdatePropertiesLog.cs" />
     <Compile Include="BusinessObjectLoaderInMemory.cs" />

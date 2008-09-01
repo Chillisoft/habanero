@@ -151,10 +151,12 @@ namespace Habanero.Test.BO
             ClassDef classDef = MyBO.LoadClassDefWithStringRule();
             Assert.IsTrue(classDef.PropDefcol.Contains("TestProp"), "TestProp must exist");
             IPropDef propDef = classDef.PropDefcol["TestProp"];
-            Assert.IsNotNull(propDef.PropRule, "TestProp must have a rule");
+            Assert.GreaterOrEqual(1, propDef.PropRules.Count);
+            Assert.AreEqual(1, propDef.PropRules.Count);
+            Assert.IsNotNull(propDef.PropRules[0], "TestProp must have a rule");
             string errorMessage = "";
-            Assert.IsTrue(propDef.PropRule.IsPropValueValid("TestProp", "abcde", ref errorMessage), "Property value of length 5 must pass");
-            Assert.IsFalse(propDef.PropRule.IsPropValueValid("TestProp", "abcdef", ref errorMessage), "Property value of length 6 must not pass");
+            Assert.IsTrue(propDef.PropRules[0].IsPropValueValid("TestProp", "abcde", ref errorMessage), "Property value of length 5 must pass");
+            Assert.IsFalse(propDef.PropRules[0].IsPropValueValid("TestProp", "abcdef", ref errorMessage), "Property value of length 6 must not pass");
             BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "abcde");
             string reason;
@@ -210,7 +212,7 @@ namespace Habanero.Test.BO
             bo.Save();
             Assert.IsNotNull(bo.TestAutoIncID);
             Assert.AreNotEqual(0, bo.TestAutoIncID);
-            Assert.IsFalse(bo.State.IsDirty);
+            Assert.IsFalse(bo.Status.IsDirty);
         }
 
         [Test]

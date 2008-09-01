@@ -262,11 +262,11 @@ namespace Habanero.Test.General
 
             //---------------Test Result -----------------------
             Assert.AreSame(typeof (CircleNoPrimaryKey), shape.GetType());
-            Assert.IsFalse(shape.State.IsNew);
-            Assert.IsFalse(shape.State.IsDeleted);
-            Assert.IsFalse(shape.State.IsEditing);
-            Assert.IsFalse(shape.State.IsDirty);
-            Assert.IsTrue(shape.State.IsValid());
+            Assert.IsFalse(shape.Status.IsNew);
+            Assert.IsFalse(shape.Status.IsDeleted);
+            Assert.IsFalse(shape.Status.IsEditing);
+            Assert.IsFalse(shape.Status.IsDirty);
+            Assert.IsTrue(shape.Status.IsValid());
         }
 
         [Test]

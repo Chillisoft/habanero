@@ -85,7 +85,7 @@ namespace Habanero.Test.BO
                 //---------------Tear Down--------------------------
                 contactPersonCompositeKey.Delete();
                 contactPersonCompositeKey.Save();
-                if (!duplicateContactPerson.State.IsNew)
+                if (!duplicateContactPerson.Status.IsNew)
                 {
                     duplicateContactPerson.Delete();
                     duplicateContactPerson.Save();
@@ -103,8 +103,8 @@ namespace Habanero.Test.BO
 
         private static void AssertBOStateIsValidAfterDelete(IBusinessObject bo)
         {
-            Assert.IsTrue(bo.State.IsNew);
-            Assert.IsTrue(bo.State.IsDeleted);
+            Assert.IsTrue(bo.Status.IsNew);
+            Assert.IsTrue(bo.Status.IsDeleted);
         }
 
         private static void AssertBusinessObjectNotInDatabase(IBusinessObject bo)
@@ -458,13 +458,13 @@ namespace Habanero.Test.BO
             contactPersonTestBO.Restore();
 
             //---------------Test Result -----------------------
-            Assert.IsFalse(contactPersonTestBO.State.IsEditing);
-            Assert.IsFalse(contactPersonTestBO.State.IsDeleted);
+            Assert.IsFalse(contactPersonTestBO.Status.IsEditing);
+            Assert.IsFalse(contactPersonTestBO.Status.IsDeleted);
 
             Assert.Ignore(
                 "This test is being ignored due to the fact that we do not have a philosophy for compositional parents deleting their children etc");
-            Assert.IsFalse(address.State.IsEditing);
-            Assert.IsFalse(address.State.IsDeleted);
+            Assert.IsFalse(address.Status.IsEditing);
+            Assert.IsFalse(address.Status.IsDeleted);
         }
 
         [Test]
@@ -492,12 +492,12 @@ namespace Habanero.Test.BO
             AssertBusinessObjectInDatabase(contactPersonTestBO);
             AssertBusinessObjectInDatabase(address);
 
-            Assert.IsTrue(address.State.IsDeleted);
-            Assert.IsTrue(address.State.IsEditing);
-            Assert.IsFalse(address.State.IsNew);
-            Assert.IsTrue(contactPersonTestBO.State.IsDeleted);
-            Assert.IsTrue(contactPersonTestBO.State.IsEditing);
-            Assert.IsFalse(contactPersonTestBO.State.IsNew);
+            Assert.IsTrue(address.Status.IsDeleted);
+            Assert.IsTrue(address.Status.IsEditing);
+            Assert.IsFalse(address.Status.IsNew);
+            Assert.IsTrue(contactPersonTestBO.Status.IsDeleted);
+            Assert.IsTrue(contactPersonTestBO.Status.IsEditing);
+            Assert.IsFalse(contactPersonTestBO.Status.IsNew);
         }
 
         [Test]
@@ -565,7 +565,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             committerDB.CommitTransaction();
             //---------------Test Result -----------------------
-            Assert.IsFalse(contactPersonTestBO.State.IsDirty);
+            Assert.IsFalse(contactPersonTestBO.Status.IsDirty);
         }
 
         [Test]

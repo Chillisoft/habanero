@@ -80,7 +80,7 @@ namespace Habanero.BO
                 {
                     _dataStoreInMemory.Add(businessObject);
                 }
-                else if (businessObject.State.IsDeleted) _dataStoreInMemory.Remove(businessObject);
+                else if (businessObject.Status.IsDeleted) _dataStoreInMemory.Remove(businessObject);
             }
             base.ExecuteTransactionToDataSource(transaction);
         }

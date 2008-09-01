@@ -117,7 +117,7 @@ namespace Habanero.BO
 //                {
 //                }
 //            }
-//            obj.SetState(BOState.States.isNew, false);
+//            obj.SetStatus(BOStatus.Statuses.isNew, false);
 //            return true;
 //        }
 //
@@ -157,7 +157,7 @@ namespace Habanero.BO
 //            if (tempBusObj != null)
 //            {
 //                tempBusObjType = tempBusObj.GetType();
-//                if (tempBusObj.State.IsDirty)
+//                if (tempBusObj.Status.IsDirty)
 //                {
 //                    log.Debug(
 //                        "An attempt was made to load an object already loaded that was in edit mode.  Refresh from database ignored." +
@@ -401,7 +401,7 @@ namespace Habanero.BO
 //                                        "' returned more than one record when only one was expected.");
 //            }
 //            IBusinessObject bo = col[0];
-//            if (!bo.State.IsEditing)
+//            if (!bo.Status.IsEditing)
 //            {
 //                ((BusinessObject)bo).AfterLoad();
 //            }
@@ -452,7 +452,7 @@ namespace Habanero.BO
 //            //    {
 //            //        BusinessObject loadedBusinessObject = (BusinessObject) weakRef.Target;
 //            //        //Apply concurrency Control Strategy to the Business Object
-//            //        if (refreshIfReqNotCurrent && !loadedBusinessObject.State.IsNew)
+//            //        if (refreshIfReqNotCurrent && !loadedBusinessObject.Status.IsNew)
 //            //        {
 //            //            Instance.Refresh(loadedBusinessObject);
 //            //            //loadedBusinessObject.CheckConcurrencyOnGettingObjectFromObjectManager();

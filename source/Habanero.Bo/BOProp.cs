@@ -32,6 +32,8 @@ namespace Habanero.BO
     ///<summary>
     /// Stores the values (current Value, DatabaseValue etc) and 
     ///  state (dirty, valid) of a property of a <see cref="IBusinessObject"/>.
+    /// Has a reference to the Property Definition <see cref="PropDef"/> that was used to create it.
+    /// The Property definition includes property rules and validation functionality.
     /// The property of a business object may represent a property such as FirstName, Surname.
     /// Typically a <see cref="IBusinessObject"/> will have a collection of Properties.
     ///</summary>
@@ -39,15 +41,17 @@ namespace Habanero.BO
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOProp");
         protected object _currentValue;
-        protected PropDef _propDef;
+        protected bool _isDirty;
         protected bool _isValid = true;
+
+        protected PropDef _propDef;
+
         protected string _invalidReason = "";
         protected object _persistedValue;
         protected bool _origValueIsValid = true;
         protected string _origInvalidReason = "";
         protected bool _isObjectNew;
-        protected bool _isDirty;
-        protected string _displayName = "";
+//        protected string _displayName = "";
         protected object _valueBeforeLastEdit;
 
         /// <summary>
@@ -63,7 +67,7 @@ namespace Habanero.BO
         public BOProp(IPropDef propDef)
         {
             _propDef = (PropDef) propDef;
-            _displayName = propDef.DisplayName;
+//            _displayName = propDef.DisplayName;
         }
 
         /// <summary>
@@ -207,7 +211,7 @@ namespace Habanero.BO
             }
 
             _invalidReason = "";
-            _isValid = _propDef.IsValueValid(DisplayName, propValue, ref _invalidReason);
+            _isValid = _propDef.IsValueValid(propValue, ref _invalidReason);
 
             _currentValue = propValue;
             _isObjectNew = isObjectNew;
@@ -263,7 +267,7 @@ namespace Habanero.BO
                     
                 CheckReadWriteRule(newValue);
                 _invalidReason = "";
-                _isValid = _propDef.IsValueValid(DisplayName, newValue, ref _invalidReason);
+                _isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
                 _valueBeforeLastEdit = _currentValue;
                 _currentValue = newValue;
                 FireBOPropValueUpdated();
@@ -535,37 +539,28 @@ namespace Habanero.BO
         {
             get
             {
-                return HasDisplayName() 
-                    ? _displayName 
-                    : StringUtilities.DelimitPascalCase(PropertyName, " ");
+                return _propDef.DisplayName;
+//                return HasDisplayName() 
+//                    ? _displayName 
+//                    : StringUtilities.DelimitPascalCase(PropertyName, " ");
             }
-            set
-            {
-                string newDisplayName = value ?? "";
-                if (newDisplayName.EndsWith(":") || newDisplayName.EndsWith("?"))
-                {
-                    newDisplayName = newDisplayName.Substring(0, newDisplayName.Length - 1);
-                }
-                if (_displayName == newDisplayName) return;
-                if (_invalidReason.Contains(String.Format("'{0}'", DisplayName)))
-                {
-                    _invalidReason = _invalidReason.Replace(
-                        String.Format("'{0}'", DisplayName),
-                        String.Format("'{0}'", newDisplayName));
-                }
-                _displayName = newDisplayName;
-            }
+//            set
+//            {
+//                string newDisplayName = value ?? "";
+//                if (newDisplayName.EndsWith(":") || newDisplayName.EndsWith("?"))
+//                {
+//                    newDisplayName = newDisplayName.Substring(0, newDisplayName.Length - 1);
+//                }
+//                if (_displayName == newDisplayName) return;
+//                if (_invalidReason.Contains(String.Format("'{0}'", DisplayName)))
+//                {
+//                    _invalidReason = _invalidReason.Replace(
+//                        String.Format("'{0}'", DisplayName),
+//                        String.Format("'{0}'", newDisplayName));
+//                }
+//                _displayName = newDisplayName;
+//            }
         }
-
-        ///<summary>
-        /// Does the business object property have a specified display name or not.
-        ///</summary>
-        ///<returns>True if a display name has been set for this property, otherwise false.</returns>
-        public bool HasDisplayName()
-        {
-            return !String.IsNullOrEmpty(_displayName);
-        }
-
     }
 
 }

@@ -80,7 +80,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(1, dataStore.Count);
             Assert.AreSame(cp, loader.GetBusinessObject<ContactPersonTestBO>(cp.ID));
-            Assert.IsFalse(cp.State.IsDirty);
+            Assert.IsFalse(cp.Status.IsDirty);
             //---------------Tear Down -------------------------
         }
 

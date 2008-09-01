@@ -30,13 +30,13 @@ namespace Habanero.Test.BO
     {
         public static void AssertBOStateIsValidAfterInsert_Updated(BusinessObject businessObject)
         {
-            Assert.IsFalse(businessObject.State.IsNew);
-            Assert.IsFalse(businessObject.State.IsDirty);
-            Assert.IsFalse(businessObject.State.IsDeleted);
-            Assert.IsFalse(businessObject.State.IsEditing);
-            Assert.IsTrue(businessObject.State.IsValid());
+            Assert.IsFalse(businessObject.Status.IsNew);
+            Assert.IsFalse(businessObject.Status.IsDirty);
+            Assert.IsFalse(businessObject.Status.IsDeleted);
+            Assert.IsFalse(businessObject.Status.IsEditing);
+            Assert.IsTrue(businessObject.Status.IsValid());
             string message;
-            Assert.IsTrue(businessObject.State.IsValid(out message));
+            Assert.IsTrue(businessObject.Status.IsValid(out message));
             Assert.AreEqual("", message);
         }
     }

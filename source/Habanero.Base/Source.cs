@@ -13,6 +13,7 @@ namespace Habanero.Base
         private string _entityName;
         private JoinList _joins;
         private JoinList _inheritanceJoins;
+        private bool _isPrepared;
 
         public Source(string name) : this(name, name)
         {
@@ -64,6 +65,12 @@ namespace Habanero.Base
         public virtual JoinList InheritanceJoins
         {
             get { return _inheritanceJoins; }
+        }
+
+        public bool IsPrepared
+        {
+            get { return _isPrepared; }
+            set { _isPrepared = value; }
         }
 
         public override string ToString()
