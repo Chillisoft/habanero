@@ -126,24 +126,30 @@ namespace Habanero.Test
             RelKeyDef relKeyDef;
             IPropDef propDef;
             RelPropDef lRelPropDef;
-            RelationshipDef relDef;
+            
             relKeyDef = new RelKeyDef();
             propDef = lPropDefCol["ContactPersonID"];
             lRelPropDef = new RelPropDef(propDef, "OwnerId");
             relKeyDef.Add(lRelPropDef);
-            relDef = new MultipleRelationshipDef("Owner", typeof(Car),
-                                                 relKeyDef, false, "",
-                                                 DeleteParentAction.DereferenceRelated);
-            relDefCol.Add(relDef);
-
+            //relDef = new MultipleRelationshipDef("Owner", typeof(Car),
+            //                                     relKeyDef, false, "",
+            //                                     DeleteParentAction.DereferenceRelated);
+            RelationshipDef relDef1 = new MultipleRelationshipDef("Owner", typeof(Car),
+                                     relKeyDef, false, "",
+                                     DeleteParentAction.DereferenceRelated);
+            RelationshipDef relDef2 = new MultipleRelationshipDef("Cars", typeof(Car),
+                         relKeyDef, false, "Engine.EngineNo",
+                         DeleteParentAction.DereferenceRelated);
+            relDefCol.Add(relDef1);
+            relDefCol.Add(relDef2);
             relKeyDef = new RelKeyDef();
             propDef = lPropDefCol["ContactPersonID"];
             lRelPropDef = new RelPropDef(propDef, "ContactPersonID");
             relKeyDef.Add(lRelPropDef);
-            relDef = new MultipleRelationshipDef("Addresses", typeof(Address),
+            RelationshipDef relDef3 = new MultipleRelationshipDef("Addresses", typeof(Address),
                                                  relKeyDef, false, "",
                                                  DeleteParentAction.DeleteRelated);
-            relDefCol.Add(relDef);
+            relDefCol.Add(relDef3);
 			
             return relDefCol;
         }
@@ -259,9 +265,13 @@ namespace Habanero.Test
 
         #region Relationships
 
-        public IBusinessObjectCollection GetCarsOwned()
+        public IBusinessObjectCollection  GetCarsOwned()
         {
             return Relationships.GetRelatedCollection("Owner");
+        }
+        public IBusinessObjectCollection GetCarsOwnedOrdered()
+        {
+            return Relationships.GetRelatedCollection("Cars");
         }
 
         public BusinessObjectCollection<Address> Addresses
@@ -275,10 +285,13 @@ namespace Habanero.Test
 
         public static void DeleteAllContactPeople()
         {
-            string sql = "DELETE FROM contact_person_address";
-            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
-            sql = "DELETE FROM contact_person";
-            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            if (DatabaseConnection.CurrentConnection != null)
+            {
+                string sql = "DELETE FROM contact_person_address";
+                DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+                sql = "DELETE FROM contact_person";
+                DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            }
         }
 
         #endregion
@@ -312,6 +325,7 @@ namespace Habanero.Test
             relKeyDef.Add(lRelPropDef);
             RelationshipDef relDef = new MultipleRelationshipDef("AddressesNoDelete", typeof(Address),
                                                                   relKeyDef, false, "", DeleteParentAction.Prevent);
+        
             ClassDef.RelationshipDefCol = new RelationshipDefCol();
             ClassDef.RelationshipDefCol.Add(relDef);
 

@@ -44,6 +44,7 @@ namespace Habanero.Test.General
 		{
 			ClassDef.ClassDefs.Clear();
             ContactPerson.DeleteAllContactPeople();
+            new Engine();
 			_person = new ContactPerson();
 			_person.FirstName = "Joe";
 			_person.Surname = "Soap";

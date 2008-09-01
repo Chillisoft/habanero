@@ -27,6 +27,7 @@ namespace Habanero.UI.WebGUI
     /// <summary>
     /// Used to group collections of controls
     /// </summary>
+    [MetadataTag("P")]
     public class PanelGiz : Panel, IPanel
     {
         /// <summary>

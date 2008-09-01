@@ -393,6 +393,7 @@ namespace Habanero.BO
             if (searchCriteria.Length > 0)
             {
                 criteriaExpression = CriteriaParser.CreateCriteria(searchCriteria);
+                QueryBuilder.PrepareCriteria(this.ClassDef, criteriaExpression);
             }
             LoadWithLimit(criteriaExpression, orderByClause, limit);
         }

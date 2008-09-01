@@ -26,7 +26,8 @@ namespace Habanero.UI.WebGUI
     /// <summary>
     /// Manages a group of buttons that display next to each other
     /// </summary>
-    public class ButtonGroupControlGiz : ControlGiz, IButtonGroupControl
+    [MetadataTag("P")]
+    public class ButtonGroupControlGiz : PanelGiz, IButtonGroupControl
     {
         private ButtonGroupControlManager _buttonGroupControlManager;
         private IControlFactory _controlFactory;

@@ -556,10 +556,12 @@ namespace Habanero.BO
         {
             RelatedBusinessObjectCollection<T> relatedCol = new RelatedBusinessObjectCollection<T>(relationship);
             Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
-            GetBusinessObjectCollection<T>(relationshipCriteria, relationship.OrderCriteria).ForEach(
-                delegate(T obj) { relatedCol.Add(obj); });
-            relatedCol.SelectQuery.Criteria = relationshipCriteria;
-            relatedCol.SelectQuery.OrderCriteria = relationship.OrderCriteria;
+            OrderCriteria preparedOrderCriteria =
+                QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
+
+            BusinessObjectCollection<T> col = GetBusinessObjectCollection<T>(relationshipCriteria, preparedOrderCriteria);
+            col.ForEach(delegate(T obj) { relatedCol.Add(obj); });
+            relatedCol.SelectQuery = col.SelectQuery;
             return relatedCol;
         }
 
@@ -578,14 +580,16 @@ namespace Habanero.BO
             IBusinessObjectCollection relatedCol = CreateRelatedBusinessObjectCollection(type, relationship);
             Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
 
-            IBusinessObjectCollection col = GetBusinessObjectCollection(relationship.RelatedObjectClassDef, 
-                                                                        relationshipCriteria, relationship.OrderCriteria);
+            OrderCriteria preparedOrderCriteria =
+                QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
+
+            IBusinessObjectCollection col = GetBusinessObjectCollection(relationship.RelatedObjectClassDef,
+                                                                        relationshipCriteria, preparedOrderCriteria);
             foreach (IBusinessObject businessObject in col)
             {
                 relatedCol.Add(businessObject);
             }
-            relatedCol.SelectQuery.Criteria = relationshipCriteria;
-            relatedCol.SelectQuery.OrderCriteria = relationship.OrderCriteria;
+            relatedCol.SelectQuery = col.SelectQuery;
             return relatedCol;
         }
 

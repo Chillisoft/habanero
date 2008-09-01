@@ -1605,7 +1605,7 @@ namespace Habanero.Test.BO
             Assert.Contains(cp1, col);
         }
 
-        [Test, Ignore("Not working for now - to be fixed before 2.0")]
+        [Test, Ignore("Not working for IN MEMORY now - to be fixed before 2.0")]
         public void TestGetBusinessObjectCollection_CriteriaString_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
@@ -1622,6 +1622,29 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             BusinessObjectCollection<Engine> col =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Engine>(criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(engine, col);
+        }
+
+        [Test, Ignore("Not working for IN MEMORY now - to be fixed before 2.0")]
+        public void TestBusinessObjectCollection_Load_CriteriaString_ThroughRelationship_TwoLevels()
+        {
+            //---------------Set up test pack-------------------
+            Engine.LoadClassDef_IncludingCarAndOwner();
+            //            DateTime now = DateTime.Now;
+            string surname;
+            string regno;
+            string engineNo;
+            Engine engine = CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
+            CreateEngineWithCarWithContact();
+            //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            string criteria = string.Format("Car.Owner.Surname = '{0}'", surname);
+            BusinessObjectCollection<Engine> col = new BusinessObjectCollection<Engine>();
+
+            //---------------Execute Test ----------------------
+            col.Load(criteria, "");
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, col.Count);
@@ -1945,6 +1968,26 @@ namespace Habanero.Test.BO
             Assert.AreSame(car1engine1, engines[2]);
             //---------------Tear Down -------------------------     
         }
+
+        
+        [Test]
+        public void TestGetBusinessObjectCollectionClassDef_SortOrder_ThroughRelationship_TwoLevels()
+        {
+            //---------------Set up test pack-------------------
+            //DeleteEnginesAndCars();
+            ContactPerson contactPerson1 = ContactPerson.CreateSavedContactPerson("zzzz");
+            Car car1 = Car.CreateSavedCar("2", contactPerson1);
+            Engine car1engine1 = Engine.CreateSavedEngine(car1, "20");
+
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection carsOwned = contactPerson1.GetCarsOwnedOrdered();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, carsOwned.Count);
+
+            //---------------Tear Down -------------------------     
+        }
+
 
         [Test]
         public void TestGetBusinessObjectCollection_SortOrder_ThroughRelationship_Untyped()
@@ -2602,6 +2645,19 @@ namespace Habanero.Test.BO
                 StringAssert.Contains("A collections select query cannot be set to null", ex.Message);
                 StringAssert.Contains("A collections select query cannot be set to null", ex.DeveloperMessage);
             }
+        }
+
+        [Test]
+        public void TestLoadWithCriteria_MultipleLevels()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Execute Test ----------------------
+
+            //---------------Test Result -----------------------
+
+            //---------------Tear Down -------------------------
+
         }
     }
 }

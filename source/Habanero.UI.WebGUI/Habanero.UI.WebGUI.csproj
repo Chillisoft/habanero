@@ -54,7 +54,6 @@
     </Compile>
     <Compile Include="BorderLayoutManagerGiz.cs" />
     <Compile Include="ButtonGroupControlGiz.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="CheckBoxGiz.cs">
       <SubType>Component</SubType>
@@ -67,7 +66,6 @@
     </Compile>
     <Compile Include="ControlCollectionGiz.cs" />
     <Compile Include="ControlGiz.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="DataGridViewCheckBoxColumnGiz.cs" />
     <Compile Include="DataGridViewComboBoxColumnGiz.cs" />
@@ -126,7 +124,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DefaultBOEditorFormGiz.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="ControlFactoryGizmox.cs">
     </Compile>
@@ -146,7 +143,6 @@
       <DependentUpon>MultiSelectorGiz.cs</DependentUpon>
     </Compile>
     <Compile Include="PanelGiz.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\Common\AssemblyInfoShared.cs">
@@ -159,7 +155,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Grid\ReadOnlyGridControlGiz.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="TextBoxGiz.cs">
       <SubType>Component</SubType>

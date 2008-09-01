@@ -113,6 +113,13 @@
             <param name="objContext"></param>
             <param name="objWriter"></param>
         </member>
+        <member name="M:Gizmox.WebGUI.Forms.Component.RenderExtendedComponentAttributes(Gizmox.WebGUI.Common.Interfaces.IContext,Gizmox.WebGUI.Common.Interfaces.IAttributeWriter)">
+            <summary>
+            Renders the extended component attributes.
+            </summary>
+            <param name="objContext">The context.</param>
+            <param name="objWriter">The writer.</param>
+        </member>
         <member name="M:Gizmox.WebGUI.Forms.Component.RenderDragAndDropAttributes(Gizmox.WebGUI.Common.Interfaces.IContext,Gizmox.WebGUI.Common.Interfaces.IAttributeWriter)">
             <summary>
             Renders the drag and drop attributes.
@@ -169,6 +176,26 @@
             </summary>
             <param name="strProperty">The name of the property that has changed</param>
             <param name="objSubject">The subject of the property that has changed</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Component.RenderAttributes(Gizmox.WebGUI.Common.Interfaces.IAttributeWriter,System.Int64)">
+            <summary>
+            Renders the attributes.
+            </summary>
+            <param name="attributeWriter">The attribute writer.</param>
+            <param name="lngRequestID">The LNG request ID.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Component.Gizmox#WebGUI#Common#Interfaces#IAttributeExtender#RenderAttributes(Gizmox.WebGUI.Common.Interfaces.IAttributeWriter)">
+            <summary>
+            Writes the container attributes to an IAttributeWriter
+            </summary>
+            <param name="attributeWriter"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Component.Gizmox#WebGUI#Common#Interfaces#IAttributeExtender#RenderUpdatedAttributes(Gizmox.WebGUI.Common.Interfaces.IAttributeWriter,System.Int64)">
+            <summary>
+            Renders the updated attributes.
+            </summary>
+            <param name="objWriter">The writer.</param>
+            <param name="lngRequestID">The request ID.</param>
         </member>
         <member name="E:Gizmox.WebGUI.Forms.Component.DragDrop">
             <summary>Occurs when a drag-and-drop operation is completed.</summary>
@@ -231,6 +258,11 @@
             Gets the application object.
             </summary>
             <value></value>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Component.AttributesWrapper.mlngLastModified">
+            <summary>
+            Indicates last render identifiers
+            </summary>
         </member>
         <member name="T:Gizmox.WebGUI.Forms.IBindableComponent">
             <summary>Enables a non-control component to emulate the data-binding behavior of a Windows Forms control.</summary>
@@ -1043,6 +1075,11 @@
         <member name="P:Gizmox.WebGUI.Forms.Control.ToolTip">
             <summary>
             Gets or sets the text associated with this control.  
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Control.MetadataTag">
+            <summary>
+            Gets the control tag name.  
             </summary>
         </member>
         <member name="P:Gizmox.WebGUI.Forms.Control.TagName">
@@ -8929,6 +8966,62 @@
             <returns>A data source based on the <see cref="T:System.Collections.IList"/> interface to be monitored for errors. Typically, this is a <see cref="T:System.Data.DataSet"/> to be monitored for errors.</returns>
             <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
         </member>
+        <member name="T:Gizmox.WebGUI.Forms.Extenders.SilverlightExtender">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Extenders.SilverlightExtender.SetDouble(Gizmox.WebGUI.Forms.Control,System.String,System.Double)">
+            <summary>
+            Sets the opacity.
+            </summary>
+            <param name="objControl">The control.</param>
+            <param name="dblOpacity">The opacity.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Extenders.SilverlightExtender.GetDouble(Gizmox.WebGUI.Forms.Control,System.String,System.Double)">
+            <summary>
+            Gets the opacity.
+            </summary>
+            <param name="objControl">The control.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Extenders.SilverlightExtender.CanExtend(System.Object)">
+            <summary>
+            Specifies whether this object can provide its extender properties to the specified object.
+            </summary>
+            <param name="extendee">The <see cref="T:System.Object"/> to receive the extender properties.</param>
+            <returns>
+            true if this object can provide extender properties to the specified object; otherwise, false.
+            </returns>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Extenders.UniqueIdExtender">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Extenders.UniqueIdExtender.SetUniqueId(Gizmox.WebGUI.Forms.Component,System.String)">
+            <summary>
+            Sets the unique id.
+            </summary>
+            <param name="objComponent">The component.</param>
+            <param name="strId">The unique id.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Extenders.UniqueIdExtender.GetUniqueId(Gizmox.WebGUI.Forms.Control)">
+            <summary>
+            Gets the unique id.
+            </summary>
+            <param name="objComponent">The component.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Extenders.UniqueIdExtender.CanExtend(System.Object)">
+            <summary>
+            Specifies whether this object can provide its extender properties to the specified object.
+            </summary>
+            <param name="extendee">The <see cref="T:System.Object"/> to receive the extender properties.</param>
+            <returns>
+            true if this object can provide extender properties to the specified object; otherwise, false.
+            </returns>
+        </member>
         <member name="T:Gizmox.WebGUI.Forms.FileDialog">
             <summary>Displays a dialog box from which the user can select a file.</summary>
             <filterpriority>1</filterpriority>
@@ -11451,6 +11544,11 @@
         <member name="P:Gizmox.WebGUI.Forms.ProfessionalColorTable.UseSystemColors">
             <summary>Gets or sets a value indicating whether to use <see cref="T:System.Drawing.SystemColors"></see> rather than colors that match the current visual style. </summary>
             <returns>true to use <see cref="T:System.Drawing.SystemColors"></see>; otherwise, false. The default is false.</returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.PropertyStore.#cctor">
+            <summary>
+            Initializes the <see cref="T:Gizmox.WebGUI.Forms.PropertyStore"/> class.
+            </summary>
         </member>
         <member name="T:Gizmox.WebGUI.Forms.Screen">
             <summary>Represents a display device or multiple display devices on a single system.</summary>
@@ -23438,7 +23536,7 @@
             <summary>Raises the <see cref="E:Gizmox.WebGUI.Forms.Control.BindingContextChanged"></see> event.</summary>
             <param name="e">An <see cref="T:System.EventArgs"></see> that contains the event data. </param>
         </member>
-        <member name="M:Gizmox.WebGUI.Forms.ListView.Bind">
+        <member name="M:Gizmox.WebGUI.Forms.ListView.Bind(System.ComponentModel.ListChangedEventArgs)">
             <summary>
             Bind listview to data
             </summary>        

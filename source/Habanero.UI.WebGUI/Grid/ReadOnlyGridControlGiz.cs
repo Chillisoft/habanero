@@ -41,7 +41,8 @@ namespace Habanero.UI.WebGUI
     /// A filter control is placed above the grid and is used to filter which rows
     /// are shown.
     /// </summary>
-    public class ReadOnlyGridControlGiz : ControlGiz, IReadOnlyGridControl, ISupportInitialize
+    [MetadataTag("P")]
+    public class ReadOnlyGridControlGiz : PanelGiz, IReadOnlyGridControl, ISupportInitialize
     {
         public delegate void RefreshGridDelegate();
 

@@ -434,6 +434,17 @@
             Summary description for LogonException.
             </summary>
         </member>
+        <member name="T:Gizmox.WebGUI.Common.Extensibility.SilverlightControlAttribute">
+            <summary>
+            Maps the Silverlight client control 
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Extensibility.SilverlightControlAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Common.Extensibility.SilverlightControlAttribute"/> class.
+            </summary>
+            <param name="strControlType">The mapped silverlight client control.</param>
+        </member>
         <member name="T:Gizmox.WebGUI.Common.Extensibility.WebCompilerPagesAttribute">
             <summary>
             Defines a component exposed pages that can be retrieved using the resources mechanism.
@@ -727,6 +738,28 @@
             <returns>The product version.</returns>
             <filterpriority>1</filterpriority>
             <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.MetadataTagAttribute">
+            <summary>
+            Indicates the tag name to be used when generating the control metadata
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.MetadataTagAttribute.mstrTagName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.MetadataTagAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Forms.MetadataTagAttribute"/> class.
+            </summary>
+            <param name="strTagName">The metadata tag name to use.</param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.MetadataTagAttribute.TagName">
+            <summary>
+            Gets the name of the tag.
+            </summary>
+            <value>The name of the tag.</value>
         </member>
         <member name="T:Gizmox.WebGUI.Forms.SRCategoryAttribute">
             <summary>
@@ -2465,6 +2498,38 @@
             <summary>
             Summary description for IAttributeWriter.
             </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IAttributeExtender">
+            <summary>
+            Defines generic attribute container capabilities
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IAttributeExtender.SetAttribute(System.String,System.String)">
+            <summary>
+            Sets an attribute to the container
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IAttributeExtender.GetAttribute(System.String)">
+            <summary>
+            Gets an attribute from the container
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IAttributeExtender.RenderAttributes(Gizmox.WebGUI.Common.Interfaces.IAttributeWriter)">
+            <summary>
+            Writes the container attributes to an IAttributeWriter
+            </summary>
+            <param name="attributeWriter"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IAttributeExtender.RenderUpdatedAttributes(Gizmox.WebGUI.Common.Interfaces.IAttributeWriter,System.Int64)">
+            <summary>
+            Renders the updated attributes.
+            </summary>
+            <param name="objWriter">The writer.</param>
+            <param name="lngRequestID">The request ID.</param>
         </member>
         <member name="T:Gizmox.WebGUI.Common.Interfaces.ICommand">
             <summary>

@@ -79,7 +79,8 @@ namespace Habanero.BO
         ///</summary>
         public OrderCriteria OrderCriteria
         {
-            get { return _relDef.OrderCriteria; }
+            get { if (_relDef.OrderCriteria == null) return new OrderCriteria();
+                return _relDef.OrderCriteria; }
         }
 
         ///<summary>

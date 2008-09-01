@@ -62,9 +62,10 @@ namespace Habanero.Test.General
             mCotanctPTestRefreshFromObjMan = new ContactPerson();
             mCotanctPTestRefreshFromObjMan.Surname = "FirstSurname";
             mCotanctPTestRefreshFromObjMan.Save();
-
+            new Engine();
             CreateDeletedPersonTestPack();
             CreateSaveContactPersonTestPack();
+  
             //Ensure that a fresh object is loaded from DB
             BusinessObjectManager.Instance.ClearLoadedObjects();
         }

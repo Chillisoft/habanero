@@ -26,6 +26,7 @@ namespace Habanero.UI.WebGUI
     /// <summary>
     /// Defines controls, which are components with visual representation
     /// </summary>
+    [MetadataTag("P")]
     public class ControlGiz : Control, IControlChilli
     {
         /// <summary>
