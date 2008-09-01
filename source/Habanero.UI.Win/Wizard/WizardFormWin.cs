@@ -18,18 +18,19 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using Gizmox.WebGUI.Forms;
+using System.Windows.Forms;
 using Habanero.UI.Base;
+using DialogResult=System.Windows.Forms.DialogResult;
 
-namespace Habanero.UI.WebGUI
+namespace Habanero.UI.Win
 {
     /// <summary>
     /// A form that displays a wizard.  This form simply wraps the WizardControl in a form and handles communication with the user.
     /// </summary>
-    public partial class WizardFormGiz : FormGiz, IFormChilli
+    public partial class WizardFormWin : FormWin, IFormChilli
     {
         private readonly IWizardController _wizardController;
-        private readonly WizardControlGiz _uxWizardControl;
+        private readonly WizardControlWin _uxWizardControl;
         private readonly IControlFactory _controlFactory;
         private string _wizardText;
 
@@ -37,7 +38,7 @@ namespace Habanero.UI.WebGUI
         /// Initialises the WizardForm, sets the controller and starts the wizard.
         /// </summary>
         /// <param name="controller">the wizrd controller that controls moving the wizard steps and the </param>
-        public WizardFormGiz(IWizardController controller) : this(controller, GlobalUIRegistry.ControlFactory)
+        public WizardFormWin(IWizardController controller) : this(controller, GlobalUIRegistry.ControlFactory)
         {
         }
 
@@ -46,20 +47,20 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         /// <param name="controller">the wizrd controller that controls moving the wizard steps and the </param>
         /// <param name="controlFactory">The control factory to use for creating any controls</param>
-        public WizardFormGiz(IWizardController controller, IControlFactory controlFactory)
+        public WizardFormWin(IWizardController controller, IControlFactory controlFactory)
         {
             _wizardController = controller;
 
             _controlFactory = controlFactory;
 //            _uxWizardControl = new WizardControlGiz(controller, _controlFactory);
-            _uxWizardControl = (WizardControlGiz) controlFactory.CreateWizardControl(controller);
+            _uxWizardControl = (WizardControlWin)controlFactory.CreateWizardControl(controller);
             this._uxWizardControl.MessagePosted += _uxWizardControl_MessagePosted;
             this._uxWizardControl.Finished += this._uxWizardControl_Finished;
             this._uxWizardControl.StepChanged += this._uxWizardControl_StepChanged;
             this._uxWizardControl.CancelButton.Click += CancelButton_OnClick;
             InitializeComponent();
             WizardControl.WizardController = _wizardController;
-            DialogResult = Gizmox.WebGUI.Forms.DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel;
             this.Closing += WizardFormGiz_Closing;
         }
 
@@ -99,7 +100,7 @@ namespace Habanero.UI.WebGUI
         
         IControlCollection IControlChilli.Controls
         {
-            get { return new ControlCollectionGiz(base.Controls); }
+            get { return new ControlCollectionWin(base.Controls); }
         }
 
         public void Refresh()
@@ -115,7 +116,7 @@ namespace Habanero.UI.WebGUI
 
         private void _uxWizardControl_Finished(object sender, EventArgs e)
         {
-            DialogResult = Gizmox.WebGUI.Forms.DialogResult.OK;
+            DialogResult = DialogResult.OK;
             Close();
         }
 
@@ -149,12 +150,12 @@ namespace Habanero.UI.WebGUI
         private static bool Show(string title, IWizardController wizardController, bool showDialog,
                                  IControlFactory controlFactory)
         {
-            WizardFormGiz form = new WizardFormGiz(wizardController, controlFactory);
+            WizardFormWin form = new WizardFormWin(wizardController, controlFactory);
             form.Text = title;
             form.StartPosition = FormStartPosition.CenterParent;
             if (showDialog)
             {
-                return form.ShowDialog() == (Gizmox.WebGUI.Forms.DialogResult)Base.DialogResult.OK;
+                return form.ShowDialog() == (DialogResult)Base.DialogResult.OK;
             }
             else
             {
