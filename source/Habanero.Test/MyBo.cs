@@ -17,10 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-#pragma warning disable RedundantThisQualifier
 using System;
 using System.Xml;
-using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -32,11 +30,6 @@ namespace Habanero.Test
     /// </summary>
     public class MyBO : BusinessObject
     {
-
-        public MyBO() {}
-
-//        public MyBO(IDatabaseConnection conn) : base(conn){}
-
         protected override ClassDef ConstructClassDef()
         {
             return _classDef;
@@ -93,7 +86,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID""  type=""Guid"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<primaryKey>
@@ -112,7 +105,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<primaryKey>
@@ -166,7 +159,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"" table=""my_bo"" >
-					<property  name=""MyBoID"" databaseField=""my_bo_id"" />
+					<property  name=""MyBoID""  type=""Guid"" databaseField=""my_bo_id"" />
 					<property  name=""TestProp"" databaseField=""test_prop"" />
 					<property  name=""TestProp2"" databaseField=""test_prop2"" />
 					<primaryKey>
@@ -185,7 +178,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<primaryKey>
@@ -239,7 +232,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid""/>
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<primaryKey>
@@ -308,7 +301,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID""  type=""Guid"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<property  name=""TestBoolean"" type=""Boolean"" />
@@ -344,7 +337,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID""  type=""Guid"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<primaryKey>
@@ -368,7 +361,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID""   type=""Guid""/>
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<primaryKey>
@@ -392,7 +385,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID""  />
+					<property  name=""MyBoID""  type=""Guid"" />
 					<property  name=""TestProp"" type=""Boolean""/>
 					<primaryKey>
 						<prop name=""MyBoID"" />
@@ -416,7 +409,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID""  />
+					<property  name=""MyBoID""   type=""Guid""/>
 					<property  name=""RelatedID"" type=""Guid""/>
 					<primaryKey>
 						<prop name=""MyBoID"" />
@@ -442,7 +435,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID""  type=""Guid""/>
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<property  name=""TestDateTime"" type=""DateTime"" />
@@ -485,7 +478,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID""  type=""Guid""/>
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<property  name=""TestDateTime"" type=""DateTime"" />
@@ -528,7 +521,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID""  type=""Guid""/>
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" type=""Guid"" >
 						<simpleLookupList>
@@ -575,7 +568,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID""  type=""Guid""/>
 					<property  name=""TestProp"" />
                     <property name=""TestProp2"" type=""Int32"" default=""1"" compulsory=""true"">
                       <simpleLookupList>
@@ -620,7 +613,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID""  type=""Guid""/>
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" >
 						<simpleLookupList>
@@ -664,7 +657,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID""  type=""Guid""/>
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" type=""Guid"" >
 						<businessObjectLookupList class=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" "
@@ -758,7 +751,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid""/>
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<primaryKey>
@@ -793,7 +786,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid""/>
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<primaryKey>
@@ -832,7 +825,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid""/>
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<primaryKey>
@@ -872,7 +865,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid""/>
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" >
 						<businessObjectLookupList class=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" />
@@ -909,7 +902,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid""/>
 					<property  name=""TestProp"">
                         <rule name=""TestProp"">
                             <add key=""maxLength"" value=""5"" />
@@ -933,7 +926,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid""/>
                     <property  name=""TestProp2"" type=""Int32""/>
 					<property  name=""TestProp"" type=""Int32"">
                         <rule name=""TestProp"">
@@ -958,7 +951,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid""/>
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" type=""Guid"" >
 						<simpleLookupList>
@@ -1005,7 +998,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
                 <class name=""MyBO"" assembly=""Habanero.Test"" table=""my_bo"" >
-					<property  name=""MyBoID"" databaseField=""my_bo_id"" />
+					<property  name=""MyBoID"" type=""Guid"" databaseField=""my_bo_id"" />
 					<property  name=""TestProp"" databaseField=""test_prop"" />
 					<property  name=""TestProp2"" databaseField=""test_prop2"" />
                     <property  name=""RelatedID"" type=""Guid"" databaseField=""related_id""  />
@@ -1032,7 +1025,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid""/>
 					<property  name=""ShapeID"" type=""Guid"" />
 					<primaryKey>
 						<prop name=""MyBoID"" />
@@ -1061,7 +1054,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid""/>
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<primaryKey>
@@ -1099,7 +1092,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid""/>
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<primaryKey>
@@ -1125,7 +1118,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid""/>
                     <property  name=""TestProp2"" type=""Decimal""/>
 					<property  name=""TestProp"" type=""Decimal"">
                         <rule name=""TestProp"">
@@ -1181,9 +1174,9 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBo"">
-					<property  name=""MyRelatedBoID"" />
+					<property  name=""MyRelatedBoID"" type=""Guid""/>
 					<property  name=""MyRelatedTestProp"" />
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid""/>
 					<primaryKey>
 						<prop name=""MyRelatedBoID"" />
 					</primaryKey>
@@ -1203,10 +1196,10 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""My_Related_Bo"">
-					<property  name=""MyRelatedBoID"" databaseField=""My_Related_Bo_ID""/>
+					<property  name=""MyRelatedBoID"" type=""Guid"" databaseField=""My_Related_Bo_ID""/>
 					<property  name=""MyRelatedTestProp"" databaseField=""My_Related_Test_Prop"" />
 					<property  name=""MyRelatedTestProp2"" databaseField=""My_Related_Test_Prop2"" />
-                    <property  name=""MyBoID"" databaseField=""My_Bo_ID"" />
+                    <property  name=""MyBoID"" type=""Guid"" databaseField=""My_Bo_ID"" />
 					<primaryKey>
 						<prop name=""MyRelatedBoID"" />
 					</primaryKey>
@@ -1226,9 +1219,9 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBo"">
-					<property  name=""MyRelatedBoID"" />
+					<property  name=""MyRelatedBoID"" type=""Guid""/>
 					<property  name=""MyRelatedTestProp"" />
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid""/>
 					<primaryKey>
 						<prop name=""MyRelatedBoID"" />
 					</primaryKey>
@@ -1250,9 +1243,9 @@ namespace Habanero.Test
 				<class name=""MyRelatedBo"" assembly=""Habanero.Test"">
                     <superClass class=""MyBO"" assembly=""Habanero.Test"" 
                         orMapping=""SingleTableInheritance"" discriminator=""TestProp"" />
-					<property  name=""MyRelatedBoID"" />
+					<property  name=""MyRelatedBoID"" type=""Guid""/>
 					<property  name=""MyRelatedTestProp"" />
-					<property  name=""MyBoID"" />
+					<property  name=""MyBoID"" type=""Guid""/>
 					<primaryKey>
 						<prop name=""MyRelatedBoID"" />
 					</primaryKey>
@@ -1337,8 +1330,8 @@ namespace Habanero.Test
     /// </summary>
     public class MyBoNotEditableDeletable : BusinessObject
     {
-        private bool _editable = false;
-        private bool _deletable = false; 
+        private bool _editable;
+        private bool _deletable; 
 
 
 //        public MyBoNotEditableDeletable() { }
@@ -1380,7 +1373,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBoNotEditableDeletable"" assembly=""Habanero.Test"">
-					<property  name=""MyBoNotEditableID"" />
+					<property  name=""MyBoNotEditableID"" type=""Guid""/>
 					<property  name=""TestProp"" />
 					<primaryKey>
 						<prop name=""MyBoNotEditableID"" />
