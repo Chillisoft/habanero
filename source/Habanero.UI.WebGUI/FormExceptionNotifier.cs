@@ -93,7 +93,7 @@ namespace Habanero.UI.WebGUI
 
                 IButtonGroupControl buttonsDetail = GlobalUIRegistry.ControlFactory.CreateButtonGroupControl();
                 buttonsDetail.AddButton("Email Error", EmailErrorClickHandler);
-                _moreDetailButton = buttonsDetail.AddButton("More Detail...", MoreDetailClickHandler);
+                _moreDetailButton = buttonsDetail.AddButton("More Detail »", MoreDetailClickHandler);
                 buttonsDetail.Height = BUTTONS_HEIGHT;
                 buttonsDetail.Width = 2 * (_moreDetailButton.Width + 9);
 
@@ -226,13 +226,13 @@ namespace Habanero.UI.WebGUI
                     Height = _summaryPanel.Height + BUTTONS_HEIGHT + 16 + FULL_DETAIL_HEIGHT;
                     Width = 750;
                     _fullDetailPanel.Visible = true;
-                    _moreDetailButton.Text = "� &Less Detail";
+                    _moreDetailButton.Text = "« &Less Detail";
                 }
                 else
                 {
                     Height = _summaryPanel.Height + BUTTONS_HEIGHT + 16;
                     _fullDetailPanel.Visible = false;
-                    _moreDetailButton.Text = "&More Detail �";
+                    _moreDetailButton.Text = "&More Detail »";
                 }
             }
 

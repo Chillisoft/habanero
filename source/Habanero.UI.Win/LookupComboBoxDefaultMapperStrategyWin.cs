@@ -22,7 +22,7 @@ namespace Habanero.UI.Win
         private void SelectIndexChangedHandler(object sender, EventArgs e)
         {
             _mapper.ApplyChangesToBusinessObject();
-            _mapper.UpdateControlValueFromBusinessObject();
+           // _mapper.UpdateControlValueFromBusinessObject();
         }
 
 

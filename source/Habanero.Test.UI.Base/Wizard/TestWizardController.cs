@@ -479,6 +479,8 @@ namespace Habanero.Test.UI.Base.Wizard
             set { throw new NotImplementedException(); }
         }
 
+        public event EventHandler TextChanged;
+
         #endregion
     }
 }

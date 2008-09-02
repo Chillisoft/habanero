@@ -60,6 +60,14 @@ namespace Habanero.UI.Base
         /// </summary>
         bool Checked { get; set; }
 
+        /// <summary>
+        /// Occurs when the control is entered
+        /// </summary>
         event EventHandler Enter;
+
+        /// <summary>
+        /// Occurs when the Value property changes
+        /// </summary>
+        event EventHandler ValueChanged;
     }
 }

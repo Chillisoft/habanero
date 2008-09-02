@@ -72,6 +72,5 @@ namespace Habanero.UI.Base
         /// Gets or sets which scroll bars should appear in a multiline TextBox control
         /// </summary>
         ScrollBars ScrollBars { get; set; }
-
     }
 }

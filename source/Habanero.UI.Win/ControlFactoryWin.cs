@@ -64,7 +64,9 @@ namespace Habanero.UI.Win
         /// <returns>Returns a new ITreeView object</returns>
         public ITreeView CreateTreeView(string name)
         {
-            throw new NotImplementedException();
+            ITreeView treeView = new TreeViewWin();
+            treeView.Name = name;
+            return treeView;
         }
 
         /// <summary>
@@ -79,15 +81,15 @@ namespace Habanero.UI.Win
         {
             Type controlType = null;
 
-            if (String.IsNullOrEmpty(typeName) || String.IsNullOrEmpty(assemblyName))
+            if (String.IsNullOrEmpty(typeName)) return CreateControl(typeof (TextBox));
+
+            if (String.IsNullOrEmpty(assemblyName))
             {
-                controlType = typeof (TextBox);
+                assemblyName = "System.Windows.Forms";
             }
-            else
-            {
-                TypeLoader.LoadClassType(ref controlType, assemblyName, typeName,
+            TypeLoader.LoadClassType(ref controlType, assemblyName, typeName,
                                          "field", "field definition");
-            }
+            
 
             return CreateControl(controlType);
         }
@@ -108,6 +110,7 @@ namespace Habanero.UI.Win
                 if (controlType == typeof (TextBox)) return CreateTextBox();
                 if (controlType == typeof (ListBox)) return CreateListBox();
                 if (controlType == typeof (DateTimePicker)) return CreateDateTimePicker();
+                if (controlType == typeof (NumericUpDown)) return CreateNumericUpDownInteger();
 
                 ctl = (IControlChilli) Activator.CreateInstance(controlType);
                 PropertyInfo infoFlatStyle =
@@ -154,7 +157,10 @@ namespace Habanero.UI.Win
         /// <returns>Returns a new DateTimePicker object</returns>
         public IDateTimePicker CreateMonthPicker()
         {
-            throw new NotImplementedException();
+            DateTimePickerWin editor = (DateTimePickerWin)CreateDateTimePicker();
+            editor.Format = DateTimePickerFormat.Custom;
+            editor.CustomFormat = "MMM yyyy";
+            return editor;
         }
 
 
@@ -181,8 +187,8 @@ namespace Habanero.UI.Win
         {
             NumericUpDownWin ctl = new NumericUpDownWin();
             ctl.DecimalPlaces = 2;
-            ctl.Maximum = Int32.MaxValue;
-            ctl.Minimum = Int32.MinValue;
+            ctl.Maximum = decimal.MaxValue;
+            ctl.Minimum = decimal.MinValue;
             return ctl;
         }
 
@@ -468,6 +474,9 @@ namespace Habanero.UI.Win
         {
             IButton button = CreateButton();
             button.Text = text;
+            button.Name = text;
+            ((Button)button).FlatStyle = FlatStyle.Standard;
+            button.Width = CreateLabel(text, false).PreferredWidth + 20;
             return button;
         }
 
@@ -498,8 +507,9 @@ namespace Habanero.UI.Win
         /// <param name="defaultValue">Whether the initial box is checked</param>
         public ICheckBox CreateCheckBox(bool defaultValue)
         {
-            //TODO
-            throw new NotImplementedException();
+            ICheckBox checkBox = CreateCheckBox();
+            checkBox.Checked = defaultValue;
+            return checkBox;
         }
 
         public ILabel CreateLabel()
@@ -511,7 +521,7 @@ namespace Habanero.UI.Win
 
         public ILabel CreateLabel(string labelText)
         {
-            ILabel label = CreateLabel();
+            ILabel label = CreateLabel(labelText, false);
             label.Text = labelText;
             return label;
         }
@@ -585,7 +595,9 @@ namespace Habanero.UI.Win
         /// <returns>Returns a new Panel object</returns>
         public IPanel CreatePanel(string name, IControlFactory controlFactory)
         {
-            throw new NotImplementedException();
+            IPanel panel = CreatePanel();
+            panel.Name = name;
+            return panel;
         }
 
 

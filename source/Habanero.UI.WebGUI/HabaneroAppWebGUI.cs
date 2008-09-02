@@ -17,9 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.DB;
 using Habanero.Base;
@@ -66,6 +64,7 @@ namespace Habanero.UI.WebGUI
             if (_databaseConfig == null) _databaseConfig = DatabaseConfig.ReadFromConfigFile();
             if (_privateKey != null) _databaseConfig.SetPrivateKey(_privateKey);
             DatabaseConnection.CurrentConnection = _databaseConfig.GetDatabaseConnection();
+            BORegistry.DataAccessor = new DataAccessorDB();
         }
 
 

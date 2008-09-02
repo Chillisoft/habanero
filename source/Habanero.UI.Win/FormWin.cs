@@ -66,6 +66,15 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
+        /// Gets or sets the form's window state.  The default is Normal.
+        /// </summary>
+        Base.FormWindowState IFormChilli.WindowState
+        {
+            get { return (Base.FormWindowState) base.WindowState; }
+            set { base.WindowState = (System.Windows.Forms.FormWindowState) value; }
+        }
+
+        /// <summary>
         /// Shows the form as a modal dialog box with the currently active window set as its owner
         /// </summary>
         /// <returns>One of the DialogResult values</returns>

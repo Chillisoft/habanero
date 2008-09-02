@@ -220,23 +220,15 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// See <see cref="IFilterControl.AddDateRangeFilterComboBox(string,string,bool,bool)"/>
-        /// </summary>
-        public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, bool includeStartDate, bool includeEndDate)
-        {
-
-            IDateRangeComboBox dateRangeComboBox = _controlFactory.CreateDateRangeComboBox();
-            ConfigureDateRangeComboBox(labelText, columnName, dateRangeComboBox, includeStartDate, includeEndDate);
-            return dateRangeComboBox;
-
-        }
-
-        /// <summary>
-        /// See <see cref="IFilterControl.AddDateRangeFilterComboBox(string,string,List{T},bool,bool)"/>
+        /// See <see cref="IFilterControl.AddDateRangeFilterComboBox(string,string,List{DateRangeOptions},bool,bool)"/>
         /// </summary>
         public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, List<DateRangeOptions> options, bool includeStartDate, bool includeEndDate)
         {
-            IDateRangeComboBox dateRangeComboBox = _controlFactory.CreateDateRangeComboBox(options);
+            IDateRangeComboBox dateRangeComboBox;
+            if (options == null) 
+                dateRangeComboBox = _controlFactory.CreateDateRangeComboBox();
+            else 
+                dateRangeComboBox = _controlFactory.CreateDateRangeComboBox(options);
             return ConfigureDateRangeComboBox(labelText, columnName, dateRangeComboBox, includeStartDate, includeEndDate);
         }
 

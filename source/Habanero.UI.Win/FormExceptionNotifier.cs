@@ -60,66 +60,6 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Provides a form to display the exception message using two tabs,
-        /// one for the basic message and one for the detailed error information
-        /// </summary>
-        private class ExceptionNotifyForm : FormWin
-        {
-            /// <summary>
-            /// Constructor to initialise the form
-            /// </summary>
-            /// <param name="ex">The exception</param>
-            /// <param name="furtherMessage">Extra error messages</param>
-            /// <param name="title">The title</param>
-            public ExceptionNotifyForm(Exception ex, string furtherMessage, string title)
-            {
-                ITabControl tabControl = _controlFactory.CreateTabControl();
-                IButtonGroupControl buttons = _controlFactory.CreateButtonGroupControl();
-                buttons.AddButton("OK", new EventHandler(OKButtonClickHandler));
-
-                BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(this);
-                manager.AddControl(tabControl, BorderLayoutManager.Position.Centre);
-                manager.AddControl(buttons, BorderLayoutManager.Position.South);
-
-                ITabPage messageTabPage = _controlFactory.CreateTabPage("Message");
-                ILabel messageLabel = _controlFactory.CreateLabel(furtherMessage, false);
-                ITextBox messageTextBox = _controlFactory.CreateTextBox();
-                messageTextBox.Text = ex.Message;
-                messageTextBox.Multiline = true;
-                //                messageTextBox.ScrollBars = ScrollBars.Both;//TODO:
-                BorderLayoutManager messageTabPageManager = _controlFactory.CreateBorderLayoutManager(messageTabPage);
-                messageTabPageManager.AddControl(messageLabel, BorderLayoutManager.Position.North);
-                messageTabPageManager.AddControl(messageTextBox, BorderLayoutManager.Position.Centre);
-
-                ITabPage detailsTabPage = _controlFactory.CreateTabPage("Details");
-                ILabel detailsLabel = _controlFactory.CreateLabel("Below are further details for the error.", false);
-                ITextBox detailsTextBox = _controlFactory.CreateTextBox();
-                detailsTextBox.Text = ExceptionUtilities.GetExceptionString(ex, 0, true);
-                detailsTextBox.Multiline = true;
-//                detailsTextBox.ScrollBars = ScrollBars.Both; //TODO:
-                BorderLayoutManager detailsTabPageManager = _controlFactory.CreateBorderLayoutManager(detailsTabPage);
-                detailsTabPageManager.AddControl(detailsLabel, BorderLayoutManager.Position.North);
-                detailsTabPageManager.AddControl(detailsTextBox, BorderLayoutManager.Position.Centre);
-
-                tabControl.TabPages.Add(messageTabPage);
-                tabControl.TabPages.Add(detailsTabPage);
-
-                this.Text = title;
-            }
-
-            /// <summary>
-            /// Handles the event of the OK button being pressed on the
-            /// exception form, which closes the form
-            /// </summary>
-            /// <param name="sender">The object that notified of the event</param>
-            /// <param name="e">Attached arguments regarding the event</param>
-            private void OKButtonClickHandler(object sender, EventArgs e)
-            {
-                this.Close();
-            }
-        }
-
-        /// <summary>
         /// Provides a form to display the exception message, using a "More Detail"
         /// button that collapses or uncollapses the error detail panel
         /// </summary>
@@ -154,7 +94,7 @@ namespace Habanero.UI.Win
                 IButtonGroupControl buttonsOK = _controlFactory.CreateButtonGroupControl();
                 IButtonGroupControl buttonsDetail = _controlFactory.CreateButtonGroupControl();
                 buttonsOK.AddButton("&OK", new EventHandler(OKButtonClickHandler));
-                _moreDetailButton = buttonsDetail.AddButton("&More Detail �", new EventHandler(MoreDetailClickHandler));
+                _moreDetailButton = buttonsDetail.AddButton("&More Detail »", new EventHandler(MoreDetailClickHandler));
                 buttonsOK.Height = BUTTONS_HEIGHT;
                 buttonsDetail.Height = BUTTONS_HEIGHT;
                 buttonsDetail.Width = _moreDetailButton.Width + 9;
@@ -218,7 +158,7 @@ namespace Habanero.UI.Win
 //                _errorDetails.ScrollBars = ScrollBars.Both;
                 _showStackTrace = _controlFactory.CreateCheckBox();
                 _showStackTrace.Text = "&Show stack trace";
-//                _showStackTrace.CheckedChanged += new EventHandler(ShowStackTraceClicked);//TODO: Fix
+                _showStackTrace.CheckedChanged += new EventHandler(ShowStackTraceClicked);//TODO: Fix
                 BorderLayoutManager detailsManager = _controlFactory.CreateBorderLayoutManager(_fullDetail);
                 detailsManager.AddControl(_errorDetails, BorderLayoutManager.Position.Centre);
                 detailsManager.AddControl(_showStackTrace, BorderLayoutManager.Position.South);
@@ -243,13 +183,13 @@ namespace Habanero.UI.Win
                     Height = _summary.Height + BUTTONS_HEIGHT + 16 + FULL_DETAIL_HEIGHT;
                     Width = 750;
                     _fullDetail.Visible = true;
-                    _moreDetailButton.Text = "� &Less Detail";
+                    _moreDetailButton.Text = "« &Less Detail";
                 }
                 else
                 {
                     Height = _summary.Height + BUTTONS_HEIGHT + 16;
                     _fullDetail.Visible = false;
-                    _moreDetailButton.Text = "&More Detail �";
+                    _moreDetailButton.Text = "&More Detail »";
                 }
             }
 

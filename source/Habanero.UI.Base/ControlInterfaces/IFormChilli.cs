@@ -85,6 +85,25 @@ namespace Habanero.UI.Base
     }
 
     /// <summary>
+    /// Specifies how a form window is displayed
+    /// </summary>
+    public enum FormWindowState
+    {
+        /// <summary>
+        /// A maximized window
+        /// </summary>
+        Maximized = 2,
+        /// <summary>
+        /// A minimized window
+        /// </summary>
+        Minimized = 1,
+        /// <summary>
+        /// A default sized window
+        /// </summary>
+        Normal = 0
+    }
+
+    /// <summary>
     /// Represents a window or dialog box that makes up an application's user interface
     /// </summary>
     public interface IFormChilli : IControlChilli
@@ -127,6 +146,11 @@ namespace Habanero.UI.Base
         /// Gets or sets the current multiple document interface (MDI) parent form of this form
         /// </summary>
         IFormChilli MdiParent { get; set; }
+
+        /// <summary>
+        /// Gets or sets the form's window state.  The default is Normal.
+        /// </summary>
+        FormWindowState WindowState { get; set; }
 
         /// <summary>
         /// Occurs after the form is closed

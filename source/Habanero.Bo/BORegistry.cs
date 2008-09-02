@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base.Exceptions;
+
 namespace Habanero.BO
 {
     ///<summary>
@@ -34,7 +36,12 @@ namespace Habanero.BO
         /// </summary>
         public static IDataAccessor DataAccessor
         {
-            get { return _dataAccessor; }
+            get
+            {
+                if (_dataAccessor == null) 
+                    throw new HabaneroApplicationException("The DataAccessor has not been set up on BORegistry. Please initialise it before attempting to load or save Business Objects.");
+                return _dataAccessor;
+            }
             set { _dataAccessor = value; }
         }
 

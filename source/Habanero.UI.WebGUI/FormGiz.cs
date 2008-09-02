@@ -24,6 +24,7 @@ using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 using FormStartPosition=Habanero.UI.Base.FormStartPosition;
 
+
 namespace Habanero.UI.WebGUI
 {
     /// <summary>
@@ -79,6 +80,15 @@ namespace Habanero.UI.WebGUI
         {
             get { throw new NotImplementedException(); }
             set { this.MdiParent = (Form)value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the form's window state.  The default is Normal.
+        /// </summary>
+        Base.FormWindowState IFormChilli.WindowState
+        {
+            get { return (Base.FormWindowState)base.WindowState; }
+            set { base.WindowState = (Gizmox.WebGUI.Forms.FormWindowState)value; }
         }
 
         /// <summary>

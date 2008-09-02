@@ -89,9 +89,7 @@ namespace Habanero.UI.Base
                 newMdiForm.Width = 800;
                 newMdiForm.Height = 600;
                 newMdiForm.MdiParent = _parentForm;
-
-                //TODO: make it maximised
-                //newMdiForm.WindowState = FormWindowState.Maximized;
+                newMdiForm.WindowState = FormWindowState.Maximized;
 
                 //IControlChilli ctl = formCtl;
        
@@ -99,7 +97,7 @@ namespace Habanero.UI.Base
                 newMdiForm.Controls.Clear();
                          BorderLayoutManager layoutManager = _controlFactory.CreateBorderLayoutManager(newMdiForm);
 
-                layoutManager.AddControl(formCtl);
+                layoutManager.AddControl(formCtl, BorderLayoutManager.Position.Centre);
                 newMdiForm.Show();
                 _formsbyHeading.Add(heading, newMdiForm);
                 _formsbyForm.Add(newMdiForm, heading);

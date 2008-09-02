@@ -316,5 +316,10 @@ namespace Habanero.UI.Base
         /// control and determines how a control is resized with its parent
         /// </summary>
         DockStyle Dock { get; set; }
+
+        /// <summary>
+        /// Occurs when the .Text property value changes
+        /// </summary>
+        event EventHandler TextChanged;
     }
 }

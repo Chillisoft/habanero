@@ -30,16 +30,164 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
 
-        //[TestFixture]
-        //public class TestControlFactoryWin : TestControlFactory
-        //{
-        //    protected override IControlFactory GetControlFactory()
-        //    {
-        //        return new Habanero.UI.Win.ControlFactoryWin();
-        //    }
+        protected abstract int GetBoldTextExtraWidth();
 
-        //}
+        [TestFixture]
+        public class TestControlFactoryWin : TestControlFactory
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new Habanero.UI.Win.ControlFactoryWin();
+            }
 
+            protected override int GetBoldTextExtraWidth()
+            {
+                return 10;
+            }
+
+            [Test]
+            public void TestCreateCheckBoxWin()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Execute Test ----------------------
+
+                ICheckBox cbx = GetControlFactory().CreateCheckBox();
+                //---------------Test Result -----------------------
+                Assert.IsFalse(cbx.Checked);
+                //---------------Tear Down -------------------------          
+            }
+
+            [Test]
+            public void TestCreateCheckBoxWin_WithDefault()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Execute Test ----------------------
+
+                ICheckBox cbx = GetControlFactory().CreateCheckBox(true);
+                //---------------Test Result -----------------------
+                Assert.IsTrue(cbx.Checked);
+                //---------------Tear Down -------------------------          
+            }
+
+            [Test]
+            public void TestCreateControl_ViaType_CreateCombo()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Verify test pack-------------------
+                //---------------Execute Test ----------------------
+                IControlChilli controlChilli = _factory.CreateControl(typeof(System.Windows.Forms.ComboBox));
+                //---------------Verify Result -----------------------
+                Assert.IsNotNull(controlChilli);
+                Assert.AreEqual(typeof(Habanero.UI.Win.ComboBoxWin), controlChilli.GetType());
+                //---------------Tear Down -------------------------   
+            }
+            [Test]
+            public void TestCreateControl_ViaType_CreateCheckBox()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Verify test pack-------------------
+                //---------------Execute Test ----------------------
+                IControlChilli controlChilli = _factory.CreateControl(typeof(System.Windows.Forms.CheckBox));
+                //---------------Verify Result -----------------------
+                Assert.IsNotNull(controlChilli);
+                Assert.AreEqual(typeof(Habanero.UI.Win.CheckBoxWin), controlChilli.GetType());
+                //---------------Tear Down -------------------------   
+            }
+            [Test]
+            public void TestCreateControl_ViaType_CreateTextBox()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Verify test pack-------------------
+                //---------------Execute Test ----------------------
+                IControlChilli controlChilli = _factory.CreateControl(typeof(System.Windows.Forms.TextBox));
+                //---------------Verify Result -----------------------
+                Assert.IsNotNull(controlChilli);
+                Assert.AreEqual(typeof(Habanero.UI.Win.TextBoxWin), controlChilli.GetType());
+                //---------------Tear Down -------------------------   
+            }
+            [Test]
+            public void TestCreateControl_ViaType_CreateListBox()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Verify test pack-------------------
+                //---------------Execute Test ----------------------
+                IControlChilli controlChilli = _factory.CreateControl(typeof(System.Windows.Forms.ListBox));
+                //---------------Verify Result -----------------------
+                Assert.IsNotNull(controlChilli);
+                Assert.AreEqual(typeof(Habanero.UI.Win.ListBoxWin), controlChilli.GetType());
+                //---------------Tear Down -------------------------   
+            }
+            [Test]
+            public void TestCreateControl_ViaType_CreateDateTimePicker()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Verify test pack-------------------
+                //---------------Execute Test ----------------------
+                IControlChilli controlChilli = _factory.CreateControl(typeof(System.Windows.Forms.DateTimePicker));
+                //---------------Verify Result -----------------------
+                Assert.IsNotNull(controlChilli);
+                Assert.AreEqual(typeof(Habanero.UI.Win.DateTimePickerWin), controlChilli.GetType());
+                //---------------Tear Down -------------------------   
+            }
+
+            [Test]
+            public void TestCreateControl_ViaType_NumericUpDown()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Verify test pack-------------------
+                //---------------Execute Test ----------------------
+                object controlChilli = _factory.CreateControl(typeof(System.Windows.Forms.NumericUpDown));
+                //---------------Verify Result -----------------------
+                Assert.IsNotNull(controlChilli);
+                Assert.AreEqual(typeof(Habanero.UI.Win.NumericUpDownWin), controlChilli.GetType());
+                //---------------Tear Down -------------------------   
+            }
+
+            [Test]
+            public void TestLoadWithIncorrectControlLibrary_RaisesAppropriateError()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Verify test pack-------------------
+                //---------------Execute Test ----------------------
+                try
+                {
+                    _factory.CreateControl(typeof(Gizmox.WebGUI.Forms.TextBox));
+                    //---------------Verify Result -----------------------
+                }
+                catch (UnknownTypeNameException ex)
+                {
+                    StringAssert.Contains("The control type name Gizmox.WebGUI.Forms.TextBox does not inherit from System.Windows.Forms.Control", ex.Message);
+                }
+            }
+
+            [Test]
+            public void TestCreateControlWithNullAssemblyName()
+            {
+                //---------------Set up test pack-------------------
+                
+                //---------------Execute Test ----------------------
+                IControlChilli control = _factory.CreateControl("NumericUpDown", null);
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOfType(typeof(System.Windows.Forms.NumericUpDown), control);
+                //---------------Tear down -------------------------
+
+            }
+
+            [Test]
+            public void TestCreateSpecifiedControlType()
+            {
+                //---------------Set up test pack-------------------
+                String typeName = "TextBox";
+                String assemblyName = "System.Windows.Forms";
+                //---------------Verify test pack-------------------
+                //---------------Execute Test ----------------------
+                IControlChilli control = _factory.CreateControl(typeName, assemblyName);
+                //---------------Verify Result -----------------------
+                Assert.IsTrue(control is System.Windows.Forms.TextBox);
+                //---------------Tear Down -------------------------   
+            }
+
+        }
         [TestFixture]
         public class TestControlFactoryGiz : TestControlFactory
         {
@@ -47,6 +195,13 @@ namespace Habanero.Test.UI.Base
             {
                 return new Habanero.UI.WebGUI.ControlFactoryGizmox();
             }
+
+            protected override int GetBoldTextExtraWidth()
+            {
+                return 14;
+            }
+
+
             [Test]
             public void TestCreateCheckBoxGiz()
             {
@@ -156,6 +311,35 @@ namespace Habanero.Test.UI.Base
             }
 
 
+            [Test]
+            public void TestCreateComboBox()
+            {
+                //---------------Set up test pack-------------------
+
+                //---------------Verify test pack-------------------
+                //---------------Execute Test ----------------------
+                IComboBox comboBox = _factory.CreateComboBox();
+                //---------------Verify Result -----------------------
+                Assert.IsNotNull(comboBox);
+                Assert.IsTrue(comboBox.TabStop);
+                int expectedHeight = _factory.CreateTextBox().Height;
+                Assert.AreEqual(expectedHeight, comboBox.Height);
+                //---------------Tear Down -------------------------   
+            }
+            [Test]
+            public void TestCreateSpecifiedControlType()
+            {
+                //---------------Set up test pack-------------------
+                String typeName = "TextBox";
+                String assemblyName = "Gizmox.WebGUI.Forms";
+                //---------------Verify test pack-------------------
+                //---------------Execute Test ----------------------
+                IControlChilli control = _factory.CreateControl(typeName, assemblyName);
+                //---------------Verify Result -----------------------
+                Assert.IsTrue(control is Gizmox.WebGUI.Forms.TextBox);
+                //---------------Tear Down -------------------------   
+            }
+
         }
 
         private IControlFactory _factory;
@@ -222,11 +406,12 @@ namespace Habanero.Test.UI.Base
             ILabel lbl = _factory.CreateLabel(labelText, true);
             //---------------Verify Result -----------------------
             //Assert.AreEqual(lbl.PreferredWidth + 10, lbl.Width);
-            Assert.AreEqual(lbl.PreferredWidth + 14, lbl.Width);
+            Assert.AreEqual(lbl.PreferredWidth + GetBoldTextExtraWidth(), lbl.Width);
             Font expectedFont = new Font(lbl.Font, FontStyle.Bold);
             Assert.AreEqual(expectedFont, lbl.Font);
             //---------------Tear Down -------------------------   
         }
+
 
         [Test]
         public void TestCreateButton()
@@ -303,21 +488,6 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------   
         }
 
-        [Test]
-        public void TestCreateComboBox()
-        {
-            //---------------Set up test pack-------------------
-
-            //---------------Verify test pack-------------------
-            //---------------Execute Test ----------------------
-            IComboBox comboBox = _factory.CreateComboBox();
-            //---------------Verify Result -----------------------
-            Assert.IsNotNull(comboBox);
-            Assert.IsTrue(comboBox.TabStop);
-            int expectedHeight = _factory.CreateTextBox().Height;
-            Assert.AreEqual(expectedHeight, comboBox.Height);
-            //---------------Tear Down -------------------------   
-        }
 
         [Test]
         public void TestCreateTreeView()
@@ -429,19 +599,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------   
         }
 
-        [Test]
-        public void TestCreateSpecifiedControlType()
-        {
-            //---------------Set up test pack-------------------
-            String typeName = "TextBox";
-            String assemblyName = "Gizmox.WebGUI.Forms";
-            //---------------Verify test pack-------------------
-            //---------------Execute Test ----------------------
-            IControlChilli control = _factory.CreateControl(typeName, assemblyName);
-            //---------------Verify Result -----------------------
-            Assert.IsTrue(control is Gizmox.WebGUI.Forms.TextBox);
-            //---------------Tear Down -------------------------   
-        }
+
 
         [Test, ExpectedException(typeof(UnknownTypeNameException))]
         public void TestCreateInvalidControlType()

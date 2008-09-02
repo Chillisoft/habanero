@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.DB;
 using Habanero.UI.Base;
 
@@ -67,6 +68,7 @@ namespace Habanero.UI.Win
             if (_databaseConfig == null) _databaseConfig = DatabaseConfig.ReadFromConfigFile();
             if (_privateKey != null) _databaseConfig.SetPrivateKey(_privateKey);
             DatabaseConnection.CurrentConnection = _databaseConfig.GetDatabaseConnection();
+            BORegistry.DataAccessor = new DataAccessorDB();
         }
 
 

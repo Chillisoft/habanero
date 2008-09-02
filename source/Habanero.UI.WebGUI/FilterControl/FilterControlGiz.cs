@@ -338,7 +338,7 @@ namespace Habanero.UI.WebGUI
         /// <returns>Returns the new DateRangeComboBox added</returns>
         public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, bool includeStartDate, bool includeEndDate)
         {
-            return _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, includeStartDate, includeEndDate);
+            return AddDateRangeFilterComboBox(labelText, columnName, null, includeStartDate, includeEndDate);
 
         }
 

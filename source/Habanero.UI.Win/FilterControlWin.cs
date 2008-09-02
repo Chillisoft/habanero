@@ -84,6 +84,7 @@ namespace Habanero.UI.Win
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName)
         {
             ITextBox textBox = _filterControlManager.AddStringFilterTextBox(labelText, propertyName);
+            textBox.TextChanged += delegate { FireFilterEvent(); };
             return textBox;
         }
 
@@ -132,6 +133,8 @@ namespace Habanero.UI.Win
         {
             IComboBox comboBox =
                 _filterControlManager.AddStringFilterComboBox(labelText, propertyName, options, strictMatch);
+            comboBox.TextChanged += delegate { FireFilterEvent(); };
+            comboBox.SelectedIndexChanged += delegate { FireFilterEvent(); };
             return comboBox;
         }
 
@@ -149,6 +152,7 @@ namespace Habanero.UI.Win
         public ICheckBox AddBooleanFilterCheckBox(string labelText, string propertyName, bool defaultValue)
         {
             ICheckBox checkBox = _filterControlManager.AddBooleanFilterCheckBox(labelText, propertyName, defaultValue);
+            checkBox.CheckedChanged += delegate { FireFilterEvent(); };
             return checkBox;
         }
 
@@ -176,6 +180,7 @@ namespace Habanero.UI.Win
             IDateTimePicker dtPicker = _filterControlManager.AddDateFilterDateTimePicker(propertyName,
                                                                                          filterClauseOperator, nullable,
                                                                                          defaultValue);
+            dtPicker.ValueChanged += delegate { FireFilterEvent(); };
             return dtPicker;
         }
 
@@ -286,7 +291,7 @@ namespace Habanero.UI.Win
         public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, bool includeStartDate,
                                                              bool includeEndDate)
         {
-            return _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, includeStartDate,
+            return AddDateRangeFilterComboBox(labelText, columnName, null, includeStartDate,
                                                                     includeEndDate);
         }
 
@@ -304,9 +309,10 @@ namespace Habanero.UI.Win
                                                              List<DateRangeOptions> options, bool includeStartDate,
                                                              bool includeEndDate)
         {
-            return
-                _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, options, includeStartDate,
-                                                                 includeEndDate);
+            IDateRangeComboBox dateRangeComboBox = _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, options, includeStartDate,
+                                                                                      includeEndDate);
+            dateRangeComboBox.TextChanged += delegate { FireFilterEvent(); };
+            return dateRangeComboBox;
         }
 
         private void CreateFilterButtons(IPanel filterButtonPanel)
@@ -342,6 +348,11 @@ namespace Habanero.UI.Win
             filterButton.Click += delegate { FireFilterEvent(); };
             return filterButton;
         }
+
+        //private void AssignControlEventHandlers(IControlChilli control)
+        //{
+            
+        //}
 
         private void FireFilterEvent()
         {
