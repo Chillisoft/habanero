@@ -61,7 +61,6 @@ namespace Habanero.BO
             }
             if (BOProp.PropertyType != typeof (Guid))
             {
-                //TODO - this exception breaks a whole bunch of tests, review.
                 throw new InvalidObjectIdException("A BOOBjectID cannot have " +
                     "a property of type other than Guid.");
             }
