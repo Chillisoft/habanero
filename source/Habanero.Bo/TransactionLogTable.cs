@@ -98,7 +98,7 @@ namespace Habanero.BO
             this._businessObjectTypeNameFieldName = businessObjectTypeNameFieldName;
             this._crudActionFieldName = crudActionFieldName;
             this._dirtyXmlFieldName = dirtyXMLFieldName;
-            LoadClassDef();
+            //LoadClassDef();
         }
 
         /// <summary>

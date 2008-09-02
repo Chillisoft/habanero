@@ -138,14 +138,18 @@ namespace Habanero.BO
                     }
                     else if (this.PropertyType == typeof (Guid))
                     {
-                    	Guid guidValue;
-						if (StringUtilities.GuidTryParse(propValue.ToString(), out guidValue))
-						{
-							propValue = guidValue;
-						} else
-						{
-							propValue = null;
-						}
+                        if (!(propValue is Guid))
+                        {
+                            Guid guidValue;
+                            if (StringUtilities.GuidTryParse(propValue.ToString(), out guidValue))
+                            {
+                                propValue = guidValue;
+                            }
+                            else
+                            {
+                                propValue = null;
+                            }
+                        }
                     }
                     else if (this.PropertyType == typeof (Image))
                     {
@@ -582,7 +586,7 @@ namespace Habanero.BO
                 }
                 else
                 {
-                    return StringUtilities.DelimitPascalCase(PropertyName, " ");
+                    return _propDef.SuggestedDisplayName;
                 }
             }
             set

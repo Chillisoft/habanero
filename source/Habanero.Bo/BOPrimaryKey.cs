@@ -166,7 +166,7 @@ namespace Habanero.BO
         /// Returns the ID as a Guid
         /// </summary>
         /// <returns>Returns a Guid</returns>
-        public Guid GetGuid()
+        public virtual Guid GetGuid()
         {
             string objectId = this.GetObjectId();
             objectId = objectId.TrimEnd('\'','}');

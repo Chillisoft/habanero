@@ -149,6 +149,11 @@ namespace Habanero.BO
             return false;
         }
 
+        public override Guid GetGuid()
+        {
+            return (Guid)ObjectIDProp.Value;
+        }
+
         #region Operator Overloads
 
         /// <summary>

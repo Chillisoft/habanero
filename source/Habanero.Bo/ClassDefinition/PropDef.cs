@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
+using Habanero.Util;
 using Habanero.Util.File;
 using log4net;
 
@@ -89,6 +90,7 @@ namespace Habanero.BO.ClassDefinition
         private string _displayName;
         private bool _keepValuePrivate = false;
         private bool _persistable = true;
+        private string _suggestedDisplayName;
 
         #region Constuctor and destructors
 
@@ -426,6 +428,7 @@ namespace Habanero.BO.ClassDefinition
                     propertyName);
             }
             _propertyName = propertyName;
+            _suggestedDisplayName = StringUtilities.DelimitPascalCase(_propertyName, " ");
             if (propType != null)
             {
                 MyPropertyType = propType;
@@ -888,6 +891,11 @@ namespace Habanero.BO.ClassDefinition
         {
             get { return _persistable; }
             set { _persistable = value; }
+        }
+
+        public string SuggestedDisplayName
+        {
+            get { return _suggestedDisplayName; }
         }
 
 
