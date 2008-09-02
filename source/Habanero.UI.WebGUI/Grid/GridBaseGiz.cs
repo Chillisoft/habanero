@@ -25,7 +25,6 @@ using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
-using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.WebGUI
 {
@@ -76,18 +75,17 @@ namespace Habanero.UI.WebGUI
         /// <summary>
         /// Gets or sets the currently selected cell
         /// </summary>
-        public IDataGridViewCell CurrentCell
+        public new IDataGridViewCell CurrentCell
         {
             get { return new DataGridViewCellGiz(base.CurrentCell); }
             set { base.CurrentCell = ((DataGridViewCellGiz)value).DataGridViewCell; }
         }
 
-
         private void FireBusinessObjectSelected()
         {
             if (this.BusinessObjectSelected != null)
             {
-                this.BusinessObjectSelected(this, new BOEventArgs((BusinessObject) this.SelectedBusinessObject));
+                this.BusinessObjectSelected(this, new BOEventArgs(this.SelectedBusinessObject));
             }
         }
 
@@ -280,7 +278,7 @@ namespace Habanero.UI.WebGUI
             FireSelectedBusinessObjectEdited(bo);
         }
 
-        private void FireSelectedBusinessObjectEdited(BusinessObject bo)
+        private void FireSelectedBusinessObjectEdited(IBusinessObject bo)
         {
             if (this.BusinessObjectEdited != null)
             {
@@ -370,8 +368,16 @@ namespace Habanero.UI.WebGUI
                 return _rows.Add(values);
             }
 
-            /// <summary>Clears the collection. </summary>
-            /// <exception cref="T:System.InvalidOperationException">The collection is data bound and the underlying data source does not support clearing the row data.-or-The associated <see cref="IDataGridView"></see> control is performing one of the following actions that temporarily prevents new rows from being added:Selecting all cells in the control.Clearing the selection.-or-This method is being called from a handler for one of the following <see cref="IDataGridView"></see> events:<see cref="IDataGridView.CellEnter"></see><see cref="IDataGridView.CellLeave"></see><see cref="IDataGridView.CellValidating"></see><see cref="IDataGridView.CellValidated"></see><see cref="IDataGridView.RowEnter"></see><see cref="IDataGridView.RowLeave"></see><see cref="IDataGridView.RowValidated"></see><see cref="IDataGridView.RowValidating"></see></exception>
+            /// <summary>Clears the rows collection. </summary>
+            /// <exception cref="T:System.InvalidOperationException">Thrown if 
+            /// The rows collection is data bound and the 
+            /// underlying data source does not support clearing the row data.-or-
+            /// The associated <see cref="IDataGridView"></see> control is performing one of the 
+            /// following actions that temporarily prevents new rows from being added:Selecting all 
+            /// cells in the control.Clearing the selection.-or-This method is being called from a 
+            /// handler for one of the following <see cref="IDataGridView">
+            /// </see> events:CellEnter, CellLeave, CellValidating, CellValidated, RowEnter
+            /// RowLeave, RowValidated, RowValidating</exception>
             /// <filterpriority>1</filterpriority>
             public void Clear()
             {
@@ -380,8 +386,21 @@ namespace Habanero.UI.WebGUI
 
             /// <summary>Removes the row at the specified position from the collection.</summary>
             /// <param name="index">The position of the row to remove.</param>
-            /// <exception cref="T:System.ArgumentOutOfRangeException">index is less than zero and greater than the number of rows in the collection minus one. </exception>
-            /// <exception cref="T:System.InvalidOperationException">The associated <see cref="IDataGridView"></see> control is performing one of the following actions that temporarily prevents new rows from being added:Selecting all cells in the control.Clearing the selection.-or-This method is being called from a handler for one of the following <see cref="IDataGridView"></see> events:<see cref="IDataGridView.CellEnter"></see><see cref="IDataGridView.CellLeave"></see><see cref="IDataGridView.CellValidating"></see><see cref="IDataGridView.CellValidated"></see><see cref="IDataGridView.RowEnter"></see><see cref="IDataGridView.RowLeave"></see><see cref="IDataGridView.RowValidated"></see><see cref="IDataGridView.RowValidating"></see>-or-index is equal to the number of rows in the collection and the <see cref="IDataGridView.AllowUserToAddRows"></see> property of the <see cref="IDataGridView"></see> is set to true.-or-The associated <see cref="IDataGridView"></see> control is bound to an <see cref="T:System.ComponentModel.IBindingList"></see> implementation with <see cref="P:System.ComponentModel.IBindingList.AllowRemove"></see> and <see cref="P:System.ComponentModel.IBindingList.SupportsChangeNotification"></see> property values that are not both true.</exception>
+            /// <exception cref="T:System.ArgumentOutOfRangeException">index is less than zero and greater 
+            /// than the number of rows in the collection minus one. </exception>
+            /// <exception cref="T:System.InvalidOperationException">The associated <see cref="IDataGridView"></see> 
+            /// control is performing one of the following actions that temporarily prevents new rows from 
+            /// being added:Selecting all cells in the control.Clearing the selection.-or-
+            /// This method is being called from a handler for one of the following <see cref="IDataGridView"></see> 
+            /// events:CellEnter, CellLeave, CellValidating, CellValidated, RowEnter, RowLeave, RowValidated, RowValidating
+            /// -or-index is equal to the number of rows in the collection and the 
+            /// <see cref="IDataGridView.AllowUserToAddRows"></see> property of the 
+            /// <see cref="IDataGridView"></see> is set to true.-or-The associated 
+            /// <see cref="IDataGridView"></see> control is bound to an 
+            /// <see cref="T:System.ComponentModel.IBindingList"></see> implementation with 
+            /// <see cref="P:System.ComponentModel.IBindingList.AllowRemove"></see> and 
+            /// <see cref="P:System.ComponentModel.IBindingList.SupportsChangeNotification"></see> 
+            /// property values that are not both true.</exception>
             /// <filterpriority>1</filterpriority>
             public void RemoveAt(int index)
             {

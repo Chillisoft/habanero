@@ -213,7 +213,7 @@ namespace Habanero.Test.BO.ClassDefinition
             KeyDefCol keysCol = new KeyDefCol();
 
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
-            primaryKey.IsObjectID = true;
+            primaryKey.IsGuidObjectID = true;
             primaryKey.Add(lPropDefCol["MockBOID"]);
             ClassDef lClassDef = new ClassDef(typeof(MockBO), primaryKey, lPropDefCol, keysCol, new RelationshipDefCol());
             ClassDef.ClassDefs.Add(lClassDef);

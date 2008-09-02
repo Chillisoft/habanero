@@ -63,7 +63,7 @@ namespace Habanero.Test
             KeyDefCol keysCol = new KeyDefCol();
 
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
-            primaryKey.IsObjectID = true;
+            primaryKey.IsGuidObjectID = true;
             primaryKey.Add(lPropDefCol["CarID"]);
 
             RelationshipDefCol relDefCol = CreateRelationshipDefCol(lPropDefCol);

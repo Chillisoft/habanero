@@ -112,6 +112,7 @@ namespace Habanero.BO
         ///<returns>the newly created <see cref="OrderCriteria"/> object.</returns>
         public static OrderCriteria CreateOrderCriteria(IClassDef classDef, string orderByString)
         {
+            if (classDef == null) throw new ArgumentNullException("classDef");
             OrderCriteria orderCriteria = OrderCriteria.FromString(orderByString);
             foreach (OrderCriteria.Field field in orderCriteria.Fields)
             {
@@ -140,6 +141,7 @@ namespace Habanero.BO
         ///<param name="criteria">The <see cref="Criteria"/> to prepare for use with a <see cref="SelectQuery"/>.</param>
         public static void PrepareCriteria(IClassDef classDef, Criteria criteria)
         {
+            if (classDef == null) throw new ArgumentNullException("classDef");
             if (criteria == null) return;
             if (criteria.IsComposite())
             {
@@ -179,6 +181,7 @@ namespace Habanero.BO
 
         private static void PrepareSource(IClassDef classDef, ref Source source, out IClassDef relatedClassDef)
         {
+            if (classDef == null) throw new ArgumentNullException("classDef");
             relatedClassDef = null;
             if (source != null && source.IsPrepared) return;
             Source rootSource = new Source(classDef.ClassName, classDef.GetTableName());

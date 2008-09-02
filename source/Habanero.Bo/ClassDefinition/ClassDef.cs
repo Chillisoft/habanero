@@ -397,7 +397,7 @@ namespace Habanero.BO.ClassDefinition
             get
             {
                 if (_primaryKeyDef == null) return true;
-                return _primaryKeyDef.IsObjectID;
+                return _primaryKeyDef.IsGuidObjectID;
             }
         }
 

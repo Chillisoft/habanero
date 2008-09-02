@@ -30,7 +30,7 @@ namespace Habanero.BO.ClassDefinition
     /// It is essentially a key name and a collection of property 
     /// definitions that place certain limitations on the data
     /// that the key can hold.  The property definitions can also relate
-    /// together in some way (e.g. for a composite alternate 
+    /// together in some way (e.g. for a composite/compound alternate 
     /// key, the combination of properties is required to be unique).
     /// </summary>
     public class KeyDef : IKeyDef

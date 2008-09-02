@@ -55,7 +55,7 @@ namespace Habanero.Test
             lPropDefCol.Add(propDef);
             propDef = lPropDefCol.Add("FilledCircleID", typeof(Guid), PropReadWriteRule.WriteOnce, "FilledCircleID_field", null);
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
-            primaryKey.IsObjectID = true;
+            primaryKey.IsGuidObjectID = true;
             primaryKey.Add(lPropDefCol["FilledCircleID"]);
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();

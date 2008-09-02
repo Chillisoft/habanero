@@ -48,7 +48,7 @@ namespace Habanero.Test.BO.Loaders
             PrimaryKeyDef def =
                 itsLoader.LoadPrimaryKey(@"<primaryKey><prop name=""TestProp"" /></primaryKey>", itsPropDefs);
             Assert.AreEqual(1, def.Count, "Def should have one property in it.");
-            Assert.AreEqual(true, def.IsObjectID, "Def should by default be an objectID");
+            Assert.AreEqual(true, def.IsGuidObjectID, "Def should by default be an objectID");
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException), "An invalid node 'primaryKeyDef' was encountered when loading the class definitions.")]
@@ -73,7 +73,7 @@ namespace Habanero.Test.BO.Loaders
                     @"<primaryKey isObjectID=""false""><prop name=""TestProp"" /><prop name=""TestProp2"" /></primaryKey>",
                     itsPropDefs);
             Assert.AreEqual(2, def.Count, "Def should have one property in it.");
-            Assert.AreEqual(false, def.IsObjectID, "Def should not be an objectID");
+            Assert.AreEqual(false, def.IsGuidObjectID, "Def should not be an objectID");
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]

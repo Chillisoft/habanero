@@ -67,7 +67,6 @@ namespace Habanero.BO
         public BOProp(IPropDef propDef)
         {
             _propDef = (PropDef) propDef;
-//            _displayName = propDef.DisplayName;
         }
 
         /// <summary>
@@ -103,7 +102,6 @@ namespace Habanero.BO
         {
             get { return _propDef.DatabaseFieldName; }
         }
-
 
         /// <summary>
         /// Initialises the property with the specified value
@@ -274,9 +272,6 @@ namespace Habanero.BO
                 _isDirty = true;
             }
         }
-
-
-
 
         private void CheckReadWriteRule(object newValue)
         {
@@ -537,29 +532,7 @@ namespace Habanero.BO
         /// </summary>
         public string DisplayName
         {
-            get
-            {
-                return _propDef.DisplayName;
-//                return HasDisplayName() 
-//                    ? _displayName 
-//                    : StringUtilities.DelimitPascalCase(PropertyName, " ");
-            }
-//            set
-//            {
-//                string newDisplayName = value ?? "";
-//                if (newDisplayName.EndsWith(":") || newDisplayName.EndsWith("?"))
-//                {
-//                    newDisplayName = newDisplayName.Substring(0, newDisplayName.Length - 1);
-//                }
-//                if (_displayName == newDisplayName) return;
-//                if (_invalidReason.Contains(String.Format("'{0}'", DisplayName)))
-//                {
-//                    _invalidReason = _invalidReason.Replace(
-//                        String.Format("'{0}'", DisplayName),
-//                        String.Format("'{0}'", newDisplayName));
-//                }
-//                _displayName = newDisplayName;
-//            }
+            get { return _propDef.DisplayName;}
         }
     }
 

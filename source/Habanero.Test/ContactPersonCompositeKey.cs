@@ -75,7 +75,7 @@ namespace Habanero.Test
 
             KeyDefCol keysCol = new KeyDefCol();
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
-            primaryKey.IsObjectID = false;
+            primaryKey.IsGuidObjectID = false;
             primaryKey.Add(lPropDefCol[PK1_PROP1_NAME]);
             primaryKey.Add(lPropDefCol[PK1_PROP2_NAME]);
 

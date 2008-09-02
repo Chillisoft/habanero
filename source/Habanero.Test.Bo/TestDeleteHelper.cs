@@ -211,7 +211,7 @@ namespace Habanero.Test.BO
 			string suffix = number.ToString();
 			PropDefCol propDefCol = new PropDefCol();
 			PrimaryKeyDef primaryKeyDef = new PrimaryKeyDef();
-			primaryKeyDef.IsObjectID = false;
+			primaryKeyDef.IsGuidObjectID = false;
 			RelationshipDefCol relationshipDefCol = new RelationshipDefCol();
 			PropDef idPropDef;
 			idPropDef = new PropDef(idPropName, typeof(string), PropReadWriteRule.ReadWrite, "");

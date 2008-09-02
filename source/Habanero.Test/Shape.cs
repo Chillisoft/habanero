@@ -53,7 +53,7 @@ namespace Habanero.Test
            // propDef = new PropDef("MyID", typeof(Guid), PropReadWriteRule.WriteOnce, null);
            // lPropDefCol.Add(propDef);
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
-            primaryKey.IsObjectID = true;
+            primaryKey.IsGuidObjectID = true;
             primaryKey.Add(lPropDefCol["ShapeID"]);
             KeyDefCol keysCol = new KeyDefCol();
             KeyDef lKeyDef = new KeyDef();
@@ -86,7 +86,7 @@ namespace Habanero.Test
             // propDef = new PropDef("MyID", typeof(Guid), PropReadWriteRule.WriteOnce, null);
             // lPropDefCol.Add(propDef);
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
-            primaryKey.IsObjectID = true;
+            primaryKey.IsGuidObjectID = true;
             primaryKey.Add(lPropDefCol["ShapeID"]);
             KeyDefCol keysCol = new KeyDefCol();
             KeyDef lKeyDef = new KeyDef();

@@ -43,15 +43,15 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Sets the object's ID
+        /// Sets the object's Guid ID
         /// </summary>
         /// <param name="id">The ID to set to</param>
-        public virtual void SetObjectID(Guid id)
+        public virtual void SetObjectGuidID(Guid id)
         {
             //If the Business object is not new then you cannot set the objectID
             if (!IsObjectNew)
             {
-                throw new InvalidObjectIdException("The objectID cannot be set for an object that is not new.");
+                throw new InvalidObjectIdException("The objectGuiID cannot be set for an object that is not new.");
             }
             //If the object id is not already set then set it.
             if (_newObjectID == Guid.Empty)
@@ -60,23 +60,21 @@ namespace Habanero.BO
             }
             else if (_newObjectID != id)
             {
-                throw new InvalidObjectIdException("The ObjectId has already been set for this object.");
+                throw new InvalidObjectIdException("The ObjectGuidId has already been set for this object.");
             }
         }
 
         /// <summary>
-        /// Returns the object's ID
+        /// Returns the object's ID as a string.
         /// </summary>
-        /// <returns>Returns a string</returns>
+        /// <returns>Returns a string representation of the object id</returns>
         public virtual string GetObjectId()
         {
             if (IsObjectNew && (_newObjectID != Guid.Empty))
             {
                 return "ID=" + _newObjectID;
             }
-            return !IsObjectNew ? PersistedDatabaseWhereClause(null) : "";
-            //TODO: This exception breaks tests. Review.
-            //throw new InvalidObjectIdException("Error: _isObjectNew = true but the _newObjectID is not set");
+            return IsObjectNew ? "" : PersistedDatabaseWhereClause(null);
         }
 
         /// <summary>
@@ -122,7 +120,7 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Returns the ID as a Guid
+        /// Returns the ID as a Guid it it can
         /// </summary>
         /// <returns>Returns a Guid</returns>
         public Guid GetAsGuid()
@@ -148,15 +146,5 @@ namespace Habanero.BO
 
             return false;
         }
-
-        ///// <summary>
-        ///// Returns a string containing all the properties and their values
-        ///// </summary>
-        ///// <returns>Returns a string</returns>
-        //public override string ToString()
-        //{
-        //    return KeyDef.. + ":" + base.ToString();
-        //}
-
     }
 }

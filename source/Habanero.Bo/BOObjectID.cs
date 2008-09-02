@@ -41,7 +41,7 @@ namespace Habanero.BO
         /// <param name="lPrimaryKeyDef">The primary key definition</param>
         internal BOObjectID(PrimaryKeyDef lPrimaryKeyDef) : base(lPrimaryKeyDef)
         {
-            if (lPrimaryKeyDef.Count != 1 || !lPrimaryKeyDef.IsObjectID)
+            if (lPrimaryKeyDef.Count != 1 || !lPrimaryKeyDef.IsGuidObjectID)
             {
                 throw new InvalidObjectIdException(
                     "The BOOBjectID must have a key def that defines exactly one property and that is an ObjectID");
@@ -62,8 +62,8 @@ namespace Habanero.BO
             if (BOProp.PropertyType != typeof (Guid))
             {
                 //TODO - this exception breaks a whole bunch of tests, review.
-                //throw new InvalidObjectIdException("A BOOBjectID cannot have " +
-                //    "a property of type other than Guid.");
+                throw new InvalidObjectIdException("A BOOBjectID cannot have " +
+                    "a property of type other than Guid.");
             }
 
             base.Add(BOProp);
@@ -92,24 +92,21 @@ namespace Habanero.BO
         /// Sets the objectID
         /// </summary>
         /// <param name="id">The Guid ID to set to</param>
-        public override void SetObjectID(Guid id)
+        public override void SetObjectGuidID(Guid id)
         {
             //If the object id is not already set then set it.
-            if (ObjectIDProp != null)
-            {
-                if (ObjectIDProp.Value == null ||
-                    (Guid) ObjectIDProp.Value == Guid.Empty)
-                {
-                    ObjectIDProp.Value = id;
-                }
-                else if ((Guid) ObjectIDProp.Value != id)
-                {
-                    throw new InvalidObjectIdException("The ObjectId has already been set for this object.");
-                }
-            }
-            else
+            if (ObjectIDProp == null)
             {
                 throw new InvalidObjectIdException("The property for objectID cannot be null.");
+            }
+            if (ObjectIDProp.Value == null ||
+                (Guid) ObjectIDProp.Value == Guid.Empty)
+            {
+                ObjectIDProp.Value = id;
+            }
+            else if ((Guid) ObjectIDProp.Value != id)
+            {
+                throw new InvalidObjectIdException("The ObjectId has already been set for this object.");
             }
         }
 
@@ -132,7 +129,7 @@ namespace Habanero.BO
             return false;
         }
 
-        #region Operator Overloads
+        #region Operator == Overloads
 
         /// <summary>
         /// Indicates if a BOObjectID has the same value as a given Guid

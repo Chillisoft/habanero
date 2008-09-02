@@ -105,11 +105,11 @@ namespace Habanero.BO.Loaders
         {
             if (_reader.GetAttribute("isObjectID") == "true")
             {
-                _primaryKeyDef.IsObjectID = true;
+                _primaryKeyDef.IsGuidObjectID = true;
             }
             else
             {
-                _primaryKeyDef.IsObjectID = false;
+                _primaryKeyDef.IsGuidObjectID = false;
             }
         }
 

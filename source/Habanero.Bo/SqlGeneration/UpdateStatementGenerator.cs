@@ -97,8 +97,8 @@ namespace Habanero.BO.SqlGeneration
                     PrimaryKeyDef primaryKeyDef = ((ClassDef)_bo.ClassDef).GetPrimaryKeyDef();
                     if (primaryKeyDef == null) primaryKeyDef = (PrimaryKeyDef) _bo.ID.KeyDef;
                     if (prop.IsDirty &&
-                        ((primaryKeyDef.IsObjectID && !primaryKeyDef.Contains(prop.PropertyName)) ||
-                         !primaryKeyDef.IsObjectID))
+                        ((primaryKeyDef.IsGuidObjectID && !primaryKeyDef.Contains(prop.PropertyName)) ||
+                         !primaryKeyDef.IsGuidObjectID))
                     {
                         includedProps++;
                         _updateSql.Statement.Append(SqlFormattingHelper.FormatFieldName(prop.DatabaseFieldName, _connection));

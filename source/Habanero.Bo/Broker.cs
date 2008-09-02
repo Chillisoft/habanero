@@ -49,7 +49,7 @@ namespace Habanero.BO
         public static IBusinessObject GetBusinessObjectWithGuid(Guid id, ClassDef classDef)
         {
             PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
-            if (!primaryKeyDef.IsObjectID)
+            if (!primaryKeyDef.IsGuidObjectID)
             {
                 throw new HabaneroApplicationException(
                     "GetBusinessObjectWithGuid can only be used for objects that use Guids as primary keys.");

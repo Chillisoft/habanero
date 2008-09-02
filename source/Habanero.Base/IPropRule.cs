@@ -28,6 +28,8 @@ namespace Habanero.Base
     /// In the class definitions, in the 'rule'
     /// element under the relevant 'property', specify the class and assembly
     /// of your newly implemented class.
+    /// The Property rules for the <see cref="IBusinessObject"/> are implemented
+    ///  using the GOF Strategy Pattern.
     /// </summary>
     public interface IPropRule
     {

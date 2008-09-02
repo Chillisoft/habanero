@@ -425,7 +425,7 @@ namespace Habanero.Test.General
             KeyDefCol keysCol = new KeyDefCol();
 
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
-            primaryKey.IsObjectID = true;
+            primaryKey.IsGuidObjectID = true;
             primaryKey.Add(lPropDefCol["TransactionSequenceNo"]);
             ClassDef lClassDef = new ClassDef(typeof (TransactionLogStub), primaryKey, lPropDefCol, keysCol, null);
             ClassDef.ClassDefs.Add(lClassDef);

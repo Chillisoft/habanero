@@ -204,7 +204,7 @@ namespace Habanero.Test.BO.SqlGeneration
 
         //        KeyDefCol keysCol = new KeyDefCol();
         //        PrimaryKeyDef primaryKey = new PrimaryKeyDef();
-        //        primaryKey.IsObjectID = false;
+        //        primaryKey.IsGuidObjectID = false;
         //        primaryKey.Add(lPropDefCol["PK1Prop1"]);
         //        primaryKey.Add(lPropDefCol["PK1Prop2"]);
 

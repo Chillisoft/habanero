@@ -31,7 +31,7 @@ namespace Habanero.BO.ClassDefinition
     /// 
     /// In most cases the PrimaryKeyDefinition will only have one property definition and this property definition 
     ///  will be for an immutable property. In the ideal case this property definition will
-    ///  represent a property that is globally unique. In these cases the primaryKeyDef will have the flag mIsObjectID set to true. 
+    ///  represent a property that is globally unique. In these cases the primaryKeyDef will have the flag mIsGUIDObjectID set to true. 
     ///  However we have in many cases had to extend or replace existing systems
     ///  that use mutable composite keys to identify objects in the database. The primary key definition allows you to define
     ///  all of these scenarious.
@@ -40,7 +40,7 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class PrimaryKeyDef : KeyDef
     {
-        private bool mIsObjectID = true;
+        private bool mIsGUIDObjectID = true;
 
         /// <summary>
         /// Constructor to create a new primary key definition
@@ -58,36 +58,24 @@ namespace Habanero.BO.ClassDefinition
         /// property definition is being added</exception>
         public override void Add(IPropDef propDef)
         {
-            if (Count > 0 && mIsObjectID)
+            if (Count > 0 && mIsGUIDObjectID)
             {
                 throw new InvalidPropertyException("You cannot have more than one " +
-                    "property for a primary key that represents an object's ID");
+                    "property for a primary key that represents an object's Guid ID");
             }
             base.Add(propDef);
         }
 
-		///// <summary>
-		///// Removes a Property definition from the key
-		///// </summary>
-		///// <param name="propDef">The Property Definition to remove</param>
-		//protected void Remove(PropDef propDef)
-		//{
-		//    if (Dictionary.Contains(propDef.PropertyName))
-		//    {
-		//        base.Dictionary.Remove(propDef.PropertyName);
-		//    }
-		//}
-
 		#region Properties
 
         /// <summary>
-        /// Returns true if the primary key is also the object's ID, that is,
-        /// the primary key is a single discrete property that serves as the ID
+        /// Returns true if the primary key is a propery the object's ID, that is,
+        /// the primary key is a single discrete property that is immutable and serves as the ID.
         /// </summary>
-        public bool IsObjectID
+        public bool IsGuidObjectID
         {
-            get { return mIsObjectID; }
-            set { mIsObjectID = value; }
+            get { return mIsGUIDObjectID; }
+            set { mIsGUIDObjectID = value; }
         }
 
         /// <summary>
@@ -122,7 +110,7 @@ namespace Habanero.BO.ClassDefinition
         /// key definition</returns>
         public override BOKey CreateBOKey(BOPropCol lBOPropCol)
         {
-		    BOPrimaryKey lBOKey = mIsObjectID ? new BOObjectID(this) : new BOPrimaryKey(this);
+		    BOPrimaryKey lBOKey = mIsGUIDObjectID ? new BOObjectID(this) : new BOPrimaryKey(this);
             foreach (PropDef lPropDef in this)
             {
                 lBOKey.Add(lBOPropCol[lPropDef.PropertyName]);

@@ -86,7 +86,7 @@ namespace Habanero.BO
             Guid myID = Guid.NewGuid();
             if (_primaryKey != null)
             {
-                _primaryKey.SetObjectID(myID);
+                _primaryKey.SetObjectGuidID(myID);
             }
             InitialisePrimaryKeyPropertiesBasedOnParentClass(myID);
 
@@ -135,21 +135,8 @@ namespace Habanero.BO
                 if (ClassDef == null) return;
                 if (ID != null)
                 {
-//                    AllLoadedBusinessObjects().Remove(ID.GetObjectId());
                     BusinessObjectManager.Instance.Remove(this);
                 }
-                //TODO: All the code below To be removed
-                //if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
-                //    if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
-                //        if (ID != null) AllLoadedBusinessObjects().Remove(ID.ToString());
-                //if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
-                //{
-                //    AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
-                //    if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
-                //    {
-                //        AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
-                //    }
-                //}
             }
             catch (Exception ex)
             {
@@ -158,7 +145,7 @@ namespace Habanero.BO
             finally
             {
                 ReleaseWriteLocks();
-//-            ReleaseReadLocks();                
+//                ReleaseReadLocks();                
             }
         }
 
@@ -435,11 +422,37 @@ namespace Habanero.BO
         ///<summary>
         /// This method can be overridden by a class that inherits from Business object.
         /// The method allows the Business object developer to add customised rules that determine.
+        /// The Creatable rules of a business object.
+        /// E.g. Certain users may not be allowed to create certain Business Objects.
+        /// </summary>
+        public virtual bool IsCreatable(out string message)
+        {
+            message = "";
+            return true;
+        }
+
+        ///<summary>
+        /// This method can be overridden by a class that inherits from Business object.
+        /// The method allows the Business object developer to add customised rules that determine.
+        /// The Readable rules of a business object.
+        /// E.g. Certain users may not be allowed to view certain objects.
+        /// </summary>
+        public virtual bool IsReadable(out string message)
+        {
+            message = "";
+            return true;
+        }
+
+        ///<summary>
+        /// This method can be overridden by a class that inherits from Business object.
+        /// The method allows the Business object developer to add customised rules that determine.
         /// The editable state of a business object.
         /// E.g. Once an invoice is paid it is no longer editable. Or when a course is old it is no
         /// longer editable. This allows a UI developer to standise Code for enabling and disabling controls.
         /// These rules are applied to new object as well so if you want a new object 
         /// to be editable then you must include this.Status.IsNew in evaluating IsEditable.
+        /// It also allows the Application developer to implement security controlling the 
+        ///   Editability of a particular Business Object.
         /// </summary>
         public virtual bool IsEditable(out string message)
         {
@@ -454,6 +467,8 @@ namespace Habanero.BO
         /// Objects cannot be deteled once they have reached certain stages e.g. a customer order after it is accepted.
         /// These rules are applied to new object as well so if you want a new object 
         /// to be deletable then you must include this.Status.IsNew in evaluating IsDeletable.
+        /// It also allows the Application developer to implement security controlling the 
+        ///   Deletability of a particular Business Object.
         ///</summary>
         public virtual bool IsDeletable(out string message)
         {
@@ -739,7 +754,7 @@ namespace Habanero.BO
                     ClassDef classDef = businessObjectLookupList.LookupBoClassDef;
                     IBusinessObject businessObject = null;
                     PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
-                    if (primaryKeyDef.IsObjectID)
+                    if (primaryKeyDef.IsGuidObjectID)
                     {
                         BOPropCol boPropCol = classDef.createBOPropertyCol(true);
                         BOPrimaryKey boPrimaryKey = primaryKeyDef.CreateBOKey(boPropCol) as BOPrimaryKey;
@@ -1047,6 +1062,16 @@ namespace Habanero.BO
             }
         }
 
+//        /// <summary>
+//        /// Releases write locks from the database
+//        /// </summary>
+//        protected virtual void ReleaseReadLocks()
+//        {
+//            if (!(_concurrencyControl == null))
+//            {
+//                _concurrencyControl.ReleaseReadLocks();
+//            }
+//        }
         #endregion //Concurrency
 
         #region Sql Statements

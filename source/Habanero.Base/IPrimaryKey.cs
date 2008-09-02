@@ -55,6 +55,6 @@ namespace Habanero.Base
         /// a new object will be inserted into the database using this Guid Value for the ID Field.
         /// </summary>
         /// <param name="id">The ID to set to</param>
-        void SetObjectID(Guid id);
+        void SetObjectGuidID(Guid id);
     }
 }

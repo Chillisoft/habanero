@@ -198,7 +198,7 @@ namespace Habanero.UI.Base
             _isEditable = !_isReadOnly && _businessObject != null
                           && (_businessObject.Props.Contains(_propertyName) || virtualPropertySetExists);
             //TODO: make this support single-table-inheritance.
-            //if (_isEditable && _businessObject.ClassDef.PrimaryKeyDef.IsObjectID &&
+            //if (_isEditable && _businessObject.ClassDef.PrimaryKeyDef.IsGuidObjectID &&
             //    _businessObject.ID.Contains(_propertyName) &&
             //    !_businessObject.Status.IsNew)
             //{

@@ -105,7 +105,7 @@ namespace Habanero.Test
             keysCol.Add(lKeyDef);
 
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
-            primaryKey.IsObjectID = true;
+            primaryKey.IsGuidObjectID = true;
             primaryKey.Add(lPropDefCol["ContactPersonID"]);
 
 

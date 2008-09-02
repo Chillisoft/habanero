@@ -173,7 +173,7 @@
     <Compile Include="ConcurrencyControl\TestConcurrencyControl_PessimisticLockingDB.cs" />
     <Compile Include="TestBORegistry.cs" />
     <Compile Include="TestBusinessObjectLoader.cs" />
-    <Compile Include="TestBusObjectManager.cs" />
+    <Compile Include="TestBusinessObjectManager.cs" />
     <Compile Include="CriteriaManager\TestCriteria.cs" />
     <Compile Include="TestQueryBuilderWithInheritance.cs" />
     <Compile Include="TestSource_Join.cs" />

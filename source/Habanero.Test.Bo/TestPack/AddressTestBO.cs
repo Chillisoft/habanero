@@ -61,7 +61,7 @@ namespace Habanero.Test.BO
             KeyDefCol keysCol = new KeyDefCol();
 
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
-            primaryKey.IsObjectID = true;
+            primaryKey.IsGuidObjectID = true;
             primaryKey.Add(propDefCol["AddressID"]);
 
             RelationshipDefCol relDefCol = CreateRelationshipDefCol(propDefCol);
