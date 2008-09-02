@@ -176,6 +176,14 @@ namespace Habanero.Test
             return engine;
         }
 
+        public static Engine CreateSavedEngine(string engineNo)
+        {
+            Engine engine = new Engine();
+            engine.EngineNo = engineNo;
+            engine.Save();
+            return engine;
+        }
+
         public static ClassDef LoadClassDef_IncludingCarAndOwner()
         {
             new ContactPerson();

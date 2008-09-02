@@ -98,7 +98,7 @@ namespace Habanero.Base
 
         public void JoinToSource(Source toSource)
         {
-            Joins.AddNewJoinTo(toSource);
+            Joins.AddNewJoinTo(toSource, JoinType.InnerJoin);
         }
 
 
@@ -142,7 +142,7 @@ namespace Habanero.Base
                 if (!Object.Equals(toSourceToMerge, toSource))
                 {
                     toSource = toSourceToMerge;
-                    Join newJoin = this.AddNewJoinTo(toSourceToMerge);
+                    Join newJoin = this.AddNewJoinTo(toSourceToMerge, inheritanceJoinToMerge.JoinType);
                     foreach (Join.JoinField joinField in inheritanceJoinToMerge.JoinFields)
                     {
                         newJoin.JoinFields.Add(joinField);
@@ -155,7 +155,7 @@ namespace Habanero.Base
                 
             }
 
-            public Join AddNewJoinTo(Source toSource)
+            public Join AddNewJoinTo(Source toSource, JoinType joinType)
             {
                 if (toSource == null) return null;
                 bool alreadyExists = this.Exists(delegate(Join join1)
@@ -163,22 +163,36 @@ namespace Habanero.Base
                     return join1.ToSource.Name.Equals(toSource.Name);
                 });
                 if (alreadyExists) return null;
-                Join join = new Join(_fromSource, toSource);
+                Join join = new Join(_fromSource, toSource, joinType);
                 this.Add(join);
                 return join;
             }
         }
 
+        public enum JoinType
+        {
+            InnerJoin,
+            LeftJoin
+        }
+
         public class Join
         {
+          
             private Source _fromSource;
             private Source _toSource;
             private List<JoinField> _joinFields = new List<JoinField>( );
+            private JoinType _joinType;
 
-            public Join(Source fromSource, Source toSource)
+            public Join(Source fromSource, Source toSource) : this(fromSource, toSource, Source.JoinType.InnerJoin)
+            {
+                
+            }
+
+            public Join(Source fromSource, Source toSource, JoinType joinType)
             {
                 _fromSource = fromSource;
                 _toSource = toSource;
+                _joinType = joinType;
             }
 
             public Source FromSource
@@ -194,6 +208,12 @@ namespace Habanero.Base
             public List<JoinField> JoinFields
             {
                 get { return _joinFields; }
+            }
+
+            public JoinType JoinType
+            {
+                get { return _joinType; }
+                set { _joinType = value; }
             }
 
             public class JoinField
@@ -217,6 +237,18 @@ namespace Habanero.Base
                     get { return _toField; }
                 }
             }
+
+            public string GetJoinClause()
+            {
+                switch (JoinType)
+                {
+                    case JoinType.InnerJoin:
+                        return "JOIN";
+                    case JoinType.LeftJoin:
+                        return "LEFT JOIN";
+                }
+                return "";
+            }
         }
 
         public static Source FromString(string sourcename)
@@ -229,7 +261,7 @@ namespace Habanero.Base
             for (int i = 1; i < sourceParts.Length; i++)
             {
                 Source newSource = new Source(sourceParts[i]);
-                currentSource.Joins.Add(new Join(currentSource, newSource));
+                currentSource.Joins.Add(new Join(currentSource, newSource, Source.JoinType.LeftJoin));
                 currentSource = newSource;
             }
             return baseSource;

@@ -132,7 +132,7 @@ namespace Habanero.Test.BO
         {
             Source partSource = new Source("Part", "table_class_Part");
             Source entitySource = new Source("Entity", "table_Entity");
-            Source.Join join = partSource.InheritanceJoins.AddNewJoinTo(entitySource);
+            Source.Join join = partSource.InheritanceJoins.AddNewJoinTo(entitySource, Source.JoinType.InnerJoin);
             QueryField partQueryField = new QueryField("PartID", "field_Part_ID", partSource);
             QueryField entityQueryField = new QueryField("EntityID", "field_Entity_ID", entitySource);
             Source.Join.JoinField joinField = new Source.Join.JoinField(partQueryField, entityQueryField);
@@ -162,7 +162,7 @@ namespace Habanero.Test.BO
         {
             Source engineSource = new Source("Engine", "table_class_Engine");
             Source partSource = GetCorrectPartSourceStructure();
-            Source.Join join = engineSource.InheritanceJoins.AddNewJoinTo(partSource);
+            Source.Join join = engineSource.InheritanceJoins.AddNewJoinTo(partSource, Source.JoinType.InnerJoin);
             QueryField engineQueryField = new QueryField("EngineID", "field_Engine_ID", engineSource);
             QueryField partQueryField = new QueryField("PartID", "field_Part_ID", partSource);
             Source.Join.JoinField joinField = new Source.Join.JoinField(engineQueryField, partQueryField);

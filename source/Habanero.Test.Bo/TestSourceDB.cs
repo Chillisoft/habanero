@@ -90,6 +90,41 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestCreateSQL_InnerJoin()
+        {
+            //-------------Setup Test Pack ------------------
+            Source source = new Source("MySource", "MY_SOURCE");
+            Source joinSource = new Source("JoinSource", "MY_JOINED_TABLE");
+            Source.Join join = CreateAndAddJoin(source, joinSource);
+            join.JoinType = Source.JoinType.InnerJoin;
+            SourceDB sourceDB = new SourceDB(source);
+            //-------------Execute test ---------------------
+
+            string sql = sourceDB.CreateSQL();
+            //-------------Test Result ----------------------
+            StringAssert.Contains("JOIN", sql);
+            Assert.IsFalse(sql.Contains("LEFT JOIN"));
+
+        }
+
+        [Test]
+        public void TestCreateSQL_LeftJoin()
+        {
+            //-------------Setup Test Pack ------------------
+            Source source = new Source("MySource", "MY_SOURCE");
+            Source joinSource = new Source("JoinSource", "MY_JOINED_TABLE");
+
+            Source.Join join = CreateAndAddJoin(source, joinSource);
+            join.JoinType = Source.JoinType.LeftJoin;
+            SourceDB leftJoinSourceDB = new SourceDB(source);
+            //-------------Execute test ---------------------
+
+            string sql = leftJoinSourceDB.CreateSQL();
+            //-------------Test Result ----------------------
+            StringAssert.Contains("LEFT JOIN", sql);
+        }
+
+        [Test]
         public void TestCreateSQL_WithJoin_TwoFields()
         {
             //-------------Setup Test Pack ------------------

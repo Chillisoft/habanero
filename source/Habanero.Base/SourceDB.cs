@@ -63,9 +63,13 @@ namespace Habanero.Base
                 throw new HabaneroDeveloperException(message, "Please check how you are building your join clause structure.");
             }
             Source.Join.JoinField joinField = join.JoinFields[0];
-            string joinString = string.Format("JOIN {0} ON {1}.{2} = {0}.{3}",
-                                              sqlFormatter.DelimitTable(join.ToSource.EntityName), sqlFormatter.DelimitTable(join.FromSource.EntityName),
-                                              sqlFormatter.DelimitField(joinField.FromField.FieldName), sqlFormatter.DelimitField(joinField.ToField.FieldName));
+            string joinString = string.Format("{0} {1} ON {2}.{3} = {1}.{4}",
+                                              join.GetJoinClause(),
+                     sqlFormatter.DelimitTable(join.ToSource.EntityName), 
+                     sqlFormatter.DelimitTable(join.FromSource.EntityName),
+                     sqlFormatter.DelimitField(joinField.FromField.FieldName), 
+                     sqlFormatter.DelimitField(joinField.ToField.FieldName));
+
             if (join.JoinFields.Count > 1)
             {
                 for (int i = 1; i < join.JoinFields.Count; i++)
@@ -80,6 +84,8 @@ namespace Habanero.Base
             
             return joinString;
         }
+
+   
 
         public string CreateSQL(SqlFormatter sqlFormatter)
         {

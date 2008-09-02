@@ -364,7 +364,7 @@ namespace Habanero.Test.BO
         public void TestFromString_TwoLevels()
         {
             //---------------Set up test pack-------------------
-            string sourcename = "OneSource.TwoSource";
+            const string sourcename = "OneSource.TwoSource";
 
             //---------------Execute Test ----------------------
             Source source = Source.FromString(sourcename);
@@ -380,10 +380,26 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestFromString_TwoLevels_CreatesLeftJoins()
+        {
+            //---------------Set up test pack-------------------
+            const string sourcename = "OneSource.TwoSource";
+
+            //---------------Execute Test ----------------------
+            Source source = Source.FromString(sourcename);
+            //---------------Test Result -----------------------
+
+            Source.Join join = source.Joins[0];
+            Assert.AreEqual(Source.JoinType.LeftJoin, join.JoinType);
+            //---------------Tear Down -------------------------
+        }
+
+
+        [Test]
         public void TestFromString_ThreeLevels()
         {
             //---------------Set up test pack-------------------
-            string sourcename = "OneSource.TwoSource.ThreeSource";
+            const string sourcename = "OneSource.TwoSource.ThreeSource";
 
             //---------------Execute Test ----------------------
             Source oneSource = Source.FromString(sourcename);

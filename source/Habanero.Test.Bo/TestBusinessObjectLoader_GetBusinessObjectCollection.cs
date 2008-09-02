@@ -1606,7 +1606,7 @@ namespace Habanero.Test.BO
         }
 
         [Test, Ignore("Not working for IN MEMORY now - to be fixed before 2.0")]
-        public void TestGetBusinessObjectCollection_CriteriaString_ThroughRelationship_TwoLevels()
+        public void Test_CriteriaString_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
             Engine.LoadClassDef_IncludingCarAndOwner();
@@ -1627,6 +1627,27 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, col.Count);
             Assert.Contains(engine, col);
         }
+
+        [Test, Ignore("Not working for IN MEMORY now - to be fixed before 2.0")]
+        public void Test_CriteriaString_ThroughRelationship_TwoLevels_SearchOnNULL()
+        {
+            //---------------Set up test pack-------------------
+            Engine.DeleteAllEngines();
+            Engine.LoadClassDef_IncludingCarAndOwner();
+            string engineNo = TestUtil.CreateRandomString();
+            Engine engine = Engine.CreateSavedEngine(engineNo);
+            string criteria = string.Format("Car.OwnerID is NULL");
+
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<Engine> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Engine>(criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(engine, col);
+
+        }
+
 
         [Test, Ignore("Not working for IN MEMORY now - to be fixed before 2.0")]
         public void TestBusinessObjectCollection_Load_CriteriaString_ThroughRelationship_TwoLevels()
@@ -1651,12 +1672,13 @@ namespace Habanero.Test.BO
             Assert.Contains(engine, col);
         }
 
-        private Engine CreateEngineWithCarWithContact()
+        private void CreateEngineWithCarWithContact()
         {
             string surname;
             string regno;
             string engineNo;
-            return CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
+            CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
+            return;
         }
         private Engine CreateEngineWithCarWithContact(out string surname, out string regno, out string engineNo)
         {
@@ -1665,6 +1687,14 @@ namespace Habanero.Test.BO
             surname = TestUtil.CreateRandomString();
             ContactPerson owner = ContactPerson.CreateSavedContactPerson(surname);
             Car car = Car.CreateSavedCar(regno, owner);
+            return Engine.CreateSavedEngine(car, engineNo);
+        }
+
+        private Engine CreateEngineWithCarNoContact(out string regno, out string engineNo)
+        {
+            regno = TestUtil.CreateRandomString();
+            engineNo = TestUtil.CreateRandomString();
+            Car car = Car.CreateSavedCar(regno);
             return Engine.CreateSavedEngine(car, engineNo);
         }
 

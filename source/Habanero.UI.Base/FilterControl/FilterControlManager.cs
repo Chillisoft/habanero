@@ -160,6 +160,7 @@ namespace Habanero.UI.Base
         public IDateTimePicker AddDateFilterDateTimePicker(string columnName, FilterClauseOperator filterClauseOperator, bool nullable, DateTime defaultDate)
         {
             IDateTimePicker dtPicker = _controlFactory.CreateDateTimePicker();
+            _layoutManager.AddControl(dtPicker);
             _filterControls.Add(new FilterUIDate(_clauseFactory, columnName, dtPicker, filterClauseOperator));
             dtPicker.Value = defaultDate;
             return dtPicker;

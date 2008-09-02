@@ -53,9 +53,12 @@ namespace Habanero.BO
             SelectQuery selectQuery = new SelectQuery();
             foreach (IPropDef propDef in classDef.PropDefColIncludingInheritance)
             {
-                selectQuery.Fields.Add(propDef.PropertyName,
-                                       new QueryField(propDef.PropertyName, propDef.DatabaseFieldName,
-                                                      new Source(classDef.GetTableName(propDef))));
+                if (propDef.Persistable)
+                {
+                    selectQuery.Fields.Add(propDef.PropertyName,
+                                           new QueryField(propDef.PropertyName, propDef.DatabaseFieldName,
+                                                          new Source(classDef.GetTableName(propDef))));
+                }
             }
             Criteria discriminatorCriteria = null;
             AddDiscriminatorFields(selectQuery, classDef, ref discriminatorCriteria);
@@ -116,10 +119,6 @@ namespace Habanero.BO
             OrderCriteria orderCriteria = OrderCriteria.FromString(orderByString);
             foreach (OrderCriteria.Field field in orderCriteria.Fields)
             {
-
-                //IPropDef propDef = ((ClassDef)classDef).GetPropDef(field.Source, field.PropertyName, true);
-                //field.FieldName = propDef.DatabaseFieldName;
-
                 Source source = field.Source;
                 IClassDef relatedClassDef;
                 PrepareSource(classDef, ref source, out relatedClassDef);
@@ -200,7 +199,7 @@ namespace Habanero.BO
             else
             {
                 ClassDef currentClassDef = (ClassDef)classDef;
-                Source.Join join = new Source.Join(rootSource, source);
+                Source.Join join = new Source.Join(rootSource, source, Source.JoinType.LeftJoin);
                 rootSource.Joins.Add(join);
                 Source currentSource = rootSource;
                 PrepareSourceTree(currentSource, ref currentClassDef);
@@ -263,9 +262,8 @@ namespace Habanero.BO
                     }
                     foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
                     {
-                        string ownerFieldName =
-                            currentClassDef.GetPropDef(relPropDef.OwnerPropertyName).DatabaseFieldName;
-                        string relatedFieldName =
+                        string ownerFieldName = currentClassDef.GetPropDef(relPropDef.OwnerPropertyName).DatabaseFieldName;
+                        string relatedFieldName = 
                             relationshipDef.RelatedObjectClassDef.GetPropDef(relPropDef.RelatedClassPropName).DatabaseFieldName;
                         QueryField fromField = new QueryField(relPropDef.OwnerPropertyName, ownerFieldName, currentSource);
                         QueryField toField = new QueryField(relPropDef.RelatedClassPropName, relatedFieldName, childSource);

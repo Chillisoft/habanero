@@ -170,6 +170,25 @@ namespace Habanero.Test.BO
             Assert.GreaterOrEqual(dateTimeValue, dateTimeBefore);
             Assert.LessOrEqual(dateTimeValue, dateTimeAfter);
         }
+
+
+        [Test]
+        public void TestCreateSqlStatement_WithCriteria_TwoLevels()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            Criteria criteria = CriteriaParser.CreateCriteria("MyRelationship.MyRelatedTestProp = 'test'");
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
+            //---------------Test Result -----------------------
+            StringAssert.Contains(
+                "[MyBO] LEFT JOIN [MyRelatedBo] ON [MyBO].[RelatedID] = [MyRelatedBo].[MyRelatedBoID]", 
+                    statement.Statement.ToString());
+            //---------------Tear Down -------------------------
+        }
             
         [Test]
         public void TestCreateSqlStatement_WithOrderFields()
@@ -273,20 +292,6 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        //[Test]
-        //public void TestCreateJoinStatement_WithRelationship()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    new ContactPerson();
-        //    Address address = new Address();
-        //    //---------------Execute Test ----------------------
-        //    string joinStatement = SelectQueryDB.CreateJoinFromRelationship(address.Relationships["ContactPerson"]);
-        //    //---------------Test Result -----------------------
-        //    StringAssert.AreEqualIgnoringCase("JOIN [ContactPerson] ON [Address].[ContactPersonID] = [ContactPerson].[ContactPersonID]", joinStatement);
-
-        //    //---------------Tear Down -------------------------
-        //}
-
         [Test]
         public void TestCreateSqlStatement_WithOrder_ThroughRelationship()
         {
@@ -306,14 +311,13 @@ namespace Habanero.Test.BO
             StringAssert.EndsWith("ORDER BY [contact_person].[Surname_field] ASC", statementString);
         }
 
-#pragma warning disable 168
         [Test]
         public void TestCreateSqlStatement_WithOrder_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
 
-            ClassDef cpClassDef = new ContactPerson().ClassDef;
-            ClassDef carClassDef = new Car().ClassDef;
+            new ContactPerson();
+            new Car();
             ClassDef engineClassDef = new Engine().ClassDef;
 
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(engineClassDef);
@@ -324,12 +328,12 @@ namespace Habanero.Test.BO
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            string expectedJoinSql = "JOIN [car_table] ON [Table_Engine].[CAR_ID] = [car_table].[CAR_ID]";
-            expectedJoinSql += " JOIN [contact_person] ON [car_table].[OWNER_ID] = [contact_person].[ContactPersonID]";
+            string expectedJoinSql = "LEFT JOIN [car_table] ON [Table_Engine].[CAR_ID] = [car_table].[CAR_ID]";
+            expectedJoinSql += " LEFT JOIN [contact_person] ON [car_table].[OWNER_ID] = [contact_person].[ContactPersonID]";
             StringAssert.Contains(expectedJoinSql, statementString);
             StringAssert.EndsWith("ORDER BY [contact_person].[Surname_field] ASC", statementString);
         }
-#pragma warning restore 168
+
         [Test]
         public void TestCreateSqlStatement_WithOrder_ThroughRelationship_CompositeKey()
         {
@@ -521,6 +525,28 @@ namespace Habanero.Test.BO
             Assert.AreEqual("CircleNoPrimaryKey", statement.Parameters[0].Value);
             //---------------Tear Down -------------------------
 
+        }
+
+        [Test]
+        public void TestCreateSqlStatement_NonPersistableProperty()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+
+            PropDef newPropDef =
+                new PropDef("NonPeristableProp", typeof (string), PropReadWriteRule.ReadOnly, null);
+            newPropDef.Persistable = false;
+            classDef.PropDefcol.Add(newPropDef);
+
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.AreEqualIgnoringCase("SELECT MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO", statementString);
+            //---------------Tear Down -------------------------          
         }
 
         public class DatabaseConnectionStub_LimitClauseAtEnd : DatabaseConnectionStub

@@ -52,7 +52,7 @@ namespace Habanero.Test.BO
             Source toSource = new Source("TestToSource");
 
             //---------------Execute Test ----------------------
-            Source.Join join = joinList.AddNewJoinTo(toSource);
+            Source.Join join = joinList.AddNewJoinTo(toSource, Source.JoinType.InnerJoin);
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(join);
@@ -68,13 +68,13 @@ namespace Habanero.Test.BO
             Source.JoinList joinList = new Source.JoinList(fromSource);
             Source toSource = new Source("ToSource", "ToSourceEntity");
             Source toSource2 = new Source("ToSource", "ToSourceEntity");
-            joinList.AddNewJoinTo(toSource);
+            joinList.AddNewJoinTo(toSource, Source.JoinType.InnerJoin);
 
             //-------------Assert Preconditions -------------
             Assert.AreEqual(1, joinList.Count);
             
             //---------------Execute Test ----------------------
-            joinList.AddNewJoinTo(toSource2);
+            joinList.AddNewJoinTo(toSource2, Source.JoinType.InnerJoin);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, joinList.Count);
@@ -93,7 +93,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(0, joinList.Count);
 
             //---------------Execute Test ----------------------
-            joinList.AddNewJoinTo(null);
+            joinList.AddNewJoinTo(null, Source.JoinType.InnerJoin);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(0, joinList.Count);
@@ -110,7 +110,7 @@ namespace Habanero.Test.BO
             Source otherSource = new Source("FromSource", "FromSourceEntity");
             Source.JoinList joinList = new Source.JoinList(otherSource);
             Source childSource = new Source("ToSource", "ToSourceEntity");
-            Source.Join join = joinList.AddNewJoinTo(childSource);
+            Source.Join join = joinList.AddNewJoinTo(childSource, Source.JoinType.InnerJoin);
 
             QueryField field1 = new QueryField("FromSourceProp1", "FromSourceProp1Field", otherSource);
             QueryField field2 = new QueryField("ToSourceProp1", "ToSourceProp1Field", childSource);
@@ -175,6 +175,22 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestMergeWith_LeftJoin()
+        {
+            //-------------Setup Test Pack ------------------
+            Source fromSource = new Source("FromSource", "FromSourceEntity");
+            Source toSource = new Source("ToSource", "ToSourceEntity");
+            Source.Join join = new Source.Join(fromSource, toSource, Source.JoinType.LeftJoin);
+            Source.JoinList joinList = new Source.JoinList(fromSource);
+            joinList.Add(join);
+            //-------------Execute test ---------------------
+            fromSource.Joins.MergeWith(joinList);
+            //-------------Test Result ----------------------
+            Assert.AreEqual(1, fromSource.Joins.Count);
+            Assert.AreEqual(Source.JoinType.LeftJoin, fromSource.Joins[0].JoinType);
+        }
+
+        [Test]
         public void TestMergeWith_Simple()
         {
             //-------------Setup Test Pack ------------------
@@ -182,7 +198,7 @@ namespace Habanero.Test.BO
             Source.JoinList originalJoinList = new Source.JoinList(originalSource);
             Source otherSource = new Source("FromSource", "FromSourceEntity");
             Source.JoinList joinList = new Source.JoinList(otherSource);
-            joinList.AddNewJoinTo(new Source("ToSource", "ToSourceEntity"));
+            joinList.AddNewJoinTo(new Source("ToSource", "ToSourceEntity"), Source.JoinType.InnerJoin);
 
             //-------------Execute test ---------------------
             originalJoinList.MergeWith(joinList);
