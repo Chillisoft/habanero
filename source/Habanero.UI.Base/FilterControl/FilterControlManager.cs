@@ -463,7 +463,8 @@ namespace Habanero.UI.Base
             public override void Clear()
             {
                 //TODO Critical Urgent NNB FIx :
-                throw new NotImplementedException();
+                //throw new NotImplementedException();
+                _dateTimePicker.ValueOrNull = null;
             }
         }
 

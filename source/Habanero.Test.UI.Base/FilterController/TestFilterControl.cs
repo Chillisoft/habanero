@@ -664,6 +664,21 @@ namespace Habanero.Test.UI.Base.FilterController
             }
 
             [Test]
+            public void Test_SetFilterModeSearchSetsText()
+            {
+                //---------------Set up test pack-------------------
+                IControlFactory factory = GetControlFactory();
+                IFilterControl ctl = factory.CreateFilterControl();
+                //---------------Assert Preconditions --------------
+                Assert.AreEqual("Filter", ctl.FilterButton.Text);
+                //---------------Execute Test ----------------------
+                ctl.FilterMode = FilterModes.Search;
+                //---------------Test Result -----------------------
+                Assert.AreEqual("Search", ctl.FilterButton.Text);
+                //---------------Tear Down -------------------------          
+            }
+
+            [Test]
             public void TestChangeTextBoxValueAppliesFilter()
             {
                 //---------------Set up test pack-------------------
@@ -776,6 +791,134 @@ namespace Habanero.Test.UI.Base.FilterController
                 dateRangeComboBox.Text = text;
                 //---------------Test Result -----------------------
                 Assert.IsTrue(filterFired, "The filter event should have been fired when the text was changed.");
+            }
+
+            [Test]
+            public void TestChangeTextBoxValueDoesNotApplyFilter_InSearchMode()
+            {
+                //---------------Set up test pack-------------------
+                IControlFactory factory = GetControlFactory();
+                IFilterControl ctl = factory.CreateFilterControl();
+                ctl.FilterMode = FilterModes.Search;
+                ITextBox textBox = ctl.AddStringFilterTextBox("test", "propname");
+                string text = TestUtil.CreateRandomString();
+
+                bool filterFired = false;
+                ctl.Filter += delegate { filterFired = true; };
+                //---------------Assert Preconditions --------------
+                Assert.AreEqual(FilterModes.Search, ctl.FilterMode);
+                Assert.IsFalse(filterFired);
+                //---------------Execute Test ----------------------
+                textBox.Text = text;
+                //---------------Test Result -----------------------
+                Assert.IsFalse(filterFired, "The filter event should not have been fired when the text was changed.");
+            }
+
+            [Test]
+            public void TestChangeComboBoxTextDoesNotApplyFilter_InSearchMode()
+            {
+                //---------------Set up test pack-------------------
+                IControlFactory factory = GetControlFactory();
+                IFilterControl ctl = factory.CreateFilterControl();
+                ctl.FilterMode = FilterModes.Search;
+                string[] optionList = { "one", "two" };
+                IComboBox comboBox = ctl.AddStringFilterComboBox("test", "propname", optionList, true);
+                string text = TestUtil.CreateRandomString();
+
+                bool filterFired = false;
+                ctl.Filter += delegate { filterFired = true; };
+                //---------------Assert Preconditions --------------
+                Assert.AreEqual(FilterModes.Search, ctl.FilterMode);
+                Assert.IsFalse(filterFired);
+                //---------------Execute Test ----------------------
+                comboBox.Text = text;
+                //---------------Test Result -----------------------
+                Assert.IsFalse(filterFired, "The filter event should not have been fired when the text was changed.");
+            }
+
+            [Test]
+            public void TestChangeComboBoxIndexChangeDoesNotApplyFilter_InSearchMode()
+            {
+                //---------------Set up test pack-------------------
+                IControlFactory factory = GetControlFactory();
+                IFilterControl ctl = factory.CreateFilterControl();
+                ctl.FilterMode = FilterModes.Search;
+                string[] optionList = { "one", "oneone" };
+                IComboBox comboBox = ctl.AddStringFilterComboBox("test", "propname", optionList, true);
+                comboBox.Text = optionList[0];
+
+                bool filterFired = false;
+                ctl.Filter += delegate { filterFired = true; };
+                //---------------Assert Preconditions --------------
+                Assert.AreEqual(FilterModes.Search, ctl.FilterMode);
+                Assert.AreEqual(1, comboBox.SelectedIndex);
+                Assert.IsFalse(filterFired);
+                //---------------Execute Test ----------------------
+                comboBox.SelectedIndex = 2;
+                //---------------Test Result -----------------------
+                Assert.IsFalse(filterFired, "The filter event should not have been fired when the text was changed.");
+            }
+
+
+            [Test]
+            public void TestChangeCheckBoxDoesNotApplyFilter_InSearchMode()
+            {
+                //---------------Set up test pack-------------------
+                IControlFactory factory = GetControlFactory();
+                IFilterControl ctl = factory.CreateFilterControl();
+                ctl.FilterMode = FilterModes.Search;
+                ICheckBox checkBox = ctl.AddBooleanFilterCheckBox("test", "propname", false);
+
+                bool filterFired = false;
+                ctl.Filter += delegate { filterFired = true; };
+                //---------------Assert Preconditions --------------
+                Assert.AreEqual(FilterModes.Search, ctl.FilterMode);
+                Assert.IsFalse(filterFired);
+                //---------------Execute Test ----------------------
+                checkBox.Checked = true;
+                //---------------Test Result -----------------------
+                Assert.IsFalse(filterFired, "The filter event should not have been fired when the text was changed.");
+            }
+
+            [Test]
+            public void TestChangeDateTimePickerDoesNotApplyFilter_InSearchMode()
+            {
+                //---------------Set up test pack-------------------
+                IControlFactory factory = GetControlFactory();
+                IFilterControl ctl = factory.CreateFilterControl();
+                ctl.FilterMode = FilterModes.Search;
+                IDateTimePicker dateTimePicker = ctl.AddDateFilterDateTimePicker("test", "propname", DateTime.Now, FilterClauseOperator.OpLessThan, true);
+
+                bool filterFired = false;
+                ctl.Filter += delegate { filterFired = true; };
+                //---------------Assert Preconditions --------------
+                Assert.AreEqual(FilterModes.Search, ctl.FilterMode);
+                Assert.IsFalse(filterFired);
+                //---------------Execute Test ----------------------
+                dateTimePicker.Value = DateTime.Now.AddMonths(-1);
+                //---------------Test Result -----------------------
+                Assert.IsFalse(filterFired, "The filter event should not have been fired when the text was changed.");
+            }
+
+            [Test]
+            public void TestChangeDateRangeComboBoxDoesNotApplyFilter_InSearchMode()
+            {
+                //---------------Set up test pack-------------------
+                IControlFactory factory = GetControlFactory();
+                IFilterControl ctl = factory.CreateFilterControl();
+                ctl.FilterMode = FilterModes.Search;
+                IDateRangeComboBox dateRangeComboBox = ctl.AddDateRangeFilterComboBox("test", "propname", true, true);
+                string text = TestUtil.CreateRandomString();
+
+                bool filterFired = false;
+                ctl.Filter += delegate { filterFired = true; };
+                //---------------Assert Preconditions --------------
+                Assert.AreEqual(FilterModes.Search, ctl.FilterMode);
+                Assert.IsFalse(filterFired);
+                //---------------Execute Test ----------------------
+                dateRangeComboBox.Text = text;
+                //---------------Test Result -----------------------
+                Assert.IsFalse(filterFired, "The filter event should not have been fired when the text was changed.");
             }
 
             //

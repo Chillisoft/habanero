@@ -57,7 +57,7 @@ namespace Habanero.UI.Win
             layoutManager.BorderSize = 20;
             _filterButtonPanel = controlFactory.CreatePanel();
             _filterButtonPanel.Height = 50;
-            _filterButtonPanel.Width = 110;
+            _filterButtonPanel.Width = 120;   //110;
             _filterButtonPanel.Visible = false;
             CreateFilterButtons(_filterButtonPanel);
 
@@ -84,7 +84,8 @@ namespace Habanero.UI.Win
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName)
         {
             ITextBox textBox = _filterControlManager.AddStringFilterTextBox(labelText, propertyName);
-            textBox.TextChanged += delegate { FireFilterEvent(); };
+            //textBox.TextChanged += delegate { FireFilterEvent(); };
+            textBox.TextChanged += delegate { if (this.FilterMode == FilterModes.Filter ) FireFilterEvent(); };
             return textBox;
         }
 
@@ -133,8 +134,8 @@ namespace Habanero.UI.Win
         {
             IComboBox comboBox =
                 _filterControlManager.AddStringFilterComboBox(labelText, propertyName, options, strictMatch);
-            comboBox.TextChanged += delegate { FireFilterEvent(); };
-            comboBox.SelectedIndexChanged += delegate { FireFilterEvent(); };
+            comboBox.TextChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
+            comboBox.SelectedIndexChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
             return comboBox;
         }
 
@@ -152,7 +153,7 @@ namespace Habanero.UI.Win
         public ICheckBox AddBooleanFilterCheckBox(string labelText, string propertyName, bool defaultValue)
         {
             ICheckBox checkBox = _filterControlManager.AddBooleanFilterCheckBox(labelText, propertyName, defaultValue);
-            checkBox.CheckedChanged += delegate { FireFilterEvent(); };
+            checkBox.CheckedChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
             return checkBox;
         }
 
@@ -180,7 +181,7 @@ namespace Habanero.UI.Win
             IDateTimePicker dtPicker = _filterControlManager.AddDateFilterDateTimePicker(propertyName,
                                                                                          filterClauseOperator, nullable,
                                                                                          defaultValue);
-            dtPicker.ValueChanged += delegate { FireFilterEvent(); };
+            dtPicker.ValueChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
             return dtPicker;
         }
 
@@ -237,6 +238,17 @@ namespace Habanero.UI.Win
             {
                 _filterMode = value;
                 _filterButtonPanel.Visible = (_filterMode == FilterModes.Search);
+
+                if (_filterMode == FilterModes.Filter)
+                {
+                    _filterButton.Text = "Filter";
+                    _gbox.Text = "Filter the Grid";
+                }
+                else
+                {
+                    _filterButton.Text = "Search";
+                    _gbox.Text = "Search the Grid";
+                }
             }
         }
 
@@ -258,7 +270,8 @@ namespace Habanero.UI.Win
         /// </summary>
         public void ClearFilters()
         {
-            throw new NotImplementedException("not implemented on win");
+            _filterControlManager.ClearFilters();
+            FireFilterEvent();
         }
 
         /// <summary>
@@ -311,14 +324,14 @@ namespace Habanero.UI.Win
         {
             IDateRangeComboBox dateRangeComboBox = _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, options, includeStartDate,
                                                                                       includeEndDate);
-            dateRangeComboBox.TextChanged += delegate { FireFilterEvent(); };
+            dateRangeComboBox.TextChanged += delegate {if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
             return dateRangeComboBox;
         }
 
         private void CreateFilterButtons(IPanel filterButtonPanel)
         {
             const int buttonHeight = 20;
-            const int buttonWidth = 45;
+            const int buttonWidth = 50; //45;
             _filterButton = CreateFilterButton(buttonWidth, buttonHeight);
             _clearButton = CreateClearButton(buttonWidth, buttonHeight);
 

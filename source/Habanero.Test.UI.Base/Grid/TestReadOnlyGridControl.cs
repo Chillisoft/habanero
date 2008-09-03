@@ -105,6 +105,9 @@ namespace Habanero.Test.UI.Base
                 frmLocal.Height = formHeight;
             }
 
+
+
+
 //        [Test]
 //        public void TestWinInitialiseGrid()
 //        {
