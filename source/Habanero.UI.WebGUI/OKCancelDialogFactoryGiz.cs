@@ -38,12 +38,13 @@ namespace Habanero.UI.WebGUI
             //return mainPanel;
         }
 
-        public IFormChilli CreateOKCancelForm(IControlChilli nestedControl)
+        public IFormChilli CreateOKCancelForm(IControlChilli nestedControl, string formTitle)
         {
             IFormChilli form = _controlFactory.CreateForm();
             IPanel mainPanel = CreateOKCancelPanel(nestedControl);
             mainPanel.Dock = DockStyle.Fill;
             form.Controls.Add(mainPanel);
+            form.Text = formTitle;
             return form;
         }
 
@@ -56,19 +57,32 @@ namespace Habanero.UI.WebGUI
 
             public OKCancelPanelGiz(IControlFactory controlFactory)
             {
+                //_controlFactory = controlFactory;
+                //// create content panel
+                //_contentPanel = _controlFactory.CreatePanel();
+                //_contentPanel.Dock = DockStyle.Fill;
+                //this.Controls.Add((Control)_contentPanel);
+
+                //// create buttons
+                //IButtonGroupControl buttonGroupControl = _controlFactory.CreateButtonGroupControl();
+                //buttonGroupControl.Dock = DockStyle.Bottom;
+                //_okButton = buttonGroupControl.AddButton("OK");
+                //_okButton.NotifyDefault(true);
+                //_cancelButton = buttonGroupControl.AddButton("Cancel");
+                //this.Controls.Add((Control)buttonGroupControl);
+
                 _controlFactory = controlFactory;
                 // create content panel
                 _contentPanel = _controlFactory.CreatePanel();
-                _contentPanel.Dock = DockStyle.Fill;
-                this.Controls.Add((Control)_contentPanel);
-
                 // create buttons
                 IButtonGroupControl buttonGroupControl = _controlFactory.CreateButtonGroupControl();
-                buttonGroupControl.Dock = DockStyle.Bottom;
                 _okButton = buttonGroupControl.AddButton("OK");
                 _okButton.NotifyDefault(true);
                 _cancelButton = buttonGroupControl.AddButton("Cancel");
-                this.Controls.Add((Control)buttonGroupControl);
+
+                BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(this);
+                layoutManager.AddControl(_contentPanel, BorderLayoutManager.Position.Centre);
+                layoutManager.AddControl(buttonGroupControl, BorderLayoutManager.Position.South);
             }
 
             public IButton OKButton

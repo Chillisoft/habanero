@@ -36,7 +36,7 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 IOKCancelDialogFactory okCancelDialogFactory = GetControlFactory().CreateOKCancelDialogFactory();
                     //---------------Execute Test ----------------------
-                IFormChilli dialogForm = okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel());
+                IFormChilli dialogForm = okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel(), "");
 
                 //---------------Test Result -----------------------
                 Assert.AreEqual(1, dialogForm.Controls.Count);
@@ -50,7 +50,7 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 IOKCancelDialogFactory okCancelDialogFactory = GetControlFactory().CreateOKCancelDialogFactory();
                 //---------------Execute Test ----------------------
-                FormWin dialogForm = (FormWin) okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel());
+                FormWin dialogForm = (FormWin) okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel(), "");
                 //---------------Test Result -----------------------
                 IButtonGroupControl buttons = (IButtonGroupControl) dialogForm.Controls[0].Controls[1];
                 Assert.AreSame(buttons["OK"], dialogForm.AcceptButton);
@@ -62,7 +62,7 @@ namespace Habanero.Test.UI.Base
             {
                 //---------------Set up test pack-------------------
                 OKCancelDialogFactoryWin okCancelDialogFactory = (OKCancelDialogFactoryWin) GetControlFactory().CreateOKCancelDialogFactory();
-                FormWin dialogForm = (FormWin) okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel());
+                FormWin dialogForm = (FormWin) okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel(), "");
 
                 //---------------Execute Test ----------------------
                 okCancelDialogFactory.OkButton_ClickHandler(dialogForm);
@@ -75,7 +75,7 @@ namespace Habanero.Test.UI.Base
             {
                 //---------------Set up test pack-------------------
                 OKCancelDialogFactoryWin okCancelDialogFactory = (OKCancelDialogFactoryWin)GetControlFactory().CreateOKCancelDialogFactory();
-                FormWin dialogForm = (FormWin)okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel());
+                FormWin dialogForm = (FormWin)okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel(), "");
 
                 //---------------Execute Test ----------------------
                 okCancelDialogFactory.CancelButton_ClickHandler(dialogForm);
@@ -97,7 +97,8 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(2, dialogControl.Controls.Count);
             Assert.IsInstanceOfType(typeof (IPanel), dialogControl.Controls[0]);
             IPanel contentPanel = (IPanel) dialogControl.Controls[0];
-            Assert.AreEqual(DockStyle.Fill, contentPanel.Dock);
+            //Assert.AreEqual(DockStyle.Fill, contentPanel.Dock);
+            Assert.AreEqual(DockStyle.Fill, contentPanel.Controls[0].Dock);
             Assert.IsInstanceOfType(typeof (IButtonGroupControl), dialogControl.Controls[1]);
             IButtonGroupControl buttons = (IButtonGroupControl) dialogControl.Controls[1];
             Assert.AreEqual(DockStyle.Bottom, buttons.Dock);

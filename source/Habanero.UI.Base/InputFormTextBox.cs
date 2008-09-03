@@ -65,7 +65,7 @@ namespace Habanero.UI.Base
         {
             IPanel panel = createControlPanel();
             IOKCancelDialogFactory okCancelDialogFactory = _controlFactory.CreateOKCancelDialogFactory();
-            IFormChilli form = okCancelDialogFactory.CreateOKCancelForm(panel);
+            IFormChilli form = okCancelDialogFactory.CreateOKCancelForm(panel, "");
             return form.ShowDialog();
         }
     }
