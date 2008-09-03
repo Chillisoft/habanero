@@ -33,18 +33,27 @@ namespace Habanero.BO
         {
             if (IsNewAndDeleted()) return null;
 
+            SqlStatementCollection sqlStatementCollection;
             if (IsNew())
             {
-                return GetInsertSql();
+                sqlStatementCollection = GetInsertSql();
+                
             }
             else if(IsDeleted)
             {
-                return GetDeleteSql();
+                sqlStatementCollection = GetDeleteSql();
             }
             else
             {
-                return GetUpdateSql();
+                sqlStatementCollection = GetUpdateSql();
             }
+            BOState boState = BusinessObject.State;
+            ITransactionalDB transactionLog = BusinessObject.TransactionLog as ITransactionalDB;
+            if (transactionLog != null && (boState.IsNew || boState.IsDeleted || boState.IsDirty))
+            {
+                sqlStatementCollection.Add(transactionLog.GetPersistSql());
+            }
+            return sqlStatementCollection;
         }
 
         /// <summary>

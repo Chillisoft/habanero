@@ -33,7 +33,7 @@ namespace Habanero.Test.BO
             //base.TearDownTest();
         }
         [Test]
-        public void TestTransactionLogtransactionAddedToTransactionCommitter()
+        public void TestTransactionLogTransactionNotAddedToTransactionCommitter()
         {
             //---------------Set up test pack-------------------
             //Create Mock Business object that implements a stub transaction log.
@@ -47,9 +47,52 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             //check if the transaction committer has 2 object
             // check that the one object is the transaction log object.
-            Assert.AreEqual(2,tc.ExecutedTransactions.Count);
-            ITransactional trlogBO = tc.ExecutedTransactions[1];
-            Assert.IsTrue(trlogBO is TransactionLogTable);
+            Assert.AreEqual(1, tc.ExecutedTransactions.Count);
+        }
+
+        [Test]
+        public void TestTransactionLogPersistsSQL_AddedToBusinessObjectPersistsSql()
+        {
+            //---------------Set up test pack-------------------
+            //Create Mock Business object that implements a stub transaction log.
+            ContactPersonTransactionLogging cp = CreateUnsavedContactPersonTransactionLogging();
+            TransactionalBusinessObjectDB transactionalBODB = new TransactionalBusinessObjectDB(cp);
+            
+            //---------------Assert Preconditions --------------
+            
+            //---------------Execute Test ----------------------
+            ISqlStatementCollection sqlStatementCollection = transactionalBODB.GetPersistSql();
+            //---------------Test Result -----------------------
+            //check if the transaction committer has 2 object
+            // check that the one object is the transaction log object.
+            Assert.AreEqual(2, sqlStatementCollection.Count);
+            ISqlStatement sqlStatement = sqlStatementCollection[1];
+            TransactionLogTable transactionLogTable = new TransactionLogTable(cp);
+            Assert.AreEqual(transactionLogTable.GetPersistSql()[0].Statement.ToString(), sqlStatement.Statement.ToString());
+        }
+
+        [Test]
+        public void TestTransactionLogPersistsSQL_NotAddedToBusinessObjectPersistsSql_WhenObjectUnchanged()
+        {
+            //---------------Set up test pack-------------------
+            //Create Mock Business object that implements a stub transaction log.
+            ContactPersonTransactionLogging cp = CreateUnsavedContactPersonTransactionLogging();
+            TransactionCommitterStub tc = new TransactionCommitterStub();
+            tc.AddBusinessObject(cp); 
+            tc.CommitTransaction();
+            TransactionalBusinessObjectDB transactionalBODB = new TransactionalBusinessObjectDB(cp);
+
+            //---------------Assert Preconditions --------------
+
+            //---------------Execute Test ----------------------
+            ISqlStatementCollection sqlStatementCollection = transactionalBODB.GetPersistSql();
+            //---------------Test Result -----------------------
+            //check if the transaction committer has 2 object
+            // check that the one object is the transaction log object.
+            Assert.AreEqual(0, sqlStatementCollection.Count);
+            //ISqlStatement sqlStatement = sqlStatementCollection[1];
+            //TransactionLogTable transactionLogTable = new TransactionLogTable(cp);
+            //Assert.AreEqual(transactionLogTable.GetPersistSql()[0].Statement.ToString(), sqlStatement.Statement.ToString());
         }
 
         private static ContactPersonTransactionLogging CreateUnsavedContactPersonTransactionLogging()

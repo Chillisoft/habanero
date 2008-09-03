@@ -815,6 +815,60 @@ namespace Habanero.Test.BO
             }
         }
 
+        [Test]
+        public void TestUpdateBeforePersistCalled()
+        {
+            //---------------Set up test pack-------------------
+            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB();
+            bool updateBeforePersistCalled = false;
+            MockBOWithUpdateBeforePersistDelegate mockBo = new MockBOWithUpdateBeforePersistDelegate(
+                delegate(TransactionCommitter committer)
+                {
+                    updateBeforePersistCalled = true;
+                });
+            trnCommitter.AddBusinessObject(mockBo);
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            trnCommitter.CommitTransaction();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(updateBeforePersistCalled);
+        }
+
+        [Test]
+        public void TestUpdateBeforePersistCalled_ForBoAddedInUpdateBeforePersist()
+        {
+            //---------------Set up test pack-------------------
+            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB();
+            bool updateBeforePersistCalled = false;
+            bool updateBeforePersistCalledForInner = false;
+            MockBOWithUpdateBeforePersistDelegate innerMockBo = new MockBOWithUpdateBeforePersistDelegate(
+                delegate(TransactionCommitter committer)
+                {
+                    updateBeforePersistCalledForInner = true;
+                });
+            MockBOWithUpdateBeforePersistDelegate mockBo = new MockBOWithUpdateBeforePersistDelegate(
+                delegate(TransactionCommitter committer)
+                {
+                    updateBeforePersistCalled = true;
+                    committer.AddBusinessObject(innerMockBo);
+                });
+            trnCommitter.AddBusinessObject(mockBo);
+            //-------------Assert Preconditions -------------
+            Assert.AreEqual(1, trnCommitter.OriginalTransactions.Count);
+            Assert.IsFalse(updateBeforePersistCalled);
+            Assert.IsFalse(updateBeforePersistCalledForInner);
+
+            //---------------Execute Test ----------------------
+            trnCommitter.CommitTransaction();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, trnCommitter.OriginalTransactions.Count);
+            Assert.IsTrue(updateBeforePersistCalled);
+            Assert.IsTrue(updateBeforePersistCalledForInner);
+        }
+
+        
+
         #region CustomAsserts
 
         private static void AssertBusinessObjectNotInDatabase(BusinessObject bo)
@@ -940,6 +994,27 @@ namespace Habanero.Test.BO
         {
             base.UpdateAsTransactionRolledBack();
             _rollBackExecuted = true;
+        }
+    }
+
+    internal class MockBOWithUpdateBeforePersistDelegate : MockBO
+    {
+        public delegate void UpdateObjectBeforePersistingDelegate(TransactionCommitter transactionCommitter);
+
+        private readonly UpdateObjectBeforePersistingDelegate _updateObjectBeforePersistingDelegate;
+
+        public MockBOWithUpdateBeforePersistDelegate(UpdateObjectBeforePersistingDelegate updateObjectBeforePersistingDelegate)
+        {
+            _updateObjectBeforePersistingDelegate = updateObjectBeforePersistingDelegate;
+        }
+
+        protected internal override void UpdateObjectBeforePersisting(TransactionCommitter transactionCommitter)
+        {
+            if (_updateObjectBeforePersistingDelegate != null)
+            {
+                _updateObjectBeforePersistingDelegate(transactionCommitter);
+            }
+            base.UpdateObjectBeforePersisting(transactionCommitter);
         }
     }
 

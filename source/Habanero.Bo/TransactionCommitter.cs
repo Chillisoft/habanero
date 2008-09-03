@@ -19,6 +19,7 @@ namespace Habanero.BO
         protected List<ITransactional> _executedTransactions = new List<ITransactional>();
 
         protected bool _CommittSuccess = false;
+        private bool _runningUpdatingBeforePersisting = false;
 
         ///<summary>
         /// Constructs the TransactionCommitter
@@ -60,6 +61,11 @@ namespace Habanero.BO
         ///<param name="transaction"></param>
         public void AddTransaction(ITransactional transaction)
         {
+            ITransactional foundTransactional = _originalTransactions.Find(delegate(ITransactional obj)
+            {
+                return obj.TransactionID() == transaction.TransactionID();
+            });
+            if (foundTransactional != null) return;
             _originalTransactions.Add(transaction);
         }
 
@@ -85,15 +91,21 @@ namespace Habanero.BO
             BeginDataSource();
         }
 
-        private  void UpdateObjectBeforePersisting()
+        private void UpdateObjectBeforePersisting()
         {
-            foreach (ITransactional transaction in _originalTransactions.ToArray())
+            _runningUpdatingBeforePersisting = true;
+            try
             {
-                if (transaction is TransactionalBusinessObject)
+                foreach (ITransactional transaction in _originalTransactions.ToArray())
                 {
-                    TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+                    if (!(transaction is TransactionalBusinessObject)) continue;
+                    TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject)transaction;
                     trnBusObj.UpdateObjectBeforePersisting(this);
                 }
+            }
+            finally
+            {
+                _runningUpdatingBeforePersisting = false;
             }
         }
 
@@ -293,7 +305,22 @@ namespace Habanero.BO
         ///<param name="bo"></param>
         public virtual void AddBusinessObject(BusinessObject bo)
         {
-            this.AddTransaction(new TransactionalBusinessObject(bo));
+            TransactionalBusinessObject transaction = CreateTransactionalBusinessObject(bo);
+            this.AddTransaction(transaction);
+            bool added = _originalTransactions.Contains(transaction);
+            if (added && _runningUpdatingBeforePersisting)
+            {
+                transaction.UpdateObjectBeforePersisting(this);
+            }
         }
+
+        /// <summary>
+        /// Used to decorate a businessObject in a TransactionalBusinessObject. To be overridden in the concrete 
+        /// implementation of a TransactionCommitter depending on the type of transaction you need.
+        /// </summary>
+        /// <param name="businessObject">The business object to decorate</param>
+        /// <returns>A decorated Business object (TransactionalBusinessObject)</returns>
+        protected abstract TransactionalBusinessObject CreateTransactionalBusinessObject(BusinessObject businessObject);
+
     }
 }

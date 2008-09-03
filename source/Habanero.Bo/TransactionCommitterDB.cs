@@ -181,15 +181,27 @@ namespace Habanero.BO
             }
         }
 
-        ///<summary>
-        /// Add an object of type business object to the transaction.
-        /// The DBTransactionCommiter wraps this Business Object in the
-        /// appropriate Transactional Business Object
-        ///</summary>
-        ///<param name="bo"></param>
-        public override void AddBusinessObject(BusinessObject bo)
+        /////<summary>
+        ///// Add an object of type business object to the transaction.
+        ///// The DBTransactionCommiter wraps this Business Object in the
+        ///// appropriate Transactional Business Object
+        /////</summary>
+        /////<param name="bo"></param>
+        //public override void AddBusinessObject(BusinessObject bo)
+        //{
+        //    this.AddTransaction(new TransactionalBusinessObjectDB(bo));
+        //}
+
+
+        /// <summary>
+        /// Decorates the business object with a TransactionalBusinessObjectDB.
+        /// See <see cref="TransactionCommitter.CreateTransactionalBusinessObject" />
+        /// </summary>
+        /// <param name="businessObject">The business object to decorate in a TransactionalBusinessObjectDB</param>
+        /// <returns>The decorated TransactionalBusinessObjectDB</returns>
+        protected override TransactionalBusinessObject CreateTransactionalBusinessObject( BusinessObject businessObject)
         {
-            this.AddTransaction(new TransactionalBusinessObjectDB(bo));
+            return new TransactionalBusinessObjectDB(businessObject);
         }
     }
 }
