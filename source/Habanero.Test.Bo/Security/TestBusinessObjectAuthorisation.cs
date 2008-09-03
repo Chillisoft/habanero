@@ -587,7 +587,7 @@ namespace Habanero.Test.BO.Security
             return itsClassDef;
         }
 
-        public void SetAuthorisation(IBusinessObjectAuthorisation authorisationStub)
+        internal protected void SetAuthorisation(IBusinessObjectAuthorisation authorisationStub)
         {
             SetAuthorisationRules(authorisationStub);
         }

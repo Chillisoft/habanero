@@ -20,6 +20,7 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -51,9 +52,8 @@ namespace Habanero.BO
         protected bool _origValueIsValid = true;
         protected string _origInvalidReason = "";
         protected bool _isObjectNew;
-//        protected string _displayName = "";
         protected object _valueBeforeLastEdit;
-
+        private IBOPropAuthorisation _boPropAuthorisation = null;
         /// <summary>
         /// Indicates that the value held by the property has been
         /// changed. This is fired any time that the current value of the property is set to a new value.
@@ -262,8 +262,16 @@ namespace Habanero.BO
                 {
                     newValue = ((PropDef)this.PropDef).GetNewValue(value);
                 }
-                    
-                CheckReadWriteRule(newValue);
+
+                if (!Equals(_persistedValue, newValue))
+                {
+                    string message;
+                    if (!IsEditable(out message))
+                    {
+                        throw new BusinessObjectReadWriteRuleException(_propDef);
+                    }
+                }
+
                 _invalidReason = "";
                 _isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
                 _valueBeforeLastEdit = _currentValue;
@@ -533,6 +541,74 @@ namespace Habanero.BO
         public string DisplayName
         {
             get { return _propDef.DisplayName;}
+        }
+
+        /// <summary>
+        /// Set the authorisation rule strategy to be used 
+        /// </summary>
+        /// <param name="boPropAuthorisation"></param>
+        internal protected void SetAuthorisationRules(IBOPropAuthorisation boPropAuthorisation)
+        {
+            _boPropAuthorisation = boPropAuthorisation;
+        }
+
+        ///<summary>
+        /// Returns whether the BOProperty is Editable or not. The BOProp may not be editable
+        ///  based on a number of factors. 
+        ///  1) If its ReadWrite Rules are set to ReadOnly.
+        /// 
+        ///</summary>
+        ///<param name="message"></param>
+        ///<returns></returns>
+        public virtual bool IsEditable(out string message)
+        {
+            message = "";
+            if (!AreReadWriteRulesEditable(out message)) return false;
+            if (_boPropAuthorisation == null) return true;
+            if (!_boPropAuthorisation.IsAuthorised(BOPropActions.CanUpdate))
+            {
+                message = string.Format("The logged on user {0} is not authorised to update the {1} ", 
+                        Thread.CurrentPrincipal.Identity.Name, this.PropertyName);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool AreReadWriteRulesEditable(out string message)
+        {
+            switch (_propDef.ReadWriteRule)
+            {
+                case PropReadWriteRule.ReadWrite:
+                    break;
+                case PropReadWriteRule.ReadOnly:
+                    message = "The property '" + this.DisplayName + "' is not editable since it is set up as ReadOnly";
+                    return false;
+                case PropReadWriteRule.WriteOnce:
+                    if (_isObjectNew || _persistedValue == null) break;
+                    message = "The property '" + this.DisplayName + "' is not editable since it is set up as WriteOnce and the value has already been set";
+                    return false;
+                case PropReadWriteRule.WriteNotNew:
+                    if (_isObjectNew)
+                    {
+                        message = "The property '" + this.DisplayName +
+                                  "' is not editable since it is set up as WriteNew and the object is new";
+                        return false;
+                    }
+                    break;
+                case PropReadWriteRule.WriteNew:
+                    if (!_isObjectNew)
+                    {
+                        message = "The property '" + this.DisplayName + 
+                                  "' is not editable since it is set up as WriteNew and the object is not new";
+                        return false;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            message = "";
+            return true;
         }
     }
 

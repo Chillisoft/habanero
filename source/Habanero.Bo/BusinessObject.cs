@@ -376,7 +376,7 @@ namespace Habanero.BO
         /// Sets the IBusinessObjectAuthorisation to that specified
         /// </summary>
         /// <param name="authorisationRules">The authorisation Rules</param>
-        protected void SetAuthorisationRules(IBusinessObjectAuthorisation authorisationRules)
+        protected internal void SetAuthorisationRules(IBusinessObjectAuthorisation authorisationRules)
         {
             _authorisationRules = authorisationRules;
         }
