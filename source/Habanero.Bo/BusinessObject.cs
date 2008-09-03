@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -64,7 +65,7 @@ namespace Habanero.BO
         protected IPrimaryKey _primaryKey;
         protected IRelationshipCol _relationshipCol;
         private ITransactionLog _transactionLog;
-
+        private IBusinessObjectAuthorisation _authorisationRules;
         #endregion //Fields
 
         #region Constructors
@@ -371,7 +372,14 @@ namespace Habanero.BO
         {
             _transactionLog = transactionLog;
         }
-
+        /// <summary>
+        /// Sets the IBusinessObjectAuthorisation to that specified
+        /// </summary>
+        /// <param name="authorisationRules">The authorisation Rules</param>
+        protected void SetAuthorisationRules(IBusinessObjectAuthorisation authorisationRules)
+        {
+            _authorisationRules = authorisationRules;
+        }
         /// <summary>
         /// Sets the business object update log to the one specified
         /// </summary>
@@ -416,7 +424,6 @@ namespace Habanero.BO
         protected IPrimaryKey PrimaryKey
         {
             get { return _primaryKey; }
-//            set { _primaryKey = value; }
         }
 
         ///<summary>
@@ -428,7 +435,11 @@ namespace Habanero.BO
         public virtual bool IsCreatable(out string message)
         {
             message = "";
-            return true;
+            if (_authorisationRules == null) return true;
+            if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanCreate)) return true;
+            message = string.Format("The logged on user {0} is not authorised to create a {1}",
+                    Thread.CurrentPrincipal.Identity.Name, this.ClassName);
+            return false;
         }
 
         ///<summary>
@@ -440,7 +451,11 @@ namespace Habanero.BO
         public virtual bool IsReadable(out string message)
         {
             message = "";
-            return true;
+            if (_authorisationRules == null) return true;
+            if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanRead)) return true;
+            message = string.Format("The logged on user {0} is not authorised to read a {1}",
+                    Thread.CurrentPrincipal.Identity.Name, this.ClassName);
+            return false;
         }
 
         ///<summary>
@@ -457,7 +472,11 @@ namespace Habanero.BO
         public virtual bool IsEditable(out string message)
         {
             message = "";
-            return true;
+            if (_authorisationRules == null) return true;
+            if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanUpdate)) return true;
+            message = string.Format("The logged on user {0} is not authorised to update {1} Identified By {2}",
+                    Thread.CurrentPrincipal.Identity.Name, this.ClassName, this.ID.GetObjectId());
+            return false;
         }
 
         ///<summary>
@@ -473,7 +492,11 @@ namespace Habanero.BO
         public virtual bool IsDeletable(out string message)
         {
             message = "";
-            return true;
+            if (_authorisationRules == null) return true;
+            if(_authorisationRules.IsAuthorised(BusinessObjectActions.CanDelete)) return true;
+            message = string.Format("The logged on user {0} is not authorised to delete {1} Identified By {2}", 
+                    Thread.CurrentPrincipal.Identity.Name, this.ClassName, this.ID.GetObjectId());
+            return false;
         }
 
         /// <summary>
@@ -484,6 +507,8 @@ namespace Habanero.BO
         public object GetPropertyValue(string propName)
         {
             if (propName == null) throw new ArgumentNullException("propName");
+            string message;
+            if (!this.IsReadable(out message)) throw new BusObjReadException(message);
 
             if (Props.Contains(propName))
                 return Props[propName].Value;
@@ -1221,6 +1246,39 @@ namespace Habanero.BO
         internal void SetStatus(BOStatus.Statuses status, bool value)
         {
             _boStatus.SetBOFlagValue(status, value);
+        }
+        /// <summary>
+        /// Checks if the object can be persisted. This
+        /// Checks the basic rules e.g. If you are deleting then
+        ///   IsDeletable if creating a new object then IsCreatable
+        ///   if Updating then IsEditable.
+        /// </summary>
+        /// <param name="errMsg">The appropriate error message if the 
+        ///  Business Object cannot be persisted</param>
+        /// <returns></returns>
+        protected internal virtual bool CanBePersisted(out string errMsg)
+        {
+            errMsg = "";
+            if (this.Status.IsDeleted && this.Status.IsNew)
+            {
+                errMsg = "The object has already been deleted from the dataBase and cannot be persisted again";
+                return false;
+            }
+            if (this.Status.IsDeleted && !this.Status.IsNew )
+            {
+                return this.IsDeletable(out errMsg);
+            }
+
+            if (this.Status.IsNew)
+            {
+                return this.IsCreatable(out errMsg);
+            }
+            
+            if (this.Status.IsDirty)
+            {
+                return this.IsEditable(out errMsg);
+            }
+            return true;
         }
     }
 }

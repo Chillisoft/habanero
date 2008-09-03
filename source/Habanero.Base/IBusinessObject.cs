@@ -135,5 +135,13 @@ namespace Habanero.Base
         /// </summary>
         /// <returns>Returns true if all are valid</returns>
         bool IsValid();
+
+        ///<summary>
+        /// This method can be overridden by a class that inherits from Business object.
+        /// The method allows the Business object developer to add customised rules that determine.
+        /// The Creatable rules of a business object.
+        /// E.g. Certain users may not be allowed to create certain Business Objects.
+        /// </summary>
+        bool IsCreatable(out string message);
     }
 }

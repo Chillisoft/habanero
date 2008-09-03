@@ -650,6 +650,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             MockBO mockBo = new MockBO();
+            mockBo.SetStatus(BOStatus.Statuses.isNew, false);
             TransactionCommitterDB committerDB = new TransactionCommitterDB();
             mockBo.Delete();
             committerDB.AddTransaction(new TransactionalBusinessObjectDB(mockBo));

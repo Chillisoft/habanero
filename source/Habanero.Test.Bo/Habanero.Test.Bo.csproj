@@ -136,6 +136,8 @@
     <Compile Include="CriteriaManager\TestCriteriaDB.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
     <Compile Include="CriteriaManager\TestHabaneroStringBuilder.cs" />
+    <Compile Include="Security\TestBOPropAuthorisation.cs" />
+    <Compile Include="Security\TestBusinessObjectAuthorisation.cs" />
     <Compile Include="TestBusinessObjectLoaderWithInheritance.cs" />
     <Compile Include="TestBusinessObjectLoader_GetBusinessObjectCollection.cs" />
     <Compile Include="TestPack\AddressTestBO.cs" />

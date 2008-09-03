@@ -105,10 +105,10 @@ namespace Habanero.BO
         /// The DBTransactionCommiter wraps this Business Object in the
         /// appropriate Transactional Business Object
         ///</summary>
-        ///<param name="bo"></param>
-        public virtual void AddBusinessObject(IBusinessObject bo)
+        ///<param name="businessObject"></param>
+        public virtual void AddBusinessObject(IBusinessObject businessObject)
         {
-            TransactionalBusinessObject transaction = CreateTransactionalBusinessObject(bo);
+            TransactionalBusinessObject transaction = CreateTransactionalBusinessObject(businessObject);
             this.AddTransaction(transaction);
             if (_runningUpdatingBeforePersisting)
             {
@@ -211,9 +211,32 @@ namespace Habanero.BO
         private void ValidateTransactionCanBePersisted()
         {
             CheckObjectsAreValid();
+            CheckTransactionsCanBePersisted();
             ValidateObjectsCanBeDeleted();
             CheckForDuplicateObjects();
             CheckForConcurrencyErrors();
+        }
+        /// <summary>
+        /// Verifies that any <see cref="TransactionalBusinessObject"/>'s that are marked can be persisted
+        ///   can be deleted. <see cref="TransactionalBusinessObject.CheckCanDelete"/>
+        /// </summary>
+        private void CheckTransactionsCanBePersisted()
+        {
+            string allMessages = "";
+            foreach (ITransactional transaction in _originalTransactions)
+            {
+                if (!(transaction is TransactionalBusinessObject)) continue;
+                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject)transaction;
+                string errMsg;
+                if (!trnBusObj.CanBePersisted(out errMsg))
+                {
+                    allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
+                }
+            }
+            if (!string.IsNullOrEmpty(allMessages))
+            {
+                throw new BusObjPersistException(allMessages);
+            }
         }
 
         /// <summary>
@@ -239,7 +262,6 @@ namespace Habanero.BO
             foreach (ITransactional transaction in _originalTransactions)
             {
                 if (!(transaction is TransactionalBusinessObject)) continue;
-
                 TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
 
                 string errMsg;
@@ -406,4 +428,5 @@ namespace Habanero.BO
         /// <returns>A decorated Business object (TransactionalBusinessObject)</returns>
         protected abstract TransactionalBusinessObject CreateTransactionalBusinessObject(IBusinessObject businessObject);
     }
+
 }

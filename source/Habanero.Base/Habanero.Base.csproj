@@ -104,7 +104,7 @@
     <Compile Include="HabaneroApp.cs" />
     <Compile Include="Criteria\HabaneroStringBuilder.cs" />
     <Compile Include="IApplicationVersionUpgrader.cs" />
-    <Compile Include="IAuthorisation.cs" />
+    <Compile Include="IBusinessObjectAuthorisation.cs" />
     <Compile Include="IBOKey.cs" />
     <Compile Include="IBOProp.cs" />
     <Compile Include="IBOStatus.cs" />

@@ -30,7 +30,7 @@ namespace Habanero.Base
         bool IsNew { get;  }
 
         /// <summary>
-        /// Indicates if the business object has been deleted
+        /// Indicates if the business object has been marked for deletion
         /// </summary>
         bool IsDeleted { get;  }
 
