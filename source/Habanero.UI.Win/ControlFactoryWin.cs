@@ -39,29 +39,23 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Creates a filter control with the default layout manager
         /// </summary>
-        /// <returns></returns>
         public IFilterControl CreateFilterControl()
         {
             return new FilterControlWin(this);
         }
 
-
         /// <summary>
-        /// Creates a TextBox with no filtering of characters. 
-        /// If the type of the property is known, rather use the overloaded version of this method.
+        /// Creates a TextBox control
         /// </summary>
-        /// <returns>Returns a new ITextBox object.</returns>
         public ITextBox CreateTextBox()
         {
             return new TextBoxWin();
         }
 
-
         /// <summary>
         /// Creates a new empty TreeView
         /// </summary>
-        /// <param name="name">The name of the view</param>
-        /// <returns>Returns a new ITreeView object</returns>
+        /// <param name="name">The name of the TreeView</param>
         public ITreeView CreateTreeView(string name)
         {
             ITreeView treeView = new TreeViewWin();
@@ -70,13 +64,12 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Creates a control for the given type and assembly name.
+        /// Creates a control for the given type and assembly name
         /// </summary>
         /// <param name="typeName">The name of the control type</param>
         /// <param name="assemblyName">The assembly name of the control type</param>
         /// <returns>Returns either the control of the specified type or
-        ///          the default type, which is usually TextBox.
-        /// </returns>
+        /// the default type, which is usually TextBox.</returns>
         public IControlChilli CreateControl(string typeName, string assemblyName)
         {
             Type controlType = null;
@@ -95,11 +88,10 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Creates a new control of the type specified.
+        /// Creates a new control of the type specified
         /// </summary>
         /// <param name="controlType">The control type, which must be a
-        /// sub-type of Control</param>
-        /// <returns>Returns a new object of the type requested</returns>
+        /// sub-type of <see cref="IControlChilli"/></param>
         public IControlChilli CreateControl(Type controlType)
         {
             IControlChilli ctl;
@@ -133,7 +125,6 @@ namespace Habanero.UI.Win
         /// Creates a new DateTimePicker with a specified date
         /// </summary>
         /// <param name="defaultDate">The initial date value</param>
-        /// <returns>Returns a new DateTimePicker object</returns>
         public IDateTimePicker CreateDateTimePicker(DateTime defaultDate)
         {
             DateTimePickerWin dateTimePickerWin = new DateTimePickerWin(this);
@@ -142,9 +133,8 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Creates a new DateRangeComboBox
+        /// Creates a new DateRangeComboBox control
         /// </summary>
-        /// <returns>Returns a new DateRangeComboBox object</returns>
         public IDateRangeComboBox CreateDateRangeComboBox()
         {
             return new DateRangeComboBoxWin();
@@ -163,12 +153,10 @@ namespace Habanero.UI.Win
             return editor;
         }
 
-
         /// <summary>
         /// Creates a new numeric up-down control that is formatted with
         /// zero decimal places for integer use
         /// </summary>
-        /// <returns>Returns a new NumericUpDown object</returns>
         public INumericUpDown CreateNumericUpDownInteger()
         {
             NumericUpDownWin ctl = new NumericUpDownWin();
@@ -180,9 +168,8 @@ namespace Habanero.UI.Win
 
         /// <summary>
         /// Creates a new numeric up-down control that is formatted with
-        /// two decimal places for Currency use
+        /// two decimal places for currency use
         /// </summary>
-        /// <returns></returns>
         public INumericUpDown CreateNumericUpDownCurrency()
         {
             NumericUpDownWin ctl = new NumericUpDownWin();
@@ -195,7 +182,6 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Creates a new progress bar
         /// </summary>
-        /// <returns>Returns a new ProgressBar object</returns>
         public IProgressBar CreateProgressBar()
         {
             throw new NotImplementedException();
@@ -205,7 +191,6 @@ namespace Habanero.UI.Win
         /// Creates a new splitter which enables the user to resize 
         /// docked controls
         /// </summary>
-        /// <returns>Returns a new Splitter object</returns>
         public ISplitter CreateSplitter()
         {
             return new SplitterWin();
@@ -215,7 +200,6 @@ namespace Habanero.UI.Win
         /// Creates a new tab page
         /// </summary>
         /// <param name="title">The page title to appear in the tab</param>
-        /// <returns>Returns a new TabPage object</returns>
         public ITabPage CreateTabPage(string title)
         {
             TabPageWin page = new TabPageWin();
@@ -227,7 +211,6 @@ namespace Habanero.UI.Win
         /// Creates a new radio button
         /// </summary>
         /// <param name="text">The text to appear next to the radio button</param>
-        /// <returns>Returns a new RadioButton object</returns>
         public IRadioButton CreateRadioButton(string text)
         {
             throw new NotImplementedException();
@@ -236,7 +219,6 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Creates a new GroupBox
         /// </summary>
-        /// <returns>Returns the new GroupBox</returns>
         public IGroupBox CreateGroupBox()
         {
             return new GroupBoxWin();
@@ -246,15 +228,17 @@ namespace Habanero.UI.Win
         /// Creates a form in which a business object can be edited
         /// </summary>
         /// <param name="bo">The business object to edit</param>
-        /// <param name="uiDefName">The name of the set of ui definitions
+        /// <param name="uiDefName">The name of the set of UI definitions
         /// used to design the edit form. Setting this to an empty string
-        /// will use a ui definition with no name attribute specified.</param>
-        /// <returns>Returns a DefaultBOEditorForm object</returns>
+        /// will use a UI definition with no name attribute specified.</param>
         public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Creates a TabControl
+        /// </summary>
         public ITabControl CreateTabControl()
         {
             return new TabControlWin();
@@ -263,7 +247,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Creates a multi line textbox, setting the scrollbars to vertical
         /// </summary>
-        /// <param name="numLines"></param>
+        /// <param name="numLines">The number of lines to show in the TextBox</param>
         public ITextBox CreateTextBoxMultiLine(int numLines)
         {
             TextBoxWin tb = (TextBoxWin) CreateTextBox();
@@ -274,13 +258,11 @@ namespace Habanero.UI.Win
             return tb;
         }
 
-
         /// <summary>
-        /// Creates a control that can be places on a form or a panel to to implement a wizard user interface.
+        /// Creates a control that can be placed on a form or a panel to implement a wizard user interface.
         /// The wizard control will have a next and previous button and a panel to place the wizard step on.
         /// </summary>
-        /// <param name="wizardController"></param>
-        /// <returns></returns>
+        /// <param name="wizardController">The controller that manages the wizard process</param>
         public IWizardControl CreateWizardControl(IWizardController wizardController)
         {
             return new WizardControlWin(wizardController, this);
@@ -296,12 +278,27 @@ namespace Habanero.UI.Win
             return new WizardFormWin(wizardController, this);
         }
 
+        /// <summary>
+        /// Creates a form in which a business object can be edited
+        /// </summary>
+        /// <param name="bo">The business object to edit</param>
+        /// <param name="uiDefName">The name of the set of UI definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a UI definition with no name attribute specified.</param>
+        /// <param name="action">Action to be performed when the editing is complete. Typically used if you want to update
+        /// a grid or a list in an asynchronous environment (E.g. to select the recently edited item in the grid)</param>
         public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string name,
                                                        PostObjectPersistingDelegate action)
         {
             return new DefaultBOEditorFormWin(bo, name, this, action);
         }
 
+        /// <summary>
+        /// Returns a BOEditor form. This is a form that the business object can be edited in.
+        /// </summary>
+        /// <param name="bo"></param>
+        ///   a grid, list etc in an asynchronous environment. E.g. to select the recently edited item in the grid</param>
+        /// <returns></returns>
         public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo)
         {
             return new DefaultBOEditorFormWin(bo, "default", this);
@@ -313,18 +310,25 @@ namespace Habanero.UI.Win
 //            throw new NotImplementedException();
 //        }
 
+        /// <summary>
+        /// Creates an editable grid
+        /// </summary>
         public IEditableGrid CreateEditableGrid()
         {
             return new EditableGridWin();
         }
 
-
+        /// <summary>
+        /// Creates an EditableGridControl
+        /// </summary>
         public IEditableGridControl CreateEditableGridControl()
         {
             return new EditableGridControlWin(this);
         }
 
-
+        /// <summary>
+        /// Creates a FileChooser control
+        /// </summary>
         public IFileChooser CreateFileChooser()
         {
             return new FileChooserWin(this);
@@ -345,14 +349,12 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// returns a control mapper strategy for the management of how
-        /// business objects properties and their related controls update each other.
-        /// E.g. A windows strategy might be to update the control value whenever the property 
-        /// is updated.
-        /// An internet strategy might be to update the control value only when the business object
-        /// is loaded.
+        /// Creates a control mapper strategy for the management of how
+        /// business object properties and their related controls update each other.
+        /// For example, a windows strategy might be to update the control value whenever the property 
+        /// is updated, whereas an internet strategy might be to update the control value only
+        /// when the business object is loaded.
         /// </summary>
-        /// <returns></returns>
         public IControlMapperStrategy CreateControlMapperStrategy()
         {
             return new ControlMapperStrategyWin();
@@ -361,80 +363,112 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Returns a textbox mapper strategy that can be applied to a textbox
         /// </summary>
-        /// <returns>Returns a strategy</returns>
         public ITextBoxMapperStrategy CreateTextBoxMapperStrategy()
         {
             return new TextBoxMapperStrategyWin();
         }
 
+        /// <summary>
+        /// Creates a DataGridViewImageColumn
+        /// </summary>
         public IDataGridViewImageColumn CreateDataGridViewImageColumn()
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Creates a DataGridViewCheckBoxColumn for the appropriate userinterface framework
+        /// Creates a DataGridViewCheckBoxColumn
         /// </summary>
-        /// <returns></returns>
         public IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn()
         {
             return new DataGridViewCheckBoxColumnWin(new DataGridViewCheckBoxColumn());
         }
 
+        /// <summary>
+        /// Creates a DataGridViewComboBoxColumn
+        /// </summary>
         public IDataGridViewComboBoxColumn CreateDataGridViewComboBoxColumn()
         {
             return new DataGridViewComboBoxColumnWin(new DataGridViewComboBoxColumn());
         }
 
         /// <summary>
-        /// Constructor that provides a specific list of optionsToDisplay to display
+        /// Creates DateRangeComboBox control with a specific set of date range
+        /// options to display
         /// </summary>
-        /// <param name="optionsToDisplay">A list of date range optionsToDisplay</param>
+        /// <param name="optionsToDisplay">A list of date range options to display</param>
         public IDateRangeComboBox CreateDateRangeComboBox(List<DateRangeOptions> optionsToDisplay)
         {
             return new DateRangeComboBoxWin(optionsToDisplay);
         }
 
+        /// <summary>
+        /// Creates an ErrorProvider
+        /// </summary>
         public IErrorProvider CreateErrorProvider()
         {
             return new ErrorProviderWin();
         }
 
+        /// <summary>
+        /// Creates a Form control
+        /// </summary>
         public IFormChilli CreateForm()
         {
             return new FormWin();
         }
 
+        /// <summary>
+        /// Creates a strategy that customises behaviour of a CheckBox for the environment
+        /// </summary>
         public ICheckBoxMapperStrategy CreateCheckBoxMapperStrategy()
         {
             return new CheckBoxStrategyWin();
         }
 
+        /// <summary>
+        /// Creates a strategy that customises behaviour of a ComboBox for the environment
+        /// </summary>
         public IListComboBoxMapperStrategy CreateListComboBoxMapperStrategy()
         {
             return new ListComboBoxMapperStrategyWin();
         }
 
+        /// <summary>
+        /// Creates a strategy that customises behaviour of a lookup ComboBox for the environment
+        /// </summary>
         public ILookupComboBoxMapperStrategy CreateLookupComboBoxDefaultMapperStrategy()
         {
             return new LookupComboBoxDefaultMapperStrategyWin();
         }
 
+        /// <summary>
+        /// Creates a strategy that customises behaviour of key presses on a lookup ComboBox for the environment
+        /// </summary>
         public ILookupComboBoxMapperStrategy CreateLookupKeyPressMapperStrategy()
         {
             return new LookupComboBoxKeyPressMapperStrategyWin();
         }
 
+        /// <summary>
+        /// Creates a strategy that customises behaviour of a NumericUpDown for the environment
+        /// </summary>
         public INumericUpDownMapperStrategy CreateNumericUpDownMapperStrategy()
         {
             return new NumericUpDownMapperStrategyWin();
         }
 
+        /// <summary>
+        /// Creates an buttons control for an <see cref="IEditableGridControl"/>
+        /// </summary>
         public IEditableGridButtonsControl CreateEditableGridButtonsControl()
         {
             return new EditableGridButtonsControlWin(this);
         }
 
+        /// <summary>
+        /// Creates an OKCancelDialog
+        /// </summary>
         public IOKCancelDialogFactory CreateOKCancelDialogFactory()
         {
             return new OKCancelDialogFactoryWin(this);
@@ -448,11 +482,19 @@ namespace Habanero.UI.Win
             return new ComboBoxWin();
         }
 
+        /// <summary>
+        /// Creates a ListBox control
+        /// </summary>
+        /// <returns></returns>
         public IListBox CreateListBox()
         {
             return new ListBoxWin();
         }
 
+        /// <summary>
+        /// Creates a multi-selector control
+        /// </summary>
+        /// <typeparam name="T">The business object type being managed in the control</typeparam>
         public IMultiSelector<T> CreateMultiSelector<T>()
         {
             return new MultiSelectorWin<T>();
@@ -512,6 +554,9 @@ namespace Habanero.UI.Win
             return checkBox;
         }
 
+        /// <summary>
+        /// Creates a label without text
+        /// </summary>
         public ILabel CreateLabel()
         {
             ILabel label = new LabelWin();
@@ -519,6 +564,9 @@ namespace Habanero.UI.Win
             return label;
         }
 
+        /// <summary>
+        /// Creates a label with specified text
+        /// </summary>
         public ILabel CreateLabel(string labelText)
         {
             ILabel label = CreateLabel(labelText, false);
@@ -526,6 +574,11 @@ namespace Habanero.UI.Win
             return label;
         }
 
+        /// <summary>
+        /// Creates a label
+        /// </summary>
+        /// <param name="labelText">The text to appear in the label</param>
+        /// <param name="isBold">Whether the text appears in bold font</param>
         public ILabel CreateLabel(string labelText, bool isBold)
         {
             LabelWin label = (LabelWin) CreateLabel();
@@ -545,26 +598,42 @@ namespace Habanero.UI.Win
             return label;
         }
 
+        /// <summary>
+        /// Creates a DateTimePicker
+        /// </summary>
         public IDateTimePicker CreateDateTimePicker()
         {
             return new DateTimePickerWin(this);
         }
 
+        /// <summary>
+        /// Creates a BorderLayoutManager to place controls on the given parent control
+        /// </summary>
+        /// <param name="control">The parent control on which to managed the layout</param>
         public BorderLayoutManager CreateBorderLayoutManager(IControlChilli control)
         {
             return new BorderLayoutManagerWin(control, this);
         }
 
+        /// <summary>
+        /// Creates a Panel control
+        /// </summary>
         public IPanel CreatePanel()
         {
             return new PanelWin();
         }
 
+        /// <summary>
+        /// Creates a read-only Grid
+        /// </summary>
         public IReadOnlyGrid CreateReadOnlyGrid()
         {
             return new ReadOnlyGridWin();
         }
 
+        /// <summary>
+        /// Creates a ReadOnlyGridControl
+        /// </summary>
         public IReadOnlyGridControl CreateReadOnlyGridControl()
         {
             return new ReadOnlyGridControlWin(this);
@@ -578,21 +647,28 @@ namespace Habanero.UI.Win
             return new ButtonGroupControlWin(this);
         }
 
+        /// <summary>
+        /// Creates a buttons control for a <see cref="IReadOnlyGridControl"/>
+        /// </summary>
         public IReadOnlyGridButtonsControl CreateReadOnlyGridButtonsControl()
         {
             return new ReadOnlyGridButtonsControlWin(this);
         }
 
+        /// <summary>
+        /// Creates a Panel control
+        /// </summary>
+        /// <param name="controlFactory">The factory that this panel will use to create any controls on it</param>
         public IPanel CreatePanel(IControlFactory controlFactory)
         {
             return new PanelWin();
         }
 
         /// <summary>
-        /// Creates a new panel
+        /// Creates a Panel control
         /// </summary>
         /// <param name="name">The name of the panel</param>
-        /// <returns>Returns a new Panel object</returns>
+        /// <param name="controlFactory">The factory that this panel will use to create any controls on it</param>
         public IPanel CreatePanel(string name, IControlFactory controlFactory)
         {
             IPanel panel = CreatePanel();
@@ -600,7 +676,11 @@ namespace Habanero.UI.Win
             return panel;
         }
 
-
+        /// <summary>
+        /// Creates a new PasswordTextBox that masks the letters as the user
+        /// types them
+        /// </summary>
+        /// <returns>Returns the new PasswordTextBox object</returns>
         public ITextBox CreatePasswordTextBox()
         {
             ITextBox tb = CreateTextBox();
@@ -608,11 +688,17 @@ namespace Habanero.UI.Win
             return tb;
         }
 
+        /// <summary>
+        /// Creates a ToolTip
+        /// </summary>
         public IToolTip CreateToolTip()
         {
             return new ToolTipWin();
         }
 
+        /// <summary>
+        /// Creates a generic control
+        /// </summary>
         public IControlChilli CreateControl()
         {
             return new ControlWin();
@@ -624,12 +710,14 @@ namespace Habanero.UI.Win
         /// Creates a TextBox that provides filtering of characters depending on the property type.
         /// </summary>
         /// <param name="propertyType">Type property being edited.</param>
-        /// <returns>Returns a new ITextBox object.</returns>
         public ITextBox CreateTextBox(Type propertyType)
         {
             return new TextBoxWin();
         }
 
+        /// <summary>
+        /// Creates a new TabPage
+        /// </summary>
         public ITabPage createTabPage(string name)
         {
             throw new NotImplementedException();

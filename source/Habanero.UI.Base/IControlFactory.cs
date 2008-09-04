@@ -26,12 +26,14 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Creates controls for a specific UI environment
+    /// </summary>
     public interface IControlFactory
     {
         /// <summary>
         /// Creates a filter control with the default layout manager
         /// </summary>
-        /// <returns></returns>
         IFilterControl CreateFilterControl();
 
         /// <summary>
@@ -39,7 +41,16 @@ namespace Habanero.UI.Base
         /// </summary>
         IComboBox CreateComboBox();
 
+        /// <summary>
+        /// Creates a ListBox control
+        /// </summary>
+        /// <returns></returns>
         IListBox CreateListBox();
+
+        /// <summary>
+        /// Creates a multi-selector control
+        /// </summary>
+        /// <typeparam name="T">The business object type being managed in the control</typeparam>
         IMultiSelector<T> CreateMultiSelector<T>();
 
         /// <summary>
@@ -72,43 +83,82 @@ namespace Habanero.UI.Base
         /// <param name="defaultValue">Whether the initial box is checked</param>
         ICheckBox CreateCheckBox(bool defaultValue);
 
+        /// <summary>
+        /// Creates a label without text
+        /// </summary>
         ILabel CreateLabel();
-        IControlChilli CreateControl();
+
+        /// <summary>
+        /// Creates a label with specified text
+        /// </summary>
         ILabel CreateLabel(string labelText);
-        IDateTimePicker CreateDateTimePicker();
+
+        /// <summary>
+        /// Creates a label
+        /// </summary>
+        /// <param name="labelText">The text to appear in the label</param>
+        /// <param name="isBold">Whether the text appears in bold font</param>
+        ILabel CreateLabel(string labelText, bool isBold);
+
+        /// <summary>
+        /// Creates a BorderLayoutManager to place controls on the given parent control
+        /// </summary>
+        /// <param name="control">The parent control on which to managed the layout</param>
         BorderLayoutManager CreateBorderLayoutManager(IControlChilli control);
+
+        /// <summary>
+        /// Creates a Panel control
+        /// </summary>
         IPanel CreatePanel();
+
+        /// <summary>
+        /// Creates a Panel control
+        /// </summary>
+        /// <param name="controlFactory">The factory that this panel will use to create any controls on it</param>
+        IPanel CreatePanel(IControlFactory controlFactory);
+
+        /// <summary>
+        /// Creates a Panel control
+        /// </summary>
+        /// <param name="name">The name of the panel</param>
+        /// <param name="controlFactory">The factory that this panel will use to create any controls on it</param>
+        IPanel CreatePanel(string name, IControlFactory controlFactory);
+
+        /// <summary>
+        /// Creates a read-only Grid
+        /// </summary>
         IReadOnlyGrid CreateReadOnlyGrid();
+
+        /// <summary>
+        /// Creates a ReadOnlyGridControl
+        /// </summary>
         IReadOnlyGridControl CreateReadOnlyGridControl();
+
+        /// <summary>
+        /// Creates a buttons control for a <see cref="IReadOnlyGridControl"/>
+        /// </summary>
+        IReadOnlyGridButtonsControl CreateReadOnlyGridButtonsControl();
 
         /// <summary>
         /// Creates a control to manage a group of buttons that display next to each other
         /// </summary>
         IButtonGroupControl CreateButtonGroupControl();
 
-        IReadOnlyGridButtonsControl CreateReadOnlyGridButtonsControl();
+        /// <summary>
+        /// Creates a ToolTip
+        /// </summary>
+        IToolTip CreateToolTip();
 
         /// <summary>
-        /// Creates a new panel
+        /// Creates a TextBox control
         /// </summary>
-        /// <returns>Returns a new Panel object</returns>
-        IPanel CreatePanel(IControlFactory controlFactory);
+        ITextBox CreateTextBox();
 
         /// <summary>
-        /// Creates a new panel
+        /// Creates a multi line textbox, setting the scrollbars to vertical
         /// </summary>
-        /// <param name="name">The name of the panel</param>
-        /// <returns>Returns a new Panel object</returns>
-        /// <param name="controlFactory">the factory that this panel will use to create any controls on it</param>
-        IPanel CreatePanel(string name, IControlFactory controlFactory);
-
-        ///// <summary>
-        ///// Creates a label
-        ///// </summary>
-        ///// <param name="text">The text to appear in the label</param>
-        ///// <param name="isBold">Whether the text appears in bold lettering</param>
-        ///// <returns>Returns the new Label object</returns>
-        ILabel CreateLabel(string labelText, bool isBold);
+        /// <param name="numLines">The number of lines to show in the TextBox</param>
+        ITextBox CreateTextBoxMultiLine(int numLines);
 
         /// <summary>
         /// Creates a new PasswordTextBox that masks the letters as the user
@@ -117,51 +167,43 @@ namespace Habanero.UI.Base
         /// <returns>Returns the new PasswordTextBox object</returns>
         ITextBox CreatePasswordTextBox();
 
-        IToolTip CreateToolTip();
-
-        /// <summary>
-        /// Creates a new empty TextBox
-        /// </summary>
-        /// <returns>Returns the new TextBox object</returns>
-        ITextBox CreateTextBox();
-
         /// <summary>
         /// Creates a new empty TreeView
         /// </summary>
-        /// <param name="name">The name of the view</param>
-        /// <returns>Returns a new TreeView object</returns>
+        /// <param name="name">The name of the TreeView</param>
         ITreeView CreateTreeView(string name);
 
         /// <summary>
-        /// Creates a control for the given type and assembly name.
+        /// Creates a generic control
+        /// </summary>
+        IControlChilli CreateControl();
+
+        /// <summary>
+        /// Creates a control for the given type and assembly name
         /// </summary>
         /// <param name="typeName">The name of the control type</param>
         /// <param name="assemblyName">The assembly name of the control type</param>
         /// <returns>Returns either the control of the specified type or
-        ///          the default type, which is usually TextBox.
-        /// </returns>
+        /// the default type, which is usually TextBox.</returns>
         IControlChilli CreateControl(String typeName, String assemblyName);
 
         /// <summary>
-        /// Creates a new control of the type specified.
+        /// Creates a new control of the type specified
         /// </summary>
         /// <param name="controlType">The control type, which must be a
-        /// sub-type of Control</param>
-        /// <returns>Returns a new object of the type requested</returns>
+        /// sub-type of <see cref="IControlChilli"/></param>
         IControlChilli CreateControl(Type controlType);
+
+        /// <summary>
+        /// Creates a DateTimePicker
+        /// </summary>
+        IDateTimePicker CreateDateTimePicker();
 
         /// <summary>
         /// Creates a new DateTimePicker with a specified date
         /// </summary>
         /// <param name="defaultDate">The initial date value</param>
-        /// <returns>Returns a new DateTimePicker object</returns>
         IDateTimePicker CreateDateTimePicker(DateTime defaultDate);
-
-        /// <summary>
-        /// Creates a new DateRangeComboBox
-        /// </summary>
-        /// <returns>Returns a new DateRangeComboBox object</returns>
-        IDateRangeComboBox CreateDateRangeComboBox();
 
         /// <summary>
         /// Creates a new DateTimePicker that is formatted to handle months
@@ -171,76 +213,67 @@ namespace Habanero.UI.Base
         IDateTimePicker CreateMonthPicker();
 
         /// <summary>
+        /// Creates a new DateRangeComboBox control
+        /// </summary>
+        IDateRangeComboBox CreateDateRangeComboBox();
+
+        /// <summary>
+        /// Creates DateRangeComboBox control with a specific set of date range
+        /// options to display
+        /// </summary>
+        /// <param name="optionsToDisplay">A list of date range options to display</param>
+        IDateRangeComboBox CreateDateRangeComboBox(List<DateRangeOptions> optionsToDisplay);
+
+        /// <summary>
         /// Creates a new numeric up-down control that is formatted with
         /// zero decimal places for integer use
         /// </summary>
-        /// <returns>Returns a new NumericUpDown object</returns>
         INumericUpDown CreateNumericUpDownInteger();
 
         /// <summary>
         /// Creates a new numeric up-down control that is formatted with
-        /// two decimal places for Currency use
+        /// two decimal places for currency use
         /// </summary>
-        /// <returns></returns>
         INumericUpDown CreateNumericUpDownCurrency();
 
         /// <summary>
         /// Creates a new progress bar
         /// </summary>
-        /// <returns>Returns a new ProgressBar object</returns>
         IProgressBar CreateProgressBar();
 
         /// <summary>
         /// Creates a new splitter which enables the user to resize 
         /// docked controls
         /// </summary>
-        /// <returns>Returns a new Splitter object</returns>
         ISplitter CreateSplitter();
-
-        /// <summary>
-        /// Creates a new tab page
-        /// </summary>
-        /// <param name="title">The page title to appear in the tab</param>
-        /// <returns>Returns a new TabPage object</returns>
-        ITabPage CreateTabPage(string title);
 
         /// <summary>
         /// Creates a new radio button
         /// </summary>
         /// <param name="text">The text to appear next to the radio button</param>
-        /// <returns>Returns a new RadioButton object</returns>
         IRadioButton CreateRadioButton(string text);
 
         /// <summary>
         /// Creates a new GroupBox
         /// </summary>
-        /// <returns>Returns the new GroupBox</returns>
         IGroupBox CreateGroupBox();
 
         /// <summary>
-        /// Creates a form in which a business object can be edited
+        /// Creates a TabControl
         /// </summary>
-        /// <param name="bo">The business object to edit</param>
-        /// <param name="uiDefName">The name of the set of ui definitions
-        /// used to design the edit form. Setting this to an empty string
-        /// will use a ui definition with no name attribute specified.</param>
-        /// <returns>Returns a DefaultBOEditorForm object</returns>
-        IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName);
-
         ITabControl CreateTabControl();
 
         /// <summary>
-        /// Creates a multi line textbox, setting the scrollbars to vertical
+        /// Creates a new tab page
         /// </summary>
-        /// <param name="numLines"></param>
-        ITextBox CreateTextBoxMultiLine(int numLines);
+        /// <param name="title">The page title to appear in the tab</param>
+        ITabPage CreateTabPage(string title);
 
         /// <summary>
-        /// Creates a control that can be places on a form or a panel to to implement a wizard user interface.
+        /// Creates a control that can be placed on a form or a panel to implement a wizard user interface.
         /// The wizard control will have a next and previous button and a panel to place the wizard step on.
         /// </summary>
-        /// <param name="wizardController"></param>
-        /// <returns></returns>
+        /// <param name="wizardController">The controller that manages the wizard process</param>
         IWizardControl CreateWizardControl(IWizardController wizardController);
 
         /// <summary>
@@ -254,25 +287,53 @@ namespace Habanero.UI.Base
         /// Returns a BOEditor form. This is a form that the business object can be edited in.
         /// </summary>
         /// <param name="bo"></param>
-        /// <param name="uiDefName"></param>
-        /// <param name="action">Action to be performed when the editing is complete. Typically used if you want to update
-        ///   a grid, list etc in an asynchronous environment. E.g. to select the recently edited item in the grid</param>
-        /// <returns></returns>
-        IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName, PostObjectPersistingDelegate action);
-
-        /// <summary>
-        /// Returns a BOEditor form. This is a form that the business object can be edited in.
-        /// </summary>
-        /// <param name="bo"></param>
         ///   a grid, list etc in an asynchronous environment. E.g. to select the recently edited item in the grid</param>
         /// <returns></returns>
         IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo);
 
-//        IListView CreateListView(); //TODO: Port
+        /// <summary>
+        /// Creates a form in which a business object can be edited
+        /// </summary>
+        /// <param name="bo">The business object to edit</param>
+        /// <param name="uiDefName">The name of the set of UI definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a UI definition with no name attribute specified.</param>
+        IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName);
 
+        /// <summary>
+        /// Creates a form in which a business object can be edited
+        /// </summary>
+        /// <param name="bo">The business object to edit</param>
+        /// <param name="uiDefName">The name of the set of UI definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a UI definition with no name attribute specified.</param>
+        /// <param name="action">Action to be performed when the editing is complete. Typically used if you want to update
+        /// a grid or a list in an asynchronous environment (E.g. to select the recently edited item in the grid)</param>
+        IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName, PostObjectPersistingDelegate action);
 
+        ///// <summary>
+        ///// Creates a ListView control
+        ///// </summary>
+        //IListView CreateListView(); //TODO: Port
+
+        /// <summary>
+        /// Creates an editable grid
+        /// </summary>
         IEditableGrid CreateEditableGrid();
+
+        /// <summary>
+        /// Creates an EditableGridControl
+        /// </summary>
         IEditableGridControl CreateEditableGridControl();
+
+        /// <summary>
+        /// Creates an buttons control for an <see cref="IEditableGridControl"/>
+        /// </summary>
+        IEditableGridButtonsControl CreateEditableGridButtonsControl();
+
+        /// <summary>
+        /// Creates a FileChooser control
+        /// </summary>
         IFileChooser CreateFileChooser();
 
         /// <summary>
@@ -287,152 +348,186 @@ namespace Habanero.UI.Base
         IBOColTabControl CreateBOColTabControl();
 
         /// <summary>
-        /// returns a control mapper strategy for the management of how
-        /// business objects properties and their related controls update each other.
-        /// E.g. A windows strategy might be to update the control value whenever the property 
-        /// is updated.
-        /// An internet strategy might be to update the control value only when the business object
-        /// is loaded.
+        /// Creates a DataGridViewImageColumn
         /// </summary>
-        /// <returns></returns>
+        IDataGridViewImageColumn CreateDataGridViewImageColumn();
+
+        /// <summary>
+        /// Creates a DataGridViewCheckBoxColumn
+        /// </summary>
+        IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn();
+
+        /// <summary>
+        /// Creates a DataGridViewComboBoxColumn
+        /// </summary>
+        IDataGridViewComboBoxColumn CreateDataGridViewComboBoxColumn();
+
+        /// <summary>
+        /// Creates an ErrorProvider
+        /// </summary>
+        IErrorProvider CreateErrorProvider();
+
+        /// <summary>
+        /// Creates a Form control
+        /// </summary>
+        IFormChilli CreateForm();
+
+        /// <summary>
+        /// Creates an OKCancelDialog
+        /// </summary>
+        IOKCancelDialogFactory CreateOKCancelDialogFactory();
+
+        /// <summary>
+        /// Creates a control mapper strategy for the management of how
+        /// business object properties and their related controls update each other.
+        /// For example, a windows strategy might be to update the control value whenever the property 
+        /// is updated, whereas an internet strategy might be to update the control value only
+        /// when the business object is loaded.
+        /// </summary>
         IControlMapperStrategy CreateControlMapperStrategy();
 
         /// <summary>
         /// Returns a textbox mapper strategy that can be applied to a textbox
         /// </summary>
-        /// <returns>Returns a strategy</returns>
         ITextBoxMapperStrategy CreateTextBoxMapperStrategy();
 
         /// <summary>
-        /// Creates a DataGridViewImageColumn for the appropriate userinterface framework
+        /// Creates a strategy that customises behaviour of a CheckBox for the environment
         /// </summary>
-        /// <returns></returns>
-        IDataGridViewImageColumn CreateDataGridViewImageColumn();
-
-        /// <summary>
-        /// Creates a DataGridViewCheckBoxColumn for the appropriate userinterface framework
-        /// </summary>
-        /// <returns></returns>
-        IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn();
-
-        /// <summary>
-        /// Creates a DataGridViewComboBoxColumn for the appropriate userinterface framework
-        /// </summary>
-        /// <returns></returns>
-        IDataGridViewComboBoxColumn CreateDataGridViewComboBoxColumn();
-
-        /// <summary>
-        /// Constructor that provides a specific list of optionsToDisplay to display
-        /// </summary>
-        /// <param name="optionsToDisplay">A list of date range optionsToDisplay</param>
-        IDateRangeComboBox CreateDateRangeComboBox(List<DateRangeOptions> optionsToDisplay);
-
-        /// <summary>
-        /// Constructor that provides a specific ErrorProvider. 
-        /// </summary>
-        /// <returns></returns>
-        IErrorProvider CreateErrorProvider();
-
-        IFormChilli CreateForm();
         ICheckBoxMapperStrategy CreateCheckBoxMapperStrategy();
+
+        /// <summary>
+        /// Creates a strategy that customises behaviour of a ComboBox for the environment
+        /// </summary>
         IListComboBoxMapperStrategy CreateListComboBoxMapperStrategy();
+
+        /// <summary>
+        /// Creates a strategy that customises behaviour of a lookup ComboBox for the environment
+        /// </summary>
         ILookupComboBoxMapperStrategy CreateLookupComboBoxDefaultMapperStrategy();
+
+        /// <summary>
+        /// Creates a strategy that customises behaviour of key presses on a lookup ComboBox for the environment
+        /// </summary>
         ILookupComboBoxMapperStrategy CreateLookupKeyPressMapperStrategy();
+
+        /// <summary>
+        /// Creates a strategy that customises behaviour of a NumericUpDown for the environment
+        /// </summary>
         INumericUpDownMapperStrategy CreateNumericUpDownMapperStrategy();
-        IEditableGridButtonsControl CreateEditableGridButtonsControl();
-        IOKCancelDialogFactory CreateOKCancelDialogFactory();
     }
 
+    /// <summary>
+    /// Provides a screen
+    /// </summary>
     public interface IScreen
     {
     }
 
     /// <summary>
-    /// Provides a set of strategies that can be applied to a control
+    /// Provides a set of behaviour strategies that can be applied to a control
     /// depending on the environment
     /// </summary>
     public interface IControlMapperStrategy
     {
         /// <summary>
-        /// Provides an interface for Adding handlers to updated events of current business object
-        /// property. This provides the ability to implement various strategies for updating the 
-        /// control value based on changes in the business object.
+        /// Adds handlers to events of a current business object property.
         /// </summary>
-        /// <param name="mapper">The business object mapper that maps the business object property to the control</param>
+        /// <param name="mapper">The control mapper that maps the business object property to the control</param>
         /// <param name="boProp">The business object property being mapped to the control</param>
         void AddCurrentBOPropHandlers(ControlMapper mapper, IBOProp boProp);
 
         /// <summary>
-        /// Provides an interface for Removing handlers to updated events of current business object
-        /// properties. It is essential that if the AddCurrentBoPropHandlers is implemented then this 
-        /// is implemented such that a editing a business object that is no longer being shown on the control does not
+        /// Removes handlers to events of a current business object property.
+        /// It is essential that if the AddCurrentBoPropHandlers is implemented then this 
+        /// is implemented such that editing a business object that is no longer being shown on the control does not
         /// does not update the value in the control.
         /// </summary>
-        /// <param name="mapper">The business object mapper that maps the business object property to the control</param>
+        /// <param name="mapper">The control mapper that maps the business object property to the control</param>
         /// <param name="boProp">The business object property being mapped to the control</param>
         void RemoveCurrentBOPropHandlers(ControlMapper mapper, IBOProp boProp);
 
         /// <summary>
-        /// Provides an interface for handling the default key press behaviours on a control.
-        /// This is typically used to change the handling of the enter key. I.e. A common behavioural
-        /// requirement is to have the enter key move to the next control.
+        /// Handles the default key press behaviours on a control.
+        /// This is typically used to change the handling of the enter key (such as having
+        /// the enter key cause focus to move to the next control).
         /// </summary>
         /// <param name="control">The control whose events will be handled</param>
         void AddKeyPressEventHandler(IControlChilli control);
     }
 
     /// <summary>
-    /// Provides a set of strategies that can be applied to a textbox
+    /// Provides a set of behaviour strategies that can be applied to a TextBox
     /// depending on the environment
     /// </summary>
     public interface ITextBoxMapperStrategy
     {
         /// <summary>
         /// Adds key press event handlers that carry out actions like
-        /// limiting the characters input, depending on the type of the
+        /// limiting the input of certain characters, depending on the type of the
         /// property
         /// </summary>
-        /// <param name="mapper">The textbox mapper</param>
+        /// <param name="mapper">The TextBox mapper</param>
         /// <param name="boProp">The property being mapped</param>
         void AddKeyPressEventHandler(TextBoxMapper mapper, IBOProp boProp);
     }
 
     /// <summary>
-    /// Provides a set of strategies that can be applied to a checkbox
+    /// Provides a set of behaviour strategies that can be applied to a CheckBox
     /// depending on the environment
     /// </summary>
     public interface ICheckBoxMapperStrategy
     {
         /// <summary>
-        /// Adds click event handler.
-        /// <param name="mapper">The checkbox mapper</param>
+        /// Adds click event handler
         /// </summary>
+        /// <param name="mapper">The checkbox mapper</param>
         void AddClickEventHandler(CheckBoxMapper mapper);
     }
 
+    /// <summary>
+    /// Provides a set of behaviour strategies that can be applied to a list ComboBox
+    /// depending on the environment
+    /// </summary>
     public interface IListComboBoxMapperStrategy
     {
         /// <summary>
-        /// Adds Item selected event handler. For Windows we want the Business to be updated immediately, however
-        /// for Web environment with low bandwidth we may choose to only update when the user saves.
+        /// Adds an ItemSelected event handler.
+        /// For Windows Forms you may want the business object to be updated immediately, however
+        /// for a web environment with low bandwidth you may choose to only update when the user saves.
         ///</summary>
         void AddItemSelectedEventHandler(ListComboBoxMapper mapper);
     }
 
+    /// <summary>
+    /// Provides a set of behaviour strategies that can be applied to a lookup ComboBox
+    /// depending on the environment
+    /// </summary>
     public interface ILookupComboBoxMapperStrategy
     {
         /// <summary>
-        /// Adds Item selected event handler. For Windows we want the Business to be updated immediately, however
-        /// for Web environment with low bandwidth we may choose to only update when the user saves.
-        ///</summary>
-        void RemoveCurrentHandlers(LookupComboBoxMapper mapper);
-
+        /// Adds event handlers to the ComboBox that are suitable for the UI environment
+        /// </summary>
+        /// <param name="mapper">The mapper for the lookup ComboBox</param>
         void AddHandlers(LookupComboBoxMapper mapper);
+
+        /// <summary>
+        /// Removes event handlers previously assigned to the ComboBox
+        /// </summary>
+        /// <param name="mapper">The mapper for the lookup ComboBox</param>
+        void RemoveCurrentHandlers(LookupComboBoxMapper mapper);
     }
 
-
+    /// <summary>
+    /// Provides a set of behaviour strategies that can be applied to a NumericUpDown
+    /// depending on the environment
+    /// </summary>
     public interface INumericUpDownMapperStrategy
     {
+        /// <summary>
+        /// Handles the value changed event suitably for the UI environment
+        /// </summary>
+        /// <param name="mapper">The mapper for the NumericUpDown</param>
         void ValueChanged(NumericUpDownMapper mapper);
     }
 }

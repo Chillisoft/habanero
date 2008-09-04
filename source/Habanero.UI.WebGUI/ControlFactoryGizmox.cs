@@ -37,17 +37,17 @@ namespace Habanero.UI.WebGUI
     {
         public const int TEXTBOX_HEIGHT = 20;
 
-        #region IControlFactory Members
-
         /// <summary>
         /// Creates a filter control with the default layout manager
         /// </summary>
-        /// <returns></returns>
         public virtual IFilterControl CreateFilterControl()
         {
             return new FilterControlGiz(this);
         }
 
+        /// <summary>
+        /// Creates a TextBox control
+        /// </summary>
         public virtual ITextBox CreateTextBox()
         {
             TextBoxGiz tb = new TextBoxGiz();
@@ -65,11 +65,19 @@ namespace Habanero.UI.WebGUI
             return comboBox;
         }
 
+        /// <summary>
+        /// Creates a ListBox control
+        /// </summary>
+        /// <returns></returns>
         public virtual IListBox CreateListBox()
         {
             return new ListBoxGiz();
         }
 
+        /// <summary>
+        /// Creates a multi-selector control
+        /// </summary>
+        /// <typeparam name="T">The business object type being managed in the control</typeparam>
         public virtual IMultiSelector<T> CreateMultiSelector<T>()
         {
             return new MultiSelectorGiz<T>();
@@ -110,12 +118,17 @@ namespace Habanero.UI.WebGUI
             return btn;
         }
 
-
+        /// <summary>
+        /// Creates a label without text
+        /// </summary>
         public virtual ILabel CreateLabel()
         {
             return CreateLabel("");
         }
 
+        /// <summary>
+        /// Creates a label with specified text
+        /// </summary>
         public virtual ILabel CreateLabel(string labelText)
         {
             LabelGiz label = new LabelGiz(labelText);
@@ -125,6 +138,9 @@ namespace Habanero.UI.WebGUI
             return label;
         }
 
+        /// <summary>
+        /// Creates a DateTimePicker
+        /// </summary>
         public virtual IDateTimePicker CreateDateTimePicker()
         {
             DateTimePickerGiz dtp = new DateTimePickerGiz(this);
@@ -134,22 +150,35 @@ namespace Habanero.UI.WebGUI
             return dtp;
         }
 
+        /// <summary>
+        /// Creates a BorderLayoutManager to place controls on the given parent control
+        /// </summary>
+        /// <param name="control">The parent control on which to managed the layout</param>
         public virtual BorderLayoutManager CreateBorderLayoutManager(IControlChilli control)
         {
             return new BorderLayoutManagerGiz(control, this);
         }
 
+        /// <summary>
+        /// Creates a Panel control
+        /// </summary>
         public virtual IPanel CreatePanel()
         {
             return new PanelGiz();
         }
 
+        /// <summary>
+        /// Creates a read-only Grid
+        /// </summary>
         public virtual IReadOnlyGrid CreateReadOnlyGrid()
         {
             return new ReadOnlyGridGiz();
         }
 
 
+        /// <summary>
+        /// Creates a ReadOnlyGridControl
+        /// </summary>
         public virtual IReadOnlyGridControl CreateReadOnlyGridControl()
         {
             return new ReadOnlyGridControlGiz(this);
@@ -163,11 +192,18 @@ namespace Habanero.UI.WebGUI
             return new ButtonGroupControlGiz(this);
         }
 
+        /// <summary>
+        /// Creates a buttons control for a <see cref="IReadOnlyGridControl"/>
+        /// </summary>
         public virtual IReadOnlyGridButtonsControl CreateReadOnlyGridButtonsControl()
         {
             return new ReadOnlyGridButtonsControlGiz(this);
         }
 
+        /// <summary>
+        /// Creates a Panel control
+        /// </summary>
+        /// <param name="controlFactory">The factory that this panel will use to create any controls on it</param>
         public virtual IPanel CreatePanel(IControlFactory controlFactory)
         {
             IPanel pnl = new PanelGiz();
@@ -175,11 +211,10 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// Creates a new panel
+        /// Creates a Panel control
         /// </summary>
         /// <param name="name">The name of the panel</param>
-        /// <returns>Returns a new Panel object</returns>
-        /// <param name="controlFactory">The control factory that the panel will use to create any controls</param>
+        /// <param name="controlFactory">The factory that this panel will use to create any controls on it</param>
         public virtual IPanel CreatePanel(string name, IControlFactory controlFactory)
         {
             IPanel pnl = CreatePanel(controlFactory);
@@ -187,7 +222,11 @@ namespace Habanero.UI.WebGUI
             return pnl;
         }
 
-
+        /// <summary>
+        /// Creates a label
+        /// </summary>
+        /// <param name="labelText">The text to appear in the label</param>
+        /// <param name="isBold">Whether the text appears in bold font</param>
         public virtual ILabel CreateLabel(string labelText, bool isBold)
         {
             ILabel lbl = CreateLabel(labelText);
@@ -210,6 +249,11 @@ namespace Habanero.UI.WebGUI
             return lbl;
         }
 
+        /// <summary>
+        /// Creates a new PasswordTextBox that masks the letters as the user
+        /// types them
+        /// </summary>
+        /// <returns>Returns the new PasswordTextBox object</returns>
         public virtual ITextBox CreatePasswordTextBox()
         {
             ITextBox tb = CreateTextBox();
@@ -217,11 +261,17 @@ namespace Habanero.UI.WebGUI
             return tb;
         }
 
+        /// <summary>
+        /// Creates a ToolTip
+        /// </summary>
         public virtual IToolTip CreateToolTip()
         {
             return new ToolTipGiz();
         }
 
+        /// <summary>
+        /// Creates a generic control
+        /// </summary>
         public virtual IControlChilli CreateControl()
         {
             ControlGiz cntrl = new ControlGiz();
@@ -232,8 +282,7 @@ namespace Habanero.UI.WebGUI
         /// <summary>
         /// Creates a new empty TreeView
         /// </summary>
-        /// <param name="name">The name of the view</param>
-        /// <returns>Returns a new TreeView object</returns>
+        /// <param name="name">The name of the TreeView</param>
         public virtual ITreeView CreateTreeView(string name)
         {
             ITreeView tv = new TreeViewGiz();
@@ -242,13 +291,12 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// Creates a control for the given type and assembly name.
+        /// Creates a control for the given type and assembly name
         /// </summary>
         /// <param name="typeName">The name of the control type</param>
         /// <param name="assemblyName">The assembly name of the control type</param>
         /// <returns>Returns either the control of the specified type or
-        ///          the default type, which is usually TextBox.
-        /// </returns>
+        /// the default type, which is usually TextBox.</returns>
         public virtual IControlChilli CreateControl(string typeName, string assemblyName)
         {
             Type controlType = null;
@@ -267,11 +315,10 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// Creates a new control of the type specified.
+        /// Creates a new control of the type specified
         /// </summary>
         /// <param name="controlType">The control type, which must be a
-        /// sub-type of Control</param>
-        /// <returns>Returns a new object of the type requested</returns>
+        /// sub-type of <see cref="IControlChilli"/></param>
         public virtual IControlChilli CreateControl(Type controlType)
         {
             IControlChilli ctl;
@@ -307,12 +354,10 @@ namespace Habanero.UI.WebGUI
             return ctl;
         }
 
-
         /// <summary>
         /// Creates a new DateTimePicker with a specified date
         /// </summary>
         /// <param name="defaultDate">The initial date value</param>
-        /// <returns>Returns a new DateTimePicker object</returns>
         public virtual IDateTimePicker CreateDateTimePicker(DateTime defaultDate)
         {
             IDateTimePicker editor = CreateDateTimePicker();
@@ -321,9 +366,8 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// Creates a new DateRangeComboBox
+        /// Creates a new DateRangeComboBox control
         /// </summary>
-        /// <returns>Returns a new DateRangeComboBox object</returns>
         public virtual IDateRangeComboBox CreateDateRangeComboBox()
         {
             DateRangeComboBoxGiz dateRangeCombo = new DateRangeComboBoxGiz();
@@ -332,55 +376,82 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// Creates a new DateRangeComboBox with a specified list of options
+        /// Creates DateRangeComboBox control with a specific set of date range
+        /// options to display
         /// </summary>
-        /// <param name="optionsToDisplay">The list of options to be displayed</param>
-        /// <returns>Returns a new DateRangeComboBox object</returns>
+        /// <param name="optionsToDisplay">A list of date range options to display</param>
         public virtual IDateRangeComboBox CreateDateRangeComboBox(List<DateRangeOptions> optionsToDisplay)
         {
             return new DateRangeComboBoxGiz(optionsToDisplay);
         }
 
+        /// <summary>
+        /// Creates an ErrorProvider
+        /// </summary>
         public IErrorProvider CreateErrorProvider()
         {
             return new ErrorProviderGiz();
         }
 
+        /// <summary>
+        /// Creates a Form control
+        /// </summary>
         public IFormChilli CreateForm()
         {
             return new FormGiz();
         }
 
+        /// <summary>
+        /// Creates a strategy that customises behaviour of a CheckBox for the environment
+        /// </summary>
         public ICheckBoxMapperStrategy CreateCheckBoxMapperStrategy()
         {
             return new CheckBoxMapperStrategyGiz();
         }
 
+        /// <summary>
+        /// Creates a strategy that customises behaviour of a ComboBox for the environment
+        /// </summary>
         public IListComboBoxMapperStrategy CreateListComboBoxMapperStrategy()
         {
             return new ListComboBoxMapperStrategyGiz();
         }
 
+        /// <summary>
+        /// Creates a strategy that customises behaviour of a lookup ComboBox for the environment
+        /// </summary>
         public ILookupComboBoxMapperStrategy CreateLookupComboBoxDefaultMapperStrategy()
         {
             return new LookupComboBoxMapperStrategyGiz();
         }
 
+        /// <summary>
+        /// Creates a strategy that customises behaviour of key presses on a lookup ComboBox for the environment
+        /// </summary>
         public ILookupComboBoxMapperStrategy CreateLookupKeyPressMapperStrategy()
         {
             return new LookupComboBoxKeyPressMapperStrategyGiz();
         }
 
+        /// <summary>
+        /// Creates a strategy that customises behaviour of a NumericUpDown for the environment
+        /// </summary>
         public INumericUpDownMapperStrategy CreateNumericUpDownMapperStrategy()
         {
             return new NumericUpDownMapperStrategyGiz();
         }
 
+        /// <summary>
+        /// Creates an buttons control for an <see cref="IEditableGridControl"/>
+        /// </summary>
         public IEditableGridButtonsControl CreateEditableGridButtonsControl()
         {
             return new EditableGridButtonsControlGiz(this);
         }
 
+        /// <summary>
+        /// Creates an OKCancelDialog
+        /// </summary>
         public IOKCancelDialogFactory CreateOKCancelDialogFactory()
         {
             return new OKCancelDialogFactoryGiz(this);
@@ -399,7 +470,10 @@ namespace Habanero.UI.WebGUI
             return editor;
         }
 
-
+        /// <summary>
+        /// Creates a new numeric up-down control that is formatted with
+        /// zero decimal places for integer use
+        /// </summary>
         public virtual INumericUpDown CreateNumericUpDownInteger()
         {
             INumericUpDown ctl = CreateNumericUpDown();
@@ -411,9 +485,8 @@ namespace Habanero.UI.WebGUI
 
         /// <summary>
         /// Creates a new numeric up-down control that is formatted with
-        /// two decimal places for Currency use
+        /// two decimal places for currency use
         /// </summary>
-        /// <returns></returns>
         public virtual INumericUpDown CreateNumericUpDownCurrency()
         {
             INumericUpDown ctl = CreateNumericUpDown();
@@ -453,7 +526,6 @@ namespace Habanero.UI.WebGUI
         /// <summary>
         /// Creates a new progress bar
         /// </summary>
-        /// <returns>Returns a new ProgressBar object</returns>
         public virtual IProgressBar CreateProgressBar()
         {
             ProgressBarGiz bar = new ProgressBarGiz();
@@ -464,7 +536,6 @@ namespace Habanero.UI.WebGUI
         /// Creates a new splitter which enables the user to resize 
         /// docked controls
         /// </summary>
-        /// <returns>Returns a new Splitter object</returns>
         public virtual ISplitter CreateSplitter()
         {
             SplitterGiz splitter = new SplitterGiz();
@@ -479,7 +550,6 @@ namespace Habanero.UI.WebGUI
         /// Creates a new tab page
         /// </summary>
         /// <param name="title">The page title to appear in the tab</param>
-        /// <returns>Returns a new TabPage object</returns>
         public virtual ITabPage CreateTabPage(string title)
         {
             TabPageGiz page = new TabPageGiz();
@@ -491,7 +561,6 @@ namespace Habanero.UI.WebGUI
         /// Creates a new radio button
         /// </summary>
         /// <param name="text">The text to appear next to the radio button</param>
-        /// <returns>Returns a new RadioButton object</returns>
         public virtual IRadioButton CreateRadioButton(string text)
         {
             RadioButtonGiz rButton = new RadioButtonGiz();
@@ -505,7 +574,6 @@ namespace Habanero.UI.WebGUI
         /// <summary>
         /// Creates a new GroupBox
         /// </summary>
-        /// <returns>Returns the new GroupBox</returns>
         public virtual IGroupBox CreateGroupBox()
         {
             return new GroupBoxGiz();
@@ -515,31 +583,35 @@ namespace Habanero.UI.WebGUI
         /// Creates a form in which a business object can be edited
         /// </summary>
         /// <param name="bo">The business object to edit</param>
-        /// <param name="uiDefName">The name of the set of ui definitions
+        /// <param name="uiDefName">The name of the set of UI definitions
         /// used to design the edit form. Setting this to an empty string
-        /// will use a ui definition with no name attribute specified.</param>
-        /// <returns>Returns a DefaultBOEditorFormGiz object</returns>
+        /// will use a UI definition with no name attribute specified.</param>
         public virtual IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName)
         {
             return new DefaultBOEditorFormGiz(bo, uiDefName, this);
         }
 
-        
-
         /// <summary>
-        /// Returns a BOEditor form. This is a form that the business object can be edited in.
+        /// Creates a form in which a business object can be edited
         /// </summary>
-        /// <param name="bo"></param>
-        /// <param name="uiDefName"></param>
+        /// <param name="bo">The business object to edit</param>
+        /// <param name="uiDefName">The name of the set of UI definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a UI definition with no name attribute specified.</param>
         /// <param name="action">Action to be performed when the editing is complete. Typically used if you want to update
-        ///   a grid, list etc in an asynchronous environment.</param>
-        /// <returns></returns>
+        /// a grid or a list in an asynchronous environment (E.g. to select the recently edited item in the grid)</param>
         public virtual IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName,
                                                                PostObjectPersistingDelegate action)
         {
             return new DefaultBOEditorFormGiz(bo, uiDefName, this, action);
         }
 
+        /// <summary>
+        /// Returns a BOEditor form. This is a form that the business object can be edited in.
+        /// </summary>
+        /// <param name="bo"></param>
+        ///   a grid, list etc in an asynchronous environment. E.g. to select the recently edited item in the grid</param>
+        /// <returns></returns>
         public virtual IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo)
         {
             return new DefaultBOEditorFormGiz(bo, "default", this);
@@ -551,16 +623,25 @@ namespace Habanero.UI.WebGUI
 //        }
 
 
+        /// <summary>
+        /// Creates an editable grid
+        /// </summary>
         public virtual IEditableGrid CreateEditableGrid()
         {
             return new EditableGridGiz();
         }
 
+        /// <summary>
+        /// Creates an EditableGridControl
+        /// </summary>
         public virtual IEditableGridControl CreateEditableGridControl()
         {
             return new EditableGridControlGiz(this);
         }
 
+        /// <summary>
+        /// Creates a FileChooser control
+        /// </summary>
         public virtual IFileChooser CreateFileChooser()
         {
             return new FileChooserGiz(this);
@@ -581,14 +662,12 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// returns a control mapper strategy for the management of how
-        /// business objects properties and their related controls update each other.
-        /// E.g. A windows strategy might be to update the control value whenever the property 
-        /// is updated.
-        /// An internet strategy might be to update the control value only when the business object
-        /// is loaded.
+        /// Creates a control mapper strategy for the management of how
+        /// business object properties and their related controls update each other.
+        /// For example, a windows strategy might be to update the control value whenever the property 
+        /// is updated, whereas an internet strategy might be to update the control value only
+        /// when the business object is loaded.
         /// </summary>
-        /// <returns></returns>
         public virtual IControlMapperStrategy CreateControlMapperStrategy()
         {
             return new ControlMapperStrategyGiz();
@@ -597,32 +676,38 @@ namespace Habanero.UI.WebGUI
         /// <summary>
         /// Returns a textbox mapper strategy that can be applied to a textbox
         /// </summary>
-        /// <returns>Returns a strategy</returns>
         public virtual ITextBoxMapperStrategy CreateTextBoxMapperStrategy()
         {
             return new TextBoxMapperStrategyGiz();
         }
 
+        /// <summary>
+        /// Creates a DataGridViewImageColumn
+        /// </summary>
         public virtual IDataGridViewImageColumn CreateDataGridViewImageColumn()
         {
             return new GridBaseGiz.DataGridViewImageColumnGiz(new DataGridViewImageColumn());
         }
 
         /// <summary>
-        /// Creates a DataGridViewCheckBoxColumn for the appropriate userinterface framework
+        /// Creates a DataGridViewCheckBoxColumn
         /// </summary>
-        /// <returns></returns>
         public virtual IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn()
         {
             return new DataGridViewCheckBoxColumnGiz(new DataGridViewCheckBoxColumn());
         }
 
+        /// <summary>
+        /// Creates a DataGridViewComboBoxColumn
+        /// </summary>
         public virtual IDataGridViewComboBoxColumn CreateDataGridViewComboBoxColumn()
         {
             return new DataGridViewComboBoxColumnGiz(new DataGridViewComboBoxColumn());
         }
 
-
+        /// <summary>
+        /// Creates a TabControl
+        /// </summary>
         public virtual ITabControl CreateTabControl()
         {
             return new TabControlGiz();
@@ -631,7 +716,7 @@ namespace Habanero.UI.WebGUI
         /// <summary>
         /// Creates a multi line textbox, setting the scrollbars to vertical
         /// </summary>
-        /// <param name="numLines"></param>
+        /// <param name="numLines">The number of lines to show in the TextBox</param>
         public virtual ITextBox CreateTextBoxMultiLine(int numLines)
         {
             TextBoxGiz tb = (TextBoxGiz) CreateTextBox();
@@ -642,13 +727,11 @@ namespace Habanero.UI.WebGUI
             return tb;
         }
 
-
         /// <summary>
-        /// Creates a control that can be places on a form or a panel to to implement a wizard user interface.
+        /// Creates a control that can be placed on a form or a panel to implement a wizard user interface.
         /// The wizard control will have a next and previous button and a panel to place the wizard step on.
         /// </summary>
-        /// <param name="wizardController"></param>
-        /// <returns></returns>
+        /// <param name="wizardController">The controller that manages the wizard process</param>
         public virtual IWizardControl CreateWizardControl(IWizardController wizardController)
         {
             return new WizardControlGiz(wizardController, this);
@@ -663,8 +746,6 @@ namespace Habanero.UI.WebGUI
         {
             return new WizardFormGiz(wizardController, this);
         }
-
-        #endregion
 
         public IScreen CreateScreen()
         {

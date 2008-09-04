@@ -19,11 +19,13 @@
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Manages a collection of column header
+    /// </summary>
     public interface IColumnHeaderCollection
     {
-
         /// <summary>
-        /// Gets the count.
+        /// Gets the number of items in the collection
         /// </summary>
         /// <value></value>
         int Count { get; }
