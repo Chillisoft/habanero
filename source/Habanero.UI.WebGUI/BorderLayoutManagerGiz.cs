@@ -26,6 +26,12 @@ using DockStyle=Gizmox.WebGUI.Forms.DockStyle;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Manages the layout of controls in a user interface by having a
+    /// component assigned a compass position.  For instance, having the
+    /// "east" position assigned will result in the control being placed
+    /// against the right border.
+    /// </summary>
     public class BorderLayoutManagerGiz : BorderLayoutManager
     {
         private readonly IControlChilli[] _controls;
@@ -38,6 +44,9 @@ namespace Habanero.UI.WebGUI
             _splitters = new bool[5];
         }
 
+        /// <summary>
+        /// Sets how the specified control is docked within its parent
+        /// </summary>
         protected override void SetupDockOfControl(IControlChilli control, Position pos)
         {
             Control ctl = (Control) control;
@@ -61,6 +70,13 @@ namespace Habanero.UI.WebGUI
             }
         }
 
+        /// <summary>
+        /// Add a control to the layout
+        /// </summary>
+        /// <param name="control">The control to add</param>
+        /// /// <param name="pos">The position at which to add the control</param>
+        /// <param name="includeSplitter">True to include a splitter between the controls</param>
+        /// <returns>Returns the control added</returns>
         public override IControlChilli AddControl(IControlChilli control, Position pos, bool includeSplitter)
         {
             SetupDockOfControl(control, pos);

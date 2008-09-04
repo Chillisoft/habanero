@@ -52,7 +52,6 @@ namespace Habanero
         private DatabaseConfig _databaseConfig;
         private string _privateKey;
 
-
         /// <summary>
         /// Constructor to initialise a new application with basic application
         /// information.  Use the Startup() method to launch the application.
@@ -60,8 +59,6 @@ namespace Habanero
         /// <param name="appName">The application name</param>
         /// <param name="appVersion">The application version</param>
         public HabaneroAppConsole(string appName, string appVersion) : base(appName, appVersion) { }
-
-
 
         /// <summary>
         /// Sets the definition class factory.
@@ -118,17 +115,28 @@ namespace Habanero
             }
         }
 
+        /// <summary>
+        /// Loads the class definitions
+        /// </summary>
         protected override void SetupClassDefs()
         {
             if (LoadClassDefs) ClassDef.LoadClassDefs(GetXmlClassDefsLoader());
         }
 
+        /// <summary>
+        /// Initialises the settings.  If not provided, DatabaseSettings
+        /// is assumed.
+        /// </summary>
         protected override void SetupSettings()
         {
             if (Settings == null) Settings = new DatabaseSettings();
             GlobalRegistry.Settings = Settings;
         }
 
+        /// <summary>
+        /// Sets up the database connection.  If not provided, then
+        /// reads the connection from the config file.
+        /// </summary>
         protected override void SetupDatabaseConnection()
         {
             if (_databaseConfig == null) _databaseConfig = DatabaseConfig.ReadFromConfigFile();
@@ -136,6 +144,11 @@ namespace Habanero
             DatabaseConnection.CurrentConnection = _databaseConfig.GetDatabaseConnection();
         }
 
+        /// <summary>
+        /// Sets up the exception notifier used to display
+        /// exceptions to the final user.  If not specified,
+        /// assumes the ConsoleExceptionNotifier.
+        /// </summary>
         protected override void SetupExceptionNotifier()
         {
             if (ExceptionNotifier == null) ExceptionNotifier = new ConsoleExceptionNotifier();

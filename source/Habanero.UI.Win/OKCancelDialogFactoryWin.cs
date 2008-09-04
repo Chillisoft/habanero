@@ -4,6 +4,10 @@ using DockStyle=Habanero.UI.Base.DockStyle;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Creates OK/Cancel dialogs which contain OK and Cancel buttons, as well
+    /// as control placed above the buttons, which the developer must provide.
+    /// </summary>
     public class OKCancelDialogFactoryWin : IOKCancelDialogFactory
     {
         private readonly IControlFactory _controlFactory;
@@ -56,6 +60,9 @@ namespace Habanero.UI.Win
             form.Close();
         }
 
+        /// <summary>
+        /// Represents a panel that contains an OK and Cancel button
+        /// </summary>
         private class OKCancelPanelWin : PanelWin, IOKCancelPanel
         {
             private readonly IControlFactory _controlFactory;
@@ -94,11 +101,17 @@ namespace Habanero.UI.Win
                 layoutManager.AddControl(ButtonGroupControl, BorderLayoutManager.Position.South);
             }
 
+            /// <summary>
+            /// Gets the OK button
+            /// </summary>
             public IButton OKButton
             {
                 get { return _okButton; }
             }
 
+            /// <summary>
+            /// Gets the Cancel button
+            /// </summary>
             public IButton CancelButton
             {
                 get { return _cancelButton; }
@@ -109,6 +122,9 @@ namespace Habanero.UI.Win
                 get { return _contentPanel; }
             }
 
+            /// <summary>
+            /// Gets the button group control containing the buttons
+            /// </summary>
             public IButtonGroupControl ButtonGroupControl
             {
                 get { return _buttonGroupControl; }

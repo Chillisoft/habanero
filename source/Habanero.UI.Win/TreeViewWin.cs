@@ -4,6 +4,9 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Displays a hierarchical collection of labeled items, each represented by a TreeNode
+    /// </summary>
     public class TreeViewWin : TreeView, ITreeView
     {       
         /// <summary>

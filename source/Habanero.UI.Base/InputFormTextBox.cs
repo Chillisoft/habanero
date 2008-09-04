@@ -1,5 +1,9 @@
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Provides a form containing a TextBox in order to get a single
+    /// string value back from a user
+    /// </summary>
     public class InputFormTextBox
     {
         private readonly IControlFactory _controlFactory;
@@ -27,26 +31,47 @@ namespace Habanero.UI.Base
             }
         }
 
+        /// <summary>
+        /// Initialises the form with a message to display to the user.
+        /// </summary>
+        /// <param name="controlFactory">The <see cref="IControlFactory"/> to use to create the form</param>
+        /// <param name="message">The message to display</param>
+        /// <param name="numLines">The number of lines to make available</param>
         public InputFormTextBox(IControlFactory controlFactory, string message, int numLines)
             : this(controlFactory, message, numLines, (char)0)
         {
         }
 
-        public InputFormTextBox(IControlFactory factory, string message)
-            : this(factory, message, 1)
+        /// <summary>
+        /// Initialises the form with a message to display to the user.
+        /// </summary>
+        /// <param name="controlFactory">The <see cref="IControlFactory"/> to use to create the form</param>
+        /// <param name="message">The message to display</param>
+        public InputFormTextBox(IControlFactory controlFactory, string message)
+            : this(controlFactory, message, 1)
         {
         }
 
+        /// <summary>
+        /// Gets the TextBox control
+        /// </summary>
         public ITextBox TextBox
         {
             get { return _textBox; }
         }
 
+        /// <summary>
+        /// Gets the message to display to the user
+        /// </summary>
         public string Message
         {
             get { return _message; }
         }
 
+        /// <summary>
+        /// Creates the panel on the form
+        /// </summary>
+        /// <returns>Returns the panel created</returns>
         public IPanel createControlPanel()
         {
             IPanel panel = _controlFactory.CreatePanel();
@@ -61,6 +86,9 @@ namespace Habanero.UI.Base
         }
 
         //this is Currently untestable, the layout has been tested in the createControlPanel method. 
+        /// <summary>
+        /// Shows the form to the user
+        /// </summary>
         public DialogResult ShowDialog()
         {
             IPanel panel = createControlPanel();

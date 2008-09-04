@@ -2,6 +2,10 @@ using System.Collections.Generic;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Provides a form containing a ComboBox in order to get a single
+    /// input value back from a user
+    /// </summary>
     public class InputFormComboBox
     {
         private readonly IControlFactory _controlFactory;
@@ -16,27 +20,43 @@ namespace Habanero.UI.Base
             choices.ForEach(delegate(object item) { _comboBox.Items.Add(item); });
         }
 
+        /// <summary>
+        /// Gets the control factory used to create the controls
+        /// </summary>
         public IControlFactory ControlFactory
         {
             get { return _controlFactory; }
         }
 
+        /// <summary>
+        /// Gets the message to display to the user
+        /// </summary>
         public string Message
         {
             get { return _message; }
         }
 
+        /// <summary>
+        /// Gets the ComboBox control on the form
+        /// </summary>
         public IComboBox ComboBox
         {
             get { return _comboBox; }
         }
 
+        /// <summary>
+        /// Gets or sets the selected item in the ComboBox
+        /// </summary>
         public object SelectedItem
         {
             get { return _comboBox.SelectedItem; }
             set { _comboBox.SelectedItem = value; }
         }
 
+        /// <summary>
+        /// Creates the panel on the form
+        /// </summary>
+        /// <returns>Returns the panel created</returns>
         public IPanel createControlPanel()
         {
             IPanel panel = _controlFactory.CreatePanel();
@@ -50,7 +70,10 @@ namespace Habanero.UI.Base
             return panel;
         }
 
-        //this is Currently untestable, the layout has been tested in the createControlPanel method. 
+        //this is Currently untestable, the layout has been tested in the createControlPanel method.
+        /// <summary>
+        /// Shows the form to the user
+        /// </summary>
         public DialogResult ShowDialog()
         {
             IPanel panel = createControlPanel();

@@ -33,6 +33,9 @@ using ScrollBars=Gizmox.WebGUI.Forms.ScrollBars;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Creates controls for the Gizmox.WebGUI.Forms UI environment
+    /// </summary>
     public class ControlFactoryGizmox : IControlFactory
     {
         public const int TEXTBOX_HEIGHT = 20;
@@ -775,10 +778,18 @@ namespace Habanero.UI.WebGUI
         }
     }
 
+    /// <summary>
+    /// Provides a set of behaviour strategies that can be applied to a NumericUpDown
+    /// depending on the environment
+    /// </summary>
     internal class NumericUpDownMapperStrategyGiz : INumericUpDownMapperStrategy
     {
         #region INumericUpDownMapperStrategy Members
 
+        /// <summary>
+        /// Handles the value changed event suitably for the UI environment
+        /// </summary>
+        /// <param name="mapper">The mapper for the NumericUpDown</param>
         public void ValueChanged(NumericUpDownMapper mapper)
         {
         }
@@ -786,15 +797,27 @@ namespace Habanero.UI.WebGUI
         #endregion
     }
 
+    /// <summary>
+    /// Provides a set of behaviour strategies that can be applied to a lookup ComboBox
+    /// depending on the environment
+    /// </summary>
     internal class LookupComboBoxKeyPressMapperStrategyGiz : ILookupComboBoxMapperStrategy
     {
         #region ILookupComboBoxMapperStrategy Members
 
+        /// <summary>
+        /// Removes event handlers previously assigned to the ComboBox
+        /// </summary>
+        /// <param name="mapper">The mapper for the lookup ComboBox</param>
         public void RemoveCurrentHandlers(LookupComboBoxMapper mapper)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Adds event handlers to the ComboBox that are suitable for the UI environment
+        /// </summary>
+        /// <param name="mapper">The mapper for the lookup ComboBox</param>
         public void AddHandlers(LookupComboBoxMapper mapper)
         {
             throw new NotImplementedException();
@@ -803,14 +826,26 @@ namespace Habanero.UI.WebGUI
         #endregion
     }
 
+    /// <summary>
+    /// Provides a set of behaviour strategies that can be applied to a lookup ComboBox
+    /// depending on the environment
+    /// </summary>
     internal class LookupComboBoxMapperStrategyGiz : ILookupComboBoxMapperStrategy
     {
         #region ILookupComboBoxMapperStrategy Members
 
+        /// <summary>
+        /// Removes event handlers previously assigned to the ComboBox
+        /// </summary>
+        /// <param name="mapper">The mapper for the lookup ComboBox</param>
         public void RemoveCurrentHandlers(LookupComboBoxMapper mapper)
         {
         }
 
+        /// <summary>
+        /// Adds event handlers to the ComboBox that are suitable for the UI environment
+        /// </summary>
+        /// <param name="mapper">The mapper for the lookup ComboBox</param>
         public void AddHandlers(LookupComboBoxMapper mapper)
         {
         }
@@ -822,10 +857,19 @@ namespace Habanero.UI.WebGUI
         }
     }
 
+    /// <summary>
+    /// Provides a set of behaviour strategies that can be applied to a lookup ComboBox
+    /// depending on the environment
+    /// </summary>
     internal class ListComboBoxMapperStrategyGiz : IListComboBoxMapperStrategy
     {
         #region IListComboBoxMapperStrategy Members
 
+        /// <summary>
+        /// Adds an ItemSelected event handler.
+        /// For Windows Forms you may want the business object to be updated immediately, however
+        /// for a web environment with low bandwidth you may choose to only update when the user saves.
+        ///</summary>
         public void AddItemSelectedEventHandler(ListComboBoxMapper mapper)
         {
         }
@@ -833,10 +877,18 @@ namespace Habanero.UI.WebGUI
         #endregion
     }
 
+    /// <summary>
+    /// Provides a set of behaviour strategies that can be applied to a CheckBox
+    /// depending on the environment
+    /// </summary>
     internal class CheckBoxMapperStrategyGiz : ICheckBoxMapperStrategy
     {
         #region ICheckBoxMapperStrategy Members
 
+        /// <summary>
+        /// Adds click event handler
+        /// </summary>
+        /// <param name="mapper">The checkbox mapper</param>
         public void AddClickEventHandler(CheckBoxMapper mapper)
         {
         }
@@ -845,18 +897,17 @@ namespace Habanero.UI.WebGUI
     }
 
     /// <summary>
-    /// Provides a set of strategies that can be applied to a control
+    /// Provides a set of behaviour strategies that can be applied to a control
+    /// depending on the environment
     /// </summary>
     internal class ControlMapperStrategyGiz : IControlMapperStrategy
     {
         #region IControlMapperStrategy Members
 
         /// <summary>
-        /// Provides an interface for Adding handlers to updated events of current business object
-        /// property. This provides the ability to implement various strategies for updating the 
-        /// control value based on changes in the business object.
+        /// Adds handlers to events of a current business object property.
         /// </summary>
-        /// <param name="mapper">The business object mapper that maps the business object property to the control</param>
+        /// <param name="mapper">The control mapper that maps the business object property to the control</param>
         /// <param name="boProp">The business object property being mapped to the control</param>
         public virtual void AddCurrentBOPropHandlers(ControlMapper mapper, IBOProp boProp)
         {
@@ -864,12 +915,12 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// Provides an interface for Removing handlers to updated events of current business object
-        /// properties. It is essential that if the AddCurrentBoPropHandlers is implemented then this 
-        /// is implemented such that a editing a business object that is no longer being shown on the control does not
+        /// Removes handlers to events of a current business object property.
+        /// It is essential that if the AddCurrentBoPropHandlers is implemented then this 
+        /// is implemented such that editing a business object that is no longer being shown on the control does not
         /// does not update the value in the control.
         /// </summary>
-        /// <param name="mapper">The business object mapper that maps the business object property to the control</param>
+        /// <param name="mapper">The control mapper that maps the business object property to the control</param>
         /// <param name="boProp">The business object property being mapped to the control</param>
         public virtual void RemoveCurrentBOPropHandlers(ControlMapper mapper, IBOProp boProp)
         {
@@ -877,11 +928,9 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// Provides an interface for handling the default key press behaviours on a control.
-        /// This is typically used to change the handling of the enter key. I.e. A common behavioural
-        /// requirement is to have the enter key move to the next control.
-        /// 
-        /// For Gizmoz 
+        /// Handles the default key press behaviours on a control.
+        /// This is typically used to change the handling of the enter key (such as having
+        /// the enter key cause focus to move to the next control).
         /// </summary>
         /// <param name="control">The control whose events will be handled</param>
         public virtual void AddKeyPressEventHandler(IControlChilli control)
@@ -893,7 +942,8 @@ namespace Habanero.UI.WebGUI
     }
 
     /// <summary>
-    /// Provides a set of strategies that can be applied to a textbox
+    /// Provides a set of behaviour strategies that can be applied to a TextBox
+    /// depending on the environment
     /// </summary>
     internal class TextBoxMapperStrategyGiz : ITextBoxMapperStrategy
     {
@@ -901,10 +951,10 @@ namespace Habanero.UI.WebGUI
 
         /// <summary>
         /// Adds key press event handlers that carry out actions like
-        /// limiting the characters input, depending on the type of the
+        /// limiting the input of certain characters, depending on the type of the
         /// property
         /// </summary>
-        /// <param name="mapper">The textbox mapper</param>
+        /// <param name="mapper">The TextBox mapper</param>
         /// <param name="boProp">The property being mapped</param>
         public virtual void AddKeyPressEventHandler(TextBoxMapper mapper, IBOProp boProp)
         {

@@ -2,6 +2,9 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Provides a form that displays information about the application
+    /// </summary>
     public class HelpAboutBoxWin : FormWin
     {
         /// <summary>

@@ -37,12 +37,18 @@ namespace Habanero.UI.WebGUI.Wizard
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(base.Controls); }
         }
 
 
+        /// <summary>
+        /// Initialises the step. Run when the step is reached.
+        /// </summary>
         public void InitialiseStep() { }
 
         /// <summary>

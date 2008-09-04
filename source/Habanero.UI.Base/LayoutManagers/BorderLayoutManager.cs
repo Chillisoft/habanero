@@ -109,6 +109,9 @@ namespace Habanero.UI.Base
         /// <returns>Returns the control added</returns>
         public abstract IControlChilli AddControl(IControlChilli control, Position pos, bool includeSplitter);
 
+        /// <summary>
+        /// Sets how the specified control is docked within its parent
+        /// </summary>
         protected abstract void SetupDockOfControl(IControlChilli control, Position pos);
 
  

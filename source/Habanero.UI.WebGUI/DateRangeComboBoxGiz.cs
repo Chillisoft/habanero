@@ -174,8 +174,6 @@ namespace Habanero.UI.WebGUI
             set { _manager.YearStartOffset = value; }
         }
 
-
-
         /// <summary>
         /// Populates the ComboBox with all available DateOptions, since
         /// the default constructor only provides a standardised collection

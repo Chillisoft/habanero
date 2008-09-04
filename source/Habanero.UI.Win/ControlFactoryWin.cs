@@ -32,6 +32,9 @@ using ScrollBars=System.Windows.Forms.ScrollBars;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Creates controls for the System.Windows.Forms UI environment
+    /// </summary>
     public class ControlFactoryWin : IControlFactory
     {
         #region IControlFactory Members

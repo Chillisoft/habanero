@@ -5,7 +5,8 @@ using Habanero.Util;
 namespace Habanero.UI.Win
 {
     /// <summary>
-    /// Provides a set of strategies that can be applied to a textbox
+    /// Provides a set of behaviour strategies that can be applied to a TextBox
+    /// depending on the environment
     /// </summary>
     internal class TextBoxMapperStrategyWin : ITextBoxMapperStrategy
     {
@@ -15,11 +16,17 @@ namespace Habanero.UI.Win
         private IBOProp _boProp;
         private TextBoxWin _textBox;
 
+        /// <summary>
+        /// Gets the BOProp being mapped through this control
+        /// </summary>
         public IBOProp BoProp
         {
             get { return _boProp; }
         }
 
+        /// <summary>
+        /// Gets the textbox control for which the strategy is applied
+        /// </summary>
         public TextBoxWin TextBoxControl
         {
             get { return _textBox; }
@@ -27,10 +34,10 @@ namespace Habanero.UI.Win
 
         /// <summary>
         /// Adds key press event handlers that carry out actions like
-        /// limiting the characters input, depending on the type of the
+        /// limiting the input of certain characters, depending on the type of the
         /// property
         /// </summary>
-        /// <param name="mapper">The textbox mapper</param>
+        /// <param name="mapper">The TextBox mapper</param>
         /// <param name="boProp">The property being mapped</param>
         public void AddKeyPressEventHandler(TextBoxMapper mapper, IBOProp boProp)
         {

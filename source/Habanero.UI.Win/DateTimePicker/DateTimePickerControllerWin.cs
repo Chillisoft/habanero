@@ -26,6 +26,9 @@ using Habanero.UI.Win.Util;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Provides utilities to control how a DateTimePicker appears and behaves
+    /// </summary>
     public class DateTimePickerControllerWin //: DateTimePickerController
     {
         //State Variables
@@ -66,6 +69,7 @@ namespace Habanero.UI.Win
 			Value = null;
 			UpdateFocusState();
 		}
+
         ~DateTimePickerControllerWin()
         {
             _dateTimePicker.KeyDown -= DateTimePicker_KeyDown;
@@ -89,6 +93,7 @@ namespace Habanero.UI.Win
                                                         });
             _dateTimePicker = null;
         }
+
         private void SetupDisplayBox()
         {
             ControlsHelper.SafeGui(_dateTimePicker, delegate()
@@ -112,6 +117,7 @@ namespace Habanero.UI.Win
                 _displayBox.Visible = false;
             });
         }
+
         private void ResizeDisplayBox()
         {
             _displayBox.Width = _dateTimePicker.Width - 22 - 2;
@@ -138,26 +144,26 @@ namespace Habanero.UI.Win
 
         #region Properties
 
-        ///<summary>
-        /// The DateTimePicker control being controlled
-        ///</summary>
+        /// <summary>
+        /// Gets the DateTimePicker control being controlled
+        /// </summary>
         public Control DateTimePicker
         {
             get { return _dateTimePicker; }
         }
 
-        ///<summary>
-        /// The text that will be displayed when the Value is null
-        ///</summary>
+        /// <summary>
+        /// Gets and sets the text that will be displayed when the Value is null
+        /// </summary>
         public string NullDisplayValue
         {
             get { return _displayText.Text; }
             set { _displayText.Text = value ?? ""; }
         }
 
-        ///<summary>
-        /// The Value represented by the DateTimePicker
-        ///</summary>
+        /// <summary>
+        /// Gets and sets the Value represented by the DateTimePicker
+        /// </summary>
         public DateTime? Value
         {
             get
@@ -343,7 +349,6 @@ namespace Habanero.UI.Win
                 }
             }
         }
-
 
         private bool CheckBoxChecked
         {

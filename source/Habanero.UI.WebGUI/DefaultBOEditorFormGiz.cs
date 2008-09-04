@@ -31,12 +31,9 @@ using log4net;
 namespace Habanero.UI.WebGUI
 {
     /// <summary>
-    /// Provides a form to edit a business object.  This form is initiated
-    /// by UI.Application.DefaultBOEditor and UI.Application.DefaultBOCreator
-    /// and is used by facilities like readOnlyGridControl.
-    /// If you need to implement a different version of this form, you will 
-    /// need to also implement a new version of the editor (see
-    /// DefaultBOEditor for more information).
+    /// Provides a form used to edit business objects.  This form will usually
+    /// be constructed using a UI Form definition provided in the class definitions.
+    /// The appropriate UI definition is typically set in the constructor.
     /// </summary>
     public class DefaultBOEditorFormGiz : FormGiz, IDefaultBOEditorForm
     {
@@ -55,14 +52,6 @@ namespace Habanero.UI.WebGUI
             
         }
 
-        /// <summary>
-        /// Constructor to initialise a new form with a panel containing the
-        /// business object to edit and "OK" and "Cancel" buttons at the
-        /// bottom, with attached event handlers.
-        /// </summary>
-        /// <param name="bo">The business object to edit</param>
-        /// <param name="uiDefName">The uiDefName</param>
-        /// <param name="controlFactory"></param>
         public DefaultBOEditorFormGiz(BusinessObject bo, string uiDefName, IControlFactory controlFactory)
         {
             _bo = bo;
@@ -273,33 +262,52 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// Returns the button control for the buttons in the form
+        /// Gets the button control for the buttons in the form
         /// </summary>
         public IButtonGroupControl Buttons
         {
             get { return _buttons; }
         }
 
+        /// <summary>
+        /// Gets or sets the dialog result that indicates what action was
+        /// taken to close the form
+        /// </summary>
         public Base.DialogResult DialogResult
         {
             get { return (Base.DialogResult) base.DialogResult; }
             set { base.DialogResult = (Gizmox.WebGUI.Forms.DialogResult) value; }
         }
 
+        /// <summary>
+        /// Gets the object containing all information related to the form, including
+        /// its controls, mappers and business object
+        /// </summary>
         public IPanelFactoryInfo PanelFactoryInfo
         {
             get { return _panelFactoryInfo; }
         }
 
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(this.Controls); }
         }
 
+        /// <summary>
+        /// Forces the form to invalidate its client area and
+        /// immediately redraw itself and any child controls
+        /// </summary>
         public void Refresh()
         {
             // do nothing
         }
+
+        /// <summary>
+        /// Gets or sets the current multiple document interface (MDI) parent form of this form
+        /// </summary>
         IFormChilli IFormChilli.MdiParent
         {
             get { throw new NotImplementedException(); }
@@ -307,13 +315,13 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
-        /// Pops the form up in a modal dialog.  If the BO is successfully edited and saved, returns true
+        /// Pops the form up in a modal dialog.  If the BO is successfully edited and saved, returns true,
         /// else returns false.
         /// </summary>
         /// <returns>True if the edit was a success, false if not</returns>
-         bool IDefaultBOEditorForm.ShowDialog() 
-         {
-             if (this.ShowDialog() == (Gizmox.WebGUI.Forms.DialogResult) Base.DialogResult.OK)
+        bool IDefaultBOEditorForm.ShowDialog()
+        {
+            if (this.ShowDialog() == (Gizmox.WebGUI.Forms.DialogResult) Base.DialogResult.OK)
             {
                 return true;
             }

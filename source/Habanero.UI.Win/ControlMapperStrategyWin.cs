@@ -25,36 +25,34 @@ using Habanero.UI.Base;
 namespace Habanero.UI.Win
 {
     /// <summary>
-    /// Provides a set of strategies that can be applied to a control
+    /// Provides a set of behaviour strategies that can be applied to a control
+    /// depending on the environment
     /// </summary>
     public class ControlMapperStrategyWin : IControlMapperStrategy
     {
         private Control _control;
 
-
         /// <summary>
-        /// Provides an interface for Adding handlers to updated events of current business object
-        /// property. This provides the ability to implement various strategies for updating the 
-        /// control value based on changes in the business object.
+        /// Adds handlers to events of a current business object property.
         /// </summary>
-        /// <param name="mapper">The business object mapper that maps the business object property to the control</param>
+        /// <param name="mapper">The control mapper that maps the business object property to the control</param>
         /// <param name="boProp">The business object property being mapped to the control</param>
         public void AddCurrentBOPropHandlers(ControlMapper mapper, IBOProp boProp)
         {
             if (boProp != null)
             {
-//                Add needed handlers
+                // Add needed handlers
                 boProp.Updated += mapper.BOPropValueUpdatedHandler;
             }
         }
 
         /// <summary>
-        /// Provides an interface for Removing handlers to updated events of current business object
-        /// properties. It is essential that if the AddCurrentBoPropHandlers is implemented then this 
-        /// is implemented such that a editing a business object that is no longer being shown on the control does not
+        /// Removes handlers to events of a current business object property.
+        /// It is essential that if the AddCurrentBoPropHandlers is implemented then this 
+        /// is implemented such that editing a business object that is no longer being shown on the control does not
         /// does not update the value in the control.
         /// </summary>
-        /// <param name="mapper">The business object mapper that maps the business object property to the control</param>
+        /// <param name="mapper">The control mapper that maps the business object property to the control</param>
         /// <param name="boProp">The business object property being mapped to the control</param>
         public void RemoveCurrentBOPropHandlers(ControlMapper mapper, IBOProp boProp)
         {
@@ -65,9 +63,9 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Provides an interface for handling the default key press behaviours on a control.
-        /// This is typically used to change the handling of the enter key. I.e. A common behavioural
-        /// requirement is to have the enter key move to the next control.
+        /// Handles the default key press behaviours on a control.
+        /// This is typically used to change the handling of the enter key (such as having
+        /// the enter key cause focus to move to the next control).
         /// </summary>
         /// <param name="control">The control whose events will be handled</param>
         public void AddKeyPressEventHandler(IControlChilli control)
@@ -131,6 +129,7 @@ namespace Habanero.UI.Win
                 }
             }
         }
+
         /// <summary>
         /// Provides the next item in the tab order on a control
         /// </summary>
@@ -150,7 +149,6 @@ namespace Habanero.UI.Win
             }
             return nextControl;
         }
-
 
         /// <summary>
         /// Provides the first control in the tab order on a control

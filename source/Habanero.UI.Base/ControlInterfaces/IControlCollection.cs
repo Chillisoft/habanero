@@ -21,16 +21,19 @@ using System.Collections;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Represents a collection of controls
+    /// </summary>
     public interface IControlCollection : IEnumerable
     {
         /// <summary>
-        /// An indexing facility for the collection so that it can be
-        /// accessed like an array with square brackets
+        /// Indicates the Control at the specified indexed location in the collection
         /// </summary>
-        /// <param name="index">The numerical index position</param>
-        /// <returns>Returns the control at the position specified</returns>
         IControlChilli this[int index] { get;  }
 
+        /// <summary>
+        /// Gets the number of controls in the collection
+        /// </summary>
         int Count { get; }
 
         /// <summary>
@@ -68,6 +71,9 @@ namespace Habanero.UI.Base
         /// found in the collection</returns>
         bool Contains(IControlChilli value);
 
+        /// <summary>
+        /// Removes all controls from the collection
+        /// </summary>
         void Clear();
     }
 }

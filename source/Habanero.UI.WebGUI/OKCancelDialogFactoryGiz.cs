@@ -4,6 +4,10 @@ using DockStyle=Habanero.UI.Base.DockStyle;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Creates OK/Cancel dialogs which contain OK and Cancel buttons, as well
+    /// as control placed above the buttons, which the developer must provide.
+    /// </summary>
     public class OKCancelDialogFactoryGiz : IOKCancelDialogFactory
     {
         private readonly IControlFactory _controlFactory;
@@ -38,6 +42,12 @@ namespace Habanero.UI.WebGUI
             //return mainPanel;
         }
 
+        /// <summary>
+        /// Creates a form containing OK and Cancel buttons
+        /// </summary>
+        /// <param name="nestedControl">The control to place above the buttons</param>
+        /// <param name="formTitle">The title shown on the form</param>
+        /// <returns>Returns the created form</returns>
         public IFormChilli CreateOKCancelForm(IControlChilli nestedControl, string formTitle)
         {
             IFormChilli form = _controlFactory.CreateForm();
@@ -48,6 +58,9 @@ namespace Habanero.UI.WebGUI
             return form;
         }
 
+        /// <summary>
+        /// Represents a panel that contains an OK and Cancel button
+        /// </summary>
         private class OKCancelPanelGiz : PanelGiz, IOKCancelPanel
         {
             private readonly IControlFactory _controlFactory;
@@ -85,11 +98,17 @@ namespace Habanero.UI.WebGUI
                 layoutManager.AddControl(buttonGroupControl, BorderLayoutManager.Position.South);
             }
 
+            /// <summary>
+            /// Gets the OK button
+            /// </summary>
             public IButton OKButton
             {
                 get { return _okButton; }
             }
 
+            /// <summary>
+            /// Gets the Cancel button
+            /// </summary>
             public IButton CancelButton
             {
                 get { return _cancelButton; }

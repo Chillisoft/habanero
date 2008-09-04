@@ -20,7 +20,8 @@
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// An interface to model an interface control for a form
+    /// Represents a form control and makes the control manageable by a
+    /// central form controller for an application
     /// </summary>
     public interface IFormControl : IControlChilli
     {

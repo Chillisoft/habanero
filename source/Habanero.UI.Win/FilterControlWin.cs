@@ -214,6 +214,9 @@ namespace Habanero.UI.Win
             get { return _filterControlManager.CountOfFilters; }
         }
 
+        /// <summary>
+        /// Returns the filter button that when clicked applies the filter
+        /// </summary>
         public IButton FilterButton
         {
             get { return _filterButton; }

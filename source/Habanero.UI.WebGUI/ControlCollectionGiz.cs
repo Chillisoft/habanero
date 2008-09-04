@@ -23,6 +23,9 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Represents a collection of controls
+    /// </summary>
     public class ControlCollectionGiz :  IControlCollection
     {
         private readonly Control.ControlCollection _col;
@@ -32,18 +35,17 @@ namespace Habanero.UI.WebGUI
             _col = col;
         }
 
-
         /// <summary>
-        /// An indexing facility for the collection so that it can be
-        /// accessed like an array with square brackets
+        /// Indicates the Control at the specified indexed location in the collection
         /// </summary>
-        /// <param name="index">The numerical index position</param>
-        /// <returns>Returns the control at the position specified</returns>
         public IControlChilli this[int index]
         {
             get { return (IControlChilli)_col[index]; }
         }
 
+        /// <summary>
+        /// Gets the number of controls in the collection
+        /// </summary>
         public int Count
         {
             get { return _col.Count; }
@@ -99,11 +101,22 @@ namespace Habanero.UI.WebGUI
             return _col.Contains((Control) value);
         }
 
+        /// <summary>
+        /// Removes all controls from the collection
+        /// </summary>
         public void Clear()
         {
             _col.Clear();
         }
 
+        ///<summary>
+        ///Returns an enumerator that iterates through a collection.
+        ///</summary>
+        ///
+        ///<returns>
+        ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+        ///</returns>
+        ///<filterpriority>2</filterpriority>
         public IEnumerator GetEnumerator()
         {
             return _col.GetEnumerator();

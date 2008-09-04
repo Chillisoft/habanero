@@ -22,38 +22,39 @@ using System.Collections;
 namespace Habanero.UI.Base
 {
     //TODO: Port
-//    public interface ISelectedListViewItemCollection
-//    {
-//        /// <summary>
-//        ///
-//        /// </summary>
-//        int Count { get; }
-//
-//        /// <summary>
-//        ///
-//        /// </summary>
-//        IEnumerator GetEnumerator();
-//
-//        /// <summary>
-//        ///
-//        /// </summary>
-//        bool IsReadOnly { get; }
-//
-//        /// <summary>
-//        ///
-//        /// </summary>
-//        IListViewItem this[int index] { get; }
-//
-//        /// <summary>
-//        ///
-//        /// </summary>
-//        /// <param name="objListViewItem"></param>
-//        bool Contains(IListViewItem objListViewItem);
-//
-//        /// <summary>
-//        ///
-//        /// </summary>
-//        /// <param name="objListViewItem"></param>
-//        int IndexOf(IListViewItem objListViewItem);
-//    }
+    ///// <summary>
+    ///// Represents the collection of selected items in a list view control
+    ///// </summary>
+    //public interface ISelectedListViewItemCollection
+    //{
+    //    /// <summary>
+    //    /// Gets the number of items in the collection.
+    //    /// </summary>
+    //    int Count { get; }
+
+    //    /// <summary>
+    //    /// Returns an enumerator that can be used to iterate through the selected item collection
+    //    /// </summary>
+    //    IEnumerator GetEnumerator();
+
+    //    /// <summary>
+    //    /// Gets a value indicating whether the collection is read-only
+    //    /// </summary>
+    //    bool IsReadOnly { get; }
+
+    //    /// <summary>
+    //    /// Gets the item at the specified index within the collection
+    //    /// </summary>
+    //    IListViewItem this[int index] { get; }
+
+    //    /// <summary>
+    //    /// Determines whether the specified item is located in the collection
+    //    /// </summary>
+    //    bool Contains(IListViewItem objListViewItem);
+
+    //    /// <summary>
+    //    /// Returns the index within the collection of the specified item
+    //    /// </summary>
+    //    int IndexOf(IListViewItem objListViewItem);
+    //}
 }

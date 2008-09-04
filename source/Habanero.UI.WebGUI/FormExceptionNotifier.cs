@@ -266,7 +266,9 @@ namespace Habanero.UI.WebGUI
                 }
             }
 
-
+            /// <summary>
+            /// Gets the collection of controls contained within the control
+            /// </summary>
             IControlCollection IControlChilli.Controls
             {
                 get { return new ControlCollectionGiz(base.Controls); }

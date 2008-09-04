@@ -24,9 +24,32 @@ using Habanero.Base;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Provides a template for a standard Habanero application, including
+    /// standard fields and initialisations.  Specific details covered are:
+    /// <ul>
+    /// <li>The class definitions that define how the data is represented
+    /// and limited</li>
+    /// <li>The database configuration, connection and settings</li>
+    /// <li>A logger to record debugging and error messages</li>
+    /// <li>An exception notifier to communicate exceptions to the user</li>
+    /// <li>Automatic version upgrades when an application is out-of-date</li>
+    /// <li>A synchronisation controller</li>
+    /// <li>A control factory to create controls</li>
+    /// <li>A data accessor that specifies what type of data source is used (DB by default)</li>
+    /// </ul>
+    /// To set up and launch an application:
+    /// <ol>
+    /// <li>Instantiate the application with the constructor</li>
+    /// <li>Specify any individual settings as required</li>
+    /// <li>Call the Startup() method to launch the application</li>
+    /// </ol>
+    /// </summary>
     public class HabaneroAppWebGUI : HabaneroAppUI
     {
-                /// <summary>
+        private DatabaseConfig _databaseConfig;
+
+        /// <summary>
         /// Constructor to initialise a new application with basic application
         /// information.  Use the Startup() method to launch the application.
         /// </summary>
@@ -39,6 +62,9 @@ namespace Habanero.UI.WebGUI
 
         }
 
+        /// <summary>
+        /// Sets the control factory used to create controls
+        /// </summary>
         protected override void SetupControlFactory()
         {
             GlobalUIRegistry.ControlFactory = new ControlFactoryGizmox();
@@ -77,8 +103,6 @@ namespace Habanero.UI.WebGUI
         {
             set { _databaseConfig = value; }
         }
-
-        private DatabaseConfig _databaseConfig;
 
         /// <summary>
         /// Sets up the exception notifier used to display

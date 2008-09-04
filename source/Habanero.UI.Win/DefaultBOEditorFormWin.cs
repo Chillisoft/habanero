@@ -9,6 +9,11 @@ using log4net;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Provides a form used to edit business objects.  This form will usually
+    /// be constructed using a UI Form definition provided in the class definitions.
+    /// The appropriate UI definition is typically set in the constructor.
+    /// </summary>
     public class DefaultBOEditorFormWin : FormWin, IDefaultBOEditorForm
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Win.DefaultBOEditorFormWin");
@@ -171,22 +176,38 @@ namespace Habanero.UI.Win
             Close();
         }
 
+        /// <summary>
+        /// Gets the button control for the buttons in the form
+        /// </summary>
         public IButtonGroupControl Buttons
         {
             get { return _buttons; }
         }
 
+        /// <summary>
+        /// Gets or sets the dialog result that indicates what action was
+        /// taken to close the form
+        /// </summary>
         public Base.DialogResult DialogResult
         {
             get { return (Base.DialogResult) base.DialogResult; }
             set { base.DialogResult = (System.Windows.Forms.DialogResult)value; }
         }
 
+        /// <summary>
+        /// Gets the object containing all information related to the form, including
+        /// its controls, mappers and business object
+        /// </summary>
         public IPanelFactoryInfo PanelFactoryInfo
         {
             get { return _panelFactoryInfo; }
         }
 
+        /// <summary>
+        /// Pops the form up in a modal dialog.  If the BO is successfully edited and saved, returns true,
+        /// else returns false.
+        /// </summary>
+        /// <returns>True if the edit was a success, false if not</returns>
         bool IDefaultBOEditorForm.ShowDialog()
         {
             {

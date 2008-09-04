@@ -19,10 +19,15 @@
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Specifies constants indicating when the error icon, supplied by an ErrorProvider,
+    /// should blink to alert the user that an error has occurred
+    /// </summary>
     public enum ErrorBlinkStyleChilli
     {
         /// <summary>
-        /// Always blink when the error icon is first displayed, or when a error description string is set for the control and the error icon is already displayed.
+        /// Always blink when the error icon is first displayed, or when a error description 
+        /// string is set for the control and the error icon is already displayed.
         /// </summary>
         AlwaysBlink = 1,
         /// <summary>
@@ -57,7 +62,6 @@ namespace Habanero.UI.Base
         /// </summary>
         MiddleLeft = 2,
 
-
         /// <summary>
         /// The icon appears aligned with the middle of the control and the right of the control.
         /// </summary>
@@ -74,6 +78,9 @@ namespace Habanero.UI.Base
         TopRight = 1
     }
 
+    /// <summary>
+    /// Provides a user interface for indicating that a control on a form has an error associated with it
+    /// </summary>
     public interface IErrorProvider
     {
         /// <summary>
@@ -149,7 +156,6 @@ namespace Habanero.UI.Base
         /// <returns>The rate, in milliseconds, at which the error icon should flash. The default is 250 milliseconds.</returns>
         /// <exception cref="T:System.ArgumentOutOfRangeException">The value is less than zero. </exception>
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
-
         int BlinkRate { get; set; }
 
         /// <summary>
@@ -158,8 +164,8 @@ namespace Habanero.UI.Base
         /// <returns>One of the <see cref="T:Habanero.UI.Base.ErrorBlinkStyleChilli"/> values. The default is <see cref="F:Habanero.UI.Base.ErrorBlinkStyleChilli.BlinkIfDifferentError"/>.</returns>
         /// <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The assigned value is not one of the <see cref="T:Habanero.UI.Base.ErrorBlinkStyleChilli"/> values. </exception>
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
-
         ErrorBlinkStyleChilli BlinkStyleChilli { get; set; }
+
         /// <summary>
         /// Gets or sets the list within a data source to monitor.
         /// </summary>

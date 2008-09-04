@@ -2,7 +2,9 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
-
+    /// <summary>
+    /// Provides a form that displays information about the application
+    /// </summary>
     public class HelpAboutBoxGiz : FormGiz
     {
         /// <summary>

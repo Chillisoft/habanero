@@ -37,6 +37,8 @@ namespace Habanero.UI.Base {
     /// <li>An exception notifier to communicate exceptions to the user</li>
     /// <li>Automatic version upgrades when an application is out-of-date</li>
     /// <li>A synchronisation controller</li>
+    /// <li>A control factory to create controls</li>
+    /// <li>A data accessor that specifies what type of data source is used (DB by default)</li>
     /// </ul>
     /// To set up and launch an application:
     /// <ol>
@@ -48,7 +50,6 @@ namespace Habanero.UI.Base {
     public abstract class HabaneroAppUI : HabaneroApp
     {
         private IDefClassFactory _defClassFactory;
-
         protected string _privateKey;
 
         /// <summary>
@@ -64,17 +65,18 @@ namespace Habanero.UI.Base {
             SetupDateDisplaySettings();
         }
 
-
+        /// <summary>
+        /// Sets the control factory used to create controls
+        /// </summary>
         protected abstract void SetupControlFactory();
 
         /// <summary>
-        /// Sets the definition class factory.
+        /// Sets the definition class factory
         /// </summary>
         public IDefClassFactory DefClassFactory
         {
             set { _defClassFactory = value; }
         }
-
 
         /// <summary>
         /// Sets the private key used to decrypt the database password. If your database password as supplied is
@@ -129,7 +131,7 @@ namespace Habanero.UI.Base {
         }
 
         /// <summary>
-        /// Sets up the class that stores the user interface
+        /// Sets up the class that stores the date display
         /// settings
         /// </summary>
         protected void SetupDateDisplaySettings()

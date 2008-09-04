@@ -25,7 +25,9 @@ using FormStartPosition=Gizmox.WebGUI.Forms.FormStartPosition;
 namespace Habanero.UI.WebGUI
 {
     /// <summary>
-    /// A form that displays a wizard.  This form simply wraps the WizardControl in a form and handles communication with the user.
+    /// Represents a form containing a wizard control that guides users
+    /// through a process step by step.
+    /// This form simply wraps the WizardControl in a form and handles communication with the user.
     /// </summary>
     public partial class WizardFormGiz : FormGiz, IWizardForm
     {
@@ -52,7 +54,7 @@ namespace Habanero.UI.WebGUI
             _wizardController = controller;
 
             _controlFactory = controlFactory;
-//            _uxWizardControl = new WizardControlGiz(controller, _controlFactory);
+            //  _uxWizardControl = new WizardControlGiz(controller, _controlFactory);
             _uxWizardControl = (WizardControlGiz) controlFactory.CreateWizardControl(controller);
             this._uxWizardControl.MessagePosted += _uxWizardControl_MessagePosted;
             this._uxWizardControl.Finished += this._uxWizardControl_Finished;
@@ -80,6 +82,9 @@ namespace Habanero.UI.WebGUI
             this.Text = this.WizardText + " - " + headingText;
         }
 
+        /// <summary>
+        /// Gets and sets the text to dispaly
+        /// </summary>
         public string WizardText
         {
             get { return _wizardText; }
@@ -97,17 +102,27 @@ namespace Habanero.UI.WebGUI
         {
             get { return _uxWizardControl; }
         }
-        
+
+        /// <summary>
+        /// Gets the collection of controls contained within the control
+        /// </summary>
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(base.Controls); }
         }
 
+        /// <summary>
+        /// Forces the form to invalidate its client area and
+        /// immediately redraw itself and any child controls
+        /// </summary>
         public void Refresh()
         {
             // do nothing
         }
 
+        /// <summary>
+        /// Gets or sets the current multiple document interface (MDI) parent form of this form
+        /// </summary>
         IFormChilli IFormChilli.MdiParent
         {
             get { throw new NotImplementedException(); }

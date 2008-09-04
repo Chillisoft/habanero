@@ -27,7 +27,7 @@ using log4net.spi;
 namespace Habanero.Base
 {
     /// <summary>
-    /// The base class for a HabaneroAppForm and HabaneroAppConsole, two classes to kick start an application built
+    /// The base class for a HabaneroAppUI and HabaneroAppConsole, two classes to kick start an application built
     /// using the Habanero libraries.
     /// </summary>
     public abstract class HabaneroApp
@@ -109,7 +109,8 @@ namespace Habanero.Base
             return true;
         }
 
-        private static void SetupLogging() {
+        private static void SetupLogging()
+        {
             try {
                 DOMConfigurator.Configure();
             }
@@ -123,14 +124,34 @@ namespace Habanero.Base
             log = LogManager.GetLogger("HabaneroApp");
         }
 
-        private void SetupApplicationNameAndVersion() {
+        private void SetupApplicationNameAndVersion()
+        {
             GlobalRegistry.ApplicationName = _appName;
             GlobalRegistry.ApplicationVersion = _appVersion;
         }
 
+        /// <summary>
+        /// Sets up the exception notifier used to display
+        /// exceptions to the final user.  If not specified,
+        /// assumes the FormExceptionNotifier.
+        /// </summary>
         protected abstract void SetupExceptionNotifier();
+
+        /// <summary>
+        /// Sets up the database connection.  If not provided, then
+        /// reads the connection from the config file.
+        /// </summary>
         protected abstract void SetupDatabaseConnection();
+
+        /// <summary>
+        /// Initialises the settings.  If not provided, DatabaseSettings
+        /// is assumed.
+        /// </summary>
         protected abstract void SetupSettings();
+
+        /// <summary>
+        /// Loads the class definitions
+        /// </summary>
         protected abstract void SetupClassDefs();
 
         ///// <summary>
@@ -146,15 +167,20 @@ namespace Habanero.Base
         //    GlobalRegistry.SynchronisationController = _synchronisationController;
         //}
 
+        /// <summary>
+        /// Upgrades an application's database where an application
+        /// upgrader has been provided.  See <see cref="IApplicationVersionUpgrader"/>.
+        /// </summary>
         protected virtual void Upgrade()
         {
-            if (_applicationVersionUpgrader != null) {
+            if (_applicationVersionUpgrader != null)
+            {
                 _applicationVersionUpgrader.Upgrade();
             }
         }
 
         /// <summary>
-        /// Sets the settings storer, which stores application settings such
+        /// Gets and sets the settings storer, which stores application settings such
         /// as those for the database.  This can be set with an
         /// instantiation of DatabaseSettings (the default) or 
         /// ConfigFileSettings, although the later is read-only.
@@ -166,7 +192,7 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// Sets the class definitions to the object specified
+        /// Gets and sets the value indicating whether to load the class definitions
         /// </summary>
         public bool LoadClassDefs
         {
@@ -175,7 +201,7 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// The name of the application
+        /// Gets the name of the application
         /// </summary>
         public string AppName
         {
@@ -183,7 +209,7 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// The version of the application
+        /// Gets the version of the application
         /// </summary>
         public string AppVersion
         {
@@ -191,8 +217,7 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// Sets the class definition file name.  The class definitions specify
-        /// the format and limitations of the data.
+        /// Gets and sets the class definition file name. See <see cref="IClassDef"/>.
         /// </summary>
         public string ClassDefsFileName
         {
@@ -201,7 +226,7 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// Sets the exception notifier, which is used to inform the
+        /// Gets and sets the exception notifier, which is used to inform the
         /// user of exceptions encountered.
         /// </summary>
         public IExceptionNotifier ExceptionNotifier

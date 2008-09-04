@@ -19,30 +19,45 @@
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Provides a form used to edit business objects.  This form will usually
+    /// be constructed using a UI Form definition provided in the class definitions.
+    /// The appropriate UI definition is typically set in the constructor.
+    /// </summary>
     public interface IDefaultBOEditorForm: IFormChilli
     {
         /// <summary>
-        /// Returns the button control for the buttons in the form
+        /// Gets the button control for the buttons in the form
         /// </summary>
-        IButtonGroupControl Buttons
-        {
-            get;
-        }
-
-        
+        IButtonGroupControl Buttons { get; }
 
         /// <summary>
-        /// Pops the form up in a modal dialog.  If the BO is successfully edited and saved, returns true
+        /// Pops the form up in a modal dialog.  If the BO is successfully edited and saved, returns true,
         /// else returns false.
         /// </summary>
         /// <returns>True if the edit was a success, false if not</returns>
         bool ShowDialog();
 
+        /// <summary>
+        /// Shows the form to the user
+        /// </summary>
         void Show();
+
+        /// <summary>
+        /// Disposes of the form
+        /// </summary>
         void Dispose();
 
+        /// <summary>
+        /// Gets or sets the dialog result that indicates what action was
+        /// taken to close the form
+        /// </summary>
         DialogResult DialogResult { get; set;}
 
+        /// <summary>
+        /// Gets the object containing all information related to the form, including
+        /// its controls, mappers and business object
+        /// </summary>
         IPanelFactoryInfo PanelFactoryInfo{ get;}
     }
 }
