@@ -242,11 +242,13 @@ namespace Habanero.Util
             }
         }
 
-        ///<summary>
-        ///</summary>
-        ///<param name="origMessage"></param>
-        ///<param name="messageToAppend"></param>
-        ///<returns></returns>
+        /// <summary>
+        /// Appends a given message to an existing message, inserting
+        /// a new line (carriage return) between the messages
+        /// </summary>
+        /// <param name="origMessage">The existing message (left part)</param>
+        /// <param name="messageToAppend">The message to add on (right part)</param>
+        /// <returns>Returns the combined string</returns>
         public static string AppendMessage(string origMessage, string messageToAppend)
         {
             if (!String.IsNullOrEmpty(origMessage)) origMessage += Environment.NewLine;
@@ -255,25 +257,28 @@ namespace Habanero.Util
         }
 
         /// <summary>
-        /// 
+        /// Appends a given message to an existing message, using the given separator
+        /// betweeen the two parts
         /// </summary>
-        /// <param name="origString"></param>
-        /// <param name="appendedString"></param>
-        /// <param name="separator"></param>
-        /// <returns></returns>
-        public static string AppendMessage(string origString, string appendedString, string separator)
+        /// <param name="origMessage">The existing message (left part)</param>
+        /// <param name="messageToAppend">The message to add on (right part)</param>
+        /// <param name="separator">The separator to insert between the two
+        /// parts</param>
+        /// <returns>Returns the combined message</returns>
+        public static string AppendMessage(string origMessage, string messageToAppend, string separator)
         {
-            if (!String.IsNullOrEmpty(origString)) origString += separator;
-            return origString + appendedString;
+            if (!String.IsNullOrEmpty(origMessage)) origMessage += separator;
+            return origMessage + messageToAppend;
         }
 
         /// <summary>
-        /// 
+        /// Appends a given message to an existing message contained in a string builder
         /// </summary>
-        /// <param name="origStringBuilder"></param>
-        /// <param name="appendedString"></param>
-        /// <param name="separator"></param>
-        /// <returns></returns>
+        /// <param name="origStringBuilder">The string builder that contains the original
+        /// message</param>
+        /// <param name="appendedString">The message to add on (right part)</param>
+        /// <param name="separator">The separator to insert between the two parts</param>
+        /// <returns>Returns the combined message</returns>
         public static StringBuilder AppendMessage
             (StringBuilder origStringBuilder, string appendedString, string separator)
         {
@@ -284,7 +289,7 @@ namespace Habanero.Util
         }
 
         /// <summary>
-        /// for a given name value pair e.g. a query string or cookie string that is formatted
+        /// For a given name value pair e.g. a query string or cookie string that is formatted
         /// as name=value&name2=value2&name3=value3 etc this will return the value for a specified
         /// name e.g. for nameValuePairString = "name=value&name2=value2&name3=value3" and name = "name2"
         /// GetValueString will return value2.
