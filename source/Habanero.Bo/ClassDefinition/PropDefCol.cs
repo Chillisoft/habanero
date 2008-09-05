@@ -208,6 +208,9 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
+        /// <summary>
+        /// Gets the number of definitions in this collection
+        /// </summary>
         public int Count
         {
             get
@@ -218,7 +221,15 @@ namespace Habanero.BO.ClassDefinition
 
 		#region IEnumerable<PropDef> Members
 
-		IEnumerator<IPropDef> IEnumerable<IPropDef>.GetEnumerator()
+        ///<summary>
+        ///Returns an enumerator that iterates through the collection.
+        ///</summary>
+        ///
+        ///<returns>
+        ///A <see cref="T:System.Collections.Generic.IEnumerator`1"></see> that can be used to iterate through the collection.
+        ///</returns>
+        ///<filterpriority>1</filterpriority>
+        IEnumerator<IPropDef> IEnumerable<IPropDef>.GetEnumerator()
 		{
 			return _propDefs.Values.GetEnumerator();
 		}
@@ -227,7 +238,15 @@ namespace Habanero.BO.ClassDefinition
 
 		#region IEnumerable Members
 
-		IEnumerator IEnumerable.GetEnumerator()
+        ///<summary>
+        ///Returns an enumerator that iterates through a collection.
+        ///</summary>
+        ///
+        ///<returns>
+        ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+        ///</returns>
+        ///<filterpriority>2</filterpriority>
+        IEnumerator IEnumerable.GetEnumerator()
 		{
 			return _propDefs.Values.GetEnumerator();
 		}
@@ -236,6 +255,15 @@ namespace Habanero.BO.ClassDefinition
 
         #region Equals
 
+        ///<summary>
+        ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
         public override bool Equals(object obj)
         {
             if (obj == null) return false;

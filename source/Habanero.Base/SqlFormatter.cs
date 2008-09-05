@@ -1,7 +1,7 @@
 namespace Habanero.Base
 {
     ///<summary>
-    /// This class is used to store specific SQL formatting information for any specified database.
+    /// Used to store specific SQL formatting information for any specified database.
     /// Typically databases differ in the characters used to differentiate fields and tables e.g. [ and ] for ms sql and
     /// ` for MySQL.
     ///</summary>

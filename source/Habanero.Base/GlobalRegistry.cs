@@ -97,7 +97,7 @@ namespace Habanero.Base
         }
 
         ///<summary>
-        /// The security controller for the application
+        /// Gets and sets the security controller for the application
         ///</summary>
         public static ISecurityController SecurityController
         {

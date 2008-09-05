@@ -180,7 +180,7 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// A part of the full expression that may be to the left of this
+        /// Gets or sets a part of the full expression that may be to the left of this
         /// one, if you picture all the parts being laid out in a line.
         /// </summary>
         public CriteriaExpression Left
@@ -190,7 +190,7 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// A part of the full expression that may be to the right of this
+        /// Gets or sets a part of the full expression that may be to the right of this
         /// one, if you picture all the parts being laid out in a line
         /// </summary>
         public CriteriaExpression Right
@@ -200,7 +200,7 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// Returns the part of the expression held in this object
+        /// Gets the part of the expression held in this object
         /// </summary>
         public String Expression
         {
@@ -208,7 +208,7 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// Returns the full expression by concatenating any parts that
+        /// Gets the full expression by concatenating any parts that
         /// may be to the left or right of this expression with the part
         /// of the expression this object holds
         /// </summary>

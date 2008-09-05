@@ -28,7 +28,14 @@ using log4net;
 namespace Habanero.BO
 {
     /// <summary>
-    /// This class manages and commits a collection of ITransactions to a database using SQL.
+    /// Provides a transaction committer that persists data to a
+    /// database using SQL.
+    /// <br/>
+    /// A released application will often use a database, whereas a set of
+    /// tests for the application used during development and maintenance may use
+    /// a combination of database stores and in-memory stores.  Database storage
+    /// is useful as a test of structure, but runs comparatively slowly to
+    /// in-memory testing, which should be used for testing of the logic.
     /// </summary>
     public class TransactionCommitterDB : TransactionCommitter
     {

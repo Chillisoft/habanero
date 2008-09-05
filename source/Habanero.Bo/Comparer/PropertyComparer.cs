@@ -47,19 +47,27 @@ namespace Habanero.BO.Comparer
             _source = null;
         }
 
-
+	    /// <summary>
+	    /// Gets and sets the name of the property being compared on
+	    /// </summary>
 	    public string PropertyName
 	    {
 	        get { return _propertyName; }
             set { _propertyName = value; }
 	    }
 
+	    /// <summary>
+	    /// Gets and sets the source of data
+	    /// </summary>
 	    public Source Source
 	    {
 	        get { return _source; }
             set { _source = value;}
 	    }
 
+	    /// <summary>
+	    /// Gets and sets the type of the property being compared on
+	    /// </summary>
 	    public Type PropertyType
 	    {
             get { return typeof (TPropType); }

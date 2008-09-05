@@ -23,7 +23,27 @@ using Habanero.Base;
 
 namespace Habanero.BO
 {
-
+    /// <summary>
+    /// Provides a transaction committer that persists data to the
+    /// system memory. The committer carries out the same steps as a Database one would,
+    /// but the object is actually stored in an "in memory" data store (see <see cref="DataStoreInMemory"/>).
+    /// The DataStoreInMemory only lasts for the lifetime of the application, and is
+    /// not shared between instances of an application.
+    /// <br/>
+    /// It is mainly used in testing, with the following advantages:
+    /// <ul>
+    /// <li>Speed is vastly improved, especially where there are a large number of tests</li>
+    /// <li>The data store structure is more agile - you can add new structures without having
+    /// to amend a database</li>
+    /// <li>Tests can be run on multiple machines without replicating a database</li>
+    /// </ul>
+    /// Be aware that an application that only tests with in-memory databases may fail
+    /// to pick up structural flaws that might occur when the application is released.  In-memory
+    /// databases best serve tests of logic.
+    /// <br/>
+    /// See <see cref="ITransactionCommitter"/> for further
+    /// clarification on transaction committers.
+    /// </summary>
     public class TransactionCommitterInMemory : TransactionCommitter
     {
         private readonly DataStoreInMemory _dataStoreInMemory;

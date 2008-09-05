@@ -165,13 +165,21 @@ namespace Habanero.BO
             return _relProps.Values.GetEnumerator();
         }
 
+        ///<summary>
+        ///Returns an enumerator that iterates through a collection.
+        ///</summary>
+        ///
+        ///<returns>
+        ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+        ///</returns>
+        ///<filterpriority>2</filterpriority>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _relProps.Values.GetEnumerator();
         }
 
         ///<summary>
-        /// The number of properties in this relationship key.
+        /// Gets the number of properties in this relationship key.
         ///</summary>
         public int Count
         {

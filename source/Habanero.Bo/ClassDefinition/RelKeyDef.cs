@@ -153,7 +153,15 @@ namespace Habanero.BO.ClassDefinition
 
 		#region IEnumerable<RelPropDef> Members
 
-		IEnumerator<RelPropDef> IEnumerable<RelPropDef>.GetEnumerator()
+        ///<summary>
+        ///Returns an enumerator that iterates through the collection.
+        ///</summary>
+        ///
+        ///<returns>
+        ///A <see cref="T:System.Collections.Generic.IEnumerator`1"></see> that can be used to iterate through the collection.
+        ///</returns>
+        ///<filterpriority>1</filterpriority>
+        IEnumerator<RelPropDef> IEnumerable<RelPropDef>.GetEnumerator()
 		{
 			return _relPropDefs.Values.GetEnumerator();
 		}
@@ -162,7 +170,15 @@ namespace Habanero.BO.ClassDefinition
 
 		#region IEnumerable Members
 
-		IEnumerator IEnumerable.GetEnumerator()
+        ///<summary>
+        ///Returns an enumerator that iterates through a collection.
+        ///</summary>
+        ///
+        ///<returns>
+        ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+        ///</returns>
+        ///<filterpriority>2</filterpriority>
+        IEnumerator IEnumerable.GetEnumerator()
 		{
 			return _relPropDefs.Values.GetEnumerator();
 		}

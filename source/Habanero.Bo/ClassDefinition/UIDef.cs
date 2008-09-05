@@ -163,6 +163,15 @@ namespace Habanero.BO.ClassDefinition
             return newUIForm;
         }
 
+        ///<summary>
+        ///Indicates whether the current object is equal to another object of the same type.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the current object is equal to the other parameter; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="other">An object to compare with this object.</param>
         public bool Equals(UIDef otherUIDef)
         {
             if (otherUIDef == null) return false;
@@ -186,6 +195,14 @@ namespace Habanero.BO.ClassDefinition
             return Equals(obj as UIDef);
         }
 
+        ///<summary>
+        ///Serves as a hash function for a particular type. <see cref="M:System.Object.GetHashCode"></see> is suitable for use in hashing algorithms and data structures like a hash table.
+        ///</summary>
+        ///
+        ///<returns>
+        ///A hash code for the current <see cref="T:System.Object"></see>.
+        ///</returns>
+        ///<filterpriority>2</filterpriority>
         public override int GetHashCode()
         {
             int result = _name != null ? _name.GetHashCode() : 0;

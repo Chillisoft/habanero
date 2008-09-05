@@ -142,8 +142,10 @@ namespace Habanero.BO
             set { _classDef = value; }
         }
 
-        ///<summary>
-        ///</summary>
+        /// <summary>
+        /// Gets or sets criteria for the discriminator that is used in single table
+        /// inheritance
+        /// </summary>
         public Criteria DiscriminatorCriteria
         {
             get { return _discriminatorCriteria; }

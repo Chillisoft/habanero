@@ -3,6 +3,9 @@ using Habanero.Base.Exceptions;
 
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Represents a database source from which data is retrieved
+    /// </summary>
     public class SourceDB : Source
     {
         private Source _source;
@@ -13,28 +16,43 @@ namespace Habanero.Base
             _source = source;
         }
 
+        /// <summary>
+        /// Gets and sets the name of the source
+        /// </summary>
         public override string Name
         {
             get { return _source.Name; }
             set { _source.Name = value; }
         }
 
+        /// <summary>
+        /// Gets and sets the entity name of the source
+        /// </summary>
         public override string EntityName
         {
             get { return _source.EntityName; }
             set { _source.EntityName = value; }
         }
 
+        /// <summary>
+        /// Gets the list of joins that make up the source
+        /// </summary>
         public override JoinList Joins
         {
             get { return _source.Joins; }
         }
 
+        /// <summary>
+        /// Gets the list of joins that create one source through inheritance
+        /// </summary>
         public override JoinList InheritanceJoins
         {
             get { return _source.InheritanceJoins; }
         }
 
+        /// <summary>
+        /// Creates the SQL that corresponds to this join
+        /// </summary>
         public string CreateSQL()
         {
             return CreateSQL(new SqlFormatter("", ""));
@@ -85,8 +103,10 @@ namespace Habanero.Base
             return joinString;
         }
 
-   
-
+        /// <summary>
+        /// Creates the Sql that corresponds to this join
+        /// </summary>
+        /// <param name="sqlFormatter">The formatter used to construct the appropriate Sql</param>
         public string CreateSQL(SqlFormatter sqlFormatter)
         {
             //if (Joins.Count == 0) return sqlFormatter.DelimitTable(EntityName);

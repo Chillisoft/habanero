@@ -157,7 +157,7 @@ namespace Habanero.Base
         }
 
         ///<summary>
-        /// The query Field being used by this criteria object (Where the criteria object is a leaf).
+        /// Gets the query Field being used by this criteria object (Where the criteria object is a leaf).
         /// the query field is a query field object representing the objects property as defined in the 
         /// Constructor [Criteria(string propName, ComparisonOp op, object value)].
         ///</summary>
@@ -167,7 +167,7 @@ namespace Habanero.Base
         }
 
         ///<summary>
-        /// The left critieria object (If this is not a leaf criteria)
+        /// Gets the left critieria object (If this is not a leaf criteria)
         ///</summary>
         public virtual Criteria LeftCriteria
         {
@@ -175,7 +175,7 @@ namespace Habanero.Base
         }
 
         ///<summary>
-        /// The right criteria object (If this is not a leaf criteria)
+        /// Gets the right criteria object (If this is not a leaf criteria)
         ///</summary>
         public virtual Criteria RightCriteria
         {
@@ -183,7 +183,7 @@ namespace Habanero.Base
         }
 
         ///<summary>
-        /// The logical operator being used for this criteria object (If this is not a leaf criteria)
+        /// Gets the logical operator being used for this criteria object (If this is not a leaf criteria)
         ///</summary>
         public virtual LogicalOp LogicalOperator
         {
@@ -191,7 +191,7 @@ namespace Habanero.Base
         }
 
         ///<summary>
-        /// Returns the field value being compared to for this criteria object (If this is a leaf criteria)
+        /// Gets or sets the field value being compared to for this criteria object (If this is a leaf criteria)
         ///</summary>
         public virtual object FieldValue
         {
@@ -200,7 +200,7 @@ namespace Habanero.Base
         }
 
         ///<summary>
-        /// Returns the comparison operator being used by this Criteria object (If this is a leaf criteria)
+        /// Gets the comparison operator being used by this Criteria object (If this is a leaf criteria)
         ///</summary>
         public virtual ComparisonOp ComparisonOperator
         {
@@ -531,11 +531,16 @@ namespace Habanero.Base
             return ComparisonOperator != ComparisonOp.Is && ComparisonOperator != ComparisonOp.IsNot;
 //            return (strOp == "IS" || strOp == "IS NOT" || strOp == "NOT IS" || strOp == "IN" || strOp == "NOT IN");
         }
+
         protected string ComparisonOperatorString()
         {
             return ComparisonOps[(int)ComparisonOperator];
         }
 
+        /// <summary>
+        /// Merges two given criteria into one, using an AND operator, and returns the merged criteria
+        /// </summary>
+        /// <returns>Returns the merged criteria</returns>
         public static Criteria MergeCriteria(Criteria criteria1, Criteria criteria2)
         {
             if ((criteria1 == null) && (criteria2 == null)) return null;

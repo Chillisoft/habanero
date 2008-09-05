@@ -19,6 +19,9 @@
 
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Represents the property on which two objects match up in a relationship
+    /// </summary>
     public interface IRelProp
     {
         /// <summary>

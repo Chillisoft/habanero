@@ -24,8 +24,22 @@ using Habanero.BO.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
+    /// <summary>
+    /// Provides helper utilities for class definitions
+    /// </summary>
     internal class ClassDefHelper
     {
+        /// <summary>
+        /// Finds the property definition with the given name for the specified
+        /// class definition.  This method will search through an inheritance
+        /// structure or relationship if needed.
+        /// </summary>
+        /// <param name="classDef">The class definition containing either the property
+        /// or containing inheritance or relationship structures that might hold
+        /// the property</param>
+        /// <param name="propertyName">The name of the property.  A related property can
+        /// be described by "RelationshipName.PropertyName".</param>
+        /// <returns></returns>
         public static IPropDef GetPropDefByPropName(ClassDef classDef, string propertyName)
         {
             if (classDef == null || propertyName.IndexOf("-") != -1)

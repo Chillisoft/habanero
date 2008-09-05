@@ -30,18 +30,22 @@ using Habanero.Util.File;
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
-    /// Defines the business object class <see cref="BusinessObject"/>, 
+    /// Defines the business object class <see cref="IBusinessObject"/>, 
     ///   its properties <see cref="PropDefcol"/>,
-    ///   their related property rules <see cref="PropRuleBase"/>,
-    ///   its Primary and Alternate keys <see cref="PrimaryKeyDef"/> <see cref="KeyDefCol"/>, 
-    ///   its relationships <see cref="RelationshipDefCol"/>,
-    ///   any inheritance relationships <see cref="SuperClassDef"/>
-    ///   and the mappings of the <see cref="BusinessObject"/> to the user inteface <see cref="UIDefCol"/>.
-    /// The Definition includes the mapping of the <see cref="BusinessObject"/> 
+    ///   their related property rules <see cref="IPropRule"/>,
+    ///   its Primary and Alternate keys <see cref="IPrimaryKey"/> <see cref="IBOKey"/>, 
+    ///   its relationships <see cref="IRelationship"/>,
+    ///   any inheritance relationships
+    ///   and the mappings of the <see cref="IBusinessObject"/> to the user inteface.
+    /// <br/>
+    /// The Definition includes the mapping of the <see cref="IBusinessObject"/> 
     ///   its properties and its relationships to the Database tables and fields.
+    /// <br/>
     /// The Class Definition (ClassDef) is loaded from the ClassDef.xml file at application startup.
+    /// <br/>
     /// The Class Definition class along with the ClassDef.xml implements the pattern
     ///   MetaData Mapper (Fowler - (306) 'Patterns of Enterprise Application Architecture').
+    /// <br/>
     /// Required data is:
     /// <ul>
     /// <li>The primary key, which is the object identifier that uniquely

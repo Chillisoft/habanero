@@ -339,6 +339,10 @@ namespace Habanero.BO.ClassDefinition
                 otherFormField.ControlTypeName == this.ControlTypeName &&
                 otherFormField.Label == this.Label;
         }
+
+        /// <summary>
+        /// Indicates whether two fields are equal
+        /// </summary>
         public static bool operator ==(UIFormField a, UIFormField b)
         {
             // If both are null, or both are same instance, return true.
@@ -357,6 +361,9 @@ namespace Habanero.BO.ClassDefinition
             return a.Equals(b);
         }
 
+        /// <summary>
+        /// Indicates whether two fields are unequal
+        /// </summary>
         public static bool operator !=(UIFormField a, UIFormField b)
         {
             return !(a == b);

@@ -35,6 +35,9 @@ namespace Habanero.BO.Base
         /// Contains() method.</exception>
         IPropDef this[string propertyName] { get; }
 
+        /// <summary>
+        /// Gets the number of definitions in this collection
+        /// </summary>
         int Count
         {
             get;

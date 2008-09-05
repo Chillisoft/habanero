@@ -129,12 +129,26 @@ namespace Habanero.BO
             return _dataStore.Find(classDef.ClassType, selectQuery.Criteria);
         }
 
+        /// <summary>
+        /// Loads a business object of type T, using the SelectQuery given. It's important to make sure that T (meaning the ClassDef set up for T)
+        /// has the properties defined in the fields of the select query.  
+        /// This method allows you to define a custom query to load a business object
+        /// </summary>
+        /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="criteriaString">The select query to use to load from the data source</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public T GetBusinessObject<T>(string criteriaString) where T : class, IBusinessObject, new()
         {
             Criteria criteriaObject = CriteriaParser.CreateCriteria(criteriaString);
             return _dataStore.Find<T>(criteriaObject);
         }
 
+        /// <summary>
+        /// Loads a business object of the type identified by a <see cref="ClassDef"/>, using the criteria given
+        /// </summary>
+        /// <param name="classDef">The ClassDef of the object to load.</param>
+        /// <param name="criteriaString">The criteria to use to load the business object must be of formst "PropName = criteriaValue" e.g. "Surname = Powell"</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an error is raised</returns>
         public IBusinessObject GetBusinessObject(IClassDef classDef, string criteriaString)
         {
             Criteria criteriaObject = CriteriaParser.CreateCriteria(criteriaString);
@@ -248,6 +262,15 @@ namespace Habanero.BO
         }
 
 
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the SelectQuery given. It's important to make sure that the ClassDef given
+        /// has the properties defined in the fields of the select query.  
+        /// This method allows you to define a custom query to load a businessobjectcollection so that you can perhaps load from multiple
+        /// tables using a join (if loading from a database source).
+        /// </summary>
+        /// <param name="classDef">The ClassDef for the collection to load</param>
+        /// <param name="selectQuery">The select query to use to load from the data source</param>
+        /// <returns>The loaded collection</returns>
         public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, ISelectQuery selectQuery)
         {
             return GetBusinessObjectCollection(classDef, selectQuery.Criteria, selectQuery.OrderCriteria);
@@ -270,6 +293,13 @@ namespace Habanero.BO
             return GetBusinessObjectCollection(classDef, criteria, orderCriteriaObj);
         }
 
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the searchCriteria an given. It's important to make sure that the ClassDef given
+        /// has the properties defined in the fields of the select searchCriteria and orderCriteria.  
+        /// </summary>
+        /// <param name="classDef">The ClassDef for the collection to load</param>
+        /// <param name="searchCriteria">The select query to use to load from the data source</param>
+        /// <returns>The loaded collection</returns>
         public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria)
         {
             Criteria criteria = CriteriaParser.CreateCriteria(searchCriteria);

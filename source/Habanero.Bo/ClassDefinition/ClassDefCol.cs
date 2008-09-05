@@ -410,8 +410,4 @@ namespace Habanero.BO.ClassDefinition
 
         #endregion
     }
-
-    #region "self Tests"
-
-    #endregion
 }

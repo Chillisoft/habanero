@@ -21,8 +21,15 @@ using System.Collections.Generic;
 
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Holds a collection of properties on which two classes in a relationship
+    /// are matching
+    /// </summary>
     public interface IRelKey : IEnumerable<IRelProp>
     {
+        ///<summary>
+        /// Gets the number of properties in this relationship key.
+        ///</summary>
         int Count
         {
             get;

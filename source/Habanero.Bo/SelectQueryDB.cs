@@ -72,24 +72,36 @@ namespace Habanero.BO
             set { _selectQuery.Source = value; }
         }
 
+        /// <summary>
+        /// The fields to use to order a collection of objects when loading them.
+        /// </summary>
         public OrderCriteria OrderCriteria
         {
             get { return _selectQuery.OrderCriteria; }
             set { _selectQuery.OrderCriteria = value; }
         }
 
+        /// <summary>
+        /// The number of objects to load
+        /// </summary>
         public int Limit
         {
             get { return _selectQuery.Limit; }
             set { _selectQuery.Limit = value; }
         }
 
+        /// <summary>
+        /// The classdef this select query corresponds to. This can be null if the select query is being used
+        /// without classdefs, but if it is built using the QueryBuilder 
+        /// </summary>
         public IClassDef ClassDef
         {
             get { return _selectQuery.ClassDef; }
             set { _selectQuery.ClassDef = value; }
         }
 
+        ///<summary>
+        ///</summary>
         public Criteria DiscriminatorCriteria
         {
             get { return _selectQuery.DiscriminatorCriteria; }

@@ -3,7 +3,8 @@ using System;
 namespace Habanero.Base
 {
     ///<summary>
-    /// This class inherits from the <see cref="Criteria"/> class and implements a <see cref="ToString(SqlFormatter, AddParameterDelegate)"/> behaviour.
+    /// This class inherits from the <see cref="Criteria"/> class and implements a
+    /// <see cref="ToString(SqlFormatter, AddParameterDelegate)"/> behaviour.
     /// This allows the formatting of a criteria object into a format specific for the database.
     ///</summary>
     public class CriteriaDB : Criteria
@@ -45,36 +46,64 @@ namespace Habanero.Base
             _criteria = criteria;
         }
 
+        ///<summary>
+        ///Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+        ///</summary>
+        ///
+        ///<returns>
+        ///A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+        ///</returns>
+        ///<filterpriority>2</filterpriority>
         public override string ToString()
         {
             return _criteria.ToString();
         }
 
+        ///<summary>
+        /// Gets the query Field being used by this criteria object (Where the criteria object is a leaf).
+        /// the query field is a query field object representing the objects property as defined in the 
+        /// Constructor [Criteria(string propName, ComparisonOp op, object value)].
+        ///</summary>
         public override QueryField Field
         {
             get { return _criteria.Field; }
         }
 
+        ///<summary>
+        /// Gets the left critieria object (If this is not a leaf criteria)
+        ///</summary>
         public override Criteria LeftCriteria
         {
             get { return _criteria.LeftCriteria; }
         }
 
+        ///<summary>
+        /// Gets the logical operator being used for this criteria object (If this is not a leaf criteria)
+        ///</summary>
         public override LogicalOp LogicalOperator
         {
             get { return _criteria.LogicalOperator; }
         }
 
+        ///<summary>
+        /// Gets the right criteria object (If this is not a leaf criteria)
+        ///</summary>
         public override Criteria RightCriteria
         {
             get { return _criteria.RightCriteria; }
         }
 
+        ///<summary>
+        /// Gets or sets the field value being compared to for this criteria object (If this is a leaf criteria)
+        ///</summary>
         public override object FieldValue
         {
             get { return _criteria.FieldValue; }
         }
 
+        ///<summary>
+        /// Gets the comparison operator being used by this Criteria object (If this is a leaf criteria)
+        ///</summary>
         public override ComparisonOp ComparisonOperator
         {
             get { return _criteria.ComparisonOperator; }

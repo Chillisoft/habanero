@@ -27,7 +27,8 @@ namespace Habanero.Base
     /// This class can only encrypt short messages, so is really only useful for encrypting
     /// passwords or similar short phrases.
     /// </summary>
-    public class RSAPasswordCrypter : ICrypter {
+    public class RSAPasswordCrypter : ICrypter
+    {
         private RSA _rsa;
 
         public RSAPasswordCrypter(RSA rsa)
@@ -35,6 +36,11 @@ namespace Habanero.Base
             _rsa = rsa;
         }
 
+        /// <summary>
+        /// Returns the given string without carrying out any changes.
+        /// </summary>
+        /// <param name="value">The string to decrypt</param>
+        /// <returns>Returns the unaltered string provided</returns>
         public string DecryptString(string value)
         {
 
@@ -48,6 +54,11 @@ namespace Habanero.Base
                    return ASCIIEncoding.ASCII.GetString(encryptedByes);
         }
 
+        /// <summary>
+        /// Returns the given string without carrying out any changes.
+        /// </summary>
+        /// <param name="value">The string to encrypt</param>
+        /// <returns>Returns the unaltered string provided</returns>
         public string EncryptString(string value)
         {
             RSACryptoServiceProvider provider = new RSACryptoServiceProvider();

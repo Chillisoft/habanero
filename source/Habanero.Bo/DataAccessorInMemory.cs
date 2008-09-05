@@ -34,8 +34,8 @@ namespace Habanero.BO
         ///</summary>
         public DataAccessorInMemory() : this(new DataStoreInMemory())
         {
-            
         }
+
         internal DataAccessorInMemory(DataStoreInMemory dataStore)
         {
             _dataStore = dataStore;
@@ -43,12 +43,19 @@ namespace Habanero.BO
             _businessObjectLoader = new BusinessObjectLoaderInMemory(_dataStore);
         }
 
-
+        /// <summary>
+        /// The <see cref="IDataAccessor.BusinessObjectLoader"/> to use to load BusinessObjects
+        /// </summary>
         public IBusinessObjectLoader BusinessObjectLoader
         {
             get { return _businessObjectLoader; }
         }
 
+        /// <summary>
+        /// Creates a TransactionCommitter for you to use to persist BusinessObjects. A new TransactionCommitter is required
+        /// each time an object or set of objects is persisted.
+        /// </summary>
+        /// <returns></returns>
         public ITransactionCommitter CreateTransactionCommitter()
         {
             return new TransactionCommitterInMemory(_dataStore);

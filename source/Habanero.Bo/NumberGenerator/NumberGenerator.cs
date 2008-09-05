@@ -64,18 +64,33 @@ namespace Habanero.BO
 
         #region INumberGenerator Members
 
+        /// <summary>
+        /// Returns the next available unique number. One possible means
+        /// of providing unique numbers is simply to increment the last one
+        /// dispensed.
+        /// </summary>
+        /// <returns>Returns an integer</returns>
         public int NextNumber()
         {
             _boSequenceNumber.SequenceNumber++;
             return _boSequenceNumber.SequenceNumber.Value;
         }
 
+        /// <summary>
+        /// Allows the developer to set the new Sequence number this can be used when initialy creating the numbers e.g. when 
+        /// you want to ensure that the numbers are generated starting at 10000.
+        /// </summary>
+        /// <param name="newSequenceNumber"></param>
         public void SetSequenceNumber(int newSequenceNumber)
         {
             _boSequenceNumber.SequenceNumber = newSequenceNumber;
             _boSequenceNumber.Save();
         }
 
+        /// <summary>
+        /// Interface to add the number generator to a transaction via the transaction committer.
+        /// </summary>
+        /// <param name="transactionCommitter"></param>
         public void AddToTransaction(ITransactionCommitter transactionCommitter)
         {
             BusinessObject busObject = GetTransactionalBO();
@@ -149,12 +164,18 @@ namespace Habanero.BO
 //            return;
 //        }
 
+        /// <summary>
+        /// Gets or sets the type of number
+        /// </summary>
         public virtual String NumberType
         {
             get { return ((String) (base.GetPropertyValue("NumberType"))); }
             set { base.SetPropertyValue("NumberType", value); }
         }
 
+        /// <summary>
+        /// Gets or sets the sequence number
+        /// </summary>
         public virtual Int32? SequenceNumber
         {
             get { return ((Int32?) (base.GetPropertyValue("SequenceNumber"))); }
@@ -186,6 +207,10 @@ namespace Habanero.BO
             return;
         }
 
+        /// <summary>
+        /// Deletes all the numbers being stored in the database table that holds
+        /// the generated numbers
+        /// </summary>
         public static void DeleteAllNumbers()
         {
             //DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");

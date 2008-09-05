@@ -22,21 +22,34 @@ using System.Collections.Generic;
 
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Compares two business objects on the property specified 
+    /// in the constructor using the specified generic type
+    /// </summary>
     public interface IPropertyComparer<TBusinessObject> : IComparer<TBusinessObject>
         where TBusinessObject : IBusinessObject
     {
+        /// <summary>
+        /// Gets and sets the name of the property being compared on
+        /// </summary>
         string PropertyName
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// Gets and sets the source of data
+        /// </summary>
         Source Source
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// Gets and sets the type of the property being compared on
+        /// </summary>
         Type PropertyType { get; }
     }
 }

@@ -1051,6 +1051,12 @@ namespace Habanero.BO
             return newBO;
         }
 
+        /// <summary>
+        /// Creates a business object of type TBusinessObject
+        /// Adds this BO to the CreatedBusinessObjects list. When the object is saved it will
+        /// be added to the actual bo collection.
+        /// </summary>
+        /// <returns></returns>
         IBusinessObject IBusinessObjectCollection.CreateBusinessObject()
         {
             return CreateBusinessObject();

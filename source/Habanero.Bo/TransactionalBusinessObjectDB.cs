@@ -119,8 +119,6 @@ namespace Habanero.BO
         /// returns true if there is already an object in the database with the same primary identifier (primary key)
         ///  or with the same alternate identifier (alternate key)
         ///</summary>
-        ///<param name="errMsg"></param>
-        ///<returns></returns>
         protected internal override bool HasDuplicateIdentifier(out string errMsg)
         {
             errMsg = "";

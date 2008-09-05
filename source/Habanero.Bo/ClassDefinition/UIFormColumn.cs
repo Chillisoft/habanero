@@ -198,11 +198,9 @@ namespace Habanero.BO.ClassDefinition
             return true;
         }
 
-        ///<summary>
-        ///</summary>
-        ///<param name="a"></param>
-        ///<param name="b"></param>
-        ///<returns></returns>
+        /// <summary>
+        /// Indicates whether to columns are equal
+        /// </summary>
         public static bool operator ==(UIFormColumn a, UIFormColumn b)
         {
             // If both are null, or both are same instance, return true.
@@ -221,11 +219,9 @@ namespace Habanero.BO.ClassDefinition
             return a.Equals(b);
         }
 
-        ///<summary>
-        ///</summary>
-        ///<param name="a"></param>
-        ///<param name="b"></param>
-        ///<returns></returns>
+        /// <summary>
+        /// Indicates whether two columns are unequal
+        /// </summary>
         public static bool operator !=(UIFormColumn a, UIFormColumn b)
         {
             return !(a == b);

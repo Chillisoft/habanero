@@ -233,6 +233,15 @@ namespace Habanero.BO.ClassDefinition
             return newUIFormTab;
         }
 
+        ///<summary>
+        ///Indicates whether the current object is equal to another object of the same type.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the current object is equal to the other parameter; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="other">An object to compare with this object.</param>
         public bool Equals(UIFormTab uiFormTab)
         {
             if (uiFormTab == null) return false;
@@ -258,12 +267,29 @@ namespace Habanero.BO.ClassDefinition
             return true;
         }
 
+        ///<summary>
+        ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(this, obj)) return true;
             return Equals(obj as UIFormTab);
         }
 
+        ///<summary>
+        ///Serves as a hash function for a particular type. <see cref="M:System.Object.GetHashCode"></see> is suitable for use in hashing algorithms and data structures like a hash table.
+        ///</summary>
+        ///
+        ///<returns>
+        ///A hash code for the current <see cref="T:System.Object"></see>.
+        ///</returns>
+        ///<filterpriority>2</filterpriority>
         public override int GetHashCode()
         {
             int result = _list.GetHashCode();

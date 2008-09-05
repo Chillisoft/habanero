@@ -145,6 +145,9 @@ namespace Habanero.BO.ClassDefinition
 		//    return _keyDefs.Values.GetEnumerator();
 		//}
 
+        /// <summary>
+        /// Gets the count of items in this collection
+        /// </summary>
         public int Count
         {
             get
@@ -155,7 +158,15 @@ namespace Habanero.BO.ClassDefinition
 
     	#region IEnumerable<KeyDef> Members
 
-    	IEnumerator<KeyDef> IEnumerable<KeyDef>.GetEnumerator()
+        ///<summary>
+        ///Returns an enumerator that iterates through the collection.
+        ///</summary>
+        ///
+        ///<returns>
+        ///A <see cref="T:System.Collections.Generic.IEnumerator`1"></see> that can be used to iterate through the collection.
+        ///</returns>
+        ///<filterpriority>1</filterpriority>
+        IEnumerator<KeyDef> IEnumerable<KeyDef>.GetEnumerator()
     	{
     		return _keyDefs.Values.GetEnumerator();
     	}
@@ -164,7 +175,15 @@ namespace Habanero.BO.ClassDefinition
 
 		#region IEnumerable Members
 
-		IEnumerator IEnumerable.GetEnumerator()
+        ///<summary>
+        ///Returns an enumerator that iterates through a collection.
+        ///</summary>
+        ///
+        ///<returns>
+        ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+        ///</returns>
+        ///<filterpriority>2</filterpriority>
+        IEnumerator IEnumerable.GetEnumerator()
 		{
 			return _keyDefs.Values.GetEnumerator();
 		}

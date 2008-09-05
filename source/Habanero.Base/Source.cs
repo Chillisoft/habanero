@@ -5,9 +5,10 @@ using Habanero.Base.Exceptions;
 
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Represents a source from which data is retrieved
+    /// </summary>
     public class Source
-
-
     {
         private string _name;
         private string _entityName;
@@ -27,32 +28,47 @@ namespace Habanero.Base
             _entityName = entityName;
         }
 
+        /// <summary>
+        /// Gets and sets the name of the source
+        /// </summary>
         public virtual string Name
         {
             get { return _name; }
             set { _name = value; }
         }
 
+        /// <summary>
+        /// Gets and sets the entity name of the source
+        /// </summary>
         public virtual string EntityName
         {
             get { return _entityName; }
             set { _entityName = value; }
         }
 
+        /// <summary>
+        /// Gets the list of joins that make up the source
+        /// </summary>
         public virtual JoinList Joins
         {
             get { return _joins; }
         }
 
+        /// <summary>
+        /// Gets the source which is a child of this one, which can
+        /// occur where one source inherits from another
+        /// </summary>
         public Source ChildSource
         {
-            get { if (Joins.Count == 0) return null;
+            get
+            {
+                if (Joins.Count == 0) return null;
                 return Joins[0].ToSource;
-        }
+            }
         }
 
         /// <summary>
-        /// Returns the furthermost child. 
+        /// Gets the furthermost child
         /// </summary>
         public Source ChildSourceLeaf
         {
@@ -62,17 +78,27 @@ namespace Habanero.Base
             }
         }
 
+        /// <summary>
+        /// Gets the list of joins that create one source through inheritance
+        /// </summary>
         public virtual JoinList InheritanceJoins
         {
             get { return _inheritanceJoins; }
         }
 
+        /// <summary>
+        /// Gets and sets the value that indicates whether the source has been prepared
+        /// </summary>
         public bool IsPrepared
         {
             get { return _isPrepared; }
             set { _isPrepared = value; }
         }
 
+        /// <summary>
+        /// Returns this source in a string form
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             string toString = Name;
@@ -83,11 +109,20 @@ namespace Habanero.Base
             return toString;
         }
 
+        /// <summary>
+        /// Returns this source in hash code form
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             return _name.GetHashCode();
         }
 
+        /// <summary>
+        /// Indicates whether the given source is equal to this one
+        /// </summary>
+        /// <param name="obj">The source to compare with this one</param>
+        /// <returns>Returns true if equal, false if not</returns>
         public override bool Equals(object obj)
         {
             Source source = obj as Source;
@@ -95,13 +130,18 @@ namespace Habanero.Base
             return Object.Equals(_name, source._name);
         }
 
-
+        /// <summary>
+        /// Joins a given source onto this one using an inner join
+        /// </summary>
+        /// <param name="toSource">The source to join onto this one</param>
         public void JoinToSource(Source toSource)
         {
             Joins.AddNewJoinTo(toSource, JoinType.InnerJoin);
         }
 
-
+        /// <summary>
+        /// Manages a list of joins that make up a <see cref="Source"/>
+        /// </summary>
         public class JoinList : List<Join>
         {
             private Source _fromSource;
@@ -115,11 +155,18 @@ namespace Habanero.Base
                 _fromSource = fromSource;
             }
 
+            /// <summary>
+            /// Gets the source containing this join list
+            /// </summary>
             public Source FromSource
             {
                 get { return _fromSource; }
             }
 
+            /// <summary>
+            /// Merges a given list of joins into this one
+            /// </summary>
+            /// <param name="joinListToMerge">The list of joins to add to this one</param>
             public void MergeWith(JoinList joinListToMerge)
             {
                 Source fromSourceToMerge = joinListToMerge.FromSource;
@@ -155,6 +202,13 @@ namespace Habanero.Base
                 
             }
 
+            /// <summary>
+            /// Adds a new join from the source containing this join list to the
+            /// specified source, using the specified join type
+            /// </summary>
+            /// <param name="toSource">The source to connect the current source to</param>
+            /// <param name="joinType">The type of join to use</param>
+            /// <returns>Returns the newly created join</returns>
             public Join AddNewJoinTo(Source toSource, JoinType joinType)
             {
                 if (toSource == null) return null;
@@ -169,15 +223,28 @@ namespace Habanero.Base
             }
         }
 
+        /// <summary>
+        /// Provides a list of join types used to connect sources
+        /// </summary>
         public enum JoinType
         {
+            /// <summary>
+            /// Merges two sources only on the records with they match on some given criteria
+            /// </summary>
             InnerJoin,
+            /// <summary>
+            /// Merges two sources by including all records in the primary (left) source
+            /// and only rows in the secondary (right) source that match on some given criteria
+            /// </summary>
             LeftJoin
         }
 
+        /// <summary>
+        /// Represents a join between sources that allows the multiple sources to
+        /// be regarded as one
+        /// </summary>
         public class Join
         {
-          
             private Source _fromSource;
             private Source _toSource;
             private List<JoinField> _joinFields = new List<JoinField>( );
@@ -185,7 +252,6 @@ namespace Habanero.Base
 
             public Join(Source fromSource, Source toSource) : this(fromSource, toSource, Source.JoinType.InnerJoin)
             {
-                
             }
 
             public Join(Source fromSource, Source toSource, JoinType joinType)
@@ -195,27 +261,42 @@ namespace Habanero.Base
                 _joinType = joinType;
             }
 
+            /// <summary>
+            /// Gets the primary source from which the join originates
+            /// </summary>
             public Source FromSource
             {
                 get { return _fromSource; }
             }
 
+            /// <summary>
+            /// Gets the source to which this join connects
+            /// </summary>
             public Source ToSource
             {
                 get { return _toSource; }
             }
 
+            /// <summary>
+            /// Gets a list of fields on which the two sources must match
+            /// </summary>
             public List<JoinField> JoinFields
             {
                 get { return _joinFields; }
             }
 
+            /// <summary>
+            /// Gets and sets the type of join used to connect the sources
+            /// </summary>
             public JoinType JoinType
             {
                 get { return _joinType; }
                 set { _joinType = value; }
             }
 
+            /// <summary>
+            /// Represents a field on which two sources must match
+            /// </summary>
             public class JoinField
             {
                 private QueryField _fromField;
@@ -227,17 +308,27 @@ namespace Habanero.Base
                     _toField = toField;
                 }
 
+                /// <summary>
+                /// Gets the field in the primary source
+                /// </summary>
                 public QueryField FromField
                 {
                     get { return _fromField; }
                 }
 
+                /// <summary>
+                /// Gets the field in the secondary source
+                /// </summary>
                 public QueryField ToField
                 {
                     get { return _toField; }
                 }
             }
 
+            /// <summary>
+            /// Gets the clause used to indicate the type of join
+            /// </summary>
+            /// <returns></returns>
             public string GetJoinClause()
             {
                 switch (JoinType)
@@ -251,6 +342,11 @@ namespace Habanero.Base
             }
         }
 
+        /// <summary>
+        /// Gets the string clause that represents the source from which a join originates
+        /// </summary>
+        /// <param name="sourcename">The name of the source</param>
+        /// <returns></returns>
         public static Source FromString(string sourcename)
         {
             if (String.IsNullOrEmpty(sourcename)) return null;
@@ -267,6 +363,10 @@ namespace Habanero.Base
             return baseSource;
         }
 
+        /// <summary>
+        /// Merges the current source with another specified source
+        /// </summary>
+        /// <param name="sourceToMerge">The source to merge this one with</param>
         public void MergeWith(Source sourceToMerge)
         {
             if (sourceToMerge == null) return;
