@@ -59,7 +59,7 @@ namespace Habanero.Test.UI.Base
                 return new ControlFactoryWin();
             }
             
-            [Test]
+            [Test, Ignore("Only for visual testing")]
             public void TestShowDatePickerForm()
 
             {
