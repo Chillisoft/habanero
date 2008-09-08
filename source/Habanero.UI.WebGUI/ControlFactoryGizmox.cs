@@ -29,6 +29,7 @@ using Habanero.UI.Base;
 using Habanero.UI.Base.ControlInterfaces;
 using Habanero.UI.WebGUI.Grid;
 using Habanero.Util.File;
+using DateTimePickerFormat=Habanero.UI.Base.DateTimePickerFormat;
 using ScrollBars=Gizmox.WebGUI.Forms.ScrollBars;
 
 namespace Habanero.UI.WebGUI
@@ -148,7 +149,7 @@ namespace Habanero.UI.WebGUI
         {
             DateTimePickerGiz dtp = new DateTimePickerGiz(this);
             dtp.Height = TEXTBOX_HEIGHT;
-            dtp.Format = DateTimePickerFormat.Custom;
+            dtp.Format = (Gizmox.WebGUI.Forms.DateTimePickerFormat) DateTimePickerFormat.Custom;
             dtp.CustomFormat = "dd MMM yyyy";
             return dtp;
         }
@@ -473,7 +474,7 @@ namespace Habanero.UI.WebGUI
         public virtual IDateTimePicker CreateMonthPicker()
         {
             DateTimePickerGiz editor = (DateTimePickerGiz) CreateDateTimePicker();
-            editor.Format = DateTimePickerFormat.Custom;
+            editor.Format = (Gizmox.WebGUI.Forms.DateTimePickerFormat) DateTimePickerFormat.Custom;
             editor.CustomFormat = "MMM yyyy";
             return editor;
         }

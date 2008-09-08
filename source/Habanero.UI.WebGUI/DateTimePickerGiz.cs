@@ -33,15 +33,23 @@ namespace Habanero.UI.WebGUI
 
         public DateTimePickerGiz(IControlFactory controlFactory)
         {
-            DateTimePickerManager.ValueGetter valueGetter = delegate()
+            DateTimePickerManager.ValueGetter<DateTime> valueGetter = delegate()
             {
                 return base.Value;
             };
-            DateTimePickerManager.ValueSetter valueSetter = delegate(DateTime value)
+            DateTimePickerManager.ValueSetter<DateTime> valueSetter = delegate(DateTime value)
             {
                 base.Value = value;
             };
-            _manager = new DateTimePickerManager(controlFactory, this, valueGetter, valueSetter);
+            DateTimePickerManager.ValueGetter<string> customFormatGetter = delegate
+            {
+                return base.CustomFormat;
+            };
+            DateTimePickerManager.ValueSetter<string> customFormatSetter = delegate(string value)
+            {
+                base.CustomFormat = value;
+            };
+            _manager = new DateTimePickerManager(controlFactory, this, valueGetter, valueSetter, customFormatGetter, customFormatSetter);
         }
 
         /// <summary>
@@ -71,11 +79,33 @@ namespace Habanero.UI.WebGUI
             set { _manager.Value = value; }
         }
 
-        //protected override void OnValueChanged(EventArgs eventargs)
-        //{
-        //    _manager.OnValueChanged(eventargs);
-        //    base.OnValueChanged(eventargs);
-        //}
+
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the Value property has
+        /// been set with a valid date/time value and the displayed value is able to be updated
+        /// </summary>
+        bool IDateTimePicker.Checked
+        {
+            get { return base.Checked; }
+            set
+            {
+                base.Checked = value;
+                if (_manager != null) _manager.OnValueChanged(new EventArgs());
+            }
+        }
+
+        protected override void OnValueChanged(EventArgs eventargs)
+        {
+            _manager.OnValueChanged(eventargs);
+            base.OnValueChanged(eventargs);
+        }
+
+        event EventHandler IDateTimePicker.ValueChanged
+        {
+            add { _manager.ValueChanged += value; }
+            remove { _manager.ValueChanged -= value; }
+        }
 
         /// <summary>
         /// Gets or sets the date/time value assigned to the control, but returns
@@ -95,6 +125,17 @@ namespace Habanero.UI.WebGUI
         {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }
+        }
+
+        /// <summary>
+        /// Gets or sets the format of the date and time displayed in the control.
+        /// </summary>
+        ///	<returns>One of the <see cref="Base.DateTimePickerFormat"></see> values. The default is <see cref="Base.DateTimePickerFormat.Long"></see>.</returns>
+        ///	<exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The value assigned is not one of the <see cref="Base.DateTimePickerFormat"></see> values. </exception>
+        Base.DateTimePickerFormat IDateTimePicker.Format
+        {
+            get { return (Base.DateTimePickerFormat)base.Format; }
+            set { base.Format = (Gizmox.WebGUI.Forms.DateTimePickerFormat)value; }
         }
     }
 }

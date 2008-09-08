@@ -21,6 +21,36 @@ using System;
 
 namespace Habanero.UI.Base
 {
+
+    #region Enums
+
+    /// <summary>
+    /// Specifies the date and time format the <see cref="IDateTimePicker"/> control displays.
+    /// </summary>
+    //[Serializable()]
+    public enum DateTimePickerFormat
+    {
+        /// <summary>
+        /// The <see cref="IDateTimePicker"></see> control displays the date/time value in a custom format.
+        /// </summary>
+        Custom = 8,
+        /// <summary>
+        /// The <see cref="IDateTimePicker"></see> control displays the date/time value in the long date format set by the user's operating system.
+        /// </summary>
+        Long = 1,
+        /// <summary>
+        /// The <see cref="IDateTimePicker"></see> control displays the date/time value in the short date format set by the user's operating system.
+        /// </summary>
+        Short = 2,
+        /// <summary>
+        /// The <see cref="IDateTimePicker"></see> control displays the date/time value in the time format set by the user's operating system.
+        /// </summary>
+        Time = 4
+    }
+
+
+    #endregion Enums
+
     /// <summary>
     /// Represents a DateTimePicker
     /// </summary>
@@ -41,6 +71,13 @@ namespace Habanero.UI.Base
         /// Gets or sets the custom date/time format string
         /// </summary>
         string CustomFormat { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the format of the date and time displayed in the control.
+        /// </summary>
+        ///	<returns>One of the <see cref="DateTimePickerFormat"></see> values. The default is <see cref="DateTimePickerFormat.Long"></see>.</returns>
+        ///	<exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The value assigned is not one of the <see cref="DateTimePickerFormat"></see> values. </exception>
+        DateTimePickerFormat Format { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether a spin button control

@@ -157,36 +157,6 @@ namespace Habanero.Test.UI.Base
 
         
 
-        //[Test]
-        //public void TestSetControllerValueFiresEvent()
-        //{
-        //    IDateTimePicker dateTimePicker = CreateDateTimePicker();
-        //    DateTimePickerController dateTimePickerController = GetDateTimePickerController(dateTimePicker);
-        //    DateTime sampleDate = new DateTime(2003, 03, 03, 03, 03, 03);
-        //    bool isFired = false;
-        //    EventHandler handleValueChanged = delegate { isFired = true; };
-        //    dateTimePickerController.ValueChanged += handleValueChanged;
-        //    dateTimePickerController.Value = sampleDate;
-        //    Assert.IsTrue(isFired, "The ValueChanged event should have fired after setting the value.");
-        //    isFired = false;
-        //    dateTimePickerController.Value = null;
-        //    Assert.IsTrue(isFired, "The ValueChanged event should have fired after setting the value to null.");
-        //    dateTimePickerController.ValueChanged -= handleValueChanged;
-        //}
-
-        //[Test]
-        //public void TestSetPickerValueFiresEvent()
-        //{
-        //    IDateTimePicker dateTimePicker = CreateDateTimePicker();
-        //    DateTimePickerController dateTimePickerController = GetDateTimePickerController(dateTimePicker);
-        //    DateTime sampleDate = new DateTime(2004, 04, 04, 04, 04, 04);
-        //    bool isFired = false;
-        //    EventHandler handleValueChanged = delegate { isFired = true; };
-        //    dateTimePickerController.ValueChanged += handleValueChanged;
-        //    dateTimePicker.Value = sampleDate;
-        //    Assert.IsTrue(isFired, "The ValueChanged event should have fired after setting the value.");
-        //    dateTimePickerController.ValueChanged -= handleValueChanged;
-        //}
-
+        
     }
 }

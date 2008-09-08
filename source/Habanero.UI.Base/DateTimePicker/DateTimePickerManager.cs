@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Drawing;
 
 namespace Habanero.UI.Base
 {
@@ -30,36 +31,94 @@ namespace Habanero.UI.Base
     {
         #region Delegates
 
-        public delegate DateTime ValueGetter();
+        public delegate T ValueGetter<T>();
 
-        public delegate void ValueSetter(DateTime value);
+        public delegate void ValueSetter<T>(T value);
 
         #endregion
 
         private readonly IControlFactory _controlFactory;
         private readonly IDateTimePicker _dateTimePicker;
-        private readonly ValueGetter _valueGetter;
-        private readonly ValueSetter _valueSetter;
+        private readonly ValueGetter<DateTime> _valueGetter;
+        private readonly ValueSetter<DateTime> _valueSetter;
+        private readonly ValueGetter<string> _customFormatGetter;
+        private readonly ValueSetter<string> _customFormatSetter;
+        public event EventHandler ValueChanged;
 
         //State Variables
         private bool _isNull;
-        //private IPanel _displayBox;
-        //private ILabel _displayText;
+        private IPanel _displayBox;
+        private ILabel _displayText;
 
         //private event EventHandler _valueChanged;
 
         public DateTimePickerManager(IControlFactory controlFactory, IDateTimePicker dateTimePicker,
-                                     ValueGetter valueGetter, ValueSetter valueSetter)
+                                     ValueGetter<DateTime> valueGetter, ValueSetter<DateTime> valueSetter, 
+                                    ValueGetter<string> customFormatGetter, ValueSetter<string> customFormatSetter)
         {
             if (valueGetter == null) throw new ArgumentNullException("valueGetter");
             if (valueSetter == null) throw new ArgumentNullException("valueSetter");
+            if (customFormatGetter == null) throw new ArgumentNullException("customFormatGetter");
+            if (customFormatSetter == null) throw new ArgumentNullException("customFormatSetter");
             _controlFactory = controlFactory;
+            _customFormatSetter = customFormatSetter;
+            _customFormatGetter = customFormatGetter;
             _dateTimePicker = dateTimePicker;
             _valueGetter = valueGetter;
             _valueSetter = valueSetter;
             ApplyBlankFormat();
             //SetupDisplayBox();
         }
+
+        #region Null Display Box
+
+        private void SetupDisplayBox()
+        {
+            //ControlsHelper.SafeGui(_dateTimePicker, delegate()
+            //{
+                _displayBox = _controlFactory.CreatePanel();
+                //_displayBox.BorderStyle = BorderStyle.None;
+                _displayBox.Location = new Point(2, 2);
+                ResizeDisplayBox();
+                _displayBox.BackColor = _dateTimePicker.BackColor;
+                _displayBox.ForeColor = _dateTimePicker.ForeColor;
+                //_displayBox.MouseUp += DateTimePicker_MouseUp;
+                //_displayBox.KeyDown += DateTimePicker_KeyDown;
+                _displayText = _controlFactory.CreateLabel();
+                _displayText.Location = new Point(0, 0);
+                _displayText.AutoSize = true;
+                _displayText.Text = "";
+                //_displayText.MouseUp += DateTimePicker_MouseUp;
+                //_displayText.KeyDown += DateTimePicker_KeyDown;
+                _displayBox.Controls.Add(_displayText);
+                _dateTimePicker.Controls.Add(_displayBox);
+                _displayBox.Visible = false;
+            //});
+        }
+
+        private void ResizeDisplayBox()
+        {
+            _displayBox.Width = _dateTimePicker.Width - 22 - 2;
+            _displayBox.Height = _dateTimePicker.Height - 7;
+        }
+
+        private void UpdateFocusState()
+        {
+            if (_dateTimePicker.Focused)
+            {
+                _displayBox.BackColor = SystemColors.Highlight;
+                _displayBox.ForeColor = SystemColors.HighlightText;
+            }
+            else
+            {
+                _displayBox.BackColor = _dateTimePicker.BackColor;
+                _displayBox.ForeColor = _dateTimePicker.BackColor;
+            }
+            _displayText.BackColor = _displayBox.BackColor;
+            _displayText.ForeColor = _displayBox.ForeColor;
+        }
+
+        #endregion
 
         #region Properties
 
@@ -71,14 +130,14 @@ namespace Habanero.UI.Base
             get { return _dateTimePicker; }
         }
 
-        /////<summary>
-        ///// The text that will be displayed when the Value is null
-        /////</summary>
-        //public string NullDisplayValue
-        //{
-        //    get { return _displayText.Text; }
-        //    set { _displayText.Text = value ?? ""; }
-        //}
+        ///<summary>
+        /// The text that will be displayed when the Value is null
+        ///</summary>
+        public string NullDisplayValue
+        {
+            get { return _displayText.Text; }
+            set { _displayText.Text = value ?? ""; }
+        }
 
         /// <summary>
         /// Gets or sets the nullable DateTime value in the control
@@ -181,22 +240,21 @@ namespace Habanero.UI.Base
             if (!CheckBoxVisible)
             {
                 //_displayBox.Visible = true;
-            }
-            else
+            } else
             {
-                //_displayBox.Visible = false;
-                CheckBoxChecked = false;
+                
             }
+            CheckBoxChecked = false;
             _isNull = true;
             return true;
         }
 
         private void FireValueChanged()
         {
-            //if (_valueChanged != null)
-            //{
-            //    _valueChanged(this, EventArgs.Empty);
-            //}
+            if (ValueChanged != null)
+            {
+                ValueChanged(this, EventArgs.Empty);
+            }
         }
 
         #endregion //State Control

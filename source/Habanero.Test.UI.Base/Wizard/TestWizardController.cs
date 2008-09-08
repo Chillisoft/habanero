@@ -279,8 +279,6 @@ namespace Habanero.Test.UI.Base.Wizard
         {
             get { throw new NotImplementedException(); }
         }
-        
-      
 
         /// <summary>
         /// Gets or sets the control visability.  
@@ -298,6 +296,13 @@ namespace Habanero.Test.UI.Base.Wizard
         {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }
+        }
+
+        /// <summary>Gets a value indicating whether the control has input focus.</summary>
+        /// <returns>true if the control has focus; otherwise, false.</returns>
+        public bool Focused
+        {
+            get { throw new NotImplementedException(); }
         }
 
         /// <summary>

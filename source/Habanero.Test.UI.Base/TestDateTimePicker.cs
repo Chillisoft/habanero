@@ -34,14 +34,65 @@ namespace Habanero.Test.UI.Base
     /// </summary>
     public abstract class TestDateTimePicker
     {
+        protected abstract void SetBaseDateTimePickerValue(IDateTimePicker dateTimePicker, DateTime value);
+        protected abstract void SetBaseDateTimePickerCheckedValue(IDateTimePicker dateTimePicker, bool value);
+
         protected abstract IControlFactory GetControlFactory();
 
         [TestFixture]
         public class TestDateTimePickerWin : TestDateTimePicker
         {
+            protected override void SetBaseDateTimePickerValue(IDateTimePicker dateTimePicker, DateTime value)
+            {
+                System.Windows.Forms.DateTimePicker picker = (System.Windows.Forms.DateTimePicker)dateTimePicker;
+                picker.Value = value;
+            }
+
+            protected override void SetBaseDateTimePickerCheckedValue(IDateTimePicker dateTimePicker, bool value)
+            {
+                System.Windows.Forms.DateTimePicker picker = (System.Windows.Forms.DateTimePicker)dateTimePicker;
+                picker.Checked = value;
+            }
+
             protected override IControlFactory GetControlFactory()
             {
                 return new ControlFactoryWin();
+            }
+            
+            [Test]
+            public void TestShowDatePickerForm()
+
+            {
+                //---------------Set up test pack-------------------
+                IFormChilli formWin = new FormWin();
+                IDateTimePicker dateTimePicker = GetControlFactory().CreateDateTimePicker();
+                //dateTimePicker.ShowCheckBox = true;
+                ITextBox textBox = GetControlFactory().CreateTextBox();
+                IButton button = GetControlFactory().CreateButton("Check/Uncheck", delegate(object sender, EventArgs e)
+                {
+                    dateTimePicker.Checked = !dateTimePicker.Checked;
+                });
+                BorderLayoutManager borderLayoutManager = GetControlFactory().CreateBorderLayoutManager(formWin);
+                borderLayoutManager.AddControl(dateTimePicker, BorderLayoutManager.Position.North);
+                borderLayoutManager.AddControl(button, BorderLayoutManager.Position.Centre);
+                borderLayoutManager.AddControl(textBox, BorderLayoutManager.Position.South);
+                dateTimePicker.ValueChanged += delegate(object sender, EventArgs e)
+                {
+                    if (dateTimePicker.ValueOrNull.HasValue)
+                    {
+                        textBox.Text = dateTimePicker.Value.ToString();
+                    }
+                    else
+                    {
+                        textBox.Text = "";
+                    }
+                };
+                //---------------Execute Test ----------------------
+                formWin.ShowDialog();
+                //---------------Test Result -----------------------
+
+                //---------------Tear down -------------------------
+
             }
         }
 
@@ -52,6 +103,19 @@ namespace Habanero.Test.UI.Base
             {
                 return new ControlFactoryGizmox();
             }
+
+            protected override void SetBaseDateTimePickerValue(IDateTimePicker dateTimePicker, DateTime value)
+            {
+                Gizmox.WebGUI.Forms.DateTimePicker picker = (Gizmox.WebGUI.Forms.DateTimePicker)dateTimePicker;
+                picker.Value = value;
+            }
+
+            protected override void SetBaseDateTimePickerCheckedValue(IDateTimePicker dateTimePicker, bool value)
+            {
+                Gizmox.WebGUI.Forms.DateTimePicker picker = (Gizmox.WebGUI.Forms.DateTimePicker)dateTimePicker;
+                picker.Checked = value;
+            }
+
         }
 
         private IDateTimePicker CreateDateTimePicker()
@@ -87,7 +151,24 @@ namespace Habanero.Test.UI.Base
             Assert.LessOrEqual(beforeCreate, dateTime, "Default value should be Now");
             Assert.GreaterOrEqual(afterCreate, dateTime, "Default value should be Now");
             Assert.IsFalse(dateTimePicker.ShowCheckBox, "Default should not show checkbox");
+        
         }
+
+        [Test]
+        public void TestSetBaseValue_ChangesValueForIDateTimePicker()
+        {
+            //---------------Set up test pack-------------------
+            IDateTimePicker dateTimePicker = GetControlFactory().CreateDateTimePicker();
+            DateTime dateTime = DateTime.Now;
+            dateTimePicker.Value = dateTime;
+            DateTime dateTimeNew = dateTime.AddDays(1);
+            //---------------Execute Test ----------------------
+            SetBaseDateTimePickerValue(dateTimePicker, dateTimeNew);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(dateTimeNew, dateTimePicker.Value);
+        }
+
+        
 
         [Test]
         public void TestSetValue()
@@ -101,7 +182,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(testDate, dateTimePicker.Value);
             //---------------Tear Down -------------------------    
         }
-
+        
         [Test]
         public void TestSetValueToNull()
         {
@@ -167,7 +248,7 @@ namespace Habanero.Test.UI.Base
         #region Checkbox Tests
 
         [Test]
-        public void TestSetToNull_UsingCheckbox()
+        public void TestSetToNull_UnChecksCheckbox()
         {
             //-------------Setup Test Pack ------------------
             IDateTimePicker dateTimePicker = CreateDateTimePicker();
@@ -179,7 +260,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(dateTimePicker.ValueOrNull.HasValue);
             Assert.IsTrue(dateTimePicker.Checked);
             //-------------Execute test ---------------------
-            dateTimePicker.Checked = false;
+            dateTimePicker.ValueOrNull = null;
             //-------------Test Result ----------------------
             Assert.IsFalse(dateTimePicker.ValueOrNull.HasValue);
             Assert.IsFalse(dateTimePicker.Checked);
@@ -187,7 +268,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestSetToNotNull_UsingCheckbox()
+        public void TestSetToNotNull_ChecksCheckbox()
         {
             //-------------Setup Test Pack ------------------
             IDateTimePicker dateTimePicker = CreateDateTimePicker();
@@ -200,7 +281,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(dateTimePicker.ValueOrNull.HasValue);
             Assert.IsFalse(dateTimePicker.Checked);
             //-------------Execute test ---------------------
-            dateTimePicker.Checked = true;
+            dateTimePicker.ValueOrNull = dateTimeValue;
             //-------------Test Result ----------------------
             Assert.IsTrue(dateTimePicker.ValueOrNull.HasValue);
             Assert.IsTrue(dateTimePicker.Checked);
@@ -247,16 +328,146 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(dateTimeValue, dateTimePicker.ValueOrNull.Value);
         }
 
+        [Test]
+        public void TestSetBaseChecked_ChangesValueForIDateTimePicker()
+        {
+            //---------------Set up test pack-------------------
+            IDateTimePicker dateTimePicker = GetControlFactory().CreateDateTimePicker();
+            dateTimePicker.ShowCheckBox = true;
+            DateTime dateTime = DateTime.Now;
+            dateTimePicker.Value = dateTime;
+            dateTimePicker.Checked = false;
+            //---------------Assert Pre-Conditions -------------
+            Assert.IsFalse(dateTimePicker.ValueOrNull.HasValue);
+            //---------------Execute Test ----------------------
+            SetBaseDateTimePickerCheckedValue(dateTimePicker, true);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(dateTimePicker.ValueOrNull.HasValue);
+            Assert.AreEqual(dateTime, dateTimePicker.ValueOrNull);
+        }
+
         #endregion //Checkbox Tests
 
-        //[Test, Ignore("Currently Working On this(Bringing tests over from TestDateTimePickerController)")]
+        #region Test Events
+
+        [Test]
+        public void TestSetValueFiresValueChangedEvent()
+        {
+            //---------------Set up test pack-------------------
+            IDateTimePicker dateTimePicker = CreateDateTimePicker();
+            DateTime sampleDate = DateTime.Now.AddDays(1);
+            dateTimePicker.Value = sampleDate.AddDays(1);
+            bool isFired = false;
+            int firedTimes = 0;
+            dateTimePicker.ValueChanged += delegate
+            {
+                isFired = true;
+                firedTimes++;
+            };
+            //---------------Execute Test ----------------------
+            dateTimePicker.Value = sampleDate;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isFired, "The ValueChanged event should have fired after setting the value.");
+            //Assert.AreEqual(1, firedTimes, "The event should have fired only once.");
+        }
+
+        [Test]
+        public void TestSetBaseValue_FiresValueChangedEvent()
+        {
+            //---------------Set up test pack-------------------
+            IDateTimePicker dateTimePicker = CreateDateTimePicker();
+            DateTime sampleDate = DateTime.Now.AddDays(1);
+            dateTimePicker.Value = sampleDate.AddDays(1);
+            bool isFired = false;
+            int firedTimes = 0;
+            dateTimePicker.ValueChanged += delegate
+            {
+                isFired = true;
+                firedTimes++;
+            };
+            //---------------Execute Test ----------------------
+            SetBaseDateTimePickerValue(dateTimePicker, sampleDate);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isFired, "The ValueChanged event should have fired after setting the value.");
+            //Assert.AreEqual(1, firedTimes, "The event should have fired only once.");
+        }
+
+        //TODO: Add To Known Issues: There is no event that responds to changing the value of the Checkbox on the control.
+        [Test, Ignore("This is a known issue")]
+        public void TestSetBaseUnchecked_FiresValueChangedEvent()
+        {
+            //---------------Set up test pack-------------------
+            IDateTimePicker dateTimePicker = CreateDateTimePicker();
+            DateTime sampleDate = DateTime.Now.AddDays(1);
+            dateTimePicker.Value = sampleDate.AddDays(1);
+            bool isFired = false;
+            int firedTimes = 0;
+            dateTimePicker.ValueChanged += delegate
+            {
+                isFired = true;
+                firedTimes++;
+            };
+            //---------------Execute Test ----------------------
+            SetBaseDateTimePickerCheckedValue(dateTimePicker, false);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isFired, "The ValueChanged event should have fired after setting the value.");
+            //Assert.AreEqual(1, firedTimes, "The event should have fired only once.");
+        }
+
+        [Test]
+        public void TestSetUnchecked_FiresValueChangedEvent()
+        {
+            //---------------Set up test pack-------------------
+            IDateTimePicker dateTimePicker = CreateDateTimePicker();
+            DateTime sampleDate = DateTime.Now.AddDays(1);
+            dateTimePicker.Value = sampleDate.AddDays(1);
+            bool isFired = false;
+            int firedTimes = 0;
+            dateTimePicker.ValueChanged += delegate
+            {
+                isFired = true;
+                firedTimes++;
+            };
+            //---------------Execute Test ----------------------
+            dateTimePicker.Checked = false;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isFired, "The ValueChanged event should have fired after setting the value.");
+            Assert.AreEqual(1, firedTimes, "The event should have fired only once.");
+        }
+
+        [Test]
+        public void TestSetValueFiresValueChangedEvent_SetToNull()
+        {
+            //---------------Set up test pack-------------------
+            IDateTimePicker dateTimePicker = CreateDateTimePicker();
+            DateTime sampleDate = DateTime.Now.AddDays(1);
+            dateTimePicker.Value = sampleDate;
+            bool isFired = false;
+            int firedTimes = 0;
+            dateTimePicker.ValueChanged += delegate
+            {
+                isFired = true;
+                firedTimes++;
+            };
+            //---------------Execute Test ----------------------
+            dateTimePicker.ValueOrNull = null;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isFired, "The ValueChanged event should have fired after setting the value to null.");
+            //Assert.AreEqual(1, firedTimes, "The event should have fired only once.");
+        }
+
+        #endregion // Test Events
+
+        #region Visual State Tests
+
+        //[Test]
         //public void TestSetup_NullDisplayControlIsCreated()
         //{
         //    //---------------Set up test pack-------------------
         //    IDateTimePicker dateTimePicker = CreateDateTimePicker();
 
         //    //---------------Execute Test ----------------------
-            
+
         //    //---------------Test Result -----------------------
         //    Assert.AreEqual(1, dateTimePicker.Controls.Count);
         //    Assert.IsInstanceOfType(typeof(IPanel), dateTimePicker.Controls[0]);
@@ -267,5 +478,37 @@ namespace Habanero.Test.UI.Base
         //    Assert.AreEqual("", lbl.Text);
         //    //---------------Tear Down -------------------------          
         //}
+
+        //[Test]
+        //public void TestVisualState_WhenNull()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    IDateTimePicker dateTimePicker = GetControlFactory().CreateDateTimePicker();
+        //    dateTimePicker.ShowCheckBox = false;
+        //    //---------------Execute Test ----------------------
+        //    dateTimePicker.ValueOrNull = null;
+
+        //    //---------------Test Result -----------------------
+        //    Assert.AreEqual(" ", dateTimePicker.CustomFormat);
+        //    Assert.AreEqual(DateTimePickerFormat.Custom, dateTimePicker.Format);
+        //}
+
+        //[Test]
+        //public void TestVisualState_WhenNotNull()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    IDateTimePicker dateTimePicker = GetControlFactory().CreateDateTimePicker();
+        //    dateTimePicker.ShowCheckBox = false;
+        //    //---------------Execute Test ----------------------
+        //    dateTimePicker.ValueOrNull = DateTime.Now;
+
+        //    //---------------Test Result -----------------------
+        //    Assert.AreNotEqual(" ", dateTimePicker.CustomFormat);
+        //}
+
+        #endregion // Visual State Tests
+
+
+
     }
 }

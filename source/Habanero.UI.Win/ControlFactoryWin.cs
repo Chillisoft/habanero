@@ -28,6 +28,7 @@ using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Base.ControlInterfaces;
 using Habanero.Util.File;
+using DateTimePickerFormat=Habanero.UI.Base.DateTimePickerFormat;
 using ScrollBars=System.Windows.Forms.ScrollBars;
 
 namespace Habanero.UI.Win
@@ -151,7 +152,7 @@ namespace Habanero.UI.Win
         public IDateTimePicker CreateMonthPicker()
         {
             DateTimePickerWin editor = (DateTimePickerWin)CreateDateTimePicker();
-            editor.Format = DateTimePickerFormat.Custom;
+            editor.Format = (System.Windows.Forms.DateTimePickerFormat) DateTimePickerFormat.Custom;
             editor.CustomFormat = "MMM yyyy";
             return editor;
         }

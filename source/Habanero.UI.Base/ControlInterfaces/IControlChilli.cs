@@ -132,6 +132,11 @@ namespace Habanero.UI.Base
         /// </summary>
         int TabIndex { get; set; }
 
+
+        /// <summary>Gets a value indicating whether the control has input focus.</summary>
+        /// <returns>true if the control has focus; otherwise, false.</returns>
+        bool Focused { get; }
+
         /// <summary>
         /// Gets or sets the height of the control
         /// </summary>
