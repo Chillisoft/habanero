@@ -24,5 +24,23 @@ namespace Habanero.UI.Base
     /// </summary>
     public interface ITreeView : IControlChilli
     {
+
+        ITreeNodeCollection Nodes { get; }
+        ITreeNode TopNode { set; get; }
+        ITreeNode SelectedNode { get; set; }
+    }
+
+    public interface ITreeNode
+    {
+        string Text { get; set; }
+        ITreeNode Parent { get; }
+        ITreeNodeCollection Nodes { get; }
+        object OriginalNode { get; }
+    }
+
+    public interface ITreeNodeCollection
+    {
+        int Count { get; }
+        ITreeNode this[int index] { get; }
     }
 }

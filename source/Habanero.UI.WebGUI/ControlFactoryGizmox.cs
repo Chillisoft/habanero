@@ -461,7 +461,7 @@ namespace Habanero.UI.WebGUI
             return new OKCancelDialogFactoryGiz(this);
         }
 
-        public ITreeViewGridViewEditor CreateTreeViewGridViewEditor()
+        public IStaticDataEditor CreateStaticDataEditor()
         {
             throw new System.NotImplementedException();
         }

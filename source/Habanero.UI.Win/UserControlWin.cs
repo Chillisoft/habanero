@@ -20,6 +20,7 @@
 using System;
 using System.Windows.Forms;
 using Habanero.UI.Base;
+using DockStyle=System.Windows.Forms.DockStyle;
 
 namespace Habanero.UI.Win
 {
@@ -43,8 +44,16 @@ namespace Habanero.UI.Win
         /// </summary>
         Base.DockStyle IControlChilli.Dock
         {
-            get { return (Base.DockStyle)base.Dock; }
-            set { base.Dock = (System.Windows.Forms.DockStyle)value; }
+            get
+            {
+                return ControlWin.GetDockStyle(base.Dock);
+ 
+            }
+            set
+            {
+                base.Dock = ControlWin.GetDockStyle(value);
+
+            }
         }
     }
 }

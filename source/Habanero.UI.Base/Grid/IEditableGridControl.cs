@@ -54,6 +54,12 @@ namespace Habanero.UI.Base
         /// Gets and sets the filter modes for the grid (i.e. filter or search). See <see cref="FilterModes"/>.
         /// </summary>
         FilterModes FilterMode { get; set; }
+        /// <summary>
+        /// Returns the editable grid object held. This property can be used to
+        /// access a range of functionality for the grid
+        /// (eg. myGridWithButtons.Grid.AddBusinessObject(...)).
+        /// </summary>    
+        new IEditableGrid Grid { get; }
 
     
     }

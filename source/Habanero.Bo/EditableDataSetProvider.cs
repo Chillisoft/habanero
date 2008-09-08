@@ -213,6 +213,7 @@ namespace Habanero.BO
                     {
                         //log.Debug("Saving...");
                         changedBo = _collection.Find(e.Row["ID"].ToString());
+
                         changedBo.Save();
                         _rowStates.Remove(e.Row);
                     }
@@ -305,9 +306,10 @@ namespace Habanero.BO
                 if (!_rowIDs.ContainsKey(e.Row))
                 {
                     _rowIDs.Add(e.Row, e.Row["ID"]);
+                    AddToRowStates(e.Row, RowState.Added);
                 }
 
-                AddToRowStates(e.Row, RowState.Added);
+
 
                 //log.Debug("Row added complete.") ;
                 //log.Debug(newBo.GetDebugOutput()) ;
@@ -348,17 +350,9 @@ namespace Habanero.BO
         private void BusinessObjectAddedToCollectionHandler(object sender, BOEventArgs e)
         {
             IBusinessObject businessObject = e.BusinessObject;
-            //log.Debug("BO Added to collection " + e.BusinessObject.ID);
+            if (FindRow(businessObject) != -1) return;
             _table.RowChanged -= RowChangedHandler;
             _table.NewRow();
-            //object[] values = new object[_uiGridProperties.Count + 1];
-            //values[0] = businessObject.ID.ToString();
-            //int i = 1;
-            //BOMapper mapper = new BOMapper(businessObject);
-            //foreach (UIGridColumn gridProperty in _uiGridProperties)
-            //{
-            //    values[i++] = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
-            //}
             object[] values = GetValues(businessObject);
             _table.LoadDataRow(values, false);
 
@@ -366,8 +360,9 @@ namespace Habanero.BO
             if (!_rowIDs.ContainsKey(newRow))
             {
                 _rowIDs.Add(newRow, newRow["ID"]);
+                _rowStates.Add(newRow, RowState.Added);
             }
-            _rowStates.Add(newRow, RowState.Added);
+            
             _table.RowChanged += RowChangedHandler;
 
             //log.Debug("Done adding bo to collection " + e.BusinessObject.ID);

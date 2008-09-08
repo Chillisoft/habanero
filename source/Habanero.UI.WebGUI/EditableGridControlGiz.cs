@@ -219,6 +219,11 @@ namespace Habanero.UI.WebGUI
             set { _filterControl.FilterMode = value; }
         }
 
+        IEditableGrid IEditableGridControl.Grid
+        {
+            get { return _grid; }
+        }
+
         /// <summary>
         /// Gets and sets the default order by clause used for loading the grid when the <see cref="FilterModes"/>
         /// is set to Search

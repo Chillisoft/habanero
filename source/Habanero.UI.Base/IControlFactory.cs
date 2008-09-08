@@ -415,7 +415,7 @@ namespace Habanero.UI.Base
         /// Creates a strategy that customises behaviour of a NumericUpDown for the environment
         /// </summary>
         INumericUpDownMapperStrategy CreateNumericUpDownMapperStrategy();
-        ITreeViewGridViewEditor CreateTreeViewGridViewEditor();
+        IStaticDataEditor CreateStaticDataEditor();
     }
 
     /// <summary>

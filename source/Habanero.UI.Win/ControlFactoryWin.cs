@@ -478,9 +478,9 @@ namespace Habanero.UI.Win
             return new OKCancelDialogFactoryWin(this);
         }
 
-        public ITreeViewGridViewEditor CreateTreeViewGridViewEditor()
+        public IStaticDataEditor CreateStaticDataEditor()
         {
-            return new TreeViewGridViewEditorWin(this);
+            return new StaticDataEditorWin(this);
         }
 
         /// <summary>

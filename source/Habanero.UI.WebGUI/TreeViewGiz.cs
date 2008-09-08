@@ -46,5 +46,22 @@ namespace Habanero.UI.WebGUI
             get { return (Base.DockStyle)base.Dock; }
             set { base.Dock = (Gizmox.WebGUI.Forms.DockStyle)value; }
         }
+
+        public ITreeNodeCollection Nodes
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public ITreeNode TopNode
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+
+        public ITreeNode SelectedNode
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
     }
 }

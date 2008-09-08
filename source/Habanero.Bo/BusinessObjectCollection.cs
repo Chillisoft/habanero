@@ -594,15 +594,15 @@ namespace Habanero.BO
                 TBusinessObject bo = (TBusinessObject) _keyObjectHashTable[key];
                 if (this.Contains(bo))
                     return (TBusinessObject) _keyObjectHashTable[key];
+
                 return null;
             }
+
+            foreach (TBusinessObject createdBusinessObject in _createdBusinessObjects)
+            {
+                if (createdBusinessObject.ID.ToString() == key) return createdBusinessObject;
+            }
             return null;
-//			foreach (BusinessObjectBase bo in this._list) {
-//				if (bo.StrID() == strID) {
-//					return bo;
-//				}
-//			}
-//			return null;
         }
 
         /// <summary>
