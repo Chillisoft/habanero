@@ -163,6 +163,9 @@
     <Compile Include="ToolTipWin.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="TreeViewGridViewEditorWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TreeViewWin.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -479,6 +479,11 @@ namespace Habanero.Test.UI.Base.Wizard
             set { throw new NotImplementedException(); }
         }
 
+        public void Dispose()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public event EventHandler TextChanged;
 
         #endregion

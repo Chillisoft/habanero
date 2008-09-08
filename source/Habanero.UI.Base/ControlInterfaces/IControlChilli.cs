@@ -318,6 +318,11 @@ namespace Habanero.UI.Base
         DockStyle Dock { get; set; }
 
         /// <summary>
+        /// Releases all resources used by the Component.
+        /// </summary>
+        void Dispose();
+
+        /// <summary>
         /// Occurs when the .Text property value changes
         /// </summary>
         event EventHandler TextChanged;

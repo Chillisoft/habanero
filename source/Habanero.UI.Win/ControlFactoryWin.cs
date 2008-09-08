@@ -477,6 +477,11 @@ namespace Habanero.UI.Win
             return new OKCancelDialogFactoryWin(this);
         }
 
+        public ITreeViewGridViewEditor CreateTreeViewGridViewEditor()
+        {
+            return new TreeViewGridViewEditorWin(this);
+        }
+
         /// <summary>
         /// Creates a new empty ComboBox
         /// </summary>

@@ -460,6 +460,11 @@ namespace Habanero.UI.WebGUI
             return new OKCancelDialogFactoryGiz(this);
         }
 
+        public ITreeViewGridViewEditor CreateTreeViewGridViewEditor()
+        {
+            throw new System.NotImplementedException();
+        }
+
         /// <summary>
         /// Creates a new DateTimePicker that is formatted to handle months
         /// and years
