@@ -261,7 +261,7 @@ namespace Habanero.Test.UI.Base
             int column2width = 150;
             int column2left = column1width + bordersize + (gapSize * 3) + 15;
             Assert.AreEqual(column2left, secondLabelInCol2.Left);
-            Assert.IsTrue(pnl.Controls[3] is ITextBox);
+            Assert.IsTrue(pnl.Controls[4] is ITextBox);
             IControlChilli secondControl_InCol2 = pnl.Controls[4];
             Assert.AreEqual(column2left + column2width + 2, secondControl_InCol2.Left + secondControl_InCol2.Width, "Control in column 2 should be placed on column2 dimensions");
                 //  column 2 width is 150

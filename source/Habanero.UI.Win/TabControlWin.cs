@@ -88,7 +88,11 @@ namespace Habanero.UI.Win
         /// </summary>
         public ITabPage this[int i]
         {
-            get { return (ITabPage)_tabPages[i]; }
+            get
+            {
+                if(i>-1) return (ITabPage)_tabPages[i];
+                return null;
+            }
         }
 
         /// <summary>

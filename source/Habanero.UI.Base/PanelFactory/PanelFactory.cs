@@ -375,7 +375,7 @@ namespace Habanero.UI.Base
                     ctl.Width = 100;
                 }
 
-                currentColumn += 2;
+                currentColumn += 3;
             }
             for (int i = 0; i < rowCount; i++)
             {

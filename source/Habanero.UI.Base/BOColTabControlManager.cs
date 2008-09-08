@@ -57,11 +57,16 @@ namespace Habanero.UI.Base
             set
             {
                 _boControl = value;
-                if (value is IControlChilli)
+                if (_boControl != null)
                 {
-                    //BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(TabControl);
-                    //manager.AddControl(value, BorderLayoutManager.Position.Centre);
-                    //((Control)_boControl).Dock = DockStyle.Fill;
+                    BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(TabControl);
+                    ITabPage tabPage = _controlFactory.CreateTabPage(_boControl.Text);
+                    _boControl.Dock = DockStyle.Fill;
+                    tabPage.Controls.Add(_boControl);
+                    //_pageBoTable.Add(tabPage,_boControl.BusinessObject);
+                    //_boPageTable.Add(_boControl.BusinessObject,tabPage);
+                    manager.AddControl(tabPage, BorderLayoutManager.Position.Centre);
+                    
                 }
                 else
                 {
@@ -142,11 +147,13 @@ namespace Habanero.UI.Base
             if (_tabControl.SelectedTab != null)
             {
                 _tabControl.SelectedTab.Controls.Clear();
-                _boControl.Dock = DockStyle.Fill;
                 _tabControl.SelectedTab.Controls.Add(_boControl);
                 if (_boControl != null)
                 {
                     _boControl.BusinessObject = GetBo(_tabControl.SelectedTab);
+                   // _boControl.Dock = DockStyle.Fill;
+                    _tabControl.SelectedTab.Controls.Add(_boControl);
+                    
                 }
             }
         }
@@ -228,6 +235,11 @@ namespace Habanero.UI.Base
         /// <param name="bo">The business ojbect to represent</param>
         protected virtual void AddTabPage(ITabPage page, IBusinessObject bo)
         {
+            if (_boControl != null)
+            {
+                _boControl.BusinessObject = bo;
+                page.Controls.Add(_boControl);
+            }
             AddTabPageToEnd(page);
             AddBoPageIndexing(bo, page);
         }
