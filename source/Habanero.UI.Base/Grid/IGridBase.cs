@@ -33,6 +33,13 @@ namespace Habanero.UI.Base
     public delegate void GridLoaderDelegate(IGridBase grid, IBusinessObjectCollection col);
 
     /// <summary>
+    /// Handles the event of a user double-clicking on a row in the grid
+    /// </summary>
+    /// <param name="sender">The object that notified of the event</param>
+    /// <param name="e">Attached arguments regarding the event</param>
+    public delegate void RowDoubleClickedHandler(Object sender, BOEventArgs e);
+
+    /// <summary>
     /// Provides a DataGridView that is adapted to show business objects
     /// </summary>
     public interface IGridBase : IControlHabanero
@@ -249,5 +256,10 @@ namespace Habanero.UI.Base
         /// select more than one cell, row, or column at a time
         /// </summary>
         bool MultiSelect { get; set; }
+
+        /// <summary>
+        /// Occurs when a row is double-clicked by the user
+        /// </summary>
+        event RowDoubleClickedHandler RowDoubleClicked;
     }
 }

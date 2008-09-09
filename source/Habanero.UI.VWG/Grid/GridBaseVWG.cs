@@ -33,7 +33,15 @@ namespace Habanero.UI.VWG
     /// </summary>
     public abstract class GridBaseVWG : DataGridView, IGridBase
     {
+        /// <summary>
+        /// Occurs when a business object is selected
+        /// </summary>
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
+
+        /// <summary>
+        /// Occurs when a row is double-clicked by the user
+        /// </summary>
+        public event RowDoubleClickedHandler RowDoubleClicked;
 
         /// <summary>
         /// Occurs when the collection in the grid is changed
@@ -49,7 +57,6 @@ namespace Habanero.UI.VWG
 
         protected GridBaseVWG()
         {
-            
             _manager = new GridBaseManager(this);
             this.SelectionChanged += delegate { FireBusinessObjectSelected(); };
             _manager.CollectionChanged += delegate { FireCollectionChanged(); };

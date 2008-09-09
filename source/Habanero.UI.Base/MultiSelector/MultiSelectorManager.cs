@@ -33,8 +33,6 @@ namespace Habanero.UI.Base
         private readonly IMultiSelector<T> _multiSelector;
         private readonly MultiSelectorModel<T> _model;
 
-        //TODO: add double click behaviour
-
         public MultiSelectorManager(IMultiSelector<T> multiSelector)
         {
             _multiSelector = multiSelector;
@@ -64,29 +62,28 @@ namespace Habanero.UI.Base
             selectButton.Click += DoSelect;
 
             IButton deselectButton = GetButton(MultiSelectorButton.Deselect);
-            deselectButton.Click += delegate
-                                        {
-                                            List<T> items = new List<T>();
-                                            foreach (T item in SelectionsListBox.SelectedItems) items.Add(item);
-                                            _model.Deselect(items);
-                                        };
+            deselectButton.Click += DoDeselect;
 
             IButton selectAllButton = GetButton(MultiSelectorButton.SelectAll);
             selectAllButton.Click += delegate { _model.SelectAll(); };
 
             IButton deselectAllButton = GetButton(MultiSelectorButton.DeselectAll);
             deselectAllButton.Click += delegate { _model.DeselectAll(); };
-
-            //SelectionsListBox.DoubleClick += DoSelect;
         }
 
-        private void DoSelect(object sender, EventArgs e)
+        public void DoSelect(object sender, EventArgs e)
         {
             List<T> items = new List<T>();
             foreach (T item in AvailableOptionsListBox.SelectedItems) items.Add(item);
             _model.Select(items);
         }
 
+        public void DoDeselect(object sender, EventArgs e)
+        {
+            List<T> items = new List<T>();
+            foreach (T item in SelectionsListBox.SelectedItems) items.Add(item);
+            _model.Deselect(items);
+        }
 
         private void UpdateListBoxes()
         {
@@ -134,11 +131,11 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// See <see cref="IMultiSelector{T}.SelectionsListBox"/>
+        /// See <see cref="IMultiSelector{T}.SelectedOptionsListBox"/>
         /// </summary>
         private IListBox SelectionsListBox
         {
-            get { return _multiSelector.SelectionsListBox; }
+            get { return _multiSelector.SelectedOptionsListBox; }
         }
 
         /// <summary>

@@ -111,7 +111,7 @@ namespace Habanero.Test.UI.Base
                 _selector.SelectedOptions = options;
                 //---------------Execute Test ----------------------
 
-                _selector.SelectionsListBox.SelectedIndex = 0;
+                _selector.SelectedOptionsListBox.SelectedIndex = 0;
 
                 //---------------Test Result -----------------------
                 Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Deselect).Enabled);
@@ -126,13 +126,31 @@ namespace Habanero.Test.UI.Base
                 List<TestT> options = CreateListWithTwoOptions();
                 _selector.AllOptions = options;
                 _selector.SelectedOptions = options;
-                _selector.SelectionsListBox.SelectedIndex = 0;
+                _selector.SelectedOptionsListBox.SelectedIndex = 0;
                 //---------------Execute Test ----------------------
-                _selector.SelectionsListBox.SelectedIndex = -1;
+                _selector.SelectedOptionsListBox.SelectedIndex = -1;
                 //---------------Test Result -----------------------
                 Assert.IsFalse(_selector.GetButton(MultiSelectorButton.Deselect).Enabled);
                 //---------------Tear Down -------------------------          
             }
+
+            [Test]
+            public void Test_DoubleClickingHandlersAssigned()
+            {
+                //---------------Set up test pack-------------------
+                
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, TestUtil.CountEventSubscribers(_selector.AvailableOptionsListBox, "DoubleClick"));
+                Assert.AreEqual(1, TestUtil.CountEventSubscribers(_selector.SelectedOptionsListBox, "DoubleClick"));
+
+                Assert.IsTrue(TestUtil.EventHasSubscriber(_selector.AvailableOptionsListBox, "DoubleClick", "DoSelect"));
+                Assert.IsTrue(TestUtil.EventHasSubscriber(_selector.SelectedOptionsListBox, "DoubleClick", "DoDeselect"));
+            }
+
         }
 
         [TestFixture]
@@ -229,7 +247,7 @@ namespace Habanero.Test.UI.Base
                 _selector.SelectedOptions = options;
                 //---------------Execute Test ----------------------
 
-                _selector.SelectionsListBox.SelectedIndex = 0;
+                _selector.SelectedOptionsListBox.SelectedIndex = 0;
 
                 //---------------Test Result -----------------------
                 Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Deselect).Enabled);
@@ -244,9 +262,9 @@ namespace Habanero.Test.UI.Base
                 List<TestT> options = CreateListWithTwoOptions();
                 _selector.AllOptions = options;
                 _selector.SelectedOptions = options;
-                _selector.SelectionsListBox.SelectedIndex = 0;
+                _selector.SelectedOptionsListBox.SelectedIndex = 0;
                 //---------------Execute Test ----------------------
-                _selector.SelectionsListBox.SelectedIndex = -1;
+                _selector.SelectedOptionsListBox.SelectedIndex = -1;
                 //---------------Test Result -----------------------
                 Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Deselect).Enabled);
                 //---------------Tear Down -------------------------          
@@ -288,7 +306,7 @@ namespace Habanero.Test.UI.Base
             List<TestT> twoOptions = CreateListWithTwoOptions();
             //---------------Assert Preconditions -------------
             Assert.AreEqual(0, _selector.AvailableOptionsListBox.Items.Count);
-            Assert.AreEqual(0, _selector.SelectionsListBox.Items.Count);
+            Assert.AreEqual(0, _selector.SelectedOptionsListBox.Items.Count);
             //---------------Execute Test ----------------------
             _selector.AllOptions = twoOptions;
 
@@ -404,8 +422,8 @@ namespace Habanero.Test.UI.Base
             _selector.SelectedOptions = twoOptions;
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(2, _selector.SelectionsListBox.Items.Count);
-            Assert.AreEqual(_selector.SelectionsListBox.Items.Count, _selector.SelectionsView.Count);
+            Assert.AreEqual(2, _selector.SelectedOptionsListBox.Items.Count);
+            Assert.AreEqual(_selector.SelectedOptionsListBox.Items.Count, _selector.SelectionsView.Count);
             //---------------Tear Down -------------------------          
         }
 
@@ -473,7 +491,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, _selector.AvailableOptionsListBox.Items.Count);
-            Assert.AreEqual(1, _selector.SelectionsListBox.Items.Count);
+            Assert.AreEqual(1, _selector.SelectedOptionsListBox.Items.Count);
             //---------------Tear Down -------------------------          
         }
 
@@ -505,7 +523,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             AssertAllSelected(_selector);
-            Assert.AreEqual(_selector.SelectionsListBox.Items.Count, _selector.SelectionsView.Count);
+            Assert.AreEqual(_selector.SelectedOptionsListBox.Items.Count, _selector.SelectionsView.Count);
             //---------------Tear Down -------------------------          
         }
 
@@ -543,8 +561,8 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, _selector.AvailableOptionsListBox.Items.Count);
-            Assert.AreEqual(1, _selector.SelectionsListBox.Items.Count);
-            Assert.AreEqual(_selector.SelectionsListBox.Items.Count, _selector.SelectionsView.Count);
+            Assert.AreEqual(1, _selector.SelectedOptionsListBox.Items.Count);
+            Assert.AreEqual(_selector.SelectedOptionsListBox.Items.Count, _selector.SelectionsView.Count);
             //---------------Tear Down -------------------------          
         }
 
@@ -564,7 +582,7 @@ namespace Habanero.Test.UI.Base
             _selector.GetButton(MultiSelectorButton.Select).PerformClick();
 
             //---------------Test Result -----------------------
-            foreach (object o in _selector.SelectionsListBox.Items)
+            foreach (object o in _selector.SelectedOptionsListBox.Items)
             {
                 Assert.IsNotNull(o);
             }
@@ -590,7 +608,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             AssertAllSelected(_selector);
-            Assert.AreEqual(_selector.SelectionsListBox.Items.Count, _selector.SelectionsView.Count);
+            Assert.AreEqual(_selector.SelectedOptionsListBox.Items.Count, _selector.SelectionsView.Count);
             //---------------Tear Down -------------------------          
         }
 
@@ -601,7 +619,7 @@ namespace Habanero.Test.UI.Base
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
             _selector.AllOptions = CreateListWithTwoOptions();
             _selector.Model.Select(_selector.Model.OptionsView[0]);
-            _selector.SelectionsListBox.SelectedIndex = 0;
+            _selector.SelectedOptionsListBox.SelectedIndex = 0;
 
             //---------------Execute Test ----------------------
             _selector.GetButton(MultiSelectorButton.Deselect).PerformClick();
@@ -622,8 +640,8 @@ namespace Habanero.Test.UI.Base
             List<TestT> options = CreateListWithTwoOptions();
             _selector.AllOptions = options;
             _selector.Model.SelectAll();
-            _selector.SelectionsListBox.SelectedItems.Add(options[0]);
-            _selector.SelectionsListBox.SelectedItems.Add(options[1]);
+            _selector.SelectedOptionsListBox.SelectedItems.Add(options[0]);
+            _selector.SelectedOptionsListBox.SelectedItems.Add(options[1]);
             //---------------Execute Test ----------------------
             _selector.GetButton(MultiSelectorButton.Deselect).PerformClick();
 
@@ -669,13 +687,13 @@ namespace Habanero.Test.UI.Base
         private static void AssertNoneSelected(IMultiSelector<TestT> _selector)
         {
             Assert.AreEqual(2, _selector.AvailableOptionsListBox.Items.Count);
-            Assert.AreEqual(0, _selector.SelectionsListBox.Items.Count);
+            Assert.AreEqual(0, _selector.SelectedOptionsListBox.Items.Count);
         }
 
         private static void AssertAllSelected(IMultiSelector<TestT> _selector)
         {
             Assert.AreEqual(0, _selector.AvailableOptionsListBox.Items.Count);
-            Assert.AreEqual(2, _selector.SelectionsListBox.Items.Count);
+            Assert.AreEqual(2, _selector.SelectedOptionsListBox.Items.Count);
         }
 
         #endregion

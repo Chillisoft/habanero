@@ -75,6 +75,8 @@ namespace Habanero.UI.Win
             borderLayoutManager.AddControl(_filterControl, BorderLayoutManager.Position.North);
             FilterMode = FilterModes.Filter;
             _grid.Name = "GridControl";
+
+            SetDoubleClickEventHandlers();
         }
 
         #region IReadOnlyGridControl Members
@@ -405,6 +407,12 @@ namespace Habanero.UI.Win
                 _businessObjectEditor.EditObject(newBo, UiDefName,
                                                  delegate(IBusinessObject bo) { Grid.SelectedBusinessObject = bo; });
             }
+        }
+
+        private void SetDoubleClickEventHandlers()
+        {
+            _grid.RowDoubleClicked += Buttons_EditClicked;
+            //_grid.RowDoubleClicked += new RowDoubleClickedHandler(_grid_RowDoubleClicked);
         }
     }
 }

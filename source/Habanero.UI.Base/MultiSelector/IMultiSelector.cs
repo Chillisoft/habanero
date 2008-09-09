@@ -85,7 +85,7 @@ namespace Habanero.UI.Base
         /// Gets the ListBox control that contains the options that have been
         /// selected from those available
         /// </summary>
-        IListBox SelectionsListBox { get; }
+        IListBox SelectedOptionsListBox { get; }
 
         /// <summary>
         /// Gets the button control as indicated by the <see cref="MultiSelectorButton"/> enumeration.

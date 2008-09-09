@@ -35,9 +35,22 @@ namespace Habanero.UI.Win
     /// </summary>
     public abstract class GridBaseWin : DataGridView, IGridBase
     {
+        /// <summary>
+        /// Occurs when a business object is selected
+        /// </summary>
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
+
+        /// <summary>
+        /// Occurs when the collection in the grid is changed
+        /// </summary>
         public event EventHandler CollectionChanged;
+
         public event EventHandler FilterUpdated;
+
+        /// <summary>
+        /// Occurs when a row is double-clicked by the user
+        /// </summary>
+        public event RowDoubleClickedHandler RowDoubleClicked;
 
         private readonly GridBaseManager _manager;
 
@@ -46,6 +59,36 @@ namespace Habanero.UI.Win
             _manager = new GridBaseManager(this);
             this.SelectionChanged += delegate { FireBusinessObjectSelected(); };
             _manager.CollectionChanged += delegate { FireCollectionChanged(); };
+
+            DoubleClick += DoubleClickHandler;
+        }
+
+        /// <summary>
+        /// Handles the event of a double-click
+        /// </summary>
+        /// <param name="sender">The object that notified of the event</param>
+        /// <param name="e">Attached arguments regarding the event</param>
+        private void DoubleClickHandler(object sender, EventArgs e)
+        {
+            System.Drawing.Point pt = this.PointToClient(Cursor.Position);
+            DataGridView.HitTestInfo hti = this.HitTest(pt.X, pt.Y);
+            if (hti.Type == DataGridViewHitTestType.Cell)
+            {
+                FireRowDoubleClicked(SelectedBusinessObject);
+            }
+        }
+
+        /// <summary>
+        /// Creates an event for a row being double-clicked
+        /// </summary>
+        /// <param name="selectedBo">The business object to which the
+        /// double-click applies</param>
+        public void FireRowDoubleClicked(IBusinessObject selectedBo)
+        {
+            if (RowDoubleClicked != null)
+            {
+                RowDoubleClicked(this, new BOEventArgs(selectedBo));
+            }
         }
 
         /// <summary>

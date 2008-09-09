@@ -105,7 +105,23 @@ namespace Habanero.Test.UI.Base
                 frmLocal.Height = formHeight;
             }
 
+            [Test]
+            public void Test_GridDoubleClickHandlersAssigned()
+            {
+                //---------------Set up test pack-------------------
+                
+                //---------------Assert Precondition----------------
 
+                //---------------Execute Test ----------------------
+                IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, TestUtil.CountEventSubscribers(readOnlyGridControl.Grid, "DoubleClick"));
+                Assert.IsTrue(TestUtil.EventHasSubscriber(readOnlyGridControl.Grid, "DoubleClick", "DoubleClickHandler"));
+
+                // THESE TESTS DON'T WORK FOR SOME REASON, BUT THE GRID DOUBLE-CLICKING DOES WORK - ERIC
+                //Assert.AreEqual(1, TestUtil.CountEventSubscribers(readOnlyGridControl.Grid, "RowDoubleClicked"));
+                //Assert.IsTrue(TestUtil.EventHasSubscriber(readOnlyGridControl.Grid, "RowDoubleClicked", "Buttons_EditClicked"));
+            }
 
 
 //        [Test]

@@ -47,10 +47,12 @@ namespace Habanero.UI.Win
                 GetButton(MultiSelectorButton.Select).Enabled = (AvailableOptionsListBox.SelectedIndex != -1);
             };
 
-            SelectionsListBox.SelectedIndexChanged += delegate
+            SelectedOptionsListBox.SelectedIndexChanged += delegate
             {
-                GetButton(MultiSelectorButton.Deselect).Enabled = (SelectionsListBox.SelectedIndex != -1);
+                GetButton(MultiSelectorButton.Deselect).Enabled = (SelectedOptionsListBox.SelectedIndex != -1);
             };
+
+            SetDoubleClickEventHandlers();
         }
 
         /// <summary>
@@ -102,7 +104,7 @@ namespace Habanero.UI.Win
         /// Gets the ListBox control that contains the options that have been
         /// selected from those available
         /// </summary>
-        public IListBox SelectionsListBox
+        public IListBox SelectedOptionsListBox
         {
             get { return _selectionsListbox; }
         }
@@ -137,6 +139,12 @@ namespace Habanero.UI.Win
         {
             //TODO Port: Fix and test this for windows.
             get { return this._manager.SelectionsView; }
+        }
+
+        private void SetDoubleClickEventHandlers()
+        {
+            AvailableOptionsListBox.DoubleClick += _manager.DoSelect;
+            SelectedOptionsListBox.DoubleClick += _manager.DoDeselect;
         }
     }
 }

@@ -88,7 +88,7 @@ namespace Habanero.UI.VWG
         /// Gets the ListBox control that contains the options that have been
         /// selected from those available
         /// </summary>
-        public IListBox SelectionsListBox
+        public IListBox SelectedOptionsListBox
         {
             get { return _selectionsListbox; }
         }
