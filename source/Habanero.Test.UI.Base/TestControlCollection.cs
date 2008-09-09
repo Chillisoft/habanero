@@ -18,7 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -38,19 +38,19 @@ namespace Habanero.Test.UI.Base
         //}
 
         [TestFixture]
-        public class TestControlCollectionGiz : TestControlCollection
+        public class TestControlCollectionVWG : TestControlCollection
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
         }
         [Test]
         public void TestAddControl()
         {
-            TextBoxGiz tb = (TextBoxGiz) GetControlFactory().CreateTextBox();
-            IControlCollection col = new ControlCollectionGiz(new Gizmox.WebGUI.Forms.Control.ControlCollection(tb));
-            IControlChilli ctl = GetControlFactory().CreateControl();
+            TextBoxVWG tb = (TextBoxVWG) GetControlFactory().CreateTextBox();
+            IControlCollection col = new ControlCollectionVWG(new Gizmox.WebGUI.Forms.Control.ControlCollection(tb));
+            IControlHabanero ctl = GetControlFactory().CreateControl();
             col.Add(ctl);
             Assert.AreSame(ctl, col[0], "Control added should be the same object.");
         }

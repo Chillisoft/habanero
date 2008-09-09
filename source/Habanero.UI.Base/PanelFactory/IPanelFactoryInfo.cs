@@ -53,7 +53,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Returns the first control to focus on in the user interface
         /// </summary>
-        IControlChilli FirstControlToFocus { get; }
+        IControlHabanero FirstControlToFocus { get; }
 
         /// <summary>
         /// Gets and sets the tooltip for the panel

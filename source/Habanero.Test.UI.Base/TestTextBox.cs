@@ -2,18 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    public abstract class TestTestBox
+    public abstract class TestTextBox
     {
         protected abstract IControlFactory GetControlFactory();
 
         [TestFixture]
-        public class TestTestBoxWin : TestTestBox
+        public class TestTextBoxWin : TestTextBox
         {
             protected override IControlFactory GetControlFactory()
             {
@@ -72,11 +72,11 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestTestBoxGiz : TestTestBox
+        public class TestTextBoxVWG : TestTextBox
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
             [Test]
             public void TestScrollBars_Vertical()

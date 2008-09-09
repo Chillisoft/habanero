@@ -47,7 +47,7 @@ namespace Habanero.UI.Win
         private ComboBoxWin ComboBox(LookupComboBoxMapper mapper)
         {
             ComboBoxWin comboBoxWin = null;
-            IControlChilli control = mapper.Control;
+            IControlHabanero control = mapper.Control;
             if (control is IComboBox)
             {
                 comboBoxWin = (ComboBoxWin) control;

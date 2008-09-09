@@ -25,7 +25,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Represents a ComboBox control
     /// </summary>
-    public interface IComboBox : IControlChilli
+    public interface IComboBox : IControlHabanero
     {
         /// <summary>
         /// Occurs when the SelectedIndex property has changed

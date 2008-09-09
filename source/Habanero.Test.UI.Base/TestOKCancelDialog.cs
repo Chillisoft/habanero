@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 using DockStyle=Habanero.UI.Base.DockStyle;
@@ -9,16 +9,16 @@ namespace Habanero.Test.UI.Base
 {
     public abstract class TestOKCancelDialog
     {
-        //TODO: refactor - WIN and GIZ are copied and pasted.
+        //TODO: refactor - WIN and VWG are copied and pasted.
         protected abstract IControlFactory GetControlFactory();
 
 
         [TestFixture]
-        public class TestOKCancelDialogGiz : TestOKCancelDialog
+        public class TestOKCancelDialogVWG : TestOKCancelDialog
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
         }
 
@@ -36,7 +36,7 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 IOKCancelDialogFactory okCancelDialogFactory = GetControlFactory().CreateOKCancelDialogFactory();
                     //---------------Execute Test ----------------------
-                IFormChilli dialogForm = okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel(), "");
+                IFormHabanero dialogForm = okCancelDialogFactory.CreateOKCancelForm(GetControlFactory().CreatePanel(), "");
 
                 //---------------Test Result -----------------------
                 Assert.AreEqual(1, dialogForm.Controls.Count);
@@ -92,7 +92,7 @@ namespace Habanero.Test.UI.Base
             IOKCancelDialogFactory okCancelDialogFactory = GetControlFactory().CreateOKCancelDialogFactory();
 
             //---------------Execute Test ----------------------
-            IControlChilli dialogControl = okCancelDialogFactory.CreateOKCancelPanel(GetControlFactory().CreatePanel());
+            IControlHabanero dialogControl = okCancelDialogFactory.CreateOKCancelPanel(GetControlFactory().CreatePanel());
             //---------------Test Result -----------------------
             Assert.AreEqual(2, dialogControl.Controls.Count);
             Assert.IsInstanceOfType(typeof (IPanel), dialogControl.Controls[0]);
@@ -113,10 +113,10 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IOKCancelDialogFactory okCancelDialogFactory = GetControlFactory().CreateOKCancelDialogFactory();
-            IControlChilli nestedControl = GetControlFactory().CreatePanel();
+            IControlHabanero nestedControl = GetControlFactory().CreatePanel();
 
             //---------------Execute Test ----------------------
-            IControlChilli dialogControl = okCancelDialogFactory.CreateOKCancelPanel(nestedControl);
+            IControlHabanero dialogControl = okCancelDialogFactory.CreateOKCancelPanel(nestedControl);
             IPanel contentPanel = (IPanel) dialogControl.Controls[0];
 
             //---------------Test Result -----------------------

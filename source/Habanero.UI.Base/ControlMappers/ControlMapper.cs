@@ -42,7 +42,7 @@ namespace Habanero.UI.Base
         protected readonly bool _isReadOnly;
         protected Hashtable _attributes;
         protected BusinessObject _businessObject;
-        protected IControlChilli _control;
+        protected IControlHabanero _control;
         protected bool _isEditable;
         protected string _propertyName;
 
@@ -55,7 +55,7 @@ namespace Habanero.UI.Base
         /// If so, it then becomes disabled.  If not,
         /// handlers are assigned to manage key presses.</param>
         /// <param name="factory"></param>
-        protected ControlMapper(IControlChilli ctl, string propName, bool isReadOnly, IControlFactory factory)
+        protected ControlMapper(IControlHabanero ctl, string propName, bool isReadOnly, IControlFactory factory)
         {
             if (ctl == null) throw new ArgumentNullException("ctl");
             if (factory == null) throw new ArgumentNullException("factory");
@@ -84,7 +84,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Returns the control being mapped
         /// </summary>
-        public IControlChilli Control
+        public IControlHabanero Control
         {
             get { return _control; }
         }
@@ -281,7 +281,7 @@ namespace Habanero.UI.Base
         /// a subclass of the ControlMapper class.</exception>
         /// <param name="controlFactory">The control factory</param>
         public static IControlMapper Create
-            (string mapperTypeName, string mapperAssembly, IControlChilli ctl, string propertyName, bool isReadOnly,
+            (string mapperTypeName, string mapperAssembly, IControlHabanero ctl, string propertyName, bool isReadOnly,
              IControlFactory controlFactory)
         {
             if (string.IsNullOrEmpty(mapperTypeName)) mapperTypeName = "TextBoxMapper";

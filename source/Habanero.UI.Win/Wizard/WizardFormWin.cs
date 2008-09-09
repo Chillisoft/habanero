@@ -55,7 +55,7 @@ namespace Habanero.UI.Win
             _wizardController = controller;
 
             _controlFactory = controlFactory;
-//            _uxWizardControl = new WizardControlGiz(controller, _controlFactory);
+//            _uxWizardControl = new WizardControlWin(controller, _controlFactory);
             _uxWizardControl = (WizardControlWin)controlFactory.CreateWizardControl(controller);
             this._uxWizardControl.MessagePosted += _uxWizardControl_MessagePosted;
             this._uxWizardControl.Finished += this._uxWizardControl_Finished;
@@ -64,10 +64,10 @@ namespace Habanero.UI.Win
             InitializeComponent();
             WizardControl.WizardController = _wizardController;
             DialogResult = DialogResult.Cancel;
-            this.Closing += WizardFormGiz_Closing;
+            this.Closing += WizardFormWin_Closing;
         }
 
-        void WizardFormGiz_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        void WizardFormWin_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             //TODO: should follow pattern of checking dirty status and if dirty ask user
             this._wizardController.CancelWizard();
@@ -107,7 +107,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets the collection of controls contained within the control
         /// </summary>
-        IControlCollection IControlChilli.Controls
+        IControlCollection IControlHabanero.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }
         }
@@ -124,7 +124,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets or sets the current multiple document interface (MDI) parent form of this form
         /// </summary>
-        IFormChilli IFormChilli.MdiParent
+        IFormHabanero IFormHabanero.MdiParent
         {
             get { throw new NotImplementedException(); }
             set { this.MdiParent = (Form)value; }

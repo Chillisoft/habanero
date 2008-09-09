@@ -24,7 +24,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Represents a spin box (also known as an up-down control) that displays numeric values
     /// </summary>
-    public interface INumericUpDown : IControlChilli
+    public interface INumericUpDown : IControlHabanero
     {
         /// <summary>
         /// Occurs when the control is entered

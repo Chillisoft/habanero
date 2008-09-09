@@ -60,7 +60,7 @@ namespace Habanero.UI.Base
 	/// </summary>
 	public class ValidationProvider : IExtenderProvider
 	{
-        private readonly Dictionary<IControlChilli, List<ValidationRule>> _ValidationRules = new Dictionary<IControlChilli, List<ValidationRule>>();
+        private readonly Dictionary<IControlHabanero, List<ValidationRule>> _ValidationRules = new Dictionary<IControlHabanero, List<ValidationRule>>();
 		private readonly ValidationRule				_DefaultValidationRule	= new ValidationRule();
 	    private readonly IErrorProvider _ErrorProvider;
 
@@ -79,7 +79,7 @@ namespace Habanero.UI.Base
 		{
 			bool bIsValid = true;
 			List<ValidationRule> vr = null;
-            foreach (IControlChilli ctrl in _ValidationRules.Keys)
+            foreach (IControlHabanero ctrl in _ValidationRules.Keys)
 			{
 				this.Validate(ctrl);
                 
@@ -98,7 +98,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="ctrl">The control to validate</param>
         /// <returns>Returns true if valid, false if not</returns>
-        public bool ValidateControl(IControlChilli ctrl)
+        public bool ValidateControl(IControlHabanero ctrl)
         {
             bool bIsValid = true;
             List<ValidationRule> vr;
@@ -122,7 +122,7 @@ namespace Habanero.UI.Base
 		{
 			StringBuilder sb = new StringBuilder();
 			List<ValidationRule> vr;
-            foreach (IControlChilli ctrl in _ValidationRules.Keys)
+            foreach (IControlHabanero ctrl in _ValidationRules.Keys)
 			{
 				vr = this.GetValidationRules(ctrl);
 				if (vr != null) 
@@ -151,7 +151,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Gets validation error messages for a specific control
         /// </summary>
-        public string ValidationMessagesControl(IControlChilli ctrl, bool showErrorIcon)
+        public string ValidationMessagesControl(IControlHabanero ctrl, bool showErrorIcon)
         {
             StringBuilder sb = new StringBuilder();
             List<ValidationRule> vr;
@@ -184,7 +184,7 @@ namespace Habanero.UI.Base
 		/// <summary>
 		/// Perform validation on specific control.
 		/// </summary>
-        private bool Validate(IControlChilli ctrl)
+        private bool Validate(IControlHabanero ctrl)
 		{
 			List<ValidationRule> vr = this.GetValidationRules(ctrl);
 		    bool valid=false;
@@ -222,7 +222,7 @@ namespace Habanero.UI.Base
 		/// <summary>
 		/// Validate Data Type.
 		/// </summary>
-        private ValidationRule DataTypeValidate(IControlChilli ctrl)
+        private ValidationRule DataTypeValidate(IControlHabanero ctrl)
 		{
             ValidationRule returnRule = new ValidationRule();
             List<ValidationRule> vr = this._ValidationRules[ctrl];
@@ -252,7 +252,7 @@ namespace Habanero.UI.Base
 		/// Perform CompareValidate on a specific control.
 		/// </summary>
 		/// <returns>true if control has no validation rule.</returns>
-        private ValidationRule CompareValidate(IControlChilli ctrl)
+        private ValidationRule CompareValidate(IControlHabanero ctrl)
 		{
             ValidationRule returnRule = new ValidationRule();
             List<ValidationRule> vr = _ValidationRules[ctrl];
@@ -279,7 +279,7 @@ namespace Habanero.UI.Base
 		/// <summary>
 		/// Perform Custom Validation on specific control.
 		/// </summary>
-        private ValidationRule CustomValidate(IControlChilli ctrl)
+        private ValidationRule CustomValidate(IControlHabanero ctrl)
 		{
             ValidationRule returnRule = new ValidationRule();
             List<ValidationRule> vr = _ValidationRules[ctrl];
@@ -299,7 +299,7 @@ namespace Habanero.UI.Base
 		/// <summary>
 		/// Perform Range Validation on a specific control.
 		/// </summary>
-        private ValidationRule RangeValidate(IControlChilli ctrl)
+        private ValidationRule RangeValidate(IControlHabanero ctrl)
 		{
             List<ValidationRule> vr = _ValidationRules[ctrl];
             ValidationRule returnRule = new ValidationRule();
@@ -340,7 +340,7 @@ namespace Habanero.UI.Base
 		/// <summary>
 		/// Perform Regular Expression Validation on a specific control.
 		/// </summary>
-        private ValidationRule RegularExpressionValidate(IControlChilli ctrl)
+        private ValidationRule RegularExpressionValidate(IControlHabanero ctrl)
 		{
             List<ValidationRule> vr = _ValidationRules[ctrl];
             ValidationRule returnRule = new ValidationRule();
@@ -371,7 +371,7 @@ namespace Habanero.UI.Base
 		/// <summary>
 		/// Perform RequiredField Validation on a specific control.
 		/// </summary>
-        private ValidationRule RequiredFieldValidate(IControlChilli ctrl)
+        private ValidationRule RequiredFieldValidate(IControlHabanero ctrl)
 		{
             ValidationRule returnRule = new ValidationRule();
             List<ValidationRule> vr = _ValidationRules[ctrl];
@@ -394,7 +394,7 @@ namespace Habanero.UI.Base
 		/// <summary>
 		/// Set validation rule.
 		/// </summary>
-        public void SetValidationRule(IControlChilli inputComponent, ValidationRule vr)
+        public void SetValidationRule(IControlHabanero inputComponent, ValidationRule vr)
 		{
 			if (inputComponent != null)
 			{
@@ -435,7 +435,7 @@ namespace Habanero.UI.Base
 		/// Gets validation rules for a control.
 		/// </summary>
 		[DefaultValue(null), Category("Data")]
-        public List<ValidationRule> GetValidationRules(IControlChilli inputComponent)
+        public List<ValidationRule> GetValidationRules(IControlHabanero inputComponent)
 		{
             return this._ValidationRules[inputComponent];
 		}
@@ -466,10 +466,10 @@ namespace Habanero.UI.Base
 		/// <summary>
 		/// Get or set Blink Behavior.
 		/// </summary>
-        public ErrorBlinkStyleChilli BlinkStyle
+        public ErrorBlinkStyleHabanero BlinkStyle
 		{
-			get { return this._ErrorProvider.BlinkStyleChilli; }
-			set { this._ErrorProvider.BlinkStyleChilli = value; }
+			get { return this._ErrorProvider.BlinkStyleHabanero; }
+			set { this._ErrorProvider.BlinkStyleHabanero = value; }
 		}
  
 		/// <summary>
@@ -477,7 +477,7 @@ namespace Habanero.UI.Base
 		/// </summary>
 		/// <param name="control"></param>
 		/// <returns></returns>
-        public ErrorIconAlignmentChilli GetIconAlignment(IControlChilli control)
+        public ErrorIconAlignmentHabanero GetIconAlignment(IControlHabanero control)
 		{
 			return this._ErrorProvider.GetIconAlignment(control);
 		}
@@ -487,7 +487,7 @@ namespace Habanero.UI.Base
 		/// </summary>
 		/// <param name="control"></param>
 		/// <returns></returns>
-        public int GetIconPadding(IControlChilli control)
+        public int GetIconPadding(IControlHabanero control)
 		{
 			return this._ErrorProvider.GetIconPadding(control);
 		}
@@ -497,7 +497,7 @@ namespace Habanero.UI.Base
 		/// </summary>
 		/// <param name="control"></param>
 		/// <param name="value"></param>
-        public void SetIconAlignment(IControlChilli control, ErrorIconAlignmentChilli value)
+        public void SetIconAlignment(IControlHabanero control, ErrorIconAlignmentHabanero value)
 		{
 			this._ErrorProvider.SetIconAlignment(control, value);
 		}
@@ -507,7 +507,7 @@ namespace Habanero.UI.Base
 		/// </summary>
 		/// <param name="control"></param>
 		/// <param name="padding"></param>
-        public void SetIconPadding(IControlChilli control, int padding)
+        public void SetIconPadding(IControlHabanero control, int padding)
 		{
 			this._ErrorProvider.SetIconPadding(control, padding);
 		}
@@ -520,7 +520,7 @@ namespace Habanero.UI.Base
 		/// </summary>
 		/// <param name="extendee"></param>
 		/// <returns></returns>
-        public bool CanExtend(IControlChilli extendee)
+        public bool CanExtend(IControlHabanero extendee)
 		{
             if ((extendee is ITextBox) || (extendee is IComboBox)) return true;
 
@@ -536,7 +536,7 @@ namespace Habanero.UI.Base
         /// <returns></returns>
 	    public bool CanExtend(object extendee)
 	    {
-	        return CanExtend(extendee as IControlChilli);
+	        return CanExtend(extendee as IControlHabanero);
 	    }
 	}
 }

@@ -36,7 +36,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="managedControl">The control to manage</param>
         /// <param name="controlFactory">The control factory used by the layout manager to create controls</param>
-        public ColumnLayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
+        public ColumnLayoutManager(IControlHabanero managedControl, IControlFactory controlFactory)
             : base(managedControl, controlFactory)
         {
             _columnCount = 1;
@@ -69,7 +69,7 @@ namespace Habanero.UI.Base
             int currentLeft = BorderSize;
             int currentTop = BorderSize;
             int maxControlHeight = 0;
-            foreach (IControlChilli control in this.ManagedControl.Controls)
+            foreach (IControlHabanero control in this.ManagedControl.Controls)
             {
   
                 if (currentColumn > ColumnCount)
@@ -96,7 +96,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="control">The control to add</param>
         /// <returns>Returns the control after it has been added</returns>
-        public override IControlChilli AddControl(IControlChilli control)
+        public override IControlHabanero AddControl(IControlHabanero control)
         {
             this.ManagedControl.Controls.Add(control);
             RefreshControlPositions();

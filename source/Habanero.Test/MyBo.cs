@@ -171,7 +171,7 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static ClassDef LoadDefaultClassDefGizmox()
+        public static ClassDef LoadDefaultClassDefVWG()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef =

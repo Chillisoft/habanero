@@ -39,11 +39,11 @@ namespace Habanero.Test.UI.Base
         //}
 
         [TestFixture]
-        public class TestColumnLayoutManagerGiz : TestColumnLayoutManager
+        public class TestColumnLayoutManagerVWG : TestColumnLayoutManager
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
+                return new Habanero.UI.VWG.ControlFactoryVWG();
             }
         }
 
@@ -72,12 +72,12 @@ namespace Habanero.Test.UI.Base
         public void TestCreateColumnLayoutManager()
         {
             //---------------Set up test pack-------------------
-            IControlChilli controlChilli = GetControlFactory().CreatePanel();
+            IControlHabanero controlHabanero = GetControlFactory().CreatePanel();
             //---------------Execute Test ----------------------
-            ColumnLayoutManager columnLayoutManager = new ColumnLayoutManager(controlChilli, GetControlFactory());
+            ColumnLayoutManager columnLayoutManager = new ColumnLayoutManager(controlHabanero, GetControlFactory());
             //---------------Test Result -----------------------
             Assert.IsNotNull(columnLayoutManager.ManagedControl);
-            Assert.AreSame(controlChilli, columnLayoutManager.ManagedControl);
+            Assert.AreSame(controlHabanero, columnLayoutManager.ManagedControl);
             Assert.AreEqual(1, columnLayoutManager.ColumnCount);
             //---------------Tear Down   -----------------------
         }
@@ -86,11 +86,11 @@ namespace Habanero.Test.UI.Base
         public void TestAddControl()
         {
             //---------------Set up test pack-------------------
-            IControlChilli managedControl = GetControlFactory().CreatePanel();
+            IControlHabanero managedControl = GetControlFactory().CreatePanel();
             ColumnLayoutManager columnLayoutManager = new ColumnLayoutManager(managedControl, GetControlFactory());
             //---------------Execute Test ----------------------
-            IControlChilli createdControl = GetControlFactory().CreateControl();
-            IControlChilli addedControl = columnLayoutManager.AddControl(createdControl);
+            IControlHabanero createdControl = GetControlFactory().CreateControl();
+            IControlHabanero addedControl = columnLayoutManager.AddControl(createdControl);
             //---------------Test Result -----------------------
             Assert.AreEqual(1, managedControl.Controls.Count);
             Assert.AreSame(addedControl, createdControl);
@@ -99,9 +99,9 @@ namespace Habanero.Test.UI.Base
 
         private ColumnLayoutManager GetColumnLayoutManager()
         {
-            IControlChilli controlChilli = GetControlFactory().CreatePanel();
+            IControlHabanero controlHabanero = GetControlFactory().CreatePanel();
             //---------------Execute Test ----------------------
-            return new ColumnLayoutManager(controlChilli, GetControlFactory());
+            return new ColumnLayoutManager(controlHabanero, GetControlFactory());
         }
 
         [Test]
@@ -122,9 +122,9 @@ namespace Habanero.Test.UI.Base
         public void TestAddControl_LayoutWithOneColumn()
         {
             //---------------Set up test pack-------------------
-            IControlChilli control = GetControlFactory().CreateControl();
+            IControlHabanero control = GetControlFactory().CreateControl();
             ColumnLayoutManager columnLayoutManager = GetColumnLayoutManager();
-            IControlChilli managedControl = columnLayoutManager.ManagedControl;
+            IControlHabanero managedControl = columnLayoutManager.ManagedControl;
             //managedControl.Width = 200;
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(0, managedControl.Controls.Count);
@@ -146,9 +146,9 @@ namespace Habanero.Test.UI.Base
         public void TestAddControl_LayoutWithOneColumn_ChangeBorderSize()
         {
             //---------------Set up test pack-------------------
-            IControlChilli control = GetControlFactory().CreateControl();
+            IControlHabanero control = GetControlFactory().CreateControl();
             ColumnLayoutManager columnLayoutManager = GetColumnLayoutManager();
-            IControlChilli managedControl = columnLayoutManager.ManagedControl;
+            IControlHabanero managedControl = columnLayoutManager.ManagedControl;
             //managedControl.Width = 200;
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(0, managedControl.Controls.Count);
@@ -171,10 +171,10 @@ namespace Habanero.Test.UI.Base
         public void TestAddTwoControls_LayoutWithOneColumn()
         {
             //---------------Set up test pack-------------------
-            IControlChilli control1 = GetControlFactory().CreateControl();
-            IControlChilli control2 = GetControlFactory().CreateControl();
+            IControlHabanero control1 = GetControlFactory().CreateControl();
+            IControlHabanero control2 = GetControlFactory().CreateControl();
             ColumnLayoutManager columnLayoutManager = GetColumnLayoutManager();
-            IControlChilli managedControl = columnLayoutManager.ManagedControl;
+            IControlHabanero managedControl = columnLayoutManager.ManagedControl;
             //managedControl.Width = 200;
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(0, managedControl.Controls.Count);
@@ -204,11 +204,11 @@ namespace Habanero.Test.UI.Base
         public void TestAddControl_TwoColumns_OneControl()
         {
             //---------------Set up test pack-------------------
-            IControlChilli control = GetControlFactory().CreateControl();
+            IControlHabanero control = GetControlFactory().CreateControl();
             ColumnLayoutManager columnLayoutManager = GetColumnLayoutManager();
             int NoColumns = 2;
             columnLayoutManager.ColumnCount = NoColumns;
-            IControlChilli managedControl = columnLayoutManager.ManagedControl;
+            IControlHabanero managedControl = columnLayoutManager.ManagedControl;
             int expectedControlWidth = (managedControl.Width - 2*BORDER_SIZE - GAP_SIZE)/NoColumns;
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(0, control.Left);
@@ -228,11 +228,11 @@ namespace Habanero.Test.UI.Base
         public void TestAddControl_TwoColumns_OneControl_NonIntegerColumnWidth()
         {
             //---------------Set up test pack-------------------
-            IControlChilli control = GetControlFactory().CreateControl();
+            IControlHabanero control = GetControlFactory().CreateControl();
             ColumnLayoutManager columnLayoutManager = GetColumnLayoutManager();
             int NoColumns = 2;
             columnLayoutManager.ColumnCount = NoColumns;
-            IControlChilli managedControl = columnLayoutManager.ManagedControl;
+            IControlHabanero managedControl = columnLayoutManager.ManagedControl;
             double expectedControlWidth = 42.5;
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(0, control.Left);
@@ -253,11 +253,11 @@ namespace Habanero.Test.UI.Base
         public void TestAddControl_ThreeColumns_OneControl()
         {
             //---------------Set up test pack-------------------
-            IControlChilli control = GetControlFactory().CreateControl();
+            IControlHabanero control = GetControlFactory().CreateControl();
             ColumnLayoutManager columnLayoutManager = GetColumnLayoutManager();
             int NoColumns = 3;
             columnLayoutManager.ColumnCount = NoColumns;
-            IControlChilli managedControl = columnLayoutManager.ManagedControl;
+            IControlHabanero managedControl = columnLayoutManager.ManagedControl;
             int expectedControlWidth = (managedControl.Width - 2*BORDER_SIZE - 2*GAP_SIZE)/NoColumns;
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(0, control.Left);
@@ -275,12 +275,12 @@ namespace Habanero.Test.UI.Base
         public void TestAddControl_TwoColumns_TwoControl()
         {
             //---------------Set up test pack-------------------
-            IControlChilli control1 = GetControlFactory().CreateControl();
-            IControlChilli control2 = GetControlFactory().CreateControl();
+            IControlHabanero control1 = GetControlFactory().CreateControl();
+            IControlHabanero control2 = GetControlFactory().CreateControl();
             ColumnLayoutManager columnLayoutManager = GetColumnLayoutManager();
             int NoColumns = 2;
             columnLayoutManager.ColumnCount = NoColumns;
-            IControlChilli managedControl = columnLayoutManager.ManagedControl;
+            IControlHabanero managedControl = columnLayoutManager.ManagedControl;
             int expectedControlWidth = (managedControl.Width - 2*BORDER_SIZE - 1*GAP_SIZE)/NoColumns;
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(0, control1.Left);
@@ -308,13 +308,13 @@ namespace Habanero.Test.UI.Base
         public void TestAddControl_TwoColumns_ThreeControl()
         {
             //---------------Set up test pack-------------------
-            IControlChilli control1 = GetControlFactory().CreateControl();
-            IControlChilli control2 = GetControlFactory().CreateControl();
-            IControlChilli control3 = GetControlFactory().CreateControl();
+            IControlHabanero control1 = GetControlFactory().CreateControl();
+            IControlHabanero control2 = GetControlFactory().CreateControl();
+            IControlHabanero control3 = GetControlFactory().CreateControl();
             ColumnLayoutManager columnLayoutManager = GetColumnLayoutManager();
             int NoColumns = 2;
             columnLayoutManager.ColumnCount = NoColumns;
-            IControlChilli managedControl = columnLayoutManager.ManagedControl;
+            IControlHabanero managedControl = columnLayoutManager.ManagedControl;
             int expectedControlWidth = (managedControl.Width - 2*BORDER_SIZE - 1*GAP_SIZE)/NoColumns;
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(0, control1.Left);
@@ -351,13 +351,13 @@ namespace Habanero.Test.UI.Base
         public void TestAddControl_TwoColumns_ThreeControl_Control2DiffHeight()
         {
             //---------------Set up test pack-------------------
-            IControlChilli control1 = GetControlFactory().CreateControl();
-            IControlChilli control2 = GetControlFactory().CreateControl();
-            IControlChilli control3 = GetControlFactory().CreateControl();
+            IControlHabanero control1 = GetControlFactory().CreateControl();
+            IControlHabanero control2 = GetControlFactory().CreateControl();
+            IControlHabanero control3 = GetControlFactory().CreateControl();
             ColumnLayoutManager columnLayoutManager = GetColumnLayoutManager();
             int NoColumns = 2;
             columnLayoutManager.ColumnCount = NoColumns;
-            IControlChilli managedControl = columnLayoutManager.ManagedControl;
+            IControlHabanero managedControl = columnLayoutManager.ManagedControl;
             int expectedControlWidth = (managedControl.Width - 2*BORDER_SIZE - 1*GAP_SIZE)/NoColumns;
             control2.Height = 40;
             //--------------Assert PreConditions----------------            
@@ -396,20 +396,20 @@ namespace Habanero.Test.UI.Base
         public void TestAddControl_TwoColumns_FiveControl()
         {
             //---------------Set up test pack-------------------
-            IControlChilli control1 = GetControlFactory().CreateControl();
-            IControlChilli control2 = GetControlFactory().CreateControl();
-            IControlChilli control5 = GetControlFactory().CreateControl();
+            IControlHabanero control1 = GetControlFactory().CreateControl();
+            IControlHabanero control2 = GetControlFactory().CreateControl();
+            IControlHabanero control5 = GetControlFactory().CreateControl();
             ColumnLayoutManager columnLayoutManager = GetColumnLayoutManager();
             int NoColumns = 2;
             columnLayoutManager.ColumnCount = NoColumns;
-            IControlChilli managedControl = columnLayoutManager.ManagedControl;
+            IControlHabanero managedControl = columnLayoutManager.ManagedControl;
             int expectedControlWidth = (managedControl.Width - 2 * BORDER_SIZE - 1 * GAP_SIZE) / NoColumns;
             control2.Height = 40;
             //--------------Assert PreConditions----------------            
             //---------------Execute Test ----------------------
             columnLayoutManager.AddControl(control1);
             columnLayoutManager.AddControl(control2);
-            IControlChilli control3 = columnLayoutManager.AddControl(GetControlFactory().CreateControl());
+            IControlHabanero control3 = columnLayoutManager.AddControl(GetControlFactory().CreateControl());
             columnLayoutManager.AddControl(GetControlFactory().CreateControl());
             columnLayoutManager.AddControl(control5);
             //---------------Test Result -----------------------
@@ -432,18 +432,18 @@ namespace Habanero.Test.UI.Base
         public void TestAddControl_TwoColumns_FiveControl_ResizeManagedControl()
         {
             //---------------Set up test pack-------------------
-            IControlChilli control1 = GetControlFactory().CreateControl();
-            IControlChilli control2 = GetControlFactory().CreateControl();
-            IControlChilli control5 = GetControlFactory().CreateControl();
+            IControlHabanero control1 = GetControlFactory().CreateControl();
+            IControlHabanero control2 = GetControlFactory().CreateControl();
+            IControlHabanero control5 = GetControlFactory().CreateControl();
             ColumnLayoutManager columnLayoutManager = GetColumnLayoutManager();
             int NoColumns = 2;
             columnLayoutManager.ColumnCount = NoColumns;
-            IControlChilli managedControl = columnLayoutManager.ManagedControl;
+            IControlHabanero managedControl = columnLayoutManager.ManagedControl;
             int expectedControlWidth = (managedControl.Width - 2 * BORDER_SIZE - 1 * GAP_SIZE) / NoColumns;
             control2.Height = 40;
             columnLayoutManager.AddControl(control1);
             columnLayoutManager.AddControl(control2);
-            IControlChilli control3 = columnLayoutManager.AddControl(GetControlFactory().CreateControl());
+            IControlHabanero control3 = columnLayoutManager.AddControl(GetControlFactory().CreateControl());
             columnLayoutManager.AddControl(GetControlFactory().CreateControl());
             columnLayoutManager.AddControl(control5);
 
@@ -509,12 +509,12 @@ namespace Habanero.Test.UI.Base
         public void TestResizeControlOnManagedControl()
         {
             //---------------Set up test pack-------------------
-            IControlChilli managedControl = GetControlFactory().CreatePanel();
+            IControlHabanero managedControl = GetControlFactory().CreatePanel();
             ColumnLayoutManager columnLayoutManager = new ColumnLayoutManager(managedControl, GetControlFactory());
             columnLayoutManager.GapSize = 0;
             columnLayoutManager.BorderSize = 0;
-            IControlChilli createdControl1 = GetControlFactory().CreateControl();
-            IControlChilli createdControl2 = GetControlFactory().CreateControl();
+            IControlHabanero createdControl1 = GetControlFactory().CreateControl();
+            IControlHabanero createdControl2 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             columnLayoutManager.AddControl(createdControl1);
             columnLayoutManager.AddControl(createdControl2);
@@ -528,14 +528,14 @@ namespace Habanero.Test.UI.Base
         public void TestResizeManagedControl()
         {
             //---------------Set up test pack-------------------
-            IControlChilli managedControl = GetControlFactory().CreatePanel();
+            IControlHabanero managedControl = GetControlFactory().CreatePanel();
             int originalWidth = 400;
             managedControl.Width = originalWidth;
             ColumnLayoutManager columnLayoutManager = new ColumnLayoutManager(managedControl, GetControlFactory());
             columnLayoutManager.GapSize = 0;
             columnLayoutManager.BorderSize = 0;
-            IControlChilli createdControl1 = GetControlFactory().CreateControl();
-            IControlChilli createdControl2 = GetControlFactory().CreateControl();
+            IControlHabanero createdControl1 = GetControlFactory().CreateControl();
+            IControlHabanero createdControl2 = GetControlFactory().CreateControl();
             columnLayoutManager.AddControl(createdControl1);
             columnLayoutManager.AddControl(createdControl2);
             //---------------Assert preconditions---------------

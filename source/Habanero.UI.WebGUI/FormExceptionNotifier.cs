@@ -29,7 +29,7 @@ using Habanero.UI.Base;
 using Habanero.Util;
 using FormStartPosition=Gizmox.WebGUI.Forms.FormStartPosition;
 
-namespace Habanero.UI.WebGUI
+namespace Habanero.UI.VWG
 {
     /// <summary>
     /// Provides a form that displays an exception to the user
@@ -59,14 +59,14 @@ namespace Habanero.UI.WebGUI
         /// Provides a form to display the exception message, using a "More Detail"
         /// button that collapses or uncollapses the error detail panel
         /// </summary>
-        private class CollapsibleExceptionNotifyForm : FormGiz, IControlChilli
+        private class CollapsibleExceptionNotifyForm : FormVWG, IControlHabanero
         {
             private readonly Exception _exception;
-            private readonly PanelGiz _summaryPanel;
-            private PanelGiz _fullDetailPanel;
+            private readonly PanelVWG _summaryPanel;
+            private PanelVWG _fullDetailPanel;
             private readonly IButton _moreDetailButton;
-            private TextBoxGiz _errorDetails;
-            private CheckBoxGiz _showStackTrace;
+            private TextBoxVWG _errorDetails;
+            private CheckBoxVWG _showStackTrace;
             private const int SUMMARY_HEIGHT = 150;
             private const int FULL_DETAIL_HEIGHT = 300;
             private const int BUTTONS_HEIGHT = 50;
@@ -78,12 +78,12 @@ namespace Habanero.UI.WebGUI
             {
                 _exception = ex;
 
-                _summaryPanel = new PanelGiz();
+                _summaryPanel = new PanelVWG();
                 _summaryPanel.Text = title;
                 _summaryPanel.Height = SUMMARY_HEIGHT;
                 ITextBox messageTextBox = GetSimpleMessage(ex.Message);
                 ILabel messageLabel = GetErrorLabel(furtherMessage);
-                BorderLayoutManager summaryManager = new BorderLayoutManagerGiz(_summaryPanel, GlobalUIRegistry.ControlFactory);
+                BorderLayoutManager summaryManager = new BorderLayoutManagerVWG(_summaryPanel, GlobalUIRegistry.ControlFactory);
                 summaryManager.AddControl(messageLabel, BorderLayoutManager.Position.North);
                 summaryManager.AddControl(messageTextBox, BorderLayoutManager.Position.Centre);
 
@@ -99,7 +99,8 @@ namespace Habanero.UI.WebGUI
 
                 SetFullDetailsPanel();
 
-                BorderLayoutManager manager = new BorderLayoutManagerGiz(this, GlobalUIRegistry.ControlFactory);
+                BorderLayoutManager manager = //new BorderLayoutManagerVWG(this, GlobalUIRegistry.ControlFactory);
+                    GlobalUIRegistry.ControlFactory.CreateBorderLayoutManager(this);
                 manager.AddControl(_summaryPanel, BorderLayoutManager.Position.North);
                 manager.AddControl(buttonsDetail, BorderLayoutManager.Position.West);
                 manager.AddControl(buttonsOK, BorderLayoutManager.Position.East);
@@ -177,7 +178,7 @@ namespace Habanero.UI.WebGUI
             /// </summary>
             private static ITextBox GetSimpleMessage(string message)
             {
-                TextBoxGiz messageTextBox = new TextBoxGiz();
+                TextBoxVWG messageTextBox = new TextBoxVWG();
                 messageTextBox.Text = message;
                 messageTextBox.Multiline = true;
                 messageTextBox.ScrollBars = Gizmox.WebGUI.Forms.ScrollBars.Both;
@@ -191,18 +192,18 @@ namespace Habanero.UI.WebGUI
             /// </summary>
             private void SetFullDetailsPanel()
             {
-                _fullDetailPanel = new PanelGiz();
+                _fullDetailPanel = new PanelVWG();
                 _fullDetailPanel.Text = "Error Detail";
                 _fullDetailPanel.Height = FULL_DETAIL_HEIGHT;
                 _fullDetailPanel.Visible = false;
-                _errorDetails = new TextBoxGiz();
+                _errorDetails = new TextBoxVWG();
                 _errorDetails.Text = ExceptionUtilities.GetExceptionString(_exception, 0, false);
                 _errorDetails.Multiline = true;
                 _errorDetails.ScrollBars = Gizmox.WebGUI.Forms.ScrollBars.Both;
-                _showStackTrace = new CheckBoxGiz();
+                _showStackTrace = new CheckBoxVWG();
                 _showStackTrace.Text = "&Show stack trace";
                 _showStackTrace.CheckedChanged += ShowStackTraceClicked;
-                BorderLayoutManager detailsManager = new BorderLayoutManagerGiz(_fullDetailPanel, GlobalUIRegistry.ControlFactory);
+                BorderLayoutManager detailsManager = new BorderLayoutManagerVWG(_fullDetailPanel, GlobalUIRegistry.ControlFactory);
                 detailsManager.AddControl(_errorDetails, BorderLayoutManager.Position.Centre);
                 detailsManager.AddControl(_showStackTrace, BorderLayoutManager.Position.South);
             }
@@ -269,9 +270,9 @@ namespace Habanero.UI.WebGUI
             /// <summary>
             /// Gets the collection of controls contained within the control
             /// </summary>
-            IControlCollection IControlChilli.Controls
+            IControlCollection IControlChiHabanerontrols
             {
-                get { return new ControlCollectionGiz(base.Controls); }
+                get { return new ControlCollectionVWG(base.Controls); }
             }
         }
     }

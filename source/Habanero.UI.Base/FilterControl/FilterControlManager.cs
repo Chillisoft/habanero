@@ -100,7 +100,7 @@ namespace Habanero.UI.Base
             return textBox;
         }
 
-        private void AddControlToLayoutManager(ILabel label, IControlChilli entryControl)
+        private void AddControlToLayoutManager(ILabel label, IControlHabanero entryControl)
         {
             _layoutManager.AddControl(label);
             if (_layoutManager is FlowLayoutManager)
@@ -207,7 +207,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// See <see cref="IFilterControl.GetChildControl"/>
         /// </summary>
-        public IControlChilli GetChildControl(string propertyName)
+        public IControlHabanero GetChildControl(string propertyName)
         {
             foreach (FilterUI filterUI in this._filterControls)
             {
@@ -274,7 +274,7 @@ namespace Habanero.UI.Base
                 get { return _columnName; }
             }
 
-            public abstract IControlChilli FilterControl
+            public abstract IControlHabanero FilterControl
             { get; }
 
             ///// <summary>
@@ -311,7 +311,7 @@ namespace Habanero.UI.Base
                 _filterClauseOperator = filterClauseOperator;
             }
 
-            public override IControlChilli FilterControl
+            public override IControlHabanero FilterControl
             {
                 get { return _textBox; }
             }
@@ -353,7 +353,7 @@ namespace Habanero.UI.Base
                 _strictMatch = strictMatch;
             }
 
-            public override IControlChilli FilterControl
+            public override IControlHabanero FilterControl
             {
                 get { return _comboBox; }
             }
@@ -397,7 +397,7 @@ namespace Habanero.UI.Base
                 _checkBox.Text = text;
             }
 
-            public override IControlChilli FilterControl
+            public override IControlHabanero FilterControl
             {
                 get { return _checkBox; }
             }
@@ -439,7 +439,7 @@ namespace Habanero.UI.Base
                 _filterClauseOperator = op;
             }
 
-            public override IControlChilli FilterControl
+            public override IControlHabanero FilterControl
             {
                 get { return _dateTimePicker; }
             }
@@ -506,7 +506,7 @@ namespace Habanero.UI.Base
                 return _clauseFactory.CreateNullFilterClause();
             }
 
-            public override IControlChilli FilterControl
+            public override IControlHabanero FilterControl
             {
                 get { return _dateRangeComboBox; }
             }

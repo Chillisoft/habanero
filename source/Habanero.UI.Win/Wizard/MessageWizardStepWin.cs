@@ -35,7 +35,7 @@ namespace Habanero.UI.Win
             InitializeComponent();
         }
 
-        IControlCollection IControlChilli.Controls
+        IControlCollection IControlHabanero.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }
         }

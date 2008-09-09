@@ -49,9 +49,9 @@ namespace Habanero.Test.UI.Base
             {
                 //---------------Test Result -----------------------
                 Assert.AreEqual(2, _defaultBOEditorForm.Controls.Count);
-                IControlChilli boCtl = _defaultBOEditorForm.Controls[0];
+                IControlHabanero boCtl = _defaultBOEditorForm.Controls[0];
                 Assert.AreEqual(6, boCtl.Controls.Count);
-                IControlChilli buttonControl = _defaultBOEditorForm.Controls[1];
+                IControlHabanero buttonControl = _defaultBOEditorForm.Controls[1];
                 Assert.IsTrue(buttonControl is Habanero.UI.Win.ButtonGroupControlWin);
                 Assert.AreEqual(2, buttonControl.Controls.Count);
             }
@@ -120,11 +120,11 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestDefaultBOEditorFormGiz : TestDefaultBOEditorForm
+        public class TestDefaultBOEditorFormVWG : TestDefaultBOEditorForm
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
+                return new Habanero.UI.VWG.ControlFactoryVWG();
             }
 
             //Create a duplicate for win
@@ -133,10 +133,10 @@ namespace Habanero.Test.UI.Base
             {
                 //---------------Test Result -----------------------
                 Assert.AreEqual(2, _defaultBOEditorForm.Controls.Count);
-                IControlChilli boCtl = _defaultBOEditorForm.Controls[0];
+                IControlHabanero boCtl = _defaultBOEditorForm.Controls[0];
                 Assert.AreEqual(6, boCtl.Controls.Count);
-                IControlChilli buttonControl = _defaultBOEditorForm.Controls[1];
-                Assert.IsTrue(buttonControl is Habanero.UI.WebGUI.ButtonGroupControlGiz);
+                IControlHabanero buttonControl = _defaultBOEditorForm.Controls[1];
+                Assert.IsTrue(buttonControl is Habanero.UI.VWG.ButtonGroupControlVWG);
                 Assert.AreEqual(2, buttonControl.Controls.Count);
             }
         }
@@ -152,9 +152,9 @@ namespace Habanero.Test.UI.Base
             GlobalRegistry.UIExceptionNotifier = new ConsoleExceptionNotifier();
             this.SetupDBConnection();
             ClassDef.ClassDefs.Clear();
-            if (GetControlFactory() is Habanero.UI.WebGUI.ControlFactoryGizmox)
+            if (GetControlFactory() is Habanero.UI.VWG.ControlFactoryVWG)
             {
-                _classDefMyBo = MyBO.LoadDefaultClassDefGizmox();
+                _classDefMyBo = MyBO.LoadDefaultClassDefVWG();
             }
             else
             {

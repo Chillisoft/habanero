@@ -35,7 +35,7 @@ namespace Habanero.UI.Base
     {
         private Hashtable _formsbyHeading;
         private Hashtable _formsbyForm;
-        private IFormChilli _parentForm;
+        private IFormHabanero _parentForm;
         private readonly IControlFactory _controlFactory;
         private float _fontSize = 0.0f;
         
@@ -43,7 +43,7 @@ namespace Habanero.UI.Base
         /// Constructor to initialise a new controller
         /// </summary>
         /// <param name="parentForm">The parent form</param>
-        public FormController(IFormChilli parentForm, IControlFactory controlFactory)
+        public FormController(IFormHabanero parentForm, IControlFactory controlFactory)
         {
             _parentForm = parentForm;
             _controlFactory = controlFactory;
@@ -73,7 +73,7 @@ namespace Habanero.UI.Base
             }
             if (_formsbyHeading.Contains(heading))
             {
-                IFormChilli frm = (IFormChilli)_formsbyHeading[heading];
+                IFormHabanero frm = (IFormHabanero)_formsbyHeading[heading];
                 if (_fontSize != 0.0f) frm.Font = new Font(frm.Font.FontFamily, _fontSize );
                 frm.Show();
                 frm.Refresh();
@@ -85,13 +85,13 @@ namespace Habanero.UI.Base
             {
                 IFormControl formCtl = GetFormControl(heading);
 
-                IFormChilli newMdiForm = _controlFactory.CreateForm();
+                IFormHabanero newMdiForm = _controlFactory.CreateForm();
                 newMdiForm.Width = 800;
                 newMdiForm.Height = 600;
                 newMdiForm.MdiParent = _parentForm;
                 newMdiForm.WindowState = FormWindowState.Maximized;
 
-                //IControlChilli ctl = formCtl;
+                //IControlHabanero ctl = formCtl;
        
                 newMdiForm.Text = heading;
                 newMdiForm.Controls.Clear();
@@ -120,9 +120,9 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="heading">The heading</param>
         /// <returns>Returns the control if found</returns>
-        protected IControlChilli GetControl(string heading)
+        protected IControlHabanero GetControl(string heading)
         {
-            IFormChilli frm = (IFormChilli)this._formsbyHeading[heading];
+            IFormHabanero frm = (IFormHabanero)this._formsbyHeading[heading];
             if (frm != null)
             {
                 return frm.Controls[0];

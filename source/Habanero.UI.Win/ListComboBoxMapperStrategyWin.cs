@@ -16,7 +16,7 @@ namespace Habanero.UI.Win
         ///</summary>
         public void AddItemSelectedEventHandler(ListComboBoxMapper mapper)
         {
-            IControlChilli control = mapper.Control;
+            IControlHabanero control = mapper.Control;
             if (!(control is IComboBox)) return;
             ComboBoxWin comboBoxWin = (ComboBoxWin) control;
             comboBoxWin.SelectedIndexChanged += delegate(object sender, EventArgs e)

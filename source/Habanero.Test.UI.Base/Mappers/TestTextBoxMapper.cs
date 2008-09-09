@@ -365,11 +365,11 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestTextBoxMapperGiz : TestTextBoxMapper
+        public class TestTextBoxMapperVWG : TestTextBoxMapper
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
+                return new Habanero.UI.VWG.ControlFactoryVWG();
             }
         }
 

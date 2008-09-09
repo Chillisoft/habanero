@@ -27,7 +27,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Represents a button control
     /// </summary>
-    public interface IButton : IControlChilli
+    public interface IButton : IControlHabanero
     {
         /// <summary>
         /// Generates a Click event for a button

@@ -54,7 +54,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Represents a DateTimePicker
     /// </summary>
-    public interface IDateTimePicker : IControlChilli
+    public interface IDateTimePicker : IControlHabanero
     {
         /// <summary>
         /// Gets or sets the date/time value assigned to the control.

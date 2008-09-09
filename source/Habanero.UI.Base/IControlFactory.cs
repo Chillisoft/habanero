@@ -104,7 +104,7 @@ namespace Habanero.UI.Base
         /// Creates a BorderLayoutManager to place controls on the given parent control
         /// </summary>
         /// <param name="control">The parent control on which to managed the layout</param>
-        BorderLayoutManager CreateBorderLayoutManager(IControlChilli control);
+        BorderLayoutManager CreateBorderLayoutManager(IControlHabanero control);
 
         /// <summary>
         /// Creates a Panel control
@@ -176,7 +176,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Creates a generic control
         /// </summary>
-        IControlChilli CreateControl();
+        IControlHabanero CreateControl();
 
         /// <summary>
         /// Creates a control for the given type and assembly name
@@ -185,14 +185,14 @@ namespace Habanero.UI.Base
         /// <param name="assemblyName">The assembly name of the control type</param>
         /// <returns>Returns either the control of the specified type or
         /// the default type, which is usually TextBox.</returns>
-        IControlChilli CreateControl(String typeName, String assemblyName);
+        IControlHabanero CreateControl(String typeName, String assemblyName);
 
         /// <summary>
         /// Creates a new control of the type specified
         /// </summary>
         /// <param name="controlType">The control type, which must be a
-        /// sub-type of <see cref="IControlChilli"/></param>
-        IControlChilli CreateControl(Type controlType);
+        /// sub-type of <see cref="IControlHabanero"/></param>
+        IControlHabanero CreateControl(Type controlType);
 
         /// <summary>
         /// Creates a DateTimePicker
@@ -370,7 +370,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Creates a Form control
         /// </summary>
-        IFormChilli CreateForm();
+        IFormHabanero CreateForm();
 
         /// <summary>
         /// Creates an OKCancelDialog
@@ -454,7 +454,7 @@ namespace Habanero.UI.Base
         /// the enter key cause focus to move to the next control).
         /// </summary>
         /// <param name="control">The control whose events will be handled</param>
-        void AddKeyPressEventHandler(IControlChilli control);
+        void AddKeyPressEventHandler(IControlHabanero control);
     }
 
     /// <summary>

@@ -19,7 +19,7 @@
 
 using System;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -91,7 +91,7 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// Represents a column in data grid view
     /// </summary>
-    //public class DataGridViewDateTimeColumnGiz :DataGridViewColumnGiz, IDataGridViewDateTimeColumn
+    //public class DataGridViewDateTimeColumnVWG :DataGridViewColumnVWG, IDataGridViewDateTimeColumn
     //{
     //    /// <summary>
     //    ///// Constructor to initialise a new column

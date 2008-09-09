@@ -20,7 +20,7 @@
 using System;
 using System.Windows.Forms;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -33,11 +33,11 @@ namespace Habanero.Test.UI.Base.Mappers
         protected const string LOOKUP_ITEM_1 = "Test1";
 
         [TestFixture]
-        public class TestLookupComboBoxMapperGiz : TestLookupComboBoxMapper
+        public class TestLookupComboBoxMapperVWG : TestLookupComboBoxMapper
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
 
             [Test]

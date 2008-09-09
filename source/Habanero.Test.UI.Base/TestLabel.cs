@@ -18,7 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -39,11 +39,11 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestLabelGiz : TestLabel
+        public class TestLabelVWG : TestLabel
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
+                return new Habanero.UI.VWG.ControlFactoryVWG();
             }
 
             [Test]

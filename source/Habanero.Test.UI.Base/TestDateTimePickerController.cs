@@ -21,7 +21,7 @@ using System;
 using System.Windows.Forms;
 using Habanero.UI;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -44,11 +44,11 @@ namespace Habanero.Test.UI.Base
         //}
 
 
-        //public class TestDateTimePickerControllerGiz : TestDateTimePickerController
+        //public class TestDateTimePickerControllerVWG : TestDateTimePickerController
         //{
         //    protected override IControlFactory GetControlFactory()
         //    {
-        //        return new ControlFactoryGizmox();
+        //        return new ControlFactoryVWG();
         //    }
         //    //There are not tests for Giz since this functionality is very specific to windows
         //}
@@ -138,7 +138,7 @@ namespace Habanero.Test.UI.Base
         //    dateTimePicker.Value = sampleDate;
         //    //---------------Test Result -----------------------
         //    Assert.AreEqual(sampleDate, dateTimePickerController.Value);
-        //    IControlChilli nullDisplayControl = dateTimePicker.Controls[0];
+        //    IControlHabanero nullDisplayControl = dateTimePicker.Controls[0];
         //    Assert.IsFalse(nullDisplayControl.Visible,
         //                   "Null display value control should not be visible when there is a value.");
         //}

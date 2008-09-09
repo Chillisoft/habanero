@@ -26,12 +26,12 @@ namespace Habanero.UI.Win
     /// <summary>
     /// Represents a window or dialog box that makes up an application's user interface
     /// </summary>
-    public class FormWin : Form, IFormChilli
+    public class FormWin : Form, IFormHabanero
     {
         /// <summary>
         /// Gets the collection of controls contained within the control
         /// </summary>
-        IControlCollection IControlChilli.Controls
+        IControlCollection IControlHabanero.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }
         }
@@ -40,7 +40,7 @@ namespace Habanero.UI.Win
         /// Gets or sets which control borders are docked to its parent
         /// control and determines how a control is resized with its parent
         /// </summary>
-        Base.DockStyle IControlChilli.Dock
+        Base.DockStyle IControlHabanero.Dock
         {
             get { return (Base.DockStyle)base.Dock; }
             set { base.Dock = (System.Windows.Forms.DockStyle)value; }
@@ -51,7 +51,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <param name="owner">Any object that implements System.Windows.Forms.IWin32Window and represents the top-level window that will own this form.</param>
         /// <exception cref="System.ArgumentException">The form specified in the owner parameter is the same as the form being shown.</exception>
-        public void Show(IControlChilli owner)
+        public void Show(IControlHabanero owner)
         {
             base.Show((IWin32Window)owner);
         }
@@ -59,7 +59,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets or sets the current multiple document interface (MDI) parent form of this form
         /// </summary>
-        IFormChilli IFormChilli.MdiParent
+        IFormHabanero IFormHabanero.MdiParent
         {
             get { throw new NotImplementedException(); }
             set { this.MdiParent = (Form) value; }
@@ -68,7 +68,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets or sets the form's window state.  The default is Normal.
         /// </summary>
-        Base.FormWindowState IFormChilli.WindowState
+        Base.FormWindowState IFormHabanero.WindowState
         {
             get { return (Base.FormWindowState) base.WindowState; }
             set { base.WindowState = (System.Windows.Forms.FormWindowState) value; }
@@ -78,7 +78,7 @@ namespace Habanero.UI.Win
         /// Shows the form as a modal dialog box with the currently active window set as its owner
         /// </summary>
         /// <returns>One of the DialogResult values</returns>
-        Base.DialogResult IFormChilli.ShowDialog()
+        Base.DialogResult IFormHabanero.ShowDialog()
         {
             return (Base.DialogResult)base.ShowDialog();
         }
@@ -87,7 +87,7 @@ namespace Habanero.UI.Win
         /// Gets or sets the form start position.
         /// </summary>
         /// <value></value>
-        Base.FormStartPosition IFormChilli.StartPosition
+        Base.FormStartPosition IFormHabanero.StartPosition
         {
             get { return (Base.FormStartPosition)base.StartPosition; }
             set { base.StartPosition = (System.Windows.Forms.FormStartPosition)value; }

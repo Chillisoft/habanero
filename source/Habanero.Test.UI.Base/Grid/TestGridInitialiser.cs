@@ -22,7 +22,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -50,7 +50,7 @@ namespace Habanero.Test.UI.Base
         }
 
         protected abstract IControlFactory GetControlFactory();
-        protected abstract void AddControlToForm(IControlChilli cntrl);
+        protected abstract void AddControlToForm(IControlHabanero cntrl);
 
 
         //[TestFixture]
@@ -61,7 +61,7 @@ namespace Habanero.Test.UI.Base
         //        return new ControlFactoryWin();
         //    }
 
-        //    protected override void AddControlToForm(IControlChilli cntrl)
+        //    protected override void AddControlToForm(IControlHabanero cntrl)
         //    {
         //        System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
         //        frm.Controls.Add((System.Windows.Forms.Control)cntrl);
@@ -69,14 +69,14 @@ namespace Habanero.Test.UI.Base
         //}
 
         [TestFixture]
-        public class TestGridInitialiserGiz : TestGridInitialiser
+        public class TestGridInitialiserVWG : TestGridInitialiser
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
 
-            protected override void AddControlToForm(IControlChilli cntrl)
+            protected override void AddControlToForm(IControlHabanero cntrl)
             {
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
                 frm.Controls.Add((Gizmox.WebGUI.Forms.Control) cntrl);
@@ -257,7 +257,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, col.Count);
             Assert.AreEqual(1, grid.Grid.Rows.Count);
             IDataGridViewCell dataGridViewCell = grid.Grid.Rows[0].Cells[formattedPropertyName];
-            //((DataGridViewCellGiz) dataGridViewCell).DataGridViewCell.HasStyle = false;
+            //((DataGridViewCellVWG) dataGridViewCell).DataGridViewCell.HasStyle = false;
             Assert.AreSame(typeof (DateTime), dataGridViewCell.ValueType);
             Assert.AreEqual(currentDateTime.ToString(expectedFormat), dataGridViewCell.FormattedValue);
 

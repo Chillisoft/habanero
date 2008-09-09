@@ -9,12 +9,12 @@ namespace Habanero.UI.Base
     /// </summary>
     public class HelpAboutBoxManager
     {
-        private IFormChilli _formChilli;
+        private IFormHabanero _FormHabanero;
         private IPanel _mainPanel;
 
-        public HelpAboutBoxManager(IControlFactory controlFactory, IFormChilli formChilli, string programName, string producedForName, string producedByName, string versionNumber)
+        public HelpAboutBoxManager(IControlFactory controlFactory, IFormHabanero formHabanero, string programName, string producedForName, string producedByName, string versionNumber)
         {
-            _formChilli = formChilli;
+            _FormHabanero = formHabanero;
             _mainPanel = controlFactory.CreatePanel();
             GridLayoutManager mainPanelManager = new GridLayoutManager(_mainPanel, controlFactory);
             mainPanelManager.SetGridSize(4, 2);
@@ -33,12 +33,12 @@ namespace Habanero.UI.Base
             IButtonGroupControl buttons = controlFactory.CreateButtonGroupControl();
             buttons.AddButton("OK", new EventHandler(OKButtonClickHandler));
 
-            BorderLayoutManager manager = controlFactory.CreateBorderLayoutManager(formChilli);
+            BorderLayoutManager manager = controlFactory.CreateBorderLayoutManager(formHabanero);
             manager.AddControl(_mainPanel, BorderLayoutManager.Position.Centre);
             manager.AddControl(buttons, BorderLayoutManager.Position.South);
-            formChilli.Width = 300;
-            formChilli.Height = 200;
-            formChilli.Text = "About";
+            formHabanero.Width = 300;
+            formHabanero.Height = 200;
+            formHabanero.Text = "About";
         }
 
         public IPanel MainPanel 
@@ -48,7 +48,7 @@ namespace Habanero.UI.Base
 
         public void OKButtonClickHandler(object sender, EventArgs e)
         {
-            _formChilli.Close();
+            _FormHabanero.Close();
         }
     }
 }

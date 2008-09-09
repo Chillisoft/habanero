@@ -68,7 +68,7 @@ namespace Habanero.UI.Win
         /// the enter key cause focus to move to the next control).
         /// </summary>
         /// <param name="control">The control whose events will be handled</param>
-        public void AddKeyPressEventHandler(IControlChilli control)
+        public void AddKeyPressEventHandler(IControlHabanero control)
         {
             if (control == null) throw new ArgumentNullException("control");
             _control = (Control) control;

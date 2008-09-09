@@ -147,7 +147,7 @@ namespace Habanero.UI.Base
         /////</summary>
         /////<param name="dateTimePicker">The date-time picker</param>
         /////<param name="eventHandler">The Handler to add</param>
-        //public static void AddValueChangedHandler(IControlChilli dateTimePicker, EventHandler eventHandler)
+        //public static void AddValueChangedHandler(IControlHabanero dateTimePicker, EventHandler eventHandler)
         //{
         //    EventInfo valueChangedEventInfo = dateTimePicker.GetType().GetEvent("ValueChanged");
         //    valueChangedEventInfo.AddEventHandler(dateTimePicker, eventHandler);
@@ -158,7 +158,7 @@ namespace Habanero.UI.Base
         /////</summary>
         /////<param name="dateTimePicker">The date-time picker</param>
         /////<param name="eventHandler">The Handler to remove</param>
-        //public static void RemoveValueChangedHandler(IControlChilli dateTimePicker, EventHandler eventHandler)
+        //public static void RemoveValueChangedHandler(IControlHabanero dateTimePicker, EventHandler eventHandler)
         //{
         //    EventInfo valueChangedEventInfo = dateTimePicker.GetType().GetEvent("ValueChanged");
         //    valueChangedEventInfo.RemoveEventHandler(dateTimePicker, eventHandler);

@@ -123,8 +123,8 @@ namespace Habanero.Test.UI.Base
         public void Test_GetFirstControl_OneControl()
         {
             //---------------Set up test pack-------------------
-            IControlChilli parentControl = _factory.CreateControl();
-            IControlChilli childControl = _factory.CreateControl();
+            IControlHabanero parentControl = _factory.CreateControl();
+            IControlHabanero childControl = _factory.CreateControl();
             parentControl.Controls.Add(childControl);
 
             //--------------Assert PreConditions----------------            
@@ -140,11 +140,11 @@ namespace Habanero.Test.UI.Base
         public void Test_GetFirstControl_TwoControl()
         {
             //---------------Set up test pack-------------------
-            IControlChilli parentControl = _factory.CreateControl();
-            IControlChilli childControl = _factory.CreateControl();
+            IControlHabanero parentControl = _factory.CreateControl();
+            IControlHabanero childControl = _factory.CreateControl();
             childControl.TabIndex = 0;
             parentControl.Controls.Add(childControl);
-            IControlChilli childControl2 = _factory.CreateControl();
+            IControlHabanero childControl2 = _factory.CreateControl();
             childControl2.TabIndex = 1;
             parentControl.Controls.Add(childControl2);
 
@@ -163,11 +163,11 @@ namespace Habanero.Test.UI.Base
         public void Test_GetFirstControl_TwoControl_ReverseTabOrder()
         {
             //---------------Set up test pack-------------------
-            IControlChilli parentControl = _factory.CreateControl();
-            IControlChilli childControl = _factory.CreateControl();
+            IControlHabanero parentControl = _factory.CreateControl();
+            IControlHabanero childControl = _factory.CreateControl();
             childControl.TabIndex = 1;
             parentControl.Controls.Add(childControl);
-            IControlChilli childControl2 = _factory.CreateControl();
+            IControlHabanero childControl2 = _factory.CreateControl();
             childControl2.TabIndex = 0;
             parentControl.Controls.Add(childControl2);
 
@@ -186,22 +186,22 @@ namespace Habanero.Test.UI.Base
         public void Test_GetFirstControl_MultipleControl_MixedTabOrder()
         {
             //---------------Set up test pack-------------------
-            IControlChilli parentControl = _factory.CreateControl();
+            IControlHabanero parentControl = _factory.CreateControl();
 
-            IControlChilli childControl1 = _factory.CreateControl();
+            IControlHabanero childControl1 = _factory.CreateControl();
             childControl1.TabIndex = 2;
             parentControl.Controls.Add(childControl1);
 
-            IControlChilli childControl2 = _factory.CreateControl();
+            IControlHabanero childControl2 = _factory.CreateControl();
             childControl2.TabIndex = 0;
             childControl2.TabStop = false;
             parentControl.Controls.Add(childControl2);
 
-            IControlChilli childControl3 = _factory.CreateControl();
+            IControlHabanero childControl3 = _factory.CreateControl();
             childControl3.TabIndex = 1;
             parentControl.Controls.Add(childControl3);
 
-            IControlChilli childControl4 = _factory.CreateControl();
+            IControlHabanero childControl4 = _factory.CreateControl();
             childControl4.TabIndex = 3;
             parentControl.Controls.Add(childControl4);
 
@@ -222,8 +222,8 @@ namespace Habanero.Test.UI.Base
         public void Test_GetNextControl_OneControl()
         {
             //---------------Set up test pack-------------------
-            IControlChilli parentControl = _factory.CreateControl();
-            IControlChilli childControl = _factory.CreateControl();
+            IControlHabanero parentControl = _factory.CreateControl();
+            IControlHabanero childControl = _factory.CreateControl();
             parentControl.Controls.Add(childControl);
 
 //            ControlMapperStrategyWin strategyWin = new ControlMapperStrategyWin();
@@ -240,11 +240,11 @@ namespace Habanero.Test.UI.Base
         public void Test_GetNextControl_TwoControl()
         {
             //---------------Set up test pack-------------------
-            IControlChilli parentControl = _factory.CreateControl();
-            IControlChilli childControl = _factory.CreateControl();
+            IControlHabanero parentControl = _factory.CreateControl();
+            IControlHabanero childControl = _factory.CreateControl();
             childControl.TabIndex = 0;
             parentControl.Controls.Add(childControl);
-            IControlChilli childControl2 = _factory.CreateControl();
+            IControlHabanero childControl2 = _factory.CreateControl();
             childControl2.TabIndex = 1;
             parentControl.Controls.Add(childControl2);
 
@@ -263,11 +263,11 @@ namespace Habanero.Test.UI.Base
         public void Test_GetNextControl_TwoControl_ReverseTabOrder()
         {
             //---------------Set up test pack-------------------
-            IControlChilli parentControl = _factory.CreateControl();
-            IControlChilli childControl = _factory.CreateControl();
+            IControlHabanero parentControl = _factory.CreateControl();
+            IControlHabanero childControl = _factory.CreateControl();
             childControl.TabIndex = 1;
             parentControl.Controls.Add(childControl);
-            IControlChilli childControl2 = _factory.CreateControl();
+            IControlHabanero childControl2 = _factory.CreateControl();
             childControl2.TabIndex = 0;
             parentControl.Controls.Add(childControl2);
 
@@ -286,27 +286,27 @@ namespace Habanero.Test.UI.Base
         public void Test_GetNextControl_MultipleControl_MixedTabOrder()
         {
             //---------------Set up test pack-------------------
-            IControlChilli parentControl = _factory.CreateControl();
+            IControlHabanero parentControl = _factory.CreateControl();
 
-            IControlChilli childControl1 = _factory.CreateControl();
+            IControlHabanero childControl1 = _factory.CreateControl();
             childControl1.TabIndex = 2;
             parentControl.Controls.Add(childControl1);
 
-            IControlChilli childControl2 = _factory.CreateControl();
+            IControlHabanero childControl2 = _factory.CreateControl();
             childControl2.TabIndex = 0;
             childControl2.TabStop = false;
             parentControl.Controls.Add(childControl2);
 
-            IControlChilli childControl3 = _factory.CreateControl();
+            IControlHabanero childControl3 = _factory.CreateControl();
             childControl3.TabIndex = 1;
             parentControl.Controls.Add(childControl3);
 
-            IControlChilli childControl4 = _factory.CreateControl();
+            IControlHabanero childControl4 = _factory.CreateControl();
             childControl4.TabIndex = 1;
             childControl2.TabStop = false;
             parentControl.Controls.Add(childControl4);
 
-            IControlChilli childControl5 = _factory.CreateControl();
+            IControlHabanero childControl5 = _factory.CreateControl();
             childControl5.TabIndex = 3;
             parentControl.Controls.Add(childControl5);
 
@@ -326,7 +326,7 @@ namespace Habanero.Test.UI.Base
         public void Test_KeyPressMovesFocusToNextControl()
         {
             //---------------Set up test pack-------------------
-            IControlChilli parentControl = _factory.CreateControl();
+            IControlHabanero parentControl = _factory.CreateControl();
             ControlMapperStrategyWin strategyWin = new ControlMapperStrategyWin();
             ITextBox textBox = _factory.CreateTextBox();
             textBox.Name = "TestTextBox";
@@ -380,7 +380,7 @@ namespace Habanero.Test.UI.Base
         //    Assert.IsTrue(pressed);
         //}
 
-        private Form AddControlToForm(IControlChilli parentControl)
+        private Form AddControlToForm(IControlHabanero parentControl)
         {
             Form frm = new Form();
             frm.Controls.Clear();

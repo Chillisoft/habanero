@@ -27,7 +27,7 @@ namespace Habanero.UI.Base.ControlInterfaces
     /// Provides a means to choose a file and makes the selected
     /// path available to a control that needs it
     /// </summary>
-    public interface IFileChooser : IControlChilli
+    public interface IFileChooser : IControlHabanero
     {
         /// <summary>
         /// Gets or sets the selected file path

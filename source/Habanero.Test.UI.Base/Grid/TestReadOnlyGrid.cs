@@ -20,7 +20,7 @@
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -50,7 +50,7 @@ namespace Habanero.Test.UI.Base
         }
 
         protected abstract IControlFactory GetControlFactory();
-        protected abstract void AddControlToForm(IControlChilli cntrl);
+        protected abstract void AddControlToForm(IControlHabanero cntrl);
 
 
         [TestFixture]
@@ -60,7 +60,7 @@ namespace Habanero.Test.UI.Base
             {
                 return new ControlFactoryWin();
             }
-            protected override void AddControlToForm(IControlChilli cntrl)
+            protected override void AddControlToForm(IControlHabanero cntrl)
             {
                 System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
                 frm.Controls.Add((System.Windows.Forms.Control)cntrl);
@@ -70,7 +70,7 @@ namespace Habanero.Test.UI.Base
             {
                 //---------------Set up test pack-------------------
                 //---------------Execute Test ----------------------
-                IControlChilli grid = GetControlFactory().CreateReadOnlyGrid();
+                IControlHabanero grid = GetControlFactory().CreateReadOnlyGrid();
                 ReadOnlyGridWin readOnlyGrid = (ReadOnlyGridWin)grid;
                 ////---------------Test Result -----------------------
                 Assert.IsTrue(readOnlyGrid.ReadOnly);
@@ -81,25 +81,25 @@ namespace Habanero.Test.UI.Base
             }
         }
         [TestFixture]
-        public class TestReadOnlyGridGiz : TestReadOnlyGrid
+        public class TestReadOnlyGridVWG : TestReadOnlyGrid
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
 
-            protected override void AddControlToForm(IControlChilli cntrl)
+            protected override void AddControlToForm(IControlHabanero cntrl)
             {
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
                 frm.Controls.Add((Gizmox.WebGUI.Forms.Control)cntrl);
             }
             [Test]
-            public void TestCreateGridBaseGiz()
+            public void TestCreateGridBaseVWG()
             {
                 //---------------Set up test pack-------------------
                 //---------------Execute Test ----------------------
-                IControlChilli grid = GetControlFactory().CreateReadOnlyGrid();
-                ReadOnlyGridGiz readOnlyGrid = (ReadOnlyGridGiz)grid;
+                IControlHabanero grid = GetControlFactory().CreateReadOnlyGrid();
+                ReadOnlyGridVWG readOnlyGrid = (ReadOnlyGridVWG)grid;
                 ////---------------Test Result -----------------------
                 Assert.IsTrue(readOnlyGrid.ReadOnly);
                 Assert.IsFalse(readOnlyGrid.AllowUserToAddRows);
@@ -113,7 +113,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             //---------------Execute Test ----------------------
-            IControlChilli grid = GetControlFactory().CreateReadOnlyGrid();
+            IControlHabanero grid = GetControlFactory().CreateReadOnlyGrid();
 
             ////---------------Test Result -----------------------
             Assert.IsNotNull(grid);

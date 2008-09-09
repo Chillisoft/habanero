@@ -25,7 +25,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 using Control=Gizmox.WebGUI.Forms.Control;
@@ -66,12 +66,12 @@ namespace Habanero.Test.UI.Base
         }
 
         protected abstract IControlFactory GetControlFactory();
-        protected abstract IFormChilli AddControlToForm(IControlChilli cntrl);
+        protected abstract IFormHabanero AddControlToForm(IControlHabanero cntrl);
         protected abstract void AssertIsTextBoxColumnType(IDataGridViewColumn dataGridViewColumn);
         protected abstract void AssertIsCheckBoxColumnType(IDataGridViewColumn dataGridViewColumn);
         protected abstract void AssertIsComboBoxColumnType(IDataGridViewColumn dataGridViewColumn);
         protected abstract void AssertComboBoxItemCount(IDataGridViewColumn dataGridViewColumn, int expectedCount);
-        protected abstract void AssertMainControlsOnForm(IFormChilli form);
+        protected abstract void AssertMainControlsOnForm(IFormHabanero form);
         protected abstract IEditableGridControl CreateEditableGridControl();
 
         [Test]
@@ -136,7 +136,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Execute Test ----------------------
             IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
-            IFormChilli form = AddControlToForm(gridControl);
+            IFormHabanero form = AddControlToForm(gridControl);
             //---------------Test Result -----------------------
             AssertMainControlsOnForm(form);
         }
@@ -327,7 +327,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             try
             {
-                new EditableGridControlGiz(null);
+                new EditableGridControlVWG(null);
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------
@@ -452,7 +452,7 @@ namespace Habanero.Test.UI.Base
             //frm.Controls.Add((Gizmox.WebGUI.Forms.Control)readOnlyGridControl);
             AddControlToForm(editableGridControl);
             //---------------Execute Test ----------------------
-            editableGridControl.Initialise(Sample.CreateClassDefGiz());
+            editableGridControl.Initialise(Sample.CreateClassDefVWG());
             try
             {
                 editableGridControl.SetBusinessObjectCollection(col);
@@ -728,9 +728,9 @@ namespace Habanero.Test.UI.Base
         private ClassDef LoadMyBoDefaultClassDef()
         {
             ClassDef classDef;
-            if (GetControlFactory() is ControlFactoryGizmox)
+            if (GetControlFactory() is ControlFactoryVWG)
             {
-                classDef = MyBO.LoadDefaultClassDefGizmox();
+                classDef = MyBO.LoadDefaultClassDefVWG();
             }
             else
             {
@@ -785,19 +785,19 @@ namespace Habanero.Test.UI.Base
             return contactPersonTestBO;
         }
 
-        #region Nested type: TestEditableGridControlGiz
+        #region Nested type: TestEditableGridControlVWG
 
         [TestFixture]
-        public class TestEditableGridControlGiz : TestEditableGridControl
+        public class TestEditableGridControlVWG : TestEditableGridControl
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
 
             //protected override IGridBase CreateGridBaseStub()
             //{
-            //    GridBaseGizStub gridBase = new GridBaseGizStub();
+            //    GridBaseVWGStub gridBase = new GridBaseVWGStub();
             //    Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
             //    frm.Controls.Add(gridBase);
             //    return gridBase;
@@ -820,62 +820,62 @@ namespace Habanero.Test.UI.Base
 
             protected override void AssertIsTextBoxColumnType(IDataGridViewColumn dataGridViewColumn)
             {
-                DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz) dataGridViewColumn;
+                DataGridViewColumnVWG dataGridViewColumnVWG = (DataGridViewColumnVWG) dataGridViewColumn;
                 Assert.IsInstanceOfType
-                    (typeof (Gizmox.WebGUI.Forms.DataGridViewTextBoxColumn), dataGridViewColumnGiz.DataGridViewColumn);
+                    (typeof (Gizmox.WebGUI.Forms.DataGridViewTextBoxColumn), dataGridViewColumnVWG.DataGridViewColumn);
             }
 
             protected override void AssertIsCheckBoxColumnType(IDataGridViewColumn dataGridViewColumn)
             {
-                DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz) dataGridViewColumn;
+                DataGridViewColumnVWG dataGridViewColumnVWG = (DataGridViewColumnVWG) dataGridViewColumn;
                 Assert.IsInstanceOfType
-                    (typeof (Gizmox.WebGUI.Forms.DataGridViewCheckBoxColumn), dataGridViewColumnGiz.DataGridViewColumn);
+                    (typeof (Gizmox.WebGUI.Forms.DataGridViewCheckBoxColumn), dataGridViewColumnVWG.DataGridViewColumn);
             }
 
             protected override void AssertIsComboBoxColumnType(IDataGridViewColumn dataGridViewColumn)
             {
-                DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz) dataGridViewColumn;
+                DataGridViewColumnVWG dataGridViewColumnVWG = (DataGridViewColumnVWG) dataGridViewColumn;
                 Assert.IsInstanceOfType
-                    (typeof (Gizmox.WebGUI.Forms.DataGridViewComboBoxColumn), dataGridViewColumnGiz.DataGridViewColumn);
+                    (typeof (Gizmox.WebGUI.Forms.DataGridViewComboBoxColumn), dataGridViewColumnVWG.DataGridViewColumn);
             }
 
             protected override void AssertComboBoxItemCount(IDataGridViewColumn dataGridViewColumn, int expectedCount)
             {
                 //TODO: get this code working again when the Gizmox bug is fixed in GridInitialiser
-                //DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz)dataGridViewColumn;
+                //DataGridViewColumnVWG dataGridViewColumnVWG = (DataGridViewColumnVWG)dataGridViewColumn;
                 //Assert.AreEqual(expectedCount,
-                //    ((Gizmox.WebGUI.Forms.DataGridViewComboBoxColumn)dataGridViewColumnGiz.DataGridViewColumn).Items.Count);
+                //    ((Gizmox.WebGUI.Forms.DataGridViewComboBoxColumn)dataGridViewColumnVWG.DataGridViewColumn).Items.Count);
             }
 
-            protected override void AssertMainControlsOnForm(IFormChilli form)
+            protected override void AssertMainControlsOnForm(IFormHabanero form)
             {
-                Form formGiz = (Form) form;
-                Assert.AreEqual(3, formGiz.Controls[0].Controls.Count);
-                Assert.IsInstanceOfType(typeof (IFilterControl), formGiz.Controls[0].Controls[1]);
-                Assert.IsInstanceOfType(typeof (IEditableGrid), formGiz.Controls[0].Controls[0]);
-                Assert.IsInstanceOfType(typeof (IButtonGroupControl), formGiz.Controls[0].Controls[2]);
+                Form formVWG = (Form)form;
+                Assert.AreEqual(3, formVWG.Controls[0].Controls.Count);
+                Assert.IsInstanceOfType(typeof (IFilterControl), formVWG.Controls[0].Controls[1]);
+                Assert.IsInstanceOfType(typeof (IEditableGrid), formVWG.Controls[0].Controls[0]);
+                Assert.IsInstanceOfType(typeof (IButtonGroupControl), formVWG.Controls[0].Controls[2]);
             }
 
             protected override IEditableGridControl CreateEditableGridControl()
             {
-                EditableGridControlGiz editableGridControlGiz = new EditableGridControlGiz(GetControlFactory());
+                EditableGridControlVWG editableGridControlVWG = new EditableGridControlVWG(GetControlFactory());
                 Form frm = new Form();
-                frm.Controls.Add(editableGridControlGiz);
-                return editableGridControlGiz;
+                frm.Controls.Add(editableGridControlVWG);
+                return editableGridControlVWG;
             }
 
             [Test]
-            protected override IFormChilli AddControlToForm(IControlChilli cntrl)
+            protected override IFormHabanero AddControlToForm(IControlHabanero cntrl)
             {
                 //Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
                 //frm.Controls.Add((Gizmox.WebGUI.Forms.Control) cntrl);
 
-                ////return (FormGiz) frm;
+                ////return (FormVWG) frm;
                 //return null;
 
-                FormGiz form = (FormGiz) GetControlFactory().CreateForm();
-                Form formGiz = form;
-                formGiz.Controls.Add((Control) cntrl);
+                FormVWG form = (FormVWG) GetControlFactory().CreateForm();
+                Form formVWG = form;
+                formVWG.Controls.Add((Control) cntrl);
 
                 return form;
             }
@@ -908,7 +908,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test, Ignore("Currently working on this")]
-            public void TestGiz_CheckBoxUIGridDef_Creates_CheckBoxColumn()
+            public void TestVWG_CheckBoxUIGridDef_Creates_CheckBoxColumn()
             {
                 //---------------Set up test pack-------------------
                 IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
@@ -921,12 +921,12 @@ namespace Habanero.Test.UI.Base
                 //---------------Test Result -----------------------
                 IDataGridViewColumn column = gridControl.Grid.Columns["TestBoolean"];
                 Assert.IsNotNull(column);
-                Assert.IsInstanceOfType(typeof (DataGridViewCheckBoxColumnGiz), column);
+                Assert.IsInstanceOfType(typeof (DataGridViewCheckBoxColumnVWG), column);
                 //---------------Tear Down -------------------------          
             }
 
             [Test]
-            public void TestGizInitialise_SelectionEditMode()
+            public void TestVWGInitialise_SelectionEditMode()
             {
                 //---------------Set up test pack-------------------
                 IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
@@ -977,12 +977,12 @@ namespace Habanero.Test.UI.Base
             //{
             //    throw new NotImplementedException();
             //}
-            protected override IFormChilli AddControlToForm(IControlChilli cntrl)
+            protected override IFormHabanero AddControlToForm(IControlHabanero cntrl)
             {
                 //System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
                 //frm.Controls.Add((System.Windows.Forms.Control)cntrl);
 
-                IFormChilli frm = GetControlFactory().CreateForm();
+                IFormHabanero frm = GetControlFactory().CreateForm();
                 frm.Controls.Add(cntrl);
                 return frm;
             }
@@ -1015,7 +1015,7 @@ namespace Habanero.Test.UI.Base
                                 ((DataGridViewComboBoxColumn) dataGridViewColumnWin.DataGridViewColumn).Items.Count);
             }
 
-            protected override void AssertMainControlsOnForm(IFormChilli form)
+            protected override void AssertMainControlsOnForm(IFormHabanero form)
             {
                 Assert.AreEqual(3, form.Controls[0].Controls.Count);
                 Assert.IsInstanceOfType(typeof (IFilterControl), form.Controls[0].Controls[1]);

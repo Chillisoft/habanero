@@ -18,7 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -28,7 +28,7 @@ namespace Habanero.Test.UI.Base
     public abstract class TestLayoutManager
     {
         private LayoutManagerStub _ManagerStub;
-        private IControlChilli managedControl;
+        private IControlHabanero managedControl;
 
         protected abstract IControlFactory GetControlFactory();
 
@@ -42,11 +42,11 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestLayoutManagerGiz : TestLayoutManager
+        public class TestLayoutManagerVWG : TestLayoutManager
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
         }
         [SetUp]
@@ -82,14 +82,14 @@ namespace Habanero.Test.UI.Base
         public void Test_ResetTheManagedControl()
         {
             //---------------Set up test pack-------------------
-            IControlChilli control = GetControlFactory().CreatePanel();
+            IControlHabanero control = GetControlFactory().CreatePanel();
             LayoutManagerStub managerStub = new LayoutManagerStub(control);
 
             //---------------Assert Precondition----------------
 
             Assert.AreSame(control, managerStub.ManagedControl);
             //---------------Execute Test ----------------------
-            IControlChilli control2 = GetControlFactory().CreatePanel();
+            IControlHabanero control2 = GetControlFactory().CreatePanel();
             managerStub.ManagedControl = control2;
 
             //---------------Test Result -----------------------
@@ -108,12 +108,12 @@ namespace Habanero.Test.UI.Base
         public void TestCreate_AlreadyHasControls()
         {
             //---------------Set up test pack-------------------
-            IControlChilli controlChilli = GetControlFactory().CreatePanel();
-            controlChilli.Controls.Add(GetControlFactory().CreateControl());
+            IControlHabanero controlHabanero = GetControlFactory().CreatePanel();
+            controlHabanero.Controls.Add(GetControlFactory().CreateControl());
             //---------------Execute Test ----------------------
             try
             {
-                new LayoutManagerStub(controlChilli);
+                new LayoutManagerStub(controlHabanero);
                 Assert.Fail("Should raise an error");
             }
             //---------------Test Result -----------------------
@@ -149,7 +149,7 @@ namespace Habanero.Test.UI.Base
                 get { return mRefreshed; }
             }
 
-            public LayoutManagerStub(IControlChilli managedControl) : base(managedControl, null)
+            public LayoutManagerStub(IControlHabanero managedControl) : base(managedControl, null)
             {
             }
 
@@ -158,7 +158,7 @@ namespace Habanero.Test.UI.Base
                 mRefreshed = true;
             }
 
-            public override IControlChilli AddControl(IControlChilli control)
+            public override IControlHabanero AddControl(IControlHabanero control)
             {
                 throw new System.NotImplementedException();
             }

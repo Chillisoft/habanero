@@ -29,7 +29,7 @@ namespace Habanero.UI.Base
         private readonly IComboBox _comboBox;
         private readonly IListComboBoxMapperStrategy _mapperStrategy;
 
-        public ListComboBoxMapper(IControlChilli ctl, string propName, bool isReadOnly, IControlFactory factory)
+        public ListComboBoxMapper(IControlHabanero ctl, string propName, bool isReadOnly, IControlFactory factory)
             : base(ctl, propName, isReadOnly, factory)
         {
             _comboBox = (IComboBox)ctl;

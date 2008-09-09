@@ -29,7 +29,7 @@ namespace Habanero.UI.Base
     /// </summary>
     public abstract class LayoutManager : MarshalByRefObject
     {
-        private IControlChilli _managedControl;
+        private IControlHabanero _managedControl;
         protected readonly IControlFactory _controlFactory;
         private int _borderSize = 5;
         private int _gapSize = 2;
@@ -39,7 +39,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="managedControl">The control to manage</param>
         /// <param name="controlFactory">control factory used to create any child controls</param>
-        public LayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
+        public LayoutManager(IControlHabanero managedControl, IControlFactory controlFactory)
         {
             if (managedControl == null)
             {
@@ -57,7 +57,7 @@ namespace Habanero.UI.Base
             SetManagedControl(managedControl);
         }
 
-        private void SetManagedControl(IControlChilli managedControl)
+        private void SetManagedControl(IControlHabanero managedControl)
         {
             _managedControl = managedControl;
             _managedControl.Resize += this.ManagedControlResizeHandler;
@@ -66,7 +66,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Gets and sets the managed control
         /// </summary>
-        public IControlChilli ManagedControl
+        public IControlHabanero ManagedControl
         {
             get { return _managedControl; }
             set { SetManagedControl(value); }
@@ -117,7 +117,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="label">The control to add</param>
         /// <returns>Returns the control added</returns>
-        public abstract IControlChilli AddControl(IControlChilli label);
+        public abstract IControlHabanero AddControl(IControlHabanero label);
     }
 
     /// <summary>

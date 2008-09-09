@@ -24,7 +24,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Provides a single step in a wizard control
     /// </summary>
-    public interface IWizardStep : IControlChilli
+    public interface IWizardStep : IControlHabanero
     {
         /// <summary>
         /// Initialises the step. Run when the step is reached.

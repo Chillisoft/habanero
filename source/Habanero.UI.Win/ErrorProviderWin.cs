@@ -37,7 +37,7 @@ namespace Habanero.UI.Win
         ///	<param name="objControl">The item to get the error description string for. </param>
         ///	<exception cref="T:System.ArgumentNullException">control is null.</exception>
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
-        public string GetError(IControlChilli objControl)
+        public string GetError(IControlHabanero objControl)
         {
             return base.GetError((Control)objControl);
         }
@@ -45,13 +45,13 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets a value indicating where the error icon should be placed in relation to the control.
         /// </summary>
-        ///	<returns>One of the <see cref="T:Habanero.UI.Base.ErrorIconAlignmentChilli"></see> values. The default icon alignment is <see cref="F:Habanero.UI.Base.ErrorIconAlignmentChilli.MiddleRight"></see>.</returns>
+        ///	<returns>One of the <see cref="T:Habanero.UI.Base.ErrorIconAlignmentHabanero"></see> values. The default icon alignment is <see cref="F:Habanero.UI.Base.ErrorIconAlignmentHabanero.MiddleRight"></see>.</returns>
         ///	<param name="objControl">The control to get the icon location for. </param>
         ///	<exception cref="T:System.ArgumentNullException">control is null.</exception>
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
-        public ErrorIconAlignmentChilli GetIconAlignment(IControlChilli objControl)
+        public ErrorIconAlignmentHabanero GetIconAlignment(IControlHabanero objControl)
         {
-            return (ErrorIconAlignmentChilli)base.GetIconAlignment((Control)objControl);
+            return (ErrorIconAlignmentHabanero)base.GetIconAlignment((Control)objControl);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Habanero.UI.Win
         /// <param name="objControl">The control to get the padding for. </param>
         /// <exception cref="T:System.ArgumentNullException">control is null.</exception>
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
-        public int GetIconPadding(IControlChilli objControl)
+        public int GetIconPadding(IControlHabanero objControl)
         {
             return base.GetIconPadding((Control)objControl);
 
@@ -74,7 +74,7 @@ namespace Habanero.UI.Win
         /// <param name="strValue">The error description string. </param>
         /// <exception cref="T:System.ArgumentNullException">control is null.</exception>
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
-        public void SetError(IControlChilli objControl, string strValue)
+        public void SetError(IControlHabanero objControl, string strValue)
         {
             base.SetError((Control)objControl, strValue);
         }
@@ -83,10 +83,10 @@ namespace Habanero.UI.Win
         /// Sets the location where the error icon should be placed in relation to the control.
         /// </summary>
         /// <param name="objControl">The control to set the icon location for. </param>
-        /// <param name="enmValue">One of the <see cref="T:Habanero.UI.Base.ErrorIconAlignmentChilli"/> values. </param>
+        /// <param name="enmValue">One of the <see cref="T:Habanero.UI.Base.ErrorIconAlignmentHabanero"/> values. </param>
         /// <exception cref="T:System.ArgumentNullException">control is null.</exception>
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
-        public void SetIconAlignment(IControlChilli objControl, ErrorIconAlignmentChilli enmValue)
+        public void SetIconAlignment(IControlHabanero objControl, ErrorIconAlignmentHabanero enmValue)
         {
             base.SetIconAlignment((Control)objControl, (ErrorIconAlignment)enmValue);
 
@@ -99,7 +99,7 @@ namespace Habanero.UI.Win
         /// <param name="intPadding">The number of pixels to add between the icon and the control. </param>
         /// <exception cref="T:System.ArgumentNullException">control is null.</exception>
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
-        public void SetIconPadding(IControlChilli objControl, int intPadding)
+        public void SetIconPadding(IControlHabanero objControl, int intPadding)
         {
             base.SetIconPadding((Control)objControl, intPadding);
         }
@@ -107,12 +107,12 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets or sets a value indicating when the error icon flashes.
         /// </summary>
-        /// <returns>One of the <see cref="T:Habanero.UI.Base.ErrorBlinkStyleChilli"/> values. The default is <see cref="F:Habanero.UI.Base.ErrorBlinkStyleChilli.BlinkIfDifferentError"/>.</returns>
-        /// <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The assigned value is not one of the <see cref="T:Habanero.UI.Base.ErrorBlinkStyleChilli"/> values. </exception>
+        /// <returns>One of the <see cref="T:Habanero.UI.Base.ErrorBlinkStyleHabanero"/> values. The default is <see cref="F:Habanero.UI.Base.ErrorBlinkStyleHabanero.BlinkIfDifferentError"/>.</returns>
+        /// <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The assigned value is not one of the <see cref="T:Habanero.UI.Base.ErrorBlinkStyleHabanero"/> values. </exception>
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
-        public ErrorBlinkStyleChilli BlinkStyleChilli
+        public ErrorBlinkStyleHabanero BlinkStyleHabanero
         {
-            get { return (ErrorBlinkStyleChilli)base.BlinkStyle; }
+            get { return (ErrorBlinkStyleHabanero)base.BlinkStyle; }
             set { base.BlinkStyle = (ErrorBlinkStyle)value; }
         }
     }

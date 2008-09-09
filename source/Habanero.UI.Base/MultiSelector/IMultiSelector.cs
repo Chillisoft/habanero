@@ -54,7 +54,7 @@ namespace Habanero.UI.Base
     /// selected list if it is not also in the AllOptions list.  All list
     /// control is managed through the Model object.
     /// </summary>
-    public interface IMultiSelector<T> : IControlChilli
+    public interface IMultiSelector<T> : IControlHabanero
     {
         /// <summary>
         /// Gets and sets the complete list of options available to go in

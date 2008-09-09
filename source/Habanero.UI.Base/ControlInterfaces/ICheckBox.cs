@@ -25,7 +25,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Represents a CheckBox control
     /// </summary>
-    public interface ICheckBox:IControlChilli
+    public interface ICheckBox:IControlHabanero
     {
         /// <summary>
         /// Gets or sets whether the CheckBox is checked

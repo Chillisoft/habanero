@@ -80,15 +80,15 @@ namespace Habanero.Test.UI.Base.Mappers
         }
 
         [TestFixture]
-        public class TestDateTimePickerMapperGiz : TestDateTimePickerMapper
+        public class TestDateTimePickerMapperVWG : TestDateTimePickerMapper
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
+                return new Habanero.UI.VWG.ControlFactoryVWG();
                 //return null;
             }
             [Test]
-            public void TestSetBusinessObjectValue_DoesNotChangeDateTimePicker_InGiz()
+            public void TestSetBusinessObjectValue_DoesNotChangeDateTimePicker_InVWG()
             {
                 //---------------Set up test pack-------------------
                 Sample sampleBusinessObject = new Sample();
@@ -108,7 +108,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Tear Down -------------------------          
             }
             [Test]
-            public void TestUpdateValueInPicker_DoesNot_ChangesValueInBO_ForGiz()
+            public void TestUpdateValueInPicker_DoesNot_ChangesValueInBO_ForVWG()
             {
                 //---------------Set up test pack-------------------
                 Sample sampleBusinessObject = new Sample();

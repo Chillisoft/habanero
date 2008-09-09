@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -523,14 +523,14 @@ namespace Habanero.Test.UI.Base.FilterController
 
         #endregion
 
-        #region Nested type: TestFilterControlGizmox
+        #region Nested type: TestFilterControlVWG
 
         [TestFixture]
-        public class TestFilterControlGizmox : TestFilterControl
+        public class TestFilterControlVWG : TestFilterControl
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
 
 
@@ -541,7 +541,7 @@ namespace Habanero.Test.UI.Base.FilterController
                 IControlFactory factory = GetControlFactory();
 
                 //---------------Execute Test ----------------------
-                //            IControlChilli control = factory.CreatePanel();
+                //            IControlHabanero control = factory.CreatePanel();
                 IFilterControl ctl = factory.CreateFilterControl();
                 //---------------Test Result -----------------------
                 Assert.IsInstanceOfType(typeof (FlowLayoutManager), ctl.LayoutManager);

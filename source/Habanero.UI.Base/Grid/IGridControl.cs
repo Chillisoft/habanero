@@ -26,7 +26,7 @@ namespace Habanero.UI.Base
     /// Provides a combination of grid, filter and buttons used to edit a
     /// collection of business objects
     /// </summary>
-    public interface IGridControl : IControlChilli
+    public interface IGridControl : IControlHabanero
     {
         /// <summary>
         /// Initiliases the grid structure using the default UI class definition (implicitly named "default")

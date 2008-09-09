@@ -24,7 +24,7 @@ namespace Habanero.UI.Base
     /// be constructed using a UI Form definition provided in the class definitions.
     /// The appropriate UI definition is typically set in the constructor.
     /// </summary>
-    public interface IDefaultBOEditorForm: IFormChilli
+    public interface IDefaultBOEditorForm: IFormHabanero
     {
         /// <summary>
         /// Gets the button control for the buttons in the form

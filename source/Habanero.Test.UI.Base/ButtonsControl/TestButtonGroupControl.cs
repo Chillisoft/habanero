@@ -21,7 +21,7 @@ using System;
 using System.Windows.Forms;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -48,7 +48,7 @@ namespace Habanero.Test.UI.Base
         }
 
         protected abstract IControlFactory GetControlFactory();
-        protected abstract void AddControlToForm(IControlChilli cntrl);
+        protected abstract void AddControlToForm(IControlHabanero cntrl);
 
         [TestFixture]
         public class TestButtonControlWin : TestButtonGroupControl
@@ -58,7 +58,7 @@ namespace Habanero.Test.UI.Base
                 return new ControlFactoryWin();
             }
 
-            protected override void AddControlToForm(IControlChilli cntrl)
+            protected override void AddControlToForm(IControlHabanero cntrl)
             {
                 System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
                 frm.Controls.Add((System.Windows.Forms.Control) cntrl);
@@ -114,14 +114,14 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestButtonControlGiz : TestButtonGroupControl
+        public class TestButtonControlVWG : TestButtonGroupControl
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
 
-            protected override void AddControlToForm(IControlChilli cntrl)
+            protected override void AddControlToForm(IControlHabanero cntrl)
             {
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
                 frm.Controls.Add((Gizmox.WebGUI.Forms.Control) cntrl);
@@ -151,7 +151,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             //---------------Execute Test ----------------------
-            IControlChilli buttons = GetControlFactory().CreateButtonGroupControl();
+            IControlHabanero buttons = GetControlFactory().CreateButtonGroupControl();
             ////---------------Test Result -----------------------
             Assert.IsNotNull(buttons);
             Assert.IsTrue(buttons is IButtonGroupControl);

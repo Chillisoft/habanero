@@ -23,7 +23,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -70,16 +70,16 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestBOColTabControlGiz : TestBOColTabControl
+        public class TestBOColTabControlVWG : TestBOColTabControl
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
+                return new Habanero.UI.VWG.ControlFactoryVWG();
             }
 
             protected override IBusinessObjectControl GetBusinessObjectControlStub()
             {
-                return new BusinessObjectControlGizStub();
+                return new BusinessObjectControlVWGStub();
             }
 
             /// <summary>
@@ -170,6 +170,23 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(myBoCol, boColTabControl.BusinessObjectCollection);
             Assert.AreEqual(3, boColTabControl.TabControl.TabPages.Count);
         }
+
+//        [Test]
+//        public void TestSetCollectionHasNoObjects()
+//        {
+//            //---------------Set up test pack-------------------
+//            IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
+//            IBusinessObjectControl busControl = GetBusinessObjectControlStub();
+//            boColTabControl.BusinessObjectControl = busControl;
+//            BusinessObjectCollection<MyBO> myBOS = new BusinessObjectCollection<MyBO>();
+//
+//            //---------------Execute Test ----------------------
+//            boColTabControl.BusinessObjectCollection = myBOS;
+//
+//            //---------------Test Result -----------------------
+//            Assert.AreSame(myBOS, boColTabControl.BusinessObjectCollection);
+//            Assert.IsNull(boColTabControl.CurrentBusinessObject);
+//        }
 
         [Test]
         public void TestGetBo()
@@ -397,7 +414,7 @@ namespace Habanero.Test.UI.Base
             return myBoCol;
         }
 
-        private class BusinessObjectControlGizStub : ControlGiz, IBusinessObjectControl
+        private class BusinessObjectControlVWGStub : ControlVWG, IBusinessObjectControl
         {
             private IBusinessObject _bo;
 

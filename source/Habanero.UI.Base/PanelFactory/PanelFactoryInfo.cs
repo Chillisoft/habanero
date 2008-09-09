@@ -32,7 +32,7 @@ namespace Habanero.UI.Base
     {
         private readonly IPanel _panel;
         private readonly IControlMapperCollection _mappers;
-        private readonly IControlChilli _firstControlToFocus;
+        private readonly IControlHabanero _firstControlToFocus;
         private int _preferredHeight;
         private int _preferredWidth;
         //private IDictionary<string, EditableGrid> _formGrids;
@@ -51,7 +51,7 @@ namespace Habanero.UI.Base
         /// <param name="mappers">The control mappers collection</param>
         /// <param name="uiDefName">The UI definition name to use</param>
         /// <param name="firstControlToFocus">The first control to focus on</param>
-        public PanelFactoryInfo(IPanel panel, IControlMapperCollection mappers, string uiDefName, IControlChilli firstControlToFocus)
+        public PanelFactoryInfo(IPanel panel, IControlMapperCollection mappers, string uiDefName, IControlHabanero firstControlToFocus)
         {
             _panel = panel;
             _mappers = mappers;
@@ -105,7 +105,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Returns the first control to focus on in the user interface
         /// </summary>
-        public IControlChilli FirstControlToFocus
+        public IControlHabanero FirstControlToFocus
         {
             get { return _firstControlToFocus; }
         }

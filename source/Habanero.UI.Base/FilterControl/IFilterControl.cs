@@ -28,7 +28,7 @@ namespace Habanero.UI.Base
     /// Manages a group of filter controls that create a filter clause used to limit
     /// which rows of data to show on a DataGridView
     /// </summary>
-    public interface IFilterControl : IControlChilli
+    public interface IFilterControl : IControlHabanero
     {
         /// <summary>
         /// Adds a TextBox filter in which users can specify text that
@@ -142,7 +142,7 @@ namespace Habanero.UI.Base
         /// Returns the filter control used to filter the column for the given property name
         /// </summary>
         /// <param name="propertyName">The property name on the business object</param>
-        IControlChilli GetChildControl(string propertyName);
+        IControlHabanero GetChildControl(string propertyName);
 
         /// <summary>
         /// Clears all the values from the filter and calls <see cref="ApplyFilter"/>

@@ -174,9 +174,9 @@ namespace Habanero.Test.UI.Base.Wizard
         }
 
         [Test]
-        public void Test_WizardControllerCancelsWizardSteps_Giz()
+        public void Test_WizardControllerCancelsWizardSteps_VWG()
         {
-            Test_WizardControllerCancelsWizardSteps(new Habanero.UI.WebGUI.ControlFactoryGizmox());
+            Test_WizardControllerCancelsWizardSteps(new Habanero.UI.VWG.ControlFactoryVWG());
         }
         
         public void Test_WizardControllerCancelsWizardSteps(IControlFactory controlFactory)

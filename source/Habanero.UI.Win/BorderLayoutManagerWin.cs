@@ -35,20 +35,20 @@ namespace Habanero.UI.Win
     /// </summary>
     public class BorderLayoutManagerWin : BorderLayoutManager
     {
-        private readonly IControlChilli[] _controls;
+        private readonly IControlHabanero[] _controls;
         private readonly bool[] _splitters;
         private Control _ctl;
-        public BorderLayoutManagerWin(IControlChilli managedControl, IControlFactory controlFactory)
+        public BorderLayoutManagerWin(IControlHabanero managedControl, IControlFactory controlFactory)
             : base(managedControl, controlFactory)
         {
-            _controls = new IControlChilli[5];
+            _controls = new IControlHabanero[5];
             _splitters = new bool[5];
         }
 
         /// <summary>
         /// Sets how the specified control is docked within its parent
         /// </summary>
-        protected override void SetupDockOfControl(IControlChilli control, Position pos)
+        protected override void SetupDockOfControl(IControlHabanero control, Position pos)
         {
             _ctl = (Control)control;
             switch (pos)
@@ -79,7 +79,7 @@ namespace Habanero.UI.Win
         /// /// <param name="pos">The position at which to add the control</param>
         /// <param name="includeSplitter">True to include a splitter between the controls</param>
         /// <returns>Returns the control added</returns>
-        public override IControlChilli AddControl(IControlChilli control, Position pos, bool includeSplitter)
+        public override IControlHabanero AddControl(IControlHabanero control, Position pos, bool includeSplitter)
         {
             SetupDockOfControl(control, pos);
             _controls[(int)pos] = control;
@@ -87,8 +87,8 @@ namespace Habanero.UI.Win
             this.ManagedControl.Controls.Clear();
             for (int i = 0; i < _controls.Length; i++)
             {
-                IControlChilli chilliControl = _controls[i];
-                if (chilliControl != null)
+                IControlHabanero habaneroControl = _controls[i];
+                if (habaneroControl != null)
                 {
                     if (_splitters[i])
                     {
@@ -101,7 +101,7 @@ namespace Habanero.UI.Win
                         //TODO: port  splt.Dock = ((Control)_controls[i]).Dock;
                         ManagedControl.Controls.Add(splt);
                     }
-                    this.ManagedControl.Controls.Add(chilliControl);
+                    this.ManagedControl.Controls.Add(habaneroControl);
                 }
             }
 

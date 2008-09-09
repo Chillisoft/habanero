@@ -23,7 +23,7 @@ namespace Habanero.UI.Base
     /// Enables the user to select a single option from a group of choices
     /// when paired with other RadioButton controls
     /// </summary>
-    public interface IRadioButton : IControlChilli
+    public interface IRadioButton : IControlHabanero
     {
     }
 }

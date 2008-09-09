@@ -49,154 +49,153 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BOColTabControlGiz.cs">
+    <Compile Include="BOColTabControlVWG.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="BorderLayoutManagerGiz.cs" />
-    <Compile Include="ButtonGroupControlGiz.cs">
+    <Compile Include="BorderLayoutManagerVWG.cs" />
+    <Compile Include="ButtonGroupControlVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CheckBoxGiz.cs">
+    <Compile Include="ButtonVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ComboBoxGiz.cs">
+    <Compile Include="CheckBoxVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ButtonGiz.cs">
+    <Compile Include="ComboBoxVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ControlCollectionGiz.cs" />
-    <Compile Include="ControlGiz.cs">
+    <Compile Include="ControlCollectionVWG.cs" />
+    <Compile Include="ControlFactoryVWG.cs" />
+    <Compile Include="ControlVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViewCheckBoxColumnGiz.cs" />
-    <Compile Include="DataGridViewComboBoxColumnGiz.cs" />
-    <Compile Include="DateRangeComboBoxGiz.cs">
+    <Compile Include="DataGridViewCheckBoxColumnVWG.cs" />
+    <Compile Include="DataGridViewComboBoxColumnVWG.cs" />
+    <Compile Include="DateRangeComboBoxVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DateTimePickerGiz.cs">
+    <Compile Include="DateTimePickerVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="EditableGridControlGiz.cs">
+    <Compile Include="DefaultBOEditorFormVWG.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditableGridControlVWG.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="EditableGridGiz.cs">
+    <Compile Include="EditableGridVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ErrorProviderGiz.cs" />
-    <Compile Include="FileChooserGiz.cs">
+    <Compile Include="ErrorProviderVWG.cs" />
+    <Compile Include="FileChooserVWG.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FilterControl\FilterControlVWG.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="FormExceptionNotifier.cs">
+      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FormGiz.cs">
+    <Compile Include="FormVWG.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Grid\DataGridViewCellStyleGiz.cs" />
-    <Compile Include="Grid\DataGridViewColumnGiz.cs" />
-    <Compile Include="Grid\EditableGridButtonsControlGiz.cs">
+    <Compile Include="Grid\DataGridViewCellStyleVWG.cs" />
+    <Compile Include="Grid\DataGridViewColumnVWG.cs" />
+    <Compile Include="Grid\EditableGridButtonsControlVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GroupBoxGiz.cs">
+    <Compile Include="Grid\GridBaseVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="HabaneroAppWebGUI.cs" />
-    <Compile Include="HelpAboutBoxGiz.cs">
+    <Compile Include="Grid\ReadOnlyGridButtonsControlVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Grid\ReadOnlyGridControlVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Grid\ReadOnlyGridVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GroupBoxVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="HabaneroAppVWG.cs" />
+    <Compile Include="HelpAboutBoxVWG.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ListViewGiz.cs">
-    </Compile>
-    <Compile Include="ListViewGiz.Designer.cs">
-      <DependentUpon>ListViewGiz.cs</DependentUpon>
-    </Compile>
-    <Compile Include="NumericUpDownGiz.cs">
+    <Compile Include="LabelVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="OKCancelDialogFactoryGiz.cs" />
-    <Compile Include="ProgressBarGiz.cs">
+    <Compile Include="ListBoxVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="RadioButtonGiz.cs">
-      <SubType>Component</SubType>
+    <Compile Include="ListViewVWG.cs" />
+    <Compile Include="ListViewVWG.designer.cs">
+      <DependentUpon>ListViewVWG.cs</DependentUpon>
     </Compile>
-    <Compile Include="SplitterGiz.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="TabPageGiz.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DefaultBOEditorFormGiz.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ControlFactoryGizmox.cs">
-    </Compile>
-    <Compile Include="Grid\GridBaseGiz.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="LabelGiz.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ListBoxGiz.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="MultiSelectorGiz.cs">
+    <Compile Include="MultiSelectorVWG.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MultiSelectorGiz.Designer.cs">
-      <DependentUpon>MultiSelectorGiz.cs</DependentUpon>
+    <Compile Include="MultiSelectorVWG.designer.cs">
+      <DependentUpon>MultiSelectorVWG.cs</DependentUpon>
     </Compile>
-    <Compile Include="PanelGiz.cs">
+    <Compile Include="NumericUpDownVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="OKCancelDialogFactoryVWG.cs" />
+    <Compile Include="PanelVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProgressBarVWG.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\Common\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
-    <Compile Include="Grid\ReadOnlyGridButtonsControlGiz.cs">
+    <Compile Include="RadioButtonVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Grid\ReadOnlyGridGiz.cs">
+    <Compile Include="SplitterVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Grid\ReadOnlyGridControlGiz.cs">
+    <Compile Include="TabPageVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="TextBoxGiz.cs">
+    <Compile Include="TextBoxVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FilterControl\FilterControlGiz.cs">
+    <Compile Include="ToBeGeneralised\TabControlVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ToBeGeneralised\TabControlGiz.cs">
+    <Compile Include="ToolTipVWG.cs" />
+    <Compile Include="TreeViewVWG.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ToolTipGiz.cs" />
-    <Compile Include="TreeViewGiz.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UserControlGiz.cs">
+    <Compile Include="UserControlVWG.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Wizard\WizardControlGiz.cs">
+    <Compile Include="Wizard\MessageWizardStepVWG.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Wizard\WizardFormGiz.cs">
+    <Compile Include="Wizard\MessageWizardStepVWG.designer.cs">
+      <DependentUpon>MessageWizardStepVWG.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\NullWizardStepVWG.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\NullWizardStepVWG.designer.cs">
+      <DependentUpon>NullWizardStepVWG.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\WizardControlVWG.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\WizardFormVWG.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Wizard\WizardFormGiz.designer.cs">
-      <DependentUpon>WizardFormGiz.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Wizard\MessageWizardStepGiz.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Wizard\MessageWizardStepGiz.designer.cs">
-      <DependentUpon>MessageWizardStepGiz.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Wizard\NullWizardStepGiz.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Wizard\NullWizardStepGiz.designer.cs">
-      <DependentUpon>NullWizardStepGiz.cs</DependentUpon>
+    <Compile Include="Wizard\WizardFormVWG.designer.cs">
+      <DependentUpon>WizardFormVWG.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -222,16 +221,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MultiSelectorGiz.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MultiSelectorGiz.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Wizard\WizardFormGiz.resx">
-      <DependentUpon>WizardFormGiz.cs</DependentUpon>
+    <EmbeddedResource Include="MultiSelectorVWG.resx">
+      <DependentUpon>MultiSelectorVWG.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Wizard\MessageWizardStepGiz.resx">
-      <DependentUpon>MessageWizardStepGiz.cs</DependentUpon>
+    <EmbeddedResource Include="Wizard\MessageWizardStepVWG.resx">
+      <DependentUpon>MessageWizardStepVWG.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Wizard\WizardFormVWG.resx">
+      <DependentUpon>WizardFormVWG.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

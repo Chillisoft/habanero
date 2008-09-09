@@ -20,7 +20,7 @@
 using System;
 using Habanero.Base;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -45,11 +45,11 @@ namespace Habanero.Test.UI.Base.FilterController
         }
 
         [TestFixture]
-        public class TestFilterControlDateGiz : TestFilterControlDate
+        public class TestFilterControlDateVWG : TestFilterControlDate
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
             [Test, Ignore()] //TODO label not being added
             public void TestLabelAndDateTimePickerAreOnPanel()
@@ -88,7 +88,7 @@ namespace Habanero.Test.UI.Base.FilterController
             IFilterControl filterControl = factory.CreateFilterControl();
 
             //---------------Execute Test ----------------------
-            IControlChilli dtPicker = filterControl.AddDateFilterDateTimePicker("test:", "testcolumn", testDate,FilterClauseOperator.OpGreaterThan, true);
+            IControlHabanero dtPicker = filterControl.AddDateFilterDateTimePicker("test:", "testcolumn", testDate,FilterClauseOperator.OpGreaterThan, true);
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(dtPicker);
@@ -207,7 +207,7 @@ namespace Habanero.Test.UI.Base.FilterController
             //---------------Test Result -----------------------
             IFilterClause clause =
                 filterClauseFactory.CreateDateFilterClause("TestColumn", FilterClauseOperator.OpGreaterThan, new DateTime(newDateTime.Year, newDateTime.Month, newDateTime.Day));
-            IControlChilli dtPicker = filterControl.AddDateFilterDateTimePicker("test:", "testcolumn", testDate, FilterClauseOperator.OpGreaterThan, true);
+            IControlHabanero dtPicker = filterControl.AddDateFilterDateTimePicker("test:", "testcolumn", testDate, FilterClauseOperator.OpGreaterThan, true);
 
             Assert.AreEqual(clause.GetFilterClauseString(), expectedFilterClause);
             //---------------Tear Down -------------------------          

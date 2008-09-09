@@ -30,7 +30,7 @@ namespace Habanero.UI.Base
     /// This control is suitable for a business object collection with a limited
     /// number of objects.
     /// </summary>
-    public interface IBOColTabControl: IControlChilli
+    public interface IBOColTabControl: IControlHabanero
     {
         /// <summary>
         /// Sets the boControl that will be displayed on each tab page.  This must be called

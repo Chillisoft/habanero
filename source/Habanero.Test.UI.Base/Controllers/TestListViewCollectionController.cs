@@ -47,11 +47,11 @@ namespace Habanero.Test.UI.Base
 //        //}
 //
 //        [TestFixture]
-//        public class TestListViewCollectionMapperGiz : TestListViewCollectionController
+    //        public class TestListViewCollectionMapperVWG : TestListViewCollectionController
 //        {
 //            protected override IControlFactory GetControlFactory()
 //            {
-//                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
+//                return new Habanero.UI.WebGUI.ControlFactoryVWG();
 //            }
 //
 //        }
@@ -119,7 +119,7 @@ namespace Habanero.Test.UI.Base
 ////        {
 ////            //---------------Set up test pack-------------------
 ////            IListView listView = GetControlFactory().CreateListView();
-////            ClassDef def = MyBO.LoadDefaultClassDefGizmox();
+    ////            ClassDef def = MyBO.LoadDefaultClassDefVWG();
 ////            ListViewCollectionSelector controller = new ListViewCollectionSelector(listView, def);
 ////            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
 ////            col.Add(new MyBO());

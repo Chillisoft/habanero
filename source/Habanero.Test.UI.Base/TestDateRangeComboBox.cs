@@ -20,7 +20,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -40,11 +40,11 @@ namespace Habanero.Test.UI.Base
         //}
 
         [TestFixture]
-        public class TestDateRangeComboBoxGiz : TestDateRangeComboBox
+        public class TestDateRangeComboBoxVWG : TestDateRangeComboBox
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
         }
 

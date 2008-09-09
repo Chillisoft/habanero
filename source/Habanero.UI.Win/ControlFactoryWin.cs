@@ -74,7 +74,7 @@ namespace Habanero.UI.Win
         /// <param name="assemblyName">The assembly name of the control type</param>
         /// <returns>Returns either the control of the specified type or
         /// the default type, which is usually TextBox.</returns>
-        public IControlChilli CreateControl(string typeName, string assemblyName)
+        public IControlHabanero CreateControl(string typeName, string assemblyName)
         {
             Type controlType = null;
 
@@ -95,10 +95,10 @@ namespace Habanero.UI.Win
         /// Creates a new control of the type specified
         /// </summary>
         /// <param name="controlType">The control type, which must be a
-        /// sub-type of <see cref="IControlChilli"/></param>
-        public IControlChilli CreateControl(Type controlType)
+        /// sub-type of <see cref="IControlHabanero"/></param>
+        public IControlHabanero CreateControl(Type controlType)
         {
-            IControlChilli ctl;
+            IControlHabanero ctl;
             if (controlType.IsSubclassOf(typeof (Control)))
             {
                 if (controlType == typeof (ComboBox)) return CreateComboBox();
@@ -108,7 +108,7 @@ namespace Habanero.UI.Win
                 if (controlType == typeof (DateTimePicker)) return CreateDateTimePicker();
                 if (controlType == typeof (NumericUpDown)) return CreateNumericUpDownInteger();
 
-                ctl = (IControlChilli) Activator.CreateInstance(controlType);
+                ctl = (IControlHabanero) Activator.CreateInstance(controlType);
                 PropertyInfo infoFlatStyle =
                     ctl.GetType().GetProperty("FlatStyle", BindingFlags.Public | BindingFlags.Instance);
                 if (infoFlatStyle != null)
@@ -417,7 +417,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Creates a Form control
         /// </summary>
-        public IFormChilli CreateForm()
+        public IFormHabanero CreateForm()
         {
             return new FormWin();
         }
@@ -619,7 +619,7 @@ namespace Habanero.UI.Win
         /// Creates a BorderLayoutManager to place controls on the given parent control
         /// </summary>
         /// <param name="control">The parent control on which to managed the layout</param>
-        public BorderLayoutManager CreateBorderLayoutManager(IControlChilli control)
+        public BorderLayoutManager CreateBorderLayoutManager(IControlHabanero control)
         {
             return new BorderLayoutManagerWin(control, this);
         }
@@ -708,7 +708,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Creates a generic control
         /// </summary>
-        public IControlChilli CreateControl()
+        public IControlHabanero CreateControl()
         {
             return new ControlWin();
         }

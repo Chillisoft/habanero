@@ -38,7 +38,7 @@ namespace Habanero.UI.Base
         /// If so, it then becomes disabled.  If not,
         /// handlers are assigned to manage key presses, depending on the strategy assigned to this mapper.</param>
         /// <param name="factory">The control factory to be used when creating the controlMapperStrategy</param>
-        protected NumericUpDownMapper(IControlChilli ctl, string propName, bool isReadOnly, IControlFactory factory)
+        protected NumericUpDownMapper(IControlHabanero ctl, string propName, bool isReadOnly, IControlFactory factory)
             : base(ctl, propName, isReadOnly, factory)
         {
             _numericUpDown = (INumericUpDown)ctl;

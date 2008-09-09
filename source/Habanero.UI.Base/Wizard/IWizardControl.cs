@@ -33,7 +33,7 @@ namespace Habanero.UI.Base
     /// Provides the controls for a wizard, which guides users through a process one
     /// step at a time.
     /// </summary>
-    public interface IWizardControl : IControlChilli
+    public interface IWizardControl : IControlHabanero
     {
         /// <summary>
         /// Raised when the wizard is complete to notify the containing control or controlling object.
@@ -48,7 +48,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Gets the control that is currently displayed in the WizardControl (the current wizard step's control)
         /// </summary>
-        IControlChilli CurrentControl { get; }
+        IControlHabanero CurrentControl { get; }
 
         /// <summary>
         /// Gets the Next Button so that it can be programmatically interacted with.

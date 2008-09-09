@@ -22,6 +22,6 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Represents a single tab page in a TabControl
     /// </summary>
-    public interface ITabPage : IControlChilli
+    public interface ITabPage : IControlHabanero
     { }
 }

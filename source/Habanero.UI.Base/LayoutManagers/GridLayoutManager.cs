@@ -31,7 +31,7 @@ namespace Habanero.UI.Base
     /// </summary>
     public class GridLayoutManager : LayoutManager
     {
-        private readonly List<IControlChilli> _controls;
+        private readonly List<IControlHabanero> _controls;
         private readonly Hashtable _controlInfoTable;
         private Point _currentPos;
         private int[] _columnWidths;
@@ -45,10 +45,10 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="managedControl">The control to manage</param>
         /// <param name="controlFactory">The control factory used to create any controls</param>
-        public GridLayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
+        public GridLayoutManager(IControlHabanero managedControl, IControlFactory controlFactory)
             : base(managedControl, controlFactory)
         {
-            _controls = new List<IControlChilli>();
+            _controls = new List<IControlHabanero>();
             _controlInfoTable = new Hashtable();
             this.SetGridSize(2, 2);
         }
@@ -102,7 +102,7 @@ namespace Habanero.UI.Base
                 IList rows = new ArrayList();
                 for (int i = 0; i < RowCount; i++)
                 {
-                    IList<IControlChilli> row = new List<IControlChilli>();
+                    IList<IControlHabanero> row = new List<IControlHabanero>();
                     for (int j = 0; j < ColumnCount; j++)
                     {
                         if ((i*ColumnCount + j) < this._controls.Count)
@@ -130,7 +130,7 @@ namespace Habanero.UI.Base
                 IList cols = new ArrayList();
                 for (int i = 0; i < ColumnCount; i++)
                 {
-                    IList<IControlChilli> col = new List<IControlChilli>();
+                    IList<IControlHabanero> col = new List<IControlHabanero>();
                     for (int j = 0; j < RowCount; j++)
                     {
                         if ((ColumnCount*j + i) < this._controls.Count)
@@ -153,7 +153,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="control">The control to add</param>
         /// <returns>Returns the control once it has been added</returns>
-        public override IControlChilli AddControl(IControlChilli control)
+        public override IControlHabanero AddControl(IControlHabanero control)
         {
             return AddControl(control, 1, 1);
         }
@@ -165,7 +165,7 @@ namespace Habanero.UI.Base
         /// <param name="rowSpan">The row position to add to</param>
         /// <param name="columnSpan">The column position to add to</param>
         /// <returns>Returns the control once it has been added</returns>
-        public IControlChilli AddControl(IControlChilli control, int rowSpan, int columnSpan)
+        public IControlHabanero AddControl(IControlHabanero control, int rowSpan, int columnSpan)
         {
             if (control == null)
             {
@@ -219,7 +219,7 @@ namespace Habanero.UI.Base
             {
                 int currentRow = i/ColumnCount;
                 int currentCol = i%ColumnCount;
-                IControlChilli ctl = this._controls[i];
+                IControlHabanero ctl = this._controls[i];
                 if ((i > 0) && (currentCol == 0))
                 {
                     _currentPos.X = BorderSize;
@@ -466,7 +466,7 @@ namespace Habanero.UI.Base
         /// </summary>
         public class ControlInfo
         {
-            private IControlChilli _control;
+            private IControlHabanero _control;
             private int _columnSpan;
             private readonly int _rowSpan;
 
@@ -475,7 +475,7 @@ namespace Habanero.UI.Base
             /// to (1,1)
             /// </summary>
             /// <param name="control">The control in question</param>
-            public ControlInfo(IControlChilli control)
+            public ControlInfo(IControlHabanero control)
                 : this(control, 1, 1)
             {
             }
@@ -484,7 +484,7 @@ namespace Habanero.UI.Base
             /// Constructor as before, but requiring the row and column
             /// spans to be specified
             /// </summary>
-            public ControlInfo(IControlChilli control, int columnSpan, int rowSpan)
+            public ControlInfo(IControlHabanero control, int columnSpan, int rowSpan)
             {
                 _control = control;
                 _columnSpan = columnSpan;
@@ -494,7 +494,7 @@ namespace Habanero.UI.Base
             /// <summary>
             /// Returns the control being represented
             /// </summary>
-            public IControlChilli Control
+            public IControlHabanero Control
             {
                 get { return _control; }
             }

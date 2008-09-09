@@ -147,11 +147,11 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestControlMapperGiz : TestControlMapper
+        public class TestControlMapperVWG : TestControlMapper
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
+                return new Habanero.UI.VWG.ControlFactoryVWG();
             }
 
             [Test]
@@ -1042,7 +1042,7 @@ namespace Habanero.Test.UI.Base
 
     internal class ControlMapperStub : ControlMapper
     {
-        public ControlMapperStub(IControlChilli ctl, string propName, bool isReadOnly, IControlFactory factory)
+        public ControlMapperStub(IControlHabanero ctl, string propName, bool isReadOnly, IControlFactory factory)
             : base(ctl, propName, isReadOnly, factory)
         {
         }

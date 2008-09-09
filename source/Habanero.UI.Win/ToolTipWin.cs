@@ -33,7 +33,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <param name="label">The Control to associate the ToolTip text with</param>
         /// <param name="toolTipText">The ToolTip text to display when the pointer is on the control</param>
-        public void SetToolTip(IControlChilli label, string toolTipText)
+        public void SetToolTip(IControlHabanero label, string toolTipText)
         {
             base.SetToolTip((Control)label, toolTipText);
         }
@@ -41,10 +41,10 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Retrieves the ToolTip text associated with the specified control
         /// </summary>
-        /// <param name="controlChilli">The Control for which to retrieve the ToolTip text</param>
-        public string GetToolTip(IControlChilli controlChilli)
+        /// <param name="controlHabanero">The Control for which to retrieve the ToolTip text</param>
+        public string GetToolTip(IControlHabanero controlHabanero)
         {
-            return base.GetToolTip((Control) controlChilli);
+            return base.GetToolTip((Control) controlHabanero);
         }
     }
 }

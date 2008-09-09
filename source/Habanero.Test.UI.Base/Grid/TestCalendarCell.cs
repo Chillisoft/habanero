@@ -21,7 +21,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -41,11 +41,11 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestCalendarCellGiz : TestCalendarCell
+        public class TestCalendarCellVWG : TestCalendarCell
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
+                return new Habanero.UI.VWG.ControlFactoryVWG();
             }
         }
 
@@ -99,7 +99,7 @@ namespace Habanero.Test.UI.Base
     ///// <summary>
     ///// A control for editing date and time values
     ///// </summary>
-    //class CalendarEditingControl : DateTimePickerGiz, IDataGridViewEditingControl
+    //class CalendarEditingControl : DateTimePickerVWG, IDataGridViewEditingControl
     //{
     //    IDataGridView _dataGridView;
     //    private bool _valueChanged = false;
@@ -276,12 +276,12 @@ namespace Habanero.Test.UI.Base
     //    }
     //}
 
-    //public class CalendarCellGiz : DataGridViewCellGiz, ICalendarCell
+    //public class CalendarCellVWG : DataGridViewCellVWG, ICalendarCell
     //{
     //    /// <summary>
     //    /// Constructor to initialise a new cell, using the short date format
     //    /// </summary>
-    //    public CalendarCellGiz()
+    //    public CalendarCellVWG()
     //    {
     //        // Use the short date format.
     //        this.Style.Format = "d";

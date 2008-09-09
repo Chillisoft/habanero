@@ -17,7 +17,7 @@ namespace Habanero.UI.Win
             _controlFactory = controlFactory;
         }
 
-        public IOKCancelPanel CreateOKCancelPanel(IControlChilli nestedControl)
+        public IOKCancelPanel CreateOKCancelPanel(IControlHabanero nestedControl)
         {
             OKCancelPanelWin mainPanel = new OKCancelPanelWin(_controlFactory);
             mainPanel.Width = nestedControl.Width  + 5;
@@ -27,7 +27,7 @@ namespace Habanero.UI.Win
             return mainPanel;
         }
 
-        public IFormChilli CreateOKCancelForm(IControlChilli nestedControl, string formTitle)
+        public IFormHabanero CreateOKCancelForm(IControlHabanero nestedControl, string formTitle)
         {
             FormWin form = (FormWin) _controlFactory.CreateForm();
             form.Text = formTitle;

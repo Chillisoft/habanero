@@ -31,7 +31,7 @@ namespace Habanero.UI.Base
     /// </summary>
     public class FlowLayoutManager : LayoutManager
     {
-        private readonly List<IControlChilli> _controls;
+        private readonly List<IControlHabanero> _controls;
         private readonly IList _newLinePositions;
         private Alignments _alignment;
         private Point _currentPos;
@@ -65,10 +65,10 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="managedControl">The control to manage e.g. a Panel</param>
         /// <param name="controlFactory">The factory which generates controls</param>
-        public FlowLayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
+        public FlowLayoutManager(IControlHabanero managedControl, IControlFactory controlFactory)
             : base(managedControl, controlFactory)
         {
-            _controls = new List<IControlChilli>();
+            _controls = new List<IControlHabanero>();
             _newLinePositions = new ArrayList(3);
             _gluePositions = new ArrayList(5);
         }
@@ -78,7 +78,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="ctl">The control to add</param>
         /// <returns>Returns the control once it has been added</returns>
-        public override IControlChilli AddControl(IControlChilli ctl)
+        public override IControlHabanero AddControl(IControlHabanero ctl)
         {
             _controls.Add(ctl);
             RefreshControlPositions();
@@ -94,7 +94,7 @@ namespace Habanero.UI.Base
         ///// Removes the specified control from the layout
         ///// </summary>
         ///// <param name="ctl">The control to remove</param>
-        //public void RemoveControl(IControlChilli ctl)
+        //public void RemoveControl(IControlHabanero ctl)
         //{
         //    _controls.Remove(ctl);
         //    this.ManagedControl.Controls.Remove(ctl);
@@ -130,7 +130,7 @@ namespace Habanero.UI.Base
             IList controlsInRow = new ArrayList();
             for (int controlNumber = 0; controlNumber < this._controls.Count; controlNumber++)
             {
-                IControlChilli ctl = GetControl(controlNumber);
+                IControlHabanero ctl = GetControl(controlNumber);
                 if (IsControlOnANewLine(controlNumber, currentLine))
                 {
                     MoveCurrentPosToStartOfNextRow(currentRowHeight);
@@ -174,7 +174,7 @@ namespace Habanero.UI.Base
             }
         }
 
-        private void GetGluedControlToMoveToNewLineIfPossible(ref int controlNumber, ref IControlChilli ctl)
+        private void GetGluedControlToMoveToNewLineIfPossible(ref int controlNumber, ref IControlHabanero ctl)
         {
             if (PreviousControlVisible(controlNumber) && BothControlsFitOnALine(controlNumber))
             {
@@ -210,7 +210,7 @@ namespace Habanero.UI.Base
                    this.ManagedControl.Width;
         }
 
-        private IControlChilli GetPreviousControl(int currentPos)
+        private IControlHabanero GetPreviousControl(int currentPos)
         {
             return this._controls[currentPos - 1];
         }
@@ -219,14 +219,14 @@ namespace Habanero.UI.Base
         {
             for (int ctlCount = 0; ctlCount < controlsInRow.Count; ctlCount++)
             {
-                IControlChilli controlInRow = (IControlChilli)controlsInRow[controlsInRow.Count - 1 - ctlCount];
+                IControlHabanero controlInRow = (IControlHabanero)controlsInRow[controlsInRow.Count - 1 - ctlCount];
                 {
                     controlInRow.TabIndex = rowStart + ctlCount;
                 }
             }
         }
 
-        private IControlChilli GetControl(int position)
+        private IControlHabanero GetControl(int position)
         {
             return this._controls[position];
         }
@@ -255,7 +255,7 @@ namespace Habanero.UI.Base
         /// Calculates the control's position in the user interface
         /// </summary>
         /// <param name="ctl">The control in question</param>
-        private void SetControlPosition(IControlChilli ctl)
+        private void SetControlPosition(IControlHabanero ctl)
         {
             if (_alignment == Alignments.Right)
             {
@@ -288,7 +288,7 @@ namespace Habanero.UI.Base
         /// <param name="ctl">The control in question</param>
         /// <returns>Returns true if the item doesn't fit, false if it 
         /// does</returns>
-        private bool ControlDoesNotFitOnCurrentRow(IControlChilli ctl)
+        private bool ControlDoesNotFitOnCurrentRow(IControlHabanero ctl)
         {
             return (_currentPos.X + ctl.Width >= ManagedControl.Width - BorderSize);
         }

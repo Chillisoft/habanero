@@ -75,10 +75,10 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 //---------------Verify test pack-------------------
                 //---------------Execute Test ----------------------
-                IControlChilli controlChilli = _factory.CreateControl(typeof(System.Windows.Forms.ComboBox));
+                IControlHabanero controlHabanero = _factory.CreateControl(typeof(System.Windows.Forms.ComboBox));
                 //---------------Verify Result -----------------------
-                Assert.IsNotNull(controlChilli);
-                Assert.AreEqual(typeof(Habanero.UI.Win.ComboBoxWin), controlChilli.GetType());
+                Assert.IsNotNull(controlHabanero);
+                Assert.AreEqual(typeof(Habanero.UI.Win.ComboBoxWin), controlHabanero.GetType());
                 //---------------Tear Down -------------------------   
             }
             [Test]
@@ -87,10 +87,10 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 //---------------Verify test pack-------------------
                 //---------------Execute Test ----------------------
-                IControlChilli controlChilli = _factory.CreateControl(typeof(System.Windows.Forms.CheckBox));
+                IControlHabanero controlHabanero = _factory.CreateControl(typeof(System.Windows.Forms.CheckBox));
                 //---------------Verify Result -----------------------
-                Assert.IsNotNull(controlChilli);
-                Assert.AreEqual(typeof(Habanero.UI.Win.CheckBoxWin), controlChilli.GetType());
+                Assert.IsNotNull(controlHabanero);
+                Assert.AreEqual(typeof(Habanero.UI.Win.CheckBoxWin), controlHabanero.GetType());
                 //---------------Tear Down -------------------------   
             }
             [Test]
@@ -99,10 +99,10 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 //---------------Verify test pack-------------------
                 //---------------Execute Test ----------------------
-                IControlChilli controlChilli = _factory.CreateControl(typeof(System.Windows.Forms.TextBox));
+                IControlHabanero controlHabanero = _factory.CreateControl(typeof(System.Windows.Forms.TextBox));
                 //---------------Verify Result -----------------------
-                Assert.IsNotNull(controlChilli);
-                Assert.AreEqual(typeof(Habanero.UI.Win.TextBoxWin), controlChilli.GetType());
+                Assert.IsNotNull(controlHabanero);
+                Assert.AreEqual(typeof(Habanero.UI.Win.TextBoxWin), controlHabanero.GetType());
                 //---------------Tear Down -------------------------   
             }
             [Test]
@@ -111,10 +111,10 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 //---------------Verify test pack-------------------
                 //---------------Execute Test ----------------------
-                IControlChilli controlChilli = _factory.CreateControl(typeof(System.Windows.Forms.ListBox));
+                IControlHabanero controlHabanero = _factory.CreateControl(typeof(System.Windows.Forms.ListBox));
                 //---------------Verify Result -----------------------
-                Assert.IsNotNull(controlChilli);
-                Assert.AreEqual(typeof(Habanero.UI.Win.ListBoxWin), controlChilli.GetType());
+                Assert.IsNotNull(controlHabanero);
+                Assert.AreEqual(typeof(Habanero.UI.Win.ListBoxWin), controlHabanero.GetType());
                 //---------------Tear Down -------------------------   
             }
             [Test]
@@ -123,10 +123,10 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 //---------------Verify test pack-------------------
                 //---------------Execute Test ----------------------
-                IControlChilli controlChilli = _factory.CreateControl(typeof(System.Windows.Forms.DateTimePicker));
+                IControlHabanero controlHabanero = _factory.CreateControl(typeof(System.Windows.Forms.DateTimePicker));
                 //---------------Verify Result -----------------------
-                Assert.IsNotNull(controlChilli);
-                Assert.AreEqual(typeof(Habanero.UI.Win.DateTimePickerWin), controlChilli.GetType());
+                Assert.IsNotNull(controlHabanero);
+                Assert.AreEqual(typeof(Habanero.UI.Win.DateTimePickerWin), controlHabanero.GetType());
                 //---------------Tear Down -------------------------   
             }
 
@@ -136,10 +136,10 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 //---------------Verify test pack-------------------
                 //---------------Execute Test ----------------------
-                object controlChilli = _factory.CreateControl(typeof(System.Windows.Forms.NumericUpDown));
+                object controlHabanero = _factory.CreateControl(typeof(System.Windows.Forms.NumericUpDown));
                 //---------------Verify Result -----------------------
-                Assert.IsNotNull(controlChilli);
-                Assert.AreEqual(typeof(Habanero.UI.Win.NumericUpDownWin), controlChilli.GetType());
+                Assert.IsNotNull(controlHabanero);
+                Assert.AreEqual(typeof(Habanero.UI.Win.NumericUpDownWin), controlHabanero.GetType());
                 //---------------Tear Down -------------------------   
             }
 
@@ -166,7 +166,7 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 
                 //---------------Execute Test ----------------------
-                IControlChilli control = _factory.CreateControl("NumericUpDown", null);
+                IControlHabanero control = _factory.CreateControl("NumericUpDown", null);
                 //---------------Test Result -----------------------
                 Assert.IsInstanceOfType(typeof(System.Windows.Forms.NumericUpDown), control);
                 //---------------Tear down -------------------------
@@ -181,7 +181,7 @@ namespace Habanero.Test.UI.Base
                 String assemblyName = "System.Windows.Forms";
                 //---------------Verify test pack-------------------
                 //---------------Execute Test ----------------------
-                IControlChilli control = _factory.CreateControl(typeName, assemblyName);
+                IControlHabanero control = _factory.CreateControl(typeName, assemblyName);
                 //---------------Verify Result -----------------------
                 Assert.IsTrue(control is System.Windows.Forms.TextBox);
                 //---------------Tear Down -------------------------   
@@ -189,11 +189,11 @@ namespace Habanero.Test.UI.Base
 
         }
         [TestFixture]
-        public class TestControlFactoryGiz : TestControlFactory
+        public class TestControlFactoryVWG : TestControlFactory
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
+                return new Habanero.UI.VWG.ControlFactoryVWG();
             }
 
             protected override int GetBoldTextExtraWidth()
@@ -203,7 +203,7 @@ namespace Habanero.Test.UI.Base
 
 
             [Test]
-            public void TestCreateCheckBoxGiz()
+            public void TestCreateCheckBoxVWG()
             {
                 //---------------Set up test pack-------------------
                  //---------------Execute Test ----------------------
@@ -223,10 +223,10 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 //---------------Verify test pack-------------------
                 //---------------Execute Test ----------------------
-                IControlChilli controlChilli = _factory.CreateControl(typeof(Gizmox.WebGUI.Forms.ComboBox));
+                IControlHabanero controlHabanero = _factory.CreateControl(typeof(Gizmox.WebGUI.Forms.ComboBox));
                 //---------------Verify Result -----------------------
-                Assert.IsNotNull(controlChilli);
-                Assert.AreEqual(typeof(Habanero.UI.WebGUI.ComboBoxGiz), controlChilli.GetType());
+                Assert.IsNotNull(controlHabanero);
+                Assert.AreEqual(typeof(Habanero.UI.VWG.ComboBoxVWG), controlHabanero.GetType());
                 //---------------Tear Down -------------------------   
             }
             [Test]
@@ -235,10 +235,10 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 //---------------Verify test pack-------------------
                 //---------------Execute Test ----------------------
-                IControlChilli controlChilli = _factory.CreateControl(typeof(Gizmox.WebGUI.Forms.CheckBox));
+                IControlHabanero controlHabanero = _factory.CreateControl(typeof(Gizmox.WebGUI.Forms.CheckBox));
                 //---------------Verify Result -----------------------
-                Assert.IsNotNull(controlChilli);
-                Assert.AreEqual(typeof(Habanero.UI.WebGUI.CheckBoxGiz), controlChilli.GetType());
+                Assert.IsNotNull(controlHabanero);
+                Assert.AreEqual(typeof(Habanero.UI.VWG.CheckBoxVWG), controlHabanero.GetType());
                 //---------------Tear Down -------------------------   
             }
             [Test]
@@ -247,10 +247,10 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 //---------------Verify test pack-------------------
                 //---------------Execute Test ----------------------
-                IControlChilli controlChilli = _factory.CreateControl(typeof(Gizmox.WebGUI.Forms.TextBox));
+                IControlHabanero controlHabanero = _factory.CreateControl(typeof(Gizmox.WebGUI.Forms.TextBox));
                 //---------------Verify Result -----------------------
-                Assert.IsNotNull(controlChilli);
-                Assert.AreEqual(typeof(Habanero.UI.WebGUI.TextBoxGiz), controlChilli.GetType());
+                Assert.IsNotNull(controlHabanero);
+                Assert.AreEqual(typeof(Habanero.UI.VWG.TextBoxVWG), controlHabanero.GetType());
                 //---------------Tear Down -------------------------   
             }
             [Test]
@@ -259,10 +259,10 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 //---------------Verify test pack-------------------
                 //---------------Execute Test ----------------------
-                IControlChilli controlChilli = _factory.CreateControl(typeof(Gizmox.WebGUI.Forms.ListBox));
+                IControlHabanero controlHabanero = _factory.CreateControl(typeof(Gizmox.WebGUI.Forms.ListBox));
                 //---------------Verify Result -----------------------
-                Assert.IsNotNull(controlChilli);
-                Assert.AreEqual(typeof(Habanero.UI.WebGUI.ListBoxGiz), controlChilli.GetType());
+                Assert.IsNotNull(controlHabanero);
+                Assert.AreEqual(typeof(Habanero.UI.VWG.ListBoxVWG), controlHabanero.GetType());
                 //---------------Tear Down -------------------------   
             }
             [Test]
@@ -271,10 +271,10 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 //---------------Verify test pack-------------------
                 //---------------Execute Test ----------------------
-                IControlChilli controlChilli = _factory.CreateControl(typeof(Gizmox.WebGUI.Forms.DateTimePicker));
+                IControlHabanero controlHabanero = _factory.CreateControl(typeof(Gizmox.WebGUI.Forms.DateTimePicker));
                 //---------------Verify Result -----------------------
-                Assert.IsNotNull(controlChilli);
-                Assert.AreEqual(typeof(Habanero.UI.WebGUI.DateTimePickerGiz), controlChilli.GetType());
+                Assert.IsNotNull(controlHabanero);
+                Assert.AreEqual(typeof(Habanero.UI.VWG.DateTimePickerVWG), controlHabanero.GetType());
                 //---------------Tear Down -------------------------   
             }
 
@@ -284,11 +284,11 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 //---------------Verify test pack-------------------
                 //---------------Execute Test ----------------------
-                IControlChilli controlChilli = _factory.CreateControl(typeof(Gizmox.WebGUI.Forms.NumericUpDown));
+                IControlHabanero controlHabanero = _factory.CreateControl(typeof(Gizmox.WebGUI.Forms.NumericUpDown));
                 //---------------Verify Result -----------------------
-                Assert.IsNotNull(controlChilli);
-                Assert.AreEqual(typeof(Habanero.UI.WebGUI.NumericUpDownGiz), controlChilli.GetType());
-                Assert.AreEqual(_factory.CreateTextBox().Height, controlChilli.Height);
+                Assert.IsNotNull(controlHabanero);
+                Assert.AreEqual(typeof(Habanero.UI.VWG.NumericUpDownVWG), controlHabanero.GetType());
+                Assert.AreEqual(_factory.CreateTextBox().Height, controlHabanero.Height);
                 //---------------Tear Down -------------------------   
             }
 
@@ -334,7 +334,7 @@ namespace Habanero.Test.UI.Base
                 String assemblyName = "Gizmox.WebGUI.Forms";
                 //---------------Verify test pack-------------------
                 //---------------Execute Test ----------------------
-                IControlChilli control = _factory.CreateControl(typeName, assemblyName);
+                IControlHabanero control = _factory.CreateControl(typeName, assemblyName);
                 //---------------Verify Result -----------------------
                 Assert.IsTrue(control is Gizmox.WebGUI.Forms.TextBox);
                 //---------------Tear Down -------------------------   
@@ -593,7 +593,7 @@ namespace Habanero.Test.UI.Base
             String assemblyName = "";
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
-            IControlChilli control = _factory.CreateControl(typeName, assemblyName);
+            IControlHabanero control = _factory.CreateControl(typeName, assemblyName);
             //---------------Verify Result -----------------------
             Assert.IsTrue(control is ITextBox);
             //---------------Tear Down -------------------------   
@@ -609,7 +609,7 @@ namespace Habanero.Test.UI.Base
             String assemblyName = "SuperDuper.Components";
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
-            IControlChilli control = _factory.CreateControl(typeName, assemblyName);
+            IControlHabanero control = _factory.CreateControl(typeName, assemblyName);
             //---------------Verify Result -----------------------
             //---------------Tear Down -------------------------   
         }

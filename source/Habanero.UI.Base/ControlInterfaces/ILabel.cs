@@ -24,7 +24,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Represents a label
     /// </summary>
-    public interface ILabel : IControlChilli
+    public interface ILabel : IControlHabanero
     {
         /// <summary>
         /// Gets the preferred width of the control

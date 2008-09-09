@@ -29,7 +29,7 @@ namespace Habanero.UI.Base
     /// that inherits from this interface.  See IBOColTabControl for an
     /// example usage.
     /// </summary>
-    public interface IBusinessObjectControl : IControlChilli
+    public interface IBusinessObjectControl : IControlHabanero
     {
         /// <summary>
         /// Gets or sets the business object being represented

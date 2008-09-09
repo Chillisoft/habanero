@@ -44,13 +44,13 @@ namespace Habanero.Test.UI.Base
             ClassDef.ClassDefs.Clear();
         }
 
-        protected abstract IStaticDataEditor CreateEditorOnForm(out IFormChilli frm);
+        protected abstract IStaticDataEditor CreateEditorOnForm(out IFormHabanero frm);
         protected abstract IControlFactory GetControlFactory();
 
         [TestFixture]
         public class TestStaticDataEditorWin : TestStaticDataEditor
         {
-            protected override IStaticDataEditor CreateEditorOnForm(out IFormChilli frm)
+            protected override IStaticDataEditor CreateEditorOnForm(out IFormHabanero frm)
             {
                 frm = GetControlFactory().CreateForm();
                 IStaticDataEditor editor = GetControlFactory().CreateStaticDataEditor();
@@ -66,16 +66,16 @@ namespace Habanero.Test.UI.Base
         }
 
         //[TestFixture]
-        //public class TestTreeViewGridViewEditorGiz : TestStaticDataEditor
+        //public class TestTreeViewGridViewEditorVWG : TestStaticDataEditor
         //{
-        //    protected override ITreeViewGridViewEditor CreateEditorOnForm(out IFormChilli frm)
+        //    protected override ITreeViewGridViewEditor CreateEditorOnForm(out IFormHabanero frm)
         //    {
         //        throw new System.NotImplementedException();
         //    }
 
         //    protected override IControlFactory GetControlFactory()
         //    {
-        //        return new ControlFactoryGizmox();
+        //        return new ControlFactoryVWG();
         //    }
         //}
 
@@ -83,7 +83,7 @@ namespace Habanero.Test.UI.Base
         public void TestLayoutOfEditor()
         {
             //---------------Set up test pack-------------------
-            IFormChilli frm;
+            IFormHabanero frm;
 
             //---------------Execute Test ----------------------
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
@@ -106,7 +106,7 @@ namespace Habanero.Test.UI.Base
         public void TestAddSection()
         {
             //---------------Set up test pack-------------------
-            IFormChilli frm;
+            IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             ITreeView treeView = (ITreeView) editor.Controls[1];
             string sectionName = TestUtil.CreateRandomString();
@@ -127,7 +127,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef();
-            IFormChilli frm;
+            IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             ITreeView treeView = (ITreeView) editor.Controls[1];
             editor.AddSection(TestUtil.CreateRandomString());
@@ -154,7 +154,7 @@ namespace Habanero.Test.UI.Base
         public void TestAddSecondSection()
         {
             //---------------Set up test pack-------------------
-            IFormChilli frm;
+            IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             ITreeView treeView = (ITreeView) editor.Controls[1];
             editor.AddSection(TestUtil.CreateRandomString());
@@ -182,7 +182,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef();
-            IFormChilli frm;
+            IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             ITreeView treeView = (ITreeView) editor.Controls[1];
             editor.AddSection(TestUtil.CreateRandomString());
@@ -204,7 +204,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef classDef = MyBO.LoadDefaultClassDef();
-            IFormChilli frm;
+            IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl) editor.Controls[0];
             editor.AddSection(TestUtil.CreateRandomString());
@@ -225,7 +225,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef classDef = MyBO.LoadDefaultClassDef();
-            IFormChilli frm;
+            IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl)editor.Controls[0];
             editor.AddSection(TestUtil.CreateRandomString());
@@ -254,7 +254,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef classDef = MyBO.LoadDefaultClassDef();
-            IFormChilli frm;
+            IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl)editor.Controls[0];
             editor.AddSection(TestUtil.CreateRandomString());
@@ -277,7 +277,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef classDef = MyBO.LoadDefaultClassDef();
-            IFormChilli frm;
+            IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl)editor.Controls[0];
             editor.AddSection(TestUtil.CreateRandomString());
@@ -304,7 +304,7 @@ namespace Habanero.Test.UI.Base
             ClassDef classDef1 = MyBO.LoadDefaultClassDef();
             ClassDef classDef2 = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
 
-            IFormChilli frm;
+            IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl) editor.Controls[0];
             editor.AddSection(TestUtil.CreateRandomString());
@@ -336,7 +336,7 @@ namespace Habanero.Test.UI.Base
             ClassDef classDef1 = MyBO.LoadDefaultClassDef();
             MyBO myBO = new MyBO();
             myBO.Save();
-            IFormChilli frm;
+            IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl)editor.Controls[0];
             editor.AddSection(TestUtil.CreateRandomString());
@@ -368,7 +368,7 @@ namespace Habanero.Test.UI.Base
             string originalValue = TestUtil.CreateRandomString();
             myBO.TestProp = originalValue;
             myBO.Save();
-            IFormChilli frm;
+            IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl)editor.Controls[0];
             editor.AddSection(TestUtil.CreateRandomString());

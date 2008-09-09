@@ -30,7 +30,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets the collection of controls contained within the control
         /// </summary>
-        IControlCollection IControlChilli.Controls
+        IControlCollection IControlHabanero.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }
         }
@@ -39,7 +39,7 @@ namespace Habanero.UI.Win
         /// Gets or sets which control borders are docked to its parent
         /// control and determines how a control is resized with its parent
         /// </summary>
-        Base.DockStyle IControlChilli.Dock
+        Base.DockStyle IControlHabanero.Dock
         {
             get { return (Base.DockStyle)base.Dock; }
             set { base.Dock = (System.Windows.Forms.DockStyle)value; }

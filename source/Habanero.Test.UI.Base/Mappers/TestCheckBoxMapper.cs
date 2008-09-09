@@ -93,7 +93,7 @@ namespace Habanero.Test.UI.Base
                 Assert.IsTrue(_sampleBusinessObject.SampleBoolean);
                 //---------------Tear down -------------------------
             }
-            private Form AddControlToForm(IControlChilli parentControl)
+            private Form AddControlToForm(IControlHabanero parentControl)
             {
                 Form frm = new Form();
                 frm.Controls.Clear();
@@ -103,11 +103,11 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestCheckBoxMapperGiz : TestCheckBoxMapper
+        public class TestCheckBoxMapperVWG : TestCheckBoxMapper
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
+                return new Habanero.UI.VWG.ControlFactoryVWG();
             }
 
             [Test]

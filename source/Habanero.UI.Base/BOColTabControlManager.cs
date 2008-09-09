@@ -70,7 +70,7 @@ namespace Habanero.UI.Base
                 }
                 else
                 {
-                    throw new ArgumentException("boControl must be of type IControlChilli or one of its subtypes.");
+                    throw new ArgumentException("boControl must be of type IControlHabanero or one of its subtypes.");
                 }
             }
             get { return _boControl; }

@@ -48,7 +48,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Represents a TextBox control
     /// </summary>
-    public interface ITextBox : IControlChilli
+    public interface ITextBox : IControlHabanero
     {
         /// <summary>
         /// Gets or sets a value indicating whether this is a multiline TextBox control

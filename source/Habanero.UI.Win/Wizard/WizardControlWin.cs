@@ -30,7 +30,7 @@ namespace Habanero.UI.Win
     /// </summary>
     public class WizardControlWin : UserControlWin, IWizardControl
     {
-        private IControlChilli _currentControl;
+        private IControlHabanero _currentControl;
         private IButton _nextButton;
         private IButton _previousButton;
         private IWizardController _wizardController;
@@ -138,7 +138,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets the control that is currently displayed in the WizardControl (the current wizard step's control)
         /// </summary>
-        public IControlChilli CurrentControl
+        public IControlHabanero CurrentControl
         {
             get { return _currentControl; }
         }
@@ -175,7 +175,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets the collection of controls contained within the control
         /// </summary>
-        IControlCollection IControlChilli.Controls
+        IControlCollection IControlHabanero.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }
         }
@@ -218,7 +218,7 @@ namespace Habanero.UI.Win
 
         private void SetStep(IWizardStep step)
         {
-            IControlChilli stepControl = step;
+            IControlHabanero stepControl = step;
             if (stepControl != null)
             {
                 _currentControl = stepControl;

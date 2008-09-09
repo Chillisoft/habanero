@@ -24,7 +24,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Manages a group of buttons that display next to each other
     /// </summary>
-    public interface IButtonGroupControl:IControlChilli
+    public interface IButtonGroupControl:IControlHabanero
     {
         /// <summary>
         /// Adds a new button to the control with a specified name

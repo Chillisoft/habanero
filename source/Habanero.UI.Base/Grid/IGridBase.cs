@@ -35,7 +35,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Provides a DataGridView that is adapted to show business objects
     /// </summary>
-    public interface IGridBase : IControlChilli
+    public interface IGridBase : IControlHabanero
     {
         /// <summary>
         /// Sets the business object collection displayed in the grid.  This

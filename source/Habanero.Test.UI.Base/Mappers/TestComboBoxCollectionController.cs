@@ -20,7 +20,7 @@
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -31,11 +31,11 @@ namespace Habanero.Test.UI.Base.Mappers
         protected abstract IControlFactory GetControlFactory();
 
         [TestFixture]
-        public class TestComboBoxCollectionControllerGiz : TestComboBoxCollectionController
+        public class TestComboBoxCollectionControllerVWG : TestComboBoxCollectionController
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
         }
 

@@ -23,7 +23,7 @@ namespace Habanero.UI.Base
     /// Represents a Windows control that displays a frame around
     /// a group of controls with an optional caption
     /// </summary>
-    public interface IGroupBox : IControlChilli
+    public interface IGroupBox : IControlHabanero
     {
 
     }

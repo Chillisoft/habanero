@@ -5,7 +5,7 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
-    public interface IStaticDataEditor: IControlChilli
+    public interface IStaticDataEditor: IControlHabanero
     {
         void AddSection(string sectionName);
         void AddItem(string itemName, ClassDef classDef);

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -13,11 +13,11 @@ namespace Habanero.Test.UI.Base
         protected abstract IControlFactory GetControlFactory();
 
         [TestFixture]
-        public class TestInputFormDateGiz : TestInputFormDate
+        public class TestInputFormDateVWG : TestInputFormDate
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
         }
 

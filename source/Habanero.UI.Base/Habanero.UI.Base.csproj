@@ -51,11 +51,13 @@
     <Compile Include="ControlInterfaces\Events.cs" />
     <Compile Include="ControlInterfaces\IBOColTabControl.cs" />
     <Compile Include="ControlInterfaces\IBusinessObjectControl.cs" />
+    <Compile Include="ControlInterfaces\IControlHabanero.cs" />
     <Compile Include="ControlInterfaces\IDateRangeComboBox.cs" />
     <Compile Include="ControlInterfaces\IFileChooser.cs" />
+    <Compile Include="ControlInterfaces\IFormHabanero.cs" />
     <Compile Include="ControlInterfaces\IListControl.cs" />
     <Compile Include="ControlInterfaces\IStaticDataEditor.cs" />
-    <Compile Include="ControlInterfaces\IUserControlChilli.cs" />
+    <Compile Include="ControlInterfaces\IUserControlHabanero.cs" />
     <Compile Include="ControlMappers\ComboBoxCollectionSelector.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
     <Compile Include="DateTimePicker\DateTimePickerManager.cs" />
@@ -118,7 +120,6 @@
     <Compile Include="ControlMappers\LookupComboBoxMapper.cs" />
     <Compile Include="ControlMappers\TextBoxMapper.cs" />
     <Compile Include="DefaultBOCreator.cs" />
-    <Compile Include="ControlInterfaces\IFormChilli.cs" />
     <Compile Include="ControlInterfaces\IGroupBox.cs" />
     <Compile Include="ControlInterfaces\IListView.cs" />
     <Compile Include="ControlInterfaces\INumericUpDown.cs" />
@@ -157,7 +158,6 @@
     <Compile Include="Grid\GridBaseManager.cs" />
     <Compile Include="ControlInterfaces\IButton.cs" />
     <Compile Include="ControlInterfaces\ICheckBox.cs" />
-    <Compile Include="ControlInterfaces\IControlChilli.cs" />
     <Compile Include="ControlInterfaces\IComboBox.cs" />
     <Compile Include="ControlInterfaces\IComboBoxObjectCollection.cs" />
     <Compile Include="IControlFactory.cs" />

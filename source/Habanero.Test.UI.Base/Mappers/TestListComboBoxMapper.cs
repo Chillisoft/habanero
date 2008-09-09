@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -32,11 +32,11 @@ namespace Habanero.Test.UI.Base
         protected abstract IControlFactory GetControlFactory();
 
         [TestFixture]
-        public class TestListComboBoxMapperGiz : TestListComboBoxMapper
+        public class TestListComboBoxMapperVWG : TestListComboBoxMapper
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
         }
 

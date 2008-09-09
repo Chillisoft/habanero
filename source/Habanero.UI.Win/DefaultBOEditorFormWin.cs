@@ -129,7 +129,7 @@ namespace Habanero.UI.Win
 
         private void FocusOnFirstControl()
         {
-            IControlChilli controlToFocus = _panelFactoryInfo.FirstControlToFocus;
+            IControlHabanero controlToFocus = _panelFactoryInfo.FirstControlToFocus;
             MethodInfo focusMethod = controlToFocus.GetType().
                 GetMethod("Focus", BindingFlags.Instance | BindingFlags.Public);
             if (focusMethod != null)

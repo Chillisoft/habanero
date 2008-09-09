@@ -18,7 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -30,11 +30,11 @@ namespace Habanero.Test.UI.Base.Mappers
         private const string INT_PROP_NAME = "SampleInt";
 
         [TestFixture]
-        public class TestNumericUpDownIntegerMapperGiz : TestNumericUpDownIntegerMapper
+        public class TestNumericUpDownIntegerMapperVWG : TestNumericUpDownIntegerMapper
         {
             public override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
         }
 

@@ -30,7 +30,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Returns the control being mapped
         /// </summary>
-        IControlChilli Control { get; }
+        IControlHabanero Control { get; }
 
         /// <summary>
         /// Returns the name of the property being edited in the control

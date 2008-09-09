@@ -39,11 +39,11 @@ namespace Habanero.Test.UI.Base.Controllers
         }
 
         [TestFixture]
-        public class TestComboBoxCollectionControllerGiz : TestComboBoxCollectionController
+        public class TestComboBoxCollectionControllerVWG : TestComboBoxCollectionController
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
+                return new Habanero.UI.VWG.ControlFactoryVWG();
             }
 
         }

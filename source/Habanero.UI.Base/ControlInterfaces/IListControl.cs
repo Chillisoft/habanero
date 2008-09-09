@@ -26,7 +26,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Provides a common implementation of members for the ListBox and ComboBox classes
     /// </summary>
-    public interface IListControl:IControlChilli
+    public interface IListControl:IControlHabanero
     {
         /// <summary>
         /// Occurs when the SelectedValue property changes.

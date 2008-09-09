@@ -20,7 +20,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -268,7 +268,7 @@ namespace Habanero.Test.UI.Base.Wizard
                     set { _allowMoveOn = value; }
                 }
 
-                IControlCollection IControlChilli.Controls
+                IControlCollection IControlHabanero.Controls
                 {
                     get
                     {
@@ -298,24 +298,24 @@ namespace Habanero.Test.UI.Base.Wizard
         }
 
         [TestFixture]
-        public class TestWizardControlGiz : TestWizardControl
+        public class TestWizardControlVWG : TestWizardControl
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
 
             protected override IWizardControllerStub CreateWizardControllerStub()
             {
-                return new WizardControllerStub<WizardStepStubGiz>();
+                return new WizardControllerStub<WizardStepStubVWG>();
             }
 
             protected override IWizardStepStub CreateWizardStepStub()
             {
-                return new WizardStepStubGiz();
+                return new WizardStepStubVWG();
             }
 
-            public class WizardStepStubGiz : ControlGiz, IWizardStepStub
+            public class WizardStepStubVWG : ControlVWG, IWizardStepStub
             {
                 private bool _allowMoveOn = true;
 
@@ -339,12 +339,12 @@ namespace Habanero.Test.UI.Base.Wizard
 
                 }
 
-                public WizardStepStubGiz()
+                public WizardStepStubVWG()
                     : this("")
                 {
                 }
 
-                public WizardStepStubGiz(string headerText)
+                public WizardStepStubVWG(string headerText)
                 {
                     _headerText = headerText;
                 }
@@ -386,7 +386,7 @@ namespace Habanero.Test.UI.Base.Wizard
                     set { _allowMoveOn = value; }
                 }
 
-                IControlCollection IControlChilli.Controls
+                IControlCollection IControlHabanero.Controls
                 {
                     get
                     {

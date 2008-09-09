@@ -116,10 +116,10 @@ namespace Habanero.Test
             return new ClassDef(typeof (Sample), primaryKey, lPropDefCol, keysCol, relDefCol);
         }
 
-        public static ClassDef CreateClassDefGiz()
+        public static ClassDef CreateClassDefVWG()
         {
             ClassDef lClassDef = CreateClassDef();
-            lClassDef.UIDefCol.Add(new SampleUserInterfaceMapperGiz().GetUIDef());
+            lClassDef.UIDefCol.Add(new SampleUserInterfaceMapperVWG().GetUIDef());
             ClassDef.ClassDefs.Add(lClassDef);
 
             return lClassDef;
@@ -472,7 +472,7 @@ namespace Habanero.Test
         /// <summary>
         /// Summary description for SampleUserInterfaceMapper.
         /// </summary>
-        public class SampleUserInterfaceMapperGiz : SampleUserInterfaceMapper
+        public class SampleUserInterfaceMapperVWG : SampleUserInterfaceMapper
         {
 
             protected override void SetupTypeNameVariables()

@@ -20,7 +20,7 @@
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -41,11 +41,11 @@ namespace Habanero.Test.UI.Base
 //        }
 
         [TestFixture]
-        public class TestLisViewGiz : TestListView
+        public class TestLisViewVWG : TestListView
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
         }
         //TODO: Port
@@ -54,11 +54,11 @@ namespace Habanero.Test.UI.Base
 //        {
 //            //---------------Set up test pack-------------------
 //            //---------------Execute Test ----------------------
-//            IControlChilli controlChilli = GetControlFactory().CreateListView();
+//            IControlHabanero controlChilli = GetControlFactory().CreateListView();
 //
 //            //---------------Test Result -----------------------
 //            Assert.IsNotNull(controlChilli);
-//            Assert.AreEqual(typeof(Habanero.UI.WebGUI.ListViewGiz), controlChilli.GetType());
+//            Assert.AreEqual(typeof(Habanero.UI.WebGUI.ListViewVWG), controlChilli.GetType());
 //
 //            //---------------Tear Down -------------------------   
 //        }
@@ -69,7 +69,7 @@ namespace Habanero.Test.UI.Base
         //    //---------------Set up test pack-------------------
         //    ClassDef.ClassDefs.Clear();
         //    IListView listView = GetControlFactory().CreateListView();
-        //    MyBO.LoadDefaultClassDefGizmox();
+        //    MyBO.LoadDefaultClassDefVWG();
         //    BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
         //    col.Add(new MyBO());
         //    col.Add(new MyBO());
@@ -87,7 +87,7 @@ namespace Habanero.Test.UI.Base
         //    //---------------Set up test pack-------------------
         //    ClassDef.ClassDefs.Clear();
         //    IListView listView = GetControlFactory().CreateListView();
-        //    MyBO.LoadDefaultClassDefGizmox();
+        //    MyBO.LoadDefaultClassDefVWG();
         //    BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
         //    col.Add(new MyBO());
         //    col.Add(new MyBO());

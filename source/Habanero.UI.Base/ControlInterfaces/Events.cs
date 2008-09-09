@@ -20,16 +20,17 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.UI.Base;
 
 namespace Habanero.UI.Base.ControlInterfaces
 {
 
-    /// <summary>Represents the method that will handle the <see cref="IControlChilli.KeyPress"></see> event of a <see cref="IControlChilli"></see>.</summary>
+    /// <summary>Represents the method that will handle the <see cref="IControlHabanero.KeyPress"></see> event of a <see cref="IControlHabanero"></see>.</summary>
     /// <filterpriority>2</filterpriority>
     public delegate void KeyPressEventHandler(object sender, KeyPressEventArgs e);
 
 
-    /// <summary>Provides data for the <see cref="IControlChilli.KeyPress"></see> event.</summary>
+    /// <summary>Provides data for the <see cref="IControlHabanero.KeyPress"></see> event.</summary>
     /// <filterpriority>2</filterpriority>
     //[Serializable()]
 	public class KeyPressEventArgs : EventArgs
@@ -45,7 +46,7 @@ namespace Habanero.UI.Base.ControlInterfaces
         }
 
 
-        /// <summary>Gets or sets a value indicating whether the <see cref="IControlChilli.KeyPress"></see> event was handled.</summary>
+        /// <summary>Gets or sets a value indicating whether the <see cref="IControlHabanero.KeyPress"></see> event was handled.</summary>
         /// <returns>true if the event is handled; otherwise, false.</returns>
         /// <filterpriority>1</filterpriority>
         public bool Handled

@@ -25,7 +25,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -150,16 +150,16 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestGridBaseGiz : TestGridBase
+        public class TestGridBaseVWG : TestGridBase
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
 
             protected override IGridBase CreateGridBaseStub()
             {
-                GridBaseGizStub gridBase = new GridBaseGizStub();
+                GridBaseVWGStub gridBase = new GridBaseVWGStub();
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
                 frm.Controls.Add(gridBase);
                 return gridBase;
@@ -188,7 +188,7 @@ namespace Habanero.Test.UI.Base
             //Both these tests work but the final result does not i.e. the row in the grid
             // does not get updated.
             [Test]
-            public void TestGizRowIsRefreshed()
+            public void TestVWGRowIsRefreshed()
             {
                 //---------------Set up test pack-------------------
                 BusinessObjectCollection<MyBO> col;
@@ -218,7 +218,7 @@ namespace Habanero.Test.UI.Base
             //This does not work since you cannot push changes to the grid based only on changes in the 
             ///underlying datasource. moved to doing a refresh grid.
             //[Test]
-            //public void TestGiz_SelectedBusinessObjectEdited_FiresEventToUpdateGrid()
+            //public void TestVWG_SelectedBusinessObjectEdited_FiresEventToUpdateGrid()
             //{
             //    //---------------Set up test pack-------------------
             //    ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
@@ -255,7 +255,7 @@ namespace Habanero.Test.UI.Base
 
             //TODO: Test if it is the first one then will be auto selected then does it still fire.
             [Test]
-            public void TestGiz_NonSelectedBusinessObjectEdited()
+            public void TestVWG_NonSelectedBusinessObjectEdited()
             {
                 //---------------Set up test pack-------------------
                 ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
@@ -298,7 +298,7 @@ namespace Habanero.Test.UI.Base
 
 
             [Test]
-            public void TestGiz_RowShowingBusinessObjectsValues()
+            public void TestVWG_RowShowingBusinessObjectsValues()
             {
                 //---------------Set up test pack-------------------
                 MyBO.LoadDefaultClassDef();
@@ -320,7 +320,7 @@ namespace Habanero.Test.UI.Base
 
             //Cannot Duplicate in grid
             //[Test]
-            //public void Test_DeleteObjectInGridThenSetCollectionCausesInfiniteLoop_InGiz()
+            //public void Test_DeleteObjectInGridThenSetCollectionCausesInfiniteLoop_InVWG()
             //{
             //    //---------------Set up test pack-------------------
             //    MyBO.LoadDefaultClassDef();
@@ -341,7 +341,7 @@ namespace Habanero.Test.UI.Base
 
 
             [Test]
-            public void TestGiz_ChangeToPageOfRowNum()
+            public void TestVWG_ChangeToPageOfRowNum()
             {
                 //---------------Set up test pack-------------------
                 BusinessObjectCollection<MyBO> col;
@@ -358,7 +358,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestGiz_SetSelectedBusinessObjectChangesPage()
+            public void TestVWG_SetSelectedBusinessObjectChangesPage()
             {
                 //---------------Set up test pack-------------------
                 BusinessObjectCollection<MyBO> col;
@@ -425,7 +425,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             //---------------Execute Test ----------------------
-            IControlChilli myGridBase = CreateGridBaseStub();
+            IControlHabanero myGridBase = CreateGridBaseStub();
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(myGridBase);
@@ -1125,7 +1125,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             IDataGridViewCell dataGridViewCell = gridBase.Rows[0].Cells[0];
-            //((DataGridViewCellGiz) dataGridViewCell).DataGridViewCell.HasStyle = false;
+            //((DataGridViewCellVWG) dataGridViewCell).DataGridViewCell.HasStyle = false;
 
             Assert.AreEqual(expectedDate.ToString(requiredFormat), dataGridViewCell.FormattedValue);
 //            Assert.AreEqual(currentDateTime.ToString("dd.MMM.yyyy") ,grid.Grid.Rows[0].Cells[formattedPropertyName].Value);
@@ -1249,7 +1249,7 @@ namespace Habanero.Test.UI.Base
             gridBase.Columns.Add("TestProp", "TestProp");
         }
 
-        internal class GridBaseGizStub : GridBaseGiz
+        internal class GridBaseVWGStub : GridBaseVWG
         {
             public override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
             {

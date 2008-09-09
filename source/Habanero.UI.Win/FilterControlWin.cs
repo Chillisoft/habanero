@@ -116,7 +116,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets the collection of controls contained within the control
         /// </summary>
-        IControlCollection IControlChilli.Controls
+        IControlCollection IControlHabanero.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }
         }
@@ -263,7 +263,7 @@ namespace Habanero.UI.Win
             get { return _filterControlManager.FilterControls; }
         }
 
-        public IControlChilli GetChildControl(string propertyName)
+        public IControlHabanero GetChildControl(string propertyName)
         {
             return _filterControlManager.GetChildControl(propertyName);
         }
@@ -365,7 +365,7 @@ namespace Habanero.UI.Win
             return filterButton;
         }
 
-        //private void AssignControlEventHandlers(IControlChilli control)
+        //private void AssignControlEventHandlers(IControlHabanero control)
         //{
             
         //}

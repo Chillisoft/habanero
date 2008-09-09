@@ -20,7 +20,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -136,16 +136,16 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestMultiSelectorGiz : TestMultiSelector
+        public class TestMultiSelectorVWG : TestMultiSelector
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
             //There are lots of different tests in giz because we do not want the event handling
             //overhead of hitting the server all the time to enable and disable buttons.
             [Test]
-            public void TestGiz_SelectButtonStateAtSet()
+            public void TestVWG_SelectButtonStateAtSet()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -159,7 +159,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestGiz_SelectButtonStateUponSelection()
+            public void TestVWG_SelectButtonStateUponSelection()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -174,7 +174,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestGiz_SelectButtonIsEnabledWhenItemIsDeselected()
+            public void TestVWG_SelectButtonIsEnabledWhenItemIsDeselected()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -188,7 +188,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestGiz_ClickSelectButtonWithNoItemSelected()
+            public void TestVWG_ClickSelectButtonWithNoItemSelected()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -205,7 +205,7 @@ namespace Habanero.Test.UI.Base
 
 
             [Test]
-            public void TestGiz_DeselectButtonStateAtSet()
+            public void TestVWG_DeselectButtonStateAtSet()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -220,7 +220,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestGiz_DeselectButtonStateUponSelection()
+            public void TestVWG_DeselectButtonStateUponSelection()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -237,7 +237,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestGiz_DeselectButtonIsDisabledWhenItemIsDeselected()
+            public void TestVWG_DeselectButtonIsDisabledWhenItemIsDeselected()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();

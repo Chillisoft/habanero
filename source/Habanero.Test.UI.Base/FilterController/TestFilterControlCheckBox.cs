@@ -19,7 +19,7 @@
 
 using Habanero.Base;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -58,7 +58,7 @@ namespace Habanero.Test.UI.Base
             IFilterControl filterControl = factory.CreateFilterControl();
             //---------------Execute Test ----------------------
             string labelName = "aa";
-            IControlChilli cb = filterControl.AddBooleanFilterCheckBox(labelName, "", true);
+            IControlHabanero cb = filterControl.AddBooleanFilterCheckBox(labelName, "", true);
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(cb);
@@ -128,9 +128,9 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestAddCheckBoxGizmox()
+        public void TestAddCheckBoxVWG()
         {
-            TestAddCheckBox(new ControlFactoryGizmox());
+            TestAddCheckBox(new ControlFactoryVWG());
         }
 
         [Test]
@@ -140,9 +140,9 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestAddStringFilterCheckBoxGiz()
+        public void TestAddStringFilterCheckBoxVWG()
         {
-            TestAddStringFilterCheckBox(new ControlFactoryGizmox());
+            TestAddStringFilterCheckBox(new ControlFactoryVWG());
         }
 
         [Test]
@@ -152,9 +152,9 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestGetCheckBoxFilterClauseGiz()
+        public void TestGetCheckBoxFilterClauseVWG()
         {
-            TestGetCheckBoxFilterClause(new ControlFactoryGizmox());
+            TestGetCheckBoxFilterClause(new ControlFactoryVWG());
         }
 
         [Test]
@@ -164,9 +164,9 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestTwoCheckBoxFilterGiz()
+        public void TestTwoCheckBoxFilterVWG()
         {
-            TestTwoCheckBoxFilter(new ControlFactoryGizmox());
+            TestTwoCheckBoxFilter(new ControlFactoryVWG());
         }
 
         [Test]

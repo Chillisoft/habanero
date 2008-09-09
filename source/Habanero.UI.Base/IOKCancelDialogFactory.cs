@@ -11,7 +11,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="nestedControl">The control to place above the buttons</param>
         /// <returns>Returns the created panel</returns>
-        IOKCancelPanel CreateOKCancelPanel(IControlChilli nestedControl);
+        IOKCancelPanel CreateOKCancelPanel(IControlHabanero nestedControl);
 
         /// <summary>
         /// Creates a form containing OK and Cancel buttons
@@ -19,7 +19,7 @@ namespace Habanero.UI.Base
         /// <param name="nestedControl">The control to place above the buttons</param>
         /// <param name="formTitle">The title shown on the form</param>
         /// <returns>Returns the created form</returns>
-        IFormChilli CreateOKCancelForm(IControlChilli nestedControl, string formTitle);
+        IFormHabanero CreateOKCancelForm(IControlHabanero nestedControl, string formTitle);
     }
 
     /// <summary>

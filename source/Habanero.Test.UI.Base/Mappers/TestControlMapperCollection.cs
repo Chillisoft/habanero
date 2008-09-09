@@ -68,11 +68,11 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestControlMapperCollectionGiz : TestControlMapperCollection
+        public class TestControlMapperCollectionVWG : TestControlMapperCollection
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
+                return new Habanero.UI.VWG.ControlFactoryVWG();
             }
 
             [Test]

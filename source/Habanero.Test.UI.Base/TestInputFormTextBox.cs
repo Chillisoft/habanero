@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 using ScrollBars=Habanero.UI.Base.ScrollBars;
@@ -10,11 +10,11 @@ namespace Habanero.Test.UI.Base
     public abstract class TestInputFormTextBox
     {
         [TestFixture]
-        public class TestInputFormTextBoxGiz : TestInputFormTextBox
+        public class TestInputFormTextBoxVWG : TestInputFormTextBox
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
         }
 

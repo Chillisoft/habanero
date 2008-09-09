@@ -7,7 +7,7 @@ namespace Habanero.UI.Base
     /// through a process step by step.
     /// This form simply wraps the WizardControl in a form and handles communication with the user.
     /// </summary>
-    public interface IWizardForm : IFormChilli
+    public interface IWizardForm : IFormHabanero
     {
         /// <summary>
         /// Gets and sets the text to dispaly

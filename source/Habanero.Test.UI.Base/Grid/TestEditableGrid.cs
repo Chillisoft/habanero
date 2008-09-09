@@ -27,7 +27,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
@@ -75,7 +75,7 @@ namespace Habanero.Test.UI.Base
         protected abstract void AssertIsCheckBoxColumnType(IDataGridViewColumn dataGridViewColumn);
         protected abstract void AssertIsComboBoxColumnType(IDataGridViewColumn dataGridViewColumn);
         //protected abstract void AssertIsDateTimeColumnType(IDataGridViewColumn dataGridViewColumn);
-        protected abstract IFormChilli AddControlToForm(IGridBase cntrl);
+        protected abstract IFormHabanero AddControlToForm(IGridBase cntrl);
         protected abstract IEditableGrid CreateEditableGrid();
 
 
@@ -145,7 +145,7 @@ namespace Habanero.Test.UI.Base
                     return false;
                 };
 
-                IFormChilli formWin = AddControlToForm(editableGrid);
+                IFormHabanero formWin = AddControlToForm(editableGrid);
                 formWin.Show();
                 //---------------Assert Precondition----------------
                 //---------------Execute Test ----------------------
@@ -170,7 +170,7 @@ namespace Habanero.Test.UI.Base
                     return false;
                 };
 
-                IFormChilli formWin = AddControlToForm(editableGrid);
+                IFormHabanero formWin = AddControlToForm(editableGrid);
                 formWin.Show();
 
                 //---------------Assert Precondition----------------
@@ -200,7 +200,7 @@ namespace Habanero.Test.UI.Base
                     return false;
                 };
 
-                IFormChilli formWin = AddControlToForm(editableGrid);
+                IFormHabanero formWin = AddControlToForm(editableGrid);
                 formWin.Show();
                 //---------------Assert Precondition----------------
                 Assert.IsTrue(editableGrid.ConfirmDeletion);
@@ -228,7 +228,7 @@ namespace Habanero.Test.UI.Base
                     return false;
                 };
                 editableGrid.DeleteKeyBehaviour = DeleteKeyBehaviours.ClearContents; 
-                IFormChilli formWin = AddControlToForm(editableGrid);
+                IFormHabanero formWin = AddControlToForm(editableGrid);
                 formWin.Show();
                 //---------------Assert Precondition----------------
                 Assert.AreEqual(DeleteKeyBehaviours.ClearContents, editableGrid.DeleteKeyBehaviour);
@@ -255,7 +255,7 @@ namespace Habanero.Test.UI.Base
                     return false;
                 };
                 editableGrid.DeleteKeyBehaviour = DeleteKeyBehaviours.None;
-                IFormChilli formWin = AddControlToForm(editableGrid);
+                IFormHabanero formWin = AddControlToForm(editableGrid);
                 formWin.Show();
                 //---------------Assert Precondition----------------
                 Assert.AreEqual(DeleteKeyBehaviours.None, editableGrid.DeleteKeyBehaviour);
@@ -281,7 +281,7 @@ namespace Habanero.Test.UI.Base
                     return false;
                 };
                
-                IFormChilli formWin = AddControlToForm(editableGrid);
+                IFormHabanero formWin = AddControlToForm(editableGrid);
                 formWin.Show();
                 editableGrid.Rows[0].Cells[0].Selected = true;
                 //---------------Assert Precondition----------------
@@ -335,7 +335,7 @@ namespace Habanero.Test.UI.Base
                     confirmationDelegateCalled = true;
                     return true;
                 };
-                IFormChilli formWin = AddControlToForm(editableGrid);
+                IFormHabanero formWin = AddControlToForm(editableGrid);
                 formWin.Show();
                 //---------------Assert Precondition----------------
                 Assert.AreEqual(5, editableGrid.Rows.Count);
@@ -363,7 +363,7 @@ namespace Habanero.Test.UI.Base
                     confirmationDelegateCalled = true;
                     return true;
                 };
-                IFormChilli formWin = AddControlToForm(editableGrid);
+                IFormHabanero formWin = AddControlToForm(editableGrid);
                 formWin.Show();
                 //---------------Assert Precondition----------------
                 Assert.AreEqual(5, editableGrid.Rows.Count);
@@ -395,7 +395,7 @@ namespace Habanero.Test.UI.Base
                     confirmationDelegateCalled = true;
                     return true;
                 };
-                IFormChilli formWin = AddControlToForm(editableGrid);
+                IFormHabanero formWin = AddControlToForm(editableGrid);
                 formWin.Show();
                 foreach(IDataGridViewCell Cell in  editableGrid.SelectedCells )
                 {
@@ -455,7 +455,7 @@ namespace Habanero.Test.UI.Base
                     confirmationDelegateCalled = true;
                     return true;
                 };
-                IFormChilli formWin = AddControlToForm(editableGrid);
+                IFormHabanero formWin = AddControlToForm(editableGrid);
                 formWin.Show();
                 editableGrid.Rows[1].Selected = true;
 
@@ -512,7 +512,7 @@ namespace Habanero.Test.UI.Base
                     confirmationDelegateCalled = true;
                     return true;
                 };
-                IFormChilli formWin = AddControlToForm(editableGrid);
+                IFormHabanero formWin = AddControlToForm(editableGrid);
                 formWin.Show();
 
                 editableGrid.Rows[0].Cells[0].Selected = true;
@@ -568,7 +568,7 @@ namespace Habanero.Test.UI.Base
                 IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
                 AddComboBoxColumnWithValues(editableGrid);
                 ((EditableGridWin) editableGrid).CellClick -= ((EditableGridWin) editableGrid).CellClickHandler;
-                IFormChilli formWin = AddControlToForm(editableGrid);
+                IFormHabanero formWin = AddControlToForm(editableGrid);
                 formWin.Show();
 
                 editableGrid.CurrentCell = editableGrid.Rows[0].Cells[1];
@@ -591,7 +591,7 @@ namespace Habanero.Test.UI.Base
                 BusinessObjectCollection<MyBO> col;
                 IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
                 ((EditableGridWin)editableGrid).CellClick -= ((EditableGridWin)editableGrid).CellClickHandler;
-                IFormChilli formWin = AddControlToForm(editableGrid);
+                IFormHabanero formWin = AddControlToForm(editableGrid);
                 formWin.Show();
                 //---------------Assert Precondition----------------
                 Assert.IsNotInstanceOfType(typeof(IDataGridViewComboBoxColumn), editableGrid.Columns[0]);
@@ -611,7 +611,7 @@ namespace Habanero.Test.UI.Base
                 AddComboBoxColumnWithValues(editableGrid);
                 editableGrid.ComboBoxClickOnce = false;
                 ((EditableGridWin)editableGrid).CellClick -= ((EditableGridWin)editableGrid).CellClickHandler;
-                IFormChilli formWin = AddControlToForm(editableGrid);
+                IFormHabanero formWin = AddControlToForm(editableGrid);
                 formWin.Show();
                 editableGrid.CurrentCell = editableGrid.Rows[0].Cells[1];
                 
@@ -638,7 +638,7 @@ namespace Habanero.Test.UI.Base
                 IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
                 AddComboBoxColumnWithValues(editableGrid);
                 ((EditableGridWin)editableGrid).CellClick -= ((EditableGridWin)editableGrid).CellClickHandler;
-                IFormChilli formWin = AddControlToForm(editableGrid);
+                IFormHabanero formWin = AddControlToForm(editableGrid);
                 formWin.Show();
                 editableGrid.CurrentCell = editableGrid.Rows[0].Cells[1];
 
@@ -673,10 +673,10 @@ namespace Habanero.Test.UI.Base
                 return row.Cells[propName];
             }
 
-            protected override IFormChilli AddControlToForm(IGridBase gridBase)
+            protected override IFormHabanero AddControlToForm(IGridBase gridBase)
             {
-                IFormChilli frm = GetControlFactory().CreateForm();
-                frm.Controls.Add((IControlChilli)gridBase);
+                IFormHabanero frm = GetControlFactory().CreateForm();
+                frm.Controls.Add((IControlHabanero)gridBase);
                 return frm;
             }
 
@@ -711,59 +711,59 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestEditableGridGiz : TestEditableGrid
+        public class TestEditableGridVWG : TestEditableGrid
         {
             
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
 
 
             protected override void AssertIsTextBoxColumnType(IDataGridViewColumn dataGridViewColumn)
             {
-                DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz) dataGridViewColumn;
+                DataGridViewColumnVWG dataGridViewColumnVWG = (DataGridViewColumnVWG) dataGridViewColumn;
                 Assert.IsInstanceOfType(typeof(Gizmox.WebGUI.Forms.DataGridViewTextBoxColumn), 
-                    dataGridViewColumnGiz.DataGridViewColumn);
+                    dataGridViewColumnVWG.DataGridViewColumn);
             }
 
             protected override void AssertIsCheckBoxColumnType(IDataGridViewColumn dataGridViewColumn)
             {
-                DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz)dataGridViewColumn;
+                DataGridViewColumnVWG dataGridViewColumnVWG = (DataGridViewColumnVWG)dataGridViewColumn;
                 Assert.IsInstanceOfType(typeof(Gizmox.WebGUI.Forms.DataGridViewCheckBoxColumn),
-                    dataGridViewColumnGiz.DataGridViewColumn);
+                    dataGridViewColumnVWG.DataGridViewColumn);
             }
 
             protected override void AssertIsComboBoxColumnType(IDataGridViewColumn dataGridViewColumn)
             {
-                DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz)dataGridViewColumn;
+                DataGridViewColumnVWG dataGridViewColumnVWG = (DataGridViewColumnVWG)dataGridViewColumn;
                 Assert.IsInstanceOfType(typeof(Gizmox.WebGUI.Forms.DataGridViewComboBoxColumn),
-                    dataGridViewColumnGiz.DataGridViewColumn);
+                    dataGridViewColumnVWG.DataGridViewColumn);
             }
 
             protected override IEditableGrid CreateEditableGrid()
             {
-                EditableGridGiz editableGridGiz = new EditableGridGiz();
+                EditableGridVWG editableGridVWG = new EditableGridVWG();
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
-                frm.Controls.Add(editableGridGiz);
-                return editableGridGiz;
+                frm.Controls.Add(editableGridVWG);
+                return editableGridVWG;
             }
 
 //            protected override void AssertIsDateTimeColumnType(IDataGridViewColumn dataGridViewColumn)
 //            {
-//                DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz) dataGridViewColumn;
+            //                DataGridViewColumnVWG dataGridViewColumnVWG = (DataGridViewColumnVWG) dataGridViewColumn;
 //                Assert.IsInstanceOfType(typeof(Gizmox.WebGUI.Forms.DataGridView,
-//                    dataGridViewColumnGiz.DataGridViewColumn);
+            //                    dataGridViewColumnVWG.DataGridViewColumn);
 //            }
             //protected override IGridBase CreateGridBaseStub()
             //{
-            //    GridBaseGizStub gridBase = new GridBaseGizStub();
+            //    GridBaseVWGStub gridBase = new GridBaseVWGStub();
             //    Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
             //    frm.Controls.Add(gridBase);
             //    return gridBase;
             //}
 
-            protected override IFormChilli AddControlToForm(IGridBase gridBase)
+            protected override IFormHabanero AddControlToForm(IGridBase gridBase)
             {
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
                 frm.Controls.Add((Gizmox.WebGUI.Forms.Control) gridBase);
@@ -784,12 +784,12 @@ namespace Habanero.Test.UI.Base
                 return cell.Value;
             }
 
-            //public void TestCreateGridBaseGiz()
+            //public void TestCreateGridBaseVWG()
             //{
             //    //---------------Set up test pack-------------------
             //    //---------------Execute Test ----------------------
-            //    IControlChilli grid = GetControlFactory().CreateEditableGridControl();
-            //    ReadOnlyGridGiz readOnlyGrid = (EditableGridControl)grid;
+            //    IControlHabanero grid = GetControlFactory().CreateEditableGridControl();
+            //    ReadOnlyGridVWG readOnlyGrid = (EditableGridControl)grid;
             //    ////---------------Test Result -----------------------
             //    Assert.IsTrue(readOnlyGrid.ReadOnly);
             //    Assert.IsFalse(readOnlyGrid.AllowUserToAddRows);
@@ -806,7 +806,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            IControlChilli grid = GetControlFactory().CreateEditableGrid();
+            IControlHabanero grid = GetControlFactory().CreateEditableGrid();
             //---------------Test Result -----------------------
             IEditableGrid editableGrid = (IEditableGrid) grid;
             Assert.IsNotNull(editableGrid);
@@ -991,9 +991,9 @@ namespace Habanero.Test.UI.Base
         private ClassDef LoadMyBoDefaultClassDef()
         {
             ClassDef classDef;
-            if (GetControlFactory() is ControlFactoryGizmox)
+            if (GetControlFactory() is ControlFactoryVWG)
             {
-                classDef = MyBO.LoadDefaultClassDefGizmox();
+                classDef = MyBO.LoadDefaultClassDefVWG();
             }
             else
             {

@@ -14,7 +14,7 @@ namespace Habanero.UI.Win
         public void AddItemSelectedEventHandler(LookupComboBoxMapper mapper)
         {
             _mapper = mapper;
-            IControlChilli control = mapper.Control;
+            IControlHabanero control = mapper.Control;
             if (control is IComboBox)
             {
                 ComboBoxWin comboBoxWin = (ComboBoxWin) control;
@@ -50,7 +50,7 @@ namespace Habanero.UI.Win
         private ComboBoxWin ComboBox(LookupComboBoxMapper mapper)
         {
             ComboBoxWin comboBoxWin = null;
-            IControlChilli control = mapper.Control;
+            IControlHabanero control = mapper.Control;
             if (control is IComboBox)
             {
                 comboBoxWin = (ComboBoxWin) control;

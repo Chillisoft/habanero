@@ -29,7 +29,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Indicates the Control at the specified indexed location in the collection
         /// </summary>
-        IControlChilli this[int index] { get;  }
+        IControlHabanero this[int index] { get;  }
 
         /// <summary>
         /// Gets the number of controls in the collection
@@ -41,27 +41,27 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="value">The control to add</param>
         /// <returns>Returns the position at which the control was added</returns>
-        void Add(IControlChilli value);
+        void Add(IControlHabanero value);
 
         /// <summary>
         /// Provides the index position of the control specified
         /// </summary>
         /// <param name="value">The control to search for</param>
         /// <returns>Returns the index position if found, or -1</returns>
-        int IndexOf(IControlChilli value);
+        int IndexOf(IControlHabanero value);
 
         /// <summary>
         /// Insert a control at a specified index position
         /// </summary>
         /// <param name="index">The index position at which to insert</param>
         /// <param name="value">The control to insert</param>
-        void Insert(int index, IControlChilli value);
+        void Insert(int index, IControlHabanero value);
 
         /// <summary>
         /// Removes the specified control from the collection
         /// </summary>
         /// <param name="value">The control to remove</param>
-        void Remove(IControlChilli value);
+        void Remove(IControlHabanero value);
 
         /// <summary>
         /// Indicates whether the collection contains the specified control
@@ -69,7 +69,7 @@ namespace Habanero.UI.Base
         /// <param name="value">The control to search for</param>
         /// <returns>Returns a boolean indicating whether that control is 
         /// found in the collection</returns>
-        bool Contains(IControlChilli value);
+        bool Contains(IControlHabanero value);
 
         /// <summary>
         /// Removes all controls from the collection

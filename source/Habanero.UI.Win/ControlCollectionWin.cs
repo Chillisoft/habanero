@@ -39,9 +39,9 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Indicates the Control at the specified indexed location in the collection
         /// </summary>
-        public IControlChilli this[int index]
+        public IControlHabanero this[int index]
         {
-            get { return (IControlChilli)_col[index]; }
+            get { return (IControlHabanero)_col[index]; }
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <param name="value">The control to add</param>
         /// <returns>Returns the position at which the control was added</returns>
-        public void Add(IControlChilli value)
+        public void Add(IControlHabanero value)
         {
             _col.Add((Control) value);
         }
@@ -67,7 +67,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <param name="value">The control to search for</param>
         /// <returns>Returns the index position if found, or -1</returns>
-        public int IndexOf(IControlChilli value)
+        public int IndexOf(IControlHabanero value)
         {
             return _col.IndexOf((Control) value);
         }
@@ -77,7 +77,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <param name="index">The index position at which to insert</param>
         /// <param name="value">The control to insert</param>
-        public void Insert(int index, IControlChilli value)
+        public void Insert(int index, IControlHabanero value)
         {
             throw new NotImplementedException("This is not supported for windows");
             //_col.Insert(index, value);
@@ -87,7 +87,7 @@ namespace Habanero.UI.Win
         /// Removes the specified control from the collection
         /// </summary>
         /// <param name="value">The control to remove</param>
-        public void Remove(IControlChilli value)
+        public void Remove(IControlHabanero value)
         {
             _col.Remove((Control) value);
         }
@@ -98,7 +98,7 @@ namespace Habanero.UI.Win
         /// <param name="value">The control to search for</param>
         /// <returns>Returns a boolean indicating whether that control is 
         /// found in the collection</returns>
-        public bool Contains(IControlChilli value)
+        public bool Contains(IControlHabanero value)
         {
             return _col.Contains((Control) value);
         }

@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using Habanero.UI.Base;
 using Habanero.UI.Base.ControlInterfaces;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -44,11 +44,11 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestFileChooserGiz : TestFileChooser
+        public class TestFileChooserVWG : TestFileChooser
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
         }
 

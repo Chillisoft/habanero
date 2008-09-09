@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
@@ -64,7 +64,7 @@ namespace Habanero.Test.UI.Base
 
             {
                 //---------------Set up test pack-------------------
-                IFormChilli formWin = new FormWin();
+                IFormHabanero formWin = new FormWin();
                 IDateTimePicker dateTimePicker = GetControlFactory().CreateDateTimePicker();
                 //dateTimePicker.ShowCheckBox = true;
                 ITextBox textBox = GetControlFactory().CreateTextBox();
@@ -97,11 +97,11 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestDateTimePickerGiz : TestDateTimePicker
+        public class TestDateTimePickerVWG : TestDateTimePicker
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
 
             protected override void SetBaseDateTimePickerValue(IDateTimePicker dateTimePicker, DateTime value)

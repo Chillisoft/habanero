@@ -18,7 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -30,11 +30,11 @@ namespace Habanero.Test.UI.Base.Mappers
         private const string CURRENCY_PROP_NAME = "SampleMoney";
 
         [TestFixture]
-        public class TestNumericUpDownCurrencyMapperGiz : TestNumericUpDownCurrencyMapper
+        public class TestNumericUpDownCurrencyMapperVWG : TestNumericUpDownCurrencyMapper
         {
             public override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
         }
 

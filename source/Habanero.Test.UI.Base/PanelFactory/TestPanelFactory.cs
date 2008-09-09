@@ -77,17 +77,17 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestPanelFactoryGiz : TestPanelFactory
+        public class TestPanelFactoryVWG : TestPanelFactory
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
+                return new Habanero.UI.VWG.ControlFactoryVWG();
             }
 
             protected override void SetupClassDef()
             {
                 ClassDef.ClassDefs.Clear();
-                Sample.CreateClassDefGiz();
+                Sample.CreateClassDefVWG();
             }
 
             protected override void ApplyChangesToBusinessObject(IPanelFactoryInfo info)
@@ -97,7 +97,7 @@ namespace Habanero.Test.UI.Base
 
             protected override void SetupUserInterfaceMapper()
             {
-                _sampleUserInterfaceMapper = new Sample.SampleUserInterfaceMapperGiz();
+                _sampleUserInterfaceMapper = new Sample.SampleUserInterfaceMapperVWG();
             }
         }
 
@@ -248,12 +248,12 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(12, pnl.Controls.Count, "The panel should have 8 controls + 4 spaces for the error provider.");
             int labelWidth = pnl.Controls[0].Width;
             int leftPos = pnl.Controls[0].Left;
-            IControlChilli label3 = pnl.Controls[6];
+            IControlHabanero label3 = pnl.Controls[6];
             Assert.AreEqual(labelWidth, label3.Width, "All labels in the column should be the same width");
                 // control 4 is first one on second row
             Assert.AreEqual
                 (leftPos, label3.Left, "All labels in the column should be positioned at the same x position");
-            IControlChilli secondLabelInCol2 = pnl.Controls[3];
+            IControlHabanero secondLabelInCol2 = pnl.Controls[3];
             Assert.IsTrue(secondLabelInCol2.Left > leftPos + labelWidth, "New column should be started here");
             int column1width = 100;
             int bordersize = 5;
@@ -262,7 +262,7 @@ namespace Habanero.Test.UI.Base
             int column2left = column1width + bordersize + (gapSize * 3) + 15;
             Assert.AreEqual(column2left, secondLabelInCol2.Left);
             Assert.IsTrue(pnl.Controls[4] is ITextBox);
-            IControlChilli secondControl_InCol2 = pnl.Controls[4];
+            IControlHabanero secondControl_InCol2 = pnl.Controls[4];
             Assert.AreEqual(column2left + column2width + 2, secondControl_InCol2.Left + secondControl_InCol2.Width, "Control in column 2 should be placed on column2 dimensions");
                 //  column 2 width is 150
         }
@@ -482,7 +482,7 @@ namespace Habanero.Test.UI.Base
             ITextBox tb = (ITextBox) pnl.Controls[1];
             Assert.IsTrue(tb.Multiline, "Textbox should be multiline if NumLines > 1");
             Assert.AreEqual(12, pnl.Controls.Count, "The panel should have 2 controls - one label and one text box.");
-            IControlChilli lastControl = pnl.Controls[10];
+            IControlHabanero lastControl = pnl.Controls[10];
             Assert.IsInstanceOfType(typeof( ITextBox), lastControl);
             ITextBox tb2 = (ITextBox) lastControl;
             int textboxHeight = 20;

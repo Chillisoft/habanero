@@ -45,7 +45,7 @@ namespace Habanero.Test.UI.Base
         public void TearDownTest()
         {
         }
-        protected abstract void AddControlToForm(IControlChilli cntrl);
+        protected abstract void AddControlToForm(IControlHabanero cntrl);
         protected abstract IControlFactory GetControlFactory();
         //protected abstract IGridBase CreateReadOnlyGridControl();
 
@@ -57,21 +57,21 @@ namespace Habanero.Test.UI.Base
                 return new Habanero.UI.Win.ControlFactoryWin();
             }
 
-            protected override void AddControlToForm(IControlChilli cntrl)
+            protected override void AddControlToForm(IControlHabanero cntrl)
             {
 
             }
 
         }
         [TestFixture]
-        public class TestReadOnlyGridButtonControlGiz : TestReadOnlyGridButtonControl
+        public class TestReadOnlyGridButtonControlVWG : TestReadOnlyGridButtonControl
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.WebGUI.ControlFactoryGizmox();
+                return new Habanero.UI.VWG.ControlFactoryVWG();
             }
 
-            protected override void AddControlToForm(IControlChilli cntrl)
+            protected override void AddControlToForm(IControlHabanero cntrl)
             {
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
                 frm.Controls.Add((Gizmox.WebGUI.Forms.Control)cntrl);
@@ -82,7 +82,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             //---------------Execute Test ----------------------
-            IControlChilli grid = GetControlFactory().CreateReadOnlyGridButtonsControl();
+            IControlHabanero grid = GetControlFactory().CreateReadOnlyGridButtonsControl();
             //---------------Test Result ----------------------
             Assert.IsNotNull(grid);
             Assert.IsTrue(grid is IReadOnlyGridButtonsControl);
@@ -93,7 +93,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             //---------------Execute Test ----------------------
-            IControlChilli grid = GetControlFactory().CreateReadOnlyGridButtonsControl();
+            IControlHabanero grid = GetControlFactory().CreateReadOnlyGridButtonsControl();
             //---------------Test Result ----------------------
             IReadOnlyGridButtonsControl readOnlyGridButtonsControl = (IReadOnlyGridButtonsControl)grid;
             AddControlToForm(readOnlyGridButtonsControl);
@@ -120,7 +120,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             //---------------Execute Test ----------------------
-            IControlChilli grid = GetControlFactory().CreateReadOnlyGridButtonsControl();
+            IControlHabanero grid = GetControlFactory().CreateReadOnlyGridButtonsControl();
             //---------------Test Result ----------------------
 
             IReadOnlyGridButtonsControl readOnlyGridButtonsControl = (IReadOnlyGridButtonsControl)grid;

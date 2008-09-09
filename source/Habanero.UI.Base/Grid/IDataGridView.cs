@@ -124,7 +124,7 @@ namespace Habanero.UI.Base
         void UpdateCellValue(int columnIndex, int rowIndex);
 
         //[EditorBrowsable(EditorBrowsableState.Advanced), Browsable(false)]
-        //IControlChilli EditingControl { get; }
+        //IControlHabanero EditingControl { get; }
 
         /// <summary>Gets or sets a value indicating whether the option to add rows is displayed to the user.</summary>
         /// <returns>true if the add-row option is displayed to the user; otherwise false. The default is true.</returns>

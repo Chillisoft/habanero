@@ -55,7 +55,7 @@ namespace Habanero.UI.Base
             South = 4
         }
 
-        private readonly IControlChilli[] _controls;
+        private readonly IControlHabanero[] _controls;
         private readonly bool[] _splitters;
 
         /// <summary>
@@ -65,10 +65,10 @@ namespace Habanero.UI.Base
         /// if you create the manager inside a form class that you will be
         /// managing)</param>
         /// <param name="controlFactory">The control factory that will be used to create controls</param>
-        public BorderLayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
+        public BorderLayoutManager(IControlHabanero managedControl, IControlFactory controlFactory)
             : base(managedControl, controlFactory)
         {
-            _controls = new IControlChilli[5];
+            _controls = new IControlHabanero[5];
             _splitters = new bool[5];
         }
 
@@ -82,7 +82,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="control">The control to add</param>
         /// <returns>Returns the control added</returns>
-        public override IControlChilli AddControl(IControlChilli control)
+        public override IControlHabanero AddControl(IControlHabanero control)
         {
             this.ManagedControl.Controls.Add(control);
             return control;
@@ -94,7 +94,7 @@ namespace Habanero.UI.Base
         /// <param name="control">The control to add</param>
         /// <param name="pos">The position at which to add the control</param>
         /// <returns>Returns the control added</returns>
-        public IControlChilli AddControl(IControlChilli control, Position pos)
+        public IControlHabanero AddControl(IControlHabanero control, Position pos)
         {
             AddControl(control,pos,false);
             return control;
@@ -107,15 +107,15 @@ namespace Habanero.UI.Base
         /// /// <param name="pos">The position at which to add the control</param>
         /// <param name="includeSplitter">True to include a splitter between the controls</param>
         /// <returns>Returns the control added</returns>
-        public abstract IControlChilli AddControl(IControlChilli control, Position pos, bool includeSplitter);
+        public abstract IControlHabanero AddControl(IControlHabanero control, Position pos, bool includeSplitter);
 
         /// <summary>
         /// Sets how the specified control is docked within its parent
         /// </summary>
-        protected abstract void SetupDockOfControl(IControlChilli control, Position pos);
+        protected abstract void SetupDockOfControl(IControlHabanero control, Position pos);
 
- 
-        //public IControlChilli AddControl(IControlChilli ctl, Position pos, bool includeSplitter)
+
+        //public IControlHabanero AddControl(IControlHabanero ctl, Position pos, bool includeSplitter)
         //{
         //    ctl.Dock = _controlFactory.GetDockStyle(pos);
         //        this.ManagedControl.Controls.Add(ctl);

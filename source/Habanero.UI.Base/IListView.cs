@@ -29,7 +29,7 @@ namespace Habanero.UI.Base
 //    /// Represents a list view control, which displays a collection of
 //    /// items that can be displayed using one of four different views
 //    /// </summary>
-//    public interface IListView : IControlChilli
+//    public interface IListView : IControlHabanero
 //    {
 //        /// <summary>
 //        /// Occurs when the SelectedIndex property has changed.

@@ -21,7 +21,7 @@ using System;
 using System.Collections;
 using Habanero.Base.Exceptions;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -29,7 +29,7 @@ namespace Habanero.Test.UI.Base
 {
     public abstract class TestGridLayoutManager
     {
-        private IControlChilli _ctl;
+        private IControlHabanero _ctl;
         private GridLayoutManager _manager;
 
         protected abstract IControlFactory GetControlFactory();
@@ -44,11 +44,11 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestGridLayoutManagerGiz : TestGridLayoutManager
+        public class TestGridLayoutManagerVWG : TestGridLayoutManager
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryGizmox();
+                return new ControlFactoryVWG();
             }
         }
 
@@ -102,7 +102,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.AddControl(ctl1);
             //---------------Test Result -----------------------
@@ -117,8 +117,8 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
-            IControlChilli ctl2 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl2 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.AddControl(GetControlFactory().CreateControl());
             _manager.AddControl(GetControlFactory().CreateControl());
@@ -140,7 +140,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.AddControl(ctl1);
             //---------------Test Result -----------------------
@@ -156,7 +156,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.AddControl(GetControlFactory().CreateControl());
             _manager.AddControl(ctl1);
@@ -170,7 +170,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
             _manager.ManagedControl.Width = 104;
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.AddControl(ctl1);
             //---------------Test Result -----------------------
@@ -184,7 +184,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
             _manager.ManagedControl.Height = 42;
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.AddControl(ctl1);
             //---------------Test Result -----------------------
@@ -198,7 +198,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
             _manager.SetGridSize(3, 2);
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.AddControl(ctl1);
             //---------------Test Result -----------------------
@@ -211,7 +211,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.AddControl(GetControlFactory().CreateControl());
             _manager.AddControl(GetControlFactory().CreateControl());
@@ -229,8 +229,8 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
-            IControlChilli ctl2 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl2 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.FixColumn(1, 30);
             _manager.AddControl(ctl1);
@@ -245,8 +245,8 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
-            IControlChilli ctl2 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl2 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.FixRow(1, 20);
             _manager.AddControl(ctl1);
@@ -263,7 +263,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.GapSize = 3;
             _manager.AddControl(ctl1);
@@ -276,7 +276,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.AddControl(ctl1);
             _manager.GapSize = 3;
@@ -289,7 +289,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.BorderSize = 8;
             _manager.AddControl(ctl1);
@@ -302,7 +302,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.AddControl(ctl1);
             _manager.BorderSize = 8;
@@ -315,7 +315,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.AddControl(ctl1);
             _ctl.Width = 104;
@@ -328,7 +328,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.AddControl(GetControlFactory().CreateControl());
             _manager.AddControl(ctl1);
@@ -342,7 +342,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             _manager.AddControl(ctl1);
             _manager.FixRow(0, 10);
@@ -377,9 +377,9 @@ namespace Habanero.Test.UI.Base
         {
             //----------------------Setup ------------------------------
             int control1Height = 10;
-            IControlChilli ctl1 = CreateControl(10);
+            IControlHabanero ctl1 = CreateControl(10);
             int control2Height = 15;
-            IControlChilli ctl2 = CreateControl(control2Height);
+            IControlHabanero ctl2 = CreateControl(control2Height);
             //--------------------- verify setup -----------------------
             Assert.AreEqual(control1Height, ctl1.Height);
             Assert.AreEqual(control2Height, ctl2.Height);
@@ -402,9 +402,9 @@ namespace Habanero.Test.UI.Base
         public void TestColumnSpan()
         {
             //----------------------Setup ------------------------------
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
             ctl1.Height = 30;
-            IControlChilli ctl2 = GetControlFactory().CreateControl();
+            IControlHabanero ctl2 = GetControlFactory().CreateControl();
             //--------------------- Execute Tests-----------------------
             _manager.AddControl(ctl1, 1, 2);
             _manager.AddControl(ctl2);
@@ -419,9 +419,9 @@ namespace Habanero.Test.UI.Base
         public void TestColumnSpan2()
         {
             //----------------------Setup ------------------------------
-            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlHabanero ctl1 = GetControlFactory().CreateControl();
             ctl1.Height = 30;
-            IControlChilli ctl2 = GetControlFactory().CreateControl();
+            IControlHabanero ctl2 = GetControlFactory().CreateControl();
             //--------------------- Execute Tests-----------------------
             _manager.AddControl(ctl1);
             _manager.AddControl(ctl2, 1, 2);
@@ -440,7 +440,7 @@ namespace Habanero.Test.UI.Base
             int control1Height = 30;
             int controlInitialWidth = 10;
             int controlInitialLeft = -5;
-            IControlChilli ctl1 = CreateControl(control1Height, controlInitialWidth, controlInitialLeft);
+            IControlHabanero ctl1 = CreateControl(control1Height, controlInitialWidth, controlInitialLeft);
             //--------------------- verify setup -----------------------
             AssertControlsDimensions(control1Height, controlInitialWidth, controlInitialLeft, ctl1);
             //--------------------- Execute Tests-----------------------
@@ -455,14 +455,14 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestRowSpan()
         {
-            IControlChilli ctl1 = CreateControl(10, 11, -5);
+            IControlHabanero ctl1 = CreateControl(10, 11, -5);
 
             _manager.AddControl(ctl1, 2, 1);
 
             Assert.AreEqual(5, ctl1.Top);
             Assert.AreEqual(62, ctl1.Height);
         }
-        private static void AssertControlsDimensions(int height, int width, int left, IControlChilli control)
+        private static void AssertControlsDimensions(int height, int width, int left, IControlHabanero control)
         {
             Assert.AreEqual(width, control.Width, "width is not correct");
             Assert.AreEqual(left, control.Left, "left is not correct");
@@ -472,7 +472,7 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestRowAndColumnSpan()
         {
-            IControlChilli ctl1 = CreateControl(10, 11, -5,-5);
+            IControlHabanero ctl1 = CreateControl(10, 11, -5,-5);
 
             _manager.AddControl(ctl1, 2, 3);
 
@@ -486,7 +486,7 @@ namespace Habanero.Test.UI.Base
         public void TestTooManyRows()
         {
             //---------------Set up test pack-------------------
-            IControlChilli ctl1 = CreateControl(10, 11, -5, -5);
+            IControlHabanero ctl1 = CreateControl(10, 11, -5, -5);
             GridLayoutManager gridLayoutManager = new GridLayoutManager(ctl1, GetControlFactory());
             //--------------Assert PreConditions----------------            
 
@@ -510,7 +510,7 @@ namespace Habanero.Test.UI.Base
         public void TestTooManyRows_2Rows()
         {
             //---------------Set up test pack-------------------
-            IControlChilli ctl1 = CreateControl(10, 11, -5, -5);
+            IControlHabanero ctl1 = CreateControl(10, 11, -5, -5);
             GridLayoutManager gridLayoutManager = new GridLayoutManager(ctl1, GetControlFactory());
             //--------------Assert PreConditions----------------            
 
@@ -532,24 +532,24 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        private IControlChilli CreateControl(int height)
+        private IControlHabanero CreateControl(int height)
         {
             return CreateControl(height, 10);
         }
 
-        private IControlChilli CreateControl(int height, int width)
+        private IControlHabanero CreateControl(int height, int width)
         {
             return CreateControl(height, width, 0);
         }
 
-        private IControlChilli CreateControl(int height, int width, int left)
+        private IControlHabanero CreateControl(int height, int width, int left)
         {
             return CreateControl(height, width, left, -5);
         }
 
-        private IControlChilli CreateControl(int height, int width, int left, int top)
+        private IControlHabanero CreateControl(int height, int width, int left, int top)
         {
-            IControlChilli control = GetControlFactory().CreateControl();
+            IControlHabanero control = GetControlFactory().CreateControl();
             control.Height = height;
             control.Width = width;
             control.Left = left;

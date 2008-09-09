@@ -38,7 +38,7 @@ namespace Habanero.UI.Base
         private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.PanelFactory");
         private BusinessObject _currentBusinessObject;
         private readonly UIForm _uiForm;
-        private IControlChilli _firstControl;
+        private IControlHabanero _firstControl;
         private readonly IControlFactory _controlFactory;
         private readonly string _uiDefName;
         //TODO Port:        private EventHandler _emailTextBoxDoubleClickedHandler;
@@ -249,7 +249,7 @@ namespace Habanero.UI.Base
 
                     ILabel labelControl = _controlFactory.CreateLabel(labelCaption, isCompulsory);
                     controls[currentRow, currentColumn + 0] = new GridLayoutManager.ControlInfo(labelControl);
-                    IControlChilli ctl = CreateControl(field, _controlFactory);
+                    IControlHabanero ctl = CreateControl(field, _controlFactory);
 
                     if (ctl is ITextBox && propDef != null)
                     {
@@ -419,7 +419,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Checks for a range of parameters that may apply to some or all fields
         /// </summary>
-        private static void CheckGeneralParameters(UIFormField field, IControlChilli ctl)
+        private static void CheckGeneralParameters(UIFormField field, IControlHabanero ctl)
         {
             if (field.GetParameterValue("alignment") != null)
             {
@@ -451,7 +451,7 @@ namespace Habanero.UI.Base
         /// <param name="field">The field being added</param>
         /// <param name="ctl">The control being prepared</param>
         /// <returns>Returns true if editable</returns>
-        private bool CheckIfEditable(UIFormField field, IControlChilli ctl)
+        private bool CheckIfEditable(UIFormField field, IControlHabanero ctl)
         {
             bool editable = field.Editable;
             if (editable)
@@ -549,7 +549,7 @@ namespace Habanero.UI.Base
         /// Creates the appropriate control for the given field element.
         /// Preference is given to a specific type over the type and assembly names.
         /// </summary>
-        private static IControlChilli CreateControl(UIFormField field, IControlFactory factory)
+        private static IControlHabanero CreateControl(UIFormField field, IControlFactory factory)
         {
             if (field.ControlType != null)
             {
