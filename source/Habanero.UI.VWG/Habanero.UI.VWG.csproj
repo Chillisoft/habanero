@@ -1,0 +1,251 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{04E4FF45-6C20-46EB-A9AD-2B04895F6218}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Habanero.UI.VWG</RootNamespace>
+    <AssemblyName>Habanero.UI.VWG</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Gizmox.WebGUI.Common, Version=2.0.5701.0, Culture=neutral, PublicKeyToken=263fa4ef694acff6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Gizmox.WebGUI.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Gizmox.WebGUI.Forms, Version=2.0.5701.0, Culture=neutral, PublicKeyToken=c508b41386c60f1d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Gizmox.WebGUI.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BOColTabControlVWG.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BorderLayoutManagerVWG.cs" />
+    <Compile Include="ButtonGroupControlVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ButtonVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CheckBoxVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ComboBoxVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ControlCollectionVWG.cs" />
+    <Compile Include="ControlFactoryVWG.cs" />
+    <Compile Include="ControlVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataGridViewCheckBoxColumnVWG.cs" />
+    <Compile Include="DataGridViewComboBoxColumnVWG.cs" />
+    <Compile Include="DateRangeComboBoxVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DateTimePickerVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DefaultBOEditorFormVWG.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditableGridControlVWG.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EditableGridVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ErrorProviderVWG.cs" />
+    <Compile Include="FileChooserVWG.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FilterControl\FilterControlVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FormExceptionNotifier.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FormVWG.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Grid\DataGridViewCellStyleVWG.cs" />
+    <Compile Include="Grid\DataGridViewColumnVWG.cs" />
+    <Compile Include="Grid\EditableGridButtonsControlVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Grid\GridBaseVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Grid\ReadOnlyGridButtonsControlVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Grid\ReadOnlyGridControlVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Grid\ReadOnlyGridVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GroupBoxVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="HabaneroAppVWG.cs" />
+    <Compile Include="HelpAboutBoxVWG.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LabelVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ListBoxVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ListViewVWG.cs" />
+    <Compile Include="ListViewVWG.designer.cs">
+      <DependentUpon>ListViewVWG.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MultiSelectorVWG.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MultiSelectorVWG.designer.cs">
+      <DependentUpon>MultiSelectorVWG.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NumericUpDownVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="OKCancelDialogFactoryVWG.cs" />
+    <Compile Include="PanelVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProgressBarVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\Common\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
+    <Compile Include="RadioButtonVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SplitterVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TabPageVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TextBoxVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ToBeGeneralised\TabControlVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ToolTipVWG.cs" />
+    <Compile Include="TreeViewVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControlVWG.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\MessageWizardStepVWG.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\MessageWizardStepVWG.designer.cs">
+      <DependentUpon>MessageWizardStepVWG.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\NullWizardStepVWG.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\NullWizardStepVWG.designer.cs">
+      <DependentUpon>NullWizardStepVWG.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\WizardControlVWG.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\WizardFormVWG.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Wizard\WizardFormVWG.designer.cs">
+      <DependentUpon>WizardFormVWG.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.BO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
+      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
+      <Name>Habanero.DB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.UI.Base\Habanero.UI.Base.csproj">
+      <Project>{18828910-F528-48F5-B56D-7C1658D0987A}</Project>
+      <Name>Habanero.UI.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
+      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
+      <Name>Habanero.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MultiSelectorVWG.resx">
+      <DependentUpon>MultiSelectorVWG.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Wizard\MessageWizardStepVWG.resx">
+      <DependentUpon>MessageWizardStepVWG.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Wizard\WizardFormVWG.resx">
+      <DependentUpon>WizardFormVWG.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>"$(SolutionDir)PostBuild.cmd" "$(SolutionDir)"  "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>
