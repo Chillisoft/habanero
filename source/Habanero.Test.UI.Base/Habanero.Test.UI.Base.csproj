@@ -174,9 +174,9 @@
       <Project>{18828910-F528-48F5-B56D-7C1658D0987A}</Project>
       <Name>Habanero.UI.Base</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Habanero.UI.WebGUI\Habanero.UI.WebGUI.csproj">
+    <ProjectReference Include="..\Habanero.UI.VWG\Habanero.UI.VWG.csproj">
       <Project>{04E4FF45-6C20-46EB-A9AD-2B04895F6218}</Project>
-      <Name>Habanero.UI.WebGUI</Name>
+      <Name>Habanero.UI.VWG</Name>
     </ProjectReference>
     <ProjectReference Include="..\Habanero.UI.Win\Habanero.UI.Win.csproj">
       <Project>{E761E05B-B9CC-4EAC-B940-C19E42D3819C}</Project>

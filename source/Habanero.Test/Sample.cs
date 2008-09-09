@@ -477,10 +477,10 @@ namespace Habanero.Test
 
             protected override void SetupTypeNameVariables()
             {
-                _textBoxTypeName = "TextBoxGiz";
-                _textBoxAssemblyName = "Habanero.UI.WebGUI";
-                _dateTimePickerTypeName = "DateTimePickerGiz";
-                _dateTimePickerAssemblyName = "Habanero.UI.WebGUI";
+                _textBoxTypeName = "TextBoxVWG";
+                _textBoxAssemblyName = "Habanero.UI.VWG";
+                _dateTimePickerTypeName = "DateTimePickerVWG";
+                _dateTimePickerAssemblyName = "Habanero.UI.VWG";
                 _dateTimePickerMapperName = "DateTimePickerMapper";
             }
             //public UIDef GetUIDef()

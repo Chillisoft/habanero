@@ -523,7 +523,6 @@ namespace Habanero.Test.UI.Base
             IPanelFactoryInfo  panelFactoryInfo = panelFactory.CreatePanel();
             //---------------Test Result -----------------------
             IControlMapperCollection mappers = panelFactoryInfo.ControlMappers;
-
             
             Assert.IsFalse(mappers["SampleText"].Control.Enabled);
             Assert.IsTrue(mappers["SampleText2"].Control.Enabled);

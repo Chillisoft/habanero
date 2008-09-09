@@ -66,12 +66,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.UI.Win", "Habanero
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.UI.WebGUI", "Habanero.UI.WebGUI\Habanero.UI.WebGUI.csproj", "{04E4FF45-6C20-46EB-A9AD-2B04895F6218}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test", "Habanero.Test\Habanero.Test.csproj", "{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -79,6 +73,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test", "Habanero.T
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.Structure", "Habanero.Test.Structure\Habanero.Test.Structure.csproj", "{D59DAD41-663F-4AD7-9B22-04C2A7D7F9C2}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.UI.VWG", "Habanero.UI.VWG\Habanero.UI.VWG.csproj", "{04E4FF45-6C20-46EB-A9AD-2B04895F6218}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -134,10 +134,6 @@ Global
 		{E761E05B-B9CC-4EAC-B940-C19E42D3819C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E761E05B-B9CC-4EAC-B940-C19E42D3819C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E761E05B-B9CC-4EAC-B940-C19E42D3819C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{04E4FF45-6C20-46EB-A9AD-2B04895F6218}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{04E4FF45-6C20-46EB-A9AD-2B04895F6218}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{04E4FF45-6C20-46EB-A9AD-2B04895F6218}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{04E4FF45-6C20-46EB-A9AD-2B04895F6218}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -146,6 +142,10 @@ Global
 		{D59DAD41-663F-4AD7-9B22-04C2A7D7F9C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D59DAD41-663F-4AD7-9B22-04C2A7D7F9C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D59DAD41-663F-4AD7-9B22-04C2A7D7F9C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04E4FF45-6C20-46EB-A9AD-2B04895F6218}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04E4FF45-6C20-46EB-A9AD-2B04895F6218}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04E4FF45-6C20-46EB-A9AD-2B04895F6218}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04E4FF45-6C20-46EB-A9AD-2B04895F6218}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
