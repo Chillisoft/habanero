@@ -99,6 +99,15 @@ namespace Habanero.UI.WebGUI.Grid
             set { _dataGridViewCellStyle.Format = value; }
         }
 
+        /// <summary>Gets or sets the object used to provide culture-specific formatting of <see cref="IDataGridView"></see> cell values.</summary>
+        /// <returns>An <see cref="T:System.IFormatProvider"></see> used for cell formatting. The default is <see cref="P:System.Globalization.CultureInfo.CurrentUICulture"></see>.</returns>
+        /// <filterpriority>1</filterpriority>
+        public IFormatProvider FormatProvider
+        {
+            get { return _dataGridViewCellStyle.FormatProvider; }
+            set { _dataGridViewCellStyle.FormatProvider = value; }
+        }
+
         ///// <summary>Gets or sets the object used to provide culture-specific formatting of <see cref="IDataGridView"></see> cell values.</summary>
         ///// <returns>An <see cref="T:System.IFormatProvider"></see> used for cell formatting. The default is <see cref="P:System.Globalization.CultureInfo.CurrentUICulture"></see>.</returns>
         ///// <filterpriority>1</filterpriority>
