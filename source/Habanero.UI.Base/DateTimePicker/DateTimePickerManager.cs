@@ -41,33 +41,26 @@ namespace Habanero.UI.Base
         private readonly IDateTimePicker _dateTimePicker;
         private readonly ValueGetter<DateTime> _valueGetter;
         private readonly ValueSetter<DateTime> _valueSetter;
-        private readonly ValueGetter<string> _customFormatGetter;
-        private readonly ValueSetter<string> _customFormatSetter;
         public event EventHandler ValueChanged;
 
         //State Variables
         private bool _isNull;
-        private IPanel _displayBox;
-        private ILabel _displayText;
+        private ILabel _displayBox;
+        //private ILabel _displayText;
 
         //private event EventHandler _valueChanged;
 
         public DateTimePickerManager(IControlFactory controlFactory, IDateTimePicker dateTimePicker,
-                                     ValueGetter<DateTime> valueGetter, ValueSetter<DateTime> valueSetter, 
-                                    ValueGetter<string> customFormatGetter, ValueSetter<string> customFormatSetter)
+                                     ValueGetter<DateTime> valueGetter, ValueSetter<DateTime> valueSetter)
         {
             if (valueGetter == null) throw new ArgumentNullException("valueGetter");
             if (valueSetter == null) throw new ArgumentNullException("valueSetter");
-            if (customFormatGetter == null) throw new ArgumentNullException("customFormatGetter");
-            if (customFormatSetter == null) throw new ArgumentNullException("customFormatSetter");
             _controlFactory = controlFactory;
-            _customFormatSetter = customFormatSetter;
-            _customFormatGetter = customFormatGetter;
             _dateTimePicker = dateTimePicker;
             _valueGetter = valueGetter;
             _valueSetter = valueSetter;
+            SetupDisplayBox();
             ApplyBlankFormat();
-            //SetupDisplayBox();
         }
 
         #region Null Display Box
@@ -76,21 +69,23 @@ namespace Habanero.UI.Base
         {
             //ControlsHelper.SafeGui(_dateTimePicker, delegate()
             //{
-                _displayBox = _controlFactory.CreatePanel();
+                _displayBox = _controlFactory.CreateLabel(); //_controlFactory.CreatePanel();
                 //_displayBox.BorderStyle = BorderStyle.None;
+                _displayBox.AutoSize = false;
                 _displayBox.Location = new Point(2, 2);
+                _displayBox.Click += delegate { ChangeToValueMode(); };
                 ResizeDisplayBox();
                 _displayBox.BackColor = _dateTimePicker.BackColor;
                 _displayBox.ForeColor = _dateTimePicker.ForeColor;
                 //_displayBox.MouseUp += DateTimePicker_MouseUp;
                 //_displayBox.KeyDown += DateTimePicker_KeyDown;
-                _displayText = _controlFactory.CreateLabel();
-                _displayText.Location = new Point(0, 0);
-                _displayText.AutoSize = true;
-                _displayText.Text = "";
+                //_displayText = _controlFactory.CreateLabel();
+                //_displayText.Location = new Point(0, 0);
+                //_displayText.AutoSize = true;
+                //_displayText.Text = "";
                 //_displayText.MouseUp += DateTimePicker_MouseUp;
                 //_displayText.KeyDown += DateTimePicker_KeyDown;
-                _displayBox.Controls.Add(_displayText);
+                //_displayBox.Controls.Add(_displayText);            
                 _dateTimePicker.Controls.Add(_displayBox);
                 _displayBox.Visible = false;
             //});
@@ -102,20 +97,24 @@ namespace Habanero.UI.Base
             _displayBox.Height = _dateTimePicker.Height - 7;
         }
 
-        private void UpdateFocusState()
+        public void UpdateFocusState()
         {
             if (_dateTimePicker.Focused)
             {
                 _displayBox.BackColor = SystemColors.Highlight;
                 _displayBox.ForeColor = SystemColors.HighlightText;
+            } else if (!_dateTimePicker.Enabled)
+            {
+                _displayBox.BackColor = SystemColors.ButtonFace;
+                _displayBox.ForeColor = _dateTimePicker.ForeColor;
             }
             else
             {
                 _displayBox.BackColor = _dateTimePicker.BackColor;
-                _displayBox.ForeColor = _dateTimePicker.BackColor;
+                _displayBox.ForeColor = _dateTimePicker.ForeColor;
             }
-            _displayText.BackColor = _displayBox.BackColor;
-            _displayText.ForeColor = _displayBox.ForeColor;
+            //_displayText.BackColor = _displayBox.BackColor;
+            //_displayText.ForeColor = _displayBox.ForeColor;
         }
 
         #endregion
@@ -135,8 +134,8 @@ namespace Habanero.UI.Base
         ///</summary>
         public string NullDisplayValue
         {
-            get { return _displayText.Text; }
-            set { _displayText.Text = value ?? ""; }
+            get { return _displayBox.Text; }
+            set { _displayBox.Text = value ?? ""; }
         }
 
         /// <summary>
@@ -224,7 +223,7 @@ namespace Habanero.UI.Base
 
         private bool ApplyValueFormat()
         {
-            //_displayBox.Visible = false;
+            _displayBox.Visible = false;
             if (!IsNull()) return false;
             if (CheckBoxVisible)
             {
@@ -239,12 +238,11 @@ namespace Habanero.UI.Base
             if (IsNull()) return false;
             if (!CheckBoxVisible)
             {
-                //_displayBox.Visible = true;
+                _displayBox.Visible = true;
             } else
             {
-                
+                CheckBoxChecked = false;
             }
-            CheckBoxChecked = false;
             _isNull = true;
             return true;
         }
@@ -449,6 +447,43 @@ namespace Habanero.UI.Base
                 ApplyValueFormat();
             }
             FireValueChanged();
+        }
+
+        /// <summary>
+        /// Handles the event of the DateTimePicker's size being changed
+        /// </summary>
+        /// <param name="eventargs"></param>
+        public void OnResize(EventArgs eventargs)
+        {
+            ResizeDisplayBox();
+        }
+
+        /// <summary>
+        /// Changes the DatetTimePicker control to the value mode
+        /// </summary>
+        /// <returns>true if the mode was changed, false if the mode was already value mode</returns>
+        public bool ChangeToValueMode()
+        {
+            if (ApplyValueFormat())
+            {
+                FireValueChanged();
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Changes the DatetTimePicker control to the null mode
+        /// </summary>
+        /// <returns>true if the mode was changed, false if the mode was already null mode</returns>
+        public bool ChangeToNullMode()
+        {
+            if (ApplyBlankFormat())
+            {
+                FireValueChanged();
+                return true;
+            }
+            return false;
         }
     }
 }

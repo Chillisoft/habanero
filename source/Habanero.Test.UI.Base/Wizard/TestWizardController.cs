@@ -267,6 +267,16 @@ namespace Habanero.Test.UI.Base.Wizard
         public event EventHandler VisibleChanged;
 
         /// <summary>
+        /// Gets or sets the anchoring style.
+        /// </summary>
+        /// <value></value>
+        public AnchorStyles Anchor
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+
+        /// <summary>
         /// Gets/Sets the width position
         /// </summary>
         public int Width
@@ -296,6 +306,11 @@ namespace Habanero.Test.UI.Base.Wizard
         {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }
+        }
+
+        public bool Focus()
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>Gets a value indicating whether the control has input focus.</summary>

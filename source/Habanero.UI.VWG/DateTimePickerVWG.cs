@@ -41,15 +41,20 @@ namespace Habanero.UI.VWG
             {
                 base.Value = value;
             };
-            DateTimePickerManager.ValueGetter<string> customFormatGetter = delegate
-            {
-                return base.CustomFormat;
-            };
-            DateTimePickerManager.ValueSetter<string> customFormatSetter = delegate(string value)
-            {
-                base.CustomFormat = value;
-            };
-            _manager = new DateTimePickerManager(controlFactory, this, valueGetter, valueSetter, customFormatGetter, customFormatSetter);
+            _manager = new DateTimePickerManager(controlFactory, this, valueGetter, valueSetter);
+            //Note: by default the Checkbox is shown because the VWG DateTimePicker does not support representing the null state visually without it.
+            this.ShowCheckBox = true;
+            _manager.ChangeToNullMode();
+        }
+
+        /// <summary>
+        /// Gets or sets the anchoring style.
+        /// </summary>
+        /// <value></value>
+        Base.AnchorStyles IControlHabanero.Anchor
+        {
+            get { return (Base.AnchorStyles)base.Anchor; }
+            set { base.Anchor = (Gizmox.WebGUI.Forms.AnchorStyles)value; }
         }
 
         /// <summary>
@@ -101,6 +106,67 @@ namespace Habanero.UI.VWG
             base.OnValueChanged(eventargs);
         }
 
+        protected override void OnResize(EventArgs eventargs)
+        {
+            base.OnResize(eventargs);
+            _manager.OnResize(eventargs);
+        }
+
+        protected override void OnClick(EventArgs eventargs)
+        {
+            base.OnClick(eventargs);
+            _manager.ChangeToValueMode();
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            if (e == null) return;
+            if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
+            {
+                if (_manager.ChangeToNullMode())
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
+            else
+            {
+                if (_manager.ChangeToValueMode())
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
+        }
+
+        protected override void OnForeColorChanged(EventArgs e)
+        {
+            base.OnForeColorChanged(e);
+            _manager.UpdateFocusState();
+        }
+
+        protected override void OnEnabledChanged(EventArgs e)
+        {
+            base.OnEnabledChanged(e);
+            _manager.UpdateFocusState();
+        }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+            _manager.UpdateFocusState();
+        }
+
+        protected override void OnLostFocus(EventArgs e)
+        {
+            base.OnLostFocus(e);
+            _manager.UpdateFocusState();
+        }
+
+        /// <summary>
+        /// Occurs when the Value property changes
+        /// </summary>
         event EventHandler IDateTimePicker.ValueChanged
         {
             add { _manager.ValueChanged += value; }
@@ -115,6 +181,15 @@ namespace Habanero.UI.VWG
         {
             get { return _manager.ValueOrNull; }
             set { _manager.ValueOrNull = value; }
+        }
+
+        ///<summary>
+        /// The text that will be displayed when the Value is null
+        ///</summary>
+        public string NullDisplayValue
+        {
+            get { return _manager.NullDisplayValue; }
+            set { _manager.NullDisplayValue = value; }
         }
 
         /// <summary>

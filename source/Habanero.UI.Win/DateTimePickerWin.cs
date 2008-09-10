@@ -18,6 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 
@@ -41,15 +43,17 @@ namespace Habanero.UI.Win
             {
                 base.Value = value;
             };
-            DateTimePickerManager.ValueGetter<string> customFormatGetter = delegate
-            {
-                return base.CustomFormat;
-            };
-            DateTimePickerManager.ValueSetter<string> customFormatSetter = delegate(string value)
-            {
-                base.CustomFormat = value;
-            };
-            _manager = new DateTimePickerManager(controlFactory, this, valueGetter, valueSetter, customFormatGetter, customFormatSetter);
+            _manager = new DateTimePickerManager(controlFactory, this, valueGetter, valueSetter);
+        }
+
+        /// <summary>
+        /// Gets or sets the anchoring style.
+        /// </summary>
+        /// <value></value>
+        Base.AnchorStyles IControlHabanero.Anchor
+        {
+            get { return (Base.AnchorStyles)base.Anchor; }
+            set { base.Anchor = (System.Windows.Forms.AnchorStyles)value; }
         }
 
         /// <summary>
@@ -92,15 +96,79 @@ namespace Habanero.UI.Win
                 if (_manager != null) _manager.OnValueChanged(new EventArgs());
             }
         }
-
-
-
+        
         protected override void OnValueChanged(EventArgs eventargs)
         {
             _manager.OnValueChanged(eventargs);
             base.OnValueChanged(eventargs);
         }
 
+        protected override void OnResize(EventArgs eventargs)
+        {
+            base.OnResize(eventargs);
+            _manager.OnResize(eventargs);
+        }
+
+        protected override void OnClick(EventArgs eventargs)
+        {
+            base.OnClick(eventargs);
+            _manager.ChangeToValueMode();
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            if (e == null) return;
+            if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
+            {
+                if (_manager.ChangeToNullMode())
+                {
+                    e.SuppressKeyPress = true;
+                    return;
+                }
+            } else
+            {
+                if (_manager.ChangeToValueMode())
+                {
+                    e.SuppressKeyPress = true;
+                    return;
+                }
+            }
+        }
+
+        protected override void OnBackColorChanged(EventArgs e)
+        {
+            base.OnBackColorChanged(e);
+            _manager.UpdateFocusState();
+        }
+
+        protected override void OnForeColorChanged(EventArgs e)
+        {
+            base.OnForeColorChanged(e);
+            _manager.UpdateFocusState();
+        }
+
+        protected override void OnEnabledChanged(EventArgs e)
+        {
+            base.OnEnabledChanged(e);
+            _manager.UpdateFocusState();
+        }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+            _manager.UpdateFocusState();
+        }
+
+        protected override void OnLostFocus(EventArgs e)
+        {
+            base.OnLostFocus(e);
+            _manager.UpdateFocusState();
+        }
+
+        /// <summary>
+        /// Occurs when the Value property changes
+        /// </summary>
         event EventHandler IDateTimePicker.ValueChanged
         {
             add { _manager.ValueChanged += value; }
@@ -117,6 +185,15 @@ namespace Habanero.UI.Win
             set { _manager.ValueOrNull = value; }
         }
 
+        ///<summary>
+        /// The text that will be displayed when the Value is null
+        ///</summary>
+        public string NullDisplayValue
+        {
+            get { return _manager.NullDisplayValue; }
+            set { _manager.NullDisplayValue = value; }
+        }
+
         /// <summary>
         /// Gets or sets the format of the date and time displayed in the control.
         /// </summary>
@@ -125,7 +202,7 @@ namespace Habanero.UI.Win
         Base.DateTimePickerFormat IDateTimePicker.Format
         {
             get { return (Base.DateTimePickerFormat)base.Format; }
-            set { base.Format = (System.Windows.Forms.DateTimePickerFormat) value; }
+            set { base.Format = (System.Windows.Forms.DateTimePickerFormat)value; }
         }
     }
 }

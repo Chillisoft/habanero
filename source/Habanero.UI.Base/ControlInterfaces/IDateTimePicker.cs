@@ -97,6 +97,11 @@ namespace Habanero.UI.Base
         /// </summary>
         bool Checked { get; set; }
 
+        ///<summary>
+        /// The text that will be displayed when the Value is null
+        ///</summary>
+        string NullDisplayValue { get; set; }
+
         /// <summary>
         /// Occurs when the control is entered
         /// </summary>

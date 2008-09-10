@@ -31,6 +31,16 @@ namespace Habanero.UI.Win
     public class ControlWin : Control, IControlHabanero
     {
         /// <summary>
+        /// Gets or sets the anchoring style.
+        /// </summary>
+        /// <value></value>
+        Base.AnchorStyles IControlHabanero.Anchor
+        {
+            get { return (Base.AnchorStyles)base.Anchor; }
+            set { base.Anchor = (System.Windows.Forms.AnchorStyles)value; }
+        }
+
+        /// <summary>
         /// Gets the collection of controls contained within the control
         /// </summary>  
         IControlCollection IControlHabanero.Controls

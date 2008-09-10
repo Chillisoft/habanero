@@ -127,21 +127,7 @@ namespace Habanero.Test.UI.Base
         //-----------------------------------For Windows Only----------------------------
         
 
-        //[Test]
-        //public void TestSetPickerControllerValue()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    IDateTimePicker dateTimePicker = CreateDateTimePicker();
-        //    DateTimePickerController dateTimePickerController = GetDateTimePickerController(dateTimePicker);
-        //    DateTime sampleDate = new DateTime(2001, 01, 01, 01, 01, 01);
-        //    //---------------Execute Test ----------------------
-        //    dateTimePicker.Value = sampleDate;
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual(sampleDate, dateTimePickerController.Value);
-        //    IControlHabanero nullDisplayControl = dateTimePicker.Controls[0];
-        //    Assert.IsFalse(nullDisplayControl.Visible,
-        //                   "Null display value control should not be visible when there is a value.");
-        //}
+        
 
 
         

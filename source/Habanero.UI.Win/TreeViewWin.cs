@@ -8,7 +8,17 @@ namespace Habanero.UI.Win
     /// Displays a hierarchical collection of labeled items, each represented by a TreeNode
     /// </summary>
     public class TreeViewWin : TreeView, ITreeView
-    {       
+    {
+        /// <summary>
+        /// Gets or sets the anchoring style.
+        /// </summary>
+        /// <value></value>
+        Base.AnchorStyles IControlHabanero.Anchor
+        {
+            get { return (Base.AnchorStyles)base.Anchor; }
+            set { base.Anchor = (System.Windows.Forms.AnchorStyles)value; }
+        }
+     
         /// <summary>
         /// Gets the collection of controls contained within the control
         /// </summary>  

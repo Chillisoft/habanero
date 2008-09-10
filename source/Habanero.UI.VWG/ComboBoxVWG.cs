@@ -38,6 +38,16 @@ namespace Habanero.UI.VWG
         }
 
         /// <summary>
+        /// Gets or sets the anchoring style.
+        /// </summary>
+        /// <value></value>
+        Base.AnchorStyles IControlHabanero.Anchor
+        {
+            get { return (Base.AnchorStyles)base.Anchor; }
+            set { base.Anchor = (Gizmox.WebGUI.Forms.AnchorStyles)value; }
+        }
+
+        /// <summary>
         /// Gets an object representing the collection of the items
         /// contained in this ComboBox
         /// </summary>

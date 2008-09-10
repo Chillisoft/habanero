@@ -42,6 +42,16 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
+        /// Gets or sets the anchoring style.
+        /// </summary>
+        /// <value></value>
+        Base.AnchorStyles IControlHabanero.Anchor
+        {
+            get { return (Base.AnchorStyles)base.Anchor; }
+            set { base.Anchor = (System.Windows.Forms.AnchorStyles)value; }
+        }
+
+        /// <summary>
         /// Gets the items of the ListBox
         /// </summary>
         public new IListBoxObjectCollection Items

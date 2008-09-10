@@ -117,6 +117,16 @@ namespace Habanero.UI.Win
             set { base.CurrentCell = ((DataGridViewCellWin) value).DataGridViewCell; }
         }
 
+        /// <summary>
+        /// Gets or sets the anchoring style.
+        /// </summary>
+        /// <value></value>
+        Base.AnchorStyles IControlHabanero.Anchor
+        {
+            get { return (Base.AnchorStyles)base.Anchor; }
+            set { base.Anchor = (System.Windows.Forms.AnchorStyles)value; }
+        }
+
 
         private void FireBusinessObjectSelected()
         {

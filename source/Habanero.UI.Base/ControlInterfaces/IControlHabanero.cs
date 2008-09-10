@@ -71,6 +71,21 @@ namespace Habanero.UI.Base
     }
 
     /// <summary>
+    /// Control anchoring styles
+    /// </summary>
+    [Flags]
+    public enum AnchorStyles
+    {
+        // Fields
+        Bottom = 2,
+        Left = 4,
+        None = 0,
+        Right = 8,
+        Top = 1
+    }
+
+
+    /// <summary>
     /// Defines controls, which are components with visual representation
     /// </summary>
     public interface IControlHabanero
@@ -109,6 +124,12 @@ namespace Habanero.UI.Base
         event EventHandler VisibleChanged;
 
         /// <summary>
+        /// Gets or sets the anchoring style.
+        /// </summary>
+        /// <value></value>
+        AnchorStyles Anchor { get; set; }
+
+        /// <summary>
         /// Gets or sets the width of the control
         /// </summary>
         [System.ComponentModel.Browsable(false)]
@@ -132,6 +153,11 @@ namespace Habanero.UI.Base
         /// </summary>
         int TabIndex { get; set; }
 
+        /// <summary>
+        /// Sets focus to this control
+        /// </summary>
+        /// <returns>true if the input focus request was successful; otherwise, false.</returns>
+        bool Focus();
 
         /// <summary>Gets a value indicating whether the control has input focus.</summary>
         /// <returns>true if the control has focus; otherwise, false.</returns>
