@@ -491,7 +491,7 @@ namespace Habanero.Test
 						<grid>
 							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
 							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewTextBoxColumn"" />
-                            <column heading=""Test DateTime"" property=""TestDateTime"" type=""DataGridViewDateTimeColumn"" />
+                            <column heading=""Test DateTime"" property=""TestDateTime"" />
 							<column heading=""Test DateTime"" property=""TestDateTimeNoFormat"" />
 							<column heading=""Test DateTime"" property=""TestDateTimeFormat"" >
                                 <parameter name=""dateFormat"" value=""dd.MMM.yyyy"" />

@@ -162,7 +162,7 @@ namespace Habanero.BO.ClassDefinition
             get { return _parameters; }
         }
         /// <summary>
-        /// Returns the Name of the Grid Control Type
+        /// Gets and sets the name of the grid control type
         /// </summary>
         public String GridControlTypeName
         {
@@ -171,7 +171,7 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
-        /// Returns the Assembly Name of the Grid Control Type
+        /// Gets and sets the assembly name of the grid control type
         /// </summary>
         public String GridControlAssemblyName
         {

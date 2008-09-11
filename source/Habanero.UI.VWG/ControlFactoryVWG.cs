@@ -41,6 +41,12 @@ namespace Habanero.UI.VWG
     public class ControlFactoryVWG : IControlFactory
     {
         public const int TEXTBOX_HEIGHT = 20;
+        private readonly ControlFactoryManager _manager;
+
+        public ControlFactoryVWG()
+        {
+            _manager = new ControlFactoryManager(this);
+        }
 
         /// <summary>
         /// Creates a filter control with the default layout manager
@@ -462,6 +468,10 @@ namespace Habanero.UI.VWG
             return new OKCancelDialogFactoryVWG(this);
         }
 
+        /// <summary>
+        /// Creates a static data editor
+        /// </summary>
+        /// <returns></returns>
         public IStaticDataEditor CreateStaticDataEditor()
         {
             throw new System.NotImplementedException();
@@ -713,6 +723,67 @@ namespace Habanero.UI.VWG
         public virtual IDataGridViewComboBoxColumn CreateDataGridViewComboBoxColumn()
         {
             return new DataGridViewComboBoxColumnVWG(new DataGridViewComboBoxColumn());
+        }
+
+        /// <summary>
+        /// Creates a DataGridViewDateTimeColumn
+        /// </summary>
+        public IDataGridViewDateTimeColumn CreateDataGridViewDateTimeColumn()
+        {
+            throw new NotImplementedException("No VWG equivalent available");
+        }
+
+        /// <summary>
+        /// Creates a column for a DataGridView for the given type
+        /// </summary>
+        /// <param name="typeName">The name of the type</param>
+        /// <param name="assemblyName">The name of the assembly</param>
+        public IDataGridViewColumn CreateDataGridViewColumn(string typeName, string assemblyName)
+        {
+            Type controlType = null;
+
+            if (String.IsNullOrEmpty(typeName))
+            {
+                typeName = "DataGridViewTextBoxColumn";
+            }
+
+            // VWG VERSION NOT YET IMPLEMENTED
+            //if (typeName == "DataGridViewDateTimeColumn" && String.IsNullOrEmpty(assemblyName))
+            //{
+            //    assemblyName = "Habanero.UI.VWG";
+            //}
+            //else if (String.IsNullOrEmpty(assemblyName))
+            
+            if (String.IsNullOrEmpty(assemblyName))
+            {
+                assemblyName = "Gizmox.WebGUI.Forms";
+            }
+
+            TypeLoader.LoadClassType(ref controlType, assemblyName, typeName,
+                                         "column", "column definition");
+
+            return CreateDataGridViewColumn(controlType);
+        }
+
+        /// <summary>
+        /// Creates a column for a DataGridView for the given type
+        /// </summary>
+        /// <param name="columnType">The type of the column</param>
+        public IDataGridViewColumn CreateDataGridViewColumn(Type columnType)
+        {
+            if (!columnType.IsSubclassOf(typeof(DataGridViewColumn)))
+            {
+                throw new UnknownTypeNameException(
+                    string.Format(
+                        "The column type name {0} does not inherit from {1}.", columnType.FullName,
+                        typeof(DataGridViewColumn)));
+            }
+
+            if (columnType == typeof(DataGridViewCheckBoxColumn)) return CreateDataGridViewCheckBoxColumn();
+            if (columnType == typeof(DataGridViewComboBoxColumn)) return CreateDataGridViewComboBoxColumn();
+            if (columnType == typeof(DataGridViewImageColumn)) return CreateDataGridViewImageColumn();
+
+            return new DataGridViewColumnVWG((DataGridViewColumn)Activator.CreateInstance(columnType));
         }
 
         /// <summary>

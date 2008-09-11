@@ -119,5 +119,19 @@ namespace Habanero.Util
             DateTime firstDayOFinancialYear = FirstDayOFinancialYear(monthFinancialYearStarts, currentDate);
             return firstDayOFinancialYear.AddYears(1).AddDays(-1);
         }
+
+        /// <summary>
+        /// Indicates whether the given DateTime value is close to DateTime.Now,
+        /// within the given tolerance range
+        /// </summary>
+        /// <param name="valueToCheck">The DateTime value to check</param>
+        /// <param name="toleranceInSeconds">The maximum number of distance in seconds that
+        /// the value can be from Now and still be accepted</param>
+        /// <returns>Returns true if within the tolerance range</returns>
+        public static bool CloseToDateTimeNow(DateTime valueToCheck, int toleranceInSeconds)
+        {
+            TimeSpan difference = DateTime.Now - valueToCheck;
+            return Math.Abs(difference.TotalSeconds) < toleranceInSeconds;
+        }
     }
 }

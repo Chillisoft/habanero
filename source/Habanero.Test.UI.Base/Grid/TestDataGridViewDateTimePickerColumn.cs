@@ -18,20 +18,25 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Windows.Forms;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
+using Habanero.UI.Win;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-//    [TestFixture]
-    public class TestDataGridViewDateTimePickerColumn //: TestBase
+    /// <summary>
+    /// Summary description for TestReadOnlyGrid.
+    /// </summary>
+    public abstract class TestDataGridViewDateTimeColumn
     {
         [SetUp]
-        public  void SetupTest()
+        public void SetupTest()
         {
-            //Runs every time that any testmethod is executed
-//            base.SetupTest();
+            //ClassDef.ClassDefs.Clear();
         }
 
         [TestFixtureSetUp]
@@ -42,84 +47,138 @@ namespace Habanero.Test.UI.Base
         }
 
         [TearDown]
-        public  void TearDownTest()
+        public void TearDownTest()
         {
-            //runs every time any testmethod is complete
-//            base.TearDownTest();
         }
 
-        
+        protected abstract IControlFactory GetControlFactory();
+
+
+        [TestFixture]
+        public class TestDataGridViewDateTimeColumnWin : TestDataGridViewDateTimeColumn
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
+
+            [Test]
+            public void Test_CreateNewColumn_CorrectType()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Assert Precondition----------------
+                //---------------Execute Test ----------------------
+                IDataGridViewDateTimeColumn createdColumn = GetControlFactory().CreateDataGridViewDateTimeColumn();
+                //---------------Test Result -----------------------
+                DataGridViewColumnWin columnWin = (DataGridViewColumnWin)createdColumn;
+                System.Windows.Forms.DataGridViewColumn column = columnWin.DataGridViewColumn;
+                Assert.IsInstanceOfType(typeof(DataGridViewDateTimeColumn), column);
+                Assert.IsInstanceOfType(typeof(DataGridViewDateTimeColumnWin), createdColumn);
+                Assert.IsTrue(typeof(DataGridViewDateTimeColumn).IsSubclassOf(typeof(System.Windows.Forms.DataGridViewColumn)));
+            }
+
+            [Test]
+            public void Test_CellTemplateIsCalendarCell()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Assert Precondition----------------
+                //---------------Execute Test ----------------------
+                DataGridViewDateTimeColumn dtColumn = new DataGridViewDateTimeColumn();
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOfType(typeof(CalendarCell), dtColumn.CellTemplate);
+            }
+
+            [Test]
+            public void Test_SetCellTemplate()
+            {
+                //---------------Set up test pack-------------------
+                DataGridViewDateTimeColumn dtColumn = new DataGridViewDateTimeColumn();
+                CalendarCell calendarCell = new CalendarCell();
+                //---------------Assert Precondition----------------
+                Assert.AreNotSame(calendarCell, dtColumn.CellTemplate);
+                //---------------Execute Test ----------------------
+                dtColumn.CellTemplate = calendarCell;
+
+                //---------------Test Result -----------------------
+                Assert.AreSame(calendarCell, dtColumn.CellTemplate);
+            }
+
+            [Test]
+            public void Test_SetCellTemplate_MustBeCalendarCell()
+            {
+                //---------------Set up test pack-------------------
+                DataGridViewDateTimeColumn dtColumn = new DataGridViewDateTimeColumn();
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                bool errorThrown = false;
+                try
+                {
+                    dtColumn.CellTemplate = new System.Windows.Forms.DataGridViewCheckBoxCell();
+                }
+                catch (InvalidCastException ex) { errorThrown = true; }
+                //---------------Test Result -----------------------
+                Assert.IsTrue(errorThrown, "Cell Template must be type of CalendarCell");
+            }
+
+            [Test]
+            public void TestCalendarCell_HasCorrectSettings()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Assert Precondition----------------
+                //---------------Execute Test ----------------------
+                CalendarCell calendarCell = new CalendarCell();
+                //---------------Test Result -----------------------
+                Assert.AreEqual("d", calendarCell.Style.Format);
+                Assert.AreEqual(typeof(CalendarEditingControl), calendarCell.EditType);
+                Assert.AreEqual(typeof(DateTime), calendarCell.ValueType);
+                Assert.IsInstanceOfType(typeof(DateTime), calendarCell.DefaultNewRowValue);
+
+                DateTime newRowValue = (DateTime) calendarCell.DefaultNewRowValue;
+                Assert.IsTrue(DateTimeUtilities.CloseToDateTimeNow(newRowValue, 10));
+            }
+
+            [Test]
+            public void TestCalendarEditingControl_HasCorrectSettings()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Assert Precondition----------------
+                //---------------Execute Test ----------------------
+                CalendarEditingControl editingControl = new CalendarEditingControl();
+                //---------------Test Result -----------------------
+                Assert.AreEqual(System.Windows.Forms.DateTimePickerFormat.Short, editingControl.Format);
+                Assert.IsFalse(editingControl.RepositionEditingControlOnValueChange);
+                Assert.AreEqual(0, editingControl.EditingControlRowIndex);
+                Assert.IsNull(editingControl.EditingControlDataGridView);
+                Assert.IsFalse(editingControl.EditingControlValueChanged);
+            }
+            
+            [Test]
+            public void TestCalendarEditingControl_EditingControlFormattedValue()
+            {
+                //---------------Set up test pack-------------------
+                CalendarEditingControl editingControl = new CalendarEditingControl();
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(DateTime.Now.ToShortDateString(), editingControl.EditingControlFormattedValue);
+                //Assert.AreEqual(DateTime.Now.ToShortDateString(), editingControl.GetEditingControlFormattedValue(null));
+                //---------------Execute Test ----------------------
+
+                // REQUIRES A PARENT GRID FOR DIRTY NOTIFICATION, NOT WORTH THE TROUBLE?
+                //DateTime dtValue = new DateTime(2006, 5, 1, 3, 2, 1);
+                //editingControl.EditingControlFormattedValue = dtValue.ToString();
+                ////---------------Test Result -----------------------
+                //Assert.AreEqual("2006/05/01", editingControl.EditingControlFormattedValue);
+            }
+        }
+
+        //TODO: look at creating a DateTime column for VWG
+        //[TestFixture]
+        //public class TestDataGridViewDateTimeColumnVWG : TestDataGridViewDateTimeColumn
+        //{
+        //    protected override IControlFactory GetControlFactory()
+        //    {
+        //        return new ControlFactoryVWG();
+        //    }
+        //}
     }
-    public interface IDataGridViewDateTimeColumn : IDataGridViewColumn
-    {
-
-        ///// <summary>Gets or sets the underlying value corresponding to a cell value of false, which appears as an unchecked box.</summary>
-        ///// <returns>An <see cref="T:System.Object"></see> representing a value that the cells in this column will treat as a false value. The default is null.</returns>
-        ///// <exception cref="T:System.InvalidOperationException">The value of the <see cref="IDataGridViewCheckBoxColumn.CellTemplate"></see> property is null. </exception>
-        ///// <filterpriority>1</filterpriority>
-        //[TypeConverter(typeof(StringConverter)), DefaultValue((string)null)]
-        //object FalseValue { get; set; }
-
-        /////// <summary>Gets or sets the flat style appearance of the check box cells.</summary>
-        /////// <returns>A <see cref="T:Gizmox.WebGUI.Forms.FlatStyle"></see> value indicating the appearance of cells in the column. The default is <see cref="F:Gizmox.WebGUI.Forms.FlatStyle.Standard"></see>.</returns>
-        /////// <exception cref="T:System.InvalidOperationException">The value of the <see cref="IDataGridViewCheckBoxColumn.CellTemplate"></see> property is null. </exception>
-        /////// <filterpriority>1</filterpriority>
-        ////[DefaultValue(2)]
-        ////Gizmox.WebGUI.Forms.FlatStyle FlatStyle { get; set; }
-
-        ///// <summary>Gets or sets the underlying value corresponding to an indeterminate or null cell value, which appears as a disabled checkbox.</summary>
-        ///// <returns>An <see cref="T:System.Object"></see> representing a value that the cells in this column will treat as an indeterminate value. The default is null.</returns>
-        ///// <exception cref="T:System.InvalidOperationException">The value of the <see cref="IDataGridViewCheckBoxColumn.CellTemplate"></see> property is null. </exception>
-        ///// <filterpriority>1</filterpriority>
-        //[TypeConverter(typeof(StringConverter)), DefaultValue((string)null)]
-        //object IndeterminateValue { get; set; }
-
-        ///// <summary>Gets or sets a value indicating whether the hosted check box cells will allow three check states rather than two.</summary>
-        ///// <returns>true if the hosted DataGridViewCheckBoxCell" objects are able to have a third, indeterminate, state; otherwise, false. The default is false.</returns>
-        ///// <exception cref="T:System.InvalidOperationException">The value of the DataGridViewCheckBoxColumn.CellTemplate property is null.</exception>
-        ///// <filterpriority>1</filterpriority>
-        //[DefaultValue(false)]
-        //bool ThreeState { get; set; }
-
-        ///// <summary>Gets or sets the underlying value corresponding to a cell value of true, which appears as a checked box.</summary>
-        ///// <returns>An <see cref="T:System.Object"></see> representing a value that the cell will treat as a true value. The default is null.</returns>
-        ///// <exception cref="T:System.InvalidOperationException">The value of the DataGridViewCheckBoxColumn.CellTemplate property is null.</exception>
-        ///// <filterpriority>1</filterpriority>
-        //[TypeConverter(typeof(StringConverter)), DefaultValue((string)null)]
-        //object TrueValue { get; set; }
-    }
-    /// <summary>
-    /// Represents a column in data grid view
-    /// </summary>
-    //public class DataGridViewDateTimeColumnVWG :DataGridViewColumnVWG, IDataGridViewDateTimeColumn
-    //{
-    //    /// <summary>
-    //    ///// Constructor to initialise a new column
-    //    ///// </summary>
-    //    //public DataGridViewDateTimeColumn()
-    //    //    : base(new CalendarCell())
-    //    //{
-    //    //}
-
-    //    ///// <summary>
-    //    ///// Gets and sets the cell template
-    //    ///// </summary>
-    //    //public override IDataGridViewCell CellTemplate
-    //    //{
-    //    //    get
-    //    //    {
-    //    //        return base.CellTemplate;
-    //    //    }
-    //    //    set
-    //    //    {
-    //    //        // Ensure that the cell used for the template is a CalendarCell.
-    //    //        if (value != null &&
-    //    //            !value.GetType().IsAssignableFrom(typeof(CalendarCell)))
-    //    //        {
-    //    //            throw new InvalidCastException("Must be a CalendarCell");
-    //    //        }
-    //    //        base.CellTemplate = value;
-    //    //    }
-    //    //}
-    //}
 }

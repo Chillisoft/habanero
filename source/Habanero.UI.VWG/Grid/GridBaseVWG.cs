@@ -542,7 +542,8 @@ namespace Habanero.UI.VWG
             }
 
             /// <summary>
-            /// Adds the given column to the collection
+            /// Adds a column to the collection where the column has been
+            /// wrapped using the IDataGridViewColumn pattern
             /// </summary>
             public void Add(IDataGridViewColumn dataGridViewColumn)
             {

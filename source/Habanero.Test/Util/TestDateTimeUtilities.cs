@@ -196,5 +196,31 @@ namespace Habanero.Test.Util
             Assert.AreEqual(31, firstDay.Day);
             Assert.AreEqual(2007, firstDay.Year);
         }
+
+        [Test]
+        public void Test_CloseToDateTimeNow_BeforeNow()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            //---------------Test Result -----------------------
+            DateTime testValue = DateTime.Now.AddSeconds(-5);
+            Assert.IsTrue(DateTimeUtilities.CloseToDateTimeNow(testValue, 10));
+            Assert.IsFalse(DateTimeUtilities.CloseToDateTimeNow(testValue, 5)); //milliseconds should pass?
+            Assert.IsFalse(DateTimeUtilities.CloseToDateTimeNow(testValue, 3));
+        }
+
+        [Test]
+        public void Test_CloseToDateTimeNow_AfterNow()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            //---------------Test Result -----------------------
+            DateTime testValue = DateTime.Now.AddSeconds(5);
+            Assert.IsTrue(DateTimeUtilities.CloseToDateTimeNow(testValue, 10));
+            Assert.IsFalse(DateTimeUtilities.CloseToDateTimeNow(testValue, 5)); //milliseconds should pass?
+            Assert.IsFalse(DateTimeUtilities.CloseToDateTimeNow(testValue, 3));
+        }
     }
 }

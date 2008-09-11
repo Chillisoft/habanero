@@ -150,7 +150,7 @@ namespace Habanero.UI.Base
 
         private void CreateIDColumn()
         {
-            IDataGridViewColumn col = CreateColumn("ID", "ID");
+            IDataGridViewColumn col = CreateStandardColumn("ID", "ID");
             col.Width = 0;
             col.Visible = false;
             col.ReadOnly = true;
@@ -158,17 +158,34 @@ namespace Habanero.UI.Base
             col.ValueType = typeof(string);
         }
 
-        private IDataGridViewColumn CreateColumn(string columnName, string columnHeader)
+        private IDataGridViewColumn CreateStandardColumn(string columnName, string columnHeader)
         {
             int colIndex = this._gridControl.Grid.Columns.Add(columnName, columnHeader);
             return this._gridControl.Grid.Columns[colIndex];
+        }
+
+        private IDataGridViewColumn CreateCustomColumn(UIGridColumn columnDef)
+        {
+            IDataGridViewColumn newColumn;
+
+            if (columnDef.GridControlType != null)
+            {
+                newColumn = _controlFactory.CreateDataGridViewColumn(columnDef.GridControlType);
+            }
+            else
+            {
+                newColumn = _controlFactory.CreateDataGridViewColumn(columnDef.GridControlTypeName, columnDef.GridControlAssemblyName);
+            }
+
+            _gridControl.Grid.Columns.Add(newColumn);
+            return newColumn;
         }
 
         private void CreateColumnForUIDef(ClassDef classDef, UIGrid gridDef)
         {
             //foreach (UIGridColumn gridColDef in gridDef)
             //{
-            //    IDataGridViewColumn col = CreateColumn(gridColDef.PropertyName, gridColDef.GetHeading());
+            //    IDataGridViewColumn col = CreateStandardColumn(gridColDef.PropertyName, gridColDef.GetHeading());
             //    //col.ReadOnly = true;
             //    col.HeaderText = gridColDef.GetHeading();
             //    col.Name = gridColDef.PropertyName;
@@ -185,37 +202,37 @@ namespace Habanero.UI.Base
                 IDataGridViewColumn col;
                 if (gridColDef.GridControlTypeName == "DataGridViewComboBoxColumn")
                 {
-                IDataGridViewComboBoxColumn comboBoxCol = _controlFactory.CreateDataGridViewComboBoxColumn();
-                //this._gridControl.Grid.Columns.Add(comboBoxCol);
+                    IDataGridViewComboBoxColumn comboBoxCol = _controlFactory.CreateDataGridViewComboBoxColumn();
+                    //this._gridControl.Grid.Columns.Add(comboBoxCol);
 
-                IPropDef propDef = GetPropDef(classDef, gridColDef);
-                ILookupList source = propDef.LookupList;
-                //(ILookupList)_dataTable.Columns[colNum].ExtendedProperties["LookupList"];
-                if (source != null)
-                {
-                    DataTable table = new DataTable();
-                    table.Columns.Add("id");
-                    table.Columns.Add("str");
-
-                    table.LoadDataRow(new object[] { "", "" }, true);
-                    foreach (KeyValuePair<string, object> pair in source.GetLookupList())
+                    IPropDef propDef = GetPropDef(classDef, gridColDef);
+                    ILookupList source = propDef.LookupList;
+                    //(ILookupList)_dataTable.Columns[colNum].ExtendedProperties["LookupList"];
+                    if (source != null)
                     {
-                        table.LoadDataRow(new object[] { pair.Value, pair.Key }, true);
-                    }
+                        DataTable table = new DataTable();
+                        table.Columns.Add("id");
+                        table.Columns.Add("str");
 
-                    comboBoxCol.DataSource = table;
-                    //Bug: This null check has been placed because of a Gizmox bug 
-                    //  We posted this at: http://www.visualwebgui.com/Forums/tabid/364/forumid/29/threadid/12420/scope/posts/Default.aspx
-                    //  It is causing a StackOverflowException on ValueMember because the DataSource is still null
-                    if (comboBoxCol.DataSource != null)
-                    {
-                        comboBoxCol.ValueMember = "str";
-                        comboBoxCol.DisplayMember = "str";
+                        table.LoadDataRow(new object[] {"", ""}, true);
+                        foreach (KeyValuePair<string, object> pair in source.GetLookupList())
+                        {
+                            table.LoadDataRow(new object[] {pair.Value, pair.Key}, true);
+                        }
+
+                        comboBoxCol.DataSource = table;
+                        //Bug: This null check has been placed because of a Gizmox bug 
+                        //  We posted this at: http://www.visualwebgui.com/Forums/tabid/364/forumid/29/threadid/12420/scope/posts/Default.aspx
+                        //  It is causing a StackOverflowException on ValueMember because the DataSource is still null
+                        if (comboBoxCol.DataSource != null)
+                        {
+                            comboBoxCol.ValueMember = "str";
+                            comboBoxCol.DisplayMember = "str";
+                        }
                     }
-                }
-                comboBoxCol.DataPropertyName = gridColDef.PropertyName; //dataColumn.ColumnName;
-                col = comboBoxCol;
-                this._gridControl.Grid.Columns.Add(col);
+                    comboBoxCol.DataPropertyName = gridColDef.PropertyName; //dataColumn.ColumnName;
+                    col = comboBoxCol;
+                    this._gridControl.Grid.Columns.Add(col);
                 }
                 else if (gridColDef.GridControlTypeName == "DataGridViewCheckBoxColumn")
                 {
@@ -224,7 +241,8 @@ namespace Habanero.UI.Base
                 }
                 else
                 {
-                    col = CreateColumn(gridColDef.PropertyName, gridColDef.GetHeading());
+                    //col = CreateStandardColumn(gridColDef.PropertyName, gridColDef.GetHeading());
+                    col = CreateCustomColumn(gridColDef);
                 }
 //                IDataGridViewColumn col = _controlFactory.CreateDataGridViewCheckBoxColumn();
                 //col.ReadOnly = true;

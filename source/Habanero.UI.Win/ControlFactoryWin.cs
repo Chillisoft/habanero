@@ -38,6 +38,13 @@ namespace Habanero.UI.Win
     /// </summary>
     public class ControlFactoryWin : IControlFactory
     {
+        private readonly ControlFactoryManager _manager;
+
+        public ControlFactoryWin()
+        {
+            _manager = new ControlFactoryManager(this);
+        }
+
         #region IControlFactory Members
 
         /// <summary>
@@ -397,6 +404,66 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
+        /// Creates a DataGridViewDateTimeColumn
+        /// </summary>
+        public IDataGridViewDateTimeColumn CreateDataGridViewDateTimeColumn()
+        {
+            //return new DataGridViewDateTimeColumnWin(new DataGridViewColumn());
+            return new DataGridViewDateTimeColumnWin(new DataGridViewDateTimeColumn());
+        }
+
+        /// <summary>
+        /// Creates a column for a DataGridView for the given type
+        /// </summary>
+        /// <param name="typeName">The name of the type</param>
+        /// <param name="assemblyName">The name of the assembly</param>
+        public IDataGridViewColumn CreateDataGridViewColumn(string typeName, string assemblyName)
+        {
+            Type controlType = null;
+
+            if (String.IsNullOrEmpty(typeName))
+            {
+                typeName = "DataGridViewTextBoxColumn";
+            }
+
+            if (typeName == "DataGridViewDateTimeColumn" && String.IsNullOrEmpty(assemblyName))
+            {
+                assemblyName = "Habanero.UI.Win";
+            }
+            else if (String.IsNullOrEmpty(assemblyName))
+            {
+                assemblyName = "System.Windows.Forms";
+            }
+
+            TypeLoader.LoadClassType(ref controlType, assemblyName, typeName,
+                                         "column", "column definition");
+
+            return CreateDataGridViewColumn(controlType);
+        }
+
+        /// <summary>
+        /// Creates a column for a DataGridView for the given type
+        /// </summary>
+        /// <param name="columnType">The type of the column</param>
+        public IDataGridViewColumn CreateDataGridViewColumn(Type columnType)
+        {
+            if (!columnType.IsSubclassOf(typeof(DataGridViewColumn)))
+            {
+                throw new UnknownTypeNameException(
+                    string.Format(
+                        "The column type name {0} does not inherit from {1}.", columnType.FullName,
+                        typeof(DataGridViewColumn)));
+            }
+
+            if (columnType == typeof(DataGridViewCheckBoxColumn)) return CreateDataGridViewCheckBoxColumn();
+            if (columnType == typeof(DataGridViewComboBoxColumn)) return CreateDataGridViewComboBoxColumn();
+            if (columnType == typeof(DataGridViewDateTimeColumnWin)) return CreateDataGridViewDateTimeColumn();
+            if (columnType == typeof(DataGridViewImageColumn)) return CreateDataGridViewImageColumn();
+
+            return new DataGridViewColumnWin((DataGridViewColumn) Activator.CreateInstance(columnType));
+        }
+
+        /// <summary>
         /// Creates DateRangeComboBox control with a specific set of date range
         /// options to display
         /// </summary>
@@ -478,6 +545,9 @@ namespace Habanero.UI.Win
             return new OKCancelDialogFactoryWin(this);
         }
 
+        /// <summary>
+        /// Creates a static data editor
+        /// </summary>
         public IStaticDataEditor CreateStaticDataEditor()
         {
             return new StaticDataEditorWin(this);

@@ -99,6 +99,9 @@
     <Compile Include="GridBaseWin.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Grid\DataGridViewDateTimeColumnWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Grid\DataGridViewCheckBoxColumnWin.cs" />
     <Compile Include="Grid\DataGridViewColumnWin.cs" />
     <Compile Include="Grid\DataGridViewComboBoxColumnWin.cs" />

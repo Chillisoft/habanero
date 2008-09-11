@@ -37,7 +37,8 @@ namespace Habanero.UI.Base
         void Clear();
 
         /// <summary>
-        /// Adds the given column to the collection
+        /// Adds a column to the collection where the column has been
+        /// wrapped using the IDataGridViewColumn pattern
         /// </summary>
         void Add(IDataGridViewColumn dataGridViewColumn);
 

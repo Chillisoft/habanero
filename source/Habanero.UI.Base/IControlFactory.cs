@@ -363,6 +363,24 @@ namespace Habanero.UI.Base
         IDataGridViewComboBoxColumn CreateDataGridViewComboBoxColumn();
 
         /// <summary>
+        /// Creates a DataGridViewDateTimeColumn
+        /// </summary>
+        IDataGridViewDateTimeColumn CreateDataGridViewDateTimeColumn();
+
+        /// <summary>
+        /// Creates a column for a DataGridView for the given type
+        /// </summary>
+        /// <param name="typeName">The name of the type</param>
+        /// <param name="assemblyName">The name of the assembly</param>
+        IDataGridViewColumn CreateDataGridViewColumn(string typeName, string assemblyName);
+
+        /// <summary>
+        /// Creates a column for a DataGridView for the given type
+        /// </summary>
+        /// <param name="columnType">The type of the column</param>
+        IDataGridViewColumn CreateDataGridViewColumn(Type columnType);
+
+        /// <summary>
         /// Creates an ErrorProvider
         /// </summary>
         IErrorProvider CreateErrorProvider();
@@ -415,6 +433,10 @@ namespace Habanero.UI.Base
         /// Creates a strategy that customises behaviour of a NumericUpDown for the environment
         /// </summary>
         INumericUpDownMapperStrategy CreateNumericUpDownMapperStrategy();
+
+        /// <summary>
+        /// Creates a static data editor
+        /// </summary>
         IStaticDataEditor CreateStaticDataEditor();
     }
 

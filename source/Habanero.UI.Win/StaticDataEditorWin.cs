@@ -10,6 +10,14 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
+    /// <summary>
+    /// Provides an editor for static data in an application.  Static data serves
+    /// a number purposes including providing source data for lookup lists used in
+    /// drop-downs.
+    /// <br/>
+    /// The editor typically consists of a TreeView on the left and an EditableGrid
+    /// on the right, where data for the selected type in the TreeView can be edited.
+    /// </summary>
     public class StaticDataEditorWin : PanelWin, IStaticDataEditor
     {
         private readonly IControlFactory _controlFactory;
@@ -56,6 +64,11 @@ namespace Habanero.UI.Win
         }
 
 
+        /// <summary>
+        /// Adds a section to the treeview, under which individual items
+        /// can be listed
+        /// </summary>
+        /// <param name="sectionName">The name of the section as it appears to the user</param>
         public void AddSection(string sectionName)
         {
             TreeNode treeNode = new TreeNode(sectionName);
@@ -64,6 +77,12 @@ namespace Habanero.UI.Win
             _currentSectionNode = treeNode;
         }
 
+        /// <summary>
+        /// Adds an item to the treeview
+        /// </summary>
+        /// <param name="itemName">The name of the item as it appears to the user</param>
+        /// <param name="classDef">The class definition holding a grid def used to
+        /// construct the grid for that type</param>
         public void AddItem(string itemName, ClassDef classDef)
         {
             TreeNode treeNode = new TreeNode(itemName);
@@ -71,6 +90,10 @@ namespace Habanero.UI.Win
             _items.Add(itemName, classDef);
         }
 
+        /// <summary>
+        /// Selects an item with the given name in the treeview
+        /// </summary>
+        /// <param name="itemName">The name of the item to select</param>
         public void SelectItem(string itemName)
         {
             ClassDef classDef;
@@ -95,6 +118,10 @@ namespace Habanero.UI.Win
             }
         }
 
+        /// <summary>
+        /// Saves the changes made to the grid
+        /// </summary>
+        /// <returns>Returns true if saved successfully</returns>
         public bool SaveChanges()
         {
             try
@@ -109,6 +136,10 @@ namespace Habanero.UI.Win
             }
         }
 
+        /// <summary>
+        /// Rejects (restores) changes to the grid since the last save
+        /// </summary>
+        /// <returns>Returns true if restored successfully</returns>
         public bool RejectChanges()
         {
             try

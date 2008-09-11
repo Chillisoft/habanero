@@ -48,6 +48,7 @@
     <Compile Include="BOColTabControlManager.cs" />
     <Compile Include="ComboBoxManager.cs" />
     <Compile Include="ButtonGroupControlManager.cs" />
+    <Compile Include="ControlFactoryManager.cs" />
     <Compile Include="ControlInterfaces\Events.cs" />
     <Compile Include="ControlInterfaces\IBOColTabControl.cs" />
     <Compile Include="ControlInterfaces\IBusinessObjectControl.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
     <Compile Include="DateTimePicker\DateTimePickerManager.cs" />
     <Compile Include="FormController.cs" />
+    <Compile Include="Grid\IDataGridViewDateTimeColumn.cs" />
     <Compile Include="Grid\IDataGridViewCellStyle.cs" />
     <Compile Include="Grid\IDataGridViewCheckBoxColumn.cs" />
     <Compile Include="Grid\IDataGridViewImageColumn.cs" />
