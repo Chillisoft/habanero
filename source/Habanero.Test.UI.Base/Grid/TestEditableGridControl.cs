@@ -936,7 +936,7 @@ namespace Habanero.Test.UI.Base
                 gridControl.Initialise(def);
                 //---------------Test Result -----------------------
                 Assert.AreEqual
-                    (DataGridViewSelectionMode.CellSelect,
+                    (DataGridViewSelectionMode.RowHeaderSelect,
                      ((DataGridView) gridControl.Grid).SelectionMode);
                 Assert.AreEqual
                     (DataGridViewEditMode.EditOnKeystrokeOrF2,

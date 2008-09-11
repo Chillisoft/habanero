@@ -27,7 +27,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Displays data in a customizable grid
     /// </summary>
-    public interface IDataGridView
+    public interface IDataGridView : IControlHabanero
     {
         /// <summary>Puts the current cell in edit mode.</summary>
         /// <returns>true if the current cell is already in edit mode or successfully enters edit mode; otherwise, false.</returns>
@@ -113,6 +113,15 @@ namespace Habanero.UI.Base
         /// <see cref="P:System.ComponentModel.IBindingList.SupportsSorting"></see> property value of false.</exception>
         /// <filterpriority>1</filterpriority>
         void Sort(IDataGridViewColumn dataGridViewColumn, ListSortDirection direction);
+
+        /// <summary>
+        /// Sets the sort column and indicates whether
+        /// it should be sorted in ascending or descending order
+        /// </summary>
+        /// <param name="columnName">The column number to sort on</param>
+        /// object property</param>
+        /// <param name="ascending">True for ascending order, false for descending order</param>
+        void Sort(string columnName, bool ascending);
 
         /// <summary>Forces the control to update its display of the cell at the specified location based 
         /// on its new value, applying any automatic sizing modes currently in effect. </summary>
@@ -261,20 +270,21 @@ namespace Habanero.UI.Base
         [Browsable(false)]
         bool IsCurrentRowDirty { get; }
 
-        /// <summary>Gets or sets the cell located at the intersection of the row with the specified 
-        /// index and the column with the specified name. </summary>
-        /// <returns>The <see cref="IDataGridViewCell"></see> at the specified location.</returns>
-        /// <param name="columnName">The name of the column containing the cell.</param>
-        /// <param name="rowIndex">The index of the row containing the cell.</param>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
-        IDataGridViewCell this[string columnName, int rowIndex] { get; set; }
+        // TODO: THESE TWO AREN'T IN THE WINFORMS ONE
+        ///// <summary>Gets or sets the cell located at the intersection of the row with the specified 
+        ///// index and the column with the specified name. </summary>
+        ///// <returns>The <see cref="IDataGridViewCell"></see> at the specified location.</returns>
+        ///// <param name="columnName">The name of the column containing the cell.</param>
+        ///// <param name="rowIndex">The index of the row containing the cell.</param>
+        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
+        //IDataGridViewCell this[string columnName, int rowIndex] { get; set; }
 
-        /// <summary>Gets or sets the cell located at the intersection of the row and column with the specified indexes. </summary>
-        /// <returns>The <see cref="IDataGridViewCell"></see> at the specified location.</returns>
-        /// <param name="columnIndex">The index of the column containing the cell.</param>
-        /// <param name="rowIndex">The index of the row containing the cell.</param>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
-        IDataGridViewCell this[int columnIndex, int rowIndex] { get; set; }
+        ///// <summary>Gets or sets the cell located at the intersection of the row and column with the specified indexes. </summary>
+        ///// <returns>The <see cref="IDataGridViewCell"></see> at the specified location.</returns>
+        ///// <param name="columnIndex">The index of the column containing the cell.</param>
+        ///// <param name="rowIndex">The index of the row containing the cell.</param>
+        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
+        //IDataGridViewCell this[int columnIndex, int rowIndex] { get; set; }
 
         /// <summary>Gets or sets a value indicating whether the user is allowed to select more than one 
         /// cell, row, or column of the <see cref="IDataGridView"></see> at a time.</summary>
@@ -336,6 +346,15 @@ namespace Habanero.UI.Base
         [System.ComponentModel.DefaultValue(0)]
         int TotalItems { get; set; }
 
+        /// <summary>
+        /// When pagination is used, changes the current page to the one containing
+        /// the given row number
+        /// </summary>
+        /// <param name="rowNum">The row that you wish to show the page of.  For example, if your grid has
+        /// 30 rows and is set to 20 rows per page, calling ChangeToPageOfRow with an argument
+        /// of 25 will set the page to page 2 since row 25 is on page 2.</param>
+        void ChangeToPageOfRow(int rowNum);
+
         /// <summary>Gets or sets the number of rows displayed in the <see cref="IDataGridView"></see>.</summary>
         /// <returns>The number of rows to display in the <see cref="IDataGridView"></see>.</returns>
         /// <exception cref="T:System.ArgumentException">The specified value when setting this property is less 
@@ -390,5 +409,15 @@ namespace Habanero.UI.Base
         [DefaultValue(false),
          EditorBrowsable(EditorBrowsableState.Advanced)]
         bool StandardTab { get; set; }
+
+        /// <summary>
+        /// Gets the collection of currently selected rows
+        /// </summary>
+        IDataGridViewSelectedRowCollection SelectedRows { get; }
+
+        /// <summary>
+        /// Gets the collection of currently selected cells
+        /// </summary>
+        IDataGridViewSelectedCellCollection SelectedCells { get; }
     }
 }

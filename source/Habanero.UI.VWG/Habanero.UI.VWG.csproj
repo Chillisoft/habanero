@@ -102,6 +102,9 @@
     </Compile>
     <Compile Include="Grid\DataGridViewCellStyleVWG.cs" />
     <Compile Include="Grid\DataGridViewColumnVWG.cs" />
+    <Compile Include="Grid\DataGridViewVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Grid\EditableGridButtonsControlVWG.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -75,6 +74,7 @@ namespace Habanero.Test.UI.Base
         protected abstract void AssertIsCheckBoxColumnType(IDataGridViewColumn dataGridViewColumn);
         protected abstract void AssertIsComboBoxColumnType(IDataGridViewColumn dataGridViewColumn);
         //protected abstract void AssertIsDateTimeColumnType(IDataGridViewColumn dataGridViewColumn);
+        protected abstract void AssertCorrectSelectionMode(IGridBase dataGridView);
         protected abstract IFormHabanero AddControlToForm(IGridBase cntrl);
         protected abstract IEditableGrid CreateEditableGrid();
 
@@ -318,6 +318,34 @@ namespace Habanero.Test.UI.Base
                 editableGrid.DeleteKeyBehaviour = DeleteKeyBehaviours.ClearContents;
                 //---------------Test Result -----------------------
                 Assert.AreEqual(DeleteKeyBehaviours.ClearContents, editableGrid.DeleteKeyBehaviour);
+            }
+
+            [Test]
+            public void TestDeleteKeyBehaviours_DeletesSelectedCells_OneRow_WithoutConfirmsDeletion()
+            {
+                //---------------Set up test pack-------------------
+                BusinessObjectCollection<MyBO> col;
+                IEditableGrid editableGrid = GetGridWith_5_Rows(out col);
+                editableGrid.ConfirmDeletion = false;
+
+                bool confirmationDelegateCalled = false;
+                editableGrid.CheckUserConfirmsDeletionDelegate -= EditableGridWin.CheckUserWantsToDelete;
+                editableGrid.CheckUserConfirmsDeletionDelegate += delegate
+                {
+                    confirmationDelegateCalled = true;
+                    return true;
+                };
+                IFormHabanero formWin = AddControlToForm(editableGrid);
+                formWin.Show();
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(5, editableGrid.Rows.Count);
+                //---------------Execute Test ----------------------
+                editableGrid.Rows[0].Cells[0].Selected = true;
+                SimulateDeleteKeyPress(editableGrid);
+
+                //---------------Test Result -----------------------
+                Assert.IsFalse(confirmationDelegateCalled);
+                Assert.AreEqual(4, editableGrid.Rows.Count);
             }
 
             [Test]
@@ -701,6 +729,12 @@ namespace Habanero.Test.UI.Base
                     dataGridViewColumnWin.DataGridViewColumn);
             }
 
+            protected override void AssertCorrectSelectionMode(IGridBase dataGridView)
+            {
+                System.Windows.Forms.DataGridView grid = (System.Windows.Forms.DataGridView)dataGridView;
+                Assert.AreEqual(System.Windows.Forms.DataGridViewSelectionMode.RowHeaderSelect, grid.SelectionMode);
+            }
+
             protected override IEditableGrid CreateEditableGrid()
             {
                 EditableGridWin editableGridWin = new EditableGridWin();
@@ -739,6 +773,12 @@ namespace Habanero.Test.UI.Base
                 DataGridViewColumnVWG dataGridViewColumnVWG = (DataGridViewColumnVWG)dataGridViewColumn;
                 Assert.IsInstanceOfType(typeof(Gizmox.WebGUI.Forms.DataGridViewComboBoxColumn),
                     dataGridViewColumnVWG.DataGridViewColumn);
+            }
+
+            protected override void AssertCorrectSelectionMode(IGridBase dataGridView)
+            {
+                Gizmox.WebGUI.Forms.DataGridView grid = (Gizmox.WebGUI.Forms.DataGridView)dataGridView;
+                Assert.AreEqual(Gizmox.WebGUI.Forms.DataGridViewSelectionMode.RowHeaderSelect, grid.SelectionMode);
             }
 
             protected override IEditableGrid CreateEditableGrid()
@@ -987,6 +1027,23 @@ namespace Habanero.Test.UI.Base
             IDataGridViewColumn dataGridViewColumn = grid.Columns[0];
             AssertIsComboBoxColumnType(dataGridViewColumn);    
         }
+
+        [Test]
+        public void TestBasicSettings()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IEditableGrid grid = GetControlFactory().CreateEditableGrid();
+            //---------------Test Result -----------------------
+            AssertCorrectSelectionMode(grid);
+        }
+
+
+
+
+
+
 
         private ClassDef LoadMyBoDefaultClassDef()
         {

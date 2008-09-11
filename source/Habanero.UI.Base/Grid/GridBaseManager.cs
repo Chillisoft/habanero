@@ -290,21 +290,6 @@ namespace Habanero.UI.Base
             SetBusinessObjectCollection(null);
         }
 
-        public void SetSortColumn(string columnName, bool isAscending)
-        {
-            if (_gridBase.DataSource is DataView)
-            {
-                if (isAscending)
-                {
-                    ((DataView) _gridBase.DataSource).Sort = columnName + " ASC";
-                }
-                else
-                {
-                    ((DataView) _gridBase.DataSource).Sort = columnName + " DESC";
-                }
-            }
-        }
-
         /// <summary>
         /// See <see cref="IGridBase.ApplyFilter"/>
         /// </summary>

@@ -46,7 +46,7 @@ namespace Habanero.UI.VWG
         public EditableGridVWG()
         {
             this.AllowUserToAddRows = true;
-            this.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            this.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
 
         }
 

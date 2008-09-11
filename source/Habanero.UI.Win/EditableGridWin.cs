@@ -49,7 +49,7 @@ namespace Habanero.UI.Win
             _confirmDeletion = false;
             AllowUserToAddRows = true;
             _deleteKeyBehaviour = DeleteKeyBehaviours.DeleteRow;
-            SelectionMode = DataGridViewSelectionMode.CellSelect;
+            SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
             _comboBoxClickOnce = true;
 
             UserDeletingRow += ConfirmRowDeletion;
@@ -174,7 +174,7 @@ namespace Habanero.UI.Win
             {
                 if (_deleteKeyBehaviour == DeleteKeyBehaviours.DeleteRow && AllowUserToDeleteRows)
                 {
-                    if (ConfirmDeletion && CheckUserConfirmsDeletionDelegate())
+                    if (!ConfirmDeletion || (ConfirmDeletion && CheckUserConfirmsDeletionDelegate()))
                     {
                         ArrayList rowIndexes = new ArrayList();
                         foreach (IDataGridViewCell cell in SelectedCells)
