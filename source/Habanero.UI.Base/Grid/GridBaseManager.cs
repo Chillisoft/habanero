@@ -112,7 +112,7 @@ namespace Habanero.UI.Base
         protected DataView GetDataTable(IBusinessObjectCollection boCol)
         {
             _dataSetProvider = _gridBase.CreateDataSetProvider(boCol);
-            if (this.ClassDef == null)
+            if (this.ClassDef == null || this.ClassDef!=_boCol.ClassDef)
             {
                 this.ClassDef = _boCol.ClassDef;
             }  

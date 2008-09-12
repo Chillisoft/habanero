@@ -219,6 +219,31 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------
         }
 
+
+        [Test]
+        public void TestAddTwoItemsAndSelectSecondItem()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef2 = MyBO.LoadClassDefWithBoolean();
+            IFormHabanero frm;
+            IStaticDataEditor editor = CreateEditorOnForm(out frm);
+            IEditableGridControl gridControl = (IEditableGridControl)editor.Controls[0];
+            editor.AddSection(TestUtil.CreateRandomString());
+            string itemName = TestUtil.CreateRandomString();
+            string itemName2 = TestUtil.CreateRandomString();
+            editor.AddItem(itemName, classDef);
+            editor.AddItem(itemName2,classDef2);
+            //---------------Execute Test ----------------------
+            editor.SelectItem(itemName);
+            editor.SelectItem(itemName2);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(gridControl.Grid.GetBusinessObjectCollection());
+            Assert.AreSame(classDef2, gridControl.Grid.GetBusinessObjectCollection().ClassDef);
+        }
         [Test]
         public void TestSelectSection()
         {
