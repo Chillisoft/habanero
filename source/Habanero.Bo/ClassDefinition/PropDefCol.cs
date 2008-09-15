@@ -21,7 +21,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
-using Habanero.BO.Base;
 
 namespace Habanero.BO.ClassDefinition
 {

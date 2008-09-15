@@ -19,11 +19,13 @@
 
 using System;
 using System.Collections.Generic;
-using Habanero.Base;
 
-namespace Habanero.BO.Base
+namespace Habanero.Base
 {
-    public interface IPropDefCol: IEnumerable<IPropDef>
+    /// <summary>
+    /// Provides a collection of property definitions.
+    /// </summary>
+    public interface IPropDefCol : IEnumerable<IPropDef>
     {
         /// <summary>
         /// Provides an indexing facility for the collection so that items

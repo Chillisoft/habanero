@@ -19,7 +19,7 @@
 
 using System;
 using Habanero.Base.Exceptions;
-using Habanero.BO.Base;
+using Habanero.Base;
 
 namespace Habanero.Base
 {

@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO.Base;
 using Habanero.BO.Comparer;
 using Habanero.BO.Loaders;
 using Habanero.Util;
