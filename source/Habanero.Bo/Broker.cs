@@ -31,43 +31,311 @@ namespace Habanero.BO
     public class Broker
     {
         /// <summary>
-        /// Constructor to initialise a new instance of the broker
+        /// Loads a business object of type T, using the Primary key given as the criteria
         /// </summary>
-        public Broker()
+        /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="primaryKey">The primary key to use to load the business object</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
+        public static T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new()
         {
-            //
-            // TODO: Add constructor logic here
-            //
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<T>(primaryKey);
         }
 
         /// <summary>
-        /// Returns a business object with the ID specified as a Guid
+        /// Loads a business object of the type identified by a <see cref="ClassDef"/>, using the Primary key given as the criteria
         /// </summary>
-        /// <param name="id">The ID as a Guid</param>
-        /// <param name="classDef">The class definition</param>
-        /// <returns>Returns a business object or null if not found</returns>
-        public static IBusinessObject GetBusinessObjectWithGuid(Guid id, ClassDef classDef)
+        /// <param name="classDef">The ClassDef of the object to load.</param>
+        /// <param name="primaryKey">The primary key to use to load the business object</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
+        public static IBusinessObject GetBusinessObject(IClassDef classDef, IPrimaryKey primaryKey)
         {
-            PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
-            if (!primaryKeyDef.IsGuidObjectID)
-            {
-                throw new HabaneroApplicationException(
-                    "GetBusinessObjectWithGuid can only be used for objects that use Guids as primary keys.");
-            }
-            else
-            {
-                string primaryKeyField = primaryKeyDef.KeyName;
-                BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
-                col.Load(primaryKeyField + " = '" + id.ToString("B").ToUpper() + "'", "");
-                if (col.Count == 1)
-                {
-                    return col[0];
-                }
-                else
-                {
-                    return null;
-                }
-            }
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, primaryKey);
+        }
+
+        /// <summary>
+        /// Loads a business object of type T, using the criteria given
+        /// </summary>
+        /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="criteria">The criteria to use to load the business object</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
+        public static T GetBusinessObject<T>(Criteria criteria) where T : class, IBusinessObject, new()
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<T>(criteria);
+        }
+
+        /// <summary>
+        /// Loads a business object of the type identified by a <see cref="ClassDef"/>, using the criteria given
+        /// </summary>
+        /// <param name="classDef">The ClassDef of the object to load.</param>
+        /// <param name="criteria">The criteria to use to load the business object</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
+        public static IBusinessObject GetBusinessObject(IClassDef classDef, Criteria criteria)
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, criteria);
+        }
+
+        /// <summary>
+        /// Loads a business object of type T, using the SelectQuery given. It's important to make sure that T (meaning the ClassDef set up for T)
+        /// has the properties defined in the fields of the select query.  
+        /// This method allows you to define a custom query to load a business object
+        /// </summary>
+        /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="selectQuery">The select query to use to load from the data source</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, an error is raised</returns>
+        public static T GetBusinessObject<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new()
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<T>(selectQuery);
+        }
+
+        /// <summary>
+        /// Loads a business object of the type identified by a <see cref="ClassDef"/>, 
+        /// using the SelectQuery given. It's important to make sure that the ClassDef parameter given
+        /// has the properties defined in the fields of the select query.  
+        /// This method allows you to define a custom query to load a business object
+        /// </summary>
+        /// <param name="classDef">The ClassDef of the object to load.</param>
+        /// <param name="selectQuery">The select query to use to load from the data source</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
+        public static IBusinessObject GetBusinessObject(IClassDef classDef, ISelectQuery selectQuery)
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, selectQuery);
+        }
+
+        /// <summary>
+        /// Loads a business object of type T, using the SelectQuery given. It's important to make sure that T (meaning the ClassDef set up for T)
+        /// has the properties defined in the fields of the select query.  
+        /// This method allows you to define a custom query to load a business object
+        /// </summary>
+        /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="criteriaString">The select query to use to load from the data source</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
+        public static T GetBusinessObject<T>(string criteriaString) where T : class, IBusinessObject, new()
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<T>(criteriaString);
+        }
+
+        /// <summary>
+        /// Loads a business object of the type identified by a <see cref="ClassDef"/>, using the criteria given
+        /// </summary>
+        /// <param name="classDef">The ClassDef of the object to load.</param>
+        /// <param name="criteriaString">The criteria to use to load the business object must be of formst "PropName = criteriaValue" e.g. "Surname = Powell"</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an error is raised</returns>
+        public static IBusinessObject GetBusinessObject(IClassDef classDef, string criteriaString)
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, criteriaString);
+        }
+
+        /// <summary>
+        /// Loads a business object of type T using the relationship given. The relationship will be converted into a
+        /// Criteria object that defines the relationship and this will be used to load the related object.
+        /// </summary>
+        /// <typeparam name="T">The type of the business object to load</typeparam>
+        /// <param name="relationship">The relationship to use to load the object</param>
+        /// <returns>An object of type T if one was found, otherwise null</returns>
+        public static T GetRelatedBusinessObject<T>(SingleRelationship relationship) where T : class, IBusinessObject, new()
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject<T>(relationship);
+        }
+
+        /// <summary>
+        /// Loads a business object using the relationship given. The relationship will be converted into a
+        /// Criteria object that defines the relationship and this will be used to load the related object.
+        /// </summary>
+        /// <param name="relationship">The relationship to use to load the object</param>
+        /// <returns>An object of the type defined by the relationship if one was found, otherwise null</returns>
+        public static IBusinessObject GetRelatedBusinessObject(SingleRelationship relationship)
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject(relationship);
+        }
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the criteria given. 
+        /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <returns>The loaded collection</returns>
+        public static BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria) where T : class, IBusinessObject, new()
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteria);
+        }
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the criteria given. 
+        /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="criteriaString">The criteria to use to load the business object collection</param>
+        /// <returns>The loaded collection</returns>
+        public static BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString) where T : class, IBusinessObject, new()
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteriaString);
+        }
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the criteria given. 
+        /// </summary>
+        /// <param name="classDef">The ClassDef for the collection to load</param>
+        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <returns>The loaded collection</returns>
+        public static IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria)
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
+        }
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
+        /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <returns>The loaded collection</returns>
+        /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
+        public static BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : class, IBusinessObject, new()
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteria, orderCriteria);
+        }
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
+        /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="criteriaString">The criteria to use to load the business object collection</param>
+        /// <returns>The loaded collection</returns>
+        /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
+        public static BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString, string orderCriteria) where T : class, IBusinessObject, new()
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(criteriaString,
+                orderCriteria);
+        }
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
+        /// </summary>
+        /// <param name="classDef">The ClassDef for the collection to load</param>
+        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <returns>The loaded collection</returns>
+        /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
+        public static IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria, OrderCriteria orderCriteria)
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria,
+                orderCriteria);
+        }
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the SelectQuery given. It's important to make sure that T (meaning the ClassDef set up for T)
+        /// has the properties defined in the fields of the select query.  
+        /// This method allows you to define a custom query to load a businessobjectcollection so that you can perhaps load from multiple
+        /// tables using a join (if loading from a database source).
+        /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="selectQuery">The select query to use to load from the data source</param>
+        /// <returns>The loaded collection</returns>
+        public static BusinessObjectCollection<T> GetBusinessObjectCollection<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new()
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<T>(selectQuery);
+        }
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the SelectQuery given. It's important to make sure that the ClassDef given
+        /// has the properties defined in the fields of the select query.  
+        /// This method allows you to define a custom query to load a businessobjectcollection so that you can perhaps load from multiple
+        /// tables using a join (if loading from a database source).
+        /// </summary>
+        /// <param name="classDef">The ClassDef for the collection to load</param>
+        /// <param name="selectQuery">The select query to use to load from the data source</param>
+        /// <returns>The loaded collection</returns>
+        public static IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, ISelectQuery selectQuery)
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, selectQuery);
+        }
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the searchCriteria an given. It's important to make sure that the ClassDef given
+        /// has the properties defined in the fields of the select searchCriteria and orderCriteria.  
+        /// </summary>
+        /// <param name="classDef">The ClassDef for the collection to load</param>
+        /// <param name="searchCriteria">The select query to use to load from the data source</param>
+        /// <param name="orderCriteria">The order that the collections must be loaded in e.g. Surname, FirstName</param>
+        /// <returns>The loaded collection</returns>
+        public static IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria, string orderCriteria)
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, searchCriteria,
+                orderCriteria);
+        }
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the searchCriteria an given. It's important to make sure that the ClassDef given
+        /// has the properties defined in the fields of the select searchCriteria and orderCriteria.  
+        /// </summary>
+        /// <param name="classDef">The ClassDef for the collection to load</param>
+        /// <param name="searchCriteria">The select query to use to load from the data source</param>
+        /// <returns>The loaded collection</returns>
+        public static IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria)
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, searchCriteria);
+        }
+
+        /// <summary>
+        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
+        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
+        /// only fire for the new objects added to the collection, not for the ones that already existed).
+        /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="collection">The collection to refresh</param>
+        public static void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new()
+        {
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(collection);
+        }
+
+        /// <summary>
+        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
+        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
+        /// only fire for the new objects added to the collection, not for the ones that already existed).
+        /// </summary>
+        /// <param name="collection">The collection to refresh</param>
+        public static void Refresh(IBusinessObjectCollection collection)
+        {
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(collection);
+        }
+
+        /// <summary>
+        /// Reloads a businessObject from the datasource using the id of the object.
+        /// A dirty object will not be refreshed from the database and the appropriate error will be raised.
+        /// Cancel all edits before refreshing the object or call see TODO: Refresh with refresh dirty objects = true.
+        /// </summary>
+        /// <exception cref="HabaneroDeveloperException">Exception thrown if the object is dirty and refresh is called.</exception>
+        /// <param name="businessObject">The businessObject to refresh</param>
+        public static IBusinessObject Refresh(IBusinessObject businessObject)
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.Refresh(businessObject);
+        }
+
+        /// <summary>
+        /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
+        /// fields defined in the relationship.
+        /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="relationship">The relationship that defines the criteria that must be loaded.  For example, a Person might have
+        /// a Relationship called Addresses, which defines the PersonID property as the relationship property. In this case, calling this method
+        /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
+        /// PersonID</param>
+        /// <returns>The loaded RelatedBusinessObjectCollection</returns>
+        public static RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IRelationship relationship) where T : class, IBusinessObject, new()
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<T>(relationship);
+        }
+
+        /// <summary>
+        /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
+        /// fields defined in the relationship.
+        /// </summary>
+        /// <param name="type">The type of collection to load. This must be a class that implements IBusinessObject</typeparam>
+        /// <param name="relationship">The relationship that defines the criteria that must be loaded.  For example, a Person might have
+        /// a Relationship called Addresses, which defines the PersonID property as the relationship property. In this case, calling this method
+        /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
+        /// PersonID</param>
+        /// <returns>The loaded RelatedBusinessObjectCollection</returns>
+        public static IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IRelationship relationship)
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(type,relationship);
         }
     }
 }
