@@ -18,8 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 
-namespace Habanero.Base
+namespace Habanero.Console
 {
     /// <summary>
     /// Indicates to the user how much progress has been made in 
@@ -43,7 +44,7 @@ namespace Habanero.Base
         /// <param name="description">A description</param>
         public void UpdateProgress(int amountComplete, int totalToComplete, string description)
         {
-            Console.WriteLine(amountComplete + " of " + totalToComplete + " steps complete. " + description);
+            System.Console.WriteLine(amountComplete + " of " + totalToComplete + " steps complete. " + description);
         }
 
         /// <summary>
@@ -51,7 +52,7 @@ namespace Habanero.Base
         /// </summary>
         public void Complete()
         {
-            Console.WriteLine("Complete.");
+            System.Console.WriteLine("Complete.");
         }
     }
 }
