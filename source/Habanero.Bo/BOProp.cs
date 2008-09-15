@@ -53,7 +53,7 @@ namespace Habanero.BO
         protected string _origInvalidReason = "";
         protected bool _isObjectNew;
         protected object _valueBeforeLastEdit;
-        private IBOPropAuthorisation _boPropAuthorisation = null;
+        private IBOPropAuthorisation _boPropAuthorisation;
         /// <summary>
         /// Indicates that the value held by the property has been
         /// changed. This is fired any time that the current value of the property is set to a new value.
@@ -249,7 +249,15 @@ namespace Habanero.BO
         /// </summary>
         public object Value
         {
-            get { return _currentValue; }
+            get
+            {
+                string message;
+                if (!this.IsReadable(out message))
+                {
+                    throw new BOPropReadException(message);
+                }
+                return _currentValue;
+            }
             set
             {
                 if (value is Guid && Guid.Empty.Equals(value))
@@ -258,9 +266,10 @@ namespace Habanero.BO
                 }
                 if ((_currentValue != null) && (_currentValue.Equals(value))) return;
                 object newValue = null;
+                PropDef propDef = (PropDef)this.PropDef;
                 if (value != null)
                 {
-                    newValue = ((PropDef)this.PropDef).GetNewValue(value);
+                    newValue = propDef.GetNewValue(value);
                 }
 
                 if (!Equals(_persistedValue, newValue))
@@ -268,7 +277,7 @@ namespace Habanero.BO
                     string message;
                     if (!IsEditable(out message))
                     {
-                        throw new BusinessObjectReadWriteRuleException(_propDef);
+                        throw new BOPropWriteException(propDef, message);
                     }
                 }
 
@@ -278,41 +287,6 @@ namespace Habanero.BO
                 _currentValue = newValue;
                 FireBOPropValueUpdated();
                 _isDirty = true;
-            }
-        }
-
-        private void CheckReadWriteRule(object newValue)
-        {
-            switch (_propDef.ReadWriteRule)
-            {                            
-                case PropReadWriteRule.ReadWrite:
-                    break;
-                case PropReadWriteRule.ReadOnly:
-                    if (_persistedValue != newValue)
-                    {
-                        throw new BusinessObjectReadWriteRuleException(_propDef);
-                    }
-                    break;
-                case PropReadWriteRule.WriteOnce:
-                    if ((!(_isObjectNew)) && _persistedValue != null && !Equals(_persistedValue,newValue))
-                    {
-                        throw new BusinessObjectReadWriteRuleException(_propDef);
-                    }
-                    break;
-                case PropReadWriteRule.WriteNotNew:
-                    if (_isObjectNew && !Equals(_persistedValue,newValue))
-                    {
-                        throw new BusinessObjectReadWriteRuleException(_propDef);
-                    }
-                    break;
-                case PropReadWriteRule.WriteNew:
-                    if (!_isObjectNew && !Equals(_persistedValue, newValue))
-                    {
-                        throw new BusinessObjectReadWriteRuleException(_propDef);
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -547,7 +521,7 @@ namespace Habanero.BO
         /// Set the authorisation rule strategy to be used 
         /// </summary>
         /// <param name="boPropAuthorisation"></param>
-        internal protected void SetAuthorisationRules(IBOPropAuthorisation boPropAuthorisation)
+        public void SetAuthorisationRules(IBOPropAuthorisation boPropAuthorisation)
         {
             _boPropAuthorisation = boPropAuthorisation;
         }
@@ -555,14 +529,13 @@ namespace Habanero.BO
         ///<summary>
         /// Returns whether the BOProperty is Editable or not. The BOProp may not be editable
         ///  based on a number of factors. 
-        ///  1) If its ReadWrite Rules are set to ReadOnly.
-        /// 
+        ///  1) If its ReadWrite Rules are set to ReadOnly etc.
+        ///  2) The user may not have permissions to edit this property Value.
         ///</summary>
         ///<param name="message"></param>
         ///<returns></returns>
         public virtual bool IsEditable(out string message)
         {
-            message = "";
             if (!AreReadWriteRulesEditable(out message)) return false;
             if (_boPropAuthorisation == null) return true;
             if (!_boPropAuthorisation.IsAuthorised(BOPropActions.CanUpdate))
@@ -574,7 +547,24 @@ namespace Habanero.BO
 
             return true;
         }
-
+        ///<summary>
+        /// Returns whether the BOProperty is Readable or not. The BOProp may not be Readable
+        ///  if the user may not have permissions to read the property Value.
+        ///</summary>
+        ///<param name="message">the reason why the user cannot read the property.</param>
+        ///<returns></returns>
+        public virtual bool IsReadable(out string message)
+        {
+            message = "";
+            if (_boPropAuthorisation == null) return true;
+            if (!_boPropAuthorisation.IsAuthorised(BOPropActions.CanRead))
+            {
+                message = string.Format("The logged on user {0} is not authorised to read the {1} ",
+                        Thread.CurrentPrincipal.Identity.Name, this.PropertyName);
+                return false;
+            }
+            return true;
+        }
         private bool AreReadWriteRulesEditable(out string message)
         {
             switch (_propDef.ReadWriteRule)

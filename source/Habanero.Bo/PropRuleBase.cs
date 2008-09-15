@@ -152,9 +152,8 @@ namespace Habanero.BO
 		}
         protected string GetBaseErrorMessage(object propValue, string displayName)
         {
-            string errorMessage;
-            errorMessage = String.Format("'{0}' for property '{1}' is not valid for the rule '{2}'. ",
-                                         propValue, displayName, Name);
+            string errorMessage = String.Format("'{0}' for property '{1}' is not valid for the rule '{2}'. ",
+                                                propValue, displayName, Name);
             return errorMessage;
         }
     }

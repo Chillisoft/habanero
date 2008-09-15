@@ -173,12 +173,12 @@ namespace Habanero.Test.BO
         }
 
 
-        private static ContactPersonTransactionLogging CreateUnsavedContactPersonTransactionLoggingAltKey()
-        {
-            ContactPersonTransactionLogging cp = new ContactPersonTransactionLogging();
-            cp.Surname = Guid.NewGuid().ToString();
-            return cp;
-        }
+//        private static ContactPersonTransactionLogging CreateUnsavedContactPersonTransactionLoggingAltKey()
+//        {
+//            ContactPersonTransactionLogging cp = new ContactPersonTransactionLogging();
+//            cp.Surname = Guid.NewGuid().ToString();
+//            return cp;
+//        }
 
 
         [Test,
@@ -193,7 +193,7 @@ namespace Habanero.Test.BO
             ContactPersonTransactionLogging.LoadClassDef_SurnameAlternateKey();
             //---------------Set up test pack-------------------
             ContactPersonTransactionLogging cp1 = CreateUnsavedContactPersonTransactionLogging();
-            string AltSurname = "TestAltKey";
+            const string AltSurname = "TestAltKey";
             cp1.Surname = AltSurname;
             ContactPersonTransactionLogging cp2 = CreateUnsavedContactPersonTransactionLogging();
             cp2.Surname = AltSurname;
@@ -217,7 +217,7 @@ namespace Habanero.Test.BO
                 //---------------Tear Down -------------------------   
             finally
             {
-                string sql = "DELETE FROM Contact_Person where Surname_field = '" + AltSurname + "'";
+                const string sql = "DELETE FROM Contact_Person where Surname_field = '" + AltSurname + "'";
                 DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
             }
         }

@@ -77,7 +77,7 @@ namespace Habanero.BO
     /// the businessobject due to the ReadWriteRule that has been set up for the property.
     /// </summary>
     [Serializable]
-    public class BusinessObjectReadWriteRuleException : BusinessObjectException
+    public class BOPropWriteException : BusinessObjectException
     {
         private readonly PropDef _propDef;
 
@@ -85,7 +85,7 @@ namespace Habanero.BO
         /// Constructor to initialise the exception
         /// </summary>
         /// <param name="propDef">The property definition for the property that had the ReadWriteRule which threw the error.</param>
-        public BusinessObjectReadWriteRuleException(PropDef propDef): this(propDef, ConstructMessage(propDef))
+        public BOPropWriteException(PropDef propDef): this(propDef, ConstructMessage(propDef))
         {
             _propDef = propDef;
         }
@@ -104,7 +104,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="propDef">The property definition for the property that had the ReadWriteRule which threw the error.</param>
         /// <param name="message">The error message</param>
-        public BusinessObjectReadWriteRuleException(PropDef propDef, string message) : base(message)
+        public BOPropWriteException(PropDef propDef, string message) : base(message)
         {
             _propDef = propDef;
         }
@@ -116,7 +116,7 @@ namespace Habanero.BO
         /// <param name="propDef">The property definition for the property that had the ReadWriteRule which threw the error.</param>
         /// <param name="message">The error message</param>
         /// <param name="inner">The inner exception</param>
-        public BusinessObjectReadWriteRuleException(PropDef propDef, string message, Exception inner) : base(message, inner)
+        public BOPropWriteException(PropDef propDef, string message, Exception inner) : base(message, inner)
         {
             _propDef = propDef;
         }
@@ -127,7 +127,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="info">The serialisation info</param>
         /// <param name="context">The streaming context</param>
-        protected BusinessObjectReadWriteRuleException(SerializationInfo info, StreamingContext context)
+        protected BOPropWriteException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
@@ -138,6 +138,47 @@ namespace Habanero.BO
         public PropDef PropDef
         {
             get { return _propDef; }
+        }
+    }
+
+    /// <summary>
+    /// Provides an exception to throw when a there is an issue writing to a property on 
+    /// the businessobject due to the ReadWriteRule that has been set up for the property.
+    /// </summary>
+    [Serializable]
+    public class BOPropReadException : BusinessObjectException
+    {
+
+        /// <summary>
+        /// Constructor to initialise the exception with a specific message
+        /// to display
+        /// </summary>
+        /// <param name="message">The error message</param>
+        public BOPropReadException( string message)
+            : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with a specific message
+        /// to display, and the inner exception specified
+        /// </summary>
+        /// <param name="message">The error message</param>
+        /// <param name="inner">The inner exception</param>
+        public BOPropReadException( string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with the serialisation info
+        /// and streaming context provided
+        /// </summary>
+        /// <param name="info">The serialisation info</param>
+        /// <param name="context">The streaming context</param>
+        protected BOPropReadException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
         }
     }
 

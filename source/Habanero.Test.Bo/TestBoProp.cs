@@ -500,7 +500,7 @@ namespace Habanero.Test.BO
 
         #region Test ReadOnly
 
-        [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
+        [Test, ExpectedException(typeof(BOPropWriteException))]
         public void TestUpdateProp_ReadOnly_New()
         {
             PropDef propDef = new PropDef("TestProp", "System", "String",
@@ -511,7 +511,7 @@ namespace Habanero.Test.BO
             //Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value");
         }
 
-        [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
+        [Test, ExpectedException(typeof(BOPropWriteException))]
         public void TestUpdateProp_ReadOnly_Existing()
         {
             PropDef propDef = new PropDef("TestProp", "System", "String",
@@ -561,7 +561,7 @@ namespace Habanero.Test.BO
             CreateWriteOnceBoProp(true, "My Default");
         }
 
-        [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
+        [Test, ExpectedException(typeof(BOPropWriteException))]
         public void TestUpdateProp_WriteOnce_NewPersisted_WriteAgain()
         {
             IBOProp boProp = CreateWriteOnceBoProp(true);
@@ -585,7 +585,7 @@ namespace Habanero.Test.BO
             CreateWriteOnceBoProp(false);
         }
 
-        [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
+        [Test, ExpectedException(typeof(BOPropWriteException))]
         public void TestUpdateProp_WriteOnce_Existing_WriteAgain()
         {
             IBOProp boProp = CreateWriteOnceBoProp(false);
@@ -629,7 +629,7 @@ namespace Habanero.Test.BO
             CreateWriteNewBoProp(true);
         }
 
-        [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
+        [Test, ExpectedException(typeof(BOPropWriteException))]
         public void TestUpdateProp_WriteNew_NewPersisted_WriteAgain()
         {
             IBOProp boProp = CreateWriteNewBoProp(true);
@@ -638,7 +638,7 @@ namespace Habanero.Test.BO
             boProp.Value = "NewValue";
         }
 
-        [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
+        [Test, ExpectedException(typeof(BOPropWriteException))]
         public void TestUpdateProp_WriteNew_Existing()
         {
             CreateWriteNewBoProp(false);
@@ -665,7 +665,7 @@ namespace Habanero.Test.BO
             return boProp;
         }
 
-        [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
+        [Test, ExpectedException(typeof(BOPropWriteException))]
         public void TestUpdateProp_WriteNotNew_New()
         {
             CreateWriteNotNewBoPropWithValues(true);

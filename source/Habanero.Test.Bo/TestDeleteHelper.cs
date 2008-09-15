@@ -49,19 +49,16 @@ namespace Habanero.Test.BO
 		public void TestFindPreventDeleteRelationships()
 		{
 			//List<List<string>> listOfPaths;
-			MatchList listOfPaths;
-			listOfPaths = DeleteHelper.FindPreventDeleteRelationships(_baseClassDef.RelationshipDefCol);
+		    MatchList listOfPaths = DeleteHelper.FindPreventDeleteRelationships(_baseClassDef.RelationshipDefCol);
 			//Assert.AreEqual(3, listOfPaths.Count, "There should be 3 prevent delete relationships found");
-			string relationshipPath;
-			relationshipPath = listOfPaths.ToString(".");
+		    string relationshipPath = listOfPaths.ToString(".");
 			Assert.AreEqual("MyBO2.{MyBO3.MyBO4.{MyBO5.MyBO6.MyPreventBO7,MyPreventBO5},MyPreventBO3}", relationshipPath);
 		}
 
 		[Test]
 		public void CheckCanDeleteWithSomePrevents()
 		{
-			TestBO1 testBO1;
-			testBO1 = PopulateObjectWithSomePrevents();
+		    TestBO1 testBO1 = PopulateObjectWithSomePrevents();
 			string result;
 			bool canDelete = DeleteHelper.CheckCanDelete(testBO1, out result);
 			Assert.IsFalse(canDelete, "Should prevent delete.");
@@ -74,8 +71,7 @@ namespace Habanero.Test.BO
 		[Test]
 		public void CheckCanDeleteWithNoPrevents()
 		{
-			TestBO1 testBO1;
-			testBO1 = PopulateObjectWithNoPrevents();
+		    TestBO1 testBO1 = PopulateObjectWithNoPrevents();
 			string result;
 			bool canDelete = DeleteHelper.CheckCanDelete(testBO1, out result);
 			Assert.IsTrue(canDelete, "Should prevent delete.");
@@ -85,8 +81,7 @@ namespace Habanero.Test.BO
 		[Test]
 		public void CheckCanDeleteWithTieredPrevents()
 		{
-			TestBO1 testBO1;
-			testBO1 = PopulateObjectWithTieredPrevents();
+		    TestBO1 testBO1 = PopulateObjectWithTieredPrevents();
 			string result;
 			bool canDelete = DeleteHelper.CheckCanDelete(testBO1, out result);
 			Assert.IsFalse(canDelete, "Should prevent delete.");
@@ -100,8 +95,7 @@ namespace Habanero.Test.BO
 		[Test, ExpectedException(typeof(BusinessObjectReferentialIntegrityException))]
 		public void TestDeleteFailureWithSomePrevents()
 		{
-			TestBO1 testBO1;
-			testBO1 = PopulateObjectWithSomePrevents();
+		    TestBO1 testBO1 = PopulateObjectWithSomePrevents();
 			testBO1.Delete();
 			testBO1.Save();
 			Assert.Fail("The Save should not succeed!");
@@ -111,12 +105,10 @@ namespace Habanero.Test.BO
 
 		private static TestBO1 PopulateObjectWithSomePrevents()
 		{
-			IBusinessObjectCollection children;
-			TestBO1 testBO1;
-			testBO1 = new TestBO1();
+		    TestBO1 testBO1 = new TestBO1();
 			testBO1.MyBoID = "1";
 		    testBO1.SetStatus(BOStatus.Statuses.isNew, false);
-			children = AddRelatedObjects<TestBO2>(testBO1, "MyBO2", 3);
+			IBusinessObjectCollection children = AddRelatedObjects<TestBO2>(testBO1, "MyBO2", 3);
 			AddRelatedObjects<TestBO3>((TestBO)children[0], "MyBO3", 2);
 			AddRelatedObjects<TestBO3>((TestBO)children[0], "MyPreventBO3", 1);
 			AddRelatedObjects<TestBO3>((TestBO)children[1], "MyBO3", 2);
@@ -127,11 +119,9 @@ namespace Habanero.Test.BO
 
 		private static TestBO1 PopulateObjectWithNoPrevents()
 		{
-			IBusinessObjectCollection children;
-			TestBO1 testBO1;
-			testBO1 = new TestBO1();
+		    TestBO1 testBO1 = new TestBO1();
 			testBO1.MyBoID = "1";
-			children = AddRelatedObjects<TestBO2>(testBO1, "MyBO2", 3);
+			IBusinessObjectCollection children = AddRelatedObjects<TestBO2>(testBO1, "MyBO2", 3);
 			AddRelatedObjects<TestBO3>((TestBO)children[0], "MyBO3", 2);
 			children = AddRelatedObjects<TestBO3>((TestBO)children[1], "MyBO3", 2);
 			AddRelatedObjects<TestBO3>((TestBO)children[0], "MyBO4", 2);
@@ -141,17 +131,11 @@ namespace Habanero.Test.BO
 
 		private static TestBO1 PopulateObjectWithTieredPrevents()
 		{
-			IBusinessObjectCollection children2;
-			IBusinessObjectCollection children3;
-			IBusinessObjectCollection children4;
-			IBusinessObjectCollection children5;
-			IBusinessObjectCollection children6;
-		    TestBO1 testBO1;
-			testBO1 = new TestBO1();
+		    TestBO1 testBO1 = new TestBO1();
 			testBO1.MyBoID = "1";
-			children2 = AddRelatedObjects<TestBO2>(testBO1, "MyBO2", 3);
-			children3 = AddRelatedObjects<TestBO3>((TestBO)children2[0], "MyBO3", 2);
-			children4 = AddRelatedObjects<TestBO4>((TestBO)children3[0], "MyBO4", 1);
+			IBusinessObjectCollection children2 = AddRelatedObjects<TestBO2>(testBO1, "MyBO2", 3);
+			IBusinessObjectCollection children3 = AddRelatedObjects<TestBO3>((TestBO)children2[0], "MyBO3", 2);
+			IBusinessObjectCollection children4 = AddRelatedObjects<TestBO4>((TestBO)children3[0], "MyBO4", 1);
 			AddRelatedObjects<TestBO5>((TestBO)children4[0], "MyPreventBO5", 1);
 			AddRelatedObjects<TestBO3>((TestBO)children2[0], "MyPreventBO3", 1);
 			AddRelatedObjects<TestBO3>((TestBO)children2[1], "MyBO3", 2);
@@ -161,8 +145,8 @@ namespace Habanero.Test.BO
 			children4 = AddRelatedObjects<TestBO4>((TestBO)children3[0], "MyBO4", 2);
 			AddRelatedObjects<TestBO5>((TestBO)children4[0], "MyPreventBO5", 1);
 			children4 = AddRelatedObjects<TestBO4>((TestBO)children3[1], "MyBO4", 2);
-			children5 = AddRelatedObjects<TestBO5>((TestBO)children4[1], "MyBO5", 2);
-			children6 = AddRelatedObjects<TestBO6>((TestBO)children5[1], "MyBO6", 2);
+			IBusinessObjectCollection children5 = AddRelatedObjects<TestBO5>((TestBO)children4[1], "MyBO5", 2);
+			IBusinessObjectCollection children6 = AddRelatedObjects<TestBO6>((TestBO)children5[1], "MyBO6", 2);
 			AddRelatedObjects<TestBO7>((TestBO)children6[1], "MyBO7", 2);
 			AddRelatedObjects<TestBO7>((TestBO)children6[1], "MyPreventBO7", 1);
 			AddRelatedObjects<TestBO5>((TestBO)children4[1], "MyPreventBO5", 3);
@@ -187,8 +171,7 @@ namespace Habanero.Test.BO
 			IBusinessObjectCollection children = testBO.Relationships.GetRelatedCollection(relationshipName);
 			for (int count = 1; count <= numberOfBos; count++ )
 			{
-				T testBO2;
-				testBO2 = new T();
+			    T testBO2 = new T();
                 testBO2.SetStatus(BOStatus.Statuses.isNew, isNew);
 				testBO2.MyBoID = "2." + count;
 				testBO2.MyParentBoID = testBO.MyParentBoID;
@@ -204,23 +187,21 @@ namespace Habanero.Test.BO
 		private static ClassDef CreateClassDef(long number, bool hasSingleRelationship,
 			bool hasMultipleRelationship, bool hasMultipleRelationshipWithPreventDelete)
 		{
-			string assemblyName = "Habanero.Test.BO";
-			string className = "TestBO";
-			string idPropName = "MyBoID";
-			string fkPropertyName = "MyParentBoID";
+			const string assemblyName = "Habanero.Test.BO";
+			const string className = "TestBO";
+			const string idPropName = "MyBoID";
+			const string fkPropertyName = "MyParentBoID";
 			string suffix = number.ToString();
 			PropDefCol propDefCol = new PropDefCol();
 			PrimaryKeyDef primaryKeyDef = new PrimaryKeyDef();
 			primaryKeyDef.IsGuidObjectID = false;
 			RelationshipDefCol relationshipDefCol = new RelationshipDefCol();
-			PropDef idPropDef;
-			idPropDef = new PropDef(idPropName, typeof(string), PropReadWriteRule.ReadWrite, "");
+		    PropDef idPropDef = new PropDef(idPropName, typeof(string), PropReadWriteRule.ReadWrite, "");
 			propDefCol.Add(idPropDef);
 			primaryKeyDef.Add(idPropDef);
-			PropDef propDef;
-			//propDef = new PropDef("MyProp", typeof(string), PropReadWriteRule.ReadWrite, "" );
+		    //propDef = new PropDef("MyProp", typeof(string), PropReadWriteRule.ReadWrite, "" );
 			//propDefCol.Add(propDef);
-			propDef = new PropDef(fkPropertyName, typeof(string), PropReadWriteRule.ReadWrite, "");
+			PropDef propDef = new PropDef(fkPropertyName, typeof(string), PropReadWriteRule.ReadWrite, "");
 			propDefCol.Add(propDef);
 			if (hasSingleRelationship)
 			{
@@ -271,7 +252,7 @@ namespace Habanero.Test.BO
 	{
 		private readonly MockRepository _mock;
 
-		public TestBO()
+	    protected TestBO()
 		{
 			_mock = new MockRepository();
 			RelationshipCol relationshipCol = new RelationshipCol(this);

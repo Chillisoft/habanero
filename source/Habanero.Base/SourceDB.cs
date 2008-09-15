@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.Base
@@ -72,7 +71,7 @@ namespace Habanero.Base
             return joinString;
         }
 
-        private string GetJoinString(Join join, SqlFormatter sqlFormatter)
+        private string GetJoinString(Join join, ISqlFormatter sqlFormatter)
         {
             if (join.JoinFields.Count == 0)
             {
@@ -80,7 +79,7 @@ namespace Habanero.Base
                                                Name, join.ToSource.Name);
                 throw new HabaneroDeveloperException(message, "Please check how you are building your join clause structure.");
             }
-            Source.Join.JoinField joinField = join.JoinFields[0];
+            Join.JoinField joinField = join.JoinFields[0];
             string joinString = string.Format("{0} {1} ON {2}.{3} = {1}.{4}",
                                               join.GetJoinClause(),
                      sqlFormatter.DelimitTable(join.ToSource.EntityName), 
@@ -120,7 +119,7 @@ namespace Habanero.Base
             return joinString;
         }
 
-        private string GetInheritanceJoinString(SqlFormatter sqlFormatter, Source source, string joinString)
+        private string GetInheritanceJoinString(ISqlFormatter sqlFormatter, Source source, string joinString)
         {
             foreach (Join join in source.InheritanceJoins)
             {

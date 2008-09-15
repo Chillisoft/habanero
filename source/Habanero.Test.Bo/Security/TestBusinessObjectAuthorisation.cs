@@ -562,7 +562,7 @@ namespace Habanero.Test.BO.Security
             IBusinessObjectAuthorisation authorisationStub = new AuthorisationStub();
             return authorisationStub;
         }
-        #endregion /TestRead
+        #endregion //TestRead
     }
 
     internal class MyBoAuthenticationStub: BusinessObject
@@ -587,6 +587,25 @@ namespace Habanero.Test.BO.Security
             return itsClassDef;
         }
 
+        public static ClassDef LoadDefaultClassDef_ReadOnlyProp1()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBoAuthenticationStub"" assembly=""Habanero.Test.BO"">
+					<property  name=""MyBoAuthenticationStubID"" type=""Guid""/>
+                    <property  name=""Prop1"" readWriteRule=""ReadOnly""/>
+					<primaryKey>
+						<prop name=""MyBoAuthenticationStubID"" />
+					</primaryKey>
+					<ui>
+					</ui>                   
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         internal protected void SetAuthorisation(IBusinessObjectAuthorisation authorisationStub)
         {
             SetAuthorisationRules(authorisationStub);

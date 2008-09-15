@@ -704,9 +704,8 @@ namespace Habanero.BO.ClassDefinition
             foreach (IPropRule propRule in _propRules)
             {
                 string tmpErrMsg = "";
-                bool tmpValid;
-                tmpValid = (propRule == null ||
-                        propRule.IsPropValueValid(DisplayName, GetNewValue(propValue), ref tmpErrMsg));
+                bool tmpValid = (propRule == null ||
+                                 propRule.IsPropValueValid(DisplayName, GetNewValue(propValue), ref tmpErrMsg));
                 valid = valid & tmpValid;
                 errorMessage = StringUtilities.AppendMessage(errorMessage, tmpErrMsg);
             }

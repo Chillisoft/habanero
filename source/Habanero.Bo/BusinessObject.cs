@@ -232,7 +232,7 @@ namespace Habanero.BO
         }
         #endregion //Constructors
 
-        #region Business Object Loaders
+        #region Business Object manager
         /// <summary>
         /// Clears the loaded objects collection
         /// </summary>
@@ -1240,9 +1240,13 @@ namespace Habanero.BO
         /// </summary>
         protected internal virtual void AfterSave()
         {
-            
         }
 
+        /// <summary>
+        /// Sets the status of the business object to the status true or false.
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="value"></param>
         internal void SetStatus(BOStatus.Statuses status, bool value)
         {
             _boStatus.SetBOFlagValue(status, value);

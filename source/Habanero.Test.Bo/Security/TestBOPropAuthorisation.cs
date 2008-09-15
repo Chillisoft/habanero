@@ -3,13 +3,12 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.BO.ObjectManager;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Security
 {
     [TestFixture]
-    public class TestTestBOPropAuthorisation //:TestBase
+    public class TestBOPropAuthorisation //:TestBase
     {
         [SetUp]
         public void SetupTest()
@@ -208,7 +207,7 @@ namespace Habanero.Test.BO.Security
         }
 
         [Test]
-        public void Test_BOPropAuthorisation_AllowUpdate()
+        public void Test_BOPropAuthorisation_AllowUpdate_True()
         {
             //---------------Set up test pack-------------------
             MyBoAuthenticationStub.LoadDefaultClassDef();
@@ -274,7 +273,7 @@ namespace Habanero.Test.BO.Security
             Assert.AreEqual(newPropValue, prop1.Value);
         }
 
-        [Test, Ignore("Currently working on this")]
+        [Test]
         public void Test_SetValue_Fail_AllowUpdate_False()
         {
             //---------------Set up test pack-------------------
@@ -289,6 +288,8 @@ namespace Habanero.Test.BO.Security
             //---------------Assert Precondition----------------
             Assert.IsFalse(propAuthorisationStub.IsAuthorised(BOPropActions.CanUpdate));
             Assert.IsFalse(myBoStub.Status.IsNew);
+            string message;
+            Assert.IsFalse(prop1.IsEditable(out message));
 
             //---------------Execute Test ----------------------
             const string newPropValue = "1112";
@@ -298,70 +299,69 @@ namespace Habanero.Test.BO.Security
                 Assert.Fail("expected Err");
             }
             //---------------Test Result -----------------------
-            catch (BusinessObjectReadWriteRuleException ex)
+            catch (BOPropWriteException ex)
             {
-                StringAssert.Contains("You cannot Edit ", ex.Message);
-                StringAssert.Contains("as the IsEditable is set to false for the object", ex.Message);
+                StringAssert.Contains("The logged on user  is not authorised to update the Prop1 ", ex.Message);
             }
         }
-//
-//        [Test]
-//        public void Test_SaveExistingBO_AllowUpdate_True()
-//        {
-//            //---------------Set up test pack-------------------
-//            MyBoAuthenticationStub.LoadDefaultClassDef();
-//            IBusinessObjectAuthorisation authorisationStub = GetAuthorisationStub_CanUpdate_True();
-//
-//            MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
-//            myBoStub.SetAuthorisation(authorisationStub);
-//            myBoStub.Save();
-//            myBoStub.SetPropertyValue("Prop1", "1112");
-//
-//            //---------------Assert Precondition----------------
-//            Assert.IsTrue(authorisationStub.IsAuthorised(BusinessObjectActions.CanUpdate));
-//            Assert.IsFalse(myBoStub.Status.IsNew);
-//            Assert.IsTrue(myBoStub.Status.IsDirty);
-//
-//            //---------------Execute Test ----------------------
-//            myBoStub.Save();
-//
-//            //---------------Test Result -----------------------
-//            Assert.IsFalse(myBoStub.Status.IsDirty);
-//        }
-//
-//        [Test]
-//        public void Test_SaveExistingBO_Fail_AllowUpdate_False()
-//        {
-//            //---------------Set up test pack-------------------
-//            MyBoAuthenticationStub.LoadDefaultClassDef();
-//            IBusinessObjectAuthorisation authorisationStub = GetAuthorisationStub_CanUpdate_False();
-//
-//            MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
-//            myBoStub.SetAuthorisation(authorisationStub);
-//            myBoStub.Save();
-//            IBOProp prop1Prop = myBoStub.Props["Prop1"];
-//            prop1Prop.Value = "1112";
-//            myBoStub.SetStatus(BOStatus.Statuses.isDirty, true);
-//
-//            //---------------Assert Precondition----------------
-//            Assert.IsFalse(authorisationStub.IsAuthorised(BusinessObjectActions.CanUpdate));
-//            Assert.IsTrue(prop1Prop.IsDirty);
-//            Assert.IsTrue(myBoStub.Status.IsDirty);
-//
-//            //---------------Execute Test ----------------------
-//            try
-//            {
-//                myBoStub.Save();
-//                Assert.Fail("expected Err");
-//            }
-//            //---------------Test Result -----------------------
-//            catch (BusObjPersistException ex)
-//            {
-//                StringAssert.Contains("The logged on user", ex.Message);
-//                StringAssert.Contains("is not authorised to update ", ex.Message);
-//            }
-//        }
-//
+
+        [Test]
+        public void Test_SetValue_Fail_ReadOnly_False()
+        {
+            //---------------Set up test pack-------------------
+            MyBoAuthenticationStub.LoadDefaultClassDef_ReadOnlyProp1();
+
+            MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
+            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+
+            //---------------Assert Precondition----------------
+            string message;
+            Assert.IsFalse(prop1.IsEditable(out message));
+
+            //---------------Execute Test ----------------------
+            const string newPropValue = "1112";
+            try
+            {
+                prop1.Value = newPropValue;
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (BOPropWriteException ex)
+            {
+                StringAssert.Contains("The property 'Prop 1' is not editable since it is set up as ReadOnly", ex.Message);
+            }
+        }
+
+        [Test]
+        public void Test_SetPropertyValue_Fail_AllowUpdate_False()
+        {
+            //---------------Set up test pack-------------------
+            MyBoAuthenticationStub.LoadDefaultClassDef();
+            IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanUpdate_False();
+
+            MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
+            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+            prop1.SetAuthorisationRules(propAuthorisationStub);
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(propAuthorisationStub.IsAuthorised(BOPropActions.CanUpdate));
+            string message;
+            Assert.IsFalse(prop1.IsEditable(out message));
+
+            //---------------Execute Test ----------------------
+            const string newPropValue = "1112";
+            try
+            {
+                myBoStub.SetPropertyValue("Prop1", newPropValue);
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (BOPropWriteException ex)
+            {
+                StringAssert.Contains("The logged on user  is not authorised to update the Prop1 ", ex.Message);
+            }
+        }
+
         private static IBOPropAuthorisation GetPropAuthorisationStub_CanUpdate_True()
         {
             IBOPropAuthorisation authorisationStub = new BOPropAuthorisationStub();
@@ -379,121 +379,148 @@ namespace Habanero.Test.BO.Security
         #endregion /TestDelete
 
         #region TestRead
-//        [Test]
-//        public void Test_BusinessObjectAuthorisation_AllowRead()
-//        {
-//            //---------------Set up test pack-------------------
-//            MyBoAuthenticationStub.LoadDefaultClassDef();
-//            IBusinessObjectAuthorisation authorisationStub = new AuthorisationStub();
-//            authorisationStub.AddAuthorisedRole("A Role", BusinessObjectActions.CanRead);
-//            MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
-//            myBoStub.SetAuthorisation(authorisationStub);
-//
-//            //---------------Assert Precondition----------------
-//            Assert.IsTrue(authorisationStub.IsAuthorised(BusinessObjectActions.CanRead));
-//
-//            //---------------Execute Test ----------------------
-//            string message;
-//            bool isReadable = myBoStub.IsReadable(out message);
-//
-//            //---------------Test Result -----------------------
-//            Assert.IsTrue(isReadable);
-//            Assert.AreEqual("", message);
-//        }
-//        [Test]
-//        public void Test_BusinessObjectAuthorisation_AllowRead_False()
-//        {
-//            //---------------Set up test pack-------------------
-//            MyBoAuthenticationStub.LoadDefaultClassDef();
-//            IBusinessObjectAuthorisation authorisationStub = new AuthorisationStub();
-//            MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
-//            myBoStub.SetAuthorisation(authorisationStub);
-//
-//            //---------------Assert Precondition----------------
-//            Assert.IsFalse(authorisationStub.IsAuthorised(BusinessObjectActions.CanRead));
-//
-//            //---------------Execute Test ----------------------
-//            string message;
-//            bool isReadable = myBoStub.IsReadable(out message);
-//
-//            //---------------Test Result -----------------------
-//            Assert.IsFalse(isReadable);
-//            StringAssert.Contains("The logged on user", message);
-//            StringAssert.Contains("is not authorised to read ", message);
-//        }
-//
-//        [Test]
-//        public void Test_LoadExistingBO_AllowRead_True()
-//        {
-//            //---------------Set up test pack-------------------
-//            MyBoAuthenticationStub.LoadDefaultClassDef();
-//            IBusinessObjectAuthorisation authorisationStub = GetAuthorisationStub_CanCreate_True();
-//            MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
-//            myBoStub.SetAuthorisation(authorisationStub);
-//            myBoStub.Save();
-//
-//            authorisationStub = GetAuthorisationStub_CanRead_True();
-//            myBoStub.SetAuthorisation(authorisationStub);
-//            IPrimaryKey id = myBoStub.ID;
-//            BusinessObjectManager.Instance.ClearLoadedObjects();
-//
-//            //---------------Assert Precondition----------------
-//            Assert.IsTrue(authorisationStub.IsAuthorised(BusinessObjectActions.CanRead));
-//            Assert.IsFalse(myBoStub.Status.IsNew);
-//
-//            //---------------Execute Test ----------------------
-//            myBoStub = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBoAuthenticationStub>(id);
-//            object value = myBoStub.GetPropertyValue("Prop1");
-//            //---------------Test Result -----------------------
-//            Assert.IsNull(value);
-//            Assert.IsFalse(myBoStub.Status.IsDirty);
-//        }
-//        [Test]
-//        public void Test_LoadExistingBO_Fail_AllowRead_False()
-//        {
-//            //---------------Set up test pack-------------------
-//            MyBoAuthenticationStub.LoadDefaultClassDef();
-//            IBusinessObjectAuthorisation authorisationStub = GetAuthorisationStub_CanCreate_True();
-//            MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
-//            myBoStub.SetAuthorisation(authorisationStub);
-//            myBoStub.Save();
-//
-//            authorisationStub = GetAuthorisationStub_CanRead_False();
-//            myBoStub.SetAuthorisation(authorisationStub);
-//            IPrimaryKey id = myBoStub.ID;
-//            BusinessObjectManager.Instance.ClearLoadedObjects();
-//
-//            //---------------Assert Precondition----------------
-//            Assert.IsFalse(authorisationStub.IsAuthorised(BusinessObjectActions.CanRead));
-//            Assert.IsFalse(myBoStub.Status.IsNew);
-//
-//            //---------------Execute Test ----------------------
-//            myBoStub = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBoAuthenticationStub>(id);
-//            try
-//            {
-//                myBoStub.GetPropertyValue("Prop1");
-//                Assert.Fail("expected Err");
-//            }
-//            //---------------Test Result -----------------------
-//            catch (BusObjReadException ex)
-//            {
-//                StringAssert.Contains("The logged on user", ex.Message);
-//                StringAssert.Contains("is not authorised to read ", ex.Message);
-//            }
-//        }
-//
-//        private static IBusinessObjectAuthorisation GetAuthorisationStub_CanRead_True()
-//        {
-//            IBusinessObjectAuthorisation authorisationStub = new AuthorisationStub();
-//            authorisationStub.AddAuthorisedRole("A Role", BusinessObjectActions.CanRead);
-//            authorisationStub.AddAuthorisedRole("A Role", BusinessObjectActions.CanCreate);
-//            return authorisationStub;
-//        }
-//        private static IBusinessObjectAuthorisation GetAuthorisationStub_CanRead_False()
-//        {
-//            IBusinessObjectAuthorisation authorisationStub = new AuthorisationStub();
-//            return authorisationStub;
-//        }
+
+        [Test]
+        public void Test_BOPropAuthorisation_AllowRead_True()
+        {
+            //---------------Set up test pack-------------------
+            MyBoAuthenticationStub.LoadDefaultClassDef();
+            IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanRead_True();
+            MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
+            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+            prop1.SetAuthorisationRules(propAuthorisationStub);
+
+            //---------------Assert Precondition----------------
+            propAuthorisationStub.IsAuthorised(BOPropActions.CanRead);
+
+            //---------------Execute Test ----------------------
+            string message;
+            bool isReadable = prop1.IsReadable(out message);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isReadable);
+            Assert.AreEqual("", message);
+        }
+
+        [Test]
+        public void Test_BOPropAuthorisation_AllowRead_False()
+        {
+            //---------------Set up test pack-------------------
+            MyBoAuthenticationStub.LoadDefaultClassDef();
+            IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanRead_False();
+            MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
+            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+            prop1.SetAuthorisationRules(propAuthorisationStub);
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(propAuthorisationStub.IsAuthorised(BOPropActions.CanRead));
+
+            //---------------Execute Test ----------------------
+            string message;
+            bool isReadable = prop1.IsReadable(out message);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isReadable);
+            StringAssert.Contains("The logged on user", message);
+            StringAssert.Contains(" is not authorised to read ", message);
+        }
+
+        [Test]
+        public void Test_GetValue_AllowRead_True()
+        {
+            //---------------Set up test pack-------------------
+            MyBoAuthenticationStub.LoadDefaultClassDef();
+            IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanRead_True();
+            MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
+            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+            prop1.SetAuthorisationRules(propAuthorisationStub);
+            myBoStub.Save();
+
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(propAuthorisationStub.IsAuthorised(BOPropActions.CanRead));
+            string message;
+            Assert.IsTrue(prop1.IsReadable(out message));
+
+            //---------------Execute Test ----------------------
+            const string newPropValue = "1112";
+            prop1.Value = newPropValue;
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(prop1.IsDirty);
+            Assert.AreEqual(newPropValue, prop1.Value);
+        }
+#pragma warning disable 168
+        [Test]
+        public void Test_GetValue_Fail_AllowRead_False()
+        {
+            //---------------Set up test pack-------------------
+            MyBoAuthenticationStub.LoadDefaultClassDef();
+            IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanRead_False();
+
+            MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
+            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+            prop1.SetAuthorisationRules(propAuthorisationStub);
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(propAuthorisationStub.IsAuthorised(BOPropActions.CanRead));
+            string message;
+            Assert.IsFalse(prop1.IsReadable(out message));
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                object value = prop1.Value;
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (BOPropReadException ex)
+            {
+                StringAssert.Contains("The logged on user  is not authorised to read the Prop1 ", ex.Message);
+            }
+        }
+#pragma warning restore 168
+
+        [Test]
+        public void Test_BO_GetPropertyValue_Fail_AllowRead_False()
+        {
+            //---------------Set up test pack-------------------
+            MyBoAuthenticationStub.LoadDefaultClassDef();
+            IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanRead_False();
+
+            MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
+            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+            prop1.SetAuthorisationRules(propAuthorisationStub);
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(propAuthorisationStub.IsAuthorised(BOPropActions.CanRead));
+            string message;
+            Assert.IsFalse(prop1.IsReadable(out message));
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                myBoStub.GetPropertyValue("Prop1");
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (BOPropReadException ex)
+            {
+                StringAssert.Contains("The logged on user  is not authorised to read the Prop1 ", ex.Message);
+            }
+        }
+        private static IBOPropAuthorisation GetPropAuthorisationStub_CanRead_True()
+        {
+            IBOPropAuthorisation authorisationStub = new BOPropAuthorisationStub();
+            authorisationStub.AddAuthorisedRole("A Role", BOPropActions.CanUpdate);
+            authorisationStub.AddAuthorisedRole("A Role", BOPropActions.CanRead);
+            return authorisationStub;
+        }
+
+        private static IBOPropAuthorisation GetPropAuthorisationStub_CanRead_False()
+        {
+            IBOPropAuthorisation authorisationStub = new BOPropAuthorisationStub();
+            return authorisationStub;
+        }
         #endregion /TestRead
     }
     internal class MyBo_PropAuthenticationStub : BusinessObject

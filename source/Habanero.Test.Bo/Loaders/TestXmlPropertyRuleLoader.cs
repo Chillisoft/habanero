@@ -249,7 +249,7 @@ namespace Habanero.Test.BO.Loaders
         [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
         public void TestNoRuleForCustomType()
         {
-            PropRuleBase rule = _loader.LoadRule(typeof (TimeSpan).Name,
+            _loader.LoadRule(typeof (TimeSpan).Name,
                 @"<rule name=""TestCustom"">
                     <add key=""bob"" value=""billy"" />
                 </rule>");
@@ -269,8 +269,8 @@ namespace Habanero.Test.BO.Loaders
         [Test, ExpectedException(typeof (TypeLoadException))]
         public void TestCustomRuleMustInheritFromPropRuleBase()
         {
-            PropRuleBase rule = _loader.LoadRule(typeof (TimeSpan).Name,
-                @"<rule name=""TestCustom"" class=""Habanero.Test.MyBO"" assembly=""Habanero.Test"">
+            _loader.LoadRule(typeof (TimeSpan).Name,
+                             @"<rule name=""TestCustom"" class=""Habanero.Test.MyBO"" assembly=""Habanero.Test"">
                     <add key=""bob"" value=""billy"" />
                 </rule>");
         }

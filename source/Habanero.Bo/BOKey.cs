@@ -33,7 +33,7 @@ namespace Habanero.BO
     /// Contains the details of the key constraints for the particular
     /// business object. The Key constraint can be a primary or Alternate Key. 
     /// The primaryKey <see cref="PrimaryKeyDef"/> or alternate key can both be either 
-    /// composite/compound (more than one property) or not (only one property). 
+    /// composite/compound (more than one property) or single (only one property). 
     /// The property can also be a meaningFull Key e.g. Surname or a meaningLess Key e.g PersonID
     /// It is essentially a collection of Business Object Properties <see cref="BOProp"/>
     ///  objects e.g. FirstName and Surname 
