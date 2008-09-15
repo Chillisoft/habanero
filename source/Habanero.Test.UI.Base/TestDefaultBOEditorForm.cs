@@ -18,9 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Console;
 using Habanero.DB;
 using Habanero.UI.Base;
 using NMock;

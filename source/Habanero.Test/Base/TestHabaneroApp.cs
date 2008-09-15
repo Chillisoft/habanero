@@ -19,6 +19,7 @@
 
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Console;
 using Habanero.DB;
 using Habanero.Util;
 using NUnit.Framework;

@@ -147,12 +147,6 @@
     <Compile Include="Exceptions\CannotSaveException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Exceptions\ConsoleExceptionNotifier.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ConsoleProgressIndicator.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Exceptions\ExceptionUtilities.cs" />
     <Compile Include="Exceptions\HabaneroArgumentException.cs" />
     <Compile Include="ICrypter.cs" />

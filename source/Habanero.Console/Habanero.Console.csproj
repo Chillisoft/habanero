@@ -7,8 +7,8 @@
     <ProjectGuid>{9B32C6E9-037A-4610-85CB-95C9A050CF7C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Habanero</RootNamespace>
-    <AssemblyName>Habanero</AssemblyName>
+    <RootNamespace>Habanero.Console</RootNamespace>
+    <AssemblyName>Habanero.Console</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Habanero.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Habanero.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleExceptionNotifier.cs" />
+    <Compile Include="ConsoleProgressIndicator.cs" />
     <Compile Include="HabaneroAppConsole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\Common\AssemblyInfoShared.cs">

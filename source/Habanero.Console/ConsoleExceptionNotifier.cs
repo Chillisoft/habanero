@@ -18,8 +18,10 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
+using Habanero.Base.Exceptions;
 
-namespace Habanero.Base.Exceptions
+namespace Habanero.Console
 {
     /// <summary>
     /// Displays exception message output to the console
@@ -45,8 +47,8 @@ namespace Habanero.Base.Exceptions
         /// <param name="title">The title</param>
         public void Notify(Exception ex, string furtherMessage, string title)
         {
-            Console.Out.WriteLine("Error: " + furtherMessage);
-            Console.Out.WriteLine("Further details: " + ExceptionUtilities.GetExceptionString(ex, 0, true));
+            System.Console.Out.WriteLine("Error: " + furtherMessage);
+            System.Console.Out.WriteLine("Further details: " + ExceptionUtilities.GetExceptionString(ex, 0, true));
         }
     }
 }

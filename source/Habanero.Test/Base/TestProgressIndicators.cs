@@ -20,6 +20,7 @@
 using System;
 using System.IO;
 using Habanero.Base;
+using Habanero.Console;
 using NUnit.Framework;
 
 namespace Habanero.Test.Base
@@ -37,7 +38,7 @@ namespace Habanero.Test.Base
 //            Console.SetOut(standardOut);
 
             standardOut = new StringWriter();
-            Console.SetOut(standardOut);
+            System.Console.SetOut(standardOut);
         }
 
         [TearDown]
