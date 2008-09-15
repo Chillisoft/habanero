@@ -97,7 +97,7 @@ namespace Habanero.UI.Base
                 newMdiForm.Controls.Clear();
                          BorderLayoutManager layoutManager = _controlFactory.CreateBorderLayoutManager(newMdiForm);
 
-                layoutManager.AddControl(formCtl, BorderLayoutManager.Position.Centre);
+                layoutManager.AddControl((IControlHabanero) formCtl, BorderLayoutManager.Position.Centre);
                 newMdiForm.Show();
                 _formsbyHeading.Add(heading, newMdiForm);
                 _formsbyForm.Add(newMdiForm, heading);

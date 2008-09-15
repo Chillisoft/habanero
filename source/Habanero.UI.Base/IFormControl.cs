@@ -23,7 +23,7 @@ namespace Habanero.UI.Base
     /// Represents a form control and makes the control manageable by a
     /// central form controller for an application
     /// </summary>
-    public interface IFormControl : IControlHabanero
+    public interface IFormControl 
     {
         /// <summary>
         /// Sets the form to control

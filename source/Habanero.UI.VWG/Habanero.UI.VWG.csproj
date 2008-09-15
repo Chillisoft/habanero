@@ -137,6 +137,9 @@
     <Compile Include="ListViewVWG.designer.cs">
       <DependentUpon>ListViewVWG.cs</DependentUpon>
     </Compile>
+    <Compile Include="MenuBuilderVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MultiSelectorVWG.cs">
       <SubType>UserControl</SubType>
     </Compile>

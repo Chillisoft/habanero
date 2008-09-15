@@ -28,14 +28,23 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
 
-        //[TestFixture]
-        //public class TestControlCollectionWin : TestControlCollection
-        //{
-        //    protected override IControlFactory GetControlFactory()
-        //    {
-        //        return new ControlFactoryWin();
-        //    }
-        //}
+        [TestFixture]
+        public class TestControlCollectionWin : TestControlCollection
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
+            [Test]
+            public void TestAddControl()
+            {
+                TextBoxWin tb = (TextBoxWin)GetControlFactory().CreateTextBox();
+                IControlCollection col = new ControlCollectionWin(new System.Windows.Forms.Control.ControlCollection(tb));
+                IControlHabanero ctl = GetControlFactory().CreateControl();
+                col.Add(ctl);
+                Assert.AreSame(ctl, col[0], "Control added should be the same object.");
+            }
+        }
 
         [TestFixture]
         public class TestControlCollectionVWG : TestControlCollection
@@ -43,9 +52,7 @@ namespace Habanero.Test.UI.Base
             protected override IControlFactory GetControlFactory()
             {
                 return new ControlFactoryVWG();
-            }
-        }
-        [Test]
+            }       [Test]
         public void TestAddControl()
         {
             TextBoxVWG tb = (TextBoxVWG) GetControlFactory().CreateTextBox();
@@ -54,6 +61,8 @@ namespace Habanero.Test.UI.Base
             col.Add(ctl);
             Assert.AreSame(ctl, col[0], "Control added should be the same object.");
         }
+        }
+ 
 
         //[Test]
         //public void TestAddNull()

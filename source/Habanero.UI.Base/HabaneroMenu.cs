@@ -1,0 +1,107 @@
+using System;
+using System.Collections.Generic;
+
+namespace Habanero.UI.Base
+{
+
+    public delegate IFormControl FormControlCreator();
+    public class HabaneroMenu
+    {
+        private readonly List<HabaneroMenu> _submenus = new List<HabaneroMenu>();
+        private readonly string _name;
+        private readonly IFormHabanero _form;
+        private readonly IControlFactory _controlFactory;
+        private readonly List<HabaneroMenu.Item> _menuItems = new List<HabaneroMenu.Item>();
+
+        public HabaneroMenu(string menuName) : this(menuName, null, null)
+        {
+        }
+
+        public HabaneroMenu(string menuName, IFormHabanero form, IControlFactory controlFactory)
+        {
+            _name = menuName;
+            _form = form;
+            _controlFactory = controlFactory;
+        }
+
+        public List<HabaneroMenu> Submenus
+        {
+            get { return _submenus; }
+        }
+
+        public string Name
+        {
+            get { return _name; }
+        }
+
+        public List<HabaneroMenu.Item> MenuItems
+        {
+            get { return _menuItems; }
+        }
+
+       
+
+        public HabaneroMenu AddSubmenu(string menuName)
+        {
+            HabaneroMenu submenu = new HabaneroMenu(menuName, _form, _controlFactory);
+            this._submenus.Add(submenu);
+            return submenu;
+        }
+
+        public HabaneroMenu.Item AddMenuItem(string menuItemName)
+        {
+            HabaneroMenu.Item menuItem = new HabaneroMenu.Item(menuItemName, _form, _controlFactory);
+            _menuItems.Add(menuItem);
+            return menuItem;
+        }
+
+        public class Item
+        {
+            private readonly string _name;
+            private readonly IControlFactory _controlFactory;
+            private readonly IFormHabanero _form;
+            private FormControlCreator _formControlCreator;
+            private EventHandler _customHandler;
+            public Item(string name) : this(name, null, null)
+            {
+     
+            }
+            public Item(string name, IFormHabanero form, IControlFactory controlFactory)
+            {
+                _name = name;
+                _controlFactory = controlFactory;
+                _form = form;
+            }
+
+            public string Name
+            {
+                get { return _name; }
+            }
+
+            public FormControlCreator FormControlCreator
+            {
+                get { return _formControlCreator; }
+                set
+                {
+                    _formControlCreator = value;
+                }
+            }
+
+            public EventHandler CustomHandler
+            {
+                get { return _customHandler; }
+                set { _customHandler = value; }
+            }
+
+            public IControlFactory ControlFactory
+            {
+                get { return _controlFactory; }
+            }
+
+            public IFormHabanero Form
+            {
+                get { return _form; }
+            }
+        }
+    }
+}

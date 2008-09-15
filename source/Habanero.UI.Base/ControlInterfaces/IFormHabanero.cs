@@ -168,6 +168,8 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <value></value>
         FormStartPosition StartPosition { get; set; }
+
+        bool IsMdiContainer { get; set; }
     }
 
 }

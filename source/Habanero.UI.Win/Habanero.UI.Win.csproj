@@ -130,6 +130,9 @@
     <Compile Include="ListComboBoxMapperStrategyWin.cs" />
     <Compile Include="LookupComboBoxDefaultMapperStrategyWin.cs" />
     <Compile Include="LookupComboBoxKeyPressMapperStrategyWin.cs" />
+    <Compile Include="MenuBuilderWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MultiSelectorWin.cs">
       <SubType>UserControl</SubType>
     </Compile>
