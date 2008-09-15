@@ -576,7 +576,7 @@ namespace Habanero.UI.Win
         /// <typeparam name="T">The business object type being managed in the control</typeparam>
         public IMultiSelector<T> CreateMultiSelector<T>()
         {
-            return new MultiSelectorWin<T>();
+            return new MultiSelectorWin<T>(this);
         }
 
         /// <summary>

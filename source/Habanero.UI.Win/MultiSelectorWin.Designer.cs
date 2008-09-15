@@ -62,9 +62,9 @@ namespace Habanero.UI.Win
             components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox1 = new GroupBoxWin();
             this._availableOptionsListbox = new ListBoxWin();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new GroupBoxWin();
             this._selectionsListbox = new ListBoxWin();
             this._btnSelect = new ButtonWin();
             this._btnSelectAll = new ButtonWin();
@@ -156,12 +156,12 @@ namespace Habanero.UI.Win
             // 
             // MultiSelectorGiz
             // 
-            this.Controls.Add(this._btnDeselect);
-            this.Controls.Add(this._btnDeselectAll);
-            this.Controls.Add(this._btnSelectAll);
-            this.Controls.Add(this._btnSelect);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
+            //this.Controls.Add(this._btnDeselect);
+            //this.Controls.Add(this._btnDeselectAll);
+            //this.Controls.Add(this._btnSelectAll);
+            //this.Controls.Add(this._btnSelect);
+            //this.Controls.Add(this.groupBox2);
+            //this.Controls.Add(this.groupBox1);
             this.Size = new System.Drawing.Size(497, 381);
             this.Text = "MyMultiSelector";
             this.ResumeLayout(false);

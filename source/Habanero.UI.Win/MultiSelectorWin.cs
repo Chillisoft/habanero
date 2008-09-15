@@ -20,7 +20,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Forms;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
@@ -36,11 +35,42 @@ namespace Habanero.UI.Win
     /// </summary>
     public partial class MultiSelectorWin<T> : UserControlWin, IMultiSelector<T>
     {
+        private readonly IControlFactory _controlFactory;
         private readonly MultiSelectorManager<T> _manager;
+        private GridLayoutManager _gridLayoutManager;
 
-        public MultiSelectorWin()
+        public MultiSelectorWin(IControlFactory controlFactory)
         {
+            _controlFactory = controlFactory;
             InitializeComponent();
+            _gridLayoutManager = new GridLayoutManager(this, controlFactory);
+            PanelWin optionsPanel = new PanelWin();
+            groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            optionsPanel.Controls.Add(groupBox1);
+            PanelWin buttonPanel = new PanelWin();
+            GridLayoutManager buttonPanelManager = new GridLayoutManager(buttonPanel,controlFactory);
+            buttonPanelManager.SetGridSize(6,1);
+            buttonPanelManager.AddControl(null);
+            buttonPanelManager.AddControl(_btnSelect);
+            buttonPanelManager.AddControl(_btnSelectAll);
+            buttonPanelManager.AddControl(_btnDeselectAll);
+            buttonPanelManager.AddControl(_btnDeselect);
+            buttonPanelManager.AddControl(null);
+            buttonPanelManager.FixRow(0,25);
+            buttonPanelManager.FixRow(1, 25);
+            buttonPanelManager.FixRow(2, 25);
+            buttonPanelManager.FixRow(3, 25);
+            buttonPanelManager.FixRow(4, 25);
+            buttonPanelManager.FixRow(5, 25);
+            buttonPanelManager.FixColumnBasedOnContents(0);
+            PanelWin selectionsPanel = new PanelWin();
+            groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            selectionsPanel.Controls.Add(groupBox2);
+            _gridLayoutManager.SetGridSize(1, 3);
+            _gridLayoutManager.FixColumn(1, 100);
+            _gridLayoutManager.AddControl(optionsPanel);
+            _gridLayoutManager.AddControl(buttonPanel);
+            _gridLayoutManager.AddControl(selectionsPanel);
             _manager = new MultiSelectorManager<T>(this);
             AvailableOptionsListBox.SelectedIndexChanged += delegate
             {
