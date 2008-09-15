@@ -435,6 +435,24 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_CollectionLoad_GetBusinessObjectCollection_GuidCriteria()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO.CreateSavedContactPerson(now);
+            ContactPersonTestBO.CreateSavedContactPerson(now);
+            ContactPersonTestBO person = ContactPersonTestBO.CreateSavedContactPerson();
+
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.Load("ContactPersonID = '"+person.ContactPersonID+"'", "");
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+        }
+
+        [Test]
         public void Test_CollectionLoad_GetBusinessObjectCollection_StringCriteriaObject_Untyped()
         {
             //---------------Set up test pack-------------------

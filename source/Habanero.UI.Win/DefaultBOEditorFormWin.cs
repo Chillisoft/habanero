@@ -26,8 +26,8 @@ namespace Habanero.UI.Win
         private PostObjectPersistingDelegate _action;
 
 
-        public DefaultBOEditorFormWin(BusinessObject bo, string name, IControlFactory controlFactory, PostObjectPersistingDelegate action)
-            : this(bo, name, controlFactory)
+        public DefaultBOEditorFormWin(BusinessObject bo, string uiDefName, IControlFactory controlFactory, PostObjectPersistingDelegate action)
+            : this(bo, uiDefName, controlFactory)
         {
             _action = action;
             
