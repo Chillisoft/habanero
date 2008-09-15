@@ -527,6 +527,7 @@ namespace Habanero.BO
         {
             if (source == null || String.IsNullOrEmpty(source.Name)) return GetPropertyValue(propName);
             IBusinessObject businessObject = Relationships.GetRelatedObject(source.Name);
+            if (businessObject == null) return null;
             if (source.Joins.Count > 0)
             {
                 return businessObject.GetPropertyValue(source.Joins[0].ToSource, propName);

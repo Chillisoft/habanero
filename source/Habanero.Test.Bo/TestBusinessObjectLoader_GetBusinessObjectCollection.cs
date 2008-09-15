@@ -1641,7 +1641,7 @@ namespace Habanero.Test.BO
             Assert.Contains(cp1, col);
         }
 
-        [Test, Ignore("To be implemented in memory database")]
+        [Test]
         public void Test_CriteriaString_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
@@ -1664,7 +1664,7 @@ namespace Habanero.Test.BO
             Assert.Contains(engine, col);
         }
 
-        [Test, Ignore("Not working for IN MEMORY now - to be fixed before 2.0")]
+        [Test]
         public void Test_CriteriaString_ThroughRelationship_TwoLevels_SearchOnNULL()
         {
             //---------------Set up test pack-------------------
@@ -1685,7 +1685,7 @@ namespace Habanero.Test.BO
         }
 
 
-        [Test, Ignore("Not working for IN MEMORY now - to be fixed before 2.0")]
+        [Test]
         public void TestBusinessObjectCollection_Load_CriteriaString_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------

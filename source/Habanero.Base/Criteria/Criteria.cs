@@ -228,13 +228,15 @@ namespace Habanero.Base
             }
 
             //todo: criterias with relationships - this will pass the source through to the GetPropertyValue
-            object leftValue = businessObject.GetPropertyValue(_field.PropertyName);
+            object leftValue = null;
+            if (_field.Source != null && _field.Source.ChildSource != null) leftValue = businessObject.GetPropertyValue(_field.Source.ChildSource, _field.PropertyName);
+            else leftValue = businessObject.GetPropertyValue( _field.PropertyName);
             if (leftValue == null)
             {
                 return IsNullMatch();
             }
 
-            IComparable boPropertyValue = businessObject.GetPropertyValue(_field.PropertyName) as IComparable;
+            IComparable boPropertyValue = leftValue as IComparable;
             if (boPropertyValue == null)
             {
                 throw new InvalidOperationException(

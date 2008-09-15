@@ -142,8 +142,11 @@ namespace Habanero.Test
 
         public static void DeleteAllEngines()
         {
-            string sql = "DELETE FROM " + GetClassDef().TableName;
-            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            if (DatabaseConnection.CurrentConnection != null)
+            {
+                string sql = "DELETE FROM " + GetClassDef().TableName;
+                DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            }
         }
 
         #endregion
