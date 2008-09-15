@@ -118,16 +118,18 @@ namespace Habanero.Test.BO
 
         }
 
-        [Test, ExpectedException(typeof(BusinessObjectReferentialIntegrityException)), Ignore(" new data store memory")]
+        [Test, ExpectedException(typeof(BusinessObjectReferentialIntegrityException))]
         public void TestPreventDelete()
         {
             //---------------Set up test pack-------------------
-
+            DataStoreInMemory dataStoreInMemory = new DataStoreInMemory();
+            BORegistry.DataAccessor = new DataAccessorInMemory(dataStoreInMemory);
             Address address;
             ContactPersonTestBO contactPersonTestBO =
                 ContactPersonTestBO.CreateContactPersonWithOneAddress_PreventDelete(out address);
             contactPersonTestBO.Delete();
-            ITransactionCommitter committer = new TransactionCommitterInMemory(new DataStoreInMemory());
+
+            ITransactionCommitter committer = new TransactionCommitterInMemory(dataStoreInMemory);
             committer.AddBusinessObject(contactPersonTestBO);
             //---------------Execute Test ----------------------
             committer.CommitTransaction();
