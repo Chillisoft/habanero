@@ -26,7 +26,7 @@ using Habanero.BO.Loaders;
 using Habanero.Console;
 using Habanero.DB;
 
-namespace Habanero
+namespace Habanero.Console
 {
     /// <summary>
     /// Provides a template for a standard Habanero application, including

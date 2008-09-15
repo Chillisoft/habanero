@@ -20,7 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Habanero.UI.Base.ControlInterfaces;
+using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
 {

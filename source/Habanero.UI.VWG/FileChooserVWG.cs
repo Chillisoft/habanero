@@ -25,7 +25,6 @@ using System.Data;
 using System.Text;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
-using Habanero.UI.Base.ControlInterfaces;
 
 namespace Habanero.UI.VWG
 {

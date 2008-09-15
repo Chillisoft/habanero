@@ -26,7 +26,6 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.UI.Base;
-using Habanero.UI.Base.ControlInterfaces;
 using Habanero.Util;
 using DateTimePickerFormat=Habanero.UI.Base.DateTimePickerFormat;
 using ScrollBars=System.Windows.Forms.ScrollBars;

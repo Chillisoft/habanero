@@ -19,7 +19,6 @@
 
 using System;
 using System.Drawing;
-using Habanero.UI.Base.ControlInterfaces;
 
 namespace Habanero.UI.Base
 {

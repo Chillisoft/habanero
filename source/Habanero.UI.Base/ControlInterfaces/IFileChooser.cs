@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Habanero.UI.Base.ControlInterfaces
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// Provides a means to choose a file and makes the selected
