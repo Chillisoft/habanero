@@ -81,7 +81,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        private void CtlKeyPressHandler(object sender, KeyPressEventArgs e)
+        private void CtlKeyPressHandler(object sender, System.Windows.Forms.KeyPressEventArgs e)
         {
             if (e.KeyChar == 0x013)//Should be a Keys.Enter?
             {

@@ -20,8 +20,8 @@
 using System;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
-using Habanero.UI.Base.Grid;
-using Habanero.UI.VWG.Grid;
+using Habanero.UI.Base;
+using Habanero.UI.VWG;
 using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.VWG

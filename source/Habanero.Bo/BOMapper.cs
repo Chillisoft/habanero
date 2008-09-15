@@ -24,7 +24,7 @@ using System.Reflection;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
-using Habanero.Util.File;
+using Habanero.Util;
 using log4net;
 
 namespace Habanero.BO

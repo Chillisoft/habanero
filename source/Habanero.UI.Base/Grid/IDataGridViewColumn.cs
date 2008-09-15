@@ -19,7 +19,7 @@
 
 using System.ComponentModel;
 using System.Drawing.Design;
-using Habanero.UI.Base.Grid;
+using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
 {

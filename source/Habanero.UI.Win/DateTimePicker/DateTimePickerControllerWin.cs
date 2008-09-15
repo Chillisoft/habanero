@@ -22,7 +22,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using Habanero.UI.Base;
-using Habanero.UI.Win.Util;
+using Habanero.UI.Win;
 
 namespace Habanero.UI.Win
 {

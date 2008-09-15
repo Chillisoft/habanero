@@ -21,7 +21,6 @@ using System;
 using System.Collections;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
-using KeyPressEventHandler=Habanero.UI.Base.ControlInterfaces.KeyPressEventHandler;
 using ScrollBars=Habanero.UI.Base.ScrollBars;
 
 namespace Habanero.UI.VWG

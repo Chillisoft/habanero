@@ -20,7 +20,7 @@
 using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.Util.File;
+using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
 {

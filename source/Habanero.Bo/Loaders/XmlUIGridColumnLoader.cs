@@ -22,7 +22,7 @@ using System.Collections;
 using System.Xml;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.Util.File;
+using Habanero.Util;
 using log4net;
 
 namespace Habanero.BO.Loaders

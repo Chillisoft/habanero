@@ -21,7 +21,7 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
-using Habanero.UI.Base.Grid;
+using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {

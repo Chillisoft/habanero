@@ -23,7 +23,7 @@ using System.Text;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 
-namespace Habanero.UI.VWG.Grid
+namespace Habanero.UI.VWG
 {
     /// <summary>
     /// Represents the formatting and style information applied to individual cells 

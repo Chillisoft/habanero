@@ -25,7 +25,7 @@ using Habanero.BO.Base;
 using Habanero.BO.Comparer;
 using Habanero.BO.Loaders;
 using Habanero.Util;
-using Habanero.Util.File;
+using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
 {

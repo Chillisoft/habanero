@@ -20,7 +20,7 @@
 using System.IO;
 using Habanero.Base;
 
-namespace Habanero.Util.File
+namespace Habanero.Util
 {
     /// <summary>
     /// Provides a StreamReader to load a text file

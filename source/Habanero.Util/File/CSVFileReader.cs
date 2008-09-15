@@ -22,7 +22,7 @@ using System.IO;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 
-namespace Habanero.Util.File
+namespace Habanero.Util
 {
     /// <summary>
     /// Provides a reader for a CSV (Comma-separated value) file

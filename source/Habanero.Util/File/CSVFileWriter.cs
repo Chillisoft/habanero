@@ -20,7 +20,7 @@
 using System.Data;
 using System.IO;
 
-namespace Habanero.Util.File
+namespace Habanero.Util
 {
     /// <summary>
     /// Provides a writer for a CSV (Comma-separated value) file

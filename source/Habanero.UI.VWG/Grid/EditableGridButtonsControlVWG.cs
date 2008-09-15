@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.UI.Base;
-using Habanero.UI.Base.Grid;
 
-namespace Habanero.UI.VWG.Grid
+namespace Habanero.UI.VWG
 {
     /// <summary>
     /// Provides a set of buttons for use on an <see cref="IEditableGridControl"/>.

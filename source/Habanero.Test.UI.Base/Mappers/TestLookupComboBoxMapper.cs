@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Windows.Forms;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
@@ -220,7 +219,7 @@ namespace Habanero.Test.UI.Base.Mappers
             {
                 public void CallSendKeyBob()
                 {
-                    this.OnKeyPress(new KeyPressEventArgs((char)13));
+                    this.OnKeyPress(new System.Windows.Forms.KeyPressEventArgs((char)13));
                 }
             }
         }

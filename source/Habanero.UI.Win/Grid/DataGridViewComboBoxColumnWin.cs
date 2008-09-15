@@ -20,7 +20,7 @@
 using System;
 using System.Windows.Forms;
 using Habanero.UI.Base;
-using Habanero.UI.Base.Grid;
+using Habanero.UI.Base;
 using DataGridViewColumnSortMode = Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.Win

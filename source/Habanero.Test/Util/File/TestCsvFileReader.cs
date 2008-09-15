@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using Habanero.Util.File;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.Util.File

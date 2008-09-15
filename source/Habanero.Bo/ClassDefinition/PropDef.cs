@@ -23,7 +23,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
 using Habanero.Util;
-using Habanero.Util.File;
+using Habanero.Util;
 //using log4net;
 
 namespace Habanero.BO.ClassDefinition

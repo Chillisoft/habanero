@@ -21,7 +21,7 @@ using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 
-namespace Habanero.UI.VWG.Wizard
+namespace Habanero.UI.VWG
 {
     /// <summary>
     /// A basic implementation of WizardStep that can be used for simply displaying a message.  

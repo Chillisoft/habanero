@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base.Grid;
+using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
 {

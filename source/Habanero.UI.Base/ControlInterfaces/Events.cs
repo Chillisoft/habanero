@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using Habanero.UI.Base;
 
-namespace Habanero.UI.Base.ControlInterfaces
+namespace Habanero.UI.Base
 {
 
     /// <summary>Represents the method that will handle the <see cref="IControlHabanero.KeyPress"></see> event of a <see cref="IControlHabanero"></see>.</summary>

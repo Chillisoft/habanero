@@ -19,7 +19,7 @@
 
 using Gizmox.WebGUI.Forms;
 
-namespace Habanero.UI.VWG.Wizard
+namespace Habanero.UI.VWG
 {
     partial class MessageWizardStepVWG
     {

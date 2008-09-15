@@ -27,9 +27,9 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Base.ControlInterfaces;
-using Habanero.UI.VWG.Grid;
-using Habanero.UI.VWG.Grid;
-using Habanero.Util.File;
+using Habanero.UI.VWG;
+using Habanero.UI.VWG;
+using Habanero.Util;
 using DateTimePickerFormat=Habanero.UI.Base.DateTimePickerFormat;
 using ScrollBars=Gizmox.WebGUI.Forms.ScrollBars;
 
@@ -706,7 +706,7 @@ namespace Habanero.UI.VWG
         /// </summary>
         public virtual IDataGridViewImageColumn CreateDataGridViewImageColumn()
         {
-            return new GridBaseVWG.DataGridViewImageColumnVWG(new DataGridViewImageColumn());
+            return new DataGridViewImageColumnVWG(new DataGridViewImageColumn());
         }
 
         /// <summary>

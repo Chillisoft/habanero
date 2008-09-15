@@ -24,7 +24,7 @@ using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
-using Habanero.UI.Win.Util;
+using Habanero.UI.Win;
 
 namespace Habanero.UI.Win
 {

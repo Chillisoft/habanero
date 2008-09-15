@@ -19,7 +19,7 @@
 
 using System.Windows.Forms;
 
-namespace Habanero.UI.Win.Util
+namespace Habanero.UI.Win
 {
     ///<summary>
     /// Provides useful utilities for windows controls.

@@ -24,7 +24,7 @@ using System.Data;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
-using Habanero.Util.File;
+using Habanero.Util;
 
 namespace Habanero.BO
 {

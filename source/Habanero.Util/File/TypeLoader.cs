@@ -24,7 +24,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using Habanero.Base.Exceptions;
 
-namespace Habanero.Util.File
+namespace Habanero.Util
 {
     /// <summary>
     /// Provides a loader of types for the specified assembly and class names

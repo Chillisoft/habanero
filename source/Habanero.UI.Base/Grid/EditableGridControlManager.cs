@@ -19,7 +19,7 @@
 
 using Habanero.Base;
 
-namespace Habanero.UI.Base.Grid
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// This manager groups common logic for IEditableGridControl objects.
