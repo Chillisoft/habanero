@@ -693,18 +693,18 @@ namespace Habanero.Test.UI.Base
             //    return gridBase;
             //}
 
-            private static System.Windows.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
-                                                                         IGridBase gridBase)
-            {
-                System.Windows.Forms.DataGridView dgv = (System.Windows.Forms.DataGridView)gridBase;
-                System.Windows.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
-                return row.Cells[propName];
-            }
+//            private static System.Windows.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
+//                                                                         IGridBase gridBase)
+//            {
+//                System.Windows.Forms.DataGridView dgv = (System.Windows.Forms.DataGridView)gridBase;
+//                System.Windows.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
+//                return row.Cells[propName];
+//            }
 
             protected override IFormHabanero AddControlToForm(IGridBase gridBase)
             {
                 IFormHabanero frm = GetControlFactory().CreateForm();
-                frm.Controls.Add((IControlHabanero)gridBase);
+                frm.Controls.Add(gridBase);
                 return frm;
             }
 
@@ -810,19 +810,19 @@ namespace Habanero.Test.UI.Base
                 return null;
             }
 
-            private static Gizmox.WebGUI.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
-                                                                        IGridBase gridBase)
-            {
-                Gizmox.WebGUI.Forms.DataGridView dgv = (Gizmox.WebGUI.Forms.DataGridView) gridBase;
-                Gizmox.WebGUI.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
-                return row.Cells[propName];
-            }
+//            private static Gizmox.WebGUI.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
+//                                                                        IGridBase gridBase)
+//            {
+//                Gizmox.WebGUI.Forms.DataGridView dgv = (Gizmox.WebGUI.Forms.DataGridView) gridBase;
+//                Gizmox.WebGUI.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
+//                return row.Cells[propName];
+//            }
 
-            private object GetCellValue(int rowIndex, IGridBase gridBase, string propName)
-            {
-                Gizmox.WebGUI.Forms.DataGridViewCell cell = GetCell(rowIndex, propName, gridBase);
-                return cell.Value;
-            }
+//            private object GetCellValue(int rowIndex, IGridBase gridBase, string propName)
+//            {
+//                Gizmox.WebGUI.Forms.DataGridViewCell cell = GetCell(rowIndex, propName, gridBase);
+//                return cell.Value;
+//            }
 
             //public void TestCreateGridBaseVWG()
             //{
@@ -1059,7 +1059,7 @@ namespace Habanero.Test.UI.Base
             return classDef;
         }
 
-        private static IBusinessObjectCollection GetCol_BO_1ComboBoxItem(ClassDef classDef)
+        private static IBusinessObjectCollection GetCol_BO_1ComboBoxItem(IClassDef classDef)
         {
             IBusinessObjectCollection col = new BusinessObjectCollection<BusinessObject>(classDef);
             IBusinessObject bo1 = classDef.CreateNewBusinessObject();
@@ -1069,7 +1069,7 @@ namespace Habanero.Test.UI.Base
         }
 
 
-        private static IBusinessObjectCollection GetCol_BO_1CheckboxItem(ClassDef classDef)
+        private static IBusinessObjectCollection GetCol_BO_1CheckboxItem(IClassDef classDef)
         {
             IBusinessObjectCollection col = new BusinessObjectCollection<BusinessObject>(classDef);
             IBusinessObject bo1 = classDef.CreateNewBusinessObject();
@@ -1079,7 +1079,7 @@ namespace Habanero.Test.UI.Base
 
         }
 
-        private static IBusinessObjectCollection GetCol_BO_2Items(ClassDef classDef)
+        private static IBusinessObjectCollection GetCol_BO_2Items(IClassDef classDef)
         {
             IBusinessObjectCollection col = new BusinessObjectCollection<BusinessObject>(classDef);
             IBusinessObject bo1 = classDef.CreateNewBusinessObject();

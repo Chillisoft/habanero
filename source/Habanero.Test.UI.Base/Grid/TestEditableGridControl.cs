@@ -478,7 +478,7 @@ namespace Habanero.Test.UI.Base
             IEditableGridControl editableGridControl = CreateEditableGridControl();
 
             AddControlToForm(editableGridControl);
-            IEditableGrid editableGrid = (IEditableGrid) editableGridControl.Grid;
+            IEditableGrid editableGrid = editableGridControl.Grid;
             editableGrid.Columns.Add("TestProp", "TestProp");
 
             //--------------Assert PreConditions----------------   
@@ -546,30 +546,12 @@ namespace Habanero.Test.UI.Base
             AssertIsCheckBoxColumnType(dataGridViewColumn);
             //---------------Tear Down -------------------------        
         }
+//
+//        [Test,
+//         Ignore(
+//             "This test is failing since we added the filtercontrol and buttons to the layout manager in the EditableGridControlWin constructor"
+//             )]
 
-        [Test,
-         Ignore(
-             "This test is failing since we added the filtercontrol and buttons to the layout manager in the EditableGridControlWin constructor"
-             )]
-        public void TestButtonsControl_ClickCancelRestoresGridToOriginalState()
-        {
-            //---------------Set up test pack-------------------
-            //Get Grid with 4 items
-            BusinessObjectCollection<MyBO> col;
-            IEditableGridControl gridControl = GetGridWith_5_Rows(out col);
-            AddControlToForm(gridControl);
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(5, gridControl.Grid.Rows.Count);
-            Assert.AreEqual("b", gridControl.Grid.Rows[0].Cells[1].Value);
-            //---------------Execute Test ----------------------
-            gridControl.Grid.Rows[0].Cells[1].Value = "test";
-            //---------------Assert Precondition----------------
-            Assert.AreEqual("test", gridControl.Grid.Rows[0].Cells[1].Value);
-            //---------------Execute Test ----------------------
-            gridControl.Buttons["Cancel"].PerformClick();
-            //---------------Test Result -----------------------
-            Assert.AreEqual("b", gridControl.Grid.Rows[0].Cells[1].Value);
-        }
 
         [Test]
         public void TestButtonsControl_ClickSaveAcceptsChanges()
@@ -943,6 +925,26 @@ namespace Habanero.Test.UI.Base
                      ((DataGridView) gridControl.Grid).EditMode);
                 //---------------Tear Down -------------------------
             }
+            [Test]
+            public void TestButtonsControl_ClickCancelRestoresGridToOriginalState()
+            {
+                //---------------Set up test pack-------------------
+                //Get Grid with 4 items
+                BusinessObjectCollection<MyBO> col;
+                IEditableGridControl gridControl = GetGridWith_5_Rows(out col);
+                AddControlToForm(gridControl);
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(5, gridControl.Grid.Rows.Count);
+                Assert.AreEqual("b", gridControl.Grid.Rows[0].Cells[1].Value);
+                //---------------Execute Test ----------------------
+                gridControl.Grid.Rows[0].Cells[1].Value = "test";
+                //---------------Assert Precondition----------------
+                Assert.AreEqual("test", gridControl.Grid.Rows[0].Cells[1].Value);
+                //---------------Execute Test ----------------------
+                gridControl.Buttons["Cancel"].PerformClick();
+                //---------------Test Result -----------------------
+                Assert.AreEqual("b", gridControl.Grid.Rows[0].Cells[1].Value);
+            }
         }
 
         #endregion
@@ -1029,6 +1031,26 @@ namespace Habanero.Test.UI.Base
                 System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
                 frm.Controls.Add(editableGridControlWin);
                 return editableGridControlWin;
+            }
+            [Test, Ignore("This does not work for win for some reason.")]
+            public void TestButtonsControl_ClickCancelRestoresGridToOriginalState()
+            {
+                //---------------Set up test pack-------------------
+                //Get Grid with 4 items
+                BusinessObjectCollection<MyBO> col;
+                IEditableGridControl gridControl = GetGridWith_5_Rows(out col);
+                AddControlToForm(gridControl);
+                //---------------Assert Precondition----------------
+                Assert.AreEqual(5, gridControl.Grid.Rows.Count);
+                Assert.AreEqual("b", gridControl.Grid.Rows[0].Cells[1].Value);
+                //---------------Execute Test ----------------------
+                gridControl.Grid.Rows[0].Cells[1].Value = "test";
+                //---------------Assert Precondition----------------
+                Assert.AreEqual("test", gridControl.Grid.Rows[0].Cells[1].Value);
+                //---------------Execute Test ----------------------
+                gridControl.Buttons["Cancel"].PerformClick();
+                //---------------Test Result -----------------------
+                Assert.AreEqual("b", gridControl.Grid.Rows[0].Cells[1].Value);
             }
         }
 

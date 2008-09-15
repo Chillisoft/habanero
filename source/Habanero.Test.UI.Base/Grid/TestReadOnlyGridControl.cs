@@ -1254,7 +1254,8 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        [Test, Ignore("Custom delete should not pop up messagebox by default")]
+//        [Test, Ignore("Custom delete should not pop up messagebox by default")]
+        [Test]
         public void TestDeleteButton_CallsObjectDeletor()
         {
             //---------------Set up test pack-------------------

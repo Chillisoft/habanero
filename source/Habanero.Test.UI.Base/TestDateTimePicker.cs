@@ -18,9 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
@@ -108,8 +106,7 @@ namespace Habanero.Test.UI.Base
                 System.Windows.Forms.Button button = new System.Windows.Forms.Button();
                 form.Controls.Add(button);
                 button.Dock = System.Windows.Forms.DockStyle.Bottom;
-                button.Click += delegate(object sender, EventArgs e)
-                {
+                button.Click += delegate {
                     dateTimePicker.Checked = !dateTimePicker.Checked;
                 };
                 //-------------Assert Preconditions -------------
@@ -131,8 +128,8 @@ namespace Habanero.Test.UI.Base
                 dateTimePicker.NullDisplayValue = "Please Click";
                 //dateTimePicker.ShowCheckBox = true;
                 ITextBox textBox = GetControlFactory().CreateTextBox();
-                IButton button = GetControlFactory().CreateButton("Check/Uncheck", delegate(object sender, EventArgs e)
-                {
+                IButton button = GetControlFactory().CreateButton("Check/Uncheck", delegate
+                                                                                       {
                     //dateTimePicker.Checked = !dateTimePicker.Checked;
                     if (dateTimePicker.ValueOrNull.HasValue)
                     {
@@ -143,8 +140,7 @@ namespace Habanero.Test.UI.Base
                         dateTimePicker.ValueOrNull = dateTimePicker.Value;
                     }
                 });
-                IButton enableButton = GetControlFactory().CreateButton("Enable/Disable", delegate(object sender, EventArgs e)
-                {
+                IButton enableButton = GetControlFactory().CreateButton("Enable/Disable", delegate {
                     dateTimePicker.Enabled = !dateTimePicker.Enabled;
                 });
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(formWin, GetControlFactory());
@@ -153,22 +149,14 @@ namespace Habanero.Test.UI.Base
                 gridLayoutManager.AddControl(button);
                 gridLayoutManager.AddControl(textBox);
                 gridLayoutManager.AddControl(enableButton);
-                gridLayoutManager.AddControl(GetControlFactory().CreateButton("ChangeColor", delegate(object sender, EventArgs e)
-                {
+                gridLayoutManager.AddControl(GetControlFactory().CreateButton("ChangeColor", delegate
+                                                                                                 {
                     Random random = new Random();
                     dateTimePicker.ForeColor = Color.FromArgb(random.Next(0, 255), random.Next(0, 255), random.Next(0, 255));
                     dateTimePicker.BackColor = Color.FromArgb(random.Next(0, 255), random.Next(0, 255), random.Next(0, 255));
                 }));
-                dateTimePicker.ValueChanged += delegate(object sender, EventArgs e)
-                {
-                    if (dateTimePicker.ValueOrNull.HasValue)
-                    {
-                        textBox.Text = dateTimePicker.Value.ToString();
-                    }
-                    else
-                    {
-                        textBox.Text = "";
-                    }
+                dateTimePicker.ValueChanged += delegate {
+                    textBox.Text = dateTimePicker.ValueOrNull.HasValue ? dateTimePicker.Value.ToString() : "";
                 };
                 //---------------Execute Test ----------------------
                 formWin.ShowDialog();
@@ -484,7 +472,7 @@ namespace Habanero.Test.UI.Base
         }
 
         //TODO: Add To Known Issues: There is no event that responds to changing the value of the Checkbox on the control.
-        [Test, Ignore("This is a known issue")]
+        [Test, Ignore("This is a known issue. There is no event that responds to changing the value of the Checkbox on the control")]
         public void TestSetBaseUnchecked_FiresValueChangedEvent()
         {
             //---------------Set up test pack-------------------
@@ -500,6 +488,7 @@ namespace Habanero.Test.UI.Base
             };
             //---------------Execute Test ----------------------
             SetBaseDateTimePickerCheckedValue(dateTimePicker, false);
+
             //---------------Test Result -----------------------
             Assert.IsTrue(isFired, "The ValueChanged event should have fired after setting the value.");
             //Assert.AreEqual(1, firedTimes, "The event should have fired only once.");

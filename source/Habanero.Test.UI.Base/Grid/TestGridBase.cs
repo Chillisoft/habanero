@@ -72,8 +72,8 @@ namespace Habanero.Test.UI.Base
                 return gridBase;
             }
 
-            //TODO: To be implemented in Win
-            [Test, Ignore("To be implemented in win")]
+//            [Test, Ignore("To be implemented in win")]
+            [Test]
             public void TestWin_RowShowingBusinessObjectsValues()
             {
                 //---------------Set up test pack-------------------
@@ -81,8 +81,8 @@ namespace Habanero.Test.UI.Base
                 BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
                 IGridBase gridBase = CreateGridBaseStub();
                 SetupGridColumnsForMyBo(gridBase);
-                string propName = "TestProp";
-                int rowIndex = 1;
+                const string propName = "TestProp";
+                const int rowIndex = 1;
                 //---------------Execute Test ----------------------
                 gridBase.SetBusinessObjectCollection(col);
 
@@ -102,7 +102,7 @@ namespace Habanero.Test.UI.Base
                 MyBO bo = col[0];
 
                 //---------------Execute Test ----------------------
-                string propName = "TestProp";
+                const string propName = "TestProp";
                 bo.SetPropertyValue(propName, "UpdatedValue");
 
                 //---------------Test Result -----------------------
@@ -193,8 +193,8 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 BusinessObjectCollection<MyBO> col;
                 IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
-                string propName = "TestProp";
-                int rowIndex = 1;
+                const string propName = "TestProp";
+                const int rowIndex = 1;
                 MyBO bo = col[rowIndex];
                 AddControlToForm(gridBase);
 
@@ -267,10 +267,10 @@ namespace Habanero.Test.UI.Base
 
                 IGridBase gridBase = CreateGridBaseStub();
 
-                string propName = "Surname";
+                const string propName = "Surname";
                 AddColumnsForContactPerson(businessObjectCollection, gridBase, propName);
 
-                int rowIndex = 1;
+                const int rowIndex = 1;
                 ContactPersonTestBO bo = businessObjectCollection[rowIndex];
                 gridBase.SelectedBusinessObject = bo;
                 bool _boUpdated = false;
@@ -306,8 +306,8 @@ namespace Habanero.Test.UI.Base
                 IGridBase gridBase = CreateGridBaseStub();
 
                 SetupGridColumnsForMyBo(gridBase);
-                string propName = "TestProp";
-                int rowIndex = 1;
+                const string propName = "TestProp";
+                const int rowIndex = 1;
                 //---------------Execute Test ----------------------
                 gridBase.SetBusinessObjectCollection(col);
 
@@ -371,7 +371,6 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual(2, gridBase.CurrentPage);
                 //---------------Tear Down -------------------------
             }
-            //TODO: Implement in win _Port
             [Test]
             public void Test_AddImageColumn()
             {
@@ -407,7 +406,7 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 IGridBase gridBase = CreateGridBaseStub();
                 IDataGridViewImageColumn imgColumn = GetControlFactory().CreateDataGridViewImageColumn();
-                string columnName = "Name";
+                const string columnName = "Name";
                 imgColumn.Name = columnName;
                 gridBase.Columns.Add(imgColumn);
                 //--------------Assert PreConditions----------------            
@@ -484,7 +483,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            CreateCollectionWith_4_Objects();
             IGridBase gridBase = CreateGridBaseStub();
             SetupGridColumnsForMyBo(gridBase);
             //--------------Assert PreConditions----------------            
@@ -877,8 +876,8 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
             IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
-            string propName = "TestProp";
-            int rowIndex = 1;
+            const string propName = "TestProp";
+            const int rowIndex = 1;
             MyBO bo = col[rowIndex];
             gridBase.SetBusinessObjectCollection(col);
             MyBO selectedBo = (MyBO) gridBase.GetBusinessObjectAtRow(rowIndex);
@@ -886,7 +885,7 @@ namespace Habanero.Test.UI.Base
             //---------------Verify precondition----------------
             Assert.AreEqual(selectedBo.TestProp, cell.Value);
             //---------------Execute Test ----------------------
-            string newPropValue = "NewValue";
+            const string newPropValue = "NewValue";
             bo.SetPropertyValue(propName, newPropValue);
             //---------------Test Result -----------------------
             Assert.AreEqual(newPropValue, cell.Value);
@@ -1097,7 +1096,7 @@ namespace Habanero.Test.UI.Base
             IGridBase gridBase = CreateGridBaseStub();
             gridBase.Columns.Add("TestPropDate", "TestPropDate");
             IDataGridViewColumn col = gridBase.Columns[0];
-            string requiredFormat = "dd.MMM.yyyy";
+            const string requiredFormat = "dd.MMM.yyyy";
 
             //--------------Assert PreConditions----------------            
 
@@ -1113,7 +1112,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IDataGridViewColumn col;
-            string requiredFormat = "dd.MMM.yyyy";
+            const string requiredFormat = "dd.MMM.yyyy";
             IGridBase gridBase = CreateGridBaseWithDateCustomFormatCol(out col,  requiredFormat);
 
             //--------------Assert PreConditions----------------            
@@ -1138,11 +1137,11 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             MyBO.LoadClassDefWithDateTime();
             IDataGridViewColumn column;
-            string requiredFormat = "dd.MMM.yyyy";
+            const string requiredFormat = "dd.MMM.yyyy";
             IGridBase gridBase = CreateGridBaseWithDateCustomFormatCol(out column, requiredFormat);
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             MyBO bo = new MyBO();
-            string dateTimeProp = "TestDateTime";
+            const string dateTimeProp = "TestDateTime";
             DateTime expectedDate = DateTime.Now;
             bo.SetPropertyValue(dateTimeProp, expectedDate);
             col.Add(bo);
@@ -1165,10 +1164,10 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             MyBO.LoadClassDefWithDateTime();
             IDataGridViewColumn column;
-            string requiredFormat = "dd.MMM.yyyy";
+            const string requiredFormat = "dd.MMM.yyyy";
             IGridBase gridBase = CreateGridBaseWithDateCustomFormatCol(out column, requiredFormat);
             DataTable dataTable = new DataTable();
-            string dateTimeProp = "TestDateTime";
+            const string dateTimeProp = "TestDateTime";
             dataTable.Columns.Add(dateTimeProp, typeof (DateTime));
             DateTime expectedDate = DateTime.Now;
             dataTable.Rows.Add(expectedDate);
@@ -1205,8 +1204,7 @@ namespace Habanero.Test.UI.Base
         private static void CreateBOAndAddToCollection(
             BusinessObjectCollection<ContactPersonTestBO> businessObjectCollection)
         {
-            ContactPersonTestBO cp;
-            cp = new ContactPersonTestBO();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString("N");
             cp.Save();
             businessObjectCollection.Add(cp);

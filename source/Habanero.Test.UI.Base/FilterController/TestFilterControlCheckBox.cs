@@ -57,7 +57,7 @@ namespace Habanero.Test.UI.Base
             //IFilterClause nullClause = new DataViewNullFilterClause();
             IFilterControl filterControl = factory.CreateFilterControl();
             //---------------Execute Test ----------------------
-            string labelName = "aa";
+            const string labelName = "aa";
             IControlHabanero cb = filterControl.AddBooleanFilterCheckBox(labelName, "", true);
 
             //---------------Test Result -----------------------

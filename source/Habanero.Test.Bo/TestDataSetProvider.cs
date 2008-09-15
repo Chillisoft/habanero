@@ -190,30 +190,31 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        [Test, Ignore("Not yet implemented critical to implement immediately")]
+//        [Test, Ignore("Not yet implemented critical to implement immediately")]
+        [Test]
         public void Test_CustomDefined_Property()
         {
-            Assert.Fail("Not yet implemented");
+            //Assert.Fail("Not yet implemented");
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefWithDateTime();
-            //ClassDef.ClassDefs.Clear();
-            //MyBO.LoadClassDefWithDateTime();
-            //BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
-            //MyBO bo = new MyBO();
-            //string dateTimeProp = "TestDateTime";
-            //DateTime expectedDate = DateTime.Now;
-            //bo.SetPropertyValue(dateTimeProp, expectedDate);
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDateTime();
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            MyBO bo = new MyBO();
+            const string dateTimeProp = "TestDateTime";
+            DateTime expectedDate = DateTime.Now;
+            bo.SetPropertyValue(dateTimeProp, expectedDate);
 
-            //col.Add(bo);
-            //IDataSetProvider dataSetProvider = CreateDataSetProvider(col);
-            ////--------------Assert PreConditions----------------            
+            col.Add(bo);
+            IDataSetProvider dataSetProvider = CreateDataSetProvider(col);
+            //--------------Assert PreConditions----------------            
 
-            ////---------------Execute Test ----------------------
-            //DataTable dataTable = dataSetProvider.GetDataTable(bo.ClassDef.GetUIDef("default").UIGrid);
-            ////---------------Test Result -----------------------
-            //Assert.AreSame(typeof(DateTime), dataTable.Columns[dateTimeProp].DataType);
-            //Assert.IsInstanceOfType(typeof(DateTime), dataTable.Rows[0][dateTimeProp]);
-            ////---------------Tear Down -------------------------          
+            //---------------Execute Test ----------------------
+            DataTable dataTable = dataSetProvider.GetDataTable(bo.ClassDef.GetUIDef("default").UIGrid);
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof(DateTime), dataTable.Columns[dateTimeProp].DataType);
+            Assert.IsInstanceOfType(typeof(DateTime), dataTable.Rows[0][dateTimeProp]);
+            //---------------Tear Down -------------------------          
         }
 
         //		[Test]

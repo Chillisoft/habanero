@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
-using DockStyle=Gizmox.WebGUI.Forms.DockStyle;
 
 namespace Habanero.UI.VWG
 {
@@ -40,7 +39,7 @@ namespace Habanero.UI.VWG
         public event EventHandler Filter;
         private readonly IGroupBox _gbox;
         private FilterModes _filterMode; //Note all this should move up to windows need to decide buttons etc on win
-        private IPanel _controlPanel;
+        private readonly IPanel _controlPanel;
 
         public FilterControlVWG(IControlFactory controlFactory)
         {
@@ -74,8 +73,8 @@ namespace Habanero.UI.VWG
 
         private void CreateFilterButtons(IPanel filterButtonPanel)
         {
-            int buttonHeight = 20;
-            int buttonWidth = 45;
+            const int buttonHeight = 20;
+            const int buttonWidth = 45;
             _filterButton = CreateFilterButton(buttonWidth, buttonHeight);
             _clearButton = CreateClearButton(buttonWidth, buttonHeight);
 
@@ -166,7 +165,6 @@ namespace Habanero.UI.VWG
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName,
                                                FilterClauseOperator filterClauseOperator)
         {
-            ;
             return _filterControlManager.AddStringFilterTextBox(labelText, propertyName, filterClauseOperator);
         }
 
@@ -209,7 +207,7 @@ namespace Habanero.UI.VWG
         /// chosen by the user.  The given operator compares the chosen date
         /// with the date shown in the given column name.
         /// </summary>
-        /// <param name="label">The label to appear before the control</param>
+        /// <param name="labelText">The label to appear before the control</param>
         /// <param name="propertyName">The business object property on which to filter</param>
         /// <param name="defaultValue">The default date or null</param>
         /// <param name="filterClauseOperator">The operator used to compare
@@ -217,11 +215,11 @@ namespace Habanero.UI.VWG
         /// right side of the equation.</param>
         /// <param name="nullable">Whether the datetime picker allows null values</param>
         /// <returns>Returns the new DateTimePicker added</returns>
-        public IDateTimePicker AddDateFilterDateTimePicker(string label, string propertyName, DateTime defaultValue,
+        public IDateTimePicker AddDateFilterDateTimePicker(string labelText, string propertyName, DateTime defaultValue,
                                                            FilterClauseOperator filterClauseOperator, bool nullable)
         {
             IDateTimePicker dtPicker =
-                _filterControlManager.AddDateFilterDateTimePicker(propertyName, filterClauseOperator, nullable,
+                _filterControlManager.AddDateFilterDateTimePicker(labelText, propertyName, filterClauseOperator, nullable,
                                                                   defaultValue);
             return dtPicker;
         }

@@ -37,11 +37,11 @@ namespace Habanero.Test.UI.Base.FilterController
             {
                 return new ControlFactoryWin();
             }
-            [Test, Ignore()] //TODO label not being added
-            public void TestLabelAndDateTimePickerAreOnPanel()
-            {
-                TestLabelAndDateTimePickerAreOnPanel(2);
-            }
+            //[Test]
+            //public void TestLabelAndDateTimePickerAreOnPanel()
+            //{
+            //    TestLabelAndDateTimePickerAreOnPanel(2);
+            //}
         }
 
         [TestFixture]
@@ -51,11 +51,11 @@ namespace Habanero.Test.UI.Base.FilterController
             {
                 return new ControlFactoryVWG();
             }
-            [Test, Ignore()] //TODO label not being added
-            public void TestLabelAndDateTimePickerAreOnPanel()
-            {
-                TestLabelAndDateTimePickerAreOnPanel(3);
-            }
+            //[Test]
+            //public void TestLabelAndDateTimePickerAreOnPanel()
+            //{
+            //    TestLabelAndDateTimePickerAreOnPanel(3);
+            //}
         }
         
         [SetUp]
@@ -94,8 +94,9 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.IsNotNull(dtPicker);
             Assert.IsTrue(dtPicker is IDateTimePicker);
         }
-                
-        public void TestLabelAndDateTimePickerAreOnPanel(int controlCount)
+        
+        [Test]
+        public void TestLabelAndDateTimePickerAreOnPanel()
         {
             //---------------Set up test pack-------------------
             IFilterControl filterControl = GetControlFactory().CreateFilterControl();
@@ -106,8 +107,11 @@ namespace Habanero.Test.UI.Base.FilterController
 
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(controlCount, filterControl.Controls.Count);
-            Assert.IsTrue(filterControl.Controls.Contains(dtePicker));
+            Assert.AreEqual(1, filterControl.Controls.Count);
+            Assert.AreEqual(1, filterControl.FilterControls.Count);
+            //Assert.IsTrue(filterControl.FilterControls.Contains(dtePicker));
+            Assert.AreEqual(2, filterControl.FilterPanel.Controls.Count);
+            Assert.IsTrue(filterControl.FilterPanel.Controls.Contains(dtePicker));
             //---------------Tear Down -------------------------          
         }
 
@@ -207,7 +211,7 @@ namespace Habanero.Test.UI.Base.FilterController
             //---------------Test Result -----------------------
             IFilterClause clause =
                 filterClauseFactory.CreateDateFilterClause("TestColumn", FilterClauseOperator.OpGreaterThan, new DateTime(newDateTime.Year, newDateTime.Month, newDateTime.Day));
-            IControlHabanero dtPicker = filterControl.AddDateFilterDateTimePicker("test:", "testcolumn", testDate, FilterClauseOperator.OpGreaterThan, true);
+            filterControl.AddDateFilterDateTimePicker("test:", "testcolumn", testDate, FilterClauseOperator.OpGreaterThan, true);
 
             Assert.AreEqual(clause.GetFilterClauseString(), expectedFilterClause);
             //---------------Tear Down -------------------------          
@@ -309,7 +313,7 @@ namespace Habanero.Test.UI.Base.FilterController
             IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
             IFilterControl filterControl = factory.CreateFilterControl();
             DateTime testDate = DateTime.Now;
-            IDateTimePicker dtePicker = filterControl.AddDateFilterDateTimePicker("test:", "TestColumn", testDate, FilterClauseOperator.OpLessThan, false);
+            filterControl.AddDateFilterDateTimePicker("test:", "TestColumn", testDate, FilterClauseOperator.OpLessThan, false);
             //---------------Execute Test ----------------------
             string expectedFilterClause = filterControl.GetFilterClause().GetFilterClauseString();
             //---------------Test Result -----------------------

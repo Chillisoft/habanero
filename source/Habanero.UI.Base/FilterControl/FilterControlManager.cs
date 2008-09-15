@@ -133,10 +133,6 @@ namespace Habanero.UI.Base
             AddControlToLayoutManager(label, cb);
             _filterControls.Add(new FilterUIStringOptions(_clauseFactory, columnName, cb, options, strictMatch));
 
-            //TODO: Port for windows
-            ////cb.SelectedIndexChanged += FilterControlValueChangedHandler;
-            ////cb.TextChanged += FilterControlValueChangedHandler;
-            ////FireFilterClauseChanged(cb);
             return cb;
         }
 
@@ -148,19 +144,18 @@ namespace Habanero.UI.Base
             ICheckBox cb = _controlFactory.CreateCheckBox();
             _layoutManager.AddControl(cb);
             _filterControls.Add(new FilterUICheckBox(_clauseFactory, propertyName, cb, labelText, isChecked));
-            //TODO: Port for windows
-            //cb.CheckedChanged += FilterControlValueChangedHandler;
-            //FireFilterClauseChanged(cb);
             return cb;
         }
 
         /// <summary>
         /// See <see cref="IFilterControl.AddDateFilterDateTimePicker"/>
         /// </summary>
-        public IDateTimePicker AddDateFilterDateTimePicker(string columnName, FilterClauseOperator filterClauseOperator, bool nullable, DateTime defaultDate)
+        public IDateTimePicker AddDateFilterDateTimePicker(string labelText, string columnName, FilterClauseOperator filterClauseOperator, bool nullable, DateTime defaultDate)
         {
             IDateTimePicker dtPicker = _controlFactory.CreateDateTimePicker();
-            _layoutManager.AddControl(dtPicker);
+            ILabel label = _controlFactory.CreateLabel(labelText);
+            AddControlToLayoutManager(label, dtPicker);
+//            _layoutManager.AddControl(dtPicker);
             _filterControls.Add(new FilterUIDate(_clauseFactory, columnName, dtPicker, filterClauseOperator));
             dtPicker.Value = defaultDate;
             return dtPicker;
@@ -187,10 +182,6 @@ namespace Habanero.UI.Base
             //    _filterUIs.Add(new FilterUIDate(_clauseFactory, columnName, dte, filterClauseOperator));
             //    dte.ValueChanged += FilterControlValueChangedHandler;
             //}
-            //TODO: Port for windows
-            //FireFilterClauseChanged(dte);
-            //_controls.Add(dte);
-            //return dte;
         }
 
         /// <summary>
@@ -241,11 +232,6 @@ namespace Habanero.UI.Base
             ILabel label = _controlFactory.CreateLabel(labelText);
             AddControlToLayoutManager(label, dateRangeComboBox);
             _filterControls.Add(new FilterUIDateRangeString(_clauseFactory, columnName, dateRangeComboBox, includeStartDate, includeEndDate));
-
-            //TODO: Port for windows
-            //dateRangeComboBox.SelectedIndexChanged += FilterControlValueChangedHandler;
-            //dateRangeComboBox.TextChanged += FilterControlValueChangedHandler;
-            //FireFilterClauseChanged(dateRangeComboBox);
             return dateRangeComboBox;
         } 
 
@@ -462,8 +448,6 @@ namespace Habanero.UI.Base
 
             public override void Clear()
             {
-                //TODO Critical Urgent NNB FIx :
-                //throw new NotImplementedException();
                 _dateTimePicker.ValueOrNull = null;
             }
         }
@@ -513,8 +497,6 @@ namespace Habanero.UI.Base
 
             public override void Clear()
             {
-                //TODO Critical Urgent NNB FIx :
-               // throw new NotImplementedException();
                 _dateRangeComboBox.SelectedIndex = -1;
             }
         }

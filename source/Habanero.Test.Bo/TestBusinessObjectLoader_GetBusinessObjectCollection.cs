@@ -245,7 +245,7 @@ namespace Habanero.Test.BO
                 Assert.IsInstanceOfType(typeof(CircleNoPrimaryKey), loadedShape);
             }
 
-            [Test, Ignore("TBI")]
+            [Test]
             public void TestGetBusinessObjectCollection_ReturnsSubType_TwoLevelsDeep_DiscriminatorShared_Fresh()
             {
                 //---------------Set up test pack-------------------
@@ -263,7 +263,7 @@ namespace Habanero.Test.BO
                 //---------------Tear Down -------------------------          
             }
 
-            [Test, Ignore("TBI")]
+            [Test]
             public void TestGetBusinessObjectCollection_ReturnsSubType_TwoLevelsDeep_Fresh()
             {
                 //---------------Set up test pack-------------------

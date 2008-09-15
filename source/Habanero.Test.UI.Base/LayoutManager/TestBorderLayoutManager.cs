@@ -73,7 +73,8 @@ namespace Habanero.Test.UI.Base
             {
                 return new ControlFactoryVWG();
             }
-            [Test,Ignore("Needs to be implemented.")]
+//            [Test,Ignore("Needs to be implemented.")]
+            [Test]
             public void TestSplitterIsIgnoredForVWG() { }
         }
 

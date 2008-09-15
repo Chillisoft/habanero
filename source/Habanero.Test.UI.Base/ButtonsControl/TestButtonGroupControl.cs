@@ -17,8 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Windows.Forms;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
@@ -92,7 +90,7 @@ namespace Habanero.Test.UI.Base
                 IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
 
                 //---------------Execute Test ----------------------
-                Button btn = (Button) buttons.AddButton("Test", delegate(object sender, EventArgs e) { });
+                System.Windows.Forms.Button btn = (System.Windows.Forms.Button)buttons.AddButton("Test", delegate { });
                 //---------------Test Result -----------------------
                 Assert.IsTrue(btn.UseMnemonic);
             }
@@ -107,10 +105,22 @@ namespace Habanero.Test.UI.Base
                 IButton btnTest = buttonGroupControl.AddButton("A");
                 ////---------------Test Result -----------------------
 
-                Assert.AreEqual(Screen.PrimaryScreen.Bounds.Width / 16, btnTest.Width,
+                Assert.AreEqual(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width / 16, btnTest.Width,
                                 "Button width is incorrect - when buttons are very small they should instead be 1 16th of screen width.");
             }
             //}
+
+            [Test]
+            public void TestButtonIndexer_WithASpecialCharactersInTheName_Failing()
+            {
+                //---------------Set up test pack-------------------
+                IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
+                //---------------Execute Test ----------------------
+                const string buttonText = "T est@";
+                IButton btn = buttons.AddButton(buttonText);
+                //---------------Test Result -----------------------
+                Assert.AreSame(btn, buttons["T est@"]);
+            }
         }
 
         [TestFixture]
@@ -135,7 +145,7 @@ namespace Habanero.Test.UI.Base
             {
                 //---------------Set up test pack-------------------
                 IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
-                IButton btn = buttons.AddButton("Test");
+                buttons.AddButton("Test");
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
                 frm.Controls.Add((Gizmox.WebGUI.Forms.Control) buttons);
                 //---------------Execute Test ----------------------
@@ -143,6 +153,17 @@ namespace Habanero.Test.UI.Base
                 //---------------Test Result -----------------------
                 Assert.AreSame(null, frm.AcceptButton);
                 //Assert.AreSame(btn, frm.AcceptButton);
+            }
+            [Test]
+            public void TestButtonIndexer_WithASpecialCharactersInTheName_Failing()
+            {
+                //---------------Set up test pack-------------------
+                IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
+                //---------------Execute Test ----------------------
+                const string buttonText = "T est@";
+                IButton btn = buttons.AddButton(buttonText);
+                //---------------Test Result -----------------------
+                Assert.AreSame(btn, buttons["T est"]);
             }
         }
 
@@ -165,7 +186,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
             //---------------Execute Test ----------------------
-            string buttonText = "Test";
+            const string buttonText = "Test";
             IButton btnTest = buttons.AddButton(buttonText);
             ////---------------Test Result -----------------------
             Assert.IsNotNull(btnTest);
@@ -180,8 +201,8 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
             //---------------Execute Test ----------------------
-            string buttonText = "Test";
-            string buttonname = "buttonName";
+            const string buttonText = "Test";
+            const string buttonname = "buttonName";
             bool clicked = false;
             IButton btnTest = buttons.AddButton(buttonname, buttonText, delegate { clicked = true; });
 
@@ -241,23 +262,12 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
             //---------------Execute Test ----------------------
-            string buttonText = "T est%_&^ #$�<>()!:;.,?[]+-=*/'";
+            const string buttonText = "T est%_&^ #$�<>()!:;.,?[]+-=*/'";
             IButton btn = buttons.AddButton(buttonText);
             //---------------Test Result -----------------------
             Assert.AreSame(btn, buttons[buttonText]);
         }
 
-        [Test, Ignore("Can be improved by having a different name for the control and the label text")]
-        public void TestButtonIndexer_WithASpecialCharactersInTheName_Failing()
-        {
-            //---------------Set up test pack-------------------
-            IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
-            //---------------Execute Test ----------------------
-            string buttonText = "T est@";
-            IButton btn = buttons.AddButton(buttonText);
-            //---------------Test Result -----------------------
-            Assert.AreSame(btn, buttons[buttonText]);
-        }
 
         [Test]
         public void TestHideButton()
@@ -278,8 +288,8 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
             //---------------Execute Test ----------------------
-            string buttonName = "Test";
-            IButton btnTest = buttons.AddButton(buttonName, delegate { ; });
+            const string buttonName = "Test";
+            IButton btnTest = buttons.AddButton(buttonName, delegate {  });
             //---------------Test Result -----------------------
             Assert.IsNotNull(btnTest);
             Assert.AreEqual(buttonName, btnTest.Text);
@@ -337,7 +347,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             IButtonGroupControl buttonGroupControl = GetControlFactory().CreateButtonGroupControl();
-            string buttonText = "TestMustBeLongEnoughToBeGreaterThanTwelthOfScreen";
+            const string buttonText = "TestMustBeLongEnoughToBeGreaterThanTwelthOfScreen";
             //---------------Execute Test ----------------------
             IButton btnTest = buttonGroupControl.AddButton(buttonText);
             ////---------------Test Result -----------------------
@@ -353,7 +363,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             IButtonGroupControl buttonGroupControl = GetControlFactory().CreateButtonGroupControl();
-            string buttonText = "TestMustBeLongEnoughToBeGreaterThanTwelthOfScreen";
+            const string buttonText = "TestMustBeLongEnoughToBeGreaterThanTwelthOfScreen";
             //---------------Execute Test ----------------------
             IButton btnTest1 = buttonGroupControl.AddButton("Test");
             IButton btnTest2 = buttonGroupControl.AddButton(buttonText);

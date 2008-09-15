@@ -162,7 +162,7 @@ namespace Habanero.UI.Win
         /// chosen by the user.  The given operator compares the chosen date
         /// with the date shown in the given column name.
         /// </summary>
-        /// <param name="label">The label to appear before the control</param>
+        /// <param name="labelText">The label to appear before the control</param>
         /// <param name="propertyName">The business object property on which to filter</param>
         /// <param name="defaultValue">The default date or null</param>
         /// <param name="filterClauseOperator">The operator used to compare
@@ -170,15 +170,15 @@ namespace Habanero.UI.Win
         /// right side of the equation.</param>
         /// <param name="nullable">Whether the datetime picker allows null values</param>
         /// <returns>Returns the new DateTimePicker added</returns>
-        public IDateTimePicker AddDateFilterDateTimePicker(string label, string propertyName, DateTime defaultValue,
+        public IDateTimePicker AddDateFilterDateTimePicker(string labelText, string propertyName, DateTime defaultValue,
                                                            FilterClauseOperator filterClauseOperator, bool nullable)
         {
-            //_layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
+            //_layoutManager.AddControl(_filterInputBoxCollection.AddLabel(labelText));
             //DateTimePicker picker =
             //    _filterInputBoxCollection.AddDateFilterDateTimePicker(columnName, defaultValue, filterClauseOperator, ignoreTime, nullable);
             //_layoutManager.AddControl(picker);
             //return picker;
-            IDateTimePicker dtPicker = _filterControlManager.AddDateFilterDateTimePicker(propertyName,
+            IDateTimePicker dtPicker = _filterControlManager.AddDateFilterDateTimePicker(labelText, propertyName,
                                                                                          filterClauseOperator, nullable,
                                                                                          defaultValue);
             dtPicker.ValueChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };

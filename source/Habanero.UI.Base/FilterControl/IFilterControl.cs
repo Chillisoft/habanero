@@ -85,7 +85,7 @@ namespace Habanero.UI.Base
         /// chosen by the user.  The given operator compares the chosen date
         /// with the date shown in the given column name.
         /// </summary>
-        /// <param name="label">The label to appear before the control</param>
+        /// <param name="labelText">The label to appear before the control</param>
         /// <param name="propertyName">The business object property on which to filter</param>
         /// <param name="defaultValue">The default date or null</param>
         /// <param name="filterClauseOperator">The operator used to compare
@@ -93,7 +93,7 @@ namespace Habanero.UI.Base
         /// right side of the equation.</param>
         /// <param name="nullable">Whether the datetime picker allows null values</param>
         /// <returns>Returns the new DateTimePicker added</returns>
-        IDateTimePicker AddDateFilterDateTimePicker(string label, string propertyName, DateTime defaultValue, FilterClauseOperator filterClauseOperator, bool nullable);
+        IDateTimePicker AddDateFilterDateTimePicker(string labelText, string propertyName, DateTime defaultValue, FilterClauseOperator filterClauseOperator, bool nullable);
 
         /// <summary>
         /// The event that is fired with the filter is ready so that another control e.g. a grid can be filtered.

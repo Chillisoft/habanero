@@ -320,7 +320,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IControlHabanero managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
-            int managedControlWidth = 60;
+            const int managedControlWidth = 60;
             manager.ManagedControl.Width = managedControlWidth;
             IControlHabanero ctl = CreateStandardControl();
             IControlHabanero ctl2 = CreateStandardControl();
@@ -339,7 +339,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IControlHabanero managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
-            int ManagedControlWidth = 30;
+            const int ManagedControlWidth = 30;
             manager.ManagedControl.Width = ManagedControlWidth;
             IControlHabanero ctl = CreateStandardControl();
             IControlHabanero ctl2 = CreateStandardControl();
@@ -358,7 +358,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IControlHabanero managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
-            int managedControlWidth = 60;
+            const int managedControlWidth = 60;
             manager.ManagedControl.Width = managedControlWidth;
             IControlHabanero ctl = CreateStandardControl();
             manager.AddControl(ctl);
@@ -395,8 +395,8 @@ namespace Habanero.Test.UI.Base
             manager.AddControl(ctl1);
             manager.AddControl(ctl2);
             //---------------Test Result -----------------------
-            int ctl1LeftPos = (_STD_ManagedControl_Width - _STD_CONTROL_WIDTH - _STD_GAP - _STD_CONTROL_WIDTH) / 2;
-            int ctl2LeftPos = ctl1LeftPos + _STD_GAP + _STD_CONTROL_WIDTH ;
+            const int ctl1LeftPos = (_STD_ManagedControl_Width - _STD_CONTROL_WIDTH - _STD_GAP - _STD_CONTROL_WIDTH) / 2;
+            const int ctl2LeftPos = ctl1LeftPos + _STD_GAP + _STD_CONTROL_WIDTH;
             Assert.AreEqual(ctl1LeftPos, ctl1.Left, "Control should be centre aligned.");
             Assert.AreEqual(ctl2LeftPos, ctl2.Left, "Control should be centre aligned.");
         }
@@ -407,8 +407,8 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IControlHabanero managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
-            int controlWidth = 20;
-            int managedControlWidth = 40;
+            const int controlWidth = 20;
+            const int managedControlWidth = 40;
             IControlHabanero ctl = CreateControl(controlWidth, 10);
             IControlHabanero ctl2 = CreateControl(controlWidth, 10);
             //---------------Execute Test ----------------------
@@ -428,8 +428,8 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IControlHabanero managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
-            int controlWidth = 20;
-            int managedControlWidth = 100;
+            const int controlWidth = 20;
+            const int managedControlWidth = 100;
             IControlHabanero ctl = CreateControl(controlWidth, 10);
             IControlHabanero ctl2 = CreateControl(controlWidth, 10);
             //---------------Execute Test ----------------------

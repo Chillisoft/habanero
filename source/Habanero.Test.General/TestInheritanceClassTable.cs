@@ -169,18 +169,6 @@ namespace Habanero.Test.General
         }
 
         [Test, Ignore("This has been replaced with the new loading")]
-        public void TestSelectSql()
-        {
-            Assert.AreEqual(
-                "SELECT `circle_table`.`CircleID_field`, `circle_table`.`Radius`, `Shape_table`.`ShapeID_field`, `Shape_table`.`ShapeName` FROM `circle_table`, `Shape_table` WHERE `Shape_table`.`ShapeID_field` = `circle_table`.`ShapeID_field` AND `CircleID_field` = ?Param0",
-                selectSql.Statement.ToString(), "Select sql is incorrect for class table inheritance.");
-            Assert.AreEqual(strID, ((IDbDataParameter) selectSql.Parameters[0]).Value,
-                            "Parameter CircleID is incorrect in select where clause for class table inheritance.");
-        }
-
-        // TODO: Would like to separate these tests out later, but needs a structure
-        //  change and I'm out of time right now.
-        [Test, Ignore("This has been replaced with the new loading")]
         public void TestDatabaseReadWrite()
         {
             // Test inserting & selecting

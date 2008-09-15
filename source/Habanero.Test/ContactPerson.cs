@@ -309,7 +309,6 @@ namespace Habanero.Test
         public static BusinessObjectCollection<ContactPerson> LoadBusinessObjCol(string searchCriteria,
                                                                                               string orderByClause)
         {
-            //TODO: Replace this need to build up search criteria from strings. not yet done in new loader.
             BusinessObjectCollection<ContactPerson> bOCol = new BusinessObjectCollection<ContactPerson>(GetClassDef());
             bOCol.Load(searchCriteria, orderByClause);
             return bOCol;

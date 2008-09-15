@@ -166,7 +166,7 @@ namespace Habanero.Test.General
             Assert.AreSame(p, myCol[0]);
         }
 
-        [Test, Ignore("this needs to be rewritten using new Business Object loader")]
+        [Test]
         public void TestLoadBusinessObjectsSearchCriteria_RelatedObjectCriteria()
         {
             ContactPerson.DeleteAllContactPeople();
