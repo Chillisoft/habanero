@@ -106,7 +106,7 @@ Definitions</a></font></b></font></td>
 
 
 
-<p><b>Class definitions for: Habanero v1.4.1</b></p>
+<p><b>XML Class Definitions</b></p>
 <p>This section covers a list of explanations, possible options and 
 limitations for all class definitions as listed in the class definitions XML 
 file (usually called &quot;classdefs.xml&quot;).&nbsp; The class definitions are 
@@ -315,7 +315,9 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       <tr>
         <td class="specnamebottom">Optional attribs:</td>
         <td class="specvaluebottom"><b>table</b> (table name in database, if omitted then
-        the table name is assumed to be the class name)</td>
+        the table name is assumed to be the class name)<br>
+        <b>displayName</b> (the text to use in labels or headings where this class is shown or edited)<br>
+        </td>
       </tr>
     </table>
     </font>
@@ -416,8 +418,12 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
         <b>compulsory</b> =true/<i>false</i> (whether assigning a value is compulsory, 
         will make the field's label bold and provide error messaging to the user 
         if not completed)<br>
-        <b>readWriteRule</b> =<i>ReadWrite/</i>ReadOnly/WriteOnce 
-        (limitations on how often the value can be read or written to)<br>
+        <b>displayName</b> (the text to use in labels or headings where this value is shown or edited)<br>
+        <b>description</b> (the text to use where additional information is shown about the property, such
+        as a tooltip)<br>
+        <b>keepValuePrivate</b> (masks the value in a user control with the standard password mask character)<br>
+        <b>readWriteRule</b> =<i>ReadWrite/</i>ReadOnly/WriteOnce/WriteNotNew/WriteNew 
+        (limitations on how often the value can be read or written to, see the API for more info)<br>
         <b>auto-incrementing</b> =true/<i>false</i> 
         (whether this property is an auto-incrementing primary key, isObjectID must
         be false on the primary key)<br/>
@@ -880,7 +886,7 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
         (keep a reference in memory to the class, can set this to false if your 
         application is very memory-intensive)<br>
         <b>orderBy</b> (the field name(s) to append to the sql order-by clause)<br>
-        <b>deleteAction</b> =DeleteRelated/DereferenceRelated/<i>Prevent</i> (what action to take  when the related object is 
+        <b>deleteAction</b> =DeleteRelated/DereferenceRelated/<i>Prevent</i>/DoNothing (what action to take  when the related object is 
         deleted)</td>
       </tr>
     </table>
@@ -1188,7 +1194,8 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
         <td class="specvalue">Defines a control to edit a field/property in an editing form.&nbsp; 
         "parameter" elements can be used to add further specifications for the 
         control, and "trigger" elements can trigger a range of events (list all parameter elements
-        before triggers).</td>
+        before triggers).  Note that there are default control types assigned when not explicitly
+        specified - these are determined by the UI environment of the ControlFactory.</td>
       </tr>
       <tr>
         <td class="specname">Comes under:</td>
@@ -1215,13 +1222,14 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
         <b>editable</b> =<i>true</i>/false<i><br>
         </i><b>type</b> =<i>TextBox</i> (the class name of the type of 
         control)<br>
-        <b>assembly</b> =<i>System.Windows.Forms</i> (the assembly of the 
-        control type)<br>
+        <b>assembly</b> (the assembly of the control type)<br>
         <b>mapperType</b> =<i>TextBoxMapper</i> (the class used to map the control 
         to the business object property, Habanero provides mappers for the 
         standard controls, you can leave this off for TextBox, ComboBox, 
         CheckBox, DateTimePicker, ListView and NumericUpDown)<br>
-        <b>mapperAssembly</b> (specify this if you are using a custom mapper)</td>
+        <b>mapperAssembly</b> (specify this if you are using a custom mapper)<br>
+        <b>toolTipText</b> (the text to display in a tooltip for this control)
+        </td>
       </tr>
     </table>
     </font>
@@ -1436,6 +1444,7 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
   </tr>
 
   </table>
+
 
   
   

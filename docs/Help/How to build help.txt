@@ -1,3 +1,4 @@
+------------------------------------------------------------------------------------
 NOTE:
 Sandcastle is a Microsoft product that is under development, so refer back to their
 site for the latest improvements.  It is a command-line tool, so there are some free
@@ -6,15 +7,18 @@ products made by others to provide a front-end GUI.
 Check the latest developments at Microsoft.  Also see the Chillisoft wiki page on how to
 document code and build help files.
 
------------------------------------------------
-
 I've looked at two leading GUI's:
 - SandcastleGUI
 - Sandcastle help file builder (.shfb files) - this is my favourite
 
+The installers are located in T:\DeveloperPCInstalls\Optional\Help File Builders
 
-Using SHFB
+------------------------------------------------------------------------------------
+
+
+Using Sandcastle help file builder
   - copy appropriate files to the Build directory (see the help text file)
   - update the class definitions html too
-  - double click on the .shfb file, amend the version number and compile
+  - double click on the .shfb file, amend the version number, assemblies and compile
+  - the compile should take a while, otherwise deal with the errors it shows
   - copy the CHM output file to the right docs folder
