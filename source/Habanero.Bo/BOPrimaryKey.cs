@@ -51,7 +51,7 @@ namespace Habanero.BO
             //If the Business object is not new then you cannot set the objectID
             if (!IsObjectNew)
             {
-                throw new InvalidObjectIdException("The objectGuiID cannot be set for an object that is not new.");
+                throw new InvalidObjectIdException("The ObjectGuidID cannot be set for an object that is not new.");
             }
             //If the object id is not already set then set it.
             if (_newObjectID == Guid.Empty)
@@ -60,7 +60,7 @@ namespace Habanero.BO
             }
             else if (_newObjectID != id)
             {
-                throw new InvalidObjectIdException("The ObjectGuidId has already been set for this object.");
+                throw new InvalidObjectIdException("The ObjectGuidID has already been set for this object.");
             }
         }
 

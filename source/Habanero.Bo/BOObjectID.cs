@@ -56,12 +56,12 @@ namespace Habanero.BO
         {
             if (Count > 0)
             {
-                throw new InvalidObjectIdException("A BOOBjectID cannot have " +
+                throw new InvalidObjectIdException("A BOObjectID cannot have " +
                     "more than one property.");
             }
             if (BOProp.PropertyType != typeof (Guid))
             {
-                throw new InvalidObjectIdException("A BOOBjectID cannot have " +
+                throw new InvalidObjectIdException("A BOObjectID cannot have " +
                     "a property of type other than Guid.");
             }
 
@@ -96,7 +96,7 @@ namespace Habanero.BO
             //If the object id is not already set then set it.
             if (ObjectIDProp == null)
             {
-                throw new InvalidObjectIdException("The property for objectID cannot be null.");
+                throw new InvalidObjectIdException("The property for ObjectGuidID cannot be null.");
             }
             if (ObjectIDProp.Value == null ||
                 (Guid) ObjectIDProp.Value == Guid.Empty)
@@ -105,7 +105,7 @@ namespace Habanero.BO
             }
             else if ((Guid) ObjectIDProp.Value != id)
             {
-                throw new InvalidObjectIdException("The ObjectId has already been set for this object.");
+                throw new InvalidObjectIdException("The ObjectGuidID has already been set for this object.");
             }
         }
 
