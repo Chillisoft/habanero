@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
@@ -364,6 +365,20 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
+
+        [Test]
+        public void TestIsComposite_TrueForNotCriteria()
+        {
+            //---------------Set up test pack-------------------
+            Criteria dateTimeCriteria = new Criteria("DateTime", Criteria.ComparisonOp.GreaterThan, DateTime.Now);
+
+            //---------------Execute Test ----------------------
+            Criteria notCriteria = new Criteria(Criteria.LogicalOp.Not, dateTimeCriteria);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(notCriteria.IsComposite());
+            //---------------Tear Down -------------------------
+        }
+
         [Test]
         public void TestCriteria_IsMatch_TwoProps_Or()
         {
@@ -535,6 +550,54 @@ namespace Habanero.Test.BO
             StringAssert.AreEqualIgnoringCase(expectedString, criteriaAsString);
 
             //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestToString_Not()
+        {
+            //---------------Set up test pack-------------------
+            string surnameValue = Guid.NewGuid().ToString("N");
+            const string surname = "Surname";
+            Criteria surnameCriteria = new Criteria(surname, Criteria.ComparisonOp.Equals, surnameValue);
+            DateTime dateTimeValue = DateTime.Now;
+            const string datetimePropName = "DateTime";
+            Criteria dateTimeCriteria = new Criteria(datetimePropName, Criteria.ComparisonOp.GreaterThan, dateTimeValue);
+            Criteria notCriteria = new Criteria(Criteria.LogicalOp.Not, dateTimeCriteria);
+            Criteria andCriteria = new Criteria(surnameCriteria, Criteria.LogicalOp.And, notCriteria);
+            
+            //---------------Execute Test ----------------------
+            string criteriaAsString = andCriteria.ToString();
+            //---------------Test Result -----------------------
+            string expectedString = string.Format("(Surname = '{0}') AND (NOT (DateTime > '{1}'))", surnameValue, dateTimeValue.ToString(Criteria.DATE_FORMAT));
+            StringAssert.AreEqualIgnoringCase(expectedString, criteriaAsString);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException), "And is not a valid Logical Operator for a Unary Criteria")]
+        public void TestUnaryConstructorDoesntWorkForAnd()
+        {
+            //---------------Set up test pack-------------------
+            Criteria dateTimeCriteria = new Criteria("DateTime", Criteria.ComparisonOp.GreaterThan, DateTime.Now);
+            
+            //---------------Execute Test ----------------------
+            new Criteria(Criteria.LogicalOp.And, dateTimeCriteria);
+            //---------------Test Result -----------------------
+
+            //---------------Tear Down -------------------------
+
+        }
+        [Test, ExpectedException(typeof(ArgumentException), "Or is not a valid Logical Operator for a Unary Criteria")]
+        public void TestUnaryConstructorDoesntWorkForOr()
+        {
+            //---------------Set up test pack-------------------
+            Criteria dateTimeCriteria = new Criteria("DateTime", Criteria.ComparisonOp.GreaterThan, DateTime.Now);
+
+            //---------------Execute Test ----------------------
+            new Criteria(Criteria.LogicalOp.Or, dateTimeCriteria);
+            //---------------Test Result -----------------------
+
+            //---------------Tear Down -------------------------
+
         }
 
         #endregion

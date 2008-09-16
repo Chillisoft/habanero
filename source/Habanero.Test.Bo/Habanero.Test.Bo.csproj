@@ -168,7 +168,6 @@
     <Compile Include="Comparer\TestReflectedPropertyComparer.cs" />
     <Compile Include="Comparer\TestComparers.cs" />
     <Compile Include="TestPack\ContactPersonTestBO.cs" />
-    <Compile Include="CriteriaManager\TestSqlCriteriaCreator.cs" />
     <Compile Include="OrganisationTestBO.cs" />
     <Compile Include="SqlGeneration\StatementGeneratorTestHelper.cs" />
     <Compile Include="ConcurrencyControl\TestConcurrencyControl_OptimisticLockingVersionNumberDB.cs" />
@@ -226,7 +225,6 @@
     <Compile Include="Loaders\TestXmlUIFormColumnLoader.cs" />
     <Compile Include="Loaders\TestXmlUIFormTabLoader.cs" />
     <Compile Include="SqlGeneration\TestInsertStatementGenerator.cs" />
-    <Compile Include="SqlGeneration\TestSelectStatementGenerator.cs" />
     <Compile Include="TestDataSetProvider.cs" />
     <Compile Include="TestEditableDataProvider.cs" />
     <Compile Include="TestReadOnlyDataSetProvider.cs" />

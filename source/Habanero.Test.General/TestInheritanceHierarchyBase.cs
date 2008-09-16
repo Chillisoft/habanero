@@ -29,7 +29,6 @@ namespace Habanero.Test.General
         protected SqlStatementCollection _insertSql;
         protected SqlStatementCollection _updateSql;
         protected SqlStatementCollection _deleteSql;
-        protected SqlStatement _selectSql;
         protected string _filledCircleId;
         protected SqlStatement _loadSql;
 
@@ -48,8 +47,6 @@ namespace Habanero.Test.General
                 new InsertStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
             _updateSql = new UpdateStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
             _deleteSql = new DeleteStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
-            _selectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
-            _selectSql.Statement.Append(_filledCircle.SelectSqlStatement(_selectSql));
         }
 
         private void ClearTables()
@@ -75,8 +72,6 @@ namespace Habanero.Test.General
                 new InsertStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
             _updateSql = new UpdateStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
             _deleteSql = new DeleteStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
-            _selectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
-            _selectSql.Statement.Append(_filledCircle.SelectSqlStatement(_selectSql));
         }
 
         public void SetupTestForFilledCircleInheritsCircleNoPK()
@@ -94,8 +89,6 @@ namespace Habanero.Test.General
                 new InsertStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
             _updateSql = new UpdateStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
             _deleteSql = new DeleteStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
-            _selectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
-            _selectSql.Statement.Append(_filledCircle.SelectSqlStatement(_selectSql));
         }
 
         public void SetupTestForFilledCircleNoPrimaryKeyInheritsCircle()
@@ -113,8 +106,6 @@ namespace Habanero.Test.General
                 new InsertStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
             _updateSql = new UpdateStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
             _deleteSql = new DeleteStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
-            _selectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
-            _selectSql.Statement.Append(_filledCircle.SelectSqlStatement(_selectSql));
         }
 
         protected static Shape CreateSavedShape()

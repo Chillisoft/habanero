@@ -91,29 +91,29 @@ namespace Habanero.BO
             return gen.Generate();
         }
 
-        private bool HasDuplicateObjectInDatabase(BOKey boKey, ISqlStatement checkDuplicateSql, out string errMsg)
-        {
-            errMsg = "";
-            IDatabaseConnection databaseConnection = DatabaseConnection.CurrentConnection;
-            using (IDataReader dr = databaseConnection.LoadDataReader(checkDuplicateSql))
-            {
-                if (dr.Read()) //Database object with these criteria already exists
-                {
-                      log.Error(String.Format("Duplicate record error occurred on primary key for: " +
-                                                                       "Class: {0}, Username: {1}, Machinename: {2}, " +
-                                                                       "Time: {3}, Sql: {4}, Object: {5}",
-                                                                       this.BusinessObject.ClassName, WindowsIdentity.GetCurrent().Name, Environment.MachineName,
-                                                                       DateTime.Now, boKey, this));
+        //private bool HasDuplicateObjectInDatabase(BOKey boKey, ISqlStatement checkDuplicateSql, out string errMsg)
+        //{
+        //    errMsg = "";
+        //    IDatabaseConnection databaseConnection = DatabaseConnection.CurrentConnection;
+        //    using (IDataReader dr = databaseConnection.LoadDataReader(checkDuplicateSql))
+        //    {
+        //        if (dr.Read()) //Database object with these criteria already exists
+        //        {
+        //              log.Error(String.Format("Duplicate record error occurred on primary key for: " +
+        //                                                               "Class: {0}, Username: {1}, Machinename: {2}, " +
+        //                                                               "Time: {3}, Sql: {4}, Object: {5}",
+        //                                                               this.BusinessObject.ClassName, WindowsIdentity.GetCurrent().Name, Environment.MachineName,
+        //                                                               DateTime.Now, boKey, this));
                            
 
-                    string classDisplayName = this.BusinessObject.ClassDef.DisplayName;
+        //            string classDisplayName = this.BusinessObject.ClassDef.DisplayName;
 
-                    errMsg = GetDuplicateObjectErrMsg(boKey, classDisplayName);
-                    return true;
-                }
-            }
-            return false;
-        }
+       //            errMsg = GetDuplicateObjectErrMsg(boKey, classDisplayName);
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
 
         ///<summary>
         /// returns true if there is already an object in the database with the same primary identifier (primary key)
@@ -132,47 +132,107 @@ namespace Habanero.BO
             {
                 allKeys.Add(key);
             }
+            //Criteria keyCriteria = null;
+            Criteria primaryKeyCriteria = null;
             foreach (BOKey boKey in allKeys)
             {
+                if (boKey is BOPrimaryKey)
+                {
+                    primaryKeyCriteria = Criteria.FromPrimaryKey(boKey as IPrimaryKey);
+
+                }
                 if (!boKey.IsDirtyOrNew()) continue;
-                if (boKey is BOPrimaryKey && (this.BusinessObject.ClassDef.HasObjectID)) continue;
 
-                IDatabaseConnection databaseConnection = DatabaseConnection.CurrentConnection;
-                SqlStatement checkDuplicateSql = new SqlStatement(databaseConnection);
-                SelectStatementGenerator generator =
-                    new SelectStatementGenerator(this.BusinessObject, databaseConnection);
-                checkDuplicateSql.Statement.Append(generator.GenerateDuplicateSelect());
-
-                // Special case where super class and subclass have same ID name causes ambiguous field name
-                string idWhereClause = this.BusinessObject.WhereClause(checkDuplicateSql);
-                string id = StringUtilities.GetLeftSection(idWhereClause, " ");
-                if (StringUtilities.CountOccurrences(checkDuplicateSql.ToString(), id) >= 3)
+                if (boKey is BOPrimaryKey)
                 {
-                    idWhereClause = idWhereClause.Insert(idWhereClause.IndexOf(id),
-                                                         this.BusinessObject.ClassDef.TableName + ".");
+                    
+                    if (this.BusinessObject.ClassDef.HasObjectID) continue;
+                  
+                    if (BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(this.BusinessObject.ClassDef, primaryKeyCriteria).
+                       Count > 0)
+                    {
+                        errMsg += GetDuplicateObjectErrMsg(boKey, this.BusinessObject.ClassDef.DisplayName) + Environment.NewLine;
+                    }
+                    continue;
                 }
 
-                string whereClause = "";
-                if (!(boKey is BOPrimaryKey))
-                {
-                    whereClause += " ( NOT (" + idWhereClause + ")) AND ";
-                }
-                whereClause += GetCheckForDuplicateWhereClause(boKey, checkDuplicateSql);
-                checkDuplicateSql.AppendCriteria(whereClause);
+                //if (allKeyCriteria == null)
+                //{
+                //    allKeyCriteria = GetKeyCriteria(boKey);
+                //    if (primaryKeyCriteria != null) 
+                //        allKeyCriteria = new Criteria(allKeyCriteria, Criteria.LogicalOp.And, new Criteria(Criteria.LogicalOp.Not, primaryKeyCriteria));
+                //    continue;
+                //}
 
-                if (HasDuplicateObjectInDatabase(boKey, checkDuplicateSql, out errMsg)) return true;
+                Criteria keyCriteria = GetKeyCriteria(boKey);
+                    if (primaryKeyCriteria != null) 
+                        keyCriteria = new Criteria(keyCriteria, Criteria.LogicalOp.And, new Criteria(Criteria.LogicalOp.Not, primaryKeyCriteria));
+
+                    if (BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(this.BusinessObject.ClassDef, keyCriteria).
+                       Count > 0)
+                        errMsg += GetDuplicateObjectErrMsg(boKey, this.BusinessObject.ClassDef.DisplayName) + Environment.NewLine;
+
+
+              
+
+                //Criteria keyCriteria = GetKeyCriteria(boKey);
+
+                //Criteria.FromPrimaryKey(boKey)
+
+                //IDatabaseConnection databaseConnection = DatabaseConnection.CurrentConnection;
+                //SqlStatement checkDuplicateSql = new SqlStatement(databaseConnection);
+                //SelectStatementGenerator generator =
+                //    new SelectStatementGenerator(this.BusinessObject, databaseConnection);
+                //checkDuplicateSql.Statement.Append(generator.GenerateDuplicateSelect());
+
+                //// Special case where super class and subclass have same ID name causes ambiguous field name
+                //string idWhereClause = this.BusinessObject.WhereClause(checkDuplicateSql);
+                //string id = StringUtilities.GetLeftSection(idWhereClause, " ");
+                //if (StringUtilities.CountOccurrences(checkDuplicateSql.ToString(), id) >= 3)
+                //{
+                //    idWhereClause = idWhereClause.Insert(idWhereClause.IndexOf(id),
+                //                                         this.BusinessObject.ClassDef.TableName + ".");
+                //}
+
+                //string whereClause = "";
+                //if (!(boKey is BOPrimaryKey))
+                //{
+                //    whereClause += " ( NOT (" + idWhereClause + ")) AND ";
+                //}
+                //whereClause += GetCheckForDuplicateWhereClause(boKey, checkDuplicateSql);
+                //checkDuplicateSql.AppendCriteria(whereClause);
+
+                //if (HasDuplicateObjectInDatabase(boKey, checkDuplicateSql, out errMsg)) return true;
             }
-            return false;
+
+            return !String.IsNullOrEmpty(errMsg);
         }
 
-        private static string GetCheckForDuplicateWhereClause(BOKey lBOKey, SqlStatement sql)
+        private Criteria GetKeyCriteria(BOKey boKey)
         {
-            if (lBOKey == null)
+            if (boKey.Count == 1)
             {
-                throw new InvalidKeyException("An error occurred because a " +
-                                              "BOKey argument was null.");
+                return new Criteria(boKey[0].PropertyName, Criteria.ComparisonOp.Equals, boKey[0].Value);
             }
-            return lBOKey.DatabaseWhereClause(sql);
+            Criteria lastCriteria = null;
+            foreach (IBOProp prop in boKey)
+            {
+                Criteria propCriteria = new Criteria(prop.PropertyName, Criteria.ComparisonOp.Equals, prop.Value);
+                lastCriteria = lastCriteria == null
+                                   ? propCriteria
+                                   : new Criteria(lastCriteria, Criteria.LogicalOp.And, propCriteria);
+            }
+            return lastCriteria;
         }
+
+        //private static string GetCheckForDuplicateWhereClause(BOKey lBOKey, SqlStatement sql)
+        //{
+        //    if (lBOKey == null)
+        //    {
+        //        throw new InvalidKeyException("An error occurred because a " +
+        //                                      "BOKey argument was null.");
+        //    }
+        //    return lBOKey.DatabaseWhereClause(sql);
+        //}
     }
 }

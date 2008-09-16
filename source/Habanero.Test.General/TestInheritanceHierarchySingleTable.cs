@@ -130,15 +130,6 @@ namespace Habanero.Test.General
         }
 
         [Test]
-        public void TestCircleSelectSql()
-        {
-            Assert.AreEqual(
-                "SELECT `Shape_table`.`Colour`, `Shape_table`.`Radius`, `Shape_table`.`ShapeID_field`, `Shape_table`.`ShapeName` FROM `Shape_table` WHERE `ShapeType_field` = 'FilledCircleNoPrimaryKey' AND `ShapeID_field` = ?Param0",
-                _selectSql.Statement.ToString(), //.Substring(0, 76),
-                "select statement is incorrect for Single Table inheritance");
-        }
-
-        [Test]
         public void TestCircleUpdateSql()
         {
             Assert.AreEqual(1, _updateSql.Count,

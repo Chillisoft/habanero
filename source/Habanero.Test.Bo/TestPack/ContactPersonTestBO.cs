@@ -61,6 +61,29 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+
+        public static ClassDef LoadDefaultClassDefWithKeyOnSurname()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property name=""ContactPersonID"" type=""Guid"" />
+					<property name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property name=""FirstName"" databaseField=""FirstName_field"" />
+					<property name=""DateOfBirth"" type=""DateTime"" />
+                    <key name=""Surname"">
+                        <prop name=""Surname"" />
+                    </key>
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         public static ClassDef LoadDefaultClassDef_W_IntegerProperty()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -735,5 +758,7 @@ namespace Habanero.Test.BO
         }
 
         #endregion //Properties
+
+       
     }
 }

@@ -78,6 +78,7 @@ namespace Habanero.BO
 
         private void MergeCriteriaSource(Criteria criteria)
         {
+            if (criteria == null) return;
             if (criteria.IsComposite())
             {
                 MergeCriteriaSource(criteria.LeftCriteria);

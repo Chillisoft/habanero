@@ -421,16 +421,6 @@ namespace Habanero.Test.General
         }
 
         [Test]
-        public void TestSelectSql()
-        {
-            Assert.AreEqual(
-                "SELECT `FilledCircle_table`.`Colour`, `FilledCircle_table`.`FilledCircleID_field`, `Shape_table`.`Radius`, `Shape_table`.`ShapeID_field`, `Shape_table`.`ShapeName` FROM `FilledCircle_table`, `Shape_table` WHERE `Shape_table`.`ShapeID_field` = `FilledCircle_table`.`ShapeID_field` AND `FilledCircleID_field` = ?Param0",
-                _selectSql.Statement.ToString(), "Select sql is incorrect for class table inheritance.");
-            Assert.AreEqual(_filledCircleId, (_selectSql.Parameters[0]).Value,
-                            "Parameter FilledCircleID is incorrect in select where clause for class table inheritance.");
-        }
-
-        [Test]
         public void TestSuperClassKey()
         {
             BOKey msuperKey = BOPrimaryKey.GetSuperClassKey(FilledCircleInheritsCircleNoPK.GetClassDef(), _filledCircle);
@@ -447,22 +437,10 @@ namespace Habanero.Test.General
         {
             IMock connectionControl = new DynamicMock(typeof (IDatabaseConnection));
             IDatabaseConnection connection = (IDatabaseConnection) connectionControl.MockInstance;
-            //connectionControl.ExpectAndReturn("LoadDataReader", null, new object[] {null});
-            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-//            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-//            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-//            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-//            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-//            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            //connectionControl.ExpectAndReturn("ExecuteSql", 3, new object[] { null, null });
-
             FilledCircleInheritsCircleNoPK myCircle = new FilledCircleInheritsCircleNoPK();
-//            myCircle.SetDatabaseConnection(connection);
             TransactionCommitterStub committer = new TransactionCommitterStub();
             committer.AddBusinessObject(myCircle);
             committer.CommitTransaction();
-            //myCircle.Save();
             myCircle.SetPropertyValue("Colour", 4);
 
             SqlStatementCollection myUpdateSql =

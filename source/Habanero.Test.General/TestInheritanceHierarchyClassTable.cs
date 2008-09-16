@@ -216,22 +216,6 @@ namespace Habanero.Test.General
                             "Parameter ShapeID has incorrect value in third delete statement in where clause.");
         }
 
-        [Test]
-        public void TestSelectSql()
-        {
-            Assert.AreEqual(
-                "SELECT `circle_table`.`CircleID_field`, `FilledCircle_table`.`Colour`, `FilledCircle_table`.`FilledCircleID_field`, `circle_table`.`Radius`, `Shape_table`.`ShapeID_field`, `Shape_table`.`ShapeName` FROM `FilledCircle_table`, `circle_table`, `Shape_table` WHERE `circle_table`.`CircleID_field` = `FilledCircle_table`.`CircleID_field` AND `Shape_table`.`ShapeID_field` = `circle_table`.`ShapeID_field` AND `FilledCircleID_field` = ?Param0",
-                _selectSql.Statement.ToString(), "Select sql is incorrect for class table inheritance.");
-            Assert.AreEqual(_filledCircleId, _selectSql.Parameters[0].Value,
-                            "Parameter FilledCircleID is incorrect in select where clause for class table inheritance.");
-        }
-
-
-//		[Test]
-//		public void TestLoadSql() {
-//			Assert.AreEqual("SELECT * FROM FilledCircle, Circle, Shape WHERE Circle.CircleID = FilledCircle.CircleID AND Shape.ShapeID = Circle.ShapeID", FilledCircle.GetClassDef().SelectSql);
-//		}
-
         // TODO: Would like to separate these tests out later, but needs a structure
         //  change and I'm out of time right now.
         [Test]

@@ -62,6 +62,7 @@ namespace Habanero.Base
         public CriteriaDB(Criteria criteria)
         {
             _criteria = criteria;
+            if (criteria == null) _criteria = new Criteria(null, LogicalOp.And, null);
         }
 
         ///<summary>
@@ -144,18 +145,34 @@ namespace Habanero.Base
         {
             if (IsComposite())
             {
+                string rightCriteriaAsString = null;
+                if (LogicalOperator == LogicalOp.Not)
+                {
+                    rightCriteriaAsString = new CriteriaDB(RightCriteria).ToString(formatter, addParameter);
+                    return string.Format("{0} ({1})", LogicalOps[(int)LogicalOperator], rightCriteriaAsString);
+                } 
                 string leftCriteriaAsString = new CriteriaDB(LeftCriteria).ToString(formatter, addParameter);
-                string rightCriteriaAsString = new CriteriaDB(RightCriteria).ToString(formatter, addParameter);
+                rightCriteriaAsString = new CriteriaDB(RightCriteria).ToString(formatter, addParameter);
                 return string.Format("({0}) {1} ({2})", leftCriteriaAsString, LogicalOps[(int)LogicalOperator],
                                      rightCriteriaAsString);
             }
             string valueString;
+            string comparisonOperator = ComparisonOperatorString();
             if (_criteria.CanBeParametrised())
             {
                 valueString = addParameter(FieldValue);
             } else
             {
-                valueString = FieldValue == null ? "NULL" : Convert.ToString(FieldValue);
+                if (FieldValue == null)
+                {
+                    valueString = "NULL";
+                    if (this.ComparisonOperator == ComparisonOp.Equals) comparisonOperator = "IS";
+                }
+                else
+                {
+                    valueString = Convert.ToString(FieldValue);
+                }
+
             }
             string sourceEntityName = ""; if (Field.Source != null) sourceEntityName = Field.Source.ChildSourceLeaf.EntityName;
             string separator = "";
@@ -165,7 +182,7 @@ namespace Habanero.Base
                 separator = ".";
             }
             string fieldNameString = formatter.DelimitField(Field.FieldName);
-            return string.Format("{0}{1}{2} {3} {4}", sourceEntityName, separator, fieldNameString, ComparisonOperatorString(), valueString);
+            return string.Format("{0}{1}{2} {3} {4}", sourceEntityName, separator, fieldNameString, comparisonOperator, valueString);
         }
     }
 }

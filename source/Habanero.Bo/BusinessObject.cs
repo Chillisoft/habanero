@@ -1102,36 +1102,6 @@ namespace Habanero.BO
 
         #region Sql Statements
 
-//        /// <summary>
-//        /// Parses the parameter sql information into the given search
-//        /// expression
-//        /// </summary>
-//        /// <param name="searchExpression">The search expression</param>
-//        internal void ParseParameterInfo(IExpression searchExpression)
-//        {
-//            foreach (BOProp prop in _boPropCol)
-//            {
-//                IPropDef propDef = prop.PropDef;
-//                ClassDef classDef = GetCorrespondingClassDef(propDef, _classDef);
-//                PropDefParameterSQLInfo propDefParameterSQLInfo = new PropDefParameterSQLInfo(propDef, classDef);
-//                searchExpression.SetParameterSqlInfo(propDefParameterSQLInfo);
-//            }
-//        }
-//
-//        private static ClassDef GetCorrespondingClassDef(IPropDef propDef, ClassDef classDef)
-//        {
-//            ClassDef currentClassDef = classDef;
-//            while (!currentClassDef.PropDefcol.Contains(propDef))
-//            {
-//                currentClassDef = currentClassDef.SuperClassClassDef;
-//                if (currentClassDef == null)
-//                {
-//                    return null;
-//                }
-//            }
-//            return currentClassDef;
-//        }
-
         /// <summary>
         /// Returns the primary key's sql "where" clause
         /// </summary>
@@ -1140,7 +1110,6 @@ namespace Habanero.BO
         /// <returns>Returns a string</returns>
         protected internal virtual string WhereClause(SqlStatement sql)
         {
-            //return _primaryKey.PersistedDatabaseWhereClause(sql);
             return ID.PersistedDatabaseWhereClause(sql);
         }
 
@@ -1155,70 +1124,6 @@ namespace Habanero.BO
         {
             BOKey msuperKey = BOPrimaryKey.GetSuperClassKey(subClassDef, this);
             return msuperKey.PersistedDatabaseWhereClause(sql);
-        }
-
-        /// <summary>
-        /// Returns a sql "select" statement with an attached "where" clause
-        /// </summary>
-        /// <param name="selectSql">The sql statement used to generate and track
-        /// parameters</param>
-        /// <returns>Returns a string</returns>
-        protected internal virtual string SelectSqlStatement(SqlStatement selectSql)
-        {
-            string statement = SelectSqlWithNoSearchClauseIncludingWhere();
-            statement += WhereClause(selectSql);
-            return statement;
-        }
-
-        /// <summary>
-        /// Generates a sql statement with no search clause.  It may have a where clause because of joins required by
-        /// inheritance when using class table inheritance, but no other search clauses will be attached.
-        /// </summary>
-        /// <returns>Returns a sql string</returns>
-        protected virtual string SelectSqlWithNoSearchClause()
-        {
-            return new SelectStatementGenerator(this, DatabaseConnection.CurrentConnection).Generate(-1);
-        }
-
-        /// <summary>
-        /// Returns a sql statement with no search clause but including a
-        /// "where " (or "and " where appropriate) statement.  Uses SelectSqlWithNoSearchClause() and appends
-        /// a "where" or "and" depending on which one is appropriate.
-        /// </summary>
-        /// <returns>Returns a sql string</returns>
-        internal string SelectSqlWithNoSearchClauseIncludingWhere()
-        {
-            string basicSelect = SelectSqlWithNoSearchClause();
-            if (basicSelect.IndexOf(" WHERE ") == -1)
-            {
-                basicSelect += " WHERE ";
-            }
-            else
-            {
-                basicSelect += " AND ";
-            }
-            return basicSelect;
-        }
-
-        /// <summary>
-        /// Returns a "select" sql statement string that is used to load this
-        /// object from the database
-        /// </summary>
-        /// <param name="limit">The limit</param>
-        /// <returns>Returns a sql string</returns>
-        protected internal string GetSelectSql(int limit)
-        {
-            return new SelectStatementGenerator(this, DatabaseConnection.CurrentConnection).Generate(limit);
-        }
-
-        /// <summary>
-        /// Returns a "select" sql statement string that is used to load this
-        /// object from the database
-        /// </summary>
-        /// <returns>Returns a sql string</returns>
-        protected internal string GetSelectSql()
-        {
-            return GetSelectSql(-1);
         }
 
         #endregion //Sql Statements

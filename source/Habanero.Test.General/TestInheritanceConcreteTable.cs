@@ -100,14 +100,5 @@ namespace Habanero.Test.General
                             "Parameter CircleID has incorrect value in Delete Sql statement for concrete table inheritance.");
         }
 
-        [Test]
-        public void TestSelectSql()
-        {
-            Assert.AreEqual(
-                "SELECT `circle_table`.`CircleID_field`, `circle_table`.`Radius`, `circle_table`.`ShapeName` FROM `circle_table` WHERE `CircleID_field` = ?Param0",
-                selectSql.Statement.ToString(), "Select sql is incorrect for concrete table inheritance.");
-            Assert.AreEqual(strID, ((IDbDataParameter) selectSql.Parameters[0]).Value,
-                            "Parameter CircleID is incorrect in select where clause for concrete table inheritance.");
-        }
     }
 }

@@ -44,7 +44,8 @@ namespace Habanero.Base
             /// <summary>
             /// The logical Or (||) operator
             /// </summary>
-            Or
+            Or,
+            Not
         }
 
         #endregion
@@ -110,7 +111,7 @@ namespace Habanero.Base
         private readonly ComparisonOp _comparisonOp;
         private readonly Criteria _rightCriteria;
         private object _fieldValue;
-        protected readonly string[] LogicalOps = {"AND", "OR"};
+        protected readonly string[] LogicalOps = {"AND", "OR", "NOT"};
         protected readonly string[] ComparisonOps = {"=", ">", "<", "<>", "<=", ">=", "LIKE", "NOT LIKE", "IS", "IS NOT"};
         private readonly QueryField _field;
 
@@ -154,6 +155,19 @@ namespace Habanero.Base
             _field = field;
             _comparisonOp = comparisonOp;
             _fieldValue = value;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="logicalOp"></param>
+        /// <param name="criteria"></param>
+        public Criteria(LogicalOp logicalOp, Criteria criteria)
+        {
+            if (logicalOp == LogicalOp.And) throw new ArgumentException("And is not a valid Logical Operator for a Unary Criteria");
+            if (logicalOp == LogicalOp.Or) throw new ArgumentException("Or is not a valid Logical Operator for a Unary Criteria");
+            _logicalOp = logicalOp;
+            _rightCriteria = criteria;
         }
 
         ///<summary>
@@ -367,8 +381,15 @@ namespace Habanero.Base
         {
             if (IsComposite())
             {
+                string rightCriteriaAsString;
+                if (_logicalOp == LogicalOp.Not)
+                {
+                    rightCriteriaAsString = RightCriteria.ToString();
+                    return string.Format("{0} ({1})", LogicalOps[(int)LogicalOperator], rightCriteriaAsString);
+                    
+                } 
                 string leftCriteriaAsString =  LeftCriteria.ToString();
-                string rightCriteriaAsString = RightCriteria.ToString();
+                rightCriteriaAsString = RightCriteria.ToString();
                 return string.Format("({0}) {1} ({2})", leftCriteriaAsString, LogicalOps[(int)LogicalOperator],
                                      rightCriteriaAsString);
             }
@@ -376,23 +397,6 @@ namespace Habanero.Base
             if (!String.IsNullOrEmpty(sourceName)) sourceName += ".";
             string stringComparisonOp = ComparisonOperatorString();
             return string.Format("{0}{1} {2} {3}", sourceName, Field.PropertyName, stringComparisonOp, GetValueAsString());
-            //return ToString(delegate(string propName) { return propName; }, delegate(object value)
-            //    {
-            //        string valueString;
-            //        if (value is DateTime)
-            //        {
-            //            valueString = ((DateTime) value).ToString(DATE_FORMAT);
-            //        }
-            //        else if (value is Guid)
-            //        {
-            //            valueString = ((Guid) value).ToString("B");
-            //        }
-            //        else
-            //        {
-            //            valueString = value.ToString();
-            //        }
-            //        return "'" + valueString + "'";
-            //    });
         }
 
         private string GetValueAsString()
@@ -462,7 +466,7 @@ namespace Habanero.Base
         /// <returns></returns>
         public bool IsComposite()
         {
-            return LeftCriteria != null;
+            return LeftCriteria != null || RightCriteria != null;
         }
 
         /// <summary>
@@ -530,8 +534,10 @@ namespace Habanero.Base
         /// <returns>True if cannot use parameterised Value, false if required</returns>
         public bool CanBeParametrised()
         {
-            return ComparisonOperator != ComparisonOp.Is && ComparisonOperator != ComparisonOp.IsNot;
-//            return (strOp == "IS" || strOp == "IS NOT" || strOp == "NOT IS" || strOp == "IN" || strOp == "NOT IN");
+            if (ComparisonOperator == ComparisonOp.Is) return false;
+            if (ComparisonOperator == ComparisonOp.IsNot) return false;
+            if (ComparisonOperator == ComparisonOp.Equals && FieldValue == null) return false;
+            return true;
         }
 
         protected string ComparisonOperatorString()

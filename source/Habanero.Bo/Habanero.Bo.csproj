@@ -95,7 +95,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BOLoader.cs" />
     <Compile Include="BORegistry.cs" />
     <Compile Include="BOStatus.cs" />
     <Compile Include="BusinessObjectLoaderDB.cs" />
@@ -334,7 +333,6 @@
     </Compile>
     <Compile Include="SqlGeneration\DeleteStatementGenerator.cs" />
     <Compile Include="SqlGeneration\InsertStatementGenerator.cs" />
-    <Compile Include="SqlGeneration\SelectStatementGenerator.cs" />
     <Compile Include="SqlGeneration\UpdateStatementGenerator.cs" />
     <Compile Include="SupportsAutoIncrementingFieldBO.cs" />
     <Compile Include="TransactionalBusinessObject.cs" />

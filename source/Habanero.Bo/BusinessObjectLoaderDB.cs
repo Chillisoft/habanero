@@ -384,8 +384,8 @@ namespace Habanero.BO
         public void Refresh(IBusinessObjectCollection collection)
         {
             SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
-            ISqlStatement statement = selectQuery.CreateSqlStatement();
             QueryBuilder.PrepareCriteria(collection.ClassDef, selectQuery.Criteria);
+            ISqlStatement statement = selectQuery.CreateSqlStatement();
 
             IBusinessObjectCollection clonedCol = collection.Clone();
             collection.Clear();

@@ -28,7 +28,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
-    [TestFixture]
     public abstract class TestBusinessObjectLoaderWithInheritance
     {
         protected abstract void SetupDataAccessor();

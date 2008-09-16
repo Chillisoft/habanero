@@ -63,13 +63,13 @@ namespace Habanero.Test.General
         }
 
 
-        [Test]
-        public void TestCircleSelectSql()
-        {
-            Assert.AreEqual(
-                "SELECT `FilledCircle_table`.`Colour`, `FilledCircle_table`.`FilledCircleID_field`, `FilledCircle_table`.`Radius`, `FilledCircle_table`.`ShapeName` FROM `FilledCircle_table` WHERE `FilledCircleID_field` = ?Param0",
-                _selectSql.Statement.ToString(), "select statement is incorrect for Concrete Table inheritance");
-        }
+        //[Test]
+        //public void TestCircleSelectSql()
+        //{
+        //    Assert.AreEqual(
+        //        "SELECT `FilledCircle_table`.`Colour`, `FilledCircle_table`.`FilledCircleID_field`, `FilledCircle_table`.`Radius`, `FilledCircle_table`.`ShapeName` FROM `FilledCircle_table` WHERE `FilledCircleID_field` = ?Param0",
+        //        _selectSql.Statement.ToString(), "select statement is incorrect for Concrete Table inheritance");
+        //}
 
         [Test]
         public void TestCircleInsertSql()
@@ -119,14 +119,5 @@ namespace Habanero.Test.General
                             "Parameter FilledCircleID has incorrect value in Delete Sql statement for concrete table inheritance.");
         }
 
-        [Test]
-        public void TestSelectSql()
-        {
-            Assert.AreEqual(
-                "SELECT `FilledCircle_table`.`Colour`, `FilledCircle_table`.`FilledCircleID_field`, `FilledCircle_table`.`Radius`, `FilledCircle_table`.`ShapeName` FROM `FilledCircle_table` WHERE `FilledCircleID_field` = ?Param0",
-                _selectSql.Statement.ToString(), "Select sql is incorrect for concrete table inheritance.");
-            Assert.AreEqual(_filledCircleId, ((IDbDataParameter) _selectSql.Parameters[0]).Value,
-                            "Parameter CircleID is incorrect in select where clause for concrete table inheritance.");
-        }
     }
 }

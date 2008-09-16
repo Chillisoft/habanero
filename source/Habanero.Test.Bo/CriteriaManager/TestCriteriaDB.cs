@@ -75,6 +75,25 @@ namespace Habanero.Test.BO
             Assert.AreEqual(string.Format("<<{0}>>.<<{1}>> IS NULL", surnameTable, surnameField), tostring);
         }
 
+
+        [Test]
+        public void TestToString_EqualsNullCriteria()
+        {
+            //-------------Setup Test Pack ------------------
+            const string surnameField = "Surname";
+            Criteria criteria = new Criteria(surnameField, Criteria.ComparisonOp.Equals, null);
+            const string surnameTable = "surname_table";
+            criteria.Field.Source = new Source(surnameTable);
+            CriteriaDB surnameCriteria = new CriteriaDB(criteria);
+
+            //-------------Execute test ---------------------
+            string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>"),
+                                                       delegate(object value) { return Convert.ToString(value); });
+            //-------------Test Result ----------------------
+
+            Assert.AreEqual(string.Format("<<{0}>>.<<{1}>> IS NULL", surnameTable, surnameField), tostring);
+        }
+
         [Test]
         public void TestToString_NoSource()
         {

@@ -60,6 +60,7 @@ namespace Habanero.BO
                                                           new Source(classDef.GetTableName(propDef))));
                 }
             }
+
             Criteria discriminatorCriteria = null;
             AddDiscriminatorFields(selectQuery, classDef, ref discriminatorCriteria);
             selectQuery.DiscriminatorCriteria = discriminatorCriteria;

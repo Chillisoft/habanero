@@ -30,7 +30,6 @@ namespace Habanero.Test.General
         protected SqlStatementCollection itsInsertSql;
         protected SqlStatementCollection itsUpdateSql;
         protected SqlStatementCollection itsDeleteSql;
-        protected SqlStatement selectSql;
         protected string strID;
 
         public void SetupTest()
@@ -51,8 +50,6 @@ namespace Habanero.Test.General
                 new InsertStatementGenerator(objCircle, DatabaseConnection.CurrentConnection).Generate();
             itsUpdateSql = new UpdateStatementGenerator(objCircle, DatabaseConnection.CurrentConnection).Generate();
             itsDeleteSql = new DeleteStatementGenerator(objCircle, DatabaseConnection.CurrentConnection).Generate();
-            selectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
-            selectSql.Statement.Append(objCircle.SelectSqlStatement(selectSql));
         }
 
         public void SetupTestWithoutPrimaryKey()
@@ -72,8 +69,6 @@ namespace Habanero.Test.General
                 new InsertStatementGenerator(objCircle, DatabaseConnection.CurrentConnection).Generate();
             itsUpdateSql = new UpdateStatementGenerator(objCircle, DatabaseConnection.CurrentConnection).Generate();
             itsDeleteSql = new DeleteStatementGenerator(objCircle, DatabaseConnection.CurrentConnection).Generate();
-            selectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
-            selectSql.Statement.Append(objCircle.SelectSqlStatement(selectSql));
         }
 
         protected abstract void SetupInheritanceSpecifics();

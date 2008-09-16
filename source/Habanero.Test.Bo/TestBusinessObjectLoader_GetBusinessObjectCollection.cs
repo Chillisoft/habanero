@@ -26,7 +26,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
-    [TestFixture]
     public abstract class TestBusinessObjectLoader_GetBusinessObjectCollection //:TestBase
     {
         #region Setup/Teardown
