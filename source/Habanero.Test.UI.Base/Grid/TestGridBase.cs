@@ -541,20 +541,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(boToSelect, selectedBusinessObject);
         }
 
-        [Test, Ignore("The old tests tested this but no longer works for giz or windows")]
-        public void TestSelectedBusinessObject_SetsCurrentRow()
-        {
-            //---------------Set up test pack-------------------
-            BusinessObjectCollection<MyBO> col;
-            IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
-            MyBO boToSelect = col[1];
-
-            //---------------Execute Test ----------------------
-            gridBase.SelectedBusinessObject = boToSelect;
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(gridBase.CurrentRow);
-        }
-
         [Test]
         public void TestSetSelectedBusinessObject_ToNull()
         {

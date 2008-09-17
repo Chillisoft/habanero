@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.ObjectManager;
 using Habanero.DB;
 using NUnit.Framework;
 

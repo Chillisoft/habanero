@@ -20,7 +20,6 @@
 using System;
 using Habanero.Base;
 using Habanero.BO;
-using Habanero.BO.ObjectManager;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -38,7 +37,7 @@ namespace Habanero.Test.General
         public void Setup()
         {
             //Ensure that a fresh object is loaded from DB
-            ContactPerson.ClearObjectManager();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
         }
 
         #endregion

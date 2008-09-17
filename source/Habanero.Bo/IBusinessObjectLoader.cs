@@ -21,7 +21,6 @@ using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.ObjectManager;
 
 namespace Habanero.BO
 {

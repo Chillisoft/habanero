@@ -112,11 +112,11 @@ namespace Habanero.BO.SqlGeneration
             _updateSql.Statement.Remove(_updateSql.Statement.Length - 2, 2); //remove the last ", "
             if (isSuperClassStatement)
             {
-                _updateSql.Statement.Append(" WHERE " + _bo.WhereClauseForSuperClass(_updateSql, currentClassDef));
+                _updateSql.Statement.Append(" WHERE " + BOPrimaryKey.GetSuperClassKey(currentClassDef, _bo).PersistedDatabaseWhereClause(_updateSql));
             }
             else
             {
-                _updateSql.Statement.Append(" WHERE " + _bo.WhereClause(_updateSql));
+                _updateSql.Statement.Append(" WHERE " + _bo.ID.PersistedDatabaseWhereClause(_updateSql));
             }
             if (includedProps > 0)
             {

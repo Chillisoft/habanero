@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 
-namespace Habanero.BO.ObjectManager
+namespace Habanero.BO
 {
     ///<summary>
     /// The business object manager is a class that contains weak references

@@ -59,7 +59,7 @@ namespace Habanero.BO.SqlGeneration
             deleteSql = new SqlStatement(_connection);
             deleteSql.Statement = new StringBuilder(
                 @"DELETE FROM " + SqlFormattingHelper.FormatTableName(_bo.TableName, _connection) +
-                                                    " WHERE " + _bo.WhereClause(deleteSql));
+                                                    " WHERE " + _bo.ID.PersistedDatabaseWhereClause(deleteSql));
             statementCollection.Add(deleteSql);
             ClassDef currentClassDef = (ClassDef) _bo.ClassDef;
             while (currentClassDef.IsUsingClassTableInheritance())
@@ -73,31 +73,12 @@ namespace Habanero.BO.SqlGeneration
                 deleteSql.Statement.Append(
                     "DELETE FROM " +
                     SqlFormattingHelper.FormatTableName(currentClassDef.SuperClassClassDef.TableName, _connection) +
-                    " WHERE " + _bo.WhereClauseForSuperClass(deleteSql, currentClassDef));
+                    " WHERE " +
+                    BOPrimaryKey.GetSuperClassKey(currentClassDef, _bo).PersistedDatabaseWhereClause(deleteSql));
                 statementCollection.Add(deleteSql);
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
             return statementCollection;
         }
-
-        // Copied from BO, to be adapted/corrected if needed
-        //private void AddRelationshipDeleteStatements(SqlStatementCollection statementCollection)
-        //{
-        //    foreach (Relationship relationship in _relationshipCol)
-        //    {
-        //        MultipleRelationship multipleRelationship = relationship as MultipleRelationship;
-        //        if (multipleRelationship != null)
-        //        {
-        //            BusinessObjectCollection<BusinessObject> boCol;
-        //            boCol = multipleRelationship.GetRelatedBusinessObjectCol();
-        //            foreach (BusinessObject businessObject in boCol)
-        //            {
-        //                SqlStatementCollection deleteSqlStatementCollection;
-        //                deleteSqlStatementCollection = businessObject.GetDeleteSql();
-        //                statementCollection.Add(deleteSqlStatementCollection);
-        //            }
-        //        }
-        //    }
-        //}
     }
 }

@@ -75,7 +75,7 @@ namespace Habanero.Test.General
                           "Should be the same since GetOwner recovers object from object manager");
 
             person = car.GetOwner();
-            BusinessObject.ClearObjectManager();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             Assert.IsFalse(ReferenceEquals(person, car.GetOwner()),
                            "Should not be the same since the Owner reference is being " +
                            " not maintained in the car class and the object is therefore " +

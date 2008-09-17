@@ -22,7 +22,6 @@ using System.Data;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.ObjectManager;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -162,7 +161,6 @@ namespace Habanero.Test.BO
         {
             SetupTestData();
             BusinessObjectManager.Instance.ClearLoadedObjects();
-            OrderItem.ClearObjectManager();
             OrderItem.ClearTable();
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
             col.LoadAll();

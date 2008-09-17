@@ -25,8 +25,6 @@ using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.ObjectManager;
-using Habanero.BO.SqlGeneration;
 using Habanero.DB;
 using Habanero.Util;
 using log4net;
@@ -231,17 +229,6 @@ namespace Habanero.BO
             return ClassDef.ClassDefs.Contains(GetType()) ? ClassDef.ClassDefs[GetType()] : null;
         }
         #endregion //Constructors
-
-        #region Business Object manager
-        /// <summary>
-        /// Clears the loaded objects collection
-        /// </summary>
-        internal static void ClearObjectManager()
-        {
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-        }
-
-        #endregion //Business Object Loaders
 
         #region Properties
 
@@ -1099,34 +1086,6 @@ namespace Habanero.BO
 //            }
 //        }
         #endregion //Concurrency
-
-        #region Sql Statements
-
-        /// <summary>
-        /// Returns the primary key's sql "where" clause
-        /// </summary>
-        /// <param name="sql">A sql statement used to generate and track
-        /// parameters</param>
-        /// <returns>Returns a string</returns>
-        protected internal virtual string WhereClause(SqlStatement sql)
-        {
-            return ID.PersistedDatabaseWhereClause(sql);
-        }
-
-        /// <summary>
-        /// Returns the super class's sql "where" clause
-        /// </summary>
-        /// <param name="sql">A sql statement used to generate and track
-        /// parameters</param>
-        /// <param name="subClassDef">The sub class</param>
-        /// <returns>Returns a string</returns>
-        protected internal virtual string WhereClauseForSuperClass(SqlStatement sql, ClassDef subClassDef)
-        {
-            BOKey msuperKey = BOPrimaryKey.GetSuperClassKey(subClassDef, this);
-            return msuperKey.PersistedDatabaseWhereClause(sql);
-        }
-
-        #endregion //Sql Statements
 
         ///<summary>
         /// Callec by the transaction committer in the case where the transaction failed

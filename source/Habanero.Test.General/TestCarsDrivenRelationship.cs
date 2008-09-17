@@ -19,7 +19,6 @@
 
 using Habanero.Base;
 using Habanero.BO;
-using Habanero.BO.ObjectManager;
 using NUnit.Framework;
 
 namespace Habanero.Test.General

@@ -168,7 +168,7 @@ namespace Habanero.Test.General
                             "Parameter ShapeID has incorrect value in second delete statement in where clause.");
         }
 
-        [Test, Ignore("This has been replaced with the new loading")]
+        [Test]
         public void TestDatabaseReadWrite()
         {
             // Test inserting & selecting
