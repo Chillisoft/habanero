@@ -39,8 +39,6 @@ namespace Habanero.BO
     /// </summary>
     public class BusinessObject : IBusinessObject, ISerializable
     {
-//        private const string CLASS_NAME = "$$$CLASSNAME$$$";
-//        private const string ASSEMBLY_NAME = "$$$ASSEMBLYNAME$$$";
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
 
         #region IBusinessObject Members
@@ -79,8 +77,6 @@ namespace Habanero.BO
         }
 
         protected BusinessObject(SerializationInfo info, StreamingContext context) {
-//            string className = info.GetString(CLASS_NAME);
-//            string assemblyName = info.GetString(ASSEMBLY_NAME);
             Initialise(ClassDef.ClassDefs[this.GetType()]);
             foreach (IBOProp prop in _boPropCol)
             {
@@ -91,8 +87,6 @@ namespace Habanero.BO
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-//            info.AddValue(CLASS_NAME, this.ClassDef.ClassName);
-//            info.AddValue(ASSEMBLY_NAME, this.ClassDef.AssemblyName);
             foreach (IBOProp prop in _boPropCol)
             {
                 info.AddValue(prop.PropertyName, prop.Value);

@@ -157,7 +157,6 @@ namespace Habanero.BO
         }
 
         protected BusinessObjectCollection(SerializationInfo info, StreamingContext context) {
-
             int count = info.GetInt32(COUNT);
             int created_count = info.GetInt32(CREATED_COUNT);
             Type classType = Util.TypeLoader.LoadType(info.GetString(ASSEMBLY_NAME), info.GetString(CLASS_NAME));
@@ -645,11 +644,6 @@ namespace Habanero.BO
         /// found</returns>
         public TBusinessObject FindByGuid(Guid searchTerm)
         {
-//            string formattedSearchItem = searchTerm.ToString();
-//            formattedSearchItem.Replace("{", "");
-//            formattedSearchItem.Replace("}", "");
-//            formattedSearchItem.Insert(0, _boClassDef.PrimaryKeyDef.KeyName + "=");
-
             string formattedSearchItem =
                 string.Format("{0}={1}", _boClassDef.GetPrimaryKeyDef().KeyName, searchTerm.ToString("B"));
 
