@@ -25,9 +25,10 @@ namespace Habanero.BO
     ///<summary>
     /// The current state of a business object.
     ///</summary>
+    [Serializable]
     public class BOStatus : IBOStatus
     {
-
+        [NonSerialized]
         private readonly IBusinessObject _bo;
 
         ///<summary>
@@ -37,6 +38,7 @@ namespace Habanero.BO
         {
             _bo = bo;
         }
+
         private Statuses _flagState = Statuses.isNew;
 
         /// <summary>
@@ -158,6 +160,18 @@ namespace Habanero.BO
             {
                 _flagState = _flagState & ~flag;
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            BOStatus otherStatus = obj as BOStatus;
+            if (otherStatus == null) return false;
+            return (this._flagState == otherStatus._flagState);
+        }
+
+        public override int GetHashCode()
+        {
+            return _flagState.GetHashCode();
         }
     }
 }

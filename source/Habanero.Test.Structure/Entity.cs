@@ -21,6 +21,7 @@
 // This partial class was auto-generated for use with the Habanero Architecture.
 // ------------------------------------------------------------------------------
 
+using System.Runtime.Serialization;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 
@@ -32,6 +33,15 @@ namespace Habanero.Test.Structure
     
     public partial class Entity
     {
+        public Entity()
+        {
+        }
+
+        protected Entity(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            
+        }
         public static ClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();

@@ -485,6 +485,58 @@ namespace Habanero.Test.BO
             Assert.AreEqual(surname, fetchedSurname);
             //---------------Tear Down -------------------------     
         }
+
+        [Test]
+        public void TestBoStatusEqual()
+        {
+            //---------------Set up test pack-------------------
+            BOStatus boStatus1 = new BOStatus(null);
+            boStatus1.SetBOFlagValue(BOStatus.Statuses.isDeleted, true);
+            boStatus1.SetBOFlagValue(BOStatus.Statuses.isDirty, false);
+            boStatus1.SetBOFlagValue(BOStatus.Statuses.isEditing, true);
+            boStatus1.SetBOFlagValue(BOStatus.Statuses.isNew, false);
+
+            BOStatus boStatus2 = new BOStatus(null);
+            boStatus2.SetBOFlagValue(BOStatus.Statuses.isDeleted, true);
+            boStatus2.SetBOFlagValue(BOStatus.Statuses.isDirty, false);
+            boStatus2.SetBOFlagValue(BOStatus.Statuses.isEditing, true);
+            boStatus2.SetBOFlagValue(BOStatus.Statuses.isNew, false);
+                        
+            //---------------Execute Test ----------------------
+            bool equal = boStatus1.Equals(boStatus2);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(equal);          
+            Assert.AreEqual(boStatus1.GetHashCode(), boStatus2.GetHashCode());
+        }
+
+        [Test]
+        public void TestBoStatusEqual_Null()
+        {
+            //---------------Set up test pack-------------------
+            BOStatus boStatus1 = new BOStatus(null);
+
+            //---------------Execute Test ----------------------
+            bool equal = boStatus1.Equals(null);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(equal);
+            
+        }
+        [Test]
+        public void TestBoStatusNotEqual()
+        {
+            //---------------Set up test pack-------------------
+            BOStatus boStatus1 = new BOStatus(null);
+            boStatus1.SetBOFlagValue(BOStatus.Statuses.isDeleted, true);
+
+            BOStatus boStatus2 = new BOStatus(null);
+            boStatus2.SetBOFlagValue(BOStatus.Statuses.isDeleted, false);
+
+            //---------------Execute Test ----------------------
+            bool equal = boStatus1.Equals(boStatus2);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(equal);
+            Assert.AreNotEqual(boStatus1.GetHashCode(), boStatus2.GetHashCode());
+        }
     }
 
 }

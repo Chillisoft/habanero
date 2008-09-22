@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -36,8 +37,10 @@ namespace Habanero.BO
     /// the common functionality used by business objects.
     /// This Class implements the Layer SuperType - Fowler (xxx)
     /// </summary>
-    public class BusinessObject : IBusinessObject
+    public class BusinessObject : IBusinessObject, ISerializable
     {
+//        private const string CLASS_NAME = "$$$CLASSNAME$$$";
+//        private const string ASSEMBLY_NAME = "$$$ASSEMBLYNAME$$$";
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
 
         #region IBusinessObject Members
@@ -75,6 +78,28 @@ namespace Habanero.BO
         {
         }
 
+        protected BusinessObject(SerializationInfo info, StreamingContext context) {
+//            string className = info.GetString(CLASS_NAME);
+//            string assemblyName = info.GetString(ASSEMBLY_NAME);
+            Initialise(ClassDef.ClassDefs[this.GetType()]);
+            foreach (IBOProp prop in _boPropCol)
+            {
+                prop.InitialiseProp(info.GetValue(prop.PropertyName, prop.PropertyType));
+            }
+            _boStatus = (BOStatus) info.GetValue("Status", typeof (BOStatus));
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+//            info.AddValue(CLASS_NAME, this.ClassDef.ClassName);
+//            info.AddValue(ASSEMBLY_NAME, this.ClassDef.AssemblyName);
+            foreach (IBOProp prop in _boPropCol)
+            {
+                info.AddValue(prop.PropertyName, prop.Value);
+            }
+            info.AddValue("Status",this.Status);
+        }
+
         /// <summary>
         /// Constructor that specifies a class definition
         /// </summary>
@@ -82,26 +107,6 @@ namespace Habanero.BO
         protected internal BusinessObject(ClassDef def)
         {
             Initialise(def);
-            Guid myID = Guid.NewGuid();
-            if (_primaryKey != null)
-            {
-                _primaryKey.SetObjectGuidID(myID);
-            }
-            InitialisePrimaryKeyPropertiesBasedOnParentClass(myID);
-
-            if (_classDef == null)
-            {
-                throw new HabaneroDeveloperException(
-                    "There is an error constructing a business object. Please refer to the system administrator",
-                    "The Class could not be constructed since no classdef could be loaded");
-            }
-            if (ID == null)
-            {
-                throw new HabaneroDeveloperException(
-                    "There is an error constructing a business object. Please refer to the system administrator",
-                    "The Class could not be constructed since no _primaryKey has been created");
-            }
-//            AddToLoadedObjectsCollection();
         }
 
         private void InitialisePrimaryKeyPropertiesBasedOnParentClass(Guid myID)
@@ -148,6 +153,7 @@ namespace Habanero.BO
             }
         }
 
+
         private void Initialise(ClassDef classDef)
         {
             _boStatus = new BOStatus(this);
@@ -157,6 +163,25 @@ namespace Habanero.BO
             _boStatus.IsNew = true;
             _classDef = classDef ?? ClassDef.ClassDefs[GetType()];
             ConstructFromClassDef(true);
+            Guid myID = Guid.NewGuid();
+            if (_primaryKey != null)
+            {
+                _primaryKey.SetObjectGuidID(myID);
+            }
+            InitialisePrimaryKeyPropertiesBasedOnParentClass(myID);
+
+            if (_classDef == null)
+            {
+                throw new HabaneroDeveloperException(
+                    "There is an error constructing a business object. Please refer to the system administrator",
+                    "The Class could not be constructed since no classdef could be loaded");
+            }
+            if (ID == null)
+            {
+                throw new HabaneroDeveloperException(
+                    "There is an error constructing a business object. Please refer to the system administrator",
+                    "The Class could not be constructed since no _primaryKey has been created");
+            }
         }
         /// <summary>
         /// Constructs the class
@@ -1149,5 +1174,6 @@ namespace Habanero.BO
             }
             return true;
         }
+
     }
 }

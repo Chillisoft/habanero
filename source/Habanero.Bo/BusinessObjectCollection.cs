@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -38,9 +39,18 @@ namespace Habanero.BO
     /// class. The business objects contained in this collection must
     /// inherit from BusinessObject.
     /// </summary>
-    public class BusinessObjectCollection<TBusinessObject> : List<TBusinessObject>, IBusinessObjectCollection
+    
+    [Serializable]
+    public class BusinessObjectCollection<TBusinessObject> : List<TBusinessObject>, IBusinessObjectCollection, ISerializable
         where TBusinessObject : class, IBusinessObject, new()
     {
+        private const string COUNT = "Count";
+        private const string CLASS_NAME = "ClassName";
+        private const string ASSEMBLY_NAME = "AssemblyName";
+        private const string CREATED_COUNT = "CreatedCount";
+        private const string BUSINESS_OBJECT = "bo";
+        private const string CREATED_BUSINESS_OBJECT = "createdbo";
+
         #region StronglyTypedComparer
         private class StronglyTypedComperer<T> : IComparer<T>
         {
@@ -57,11 +67,12 @@ namespace Habanero.BO
             }
         }
         #endregion//StronglyTypedComparer
-        private readonly ClassDef _boClassDef;
-        private readonly IBusinessObject _sampleBo;
-        private readonly Hashtable _keyObjectHashTable;
+        private ClassDef _boClassDef;
+        private IBusinessObject _sampleBo;
+        private Hashtable _keyObjectHashTable;
         private readonly List<TBusinessObject> _createdBusinessObjects = new List<TBusinessObject>();
         private ISelectQuery _selectQuery;
+
 
         /// <summary>
         /// Default constructor. 
@@ -106,6 +117,11 @@ namespace Habanero.BO
 
         private BusinessObjectCollection(IClassDef classDef, TBusinessObject sampleBo)
         {
+            Initialise(classDef, sampleBo);
+        }
+
+        private void Initialise(IClassDef classDef, TBusinessObject sampleBo)
+        {
             if (classDef == null)
             {
                 if (sampleBo == null)
@@ -130,9 +146,9 @@ namespace Habanero.BO
                 if (_boClassDef == null)
                 {
                     throw new HabaneroDeveloperException(String.Format("A business object collection is " +
-                                                          "being created for the type '{0}', but no class definitions have " +
-                                                          "been loaded for this type.", typeof (TBusinessObject).Name),
-                                                          "Class Definitions not loaded");
+                                                                       "being created for the type '{0}', but no class definitions have " +
+                                                                       "been loaded for this type.", typeof (TBusinessObject).Name),
+                                                         "Class Definitions not loaded");
                 }
                 _sampleBo = _boClassDef.CreateNewBusinessObject();
             }  
@@ -140,6 +156,21 @@ namespace Habanero.BO
             _selectQuery = QueryBuilder.CreateSelectQuery(_boClassDef);
         }
 
+        protected BusinessObjectCollection(SerializationInfo info, StreamingContext context) {
+
+            int count = info.GetInt32(COUNT);
+            int created_count = info.GetInt32(CREATED_COUNT);
+            Type classType = Util.TypeLoader.LoadType(info.GetString(ASSEMBLY_NAME), info.GetString(CLASS_NAME));
+            this.Initialise(ClassDefinition.ClassDef.ClassDefs[classType], null);
+            for (int i = 0; i < count; i++)
+            {
+                this.AddWithoutEvents((TBusinessObject) info.GetValue(BUSINESS_OBJECT + i, typeof(TBusinessObject)));
+            }
+            for (int i = 0; i < created_count; i++)
+            {
+                this.AddCreatedBusinessObject((TBusinessObject)info.GetValue(CREATED_BUSINESS_OBJECT + i, typeof(TBusinessObject)));
+            }
+        }
         /// <summary>
         /// Handles the event of a business object being added
         /// </summary>
@@ -1026,6 +1057,12 @@ namespace Habanero.BO
         public virtual TBusinessObject CreateBusinessObject()
         {
             TBusinessObject newBO = (TBusinessObject) Activator.CreateInstance(typeof (TBusinessObject));
+            AddCreatedBusinessObject(newBO);
+            return newBO;
+        }
+
+        private void AddCreatedBusinessObject(TBusinessObject newBO)
+        {
             EventHandler<BOEventArgs> savedEventHandler = null;
             EventHandler<BOEventArgs> savedEventHandler1 = savedEventHandler;
             savedEventHandler = delegate(object sender, BOEventArgs e)
@@ -1049,7 +1086,6 @@ namespace Habanero.BO
 //TODO: I think that the collection should show all loaded object less removed or deleted object not yet persisted
 //     plus all created or added objects not yet persisted.
 //            this.Add(newBO);
-            return newBO;
         }
 
         /// <summary>
@@ -1061,6 +1097,26 @@ namespace Habanero.BO
         IBusinessObject IBusinessObjectCollection.CreateBusinessObject()
         {
             return CreateBusinessObject();
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            int count = 0;
+            info.AddValue(COUNT,Count);
+            info.AddValue(CREATED_COUNT, this.CreatedBusinessObjects.Count);
+            info.AddValue(CLASS_NAME, this.ClassDef.ClassName);
+            info.AddValue(ASSEMBLY_NAME, this.ClassDef.AssemblyName);
+            foreach (TBusinessObject businessObject in this)
+            {
+                info.AddValue(BUSINESS_OBJECT+count,businessObject);
+                count++;
+            }
+            int createdCount = 0;
+            foreach (TBusinessObject createdBusinessObject in this.CreatedBusinessObjects)
+            {
+                info.AddValue(CREATED_BUSINESS_OBJECT + createdCount, createdBusinessObject);
+                createdCount++;
+            }
         }
     }
 }

@@ -140,6 +140,7 @@
     <Compile Include="Security\TestBusinessObjectAuthorisation.cs" />
     <Compile Include="TestBusinessObjectLoaderWithInheritance.cs" />
     <Compile Include="TestBusinessObjectLoader_GetBusinessObjectCollection.cs" />
+    <Compile Include="TestBusinessObjectSerialisation.cs" />
     <Compile Include="TestPack\AddressTestBO.cs" />
     <Compile Include="ClassDefinition\TestTriggerCol.cs" />
     <Compile Include="ClassDefinition\TestTrigger.cs" />

@@ -21,6 +21,7 @@
 // This partial class was auto-generated for use with the Habanero Architecture.
 // ------------------------------------------------------------------------------
 
+using System.Runtime.Serialization;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 
@@ -28,10 +29,18 @@ namespace Habanero.Test.Structure
 {
     using System;
     using Habanero.BO;
-    
-    
+
+    [Serializable]
     public partial class Person
     {
+        public Person()
+        {
+        }
+
+        protected Person(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            
+        }
         public new static ClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -40,7 +49,7 @@ namespace Habanero.Test.Structure
 			    <property name=""IDNumber"" databaseField=""field_ID_Number"" />
 			    <property name=""FirstName"" databaseField=""field_First_Name"" />
 			    <property name=""LastName"" databaseField=""field_Last_Name"" />
-			    <property name=""PersonID"" databaseField=""field_Person_ID"" compulsory=""true"" />
+			    <property name=""PersonID"" type=""System.Guid"" databaseField=""field_Person_ID"" compulsory=""true"" />
 			    <primaryKey>
 			      <prop name=""PersonID"" />
 			    </primaryKey>
