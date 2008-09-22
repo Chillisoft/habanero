@@ -115,6 +115,9 @@ namespace Habanero.Base
         protected readonly string[] ComparisonOps = {"=", ">", "<", "<>", "<=", ">=", "LIKE", "NOT LIKE", "IS", "IS NOT"};
         private readonly QueryField _field;
 
+        /// <summary>
+        /// This constructor is used by the Sub Classes of Criteria E.g. CriteriaDB.
+        /// </summary>
         protected Criteria()
         {
         }

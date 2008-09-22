@@ -353,6 +353,12 @@ namespace Habanero.BO
                     }
                 }
             }
+            //TODO: I think that the collection should show all loaded object less removed or deleted object not yet persisted
+            //     plus all created or added objects not yet persisted.
+//            foreach (T createdBO in collection.CreatedBusinessObjects)
+//            {
+//                ((IBusinessObjectCollection)collection).AddWithoutEvents(createdBO);
+//            }
         }
 
         /// <summary>

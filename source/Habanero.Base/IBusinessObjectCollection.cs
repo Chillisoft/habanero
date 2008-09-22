@@ -55,7 +55,6 @@ namespace Habanero.Base
 		/// <returns>
 		/// True if the <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only; otherwise, false.
 		/// </returns>
-		///
 		bool IsReadOnly { get; }
 
         /// <summary>

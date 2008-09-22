@@ -32,8 +32,6 @@ namespace Habanero.BO
     public class RelatedBusinessObjectCollection<TBusinessObject> : BusinessObjectCollection<TBusinessObject>
         where TBusinessObject : class, IBusinessObject, new()
     {
-        //private BusinessObject _parentBusinessObject;
-        //private readonly string _relationshipName;
         private readonly Relationship _relationship;
         private readonly List<TBusinessObject> _removedBusinessObjects = new List<TBusinessObject>();
 
@@ -97,6 +95,7 @@ namespace Habanero.BO
                                     _relationship.OwningBO.GetPropertyValue(relPropDef.OwnerPropertyName));
                 
             }
+            //bo.Relationships this._relationship.OwningBO
             return bo;
         }
         ///<summary>

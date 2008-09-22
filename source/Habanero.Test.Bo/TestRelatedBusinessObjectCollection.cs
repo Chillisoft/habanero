@@ -61,8 +61,34 @@ namespace Habanero.Test.BO
             Assert.AreEqual(bo.MyBoID, relatedBo.MyBoID);
             Assert.IsTrue(relatedBo.Status.IsNew);
             Assert.AreEqual(1, col.CreatedBusinessObjects.Count);
+            //TODO: I think that the collection should show all loaded object less removed or deleted object not yet persisted
+            //     plus all created or added objects not yet persisted.
+//            Assert.AreEqual(1, col.Count);
         }
 
+//TODO: I think that the collection should show all loaded object less removed or deleted object not yet persisted
+//     plus all created or added objects not yet persisted.
+//        [Test]
+//        public void TestCreateBusObjectCollection_SurvivesARefresh()
+//        {
+//            //---------------Set up test pack-------------------
+//            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
+////            MyRelatedBo.LoadClassDef();
+//            ContactPersonTestBO bo = new ContactPersonTestBO();
+//            RelatedBusinessObjectCollection<Address> addresses = bo.Addresses;
+//            addresses.CreateBusinessObject();
+//
+//            //---------------Assert Precondition----------------
+//            Assert.AreEqual(1, addresses.CreatedBusinessObjects.Count);
+//            Assert.AreEqual(1, addresses.Count);
+//
+//            //---------------Execute Test ----------------------
+//            addresses.Refresh();
+//
+//            //---------------Test Result -----------------------
+//            Assert.AreEqual(1, addresses.CreatedBusinessObjects.Count);
+//            Assert.AreEqual(1, addresses.Count);
+//        }
         [Test]
         public void TestCreateBusObjectCollectiongetCollectionFromParentMultipleTimes()
         {

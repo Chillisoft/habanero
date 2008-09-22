@@ -50,7 +50,6 @@ namespace Habanero.BO
             if(_boCol != null)
             {
                 BORegistry.DataAccessor.BusinessObjectLoader.Refresh((BusinessObjectCollection<TBusinessObject>)_boCol);
-                // Peter-Working: BOLoader.Instance.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderCriteria, "");
                 return _boCol;
             }
 
@@ -62,7 +61,6 @@ namespace Habanero.BO
             CheckTypeIsASubClassOfGenericType<TBusinessObject>(relatedBusinessObjectType, genericType);
 
             IBusinessObjectCollection boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
-            // Peter-Working: boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
 
             if (_relDef.KeepReferenceToRelatedObject)
             {

@@ -30,7 +30,7 @@ namespace Habanero.DB
     /// Stores database configuration settings and creates connections
     /// using these settings
     /// </summary>
-    public partial class DatabaseConfig : IDatabaseConfig
+    public  class DatabaseConfig : IDatabaseConfig
     {
         public const string MySql = "MYSQL";
         public const string SqlServer = "SQLSERVER";
@@ -95,7 +95,7 @@ namespace Habanero.DB
                 _password = (string) settings["password"];
                 _port = (string) settings["port"];
 
-                if (_vendor == null || _vendor.Length == 0)
+                if (string.IsNullOrEmpty(_vendor))
                 {
                     throw new ArgumentException("Missing database settings for the database configuration " +
                                          "in the application configuration file. " +
@@ -290,13 +290,10 @@ namespace Habanero.DB
                         conf.Password == this.Password &&
                         conf.Port == this.Port);
             }
-            else
-            {
-                return base.Equals(obj);
-            }
+            return base.Equals(obj);
         }
 
-        /// <summary>
+	    /// <summary>
         /// Returns the hashcode of all the settings added together
         /// </summary>
         /// <returns>Returns the hashcode</returns>

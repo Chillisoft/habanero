@@ -41,7 +41,7 @@ namespace Habanero.BO
     public class BusinessObjectCollection<TBusinessObject> : List<TBusinessObject>, IBusinessObjectCollection
         where TBusinessObject : class, IBusinessObject, new()
     {
-        #region StronglyTypedComperer
+        #region StronglyTypedComparer
         private class StronglyTypedComperer<T> : IComparer<T>
         {
             private readonly IComparer _comparer;
@@ -56,7 +56,7 @@ namespace Habanero.BO
                 return _comparer.Compare(x, y);
             }
         }
-        #endregion
+        #endregion//StronglyTypedComparer
         private readonly ClassDef _boClassDef;
         private readonly IBusinessObject _sampleBo;
         private readonly Hashtable _keyObjectHashTable;
@@ -835,7 +835,6 @@ namespace Habanero.BO
         {
             ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
 
-            // Transaction transaction = new Transaction(DatabaseConnection.CurrentConnection);
             SaveAllInTransaction(committer);
         }
 
@@ -860,7 +859,6 @@ namespace Habanero.BO
         /// Restores all the business objects to their last persisted state, that
         /// is their state and values at the time they were last saved to the database
         /// </summary>
-        /// TODO: Consider implications for the lookup table and any other caching
         public void RestoreAll()
         {
             foreach (TBusinessObject bo in this)
@@ -1048,6 +1046,9 @@ namespace Habanero.BO
             newBO.Restored += restoredEventHandler;
             newBO.Saved += savedEventHandler;
             CreatedBusinessObjects.Add(newBO);
+//TODO: I think that the collection should show all loaded object less removed or deleted object not yet persisted
+//     plus all created or added objects not yet persisted.
+//            this.Add(newBO);
             return newBO;
         }
 

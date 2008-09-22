@@ -80,6 +80,27 @@ namespace Test.CustomerExample.BO
             Assert.AreSame(customer, customer2);
         }
 
+        [Test]
+        public void Test_LoadCustomerUsingCriteriaObject()
+        {
+            ///This test shows that if a persisted object is loaded from the 
+            /// dataStore using the BusinessObjectLoader.GetBusinessObject. 
+            /// Then an object with the exact same status and data as 
+            /// the persisted object is loaded.
+            //---------------Set up test pack-------------------
+            Customer customer = CreateSavedCustomer();
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(customer.Status.IsNew);
+
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("CustomerCode", Criteria.ComparisonOp.Equals, customer.CustomerCode);
+            Customer customer2 = GetBusinessObjectLoader().GetBusinessObject<Customer>(criteria);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(customer2.Status.IsNew);
+            Assert.AreSame(customer, customer2);
+        }
 
         [Test]
         public void Test_LoadCustomer_LoadsBOProps()

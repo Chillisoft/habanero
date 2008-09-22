@@ -323,8 +323,6 @@ namespace Habanero.BO
             BusinessObjectCollection<T> updatedCol = GetBusinessObjectCollection<T>(collection.SelectQuery);
             foreach (T loadedBo in updatedCol)
             {
-
-
                 if (clonedCol.Contains(loadedBo))
                 {
                     ((IBusinessObjectCollection)collection).AddWithoutEvents(loadedBo);
@@ -334,6 +332,12 @@ namespace Habanero.BO
                     collection.Add(loadedBo);
                 }
             }
+            //TODO: I think that the collection should show all loaded object less removed or deleted object not yet persisted
+            //     plus all created or added objects not yet persisted.
+//            foreach (T createdBO in collection.CreatedBusinessObjects)
+//            {
+//                ((IBusinessObjectCollection)collection).AddWithoutEvents(createdBO);
+//            }
             //collection.ForEach(delegate(T obj) { if (!updatedCol.Contains(obj)) collection.RemoveInternal(obj); });
             //updatedCol.ForEach(delegate(T obj) { if (!collection.Contains(obj)) collection.Add(obj); });
         }

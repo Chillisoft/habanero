@@ -30,27 +30,27 @@
   <ItemGroup>
     <Reference Include="Habanero, Version=1.5.0.0, Culture=neutral, PublicKeyToken=eae2c64fef8aa18b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\systems\Habanero\trunk\bin\Habanero.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\bin\Habanero.dll</HintPath>
     </Reference>
-    <Reference Include="Habanero.Base" />
     <Reference Include="Habanero.Base, Version=1.5.0.0, Culture=neutral, PublicKeyToken=1fb6a9c86f815c07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\systems\Habanero\trunk\bin\Habanero.Base.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\bin\Habanero.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Habanero.BO" />
     <Reference Include="Habanero.BO, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b7599514c88df7f1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\systems\Habanero\trunk\bin\Habanero.BO.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\bin\Habanero.BO.dll</HintPath>
     </Reference>
-    <Reference Include="Habanero.DB" />
     <Reference Include="Habanero.DB, Version=1.5.0.0, Culture=neutral, PublicKeyToken=13cd8e0ef3c14147, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\systems\Habanero\trunk\bin\Habanero.DB.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\bin\Habanero.DB.dll</HintPath>
     </Reference>
-    <Reference Include="Habanero.Util" />
+    <Reference Include="Habanero.UI, Version=1.5.0.0, Culture=neutral, PublicKeyToken=71779386dead1c10, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\bin\Habanero.UI.dll</HintPath>
+    </Reference>
     <Reference Include="Habanero.Util, Version=1.5.0.0, Culture=neutral, PublicKeyToken=6373b1b341138aa8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\systems\Habanero\trunk\bin\Habanero.Util.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\bin\Habanero.Util.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

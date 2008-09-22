@@ -380,10 +380,11 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
+            ContactPersonTestBO.CreateSavedContactPerson();
             BusinessObjectCollection<ContactPersonTestBO> cpCol =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>("");
             ContactPersonTestBO cp2 = cpCol.CreateBusinessObject();
+
             //---------------Execute Test ----------------------
             ContactPersonTestBO foundCp = cpCol.Find(cp2.ID.ToString());
 
