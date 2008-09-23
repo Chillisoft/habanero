@@ -181,9 +181,10 @@ namespace Habanero.UI.Win
 
         protected virtual TransactionCommitter CreateSaveTransaction()
         {
-            TransactionCommitterDB committer = new TransactionCommitterDB();
+            TransactionCommitter committer = (TransactionCommitter) BORegistry.DataAccessor.CreateTransactionCommitter();
             committer.AddBusinessObject(_bo);
             return committer;
+            return null;
         }
 
         private void CancelButtonHandler(object sender, EventArgs e)

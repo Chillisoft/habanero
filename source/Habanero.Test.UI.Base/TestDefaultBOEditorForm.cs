@@ -55,8 +55,7 @@ namespace Habanero.Test.UI.Base
                 Assert.IsTrue(buttonControl is Habanero.UI.Win.ButtonGroupControlWin);
                 Assert.AreEqual(2, buttonControl.Controls.Count);
             }
-
-
+            
             [Test]
             public void TestSuccessfulEdit()
             {
