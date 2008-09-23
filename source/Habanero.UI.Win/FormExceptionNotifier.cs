@@ -18,11 +18,15 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.UI.Base;
+using Habanero.Util;
 using FormStartPosition=System.Windows.Forms.FormStartPosition;
 
 namespace Habanero.UI.Win
@@ -92,12 +96,19 @@ namespace Habanero.UI.Win
                 summaryManager.AddControl(messageTextBox, BorderLayoutManager.Position.Centre);
 
                 IButtonGroupControl buttonsOK = _controlFactory.CreateButtonGroupControl();
-                IButtonGroupControl buttonsDetail = _controlFactory.CreateButtonGroupControl();
+                //IButtonGroupControl buttonsDetail = _controlFactory.CreateButtonGroupControl();
                 buttonsOK.AddButton("&OK", new EventHandler(OKButtonClickHandler));
-                _moreDetailButton = buttonsDetail.AddButton("&More Detail »", new EventHandler(MoreDetailClickHandler));
-                buttonsOK.Height = BUTTONS_HEIGHT;
+
+                //_moreDetailButton = buttonsDetail.AddButton("&More Detail »", new EventHandler(MoreDetailClickHandler));
+                //buttonsOK.Height = BUTTONS_HEIGHT;
+                //buttonsDetail.Height = BUTTONS_HEIGHT;
+                //buttonsDetail.Width = _moreDetailButton.Width + 9;
+
+                IButtonGroupControl buttonsDetail = _controlFactory.CreateButtonGroupControl();
+                buttonsDetail.AddButton("Email Error", EmailErrorClickHandler);
+                _moreDetailButton = buttonsDetail.AddButton("More Detail »", MoreDetailClickHandler);
                 buttonsDetail.Height = BUTTONS_HEIGHT;
-                buttonsDetail.Width = _moreDetailButton.Width + 9;
+                buttonsDetail.Width = 2 * (_moreDetailButton.Width + 9);
 
                 SetFullDetailsPanel();
 
@@ -113,6 +124,48 @@ namespace Habanero.UI.Win
                 this.StartPosition = FormStartPosition.Manual;
                 this.Location = new Point(50, 50);
                 this.Resize += ResizeForm;
+            }
+
+            private void EmailErrorClickHandler(object sender, EventArgs e)
+            {
+                IDictionary dictionary = GetEmailErrorSettings();
+                string exceptionString = ExceptionUtilities.GetExceptionString(_exception, 0, true);
+                if (dictionary != null)
+                {
+                    try
+                    {
+                        SendErrorMessage(dictionary);
+                        return;
+                    } catch (Exception ex)
+                    {
+                        exceptionString += Environment.NewLine + "  -  Error sending mail via smtp: " + Environment.NewLine + ex.Message;
+                    }
+                }
+                System.Diagnostics.Process.Start("mailto:?subject=" + _exception.Source + "&body=" + exceptionString);
+            }
+
+            private void SendErrorMessage(IDictionary dictionary)
+            {
+                string smtpServer = (string)dictionary["smtp_server"];
+                string emailTo = (string)dictionary["email_to"];
+                string[] emailAddresses = emailTo.Split(new char[]{';'});
+
+                string emailFrom = (string)dictionary["email_from"];
+
+                string emailContent = ExceptionUtilities.GetExceptionString(_exception, 0, true);
+
+                EmailSender emailSender = new EmailSender(emailAddresses, emailFrom, _exception.Source, emailContent, "");
+                ////Todo : check Send Authenticated for security purposes?
+                
+                emailSender.SmtpServerHost = smtpServer;
+                string port = (string)dictionary["smtp_port"];
+                if (!String.IsNullOrEmpty(port))
+                {
+                    emailSender.SmtpServerPort = Convert.ToInt32(port);
+                }
+                bool enableSSL = Convert.ToBoolean(dictionary["smtp_enable_ssl"]); 
+                emailSender.EnableSSL = enableSSL;
+                emailSender.Send();
             }
 
             /// <summary>
@@ -221,6 +274,12 @@ namespace Habanero.UI.Win
                 {
                     _fullDetail.Height = 0;
                 }
+            }
+
+            private  IDictionary GetEmailErrorSettings()
+            {
+                IDictionary dictionary = ((IDictionary)ConfigurationSettings.GetConfig("EmailErrorConfig"));
+                return dictionary;
             }
         }
     }

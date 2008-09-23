@@ -119,39 +119,37 @@ namespace Habanero.UI.VWG
             {
                 try
                 {
-                    
-                string emailTo = GlobalRegistry.Settings.GetString("EMAIL_TO");
-                List<string> emailAddresses = new List<string>(1);
-                emailAddresses.Add(emailTo);
+                        
+                    string emailTo = GlobalRegistry.Settings.GetString("EMAIL_TO");
+                    string[] emailAddresses = emailTo.Split(new char[] { ';' });
+                    string emailFrom = GlobalRegistry.Settings.GetString("EMAIL_FROM");
 
-                string emailFrom = GlobalRegistry.Settings.GetString("EMAIL_FROM");
+                    string emailContent = ExceptionUtilities.GetExceptionString(_exception, 0, true);
 
-                string emailContent = ExceptionUtilities.GetExceptionString(_exception, 0, true);
-
-                EmailSender emailSender = new EmailSender(emailAddresses, emailFrom, _exception.Source, emailContent, "");
-                //Todo : check Send Authenticated for security purposes?
-                emailSender.SmtpServerHost = GlobalRegistry.Settings.GetString("SMTP_SERVER");
-                string port = GlobalRegistry.Settings.GetString("SMTP_SERVER_PORT");
-                if (!String.IsNullOrEmpty(port))
-                {
-                    emailSender.SmtpServerPort = Convert.ToInt32(port);
-                }
-                bool enableSSL = GlobalRegistry.Settings.GetBoolean("SMTP_ENABLE_SSL");
-                emailSender.EnableSSL = enableSSL;
-                //string authUsername = GlobalRegistry.Settings.GetString("SMTP_AUTH_USERNAME");
-                //string authPassword = GlobalRegistry.Settings.GetString("SMTP_AUTH_PASSWORD");
-                //if (!String.IsNullOrEmpty(authPassword))
-                //{
-                //    authPassword = Encryption.Decrypt(authPassword);
-                //}
-                //if (!String.IsNullOrEmpty(authUsername))
-                //{
-                //    emailSender.SendAuthenticated(authUsername, authPassword);
-                //}
-                //else
-                //{
-                emailSender.Send();
-                //}
+                    EmailSender emailSender = new EmailSender(emailAddresses, emailFrom, _exception.Source, emailContent, "");
+                    //Todo : check Send Authenticated for security purposes?
+                    emailSender.SmtpServerHost = GlobalRegistry.Settings.GetString("SMTP_SERVER");
+                    string port = GlobalRegistry.Settings.GetString("SMTP_SERVER_PORT");
+                    if (!String.IsNullOrEmpty(port))
+                    {
+                        emailSender.SmtpServerPort = Convert.ToInt32(port);
+                    }
+                    bool enableSSL = GlobalRegistry.Settings.GetBoolean("SMTP_ENABLE_SSL");
+                    emailSender.EnableSSL = enableSSL;
+                    //string authUsername = GlobalRegistry.Settings.GetString("SMTP_AUTH_USERNAME");
+                    //string authPassword = GlobalRegistry.Settings.GetString("SMTP_AUTH_PASSWORD");
+                    //if (!String.IsNullOrEmpty(authPassword))
+                    //{
+                    //    authPassword = Encryption.Decrypt(authPassword);
+                    //}
+                    //if (!String.IsNullOrEmpty(authUsername))
+                    //{
+                    //    emailSender.SendAuthenticated(authUsername, authPassword);
+                    //}
+                    //else
+                    //{
+                    emailSender.Send();
+                    //}
                 }
                 catch(Exception ex)
                 {
