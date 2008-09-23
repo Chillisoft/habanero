@@ -119,8 +119,7 @@ namespace Habanero.UI.WebGUI
                 {
                     
                 string emailTo = GlobalRegistry.Settings.GetString("EMAIL_TO");
-                List<string> emailAddresses = new List<string>(1);
-                emailAddresses.Add(emailTo);
+                string[] emailAddresses = emailTo.Split(new char[] { ';' });
 
                 string emailFrom = GlobalRegistry.Settings.GetString("EMAIL_FROM");
 
