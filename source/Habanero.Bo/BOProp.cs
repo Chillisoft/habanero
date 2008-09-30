@@ -20,6 +20,7 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using System.Security;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -563,10 +564,15 @@ namespace Habanero.BO
         {
             get
             {
-                return "<" + PropertyName + "><PreviousValue>" + PersistedPropertyValueString +
-                       "</PreviousValue><NewValue>" + PropertyValueString + "</NewValue></" +
-                       PropertyName + ">";
+                return "<" + PropertyName + "><PreviousValue>" + FormatForXML(PersistedPropertyValueString) +
+                       "</PreviousValue><NewValue>" + FormatForXML(PropertyValueString) + 
+                       "</NewValue></" + PropertyName + ">";
             }
+        }
+
+        private string FormatForXML(string text)
+        {
+            return SecurityElement.Escape(text);
         }
 
         /// <summary>
