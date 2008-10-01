@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Drawing;
 using System.Windows.Forms;
@@ -27,6 +28,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.UI.Base;
 using Habanero.Util;
+using DialogResult=System.Windows.Forms.DialogResult;
 using FormStartPosition=System.Windows.Forms.FormStartPosition;
 
 namespace Habanero.UI.Win
@@ -128,13 +130,23 @@ namespace Habanero.UI.Win
 
             private void EmailErrorClickHandler(object sender, EventArgs e)
             {
+                string userDescription = "";
+                ErrorDescriptionForm errorDescriptionForm = new ErrorDescriptionForm();
+                errorDescriptionForm.Closing += delegate{userDescription = errorDescriptionForm.ErrorDescriptionTextBox.Text; };
+                errorDescriptionForm.ShowDialog(this);
+
                 IDictionary dictionary = GetEmailErrorSettings();
                 string exceptionString = ExceptionUtilities.GetExceptionString(_exception, 0, true);
+                if (!string.IsNullOrEmpty(userDescription))
+                {
+                    exceptionString = "User Description : " + Environment.NewLine + userDescription + Environment.NewLine + "  -  Exception : " + exceptionString;
+                }
+
                 if (dictionary != null)
                 {
                     try
                     {
-                        SendErrorMessage(dictionary);
+                        SendErrorMessage(dictionary, exceptionString);
                         return;
                     } catch (Exception ex)
                     {
@@ -144,7 +156,7 @@ namespace Habanero.UI.Win
                 System.Diagnostics.Process.Start("mailto:?subject=" + _exception.Source + "&body=" + exceptionString);
             }
 
-            private void SendErrorMessage(IDictionary dictionary)
+            private void SendErrorMessage(IDictionary dictionary, string emailContent)
             {
                 string smtpServer = (string)dictionary["smtp_server"];
                 string emailTo = (string)dictionary["email_to"];
@@ -152,7 +164,7 @@ namespace Habanero.UI.Win
 
                 string emailFrom = (string)dictionary["email_from"];
 
-                string emailContent = ExceptionUtilities.GetExceptionString(_exception, 0, true);
+                //string emailContent = ExceptionUtilities.GetExceptionString(_exception, 0, true);
 
                 EmailSender emailSender = new EmailSender(emailAddresses, emailFrom, _exception.Source, emailContent, "");
                 ////Todo : check Send Authenticated for security purposes?
