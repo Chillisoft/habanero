@@ -25,6 +25,7 @@ namespace Habanero.Test.BO
             base.SetupDBConnection();
             ClassDef.ClassDefs.Clear();
             ContactPersonTransactionLogging.LoadDefaultClassDef();
+            TransactionLogBusObj.LoadClassDef();
         }
         [TearDown]
         public  void TearDownTest()

@@ -1,4 +1,6 @@
 using System;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using Habanero.DB;
 
 namespace Habanero.BO
@@ -8,6 +10,38 @@ namespace Habanero.BO
     ///</summary>
     public class TransactionLogBusObj : BusinessObject
     {
+
+        /// <summary>
+        /// Load ClassDef for accessing the transacionLog table through Business Object.
+        /// </summary>
+        public static ClassDef LoadClassDef()
+        {
+            if (ClassDef.ClassDefs.Contains(typeof(TransactionLogBusObj)))
+            {
+                return ClassDef.ClassDefs[typeof(TransactionLogBusObj)];
+            }
+            XmlClassLoader xmlClassLoader = new XmlClassLoader();
+            ClassDef classDef =
+                xmlClassLoader.LoadClass(
+                    @"
+               <class name=""TransactionLogBusObj"" assembly=""Habanero.BO"" table=""transactionlog"">
+					<property  name=""TransactionSequenceNo"" type=""Int32"" autoIncrementing=""true"" />
+					<property  name=""DateTimeUpdated"" type=""DateTime"" />
+					<property  name=""WindowsUser""/>
+					<property  name=""LogonUser"" />
+					<property  name=""MachineUpdatedName"" databaseField=""MachineName""/>
+					<property  name=""BusinessObjectTypeName"" />
+                    <property  name=""BusinessObjectToString""/>
+					<property  name=""CRUDAction"" />
+					<property  name=""DirtyXMLLog"" databaseField=""DirtyXML""/>
+					<primaryKey isObjectID=""false"">
+						<prop name=""TransactionSequenceNo"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(classDef);
+            return classDef;
+        }
 
         public string CrudAction
         {

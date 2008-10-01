@@ -100,35 +100,6 @@ namespace Habanero.BO
             this._crudActionFieldName = crudActionFieldName;
             this._dirtyXmlFieldName = dirtyXMLFieldName;
             this._ID = Guid.NewGuid();
-            LoadClassDef();
-        }
-
-        /// <summary>
-        /// Load ClassDef for accessing the transacionLog table through Business Object.
-        /// </summary>
-        public static void LoadClassDef()
-        {
-            if (ClassDef.ClassDefs.Contains("Habanero.BO", "TransactionLogBusObj")) return;
-            XmlClassLoader xmlClassLoader = new XmlClassLoader();
-            ClassDef classDef =
-                xmlClassLoader.LoadClass(
-                    @"
-               <class name=""TransactionLogBusObj"" assembly=""Habanero.BO"" table=""transactionlog"">
-					<property  name=""TransactionSequenceNo"" type=""Int32"" autoIncrementing=""true"" />
-					<property  name=""DateTimeUpdated"" type=""DateTime"" />
-					<property  name=""WindowsUser""/>
-					<property  name=""LogonUser"" />
-					<property  name=""MachineUpdatedName"" databaseField=""MachineName""/>
-					<property  name=""BusinessObjectTypeName"" />
-                    <property  name=""BusinessObjectToString""/>
-					<property  name=""CRUDAction"" />
-					<property  name=""DirtyXMLLog"" databaseField=""DirtyXML""/>
-					<primaryKey isObjectID=""false"">
-						<prop name=""TransactionSequenceNo"" />
-					</primaryKey>
-			    </class>
-			");
-            ClassDef.ClassDefs.Add(classDef);
         }
 
         /// <summary>
