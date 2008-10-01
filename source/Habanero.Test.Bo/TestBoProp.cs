@@ -355,6 +355,19 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        //Test DirtyXML.
+        public void TestDirtyXml_XmlReservedCharacters()
+        {
+            _prop.InitialiseProp("OriginalValue");
+            _prop.Value = "New <Special> Value \n\r With ' & \" ";
+            Assert.IsTrue(_prop.IsDirty);
+            string dirtyXml = "<" + _prop.PropertyName + "><PreviousValue>OriginalValue" +
+                              "</PreviousValue><NewValue>New &lt;Special&gt; Value \n\r With &apos; &amp; &quot; </NewValue></" +
+                              _prop.PropertyName + ">";
+            Assert.AreEqual(dirtyXml, _prop.DirtyXml);
+        }
+
+        [Test]
         public void TestPropLengthForStrings()
         {
             PropDef propDef = new PropDef("TestProp", "System", "String",

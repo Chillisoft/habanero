@@ -20,6 +20,8 @@
 using System;
 using System.Security.Principal;
 using Habanero.Base;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using Habanero.DB;
 
 namespace Habanero.BO
@@ -99,6 +101,7 @@ namespace Habanero.BO
         /// <param name="dateTimeUpdatedFieldName">Time updated field name</param>
         /// <param name="windowsUserFieldName">Windows user field name</param>
         /// <param name="logonUserFieldName">Logon user field name</param>
+        /// <param name="businessObjectToStringFieldName">BusinessObject ToString field name</param>
         /// <param name="machineUpdateName">Machine update name</param>
         /// <param name="businessObjectTypeNameFieldName">BO type field name</param>
         /// <param name="crudActionFieldName">Crud action field name</param>
@@ -145,36 +148,6 @@ namespace Habanero.BO
         {
             _securityController = securityController;
         }
-
-        ///// <summary>
-        ///// Record a transaction log for the specified business object
-        ///// </summary>
-        ///// <param name="busObj">The business object</param>
-        ///// <param name="logonUserName">The name of the user who carried 
-        ///// out the changes</param>
-        //public void RecordTransactionLog(BusinessObject busObj, string logonUserName)
-        //{
-        //    //TODO: Peter - make this proper parametrized Sql
-        //    SqlStatement tranSql = new SqlStatement(DatabaseConnection.CurrentConnection);
-        //    string sql = "INSERT INTO " + this._transactionLogTable + " (" +
-        //                 this._dateTimeUpdatedFieldName + ", " +
-        //                 this._logonUserFieldName + ", " +
-        //                 this._windowsUserFieldName + ", " +
-        //                 this._machineUpdateName + ", " +
-        //                 this._businessObjectTypeNameFieldName + ", " +
-        //                 this._crudActionFieldName + ", " +
-        //                 this._dirtyXmlFieldName + ") VALUES ( '" +
-        //                 DatabaseUtil.FormatDatabaseDateTime(DateTime.Now) + "', '" +
-        //                 logonUserName + "', '" +
-        //                 WindowsIdentity.GetCurrent().Name + "', '" +
-        //                 Environment.MachineName + "', '" +
-        //                 busObj.ClassName + "', '" +
-        //                 GetCrudAction(busObj) + "', '" +
-        //                 busObj.DirtyXML + "' )";
-        //    tranSql.Statement.Append(sql);
-        //    SqlStatementCollection sqlStatements = new SqlStatementCollection(tranSql);
-        //    DatabaseConnection.CurrentConnection.ExecuteSql(sqlStatements);
-        //}
 
         /// <summary>
         /// Returns the status of the business object specified, such as
@@ -247,7 +220,6 @@ namespace Habanero.BO
             if (GlobalRegistry.SecurityController != null) return GlobalRegistry.SecurityController.CurrentUserName;
             return "";
         }
-
 
         ///<summary>
         ///</summary>

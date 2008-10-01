@@ -20,6 +20,7 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using System.Security;
 using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -142,14 +143,18 @@ namespace Habanero.BO
                     }
                     else if (this.PropertyType == typeof (Guid))
                     {
-                    	Guid guidValue;
-						if (StringUtilities.GuidTryParse(propValue.ToString(), out guidValue))
-						{
-							propValue = guidValue;
-						} else
-						{
-							propValue = null;
-						}
+                        if (!(propValue is Guid))
+                        {
+                            Guid guidValue;
+                            if (StringUtilities.GuidTryParse(propValue.ToString(), out guidValue))
+                            {
+                                propValue = guidValue;
+                            }
+                            else
+                            {
+                                propValue = null;
+                            }
+                        }
                     }
                     else if (this.PropertyType == typeof (Image))
                     {
@@ -499,10 +504,15 @@ namespace Habanero.BO
         {
             get
             {
-                return "<" + PropertyName + "><PreviousValue>" + PersistedPropertyValueString +
-                       "</PreviousValue><NewValue>" + PropertyValueString + "</NewValue></" +
-                       PropertyName + ">";
+                return "<" + PropertyName + "><PreviousValue>" + FormatForXML(PersistedPropertyValueString) +
+                       "</PreviousValue><NewValue>" + FormatForXML(PropertyValueString) + 
+                       "</NewValue></" + PropertyName + ">";
             }
+        }
+
+        private string FormatForXML(string text)
+        {
+            return SecurityElement.Escape(text);
         }
 
         /// <summary>

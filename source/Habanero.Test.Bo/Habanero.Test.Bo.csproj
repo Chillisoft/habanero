@@ -263,9 +263,6 @@
     <Compile Include="TestTransactionLogger.cs" />
     <Compile Include="TestUnrefRelationshipDef.cs" />
     <Compile Include="TransactionCommitterStub.cs" />
-    <Compile Include="TransactionLogBusObj.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />

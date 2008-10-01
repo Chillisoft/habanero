@@ -982,14 +982,22 @@ namespace Habanero.BO
         ///<param name="transactionCommitter">the transaction committer that is executing the transaction</param>
         protected internal virtual void UpdateObjectBeforePersisting(ITransactionCommitter transactionCommitter)
         {
-            if (_transactionLog != null)
-            {
-                transactionCommitter.AddTransaction(_transactionLog);
-            }
+            //if (_transactionLog != null)
+            //{
+            //    transactionCommitter.AddTransaction(_transactionLog);
+            //}
             if (_businessObjectUpdateLog != null && (Status.IsNew || (Status.IsDirty && !Status.IsDeleted)))
             {
                 _businessObjectUpdateLog.Update();
             }
+        }
+
+        /// <summary>
+        /// This returns the Transaction Log object set up for this BusinessObject.
+        /// </summary>
+        internal ITransactionLog TransactionLog
+        {
+            get { return _transactionLog; }
         }
 
         private void CheckIsDeletable()

@@ -45,6 +45,7 @@ namespace Habanero.Test.BO
             base.SetupDBConnection();
             ClassDef.ClassDefs.Clear();
             ContactPersonTransactionLogging.LoadDefaultClassDef();
+            TransactionLogBusObj.LoadClassDef();
         }
 
         [TearDown]
@@ -55,7 +56,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestTransactionLogtransactionAddedToTransactionCommitter()
+        public void TestTransactionLogTransactionNotAddedToTransactionCommitter()
         {
             //---------------Set up test pack-------------------
             //Create Mock Business object that implements a stub transaction log.
@@ -67,12 +68,54 @@ namespace Habanero.Test.BO
             //call persist on the object
             tc.CommitTransaction();
             //---------------Test Result -----------------------
+            //check that the transaction committer has 1 object
+            // i.e. the transaction log object was not added to the transaction.
+            Assert.AreEqual(1, tc.ExecutedTransactions.Count);
+        }
+
+        [Test]
+        public void TestTransactionLogPersistsSQL_AddedToBusinessObjectPersistsSql()
+        {
+            //---------------Set up test pack-------------------
+            //Create Mock Business object that implements a stub transaction log.
+            ContactPersonTransactionLogging cp = CreateUnsavedContactPersonTransactionLogging();
+            TransactionalBusinessObjectDB transactionalBODB = new TransactionalBusinessObjectDB(cp);
+            
+            //---------------Assert Preconditions --------------
+            
+            //---------------Execute Test ----------------------
+            ISqlStatementCollection sqlStatementCollection = transactionalBODB.GetPersistSql();
+            //---------------Test Result -----------------------
             //check if the transaction committer has 2 object
             // check that the one object is the transaction log object.
-            Assert.AreEqual(2, tc.ExecutedTransactions.Count);
-            ITransactional trlogBO = tc.ExecutedTransactions[1];
-            Assert.IsTrue(trlogBO is TransactionLogTable);
-            Assert.IsNotNull(trlogBO.TransactionID());
+            Assert.AreEqual(2, sqlStatementCollection.Count);
+            ISqlStatement sqlStatement = sqlStatementCollection[1];
+            TransactionLogTable transactionLogTable = new TransactionLogTable(cp);
+            Assert.AreEqual(transactionLogTable.GetPersistSql()[0].Statement.ToString(), sqlStatement.Statement.ToString());
+        }
+
+        [Test]
+        public void TestTransactionLogPersistsSQL_NotAddedToBusinessObjectPersistsSql_WhenObjectUnchanged()
+        {
+            //---------------Set up test pack-------------------
+            //Create Mock Business object that implements a stub transaction log.
+            ContactPersonTransactionLogging cp = CreateUnsavedContactPersonTransactionLogging();
+            TransactionCommitterStub tc = new TransactionCommitterStub();
+            tc.AddBusinessObject(cp); 
+            tc.CommitTransaction();
+            TransactionalBusinessObjectDB transactionalBODB = new TransactionalBusinessObjectDB(cp);
+
+            //---------------Assert Preconditions --------------
+
+            //---------------Execute Test ----------------------
+            ISqlStatementCollection sqlStatementCollection = transactionalBODB.GetPersistSql();
+            //---------------Test Result -----------------------
+            //check if the transaction committer has 2 object
+            // check that the one object is the transaction log object.
+            Assert.AreEqual(0, sqlStatementCollection.Count);
+            //ISqlStatement sqlStatement = sqlStatementCollection[1];
+            //TransactionLogTable transactionLogTable = new TransactionLogTable(cp);
+            //Assert.AreEqual(transactionLogTable.GetPersistSql()[0].Statement.ToString(), sqlStatement.Statement.ToString());
         }
 
         private static ContactPersonTransactionLogging CreateUnsavedContactPersonTransactionLogging()
@@ -188,7 +231,7 @@ namespace Habanero.Test.BO
         public void TestAcceptanceTransactionLog_DuplicateAlternativeKeyEntries()
         {
             //---------------Cleanup databse ------------------
-            TransactionLogBusObj.DeleteAllTransactionLogsFromDatabase();
+            CleanDB();
             ClassDef.ClassDefs.Clear();
             ContactPersonTransactionLogging.LoadClassDef_SurnameAlternateKey();
             //---------------Set up test pack-------------------
@@ -228,7 +271,7 @@ namespace Habanero.Test.BO
         public void TestAcceptanceTransactionLog_SaveMultipleTimes()
         {
             //---------------Cleanup databse ------------------
-            TransactionLogBusObj.DeleteAllTransactionLogsFromDatabase();
+            CleanDB();
             //---------------Set up test pack-------------------
             ContactPersonTransactionLogging cp = CreateUnsavedContactPersonTransactionLogging();
             cp.Save();
@@ -256,6 +299,11 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
+        private static void CleanDB()
+        {
+            string sql = "DELETE FROM transactionlog";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+        }
 
         //Moved from tester class
         [Test]
@@ -303,26 +351,26 @@ namespace Habanero.Test.BO
 
         private static void LoadTransactionLogClassDef()
         {
-            XmlClassLoader itsLoader = new XmlClassLoader();
-            ClassDef itsClassDef =
-                itsLoader.LoadClass(
-                    @"
-               <class name=""TransactionLogBusObj"" assembly=""Habanero.Test.BO"" table=""transactionlog"">
-					<property  name=""TransactionSequenceNo"" type=""Int32"" autoIncrementing=""true"" />
-					<property  name=""DateTimeUpdated"" type=""DateTime"" />
-					<property  name=""WindowsUser""/>
-					<property  name=""LogonUser"" />
-					<property  name=""MachineUpdatedName"" databaseField=""MachineName""/>
-					<property  name=""BusinessObjectTypeName"" />
-                    <property  name=""BusinessObjectToString""/>
-					<property  name=""CRUDAction"" />
-					<property  name=""DirtyXMLLog"" databaseField=""DirtyXML""/>
-					<primaryKey isObjectID=""false"">
-						<prop name=""TransactionSequenceNo"" />
-					</primaryKey>
-			    </class>
-			");
-            ClassDef.ClassDefs.Add(itsClassDef);
+//            XmlClassLoader itsLoader = new XmlClassLoader();
+//            ClassDef itsClassDef =
+//                itsLoader.LoadClass(
+//                    @"
+//               <class name=""TransactionLogBusObj"" assembly=""Habanero.Test.BO"" table=""transactionlog"">
+//					<property  name=""TransactionSequenceNo"" type=""Int32"" autoIncrementing=""true"" />
+//					<property  name=""DateTimeUpdated"" type=""DateTime"" />
+//					<property  name=""WindowsUser""/>
+//					<property  name=""LogonUser"" />
+//					<property  name=""MachineUpdatedName"" databaseField=""MachineName""/>
+//					<property  name=""BusinessObjectTypeName"" />
+//                    <property  name=""BusinessObjectToString""/>
+//					<property  name=""CRUDAction"" />
+//					<property  name=""DirtyXMLLog"" databaseField=""DirtyXML""/>
+//					<primaryKey isObjectID=""false"">
+//						<prop name=""TransactionSequenceNo"" />
+//					</primaryKey>
+//			    </class>
+//			");
+//            ClassDef.ClassDefs.Add(itsClassDef);
             return;
         }
 

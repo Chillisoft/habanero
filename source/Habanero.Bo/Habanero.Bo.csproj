@@ -340,6 +340,7 @@
     <Compile Include="TransactionCommitterDB.cs" />
     <Compile Include="TransactionCommitter.cs" />
     <Compile Include="TransactionCommitterInMemory.cs" />
+    <Compile Include="TransactionLogBusObj.cs" />
     <Compile Include="TransactionLogTable.cs">
       <SubType>Code</SubType>
     </Compile>

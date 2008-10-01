@@ -128,6 +128,15 @@ namespace Habanero.BO
             return false;
         }
 
+        /// <summary>
+        /// Returns the ID as a Guid
+        /// </summary>
+        /// <returns>Returns a Guid</returns>
+        public override Guid GetAsGuid()
+        {
+            return (Guid)ObjectIDProp.Value;
+        }
+
         #region Operator == Overloads
 
         /// <summary>

@@ -110,7 +110,8 @@ namespace Habanero.BO
         {
             TransactionalBusinessObject transaction = CreateTransactionalBusinessObject(businessObject);
             this.AddTransaction(transaction);
-            if (_runningUpdatingBeforePersisting)
+            bool added = _originalTransactions.Contains(transaction);
+            if (added && _runningUpdatingBeforePersisting)
             {
                 transaction.UpdateObjectBeforePersisting(this);
             }
@@ -124,12 +125,10 @@ namespace Habanero.BO
         public void AddTransaction(ITransactional transaction)
         {
             ITransactional foundTransactional = _originalTransactions.Find(delegate(ITransactional obj)
-                       {
-                           return obj.TransactionID() ==
-                                  transaction.TransactionID();
-                       });
+            {
+                return obj.TransactionID() == transaction.TransactionID();
+            });
             if (foundTransactional != null) return;
-
             _originalTransactions.Add(transaction);
         }
 
