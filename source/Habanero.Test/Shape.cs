@@ -91,5 +91,10 @@ namespace Habanero.Test
         {
             get { return ShapeName; }
         }
+
+        public static void ClearLoadedBusinessObjectBaseCol()
+        {
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+        }
     }
 }

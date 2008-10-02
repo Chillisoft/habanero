@@ -254,5 +254,10 @@ namespace Habanero.Test.BO
         {
             return Surname;
         }
+
+        public static void ClearLoadedBusinessObjectBaseCol()
+        {
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+        }
     }
 }

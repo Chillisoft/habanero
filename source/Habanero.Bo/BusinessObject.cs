@@ -53,8 +53,6 @@ namespace Habanero.BO
 
         #region Fields
 
-        private static readonly Dictionary<string, WeakReference> _allLoadedBusinessObjects = new Dictionary<string, WeakReference>();
-
         //set object as new by default.
         private BOState _boState;
 
@@ -199,16 +197,16 @@ namespace Habanero.BO
             try
             {
                 if (this.ClassDef == null) return;
-                if (this.ID != null) AllLoadedBusinessObjects().Remove(this.ID.ToString());
+                if (this.ID != null) BusinessObjectManager.Instance.Remove(this);
                 if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
-                if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
-                if (this.ID != null) AllLoadedBusinessObjects().Remove(this.ID.ToString());
+                    if (BusinessObjectManager.Instance.Contains(_primaryKey.GetOrigObjectID()))
+                        if (this.ID != null) BusinessObjectManager.Instance.Remove(this.ID.ToString());
                 if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
                 {
-                    AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
-                    if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
+                    BusinessObjectManager.Instance.Remove(_primaryKey.GetOrigObjectID());
+                    if (BusinessObjectManager.Instance.Contains(_primaryKey.GetOrigObjectID()))
                     {
-                        AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
+                        BusinessObjectManager.Instance.Remove(_primaryKey.GetOrigObjectID());
                     }
                 }
                 ReleaseWriteLocks();
@@ -326,23 +324,6 @@ namespace Habanero.BO
             else
                 return null;
 
-        }
-
-        /// <summary>
-        /// Returns a Hashtable containing the loaded business objects
-        /// </summary>
-        /// <returns></returns>
-        internal static Dictionary<string, WeakReference> AllLoadedBusinessObjects()
-        {
-            return _allLoadedBusinessObjects;
-        }
-
-        /// <summary>
-        /// Clears the loaded objects collection
-        /// </summary>
-        internal static void ClearLoadedBusinessObjectBaseCol()
-        {
-            _allLoadedBusinessObjects.Clear();
         }
 
         #endregion //Business Object Loaders
@@ -995,10 +976,9 @@ namespace Habanero.BO
 
         private void AddToLoadedObjectsCollection()
         {
-            if (!AllLoadedBusinessObjects().ContainsKey(ID.GetObjectId()))
+            if (!BusinessObjectManager.Instance.Contains(ID))
             {
-                AllLoadedBusinessObjects().Add(this.ID.GetObjectId(),
-                                                     new WeakReference(this));
+                BusinessObjectManager.Instance.Add(this);
             }
         }
 
@@ -1056,7 +1036,7 @@ namespace Habanero.BO
 
         private void RemoveFromAllLoaded()
         {
-            if (_primaryKey != null) AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
+            if (_primaryKey != null) BusinessObjectManager.Instance.Remove(_primaryKey.GetOrigObjectID());
         }
 
         /// <summary>

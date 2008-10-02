@@ -676,7 +676,7 @@ namespace Habanero.Test.BO
             BOPrimaryKey objectID = contactPersonCompositeKey.ID;
             Assert.AreEqual(objectID.GetOrigObjectID(), objectID.GetObjectId());
             Assert.IsNotNull(ContactPersonTestBO.AllLoadedBusinessObjects()[objectID.GetOrigObjectID()]);
-            Assert.IsFalse(ContactPersonTestBO.AllLoadedBusinessObjects().ContainsKey(oldID));
+            Assert.IsFalse(ContactPersonTestBO.AllLoadedBusinessObjects().Contains(oldID));
         }
 
         [Test]
@@ -712,7 +712,7 @@ namespace Habanero.Test.BO
             committer.CommitTransaction();
             //---------------Test Result -----------------------
             AssertBOStateIsValidAfterInsert_Updated(contactPersonCompositeKey);
-            Assert.IsFalse(ContactPersonTestBO.AllLoadedBusinessObjects().ContainsKey(oldID));
+            Assert.IsFalse(ContactPersonTestBO.AllLoadedBusinessObjects().Contains(oldID));
             Assert.IsNotNull(ContactPersonTestBO.AllLoadedBusinessObjects()[contactPersonCompositeKey.ID.GetObjectId()]);
             //---------------Tear Down--------------------------
             contactPersonCompositeKey.Delete();

@@ -39,7 +39,7 @@ namespace Habanero.Test.General
         public void TestGetCarsDriven()
         {
             Car.DeleteAllCars();
-            BusinessObject.ClearLoadedBusinessObjectBaseCol();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonCompositeKey.DeleteAllContactPeople();
             ContactPersonCompositeKey.ClearContactPersonCol();
 

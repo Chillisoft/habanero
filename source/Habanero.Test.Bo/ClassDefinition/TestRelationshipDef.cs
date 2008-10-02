@@ -248,6 +248,10 @@ namespace Habanero.Test.BO.ClassDefinition
 
         #endregion //For Testing
 
+        public static void ClearLoadedBusinessObjectBaseCol()
+        {
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+        }
     }
 
     #endregion 

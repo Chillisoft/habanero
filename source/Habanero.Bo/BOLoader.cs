@@ -192,9 +192,9 @@ namespace Habanero.BO
                 {
                     if (isReplacingSuperClassObject)
                     {
-                        BusinessObject.AllLoadedBusinessObjects().Remove(tempBusObj.ID.GetObjectId());
+                        BusinessObjectManager.Instance.Remove(tempBusObj.ID.GetObjectId());
                     }
-                    BusinessObject.AllLoadedBusinessObjects().Add(tempBusObj.ID.GetObjectId(), new WeakReference(tempBusObj));
+                    BusinessObjectManager.Instance.Add(tempBusObj);
                 }
                 catch (Exception ex)
                 {
@@ -396,15 +396,19 @@ namespace Habanero.BO
         internal  BusinessObject GetLoadedBusinessObject(string id, bool refreshIfReqNotCurrent)
         {
             //If the object is already in loaded then refresh it and return it if required.
-            if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(id))
+            if (BusinessObjectManager.Instance.Contains(id))
             {
-                WeakReference weakRef = BusinessObject.AllLoadedBusinessObjects()[id];
-                //If the reference is valid return object else remove object from 
-                // Collection
-                if (weakRef.IsAlive && weakRef.Target != null)
+                BusinessObject loadedBusinessObject = BusinessObjectManager.Instance[id];
+                //WeakReference weakRef = BusinessObject.AllLoadedBusinessObjects()[id];
+                ////If the reference is valid return object else remove object from 
+                //// Collection
+                //if (weakRef.IsAlive && weakRef.Target != null)
+                //{
+                if (loadedBusinessObject != null)
                 {
-                    BusinessObject loadedBusinessObject;
-                    loadedBusinessObject = (BusinessObject) weakRef.Target;
+                //    BusinessObject loadedBusinessObject;
+                //    loadedBusinessObject = (BusinessObject) weakRef.Target;
+
                     //Apply concurrency Control Strategy to the Business Object
                     if (refreshIfReqNotCurrent && !loadedBusinessObject.State.IsNew)
                     {
@@ -413,10 +417,10 @@ namespace Habanero.BO
                     }
                     return loadedBusinessObject;
                 }
-                else
-                {
-                    BusinessObject.AllLoadedBusinessObjects().Remove(id);
-                }
+                //else
+                //{
+                //    BusinessObject.AllLoadedBusinessObjects().Remove(id);
+                //}
             }
             return null;
         }
@@ -647,7 +651,7 @@ namespace Habanero.BO
         /// </summary>
         public void ClearLoadedBusinessObjects()
         {
-            BusinessObject.ClearLoadedBusinessObjectBaseCol();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
         }
 
         #region Load By ID Methods

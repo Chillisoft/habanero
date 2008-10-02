@@ -334,5 +334,15 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
             return contactPersonTestBO;
         }
+
+        public static void ClearLoadedBusinessObjectBaseCol()
+        {
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+        }
+
+        public static BusinessObjectManager AllLoadedBusinessObjects()
+        {
+            return BusinessObjectManager.Instance;
+        }
     }
 }

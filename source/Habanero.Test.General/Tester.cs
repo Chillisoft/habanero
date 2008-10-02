@@ -235,8 +235,7 @@ namespace Habanero.Test.General
 #pragma warning restore RedundantAssignment
 
             GC.Collect(); //Force the GC to collect
-            Dictionary<string, WeakReference> boCol = BusinessObject.AllLoadedBusinessObjects();
-            Assert.IsFalse(boCol.ContainsKey(id.ToString()), "Object has not been removed from the dictionary");
+            Assert.IsFalse(BusinessObjectManager.Instance.Contains(id.ToString()), "Object has not been removed from the dictionary");
         }
 
 //		[Test]
@@ -581,7 +580,7 @@ namespace Habanero.Test.General
 
         internal static void ClearTransactionLogCol()
         {
-            ClearLoadedBusinessObjectBaseCol();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
         }
 
         internal static void DeleteAllTransactionLogs()
