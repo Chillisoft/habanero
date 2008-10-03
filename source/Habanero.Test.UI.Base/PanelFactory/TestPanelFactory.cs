@@ -19,7 +19,9 @@
 
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
@@ -403,6 +405,36 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(2, tabControl.TabPages.Count, "There should be 2 tabs");
             Assert.AreEqual("mytab1", tabControl.TabPages[0].Text);
             Assert.AreEqual("mytab2", tabControl.TabPages[1].Text);
+        }
+
+        [Test]
+        public void TestWithFormGrid()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            MyRelatedBo.LoadClassDefWithRelationshipBackToMyBoAndGridDef();
+            MyBO.LoadClassDefWithRelationshipAndFormGrid();
+            MyBO myBO = new MyBO();
+            IPanelFactory panelFactory = new PanelFactory(myBO,GetControlFactory());
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            IPanelFactoryInfo factoryInfo = panelFactory.CreatePanel();
+            //---------------Test Result -----------------------
+            IPanel pnl = factoryInfo.Panel;
+            Assert.AreEqual(1, pnl.Controls.Count, "The panel should have 1 control.");
+            Assert.IsTrue(pnl.Controls[0] is ITabControl, "The control should be a tabcontrol");
+            ITabControl tabControl = (ITabControl)pnl.Controls[0];
+            Assert.AreEqual(2, tabControl.TabPages.Count, "There should be 2 tabs");
+            Assert.AreEqual("Tab1", tabControl.TabPages[0].Text);
+            Assert.AreEqual("FormGridTab", tabControl.TabPages[1].Text);
+            Assert.AreEqual(1, factoryInfo.FormGrids.Count);
+            Assert.AreEqual(1, tabControl.TabPages[1].Controls.Count);
+            IPanel formGridPanel = tabControl.TabPages[1].Controls[0] as IPanel;
+            Assert.IsNotNull(formGridPanel, "Should have been a panel control");
+            Assert.AreEqual(1,formGridPanel.Controls.Count);
+            IEditableGridControl formGrid = factoryInfo.GetFormGrid("MyMultipleRelationship");
+            Assert.IsNotNull(formGrid);
         }
 
         [Test]

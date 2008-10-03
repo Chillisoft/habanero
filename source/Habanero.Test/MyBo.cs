@@ -990,7 +990,57 @@ namespace Habanero.Test
 			ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        
+
+
+        public static ClassDef LoadClassDefWithRelationshipAndFormGrid()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" type=""Guid""/>
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" type=""Guid"" >
+						<simpleLookupList>
+							<item display=""s1"" value=""{E6E8DC44-59EA-4e24-8D53-4A43DC2F25E7}"" />
+							<item display=""s2"" value=""{F428FADC-3740-412c-91A7-ECEB4D414414}"" />
+						</simpleLookupList>
+					</property>
+					<property  name=""RelatedID"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<relationship name=""MyRelationship"" type=""single"" relatedClass=""MyRelatedBo"" relatedAssembly=""Habanero.Test"">
+						<relatedProperty property=""RelatedID"" relatedProperty=""MyRelatedBoID"" />
+					</relationship>
+					<relationship name=""MyMultipleRelationship"" type=""multiple"" relatedClass=""MyRelatedBo"" relatedAssembly=""Habanero.Test"">
+						<relatedProperty property=""MyBoID"" relatedProperty=""MyBoID"" />
+					</relationship>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+                            <tab name=""FormGridTab"">
+								<formGrid relationship=""MyMultipleRelationship"" reverseRelationship=""MyRelationshipToMyBo"" />
+							</tab>
+						</form>
+					</ui>
+				</class>
+
+
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         public static ClassDef LoadClassDefWithRelationship_DifferentTableAndFieldNames()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -1228,6 +1278,33 @@ namespace Habanero.Test
 					<relationship name=""MyRelationshipToMyBo"" type=""single"" relatedClass=""MyBO"" relatedAssembly=""Habanero.Test"">
 						<relatedProperty property=""MyBoID"" relatedProperty=""MyBoID"" />
 					</relationship>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static ClassDef LoadClassDefWithRelationshipBackToMyBoAndGridDef()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBo"">
+					<property  name=""MyRelatedBoID"" type=""Guid""/>
+					<property  name=""MyRelatedTestProp"" />
+					<property  name=""MyBoID"" type=""Guid""/>
+					<primaryKey>
+						<prop name=""MyRelatedBoID"" />
+					</primaryKey>
+					<relationship name=""MyRelationshipToMyBo"" type=""single"" relatedClass=""MyBO"" relatedAssembly=""Habanero.Test"">
+						<relatedProperty property=""MyBoID"" relatedProperty=""MyBoID"" />
+					</relationship>
+					<ui>
+						<grid>
+							<column heading=""My Related Test Prop"" property=""MyRelatedTestProp"" type=""DataGridViewTextBoxColumn"" />
+						</grid>
+					</ui>
 				</class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);

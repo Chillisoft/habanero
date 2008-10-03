@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
@@ -96,5 +97,12 @@ namespace Habanero.UI.Base
         /// UI definition without a "name" attribute.
         /// </summary>
         string UIDefName { get; }
+
+        /// <summary>
+        /// Gets the form grids
+        /// </summary>
+        IDictionary<string, IEditableGridControl> FormGrids { get; set; }
+
+        IEditableGridControl GetFormGrid(string relationShipName);
     }
 }

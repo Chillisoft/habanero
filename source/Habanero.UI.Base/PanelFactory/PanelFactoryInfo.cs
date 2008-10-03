@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 
@@ -35,7 +36,7 @@ namespace Habanero.UI.Base
         private readonly IControlHabanero _firstControlToFocus;
         private int _preferredHeight;
         private int _preferredWidth;
-        //private IDictionary<string, EditableGrid> _formGrids;
+        private IDictionary<string, IEditableGridControl> _formGrids;
         private IToolTip _toolTip;
         private int _minimumPanelHeight;
         private int _minumumPanelWidth;
@@ -57,6 +58,7 @@ namespace Habanero.UI.Base
             _mappers = mappers;
             _firstControlToFocus = firstControlToFocus;
             _uiDefName = uiDefName;
+            _formGrids = new Dictionary<string, IEditableGridControl>();
         }
 
         /// <summary>
@@ -82,6 +84,28 @@ namespace Habanero.UI.Base
         public IControlMapperCollection ControlMappers
         {
             get { return _mappers; }
+        }
+
+
+        /// <summary>
+        /// Gets and sets the form grids
+        /// </summary>
+        // TODO : This should not have a set method, this should be populated some other way
+        public IDictionary<string, IEditableGridControl> FormGrids
+        {
+            get
+            {
+                return _formGrids;
+            }
+            set
+            {
+                _formGrids = value;
+            }
+        }
+
+        public IEditableGridControl GetFormGrid(string relationShipName)
+        {
+            return _formGrids[relationShipName];
         }
 
         /// <summary>

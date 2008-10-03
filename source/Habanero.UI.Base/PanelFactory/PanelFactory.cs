@@ -119,6 +119,7 @@ namespace Habanero.UI.Base
             {
                 IPanel mainPanel = _controlFactory.CreatePanel(_controlFactory);
                 ControlMapperCollection controlMappers = new ControlMapperCollection();
+                IDictionary<string, IEditableGridControl> formGrids = new Dictionary<string, IEditableGridControl>();
                 ITabControl tabControl = _controlFactory.CreateTabControl();
                 BorderLayoutManager mainPanelManager = _controlFactory.CreateBorderLayoutManager(mainPanel);
                 mainPanelManager.AddControl(tabControl, BorderLayoutManager.Position.Centre);
@@ -126,13 +127,15 @@ namespace Habanero.UI.Base
                 {
                     IPanelFactoryInfo onePanelInfo = CreateOnePanel(formTab);
                     AddControlMappers(onePanelInfo, controlMappers);
+                    AddFormGrids(onePanelInfo, formGrids);
                     ITabPage page = _controlFactory.CreateTabPage(formTab.Name);
                     BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(page);
-
                     manager.AddControl(onePanelInfo.Panel, BorderLayoutManager.Position.Centre);
                     tabControl.TabPages.Add(page);
                 }
                 factoryInfo = new PanelFactoryInfo(mainPanel, controlMappers, _uiDefName, _firstControl);
+                // TODO : This should not set FormGrid, this should be populated some other way
+                factoryInfo.FormGrids = formGrids;
             }
             else
             {
@@ -141,6 +144,14 @@ namespace Habanero.UI.Base
             SetFormPreferredHeight(factoryInfo);
             //TODO_Port AttachTriggers(_uiForm, factoryInfo, _currentBusinessObject);
             return factoryInfo;
+        }
+
+        private static void AddFormGrids(IPanelFactoryInfo onePanelInfo, IDictionary<string, IEditableGridControl> formGrids)
+        {
+            foreach (KeyValuePair<string, IEditableGridControl> keyValuePair in onePanelInfo.FormGrids)
+            {
+                formGrids.Add(keyValuePair);
+            }
         }
 
         /// <summary>
@@ -188,6 +199,10 @@ namespace Habanero.UI.Base
         /// <returns>Returns the object containing the new panel</returns>
         private IPanelFactoryInfo CreateOnePanel(UIFormTab uiFormTab)
         {
+            if (uiFormTab.UIFormGrid != null)
+            {
+                return CreatePanelWithGrid(uiFormTab.UIFormGrid);
+            }
             IPanel panel = _controlFactory.CreatePanel(_controlFactory);
             IToolTip toolTip = _controlFactory.CreateToolTip();
             GridLayoutManager manager = new GridLayoutManager(panel, _controlFactory);
@@ -561,40 +576,43 @@ namespace Habanero.UI.Base
             }
         }
 
-        //TODO_Port: Removed by peter
-        ///// <summary>
-        ///// Creates a panel with a grid containing the business object
-        ///// information
-        ///// </summary>
-        ///// <param name="formGrid">The grid to fill</param>
-        ///// <returns>Returns the object containing the panel</returns>
-        //private PanelFactoryInfo CreatePanelWithGrid(UIFormGrid formGrid)
-        //{
-        //    EditableGrid myGrid = new EditableGrid();
+        // TODO: Finish port
+        /// <summary>
+        /// Creates a panel with a grid containing the business object
+        /// information
+        /// </summary>
+        /// <param name="formGrid">The grid to fill</param>
+        /// <returns>Returns the object containing the panel</returns>
+        private PanelFactoryInfo CreatePanelWithGrid(UIFormGrid formGrid)
+        {
+            IEditableGridControl myGrid = _controlFactory.CreateEditableGridControl();
 
-        //    BusinessObject bo = _currentBusinessObject;
-        //    ClassDef classDef = ClassDef.ClassDefs[bo.GetType()];
-        //    myGrid.ObjectInitialiser =
-        //        new RelationshipObjectInitialiser(bo, classDef.GetRelationship(formGrid.RelationshipName),
-        //                                          formGrid.CorrespondingRelationshipName);
+            BusinessObject bo = _currentBusinessObject;
+            ClassDef classDef = bo.ClassDef;
+            DataSetProvider dataSetProvider = myGrid.Grid.DataSetProvider as DataSetProvider;
+            if (dataSetProvider != null)
+            {
+                dataSetProvider.ObjectInitialiser =
+                    new RelationshipObjectInitialiser(bo, classDef.GetRelationship(formGrid.RelationshipName),
+                                                      formGrid.CorrespondingRelationshipName);
+            }
+            IBusinessObjectCollection collection =
+                bo.Relationships.GetRelatedCollection(formGrid.RelationshipName);
+            //foreach (UIGridColumn property in collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties())
+            //{
+            //    //log.Debug("Heading: " + property.Heading + ", controlType: " + property.GridControlType.Name);
+            //}
 
-        //    IBusinessObjectCollection collection =
-        //        bo.Relationships.GetRelatedCollection(formGrid.RelationshipName);
-        //    //foreach (UIGridColumn property in collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties())
-        //    //{
-        //    //    //log.Debug("Heading: " + property.Heading + ", controlType: " + property.GridControlType.Name);
-        //    //}
+            myGrid.SetBusinessObjectCollection(collection);
 
-        //    myGrid.SetBusinessObjectCollection(collection);
+            myGrid.Dock = DockStyle.Fill;
+            IPanel panel = _controlFactory.CreatePanel(formGrid.RelationshipName, _controlFactory);
+            panel.Controls.Add(myGrid);
 
-        //    myGrid.Dock = DockStyle.Fill;
-        //    Panel p = ControlFactory.CreatePanel(formGrid.RelationshipName);
-        //    p.Controls.Add(myGrid);
-
-        //    PanelFactoryInfo pinfo = new PanelFactoryInfo(p);
-        //    pinfo.FormGrids.Add(formGrid.RelationshipName, myGrid);
-        //    return pinfo;
-        //}
+            PanelFactoryInfo panelFactoryInfo = new PanelFactoryInfo(panel);
+            panelFactoryInfo.FormGrids.Add(formGrid.RelationshipName, myGrid);
+            return panelFactoryInfo;
+        }
 
         //TODO_Port : removed all trigger stuff
         /// <summary>
