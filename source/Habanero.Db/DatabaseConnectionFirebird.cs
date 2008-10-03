@@ -49,5 +49,21 @@ namespace Habanero.DB
         {
         }
 
+        /// <summary>
+        /// Returns an empty string
+        /// </summary>
+        public override string LeftFieldDelimiter
+        {
+            get { return ""; }
+        }
+
+        /// <summary>
+        /// Returns an empty string
+        /// </summary>
+        public override string RightFieldDelimiter
+        {
+            get { return ""; }
+        }
+
     }
 }
