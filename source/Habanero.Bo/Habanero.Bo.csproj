@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="BORegistry.cs" />
     <Compile Include="BOStatus.cs" />
+    <Compile Include="BusinessObjectLoaderBase.cs" />
     <Compile Include="BusinessObjectLoaderDB.cs" />
     <Compile Include="BusinessObjectLastUpdatePropertiesLog.cs" />
     <Compile Include="BusinessObjectLoaderInMemory.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="DataAccessorInMemory.cs" />
     <Compile Include="DataStoreInMemory.cs" />
     <Compile Include="DeleteHelper.cs" />
+    <Compile Include="ExceptionHelper.cs" />
     <Compile Include="IBusinessObjectLoader.cs" />
     <Compile Include="IDataAccessor.cs" />
     <Compile Include="IDataSetProvider.cs" />

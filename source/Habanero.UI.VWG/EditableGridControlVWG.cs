@@ -78,8 +78,6 @@ namespace Habanero.UI.VWG
             this.Grid.CurrentPage = 1;
             if (FilterMode == FilterModes.Search)
             {
-                BusinessObjectCollection<BusinessObject> collection =
-                    new BusinessObjectCollection<BusinessObject>(this.ClassDef);
                 string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
                 if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
                 {
@@ -89,7 +87,8 @@ namespace Habanero.UI.VWG
                     }
                     searchClause += AdditionalSearchCriteria;
                 }
-                collection.Load(searchClause, OrderBy);
+                IBusinessObjectCollection collection = BORegistry.DataAccessor.BusinessObjectLoader.
+                    GetBusinessObjectCollection(this.ClassDef, searchClause, OrderBy);
                 SetBusinessObjectCollection(collection);
             }
             else

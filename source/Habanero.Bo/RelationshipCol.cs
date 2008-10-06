@@ -167,7 +167,7 @@ namespace Habanero.BO
 		/// <exception cref="InvalidRelationshipAccessException">Thrown if
 		/// the relationship specified is a single relationship, when a
 		/// multiple one was expected</exception>
-		public IBusinessObjectCollection GetRelatedCollection(string relationshipName)
+		public virtual IBusinessObjectCollection GetRelatedCollection(string relationshipName)
 		{
             MultipleRelationship multipleRelationship = GetMultipleRelationship(relationshipName);
             return multipleRelationship.GetRelatedBusinessObjectCol();

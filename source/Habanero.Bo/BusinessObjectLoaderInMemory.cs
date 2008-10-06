@@ -29,7 +29,7 @@ namespace Habanero.BO
     /// This is used to demonstrate the abilitiy to swap out loaders for different datastores and for testing so as to minimise.
     /// The continual database hits that result from testing using a traditional database.
     ///</summary>
-    public class BusinessObjectLoaderInMemory : IBusinessObjectLoader
+    public class BusinessObjectLoaderInMemory : BusinessObjectLoaderBase, IBusinessObjectLoader
     {
         private readonly DataStoreInMemory _dataStore;
 
@@ -42,7 +42,7 @@ namespace Habanero.BO
             _dataStore = dataStore;
         }
 
-        #region IBusinessObjectLoader Members
+        #region GetBusinessObject Members
 
         /// <summary>
         /// Loads a business object of type T, using the Primary key given as the criteria
@@ -155,157 +155,31 @@ namespace Habanero.BO
             return _dataStore.Find(classDef.ClassType, criteriaObject);
         }
 
-
         /// <summary>
-        /// Loads a BusinessObjectCollection using the criteria given. 
+        /// Reloads a businessObject from the datasource using the id of the object.
+        /// A dirty object will not be refreshed from the database and the appropriate error will be raised.
+        /// Cancel all edits before refreshing the object or call see TODO: Refresh with refresh dirty objects = true.
         /// </summary>
-        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        /// <param name="criteria">The criteria to use to load the business object collection</param>
-        /// <returns>The loaded collection</returns>
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria)
-            where T : class, IBusinessObject, new()
+        /// <exception cref="HabaneroDeveloperException">Exception thrown if the object is dirty and refresh is called.</exception>
+        /// <param name="businessObject">The businessObject to refresh</param>
+        public IBusinessObject Refresh(IBusinessObject businessObject)
         {
-            QueryBuilder.PrepareCriteria(ClassDef.Get<T>(), criteria);
-            return _dataStore.FindAll<T>(criteria);
-        }
-
-        /// <summary>
-        /// Loads a BusinessObjectCollection using the criteria given. 
-        /// </summary>
-        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        /// <param name="criteriaString">The criteria to use to load the business object collection</param>
-        /// <returns>The loaded collection</returns>
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString) where T : class, IBusinessObject, new()
-        {
-            Criteria criteriaObject = CriteriaParser.CreateCriteria(criteriaString);
-            return GetBusinessObjectCollection<T>(criteriaObject);
-        }
-
-
-        /// <summary>
-        /// Loads a BusinessObjectCollection using the criteria given. 
-        /// </summary>
-        /// <param name="classDef">The ClassDef for the collection to load</param>
-        /// <param name="criteria">The criteria to use to load the business object collection</param>
-        /// <returns>The loaded collection</returns>
-        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria)
-        {
-            return _dataStore.FindAll(classDef.ClassType, criteria);
-        }
-
-        /// <summary>
-        /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
-        /// </summary>
-        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        /// <param name="criteria">The criteria to use to load the business object collection</param>
-        /// <returns>The loaded collection</returns>
-        /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria)
-            where T : class, IBusinessObject, new()
-        {
-            BusinessObjectCollection<T> col = GetBusinessObjectCollection<T>(criteria);
-            col.Sort(delegate(T x, T y) { return orderCriteria.Compare(x, y); });
-            return col;
-        }
-
-        /// <summary>
-        /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
-        /// </summary>
-        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        /// <param name="criteriaString">The criteria to use to load the business object collection</param>
-        /// <returns>The loaded collection</returns>
-        /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString, string orderCriteria) where T : class, IBusinessObject, new()
-        {
-            ClassDef classDef = ClassDef.ClassDefs[typeof(T)];
-            Criteria criteriaObject = CriteriaParser.CreateCriteria(criteriaString);
-            OrderCriteria orderCriteriaObj = QueryBuilder.CreateOrderCriteria(classDef, orderCriteria);
-            return GetBusinessObjectCollection<T>(criteriaObject, orderCriteriaObj);
-        }
-
-        /// <summary>
-        /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
-        /// </summary>
-        /// <param name="classDef">The ClassDef for the collection to load</param>
-        /// <param name="criteria">The criteria to use to load the business object collection</param>
-        /// <returns>The loaded collection</returns>
-        /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
-        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria,
-                                                                     OrderCriteria orderCriteria)
-        {
-            IBusinessObjectCollection col = GetBusinessObjectCollection(classDef, criteria);
-            col.Sort(orderCriteria);
-            return col;
-        }
-
-        /// <summary>
-        /// Loads a BusinessObjectCollection using the SelectQuery given. It's important to make sure that T (meaning the ClassDef set up for T)
-        /// has the properties defined in the fields of the select query.  
-        /// This method allows you to define a custom query to load a businessobjectcollection so that you can perhaps load from multiple
-        /// tables using a join (if loading from a database source).
-        /// </summary>
-        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        /// <param name="selectQuery">The select query to use to load from the data source</param>
-        /// <returns>The loaded collection</returns>
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(ISelectQuery selectQuery)
-            where T : class, IBusinessObject, new()
-        {
-            BusinessObjectCollection<T> businessObjectCollection = GetBusinessObjectCollection<T>(selectQuery.Criteria, selectQuery.OrderCriteria);
-            if (selectQuery.Limit >= 0)
+            if (businessObject.Status.IsNew)
             {
-                while (businessObjectCollection.Count > selectQuery.Limit)
-                {
-                    businessObjectCollection.RemoveAt(selectQuery.Limit);
-                }
+                return businessObject;
             }
-            return businessObjectCollection;
+            if (businessObject.Status.IsEditing)
+            {
+                throw new HabaneroDeveloperException("A Error has occured since the object being refreshed is being edited.",
+                    "A Error has occured since the object being refreshed is being edited. ID :- " +
+                    businessObject.ID.GetObjectId() + " Class : " + businessObject.ClassDef.ClassNameFull);
+            }
+            return businessObject;
         }
 
+        #endregion //GetBusinessObject Members
 
-        /// <summary>
-        /// Loads a BusinessObjectCollection using the SelectQuery given. It's important to make sure that the ClassDef given
-        /// has the properties defined in the fields of the select query.  
-        /// This method allows you to define a custom query to load a businessobjectcollection so that you can perhaps load from multiple
-        /// tables using a join (if loading from a database source).
-        /// </summary>
-        /// <param name="classDef">The ClassDef for the collection to load</param>
-        /// <param name="selectQuery">The select query to use to load from the data source</param>
-        /// <returns>The loaded collection</returns>
-        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, ISelectQuery selectQuery)
-        {
-            return GetBusinessObjectCollection(classDef, selectQuery.Criteria, selectQuery.OrderCriteria);
-        }
-
-
-        /// <summary>
-        /// Loads a BusinessObjectCollection using the searchCriteria an given. It's important to make sure that the ClassDef given
-        /// has the properties defined in the fields of the select searchCriteria and orderCriteria.  
-        /// </summary>
-        /// <param name="classDef">The ClassDef for the collection to load</param>
-        /// <param name="searchCriteria">The select query to use to load from the data source</param>
-        /// <param name="orderCriteria">The order that the collections must be loaded in e.g. Surname, FirstName</param>
-        /// <returns>The loaded collection</returns>
-        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria, string orderCriteria)
-        {
-            Criteria criteria = CriteriaParser.CreateCriteria(searchCriteria);
-            QueryBuilder.PrepareCriteria(classDef, criteria);
-            OrderCriteria orderCriteriaObj = QueryBuilder.CreateOrderCriteria(classDef, orderCriteria);
-            return GetBusinessObjectCollection(classDef, criteria, orderCriteriaObj);
-        }
-
-        /// <summary>
-        /// Loads a BusinessObjectCollection using the searchCriteria an given. It's important to make sure that the ClassDef given
-        /// has the properties defined in the fields of the select searchCriteria and orderCriteria.  
-        /// </summary>
-        /// <param name="classDef">The ClassDef for the collection to load</param>
-        /// <param name="searchCriteria">The select query to use to load from the data source</param>
-        /// <returns>The loaded collection</returns>
-        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string searchCriteria)
-        {
-            Criteria criteria = CriteriaParser.CreateCriteria(searchCriteria);
-            QueryBuilder.PrepareCriteria(classDef, criteria);
-            return GetBusinessObjectCollection(classDef, criteria);
-        }
+        #region GetBusinessObjectCollection Members
 
         /// <summary>
         /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
@@ -314,14 +188,35 @@ namespace Habanero.BO
         /// </summary>
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="collection">The collection to refresh</param>
-        public void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new()
+        public override void Refresh<T>(BusinessObjectCollection<T> collection) 
+            //where T : class, IBusinessObject, new()
         {
-            QueryBuilder.PrepareCriteria(collection.ClassDef, collection.SelectQuery.Criteria);
+            if (typeof(T) == typeof(BusinessObject))
+            {
+                Refresh((IBusinessObjectCollection)collection);
+                return;
+            }
+            ISelectQuery selectQuery = collection.SelectQuery;
+            Criteria criteria = selectQuery.Criteria;
+            OrderCriteria orderCriteria = selectQuery.OrderCriteria;
+
+            QueryBuilder.PrepareCriteria(collection.ClassDef, criteria);
+
+            BusinessObjectCollection<T> loadedBos = _dataStore.FindAll<T>(criteria);
+            loadedBos.Sort(delegate(T x, T y) { return orderCriteria.Compare(x, y); });
+            //updatedCol.Sort(orderCriteria);
+            if (selectQuery.Limit >= 0)
+            {
+                while (loadedBos.Count > selectQuery.Limit)
+                {
+                    loadedBos.RemoveAt(selectQuery.Limit);
+                }
+            }
+
             BusinessObjectCollection<T> clonedCol = collection.Clone();
             collection.Clear();
 
-            BusinessObjectCollection<T> updatedCol = GetBusinessObjectCollection<T>(collection.SelectQuery);
-            foreach (T loadedBo in updatedCol)
+            foreach (T loadedBo in loadedBos)
             {
                 if (clonedCol.Contains(loadedBo))
                 {
@@ -348,14 +243,30 @@ namespace Habanero.BO
         /// only fire for the new objects added to the collection, not for the ones that already existed).
         /// </summary>
         /// <param name="collection">The collection to refresh</param>
-        public void Refresh(IBusinessObjectCollection collection)
+        public override void Refresh(IBusinessObjectCollection collection)
         {
-            QueryBuilder.PrepareCriteria(collection.ClassDef, collection.SelectQuery.Criteria);
+
+            ISelectQuery selectQuery = collection.SelectQuery;
+            Criteria criteria = selectQuery.Criteria;
+            OrderCriteria orderCriteria = selectQuery.OrderCriteria;
+
+            IClassDef classDef = collection.ClassDef;
+            QueryBuilder.PrepareCriteria(classDef, criteria);
+
+            IBusinessObjectCollection loadedBos = _dataStore.FindAll(classDef.ClassType, criteria);
+            loadedBos.Sort(orderCriteria);
+            if (selectQuery.Limit >= 0)
+            {
+                while (loadedBos.Count > selectQuery.Limit)
+                {
+                    loadedBos.RemoveAt(selectQuery.Limit);
+                }
+            }
+
             IBusinessObjectCollection clonedCol = collection.Clone();
             collection.Clear();
 
-            IBusinessObjectCollection updatedCol = GetBusinessObjectCollection(collection.ClassDef, collection.SelectQuery.Criteria); 
-            foreach (BusinessObject loadedBo in updatedCol)
+            foreach (BusinessObject loadedBo in loadedBos)
             {
                 if (clonedCol.Contains(loadedBo))
                 {
@@ -376,27 +287,9 @@ namespace Habanero.BO
             //}
         }
 
-        /// <summary>
-        /// Reloads a businessObject from the datasource using the id of the object.
-        /// A dirty object will not be refreshed from the database and the appropriate error will be raised.
-        /// Cancel all edits before refreshing the object or call see TODO: Refresh with refresh dirty objects = true.
-        /// </summary>
-        /// <exception cref="HabaneroDeveloperException">Exception thrown if the object is dirty and refresh is called.</exception>
-        /// <param name="businessObject">The businessObject to refresh</param>
-        public IBusinessObject Refresh(IBusinessObject businessObject)
-        {
-            if (businessObject.Status.IsNew)
-            {
-                return businessObject;
-            }
-            if (businessObject.Status.IsEditing)
-            {
-                throw new HabaneroDeveloperException("A Error has occured since the object being refreshed is being edited.",
-                    "A Error has occured since the object being refreshed is being edited. ID :- " +
-                    businessObject.ID.GetObjectId() + " Class : " + businessObject.ClassDef.ClassNameFull);
-            }
-            return businessObject;
-        }
+        #endregion //GetBusinessObjectCollection Members
+
+        #region GetRelatedBusinessObjectCollection Members
 
         /// <summary>
         /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
@@ -414,7 +307,7 @@ namespace Habanero.BO
             RelatedBusinessObjectCollection<T> relatedCol = new RelatedBusinessObjectCollection<T>(relationship);
             Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
             OrderCriteria preparedOrderCriteria =
-QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
+                QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
 
             BusinessObjectCollection<T> col = GetBusinessObjectCollection<T>(relationshipCriteria, preparedOrderCriteria);
             col.ForEach(delegate(T obj) { relatedCol.Add(obj); });
@@ -437,7 +330,7 @@ QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationshi
             IBusinessObjectCollection relatedCol = CreateRelatedBusinessObjectCollection(type, relationship);
             Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
             OrderCriteria preparedOrderCriteria =
-    QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
+                QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
 
             IBusinessObjectCollection col = GetBusinessObjectCollection(relationship.RelatedObjectClassDef,
                         relationshipCriteria, preparedOrderCriteria);

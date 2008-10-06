@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System.Collections;
+using Habanero.Base;
 using Habanero.BO;
 
 namespace Habanero.UI.Base
@@ -58,7 +59,7 @@ namespace Habanero.UI.Base
         /// Populates the collection using the given BusinessObjectCollection
         /// </summary>
         /// <param name="collection">A BusinessObjectCollection</param>
-        void SetCollection(BusinessObjectCollection<BusinessObject> collection);
+        void SetCollection(IBusinessObjectCollection collection);
 
         /// <summary>
         /// Retrieves the item at the specified index within the collection

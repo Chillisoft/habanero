@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
 
@@ -152,7 +153,7 @@ namespace Habanero.UI.Win
             /// Populates the collection using the given BusinessObjectCollection
             /// </summary>
             /// <param name="collection">A BusinessObjectCollection</param>
-            public void SetCollection(BusinessObjectCollection<BusinessObject> collection)
+            public void SetCollection(IBusinessObjectCollection collection)
             {
                 throw new System.NotImplementedException();
             }

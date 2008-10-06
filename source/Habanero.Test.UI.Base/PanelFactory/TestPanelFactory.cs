@@ -26,6 +26,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.UI.Base
 {
@@ -412,11 +413,17 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
+            //BORegistry.DataAccessor = new DataAccessorInMemory();
             MyRelatedBo.LoadClassDefWithRelationshipBackToMyBoAndGridDef();
             MyBO.LoadClassDefWithRelationshipAndFormGrid();
             MyBO myBO = new MyBO();
+            MockRepository mock = new MockRepository();
+            RelationshipCol relationshipCol = mock.DynamicMock<RelationshipCol>(myBO);
+            Expect.Call(relationshipCol.GetRelatedCollection("MyMultipleRelationship")).Return(
+                new BusinessObjectCollection<MyRelatedBo>()).Repeat.Once();
+            myBO.Relationships = relationshipCol;
             IPanelFactory panelFactory = new PanelFactory(myBO,GetControlFactory());
+            mock.ReplayAll();
             //-------------Assert Preconditions -------------
             //---------------Execute Test ----------------------
             IPanelFactoryInfo factoryInfo = panelFactory.CreatePanel();
@@ -435,6 +442,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1,formGridPanel.Controls.Count);
             IEditableGridControl formGrid = factoryInfo.GetFormGrid("MyMultipleRelationship");
             Assert.IsNotNull(formGrid);
+            mock.VerifyAll();
         }
 
         [Test]

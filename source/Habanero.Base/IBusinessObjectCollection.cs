@@ -331,5 +331,11 @@ namespace Habanero.Base
         //new void RemoveAt<TBusinessObject>(int index);
 
         void AddWithoutEvents(IBusinessObject businessObject);
+
+        /// <summary>
+        /// Removes the business object at the index position specified
+        /// </summary>
+        /// <param name="index">The index position to remove from</param>
+        void RemoveAt(int index);
 	}
 }

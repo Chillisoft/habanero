@@ -331,8 +331,7 @@ namespace Habanero.BO
         public ICollection GetValueCollection()
         {
 		    ClassDef classDef = LookupBoClassDef;
-		    BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
-            col.Load("", "");
+		    IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, "", "");
             return CreateValueList(col);
         }
 

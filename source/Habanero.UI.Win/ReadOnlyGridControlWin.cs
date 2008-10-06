@@ -323,8 +323,6 @@ namespace Habanero.UI.Win
         {
             if (FilterMode == FilterModes.Search)
             {
-                BusinessObjectCollection<BusinessObject> collection =
-                    new BusinessObjectCollection<BusinessObject>(ClassDef);
                 string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
                 if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
                 {
@@ -334,7 +332,8 @@ namespace Habanero.UI.Win
                     }
                     searchClause += AdditionalSearchCriteria;
                 }
-                collection.Load(searchClause, OrderBy);
+                IBusinessObjectCollection collection = BORegistry.DataAccessor.BusinessObjectLoader.
+                    GetBusinessObjectCollection(ClassDef, searchClause, OrderBy);
                 SetBusinessObjectCollection(collection);
             }
             else

@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 using System;
+using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -2464,6 +2465,34 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestRefreshLoadedCollection_TypedAsBusinessObject()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now);
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson(now);
+            ContactPersonTestBO.CreateSavedContactPerson(DateTime.Now.AddDays(-1));
+
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
+            col.SelectQuery.Criteria = criteria;
+            col.Add(cp1, cp2);
+            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson(now);
+            //---------------Assert Precondition ---------------
+            Assert.AreEqual(2, col.Count);
+
+            //---------------Execute Test ----------------------
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, col.Count);
+            Assert.Contains(cp1, col);
+            Assert.Contains(cp2, col);
+            Assert.Contains(cp3, col);
+        }
+
+        [Test]
         public void TestRefreshLoadedCollection_Untyped_GTCriteriaObject_DoesNotLoadNewObject()
         {
             //---------------Set up test pack-------------------
@@ -2712,6 +2741,101 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestGetBusinessObjectCollection_TypedAsBusinessObject_ThrowsError_CriteriaObject()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            DateTime now = DateTime.Now;
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+
+            //---------------Execute Test ----------------------
+            AssertTypedAsBusinessObjectThrowsCorrectException(delegate()
+            {
+                BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
+                    GetBusinessObjectCollection<BusinessObject>(criteria);
+            });
+        }
+
+        [Test]
+        public void TestGetBusinessObjectCollection_TypedAsBusinessObject_ThrowsError_CriteriaObjectWithOrderBy()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            DateTime now = DateTime.Now;
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+
+            //---------------Execute Test ----------------------
+            AssertTypedAsBusinessObjectThrowsCorrectException(delegate()
+            {
+                BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
+                    GetBusinessObjectCollection<BusinessObject>(criteria, null);
+            });
+        }
+
+        [Test]
+        public void TestGetBusinessObjectCollection_TypedAsBusinessObject_ThrowsError_SelectQuery()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+
+            //---------------Execute Test ----------------------
+            AssertTypedAsBusinessObjectThrowsCorrectException(delegate()
+            {
+                BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
+                    GetBusinessObjectCollection<BusinessObject>((SelectQuery) null);
+            });
+        }
+
+        [Test]
+        public void TestGetBusinessObjectCollection_TypedAsBusinessObject_ThrowsError_CriteriaString()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+
+            //---------------Execute Test ----------------------
+            AssertTypedAsBusinessObjectThrowsCorrectException(delegate()
+            {
+                BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
+                    GetBusinessObjectCollection<BusinessObject>("");
+            });
+        }
+
+        [Test]
+        public void TestGetBusinessObjectCollection_TypedAsBusinessObject_ThrowsError_CriteriaStringWithOrderBy()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+
+            //---------------Execute Test ----------------------
+            AssertTypedAsBusinessObjectThrowsCorrectException(delegate()
+            {
+                BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
+                    GetBusinessObjectCollection<BusinessObject>("", "");
+            });
+        }
+
+        private static void AssertTypedAsBusinessObjectThrowsCorrectException(MethodInvoker callToInvoke)
+        {
+            //---------------Execute Test ----------------------
+            Exception exception = null;
+            try
+            {
+                callToInvoke();
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(exception, "Exception should have been thrown");
+            Assert.IsInstanceOfType(typeof(HabaneroDeveloperException), exception, "Should be a HabaneroDeveloperException.");
+            HabaneroDeveloperException developerException = (HabaneroDeveloperException)exception;
+            Assert.AreEqual(developerException.Message, ExceptionHelper._habaneroDeveloperExceptionUserMessage);
+            Assert.AreEqual(developerException.DeveloperMessage, ExceptionHelper._loaderGenericTypeMethodExceptionMessage);
+        }
+
+        [Test, Ignore("No Test Implemented")]
         public void TestLoadWithCriteria_MultipleLevels()
         {
             //---------------Set up test pack-------------------
