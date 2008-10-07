@@ -18,6 +18,9 @@
 //---------------------------------------------------------------------------------
 
 
+using System.Windows.Forms;
+using Habanero.UI.Forms;
+
 namespace Habanero.UI.Base
 {
     /// <summary>
@@ -45,6 +48,31 @@ namespace Habanero.UI.Base
         {
             get { return _dateDisplaySettings; }
             set { _dateDisplaySettings = value; }
+        }
+
+        public delegate void ApplyStyleDelegate(Control control);
+
+        private static ApplyStyleDelegate _applyStyleMethod;
+
+        ///<summary>
+        /// Set or Get the Delegate used for Applying Style changes to a control.
+        ///</summary>
+        public static ApplyStyleDelegate ApplyStyleMethod
+        {
+            get { return _applyStyleMethod; }
+            set { _applyStyleMethod = value; }
+        }
+
+        ///<summary>
+        /// Applies the style to the control as implemented by the ApplyStyleMethod.
+        ///</summary>
+        ///<param name="control">The control to apply the style to.</param>
+        public static void ApplyStyle(Control control)
+        {
+            if (_applyStyleMethod != null)
+            {
+                _applyStyleMethod(control);
+            }
         }
     }
 }

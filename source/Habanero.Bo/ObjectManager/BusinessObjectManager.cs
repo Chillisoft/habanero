@@ -55,6 +55,8 @@ namespace Habanero.BO
         private readonly Dictionary<string, WeakReference> _loadedBusinessObjects =
             new Dictionary<string, WeakReference>();
 
+        private object _lockObject = new object();
+
         private BusinessObjectManager() {}
 
         ///<summary>
@@ -73,7 +75,13 @@ namespace Habanero.BO
         /// </summary>
         internal int Count
         {
-            get { return _loadedBusinessObjects.Count; }
+            get
+            {
+                lock (_lockObject)
+                {
+                    return _loadedBusinessObjects.Count;
+                }
+            }
         }
 
         /// <summary>
@@ -82,21 +90,25 @@ namespace Habanero.BO
         /// <param name="businessObject"></param>
         internal void Add(BusinessObject businessObject)
         {
-            if (_loadedBusinessObjects.ContainsKey(businessObject.ID.GetObjectId()))
+            lock (_lockObject)
             {
-                BusinessObject loadedBusinessObject = this[businessObject.ID];
-                if (!ReferenceEquals(loadedBusinessObject, businessObject))
+                if (_loadedBusinessObjects.ContainsKey(businessObject.ID.GetObjectId()))
                 {
-                    throw new HabaneroDeveloperException(
-                        "There was a serious developer exception. Two copies of the business object '"
-                        + businessObject.ClassDef.ClassNameFull + "' were added to the object manager",
-                        "Two copies of the business object '"
-                        + businessObject.ClassDef.ClassNameFull + "' identified by '" + businessObject.ID.GetObjectId() +
-                        "' were added to the object manager");
+                    BusinessObject loadedBusinessObject = this[businessObject.ID];
+                    if (!ReferenceEquals(loadedBusinessObject, businessObject))
+                    {
+                        throw new HabaneroDeveloperException(
+                            "There was a serious developer exception. Two copies of the business object '"
+                            + businessObject.ClassDef.ClassNameFull + "' were added to the object manager",
+                            "Two copies of the business object '"
+                            + businessObject.ClassDef.ClassNameFull + "' identified by '" +
+                            businessObject.ID.GetObjectId() +
+                            "' were added to the object manager");
+                    }
+                    return;
                 }
-                return;
+                _loadedBusinessObjects.Add(businessObject.ID.GetObjectId(), new WeakReference(businessObject));
             }
-            _loadedBusinessObjects.Add(businessObject.ID.GetObjectId(), new WeakReference(businessObject));
         }
 
         /// <summary>
@@ -106,11 +118,14 @@ namespace Habanero.BO
         /// <returns>Whether the busienss object is loadd or not</returns>
         internal bool Contains(BusinessObject businessObject)
         {
-             if (Contains(businessObject.ID))
-             {
-                 return (businessObject ==  this[businessObject.ID]);
-             }
-            return false;
+            lock (_lockObject)
+            {
+                if (Contains(businessObject.ID))
+                {
+                    return (businessObject == this[businessObject.ID]);
+                }
+                return false;
+            }
         }
 
         /// <summary>
@@ -120,6 +135,7 @@ namespace Habanero.BO
         /// <returns> Whether the busienss object is loadd or not</returns>
         internal bool Contains(BOPrimaryKey id)
         {
+
             return Contains(id.GetObjectId());
             
         }
@@ -131,17 +147,20 @@ namespace Habanero.BO
         /// <returns>Whether the busienss object is loadd or not</returns>
         internal bool Contains(string objectID)
         {
-            bool containsKey = _loadedBusinessObjects.ContainsKey(objectID);
-            if (containsKey)
+            lock (_lockObject)
             {
-                if (!BusinessObjectWeakReferenceIsAlive(objectID))
+                bool containsKey = _loadedBusinessObjects.ContainsKey(objectID);
+                if (containsKey)
                 {
-                    _loadedBusinessObjects.Remove(objectID);
-                    return false;
+                    if (!BusinessObjectWeakReferenceIsAlive(objectID))
+                    {
+                        _loadedBusinessObjects.Remove(objectID);
+                        return false;
+                    }
+                    return true;
                 }
-                return true;
+                return containsKey;
             }
-            return containsKey;
         }
 
         private bool BusinessObjectWeakReferenceIsAlive(string objectID)
@@ -157,9 +176,12 @@ namespace Habanero.BO
         /// <param name="businessObject">business object to be removed.</param>
         internal void Remove(BusinessObject businessObject)
         {
-            if (Contains(businessObject))
+            lock (_lockObject)
             {
-                Remove(businessObject.ID);
+                if (Contains(businessObject))
+                {
+                    Remove(businessObject.ID);
+                }
             }
         }
 
@@ -179,7 +201,10 @@ namespace Habanero.BO
         /// <param name="id">The string ID of the business object to be removed.</param>
         internal void Remove(string id)
         {
-            _loadedBusinessObjects.Remove(id);
+            lock (_lockObject)
+            {
+                _loadedBusinessObjects.Remove(id);
+            }
         }
 
         /// <summary>
@@ -189,14 +214,19 @@ namespace Habanero.BO
         /// <returns>The business object from the object manger.</returns>
         internal BusinessObject this[string objectID]
         {
-            get {
-                if (Contains(objectID))
+            get
+            {
+                lock (_lockObject)
                 {
-                    return (BusinessObject) _loadedBusinessObjects[objectID].Target; 
-                }
-                throw new HabaneroDeveloperException("There is an application error please contact your system administrator.", 
-                        "There was an attempt to retrieve the object identified by '" 
+                    if (Contains(objectID))
+                    {
+                        return (BusinessObject) _loadedBusinessObjects[objectID].Target;
+                    }
+                    throw new HabaneroDeveloperException(
+                        "There is an application error please contact your system administrator.",
+                        "There was an attempt to retrieve the object identified by '"
                         + objectID + "' from the object manager but it is not currently loaded.");
+                }
             }
         }
 
@@ -218,7 +248,10 @@ namespace Habanero.BO
         /// </summary>
         public void ClearLoadedObjects()
         {
-            _loadedBusinessObjects.Clear();
+            lock (_lockObject)
+            {
+                _loadedBusinessObjects.Clear();
+            }
         }
 
         #endregion

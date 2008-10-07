@@ -125,6 +125,7 @@ namespace Habanero.UI.Forms
             ControlBox = false;
 
             CreateLayout();
+            GlobalUIRegistry.ApplyStyle(this);
         }
 
         private DefaultBOEditorForm()
