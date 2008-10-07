@@ -35,6 +35,7 @@ namespace Habanero.DB
             : base(assemblyName, className)
         {
         }
+
         /// <summary>
         /// Constructor to initialise the connection object with an
         /// assembly name, class name and connection string

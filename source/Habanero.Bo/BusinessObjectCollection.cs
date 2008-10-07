@@ -1054,26 +1054,28 @@ namespace Habanero.BO
             AddCreatedBusinessObject(newBO);
             return newBO;
         }
-
+        
         private void AddCreatedBusinessObject(TBusinessObject newBO)
         {
             EventHandler<BOEventArgs> savedEventHandler = null;
-            EventHandler<BOEventArgs> savedEventHandler1 = savedEventHandler;
             savedEventHandler = delegate(object sender, BOEventArgs e)
-                                    {
-                                        if (CreatedBusinessObjects.Remove((TBusinessObject) e.BusinessObject))
-                                        {
-                                            Add((TBusinessObject) e.BusinessObject);
-                                            e.BusinessObject.Saved -= savedEventHandler1;
-                                        }
-                                    };
+            {
+                if (CreatedBusinessObjects.Remove((TBusinessObject) e.BusinessObject))
+                {
+                    Add((TBusinessObject) e.BusinessObject);
+// ReSharper disable AccessToModifiedClosure
+                    e.BusinessObject.Saved -= savedEventHandler;
+// ReSharper restore AccessToModifiedClosure
+                }
+            };
             EventHandler<BOEventArgs> restoredEventHandler = null;
-            EventHandler<BOEventArgs> restoredEventHandler1 = restoredEventHandler;
             restoredEventHandler = delegate(object sender, BOEventArgs e)
-                                       {
-                                           CreatedBusinessObjects.Remove((TBusinessObject) e.BusinessObject);
-                                           e.BusinessObject.Updated -= restoredEventHandler1;
-                                       };
+            {
+                CreatedBusinessObjects.Remove((TBusinessObject) e.BusinessObject);
+// ReSharper disable AccessToModifiedClosure
+                e.BusinessObject.Updated -= restoredEventHandler;
+// ReSharper restore AccessToModifiedClosure
+            };
             newBO.Restored += restoredEventHandler;
             newBO.Saved += savedEventHandler;
             CreatedBusinessObjects.Add(newBO);

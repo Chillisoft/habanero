@@ -341,7 +341,7 @@ namespace Habanero.Test.DB
                 ConnectionStringFactory.GetFactory(DatabaseConfig.FirebirdEmbedded).GetConnectionString("testserver", "testdatasource",
                                                                                                 "testuser", "testpassword",
                                                                                                 "");
-            Assert.AreEqual("Server=testserver;User=testuser;Password=testpassword;Database=testdatasource;ServerType=1", conn,
+            Assert.AreEqual("User=testuser;Password=testpassword;Database=testdatasource;ServerType=1", conn,
                             "ConnectionStringFactory not working for Firebird");
         }
 
@@ -350,6 +350,15 @@ namespace Habanero.Test.DB
         {
             String conn =
                 ConnectionStringFactory.GetFactory(DatabaseConfig.Firebird).GetConnectionString("", "testdb",
+                                                                                             "testusername",
+                                                                                             "testpassword", "testport");
+        }
+
+        [Test]
+        public void TestFirebirdEmbeddedNoServerName()
+        {
+            String conn =
+                ConnectionStringFactory.GetFactory(DatabaseConfig.FirebirdEmbedded).GetConnectionString("", "testdb",
                                                                                              "testusername",
                                                                                              "testpassword", "testport");
         }
