@@ -225,6 +225,11 @@ namespace Habanero.Test.UI.Base
                 //---------------Tear Down -------------------------   
             }
 
+            [Test, Ignore("Not implemented for Win")]
+            public override void TestCreateDataGridViewColumn_WithTypeName_Image()
+            {
+                base.TestCreateDataGridViewColumn_WithTypeName_Image();
+            }
         }
         [TestFixture]
         public class TestControlFactoryVWG : TestControlFactory
@@ -409,6 +414,17 @@ namespace Habanero.Test.UI.Base
                 //---------------Tear Down -------------------------   
             }
 
+            [Test, Ignore("Not implemented for VWG")]
+            public override void TestCreateDataGridViewColumn_WithTypeName_NumericUpDown()
+            {
+                base.TestCreateDataGridViewColumn_WithTypeName_NumericUpDown();
+            }
+
+            [Test, Ignore("Not implemented for VWG")]
+            public override void TestCreateDataGridViewColumn_WithTypeName_DateTimePicker()
+            {
+                base.TestCreateDataGridViewColumn_WithTypeName_DateTimePicker();
+            }
         }
 
         private IControlFactory _factory;
@@ -831,6 +847,86 @@ namespace Habanero.Test.UI.Base
             }
             //---------------Test Result -----------------------
             Assert.IsTrue(errorThrown, "Type must inherit from IDataGridViewColumn");
+        }
+
+        [Test]
+        public virtual void TestCreateDataGridViewColumn_WithTypeName_NumericUpDown()
+        {
+            //---------------Set up test pack-------------------
+            IDataGridViewNumericUpDownColumn dataGridViewNumericUpDownColumn = GetControlFactory().CreateDataGridViewNumericUpDownColumn();
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            IDataGridViewColumn dataGridViewColumn = GetControlFactory().
+                CreateDataGridViewColumn("DataGridViewNumericUpDownColumn", null);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(dataGridViewColumn);
+            Assert.IsInstanceOfType(typeof(IDataGridViewNumericUpDownColumn), dataGridViewColumn);
+            Assert.AreSame(dataGridViewNumericUpDownColumn.GetType(), dataGridViewColumn.GetType());
+        }
+
+        [Test]
+        public virtual void TestCreateDataGridViewColumn_WithTypeName_DateTimePicker()
+        {
+            //---------------Set up test pack-------------------
+            IDataGridViewDateTimeColumn dataGridViewNumericUpDownColumn = GetControlFactory().CreateDataGridViewDateTimeColumn();
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            IDataGridViewColumn dataGridViewColumn = GetControlFactory().
+                CreateDataGridViewColumn("DataGridViewDateTimeColumn", null);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(dataGridViewColumn);
+            Assert.IsInstanceOfType(typeof(IDataGridViewDateTimeColumn), dataGridViewColumn);
+            Assert.AreSame(dataGridViewNumericUpDownColumn.GetType(), dataGridViewColumn.GetType());
+        }
+
+        [Test]
+        public virtual void TestCreateDataGridViewColumn_WithTypeName_CheckBox()
+        {
+            //---------------Set up test pack-------------------
+            IDataGridViewCheckBoxColumn dataGridViewNumericUpDownColumn = GetControlFactory().CreateDataGridViewCheckBoxColumn();
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            IDataGridViewColumn dataGridViewColumn = GetControlFactory().
+                CreateDataGridViewColumn("DataGridViewCheckBoxColumn", null);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(dataGridViewColumn);
+            Assert.IsInstanceOfType(typeof(IDataGridViewCheckBoxColumn), dataGridViewColumn);
+            Assert.AreSame(dataGridViewNumericUpDownColumn.GetType(), dataGridViewColumn.GetType());
+        }
+
+        [Test]
+        public virtual void TestCreateDataGridViewColumn_WithTypeName_ComboBox()
+        {
+            //---------------Set up test pack-------------------
+            IDataGridViewComboBoxColumn dataGridViewNumericUpDownColumn = GetControlFactory().CreateDataGridViewComboBoxColumn();
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            IDataGridViewColumn dataGridViewColumn = GetControlFactory().
+                CreateDataGridViewColumn("DataGridViewComboBoxColumn", null);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(dataGridViewColumn);
+            Assert.IsInstanceOfType(typeof(IDataGridViewComboBoxColumn), dataGridViewColumn);
+            Assert.AreSame(dataGridViewNumericUpDownColumn.GetType(), dataGridViewColumn.GetType());
+        }
+
+        [Test]
+        public virtual void TestCreateDataGridViewColumn_WithTypeName_Image()
+        {
+            //---------------Set up test pack-------------------
+            IDataGridViewImageColumn dataGridViewNumericUpDownColumn = GetControlFactory().CreateDataGridViewImageColumn();
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            IDataGridViewColumn dataGridViewColumn = GetControlFactory().
+                CreateDataGridViewColumn("DataGridViewImageColumn", null);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(dataGridViewColumn);
+            Assert.IsInstanceOfType(typeof(IDataGridViewImageColumn), dataGridViewColumn);
+            Assert.AreSame(dataGridViewNumericUpDownColumn.GetType(), dataGridViewColumn.GetType());
         }
 
     }

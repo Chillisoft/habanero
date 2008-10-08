@@ -109,6 +109,9 @@
     <Compile Include="Grid\DataGridViewCheckBoxColumnWin.cs" />
     <Compile Include="Grid\DataGridViewColumnWin.cs" />
     <Compile Include="Grid\DataGridViewComboBoxColumnWin.cs" />
+    <Compile Include="Grid\DataGridViewNumericUpDownColumnWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Grid\DataGridViewWin.cs">
       <SubType>Component</SubType>
     </Compile>

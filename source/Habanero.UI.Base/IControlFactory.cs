@@ -366,6 +366,12 @@ namespace Habanero.UI.Base
         /// </summary>
         IDataGridViewDateTimeColumn CreateDataGridViewDateTimeColumn();
 
+        ///<summary>
+        /// Creates a DataGridViewNumericUpDownColumn
+        ///</summary>
+        ///<returns>A new DataGridViewNumericUpDownColumn</returns>
+        IDataGridViewNumericUpDownColumn CreateDataGridViewNumericUpDownColumn();
+
         /// <summary>
         /// Creates a column for a DataGridView for the given type
         /// </summary>
@@ -437,6 +443,7 @@ namespace Habanero.UI.Base
         /// Creates a static data editor
         /// </summary>
         IStaticDataEditor CreateStaticDataEditor();
+        
     }
 
     /// <summary>

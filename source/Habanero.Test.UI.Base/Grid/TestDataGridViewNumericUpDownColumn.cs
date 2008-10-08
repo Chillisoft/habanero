@@ -1,34 +1,14 @@
-//---------------------------------------------------------------------------------
-// Copyright (C) 2008 Chillisoft Solutions
-// 
-// This file is part of the Habanero framework.
-// 
-//     Habanero is a free framework: you can redistribute it and/or modify
-//     it under the terms of the GNU Lesser General Public License as published by
-//     the Free Software Foundation, either version 3 of the License, or
-//     (at your option) any later version.
-// 
-//     The Habanero framework is distributed in the hope that it will be useful,
-//     but WITHOUT ANY WARRANTY; without even the implied warranty of
-//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU Lesser General Public License for more details.
-// 
-//     You should have received a copy of the GNU Lesser General Public License
-//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
-//---------------------------------------------------------------------------------
-
 using System;
-using System.Windows.Forms;
-using Habanero.BO.ClassDefinition;
+using System.Collections.Generic;
+using System.Text;
+using Habanero.UI;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
 using Habanero.UI.Win;
-using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    public abstract class TestDataGridViewDateTimeColumn
+    public abstract class TestDataGridViewNumericUpDownColumn
     {
         [SetUp]
         public void SetupTest()
@@ -52,7 +32,7 @@ namespace Habanero.Test.UI.Base
 
 
         [TestFixture]
-        public class TestDataGridViewDateTimeColumnWin : TestDataGridViewDateTimeColumn
+        public class TestDataGridViewNumericUpDownColumnWin : TestDataGridViewNumericUpDownColumn
         {
             protected override IControlFactory GetControlFactory()
             {
@@ -65,46 +45,46 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 //---------------Assert Precondition----------------
                 //---------------Execute Test ----------------------
-                IDataGridViewDateTimeColumn createdColumn = GetControlFactory().CreateDataGridViewDateTimeColumn();
+                IDataGridViewNumericUpDownColumn createdColumn = GetControlFactory().CreateDataGridViewNumericUpDownColumn();
                 //---------------Test Result -----------------------
                 DataGridViewColumnWin columnWin = (DataGridViewColumnWin)createdColumn;
                 System.Windows.Forms.DataGridViewColumn column = columnWin.DataGridViewColumn;
-                Assert.IsInstanceOfType(typeof(DataGridViewDateTimeColumn), column);
-                Assert.IsInstanceOfType(typeof(DataGridViewDateTimeColumnWin), createdColumn);
-                Assert.IsTrue(typeof(DataGridViewDateTimeColumn).IsSubclassOf(typeof(System.Windows.Forms.DataGridViewColumn)));
+                Assert.IsInstanceOfType(typeof(DataGridViewNumericUpDownColumn), column);
+                Assert.IsInstanceOfType(typeof(DataGridViewNumericUpDownColumnWin), createdColumn);
+                Assert.IsTrue(typeof(DataGridViewNumericUpDownColumn).IsSubclassOf(typeof(System.Windows.Forms.DataGridViewColumn)));
             }
 
             [Test]
-            public void Test_CellTemplateIsCalendarCell()
+            public void Test_CellTemplateIsNumericUpDownCell()
             {
                 //---------------Set up test pack-------------------
                 //---------------Assert Precondition----------------
                 //---------------Execute Test ----------------------
-                DataGridViewDateTimeColumn dtColumn = new DataGridViewDateTimeColumn();
+                DataGridViewNumericUpDownColumn dtColumn = new DataGridViewNumericUpDownColumn();
                 //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof(CalendarCell), dtColumn.CellTemplate);
+                Assert.IsInstanceOfType(typeof(NumericUpDownCell), dtColumn.CellTemplate);
             }
 
             [Test]
             public void Test_SetCellTemplate()
             {
                 //---------------Set up test pack-------------------
-                DataGridViewDateTimeColumn dtColumn = new DataGridViewDateTimeColumn();
-                CalendarCell calendarCell = new CalendarCell();
+                DataGridViewNumericUpDownColumn dtColumn = new DataGridViewNumericUpDownColumn();
+                NumericUpDownCell NumericUpDownCell = new NumericUpDownCell();
                 //---------------Assert Precondition----------------
-                Assert.AreNotSame(calendarCell, dtColumn.CellTemplate);
+                Assert.AreNotSame(NumericUpDownCell, dtColumn.CellTemplate);
                 //---------------Execute Test ----------------------
-                dtColumn.CellTemplate = calendarCell;
+                dtColumn.CellTemplate = NumericUpDownCell;
 
                 //---------------Test Result -----------------------
-                Assert.AreSame(calendarCell, dtColumn.CellTemplate);
+                Assert.AreSame(NumericUpDownCell, dtColumn.CellTemplate);
             }
 
             [Test]
-            public void Test_SetCellTemplate_MustBeCalendarCell()
+            public void Test_SetCellTemplate_MustBeNumericUpDownCell()
             {
                 //---------------Set up test pack-------------------
-                DataGridViewDateTimeColumn dtColumn = new DataGridViewDateTimeColumn();
+                DataGridViewNumericUpDownColumn dtColumn = new DataGridViewNumericUpDownColumn();
                 //---------------Assert Precondition----------------
 
                 //---------------Execute Test ----------------------
@@ -115,62 +95,63 @@ namespace Habanero.Test.UI.Base
                 }
                 catch (InvalidCastException ex) { errorThrown = true; }
                 //---------------Test Result -----------------------
-                Assert.IsTrue(errorThrown, "Cell Template must be type of CalendarCell");
+                Assert.IsTrue(errorThrown, "Cell Template must be type of NumericUpDownCell");
             }
 
             [Test]
-            public void TestCalendarCell_HasCorrectSettings()
+            public void TestNumericUpDownCell_HasCorrectSettings()
             {
                 //---------------Set up test pack-------------------
                 //---------------Assert Precondition----------------
                 //---------------Execute Test ----------------------
-                CalendarCell calendarCell = new CalendarCell();
+                NumericUpDownCell numericUpDownCell = new NumericUpDownCell();
                 //---------------Test Result -----------------------
-                Assert.AreEqual("d", calendarCell.Style.Format);
-                Assert.AreEqual(typeof(CalendarEditingControl), calendarCell.EditType);
-                Assert.AreEqual(typeof(DateTime), calendarCell.ValueType);
-                Assert.IsInstanceOfType(typeof(DateTime), calendarCell.DefaultNewRowValue);
+                Assert.AreEqual("0.00", numericUpDownCell.Style.Format);
+                Assert.AreEqual(typeof(NumericUpDownEditingControl), numericUpDownCell.EditType);
+                Assert.AreEqual(typeof(Decimal), numericUpDownCell.ValueType);
+                Assert.IsInstanceOfType(typeof(Decimal), numericUpDownCell.DefaultNewRowValue);
 
-                DateTime newRowValue = (DateTime) calendarCell.DefaultNewRowValue;
-                Assert.IsTrue(DateTimeUtilities.CloseToDateTimeNow(newRowValue, 10));
+                Decimal newRowValue = (Decimal)numericUpDownCell.DefaultNewRowValue;
+                Assert.AreEqual(0D, newRowValue);
             }
 
             [Test]
-            public void TestCalendarEditingControl_HasCorrectSettings()
+            public void TestNumericUpDownEditingControl_HasCorrectSettings()
             {
                 //---------------Set up test pack-------------------
                 //---------------Assert Precondition----------------
                 //---------------Execute Test ----------------------
-                CalendarEditingControl editingControl = new CalendarEditingControl();
+                NumericUpDownEditingControl editingControl = new NumericUpDownEditingControl();
                 //---------------Test Result -----------------------
-                Assert.AreEqual(System.Windows.Forms.DateTimePickerFormat.Short, editingControl.Format);
+                Assert.AreEqual(2, editingControl.DecimalPlaces);
                 Assert.IsFalse(editingControl.RepositionEditingControlOnValueChange);
                 Assert.AreEqual(0, editingControl.EditingControlRowIndex);
                 Assert.IsNull(editingControl.EditingControlDataGridView);
                 Assert.IsFalse(editingControl.EditingControlValueChanged);
             }
-            
+
             [Test]
-            public void TestCalendarEditingControl_EditingControlFormattedValue()
+            public void TestNumericUpDownEditingControl_EditingControlFormattedValue()
             {
                 //---------------Set up test pack-------------------
-                CalendarEditingControl editingControl = new CalendarEditingControl();
+                NumericUpDownEditingControl editingControl = new NumericUpDownEditingControl();
                 //---------------Assert Precondition----------------
-                Assert.AreEqual(DateTime.Now.ToShortDateString(), editingControl.EditingControlFormattedValue);
-                //Assert.AreEqual(DateTime.Now.ToShortDateString(), editingControl.GetEditingControlFormattedValue(null));
+                string defaultValueString = 0D.ToString("0.00");
+                Assert.AreEqual(defaultValueString, editingControl.EditingControlFormattedValue);
+                //Assert.AreEqual(defaultValueString, editingControl.GetEditingControlFormattedValue(null));
                 //---------------Execute Test ----------------------
 
                 // REQUIRES A PARENT GRID FOR DIRTY NOTIFICATION, NOT WORTH THE TROUBLE?
-                //DateTime dtValue = new DateTime(2006, 5, 1, 3, 2, 1);
+                //Decimal dtValue = 12.345;
                 //editingControl.EditingControlFormattedValue = dtValue.ToString();
                 ////---------------Test Result -----------------------
-                //Assert.AreEqual("2006/05/01", editingControl.EditingControlFormattedValue);
+                //Assert.AreEqual(dtValue.ToString("0.00"), editingControl.EditingControlFormattedValue);
             }
         }
 
-        //TODO: look at creating a DateTime column for VWG
+        //TODO: look at creating a NumericUpDown column for VWG
         //[TestFixture]
-        //public class TestDataGridViewDateTimeColumnVWG : TestDataGridViewDateTimeColumn
+        //public class TestDataGridViewNumericUpDownColumnVWG : TestDataGridViewNumericUpDownColumn
         //{
         //    protected override IControlFactory GetControlFactory()
         //    {

@@ -411,6 +411,15 @@ namespace Habanero.UI.Win
             return new DataGridViewDateTimeColumnWin(new DataGridViewDateTimeColumn());
         }
 
+        ///<summary>
+        /// Creates a DataGridViewNumericUpDownColumn
+        ///</summary>
+        ///<returns>A new DataGridViewNumericUpDownColumn</returns>
+        public IDataGridViewNumericUpDownColumn CreateDataGridViewNumericUpDownColumn()
+        {
+            return new DataGridViewNumericUpDownColumnWin(new DataGridViewNumericUpDownColumn());
+        }
+
         /// <summary>
         /// Creates a column for a DataGridView for the given type
         /// </summary>
@@ -425,13 +434,18 @@ namespace Habanero.UI.Win
                 typeName = "DataGridViewTextBoxColumn";
             }
 
-            if (typeName == "DataGridViewDateTimeColumn" && String.IsNullOrEmpty(assemblyName))
+            if (String.IsNullOrEmpty(assemblyName))
             {
-                assemblyName = "Habanero.UI.Win";
-            }
-            else if (String.IsNullOrEmpty(assemblyName))
-            {
-                assemblyName = "System.Windows.Forms";
+                switch (typeName)
+                {
+                    case "DataGridViewNumericUpDownColumn":
+                    case "DataGridViewDateTimeColumn":
+                        assemblyName = "Habanero.UI.Win";
+                        break;
+                    default:
+                        assemblyName = "System.Windows.Forms";
+                        break;
+                }
             }
 
             TypeLoader.LoadClassType(ref controlType, assemblyName, typeName,
@@ -456,7 +470,8 @@ namespace Habanero.UI.Win
 
             if (columnType == typeof(DataGridViewCheckBoxColumn)) return CreateDataGridViewCheckBoxColumn();
             if (columnType == typeof(DataGridViewComboBoxColumn)) return CreateDataGridViewComboBoxColumn();
-            if (columnType == typeof(DataGridViewDateTimeColumnWin)) return CreateDataGridViewDateTimeColumn();
+            if (columnType == typeof(DataGridViewDateTimeColumn)) return CreateDataGridViewDateTimeColumn();
+            if (columnType == typeof(DataGridViewNumericUpDownColumn)) return CreateDataGridViewNumericUpDownColumn();
             if (columnType == typeof(DataGridViewImageColumn)) return CreateDataGridViewImageColumn();
 
             return new DataGridViewColumnWin((DataGridViewColumn) Activator.CreateInstance(columnType));

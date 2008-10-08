@@ -728,7 +728,16 @@ namespace Habanero.UI.VWG
         /// </summary>
         public IDataGridViewDateTimeColumn CreateDataGridViewDateTimeColumn()
         {
-            throw new NotImplementedException("No VWG equivalent available");
+            throw new NotImplementedException("No VWG equivalent implemented");
+        }
+
+        ///<summary>
+        /// Creates a DataGridViewNumericUpDownColumn
+        ///</summary>
+        ///<returns>A new DataGridViewNumericUpDownColumn</returns>
+        public IDataGridViewNumericUpDownColumn CreateDataGridViewNumericUpDownColumn()
+        {
+            throw new NotImplementedException("No VWG equivalent implemented");
         }
 
         /// <summary>

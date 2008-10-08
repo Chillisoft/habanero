@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------------
-// Copyright (C) 2008 Chillisoft Solutions
+// Copyright (C) 2007 Chillisoft Solutions
 // 
 // This file is part of the Habanero framework.
 // 
@@ -21,31 +21,36 @@ using System;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 using Habanero.UI.Win;
-using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
-namespace Habanero.UI.Win
+namespace Habanero.UI
 {
+
     /// <summary>
-    /// Hosts a collection of cells that support a DateTimePicker
+    /// Hosts a collection of cells that support a NumericUpDown
     /// </summary>
-    public class DataGridViewDateTimeColumnWin : DataGridViewColumnWin, IDataGridViewDateTimeColumn
+    public class DataGridViewNumericUpDownColumnWin : DataGridViewColumnWin, IDataGridViewNumericUpDownColumn
     {
-        public DataGridViewDateTimeColumnWin(DataGridViewDateTimeColumn dataGridViewColumn)
+        ///<summary>
+        /// Initialises the DataGridView NumericUpDown Column with the windows implementation
+        /// of the DataGridViewNumericUpDownColumn to wrap for this implementation.
+        ///</summary>
+        ///<param name="dataGridViewColumn">The DataGridViewNumericUpDownColumn to wrap</param>
+        public DataGridViewNumericUpDownColumnWin(DataGridViewNumericUpDownColumn dataGridViewColumn)
             : base(dataGridViewColumn)
         {
         }
     }
 
     /// <summary>
-    /// Implements a column of cells that support a DateTimePicker
+    /// Represents a numeric column in data grid view
     /// </summary>
-    public class DataGridViewDateTimeColumn : DataGridViewColumn
+    public class DataGridViewNumericUpDownColumn : DataGridViewColumn
     {
         /// <summary>
         /// Constructor to initialise a new column
         /// </summary>
-        public DataGridViewDateTimeColumn()
-            : base(new CalendarCell())
+        public DataGridViewNumericUpDownColumn()
+            : base(new NumericUpDownCell())
         {
         }
 
@@ -54,56 +59,35 @@ namespace Habanero.UI.Win
         /// </summary>
         public override DataGridViewCell CellTemplate
         {
-            get { return base.CellTemplate; }
+            get
+            {
+                return base.CellTemplate;
+            }
             set
             {
-                // Ensure that the cell used for the template is a CalendarCell.
+                // Ensure that the cell used for the template is a NumericUpDownCell.
                 if (value != null &&
-                    !value.GetType().IsAssignableFrom(typeof(CalendarCell)))
+                    !value.GetType().IsAssignableFrom(typeof(NumericUpDownCell)))
                 {
-                    throw new InvalidCastException("Must be a CalendarCell");
+                    throw new InvalidCastException("Must be a NumericUpDownCell");
                 }
                 base.CellTemplate = value;
             }
         }
-
-        /// <summary>Gets or sets the sort mode for the column.</summary>
-        /// <returns>A <see cref="DataGridViewColumnSortMode"></see> that specifies the criteria used 
-        /// to order the rows based on the cell values in a column.</returns>
-        /// <exception cref="System.InvalidOperationException">The value assigned to the property 
-        /// conflicts with SelectionMode. </exception>
-        /// <filterpriority>1</filterpriority>
-        public DataGridViewColumnSortMode SortMode
-        {
-            get { return (DataGridViewColumnSortMode)base.SortMode; }
-            set { base.SortMode = (System.Windows.Forms.DataGridViewColumnSortMode)value; }
-        }
-
-        /// <summary>Gets or sets the column's default cell style.</summary>
-        /// <returns>A <see cref="IDataGridViewCellStyle"></see> that represents the default style of the cells in the column.</returns>
-        /// <filterpriority>1</filterpriority>
-        public IDataGridViewCellStyle DefaultCellStyle
-        {
-            get { return new DataGridViewCellStyleWin(base.DefaultCellStyle); }
-            set { throw new NotImplementedException(); }
-        }
     }
 
-
-
     /// <summary>
-    /// Represents a cell that holds a calendar date
+    /// Manages a cell that holds a numeric value
     /// </summary>
-    public class CalendarCell : DataGridViewTextBoxCell
+    public class NumericUpDownCell : DataGridViewTextBoxCell
     {
         /// <summary>
-        /// Constructor to initialise a new cell, using the short date format
+        /// Constructor to initialise a new cell
         /// </summary>
-        public CalendarCell()
-            : base()
+        public NumericUpDownCell() : base()
         {
-            // Use the short date format.
-            this.Style.Format = "d";
+            // Format with 2 decimal places
+            this.Style.Format = "0.00";
         }
 
         /// <summary>
@@ -118,63 +102,72 @@ namespace Habanero.UI.Win
             // Set the value of the editing control to the current cell value.
             base.InitializeEditingControl(rowIndex, initialFormattedValue,
                                           dataGridViewCellStyle);
-            CalendarEditingControl ctl =
-                DataGridView.EditingControl as CalendarEditingControl;
+            NumericUpDownEditingControl ctl =
+                DataGridView.EditingControl as NumericUpDownEditingControl;
 
             if (this.Value == null)
             {
-                ctl.Checked = false;
+                ctl.Value = 0;
             }
             else
             {
                 if (this.Value.ToString() != "")
-                    ctl.Value = DateTime.Parse(this.Value.ToString());
+                    ctl.Value = Decimal.Parse(this.Value.ToString());
             }
         }
 
         /// <summary>
-        /// Gets the type of editing control that is used
+        /// Returns the type of editing control that is used
         /// </summary>
         public override Type EditType
         {
-            get { return typeof(CalendarEditingControl); }
+            get
+            {
+                return typeof(NumericUpDownEditingControl);
+            }
         }
 
         /// <summary>
-        /// Gets the type of value contained in the cell
+        /// Returns the type of value contained in the cell
         /// </summary>
         public override Type ValueType
         {
-            get { return typeof(DateTime); }
+            get
+            {
+                return typeof(Decimal);
+            }
         }
 
         /// <summary>
-        /// Gets the default value for a new row, which in this case is
-        /// the current date and time
+        /// Returns the default value for a new row, which in this case is zero
         /// </summary>
         public override object DefaultNewRowValue
         {
-            get { return DateTime.Now; }
+            get
+            {
+                return (Decimal)0;
+            }
         }
     }
 
-
     /// <summary>
-    /// A control for editing date and time values
+    /// A control for editing numeric values
     /// </summary>
-    public class CalendarEditingControl : DateTimePicker, IDataGridViewEditingControl
+    class NumericUpDownEditingControl : NumericUpDown, IDataGridViewEditingControl
     {
-        DataGridView _dataGridView;
-        private bool _valueChanged = false;
-        int _rowIndex;
+        DataGridView dataGridView;
+        private bool valueChanged = false;
+        int rowIndex;
 
         /// <summary>
-        /// Constructor to initialise a new editing control with the short
-        /// date format
+        /// Constructor to initialise a new editing control with the 
+        /// default numeric format of 2 decimal places.
         /// </summary>
-        public CalendarEditingControl()
+        public NumericUpDownEditingControl()
         {
-            this.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.DecimalPlaces = 2;
+            this.Minimum = Decimal.MinValue;
+            this.Maximum = Decimal.MaxValue;
         }
 
         /// <summary>
@@ -182,20 +175,23 @@ namespace Habanero.UI.Win
         /// </summary>
         public object EditingControlFormattedValue
         {
-            get { return this.Value.ToShortDateString(); }
+            get
+            {
+                return this.Value.ToString("#,##0.00");
+            }
             set
             {
                 if (value is String)
                 {
-                    this.Value = DateTime.Parse((String)value);
+                    this.Value = Decimal.Parse((String)value);
                 }
             }
         }
 
         /// <summary>
-        /// Returns the value being held in the control
+        /// Returns the value being held in the editing control
         /// </summary>
-        /// <returns>Returns the value being held</returns>
+        /// <returns>Returns the current editing control value.</returns>
         public object GetEditingControlFormattedValue(
             DataGridViewDataErrorContexts context)
         {
@@ -211,8 +207,8 @@ namespace Habanero.UI.Win
             DataGridViewCellStyle dataGridViewCellStyle)
         {
             this.Font = dataGridViewCellStyle.Font;
-            this.CalendarForeColor = dataGridViewCellStyle.ForeColor;
-            this.CalendarMonthBackground = dataGridViewCellStyle.BackColor;
+            this.ForeColor = dataGridViewCellStyle.ForeColor;
+            this.BackColor = dataGridViewCellStyle.BackColor;
         }
 
         /// <summary>
@@ -220,8 +216,14 @@ namespace Habanero.UI.Win
         /// </summary>
         public int EditingControlRowIndex
         {
-            get { return _rowIndex; }
-            set { _rowIndex = value; }
+            get
+            {
+                return rowIndex;
+            }
+            set
+            {
+                rowIndex = value;
+            }
         }
 
         /// <summary>
@@ -234,7 +236,7 @@ namespace Habanero.UI.Win
         public bool EditingControlWantsInputKey(
             Keys key, bool dataGridViewWantsInputKey)
         {
-            // Let the DateTimePicker handle the keys listed.
+            // Let the NumericUpDown handle the keys listed.
             switch (key & Keys.KeyCode)
             {
                 case Keys.Left:
@@ -243,8 +245,6 @@ namespace Habanero.UI.Win
                 case Keys.Right:
                 case Keys.Home:
                 case Keys.End:
-                case Keys.PageDown:
-                case Keys.PageUp:
                     return true;
                 default:
                     return false;
@@ -262,12 +262,15 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Gets the value that indicates whether the control should be repositioned when there
+        /// Indicates whether the control should be repositioned when there
         /// is a value change
         /// </summary>
         public bool RepositionEditingControlOnValueChange
         {
-            get { return false; }
+            get
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -276,8 +279,14 @@ namespace Habanero.UI.Win
         /// </summary>
         public DataGridView EditingControlDataGridView
         {
-            get { return _dataGridView; }
-            set { _dataGridView = value; }
+            get
+            {
+                return dataGridView;
+            }
+            set
+            {
+                dataGridView = value;
+            }
         }
 
         /// <summary>
@@ -286,16 +295,25 @@ namespace Habanero.UI.Win
         /// </summary>
         public bool EditingControlValueChanged
         {
-            get { return _valueChanged; }
-            set { _valueChanged = value; }
+            get
+            {
+                return valueChanged;
+            }
+            set
+            {
+                valueChanged = value;
+            }
         }
 
         /// <summary>
-        /// Gets the Cursor object from the editing panel
+        /// Returns the Cursor object from the editing panel
         /// </summary>
         public Cursor EditingPanelCursor
         {
-            get { return base.Cursor; }
+            get
+            {
+                return base.Cursor;
+            }
         }
 
         /// <summary>
@@ -306,7 +324,7 @@ namespace Habanero.UI.Win
         {
             // Notify the DataGridView that the contents of the cell
             // have changed.
-            _valueChanged = true;
+            valueChanged = true;
             this.EditingControlDataGridView.NotifyCurrentCellDirty(true);
             base.OnValueChanged(eventargs);
         }
