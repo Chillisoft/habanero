@@ -97,6 +97,7 @@
     <Compile Include="DefaultBODeletor.cs" />
     <Compile Include="Grid\IDataGridViewColumn.cs" />
     <Compile Include="Grid\IDataGridViewComboBoxColumn.cs" />
+    <Compile Include="IControlManager.cs" />
     <Compile Include="IErrorProvider.cs" />
     <Compile Include="IFormControl.cs" />
     <Compile Include="IFormController.cs" />

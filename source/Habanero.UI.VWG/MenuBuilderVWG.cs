@@ -94,6 +94,7 @@ namespace Habanero.UI.VWG
     {
         private readonly HabaneroMenu.Item _habaneroMenuItem;
         private IFormControl _formControl;
+        private IControlManager _controlManager;
 
         public MenuItemVWG(HabaneroMenu.Item habaneroMenuItem): this(habaneroMenuItem.Name)
         {
@@ -121,12 +122,25 @@ namespace Habanero.UI.VWG
                 _habaneroMenuItem.CustomHandler(this, new EventArgs());
 
             }
-            else if (_habaneroMenuItem.FormControlCreator != null)
+            else 
             {
-                if (_formControl == null) _formControl = _habaneroMenuItem.FormControlCreator();
+                IControlHabanero control;
                 if (_habaneroMenuItem.Form == null) return;
-
-                IControlHabanero control = (IControlHabanero)_formControl;
+                if (_habaneroMenuItem.FormControlCreator != null)
+                {
+                    if (_formControl == null) _formControl = _habaneroMenuItem.FormControlCreator();
+                    control = (IControlHabanero)_formControl;
+                }
+                else if (_habaneroMenuItem.ControlManagerCreator != null)
+                {
+                    if (_controlManager == null) _controlManager = _habaneroMenuItem.ControlManagerCreator(_habaneroMenuItem.ControlFactory);
+                    control = _controlManager.Control;
+                }
+                else
+                {
+                    throw new Exception(
+                        "Please set up the MenuItem with at least one Creational or custom handling delegate");
+                }
                 control.Dock = Base.DockStyle.Fill;
                 IControlHabanero controlToNestIn = _habaneroMenuItem.Form.Controls[0];
                 controlToNestIn.Controls.Clear();

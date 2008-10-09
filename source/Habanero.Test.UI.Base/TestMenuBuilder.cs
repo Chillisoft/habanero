@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -25,6 +26,8 @@ using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
+using AnchorStyles=Habanero.UI.Base.AnchorStyles;
+using DockStyle=Habanero.UI.Base.DockStyle;
 
 namespace Habanero.Test.UI.Base
 {
@@ -32,6 +35,8 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
         protected abstract IMenuBuilder CreateMenuBuilder();
+        protected abstract IFormHabanero CreateContainerForm();
+        protected abstract IFormControl CreateFormControlStub();
 
         [TestFixture]
         public class TestMenuBuilderWin : TestMenuBuilder
@@ -44,6 +49,18 @@ namespace Habanero.Test.UI.Base
             protected override IMenuBuilder CreateMenuBuilder()
             {
                 return new MenuBuilderWin();
+            }
+
+            protected override IFormHabanero CreateContainerForm()
+            {
+                IFormHabanero form = GetControlFactory().CreateForm();
+                form.IsMdiContainer = true;
+                return form;
+            }
+
+            protected override IFormControl CreateFormControlStub()
+            {
+                return new FormControlStubWin();
             }
 
             [Test]
@@ -105,16 +122,16 @@ namespace Habanero.Test.UI.Base
             public void TestCloseFormAndClickCreatesNewForm()
             {
                 //---------------Set up test pack-------------------
-                IFormHabanero frm = GetControlFactory().CreateForm();
-                frm.IsMdiContainer = true;
+                IFormHabanero frm = CreateContainerForm();
+                frm.Show();
                 HabaneroMenu habaneroMenu = new HabaneroMenu("Main", frm, GetControlFactory());
                 HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
                 HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
     
 
-                menuItem.FormControlCreator += delegate { return new FormControlStubWin(); ; };
+                menuItem.FormControlCreator += delegate { return new FormControlStubWin(); };
                 IMenuBuilder menuBuilder = CreateMenuBuilder();
-                                IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+                IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
                 IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
                 formsMenuItem.PerformClick();
                 System.Windows.Forms.Form winForm = (Form)frm;
@@ -156,6 +173,20 @@ namespace Habanero.Test.UI.Base
             protected override IMenuBuilder CreateMenuBuilder()
             {
                 return new MenuBuilderVWG();
+            }
+
+            protected override IFormHabanero CreateContainerForm()
+            {
+                IFormHabanero form = GetControlFactory().CreateForm();
+                IControlHabanero panel = GetControlFactory().CreatePanel();
+                panel.Dock = DockStyle.Fill;
+                form.Controls.Add(panel);
+                return form;
+            }
+
+            protected override IFormControl CreateFormControlStub()
+            {
+                return new FormControlStubVWG();
             }
 
             [Test]
@@ -349,17 +380,46 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestFormControlCreatorCalledOnClickIfSet()
+        public void TestNoCreatorsCalledWhenMenuFormNotSet()
         {
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = new HabaneroMenu("Main");
             HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
             bool called = false;
+            menuItem.FormControlCreator = delegate
+            {
+                called = true;
+                return CreateFormControlStub();
+            };
+            menuItem.ControlManagerCreator = delegate
+            {
+                called = true;
+                return new ControlManagerStub(GetControlFactory());
+            };
+            IMenuBuilder menuBuilder = CreateMenuBuilder();
+            //---------------Execute Test ----------------------
+            IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+            IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
+            formsMenuItem.PerformClick();
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(called);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestFormControlCreatorCalledOnClickIfSet()
+        {
+            //---------------Set up test pack-------------------
+            HabaneroMenu habaneroMenu = GetHabaneroMenuFullySetup();
+            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
+            HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
+            bool called = false;
             FormControlCreator formControlCreatorDelegate = delegate
             {
                 called = true;
-                return new FormControlStub();
+                return CreateFormControlStub();
             };
             menuItem.FormControlCreator += formControlCreatorDelegate;
             IMenuBuilder menuBuilder = CreateMenuBuilder();
@@ -371,6 +431,13 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsTrue(called);
             //---------------Tear Down -------------------------          
+        }
+
+        private HabaneroMenu GetHabaneroMenuFullySetup()
+        {
+            IControlFactory controlFactory = GetControlFactory();
+            IFormHabanero form = CreateContainerForm();
+            return new HabaneroMenu("Main", form, controlFactory);
         }
 
         [Test]
@@ -397,6 +464,34 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------                
         }
 
+        [Test]
+        public void TestControlManagerCreatorCalledIfSet()
+        {
+            //---------------Set up test pack-------------------
+            HabaneroMenu habaneroMenu = GetHabaneroMenuFullySetup();
+            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
+            HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
+            bool called = false;
+            IControlFactory controlFactoryPassedToCreator = null;
+            ControlManagerCreator formControlCreatorDelegate = delegate(IControlFactory controlFactory)
+            {
+                called = true;
+                controlFactoryPassedToCreator = controlFactory;
+                return new ControlManagerStub(controlFactory);
+            };
+            menuItem.ControlManagerCreator += formControlCreatorDelegate;
+            IMenuBuilder menuBuilder = CreateMenuBuilder();
+            //---------------Execute Test ----------------------
+            IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+            IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
+            formsMenuItem.PerformClick();
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(called);
+            Assert.AreSame(habaneroMenu.ControlFactory, controlFactoryPassedToCreator);
+            //---------------Tear Down -------------------------         
+        }
+
 
         [Test]
         public void TestCustomMenuHandlerTakesPrecedence()
@@ -414,7 +509,7 @@ namespace Habanero.Test.UI.Base
             FormControlCreator formControlCreatorDelegate = delegate
             {
                 formControlHandlerCalled = true;
-                return new FormControlStub();
+                return CreateFormControlStub();
             };
             menuItem.CustomHandler += customerHandler;
             menuItem.FormControlCreator += formControlCreatorDelegate;
@@ -430,10 +525,20 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------                
         }
 
-        public class FormControlStub : IFormControl
+        public class ControlManagerStub : IControlManager
         {
-            public void SetForm(IFormHabanero form)
+            private readonly IControlFactory _controlFactory;
+            private readonly IControlHabanero _control;
+
+            public ControlManagerStub(IControlFactory controlFactory)
             {
+                _controlFactory = controlFactory;
+                _control = _controlFactory.CreateControl();
+            }
+
+            public IControlHabanero Control
+            {
+                get { return _control; }
             }
         }
     }

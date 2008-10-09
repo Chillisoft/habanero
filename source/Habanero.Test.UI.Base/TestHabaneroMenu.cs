@@ -91,6 +91,32 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
+        [Test]
+        public void TestSetControlManagerCreator()
+        {
+            //---------------Set up test pack-------------------
+            HabaneroMenu.Item menuItem = new HabaneroMenu.Item(TestUtil.CreateRandomString());
+            IControlManager controlManager = null;
+            //---------------Assert PreConditions---------------            
+            Assert.IsNull(menuItem.ControlManagerCreator);
+            //---------------Execute Test ----------------------
+            menuItem.ControlManagerCreator += delegate { return new ControlManagerStub(); };
+            controlManager = menuItem.ControlManagerCreator(null);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(menuItem.ControlManagerCreator);
+            Assert.IsNotNull(controlManager);
+            Assert.IsInstanceOfType(typeof(ControlManagerStub), controlManager);
+            //---------------Tear Down -------------------------          
+        }
+
+        public class ControlManagerStub: IControlManager
+        {
+            public IControlHabanero Control
+            {
+                get { return null;}
+            }
+        }
+
 
         private class FormControlStub : IFormControl
         {

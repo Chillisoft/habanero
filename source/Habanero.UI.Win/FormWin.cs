@@ -102,5 +102,15 @@ namespace Habanero.UI.Win
             get { return (Base.FormStartPosition)base.StartPosition; }
             set { base.StartPosition = (System.Windows.Forms.FormStartPosition)value; }
         }
+
+        //event EventHandler IFormHabanero.Closed
+        //{
+        //    add {
+        //        FormClosed += delegate(object sender, FormClosedEventArgs e) { value(sender, ) };
+        //    }
+        //    remove {
+        //        throw new NotImplementedException();
+        //    }
+        //}
     }
 }

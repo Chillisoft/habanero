@@ -23,6 +23,8 @@ namespace Habanero.UI.Base
 {
 
     public delegate IFormControl FormControlCreator();
+    public delegate IControlManager ControlManagerCreator(IControlFactory controlFactory);
+
     public class HabaneroMenu
     {
         private readonly List<HabaneroMenu> _submenus = new List<HabaneroMenu>();
@@ -57,7 +59,15 @@ namespace Habanero.UI.Base
             get { return _menuItems; }
         }
 
-       
+        internal IFormHabanero Form
+        {
+            get { return _form; }
+        }
+
+        internal IControlFactory ControlFactory
+        {
+            get { return _controlFactory; }
+        }
 
         public HabaneroMenu AddSubmenu(string menuName)
         {
@@ -80,6 +90,8 @@ namespace Habanero.UI.Base
             private readonly IFormHabanero _form;
             private FormControlCreator _formControlCreator;
             private EventHandler _customHandler;
+            private ControlManagerCreator _controlManagerCreator;
+
             public Item(string name) : this(name, null, null)
             {
      
@@ -99,10 +111,13 @@ namespace Habanero.UI.Base
             public FormControlCreator FormControlCreator
             {
                 get { return _formControlCreator; }
-                set
-                {
-                    _formControlCreator = value;
-                }
+                set { _formControlCreator = value; }
+            }
+
+            public ControlManagerCreator ControlManagerCreator
+            {
+                get { return _controlManagerCreator; }
+                set { _controlManagerCreator = value; }
             }
 
             public EventHandler CustomHandler
