@@ -130,30 +130,42 @@ namespace Habanero.UI.Win
 
             private void EmailErrorClickHandler(object sender, EventArgs e)
             {
-                string userDescription = "";
-                ErrorDescriptionForm errorDescriptionForm = new ErrorDescriptionForm();
-                errorDescriptionForm.Closing += delegate{userDescription = errorDescriptionForm.ErrorDescriptionTextBox.Text; };
-                errorDescriptionForm.ShowDialog(this);
-
-                IDictionary dictionary = GetEmailErrorSettings();
-                string exceptionString = ExceptionUtilities.GetExceptionString(_exception, 0, true);
-                if (!string.IsNullOrEmpty(userDescription))
+                try
                 {
-                    exceptionString = "User Description : " + Environment.NewLine + userDescription + Environment.NewLine + "  -  Exception : " + exceptionString;
-                }
+                    string userDescription = "";
+                    ErrorDescriptionForm errorDescriptionForm = new ErrorDescriptionForm();
+                    errorDescriptionForm.Closing +=
+                        delegate { userDescription = errorDescriptionForm.ErrorDescriptionTextBox.Text; };
+                    errorDescriptionForm.ShowDialog(this);
 
-                if (dictionary != null)
-                {
-                    try
+                    IDictionary dictionary = GetEmailErrorSettings();
+                    string exceptionString = ExceptionUtilities.GetExceptionString(_exception, 0, true);
+                    if (!string.IsNullOrEmpty(userDescription))
                     {
-                        SendErrorMessage(dictionary, exceptionString);
-                        return;
-                    } catch (Exception ex)
-                    {
-                        exceptionString += Environment.NewLine + "  -  Error sending mail via smtp: " + Environment.NewLine + ex.Message;
+                        exceptionString = "User Description : " + Environment.NewLine + userDescription +
+                                          Environment.NewLine + "  -  Exception : " + exceptionString;
                     }
+
+                    if (dictionary != null)
+                    {
+                        try
+                        {
+                            SendErrorMessage(dictionary, exceptionString);
+                            return;
+                        }
+                        catch (Exception ex)
+                        {
+                            exceptionString += Environment.NewLine + "  -  Error sending mail via smtp: " +
+                                               Environment.NewLine + ex.Message;
+                        }
+                    }
+                    System.Diagnostics.Process.Start("mailto:?subject=" + _exception.Source + "&body=" + exceptionString);
                 }
-                System.Diagnostics.Process.Start("mailto:?subject=" + _exception.Source + "&body=" + exceptionString);
+                catch (Exception ex)
+                {
+                    MessageBox.Show("The error message was not sent due to the following error : " + Environment.NewLine +
+                                    ex.Message);
+                }
             }
 
             private void SendErrorMessage(IDictionary dictionary, string emailContent)

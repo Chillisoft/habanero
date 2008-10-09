@@ -19,6 +19,7 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
@@ -118,48 +119,56 @@ namespace Habanero.UI.Win
 
         public void DoClick()
         {
-            if (_habaneroMenuItem.CustomHandler != null)
+            try
             {
-                _habaneroMenuItem.CustomHandler(this, new EventArgs());
-            }
-            else
-            {
-                if (ReshowForm()) return;
-                if (_habaneroMenuItem.Form == null) return;
-                _createdForm = _habaneroMenuItem.ControlFactory.CreateForm();
-                _createdForm.Width = 800;
-                _createdForm.Height = 600;
-                _createdForm.MdiParent = _habaneroMenuItem.Form;
-                _createdForm.WindowState = Habanero.UI.Base.FormWindowState.Maximized;
-                _createdForm.Text = _habaneroMenuItem.Name;
-                _createdForm.Controls.Clear();
-
-                BorderLayoutManager layoutManager = _habaneroMenuItem
-                    .ControlFactory.CreateBorderLayoutManager(_createdForm);
-
-                IControlHabanero control;
-                if (_habaneroMenuItem.FormControlCreator != null)
+                if (_habaneroMenuItem.CustomHandler != null)
                 {
-                    _formControl = _habaneroMenuItem.FormControlCreator();
-                    control = (IControlHabanero) _formControl;
-                } else if (_habaneroMenuItem.ControlManagerCreator != null)
-                {
-                    _controlManager = _habaneroMenuItem.ControlManagerCreator(_habaneroMenuItem.ControlFactory);
-                    control = _controlManager.Control;
+                    _habaneroMenuItem.CustomHandler(this, new EventArgs());
                 }
                 else
                 {
-                    throw new Exception(
-                        "Please set up the MenuItem with at least one Creational or custom handling delegate");
+                    if (ReshowForm()) return;
+                    if (_habaneroMenuItem.Form == null) return;
+                    _createdForm = _habaneroMenuItem.ControlFactory.CreateForm();
+                    _createdForm.Width = 800;
+                    _createdForm.Height = 600;
+                    _createdForm.MdiParent = _habaneroMenuItem.Form;
+                    _createdForm.WindowState = Habanero.UI.Base.FormWindowState.Maximized;
+                    _createdForm.Text = _habaneroMenuItem.Name;
+                    _createdForm.Controls.Clear();
+
+                    BorderLayoutManager layoutManager = _habaneroMenuItem
+                        .ControlFactory.CreateBorderLayoutManager(_createdForm);
+
+                    IControlHabanero control;
+                    if (_habaneroMenuItem.FormControlCreator != null)
+                    {
+                        _formControl = _habaneroMenuItem.FormControlCreator();
+                        control = (IControlHabanero) _formControl;
+                    }
+                    else if (_habaneroMenuItem.ControlManagerCreator != null)
+                    {
+                        _controlManager = _habaneroMenuItem.ControlManagerCreator(_habaneroMenuItem.ControlFactory);
+                        control = _controlManager.Control;
+                    }
+                    else
+                    {
+                        throw new Exception(
+                            "Please set up the MenuItem with at least one Creational or custom handling delegate");
+                    }
+                    layoutManager.AddControl(control, BorderLayoutManager.Position.Centre);
+                    _createdForm.Show();
+                    _createdForm.Closed += delegate
+                    {
+                        _createdForm = null;
+                        _formControl = null;
+                        _controlManager = null;
+                    };
                 }
-                layoutManager.AddControl(control, BorderLayoutManager.Position.Centre);
-                _createdForm.Show();
-                _createdForm.Closed += delegate
-                {
-                    _createdForm = null;
-                    _formControl = null;
-                    _controlManager = null;
-                };
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, null, null);
             }
         }
 

@@ -22,10 +22,12 @@ using System.Drawing;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
+using Rhino.Mocks;
 using AnchorStyles=Habanero.UI.Base.AnchorStyles;
 using DockStyle=Habanero.UI.Base.DockStyle;
 
@@ -523,6 +525,103 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(formControlHandlerCalled);
             Assert.IsTrue(customHandlerCalled);
             //---------------Tear Down -------------------------                
+        }
+
+        [Test]
+        public void TestHandlesError_FromCustomHandler()
+        {
+            //---------------Set up test pack-------------------
+            MockExceptionNotifier exceptionNotifier = new MockExceptionNotifier();
+            GlobalRegistry.UIExceptionNotifier = exceptionNotifier;
+            Exception exception = new Exception();
+            HabaneroMenu habaneroMenu = GetHabaneroMenuFullySetup();
+            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
+            HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
+            menuItem.CustomHandler += delegate(object sender, EventArgs e)
+            {
+                throw exception;
+            };
+            IMenuBuilder menuBuilder = CreateMenuBuilder();
+            IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+            IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
+
+            //-------------Assert Preconditions -------------
+            Assert.IsNull(exceptionNotifier.Exception);
+            Assert.IsNull(exceptionNotifier.FurtherMessage);
+            Assert.IsNull(exceptionNotifier.Title);
+
+            //---------------Execute Test ----------------------
+            formsMenuItem.PerformClick();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(exception, exceptionNotifier.Exception);
+            Assert.IsNull(null, exceptionNotifier.FurtherMessage);
+            Assert.IsNull(null, exceptionNotifier.Title);
+        }
+
+
+        [Test]
+        public void TestHandlesError_FromFormControlCreator()
+        {
+            //---------------Set up test pack-------------------
+            MockExceptionNotifier exceptionNotifier = new MockExceptionNotifier();
+            GlobalRegistry.UIExceptionNotifier = exceptionNotifier;
+            Exception exception = new Exception();
+            HabaneroMenu habaneroMenu = GetHabaneroMenuFullySetup();
+            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
+            HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
+            menuItem.FormControlCreator += delegate
+            {
+                throw exception;
+            };
+            IMenuBuilder menuBuilder = CreateMenuBuilder();
+            IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+            IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
+
+            //-------------Assert Preconditions -------------
+            Assert.IsNull(exceptionNotifier.Exception);
+            Assert.IsNull(exceptionNotifier.FurtherMessage);
+            Assert.IsNull(exceptionNotifier.Title);
+
+            //---------------Execute Test ----------------------
+            formsMenuItem.PerformClick();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(exception, exceptionNotifier.Exception);
+            Assert.IsNull(null, exceptionNotifier.FurtherMessage);
+            Assert.IsNull(null, exceptionNotifier.Title);
+        }
+
+        [Test]
+        public void TestHandlesError_FromControlManagerCreator()
+        {
+            //---------------Set up test pack-------------------
+            MockExceptionNotifier exceptionNotifier = new MockExceptionNotifier();
+            GlobalRegistry.UIExceptionNotifier = exceptionNotifier;
+            Exception exception = new Exception();
+            HabaneroMenu habaneroMenu = GetHabaneroMenuFullySetup();
+            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
+            HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
+            menuItem.ControlManagerCreator += delegate
+            {
+                throw exception;
+            };
+            IMenuBuilder menuBuilder = CreateMenuBuilder();
+            IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+            IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
+
+            //-------------Assert Preconditions -------------
+            Assert.IsNull(exceptionNotifier.Exception);
+            Assert.IsNull(exceptionNotifier.FurtherMessage);
+            Assert.IsNull(exceptionNotifier.Title);
+
+            //---------------Execute Test ----------------------
+            formsMenuItem.PerformClick();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(exception, exceptionNotifier.Exception);
+            Assert.IsNull(null, exceptionNotifier.FurtherMessage);
+            Assert.IsNull(null, exceptionNotifier.Title);
         }
 
         public class ControlManagerStub : IControlManager

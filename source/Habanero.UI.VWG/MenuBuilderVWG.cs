@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 using System;
 using Gizmox.WebGUI.Forms;
+using Habanero.Base;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.VWG
@@ -117,38 +118,42 @@ namespace Habanero.UI.VWG
 
         public void DoClick()
         {
-            if (_habaneroMenuItem.CustomHandler != null)
+            try
             {
-                _habaneroMenuItem.CustomHandler(this, new EventArgs());
-
-            }
-            else 
-            {
-                IControlHabanero control;
-                if (_habaneroMenuItem.Form == null) return;
-                if (_habaneroMenuItem.FormControlCreator != null)
+                if (_habaneroMenuItem.CustomHandler != null)
                 {
-                    if (_formControl == null) _formControl = _habaneroMenuItem.FormControlCreator();
-                    control = (IControlHabanero)_formControl;
-                }
-                else if (_habaneroMenuItem.ControlManagerCreator != null)
-                {
-                    if (_controlManager == null) _controlManager = _habaneroMenuItem.ControlManagerCreator(_habaneroMenuItem.ControlFactory);
-                    control = _controlManager.Control;
+                    _habaneroMenuItem.CustomHandler(this, new EventArgs());
                 }
                 else
                 {
-                    throw new Exception(
-                        "Please set up the MenuItem with at least one Creational or custom handling delegate");
+                    IControlHabanero control;
+                    if (_habaneroMenuItem.Form == null) return;
+                    if (_habaneroMenuItem.FormControlCreator != null)
+                    {
+                        if (_formControl == null) _formControl = _habaneroMenuItem.FormControlCreator();
+                        control = (IControlHabanero) _formControl;
+                    }
+                    else if (_habaneroMenuItem.ControlManagerCreator != null)
+                    {
+                        if (_controlManager == null)
+                            _controlManager = _habaneroMenuItem.ControlManagerCreator(_habaneroMenuItem.ControlFactory);
+                        control = _controlManager.Control;
+                    }
+                    else
+                    {
+                        throw new Exception(
+                            "Please set up the MenuItem with at least one Creational or custom handling delegate");
+                    }
+                    control.Dock = Base.DockStyle.Fill;
+                    IControlHabanero controlToNestIn = _habaneroMenuItem.Form.Controls[0];
+                    controlToNestIn.Controls.Clear();
+                    controlToNestIn.Controls.Add(control);
                 }
-                control.Dock = Base.DockStyle.Fill;
-                IControlHabanero controlToNestIn = _habaneroMenuItem.Form.Controls[0];
-                controlToNestIn.Controls.Clear();
-                controlToNestIn.Controls.Add(control);
-         
             }
-
-
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, null, null);
+            }
         }
     }
 }
