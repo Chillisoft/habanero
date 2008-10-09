@@ -123,6 +123,21 @@ namespace Habanero.Test.UI.Base
                 //Assert.IsTrue(TestUtil.EventHasSubscriber(readOnlyGridControl.Grid, "RowDoubleClicked", "Buttons_EditClicked"));
             }
 
+            [Test]
+            public void TestDisableDefaultRowDoubleClick()
+            {
+                //---------------Set up test pack-------------------
+                IReadOnlyGridControl onlyGridControlgrid = CreateReadOnlyGridControl(true);
+                // onlyGridControlgrid.Initialise();
+                //-----Test PreCondition----------------------------------------
+                Assert.IsTrue(onlyGridControlgrid.HasDoubleClickEventHandler);
+                //---------------Execute Test ----------------------
+                onlyGridControlgrid.DisableDefaultRowDoubleClickEventHandler();
+                //---------------Test Result -----------------------
+
+                Assert.IsFalse(onlyGridControlgrid.HasDoubleClickEventHandler);
+                //---------------Tear Down -------------------------
+            }
 
 //        [Test]
 //        public void TestWinInitialiseGrid()
@@ -1386,6 +1401,8 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(objectDeletor.HasBeenCalled);
       
         }
+
+        
 
         //These cannot be tested in Giz since they are now raising messages to test in windows using NUnitForms
 //        [Test]

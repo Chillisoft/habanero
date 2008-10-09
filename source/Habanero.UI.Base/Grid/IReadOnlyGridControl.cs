@@ -122,5 +122,7 @@ namespace Habanero.UI.Base
         /// <exception cref="GridBaseInitialiseException">Occurs where the columns have not
         /// already been defined for the grid</exception>
         void Initialise();
+
+        void DisableDefaultRowDoubleClickEventHandler();
     }
 }

@@ -41,6 +41,7 @@ namespace Habanero.UI.VWG
         private IFilterControl _filterControl;
         private string _orderBy;
         private string _additionalSearchCriteria;
+        private bool _hasDoubleClickEventHandler;
 
 
         public EditableGridControlVWG(IControlFactory controlFactory)
@@ -54,7 +55,7 @@ namespace Habanero.UI.VWG
             _filterControl = _controlFactory.CreateFilterControl();
             InitialiseButtons();
             InitialiseFilterControl();
-
+            _hasDoubleClickEventHandler = false;
             BorderLayoutManager manager = controlFactory.CreateBorderLayoutManager(this);
             manager.AddControl(_filterControl, BorderLayoutManager.Position.North);
             manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
@@ -242,6 +243,11 @@ namespace Habanero.UI.VWG
         {
             get { return _additionalSearchCriteria; }
             set { _additionalSearchCriteria = value; }
+        }
+
+        public bool HasDoubleClickEventHandler
+        {
+            get { return _hasDoubleClickEventHandler; }
         }
 
         private void Buttons_CancelClicked(object sender, EventArgs e)

@@ -126,7 +126,6 @@ namespace Habanero.Test.UI.Base
                 bool filterUpdatedFired = false;
                 gridBase.FilterUpdated += delegate { filterUpdatedFired = true; };
                 //---------------Execute Test ----------------------
-
                 gridBase.ApplyFilter(filterClause);
                 //---------------Test Result -----------------------
 

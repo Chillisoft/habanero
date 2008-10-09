@@ -56,6 +56,7 @@ namespace Habanero.UI.VWG
         private IBusinessObjectDeletor _businessObjectDeletor;
         private IBusinessObjectEditor _businessObjectEditor;
         private string _orderBy;
+        private bool _hasDoubleClickEventHandler;
 
         public ReadOnlyGridControlVWG() : this(GlobalUIRegistry.ControlFactory)
         {
@@ -73,7 +74,7 @@ namespace Habanero.UI.VWG
             _gridInitialiser = new GridInitialiser(this, _controlFactory);
             InitialiseButtons();
             InitialiseFilterControl();
-
+            _hasDoubleClickEventHandler = false;
             BorderLayoutManager borderLayoutManager = new BorderLayoutManagerVWG(this, _controlFactory);
             borderLayoutManager.AddControl(_grid, BorderLayoutManager.Position.Centre);
             borderLayoutManager.AddControl(_buttons, BorderLayoutManager.Position.South);
@@ -235,7 +236,12 @@ namespace Habanero.UI.VWG
             get { return _additionalSearchCriteria; }
             set { _additionalSearchCriteria = value; }
         }
-        
+
+        public bool HasDoubleClickEventHandler
+        {
+            get { return _hasDoubleClickEventHandler; }
+        }
+
         /// <summary>
         /// Sets the business object collection to display.  Loading of
         /// the collection needs to be done before it is assigned to the
@@ -291,6 +297,11 @@ namespace Habanero.UI.VWG
         public void Initialise()
         {
             _gridInitialiser.InitialiseGrid();
+        }
+
+        public void DisableDefaultRowDoubleClickEventHandler()
+        {
+            throw new System.NotImplementedException();
         }
 
         #endregion

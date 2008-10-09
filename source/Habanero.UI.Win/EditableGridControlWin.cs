@@ -38,6 +38,7 @@ namespace Habanero.UI.Win
         private readonly IEditableGrid _grid;
         private string _additionalSearchCriteria;
         private string _orderBy;
+        private bool _hasDoubleClickEventHandler;
 
         public EditableGridControlWin(IControlFactory controlFactory)
         {
@@ -48,7 +49,7 @@ namespace Habanero.UI.Win
             _filterControl = _controlFactory.CreateFilterControl();
             InitialiseButtons();
             InitialiseFilterControl();
-
+            _hasDoubleClickEventHandler = false;
             BorderLayoutManager manager = controlFactory.CreateBorderLayoutManager(this);
             manager.AddControl(_filterControl, BorderLayoutManager.Position.North);
             manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
@@ -199,6 +200,11 @@ namespace Habanero.UI.Win
         {
             get { return _additionalSearchCriteria; }
             set { _additionalSearchCriteria = value; }
+        }
+
+        public bool HasDoubleClickEventHandler
+        {
+            get { return _hasDoubleClickEventHandler; }
         }
 
         private void InitialiseButtons()

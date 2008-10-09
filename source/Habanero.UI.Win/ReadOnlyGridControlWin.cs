@@ -55,7 +55,7 @@ namespace Habanero.UI.Win
         private IBusinessObjectEditor _businessObjectEditor;
         private ClassDef _classDef;
         private string _orderBy;
-
+        private bool _hasDoubleClickEventHandler;
         /// <summary>
         /// Constructor to initialise a new grid
         /// </summary>
@@ -68,7 +68,7 @@ namespace Habanero.UI.Win
             _gridInitialiser = new GridInitialiser(this, _controlFactory);
             InitialiseButtons();
             InitialiseFilterControl();
-
+            _hasDoubleClickEventHandler = false;
             BorderLayoutManager borderLayoutManager = new BorderLayoutManagerWin(this, _controlFactory);
             borderLayoutManager.AddControl(_grid, BorderLayoutManager.Position.Centre);
             borderLayoutManager.AddControl(_buttons, BorderLayoutManager.Position.South);
@@ -234,6 +234,11 @@ namespace Habanero.UI.Win
             set { _additionalSearchCriteria = value; }
         }
 
+        public bool HasDoubleClickEventHandler
+        {
+            get { return _hasDoubleClickEventHandler; }
+        }
+
         /// <summary>
         /// Sets the business object collection to display.  Loading of
         /// the collection needs to be done before it is assigned to the
@@ -290,6 +295,12 @@ namespace Habanero.UI.Win
         public void Initialise()
         {
             _gridInitialiser.InitialiseGrid();
+        }
+
+        public void DisableDefaultRowDoubleClickEventHandler()
+        {
+            _grid.RowDoubleClicked -= Buttons_EditClicked;
+            _hasDoubleClickEventHandler = false;
         }
 
         #endregion
@@ -411,6 +422,7 @@ namespace Habanero.UI.Win
         private void SetDoubleClickEventHandlers()
         {
             _grid.RowDoubleClicked += Buttons_EditClicked;
+            _hasDoubleClickEventHandler = true;
             //_grid.RowDoubleClicked += new RowDoubleClickedHandler(_grid_RowDoubleClicked);
         }
     }
