@@ -158,6 +158,7 @@ namespace Habanero.UI.Win
                 {
                     _createdForm = null;
                     _formControl = null;
+                    _controlManager = null;
                 };
             }
         }
