@@ -31,10 +31,9 @@ namespace Habanero.Test.Base
             //-------------Setup Test Pack ------------------
             DateTimeNow dateTimeNow = new DateTimeNow();
             IComparable comparable = dateTimeNow;
-            DateTime dateTime = DateTimeNow.Value;
 
             //-------------Execute test ---------------------
-            int i = comparable.CompareTo(dateTime);
+            int i = comparable.CompareTo(DateTimeNow.Value);
 
             //-------------Test Result ----------------------
             Assert.AreEqual(0, i);
