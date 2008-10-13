@@ -18,9 +18,23 @@
 //---------------------------------------------------------------------------------
 namespace Habanero.UI.Base
 {
+    ///<summary>
+    /// The main menu interface used to represent the main menu structure that has been 
+    /// set up for it's specific implementation
+    ///</summary>
     public interface IMainMenuHabanero
     {
+        ///<summary>
+        /// The collection of menu items for this menu
+        ///</summary>
         IMenuItemCollection MenuItems { get; }
+
+        /// <summary>
+        /// This method sets up the form so that the menu is displayed and the form is able to 
+        /// display the controls loaded when the menu item is clicked.
+        /// </summary>
+        /// <param name="form">The form to set up with the menu</param>
+        void DockInForm(IFormHabanero form);
     }
 
 }

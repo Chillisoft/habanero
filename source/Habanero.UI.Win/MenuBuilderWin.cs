@@ -51,22 +51,51 @@ namespace Habanero.UI.Win
                 childMenuItem.Click += delegate { childMenuItem.DoClick(); };
                 menuItem.MenuItems.Add(childMenuItem);
             }
-
-  
-
-    return menuItem;
+            return menuItem;
         }
-
-   
     }
-      
-
-
+    
+    ///<summary>
+    /// The standard windows main menu structure object.
+    ///</summary>
     internal class MainMenuWin : MainMenu, IMainMenuHabanero
     {
+        protected readonly HabaneroMenu _habaneroMenu;
+
+        public MainMenuWin() { }
+
+        public MainMenuWin(HabaneroMenu habaneroMenu)
+            : this()
+        {
+            _habaneroMenu = habaneroMenu;
+        }
+
+        //private IControlFactory GetControlFactory()
+        //{
+        //    if (_habaneroMenu != null) 
+        //        if (_habaneroMenu.ControlFactory != null)
+        //            return _habaneroMenu.ControlFactory;
+        //    return GlobalUIRegistry.ControlFactory;
+        //}
+
+        ///<summary>
+        /// The collection of menu items for this menu
+        ///</summary>
         public new IMenuItemCollection MenuItems
         {
             get { return new MenuItemCollectionWin(base.MenuItems); }
+        }
+
+        /// <summary>
+        /// This method sets up the form so that the menu is displayed and the form is able to 
+        /// display the controls loaded when the menu item is clicked.
+        /// </summary>
+        /// <param name="form">The form to set up with the menu</param>
+        public void DockInForm(IFormHabanero form)
+        {
+            Form formWin = (Form) form;
+            form.IsMdiContainer = true;
+            formWin.Menu = this;
         }
     }
 

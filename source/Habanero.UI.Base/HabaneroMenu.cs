@@ -64,7 +64,7 @@ namespace Habanero.UI.Base
             get { return _form; }
         }
 
-        internal IControlFactory ControlFactory
+        public IControlFactory ControlFactory
         {
             get { return _controlFactory; }
         }

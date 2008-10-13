@@ -27,7 +27,7 @@ namespace Habanero.UI.VWG
     {
         public IMainMenuHabanero BuildMainMenu(HabaneroMenu habaneroMenu)
         {
-            MainMenuVWG mainMenu = new MainMenuVWG();
+            MainMenuVWG mainMenu = new MainMenuVWG(habaneroMenu);
             mainMenu.Name = habaneroMenu.Name;
             foreach (HabaneroMenu submenu in habaneroMenu.Submenus)
             {
@@ -46,7 +46,7 @@ namespace Habanero.UI.VWG
             foreach (HabaneroMenu.Item habaneroMenuItem in habaneroMenu.MenuItems)
             {
                 MenuItemVWG childMenuItem = new MenuItemVWG(habaneroMenuItem);
-                childMenuItem.Click += delegate(object sender, EventArgs e) { childMenuItem.DoClick(); };
+                childMenuItem.Click += delegate { childMenuItem.DoClick(); };
                    
                 menuItem.MenuItems.Add(childMenuItem);
             }
@@ -56,14 +56,50 @@ namespace Habanero.UI.VWG
       
     }
 
+    ///<summary>
+    /// The standard VWG main menu structure object.
+    ///</summary>
     internal class MainMenuVWG : MainMenu, IMainMenuHabanero
     {
+        protected readonly HabaneroMenu _habaneroMenu;
+
+        public MainMenuVWG() { }
+
+        public MainMenuVWG(HabaneroMenu habaneroMenu)
+            : this()
+        {
+            _habaneroMenu = habaneroMenu;
+        }
+
+        private IControlFactory GetControlFactory()
+        {
+            if (_habaneroMenu != null) 
+                if (_habaneroMenu.ControlFactory != null)
+                    return _habaneroMenu.ControlFactory;
+            return GlobalUIRegistry.ControlFactory;
+        }
+
+        ///<summary>
+        /// The collection of menu items for this menu
+        ///</summary>
         public new IMenuItemCollection MenuItems
         {
             get { return new MenuItemCollectionVWG(base.MenuItems); }
         }
 
-
+        /// <summary>
+        /// This method sets up the form so that the menu is displayed and the form is able to 
+        /// display the controls loaded when the menu item is clicked.
+        /// </summary>
+        /// <param name="form">The form to set up with the menu</param>
+        public void DockInForm(IFormHabanero form)
+        {
+            IControlHabanero panel = GetControlFactory().CreatePanel();
+            panel.Dock = Habanero.UI.Base.DockStyle.Fill;
+            form.Controls.Add(panel);
+            Form formVWG = (Form) form;
+            formVWG.Menu = this;
+        }
     }
 
     internal class MenuItemCollectionVWG : IMenuItemCollection

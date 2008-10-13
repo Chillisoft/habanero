@@ -17,19 +17,12 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
-using Rhino.Mocks;
-using AnchorStyles=Habanero.UI.Base.AnchorStyles;
-using DockStyle=Habanero.UI.Base.DockStyle;
 
 namespace Habanero.Test.UI.Base
 {
@@ -37,8 +30,16 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
         protected abstract IMenuBuilder CreateMenuBuilder();
-        protected abstract IFormHabanero CreateContainerForm();
         protected abstract IFormControl CreateFormControlStub();
+        protected abstract bool IsMenuDocked(IMainMenuHabanero menu, IFormHabanero form);
+        protected abstract void AssertControlDockedInForm(IControlHabanero habanero, IFormHabanero frm);
+
+        protected HabaneroMenu CreateHabaneroMenuFullySetup()
+        {
+            IControlFactory controlFactory = GetControlFactory();
+            IFormHabanero form = controlFactory.CreateForm();
+            return new HabaneroMenu("Main", form, controlFactory);
+        }
 
         [TestFixture]
         public class TestMenuBuilderWin : TestMenuBuilder
@@ -53,80 +54,44 @@ namespace Habanero.Test.UI.Base
                 return new MenuBuilderWin();
             }
 
-            protected override IFormHabanero CreateContainerForm()
-            {
-                IFormHabanero form = GetControlFactory().CreateForm();
-                form.IsMdiContainer = true;
-                return form;
-            }
-
             protected override IFormControl CreateFormControlStub()
             {
                 return new FormControlStubWin();
             }
 
-            [Test]
-            public void TestClickMenuItemSetsControlInMdiForm()
+            protected override bool IsMenuDocked(IMainMenuHabanero menu, IFormHabanero form)
             {
-                //---------------Set up test pack-------------------
-                IFormHabanero frm = GetControlFactory().CreateForm();
-                frm.IsMdiContainer = true;
-                HabaneroMenu habaneroMenu = new HabaneroMenu("Main", frm, GetControlFactory());
-                HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
-                HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
-                IFormControl expectedFormControl = new FormControlStubWin();
-
-                menuItem.FormControlCreator += delegate { return expectedFormControl; };
-                IMenuBuilder menuBuilder = CreateMenuBuilder();
-                //---------------Execute Test ----------------------
-                IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
-                IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
-                formsMenuItem.PerformClick();
-            
-                //---------------Test Result -----------------------
-                System.Windows.Forms.Form winForm = (Form) frm;
-                Assert.AreEqual(1, winForm.MdiChildren.Length);
-                System.Windows.Forms.Form childForm = winForm.MdiChildren[0];
-                Assert.AreEqual(1, childForm.Controls.Count);
-                Assert.AreSame(expectedFormControl, childForm.Controls[0]);
-                //---------------Tear Down -------------------------          
+                System.Windows.Forms.Form formWin = (System.Windows.Forms.Form)form;
+                return formWin.Menu == menu && form.IsMdiContainer;
             }
 
-            [Test]
-            public void TestClickMenuItemTwiceOnlyCreatesOneForm()
+            protected override void AssertControlDockedInForm(IControlHabanero control, IFormHabanero form)
             {
-                //---------------Set up test pack-------------------
-                IFormHabanero frm = GetControlFactory().CreateForm();
-                frm.IsMdiContainer = true;
-                HabaneroMenu habaneroMenu = new HabaneroMenu("Main", frm, GetControlFactory());
-                HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
-                HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
-                IFormControl expectedFormControl = new FormControlStubWin();
-
-                menuItem.FormControlCreator += delegate { return expectedFormControl; };
-                IMenuBuilder menuBuilder = CreateMenuBuilder();
-                //---------------Execute Test ----------------------
-                IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
-                IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
-                formsMenuItem.PerformClick();
-                formsMenuItem.PerformClick();
-
-                //---------------Test Result -----------------------
-                System.Windows.Forms.Form winForm = (Form)frm;
-                Assert.AreEqual(1, winForm.MdiChildren.Length);
-                System.Windows.Forms.Form childForm = winForm.MdiChildren[0];
-                Assert.AreEqual(1, childForm.Controls.Count);
-                Assert.AreSame(expectedFormControl, childForm.Controls[0]);
-                //---------------Tear Down -------------------------          
+                System.Windows.Forms.Form winForm = (System.Windows.Forms.Form)form;
+                Assert.LessOrEqual(1, winForm.MdiChildren.Length);
+                bool found = false;
+                foreach (Form childForm in winForm.MdiChildren)
+                {
+                    Assert.AreEqual(1, childForm.Controls.Count);
+                    Control childFormControl = childForm.Controls[0];
+                    if (childFormControl == control)
+                    {
+                        found = true;
+                        //Assert.AreSame(childForm, winForm.ActiveMdiChild,
+                        //               "Control found in MDI children, but not the current docked form");
+                        break;
+                    }
+                }
+                Assert.IsTrue(found, "Form was not found");
             }
 
             [Test]
             public void TestCloseFormAndClickCreatesNewForm()
             {
                 //---------------Set up test pack-------------------
-                IFormHabanero frm = CreateContainerForm();
+                HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
+                IFormHabanero frm = habaneroMenu.Form;
                 frm.Show();
-                HabaneroMenu habaneroMenu = new HabaneroMenu("Main", frm, GetControlFactory());
                 HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
                 HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
     
@@ -134,9 +99,10 @@ namespace Habanero.Test.UI.Base
                 menuItem.FormControlCreator += delegate { return new FormControlStubWin(); };
                 IMenuBuilder menuBuilder = CreateMenuBuilder();
                 IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+                menu.DockInForm(habaneroMenu.Form);
                 IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
                 formsMenuItem.PerformClick();
-                System.Windows.Forms.Form winForm = (Form)frm;
+                System.Windows.Forms.Form winForm = (System.Windows.Forms.Form)frm;
                 System.Windows.Forms.Form childForm = winForm.MdiChildren[0];
                 System.Windows.Forms.Control expectedFormControl = childForm.Controls[0];
                 //---------------Execute Test ----------------------
@@ -177,105 +143,25 @@ namespace Habanero.Test.UI.Base
                 return new MenuBuilderVWG();
             }
 
-            protected override IFormHabanero CreateContainerForm()
-            {
-                IFormHabanero form = GetControlFactory().CreateForm();
-                IControlHabanero panel = GetControlFactory().CreatePanel();
-                panel.Dock = DockStyle.Fill;
-                form.Controls.Add(panel);
-                return form;
-            }
-
             protected override IFormControl CreateFormControlStub()
             {
                 return new FormControlStubVWG();
             }
-
-            [Test]
-            public void TestClickMenuItemDocksControlInForm()
+            protected override bool IsMenuDocked(IMainMenuHabanero menu, IFormHabanero form)
             {
-                //---------------Set up test pack-------------------
-                IControlHabanero contentControl;
-                IFormHabanero frm = CreateMainForm(out contentControl);
-                HabaneroMenu habaneroMenu = new HabaneroMenu("Main", frm, GetControlFactory());
-                HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
-                HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
-                IFormControl expectedFormControl = new FormControlStubVWG();
-
-                menuItem.FormControlCreator += delegate { return expectedFormControl; };
-                IMenuBuilder menuBuilder = CreateMenuBuilder();
-                //---------------Execute Test ----------------------
-                IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
-                IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
-                formsMenuItem.PerformClick();
-
-                //---------------Test Result -----------------------
+                Gizmox.WebGUI.Forms.Form formWin = (Gizmox.WebGUI.Forms.Form)form;
+                return formWin.Menu == menu && form.Controls.Count == 1;
+            }
+            
+            protected override void AssertControlDockedInForm(IControlHabanero control, IFormHabanero form)
+            {
+                Assert.AreEqual(1, form.Controls.Count, "No container control found in form");
+                IControlHabanero contentControl = form.Controls[0];
                 Assert.AreEqual(1, contentControl.Controls.Count);
-                Assert.AreSame(expectedFormControl, contentControl.Controls[0]);
-                Assert.AreEqual(Habanero.UI.Base.DockStyle.Fill, ((IControlHabanero)expectedFormControl).Dock);
-                //---------------Tear Down -------------------------          
+                Assert.AreSame(control, contentControl.Controls[0]);
+                Assert.AreEqual(Habanero.UI.Base.DockStyle.Fill, control.Dock);
             }
 
-            private IFormHabanero CreateMainForm(out IControlHabanero contentControl)
-            {
-                IFormHabanero frm = GetControlFactory().CreateForm();
-                contentControl = GetControlFactory().CreatePanel();
-                frm.Controls.Add(contentControl);
-                return frm;
-            }
-
-            [Test]
-            public void TestClickMenuItemTwiceLeavesSameControlInForm()
-            {
-                //---------------Set up test pack-------------------
-                IControlHabanero contentControl;
-                IFormHabanero frm = CreateMainForm(out contentControl);
-                HabaneroMenu habaneroMenu = new HabaneroMenu("Main", frm, GetControlFactory());
-                HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
-                HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
- 
-
-                menuItem.FormControlCreator += delegate { return new FormControlStubVWG(); };
-                IMenuBuilder menuBuilder = CreateMenuBuilder();
-                //---------------Execute Test ----------------------
-                IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
-                IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
-                formsMenuItem.PerformClick();
-                IControlHabanero expectedFormControl = contentControl.Controls[0];
-                formsMenuItem.PerformClick();
-                //---------------Test Result -----------------------
-                Assert.AreSame(expectedFormControl, contentControl.Controls[0]);
-                //---------------Tear Down -------------------------          
-            }
-
-            [Test]
-            public void TestClickSecondItemDocksNewControlInForm()
-            {
-                //---------------Set up test pack-------------------
-                IControlHabanero contentControl;
-                IFormHabanero frm = CreateMainForm(out contentControl);
-                HabaneroMenu habaneroMenu = new HabaneroMenu("Main", frm, GetControlFactory());
-                HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
-                HabaneroMenu.Item menuItem1 = submenu.AddMenuItem(TestUtil.CreateRandomString());
-                IFormControl expectedFormControl1 = new FormControlStubVWG();
-                menuItem1.FormControlCreator += delegate { return expectedFormControl1; };
-                HabaneroMenu.Item menuItem2 = submenu.AddMenuItem(TestUtil.CreateRandomString());
-                IFormControl expectedFormControl2 = new FormControlStubVWG();
-                menuItem2.FormControlCreator += delegate { return expectedFormControl2; };
- 
-                IMenuBuilder menuBuilder = CreateMenuBuilder();
-                //---------------Execute Test ----------------------
-                IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
-                IMenuItem formsMenuItem1 = menu.MenuItems[0].MenuItems[0];
-                formsMenuItem1.PerformClick();
-                IMenuItem formsMenuItem2 = menu.MenuItems[0].MenuItems[1];
-                formsMenuItem2.PerformClick();
-
-                //---------------Test Result -----------------------
-                Assert.AreEqual(1, contentControl.Controls.Count);
-                Assert.AreSame(expectedFormControl2, contentControl.Controls[0]);
-                //---------------Tear Down -------------------------          
-            }
             private class FormControlStubVWG : UserControlVWG, IFormControl
             {
                 public void SetForm(IFormHabanero form)
@@ -414,7 +300,7 @@ namespace Habanero.Test.UI.Base
         public void TestFormControlCreatorCalledOnClickIfSet()
         {
             //---------------Set up test pack-------------------
-            HabaneroMenu habaneroMenu = GetHabaneroMenuFullySetup();
+            HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
             HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
             bool called = false;
@@ -425,9 +311,11 @@ namespace Habanero.Test.UI.Base
             };
             menuItem.FormControlCreator += formControlCreatorDelegate;
             IMenuBuilder menuBuilder = CreateMenuBuilder();
-            //---------------Execute Test ----------------------
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+            menu.DockInForm(habaneroMenu.Form);
             IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
+
+            //---------------Execute Test ----------------------
             formsMenuItem.PerformClick();
             
             //---------------Test Result -----------------------
@@ -435,12 +323,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        private HabaneroMenu GetHabaneroMenuFullySetup()
-        {
-            IControlFactory controlFactory = GetControlFactory();
-            IFormHabanero form = CreateContainerForm();
-            return new HabaneroMenu("Main", form, controlFactory);
-        }
+        
 
         [Test]
         public void TestCustomMenuHandlerCalledIfSet()
@@ -470,7 +353,7 @@ namespace Habanero.Test.UI.Base
         public void TestControlManagerCreatorCalledIfSet()
         {
             //---------------Set up test pack-------------------
-            HabaneroMenu habaneroMenu = GetHabaneroMenuFullySetup();
+            HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
             HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
             bool called = false;
@@ -483,9 +366,11 @@ namespace Habanero.Test.UI.Base
             };
             menuItem.ControlManagerCreator += formControlCreatorDelegate;
             IMenuBuilder menuBuilder = CreateMenuBuilder();
-            //---------------Execute Test ----------------------
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+            menu.DockInForm(habaneroMenu.Form);
             IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
+
+            //---------------Execute Test ----------------------
             formsMenuItem.PerformClick();
 
             //---------------Test Result -----------------------
@@ -534,7 +419,7 @@ namespace Habanero.Test.UI.Base
             MockExceptionNotifier exceptionNotifier = new MockExceptionNotifier();
             GlobalRegistry.UIExceptionNotifier = exceptionNotifier;
             Exception exception = new Exception();
-            HabaneroMenu habaneroMenu = GetHabaneroMenuFullySetup();
+            HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
             HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
             menuItem.CustomHandler += delegate(object sender, EventArgs e)
@@ -567,7 +452,7 @@ namespace Habanero.Test.UI.Base
             MockExceptionNotifier exceptionNotifier = new MockExceptionNotifier();
             GlobalRegistry.UIExceptionNotifier = exceptionNotifier;
             Exception exception = new Exception();
-            HabaneroMenu habaneroMenu = GetHabaneroMenuFullySetup();
+            HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
             HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
             menuItem.FormControlCreator += delegate
@@ -577,6 +462,7 @@ namespace Habanero.Test.UI.Base
             IMenuBuilder menuBuilder = CreateMenuBuilder();
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
             IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
+            menu.DockInForm(habaneroMenu.Form);
 
             //-------------Assert Preconditions -------------
             Assert.IsNull(exceptionNotifier.Exception);
@@ -599,7 +485,7 @@ namespace Habanero.Test.UI.Base
             MockExceptionNotifier exceptionNotifier = new MockExceptionNotifier();
             GlobalRegistry.UIExceptionNotifier = exceptionNotifier;
             Exception exception = new Exception();
-            HabaneroMenu habaneroMenu = GetHabaneroMenuFullySetup();
+            HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
             HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
             menuItem.ControlManagerCreator += delegate
@@ -609,6 +495,7 @@ namespace Habanero.Test.UI.Base
             IMenuBuilder menuBuilder = CreateMenuBuilder();
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
             IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
+            menu.DockInForm(habaneroMenu.Form);
 
             //-------------Assert Preconditions -------------
             Assert.IsNull(exceptionNotifier.Exception);
@@ -622,6 +509,104 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(exception, exceptionNotifier.Exception);
             Assert.IsNull(null, exceptionNotifier.FurtherMessage);
             Assert.IsNull(null, exceptionNotifier.Title);
+        }
+
+        [Test]
+        public void TestDockMenuInForm()
+        {
+            //---------------Set up test pack-------------------
+            HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
+            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
+            HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
+            IMenuBuilder menuBuilder = CreateMenuBuilder();
+            IFormHabanero form = habaneroMenu.Form;
+            IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+            //-------------Assert Preconditions -------------
+            Assert.IsFalse(IsMenuDocked(menu, form));
+            //---------------Execute Test ----------------------
+            menu.DockInForm(form);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(IsMenuDocked(menu, form));
+        }
+
+        [Test]
+        public void TestClickMenuItemDocksControlInForm()
+        {
+            //---------------Set up test pack-------------------
+            HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
+            IFormHabanero frm = habaneroMenu.Form;
+            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
+            HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
+            IFormControl expectedFormControl = CreateFormControlStub();
+            menuItem.FormControlCreator += delegate { return expectedFormControl; };
+            IMenuBuilder menuBuilder = CreateMenuBuilder();
+            IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+            menu.DockInForm(habaneroMenu.Form);
+            IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
+
+            //---------------Execute Test ----------------------
+            formsMenuItem.PerformClick();
+
+            //---------------Test Result -----------------------
+            AssertControlDockedInForm((IControlHabanero)expectedFormControl, frm);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestClickMenuItemTwiceOnlyLeavesSameControlDocked()
+        {
+            //---------------Set up test pack-------------------
+            HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
+            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
+            HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.CreateRandomString());
+            IFormControl expectedFormControl = CreateFormControlStub();
+            menuItem.FormControlCreator += delegate { return expectedFormControl; };
+            IMenuBuilder menuBuilder = CreateMenuBuilder();
+            IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+            menu.DockInForm(habaneroMenu.Form);
+            IMenuItem formsMenuItem = menu.MenuItems[0].MenuItems[0];
+            formsMenuItem.PerformClick();
+
+            //-------------Assert Preconditions -------------
+            AssertControlDockedInForm((IControlHabanero)expectedFormControl, habaneroMenu.Form);
+
+            //---------------Execute Test ----------------------
+            formsMenuItem.PerformClick();
+
+            //---------------Test Result -----------------------
+            AssertControlDockedInForm((IControlHabanero)expectedFormControl, habaneroMenu.Form);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestClickSecondItemDocksNewControlInForm()
+        {
+            //---------------Set up test pack-------------------
+
+            HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
+            HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.CreateRandomString());
+            HabaneroMenu.Item menuItem1 = submenu.AddMenuItem(TestUtil.CreateRandomString());
+            IFormControl expectedFormControl1 = CreateFormControlStub();
+            menuItem1.FormControlCreator += delegate { return expectedFormControl1; };
+            HabaneroMenu.Item menuItem2 = submenu.AddMenuItem(TestUtil.CreateRandomString());
+            IFormControl expectedFormControl2 = CreateFormControlStub();
+            menuItem2.FormControlCreator += delegate { return expectedFormControl2; };
+
+            IMenuBuilder menuBuilder = CreateMenuBuilder();
+            IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
+            menu.DockInForm(habaneroMenu.Form);
+            IMenuItem formsMenuItem1 = menu.MenuItems[0].MenuItems[0];
+            IMenuItem formsMenuItem2 = menu.MenuItems[0].MenuItems[1];
+            formsMenuItem1.PerformClick();
+
+            //-------------Assert Preconditions -------------
+            AssertControlDockedInForm((IControlHabanero)expectedFormControl1, habaneroMenu.Form);
+
+            //---------------Execute Test ----------------------
+            formsMenuItem2.PerformClick();
+
+            //---------------Test Result -----------------------
+            AssertControlDockedInForm((IControlHabanero)expectedFormControl2, habaneroMenu.Form);
         }
 
         public class ControlManagerStub : IControlManager
