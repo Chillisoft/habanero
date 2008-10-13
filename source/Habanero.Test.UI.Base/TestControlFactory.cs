@@ -588,6 +588,21 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(treeViewname, treeView.Name);
             //---------------Tear Down -------------------------   
         }
+
+        [Test]
+        public void TestCreateTreeNode()
+        {
+            //---------------Set up test pack-------------------
+            string treeNodeName = "TVNodeName";
+            //---------------Verify test pack-------------------
+            //---------------Execute Test ----------------------
+            ITreeNode treeNode = _factory.CreateTreeNode(treeNodeName);
+            //---------------Verify Result -----------------------
+            Assert.IsNotNull(treeNode);
+            Assert.AreEqual(treeNodeName, treeNode.Text);
+            //---------------Tear Down -------------------------   
+        }
+
         [Test]
         public void TestCreatePanel()
         {

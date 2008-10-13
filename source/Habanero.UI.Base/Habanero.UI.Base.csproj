@@ -115,6 +115,8 @@
     <Compile Include="IListViewItemCollection.cs" />
     <Compile Include="ISelectedListViewItemCollection.cs" />
     <Compile Include="ReadOnlyGridButtonsControlManager.cs" />
+    <Compile Include="StaticDataEditorManager.cs">
+    </Compile>
     <Compile Include="Util\CustomValidationEventArgs.cs" />
     <Compile Include="Util\GlobalUIRegistry.cs" />
     <Compile Include="Grid\IDataGridView.cs" />
@@ -190,6 +192,8 @@
     <Compile Include="MultiSelector\MultiSelectorModel.cs" />
     <Compile Include="PanelFactory\PanelFactoryInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\MessageBox.cs" />
+    <Compile Include="Util\TreeViewEventArgs.cs" />
     <Compile Include="Util\UISettings.cs" />
     <Compile Include="Util\ValidationCompareOperator.cs" />
     <Compile Include="Util\ValidationDataType.cs" />

@@ -24,10 +24,11 @@ namespace Habanero.UI.Base
     /// </summary>
     public interface ITreeView : IControlHabanero
     {
-
         ITreeNodeCollection Nodes { get; }
         ITreeNode TopNode { set; get; }
         ITreeNode SelectedNode { get; set; }
+        event TreeViewEventHandler AfterSelect;
+        event TreeViewCancelEventHandler BeforeSelect;
     }
 
     public interface ITreeNode
@@ -42,5 +43,6 @@ namespace Habanero.UI.Base
     {
         int Count { get; }
         ITreeNode this[int index] { get; }
+        void Add(ITreeNode treeNode);
     }
 }

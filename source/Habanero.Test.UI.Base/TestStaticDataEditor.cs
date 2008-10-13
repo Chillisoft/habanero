@@ -22,6 +22,7 @@ using Habanero.BO;
 using Habanero.Test;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -46,6 +47,7 @@ namespace Habanero.Test.UI.Base
 
         protected abstract IStaticDataEditor CreateEditorOnForm(out IFormHabanero frm);
         protected abstract IControlFactory GetControlFactory();
+        protected abstract void TearDownForm(IFormHabanero frm);
 
         [TestFixture]
         public class TestStaticDataEditorWin : TestStaticDataEditor
@@ -63,21 +65,54 @@ namespace Habanero.Test.UI.Base
             {
                 return new ControlFactoryWin();
             }
+
+            protected override void TearDownForm(IFormHabanero frm)
+            {
+                frm.Close();
+                frm.Dispose();
+            }
         }
 
-        //[TestFixture]
-        //public class TestTreeViewGridViewEditorVWG : TestStaticDataEditor
-        //{
-        //    protected override ITreeViewGridViewEditor CreateEditorOnForm(out IFormHabanero frm)
-        //    {
-        //        throw new System.NotImplementedException();
-        //    }
+        [TestFixture]
+        public class TestStaticDataEditorVWG : TestStaticDataEditor
+        {
+            protected override IStaticDataEditor CreateEditorOnForm(out IFormHabanero frm)
+            {
+                frm = GetControlFactory().CreateForm();
+                IStaticDataEditor editor = GetControlFactory().CreateStaticDataEditor();
+                frm.Controls.Add(editor);
+                //frm.Show();
+                return editor;
+            }
 
-        //    protected override IControlFactory GetControlFactory()
-        //    {
-        //        return new ControlFactoryVWG();
-        //    }
-        //}
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryVWG();
+            }
+
+            protected override void TearDownForm(IFormHabanero frm)
+            {
+                
+            }
+
+            [Test, Ignore("Does not work because VWG form cannot be shown")]
+            public override void TestSelectSection()
+            {
+                base.TestSelectSection();
+            }
+
+            [Test, Ignore("Does not work because VWG form cannot be shown")]
+            public override void TestSaveChanges()
+            {
+                base.TestSaveChanges();
+            }
+
+            [Test, Ignore("Does not work because VWG form cannot be shown")]
+            public override void TestRejectChanges()
+            {
+                base.TestRejectChanges();
+            }
+        }
 
         [Test]
         public void TestLayoutOfEditor()
@@ -98,9 +133,11 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(editableGridControl.FilterControl.Visible);
 
             //---------------Tear down -------------------------
-            frm.Close();
-            frm.Dispose();
+            TearDownForm(frm);
         }
+
+        
+        
 
         [Test]
         public void TestAddSection()
@@ -118,8 +155,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(sectionName, treeView.Nodes[0].Text);
             Assert.AreEqual(sectionName, treeView.TopNode.Text);
             //---------------Tear Down -------------------------
-            frm.Close();
-            frm.Dispose();
+            TearDownForm(frm);
         }
 
         [Test]
@@ -146,8 +182,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(treeView.TopNode.Text, topNode.Nodes[0].Parent.Text);
             //---------------Tear Down -------------------------
 
-            frm.Close();
-            frm.Dispose();
+            TearDownForm(frm);
         }
 
         [Test]
@@ -173,8 +208,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreNotEqual(sectionName, treeView.TopNode.Text);
             //---------------Tear Down -------------------------
 
-            frm.Close();
-            frm.Dispose();
+            TearDownForm(frm);
         }
 
         [Test]
@@ -196,6 +230,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, treeView.Nodes[1].Nodes.Count);
             Assert.AreEqual(itemName, treeView.Nodes[1].Nodes[0].Text);
             //---------------Tear Down -------------------------
+            TearDownForm(frm);
         }
 
         [Test]
@@ -217,6 +252,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsNotNull(gridControl.Grid.GetBusinessObjectCollection());
             Assert.AreSame(classDef, gridControl.Grid.GetBusinessObjectCollection().ClassDef);
             //---------------Tear Down -------------------------
+            TearDownForm(frm);
         }
 
 
@@ -243,9 +279,11 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsNotNull(gridControl.Grid.GetBusinessObjectCollection());
             Assert.AreSame(classDef2, gridControl.Grid.GetBusinessObjectCollection().ClassDef);
+            //---------------Tear Down -------------------------
+            TearDownForm(frm);
         }
         [Test]
-        public void TestSelectSection()
+        public virtual void TestSelectSection()
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
@@ -269,6 +307,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(gridControl.Grid.Enabled);
 
             //---------------Tear Down -------------------------
+            TearDownForm(frm);
 
         }
 
@@ -294,6 +333,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsTrue(gridControl.Grid.Enabled);
             //---------------Tear Down -------------------------
+            TearDownForm(frm);
         }
 
         [Test]
@@ -316,6 +356,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsNotNull(gridControl.Grid.GetBusinessObjectCollection());
             Assert.AreSame(classDef, gridControl.Grid.GetBusinessObjectCollection().ClassDef);
             //---------------Tear Down -------------------------
+            TearDownForm(frm);
         }
 
 
@@ -350,11 +391,12 @@ namespace Habanero.Test.UI.Base
             Assert.IsNotNull(gridControl.Grid.GetBusinessObjectCollection());
             Assert.AreSame(classDef2, gridControl.Grid.GetBusinessObjectCollection().ClassDef);
             //---------------Tear Down -------------------------
+            TearDownForm(frm);
         }
 
 
         [Test]
-        public void TestSaveChanges()
+        public virtual void TestSaveChanges()
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
@@ -381,10 +423,11 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(newValue, myBO.TestProp);
             Assert.IsFalse(myBO.Status.IsDirty);
             //---------------Tear Down -------------------------
+            TearDownForm(frm);
         }
 
         [Test]
-        public void TestRejectChanges()
+        public virtual void TestRejectChanges()
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
@@ -413,6 +456,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(originalValue, myBO.TestProp);
             Assert.IsFalse(myBO.Status.IsDirty);
             //---------------Tear Down -------------------------
+            TearDownForm(frm);
         }
     }
 }

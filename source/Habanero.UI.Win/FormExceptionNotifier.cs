@@ -30,6 +30,8 @@ using Habanero.UI.Base;
 using Habanero.Util;
 using DialogResult=System.Windows.Forms.DialogResult;
 using FormStartPosition=System.Windows.Forms.FormStartPosition;
+using MessageBoxButtons=System.Windows.Forms.MessageBoxButtons;
+using MessageBoxIcon=System.Windows.Forms.MessageBoxIcon;
 
 namespace Habanero.UI.Win
 {

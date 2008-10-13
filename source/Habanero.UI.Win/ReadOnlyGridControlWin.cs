@@ -40,7 +40,7 @@ namespace Habanero.UI.Win
     /// A filter control is placed above the grid and is used to filter which rows
     /// are shown.
     /// </summary>
-    public class ReadOnlyGridControlWin : ControlWin, IReadOnlyGridControl, ISupportInitialize
+    public class ReadOnlyGridControlWin : PanelWin, IReadOnlyGridControl, ISupportInitialize
     {
         public delegate void RefreshGridDelegate();
 

@@ -160,8 +160,8 @@ namespace Habanero.UI.VWG
         /// </summary>
         public new IDataGridViewCell CurrentCell
         {
-            get { return new DataGridViewCellVWG(base.CurrentCell); }
-            set { base.CurrentCell = ((DataGridViewCellVWG)value).DataGridViewCell; }
+            get { return base.CurrentCell == null ? null : new DataGridViewCellVWG(base.CurrentCell); }
+            set { base.CurrentCell = value == null ? null : ((DataGridViewCellVWG)value).DataGridViewCell; }
         }
 
         /// <summary>

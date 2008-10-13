@@ -24,6 +24,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
 using DialogResult=Gizmox.WebGUI.Forms.DialogResult;
+using MessageBoxButtons=Gizmox.WebGUI.Forms.MessageBoxButtons;
 
 namespace Habanero.UI.VWG
 {
@@ -374,31 +375,31 @@ namespace Habanero.UI.VWG
                     MessageBox.Show("Are you certain you want to delete the object '" + selectedBo + "'",
                                     "Delete Object", MessageBoxButtons.YesNo,
                                     delegate(object msgBoxSender, EventArgs e1)
+                                    {
+                                        if (((Form) msgBoxSender).DialogResult == DialogResult.Yes)
                                         {
-                                            if (((Form) msgBoxSender).DialogResult == DialogResult.Yes)
+                                            try
+                                            {
+                                                _grid.SelectedBusinessObject = null;
+                                                _businessObjectDeletor.DeleteBusinessObject(selectedBo);
+                                            }
+                                            catch (Exception ex)
                                             {
                                                 try
                                                 {
-                                                    _grid.SelectedBusinessObject = null;
-                                                    _businessObjectDeletor.DeleteBusinessObject(selectedBo);
+                                                    selectedBo.Restore();
+                                                    _grid.SelectedBusinessObject = selectedBo;
                                                 }
-                                                catch (Exception ex)
+                                                catch (Exception)
                                                 {
-                                                    try
-                                                    {
-                                                        selectedBo.Restore();
-                                                        _grid.SelectedBusinessObject = selectedBo;
-                                                    }
-                                                    catch (Exception)
-                                                    {
-                                                        //Do nothing
-                                                    }
-                                                    GlobalRegistry.UIExceptionNotifier.Notify(ex,
-                                                                                              "There was a problem deleting",
-                                                                                              "Problem Deleting");
+                                                    //Do nothing
                                                 }
+                                                GlobalRegistry.UIExceptionNotifier.Notify(ex,
+                                                                                          "There was a problem deleting",
+                                                                                          "Problem Deleting");
                                             }
-                                        });
+                                        }
+                                    });
                 }
             }
             catch (Exception ex)

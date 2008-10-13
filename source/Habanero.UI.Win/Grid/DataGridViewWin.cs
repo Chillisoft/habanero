@@ -82,7 +82,7 @@ namespace Habanero.UI.Win
         public new IDataGridViewCell CurrentCell
         {
             get { return base.CurrentCell == null ? null : new DataGridViewCellWin(base.CurrentCell); }
-            set { base.CurrentCell = ((DataGridViewCellWin)value).DataGridViewCell; }
+            set { base.CurrentCell = value == null ? null : ((DataGridViewCellWin)value).DataGridViewCell; }
         }
 
         /// <summary>

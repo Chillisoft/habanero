@@ -299,6 +299,16 @@ namespace Habanero.UI.VWG
             return tv;
         }
 
+        ///<summary>
+        /// Creates a new TreeNode for a TreeView control.
+        ///</summary>
+        ///<param name="nodeName">The name for the node</param>
+        ///<returns>The newly created TreeNode object.</returns>
+        public ITreeNode CreateTreeNode(string nodeName)
+        {
+            return new TreeViewVWG.TreeNodeVWG(new TreeNode(nodeName));
+        }
+
         /// <summary>
         /// Creates a control for the given type and assembly name
         /// </summary>
@@ -472,7 +482,21 @@ namespace Habanero.UI.VWG
         /// <returns></returns>
         public IStaticDataEditor CreateStaticDataEditor()
         {
-            throw new System.NotImplementedException();
+            return new StaticDataEditorVWG(this);
+        }
+
+        ///<summary>
+        /// Displays a message box with specified text, caption, buttons, and icon.
+        ///</summary>
+        ///<param name="message">The text to display in the message box.</param>
+        ///<param name="title">The text to display in the title bar of the message box.</param>
+        ///<param name="buttons">One of the MessageBoxButtons values that specifies which buttons to display in the message box.</param>
+        ///<param name="icon">One of the MessageBoxIcon values that specifies which icon to display in the message box.</param>
+        ///<returns>The message box result.</returns>
+        public Base.DialogResult ShowMessageBox(string message, string title, Base.MessageBoxButtons buttons, Base.MessageBoxIcon icon)
+        {
+            return (Base.DialogResult)MessageBox.Show(message, title,
+                (Gizmox.WebGUI.Forms.MessageBoxButtons)buttons, (Gizmox.WebGUI.Forms.MessageBoxIcon)icon);
         }
 
         /// <summary>

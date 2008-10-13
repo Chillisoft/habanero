@@ -25,6 +25,8 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Win;
+using MessageBoxButtons=System.Windows.Forms.MessageBoxButtons;
+using MessageBoxIcon=System.Windows.Forms.MessageBoxIcon;
 
 namespace Habanero.UI.Win
 {

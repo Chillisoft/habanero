@@ -26,7 +26,7 @@ namespace Habanero.UI.Win
     /// <summary>
     /// Manages a group of buttons that display next to each other
     /// </summary>
-    public class ButtonGroupControlWin : ControlWin, IButtonGroupControl
+    public class ButtonGroupControlWin : PanelWin, IButtonGroupControl
     {
         private readonly IControlFactory _controlFactory;
         private ButtonGroupControlManager _buttonGroupControlManager;

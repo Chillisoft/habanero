@@ -19,6 +19,11 @@
 using System;
 using System.Windows.Forms;
 using Habanero.UI.Base;
+using TreeViewAction=Habanero.UI.Base.TreeViewAction;
+using TreeViewCancelEventArgs=System.Windows.Forms.TreeViewCancelEventArgs;
+using TreeViewCancelEventHandler=Habanero.UI.Base.TreeViewCancelEventHandler;
+using TreeViewEventArgs=System.Windows.Forms.TreeViewEventArgs;
+using TreeViewEventHandler=Habanero.UI.Base.TreeViewEventHandler;
 
 namespace Habanero.UI.Win
 {
@@ -27,6 +32,70 @@ namespace Habanero.UI.Win
     /// </summary>
     public class TreeViewWin : TreeView, ITreeView
     {
+        private event TreeViewEventHandler _afterSelect;
+        private event TreeViewCancelEventHandler _beforeSelect;
+
+        #region Utility Methods
+
+        private static ITreeNode GetITreeNode(TreeNode treeNode)
+        {
+            if (treeNode == null) return null;
+            return new TreeNodeWin(treeNode);
+            //ITreeNode treeNodeValue = treeNode as ITreeNode;
+            //if (treeNodeValue == null)
+            //{
+            //    treeNodeValue = new TreeNodeWin(treeNode);
+            //}
+            //return treeNodeValue;
+        }
+
+        private static TreeNode GetTreeNode(ITreeNode treeNode)
+        {
+            if (treeNode == null) return null;
+            return (TreeNode)treeNode.OriginalNode;
+        }
+
+        #endregion // Utility Methods
+
+        #region Event Handling
+
+        event TreeViewEventHandler ITreeView.AfterSelect
+        {
+            add { _afterSelect += value; }
+            remove { _afterSelect -= value; }
+        }
+
+        event TreeViewCancelEventHandler ITreeView.BeforeSelect
+        {
+            add { _beforeSelect += value; }
+            remove { _beforeSelect -= value; }
+        }
+
+        protected override void OnAfterSelect(TreeViewEventArgs e)
+        {
+            base.OnAfterSelect(e);
+            if (this._afterSelect != null)
+            {
+                Base.TreeViewEventArgs treeViewEventArgs = new Base.TreeViewEventArgs(
+                    GetITreeNode(e.Node), (TreeViewAction)e.Action);
+                this._afterSelect(this, treeViewEventArgs);
+            }
+        }
+
+        protected override void OnBeforeSelect(TreeViewCancelEventArgs e)
+        {
+            base.OnBeforeSelect(e);
+            if (this._beforeSelect != null && !e.Cancel)
+            {
+                Base.TreeViewCancelEventArgs treeViewCancelEventArgs = new Base.TreeViewCancelEventArgs(
+                    GetITreeNode(e.Node), e.Cancel, (TreeViewAction)e.Action);
+                this._beforeSelect(this, treeViewCancelEventArgs);
+                e.Cancel = treeViewCancelEventArgs.Cancel;
+            }
+        }
+
+        #endregion // Event Handling
+        
         /// <summary>
         /// Gets or sets the anchoring style.
         /// </summary>
@@ -62,14 +131,14 @@ namespace Habanero.UI.Win
 
         public new ITreeNode TopNode
         {
-            get { return new TreeNodeWin(base.TopNode); }
-            set { base.TopNode = (TreeNode)value.OriginalNode; }
+            get { return GetITreeNode(base.TopNode); }
+            set { base.TopNode = GetTreeNode(value); }
         }
 
         public ITreeNode SelectedNode
         {
-            get { return new TreeNodeWin(base.SelectedNode); }
-            set { base.SelectedNode = (TreeNode) value.OriginalNode; }
+            get { return GetITreeNode(base.SelectedNode); }
+            set { base.SelectedNode = GetTreeNode(value); }
         }
 
         public class TreeNodeWin : TreeNode, ITreeNode
@@ -89,7 +158,7 @@ namespace Habanero.UI.Win
 
             public ITreeNode Parent
             {
-                get { return new TreeNodeWin(_originalNode.Parent); }
+                get { return GetITreeNode(_originalNode.Parent); }
             }
 
             public ITreeNodeCollection Nodes
@@ -119,7 +188,12 @@ namespace Habanero.UI.Win
 
             public ITreeNode this[int index]
             {
-                get { return new TreeNodeWin(_nodes[index]); }
+                get { return GetITreeNode(_nodes[index]); }
+            }
+
+            public void Add(ITreeNode treeNode)
+            {
+                _nodes.Add(GetTreeNode(treeNode));
             }
         }
     }

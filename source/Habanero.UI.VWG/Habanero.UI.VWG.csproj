@@ -169,6 +169,9 @@
     <Compile Include="SplitterVWG.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="StaticDataEditorVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TabPageVWG.cs">
       <SubType>Component</SubType>
     </Compile>

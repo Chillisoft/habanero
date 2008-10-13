@@ -16,17 +16,10 @@
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using Habanero.Base;
-using Habanero.Base.Exceptions;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 
-
-namespace Habanero.UI.Win
+namespace Habanero.UI.VWG
 {
     /// <summary>
     /// Provides an editor for static data in an application.  Static data serves
@@ -36,11 +29,11 @@ namespace Habanero.UI.Win
     /// The editor typically consists of a TreeView on the left and an EditableGrid
     /// on the right, where data for the selected type in the TreeView can be edited.
     /// </summary>
-    public class StaticDataEditorWin : PanelWin, IStaticDataEditor
+    public class StaticDataEditorVWG : PanelVWG, IStaticDataEditor
     {
         private readonly StaticDataEditorManager _staticDataEditorManager;
 
-        public StaticDataEditorWin(IControlFactory controlFactory)
+        public StaticDataEditorVWG(IControlFactory controlFactory)
         {
             _staticDataEditorManager = new StaticDataEditorManager(this, controlFactory);
         }

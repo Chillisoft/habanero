@@ -172,6 +172,13 @@ namespace Habanero.UI.Base
         /// <param name="name">The name of the TreeView</param>
         ITreeView CreateTreeView(string name);
 
+        ///<summary>
+        /// Creates a new TreeNode for a TreeView control.
+        ///</summary>
+        ///<param name="nodeName">The name for the node</param>
+        ///<returns>The newly created TreeNode object.</returns>
+        ITreeNode CreateTreeNode(string nodeName);
+
         /// <summary>
         /// Creates a generic control
         /// </summary>
@@ -444,6 +451,15 @@ namespace Habanero.UI.Base
         /// </summary>
         IStaticDataEditor CreateStaticDataEditor();
         
+        ///<summary>
+        /// Displays a message box with specified text, caption, buttons, and icon.
+        ///</summary>
+        ///<param name="message">The text to display in the message box.</param>
+        ///<param name="title">The text to display in the title bar of the message box.</param>
+        ///<param name="buttons">One of the MessageBoxButtons values that specifies which buttons to display in the message box.</param>
+        ///<param name="icon">One of the MessageBoxIcon values that specifies which icon to display in the message box.</param>
+        ///<returns>The message box result.</returns>
+        DialogResult ShowMessageBox(string message, string title, MessageBoxButtons buttons, MessageBoxIcon icon);
     }
 
     /// <summary>
