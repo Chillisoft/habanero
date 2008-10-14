@@ -54,41 +54,8 @@ namespace Habanero.UI.Win
         /// </summary>
         Base.DockStyle IControlHabanero.Dock
         {
-            get {
-                return GetDockStyle(base.Dock); }
-            set { base.Dock = (System.Windows.Forms.DockStyle)Enum.Parse(typeof(System.Windows.Forms.DockStyle), value.ToString()); }
-        }
-
-        public static Base.DockStyle GetDockStyle(System.Windows.Forms.DockStyle dockStyle)
-        {
-            switch (dockStyle)
-            {
-                case System.Windows.Forms.DockStyle.Bottom: return Base.DockStyle.Bottom;
-                case System.Windows.Forms.DockStyle.Left: return Base.DockStyle.Left;
-                case System.Windows.Forms.DockStyle.Right: return Base.DockStyle.Right;
-                case System.Windows.Forms.DockStyle.Top: return Base.DockStyle.Top;
-                case System.Windows.Forms.DockStyle.Fill: return Base.DockStyle.Fill;
-            }
-            return (Base.DockStyle)dockStyle;
-        }
-
-
-        public static System.Windows.Forms.DockStyle GetDockStyle(Base.DockStyle dockStyle)
-        {
-            switch (dockStyle)
-            {
-                case Base.DockStyle.Bottom:
-                    return System.Windows.Forms.DockStyle.Bottom;
-                case Base.DockStyle.Top:
-                    return System.Windows.Forms.DockStyle.Top;
-                case Base.DockStyle.Left:
-                    return System.Windows.Forms.DockStyle.Left;
-                case Base.DockStyle.Right:
-                    return System.Windows.Forms.DockStyle.Right;
-                case Base.DockStyle.Fill:
-                    return System.Windows.Forms.DockStyle.Fill;
-            }
-            return (System.Windows.Forms.DockStyle) dockStyle;
+            get { return DockStyleWin.GetDockStyle(base.Dock); }
+            set { base.Dock = DockStyleWin.GetDockStyle(value); }
         }
     }
 }

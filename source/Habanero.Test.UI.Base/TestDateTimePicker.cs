@@ -28,6 +28,28 @@ using NUnit.Framework;
 namespace Habanero.Test.UI.Base
 {
     /// <summary>
+    /// This test class tests the base inherited methods of the DateTimePicker class.
+    /// </summary>
+    public class TestBaseMethodsWin_DateTimePicker : TestBaseMethods.TestBaseMethodsWin
+    {
+        protected override IControlHabanero CreateControl()
+        {
+            return GetControlFactory().CreateDateTimePicker();
+        }
+    }
+
+    /// <summary>
+    /// This test class tests the base inherited methods of the DateTimePicker class.
+    /// </summary>
+    public class TestBaseMethodsVWG_DateTimePicker : TestBaseMethods.TestBaseMethodsVWG
+    {
+        protected override IControlHabanero CreateControl()
+        {
+            return GetControlFactory().CreateDateTimePicker();
+        }
+    }
+
+    /// <summary>
     /// This class tests the DateTimePicker control.
     ///  - The issue of the control being nullable or not is tested.
     /// </summary>

@@ -512,6 +512,18 @@ namespace Habanero.UI.VWG
             return editor;
         }
 
+        ///<summary>
+        /// Creates a new numeric up-down control
+        ///</summary>
+        ///<returns>The created NumericUpDown control</returns>
+        public INumericUpDown CreateNumericUpDown()
+        {
+            INumericUpDown ctl = new NumericUpDownVWG();
+            // set the NumericUpDown to the default height of a text box on this machine.
+            ctl.Height = GetStandardHeight();
+            return ctl;
+        }
+
         /// <summary>
         /// Creates a new numeric up-down control that is formatted with
         /// zero decimal places for integer use
@@ -864,17 +876,7 @@ namespace Habanero.UI.VWG
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Creates a new numeric up-down control
-        /// </summary>
-        /// <returns>Returns a new NumericUpDown object</returns>
-        private INumericUpDown CreateNumericUpDown()
-        {
-            INumericUpDown ctl = new NumericUpDownVWG();
-            ctl.Height = GetStandardHeight();
-                // set the NumericUpDown to the default height of a text box on this machine.
-            return ctl;
-        }
+        
 
         private static int GetStandardHeight()
         {

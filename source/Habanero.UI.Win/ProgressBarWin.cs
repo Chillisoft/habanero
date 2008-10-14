@@ -17,17 +17,15 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
     /// <summary>
-    /// Used to group collections of controls
+    /// Represents a progress bar control.
     /// </summary>
-    public class PanelWin : Panel, IPanel
+    public class ProgressBarWin : ProgressBar, IProgressBar
     {
         /// <summary>
         /// Gets or sets the anchoring style.

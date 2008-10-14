@@ -70,8 +70,8 @@ namespace Habanero.UI.Win
         /// </summary>
         Base.DockStyle IControlHabanero.Dock
         {
-            get { return (Base.DockStyle)base.Dock; }
-            set { base.Dock = (System.Windows.Forms.DockStyle)value; }
+            get { return DockStyleWin.GetDockStyle(base.Dock); }
+            set { base.Dock = DockStyleWin.GetDockStyle(value); }
         }
 
         /// <summary>

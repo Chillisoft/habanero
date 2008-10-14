@@ -26,7 +26,31 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
+    ///// <summary>
+    ///// This test class tests the base inherited methods of the ListView class.
+    ///// </summary>
+    //public class TestBaseMethodsWin_ListView : TestBaseMethods.TestBaseMethodsWin
+    //{
+    //    protected override IControlHabanero CreateControl()
+    //    {
+    //        return new GetControlFactory().CreateListView();
+    //    }
+    //}
 
+    ///// <summary>
+    ///// This test class tests the base inherited methods of the ListView class.
+    ///// </summary>
+    //public class TestBaseMethodsVWG_ListView : TestBaseMethods.TestBaseMethodsVWG
+    //{
+    //    protected override IControlHabanero CreateControl()
+    //    {
+    //        return GetControlFactory().CreateListView();
+    //    }
+    //}
+
+    /// <summary>
+    /// This test class tests the ListView class.
+    /// </summary>
     public abstract class TestListView
     {
         protected abstract IControlFactory GetControlFactory();

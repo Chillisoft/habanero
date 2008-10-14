@@ -410,11 +410,10 @@ namespace Habanero.Test.UI.Base
             string itemName1 = TestUtil.CreateRandomString();
             editor.AddItem(itemName1, classDef1);
             editor.SelectItem(itemName1);
-
-            //---------------Execute Test ----------------------
             gridControl.Grid.SelectedBusinessObject = myBO;
             string newValue = TestUtil.CreateRandomString();
-            gridControl.Grid.CurrentCell.Value = newValue;
+            //---------------Execute Test ----------------------
+            gridControl.Grid.CurrentRow.Cells["TestProp"].Value = newValue;
             bool result = editor.SaveChanges();
             //---------------Test Result -----------------------
             Assert.IsTrue(result);
@@ -447,7 +446,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             gridControl.Grid.SelectedBusinessObject = myBO;
             string newValue = TestUtil.CreateRandomString();
-            gridControl.Grid.CurrentCell.Value = newValue;
+            gridControl.Grid.CurrentRow.Cells["TestProp"].Value = newValue;
             bool result = editor.RejectChanges();
             //---------------Test Result -----------------------
             Assert.IsTrue(result);

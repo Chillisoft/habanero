@@ -573,6 +573,21 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------   
         }
 
+        [Test]
+        public void TestCreateProgressBar()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Verify test pack-------------------
+            //---------------Execute Test ----------------------
+            IProgressBar progressBar = _factory.CreateProgressBar();
+            //---------------Verify Result -----------------------
+            Assert.IsNotNull(progressBar);
+            Assert.AreEqual(0, progressBar.Minimum);
+            Assert.AreEqual(100, progressBar.Maximum);
+            Assert.AreEqual(10, progressBar.Step);
+            Assert.AreEqual(0, progressBar.Value);
+            //---------------Tear Down -------------------------   
+        }
 
         [Test]
         public void TestCreateTreeView()
@@ -643,6 +658,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(testDate,dateTimePicker.Value);
             //---------------Tear Down -------------------------   
         }
+
         [Test]
         public void TestCreateMonthPicker()
         {
@@ -655,6 +671,24 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual("MMM yyyy", dateTimePicker.CustomFormat);
             //---------------Tear Down -------------------------   
         }
+
+        [Test]
+        public void TestCreateRadioButton()
+        {
+            //---------------Set up test pack-------------------
+            string text = TestUtil.CreateRandomString();
+            int expectedWidth = _factory.CreateLabel(text, false).PreferredWidth + 25;
+            //---------------Verify test pack-------------------
+            //---------------Execute Test ----------------------
+            IRadioButton radioButton = _factory.CreateRadioButton(text);
+            //---------------Verify Result -----------------------
+            Assert.IsNotNull(radioButton);
+            Assert.AreEqual(text, radioButton.Text);
+            Assert.AreEqual(expectedWidth, radioButton.Width);
+            Assert.IsFalse(radioButton.Checked);
+            //---------------Tear Down -------------------------   
+        }
+
         [Test]
         public void TestCreateNumericUpDownMoney()
         {
@@ -684,7 +718,20 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(Int32.MaxValue, upDown.Maximum);
             //---------------Tear Down -------------------------   
         }
-        
+
+        [Test]
+        public void TestCreateNumericUpDown()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Verify test pack-------------------
+            //---------------Execute Test ----------------------
+            INumericUpDown upDown = _factory.CreateNumericUpDown();
+            //---------------Verify Result -----------------------
+            Assert.IsNotNull(upDown);
+            Assert.AreEqual(0, upDown.DecimalPlaces);
+            //---------------Tear Down -------------------------   
+        }
+
         [Test]
         public void TestCreateDefaultControl()
         {

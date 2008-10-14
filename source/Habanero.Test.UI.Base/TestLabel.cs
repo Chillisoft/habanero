@@ -24,7 +24,31 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
+    /// <summary>
+    /// This test class tests the base inherited methods of the Label class.
+    /// </summary>
+    public class TestBaseMethodsWin_Label : TestBaseMethods.TestBaseMethodsWin
+    {
+        protected override IControlHabanero CreateControl()
+        {
+            return GetControlFactory().CreateLabel();
+        }
+    }
 
+    /// <summary>
+    /// This test class tests the base inherited methods of the Label class.
+    /// </summary>
+    public class TestBaseMethodsVWG_Label : TestBaseMethods.TestBaseMethodsVWG
+    {
+        protected override IControlHabanero CreateControl()
+        {
+            return GetControlFactory().CreateLabel();
+        }
+    }
+
+    /// <summary>
+    /// This test class tests the Label class.
+    /// </summary>
     public abstract class TestLabel
     {
         protected abstract IControlFactory GetControlFactory();

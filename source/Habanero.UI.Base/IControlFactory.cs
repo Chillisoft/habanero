@@ -230,6 +230,12 @@ namespace Habanero.UI.Base
         /// <param name="optionsToDisplay">A list of date range options to display</param>
         IDateRangeComboBox CreateDateRangeComboBox(List<DateRangeOptions> optionsToDisplay);
 
+        ///<summary>
+        /// Creates a new numeric up-down control
+        ///</summary>
+        ///<returns>The created NumericUpDown control</returns>
+        INumericUpDown CreateNumericUpDown();
+
         /// <summary>
         /// Creates a new numeric up-down control that is formatted with
         /// zero decimal places for integer use
@@ -460,6 +466,8 @@ namespace Habanero.UI.Base
         ///<param name="icon">One of the MessageBoxIcon values that specifies which icon to display in the message box.</param>
         ///<returns>The message box result.</returns>
         DialogResult ShowMessageBox(string message, string title, MessageBoxButtons buttons, MessageBoxIcon icon);
+
+        
     }
 
     /// <summary>

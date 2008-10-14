@@ -26,6 +26,31 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
+    /// <summary>
+    /// This test class tests the base inherited methods of the TextBox class.
+    /// </summary>
+    public class TestBaseMethodsWin_TextBox : TestBaseMethods.TestBaseMethodsWin
+    {
+        protected override IControlHabanero CreateControl()
+        {
+            return GetControlFactory().CreateTextBox();
+        }
+    }
+
+    /// <summary>
+    /// This test class tests the base inherited methods of the TextBox class.
+    /// </summary>
+    public class TestBaseMethodsVWG_TextBox : TestBaseMethods.TestBaseMethodsVWG
+    {
+        protected override IControlHabanero CreateControl()
+        {
+            return GetControlFactory().CreateTextBox();
+        }
+    }
+
+    /// <summary>
+    /// This test class tests the TextBox class.
+    /// </summary>
     public abstract class TestTextBox
     {
         protected abstract IControlFactory GetControlFactory();

@@ -54,7 +54,7 @@ namespace Habanero.UI.Base
             _gridControl = _controlFactory.CreateEditableGridControl();
             BorderLayoutManager layoutManager = _controlFactory.CreateBorderLayoutManager(_staticDataEditor);
             layoutManager.AddControl(_gridControl, BorderLayoutManager.Position.Centre);
-            layoutManager.AddControl(_treeView, BorderLayoutManager.Position.West, true);
+            layoutManager.AddControl(_treeView, BorderLayoutManager.Position.West);
             _treeView.AfterSelect += delegate(object sender, TreeViewEventArgs e) { SelectItem(e.Node.Text); };
             _treeView.BeforeSelect += _treeView_OnBeforeSelect;
             _gridControl.Enabled = false;

@@ -78,6 +78,7 @@
     <Compile Include="DefaultBOEditorFormWin.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="DockStyleWin.cs" />
     <Compile Include="EditableGridControlWin.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -152,6 +153,12 @@
     </Compile>
     <Compile Include="OKCancelDialogFactoryWin.cs" />
     <Compile Include="PanelWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProgressBarWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="RadioButtonWin.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ReadOnlyGridButtonsControlWin.cs">

@@ -25,5 +25,10 @@ namespace Habanero.UI.Base
     /// </summary>
     public interface IRadioButton : IControlHabanero
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether the control is checked.
+        /// </summary>
+        ///	<returns>true if the check box is checked; otherwise, false.</returns>
+        bool Checked{ get; set; }
     }
 }

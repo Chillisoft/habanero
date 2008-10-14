@@ -108,15 +108,17 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IOKCancelDialogFactory okCancelDialogFactory = GetControlFactory().CreateOKCancelDialogFactory();
+            IPanel nestedControl = GetControlFactory().CreatePanel();
 
             //---------------Execute Test ----------------------
-            IControlHabanero dialogControl = okCancelDialogFactory.CreateOKCancelPanel(GetControlFactory().CreatePanel());
+            IControlHabanero dialogControl = okCancelDialogFactory.CreateOKCancelPanel(nestedControl);
             //---------------Test Result -----------------------
             Assert.AreEqual(2, dialogControl.Controls.Count);
             Assert.IsInstanceOfType(typeof (IPanel), dialogControl.Controls[0]);
-            IPanel contentPanel = (IPanel) dialogControl.Controls[0];
-            //Assert.AreEqual(DockStyle.Fill, contentPanel.Dock);
-            Assert.AreEqual(DockStyle.Fill, contentPanel.Controls[0].Dock);
+            IPanel mainPanel = (IPanel) dialogControl.Controls[0];
+            //Assert.AreEqual(DockStyle.Fill, mainPanel.Dock);
+            Assert.AreSame(nestedControl, mainPanel.Controls[0]);
+            Assert.AreEqual(DockStyle.Fill, mainPanel.Controls[0].Dock);
             Assert.IsInstanceOfType(typeof (IButtonGroupControl), dialogControl.Controls[1]);
             IButtonGroupControl buttons = (IButtonGroupControl) dialogControl.Controls[1];
             Assert.AreEqual(DockStyle.Bottom, buttons.Dock);

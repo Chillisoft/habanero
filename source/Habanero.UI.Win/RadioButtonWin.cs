@@ -17,17 +17,16 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
     /// <summary>
-    /// Used to group collections of controls
+    /// Enables the user to select a single option from a group of choices
+    /// when paired with other RadioButton controls
     /// </summary>
-    public class PanelWin : Panel, IPanel
+    public class RadioButtonWin : RadioButton, IRadioButton
     {
         /// <summary>
         /// Gets or sets the anchoring style.

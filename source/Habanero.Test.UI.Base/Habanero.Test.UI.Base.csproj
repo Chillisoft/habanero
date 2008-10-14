@@ -78,13 +78,29 @@
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
     <Compile Include="ButtonsControl\TestButtonGroupControl.cs" />
+    <Compile Include="TestButton.cs" />
+    <Compile Include="TestCheckBox.cs" />
+    <Compile Include="TestComboBox.cs" />
+    <Compile Include="TestForm.cs" />
+    <Compile Include="TestGroupBox.cs" />
+    <Compile Include="TestNumericUpDown.cs" />
+    <Compile Include="TestProgressBar.cs" />
+    <Compile Include="TestRadioButton.cs" />
+    <Compile Include="TestSplitter.cs" />
+    <Compile Include="TestTabControl.cs" />
+    <Compile Include="TestTabPage.cs" />
+    <Compile Include="TestTreeView.cs" />
+    <Compile Include="TestUserControl.cs" />
     <Compile Include="Grid\TestDataGridViewNumericUpDownColumn.cs" />
+    <Compile Include="TestBaseMethods.cs" />
+    <Compile Include="TestControl.cs" />
     <Compile Include="TestDialogResult.cs" />
     <Compile Include="TestHabaneroMenu.cs" />
     <Compile Include="TestInputFormComboBox.cs" />
     <Compile Include="TestInputFormDate.cs" />
     <Compile Include="TestMenuBuilder.cs" />
     <Compile Include="TestOKCancelDialog.cs" />
+    <Compile Include="TestPanel.cs" />
     <Compile Include="TestTextBox.cs" />
     <Compile Include="Controllers\TestComboBoxCollectionController.cs" />
     <Compile Include="FilterController\TestCompositeFilterClause.cs" />

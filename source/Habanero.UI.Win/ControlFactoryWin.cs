@@ -173,13 +173,22 @@ namespace Habanero.UI.Win
             return editor;
         }
 
+        ///<summary>
+        /// Creates a new numeric up-down control
+        ///</summary>
+        ///<returns>The created NumericUpDown control</returns>
+        public INumericUpDown CreateNumericUpDown()
+        {
+            return new NumericUpDownWin();
+        }
+
         /// <summary>
         /// Creates a new numeric up-down control that is formatted with
         /// zero decimal places for integer use
         /// </summary>
         public INumericUpDown CreateNumericUpDownInteger()
         {
-            NumericUpDownWin ctl = new NumericUpDownWin();
+            INumericUpDown ctl = CreateNumericUpDown();
             ctl.DecimalPlaces = 0;
             ctl.Maximum = Int32.MaxValue;
             ctl.Minimum = Int32.MinValue;
@@ -192,7 +201,7 @@ namespace Habanero.UI.Win
         /// </summary>
         public INumericUpDown CreateNumericUpDownCurrency()
         {
-            NumericUpDownWin ctl = new NumericUpDownWin();
+            INumericUpDown ctl = CreateNumericUpDown();
             ctl.DecimalPlaces = 2;
             ctl.Maximum = decimal.MaxValue;
             ctl.Minimum = decimal.MinValue;
@@ -204,7 +213,7 @@ namespace Habanero.UI.Win
         /// </summary>
         public IProgressBar CreateProgressBar()
         {
-            throw new NotImplementedException();
+            return new ProgressBarWin();
         }
 
         /// <summary>
@@ -233,7 +242,12 @@ namespace Habanero.UI.Win
         /// <param name="text">The text to appear next to the radio button</param>
         public IRadioButton CreateRadioButton(string text)
         {
-            throw new NotImplementedException();
+            RadioButtonWin rButton = new RadioButtonWin();
+            rButton.Text = text;
+            //TODO_REmoved when porting rButton.AutoCheck = true;
+            //TODO_REmoved when portingrButton.FlatStyle = FlatStyle.Standard;
+            rButton.Width = CreateLabel(text, false).PreferredWidth + 25;
+            return rButton;
         }
 
         /// <summary>
@@ -496,6 +510,8 @@ namespace Habanero.UI.Win
         {
             return new DateRangeComboBoxWin(optionsToDisplay);
         }
+
+       
 
         /// <summary>
         /// Creates an ErrorProvider
