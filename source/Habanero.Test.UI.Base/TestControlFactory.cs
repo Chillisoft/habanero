@@ -198,18 +198,7 @@ namespace Habanero.Test.UI.Base
                 }
             }
 
-            [Test]
-            public void TestCreateControlWithNullAssemblyName()
-            {
-                //---------------Set up test pack-------------------
-                
-                //---------------Execute Test ----------------------
-                IControlHabanero control = _factory.CreateControl("NumericUpDown", null);
-                //---------------Test Result -----------------------
-                Assert.IsInstanceOfType(typeof(System.Windows.Forms.NumericUpDown), control);
-                //---------------Tear down -------------------------
-
-            }
+            
 
             [Test]
             public void TestCreateSpecifiedControlType()
@@ -517,6 +506,19 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(expectedButtonWidth, button.Width);
             //To_Test: btn.FlatStyle = FlatStyle.System;
             //---------------Tear Down -------------------------   
+        }
+
+        [Test]
+        public void TestCreateControlWithNullAssemblyName()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Execute Test ----------------------
+            IControlHabanero control = _factory.CreateControl("NumericUpDown", null);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(INumericUpDown), control);
+            //---------------Tear down -------------------------
+
         }
 
         [Test]

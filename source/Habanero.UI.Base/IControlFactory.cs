@@ -467,7 +467,13 @@ namespace Habanero.UI.Base
         ///<returns>The message box result.</returns>
         DialogResult ShowMessageBox(string message, string title, MessageBoxButtons buttons, MessageBoxIcon icon);
 
-        
+
+        ///<summary>
+        /// Displays a message box with specified text.
+        ///</summary>
+        ///<param name="message">The text to display in the message box.</param>
+        ///<returns>The message box result.</returns>
+        Base.DialogResult ShowMessageBox(string message);
     }
 
     /// <summary>

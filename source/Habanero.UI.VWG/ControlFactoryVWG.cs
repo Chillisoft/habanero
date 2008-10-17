@@ -318,17 +318,18 @@ namespace Habanero.UI.VWG
         /// the default type, which is usually TextBox.</returns>
         public virtual IControlHabanero CreateControl(string typeName, string assemblyName)
         {
+
             Type controlType = null;
 
-            if (String.IsNullOrEmpty(typeName) || String.IsNullOrEmpty(assemblyName))
+            if (String.IsNullOrEmpty(typeName)) return CreateControl(typeof(TextBox));
+
+            if (String.IsNullOrEmpty(assemblyName))
             {
-                controlType = typeof (TextBox);
+                assemblyName = "Gizmox.WebGUI.Forms";
             }
-            else
-            {
-                TypeLoader.LoadClassType(ref controlType, assemblyName, typeName,
+            TypeLoader.LoadClassType(ref controlType, assemblyName, typeName,
                                          "field", "field definition");
-            }
+
 
             return CreateControl(controlType);
         }
@@ -498,6 +499,17 @@ namespace Habanero.UI.VWG
             return (Base.DialogResult)MessageBox.Show(message, title,
                 (Gizmox.WebGUI.Forms.MessageBoxButtons)buttons, (Gizmox.WebGUI.Forms.MessageBoxIcon)icon);
         }
+
+        ///<summary>
+        /// Displays a message box with specified text.
+        ///</summary>
+        ///<param name="message">The text to display in the message box.</param>
+        ///<returns>The message box result.</returns>
+        public Base.DialogResult ShowMessageBox(string message)
+        {
+            return (Base.DialogResult)MessageBox.Show(message);
+        }
+
 
         /// <summary>
         /// Creates a new DateTimePicker that is formatted to handle months
