@@ -26,8 +26,8 @@ namespace Habanero.Test.UI.Base
     [TestFixture]
     public class TestGlobalUIRegistry
     {
-        private IUISettings _uiSettings = GlobalUIRegistry.UISettings;
-        private DateDisplaySettings _dateDisplaySettings = GlobalUIRegistry.DateDisplaySettings;
+        private readonly IUISettings _uiSettings = GlobalUIRegistry.UISettings;
+        private readonly DateDisplaySettings _dateDisplaySettings = GlobalUIRegistry.DateDisplaySettings;
         
         [SetUp]
         public void ResetRegistry()

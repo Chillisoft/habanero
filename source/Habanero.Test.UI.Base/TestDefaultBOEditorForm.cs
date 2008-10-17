@@ -34,7 +34,7 @@ namespace Habanero.Test.UI.Base
     public abstract class TestDefaultBOEditorForm : TestUsingDatabase
     {
         protected abstract IControlFactory GetControlFactory();
-        private IDatabaseConnection _conn;
+        //private IDatabaseConnection _conn;
 
         [TestFixture]
         public class TestDefaultBOEditorFormWin : TestDefaultBOEditorForm
@@ -166,7 +166,7 @@ namespace Habanero.Test.UI.Base
         {
             _databaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
 
-            _conn = (IDatabaseConnection) _databaseConnectionMockControl.MockInstance;
+            //_conn = (IDatabaseConnection) _databaseConnectionMockControl.MockInstance;
             //_bo = _classDefMyBo.CreateNewBusinessObject(_conn);
             _bo = _classDefMyBo.CreateNewBusinessObject();
             _defaultBOEditorForm = GetControlFactory().CreateBOEditorForm((BusinessObject) _bo);

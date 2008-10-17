@@ -16,14 +16,12 @@
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base;
-
 
 namespace Habanero.UI.Base
 {
@@ -39,10 +37,10 @@ namespace Habanero.UI.Base
     {
         private readonly IStaticDataEditor _staticDataEditor;
         private readonly IControlFactory _controlFactory;
-        private ITreeView _treeView;
+        private readonly ITreeView _treeView;
+        private readonly IEditableGridControl _gridControl;
+        private readonly Dictionary<string, ClassDef> _items;
         private ITreeNode _currentSectionNode;
-        private IEditableGridControl _gridControl;
-        private Dictionary<string, ClassDef> _items;
 
         public StaticDataEditorManager(IStaticDataEditor staticDataEditor, IControlFactory controlFactory)
         {

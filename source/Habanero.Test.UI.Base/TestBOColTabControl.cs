@@ -17,8 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Diagnostics;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -74,7 +72,7 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.VWG.ControlFactoryVWG();
+                return new ControlFactoryVWG();
             }
 
             protected override IBusinessObjectControl GetBusinessObjectControlStub()
