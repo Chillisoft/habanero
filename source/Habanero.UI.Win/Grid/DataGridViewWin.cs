@@ -141,7 +141,7 @@ namespace Habanero.UI.Win
         /// <filterpriority>1</filterpriority>
         public void Sort(IDataGridViewColumn dataGridViewColumn, ListSortDirection direction)
         {
-            throw new System.NotImplementedException();
+            base.Sort(((DataGridViewColumnWin) dataGridViewColumn).DataGridViewColumn,direction);
         }
 
         /// <summary>
