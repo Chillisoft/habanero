@@ -181,6 +181,43 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.AreEqual(3, dateRangeCombo.Items.Count);
         }
 
+        [Test, Ignore("not working in vwg")]
+        public void TestAdd_CustomFilter()
+        {
+            //---------------Set up test pack-------------------
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+            FilterControlManager.ICustomFilter customFilter = new CustomFilterStub(GetControlFactory());
+
+            //---------------Execute Test ----------------------
+            IControlHabanero control = filterControl.AddCustomFilter("LabelText","test", customFilter);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, filterControl.CountOfFilters);
+            IControlHabanero controlHabanero = filterControl.GetChildControl("test");
+            Assert.AreEqual(control,controlHabanero);
+            Assert.IsNotNull(controlHabanero);
+            Assert.IsInstanceOfType(typeof(ITextBox),controlHabanero);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test, Ignore("not working in vwg")]
+        public void TestCustomFilterValue_changedFiresWhenTextChanged()
+        {
+            //---------------Set up test pack-------------------
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+            FilterControlManager.ICustomFilter customFilter = new CustomFilterStub(GetControlFactory());
+            filterControl.AddCustomFilter("LabelText", "test", customFilter);
+
+            //---------------Assert pre conditions--------------
+            Assert.IsFalse(((CustomFilterStub)customFilter)._valueChangedFired);
+
+            //---------------Execute Test ----------------------
+            customFilter.Control.Text = "newText";
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(((CustomFilterStub)customFilter)._valueChangedFired);
+        }
+
 
         private static IComboBox GetFilterComboBox_2Items(IFilterControl filterControl)
         {
@@ -991,5 +1028,47 @@ namespace Habanero.Test.UI.Base.FilterController
         #endregion
 
 
+    }
+
+    internal class CustomFilterStub : FilterControlManager.ICustomFilter
+    {
+        private readonly IControlFactory _factory;
+        private static ITextBox _box;
+        public bool _valueChangedFired;
+
+        public CustomFilterStub(IControlFactory factory)
+        {
+            _factory = factory;
+            _box = _factory.CreateTextBox();
+            _box.TextChanged += ValueChanged;
+            _valueChangedFired = false;
+            ValueChanged += CustomFilterStub_ValueChanged;
+            
+        }
+
+        void CustomFilterStub_ValueChanged(object sender, EventArgs e)
+        {
+            _valueChangedFired = true;
+        }
+
+        public IControlHabanero Control
+        {
+            get
+            {
+                return _box;
+            }
+        }
+
+        public IFilterClause GetFilterClause(IFilterClauseFactory filterClauseFactory)
+        {
+            return filterClauseFactory.CreateStringFilterClause("test", FilterClauseOperator.OpEquals, _box.Text);
+        }
+
+        public void Clear()
+        {
+            _box.Text = "";
+        }
+
+        public event EventHandler ValueChanged;
     }
 }

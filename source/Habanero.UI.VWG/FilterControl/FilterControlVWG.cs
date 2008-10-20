@@ -352,9 +352,13 @@ namespace Habanero.UI.VWG
         /// <returns>Returns the new DateRangeComboBox added</returns>
         public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, List<DateRangeOptions> options, bool includeStartDate, bool includeEndDate)
         {
-            return
-                _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, options, includeStartDate,
+            return _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, options, includeStartDate,
                                                                  includeEndDate);
+        }
+
+        public IControlHabanero AddCustomFilter(string labelText,string propertyName, FilterControlManager.ICustomFilter customFilter)
+        {
+            return _filterControlManager.AddCustomFilter(labelText, propertyName, customFilter);
         }
     }
 }

@@ -331,6 +331,20 @@ namespace Habanero.UI.Win
             return dateRangeComboBox;
         }
 
+        ///<summary>
+        /// Adds a custom filter which allows filtering using an ICustomFilter 
+        ///</summary>
+        ///<param name="labelText">The Label to appear before the control</param>
+        ///<param name="propertyName">The property of the Business Object to filter</param>
+        ///<param name="customFilter">The custom filter</param>
+        ///<returns>Returns the new Custom Filter Control </returns>
+        public IControlHabanero AddCustomFilter(string labelText,string propertyName, FilterControlManager.ICustomFilter customFilter)
+        {
+            IControlHabanero filter = _filterControlManager.AddCustomFilter(labelText, propertyName, customFilter);
+            customFilter.ValueChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
+            return filter;
+        }
+
         private void CreateFilterButtons(IPanel filterButtonPanel)
         {
             const int buttonHeight = 20;

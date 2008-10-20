@@ -183,5 +183,15 @@ namespace Habanero.UI.Base
         /// <param name="includeEndDate">Includes all dates that match the end date exactly</param>
         /// <returns>Returns the new DateRangeComboBox added</returns>
         IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, List<DateRangeOptions> options, bool includeStartDate, bool includeEndDate);
+
+
+        ///<summary>
+        /// Adds a custom filter which allows filtering using an ICustomFilter 
+        ///</summary>
+        ///<param name="labelText">The Label to appear before the control</param>
+        ///<param name="propertyName">The property of the Business Object to filter</param>
+        ///<param name="customFilter">The custom filter</param>
+        ///<returns>Returns the new Custom Filter Control </returns>
+        IControlHabanero AddCustomFilter(string labelText,string propertyName, FilterControlManager.ICustomFilter customFilter);
     }
 }

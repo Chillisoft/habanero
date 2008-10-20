@@ -184,6 +184,15 @@ namespace Habanero.UI.Base
             //}
         }
 
+        public IControlHabanero AddCustomFilter(string labelText, string columnName, ICustomFilter customFilter)
+        {
+            ILabel label = _controlFactory.CreateLabel(labelText);
+            IControlHabanero control = customFilter.Control;
+            AddControlToLayoutManager(label, control);
+            _filterControls.Add(new FilterUICustom(_clauseFactory, customFilter, columnName));
+            return control;
+        }
+
         /// <summary>
         /// See <see cref="IFilterControl.ClearFilters"/>
         /// </summary>
@@ -274,6 +283,44 @@ namespace Habanero.UI.Base
             //public abstract IFilterClause GetFilterClause(string stringLikeDelimiter, string dateTimeDelimiter);
 
         }
+
+        private class FilterUICustom : FilterUI
+        {
+            private readonly ICustomFilter _customFilter;
+
+            public FilterUICustom(IFilterClauseFactory clauseFactory, ICustomFilter customFilter, string propertyName)
+                : base(clauseFactory, propertyName)
+            {
+                _customFilter = customFilter;
+            }
+            
+            public override IControlHabanero FilterControl
+            {
+                get { return _customFilter.Control; }
+            }
+
+            public override IFilterClause GetFilterClause()
+            {
+                return _customFilter.GetFilterClause(_clauseFactory);
+            }
+
+            public override void Clear()
+            {
+                _customFilter.Clear();
+            }
+        }
+
+
+        ///<summary>
+        /// Provides a means to create custom filters.
+        ///</summary>
+        public interface ICustomFilter : IControlManager
+        {
+            IFilterClause GetFilterClause(IFilterClauseFactory filterClauseFactory);
+            void Clear();
+            event EventHandler ValueChanged;
+        }
+
 
         /// <summary>
         /// Manages a TextBox in which the user can type string filter clauses
@@ -500,8 +547,6 @@ namespace Habanero.UI.Base
                 _dateRangeComboBox.SelectedIndex = -1;
             }
         }
-
-
     }
 
 
