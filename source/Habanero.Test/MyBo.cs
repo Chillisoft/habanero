@@ -354,6 +354,33 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+
+        public static ClassDef LoadClassDefWith_Grid_2Columns_1stHasZeroWidth()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID""  type=""Guid"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" width=""0""/>
+							<column heading=""Test Prop 2"" property=""TestProp2""/>
+						</grid>
+					</ui>
+				</class>
+				
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
         public static ClassDef LoadClassDefWith_Grid_1DateTimeColumn()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();

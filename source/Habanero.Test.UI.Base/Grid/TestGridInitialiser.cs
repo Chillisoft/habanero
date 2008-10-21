@@ -22,8 +22,6 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -52,6 +50,7 @@ namespace Habanero.Test.UI.Base
         protected abstract IControlFactory GetControlFactory();
         protected abstract void AddControlToForm(IControlHabanero cntrl);
         protected abstract Type GetCustomGridColumnType();
+        protected abstract Type GetDateTimeGridColumnType();
         protected abstract void AssertGridColumnTypeAfterCast(IDataGridViewColumn createdColumn, Type expectedColumnType);
 
 
@@ -60,7 +59,7 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryWin();
+                return new Habanero.UI.Win.ControlFactoryWin();
             }
 
             protected override void AddControlToForm(IControlHabanero cntrl)
@@ -74,39 +73,16 @@ namespace Habanero.Test.UI.Base
                 return typeof(CustomDataGridViewColumnWin);
             }
 
+            protected override Type GetDateTimeGridColumnType()
+            {
+                return typeof (Habanero.UI.Win.DataGridViewDateTimeColumn);
+            }
+
             protected override void AssertGridColumnTypeAfterCast(IDataGridViewColumn createdColumn, Type expectedColumnType)
             {
                 Habanero.UI.Win.DataGridViewColumnWin columnWin = (Habanero.UI.Win.DataGridViewColumnWin)createdColumn;
                 System.Windows.Forms.DataGridViewColumn column = columnWin.DataGridViewColumn;
                 Assert.AreEqual(expectedColumnType, column.GetType());
-            }
-
-
-
-            [Test]
-            public void TestInitGrid_LoadsDataGridViewDateTimeColumn()
-            {
-                //---------------Set up test pack-------------------
-                ClassDef classDef = MyBO.LoadClassDefWithDateTimeParameterFormat();
-                IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
-                IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
-                UIDef uiDef = classDef.UIDefCol["default"];
-                UIGrid uiGridDef = uiDef.UIGrid;
-                UIGridColumn uiDTColDef = uiGridDef[2];
-                uiDTColDef.GridControlTypeName = "DataGridViewDateTimeColumn";
-                AddControlToForm(grid);
-
-                //---------------Assert Precondition----------------
-
-                //---------------Execute Test ----------------------
-                initialiser.InitialiseGrid(classDef);
-                //---------------Test Result -----------------------
-                Assert.AreEqual(6, grid.Grid.Columns.Count);
-                IDataGridViewColumn column3 = grid.Grid.Columns[3];
-                Assert.AreEqual("TestDateTime", column3.Name);
-                Assert.AreEqual(uiDTColDef.Heading, column3.HeaderText);
-                Assert.IsInstanceOfType(typeof(IDataGridViewColumn), column3);
-                AssertGridColumnTypeAfterCast(column3, typeof(DataGridViewDateTimeColumn));
             }
         }
 
@@ -115,7 +91,7 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryVWG();
+                return new Habanero.UI.VWG.ControlFactoryVWG();
             }
 
             protected override void AddControlToForm(IControlHabanero cntrl)
@@ -129,11 +105,23 @@ namespace Habanero.Test.UI.Base
                 return typeof(CustomDataGridViewColumnVWG);
             }
 
+            protected override Type GetDateTimeGridColumnType()
+            {
+                throw new NotImplementedException("Not implemented for VWG");
+                //return typeof(Habanero.UI.VWG.DataGridViewDateTimeColumn);
+            }
+
             protected override void AssertGridColumnTypeAfterCast(IDataGridViewColumn createdColumn, Type expectedColumnType)
             {
                 Habanero.UI.VWG.DataGridViewColumnVWG columnWin = (Habanero.UI.VWG.DataGridViewColumnVWG)createdColumn;
                 Gizmox.WebGUI.Forms.DataGridViewColumn column = columnWin.DataGridViewColumn;
                 Assert.AreEqual(expectedColumnType, column.GetType());
+            }
+
+            [Test, Ignore("DateTimeColumn needs to be implemented for VWG")]
+            public override void TestInitGrid_LoadsDataGridViewDateTimeColumn()
+            {
+                base.TestInitGrid_LoadsDataGridViewDateTimeColumn();
             }
         }
 
@@ -265,6 +253,34 @@ namespace Habanero.Test.UI.Base
             IDataGridViewColumn idColumn = grid.Grid.Columns[0];
             AssertVerifyIDFieldSetUpCorrectly(idColumn);
 
+            IDataGridViewColumn dataColumn1 = grid.Grid.Columns[1];
+            AssertThatDataColumnSetupCorrectly(classDef, columnDef1, dataColumn1);
+
+            IDataGridViewColumn dataColumn2 = grid.Grid.Columns[2];
+            AssertThatDataColumnSetupCorrectly(classDef, columnDef2, dataColumn2);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestInitGrid_UIDef_ZeroWidthColumn_HidesColumn()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWith_Grid_2Columns_1stHasZeroWidth();
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
+            UIDef uiDef = classDef.UIDefCol["default"];
+            UIGrid uiGridDef = uiDef.UIGrid;
+            //---------------Assert Preconditions---------------
+            Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
+            UIGridColumn columnDef1 = uiGridDef[0];
+            Assert.AreEqual("TestProp", columnDef1.PropertyName);
+            Assert.AreEqual(0, columnDef1.Width);
+            UIGridColumn columnDef2 = uiGridDef[1];
+            Assert.AreEqual("TestProp2", columnDef2.PropertyName);
+            //---------------Execute Test ----------------------
+            initialiser.InitialiseGrid(classDef);
+
+            //---------------Test Result -----------------------
             IDataGridViewColumn dataColumn1 = grid.Grid.Columns[1];
             AssertThatDataColumnSetupCorrectly(classDef, columnDef1, dataColumn1);
 
@@ -443,6 +459,32 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
+        [Test]
+        public virtual void TestInitGrid_LoadsDataGridViewDateTimeColumn()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWithDateTimeParameterFormat();
+            IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
+            UIDef uiDef = classDef.UIDefCol["default"];
+            UIGrid uiGridDef = uiDef.UIGrid;
+            UIGridColumn uiDTColDef = uiGridDef[2];
+            uiDTColDef.GridControlTypeName = "DataGridViewDateTimeColumn";
+            AddControlToForm(grid);
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            initialiser.InitialiseGrid(classDef);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(6, grid.Grid.Columns.Count);
+            IDataGridViewColumn column3 = grid.Grid.Columns[3];
+            Assert.AreEqual("TestDateTime", column3.Name);
+            Assert.AreEqual(uiDTColDef.Heading, column3.HeaderText);
+            Assert.IsInstanceOfType(typeof(IDataGridViewColumn), column3);
+            AssertGridColumnTypeAfterCast(column3, GetDateTimeGridColumnType());
+        }
+
         private IReadOnlyGridControl CreateReadOnlyGridControl()
         {
             return GetControlFactory().CreateReadOnlyGridControl();
@@ -470,9 +512,11 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(columnDef1.PropertyName, dataColumn1.DataPropertyName); //Test Prop
             Assert.AreEqual(columnDef1.PropertyName, dataColumn1.Name);
             Assert.AreEqual(columnDef1.GetHeading(), dataColumn1.HeaderText);
-            Assert.IsTrue(dataColumn1.Visible);
+            Assert.AreEqual(columnDef1.Width != 0, dataColumn1.Visible);
 //            Assert.IsTrue(dataColumn1.ReadOnly); TODO: put this test into the readonlygridinitialiser
-            Assert.AreEqual(columnDef1.Width, dataColumn1.Width);
+            int expectedWidth = columnDef1.Width;
+            if (expectedWidth == 0) expectedWidth = 5;
+            Assert.AreEqual(expectedWidth, dataColumn1.Width);
             IPropDef propDef = GetPropDef(classDef, columnDef1);
             Assert.AreEqual(propDef.PropertyType, dataColumn1.ValueType);
         }

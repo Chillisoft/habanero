@@ -184,6 +184,9 @@ namespace Habanero.UI.Base
             //}
         }
 
+        /// <summary>
+        /// See <see cref="IFilterControl.AddCustomFilter"/>
+        /// </summary>
         public IControlHabanero AddCustomFilter(string labelText, string columnName, ICustomFilter customFilter)
         {
             ILabel label = _controlFactory.CreateLabel(labelText);

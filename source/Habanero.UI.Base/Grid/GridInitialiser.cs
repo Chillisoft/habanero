@@ -249,8 +249,8 @@ namespace Habanero.UI.Base
                 col.HeaderText = gridColDef.GetHeading();
                 col.Name = gridColDef.PropertyName;
                 col.DataPropertyName = gridColDef.PropertyName;
-                col.Visible = true;
                 col.Width = gridColDef.Width;
+                col.Visible = gridColDef.Width != 0;
                 col.SortMode = DataGridViewColumnSortMode.Automatic;
                 //IPropDef propDef = GetPropDef(classDef, gridColDef);
                 //if (propDef != null) col.ValueType = propDef.PropertyType;
