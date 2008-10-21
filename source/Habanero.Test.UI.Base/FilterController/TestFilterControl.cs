@@ -181,7 +181,7 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.AreEqual(3, dateRangeCombo.Items.Count);
         }
 
-        [Test, Ignore("not working in vwg")]
+        [Test]
         public void TestAdd_CustomFilter()
         {
             //---------------Set up test pack-------------------
@@ -200,7 +200,7 @@ namespace Habanero.Test.UI.Base.FilterController
             //---------------Tear Down -------------------------
         }
 
-        [Test, Ignore("not working in vwg")]
+        [Test]
         public void TestCustomFilterValue_changedFiresWhenTextChanged()
         {
             //---------------Set up test pack-------------------
@@ -1040,10 +1040,9 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             _factory = factory;
             _box = _factory.CreateTextBox();
+            ValueChanged += CustomFilterStub_ValueChanged;
             _box.TextChanged += ValueChanged;
             _valueChangedFired = false;
-            ValueChanged += CustomFilterStub_ValueChanged;
-            
         }
 
         void CustomFilterStub_ValueChanged(object sender, EventArgs e)
