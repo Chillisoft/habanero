@@ -31,6 +31,8 @@ namespace Habanero.UI.Base
         public ComboBoxManager(IComboBox comboBox)
         {
             _comboBox = comboBox;
+
+
         }
 
         public object GetSelectedItem(object selectedItem)

@@ -17,10 +17,14 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+
+using System;
+using System.Windows.Forms;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
+using AutoCompleteMode=Habanero.UI.Base.AutoCompleteMode;
 using DockStyle=Habanero.UI.Base.DockStyle;
 
 namespace Habanero.Test.UI.Base
@@ -40,6 +44,7 @@ namespace Habanero.Test.UI.Base
 
         public abstract class TestBaseMethodsWin : TestBaseMethods
         {
+            [STAThread]
             protected override IControlFactory GetControlFactory()
             {
                 return new ControlFactoryWin();
@@ -50,6 +55,9 @@ namespace Habanero.Test.UI.Base
                 System.Windows.Forms.Control control = (System.Windows.Forms.Control)controlHabanero;
                 return control.Dock.ToString();
             }
+
+            
+          
         }
 
         public abstract class TestBaseMethodsVWG : TestBaseMethods
@@ -65,6 +73,7 @@ namespace Habanero.Test.UI.Base
                 return control.Dock.ToString();
             }
         }
+  
 
         [Test]
         public virtual void TestConversion_DockStyle_None()

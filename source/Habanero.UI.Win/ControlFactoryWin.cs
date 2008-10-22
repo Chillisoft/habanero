@@ -39,6 +39,7 @@ namespace Habanero.UI.Win
     {
         private readonly ControlFactoryManager _manager;
 
+        
         public ControlFactoryWin()
         {
             _manager = new ControlFactoryManager(this);

@@ -63,9 +63,11 @@
     <Compile Include="CheckBoxVWG.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ComboBoxAutoCompleteModeVWG.cs" />
     <Compile Include="ComboBoxVWG.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ComboBoxAutoCompleteSourceVWG.cs" />
     <Compile Include="ControlCollectionVWG.cs" />
     <Compile Include="ControlFactoryVWG.cs" />
     <Compile Include="ControlVWG.cs">

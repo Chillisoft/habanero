@@ -22,11 +22,13 @@ using System.Data;
 
 namespace Habanero.UI.Base
 {
+    
     /// <summary>
     /// Represents a ComboBox control
     /// </summary>
     public interface IComboBox : IControlHabanero
     {
+
         /// <summary>
         /// Occurs when the SelectedIndex property has changed
         /// </summary>
@@ -73,6 +75,16 @@ namespace Habanero.UI.Base
         /// the ValueMember property
         /// </summary>
         object SelectedValue { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the value of the AutoCompleteMode property
+        /// </summary>
+        AutoCompleteMode AutoCompleteMode { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the value of the AutoCompleteSource property
+        /// </summary>
+        AutoCompleteSource AutoCompleteSource { get; set; }
     }
 
     /// <summary>

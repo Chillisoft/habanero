@@ -17,12 +17,11 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using System.Collections;
 using System.Windows.Forms;
 using Habanero.Base;
-using Habanero.BO;
 using Habanero.UI.Base;
+
 
 namespace Habanero.UI.Win
 {
@@ -37,7 +36,7 @@ namespace Habanero.UI.Win
         {
             InitializeComponent();
             _manager = new ComboBoxManager(this);
-        }
+           }
 
         /// <summary>
         /// Gets or sets the anchoring style.
@@ -45,6 +44,7 @@ namespace Habanero.UI.Win
         /// <value></value>
         Base.AnchorStyles IControlHabanero.Anchor
         {
+            
             get { return (Base.AnchorStyles)base.Anchor; }
             set { base.Anchor = (System.Windows.Forms.AnchorStyles)value; }
         }
@@ -56,8 +56,7 @@ namespace Habanero.UI.Win
         public new IComboBoxObjectCollection Items
         {
             get
-            {
-                IComboBoxObjectCollection objectCollection = new ComboBoxObjectCollectionWin(base.Items);
+            {   IComboBoxObjectCollection objectCollection = new ComboBoxObjectCollectionWin(base.Items);
                 return objectCollection;
             }
         }
@@ -92,6 +91,18 @@ namespace Habanero.UI.Win
             {
                 SelectedItem = _manager.GetValueToSelect(value);
             }
+        }
+
+        Base.AutoCompleteMode IComboBox.AutoCompleteMode
+        {
+            get { return ComboBoxAutoCompleteModeWin.GetAutoCompleteMode(base.AutoCompleteMode); }
+            set { base.AutoCompleteMode = ComboBoxAutoCompleteModeWin.GetAutoCompleteMode(value); }
+        }
+
+        Base.AutoCompleteSource IComboBox.AutoCompleteSource
+        {
+            get { return ComboBoxAutoCompleteSourceWin.GetAutoCompleteSource(base.AutoCompleteSource); }
+            set { base.AutoCompleteSource = ComboBoxAutoCompleteSourceWin.GetAutoCompleteSource(value); }
         }
 
         /// <summary>

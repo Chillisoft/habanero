@@ -83,7 +83,77 @@ namespace Habanero.UI.Base
         Top = 1
     }
 
+    /// <summary>
+    /// Specifies the mode for the automatic completion feature used in the 
+    /// ComboBox and TextBox controls.
+    /// </summary>
+    public enum AutoCompleteMode
+    {
+        /// <summary>
+        /// Disables the automatic completion feature for the ComboBox and TextBox controls.
+        /// </summary>
+        None,
+        /// <summary>
+        /// Displays the auxiliary drop-down list associated with the edit control. 
+        /// This drop-down is populated with one or more suggested completion strings.
+        /// </summary>
+        Suggest,
+        /// <summary>
+        /// Appends the remainder of the most likely candidate string to the existing 
+        /// characters, highlighting the appended characters.
+        /// </summary>
+        Append,
+        /// <summary>
+        /// Applies both Suggest and Append options.
+        /// </summary>
+        SuggestAppend,
+    }
 
+    /// <summary>
+    /// Specifies the source for ComboBox and TextBox automatic completion functionality.
+    /// </summary>
+    public enum AutoCompleteSource
+    {
+        /// <summary>
+        /// Specifies the equivalent of FileSystem and AllUrl as the source. 
+        /// This is the default value when AutoCompleteMode has been set to a value other than 
+        /// the default.
+        /// </summary>
+        AllSystemSources = 7,
+        /// <summary>
+        /// Specifies the equivalent of HistoryList and RecentlyUsedList as the source.
+        /// </summary>
+        AllUrl = 6,
+        /// <summary>
+        /// Specifies strings from a built-in AutoCompleteStringCollection as the source.
+        /// </summary>
+        CustomSource = 0x40,
+        /// <summary>
+        /// Specifies the file system as the source.
+        /// </summary>
+        FileSystem = 1,
+        /// <summary>
+        /// Specifies that only directory names and not file names will be automatically completed.
+        /// </summary>
+        FileSystemDirectories = 0x20,
+        /// <summary>
+        /// Includes the Uniform Resource Locators (URLs) in the history list.
+        /// </summary>
+        HistoryList = 2,
+        /// <summary>
+        /// Specifies that the items of the ComboBox represent the source.
+        /// </summary>
+        ListItems = 0x100,
+        /// <summary>
+        /// Specifies that no AutoCompleteSource is currently in use. 
+        /// This is the default value of AutoCompleteSource.
+        /// </summary>
+        None = 0x80,
+        /// <summary>
+        /// Includes the Uniform Resource Locators (URLs) in the list of those URLs most recently used.
+        /// </summary>
+        RecentlyUsedList = 4
+    }
     /// <summary>
     /// Defines controls, which are components with visual representation
     /// </summary>

@@ -23,6 +23,8 @@ using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
+using AutoCompleteMode=Habanero.UI.Base.AutoCompleteMode;
+using AutoCompleteSource=Habanero.UI.Base.AutoCompleteSource;
 
 namespace Habanero.UI.VWG
 {
@@ -79,6 +81,19 @@ namespace Habanero.UI.VWG
             get { return _manager.GetSelectedValue(this.SelectedItem); }
             set { SelectedItem = _manager.GetValueToSelect(value); }
         }
+
+        Base.AutoCompleteMode IComboBox.AutoCompleteMode
+        {
+            get { return ComboBoxAutoCompleteModeVWG.GetAutoCompleteMode(base.AutoCompleteMode); }
+            set { base.AutoCompleteMode = ComboBoxAutoCompleteModeVWG.GetAutoCompleteMode(value); }
+        }
+
+        Base.AutoCompleteSource IComboBox.AutoCompleteSource
+        {
+            get { return ComboBoxAutoCompleteSourceVWG.GetAutoCompleteSource(base.AutoCompleteSource); }
+            set { base.AutoCompleteSource = ComboBoxAutoCompleteSourceVWG.GetAutoCompleteSource(value); }
+        }
+
 
         /// <summary>
         /// Represents the collection of items in a ComboBox

@@ -34,6 +34,7 @@ namespace Habanero.UI.Base
     {
         private IControlFactory _controlFactory;
 
+        
         public ControlFactoryManager(IControlFactory controlFactory)
         {
             _controlFactory = controlFactory;

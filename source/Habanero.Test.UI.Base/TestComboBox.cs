@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.UI.Base;
 using NUnit.Framework;
 
@@ -27,6 +28,7 @@ namespace Habanero.Test.UI.Base
     /// </summary>
     public class TestBaseMethodsWin_ComboBox : TestBaseMethods.TestBaseMethodsWin
     {
+        [STAThread]
         protected override IControlHabanero CreateControl()
         {
             return GetControlFactory().CreateComboBox();
