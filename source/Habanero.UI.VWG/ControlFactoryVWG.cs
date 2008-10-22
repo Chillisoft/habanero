@@ -71,6 +71,8 @@ namespace Habanero.UI.VWG
         {
             ComboBoxVWG comboBox = new ComboBoxVWG();
             comboBox.Height = TEXTBOX_HEIGHT;
+            comboBox.AutoCompleteSource = Gizmox.WebGUI.Forms.AutoCompleteSource.ListItems;
+            comboBox.AutoCompleteMode = Gizmox.WebGUI.Forms.AutoCompleteMode.SuggestAppend;
             return comboBox;
         }
 

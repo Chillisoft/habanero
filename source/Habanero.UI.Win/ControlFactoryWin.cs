@@ -21,12 +21,15 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.Util;
+using AutoCompleteMode=System.Windows.Forms.AutoCompleteMode;
+using AutoCompleteSource=System.Windows.Forms.AutoCompleteSource;
 using DateTimePickerFormat=Habanero.UI.Base.DateTimePickerFormat;
 using ScrollBars=System.Windows.Forms.ScrollBars;
 
@@ -623,7 +626,14 @@ namespace Habanero.UI.Win
         /// </summary>
         public IComboBox CreateComboBox()
         {
-            return new ComboBoxWin();
+            ComboBoxWin comboBoxWin = new ComboBoxWin();
+            //Note: This is a workaround in windows to avoid this default from breaking all the tests because if the Thread's ApartmentState is not STA then setting the AutoCompleteSource default gives an error
+            if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
+            {
+                comboBoxWin.AutoCompleteSource =  AutoCompleteSource.ListItems;
+                comboBoxWin.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            }
+            return comboBoxWin;
         }
 
         /// <summary>
