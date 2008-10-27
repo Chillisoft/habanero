@@ -18,6 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
@@ -363,6 +365,78 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreSame(sampleToSelect, cmbox.SelectedValue);
 
             //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestCustomiseLookupList_Add()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            string propName = "SampleLookup2ID";
+            CustomAddLookupComboBoxMapper mapper = new CustomAddLookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
+            Sample sample = new Sample();
+
+            //---------------Execute Test ----------------------
+            mapper.BusinessObject = sample;
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(5, cmbox.Items.Count);
+            Assert.AreEqual("ExtraLookupItem", cmbox.Items[cmbox.Items.Count - 1].ToString());
+
+            //---------------Tear Down -------------------------
+            // This test changes the static class def, so force a reload
+            ClassDef.ClassDefs.Remove(typeof(Sample));
+        }
+
+        [Test]
+        public void TestCustomiseLookupList_Remove()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            string propName = "SampleLookup2ID";
+            CustomRemoveLookupComboBoxMapper mapper = new CustomRemoveLookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
+            Sample sample = new Sample();
+
+            //---------------Execute Test ----------------------
+            mapper.BusinessObject = sample;
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, cmbox.Items.Count);
+            
+            //---------------Tear Down -------------------------
+            // This test changes the static class def, so force a reload
+            ClassDef.ClassDefs.Remove(typeof(Sample));
+        }
+    }
+
+    internal class CustomAddLookupComboBoxMapper : LookupComboBoxMapper
+    {
+        public CustomAddLookupComboBoxMapper(IComboBox cbx, string propName, bool isReadOnly, IControlFactory factory)
+            : base(cbx, propName, isReadOnly, factory) {}
+
+        protected override void CustomiseLookupList(Dictionary<string, object> col)
+        {
+            Sample additionalBO = new Sample();
+            additionalBO.SampleText = "ExtraLookupItem";
+
+            col.Add(additionalBO.SampleText, additionalBO);
+        }
+    }
+
+    internal class CustomRemoveLookupComboBoxMapper : LookupComboBoxMapper
+    {
+        public CustomRemoveLookupComboBoxMapper(IComboBox cbx, string propName, bool isReadOnly, IControlFactory factory)
+            : base(cbx, propName, isReadOnly, factory) { }
+
+        protected override void CustomiseLookupList(Dictionary<string, object> col)
+        {
+            string lastKey = "";
+            foreach (string key in col.Keys)
+            {
+                lastKey = key;
+            }
+
+            col.Remove(lastKey);
         }
     }
 }

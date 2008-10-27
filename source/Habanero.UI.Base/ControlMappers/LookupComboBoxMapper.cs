@@ -268,11 +268,21 @@ namespace Habanero.UI.Base
             //    }
             //    _isRightClickInitialised = true;
             //}
+            CustomiseLookupList(col);
             LookupList = col;
             if (col.Count > 0 && GetPropertyValue() != null)
             {
                 SetValueFromLookupList();
             }
+        }
+
+        /// <summary>
+        /// Do customisation of the Lookup list by overriding this method in an inheritor.
+        /// </summary>
+        /// <param name="col">The look up list retrieved from the businessobject that will be customised</param>
+        protected virtual void CustomiseLookupList(Dictionary<string, object> col)
+        {
+            
         }
 
         /// <summary>
