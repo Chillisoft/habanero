@@ -43,6 +43,7 @@ namespace Habanero.UI.Forms
         protected Control _control;
         protected string _propertyName;
         protected readonly bool _isReadOnly;
+        protected bool _forceReadOnly;
     	protected bool _isEditable;
         protected BusinessObject _businessObject;
         protected Hashtable _attributes;
@@ -57,6 +58,7 @@ namespace Habanero.UI.Forms
         /// handlers are assigned to manage key presses.</param>
         protected ControlMapper(Control ctl, string propName, bool isReadOnly)
         {
+            _forceReadOnly = false;
             _control = ctl;
             _propertyName = propName;
             _isReadOnly = isReadOnly;
@@ -184,6 +186,15 @@ namespace Habanero.UI.Forms
             get { return _control; }
         }
 
+        ///<summary>
+        /// Forces the control to be read only
+        ///</summary>
+        public bool ForceReadOnly
+        {
+            get { return _forceReadOnly; }
+            set { _forceReadOnly = value; }
+        }
+
         /// <summary>
         /// Returns the name of the property being edited in the control
         /// </summary>
@@ -262,7 +273,7 @@ namespace Habanero.UI.Forms
                 PropertyInfo propertyInfo = ReflectionUtilities.GetPropertyInfo(_businessObject.GetType(), virtualPropName);
                 virtualPropertySetExists = propertyInfo != null && propertyInfo.CanWrite;
             }
-            _isEditable = !_isReadOnly && _businessObject != null
+            _isEditable = !_forceReadOnly && !_isReadOnly && _businessObject != null
                     && (_businessObject.Props.Contains(_propertyName) || virtualPropertySetExists);
             if (_isEditable && _businessObject.ClassDef.GetPrimaryKeyDef().IsObjectID &&
 				_businessObject.ID.Contains(_propertyName) &&
