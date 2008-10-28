@@ -340,7 +340,12 @@ namespace Habanero.UI.Base
                         ControlMapper.Create
                             (field.MapperTypeName, field.MapperAssembly, ctl, field.PropertyName, !editable,
                              _controlFactory);
-                    //TODO PORT: ctlMapper.SetPropertyAttributes(field.Parameters);
+                    if (ctlMapper is ControlMapper)
+                    {
+                        ControlMapper controlMapper = (ControlMapper) ctlMapper;
+                        controlMapper.SetPropertyAttributes(field.Parameters);
+                        //TODO: This was a quick fix to get his working. Investigate where the SetPropertyAttributes method should go.
+                    }
                     controlMappers.Add(ctlMapper);
                     ctlMapper.BusinessObject = _currentBusinessObject;
 

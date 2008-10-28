@@ -69,6 +69,29 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
+        /// Initialises the control using the attributes already provided, using
+        /// <see cref="ControlMapper.SetPropertyAttributes"/>.
+        /// </summary>
+        protected override void InitialiseWithAttributes()
+        {
+            if (_attributes.Contains("dateFormat"))
+            {
+                String dateFormat = Convert.ToString(_attributes["dateFormat"]);
+                _picker.Format = DateTimePickerFormat.Custom;
+                _picker.CustomFormat = dateFormat;
+                //DateTimePickerUtil.SetCustomFormat(_dateTimePicker, dateFormat);
+            }
+            if (_attributes.Contains("showUpDown"))
+            {
+                bool showUpDown = Convert.ToBoolean(_attributes["showUpDown"]);
+                _picker.ShowUpDown = showUpDown;
+                //DateTimePickerUtil.SetShowUpDown(_dateTimePicker, showUpDown);
+            }
+            base.InitialiseWithAttributes();
+        }
+
+
+        /// <summary>
         /// Updates the value on the control from the corresponding property
         /// on the represented <see cref="IControlMapper.BusinessObject"/>
         /// </summary>

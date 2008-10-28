@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -586,6 +587,70 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(mappers["SampleText2"].Control.Enabled);
         }
 
+        [Test]
+        public void TestFieldAttributes()
+        {
+            //---------------Set up test pack-------------------
+            Sample sample = new Sample();
+            Type type = typeof (MockControlMapper);
+
+            string attributeName = TestUtil.CreateRandomString();
+            string attributeValue = TestUtil.CreateRandomString();
+            UIForm uiForm = _sampleUserInterfaceMapper.
+                SampleUserInterface_CustomMapper_WithAttributes(type.FullName, type.Assembly.FullName, attributeName, attributeValue);
+            IPanelFactory panelFactory = new PanelFactory(sample, uiForm, GetControlFactory());
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IPanelFactoryInfo panelFactoryInfo = panelFactory.CreatePanel();
+
+            //---------------Test Result -----------------------
+            IControlMapperCollection mappers = panelFactoryInfo.ControlMappers;
+            IControlMapper controlMapper = mappers["SampleText"];
+            Assert.IsNotNull(controlMapper);
+            Assert.IsInstanceOfType(type, controlMapper);
+            MockControlMapper mockControlMapper = (MockControlMapper) controlMapper;
+            Assert.IsTrue(mockControlMapper.InitialiseWithAttributesCalled);
+            Assert.IsNotNull(mockControlMapper.Attributes);
+            Assert.IsTrue(mockControlMapper.Attributes.ContainsKey(attributeName));
+            Assert.AreEqual(attributeValue, mockControlMapper.Attributes[attributeName]);
+        }
+
+        public class MockControlMapper: ControlMapper
+        {
+            private bool _initialiseWithAttributesCalled;
+
+            public MockControlMapper(IControlHabanero ctl, string propName, bool isReadOnly, IControlFactory factory) 
+                : base(ctl, propName, isReadOnly, factory)
+            {
+            }
+
+            public override void ApplyChangesToBusinessObject()
+            {
+                
+            }
+
+            protected override void InternalUpdateControlValueFromBo()
+            {
+                
+            }
+
+            protected override void InitialiseWithAttributes()
+            {
+                _initialiseWithAttributesCalled = true;
+                base.InitialiseWithAttributes();
+            }
+
+            public bool InitialiseWithAttributesCalled
+            {
+                get { return _initialiseWithAttributesCalled; }
+            }
+
+            public Hashtable Attributes
+            {
+                get { return _attributes; }
+            }
+        }
 
     }
 }

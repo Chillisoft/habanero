@@ -34,5 +34,6 @@ namespace Habanero.Test
         UIForm SampleUserInterfaceMapperRowSpanning();
         UIForm SampleUserInterface_ReadWriteRule();
         UIForm SampleUserInterface_WriteNewRule();
+        UIForm SampleUserInterface_CustomMapper_WithAttributes(string mapperTypeName, string mapperAssemblyName, string attributeName, string attributeValue);
     }
 }

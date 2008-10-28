@@ -431,6 +431,21 @@ namespace Habanero.Test
                 return def;
             }
 
+            public UIForm SampleUserInterface_CustomMapper_WithAttributes(string mapperTypeName, string mapperAssemblyName, string attributeName, string attributeValue)
+            {
+                UIForm def = new UIForm();
+                def.Height = 300;
+                def.Width = 350;
+                UIFormTab tab = new UIFormTab();
+                UIFormColumn col = new UIFormColumn(100);
+                Hashtable propertyAttributes = new Hashtable();
+                propertyAttributes.Add(attributeName, attributeValue);
+                col.Add(new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, mapperTypeName, mapperAssemblyName, false, null, propertyAttributes, null));
+                tab.Add(col);
+                def.Add(tab);
+                return def;
+            }
+
             public UIForm SampleUserInterface_WriteNewRule()
             {
                 UIForm def = new UIForm();

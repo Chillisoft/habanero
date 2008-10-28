@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using Habanero.UI.Base;
 using NUnit.Framework;
 
@@ -87,6 +88,13 @@ namespace Habanero.Test.UI.Base.Mappers
                 return new Habanero.UI.VWG.ControlFactoryVWG();
                 //return null;
             }
+
+            [Test, Ignore("ShowUpDown property does not exist for VWG")]
+            public override void TestAttribute_ShowUpDown()
+            {
+                base.TestAttribute_ShowUpDown();
+            }
+
             [Test]
             public void TestSetBusinessObjectValue_DoesNotChangeDateTimePicker_InVWG()
             {
@@ -166,11 +174,54 @@ namespace Habanero.Test.UI.Base.Mappers
 
         //TODO: Do tests for null value and changes from null value
         //TODO: Do tests for null business object
-        //TODO: Test custom formats etc in DateTimePickerUtils
-
-
-
+        
         //TODO: Fix readonly compulsory field for control mappper base class
+
+        //TODO: Have a look at if DateTimePickerUtils is needed anymore. I don't think it is.
+        [Test]
+        public void TestAttribute_DateFormat()
+        {
+            //---------------Set up test pack-------------------
+            Sample sampleBusinessObject = new Sample();
+            DateTime origionalDate = new DateTime(2000, 1, 2, 3, 4, 0);
+            sampleBusinessObject.SampleDate = origionalDate;
+            DateTimePickerMapper dtpMapper;
+            IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper);
+            dtpMapper.BusinessObject = sampleBusinessObject;
+            Hashtable attributes = new Hashtable();
+            string dateFormat = "dd MMM yyyy HH:mm";
+            attributes.Add("dateFormat", dateFormat);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(origionalDate, dateTimePicker.Value);
+            //---------------Execute Test ----------------------
+            dtpMapper.SetPropertyAttributes(attributes);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(origionalDate, dateTimePicker.Value);
+            Assert.AreEqual(DateTimePickerFormat.Custom, dateTimePicker.Format);
+            Assert.AreEqual(dateFormat, dateTimePicker.CustomFormat);
+        }
+
+        [Test]
+        public virtual void TestAttribute_ShowUpDown()
+        {
+            //---------------Set up test pack-------------------
+            Sample sampleBusinessObject = new Sample();
+            DateTime origionalDate = new DateTime(2000, 1, 2, 3, 4, 0);
+            sampleBusinessObject.SampleDate = origionalDate;
+            DateTimePickerMapper dtpMapper;
+            IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper);
+            dtpMapper.BusinessObject = sampleBusinessObject;
+            Hashtable attributes = new Hashtable();
+            attributes.Add("showUpDown", "true");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(origionalDate, dateTimePicker.Value);
+            Assert.IsFalse(dateTimePicker.ShowUpDown);
+            //---------------Execute Test ----------------------
+            dtpMapper.SetPropertyAttributes(attributes);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(origionalDate, dateTimePicker.Value);
+            Assert.IsTrue(dateTimePicker.ShowUpDown);
+        }
 
 
         private IDateTimePicker GetDateTimePicker(out DateTimePickerMapper dtpMapper)
