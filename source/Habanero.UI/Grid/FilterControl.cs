@@ -90,10 +90,16 @@ namespace Habanero.UI.Grid
         /// <returns>Returns the new TextBox added</returns>
         public TextBox AddStringFilterTextBox(string label, string columnName)
         {
-            _layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
             TextBox tb = _filterInputBoxCollection.AddStringFilterTextBox(columnName);
-            _layoutManager.AddControl(tb);
+            AddControlAndLabel(_filterInputBoxCollection.AddLabel(label), tb);
             return tb;
+        }
+
+        private void AddControlAndLabel(Label label, Control control)
+        {
+            _layoutManager.AddControl(label);
+            _layoutManager.AddGlue();
+            _layoutManager.AddControl(control);
         }
 
         /// <summary>
@@ -110,9 +116,8 @@ namespace Habanero.UI.Grid
         /// <returns>Returns the new ComboBox added</returns>
         public ComboBox AddStringFilterComboBox(string label, string columnName, ICollection options, bool strictMatch)
         {
-            _layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
             ComboBox cb = _filterInputBoxCollection.AddStringFilterComboBox(columnName, options, strictMatch);
-            _layoutManager.AddControl(cb);
+            AddControlAndLabel(_filterInputBoxCollection.AddLabel(label), cb);
             return cb;
         }
 
@@ -157,10 +162,9 @@ namespace Habanero.UI.Grid
         public DateTimePicker AddStringFilterDateTimeEditor(string label, string columnName, object defaultValue,
                                                             bool filterGreaterThan)
         {
-            _layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
             DateTimePicker picker =
                 _filterInputBoxCollection.AddStringFilterDateTimeEditor(columnName, defaultValue, filterGreaterThan);
-            _layoutManager.AddControl(picker);
+            AddControlAndLabel(_filterInputBoxCollection.AddLabel(label), picker);
             return picker;
         }
 
@@ -204,10 +208,9 @@ namespace Habanero.UI.Grid
         public DateTimePicker AddDateFilterDateTimePicker(string label, string columnName, object defaultValue,
                                                             FilterClauseOperator filterClauseOperator, bool ignoreTime, bool nullable)
         {
-            _layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
             DateTimePicker picker =
                 _filterInputBoxCollection.AddDateFilterDateTimePicker(columnName, defaultValue, filterClauseOperator, ignoreTime, nullable);
-            _layoutManager.AddControl(picker);
+            AddControlAndLabel(_filterInputBoxCollection.AddLabel(label), picker);
             return picker;
         }
 
@@ -225,9 +228,8 @@ namespace Habanero.UI.Grid
         /// <returns>Returns the new ComboBox added</returns>
         public DateRangeComboBox AddDateRangeFilterComboBox(string label, string columnName, bool includeStartDate, bool includeEndDate)
         {
-            _layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
             DateRangeComboBox cb = _filterInputBoxCollection.AddDateRangeFilterComboBox(columnName, includeStartDate, includeEndDate);
-            _layoutManager.AddControl(cb);
+            AddControlAndLabel(_filterInputBoxCollection.AddLabel(label), cb);
             return cb;
         }
 
@@ -247,9 +249,8 @@ namespace Habanero.UI.Grid
         /// <returns>Returns the new ComboBox added</returns>
         public DateRangeComboBox AddDateRangeFilterComboBox(string label, string columnName, List<DateRangeComboBox.DateOptions> options, bool includeStartDate, bool includeEndDate)
         {
-            _layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
             DateRangeComboBox cb = _filterInputBoxCollection.AddDateRangeFilterComboBox(columnName, options, includeStartDate, includeEndDate);
-            _layoutManager.AddControl(cb);
+            AddControlAndLabel(_filterInputBoxCollection.AddLabel(label), cb);
             return cb;
         }
 
