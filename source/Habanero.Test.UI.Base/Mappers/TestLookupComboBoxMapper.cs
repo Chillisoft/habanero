@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
@@ -364,6 +365,73 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreSame(sampleToSelect, cmbox.SelectedValue);
 
             //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestSetLookupList_ComboExcludesArchivedBos()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            string propName = "SampleLookupID";
+            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
+            Dictionary<string, object> list = new Dictionary<string, object>();
+            list.Add("Test1", new MockSample(false));
+            list.Add("Test2", new MockSample(true));
+            list.Add("Test3", new MockSample(false));
+            list.Add("Test4", new MockSample(true));
+
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            mapper.LookupList = list;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, cmbox.Items.Count); // 2 items and the blank item
+            //Assert.IsTrue(cmbox.Items.Contains("Test1"));
+            //Assert.IsFalse(cmbox.Items.Contains("Test2"));
+            //Assert.IsTrue(cmbox.Items.Contains("Test3"));
+            //Assert.IsFalse(cmbox.Items.Contains("Test4"));
+        }
+
+        [Test]
+        public void TestBoValue_OnlyDisplaysTextForArchivedValue()
+        {
+            //---------------Set up test pack-------------------
+            Sample sample = new Sample();
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            string propName = "SampleLookupID";
+            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
+            Dictionary<string, object> list = new Dictionary<string, object>();
+            list.Add("Test1", new MockSample(false));
+            MockSample sample2 = new MockSample(true);
+            list.Add("Test2", sample2);
+            list.Add("Test3", new MockSample(false));
+            list.Add("Test4", new MockSample(true));
+            mapper.LookupList = list;
+            sample.SampleLookupID = sample2.SampleID;
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            mapper.BusinessObject = sample;
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Test2", cmbox.Text);
+            Assert.IsNull(cmbox.SelectedItem);
+            Assert.AreEqual(-1, cmbox.SelectedIndex);
+        }
+
+
+        class MockSample : Sample
+        {
+            private readonly bool _archived;
+
+            public MockSample(bool archived)
+            {
+                _archived = archived;
+            }
+
+            protected override bool IsArchived()
+            {
+                return _archived;
+            }
         }
     }
 }

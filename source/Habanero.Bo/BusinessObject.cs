@@ -1375,5 +1375,10 @@ namespace Habanero.BO
         {
            _boState.SetBOFlagValue(state, value);
         }
+
+        protected internal virtual bool IsArchived()
+        {
+            return false;
+        }
     }
 }

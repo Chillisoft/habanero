@@ -117,19 +117,19 @@ namespace Habanero.UI.Base
                         if (pairValueBo.ClassDef.PrimaryKeyDef.IsObjectID
                             && pairValueBo.ID.GetAsGuid().Equals(boPropertyValue))
                         {
-                            _comboBox.SelectedItem = pair.Key;
+                            SetSelectedItem(pair.Key);
                             break;
                         }
                         else if (boPropertyValue != null && String.Compare(pairValueBo.ID.ToString(), boPropertyValue.ToString()) == 0)
                         {
-                            _comboBox.SelectedItem = pair.Key;
+                            SetSelectedItem(pair.Key);
                             break;
                         }
                         else if (boPropertyValue != null &&
                             pairValueBo.ID[0].Value != null &&
                             String.Compare(pairValueBo.ID[0].Value.ToString(), boPropertyValue.ToString()) == 0)
                         {
-                            _comboBox.SelectedItem = pair.Key;
+                            SetSelectedItem(pair.Key);
                             break;
                         }
                     }
@@ -148,7 +148,7 @@ namespace Habanero.UI.Base
                     }
                     if (found)
                     {
-                        _comboBox.SelectedItem = pair.Key;
+                        SetSelectedItem(pair.Key);
                         break;
                     }
                 }
@@ -158,6 +158,12 @@ namespace Habanero.UI.Base
             catch (ObjectDisposedException)
             {
             }
+        }
+
+        private void SetSelectedItem(string key)
+        {
+            _comboBox.Text = key;
+            _comboBox.SelectedItem = key;
         }
 
         ///// <summary>
@@ -237,6 +243,7 @@ namespace Habanero.UI.Base
                 _comboBox.Items.Add(new ComboPair("", null));
                 foreach (KeyValuePair<string, object> pair in LookupList)
                 {
+                    if (IsArchivedBoItem(pair.Value)) continue;
                     //TODO Port
                     //lbl.Text = pair.Key;
                     //if (lbl.PreferredWidth > width)
@@ -257,6 +264,19 @@ namespace Habanero.UI.Base
                 // _comboBox.DropDownWidth = 25;
                 // _comboBox.DropDownWidth = chars;
             }
+        }
+
+        private static bool IsArchivedBoItem(object value)
+        {
+            if (value is BusinessObject)
+            {
+                BusinessObject businessObject = (BusinessObject)value;
+                if (BOUtilities.IsArchived(businessObject))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public ILookupComboBoxMapperStrategy MapperStrategy

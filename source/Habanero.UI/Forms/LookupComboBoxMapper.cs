@@ -121,19 +121,19 @@ namespace Habanero.UI.Forms
                         if (pairValueBo.ClassDef.GetPrimaryKeyDef().IsObjectID
                             && pairValueBo.ID.GetAsGuid().Equals(boPropertyValue))
                         {
-                            _comboBox.SelectedItem = pair.Key;
+                            SetSelectedItem(pair.Key);
                             break;
                         }
                         else if (boPropertyValue != null && String.Compare(pairValueBo.ID.ToString(), boPropertyValue.ToString()) == 0)
                         {
-                            _comboBox.SelectedItem = pair.Key;
+                            SetSelectedItem(pair.Key);
                             break;
                         }
                         else if (boPropertyValue != null &&
                             pairValueBo.ID[0].Value != null &&
                             String.Compare(pairValueBo.ID[0].Value.ToString(), boPropertyValue.ToString()) == 0)
                         {
-                            _comboBox.SelectedItem = pair.Key;
+                            SetSelectedItem(pair.Key);
                             break;
                         }
                     }
@@ -151,7 +151,7 @@ namespace Habanero.UI.Forms
                     }
                     if (found)
                     {
-                        _comboBox.SelectedItem = pair.Key;
+                        SetSelectedItem(pair.Key);
                         break;
                     }
                 }
@@ -161,6 +161,12 @@ namespace Habanero.UI.Forms
             catch (ObjectDisposedException)
             {
             }
+        }
+
+        private void SetSelectedItem(string key)
+        {
+            _comboBox.Text = key;
+            _comboBox.SelectedItem = key;
         }
 
         /// <summary>
@@ -235,6 +241,7 @@ namespace Habanero.UI.Forms
             _comboBox.Items.Add("");
             foreach (KeyValuePair<string, object> pair in _collection)
             {
+                if (IsArchivedBoItem(pair.Value)) continue;
                 lbl.Text = pair.Key;
                 if (lbl.PreferredWidth > width)
                 {
@@ -243,6 +250,19 @@ namespace Habanero.UI.Forms
                 _comboBox.Items.Add(pair.Key);
             }
             _comboBox.DropDownWidth = width;
+        }
+
+        private static bool IsArchivedBoItem(object value)
+        {
+            if (value is BusinessObject)
+            {
+                BusinessObject businessObject = (BusinessObject)value;
+                if (BOUtilities.IsArchived(businessObject))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
 
