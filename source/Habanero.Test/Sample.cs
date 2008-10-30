@@ -149,8 +149,14 @@ namespace Habanero.Test
 
         public Guid SampleLookupID
         {
-            get { return (Guid) this.GetPropertyValue("SampleLookupID"); }
+            get { return (Guid)this.GetPropertyValue("SampleLookupID"); }
             set { this.SetPropertyValue("SampleLookupID", value); }
+        }
+
+        public Guid SampleID
+        {
+            get { return (Guid)this.GetPropertyValue("SampleID"); }
+            set { this.SetPropertyValue("SampleID", value); }
         }
 
         public string SampleText

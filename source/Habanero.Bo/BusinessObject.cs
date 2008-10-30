@@ -1315,5 +1315,10 @@ namespace Habanero.BO
         {
             
         }
+
+        protected internal virtual bool IsArchived()
+        {
+            return false;
+        }
     }
 }

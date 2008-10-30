@@ -94,6 +94,7 @@
     <Compile Include="BOLoader.cs" />
     <Compile Include="BOPropEventArgs.cs" />
     <Compile Include="BOState.cs" />
+    <Compile Include="BOUtilities.cs" />
     <Compile Include="BusinessObjectLastUpdatePropertiesLog.cs" />
     <Compile Include="ClassDefinition\ClassDefHelper.cs" />
     <Compile Include="ClassDefinition\TriggerCol.cs" />

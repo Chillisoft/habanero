@@ -192,7 +192,11 @@ namespace Habanero.UI.Forms
         public bool ForceReadOnly
         {
             get { return _forceReadOnly; }
-            set { _forceReadOnly = value; }
+            set
+            {
+                _forceReadOnly = value;
+                UpdateIsEditable();
+            }
         }
 
         /// <summary>

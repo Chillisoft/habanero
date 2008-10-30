@@ -19,6 +19,7 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.UI.Forms;
 using NUnit.Framework;
@@ -138,5 +139,72 @@ namespace Habanero.Test.UI.Forms
             Assert.IsTrue(_comboBox.Items.Contains("Test1"));
             Assert.AreEqual("Test2", (string)_comboBox.SelectedItem);
         }
+
+        [Test]
+        public void TestSetLookupList_ComboExcludesArchivedBos()
+        {
+            //---------------Set up test pack-------------------
+
+            Dictionary<string, object> list = new Dictionary<string, object>();
+            list.Add("Test1", new MockSample(false));
+            list.Add("Test2", new MockSample(true));
+            list.Add("Test3", new MockSample(false));
+            list.Add("Test4", new MockSample(true));
+            
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            _lookupComboBoxMapper.SetLookupList(list);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, _comboBox.Items.Count); // 2 items and the blank item
+            Assert.AreSame(typeof(string), _comboBox.Items[0].GetType());
+            Assert.IsTrue(_comboBox.Items.Contains("Test1"));
+            Assert.IsFalse(_comboBox.Items.Contains("Test2"));
+            Assert.IsTrue(_comboBox.Items.Contains("Test3"));
+            Assert.IsFalse(_comboBox.Items.Contains("Test4"));
+            //Assert.AreEqual("Test2", (string)_comboBox.SelectedItem);
+        }
+
+        [Test]
+        public void TestBoValue_OnlyDisplaysTextForArchivedValue()
+        {
+            //---------------Set up test pack-------------------
+
+            Dictionary<string, object> list = new Dictionary<string, object>();
+            list.Add("Test1", new MockSample(false));
+            MockSample sample2 = new MockSample(true);
+            list.Add("Test2", sample2);
+            list.Add("Test3", new MockSample(false));
+            list.Add("Test4", new MockSample(true));
+            _lookupComboBoxMapper.SetLookupList(list);
+            _sample.SampleLookupID = sample2.SampleID;
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            _lookupComboBoxMapper.BusinessObject = _sample;
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Test2", _comboBox.Text);
+            Assert.IsNull(_comboBox.SelectedItem);
+            Assert.AreEqual(-1, _comboBox.SelectedIndex);
+        }
+        
+
+        class MockSample : Sample
+        {
+            private readonly bool _archived;
+
+            public MockSample(bool archived)
+            {
+                _archived = archived;
+            }
+
+            protected override bool IsArchived()
+            {
+                return _archived;
+            }
+        }
+
     }
+
+    
 }
