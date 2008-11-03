@@ -1086,6 +1086,11 @@ namespace Habanero.UI.VWG
             //Would require heavy event handling, so unsuitable for WebGUI at the moment
         }
 
+        public void AddUpdateBoPropOnTextChangedHandler(TextBoxMapper mapper, IBOProp boProp)
+        {
+            //This is not suitable for web.
+        }
+
         #endregion
     }
 }

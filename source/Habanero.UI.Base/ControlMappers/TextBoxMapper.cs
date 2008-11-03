@@ -74,6 +74,7 @@ namespace Habanero.UI.Base
             {
                 base.BusinessObject = value;
                 TextBoxMapperStrategy.AddKeyPressEventHandler(this, base.CurrentBOProp());
+                TextBoxMapperStrategy.AddUpdateBoPropOnTextChangedHandler(this, base.CurrentBOProp());
             }
         }
 

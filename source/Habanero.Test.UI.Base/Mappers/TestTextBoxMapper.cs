@@ -242,6 +242,24 @@ namespace Habanero.Test.UI.Base
                 //---------------Test Result -----------------------
                 Assert.IsTrue(strategy.IsValidCharacter('-'));
                 //---------------Tear down -------------------------
+            }       
+            
+            [Test]
+            public void TestBoProp_ChangesWhen_TextBoxTextChanges()
+            {
+                //---------------Set up test pack-------------------
+                _mapper.BusinessObject = _shape;
+                TextBoxMapperStrategyWin strategy =
+                    (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
+                IBOProp boProp = _shape.Props["ShapeName"];
+                strategy.AddKeyPressEventHandler(_mapper, boProp);
+                strategy.AddUpdateBoPropOnTextChangedHandler(_mapper,boProp);
+                _mapper.Control.Text = "TestString";
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.AreEqual("TestString", boProp.Value);
+                //---------------Tear down -------------------------
             }
 
             [Test]

@@ -71,7 +71,7 @@ namespace Habanero.Test.UI.Base
             {
                 // do nothing - on windows the changes should be applied automatically when a value in a control changes
                 //Todo: Remove this line and get this passing for win. This feature should be tested in the mappers. Check this!
-                info.ControlMappers.ApplyChangesToBusinessObject();
+                //info.ControlMappers.ApplyChangesToBusinessObject();
             }
 
             protected override void SetupUserInterfaceMapper()
@@ -283,7 +283,6 @@ namespace Habanero.Test.UI.Base
             ITextBox tb = (ITextBox) info.ControlMappers["SampleText"].Control;
             tb.Text = "Test";
             ApplyChangesToBusinessObject(info);
-
             Assert.AreEqual("Test", s.SampleText);
         }
 

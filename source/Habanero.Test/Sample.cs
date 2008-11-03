@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 
 namespace Habanero.Test
 {
@@ -251,6 +252,101 @@ namespace Habanero.Test
 
             protected abstract void SetupTypeNameVariables();
 
+            public UIForm GetSimpleUIFormDef()
+            {
+               XmlUIFormLoader loader = new XmlUIFormLoader();
+               return 
+                    loader.LoadUIFormDef(
+                        @"<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public UIForm GetSimpleUIFormDefInt()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Integer:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" />
+								</columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public UIForm GetSimpleUIFormDefTwoRows()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+                                    <field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Integer:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" />
+								</columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public UIForm GetSimpleUIFormDef1Row2Columns()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+                                    <field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                </columnLayout>
+                                <columnLayout>
+									<field label=""Integer:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" />
+								</columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public UIForm GetSimpleUIFormDef2Row2Columns1RowWithMoreControls()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+                                    <field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                </columnLayout>
+                                <columnLayout>
+									<field label=""Integer:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" />
+                                    <field label=""Date:"" property=""SampleDate"" type=""DateTimePicker"" mapperType=""DateTimePickerMapper"" />
+								</columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public UIForm GetSimpleUIFormProperties()
+            {
+                
+                UIForm def = new UIForm();
+                def.Height = 300;
+                def.Width = 350;
+                UIFormTab tab = new UIFormTab();
+                UIFormColumn col = new UIFormColumn(100);
+                Hashtable propertyAttributes = new Hashtable();
+                col.Add(
+                    new UIFormField("Text:", "SampleText", _textBoxTypeName, _textBoxAssemblyName, "TextBoxMapper", "", false, null,
+                                       propertyAttributes, null));
+                tab.Add(col);
+                def.Add(tab);
+                return def;
+            }
+            
             public UIForm GetUIFormProperties()
             {
                 UIForm def = new UIForm();

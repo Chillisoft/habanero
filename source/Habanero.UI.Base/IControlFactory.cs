@@ -529,6 +529,8 @@ namespace Habanero.UI.Base
         /// <param name="mapper">The TextBox mapper</param>
         /// <param name="boProp">The property being mapped</param>
         void AddKeyPressEventHandler(TextBoxMapper mapper, IBOProp boProp);
+
+        void AddUpdateBoPropOnTextChangedHandler(TextBoxMapper mapper, IBOProp boProp);
     }
 
     /// <summary>

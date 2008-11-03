@@ -16,6 +16,7 @@
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
+using System;
 using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.Util;
@@ -33,6 +34,7 @@ namespace Habanero.UI.Win
         //   which prop and textbox it is dealing with
         private IBOProp _boProp;
         private TextBoxWin _textBox;
+        private TextBoxMapper _mapper;
 
         /// <summary>
         /// Gets the BOProp being mapped through this control
@@ -66,6 +68,23 @@ namespace Habanero.UI.Win
                 tb.KeyPress += KeyPressEventHandler;
                 _textBox = tb;
             }
+        }
+
+        public void AddUpdateBoPropOnTextChangedHandler(TextBoxMapper mapper, IBOProp boProp)
+        {
+            _boProp = boProp;
+            _mapper = mapper;
+            if(mapper.Control is ITextBox)
+            {
+                TextBoxWin tb = (TextBoxWin)mapper.Control;
+                tb.TextChanged += UpdateBoPropWithTextFromTextBox;
+                _textBox = tb;
+            }
+        }
+
+        private void UpdateBoPropWithTextFromTextBox(object sender, EventArgs e)
+        {
+            _mapper.ApplyChangesToBusinessObject();
         }
 
         private void KeyPressEventHandler(object sender, System.Windows.Forms.KeyPressEventArgs e)
