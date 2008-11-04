@@ -367,7 +367,7 @@ namespace Habanero.Test.BO
             Assert.Contains(cp1, col);
             Assert.Contains(cp2, col);
         }
-
+        
         [Test]
         public void Test_CollectionLoad_GetBusinessObjectCollection_CriteriaString()
         {
@@ -614,6 +614,53 @@ namespace Habanero.Test.BO
             Assert.AreSame(cp1, col[1]);
             Assert.AreSame(cp2, col[2]);
         }
+
+
+        [Test]
+        public void Test_CollectionLoad_LoadedCollectionHasSuppliedClassDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ClassDef changedClassDef = classDef.Clone();
+            changedClassDef.TypeParameter = TestUtil.CreateRandomString();
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(changedClassDef, "");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(changedClassDef, col.ClassDef);
+            //---------------Tear Down -------------------------
+        }
+
+
+        [Test]
+        public void Test_CollectionLoad_LoadedCollectionHasSuppliedClassDef_WithOrder()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ClassDef changedClassDef = classDef.Clone();
+            changedClassDef.TypeParameter = TestUtil.CreateRandomString();
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(changedClassDef, "", "");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(changedClassDef, col.ClassDef);
+            //---------------Tear Down -------------------------
+        }
+
+
+        [Test]
+        public void Test_CollectionLoad_LoadedCollectionHasSuppliedClassDef_WithSelectQuery()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            ClassDef changedClassDef = classDef.Clone();
+            changedClassDef.TypeParameter = TestUtil.CreateRandomString();
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(changedClassDef, selectQuery);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(changedClassDef, col.ClassDef);
+            //---------------Tear Down -------------------------
+        }
+
 
         [Test]
         public void Test_CollectionLoad_RefreshLoadedCollection()

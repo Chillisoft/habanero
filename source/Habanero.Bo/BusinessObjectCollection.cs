@@ -67,7 +67,7 @@ namespace Habanero.BO
             }
         }
         #endregion//StronglyTypedComparer
-        private ClassDef _boClassDef;
+        private IClassDef _boClassDef;
         private IBusinessObject _sampleBo;
         private Hashtable _keyObjectHashTable;
         private readonly List<TBusinessObject> _createdBusinessObjects = new List<TBusinessObject>();
@@ -645,7 +645,7 @@ namespace Habanero.BO
         public TBusinessObject FindByGuid(Guid searchTerm)
         {
             string formattedSearchItem =
-                string.Format("{0}={1}", _boClassDef.GetPrimaryKeyDef().KeyName, searchTerm.ToString("B"));
+                string.Format("{0}={1}", ((ClassDef)_boClassDef).GetPrimaryKeyDef().KeyName, searchTerm.ToString("B"));
 
             if (_keyObjectHashTable.ContainsKey(formattedSearchItem))
             {
@@ -660,6 +660,7 @@ namespace Habanero.BO
         public IClassDef ClassDef
         {
             get { return _boClassDef; }
+            set { _boClassDef = value; }
         }
 
         /// <summary>

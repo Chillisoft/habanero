@@ -919,6 +919,7 @@ namespace Habanero.BO.ClassDefinition
             if (obj == null) return false;
             if (obj.GetType() != typeof (ClassDef)) return false;
             ClassDef otherClsDef = (ClassDef) obj;
+            if (otherClsDef.TypeParameter != this.TypeParameter) return false;
             //TODO this is a rough and ready equals test later need to improve
             if (PropDefcol == null) return false;
             if (PropDefcol.Count != otherClsDef.PropDefcol.Count)

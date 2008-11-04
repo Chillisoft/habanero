@@ -47,9 +47,9 @@ namespace Habanero.Base
         /// <summary>
         /// Returns the class definition of the collection
         /// </summary>
-        IClassDef ClassDef { get;}
+        IClassDef ClassDef { get; set; }
 
-		/// <summary>
+        /// <summary>
 		/// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.
 		/// </summary>
 		/// <returns>

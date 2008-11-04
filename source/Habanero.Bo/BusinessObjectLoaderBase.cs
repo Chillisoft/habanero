@@ -87,6 +87,7 @@ namespace Habanero.BO
         public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria)
         {
             IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
+            col.ClassDef = classDef;
             col.SelectQuery.Criteria = criteria;
             Refresh(col);
             return col;
@@ -184,6 +185,7 @@ namespace Habanero.BO
                                                                      OrderCriteria orderCriteria)
         {
             IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
+            col.ClassDef = classDef;
             QueryBuilder.PrepareCriteria(classDef, criteria);
             col.SelectQuery.Criteria = criteria;
             col.SelectQuery.OrderCriteria = orderCriteria;
@@ -222,6 +224,7 @@ namespace Habanero.BO
         public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, ISelectQuery selectQuery)
         {
             IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
+            col.ClassDef = classDef;
             col.SelectQuery = selectQuery;
             Refresh(col);
             return col;

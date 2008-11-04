@@ -689,6 +689,25 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreNotEqual(classDef1, "bob");
         }
 
+        
+        
+        [Test]
+        public void TestEquals_DifferentTypeParameter()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef1 = LoadClassDef();
+            ClassDef classDef2 = LoadClassDef();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(classDef1, classDef2);
+
+            //---------------Execute Test ----------------------
+            classDef2.TypeParameter = TestUtil.CreateRandomString();
+            //---------------Test Result -----------------------
+            Assert.AreNotEqual(classDef1, classDef2);
+            //---------------Tear Down -------------------------
+
+        }
+
 
         [Test]
         public void TestGetAllClassDefsInHierarchy()

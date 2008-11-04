@@ -635,8 +635,6 @@ namespace Habanero.Test.BO
 
         }
 
-   
-
         #region Nested type: TestBusinessObjectLoaderDB
 
         [TestFixture]
