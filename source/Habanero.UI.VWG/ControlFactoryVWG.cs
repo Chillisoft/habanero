@@ -91,7 +91,7 @@ namespace Habanero.UI.VWG
         /// <typeparam name="T">The business object type being managed in the control</typeparam>
         public virtual IMultiSelector<T> CreateMultiSelector<T>()
         {
-            return new MultiSelectorVWG<T>();
+            return new MultiSelectorVWG<T>(this);
         }
 
         /// <summary>

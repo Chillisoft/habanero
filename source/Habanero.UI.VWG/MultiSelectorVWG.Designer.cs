@@ -152,12 +152,12 @@ namespace Habanero.UI.VWG
             // 
             // MultiSelectorVWG
             // 
-            this.Controls.Add(this._btnDeselect);
-            this.Controls.Add(this._btnDeselectAll);
-            this.Controls.Add(this._btnSelectAll);
-            this.Controls.Add(this._btnSelect);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
+            //this.Controls.Add(this._btnDeselect);
+            //this.Controls.Add(this._btnDeselectAll);
+            //this.Controls.Add(this._btnSelectAll);
+            //this.Controls.Add(this._btnSelect);
+            //this.Controls.Add(this.groupBox2);
+            //this.Controls.Add(this.groupBox1);
             this.Size = new System.Drawing.Size(497, 381);
             this.Text = "MyMultiSelector";
             this.ResumeLayout(false);

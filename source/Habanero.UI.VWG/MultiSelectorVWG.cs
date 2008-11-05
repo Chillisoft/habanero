@@ -39,11 +39,42 @@ namespace Habanero.UI.VWG
     /// </summary>
     public partial class MultiSelectorVWG<T> : UserControlVWG, IMultiSelector<T>
     {
+        private readonly IControlFactory _controlFactory;
         private readonly MultiSelectorManager<T> _manager;
+        private GridLayoutManager _gridLayoutManager;
 
-        public MultiSelectorVWG()
+        public MultiSelectorVWG(IControlFactory controlFactory)
         {
+            _controlFactory = controlFactory;
             InitializeComponent();
+            _gridLayoutManager = new GridLayoutManager(this, controlFactory);
+            PanelVWG optionsPanel = new PanelVWG();
+            groupBox1.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
+            optionsPanel.Controls.Add(groupBox1);
+            PanelVWG buttonPanel = new PanelVWG();
+            GridLayoutManager buttonPanelManager = new GridLayoutManager(buttonPanel, controlFactory);
+            buttonPanelManager.SetGridSize(6, 1);
+            buttonPanelManager.AddControl(null);
+            buttonPanelManager.AddControl(_btnSelect);
+            buttonPanelManager.AddControl(_btnSelectAll);
+            buttonPanelManager.AddControl(_btnDeselectAll);
+            buttonPanelManager.AddControl(_btnDeselect);
+            buttonPanelManager.AddControl(null);
+            buttonPanelManager.FixRow(0, 25);
+            buttonPanelManager.FixRow(1, 25);
+            buttonPanelManager.FixRow(2, 25);
+            buttonPanelManager.FixRow(3, 25);
+            buttonPanelManager.FixRow(4, 25);
+            buttonPanelManager.FixRow(5, 25);
+            buttonPanelManager.FixColumnBasedOnContents(0);
+            PanelVWG selectionsPanel = new PanelVWG();
+            groupBox2.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
+            selectionsPanel.Controls.Add(groupBox2);
+            _gridLayoutManager.SetGridSize(1, 3);
+            _gridLayoutManager.FixColumn(1, 100);
+            _gridLayoutManager.AddControl(optionsPanel);
+            _gridLayoutManager.AddControl(buttonPanel);
+            _gridLayoutManager.AddControl(selectionsPanel);
             _manager = new MultiSelectorManager<T>(this);
         }
 

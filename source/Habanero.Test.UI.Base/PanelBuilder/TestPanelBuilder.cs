@@ -263,9 +263,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             rowCount = GetRowCount(form, rowCount);
             int columns = form[0].Count;
             int cols = rowCount * 3;
-            GridLayoutManager.ControlInfo[,] controls =
-                new GridLayoutManager.ControlInfo[columns, cols];
-
+            GridLayoutManager.ControlInfo[,] controls = new GridLayoutManager.ControlInfo[columns, cols];
             layoutManager.SetGridSize(columns, cols);
             GetControls(form, controls);
             AddControlsToLayoutManager(columns, cols, layoutManager, controls);
