@@ -406,7 +406,7 @@ namespace Habanero.Test.UI.Base
             ctl1.Height = 30;
             IControlHabanero ctl2 = GetControlFactory().CreateControl();
             //--------------------- Execute Tests-----------------------
-            _manager.AddControl(ctl1, 1, 2);
+            _manager.AddControl(new GridLayoutManager.ControlInfo(ctl1, 2, 1));
             _manager.AddControl(ctl2);
             //--------------------- Verify results-----------------------
             Assert.AreEqual(5, ctl1.Left);
@@ -424,7 +424,7 @@ namespace Habanero.Test.UI.Base
             IControlHabanero ctl2 = GetControlFactory().CreateControl();
             //--------------------- Execute Tests-----------------------
             _manager.AddControl(ctl1);
-            _manager.AddControl(ctl2, 1, 2);
+            _manager.AddControl(new GridLayoutManager.ControlInfo(ctl2, 2, 1));
             //--------------------- Verify results-----------------------
             Assert.AreEqual(5, ctl1.Left);
             Assert.AreEqual(20, ctl1.Width);
@@ -445,7 +445,7 @@ namespace Habanero.Test.UI.Base
             AssertControlsDimensions(control1Height, controlInitialWidth, controlInitialLeft, ctl1);
             //--------------------- Execute Tests-----------------------
 
-            _manager.AddControl(ctl1, 1, 3);
+            _manager.AddControl(new GridLayoutManager.ControlInfo(ctl1, 3, 1));
             //--------------------- Verify results-----------------------
             int borderWidth = 5;
             Assert.AreEqual(borderWidth, ctl1.Left);
@@ -457,7 +457,7 @@ namespace Habanero.Test.UI.Base
         {
             IControlHabanero ctl1 = CreateControl(10, 11, -5);
 
-            _manager.AddControl(ctl1, 2, 1);
+            _manager.AddControl(new GridLayoutManager.ControlInfo(ctl1, 1, 2));
 
             Assert.AreEqual(5, ctl1.Top);
             Assert.AreEqual(62, ctl1.Height);
@@ -474,7 +474,7 @@ namespace Habanero.Test.UI.Base
         {
             IControlHabanero ctl1 = CreateControl(10, 11, -5,-5);
 
-            _manager.AddControl(ctl1, 2, 3);
+            _manager.AddControl(new GridLayoutManager.ControlInfo(ctl1, 3, 2));
 
             Assert.AreEqual(5, ctl1.Top);
             Assert.AreEqual(62, ctl1.Height);

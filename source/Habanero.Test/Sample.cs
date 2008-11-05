@@ -259,7 +259,7 @@ namespace Habanero.Test
                     loader.LoadUIFormDef(
                         @"<form>
 							<tab name=""Tab1"">
-								<columnLayout>
+								<columnLayout width=""150"">
 									<field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
 								</columnLayout>
 							</tab>
@@ -562,6 +562,30 @@ namespace Habanero.Test
                 return def;
             }
 
+            public UIFormTab GetFormTabOneField()
+            {
+                return GetSimpleUIFormDef()[0];
+            }
+
+            public UIFormTab GetFormTabOneIntegerField()
+            {
+                return GetSimpleUIFormDefInt()[0];
+            }
+
+            public UIFormTab GetFormTabTwoFields()
+            {
+                return GetSimpleUIFormDefTwoRows()[0];
+            }
+
+            public UIFormTab GetFormTabTwoColumns_1_1()
+            {
+                return GetSimpleUIFormDef1Row2Columns()[0];
+            }
+
+            public UIFormTab GetFormTabTwoColumns_1_2()
+            {
+                return GetSimpleUIFormDef2Row2Columns1RowWithMoreControls()[0];
+            }
         }
 
 

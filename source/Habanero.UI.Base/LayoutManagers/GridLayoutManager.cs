@@ -95,14 +95,14 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Returns an IList object containing all the controls row by row
         /// </summary>
-        public IList Rows
+        public IList<List<IControlHabanero>> Rows
         {
             get
             {
-                IList rows = new ArrayList();
+                IList<List<IControlHabanero>> rows = new List<List<IControlHabanero>>();
                 for (int i = 0; i < RowCount; i++)
                 {
-                    IList<IControlHabanero> row = new List<IControlHabanero>();
+                    List<IControlHabanero> row = new List<IControlHabanero>();
                     for (int j = 0; j < ColumnCount; j++)
                     {
                         if ((i*ColumnCount + j) < this._controls.Count)
@@ -123,14 +123,14 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Returns an IList object containing all the controls column by column
         /// </summary>
-        public IList Columns
+        public IList<List<IControlHabanero>> Columns
         {
             get
             {
-                IList cols = new ArrayList();
+                IList<List<IControlHabanero>> cols = new List<List<IControlHabanero>>();
                 for (int i = 0; i < ColumnCount; i++)
                 {
-                    IList<IControlHabanero> col = new List<IControlHabanero>();
+                    List<IControlHabanero> col = new List<IControlHabanero>();
                     for (int j = 0; j < RowCount; j++)
                     {
                         if ((ColumnCount*j + i) < this._controls.Count)
@@ -155,18 +155,26 @@ namespace Habanero.UI.Base
         /// <returns>Returns the control once it has been added</returns>
         public override IControlHabanero AddControl(IControlHabanero control)
         {
-            return AddControl(control, 1, 1);
+            return AddControl(new ControlInfo(control, 1, 1));
         }
 
         /// <summary>
-        /// Adds a control at the row and column position specified
+        /// Adds a control as specified by the ControlInfo provided (which can provide some context for the control
+        /// such as number of rows or columns to span
         /// </summary>
-        /// <param name="control">The control to add</param>
-        /// <param name="rowSpan">The row position to add to</param>
-        /// <param name="columnSpan">The column position to add to</param>
-        /// <returns>Returns the control once it has been added</returns>
-        public IControlHabanero AddControl(IControlHabanero control, int rowSpan, int columnSpan)
+        /// <param name="controlInfo">The information about the control to add</param>
+        public IControlHabanero AddControl(ControlInfo controlInfo)
         {
+            IControlHabanero control = null;
+            int rowSpan = 1;
+            int columnSpan = 1;
+            if (controlInfo != null)
+            {
+                control = controlInfo.Control;
+                rowSpan = controlInfo.RowSpan;
+                columnSpan = controlInfo.ColumnSpan;
+            }
+  
             if (control == null)
             {
                 control = _controlFactory.CreateControl();

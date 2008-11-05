@@ -31,8 +31,10 @@ namespace Habanero.UI.Base
     {
         private IControlHabanero _managedControl;
         protected readonly IControlFactory _controlFactory;
-        private int _borderSize = 5;
-        private int _gapSize = 2;
+        private int _borderSize = DefaultBorderSize;
+        private int _gapSize = DefaultGapSize;
+        public const int DefaultBorderSize = 5;
+        public const int DefaultGapSize = 2;
 
         /// <summary>
         /// Constructor to initialise a new layout manager
