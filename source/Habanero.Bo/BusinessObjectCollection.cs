@@ -1051,7 +1051,26 @@ namespace Habanero.BO
         /// <returns></returns>
         public virtual TBusinessObject CreateBusinessObject()
         {
-            TBusinessObject newBO = (TBusinessObject) Activator.CreateInstance(typeof (TBusinessObject));
+            TBusinessObject newBO;
+            if (this.ClassDef == Habanero.BO.ClassDefinition.ClassDef.ClassDefs[typeof(TBusinessObject)])
+            {
+                newBO = (TBusinessObject) Activator.CreateInstance(typeof (TBusinessObject));
+            } else
+            {
+                //use the customised classdef instead of the default.
+                try
+                {
+                    newBO = (TBusinessObject) Activator.CreateInstance(typeof (TBusinessObject), new object[] {this.ClassDef});
+                } catch (MissingMethodException ex)
+                {
+                    string className = typeof (TBusinessObject).FullName;
+                    string msg =
+                        string.Format(
+                            "An attempt was made to create a {0} with a customised class def. Please add a constructor that takes a ClassDef as a parameter to the business object class of type {1}.",
+                            className, className);
+                    throw new HabaneroDeveloperException("There was a problem creating a " + className, msg, ex  );
+                }
+            }
             AddCreatedBusinessObject(newBO);
             return newBO;
         }

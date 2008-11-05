@@ -266,6 +266,12 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
+        public string ClassNameExcludingTypeParameter
+        {
+            get { return _className; }
+
+        }
+
         /// <summary>
         /// The possibly full name of the class type for the class definition
         /// </summary>
@@ -1084,6 +1090,8 @@ namespace Habanero.BO.ClassDefinition
             }
             return TableName;
         }
+
+      
 
         /// <summary>
         /// Returns the table name of the specified property

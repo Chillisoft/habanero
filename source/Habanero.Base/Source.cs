@@ -208,9 +208,12 @@ namespace Habanero.Base
                 {
                     toSource = toSourceToMerge;
                     Join newJoin = this.AddNewJoinTo(toSourceToMerge, inheritanceJoinToMerge.JoinType);
-                    foreach (Join.JoinField joinField in inheritanceJoinToMerge.JoinFields)
+                    if (newJoin != null)
                     {
-                        newJoin.JoinFields.Add(joinField);
+                        foreach (Join.JoinField joinField in inheritanceJoinToMerge.JoinFields)
+                        {
+                            newJoin.JoinFields.Add(joinField);
+                        }
                     }
                 }
                 if (toSource != null)

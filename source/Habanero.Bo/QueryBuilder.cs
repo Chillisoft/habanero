@@ -184,7 +184,7 @@ namespace Habanero.BO
             if (classDef == null) throw new ArgumentNullException("classDef");
             relatedClassDef = null;
             if (source != null && source.IsPrepared) return;
-            Source rootSource = new Source(classDef.ClassName, classDef.GetTableName());
+            Source rootSource = new Source(classDef.ClassNameExcludingTypeParameter, classDef.GetTableName());
             CreateInheritanceJoins(classDef, rootSource);
             if (source == null)
             {
@@ -216,7 +216,7 @@ namespace Habanero.BO
             while (currentClassDef.IsUsingClassTableInheritance())
             {
                 ClassDef superClassDef = currentClassDef.SuperClassClassDef;
-                Source baseSource = new Source(superClassDef.ClassName, superClassDef.TableName);
+                Source baseSource = new Source(superClassDef.ClassNameExcludingTypeParameter, superClassDef.TableName);
                 Source.Join join = new Source.Join(rootSource, baseSource);
                 IPropDef basePrimaryKeyPropDef = superClassDef.PrimaryKeyDef[0];
                 if (currentClassDef.PrimaryKeyDef != null)
@@ -292,7 +292,7 @@ namespace Habanero.BO
             else
             {
                 criteria.Field.FieldName = criteria.Field.PropertyName;
-                criteria.Field.Source = new Source(((ClassDef) classDef).GetBaseClassOfSingleTableHierarchy().ClassName,
+                criteria.Field.Source = new Source(((ClassDef)classDef).GetBaseClassOfSingleTableHierarchy().ClassNameExcludingTypeParameter,
                                                    classDef.GetTableName());
             }
         }

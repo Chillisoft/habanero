@@ -52,7 +52,7 @@ namespace Habanero.BO.ClassDefinition
         public UIForm UIForm
         {
             get { return _uiForm; }
-            protected set { _uiForm = value; }
+            set { _uiForm = value; }
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Habanero.BO.ClassDefinition
         public string Name
         {
             get { return _name; }
-            protected set { _name = value; }
+            set { _name = value; }
         }
 
         /// <summary>
@@ -70,13 +70,14 @@ namespace Habanero.BO.ClassDefinition
         public UIGrid UIGrid
         {
             get { return _uiGrid; }
-            protected set { _uiGrid = value; }
+            set { _uiGrid = value; }
         }
 
         /// <summary>
         /// Returns the form property definitions
         /// </summary>
         /// <returns>Returns a UIForm object</returns>
+        [Obsolete("Please use the UIForm property instead as it returns the same UIForm. This method will be removed in later versions of Habanero")]
         public UIForm GetUIFormProperties()
         {
             return this.UIForm;
@@ -86,6 +87,7 @@ namespace Habanero.BO.ClassDefinition
         /// Returns the grid property definitions
         /// </summary>
         /// <returns>Returns a UIGridDef object</returns>
+        [Obsolete("Please use the UIGrid property instead as it returns the same UIGrid. This method will be removed in later versions of Habanero")]
         public UIGrid GetUIGridProperties()
         {
             return this.UIGrid;

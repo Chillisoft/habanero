@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -231,6 +232,46 @@ namespace Habanero.Test.BO
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
             Assert.IsTrue(newCP.Status.IsNew);
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
+        }
+
+        [Test]
+        public void TestCreateBusinessObject_AlternateClassDef()
+        {
+            //---------------Set up test pack-------------------
+            AddressTestBO addressTestBO = new AddressTestBO();
+
+            ClassDef classDef = addressTestBO.ClassDef;
+            ClassDef alternateClassDef = classDef.Clone();
+            alternateClassDef.TypeParameter = TestUtil.CreateRandomString();
+            BusinessObjectCollection<AddressTestBO> addressCol = new BusinessObjectCollection<AddressTestBO>();
+            addressCol.ClassDef = alternateClassDef;
+
+            //---------------Execute Test ----------------------
+
+            //this should work because AddressTestBO has a constructor that takes a ClassDef as parameter
+            AddressTestBO newCP = addressCol.CreateBusinessObject();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(alternateClassDef, newCP.ClassDef);
+        }
+
+        [Test, ExpectedException(typeof(HabaneroDeveloperException))]
+        public void TestCreateBusinessObject_AlternateClassDef_NoConstructor()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ClassDef alternateClassDef = classDef.Clone();
+            alternateClassDef.TypeParameter = TestUtil.CreateRandomString();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+            cpCol.ClassDef = alternateClassDef;
+
+            //---------------Execute Test ----------------------
+
+            //this should not work because ContactPersonTestBO does not have a constructor that takes a ClassDef as parameter
+            ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(alternateClassDef, newCP.ClassDef);
         }
 
         [Test]

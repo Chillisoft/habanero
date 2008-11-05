@@ -141,6 +141,11 @@ namespace Habanero.Base
         string ClassName { get; set; }
 
         /// <summary>
+        /// The name of the class type for the class definition (excluding the namespace and the type parameter).
+        /// </summary>
+        string ClassNameExcludingTypeParameter { get; }
+
+        /// <summary>
         /// Returns the name of the table that applies to the propdef given, taking into allowance
         /// any inheritance structure.
         /// </summary>
