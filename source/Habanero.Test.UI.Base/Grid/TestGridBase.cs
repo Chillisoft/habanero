@@ -449,6 +449,20 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void TestSetCollectionOnGrid_NullCollection()
+        {
+            //---------------Set up test pack-------------------
+            IGridBase gridBase = CreateGridBaseStub();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            gridBase.SetBusinessObjectCollection(null);
+            //---------------Test Result -----------------------
+            Assert.IsNull(gridBase.GetBusinessObjectCollection());
+            Assert.AreEqual(0, gridBase.Columns.Count);
+        }
+
+        [Test]
         public void Test_SortMode()
         {
             //---------------Set up test pack-------------------

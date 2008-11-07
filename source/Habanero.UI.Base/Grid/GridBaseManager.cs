@@ -63,6 +63,7 @@ namespace Habanero.UI.Base
         {
             if (_gridBase.Columns.Count <= 0)
             {
+                if (col == null) return;
                 throw new GridBaseSetUpException(
                     "You cannot call SetBusinessObjectCollection if the grid's columns have not been set up");
             }
