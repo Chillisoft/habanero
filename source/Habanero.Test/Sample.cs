@@ -330,6 +330,37 @@ namespace Habanero.Test
 						</form>");
             }
 
+            public UIForm GetSimpleUIFormDef1Row2Columns1Row()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""100"">
+                                    <field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                </columnLayout>
+                                <columnLayout width=""50"">
+									<field label=""Text2:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                </columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public UIForm GetSimpleUIFormDef1Row1Column1Row()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""100"">
+                                    <field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                </columnLayout>
+							</tab>
+						</form>");
+            }
+
             public UIForm GetSimpleUIFormProperties()
             {
                 
@@ -585,6 +616,16 @@ namespace Habanero.Test
             public UIFormTab GetFormTabTwoColumns_1_2()
             {
                 return GetSimpleUIFormDef2Row2Columns1RowWithMoreControls()[0];
+            }
+
+            public UIFormTab GetFormTabTwoColumnsOneRowWithWidths()
+            {
+                return GetSimpleUIFormDef1Row2Columns1Row()[0];
+            }
+
+            public UIFormTab GetFormTabOneColumnOneRowWithWidth()
+            {
+                return GetSimpleUIFormDef1Row1Column1Row()[0];
             }
         }
 

@@ -417,9 +417,7 @@ namespace Habanero.UI.Base
                 if (uiFormTab[col].Width > -1)
                 {
                     //Fix width of the control column e.g. textbox or combobox.
-                    manager.FixColumn
-                        (col * intNoOfLayoutGridColumnsPerPanel + 1,
-                         uiFormTab[col].Width - manager.GetFixedColumnWidth(col * intNoOfLayoutGridColumnsPerPanel));
+                    manager.FixColumn(col * intNoOfLayoutGridColumnsPerPanel + 1,uiFormTab[col].Width - manager.GetFixedColumnWidth(col * intNoOfLayoutGridColumnsPerPanel));
                 }
                 manager.FixColumn(col * intNoOfLayoutGridColumnsPerPanel + 2, 15);
             }
