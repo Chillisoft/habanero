@@ -1009,7 +1009,7 @@ namespace Habanero.BO
             }
         }
 
-        private void FireUpdatedEvent()
+        protected void FireUpdatedEvent()
         {
             if (Updated != null)
             {
