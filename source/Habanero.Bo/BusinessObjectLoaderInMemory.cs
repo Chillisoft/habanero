@@ -380,7 +380,10 @@ namespace Habanero.BO
                                      Criteria.FromRelationship(relationship));
         }
 
-
+        public DataStoreInMemory GetMemoryDatabase()
+        {
+            return _dataStore;
+        }
         #endregion
     }
 }

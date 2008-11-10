@@ -88,8 +88,10 @@ namespace Habanero.BO
         /// the _executedTransactions list.
         /// </summary>
         protected List<ITransactional> _executedTransactions = new List<ITransactional>();
-
-        protected bool _CommittSuccess;
+        /// <summary>
+        /// A flag to indicate whether the commitToDataSource was successful or not.s
+        /// </summary>
+        protected bool _commitSuccess;
         private bool _runningUpdatingBeforePersisting;
 
         ///<summary>
@@ -164,9 +166,9 @@ namespace Habanero.BO
         /// Returns true if the transaction was successfully committed to the databasource.
         /// Else returns false. If no attempt to commit has been made will return false
         ///</summary>
-        public bool CommittSuccess
+        public bool CommitSuccess
         {
-            get { return _CommittSuccess; }
+            get { return _commitSuccess; }
         }
 
         /// <summary>
@@ -362,7 +364,7 @@ namespace Habanero.BO
         private void Commit()
         {
             CommitToDatasource();
-            if (_CommittSuccess)
+            if (_commitSuccess)
             {
                 UpdateTransactionsAsCommited();
             }

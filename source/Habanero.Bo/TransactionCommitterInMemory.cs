@@ -17,8 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
 using Habanero.Base;
 
 namespace Habanero.BO
@@ -67,7 +65,7 @@ namespace Habanero.BO
         /// </summary>
         protected override void CommitToDatasource()
         {
-            UpdateTransactionsAsCommited();
+            _commitSuccess = true;
         }
 
         /// <summary>

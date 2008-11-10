@@ -40,7 +40,7 @@ namespace Habanero.Test.BO
         /// </summary>
         protected override void CommitToDatasource()
         {
-            _CommittSuccess = true;
+            _commitSuccess = true;
         }
 
         /// <summary>

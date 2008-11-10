@@ -155,7 +155,7 @@ namespace Habanero.BO
             try
             {
                 _dbTransaction.Commit();
-                _CommittSuccess = true;
+                _commitSuccess = true;
             }
             catch (Exception ex)
             {
