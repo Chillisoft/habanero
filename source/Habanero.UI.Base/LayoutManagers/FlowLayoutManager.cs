@@ -318,7 +318,7 @@ namespace Habanero.UI.Base
         //}
 
         /// <summary>
-        /// Inserts a new line.  This is like a line break or carraige return for controls. The next control
+        /// Inserts a new line.  This is like a line break or carriage return for controls. The next control
         /// will start at the control's margin (depending on alignment).
         /// </summary>
         public void NewLine()
