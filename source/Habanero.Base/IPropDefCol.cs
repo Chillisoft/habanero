@@ -68,7 +68,13 @@ namespace Habanero.Base
         ///</summary>
         ///<returns></returns>
         IPropDefCol Clone();
-
+        /// <summary>
+        /// Clones the propdefcol. This method was created so that you could control the depth of the copy. The reason is so that you can limit the
+        ///   extra memory used in cases where the propdef does not need to be copied.
+        /// </summary>
+        /// <param name="clonePropDefs">If true then makes a full copy of the propdefs else only makes a copy of the propdefcol.</param>
+        /// <returns></returns>
+        IPropDefCol Clone(bool clonePropDefs);
         /// <summary>
         /// Indicates if the specified property definition exists
         /// in the collection.

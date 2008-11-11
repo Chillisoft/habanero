@@ -173,7 +173,7 @@ namespace Habanero.BO.ClassDefinition
         ///true if the current object is equal to the other parameter; otherwise, false.
         ///</returns>
         ///
-        ///<param name="other">An object to compare with this object.</param>
+        ///<param name="otherUIDef">An object to compare with this object.</param>
         public bool Equals(UIDef otherUIDef)
         {
             if (otherUIDef == null) return false;

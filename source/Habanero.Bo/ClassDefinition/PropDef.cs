@@ -1080,5 +1080,48 @@ namespace Habanero.BO.ClassDefinition
             if (rule == null) throw new HabaneroApplicationException("You cannot add a null property rule to a property def");
             _propRules.Add(rule);
         }
+
+        public IPropDef Clone()
+        {
+            PropDef propDef = new PropDef(this.PropertyName, this.PropertyTypeAssemblyName, this.PropertyTypeName, this.ReadWriteRule,
+                this.DatabaseFieldName, this.DefaultValueString, this.Compulsory, this.AutoIncrementing, this.Length, 
+                this.DisplayName, this.Description, this.KeepValuePrivate);
+            propDef.LookupList = this.LookupList;
+            propDef.Persistable = this.Persistable;
+            propDef.DefaultValue = this.DefaultValue;
+            propDef.PropType = this.PropType;
+            foreach (IPropRule rule in _propRules)
+            {
+                propDef.AddPropRule(rule);
+            }
+            return propDef;
+        }
+
+        public override bool Equals(object obj)
+        {
+            PropDef propDef = obj as PropDef;
+            if (propDef == null) return false;
+            if (this.AutoIncrementing != propDef.AutoIncrementing) return false;
+            if (this.Compulsory != propDef.Compulsory) return false;
+            if (this.DatabaseFieldName != propDef.DatabaseFieldName) return false;
+            if (this.DefaultValue!= propDef.DefaultValue) return false;
+            if (this.DefaultValueString != propDef.DefaultValueString) return false;
+            if (this.Description != propDef.Description) return false;
+            if (this.DisplayName != propDef.DisplayName) return false;
+            if (this.KeepValuePrivate != propDef.KeepValuePrivate) return false;
+            if (this.Length != propDef.Length) return false;
+            if (this.Persistable != propDef.Persistable) return false;
+            if (this.PropertyName != propDef.PropertyName) return false;
+            if (this.ReadWriteRule != propDef.ReadWriteRule) return false;
+            if (this.PropType != propDef.PropType) return false;
+
+            if (this.UnitOfMeasure != propDef.UnitOfMeasure) return false;
+            if (this.LookupList != propDef.LookupList) return false;
+            if (_classDef != propDef.ClassDef) return false;
+            //if (this.PropertyTypeAssemblyName != propDef.PropertyTypeAssemblyName) return false;
+            //if (this.PropertyTypeName != propDef.PropertyTypeName) return false;
+//            if (this.PropRules != propDef.PropRules) return false;
+            return true;
+        }
     }
 }

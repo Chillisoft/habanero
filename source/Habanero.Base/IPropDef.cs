@@ -188,5 +188,6 @@ namespace Habanero.Base
         object ConvertValueToPropertyType(object valueToConvert);
 
 
+        bool Equals(object obj);
     }
 }

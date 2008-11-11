@@ -944,12 +944,23 @@ namespace Habanero.BO.ClassDefinition
         #endregion
 
         ///<summary>
-        /// Does a deep clone of the classdef and return the clone
+        /// Does a deep clone of the classdef and return the clone.
+        /// NNB: The new propdefcol has the same propdefs in it (i.e. the propdefs are not copied)
         ///</summary>
         ///<returns></returns>
         public ClassDef Clone()
         {
-            IPropDefCol propDefClone = this.PropDefcol != null ? this.PropDefcol.Clone() : null;
+            return Clone(false);
+        }
+
+        ///<summary>
+        /// Does a deep clone of the classdef and return the clone.
+        /// NNB: The new propdefcol has the same propdefs in it (i.e. the propdefs are not copied)
+        ///</summary>
+        ///<returns></returns>
+        public ClassDef Clone(bool clonePropDefs)
+        {
+            IPropDefCol propDefClone = this.PropDefcol != null ? this.PropDefcol.Clone(clonePropDefs) : null;
             UIDefCol uiDefClone = this.UIDefCol != null ? this.UIDefCol.Clone() : null;
             ClassDef newClassDef = new ClassDef(this.AssemblyName, this.ClassName, this.PrimaryKeyDef,
                                                 propDefClone, this.KeysCol,
@@ -959,6 +970,7 @@ namespace Habanero.BO.ClassDefinition
 
             return newClassDef;
         }
+
 
         /// <summary>
         /// Returns whether this class has an autoincrementing field or not. Checks the propdefs for whether

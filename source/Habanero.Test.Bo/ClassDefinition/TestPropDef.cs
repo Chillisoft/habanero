@@ -634,5 +634,49 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         // Used to access protected properties
+
+        [Test]
+        public void Test_Clone()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("TestPropDef","System","String",PropReadWriteRule.ReadWrite, "TestPropDef","TestString",true,false);
+            
+            //---------------Execute Test ----------------------
+            IPropDef clonedPropDef = propDef.Clone();
+            //-----Test PreCondition--------------------------
+            Assert.AreEqual(propDef.Compulsory, clonedPropDef.Compulsory);
+            Assert.AreEqual(propDef.DefaultValueString, clonedPropDef.DefaultValueString);
+            Assert.AreEqual(propDef.ReadWriteRule, clonedPropDef.ReadWriteRule);
+            //-----------Execute------------------------------
+            clonedPropDef.Compulsory = false;
+            clonedPropDef.DefaultValueString = "ClonedString";
+            clonedPropDef.ReadWriteRule = PropReadWriteRule.WriteOnce;
+            //---------------Test Result -----------------------
+            Assert.AreNotEqual(propDef.Compulsory,clonedPropDef.Compulsory);
+            Assert.AreNotEqual(propDef.DefaultValueString,clonedPropDef.DefaultValueString);
+            Assert.AreNotEqual(propDef.ReadWriteRule,clonedPropDef.ReadWriteRule);
+            //---------------Tear Down -------------------------
+
+        }
+
+        [Test]
+        public void Test_Equals()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("TestPropDef", "System", "String", PropReadWriteRule.ReadWrite, "TestPropDef", "TestString", true, false);
+            IPropDef clonedPropDef = propDef.Clone();
+
+            //-----Test PreCondition--------------------------
+            Assert.IsTrue(propDef.Equals(clonedPropDef));
+            //---------------Execute Test ----------------------
+            clonedPropDef.Compulsory = false;
+            clonedPropDef.DefaultValueString = "ClonedString";
+            clonedPropDef.ReadWriteRule = PropReadWriteRule.WriteOnce;
+            bool equals = clonedPropDef.Equals(propDef);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(equals);
+            //---------------Tear Down -------------------------
+
+        }
     }
 }

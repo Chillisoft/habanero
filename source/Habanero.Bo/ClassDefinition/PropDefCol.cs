@@ -272,6 +272,7 @@ namespace Habanero.BO.ClassDefinition
             foreach (PropDef def in this)
             {
                 if (!otherPropDefCol.Contains(def.PropertyName)) return false;
+                return def.Equals(otherPropDefCol[def.PropertyName]);
             }
             return true;
         }
@@ -280,7 +281,7 @@ namespace Habanero.BO.ClassDefinition
 
 
         ///<summary>
-        /// Clones the propdefcol.  The new propdefcol has the same propdefs in it.
+        /// Clones the propdefcol. NNB: The new propdefcol has the same propdefs in it (i.e. the propdefs are not copied).
         ///</summary>
         ///<returns></returns>
         public IPropDefCol Clone()
@@ -289,6 +290,29 @@ namespace Habanero.BO.ClassDefinition
             foreach (PropDef def in this)
             {
                 newPropDefCol.Add(def);
+            }
+            return newPropDefCol;
+        }
+
+        /// <summary>
+        /// Clones the propdefcol. This method was created so that you could control the depth of the copy. The reason is so that you can limit the
+        ///   extra memory used in cases where the propdef does not need to be copied.
+        /// </summary>
+        /// <param name="clonePropDefs">If true then makes a full copy of the propdefs else only makes a copy of the propdefcol.</param>
+        /// <returns></returns>
+        public IPropDefCol Clone(bool clonePropDefs)
+        {
+            PropDefCol newPropDefCol = new PropDefCol();
+            foreach (PropDef def in this)
+            {
+                if (clonePropDefs)
+                {
+                    newPropDefCol.Add(def.Clone());
+                }
+                else
+                {
+                    newPropDefCol.Add(def);
+                } 
             }
             return newPropDefCol;
         }

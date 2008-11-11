@@ -642,6 +642,16 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void TestClonePropertiesAreDifferentNotEqual()
+        {
+            ClassDef originalClassDef = LoadClassDef();
+            ClassDef newClassDef = originalClassDef.Clone(true);
+            Assert.AreNotSame(newClassDef.PropDefcol, originalClassDef.PropDefcol);
+            originalClassDef.PropDefcol["MyRelatedTestProp"].Compulsory = true;
+            Assert.AreNotEqual(newClassDef.PropDefcol, originalClassDef.PropDefcol);
+        }
+
+        [Test]
         public void TestTableNamesAreCloned()
         {
             ClassDef originalClassDef = LoadClassDef();
