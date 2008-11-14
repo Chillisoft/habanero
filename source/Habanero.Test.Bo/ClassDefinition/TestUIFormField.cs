@@ -269,6 +269,98 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreNotEqual(uiFormField1, "bob");
         }
 
+        [Test]
+        public void TestHasParameterValue_False()
+        {
+            //---------------Set up test pack-------------------
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            bool hasParameterValue = uiFormField1.HasParameterValue(TestUtil.CreateRandomString());
+            //---------------Test Result -----------------------
+            Assert.IsFalse(hasParameterValue);
+
+        }       
+        
+        [Test]
+        public void TestHasParameterValue_True()
+        {
+            //---------------Set up test pack-------------------
+            Hashtable parameters = new Hashtable();
+            string parameterName = "bob";
+            parameters.Add(parameterName, "I can like to have a value");
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, null);
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            bool hasParameterValue = uiFormField1.HasParameterValue(parameterName);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(hasParameterValue);
+
+        }
+
+        [Test]
+        public void TestRowSpan_NotSet()
+        {
+            //---------------Set up test pack-------------------
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            int rowSpan = uiFormField1.RowSpan;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, rowSpan);
+
+        }
+
+        [Test]
+        public void TestRowSpan_Set()
+        {
+            //---------------Set up test pack-------------------
+            Hashtable parameters = new Hashtable();
+            parameters.Add("rowSpan", 3);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, null);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            int rowSpan = uiFormField1.RowSpan;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, rowSpan);
+
+        }    
+        
+        [Test]
+        public void TestColSpan_NotSet()
+        {
+            //---------------Set up test pack-------------------
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            int colSpan = uiFormField1.ColSpan;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, colSpan);
+
+        }
+
+        [Test]
+        public void TestColSpan_Set()
+        {
+            //---------------Set up test pack-------------------
+            Hashtable parameters = new Hashtable();
+            parameters.Add("colSpan", 3);
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, null);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            int colSpan = uiFormField1.ColSpan;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, colSpan);
+
+        }
+
         // Grants access to protected fields
         private class UIFormFieldInheritorStub : UIFormField
         {

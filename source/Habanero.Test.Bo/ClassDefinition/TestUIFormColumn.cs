@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
@@ -185,6 +186,27 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreNotEqual(uiFormColumn1, "bob");
         }
 
+        [Test]
+        public void TestGetRowsRequired()
+        {
+            //---------------Set up test pack-------------------
+     
+            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null);
+            Hashtable parameters = new Hashtable();
+            parameters.Add("rowSpan", 2);
+            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, parameters, null);
+            UIFormColumn uiFormColumn = new UIFormColumn();
+            uiFormColumn.Add(field1);
+            uiFormColumn.Add(field2);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, uiFormColumn.Count);
+            //---------------Execute Test ----------------------
+
+            int rowsRequired = uiFormColumn.GetRowsRequired();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, rowsRequired);
+
+        }
     }
 
 }

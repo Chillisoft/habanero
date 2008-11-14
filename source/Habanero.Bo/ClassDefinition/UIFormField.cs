@@ -375,17 +375,16 @@ namespace Habanero.BO.ClassDefinition
 		/// <param name="parameterName">The parameter name</param>
 		/// <returns>Returns the parameter value or null if not found</returns>
 		public object GetParameterValue(string parameterName)
-		{
-			if (this._parameters.ContainsKey(parameterName))
-			{
-				return this._parameters[parameterName];
-			} else
-			{
-				return null;
-			}
-		}
+        {
+            return HasParameterValue(parameterName) ? this._parameters[parameterName] : null;
+        }
 
-		#region Type Initialisation
+        public bool HasParameterValue(string parameterName)
+        {
+            return (this._parameters.ContainsKey(parameterName));
+        }
+
+        #region Type Initialisation
 
 		private Type MyControlType
 		{
@@ -403,8 +402,22 @@ namespace Habanero.BO.ClassDefinition
 			    _controlAssembly = _controlType.Namespace;
 			}
 		}
-               
+
+        public int RowSpan
+        {
+            get
+            {
+                return HasParameterValue("rowSpan") ? Convert.ToInt32(GetParameterValue("rowSpan")) : 1;
+            }
+        }
+
+        public int ColSpan
+        {
+            get { return HasParameterValue("colSpan") ? Convert.ToInt32(GetParameterValue("colSpan")) : 1; }
+        }
 
         #endregion Type Initialisation
+
+       
     }
 }

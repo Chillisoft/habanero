@@ -227,5 +227,14 @@ namespace Habanero.BO.ClassDefinition
             return !(a == b);
         }
 
+        public int GetRowsRequired()
+        {
+            int rowsRequired = 0;
+            foreach (UIFormField field in _list)
+            {
+                rowsRequired += field.RowSpan;
+            }
+            return rowsRequired;
+        }
     }
 }

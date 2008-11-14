@@ -398,22 +398,7 @@ namespace Habanero.Test.UI.Base
 
 
 
-        [Test]
-        public void TestColumnSpan()
-        {
-            //----------------------Setup ------------------------------
-            IControlHabanero ctl1 = GetControlFactory().CreateControl();
-            ctl1.Height = 30;
-            IControlHabanero ctl2 = GetControlFactory().CreateControl();
-            //--------------------- Execute Tests-----------------------
-            _manager.AddControl(new GridLayoutManager.ControlInfo(ctl1, 2, 1));
-            _manager.AddControl(ctl2);
-            //--------------------- Verify results-----------------------
-            Assert.AreEqual(5, ctl1.Left);
-            Assert.AreEqual(42, ctl1.Width);
-            Assert.AreEqual(49, ctl2.Left);
-            Assert.AreEqual(20, ctl2.Width);
-        }
+
 
         [Test]
         public void TestColumnSpan2()
@@ -462,6 +447,71 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(5, ctl1.Top);
             Assert.AreEqual(62, ctl1.Height);
         }
+
+        [Test]
+        public void TestLayoutWithRowSpan()
+        {
+            //---------------Set up test pack-------------------
+            IControlHabanero managedControl = GetControlFactory().CreateControl();
+            managedControl.Width = 100;
+            managedControl.Height = 100;
+            GridLayoutManager layoutManager = new GridLayoutManager(managedControl,
+                                                                    GetControlFactory());
+            layoutManager.SetGridSize(2, 2);
+            IControlHabanero control1 = GetControlFactory().CreateControl();
+            IControlHabanero control2 = GetControlFactory().CreateControl();
+            IControlHabanero control3 = GetControlFactory().CreateControl();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            layoutManager.AddControl(new GridLayoutManager.ControlInfo(control1, 1, 2));
+            layoutManager.AddControl(control2);
+            layoutManager.AddControl(control3);
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(LayoutManager.DefaultBorderSize, control1.Top);
+            Assert.AreEqual(managedControl.Height - LayoutManager.DefaultBorderSize, control1.Bottom);
+            Assert.AreEqual((managedControl.Width - LayoutManager.DefaultGapSize) / 2, control1.Right);
+
+            Assert.AreEqual(control1.Top, control2.Top);
+            Assert.AreEqual(control1.Bottom, control3.Bottom);
+            Assert.AreEqual(control3.Left, control2.Left);
+            
+            Assert.AreEqual(control2.Height + control3.Height + LayoutManager.DefaultGapSize, control1.Height);
+        }
+
+        public void TestLayoutWithColSpan()
+        {
+            //---------------Set up test pack-------------------
+            IControlHabanero managedControl = GetControlFactory().CreateControl();
+            managedControl.Width = 100;
+            managedControl.Height = 100;
+            GridLayoutManager layoutManager = new GridLayoutManager(managedControl,
+                                                                    GetControlFactory());
+            layoutManager.SetGridSize(2, 2);
+            IControlHabanero control1 = GetControlFactory().CreateControl();
+            IControlHabanero control2 = GetControlFactory().CreateControl();
+            IControlHabanero control3 = GetControlFactory().CreateControl();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            layoutManager.AddControl(new GridLayoutManager.ControlInfo(control1, 2, 1));
+            layoutManager.AddControl(control2);
+            layoutManager.AddControl(control3);
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(LayoutManager.DefaultBorderSize, control1.Top);
+            Assert.AreEqual(LayoutManager.DefaultBorderSize, control1.Left);
+            Assert.AreEqual(managedControl.Width - LayoutManager.DefaultBorderSize, control1.Right);
+            Assert.AreEqual((managedControl.Height - LayoutManager.DefaultGapSize) / 2, control1.Bottom);
+
+            Assert.AreEqual(control1.Left, control2.Left);
+            Assert.AreEqual(control1.Right, control3.Right);
+            Assert.AreEqual(control3.Top, control2.Top);
+            
+            Assert.AreEqual(control2.Width + control3.Width + LayoutManager.DefaultGapSize, control1.Width);
+        }
+
         private static void AssertControlsDimensions(int height, int width, int left, IControlHabanero control)
         {
             Assert.AreEqual(width, control.Width, "width is not correct");

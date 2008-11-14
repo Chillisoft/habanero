@@ -1,3 +1,4 @@
+using System;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.Win;
@@ -246,77 +247,202 @@ namespace Habanero.Test.UI.Base.PanelBuilder
         }
 
         [Test]
-        public void Test_ColumnWidthSetCorrectly_TwoColumns()
-        {
-            //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
-            UIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumnsOneRowWithWidths();
-
-            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(2, twoColumnTab.Count);
-            Assert.AreEqual(1, twoColumnTab[0].Count);
-            Assert.AreEqual(1, twoColumnTab[1].Count);
-            //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(twoColumnTab);
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(150,panel.Width);
-
-        }
-
-        [Test, Ignore("Need to work out how the widths work.")]
-        public void Test_ControlWidthSetCorrectlyBasedOnColumnWidth()
-        {
-            //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
-            UIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumnsOneRowWithWidths();
-
-            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(2, twoColumnTab.Count);
-            Assert.AreEqual(1, twoColumnTab[0].Count);
-            Assert.AreEqual(1, twoColumnTab[1].Count);
-            //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(twoColumnTab);
-
-            //---------------Test Result -----------------------
-            IControlCollection controls = panel.Controls;
-            Assert.AreEqual(100 - (controls[0].Width + controls[2].Width + LayoutManager.DefaultBorderSize * 2 + LayoutManager.DefaultGapSize * 5), controls[1].Width);
-            Assert.AreEqual(50 - (controls[3].Width+controls[5].Width + LayoutManager.DefaultBorderSize*2 + LayoutManager.DefaultGapSize * 2),controls[4].Width);
-
-        }
-        
-        [Test]
-        public void Test_ControlWidthSetCorrectlyBasedOnColumnWidthOneColumn()
+        public void Test_BuildPanel_ColumnWidths_SingleColumn()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
             UIFormTab twoColumnTab = interfaceMapper.GetFormTabOneColumnOneRowWithWidth();
-
+            UIFormColumn column1 = twoColumnTab[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(1, twoColumnTab.Count);
-            Assert.AreEqual(1, twoColumnTab[0].Count);
+
             //---------------Execute Test ----------------------
             IPanel panel = panelBuilder.BuildPanel(twoColumnTab);
 
             //---------------Test Result -----------------------
-            IControlCollection controls = panel.Controls;
-            Assert.AreEqual(100 - (controls[0].Width + controls[2].Width + LayoutManager.DefaultGapSize + LayoutManager.DefaultGapSize+LayoutManager.DefaultBorderSize+LayoutManager.DefaultBorderSize), controls[1].Width);
+            IControlHabanero column1Control1 = panel.Controls[0];
+            IControlHabanero column1LastControl = panel.Controls[DEFAULT_CONTROLS_PER_FIELD - 1];
 
+            // test the width of the entire panel
+            Assert.AreEqual(column1.Width, panel.Width);
+
+            // check that the left control is at the correct position (0 + Border size)
+            Assert.AreEqual(LayoutManager.DefaultBorderSize, column1Control1.Left);
+
+            // check that the last control of column 1 has its right edge at the correct position (column width)
+            Assert.AreEqual(column1.Width - LayoutManager.DefaultBorderSize, column1LastControl.Right);
+        } 
+
+        [Test]
+        public void Test_BuildPanel_ColumnWidths_FirstColumnOfMultiColumn()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            UIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumnsOneRowWithWidths();
+            UIFormColumn column1 = twoColumnTab[0];
+            UIFormColumn column2 = twoColumnTab[1];
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanel(twoColumnTab);
+
+            //---------------Test Result -----------------------
+            IControlHabanero column1Control1 = panel.Controls[0];
+            IControlHabanero column1LastControl = panel.Controls[DEFAULT_CONTROLS_PER_FIELD - 1];
+            
+            // test the width of the entire panel
+            Assert.AreEqual(column1.Width + column2.Width, panel.Width);
+
+            // check that the left control is at the correct position (0 + Border size)
+            Assert.AreEqual(LayoutManager.DefaultBorderSize, column1Control1.Left);
+
+            // check that the last control of column 1 has its right edge at the correct position (column width)
+            Assert.AreEqual(column1.Width, column1LastControl.Right);
+        }        
+        
+        [Test]
+        public void Test_BuildPanel_ColumnWidths_LastColumnOfMultiColumn()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            UIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumnsOneRowWithWidths();
+
+            UIFormColumn column1 = twoColumnTab[0];
+            UIFormColumn column2 = twoColumnTab[1];
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanel(twoColumnTab);
+
+            //---------------Test Result -----------------------
+            IControlHabanero column2LastControl = panel.Controls[DEFAULT_CONTROLS_PER_FIELD*2 - 1];
+            IControlHabanero column2Control1 = panel.Controls[DEFAULT_CONTROLS_PER_FIELD];
+
+            // check that the first control of the second column is at correct left position (column 1 width + gap)
+            Assert.AreEqual(column1.Width + LayoutManager.DefaultGapSize, column2Control1.Left);
+
+            // check that the last control of column 2 has its right edge at the correct position (panel width - border)
+            Assert.AreEqual(column1.Width + column2.Width - LayoutManager.DefaultBorderSize, column2LastControl.Right);
         }
+
+        [Test]
+        public void Test_BuildPanel_ColumnWidths_MiddleColumnOfMultiColumn()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            UIFormTab threeColumnTab = interfaceMapper.GetFormTabThreeColumnsOneRowWithWidths();
+
+            UIFormColumn column1 = threeColumnTab[0];
+            UIFormColumn column2 = threeColumnTab[1];
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanel(threeColumnTab);
+
+            //---------------Test Result -----------------------
+            IControlHabanero column2LastControl = panel.Controls[DEFAULT_CONTROLS_PER_FIELD * 2 - 1];
+            IControlHabanero column2Control1 = panel.Controls[DEFAULT_CONTROLS_PER_FIELD];
+
+            // check that the first control of the second column is at correct left position (column 1 width + gap)
+            Assert.AreEqual(column1.Width + LayoutManager.DefaultGapSize, column2Control1.Left);
+
+            // check that the last control of column 2 has its right edge at the correct position (panel width - border)
+            Assert.AreEqual(column1.Width + column2.Width, column2LastControl.Right);
+        }    
+
+        [Test]
+        public void Test_BuildPanel_ColumnWidths_DataColumnResizes()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            UIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabOneFieldNoColumnWidth();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            IPanel panel = panelBuilder.BuildPanel(singleIntegerFieldTab);
+            
+            int columnWidthOrig = 300;
+            int columnWidthAfter = 500;
+            panel.Width = columnWidthOrig;
+            ILabel label = (ILabel)panel.Controls[0];
+            IControlHabanero textbox = panel.Controls[1];
+            IPanel errorProviderPanel = (IPanel)panel.Controls[2];
+            int originalWidth = textbox.Width;
+            
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(label.Right + LayoutManager.DefaultGapSize, textbox.Left);
+            Assert.AreEqual(errorProviderPanel.Left - LayoutManager.DefaultGapSize, textbox.Right);
+            //---------------Execute Test ----------------------
+            panel.Width = columnWidthAfter;
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(originalWidth + columnWidthAfter - columnWidthOrig, textbox.Width);
+        }
+
+        [Test]
+        public void Test_BuildPanel_RowSpan()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            UIFormTab formTab = interfaceMapper.GetFormTabOneColumnThreeRowsWithRowSpan();
+
+            UIFormColumn column1 = formTab[0];
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanel(formTab);
+            //---------------Test Result -----------------------
+
+            IControlHabanero row1InputControl = panel.Controls[PanelBuilder.InputControlPosition];
+            ITextBox row2InputControl =
+                (ITextBox) panel.Controls[PanelBuilder.InputControlPosition + PanelBuilder.NumberOfControlsInColumn];
+
+            Assert.IsTrue(row2InputControl.Multiline);
+            Assert.AreEqual(row1InputControl.Height*2 + LayoutManager.DefaultGapSize,row2InputControl.Height);
+
+        }    
+        
+        [Test]
+        public void Test_BuildPanel_ColumnSpan()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            UIFormTab formTab = interfaceMapper.GetFormTabTwoColumns_2_1_ColSpan();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanel(formTab);
+            //---------------Test Result -----------------------
+
+            IControlHabanero columnSpanningControl = panel.Controls[PanelBuilder.InputControlPosition];
+            IControlHabanero columnSpanningErrorProviderControl = panel.Controls[PanelBuilder.ErrorProviderPosition];
+            IControlHabanero row2Col1InputControl = panel.Controls[PanelBuilder.InputControlPosition + PanelBuilder.NumberOfControlsInColumn*2];
+            IControlHabanero row2Col2InputControl = panel.Controls[PanelBuilder.InputControlPosition + PanelBuilder.NumberOfControlsInColumn*3];
+            IControlHabanero row2Col2ErrorProviderControl = panel.Controls[PanelBuilder.ErrorProviderPosition + PanelBuilder.NumberOfControlsInColumn * 3];
+
+            // -- check that the col spanning control is the correct width
+            Assert.AreEqual(row2Col1InputControl.Left, columnSpanningControl.Left);
+            Assert.AreEqual(row2Col2InputControl.Right, columnSpanningControl.Right);
+
+            // check that the error provider control is in the correct position (on the right of the col spanning control)
+            Assert.AreEqual(row2Col2ErrorProviderControl.Left, columnSpanningErrorProviderControl.Left);
+
+            // check that the first control in the second column is moved down to accommodate the col spanning control
+            Assert.AreEqual(row2Col1InputControl.Top, row2Col2InputControl.Top);
+        }
+        
         internal class PanelBuilder
         {
             private IControlFactory _factory;
             public const int DefaultErrorProviderWidth = 20;
             public const int NumberOfControlsInColumn = 3;
+            public const int LabelControlPosition = 0;
+            public const int InputControlPosition = 1;
+            public const int ErrorProviderPosition = NumberOfControlsInColumn - 1;
+            
 
             public PanelBuilder(IControlFactory factory)
             {
-
                 _factory = factory;
-
             }
 
             public IControlFactory Factory
@@ -328,84 +454,95 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             public IPanel BuildPanel(UIFormTab formTab)
             {
                 IPanel panel = Factory.CreatePanel();
-                GridLayoutManager layoutManager = new GridLayoutManager(panel, Factory);
-                int rowCount =  GetRowCount(formTab);
-                int colCount = formTab.Count * NumberOfControlsInColumn;
-                GridLayoutManager.ControlInfo[,] controls =
-                    new GridLayoutManager.ControlInfo[rowCount, colCount];
-                layoutManager.SetGridSize(rowCount, colCount);
-                GetControls(formTab, controls);
-                int width = 0;
-                foreach (UIFormColumn formColumn in formTab)
-                {
-                    width += formColumn.Width;
-                }
-                panel.Width = width;
-                layoutManager.FixColumnBasedOnContents(0);
-                
-                for (int i = 2; i < colCount; i+=3)
-                {
-                    layoutManager.FixColumnBasedOnContents(i-2);
-                    layoutManager.FixColumn(i,DefaultErrorProviderWidth);
-                }
-                AddControlsToLayoutManager(rowCount, colCount, layoutManager, controls);
+
+                GridLayoutManager layoutManager = SetupLayoutManager(formTab, panel);
+                AddFieldsToLayoutManager(formTab, layoutManager);
+                SetupInputControlColumnWidth(formTab, layoutManager);
+
+                panel.Width = layoutManager.GetFixedWidthIncludingGaps();
                 return panel;
             }
 
-            private void AddControlsToLayoutManager(int rowCount, int cols, GridLayoutManager layoutManager, GridLayoutManager.ControlInfo[,] controls)
+            private void SetupInputControlColumnWidth(UIFormTab formTab, GridLayoutManager layoutManager)
             {
-                for (int i = 0; i < rowCount; i++)
+                int formColCount = 0;
+                foreach (UIFormColumn formColumn in formTab)
                 {
-                    layoutManager.FixRow(i, Factory.CreateTextBox().Height);
+                    if (formColumn.Width < 0) continue;
+                    int gridCol = formColCount * NumberOfControlsInColumn;
+                    int labelColumnWidth = layoutManager.GetFixedColumnWidth(gridCol + LabelControlPosition);
+                    int errorProviderColumnWidth = layoutManager.GetFixedColumnWidth(gridCol + ErrorProviderPosition);
+                    int totalGap = (NumberOfControlsInColumn - 1)*layoutManager.GapSize;
+                    if (formTab.Count == 1) totalGap += 2 * layoutManager.BorderSize; // add extra border for single column
+                    else if (formColCount == formTab.Count - 1) totalGap += layoutManager.BorderSize + layoutManager.GapSize; // last column in multi-column
+                    else if (formColCount > 0 && formTab.Count > 0) totalGap += layoutManager.GapSize; //2 More gaps for internal column in multi-column
+                    else if (formColCount == 0 && formTab.Count > 0) totalGap += layoutManager.BorderSize;
 
-                    for (int j = 0; j < cols; j++)
+                    layoutManager.FixColumn(gridCol + InputControlPosition, formColumn.Width - labelColumnWidth - errorProviderColumnWidth - totalGap);
+                    formColCount++;
+                }
+            }
+
+            private void AddFieldsToLayoutManager(UIFormTab formTab, GridLayoutManager layoutManager)
+            {
+                int[] columnPos = new int[formTab.Count];
+                int[] columnRowSpanCount = new int[formTab.Count];
+                for (int currentRow = 0; currentRow < formTab.GetMaxRowsInColumns(); currentRow++)
+                {
+                    layoutManager.FixRow(currentRow, Factory.CreateTextBox().Height);
+                    int col = 0;
+                    int lastColSpan = 0;
+                    foreach (UIFormColumn formColumn in formTab)
                     {
-                        if (controls[i, j] == null)
+                        if (--columnRowSpanCount[col] > 0) continue;
+                        if (--lastColSpan > 0) continue;
+                        
+                        int currentFieldInColumn = columnPos[col];
+                        if (currentFieldInColumn < formColumn.Count) // there exists a field in this row in this column
                         {
-                            layoutManager.AddControl(null);
+                            UIFormField formField = formColumn[currentFieldInColumn];
+                            columnRowSpanCount[col] = formField.RowSpan;
+                            lastColSpan = formField.ColSpan;
+                            layoutManager.AddControl(Factory.CreateLabel(formField.GetLabel()));
+                            IControlHabanero inputControl = Factory.CreateControl(formField.ControlTypeName,
+                                                                                  formField.ControlAssemblyName);
+                            int rowSpan = 1;
+                            int colSpan = 1;
+                            if (formField.HasParameterValue("rowSpan"))
+                            {
+                                if (inputControl is ITextBox) ((ITextBox) inputControl).Multiline = true;
+                                rowSpan = Convert.ToInt32(formField.GetParameterValue("rowSpan"));
+                            }
+                            if (formField.HasParameterValue("colSpan"))
+                            {
+                                colSpan = Convert.ToInt32(formField.GetParameterValue("colSpan"));
+                            }
+                            layoutManager.AddControl(new GridLayoutManager.ControlInfo(inputControl, 1 + (NumberOfControlsInColumn * (colSpan-1)), rowSpan));
+                            layoutManager.AddControl(Factory.CreatePanel());
                         }
                         else
                         {
-                            layoutManager.AddControl(controls[i, j]);
-                            //controls[i, j].Control.TabIndex = rowCount * j + i;
+                            for (int i = 0; i < NumberOfControlsInColumn; i++) layoutManager.AddControl(null);
                         }
+                        columnPos[col]++;
+                        col++;
                     }
                 }
             }
 
-            private void GetControls(UIFormTab formTab, GridLayoutManager.ControlInfo[,] controls)
+            private GridLayoutManager SetupLayoutManager(UIFormTab formTab, IPanel panel)
             {
-                int currentColumn = 0;
-                int currentRow = 0;
-                foreach (UIFormColumn formColumn in formTab)
+                GridLayoutManager layoutManager = new GridLayoutManager(panel, Factory);
+                int maxRowsInColumns = formTab.GetMaxRowsInColumns();
+                int colCount = formTab.Count * NumberOfControlsInColumn;
+                layoutManager.SetGridSize(maxRowsInColumns, colCount);
+                layoutManager.FixColumnBasedOnContents(0);
+                for (int i = 0; i < colCount; i += NumberOfControlsInColumn)
                 {
-                    currentRow = 0;
-                    foreach (UIFormField formField in formColumn)
-                    {
-                        ILabel label = Factory.CreateLabel(formField.GetLabel());
-                        controls[currentRow, currentColumn + 0] = new GridLayoutManager.ControlInfo(label);
-                        IControlHabanero controlHabanero = Factory.CreateControl(formField.ControlTypeName, formField.ControlAssemblyName);
-                        controlHabanero.Width = formColumn.Width - label.Width - DefaultErrorProviderWidth;
-                        controls[currentRow, currentColumn + 1] = new GridLayoutManager.ControlInfo(controlHabanero);
-                        controls[currentRow, currentColumn + 2] = new GridLayoutManager.ControlInfo(Factory.CreatePanel());
-                        controls[currentRow, currentColumn + 2].Control.Width = DefaultErrorProviderWidth;
-                        currentRow++;
-                    }
-                    currentColumn += NumberOfControlsInColumn;
-                    
+                    layoutManager.FixColumnBasedOnContents(i + LabelControlPosition);
+                    layoutManager.FixColumn(i + ErrorProviderPosition, DefaultErrorProviderWidth);
                 }
-            }
-
-            private int GetRowCount(UIFormTab formTab)
-            {
-                int rowCount = 0;
-                foreach (UIFormColumn column in formTab)
-                {
-
-                    if (column.Count > rowCount)
-                        rowCount = column.Count;
-                }
-                return rowCount;
+                return layoutManager;
             }
         }
     }

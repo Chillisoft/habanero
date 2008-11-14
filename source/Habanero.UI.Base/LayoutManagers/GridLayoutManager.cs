@@ -39,6 +39,7 @@ namespace Habanero.UI.Base
         private bool[] _fixedColumnsBasedOnContents;
         private bool _fixAllRowsBasedOnContents;
         private bool[] _fixedRowsBasedOnContents;
+        private bool[,] _positionsOccupied;
 
         /// <summary>
         /// Constructor to initialise a new grid layout
@@ -74,6 +75,7 @@ namespace Habanero.UI.Base
                 _rowHeights[i] = -1;
                 _fixedRowsBasedOnContents[i] = false;
             }
+            _positionsOccupied = new bool[rows,cols];
         }
 
         /// <summary>
@@ -188,6 +190,7 @@ namespace Habanero.UI.Base
                 columnSpan = controlInfo.ColumnSpan;
             }
   
+
             if (control == null)
             {
                 control = _controlFactory.CreateControl();
@@ -202,6 +205,17 @@ namespace Habanero.UI.Base
                 throw new HabaneroDeveloperException(
                     "There is a serious application error. Please contact your system administrator" + Environment.NewLine + errorMessage, errorMessage);
             }
+
+            if (_positionsOccupied[currentRowNum, currentColNum])
+            {
+                IControlHabanero nullControl = _controlFactory.CreateControl();
+                nullControl.Visible = false;
+                _controls.Add(nullControl);
+                this.ManagedControl.Controls.Add(nullControl);
+                this._controlInfoTable.Add(nullControl, new ControlInfo(nullControl, columnSpan, rowSpan));
+                return AddControl(controlInfo);
+            }
+
             if (_fixedColumnsBasedOnContents[currentColNum])
             {
                 if (control.Width > _columnWidths[currentColNum])
@@ -224,8 +238,19 @@ namespace Habanero.UI.Base
                 }
             }
             this._controls.Add(control);
+
             this.ManagedControl.Controls.Add(control);
             this._controlInfoTable.Add(control, new ControlInfo(control, columnSpan, rowSpan));
+
+            for (int i = currentRowNum; i < currentRowNum + rowSpan; i++)
+            {
+                for (int j = currentColNum; j < currentColNum + columnSpan; j++)
+                {
+                    _positionsOccupied[i, j] = true;
+                }
+            }
+           
+
             RefreshControlPositions();
             return control;
         }

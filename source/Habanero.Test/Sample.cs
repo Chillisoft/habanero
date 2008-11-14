@@ -266,6 +266,20 @@ namespace Habanero.Test
 						</form>");
             }
 
+            public UIForm GetSimpleUIFormDef_NoColumnWidth()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>");
+            }
+
             public UIForm GetSimpleUIFormDefInt()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
@@ -329,7 +343,23 @@ namespace Habanero.Test
 							</tab>
 						</form>");
             }
-
+            public UIForm GetSimpleUIFormDef_1Column3RowsWithRowSpan()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+                                    <field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                    <field label=""Text1:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" >
+                                        <parameter name=""rowSpan"" value=""2""/>
+                                    </field>
+                                    <field label=""Text2:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                </columnLayout>
+							</tab>
+						</form>");
+            }
             public UIForm GetSimpleUIFormDef1Row2Columns1Row()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
@@ -337,10 +367,10 @@ namespace Habanero.Test
                      loader.LoadUIFormDef(
                          @"<form>
 							<tab name=""Tab1"">
-								<columnLayout width=""100"">
+								<columnLayout width=""200"">
                                     <field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
                                 </columnLayout>
-                                <columnLayout width=""50"">
+                                <columnLayout width=""150"">
 									<field label=""Text2:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
                                 </columnLayout>
 							</tab>
@@ -354,8 +384,48 @@ namespace Habanero.Test
                      loader.LoadUIFormDef(
                          @"<form>
 							<tab name=""Tab1"">
-								<columnLayout width=""100"">
+								<columnLayout width=""150"">
                                     <field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                </columnLayout>
+							</tab>
+						</form>");
+            }
+
+            private UIForm GetSimpleUIFormDef1Row3Columns()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""200"">
+                                    <field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                </columnLayout>
+                                <columnLayout width=""150"">
+									<field label=""Text2:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                </columnLayout>
+                                <columnLayout width=""125"">
+									<field label=""Text3:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                </columnLayout>
+							</tab>
+						</form>");
+            }
+
+            private UIForm GetSimpleUIFormDef_2Columns_2_1_ColSpan()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""200"">
+                                    <field label=""Text1:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" >
+                                        <parameter name=""colSpan"" value=""2""/>
+                                    </field>
+                                    <field label=""Text2:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                </columnLayout>
+                                <columnLayout width=""150"">
+									<field label=""Text3:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
                                 </columnLayout>
 							</tab>
 						</form>");
@@ -627,6 +697,30 @@ namespace Habanero.Test
             {
                 return GetSimpleUIFormDef1Row1Column1Row()[0];
             }
+
+            public UIFormTab GetFormTabThreeColumnsOneRowWithWidths()
+            {
+                return GetSimpleUIFormDef1Row3Columns()[0];
+            }
+
+
+            public UIFormTab GetFormTabOneFieldNoColumnWidth()
+            {
+                return GetSimpleUIFormDef_NoColumnWidth()[0];
+            }
+
+            public UIFormTab GetFormTabOneColumnThreeRowsWithRowSpan()
+            {
+                return GetSimpleUIFormDef_1Column3RowsWithRowSpan()[0];
+            }
+
+
+            public UIFormTab GetFormTabTwoColumns_2_1_ColSpan()
+            {
+                return GetSimpleUIFormDef_2Columns_2_1_ColSpan()[0];
+            }
+
+           
         }
 
 

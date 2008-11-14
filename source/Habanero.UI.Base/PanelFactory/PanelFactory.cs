@@ -407,7 +407,7 @@ namespace Habanero.UI.Base
                     }
                     else
                     {
-                        manager.AddControl(new GridLayoutManager.ControlInfo(controls[i, j].Control, controls[i, j].ColumnSpan, controls[i, j].RowSpan));
+                        manager.AddControl(controls[i, j]);
                         controls[i, j].Control.TabIndex = rowCount * j + i;
                     }
                 }

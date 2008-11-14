@@ -297,5 +297,28 @@ namespace Habanero.BO.ClassDefinition
             result = 29*result + (_uiFormGrid != null ? _uiFormGrid.GetHashCode() : 0);
             return result;
         }
+
+        public int GetMaxFieldCount()
+        {
+            int maxFieldCount = 0;
+            foreach (UIFormColumn column in this)
+            {
+                if (column.Count > maxFieldCount)
+                    maxFieldCount = column.Count;
+            }
+            return maxFieldCount;
+        }
+
+        public int GetMaxRowsInColumns()
+        {
+            int maxRowsInColumns = 0;
+            foreach (UIFormColumn column in this)
+            {
+                int rowsInColumn = column.GetRowsRequired();
+                if (rowsInColumn > maxRowsInColumns)
+                    maxRowsInColumns = rowsInColumn;
+            }
+            return maxRowsInColumns;
+        }
     }
 }
