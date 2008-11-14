@@ -858,6 +858,18 @@ namespace Habanero.UI.Win
             return new ControlWin();
         }
 
+        public IUserControlHabanero CreateUserControl()
+        {
+            return new UserControlWin();
+        }
+
+        public IUserControlHabanero CreateUserControl(string name)
+        {
+            IUserControlHabanero userControlHabanero = CreateUserControl();
+            userControlHabanero.Name = name;
+            return userControlHabanero;
+        }
+
         #endregion
 
         /// <summary>

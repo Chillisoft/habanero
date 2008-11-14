@@ -24,11 +24,10 @@ using DockStyle=System.Windows.Forms.DockStyle;
 
 namespace Habanero.UI.Win
 {
-    //TODO: why doesn't this inherit from IuserControl?
     /// <summary>
     /// Provides an empty control that can be used to create other controls
     /// </summary>
-    public class UserControlWin : UserControl, IControlHabanero
+    public class UserControlWin : UserControl, IUserControlHabanero
     {
         /// <summary>
         /// Gets or sets the anchoring style.

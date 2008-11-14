@@ -185,6 +185,16 @@ namespace Habanero.UI.Base
         IControlHabanero CreateControl();
 
         /// <summary>
+        /// Creates a user control
+        /// </summary>
+        IUserControlHabanero CreateUserControl();
+
+        /// <summary>
+        /// Creates a user control with the specified name.
+        /// </summary>
+        IUserControlHabanero CreateUserControl(string name);
+
+        /// <summary>
         /// Creates a control for the given type and assembly name
         /// </summary>
         /// <param name="typeName">The name of the control type</param>
@@ -474,6 +484,8 @@ namespace Habanero.UI.Base
         ///<param name="message">The text to display in the message box.</param>
         ///<returns>The message box result.</returns>
         Base.DialogResult ShowMessageBox(string message);
+
+        
     }
 
     /// <summary>

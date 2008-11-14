@@ -149,7 +149,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Adds a control at position (1,1)
+        /// Adds a control with a row and column span of 1 to the next position in the grid.
         /// </summary>
         /// <param name="control">The control to add</param>
         /// <returns>Returns the control once it has been added</returns>
@@ -159,10 +159,23 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Adds a control as specified by the ControlInfo provided (which can provide some context for the control
-        /// such as number of rows or columns to span
+        /// Adds a control to the next position in the grid.
+        /// The number of rows or columns to span are specified as parameters.
         /// </summary>
-        /// <param name="controlInfo">The information about the control to add</param>
+        /// <param name="control">The control to add</param>
+        /// <param name="rowSpan">The row span for the control</param>
+        /// <param name="columnSpan">The column span for the control</param>
+        /// <returns>Returns the control once it has been added</returns>
+        public IControlHabanero AddControl(IControlHabanero control, int rowSpan, int columnSpan)
+        {
+            return AddControl(new ControlInfo(control, columnSpan, rowSpan));
+        }
+
+        /// <summary>
+        /// Adds a control as specified by the ControlInfo provided (which can provide some context for the control)
+        /// such as number of rows or columns to span. 
+        /// </summary>
+        /// <param name="controlInfo">The information about the control to add to the next position in the grid.</param>
         public IControlHabanero AddControl(ControlInfo controlInfo)
         {
             IControlHabanero control = null;

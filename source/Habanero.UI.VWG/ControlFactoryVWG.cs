@@ -290,6 +290,18 @@ namespace Habanero.UI.VWG
             return cntrl;
         }
 
+        public IUserControlHabanero CreateUserControl()
+        {
+            return new UserControlVWG();
+        }
+
+        public IUserControlHabanero CreateUserControl(string name)
+        {
+            IUserControlHabanero userControlHabanero = CreateUserControl();
+            userControlHabanero.Name = name;
+            return userControlHabanero;
+        }
+
         /// <summary>
         /// Creates a new empty TreeView
         /// </summary>

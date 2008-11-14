@@ -627,7 +627,7 @@ namespace Habanero.Test.UI.Base
             string pnlName = "PanelName";
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
-            IPanel panelName = _factory.CreatePanel(pnlName,GetControlFactory());
+            IPanel panelName = _factory.CreatePanel(pnlName, GetControlFactory());
             //---------------Verify Result -----------------------
             Assert.IsNotNull(panelName);
             //Assert.IsTrue(treeView.TabStop);
@@ -635,6 +635,33 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(pnlName, panelName.Name);
             //---------------Tear Down -------------------------   
         }
+
+        [Test]
+        public void TestCreateUserControl()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Verify test pack-------------------
+            //---------------Execute Test ----------------------
+            IUserControlHabanero userControlHabanero = _factory.CreateUserControl();
+            //---------------Verify Result -----------------------
+            Assert.IsNotNull(userControlHabanero);
+            //---------------Tear Down -------------------------   
+        }
+
+        [Test]
+        public void TestCreateUserControl_WithName()
+        {
+            //---------------Set up test pack-------------------
+            string name = TestUtil.CreateRandomString();
+            //---------------Verify test pack-------------------
+            //---------------Execute Test ----------------------
+            IUserControlHabanero userControlHabanero = _factory.CreateUserControl(name);
+            //---------------Verify Result -----------------------
+            Assert.IsNotNull(userControlHabanero);
+            Assert.AreEqual(name, userControlHabanero.Name);
+            //---------------Tear Down -------------------------   
+        }
+
         [Test]
         public void TestCreateDateTimePicker()
         {
