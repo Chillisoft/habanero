@@ -143,5 +143,7 @@ namespace Habanero.Base
         /// E.g. Certain users may not be allowed to create certain Business Objects.
         /// </summary>
         bool IsCreatable(out string message);
+
+        event EventHandler<BOEventArgs> PropertyUpdated;
     }
 }

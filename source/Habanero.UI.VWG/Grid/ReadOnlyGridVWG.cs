@@ -47,7 +47,9 @@ namespace Habanero.UI.VWG
         /// <returns>Returns the data set provider</returns>
         public override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
         {
-            return new ReadOnlyDataSetProvider(col);
+            ReadOnlyDataSetProvider dataSetProvider = new ReadOnlyDataSetProvider(col);
+            dataSetProvider.AddPropertyUpdatedHandler = false;
+            return dataSetProvider;
         }
     }
 }

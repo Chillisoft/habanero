@@ -31,7 +31,9 @@ namespace Habanero.Test.BO
     {
         protected override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
         {
-            return new ReadOnlyDataSetProvider(col);
+            _dataSetProvider = new ReadOnlyDataSetProvider(col);
+            ((ReadOnlyDataSetProvider)_dataSetProvider).AddPropertyUpdatedHandler = true;
+            return _dataSetProvider;
         }
 
         [SetUp]

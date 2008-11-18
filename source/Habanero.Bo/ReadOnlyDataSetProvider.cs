@@ -26,6 +26,8 @@ namespace Habanero.BO
     /// </summary>
     public class ReadOnlyDataSetProvider : DataSetProvider
     {
+        private bool addPropertyUpdatedHandler = true;
+
         /// <summary>
         /// Constructor to initialise a new provider with the business object
         /// collection provided
@@ -36,6 +38,7 @@ namespace Habanero.BO
         {
         }
 
+
         /// <summary>
         /// Adds handlers to be called when business object updates occur
         /// </summary>
@@ -43,7 +46,15 @@ namespace Habanero.BO
         {
             foreach (BusinessObject businessObject in _collection)
             {
-                businessObject.Updated += UpdatedHandler;
+                //businessObject.Updated += UpdatedHandler;
+                if (addPropertyUpdatedHandler)
+                {
+                    businessObject.PropertyUpdated += UpdatedHandler;
+                }
+                else
+                {
+                    businessObject.Updated += UpdatedHandler;
+                }
             }
             _collection.BusinessObjectAdded += AddedHandler;
             _collection.BusinessObjectRemoved += RemovedHandler;
@@ -62,7 +73,17 @@ namespace Habanero.BO
             {
                 this._table.Rows.RemoveAt(rowNum);
             }
-            e.BusinessObject.Updated -= UpdatedHandler;
+            //e.BusinessObject.Updated -= UpdatedHandler;
+
+            if (addPropertyUpdatedHandler)
+            {
+                e.BusinessObject.PropertyUpdated -= UpdatedHandler;
+            }
+            else
+            {
+                e.BusinessObject.Updated -= UpdatedHandler;  
+            }
+            
         }
 
         /// <summary>
@@ -76,7 +97,17 @@ namespace Habanero.BO
             BusinessObject businessObject = (BusinessObject) e.BusinessObject;
             object[] values = GetValues(businessObject);
             _table.LoadDataRow(values, true);
-            businessObject.Updated += UpdatedHandler;
+            //businessObject.Updated += UpdatedHandler;
+
+            if (addPropertyUpdatedHandler)
+            {
+                businessObject.PropertyUpdated += UpdatedHandler;
+            }
+            else
+            {
+                businessObject.Updated += UpdatedHandler;
+            }
+            
         }
 
         /// <summary>
@@ -103,5 +134,16 @@ namespace Habanero.BO
         public override void InitialiseLocalData()
         {
         }
+
+        public bool AddPropertyUpdatedHandler
+        {
+            get { return addPropertyUpdatedHandler; }
+            set
+            {
+                addPropertyUpdatedHandler = value;
+                //AddHandlersForUpdates();
+            }
+        }
+
     }
 }

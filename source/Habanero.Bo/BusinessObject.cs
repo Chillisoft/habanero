@@ -48,6 +48,9 @@ namespace Habanero.BO
         public event EventHandler<BOEventArgs> Deleted;
         public event EventHandler<BOEventArgs> Restored;
 
+
+        public event EventHandler<BOEventArgs> PropertyUpdated;
+
         #endregion
 
         #region Fields
@@ -639,7 +642,8 @@ namespace Habanero.BO
                 prop.Value = newPropValue;
                 if (prop.IsValid)
                 {
-                    FireUpdatedEvent();
+                    //FireUpdatedEvent();
+                    FirePropertyUpdatedEvent();
                 }
             }
         }
@@ -1017,6 +1021,15 @@ namespace Habanero.BO
             }
         }
 
+
+        protected void FirePropertyUpdatedEvent()
+        {
+            if (PropertyUpdated != null)
+            {
+                PropertyUpdated(this, new BOEventArgs(this));
+            }
+        }
+
         private void FireRestoredEvent()
         {
             if (Restored != null)
@@ -1132,6 +1145,7 @@ namespace Habanero.BO
         /// </summary>
         protected internal virtual void AfterSave()
         {
+            FireUpdatedEvent();
         }
 
         /// <summary>

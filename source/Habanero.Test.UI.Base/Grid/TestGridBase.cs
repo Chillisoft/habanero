@@ -205,7 +205,7 @@ namespace Habanero.Test.UI.Base
 
                 //---------------Execute Test ----------------------
                 bo.SetPropertyValue(propName, "UpdatedValue");
-
+                bo.Save();
                 //---------------Test Result -----------------------
                 //gridBase.SelectedBusinessObject = bo;
 
@@ -886,6 +886,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             const string newPropValue = "NewValue";
             bo.SetPropertyValue(propName, newPropValue);
+            bo.Save();
             //---------------Test Result -----------------------
             Assert.AreEqual(newPropValue, cell.Value);
             //---------------Tear Down -------------------------          
@@ -1250,7 +1251,9 @@ namespace Habanero.Test.UI.Base
         {
             public override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
             {
-                return new ReadOnlyDataSetProvider(col);
+                ReadOnlyDataSetProvider dataSetProvider = new ReadOnlyDataSetProvider(col);
+                dataSetProvider.AddPropertyUpdatedHandler = false;
+                return dataSetProvider;
             }
         }
 
@@ -1264,7 +1267,9 @@ namespace Habanero.Test.UI.Base
             /// <returns></returns>
             public override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
             {
-                return new ReadOnlyDataSetProvider(col);
+                ReadOnlyDataSetProvider dataSetProvider = new ReadOnlyDataSetProvider(col);
+                dataSetProvider.AddPropertyUpdatedHandler = true;
+                return dataSetProvider;
             }
         }
 

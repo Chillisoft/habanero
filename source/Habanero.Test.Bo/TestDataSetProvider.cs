@@ -93,6 +93,7 @@ namespace Habanero.Test.BO
             //itsBo1.Save();
             //itsBo1.Save();
             _dataSetProvider = CreateDataSetProvider(_collection);
+            
             BOMapper mapper = new BOMapper((BusinessObject) _collection.SampleBo);
             itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef().GetUIGridProperties());
             itsDatabaseConnectionMockControl.Verify();

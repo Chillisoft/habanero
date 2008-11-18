@@ -28,9 +28,9 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Associates ToolTip text with the specified control
         /// </summary>
-        /// <param name="label">The Control to associate the ToolTip text with</param>
+        /// <param name="controlHabanero">The Control to associate the ToolTip text with</param>
         /// <param name="toolTipText">The ToolTip text to display when the pointer is on the control</param>
-        void SetToolTip(IControlHabanero label, string toolTipText);
+        void SetToolTip(IControlHabanero controlHabanero, string toolTipText);
 
         /// <summary>
         /// Retrieves the ToolTip text associated with the specified control

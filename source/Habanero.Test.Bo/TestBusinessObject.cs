@@ -537,6 +537,61 @@ namespace Habanero.Test.BO
             Assert.IsFalse(equal);
             Assert.AreNotEqual(boStatus1.GetHashCode(), boStatus2.GetHashCode());
         }
+
+        [Test]
+        public void Test__UpdatePropValueFiresPropertyUpdatedEvent()
+        {
+            //---------------Set up test pack-------------------
+            Engine engine1 = new Engine();
+            bool propertyEventFired = false;
+ 
+            //-------------Assert Preconditions -------------
+            Assert.IsFalse(propertyEventFired);
+            //---------------Execute Test ----------------------
+            engine1.PropertyUpdated += delegate {propertyEventFired = true;};
+            engine1.EngineNo = "20";
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(propertyEventFired);
+
+        }
+
+        [Test]
+        public void Test__UpdatePropValueDoesNotFireUpdatedEvent()
+        {
+            //---------------Set up test pack-------------------
+            Engine engine1 = new Engine();
+            bool updatedEventFired = false;
+
+            //-------------Assert Preconditions -------------
+            Assert.IsFalse(updatedEventFired);
+            //---------------Execute Test ----------------------
+            engine1.Updated += delegate { updatedEventFired = true; };
+            engine1.EngineNo = "20";
+          
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(updatedEventFired);
+        }
+
+
+        [Test]
+        public void Test__SaveFiresUpdatedEvent()
+        {
+            //---------------Set up test pack-------------------
+            Engine engine1 = new Engine();
+            bool updatedEventFired = false;
+
+            //-------------Assert Preconditions -------------
+            Assert.IsFalse(updatedEventFired);
+            //---------------Execute Test ----------------------
+            engine1.Updated += delegate { updatedEventFired = true; };
+            engine1.EngineNo = "20";
+            engine1.Save();
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(updatedEventFired);
+        }
     }
 
 }

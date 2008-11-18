@@ -506,7 +506,6 @@ namespace Habanero.UI.Base
                             editable = false;
                         }
                         else editable = true;
-
                     }
                 }
             }

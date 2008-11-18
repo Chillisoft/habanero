@@ -29,13 +29,13 @@ namespace Habanero.UI.VWG
     public class ToolTipVWG : ToolTip, IToolTip
     {
         /// <summary>
-        /// Associates ToolTip text with the specified control
+        /// Associates ToolTip text with the specified controlHabanero
         /// </summary>
         /// <param name="label">The Control to associate the ToolTip text with</param>
-        /// <param name="toolTipText">The ToolTip text to display when the pointer is on the control</param>
-        public void SetToolTip(IControlHabanero control, string toolTipText)
+        /// <param name="toolTipText">The ToolTip text to display when the pointer is on the controlHabanero</param>
+        public void SetToolTip(IControlHabanero controlHabanero, string toolTipText)
         {
-            base.SetToolTip((Control) control, toolTipText);
+            base.SetToolTip((Control) controlHabanero, toolTipText);
         }
 
         /// <summary>

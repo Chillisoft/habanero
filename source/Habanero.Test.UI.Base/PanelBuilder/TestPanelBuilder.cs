@@ -1,4 +1,6 @@
 using System;
+using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.Win;
@@ -347,7 +349,9 @@ namespace Habanero.Test.UI.Base.PanelBuilder
 
             // check that the last control of column 2 has its right edge at the correct position (panel width - border)
             Assert.AreEqual(column1.Width + column2.Width, column2LastControl.Right);
-        }    
+        }
+    
+
 
         [Test]
         public void Test_BuildPanel_ColumnWidths_DataColumnResizes()
@@ -429,10 +433,94 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             // check that the first control in the second column is moved down to accommodate the col spanning control
             Assert.AreEqual(row2Col1InputControl.Top, row2Col2InputControl.Top);
         }
-        
+
+        [Test]
+        public void Test_BuildPanel_CompulsoryMakesLabelBold()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneCompulsory();
+            Sample sample = new Sample(classDef);
+            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            UIFormTab twoFieldTabOneCompulsory = interfaceMapper.GetFormTabTwoFields_OneHasCompulsoryProp();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            panelBuilder.BusinessObject = sample;
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanel(twoFieldTabOneCompulsory);
+            //---------------Test Result -----------------------
+            IControlCollection controls = panel.Controls;
+
+            ILabel compulsoryLabel = (ILabel) controls[PanelBuilder.LabelControlPosition];
+            Assert.AreEqual("CompulsorySampleText:", compulsoryLabel.Text);
+            Assert.IsTrue(compulsoryLabel.Font.Bold);
+
+            ILabel nonCompulsoryLabel = (ILabel)controls[PanelBuilder.LabelControlPosition+PanelBuilder.NumberOfControlsInColumn];
+            Assert.AreEqual("SampleTextNotCompulsory:", nonCompulsoryLabel.Text);
+            Assert.IsFalse(nonCompulsoryLabel.Font.Bold);
+        }
+
+        [Test]
+        public void Test_BuildPanel_CorrectControlMappers()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            Sample sample = new Sample(classDef);
+            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            UIFormTab twoFieldTabOneCompulsory = interfaceMapper.GetFormTabTwoFields_OneHasIntegerField();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            panelBuilder.BusinessObject = sample;
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            panelBuilder.BuildPanel(twoFieldTabOneCompulsory);
+            //---------------Test Result -----------------------
+            IControlMapperCollection mappers = panelBuilder.ControlMappers;
+            Assert.AreEqual(2,mappers.Count);
+            Assert.AreEqual(sample, mappers.BusinessObject);
+
+            IControlMapper sampleTextControlMapper = mappers[0];
+            Assert.AreEqual("SampleText", sampleTextControlMapper.PropertyName);
+            Assert.IsInstanceOfType(typeof(ITextBox), sampleTextControlMapper.Control);
+            
+            IControlMapper sampleText2ControlMapper = mappers[1];
+            Assert.AreEqual("SampleInt", sampleText2ControlMapper.PropertyName);
+            Assert.IsInstanceOfType(typeof(INumericUpDown), sampleText2ControlMapper.Control);
+        }
+
+        [Test,Ignore("Still working on this")]
+        public void Test_BuildPanel_SetToolTip()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneWithToolTipText();
+            Sample sample = new Sample(classDef);
+            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            UIFormTab twoFieldTabOneHasToolTip = interfaceMapper.GetFormTabTwoFields_OneHasToolTip();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            panelBuilder.BusinessObject = sample;
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanel(twoFieldTabOneHasToolTip);
+          //---------------Test Result -----------------------
+            IControlCollection controls = panel.Controls;
+            ILabel labelWithToolTip =
+                (ILabel) controls[PanelBuilder.LabelControlPosition + PanelBuilder.NumberOfControlsInColumn];
+            IControlHabanero controlHabanero =
+                controls[PanelBuilder.InputControlPosition + PanelBuilder.NumberOfControlsInColumn];
+            IToolTip toolTip = GetControlFactory().CreateToolTip();
+
+            Assert.AreEqual("ToolTip", toolTip.GetToolTip(controlHabanero));
+            Assert.AreEqual("ToolTip", toolTip.GetToolTip(labelWithToolTip));
+
+        }
+
         internal class PanelBuilder
         {
             private IControlFactory _factory;
+            private BusinessObject _businessObject;
+            private IClassDef _classDef;
+            private IControlMapperCollection _controlMappers;
             public const int DefaultErrorProviderWidth = 20;
             public const int NumberOfControlsInColumn = 3;
             public const int LabelControlPosition = 0;
@@ -443,12 +531,24 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             public PanelBuilder(IControlFactory factory)
             {
                 _factory = factory;
+                _controlMappers = new ControlMapperCollection();
             }
 
             public IControlFactory Factory
             {
                 get { return _factory; }
                 set { _factory = value; }
+            }
+
+            public BusinessObject BusinessObject
+            {
+                get { return _businessObject; }
+                set { _businessObject = value; }
+            }
+
+            public IControlMapperCollection ControlMappers
+            {
+                get { return _controlMappers; }
             }
 
             public IPanel BuildPanel(UIFormTab formTab)
@@ -485,6 +585,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
 
             private void AddFieldsToLayoutManager(UIFormTab formTab, GridLayoutManager layoutManager)
             {
+                
                 int[] columnPos = new int[formTab.Count];
                 int[] columnRowSpanCount = new int[formTab.Count];
                 for (int currentRow = 0; currentRow < formTab.GetMaxRowsInColumns(); currentRow++)
@@ -501,11 +602,16 @@ namespace Habanero.Test.UI.Base.PanelBuilder
                         if (currentFieldInColumn < formColumn.Count) // there exists a field in this row in this column
                         {
                             UIFormField formField = formColumn[currentFieldInColumn];
+                            
                             columnRowSpanCount[col] = formField.RowSpan;
                             lastColSpan = formField.ColSpan;
-                            layoutManager.AddControl(Factory.CreateLabel(formField.GetLabel()));
+                            bool isCompulsory = GetIsCompulsory(formField);
+                            ILabel labelControl = Factory.CreateLabel(formField.GetLabel(), isCompulsory);
+                            layoutManager.AddControl(labelControl);
                             IControlHabanero inputControl = Factory.CreateControl(formField.ControlTypeName,
                                                                                   formField.ControlAssemblyName);
+                            SetupControlMapper(formField, inputControl);
+                            SetToolTip(formField, labelControl, inputControl);
                             int rowSpan = 1;
                             int colSpan = 1;
                             if (formField.HasParameterValue("rowSpan"))
@@ -530,6 +636,47 @@ namespace Habanero.Test.UI.Base.PanelBuilder
                 }
             }
 
+            private void SetToolTip(UIFormField formField, ILabel labelControl, IControlHabanero inputControl)
+            {
+                if(_businessObject==null) return;
+                ClassDef classDef = _businessObject.ClassDef;
+                string toolTipText = formField.GetToolTipText(classDef);
+                IToolTip toolTip = _factory.CreateToolTip();
+                if (!String.IsNullOrEmpty(toolTipText))
+                {
+                    toolTip.SetToolTip(labelControl, toolTipText);
+                    toolTip.SetToolTip(inputControl, toolTipText);
+                }
+            }
+
+            private bool GetIsCompulsory(UIFormField formField)
+            {
+                bool isCompulsory = false;
+                if(_businessObject!=null)
+                {
+                    _classDef = _businessObject.ClassDef;
+                    if(_classDef.PropDefcol.Contains(formField.PropertyName))
+                    {
+                        IPropDef propDef = _classDef.PropDefcol[formField.PropertyName];
+                        isCompulsory=propDef.Compulsory;
+                    }
+                    _controlMappers.BusinessObject = _businessObject;
+                }
+                return isCompulsory;
+            }
+
+            private void SetupControlMapper(UIFormField formField, IControlHabanero inputControl)
+            {
+                IControlMapper controlMapper = ControlMapper.Create(formField.MapperTypeName,
+                                                             formField.MapperAssembly, inputControl,
+                                                             formField.PropertyName, formField.Editable, _factory);
+                if (_businessObject != null)
+                {
+                    controlMapper.BusinessObject = _businessObject;
+                }
+                _controlMappers.Add(controlMapper);
+            }
+
             private GridLayoutManager SetupLayoutManager(UIFormTab formTab, IPanel panel)
             {
                 GridLayoutManager layoutManager = new GridLayoutManager(panel, Factory);
@@ -544,6 +691,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
                 }
                 return layoutManager;
             }
+
         }
     }
 }
