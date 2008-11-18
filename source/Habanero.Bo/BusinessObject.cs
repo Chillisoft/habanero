@@ -508,6 +508,17 @@ namespace Habanero.BO
             return false;
         }
 
+        ///<summary>
+        /// Returns the value under the property name specified
+        ///</summary>
+        ///<param name="propName">The property name</param>
+        ///<typeparam name="T">The type to cast the retrieved property value to.</typeparam>
+        ///<returns>Returns the value if found</returns>
+        public T GetPropertyValue<T>(string propName)
+        {
+            return (T)GetPropertyValue(propName);
+        }
+
         /// <summary>
         /// Returns the value under the property name specified
         /// </summary>
