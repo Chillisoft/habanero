@@ -26,7 +26,6 @@ using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 using Habanero.Util;
 using log4net;
 
@@ -1195,11 +1194,7 @@ namespace Habanero.BO
                 return this.IsCreatable(out errMsg);
             }
             
-            if (this.Status.IsDirty)
-            {
-                return this.IsEditable(out errMsg);
-            }
-            return true;
+            return !this.Status.IsDirty || this.IsEditable(out errMsg);
         }
 
     }

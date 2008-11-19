@@ -24,7 +24,6 @@ using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
 using Habanero.BO.Loaders;
 using Habanero.Util;
-using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
 {

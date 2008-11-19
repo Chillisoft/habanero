@@ -20,8 +20,6 @@
 using System;
 using System.Security.Principal;
 using Habanero.Base;
-using Habanero.BO.ClassDefinition;
-using Habanero.BO.Loaders;
 using Habanero.DB;
 
 namespace Habanero.BO
@@ -161,18 +159,11 @@ namespace Habanero.BO
             {
                 return "Created";
             }
-            else if (busObj.Status.IsDeleted)
+            if (busObj.Status.IsDeleted)
             {
                 return "Deleted";
             }
-            else if (busObj.Status.IsDirty)
-            {
-                return "Updated";
-            }
-            else
-            {
-                return "Unknown";
-            }
+            return busObj.Status.IsDirty ? "Updated" : "Unknown";
         }
 
         ///<summary>
