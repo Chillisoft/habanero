@@ -178,6 +178,35 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Tear Down -------------------------
         }
 
+        [Test]
+        public void TestAddUIDef()
+        {
+            //---------------Set up test pack-------------------
+            UIDef uiDef = new UIDef("test", null, null);
+            UIDefCol uiDefcol = new UIDefCol();
+            //---------------Assert Precondition----------------
+Assert.IsNull(uiDef.UIDefCol);
+            //---------------Execute Test ----------------------
+            uiDefcol.Add(uiDef);
+            //---------------Test Result -----------------------
+            Assert.AreSame(uiDefcol, uiDef.UIDefCol);
+
+        }
+        [Test]
+        public void TestClassDef()
+        {
+            //---------------Set up test pack-------------------
+            UIDefCol uiDefCol = new UIDefCol();
+            ClassDef classdef = MyBO.LoadDefaultClassDef();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            uiDefCol.ClassDef = classdef;
+            //---------------Test Result -----------------------
+            Assert.AreSame(classdef, uiDefCol.ClassDef);
+
+        }
+
 
         public static ClassDef LoadClassDef()
         {

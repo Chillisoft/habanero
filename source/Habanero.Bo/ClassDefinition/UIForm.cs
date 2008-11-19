@@ -32,6 +32,7 @@ namespace Habanero.BO.ClassDefinition
         private int _width;
         private int _height;
         private string _title;
+        private UIDef _uiDef;
 
         /// <summary>
         /// Constructor to initialise a new definition
@@ -47,6 +48,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="tab">A UIFormTab object</param>
         public void Add(UIFormTab tab)
         {
+            tab.UIForm = this;
             _list.Add(tab);
         }
 
@@ -151,6 +153,12 @@ namespace Habanero.BO.ClassDefinition
         {
             set { _title = value; }
             get { return _title; }
+        }
+
+        public UIDef UIDef
+        {
+            get { return _uiDef; }
+            internal set { _uiDef = value; }
         }
 
         ///<summary>

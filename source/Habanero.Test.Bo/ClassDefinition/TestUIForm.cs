@@ -266,6 +266,36 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Tear Down -------------------------          
         }
 
+        [Test]
+        public void TestAddUIFormTab()
+        {
+            //---------------Set up test pack-------------------
+            UIForm form = new UIForm();
+            UIFormTab tab = new UIFormTab();
+
+            //---------------Assert Precondition----------------
+            Assert.IsNull(tab.UIForm);
+            //---------------Execute Test ----------------------
+            form.Add(tab);
+            //---------------Test Result -----------------------
+            Assert.AreSame(form, tab.UIForm);
+        }
+
+        [Test]
+        public void TestUIDef()
+        {
+            //---------------Set up test pack-------------------
+            UIForm uiForm = new UIForm();
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            UIDef uiDef = new UIDef("test", uiForm, null);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(uiDef, uiForm.UIDef);
+        }
+
         private UIFormTab CreateUIFormTab()
         {
             UIFormTab uiFormTab1 = new UIFormTab();

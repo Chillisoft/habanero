@@ -286,6 +286,22 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsTrue(uiDef != uiDef2);
         }
 
+        [Test]
+        public void TestUIDefCol()
+        {
+            //---------------Set up test pack-------------------
+            UIDef uiDef = new UIDef("test", null, null);
+            UIDefCol uiDefCol = new UIDefCol();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            uiDef.UIDefCol = uiDefCol;
+            //---------------Test Result -----------------------
+            Assert.AreSame(uiDefCol, uiDef.UIDefCol);
+
+        }
+ 
+
 
         // Grants access to protected methods
         private class UIDefInheritorStub : UIDef

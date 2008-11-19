@@ -146,11 +146,50 @@ namespace Habanero.Test
 								</columnLayout>
 							</tab>
 						</form>
-					</ui>                    
+					</ui>   
+                    <ui name=""AlternateVirtualProp"">
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""-MyTestProp-"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+                 
 				</class>
 			");
 			ClassDef.ClassDefs.Add(itsClassDef);
 			return itsClassDef;
+        }
+
+
+        public static ClassDef LoadDefaultClassDef_CompulsoryField()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" type=""Guid"" />
+					<property  name=""TestProp"" compulsory=""true"" />
+					<property  name=""TestProp2"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
         }
 
         public static ClassDef LoadDefaultClassDefWithDifferentTableAndFieldNames()
@@ -1213,6 +1252,7 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;    
         }
+
     }
 
     public class MyRelatedBo : BusinessObject

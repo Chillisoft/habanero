@@ -30,6 +30,7 @@ namespace Habanero.BO.ClassDefinition
     public class UIDefCol :  IEnumerable<UIDef>
     {
         private Dictionary<string, UIDef> _defs;
+        private ClassDef _classDef;
 
         /// <summary>
         /// Constructor to initialise a new empty collection
@@ -55,6 +56,7 @@ namespace Habanero.BO.ClassDefinition
                                                             "'default' is the name given to a 'ui' element without " +
                                                             "a 'name' attribute.)", def.Name));
             }
+            def.UIDefCol = this;
             _defs.Add(def.Name, def);
         }
 
@@ -132,6 +134,12 @@ namespace Habanero.BO.ClassDefinition
         public int Count
         {
             get { return _defs.Count; }
+        }
+
+        public ClassDef ClassDef
+        {
+            get { return _classDef; }
+            internal set { _classDef = value; }
         }
 
         #region Equals

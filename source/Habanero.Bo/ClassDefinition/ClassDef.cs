@@ -219,6 +219,7 @@ namespace Habanero.BO.ClassDefinition
             _keysCol = keyDefCol;
             _relationshipDefCol = relationshipDefCol;
             _uiDefCol = uiDefCol ?? new UIDefCol();
+            _uiDefCol.ClassDef = this;
         }
 
         #endregion Constructors

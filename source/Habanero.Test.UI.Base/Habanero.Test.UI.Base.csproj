@@ -79,6 +79,7 @@
     </Compile>
     <Compile Include="ButtonsControl\TestButtonGroupControl.cs" />
     <Compile Include="PanelBuilder\TestPanelBuilder.cs" />
+    <Compile Include="PanelBuilder\TestPanelInfo.cs" />
     <Compile Include="TestButton.cs" />
     <Compile Include="TestCheckBox.cs" />
     <Compile Include="TestComboBox.cs" />

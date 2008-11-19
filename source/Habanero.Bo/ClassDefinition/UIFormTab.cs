@@ -31,6 +31,7 @@ namespace Habanero.BO.ClassDefinition
         private IList _list;
         private string _name;
         private UIFormGrid _uiFormGrid;
+        private UIForm _uiForm;
         //private UIDefName _name;
 
         /// <summary>
@@ -56,6 +57,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="column">The UIFormColumn object</param>
         public void Add(UIFormColumn column)
         {
+            column.UIFormTab = this;
             _list.Add(column);
         }
 
@@ -150,6 +152,12 @@ namespace Habanero.BO.ClassDefinition
         {
             set { _uiFormGrid = value; }
             get { return _uiFormGrid; }
+        }
+
+        public UIForm UIForm
+        {
+            get { return _uiForm; }
+            internal set { _uiForm = value; }
         }
 
         /////<summary>

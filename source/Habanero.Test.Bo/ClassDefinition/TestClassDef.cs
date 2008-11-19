@@ -926,5 +926,14 @@ namespace Habanero.Test.BO.ClassDefinition
 
         }
 
+        [Test]
+        public void TestUIDefColHasClassDefSetup()
+        {
+            //---------------Execute Test ----------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef, classDef.UIDefCol.ClassDef);
+        }
+
     }
 }

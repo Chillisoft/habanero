@@ -225,6 +225,21 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(3, maxFieldCount);
         }
 
+        [Test]
+        public void TestUIForm()
+        {
+            //---------------Set up test pack-------------------
+            UIFormTab uiFormTab = new UIFormTab("tab1");
+            UIForm form = new UIForm();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            uiFormTab.UIForm = form;
+            //---------------Test Result -----------------------
+            Assert.AreSame(form, uiFormTab.UIForm);
+        }
+
+
         public UIFormColumn CreateUIFormColumn_2Fields()
         {
             return CreateUIFormColumn_2Fields("prop1");
@@ -270,6 +285,21 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             UIFormTab uiFormTab1 = new UIFormTab();
             Assert.AreNotEqual(uiFormTab1, "bob");
+        }
+
+        [Test]
+        public void TestAddColumn()
+        {
+            //---------------Set up test pack-------------------
+            UIFormColumn uiFormColumn = new UIFormColumn();
+            UIFormTab uiFormTab = new UIFormTab();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiFormColumn.UIFormTab);
+            //---------------Execute Test ----------------------
+            uiFormTab.Add(uiFormColumn);
+            //---------------Test Result -----------------------
+            Assert.AreSame(uiFormTab, uiFormColumn.UIFormTab);
+
         }
     }
 }

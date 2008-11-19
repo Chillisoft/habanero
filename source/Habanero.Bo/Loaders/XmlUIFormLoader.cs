@@ -84,13 +84,6 @@ namespace Habanero.BO.Loaders
         protected override void LoadFromReader()
         {
 			_uiForm = _defClassFactory.CreateUIFormDef();
-			//_uiFormDef = new UIFormDef();
-
-            //_reader.Read();
-            //string className = _reader.GetAttribute("class");
-            //string assemblyName = _reader.GetAttribute("assembly");
-            //_collection.Class = TypeLoader.LoadType(assemblyName, className);
-            //_collection.Name = new UIPropertyCollectionName(_collection.Class, _reader.GetAttribute("name"));
 
             _reader.Read();
             _uiForm.Title = _reader.GetAttribute("title");

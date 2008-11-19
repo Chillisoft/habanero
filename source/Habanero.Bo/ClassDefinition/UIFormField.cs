@@ -42,6 +42,8 @@ namespace Habanero.BO.ClassDefinition
         private readonly Hashtable _parameters;
         private TriggerCol _triggers;
         private string _toolTipText;
+        private UIFormTab _uiFormTab;
+        private UIFormColumn _uiFormColumn;
 
         /// <summary>
         /// Constructor to initialise a new definition
@@ -414,6 +416,30 @@ namespace Habanero.BO.ClassDefinition
         public int ColSpan
         {
             get { return HasParameterValue("colSpan") ? Convert.ToInt32(GetParameterValue("colSpan")) : 1; }
+        }
+
+        public bool IsCompulsory
+        {
+            get {
+                ClassDef def = GetClassDef();
+                if (def == null) return false;
+                IPropDef propDef = this.GetPropDefIfExists(def);
+                if (propDef == null) return false;
+                return propDef.Compulsory;
+            }
+        }
+
+        public UIFormColumn UIFormColumn
+        {
+            get { return _uiFormColumn; }
+            internal set { _uiFormColumn = value; }
+        }
+
+        private ClassDef GetClassDef()
+        {
+            UIDef uiDef = this.UIFormColumn.UIFormTab.UIForm.UIDef;
+            if (uiDef == null) return null;
+            return uiDef.UIDefCol.ClassDef;
         }
 
         #endregion Type Initialisation

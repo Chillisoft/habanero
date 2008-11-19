@@ -21,6 +21,7 @@ using System;
 using System.IO;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.Console;
@@ -140,9 +141,11 @@ namespace Habanero.Console
         /// </summary>
         protected override void SetupDatabaseConnection()
         {
+            if (DatabaseConnection.CurrentConnection != null) return;
             if (_databaseConfig == null) _databaseConfig = DatabaseConfig.ReadFromConfigFile();
             if (_privateKey != null) _databaseConfig.SetPrivateKey(_privateKey);
             DatabaseConnection.CurrentConnection = _databaseConfig.GetDatabaseConnection();
+            BORegistry.DataAccessor = new DataAccessorDB();
         }
 
         /// <summary>

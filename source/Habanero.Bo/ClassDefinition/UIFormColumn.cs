@@ -31,6 +31,7 @@ namespace Habanero.BO.ClassDefinition
     {
         private readonly IList _list;
         private int _width;
+        private UIFormTab _uiFormTab;
 
         /// <summary>
         /// Constructor to initialise a new column definition
@@ -56,6 +57,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="field">A form field definition</param>
         public void Add(UIFormField field)
         {
+            field.UIFormColumn = this;
             _list.Add(field);
         }
 
@@ -144,10 +146,11 @@ namespace Habanero.BO.ClassDefinition
             set { _width = value; }
         }
 
-        //		public UIDefName Name {
-        //			get { return _name; }
-        //			set { _name = value; }
-        //		}
+        public UIFormTab UIFormTab
+        {
+            get { return _uiFormTab; }
+            internal set { _uiFormTab = value; }
+        }
 
         ///<summary>
         /// Clones the collection.

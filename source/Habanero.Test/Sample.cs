@@ -74,24 +74,36 @@ namespace Habanero.Test
 
         public static ClassDef CreateClassDefWithTwoPropsOneCompulsory()
         {
-            PropDefCol lPropDefCol = new PropDefCol();
-            PropDef def = new PropDef("SampleID", typeof(Guid), PropReadWriteRule.WriteOnce, null);
-            lPropDefCol.Add(def);
-            
-            lPropDefCol.Add(new PropDef("SampleText", typeof (String), PropReadWriteRule.ReadWrite, "SampleText", null,
-                                        true, false));
-            lPropDefCol.Add(new PropDef("SampleText2", typeof(String), PropReadWriteRule.ReadWrite, "SampleText2", null,
-                                        false, false));
-            PrimaryKeyDef primaryKey = new PrimaryKeyDef();
-            primaryKey.IsGuidObjectID = true;
-            primaryKey.Add(lPropDefCol["SampleID"]);
-            KeyDefCol keysCol = new KeyDefCol();
-            RelationshipDefCol relDefCol = new RelationshipDefCol();
-            return new ClassDef(typeof(Sample), primaryKey, lPropDefCol, keysCol, relDefCol);
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""Sample"" assembly=""Habanero.Test"">
+					<property  name=""SampleID"" type=""Guid"" />
+					<property  name=""SampleText"" />
+					<property  name=""SampleText2"" compulsory=""true""/>
+					<primaryKey>
+						<prop name=""SampleID"" />
+					</primaryKey>
+					<ui>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""150"">
+									<field label=""CompulsorySampleText:"" property=""SampleText2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""SampleTextNotCompulsory:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+			");
+			ClassDef.ClassDefs.Add(itsClassDef);
+			return itsClassDef;
         }
 
         public static ClassDef CreateClassDefWithTwoPropsOneWithToolTipText()
         {
+
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef def = new PropDef("SampleID", typeof(Guid), PropReadWriteRule.WriteOnce, null);
             lPropDefCol.Add(def);
@@ -110,20 +122,31 @@ namespace Habanero.Test
 
         public static ClassDef CreateClassDefWithTwoPropsOneInteger()
         {
-            PropDefCol lPropDefCol = new PropDefCol();
-            PropDef def = new PropDef("SampleID", typeof(Guid), PropReadWriteRule.WriteOnce, null);
-            lPropDefCol.Add(def);
-            
-            lPropDefCol.Add(new PropDef("SampleText", typeof (String), PropReadWriteRule.ReadWrite, "SampleText", null,
-                                        true, false));
-            lPropDefCol.Add(new PropDef("SampleInt", typeof(Int32), PropReadWriteRule.ReadWrite, "SampleInt", null,
-                                        false, false));
-            PrimaryKeyDef primaryKey = new PrimaryKeyDef();
-            primaryKey.IsGuidObjectID = true;
-            primaryKey.Add(lPropDefCol["SampleID"]);
-            KeyDefCol keysCol = new KeyDefCol();
-            RelationshipDefCol relDefCol = new RelationshipDefCol();
-            return new ClassDef(typeof(Sample), primaryKey, lPropDefCol, keysCol, relDefCol);
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""Sample"" assembly=""Habanero.Test"">
+					<property  name=""SampleID"" type=""Guid"" />
+					<property  name=""SampleText"" />
+					<property  name=""SampleInt"" type=""Int32"" />
+					<primaryKey>
+						<prop name=""SampleID"" />
+					</primaryKey>
+					<ui>
+                        <form>
+							<tab name=""Tab1"">
+								<columnLayout width=""200"">
+                                    <field label=""SampleText:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                    <field label=""SampleInt:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" />
+                                </columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
         }
 
         private static ClassDef CreateClassDef()
@@ -511,21 +534,6 @@ namespace Habanero.Test
 						</form>");
             }
 
-            private UIForm GetSimpleUIFormDefTwoRowsOneHasIntegerProp()
-            {
-                XmlUIFormLoader loader = new XmlUIFormLoader();
-                return
-                     loader.LoadUIFormDef(
-                         @"<form>
-							<tab name=""Tab1"">
-								<columnLayout width=""200"">
-                                    <field label=""SampleText:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
-                                    <field label=""SampleInt:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" />
-                                </columnLayout>
-							</tab>
-						</form>");
-            }
-
             private UIForm GetSimpleUIFormDef_2Columns_2_1_ColSpan()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
@@ -840,12 +848,6 @@ namespace Habanero.Test
             {
                 return GetSimpleUIFormDefTwoRowsOneHasCompulsoryProp()[0];
             }
-
-            public UIFormTab GetFormTabTwoFields_OneHasIntegerField()
-            {
-                return GetSimpleUIFormDefTwoRowsOneHasIntegerProp()[0];
-            }
-
 
             public UIFormTab GetFormTabOneField_ReadWriteParameter_ReadOnly()
             {

@@ -204,5 +204,32 @@ namespace Habanero.Test.BO.Loaders
                     <field property=""testpropname1"" />
                 </form>");
         }
+
+        [Test]
+        public void TestUIFormSetOnUIFormTab()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            UIForm col =
+loader.LoadUIFormDef(
+@"
+					<form width=""100"" height=""120"" title=""testheading"">
+						<tab name=""testtab"">
+							<field label=""testlabel1"" property=""testpropname1"" type=""Button"" mapperType=""testmappertypename1"" />
+						</tab>
+						<tab name=""testtab2"">
+							<field label=""testlabel2"" property=""testpropname2"" type=""Button"" mapperType=""testmappertypename3"" />
+						</tab>
+                    </form>");
+            //---------------Test Result -----------------------
+
+
+            Assert.AreSame(col, col[0].UIForm);
+            Assert.AreSame(col, col[1].UIForm);
+
+        }
     }
 }

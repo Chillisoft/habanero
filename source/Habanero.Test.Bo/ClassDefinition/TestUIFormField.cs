@@ -29,6 +29,12 @@ namespace Habanero.Test.BO.ClassDefinition
     [TestFixture]
     public class TestUIFormField
     {
+        [SetUp]
+        public void SetupTest()
+        {
+            ClassDef.ClassDefs.Clear();
+            
+        }
         [Test]
         public void TestTriggerAccess()
         {
@@ -359,6 +365,62 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.AreEqual(3, colSpan);
 
+        }
+
+        [Test]
+        public void TestIsCompulsory_False()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            UIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            bool isCompulsory = field.IsCompulsory;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isCompulsory);
+        }
+
+        [Test]
+        public void TestIsCompulsory_True()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField();
+            UIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            bool isCompulsory = field.IsCompulsory;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isCompulsory);
+        }
+
+        [Test]
+        public void TestIsCompulsory_VirtualProp()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            UIFormField field = classDef.UIDefCol["AlternateVirtualProp"].GetFormField("-MyTestProp-");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            bool isCompulsory = field.IsCompulsory;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isCompulsory);
+        }
+
+        [Test]
+        public void TestFormColumn()
+        {
+            //---------------Set up test pack-------------------
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", null, null);
+            UIFormColumn column = new UIFormColumn();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            uiFormField1.UIFormColumn = column;
+            //---------------Test Result -----------------------
+            Assert.AreSame(column, uiFormField1.UIFormColumn);
         }
 
         // Grants access to protected fields

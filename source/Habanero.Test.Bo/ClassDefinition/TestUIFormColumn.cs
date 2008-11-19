@@ -207,6 +207,34 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(3, rowsRequired);
 
         }
+
+        [Test]
+        public void TestAddUIFormField()
+        {
+            //---------------Set up test pack-------------------
+            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null);
+            UIFormColumn uiFormColumn = new UIFormColumn();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(field1.UIFormColumn);
+            //---------------Execute Test ----------------------
+            uiFormColumn.Add(field1);
+            //---------------Test Result -----------------------
+            Assert.AreSame(uiFormColumn, field1.UIFormColumn);
+        }
+
+        [Test]
+        public void TestFormTab()
+        {
+            //---------------Set up test pack-------------------
+            UIFormColumn column = new UIFormColumn();
+            UIFormTab tab = new UIFormTab();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            column.UIFormTab = tab;
+            //---------------Test Result -----------------------
+            Assert.AreSame(tab, column.UIFormTab);
+        }
     }
 
 }
