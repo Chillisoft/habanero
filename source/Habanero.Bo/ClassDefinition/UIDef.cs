@@ -45,7 +45,7 @@ namespace Habanero.BO.ClassDefinition
         {
             _name = name;
             _uiForm = uiForm;
-            _uiForm.UIDef = this;
+            if (_uiForm != null) _uiForm.UIDef = this;
             _uiGrid = uiGrid;
         }
 

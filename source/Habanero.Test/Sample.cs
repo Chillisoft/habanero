@@ -103,21 +103,31 @@ namespace Habanero.Test
 
         public static ClassDef CreateClassDefWithTwoPropsOneWithToolTipText()
         {
-
-            PropDefCol lPropDefCol = new PropDefCol();
-            PropDef def = new PropDef("SampleID", typeof(Guid), PropReadWriteRule.WriteOnce, null);
-            lPropDefCol.Add(def);
-
-            lPropDefCol.Add(new PropDef("SampleText", typeof(String), PropReadWriteRule.ReadWrite, "SampleText", null,
-                                        true, false, 255, "SampleText", "SampleTextToolTip"));
-            lPropDefCol.Add(new PropDef("SampleText2", typeof(String), PropReadWriteRule.ReadWrite, "SampleText2", null,
-                                        false, false,255,"SampleText2","SampleText2ToolTip"));
-            PrimaryKeyDef primaryKey = new PrimaryKeyDef();
-            primaryKey.IsGuidObjectID = true;
-            primaryKey.Add(lPropDefCol["SampleID"]);
-            KeyDefCol keysCol = new KeyDefCol();
-            RelationshipDefCol relDefCol = new RelationshipDefCol();
-            return new ClassDef(typeof(Sample), primaryKey, lPropDefCol, keysCol, relDefCol);
+                        XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""Sample"" assembly=""Habanero.Test"">
+					<property  name=""SampleID"" type=""Guid"" />
+					<property  name=""SampleText"" description=""Test tooltip text""/>
+					<property  name=""SampleText2"" />
+					<primaryKey>
+						<prop name=""SampleID"" />
+					</primaryKey>
+					<ui>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""150"">
+									<field property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field property=""SampleText2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+			");
+			ClassDef.ClassDefs.Add(itsClassDef);
+			return itsClassDef;
         }
 
         public static ClassDef CreateClassDefWithTwoPropsOneInteger()

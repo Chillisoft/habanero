@@ -410,6 +410,37 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void TestLabelTextHasStarIfCompulsory()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField();
+            UIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string labelText = field.GetLabel();
+            //---------------Test Result -----------------------
+            StringAssert.EndsWith(" *", labelText);
+
+        }
+
+        [Test]
+        public void TestLabelTextHasStarIfCompulsory_Generated()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField();
+            UIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
+            field.Label = "";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string labelText = field.GetLabel();
+            //---------------Test Result -----------------------
+            StringAssert.EndsWith(": *", labelText);
+
+        }
+
+        [Test]
         public void TestFormColumn()
         {
             //---------------Set up test pack-------------------

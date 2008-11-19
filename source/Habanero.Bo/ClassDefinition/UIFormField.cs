@@ -247,7 +247,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns> The text that will be used for the tool tip for this control. </returns>
         public string GetToolTipText()
         {
-            return GetToolTipText(null);
+            return GetToolTipText(GetClassDef());
         }
 
         ///<summary>
@@ -292,7 +292,7 @@ namespace Habanero.BO.ClassDefinition
         {
             if (!String.IsNullOrEmpty(_label))
             {
-                return _label;
+                return _label + GetIsCompulsoryIndicator();
             }
             string label = null;
             IPropDef propDef = GetPropDefIfExists(classDef);
@@ -304,7 +304,12 @@ namespace Habanero.BO.ClassDefinition
             {
                 label = StringUtilities.DelimitPascalCase(_propertyName, " ");
             }
-            return label + LabelSuffix;
+            return label + LabelSuffix + GetIsCompulsoryIndicator();
+        }
+
+        private string GetIsCompulsoryIndicator()
+        {
+            return IsCompulsory ? " *" : "";
         }
 
         private string LabelSuffix
@@ -437,7 +442,9 @@ namespace Habanero.BO.ClassDefinition
 
         private ClassDef GetClassDef()
         {
-            UIDef uiDef = this.UIFormColumn.UIFormTab.UIForm.UIDef;
+            UIFormColumn column = this.UIFormColumn;
+            if (column == null) return null;
+            UIDef uiDef = column.UIFormTab.UIForm.UIDef;
             if (uiDef == null) return null;
             return uiDef.UIDefCol.ClassDef;
         }

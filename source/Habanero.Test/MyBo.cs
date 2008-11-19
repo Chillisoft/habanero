@@ -173,7 +173,7 @@ namespace Habanero.Test
 				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" type=""Guid"" />
 					<property  name=""TestProp"" compulsory=""true"" />
-					<property  name=""TestProp2"" />
+					<property  name=""TestProp2""  />
 					<primaryKey>
 						<prop name=""MyBoID"" />
 					</primaryKey>
@@ -182,7 +182,7 @@ namespace Habanero.Test
 							<tab name=""Tab1"">
 								<columnLayout>
 									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
-								</columnLayout>
+		    					</columnLayout>
 							</tab>
 						</form>
 					</ui>
