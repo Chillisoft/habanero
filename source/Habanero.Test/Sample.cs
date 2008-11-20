@@ -148,7 +148,21 @@ namespace Habanero.Test
 							<tab name=""Tab1"">
 								<columnLayout width=""200"">
                                     <field label=""SampleText:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
-                                    <field label=""SampleInt:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" />
+                                    <field label=""SampleInt:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" editable=""false"" />
+                                </columnLayout>
+							</tab>
+						</form>
+					</ui>
+					<ui name=""TwoTabs"">
+                        <form>
+							<tab name=""Tab1"">
+								<columnLayout width=""200"">
+                                    <field label=""SampleText:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                </columnLayout>
+							</tab>
+						<tab name=""Tab1"">
+								<columnLayout width=""200"">
+                                    <field label=""SampleInt:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" editable=""false"" />
                                 </columnLayout>
 							</tab>
 						</form>

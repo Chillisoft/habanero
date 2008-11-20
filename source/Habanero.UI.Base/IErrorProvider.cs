@@ -81,7 +81,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Provides a user interface for indicating that a control on a form has an error associated with it
     /// </summary>
-    public interface IErrorProvider
+    public interface IErrorProvider 
     {
         /// <summary>
         /// Returns the current error description string for the specified control.

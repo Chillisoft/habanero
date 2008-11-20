@@ -6,7 +6,7 @@ using Habanero.UI.Base;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Base.PanelBuilder
+namespace Habanero.Test.UI.Base
 {
     [TestFixture]
     public class TestPanelBuilder
@@ -45,7 +45,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(singleFieldTab).Panel;
+            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
             Assert.AreEqual(DEFAULT_CONTROLS_PER_FIELD, panel.Controls.Count);
             Assert.IsInstanceOfType(typeof (ILabel), panel.Controls[0]);
@@ -66,7 +66,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(singleIntegerFieldTab).Panel;
+            IPanel panel = panelBuilder.BuildPanelForTab(singleIntegerFieldTab).Panel;
             //---------------Test Result -----------------------
             Assert.AreEqual(DEFAULT_CONTROLS_PER_FIELD, panel.Controls.Count);
             Assert.IsInstanceOfType(typeof (ILabel), panel.Controls[0]);
@@ -85,7 +85,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(singleIntegerFieldTab).Panel;
+            IPanel panel = panelBuilder.BuildPanelForTab(singleIntegerFieldTab).Panel;
             //---------------Test Result -----------------------
             ILabel label = (ILabel) panel.Controls[0];
             IControlHabanero textbox = panel.Controls[1];
@@ -114,7 +114,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(twoFieldTab).Panel;
+            IPanel panel = panelBuilder.BuildPanelForTab(twoFieldTab).Panel;
             //---------------Test Result -----------------------
             ILabel label1 = (ILabel) panel.Controls[0];
             IControlHabanero textbox1 = panel.Controls[1];
@@ -155,7 +155,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             //---------------Assert Precondition----------------
             Assert.AreEqual(expectedFields, twoFieldTab[0].Count);
             //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(twoFieldTab).Panel;
+            IPanel panel = panelBuilder.BuildPanelForTab(twoFieldTab).Panel;
             //---------------Test Result -----------------------
             Assert.AreEqual(DEFAULT_CONTROLS_PER_FIELD*expectedFields, panel.Controls.Count);
 
@@ -188,7 +188,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             Assert.AreEqual(expectedFieldsInEachColumn, twoColumnTab[0].Count);
             Assert.AreEqual(expectedFieldsInEachColumn, twoColumnTab[1].Count);
             //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(twoColumnTab).Panel;
+            IPanel panel = panelBuilder.BuildPanelForTab(twoColumnTab).Panel;
             //---------------Test Result -----------------------
             Assert.AreEqual(DEFAULT_CONTROLS_PER_FIELD*expectedColumns*expectedFieldsInEachColumn, panel.Controls.Count);
         }
@@ -207,7 +207,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             Assert.AreEqual(1, twoColumnTab[0].Count);
             Assert.AreEqual(2, twoColumnTab[1].Count);
             //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(twoColumnTab).Panel;
+            IPanel panel = panelBuilder.BuildPanelForTab(twoColumnTab).Panel;
             //---------------Test Result -----------------------
             Assert.AreEqual(DEFAULT_CONTROLS_PER_FIELD*expectedColumns*maxFieldsInAColumn, panel.Controls.Count);
         }
@@ -225,7 +225,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             Assert.AreEqual(1, formColumn.Count);
             Assert.AreEqual(2, twoColumnTab[1].Count);
             //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(twoColumnTab).Panel;
+            IPanel panel = panelBuilder.BuildPanelForTab(twoColumnTab).Panel;
             //---------------Test Result -----------------------
             IControlCollection panelControls = panel.Controls;
             //-----Row 1 Column 1
@@ -263,7 +263,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
             //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(twoColumnTab).Panel;
+            IPanel panel = panelBuilder.BuildPanelForTab(twoColumnTab).Panel;
 
             //---------------Test Result -----------------------
             IControlHabanero column1Control1 = panel.Controls[0];
@@ -290,7 +290,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
             //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(twoColumnTab).Panel;
+            IPanel panel = panelBuilder.BuildPanelForTab(twoColumnTab).Panel;
 
             //---------------Test Result -----------------------
             IControlHabanero column1Control1 = panel.Controls[0];
@@ -318,7 +318,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
             //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(twoColumnTab).Panel;
+            IPanel panel = panelBuilder.BuildPanelForTab(twoColumnTab).Panel;
 
             //---------------Test Result -----------------------
             IControlHabanero column2LastControl = panel.Controls[DEFAULT_CONTROLS_PER_FIELD*2 - 1];
@@ -343,7 +343,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
             //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(threeColumnTab).Panel;
+            IPanel panel = panelBuilder.BuildPanelForTab(threeColumnTab).Panel;
 
             //---------------Test Result -----------------------
             IControlHabanero column2LastControl = panel.Controls[DEFAULT_CONTROLS_PER_FIELD*2 - 1];
@@ -364,7 +364,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
             UIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabOneFieldNoColumnWidth();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
-            IPanel panel = panelBuilder.BuildPanel(singleIntegerFieldTab).Panel;
+            IPanel panel = panelBuilder.BuildPanelForTab(singleIntegerFieldTab).Panel;
 
             int columnWidthOrig = 300;
             int columnWidthAfter = 500;
@@ -396,7 +396,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(formTab).Panel;
+            IPanel panel = panelBuilder.BuildPanelForTab(formTab).Panel;
             //---------------Test Result -----------------------
 
             IControlHabanero row1InputControl = panel.Controls[PanelBuilder.INPUT_CONTROL_COLUMN_NO];
@@ -417,7 +417,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(formTab).Panel;
+            IPanel panel = panelBuilder.BuildPanelForTab(formTab).Panel;
             //---------------Test Result -----------------------
 
             IControlHabanero columnSpanningControl = panel.Controls[PanelBuilder.INPUT_CONTROL_COLUMN_NO];
@@ -450,7 +450,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             //-------------Assert Preconditions -------------
 
             //---------------Execute Test ----------------------
-            IPanel panel = panelBuilder.BuildPanel(twoFieldTabOneCompulsory).Panel;
+            IPanel panel = panelBuilder.BuildPanelForTab(twoFieldTabOneCompulsory).Panel;
             //---------------Test Result -----------------------
             IControlCollection controls = panel.Controls;
 
@@ -465,36 +465,39 @@ namespace Habanero.Test.UI.Base.PanelBuilder
         }
 
         [Test]
-        public void Test_BuildPanel_CreatesControlMappers()
+        public void Test_BuildPanel_PopulatesFieldInfoCollection()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             UIFormTab twoFieldTabOneCompulsory = classDef.UIDefCol["default"].UIForm[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            Sample sample = new Sample();
+            //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IPanelInfo panelInfo = panelBuilder.BuildPanel(twoFieldTabOneCompulsory);
-
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(twoFieldTabOneCompulsory);
+            panelInfo.BusinessObject = sample;
             //---------------Test Result -----------------------
-            IControlMapperCollection mappers = panelInfo.ControlMappers;
-            Assert.AreEqual(2, mappers.Count);
 
+            IControlHabanero sampleTextLabel = panelInfo.Panel.Controls[PanelBuilder.LABEL_CONTROL_COLUMN_NO];
             IControlHabanero sampleTextInputControl = panelInfo.Panel.Controls[PanelBuilder.INPUT_CONTROL_COLUMN_NO];
-            IControlHabanero sampleIntInputControl = panelInfo.Panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + PanelBuilder.INPUT_CONTROL_COLUMN_NO];
+            string propertyName = "SampleText";
+            IControlMapper sampleTextControlMapper = panelInfo.FieldInfos[propertyName].ControlMapper;
 
-            IControlMapper sampleTextControlMapper = mappers[0];
-            Assert.AreEqual("SampleText", sampleTextControlMapper.PropertyName);
+            Assert.AreEqual(2, panelInfo.FieldInfos.Count);
+
+            PanelInfo.FieldInfo fieldInfo = panelInfo.FieldInfos[propertyName];
+            Assert.AreSame(sampleTextLabel, fieldInfo.Label);
+            Assert.AreSame(sampleTextInputControl, fieldInfo.InputControl);
+
             Assert.AreSame(sampleTextInputControl, sampleTextControlMapper.Control);
-            Assert.IsInstanceOfType(typeof(TextBoxMapper), sampleTextControlMapper);
-
-            IControlMapper sampleIntControlMapper = mappers[1];
-            Assert.AreEqual("SampleInt", sampleIntControlMapper.PropertyName);
-            Assert.AreSame(sampleIntInputControl, sampleIntControlMapper.Control);
-            Assert.IsInstanceOfType(typeof(NumericUpDownIntegerMapper), sampleIntControlMapper);
+            Assert.AreSame(sample, sampleTextControlMapper.BusinessObject);
+            Assert.AreEqual(propertyName, sampleTextControlMapper.PropertyName);
         }
 
+
         [Test]
-        public void Test_BuildPanel_PopulatesFieldInfoCollection()
+        public void Test_BuildPanel_InputControlsHaveCorrectEnabledState()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
@@ -504,25 +507,14 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IPanelInfo panelInfo = panelBuilder.BuildPanel(twoFieldTabOneCompulsory);
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(twoFieldTabOneCompulsory);
+            panelInfo.BusinessObject = new Sample();
 
             //---------------Test Result -----------------------
-
-            IControlHabanero sampleTextLabel = panelInfo.Panel.Controls[PanelBuilder.LABEL_CONTROL_COLUMN_NO];
-            IControlHabanero sampleTextInputControl = panelInfo.Panel.Controls[PanelBuilder.INPUT_CONTROL_COLUMN_NO];
-            IControlMapper sampleTextControlMapper = panelInfo.ControlMappers["SampleText"];
-
-            Assert.AreEqual(2, panelInfo.FieldInfos.Count);
-
-            PanelInfo.FieldInfo fieldInfo = panelInfo.FieldInfos["SampleText"];
-            Assert.AreSame(sampleTextLabel, fieldInfo.Label);
-            Assert.AreSame(sampleTextInputControl, fieldInfo.InputControl);
-            Assert.AreSame(sampleTextControlMapper, fieldInfo.ControlMapper);
+            Assert.IsTrue(panelInfo.FieldInfos[0].InputControl.Enabled);
+            Assert.IsFalse(panelInfo.FieldInfos[1].InputControl.Enabled);
         }
-
-        //todo: ErrorProvider stuff
-
-
+        
         [Test]
         public void Test_BuildPanel_LayoutManagerIsSet()
         {
@@ -531,12 +523,74 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
 
             //---------------Execute Test ----------------------
-            IPanelInfo panelInfo = panelBuilder.BuildPanel(twoFieldTabOneCompulsory);
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(twoFieldTabOneCompulsory);
 
             //---------------Test Result -----------------------
             GridLayoutManager layoutManager = panelInfo.LayoutManager;
             Assert.IsNotNull(layoutManager);
             Assert.AreEqual(2, layoutManager.Rows.Count);
+        }
+
+        [Test]
+        public void Test_BuildTabControl_TwoTabPagesOnTabControl()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, panelInfo.Panel.Controls.Count); // only one control because it's the tab control
+            Assert.IsInstanceOfType(typeof(ITabControl), panelInfo.Panel.Controls[0]);
+            ITabControl tabControl = (ITabControl) panelInfo.Panel.Controls[0];
+            Assert.AreEqual(form.Count, tabControl.TabPages.Count); 
+        }
+
+
+        [Test]
+        public void Test_BuildTabControl_CorrectControlsOnTabPage()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form);
+            //---------------Test Result -----------------------
+            ITabControl tabControl = (ITabControl)panelInfo.Panel.Controls[0];
+            ITabPage tabPage1 = tabControl.TabPages[0];
+            ITabPage tabPage2 = tabControl.TabPages[1];
+            Assert.AreEqual(1, tabPage1.Controls.Count);
+            Assert.IsInstanceOfType(typeof(IPanel), tabPage1.Controls[0]);
+            IPanel tabPage1Panel = (IPanel) tabPage1.Controls[0];
+            Assert.AreEqual(PanelBuilder.CONTROLS_PER_COLUMN, tabPage1Panel.Controls.Count);
+            Assert.AreEqual(1, tabPage2.Controls.Count);
+            Assert.IsInstanceOfType(typeof(IPanel), tabPage2.Controls[0]);
+            IPanel tabPage2Panel = (IPanel)tabPage2.Controls[0];
+            Assert.AreEqual(PanelBuilder.CONTROLS_PER_COLUMN, tabPage2Panel.Controls.Count);
+        }
+
+        [Test]
+        public void Test_BuildTabControl_PanelInfos()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(form.Count, panelInfo.PanelInfos.Count);
+            Assert.AreEqual(panelInfo.FieldInfos.Count, panelInfo.PanelInfos[0].FieldInfos.Count + panelInfo.PanelInfos[1].FieldInfos.Count);
+
         }
 
         //[Test, Ignore("This doesn't work in code for some reason")]
@@ -560,197 +614,5 @@ namespace Habanero.Test.UI.Base.PanelBuilder
 
         //    Assert.AreEqual("Test tooltip text", toolTip.GetToolTip(controlHabanero));
         //}
-
-        [Test]
-        public void Test_BusinessObjectPassedToPanelInfo()
-        {
-            //---------------Set up test pack-------------------
-            
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-
-            //---------------Test Result -----------------------
-
-        }
-
-        internal class PanelBuilder
-        {
-            private IControlFactory _factory;
-            public const int ERROR_PROVIDER_WIDTH = 20;
-            public const int CONTROLS_PER_COLUMN = 3;
-            public const int LABEL_CONTROL_COLUMN_NO = 0;
-            public const int INPUT_CONTROL_COLUMN_NO = 1;
-            public const int ERROR_PROVIDER_COLUMN_NO = CONTROLS_PER_COLUMN - 1;
-
-
-            public PanelBuilder(IControlFactory factory)
-            {
-                _factory = factory;
-            }
-
-            public IControlFactory Factory
-            {
-                get { return _factory; }
-                set { _factory = value; }
-            }
-
-            public IPanelInfo BuildPanel(UIFormTab formTab)
-            {
-                IPanel panel = Factory.CreatePanel();
-                IPanelInfo panelInfo = new PanelInfo();
-                GridLayoutManager layoutManager = panelInfo.LayoutManager = SetupLayoutManager(formTab, panel);
-                AddFieldsToLayoutManager(formTab, panelInfo);
-                SetupInputControlColumnWidth(panelInfo, formTab);
-
-                panel.Width = layoutManager.GetFixedWidthIncludingGaps();
-                
-                panelInfo.Panel = panel;
-                return panelInfo;
-            }
-
-            private GridLayoutManager SetupLayoutManager(UIFormTab formTab, IPanel panel)
-            {
-                GridLayoutManager layoutManager = new GridLayoutManager(panel, Factory);
-                int maxRowsInColumns = formTab.GetMaxRowsInColumns();
-                int colCount = formTab.Count*CONTROLS_PER_COLUMN;
-                layoutManager.SetGridSize(maxRowsInColumns, colCount);
-                layoutManager.FixColumnBasedOnContents(0);
-                for (int i = 0; i < colCount; i += CONTROLS_PER_COLUMN)
-                {
-                    layoutManager.FixColumnBasedOnContents(i + LABEL_CONTROL_COLUMN_NO);
-                    layoutManager.FixColumn(i + ERROR_PROVIDER_COLUMN_NO, ERROR_PROVIDER_WIDTH);
-                }
-                ITextBox sampleTextBoxForHeight = Factory.CreateTextBox();
-                for (int row = 0; row < maxRowsInColumns; row++)
-                {
-                    layoutManager.FixRow(row, sampleTextBoxForHeight.Height);
-                }
-                return layoutManager;
-            }
-
-            private void AddFieldsToLayoutManager(UIFormTab formTab, IPanelInfo panelInfo)
-            {
-                int numberOfColumns = formTab.Count;
-                int[] currentFieldPositionInColumns = new int[numberOfColumns];
-                int[] rowSpanTrackerForColumn = new int[numberOfColumns];
-                for (int currentRowNo = 0; currentRowNo < formTab.GetMaxRowsInColumns(); currentRowNo++)
-                {
-                    int columnSpanTracker = 0;
-                    for (int currentColumnNo = 0; currentColumnNo < numberOfColumns; currentColumnNo++)
-                    {
-                        UIFormColumn currentFormColumn = formTab[currentColumnNo];
-
-                        if (--rowSpanTrackerForColumn[currentColumnNo] > 0) continue;  // keep skipping this grid position until a previous row span in this column has been decremented 
-                        if (--columnSpanTracker > 0) continue;  // keep skipping this grid position until a previous column span in this row has been decremented
-
-                        int currentFieldNoInColumn = currentFieldPositionInColumns[currentColumnNo];
-                        int totalFieldsInColumn = currentFormColumn.Count;
-                        if (currentFieldNoInColumn < totalFieldsInColumn) // there exists a field in this row in this column
-                        {
-                            UIFormField formField = currentFormColumn[currentFieldNoInColumn];
-                            rowSpanTrackerForColumn[currentColumnNo] = formField.RowSpan;
-                            columnSpanTracker = formField.ColSpan;
-
-                            AddControlsForField(formField, panelInfo);
-                        }
-                        else
-                        {
-                            AddNullControlsForEmptyField(panelInfo);
-                        }
-                        currentFieldPositionInColumns[currentColumnNo]++;
-                    }
-                }
-            }
-
-            private void AddControlsForField(UIFormField formField, IPanelInfo panelInfo)
-            {
-                ILabel label = CreateAndAddLabel(panelInfo, formField);
-                IControlMapper controlMapper = CreateAndAddInputControl(panelInfo, formField);
-                IPanel errorProviderPanel = CreateAndAddErrorProviderPanel(panelInfo, formField);
-
-                panelInfo.FieldInfos.Add(new PanelInfo.FieldInfo(formField.PropertyName, label, controlMapper, null));
-            }
-
-            private void AddNullControlsForEmptyField(IPanelInfo panelInfo)
-            {
-                for (int i = 0; i < CONTROLS_PER_COLUMN; i++)
-                    panelInfo.LayoutManager.AddControl(null);
-            }
-
-            private IPanel CreateAndAddErrorProviderPanel(IPanelInfo panelInfo, UIFormField formField)
-            {
-                IPanel errorProviderPanel = Factory.CreatePanel();
-                panelInfo.LayoutManager.AddControl(errorProviderPanel);
-                return errorProviderPanel;
-            }
-
-            private IControlMapper CreateAndAddInputControl(IPanelInfo panelInfo, UIFormField formField)
-            {
-                IControlHabanero inputControl = Factory.CreateControl(formField.ControlTypeName,
-                                                                      formField.ControlAssemblyName);
-                IControlMapper controlMapper = ControlMapper.Create(formField.MapperTypeName,
-                                                                    formField.MapperAssembly, inputControl,
-                                                                    formField.PropertyName, formField.Editable, _factory);
-                panelInfo.ControlMappers.Add(controlMapper);
-                            
-                if (formField.RowSpan > 1)
-                {
-                    if (inputControl is ITextBox) ((ITextBox) inputControl).Multiline = true;
-                }
-                int numberOfGridColumnsToSpan = 1 + (CONTROLS_PER_COLUMN*(formField.ColSpan - 1));
-                GridLayoutManager.ControlInfo inputControlInfo =
-                    new GridLayoutManager.ControlInfo(inputControl, numberOfGridColumnsToSpan,
-                                                      formField.RowSpan);
-                SetToolTip(formField, inputControl);
-                panelInfo.LayoutManager.AddControl(inputControlInfo);
-                return controlMapper;
-            }
-
-            private ILabel CreateAndAddLabel(IPanelInfo panelInfo, UIFormField formField)
-            {
-                ILabel labelControl = Factory.CreateLabel(formField.GetLabel(), formField.IsCompulsory);
-                labelControl.Name = formField.PropertyName;
-                SetToolTip(formField, labelControl);
-                panelInfo.LayoutManager.AddControl(labelControl);
-                return labelControl;
-            }
-
-            private void SetupInputControlColumnWidth(IPanelInfo panelInfo, UIFormTab formTab)
-            {
-                GridLayoutManager layoutManager = panelInfo.LayoutManager;
-                int formColCount = 0;
-                foreach (UIFormColumn formColumn in formTab)
-                {
-                    if (formColumn.Width < 0) continue;
-                    int gridCol = formColCount*CONTROLS_PER_COLUMN;
-                    int labelColumnWidth = layoutManager.GetFixedColumnWidth(gridCol + LABEL_CONTROL_COLUMN_NO);
-                    int errorProviderColumnWidth = layoutManager.GetFixedColumnWidth(gridCol + ERROR_PROVIDER_COLUMN_NO);
-                    int totalGap = (CONTROLS_PER_COLUMN - 1)*layoutManager.GapSize;
-                    if (formTab.Count == 1)
-                        totalGap += 2*layoutManager.BorderSize; // add extra border for single column
-                    else if (formColCount == formTab.Count - 1)
-                        totalGap += layoutManager.BorderSize + layoutManager.GapSize; // last column in multi-column
-                    else if (formColCount > 0 && formTab.Count > 0)
-                        totalGap += layoutManager.GapSize; //2 More gaps for internal column in multi-column
-                    else if (formColCount == 0 && formTab.Count > 0) totalGap += layoutManager.BorderSize;
-
-                    layoutManager.FixColumn(gridCol + INPUT_CONTROL_COLUMN_NO,
-                                            formColumn.Width - labelColumnWidth - errorProviderColumnWidth - totalGap);
-                    formColCount++;
-                }
-            }
-
-            private void SetToolTip(UIFormField formField, IControlHabanero inputControl)
-            {
-                string toolTipText = formField.GetToolTipText();
-                IToolTip toolTip = _factory.CreateToolTip();
-                if (!String.IsNullOrEmpty(toolTipText))
-                {
-                    toolTip.SetToolTip(inputControl, toolTipText);
-                }
-            }
-
-        }
     }
 }

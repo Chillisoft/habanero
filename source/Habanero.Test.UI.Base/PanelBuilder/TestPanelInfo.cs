@@ -3,15 +3,16 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Base.PanelBuilder
+namespace Habanero.Test.UI.Base
 {
     [TestFixture]
     public class TestPanelInfo 
     {
-        private IControlFactory _controlFactory = new ControlFactoryWin();
+        private IControlFactory _controlFactory = new ControlFactoryVWG();
         [SetUp]
         public void SetupTest()
         {
@@ -39,20 +40,6 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             //---------------Test Result -----------------------
             Assert.AreSame(panel, panelInfo.Panel);
 
-        }
-
-        [Test]
-        public void TestControlMappers()
-        {
-            //---------------Set up test pack-------------------
-           
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-            IPanelInfo panelInfo = new PanelInfo();
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(panelInfo.ControlMappers);
-            Assert.AreEqual(0, panelInfo.ControlMappers.Count);
         }
 
         [Test]
@@ -87,11 +74,10 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             string propertyName = TestUtil.CreateRandomString();
             ITextBox tb = _controlFactory.CreateTextBox();
             IControlMapper controlMapper = new TextBoxMapper(tb, propertyName, false, _controlFactory);
-            IErrorProvider errorProvider = _controlFactory.CreateErrorProvider();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            PanelInfo.FieldInfo fieldInfo = new PanelInfo.FieldInfo(propertyName, label, controlMapper, errorProvider);
+            PanelInfo.FieldInfo fieldInfo = new PanelInfo.FieldInfo(propertyName, label, controlMapper);
 
             //---------------Test Result -----------------------
 
@@ -99,7 +85,6 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             Assert.AreSame(label, fieldInfo.Label);
             Assert.AreSame(controlMapper, fieldInfo.ControlMapper);
             Assert.AreSame(tb, fieldInfo.InputControl);
-            Assert.AreSame(errorProvider, fieldInfo.ErrorProvider);
         }
 
         [Test]
@@ -121,7 +106,7 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             Assert.AreSame(sampleBO, panelInfo.FieldInfos[1].ControlMapper.BusinessObject);
         }
 
-        [Test, Ignore("Eric: not sure how the underlying architecture works here")]
+        [Test]
         public void TestApplyChangesToBusinessObject()
         {
             //---------------Set up test pack-------------------
@@ -149,13 +134,43 @@ namespace Habanero.Test.UI.Base.PanelBuilder
             Assert.AreEqual(1, sampleBO.SampleInt);
         }
 
+        [Test]
+        public void TestControlsEnabled()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            PanelBuilder panelBuilder = new PanelBuilder(_controlFactory);
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(classDef.UIDefCol["default"].UIForm[0]);
+            panelInfo.BusinessObject = new Sample();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(panelInfo.FieldInfos[0].InputControl.Enabled);
+            Assert.IsFalse(panelInfo.FieldInfos[1].InputControl.Enabled);
+            //---------------Execute Test ----------------------
+            panelInfo.ControlsEnabled = false;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(panelInfo.FieldInfos[0].InputControl.Enabled);
+            Assert.IsFalse(panelInfo.FieldInfos[1].InputControl.Enabled);
+
+        }
+
+        [Test]
+        public void TestPanelInfos()
+        {
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = new PanelInfo();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(panelInfo.PanelInfos);
+            Assert.AreEqual(0, panelInfo.PanelInfos.Count);
+
+        }
+
         private PanelInfo.FieldInfo CreateFieldInfo(string propertyName)
         {
             ILabel label = _controlFactory.CreateLabel();
             ITextBox tb = _controlFactory.CreateTextBox();
             IControlMapper controlMapper = new TextBoxMapper(tb, propertyName, false, _controlFactory);
             IErrorProvider errorProvider = _controlFactory.CreateErrorProvider();
-            return  new PanelInfo.FieldInfo(propertyName, label, controlMapper, errorProvider);
+            return  new PanelInfo.FieldInfo(propertyName, label, controlMapper);
         }
 
         private PanelInfo.FieldInfo CreateFieldInfo()
@@ -164,153 +179,4 @@ namespace Habanero.Test.UI.Base.PanelBuilder
         }
     }
     
-    public class PanelInfo : IPanelInfo
-    {
-        private IPanel _panel;
-        private readonly IControlMapperCollection _controlMappers;
-        private GridLayoutManager _layoutManager;
-        private readonly FieldInfoCollection _fieldInfos;
-        private BusinessObject _businessObject;
-
-        public PanelInfo()
-        {
-            _controlMappers = new ControlMapperCollection();
-            _fieldInfos = new FieldInfoCollection();
-        }
-
-        public IPanel Panel
-        {
-            get { return _panel; }
-            set { _panel = value; }
-        }
-
-        public IControlMapperCollection ControlMappers
-        {
-            get { return _controlMappers; }
-        }
-
-        public GridLayoutManager LayoutManager
-        {
-            get { return _layoutManager; }
-            set { _layoutManager = value; }
-        }
-
-        public FieldInfoCollection FieldInfos
-        {
-            get { return _fieldInfos; }
-        }
-
-        public BusinessObject BusinessObject
-        {
-            get { return _businessObject; }
-            set
-            {
-                _businessObject = value;
-                for (int fieldInfoNum = 0; fieldInfoNum < _fieldInfos.Count; fieldInfoNum++)
-                {
-                    _fieldInfos[fieldInfoNum].ControlMapper.BusinessObject = value;
-                }
-            }
-        }
-
-        public void ApplyChangesToBusinessObject()
-        {
-            for (int fieldInfoNum = 0; fieldInfoNum < _fieldInfos.Count; fieldInfoNum++)
-            {
-                _fieldInfos[fieldInfoNum].ControlMapper.ApplyChangesToBusinessObject();
-            }
-        }
-
-        public class FieldInfoCollection// : IEnumerable<FieldInfo>
-        {
-            private readonly IList<FieldInfo> _fieldInfos = new List<FieldInfo>();
-
-            public FieldInfo this[string propertyName]
-            {
-                get
-                {
-                    foreach (FieldInfo fieldInfo in _fieldInfos)
-                    {
-                        if (fieldInfo.PropertyName == propertyName)
-                        {
-                            return fieldInfo;
-                        }
-                    }
-                    throw new InvalidPropertyNameException(
-                            string.Format("A label for the property {0} was not found.", propertyName));
-                }
-            }
-
-            public FieldInfo this[int index]
-            {
-                get { return _fieldInfos[index]; }
-            }
-
-            public void Add(FieldInfo fieldInfo)
-            {
-                _fieldInfos.Add(fieldInfo);
-            }
-
-            public int Count
-            {
-                get { return _fieldInfos.Count; }
-            }
-
-            //public IEnumerator<FieldInfo> GetEnumerator()
-            //{
-            //    throw new System.NotImplementedException();
-            //}
-        }
-
-        public class FieldInfo
-        {
-            private readonly ILabel _label;
-            private string _propertyName;
-            private IErrorProvider _errorProvider;
-            private IControlMapper _controlMapper;
-
-            public FieldInfo(string propertyName, ILabel label, IControlMapper controlMapper, IErrorProvider errorProvider)
-            {
-                _propertyName = propertyName;
-                _label = label;
-                _controlMapper = controlMapper;
-                _errorProvider = errorProvider;
-            }
-
-            public string PropertyName
-            {
-                get { return _propertyName; }
-            }
-
-            public ILabel Label
-            {
-                get { return _label; }
-            }
-
-            public IControlHabanero InputControl
-            {
-                get { return _controlMapper.Control; }
-            }
-
-            public IErrorProvider ErrorProvider
-            {
-                get { return _errorProvider; }
-            }
-
-            public IControlMapper ControlMapper
-            {
-                get { return _controlMapper; }
-            }
-        }
-    }
-
-    public interface IPanelInfo
-    {
-        IPanel Panel { get; set; }
-        IControlMapperCollection ControlMappers { get; }
-        GridLayoutManager LayoutManager { get; set; }
-        PanelInfo.FieldInfoCollection FieldInfos { get; }
-        BusinessObject BusinessObject { get; set; }
-        void ApplyChangesToBusinessObject();
-    }
 }
