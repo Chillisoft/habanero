@@ -38,7 +38,7 @@ namespace Habanero.UI.Win
         private BusinessObject _bo;
         private IControlFactory _controlFactory;
         private string _uiDefName;
-        private IPanelFactoryInfo _panelFactoryInfo;
+        private IPanelInfo _panelInfo;
         private IPanel _boPanel;
         private IButtonGroupControl _buttons;
         private PostObjectPersistingDelegate _action;
@@ -93,9 +93,10 @@ namespace Habanero.UI.Win
                                                  "'form' section for the class.");
             }
 
-            IPanelFactory factory = new PanelFactory(_bo, def, _controlFactory);
-            _panelFactoryInfo = factory.CreatePanel();
-            _boPanel = _panelFactoryInfo.Panel;
+            PanelBuilder panelBuilder = new PanelBuilder(_controlFactory);
+            _panelInfo = panelBuilder.BuildPanelForForm(_bo.ClassDef.UIDefCol["default"].UIForm);
+            _panelInfo.BusinessObject = _bo;
+            _boPanel = _panelInfo.Panel;
             _buttons = _controlFactory.CreateButtonGroupControl();
             _buttons.AddButton("Cancel", CancelButtonHandler);
             IButton okbutton = _buttons.AddButton("OK", OKButtonHandler);
@@ -147,20 +148,20 @@ namespace Habanero.UI.Win
 
         private void FocusOnFirstControl()
         {
-            IControlHabanero controlToFocus = _panelFactoryInfo.FirstControlToFocus;
-            MethodInfo focusMethod = controlToFocus.GetType().
-                GetMethod("Focus", BindingFlags.Instance | BindingFlags.Public);
-            if (focusMethod != null)
-            {
-                focusMethod.Invoke(controlToFocus, new object[] { });
-            }
+            //IControlHabanero controlToFocus = _panelInfo.FirstControlToFocus;
+            //MethodInfo focusMethod = controlToFocus.GetType().
+            //    GetMethod("Focus", BindingFlags.Instance | BindingFlags.Public);
+            //if (focusMethod != null)
+            //{
+            //    focusMethod.Invoke(controlToFocus, new object[] { });
+            //}
         }
 
         private void OKButtonHandler(object sender, EventArgs e)
         {
             try
             {
-                _panelFactoryInfo.ControlMappers.ApplyChangesToBusinessObject();
+                _panelInfo.ApplyChangesToBusinessObject();
                 TransactionCommitter committer = CreateSaveTransaction();
                 committer.CommitTransaction();
                 DialogResult = Base.DialogResult.OK;
@@ -169,7 +170,7 @@ namespace Habanero.UI.Win
                 {
                     _action(this._bo);
                 }
-                _panelFactoryInfo.ControlMappers.BusinessObject = null;
+                _panelInfo.BusinessObject = null;
             }
             catch (Exception ex)
             {
@@ -189,7 +190,7 @@ namespace Habanero.UI.Win
 
         private void CancelButtonHandler(object sender, EventArgs e)
         {
-            _panelFactoryInfo.ControlMappers.BusinessObject = null;
+            _panelInfo.BusinessObject = null;
             _bo.Restore();
             DialogResult = Base.DialogResult.Cancel;
             Close();
@@ -217,9 +218,9 @@ namespace Habanero.UI.Win
         /// Gets the object containing all information related to the form, including
         /// its controls, mappers and business object
         /// </summary>
-        public IPanelFactoryInfo PanelFactoryInfo
+        public IPanelInfo PanelInfo
         {
-            get { return _panelFactoryInfo; }
+            get { return _panelInfo; }
         }
 
         /// <summary>

@@ -930,6 +930,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestUIDefColHasClassDefSetup()
         {
             //---------------Execute Test ----------------------
+            ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadDefaultClassDef();
             //---------------Test Result -----------------------
             Assert.AreSame(classDef, classDef.UIDefCol.ClassDef);

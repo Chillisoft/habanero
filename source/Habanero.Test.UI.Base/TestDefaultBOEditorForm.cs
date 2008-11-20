@@ -70,7 +70,7 @@ namespace Habanero.Test.UI.Base
                 Assert.IsFalse(_defaultBOEditorForm.Visible);
                 Assert.AreEqual(DialogResult.OK, _defaultBOEditorForm.DialogResult);
                 Assert.AreEqual("TestValue", _bo.GetPropertyValue("TestProp"));
-                Assert.IsNull(_defaultBOEditorForm.PanelFactoryInfo.ControlMappers.BusinessObject);
+                Assert.IsNull(_defaultBOEditorForm.PanelInfo.BusinessObject);
                 //TearDown--------------------------
                 _defaultBOEditorForm.Dispose();
             }
@@ -201,7 +201,7 @@ namespace Habanero.Test.UI.Base
         //    Assert.IsFalse(_defaultBOEditorForm.Visible);
         //    //TODO_Port: Assert.AreEqual(DialogResult.OK, _defaultBOEditorForm.DialogResult);
         //    Assert.AreEqual("TestValue", _bo.GetPropertyValue("TestProp"));
-        //    //TODO_Port: Assert.IsNull(_defaultBOEditorForm._panelFactoryInfo.ControlMappers.BusinessObject);
+        //    //TODO_Port: Assert.IsNull(_defaultBOEditorForm._panelInfo.ControlMappers.BusinessObject);
         //    //TearDown--------------------------
         //    _defaultBOEditorForm.Dispose();
         //}

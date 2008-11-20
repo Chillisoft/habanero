@@ -44,7 +44,7 @@ namespace Habanero.UI.VWG
         protected BusinessObject _bo;
         private readonly IControlFactory _controlFactory;
         private readonly IPanel _boPanel;
-        protected IPanelFactoryInfo _panelFactoryInfo;
+        protected IPanelInfo _panelInfo;
 
         public DefaultBOEditorFormVWG(BusinessObject bo, string name, IControlFactory controlFactory, PostObjectPersistingDelegate action):this(bo, name, controlFactory)
         {
@@ -94,9 +94,10 @@ namespace Habanero.UI.VWG
                                                  "'form' section for the class.");
             }
 
-            IPanelFactory factory = new PanelFactory(_bo, def, _controlFactory);
-            _panelFactoryInfo = factory.CreatePanel();
-            _boPanel = _panelFactoryInfo.Panel;
+            PanelBuilder panelBuilder = new PanelBuilder(_controlFactory);
+            _panelInfo = panelBuilder.BuildPanelForForm(_bo.ClassDef.UIDefCol["default"].UIForm);
+            _panelInfo.BusinessObject = _bo;
+            _boPanel = _panelInfo.Panel;
             _buttons = _controlFactory.CreateButtonGroupControl();
             _buttons.AddButton("&Cancel", CancelButtonHandler);
             IButton okbutton = _buttons.AddButton("&OK", OKButtonHandler);
@@ -116,20 +117,20 @@ namespace Habanero.UI.VWG
 
         private void FocusOnFirstControl()
         {
-            IControlHabanero controlToFocus = _panelFactoryInfo.FirstControlToFocus;
-            MethodInfo focusMethod = controlToFocus.GetType().
-                GetMethod("Focus", BindingFlags.Instance | BindingFlags.Public);
-            if (focusMethod != null)
-            {
-                focusMethod.Invoke(controlToFocus, new object[] { });
-            }
+            //IControlHabanero controlToFocus = _panelInfo.FirstControlToFocus;
+            //MethodInfo focusMethod = controlToFocus.GetType().
+            //    GetMethod("Focus", BindingFlags.Instance | BindingFlags.Public);
+            //if (focusMethod != null)
+            //{
+            //    focusMethod.Invoke(controlToFocus, new object[] { });
+            //}
         }
 
         //private void DefaultBOEditorForm_Load(object sender, EventArgs e)
         //{
-        //    if (_panelFactoryInfo.ControlMappers.BusinessObject == null && _bo != null)
+        //    if (_panelInfo.ControlMappers.BusinessObject == null && _bo != null)
         //    {
-        //        _panelFactoryInfo.ControlMappers.BusinessObject = _bo;
+        //        _panelInfo.ControlMappers.BusinessObject = _bo;
         //    }
         //}
 
@@ -189,7 +190,7 @@ namespace Habanero.UI.VWG
         /// <param name="e">Attached arguments regarding the event</param>
         private void CancelButtonHandler(object sender, EventArgs e)
         {
-            _panelFactoryInfo.ControlMappers.BusinessObject = null;
+            _panelInfo.BusinessObject = null;
             _bo.Restore();
             //DialogResult = Gizmox.WebGUI.Forms.DialogResult.Cancel;
             DialogResult = Base.DialogResult.Cancel;
@@ -206,7 +207,7 @@ namespace Habanero.UI.VWG
         {
             try
             {
-                _panelFactoryInfo.ControlMappers.ApplyChangesToBusinessObject();
+                _panelInfo.ApplyChangesToBusinessObject();
                 TransactionCommitter committer = CreateSaveTransaction();
                 committer.CommitTransaction();
 
@@ -239,7 +240,7 @@ namespace Habanero.UI.VWG
                 {
                     _action(this._bo);
                 }
-                _panelFactoryInfo.ControlMappers.BusinessObject = null;
+                _panelInfo.BusinessObject = null;
             }
             catch (Exception ex)
             {
@@ -283,9 +284,9 @@ namespace Habanero.UI.VWG
         /// Gets the object containing all information related to the form, including
         /// its controls, mappers and business object
         /// </summary>
-        public IPanelFactoryInfo PanelFactoryInfo
+        public IPanelInfo PanelInfo
         {
-            get { return _panelFactoryInfo; }
+            get { return _panelInfo; }
         }
 
         /// <summary>

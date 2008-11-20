@@ -52,13 +52,13 @@ namespace Habanero.Test.UI.Base
                 myBO.TestProp = START_VALUE_1;
                 myBO.SetPropertyValue(TEST_PROP_2, START_VALUE_2);
 
-                IPanelFactory factory = new PanelFactory(myBO, GetControlFactory());
-                IPanelFactoryInfo panelInfo = factory.CreatePanel();
-
+                PanelBuilder factory = new PanelBuilder(GetControlFactory());
+                IPanelInfo panelInfo = factory.BuildPanelForForm(myBO.ClassDef.UIDefCol["default"].UIForm);
+                panelInfo.BusinessObject = myBO;
                 //---------------Execute Test ----------------------
                 ChangeValuesInControls(panelInfo);
-                panelInfo.ControlMappers[TEST_PROP_1].ApplyChangesToBusinessObject();
-                panelInfo.ControlMappers[TEST_PROP_2].ApplyChangesToBusinessObject();
+                panelInfo.FieldInfos[TEST_PROP_1].ControlMapper.ApplyChangesToBusinessObject();
+                panelInfo.FieldInfos[TEST_PROP_2].ControlMapper.ApplyChangesToBusinessObject();
                 //---------------Test Result -----------------------
 
                 Assert.AreEqual(CHANGED_VALUE_1, myBO.GetPropertyValue(TEST_PROP_1));
@@ -84,9 +84,9 @@ namespace Habanero.Test.UI.Base
                 myBO.TestProp = START_VALUE_1;
                 myBO.SetPropertyValue(TEST_PROP_2, START_VALUE_2);
 
-                IPanelFactory factory = new PanelFactory(myBO, GetControlFactory());
-                IPanelFactoryInfo panelInfo = factory.CreatePanel();
-
+                PanelBuilder factory = new PanelBuilder(GetControlFactory());
+                IPanelInfo panelInfo = factory.BuildPanelForForm(myBO.ClassDef.UIDefCol["default"].UIForm);
+                panelInfo.BusinessObject = myBO;
                 //---------------Execute Test ----------------------
                 ChangeValuesInControls(panelInfo);
                 //---------------Test Result -----------------------
@@ -126,21 +126,21 @@ namespace Habanero.Test.UI.Base
             MyBO myBO = new MyBO();
             myBO.TestProp = START_VALUE_1;
             myBO.SetPropertyValue(TEST_PROP_2, START_VALUE_2);
-            IPanelFactory factory = new PanelFactory(myBO, GetControlFactory());
+            PanelBuilder factory = new PanelBuilder(GetControlFactory());
 
             //---------------Execute Test ----------------------
-            IPanelFactoryInfo panelInfo = factory.CreatePanel();
-
+            IPanelInfo panelInfo = factory.BuildPanelForForm(myBO.ClassDef.UIDefCol["default"].UIForm);
+            panelInfo.BusinessObject = myBO;
             //---------------Test Result -----------------------
-            Assert.AreEqual(START_VALUE_1, panelInfo.ControlMappers[TEST_PROP_1].Control.Text);
-            Assert.AreEqual(START_VALUE_2, panelInfo.ControlMappers[TEST_PROP_2].Control.Text);
+            Assert.AreEqual(START_VALUE_1, panelInfo.FieldInfos[TEST_PROP_1].ControlMapper.Control.Text);
+            Assert.AreEqual(START_VALUE_2, panelInfo.FieldInfos[TEST_PROP_2].ControlMapper.Control.Text);
         }
 
         
-        private void ChangeValuesInControls(IPanelFactoryInfo panelInfo)
+        private void ChangeValuesInControls(IPanelInfo panelInfo)
         {
-            panelInfo.ControlMappers[TEST_PROP_1].Control.Text = CHANGED_VALUE_1;
-            panelInfo.ControlMappers[TEST_PROP_2].Control.Text = CHANGED_VALUE_2;
+            panelInfo.FieldInfos[TEST_PROP_1].ControlMapper.Control.Text = CHANGED_VALUE_1;
+            panelInfo.FieldInfos[TEST_PROP_2].ControlMapper.Control.Text = CHANGED_VALUE_2;
         }
 
         [Test]
@@ -153,13 +153,14 @@ namespace Habanero.Test.UI.Base
             myBO.TestProp = START_VALUE_1;
             myBO.SetPropertyValue(TEST_PROP_2, START_VALUE_2);
 
-            IPanelFactory factory = new PanelFactory(myBO, GetControlFactory());
-            IPanelFactoryInfo panelInfo = factory.CreatePanel();
+            PanelBuilder factory = new PanelBuilder(GetControlFactory());
+            IPanelInfo panelInfo = factory.BuildPanelForForm(myBO.ClassDef.UIDefCol["default"].UIForm);
+            panelInfo.BusinessObject = myBO;
             ChangeValuesInControls(panelInfo);
 
             //---------------Execute Test ----------------------
 
-            panelInfo.ControlMappers.ApplyChangesToBusinessObject();
+            panelInfo.ApplyChangesToBusinessObject();
             //---------------Test Result -----------------------
 
             Assert.AreEqual(CHANGED_VALUE_1, myBO.GetPropertyValue(TEST_PROP_1));
@@ -172,17 +173,17 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
             MyBO myBO = new MyBO();
-            IPanelFactory factory = new PanelFactory(myBO, GetControlFactory());
-            IPanelFactoryInfo panelInfo = factory.CreatePanel();
-
+            PanelBuilder factory = new PanelBuilder(GetControlFactory());
+            IPanelInfo panelInfo = factory.BuildPanelForForm(myBO.ClassDef.UIDefCol["default"].UIForm);
+            panelInfo.BusinessObject = myBO;
             //---------------Assert precondition----------------
-            Assert.IsTrue(panelInfo.ControlMappers[TEST_PROP_1].Control.Enabled);
+            Assert.IsTrue(panelInfo.FieldInfos[TEST_PROP_1].ControlMapper.Control.Enabled);
         
             //---------------Execute Test ----------------------
-            panelInfo.ControlMappers.ControlsEnabled = false;
+            panelInfo.ControlsEnabled = false;
             //---------------Test Result -----------------------
-            Assert.IsFalse(panelInfo.ControlMappers[TEST_PROP_1].Control.Enabled);
-            Assert.IsFalse(panelInfo.ControlMappers[TEST_PROP_2].Control.Enabled);
+            Assert.IsFalse(panelInfo.FieldInfos[TEST_PROP_1].ControlMapper.Control.Enabled);
+            Assert.IsFalse(panelInfo.FieldInfos[TEST_PROP_2].ControlMapper.Control.Enabled);
             //---------------Tear Down -------------------------
         }
 
@@ -193,15 +194,16 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
             MyBO myBO = new MyBO();
-            IPanelFactory factory = new PanelFactory(myBO, GetControlFactory());
-            IPanelFactoryInfo panelInfo = factory.CreatePanel();
-            panelInfo.ControlMappers.ControlsEnabled = false;
+            PanelBuilder factory = new PanelBuilder(GetControlFactory());
+            IPanelInfo panelInfo = factory.BuildPanelForForm(myBO.ClassDef.UIDefCol["default"].UIForm);
+            panelInfo.BusinessObject = myBO;
+            panelInfo.ControlsEnabled = false;
              
             //---------------Execute Test ----------------------
-            panelInfo.ControlMappers.ControlsEnabled = true;
+            panelInfo.ControlsEnabled = true;
             //---------------Test Result -----------------------
-            Assert.IsTrue(panelInfo.ControlMappers[TEST_PROP_1].Control.Enabled);
-            Assert.IsTrue(panelInfo.ControlMappers[TEST_PROP_2].Control.Enabled);
+            Assert.IsTrue(panelInfo.FieldInfos[TEST_PROP_1].ControlMapper.Control.Enabled);
+            Assert.IsTrue(panelInfo.FieldInfos[TEST_PROP_2].ControlMapper.Control.Enabled);
             //---------------Tear Down -------------------------
         }
     }

@@ -58,6 +58,6 @@ namespace Habanero.UI.Base
         /// Gets the object containing all information related to the form, including
         /// its controls, mappers and business object
         /// </summary>
-        IPanelFactoryInfo PanelFactoryInfo{ get;}
+        IPanelInfo PanelInfo{ get;}
     }
 }

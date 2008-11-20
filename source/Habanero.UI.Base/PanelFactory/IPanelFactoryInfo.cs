@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using Habanero.BO.ClassDefinition;
 
@@ -28,6 +29,7 @@ namespace Habanero.UI.Base
     /// <see cref="IPanelFactory.CreatePanel"/>, and contains references to the
     /// controls, mappers, the panel control itself and the business object.
     /// </summary>
+    [Obsolete("Panelfactory and PanelFactoryInfo is soon to be replaced by PanelBuilder and PanelInfo.")]
     public interface IPanelFactoryInfo
     {
         /// <summary>

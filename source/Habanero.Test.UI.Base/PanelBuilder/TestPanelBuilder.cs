@@ -593,6 +593,22 @@ namespace Habanero.Test.UI.Base
 
         }
 
+        [Test]
+        public void Test_BuildPanelForForm_ReturnsOnlyPanelForOneTab()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIForm form = classDef.UIDefCol["default"].UIForm;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form);
+            //---------------Test Result -----------------------
+           Assert.AreEqual(6,panelInfo.Panel.Controls.Count);
+        }
+
         //[Test, Ignore("This doesn't work in code for some reason")]
         //public void Test_BuildPanel_SetToolTip()
         //{

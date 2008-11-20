@@ -45,11 +45,12 @@ namespace Habanero.UI.Base
             IPanel panel = Factory.CreatePanel();
             panelInfo.Panel = panel;
             ITabControl tabControl = Factory.CreateTabControl();
+            IPanel tabPagePanel = Factory.CreatePanel();
             foreach (UIFormTab formTab in uiForm)
             {
                 ITabPage tabPage = Factory.CreateTabPage(formTab.Name);
                 IPanelInfo tabPagePanelInfo = BuildPanelForTab(formTab);
-                IPanel tabPagePanel = tabPagePanelInfo.Panel;
+                tabPagePanel = tabPagePanelInfo.Panel;
                 tabPagePanel.Dock = DockStyle.Fill;
                 tabPage.Controls.Add(tabPagePanel);
                 tabControl.TabPages.Add(tabPage);
@@ -60,7 +61,14 @@ namespace Habanero.UI.Base
                 }
             }
             tabControl.Dock = DockStyle.Fill;
-            panel.Controls.Add(tabControl);
+            if (uiForm.Count == 1)
+            {
+                panelInfo.Panel = tabPagePanel;
+            }
+            else
+            {
+                panel.Controls.Add(tabControl);
+            }
             return panelInfo;
         }
 

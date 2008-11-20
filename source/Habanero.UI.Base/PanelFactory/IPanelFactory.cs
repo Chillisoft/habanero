@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using Habanero.UI.Base;
 
@@ -28,6 +29,7 @@ namespace Habanero.UI.Base
     /// which contains all the information relating to the panel, including the controls, the
     /// mappers, the business object and the panel control.
     /// </summary>
+    [Obsolete("Panelfactory and PanelFactoryInfo is soon to be replaced by PanelBuilder and PanelInfo.")]
     public interface IPanelFactory
     {
         /// <summary>
