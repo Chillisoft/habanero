@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -325,6 +326,31 @@ namespace Habanero.Test.BO
             }
         }
 
+        [Test]
+        public void TestDeleteWhenNewThrowsException()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IBusinessObject bo = classDef.CreateNewBusinessObject();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(bo.Status.IsNew);
+            //---------------Execute Test ----------------------
+            try
+            {
+                bo.Delete();
+            //---------------Test Result -----------------------
+                Assert.Fail("Should have thrown an exception");
+            }
+            catch (HabaneroDeveloperException ex)
+            {
+                Assert.AreEqual("This 'My B O' cannot be deleted as it has never existed in the database.",
+                    ex.Message);
+                Assert.AreEqual("A 'MyBO' cannot be deleted when its status is new and does not exist in the database.",
+                    ex.DeveloperMessage);
+            }
+        }
+
         [Test, ExpectedException(typeof(BusObjEditableException))]
         public void TestCannotEdit_IsEditable_False()
         {
@@ -353,9 +379,11 @@ namespace Habanero.Test.BO
         [Test]
         public void TestCanDelete_IsDeletable_True()
         {
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
             MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable)classDef.CreateNewBusinessObject();
+            bo.Save();
             bo.Deletable = true;
             bo.Editable = true;
             bo.Delete();
@@ -385,9 +413,11 @@ namespace Habanero.Test.BO
         [Test]
         public void TestCanDelete_IsEditable_False()
         {
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
             MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable)classDef.CreateNewBusinessObject();
+            bo.Save();
             bo.Editable = false;
             bo.Deletable = true;
             bo.Delete();

@@ -52,6 +52,10 @@ namespace Habanero.Base.Exceptions
             string str = "";
             str += GetIndent(indent);
             str += ex.GetType() + ": " + ex.Message;
+            if (ex is HabaneroDeveloperException)
+            {
+                str += String.Format(" (Developer message: {0})", ((HabaneroDeveloperException) ex).DeveloperMessage);
+            }
             if (showStackTrace)
             {
                 str += Environment.NewLine + GetIndent(indent);

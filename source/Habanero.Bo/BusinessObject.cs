@@ -917,6 +917,15 @@ namespace Habanero.BO
         public void Delete()
         {
             CheckIsDeletable();
+            if (Status.IsNew)
+            {
+                throw new HabaneroDeveloperException(
+                    String.Format("This '{0}' cannot be deleted as it has never existed in the database.",
+                                  ClassDef.DisplayName),
+                    String.Format("A '{0}' cannot be deleted when its status is new and does not exist in the database.",
+                                  ClassDef.ClassName));
+
+            }
             if (!Status.IsEditing)
             {
                 BeginEdit(true);
