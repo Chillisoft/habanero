@@ -262,17 +262,7 @@ namespace Habanero.UI.Win
             return new GroupBoxWin();
         }
 
-        /// <summary>
-        /// Creates a form in which a business object can be edited
-        /// </summary>
-        /// <param name="bo">The business object to edit</param>
-        /// <param name="uiDefName">The name of the set of UI definitions
-        /// used to design the edit form. Setting this to an empty string
-        /// will use a UI definition with no name attribute specified.</param>
-        public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         /// <summary>
         /// Creates a TabControl
@@ -325,10 +315,10 @@ namespace Habanero.UI.Win
         /// will use a UI definition with no name attribute specified.</param>
         /// <param name="action">Action to be performed when the editing is complete. Typically used if you want to update
         /// a grid or a list in an asynchronous environment (E.g. to select the recently edited item in the grid)</param>
-        public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string name,
+        public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName,
                                                        PostObjectPersistingDelegate action)
         {
-            return new DefaultBOEditorFormWin(bo, name, this, action);
+            return new DefaultBOEditorFormWin(bo, uiDefName, this, action);
         }
 
         /// <summary>
@@ -340,6 +330,18 @@ namespace Habanero.UI.Win
         public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo)
         {
             return new DefaultBOEditorFormWin(bo, "default", this);
+        }
+
+        /// <summary>
+        /// Creates a form in which a business object can be edited
+        /// </summary>
+        /// <param name="bo">The business object to edit</param>
+        /// <param name="uiDefName">The name of the set of UI definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a UI definition with no name attribute specified.</param>
+        public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName)
+        {
+            return new DefaultBOEditorFormWin(bo, uiDefName, this);
         }
 
         //TODO: Port

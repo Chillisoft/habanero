@@ -20,7 +20,10 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using NUnit.Framework;
 
@@ -506,6 +509,56 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(expectedButtonWidth, button.Width);
             //To_Test: btn.FlatStyle = FlatStyle.System;
             //---------------Tear Down -------------------------   
+        }
+
+        [Test]
+        public void TestCreateBOEditorForm_BoParam()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadDefaultClassDef();
+            MyBO businessObject = new MyBO();
+            //---------------Verify test pack-------------------
+            //---------------Execute Test ----------------------
+            IDefaultBOEditorForm boEditorForm = _factory.CreateBOEditorForm(businessObject);
+            //---------------Verify Result -----------------------
+            Assert.IsNotNull(boEditorForm);
+            Assert.AreSame(businessObject, boEditorForm.PanelFactoryInfo.ControlMappers.BusinessObject);
+        }
+
+        [Test]
+        public void TestCreateBOEditorForm_BoParam_UiDefNameParam()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadDefaultClassDef();
+            MyBO businessObject = new MyBO();
+            string uiDefName = "Alternate";
+            //---------------Verify test pack-------------------
+            //---------------Execute Test ----------------------
+            IDefaultBOEditorForm boEditorForm = _factory.CreateBOEditorForm(businessObject, uiDefName);
+            //---------------Verify Result -----------------------
+            Assert.IsNotNull(boEditorForm);
+            Assert.AreSame(businessObject, boEditorForm.PanelFactoryInfo.ControlMappers.BusinessObject);
+            //TODO: Assert.AreEqual(uiDefName, boEditorForm.PanelFactoryInfo.UIDefName);
+        }
+
+        [Test]
+        public void TestCreateBOEditorForm_BoParam_UiDefNameParam_PostObjectPersistingParam()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadDefaultClassDef();
+            MyBO businessObject = new MyBO();
+            string uiDefName = "Alternate";
+            PostObjectPersistingDelegate action = delegate(IBusinessObject bo) {  };
+            //---------------Verify test pack-------------------
+            //---------------Execute Test ----------------------
+            IDefaultBOEditorForm boEditorForm = _factory.CreateBOEditorForm(businessObject, uiDefName, action);
+            //---------------Verify Result -----------------------
+            Assert.IsNotNull(boEditorForm);
+            Assert.AreSame(businessObject, boEditorForm.PanelFactoryInfo.ControlMappers.BusinessObject);
+            //TODO: Assert.AreEqual(uiDefName, boEditorForm.PanelFactoryInfo.UIDefName);
         }
 
         [Test]
