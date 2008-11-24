@@ -1097,12 +1097,16 @@ namespace Habanero.Test.UI.Base
         {
             MyBO cp = new MyBO();
             cp.TestProp = "b";
+            cp.Save();
             MyBO cp2 = new MyBO();
             cp2.TestProp = "d";
+            cp2.Save();
             MyBO cp3 = new MyBO();
             cp3.TestProp = "c";
+            cp3.Save();
             MyBO cp4 = new MyBO();
             cp4.TestProp = "a";
+            cp4.Save();
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             col.Add(cp, cp2, cp3, cp4);
             return col;

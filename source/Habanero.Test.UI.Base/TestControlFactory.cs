@@ -523,7 +523,7 @@ namespace Habanero.Test.UI.Base
             IDefaultBOEditorForm boEditorForm = _factory.CreateBOEditorForm(businessObject);
             //---------------Verify Result -----------------------
             Assert.IsNotNull(boEditorForm);
-            Assert.AreSame(businessObject, boEditorForm.PanelFactoryInfo.ControlMappers.BusinessObject);
+            Assert.AreSame(businessObject, boEditorForm.PanelInfo.BusinessObject);
         }
 
         [Test]
@@ -539,7 +539,7 @@ namespace Habanero.Test.UI.Base
             IDefaultBOEditorForm boEditorForm = _factory.CreateBOEditorForm(businessObject, uiDefName);
             //---------------Verify Result -----------------------
             Assert.IsNotNull(boEditorForm);
-            Assert.AreSame(businessObject, boEditorForm.PanelFactoryInfo.ControlMappers.BusinessObject);
+            Assert.AreSame(businessObject, boEditorForm.PanelInfo.BusinessObject);
             //TODO: Assert.AreEqual(uiDefName, boEditorForm.PanelFactoryInfo.UIDefName);
         }
 
@@ -557,7 +557,7 @@ namespace Habanero.Test.UI.Base
             IDefaultBOEditorForm boEditorForm = _factory.CreateBOEditorForm(businessObject, uiDefName, action);
             //---------------Verify Result -----------------------
             Assert.IsNotNull(boEditorForm);
-            Assert.AreSame(businessObject, boEditorForm.PanelFactoryInfo.ControlMappers.BusinessObject);
+            Assert.AreSame(businessObject, boEditorForm.PanelInfo.BusinessObject);
             //TODO: Assert.AreEqual(uiDefName, boEditorForm.PanelFactoryInfo.UIDefName);
         }
 
