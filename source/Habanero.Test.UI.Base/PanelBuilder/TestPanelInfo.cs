@@ -164,6 +164,29 @@ namespace Habanero.Test.UI.Base
 
         }
 
+        [Test]
+        public void TestClearErrorProviders()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneCompulsory();
+            PanelBuilder panelBuilder = new PanelBuilder(_controlFactory);
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(classDef.UIDefCol["default"].UIForm[0]);
+            Sample businessObject = new Sample();
+            panelInfo.BusinessObject = businessObject;
+
+            //businessObject.SetPropertyValue("SampleText2", "sdlkfj");
+            PanelInfo.FieldInfo fieldInfo = panelInfo.FieldInfos["SampleText2"];
+            panelInfo.ApplyChangesToBusinessObject();
+            IErrorProvider errorProvider = fieldInfo.ControlMapper.ErrorProvider;
+
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(errorProvider.GetError(fieldInfo.InputControl).Length > 0);
+            //---------------Execute Test ----------------------
+            panelInfo.ClearErrorProviders();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(errorProvider.GetError(fieldInfo.InputControl).Length > 0);
+        }
+
         private PanelInfo.FieldInfo CreateFieldInfo(string propertyName)
         {
             ILabel label = _controlFactory.CreateLabel();

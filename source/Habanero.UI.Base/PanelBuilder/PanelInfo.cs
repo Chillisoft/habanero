@@ -73,6 +73,14 @@ namespace Habanero.UI.Base
             }
         }
 
+        public void ClearErrorProviders()
+        {
+            foreach (FieldInfo fieldInfo in FieldInfos)
+            {
+                fieldInfo.ControlMapper.ErrorProvider.SetError(fieldInfo.InputControl, "");
+            }
+        }
+
         public class FieldInfoCollection : IEnumerable<FieldInfo>
         {
             private readonly IList<FieldInfo> _fieldInfos = new List<FieldInfo>();

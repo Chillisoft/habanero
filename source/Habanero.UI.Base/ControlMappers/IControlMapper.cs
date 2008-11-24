@@ -46,6 +46,11 @@ namespace Habanero.UI.Base
         BusinessObject BusinessObject { get; set; }
 
         /// <summary>
+        /// Gets the error provider for this control <see cref="IErrorProvider"/>
+        /// </summary>
+        IErrorProvider ErrorProvider { get; }
+
+        /// <summary>
         /// Updates the properties on the represented business object
         /// </summary>
         void ApplyChangesToBusinessObject();

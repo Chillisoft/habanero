@@ -60,7 +60,7 @@ namespace Habanero.BO
         /// <summary>
         /// Returns the relationship definition
         /// </summary>
-        internal RelationshipDef RelationshipDef
+        public RelationshipDef RelationshipDef
         {
             get { return _relDef; }
         }

@@ -12,5 +12,6 @@ namespace Habanero.UI.Base
         bool ControlsEnabled { set; }
         IList<IPanelInfo> PanelInfos { get; }
         void ApplyChangesToBusinessObject();
+        void ClearErrorProviders();
     }
 }
