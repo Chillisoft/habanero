@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.BO;
 
 namespace Habanero.UI.Base
@@ -8,7 +9,7 @@ namespace Habanero.UI.Base
         IPanel Panel { get; set; }
         GridLayoutManager LayoutManager { get; set; }
         PanelInfo.FieldInfoCollection FieldInfos { get; }
-        BusinessObject BusinessObject { get; set; }
+        IBusinessObject BusinessObject { get; set; }
         bool ControlsEnabled { set; }
         IList<IPanelInfo> PanelInfos { get; }
         void ApplyChangesToBusinessObject();

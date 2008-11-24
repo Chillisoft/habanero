@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.BO;
 
 namespace Habanero.UI.Base
@@ -67,7 +68,7 @@ namespace Habanero.UI.Base
         /// altered, the <see cref="ControlMapper.UpdateControlValueFromBusinessObject"/> method is automatically called here to 
         /// implement the changes in the control itself.
         /// </summary>
-        public override BusinessObject BusinessObject
+        public override IBusinessObject BusinessObject
         {
             get { return base.BusinessObject; }
             set

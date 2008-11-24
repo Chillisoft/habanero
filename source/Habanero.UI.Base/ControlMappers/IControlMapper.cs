@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO;
 
 namespace Habanero.UI.Base
@@ -43,7 +44,7 @@ namespace Habanero.UI.Base
         /// altered, the <see cref="UpdateControlValueFromBusinessObject"/> method can be called here to 
         /// implement the changes in the control itself.
         /// </summary>
-        BusinessObject BusinessObject { get; set; }
+        IBusinessObject BusinessObject { get; set; }
 
         /// <summary>
         /// Gets the error provider for this control <see cref="IErrorProvider"/>

@@ -35,13 +35,13 @@ namespace Habanero.BO
     public class BOMapper
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BoMapper");
-        private BusinessObject _businessObject;
+        private IBusinessObject _businessObject;
 
         /// <summary>
         /// Constructor to initialise a new mapper
         /// </summary>
         /// <param name="bo">The business object to map</param>
-        public BOMapper(BusinessObject bo)
+        public BOMapper(IBusinessObject bo)
         {
             _businessObject = bo;
         }
@@ -84,7 +84,7 @@ namespace Habanero.BO
         /// <returns>Returns the interface mapper</returns>
         public UIDef GetUIDef(string uiDefName)
         {
-            return _businessObject.ClassDef.GetUIDef(uiDefName);
+            return ((ClassDef)_businessObject.ClassDef).GetUIDef(uiDefName);
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace Habanero.BO
             {
                 return GetVirtualPropertyValue(propertyName);
             }
-            return _businessObject.GetPropertyValueToDisplay(propertyName);
+            return ((BusinessObject)_businessObject).GetPropertyValueToDisplay(propertyName);
         }
 
         private object GetVirtualPropertyValue(string propertyName)
@@ -192,7 +192,7 @@ namespace Habanero.BO
         /// <returns>Returns the class definition or null if not available</returns>
         public ClassDef GetLookupListClassDef(string propertyName)
         {
-            ClassDef classDef = _businessObject.ClassDef;
+            IClassDef classDef = _businessObject.ClassDef;
             IPropDef propDef = classDef.GetPropDef(propertyName, false);
 
             if (propDef != null && propDef.LookupList != null && propDef.HasLookupList())

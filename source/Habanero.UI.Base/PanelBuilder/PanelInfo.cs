@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 
@@ -10,7 +11,7 @@ namespace Habanero.UI.Base
         private IPanel _panel;
         private GridLayoutManager _layoutManager;
         private readonly FieldInfoCollection _fieldInfos;
-        private BusinessObject _businessObject;
+        private IBusinessObject _businessObject;
         private IList<IPanelInfo> _panelInfos;
 
         public PanelInfo()
@@ -36,7 +37,7 @@ namespace Habanero.UI.Base
             get { return _fieldInfos; }
         }
 
-        public BusinessObject BusinessObject
+        public IBusinessObject BusinessObject
         {
             get { return _businessObject; }
             set

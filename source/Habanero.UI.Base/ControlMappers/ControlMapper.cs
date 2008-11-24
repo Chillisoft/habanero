@@ -41,7 +41,7 @@ namespace Habanero.UI.Base
         private readonly IControlFactory _factory;
         protected readonly bool _isReadOnly;
         protected Hashtable _attributes;
-        protected BusinessObject _businessObject;
+        protected IBusinessObject _businessObject;
         protected IControlHabanero _control;
         protected bool _isEditable;
         protected string _propertyName;
@@ -106,7 +106,7 @@ namespace Habanero.UI.Base
         /// altered, the <see cref="UpdateControlValueFromBusinessObject"/> method is automatically called here to 
         /// implement the changes in the control itself.
         /// </summary>
-        public virtual BusinessObject BusinessObject
+        public virtual IBusinessObject BusinessObject
         {
             get { return _businessObject; }
             set

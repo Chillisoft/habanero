@@ -69,6 +69,30 @@ namespace Habanero.Base
         IPropDef GetPropDef(string propertyName);
 
         /// <summary>
+        /// Searches the property definition collection and returns the 
+        /// property definition for the property with the name provided.
+        /// </summary>
+        /// <param name="propertyName">The property name in question</param>
+        /// <param name="throwError">Should an error be thrown if the property is not found</param>
+        /// <returns>Returns the property definition if found, or
+        /// throw an error if <paramref name="throwError"/> is true,
+        /// otherwise return null</returns>
+        /// <exception cref="InvalidPropertyNameException">
+        /// This exception is thrown if the property is not found and 
+        /// <paramref name="throwError"/> is true</exception>
+        IPropDef GetPropDef(string propertyName, bool throwError);
+
+        ///<summary>
+        /// Returns a particular property definition for a class definition.
+        ///</summary>
+        ///<param name="source"></param>
+        ///<param name="propertyName"></param>
+        ///<param name="throwError"></param>
+        ///<returns></returns>
+        ///<exception cref="ArgumentException"></exception>
+        IPropDef GetPropDef(Source source, string propertyName, bool throwError);
+
+        /// <summary>
         /// Searches the property definition collection and returns 
         /// the lookup-list found under the property with the
         /// name specified.  Also checks the super-class.
@@ -184,15 +208,5 @@ namespace Habanero.Base
         /// <returns>Returns true if so, or false if there is no
         /// super class or another type of inheritance is being used</returns>
         bool IsUsingClassTableInheritance();
-
-        ///<summary>
-        /// Returns a particular property definition for a class definition.
-        ///</summary>
-        ///<param name="source"></param>
-        ///<param name="propertyName"></param>
-        ///<param name="throwError"></param>
-        ///<returns></returns>
-        ///<exception cref="ArgumentException"></exception>
-        IPropDef GetPropDef(Source source, string propertyName, bool throwError);
     }
 }
