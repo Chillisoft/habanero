@@ -44,8 +44,17 @@ namespace Habanero.Test.BO
         {
             //Code that is executed after each and every test is executed in this fixture/class.
         }
+        //Load a collection from the database.
+        // Create a new business object.
+        // The related collection will now contain the newly added business object.
+        // Remove a business object or mark a business object as deleted.
+        //  A loaded business object collection will remove the business object from the collection and will
+        //    add it to its Deleted Collection.
+        // A related collection will be dirty if it has any removed items, created items or deleted items.
+        // A related collection will be dirty if it has any dirty objects.
+        // A business object will be dirty if it has a dirty related collection.
         [Test]
-        public void TestCreateBusObjectCollection()
+        public void TestCreateBusObject_AddedToTheCollection()
         {
             //SetupTests
             MyBO.LoadClassDefWithRelationship();
@@ -61,37 +70,43 @@ namespace Habanero.Test.BO
             Assert.AreEqual(bo.MyBoID, relatedBo.MyBoID);
             Assert.IsTrue(relatedBo.Status.IsNew);
             Assert.AreEqual(1, col.CreatedBusinessObjects.Count);
-            //TODO: I think that the collection should show all loaded object less removed or deleted object not yet persisted
-            //     plus all created or added objects not yet persisted.
-//            Assert.AreEqual(1, col.Count);
+            Assert.AreEqual(1, col.Count);
         }
+        //TODO: Test add new business object adds to created collection and sets the foreign key fields
+        // composite and non composite.
+
 
 //TODO: I think that the collection should show all loaded object less removed or deleted object not yet persisted
 //     plus all created or added objects not yet persisted.
-//        [Test]
-//        public void TestCreateBusObjectCollection_SurvivesARefresh()
-//        {
-//            //---------------Set up test pack-------------------
-//            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
-////            MyRelatedBo.LoadClassDef();
-//            ContactPersonTestBO bo = new ContactPersonTestBO();
-//            RelatedBusinessObjectCollection<Address> addresses = bo.Addresses;
-//            addresses.CreateBusinessObject();
-//
-//            //---------------Assert Precondition----------------
-//            Assert.AreEqual(1, addresses.CreatedBusinessObjects.Count);
-//            Assert.AreEqual(1, addresses.Count);
-//
-//            //---------------Execute Test ----------------------
-//            addresses.Refresh();
-//
-//            //---------------Test Result -----------------------
-//            Assert.AreEqual(1, addresses.CreatedBusinessObjects.Count);
-//            Assert.AreEqual(1, addresses.Count);
-//        }
+
         [Test]
-        public void TestCreateBusObjectCollectiongetCollectionFromParentMultipleTimes()
+        public void Test_Refresh_PreservesCreateBusObjectCollection()
         {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
+            ContactPersonTestBO bo = new ContactPersonTestBO();
+            RelatedBusinessObjectCollection<Address> addresses = bo.Addresses;
+            addresses.CreateBusinessObject();
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, addresses.CreatedBusinessObjects.Count);
+            Assert.AreEqual(1, addresses.Count);
+            Assert.AreEqual(0, addresses.PersistedBusinessObjects.Count);
+
+            //---------------Execute Test ----------------------
+            addresses.Refresh();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, addresses.CreatedBusinessObjects.Count);
+            Assert.AreEqual(1, addresses.Count);
+            Assert.AreEqual(0, addresses.PersistedBusinessObjects.Count);
+        }
+
+        [Test]
+        public void TestCreateBusObjectCollection_ForeignKeySetUp()
+        {
+            //The Foreign Key (address.ContactPersonId) should be set up to be 
+            // equal to the contactPerson.ContactPersonID
             //SetupTests
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
@@ -108,22 +123,36 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestPersistOfCreatedBusinessObjects()
+        public void Test_AddNewObject_AddsObjectToCollection_SetsUpForeignKey()
         {
             //---------------Set up test pack-------------------
+            //The Foreign Key (address.ContactPersonId) should be set up to be 
+            // equal to the contactPerson.ContactPersonID
+            //SetupTests
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
-            ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
-            newCP.Surname = Guid.NewGuid().ToString();
-            newCP.FirstName = Guid.NewGuid().ToString();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            //MultipleRelationship rel = (MultipleRelationship)bo.Relationships["MyMultipleRelationship"];
+            //RelatedBusinessObjectCollection<MyRelatedBo> col = new RelatedBusinessObjectCollection<MyRelatedBo>(rel);
+
+            //Run tests
+            Address address = new Address();
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.Count);
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.PersistedBOColl.Count);
 
             //---------------Execute Test ----------------------
-            cpCol.SaveAll();
+            contactPersonTestBO.Addresses.Add(address);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, cpCol.Count);
-            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.CreatedBusinessObjects.Count);
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.PersistedBOColl.Count);
+            Assert.AreEqual(contactPersonTestBO.ContactPersonID, address.ContactPersonID);
         }
+
+
         [Test]
         public void TestRemoveRelatedObject()
         {
@@ -133,40 +162,94 @@ namespace Habanero.Test.BO
             Address address = contactPersonTestBO.Addresses.CreateBusinessObject();
             address.Save();
             Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
-
+            //------Assert Preconditions
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.PersistedBOColl.Count);
             //-----Run tests----------------------------
-            //Run tests
-
-            BusinessObjectCollection<Address> addresses = contactPersonTestBO.Addresses;
+            RelatedBusinessObjectCollection<Address> addresses = contactPersonTestBO.Addresses;
             addresses.Remove(address);
+
             ////-----Test results-------------------------
             Assert.AreEqual(1, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
-            Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.Count);
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.PersistedBOColl.Count);
         }
 
+        [Test]
+        public void TestRemoveRelatedObject_AsBusinessObjectCollection()
+        {
+            //-----Create Test pack---------------------
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
+            Address address = contactPersonTestBO.Addresses.CreateBusinessObject();
+            address.Save();
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
 
+            //-----Run tests----------------------------
+            BusinessObjectCollection<Address> addresses = contactPersonTestBO.Addresses;
+            addresses.Remove(address);
+
+            ////-----Test results-------------------------
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.Count);
+            Assert.IsNull(address.ContactPersonID);
+            Assert.IsNull(address.ContactPerson);
+            Assert.IsTrue(address.Status.IsDeleted);
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.PersistedBOColl.Count);
+        }
 
         [Test]
-        public void TestRemoveRelatedObject_PersistToDB()
+        public void TestRemoveRelatedObject_PersistColToDB()
         {
             //-----Create Test pack---------------------
             Address address;
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            
+            //-----Assert Precondition------------------
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
 
             //-----Run tests----------------------------
             //Run tests
             BusinessObjectCollection<Address> addresses = contactPersonTestBO.Addresses;
             addresses.Remove(address);
             addresses.SaveAll();
+
             ////-----Test results-------------------------
             Assert.AreEqual(0, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, contactPersonTestBO.Addresses.Count);
+            Assert.IsTrue(address.Status.IsDeleted);
+            Assert.IsTrue(address.Status.IsNew);
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.PersistedBOColl.Count);
         }
 
+        [Test]
+        public void TestRemoveRelatedObject_PersistBOToDB()
+        {
+            //-----Create Test pack---------------------
+            Address address;
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
 
+            //-----Assert Precondition------------------
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
+
+            //-----Run tests----------------------------
+            BusinessObjectCollection<Address> addresses = contactPersonTestBO.Addresses;
+            addresses.Remove(address);
+            address.Save();
+
+            ////-----Test results-------------------------
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.Count);
+            Assert.IsTrue(address.Status.IsDeleted);
+            Assert.IsTrue(address.Status.IsNew);
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.PersistedBOColl.Count);
+        }
 
         [Test]
-        public void TestRemoveGuestAttendee_AlreadyInRemoveCollection()
+        public void TestRemoveAddress_AlreadyInRemoveCollection()
         {
             //-----Create Test pack---------------------
             Address address;
@@ -175,11 +258,9 @@ namespace Habanero.Test.BO
             //-----Run tests----------------------------
             contactPersonTestBO.Addresses.Remove(address);
             contactPersonTestBO.Addresses.Remove(address);
-            //eveBooking.GuestAttendees.SaveAll();
+
             //-----Test results-------------------------
             Assert.AreEqual(1, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
         }
-
-
     }
 }

@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -749,6 +750,8 @@ namespace Habanero.Test.BO
                     Relationships.GetRelatedCollection<AddressTestBO>("AddressTestBOs");
             }
         }
+
+
 
 
         protected internal override void AfterLoad()

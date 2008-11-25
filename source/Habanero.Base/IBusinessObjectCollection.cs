@@ -81,6 +81,8 @@ namespace Habanero.Base
             set;
         }
 
+ 
+
         /// <summary>
 		/// Finds a business object that has the key string specified.<br/>
 		/// Note: the format of the search term is strict, so that a Guid ID
@@ -330,7 +332,52 @@ namespace Habanero.Base
         ///// <param name="index">The index position to remove from</param>
         //new void RemoveAt<TBusinessObject>(int index);
 
+        /// <summary>
+        /// Allows the adding of business objects to the collection without
+        /// this causing the added event to be fired.
+        /// This is intended to be used for internal use only.
+        /// </summary>
+        /// <param name="businessObject"></param>
         void AddWithoutEvents(IBusinessObject businessObject);
+
+//        /// <summary>
+//        /// Allows the adding of business objects to the collection without
+//        /// this causing the added event to be fired.
+//        /// This is intended to be used for internal use only.
+//        /// </summary>
+//        /// <param name="businessObject"></param>
+//        void AddToPersistedCollection(IBusinessObject businessObject);
+
+        /// <summary>
+        /// Returns a list of the business objects that are currently persisted to the 
+        ///   database. The Business Object collection maintains this list so as to be
+        ///   able to store the state of this collection when it was last loaded or persisted
+        ///   to the relevant datastore. This is necessary so that the collection can be
+        ///   restored (in the case where a user selects to can edits to a collection.
+        ///   The business object collection differentiates between
+        ///   - business objects deleted from it since it was last synchronised with the datastore.
+        ///   - business objects added to it since it was last synchronised.
+        ///   - business objects created by it since it was last synchronised.
+        ///   - business objects removed from it since it was last synchronised.
+        /// </summary>
+        /// Hack: This method was created to overcome the shortfall of using a Generic Collection.
+        IList PersistedBOColl { get; }
+
+        /// <summary>
+        /// Returns a list of the business objects that are currently created for the
+        ///   collection but have not yet been persisted to the database.
+        /// </summary>
+        /// Hack: This method was created returning a type IList to overcome problems with 
+        ///   BusinessObjectCollecion being a generic collection.
+        IList CreatedBOCol { get; }
+
+        /// <summary>
+        /// Returns a list of the business objects that are currently removed for the
+        ///   collection but have not yet been persisted to the database.
+        /// </summary>
+        /// Hack: This method was created returning a type IList to overcome problems with 
+        ///   BusinessObjectCollecion being a generic collection.
+        IList RemovedBOCol { get; }
 
         /// <summary>
         /// Removes the business object at the index position specified

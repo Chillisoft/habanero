@@ -43,6 +43,7 @@ namespace Habanero.BO
         #region IBusinessObject Members
 
         public event EventHandler<BOEventArgs> Updated;
+
         public event EventHandler<BOEventArgs> Saved;
         public event EventHandler<BOEventArgs> Deleted;
         public event EventHandler<BOEventArgs> Restored;
@@ -117,6 +118,7 @@ namespace Habanero.BO
                     currentClassDef = currentClassDef.SuperClassClassDef;
                 }
 
+                if (currentClassDef.SuperClassClassDef == null) continue;
                 if (currentClassDef.SuperClassClassDef.PrimaryKeyDef != null)
                 {
                     InitialisePropertyValue(currentClassDef.SuperClassClassDef.PrimaryKeyDef.KeyName, myID);
@@ -202,10 +204,13 @@ namespace Habanero.BO
             if (_classDef == null)
             {
                 throw new NullReferenceException(String.Format(
-                                                     "An error occurred while loading the class definitions for " +
+                                                     "An error occurred while loading the class definitions (ClassDef.xml) for " +
                                                      "'{0}'. Check that the class exists in that " +
                                                      "namespace and assembly and that there are corresponding " +
-                                                     "class definitions for this class.", GetType()));
+                                                     "class definitions for this class.\n" + 
+                                                     "Please check that the ClassDef.xml file is either an imbedded resource " + 
+                                                     "or is copied to the output directory via the appropriate postbuild command " + 
+                                                     "(for more help see FAQ)", GetType()));
             }
         }
 
@@ -963,7 +968,6 @@ namespace Habanero.BO
                 {
                     BusinessObjectManager.Instance.Add(this);
                 }
-
                 FireSaved();
             }
             AfterSave();

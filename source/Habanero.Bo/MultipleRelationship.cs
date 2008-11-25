@@ -47,6 +47,10 @@ namespace Habanero.BO
 
         protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>()
         {
+            //TODO: Need a strategy for what should be happening here when the collection is previously loaded.
+            //I would suggest option 1
+            //1) The collection is reloaded from the database as is currently being done.
+            //2) The collection is is returned
             if(_boCol != null)
             {
                 BORegistry.DataAccessor.BusinessObjectLoader.Refresh((BusinessObjectCollection<TBusinessObject>)_boCol);

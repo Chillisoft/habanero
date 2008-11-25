@@ -608,9 +608,10 @@ namespace Habanero.Test.BO
             Assert.IsTrue(businessObject.Status.IsNew);
         }
 
-        //TODO: refresh dirty object if correct method called.
+        //TODO: refresh dirty object if correct method called need a strategy for this?.
+        // should restore just cancel edits or restore from the DB strategy for this too.
         [Test]
-        public void Test_GetDirtyObject_DoesNotReloadFromDatabase()
+        public void TestGetDirtyObject_DoesNotReloadFromDatabase()
         {
             //---------------Set up test pack-------------------
             ContactPerson cp = ContactPerson.CreateSavedContactPerson();
@@ -829,7 +830,7 @@ namespace Habanero.Test.BO
             /// <summary>
             /// Tests to ensure that if the object has been edited by another user
             ///  and the default strategy to reload has been replaced then one we do not get back is always the latest.
-            /// Note: This behaviour is configurable using a strategy TestGetTheFreshestObject_Strategy test 
+            /// Note: This behaviour must be made configurable using a strategy TestGetTheFreshestObject_Strategy test 
             /// </summary>
             [Test, Ignore("Need to implement via a strategy")]
             public void TestDontGetTheFreshestObject_Strategy()

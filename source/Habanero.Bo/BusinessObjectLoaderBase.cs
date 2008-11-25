@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
@@ -238,5 +239,65 @@ namespace Habanero.BO
             return (IBusinessObjectCollection)Activator.CreateInstance(boColType);
         }
 
+        protected static void AddBusinessObjectToCollection<T>(BusinessObjectCollection<T> collection, T loadedBo, BusinessObjectCollection<T> clonedCol)
+            where T : class, IBusinessObject, new()
+        {
+            //If the origional collection had the new business object then
+            // use add internal this adds without any events being raised etc.
+            //else adds via the Add method (normal add) this raises events such that the 
+            // user interface can be updated.
+            if (clonedCol.Contains(loadedBo))
+            {
+                ((IBusinessObjectCollection)collection).AddWithoutEvents(loadedBo);
+            }
+            else
+            {
+                collection.Add(loadedBo);
+            }
+            collection.PersistedBOColl.Add(loadedBo);
+        }
+        protected static void AddBusinessObjectToCollection(IBusinessObjectCollection collection, IBusinessObject loadedBo, IBusinessObjectCollection clonedCol)
+        {
+            //If the origional collection had the new business object then
+            // use add internal this adds without any events being raised etc.
+            //else adds via the Add method (normal add) this raises events such that the 
+            // user interface can be updated.
+            if (clonedCol.Contains(loadedBo))
+            {
+                collection.AddWithoutEvents(loadedBo);
+            }
+            else
+            {
+                collection.Add(loadedBo);
+            }
+            collection.PersistedBOColl.Add(loadedBo);
+
+        }
+
+        protected static void RestoreCreatedCollection(IBusinessObjectCollection collection, IList createdBusinessObjects)
+        {
+            //The collection should show all loaded object less removed or deleted object not yet persisted
+            //     plus all created or added objects not yet persisted.
+            //Note: This behaviour is fundamentally different than the business objects behaviour which 
+            //  throws and error if any of the items are dirty when it is being refreshed.
+            //Should a refresh be allowed on a dirty collection (what do we do with BO's
+            foreach (IBusinessObject createdBO in createdBusinessObjects)
+            {
+                collection.CreatedBOCol.Add(createdBO);
+                collection.AddWithoutEvents(createdBO);
+            }
+        }
+        protected static void RestoreRemovedCollection(IBusinessObjectCollection collection, IList removedBusinessObjects)
+        {
+            //The collection should show all loaded object less removed or deleted object not yet persisted
+            //     plus all created or added objects not yet persisted.
+            //Note: This behaviour is fundamentally different than the business objects behaviour which 
+            //  throws and error if any of the items are dirty when it is being refreshed.
+            //Should a refresh be allowed on a dirty collection (what do we do with BO's
+            foreach (IBusinessObject removedBO in removedBusinessObjects)
+            {
+                collection.Remove(removedBO);
+            }
+        }
     }
 }
