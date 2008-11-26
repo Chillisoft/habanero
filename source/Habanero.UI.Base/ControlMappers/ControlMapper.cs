@@ -79,6 +79,22 @@ namespace Habanero.UI.Base
             get { return _errorProvider; }
         }
 
+        ///<summary>
+        /// Returns the Control Factory that this Control Mapper is set up to use
+        ///</summary>
+        public IControlFactory ControlFactory
+        {
+            get { return _factory; }
+        }
+
+        ///<summary>
+        /// Returns the value of the IsReadonly field as set up in the Control Mappers's construtor.
+        ///</summary>
+        public bool IsReadOnly
+        {
+            get { return _isReadOnly; }
+        }
+
         #region IControlMapper Members
 
         /// <summary>
