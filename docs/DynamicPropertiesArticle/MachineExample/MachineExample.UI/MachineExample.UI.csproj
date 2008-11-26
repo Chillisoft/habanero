@@ -1,0 +1,87 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B39537EF-B8FB-4090-9858-F7D004A5F74D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MachineExample.UI</RootNamespace>
+    <AssemblyName>MachineExample.UI</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Habanero.Base">
+      <HintPath>..\lib\Habanero.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Habanero.BO">
+      <HintPath>..\lib\Habanero.BO.dll</HintPath>
+    </Reference>
+    <Reference Include="Habanero.UI.Base">
+      <HintPath>..\lib\Habanero.UI.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Habanero.UI.Win">
+      <HintPath>..\lib\Habanero.UI.Win.dll</HintPath>
+    </Reference>
+    <Reference Include="Habanero.Util">
+      <HintPath>..\lib\Habanero.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MachineControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MachinePropertiesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MachineTypeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <ProjectReference Include="..\MachineExample.BO\MachineExample.BO.csproj">
+      <Project>{2B88A601-7E18-453E-A9EB-26D1352C558B}</Project>
+      <Name>MachineExample.BO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <!-- NB: These build events MUST be after the above project import  -->
+  <PropertyGroup>
+    <PostBuildEvent />
+    <PreBuildEvent />
+  </PropertyGroup>
+</Project>
