@@ -1,3 +1,6 @@
+/// This code is copyright under the terms of the Code Project Open License
+/// (C) 2008 Peter Wiles/Chillisoft Solution Services (Pty) Ltd
+
 using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Win;

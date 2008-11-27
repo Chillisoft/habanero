@@ -1,6 +1,5 @@
-// ------------------------------------------------------------------------------
-// This class was auto-generated for use with the Habanero Enterprise Framework.
-// ------------------------------------------------------------------------------
+/// This code is copyright under the terms of the Code Project Open License
+/// (C) 2008 Peter Wiles/Chillisoft Solution Services (Pty) Ltd
 
 using System;
 using Habanero.Base;
