@@ -1,0 +1,15 @@
+public class MachineType : BusinessObject {
+
+        public virtual String Name
+        {
+            get
+            {
+                return ((String)(base.GetPropertyValue("Name")));
+            }
+            set
+            {
+                base.SetPropertyValue("Name", value);
+            }
+        }
+	//...
+}
