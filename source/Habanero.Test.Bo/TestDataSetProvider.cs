@@ -76,7 +76,7 @@ namespace Habanero.Test.BO
             TransactionCommitterStub committer = new TransactionCommitterStub();
 			itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
 			itsConnection = (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
-            _collection = new BusinessObjectCollection<BusinessObject>(_classDef);
+            _collection = new BusinessObjectCollection<MyBO>(_classDef);
             //itsBo1 = _classDef.CreateNewBusinessObject(itsConnection);
             itsBo1 = _classDef.CreateNewBusinessObject();
             itsBo1.SetPropertyValue("TestProp", "bo1prop1");

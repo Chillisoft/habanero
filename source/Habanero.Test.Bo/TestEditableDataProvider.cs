@@ -106,6 +106,22 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, numDeleted, "BO should be marked as deleted.");
         }
 
+        [Test, Ignore("Changes have been made recently (Brett?) that are now breaking editable grids.")]
+        public void TestRejectChangesRemovesNewRow()
+        {
+            //---------------Set up test pack-------------------
+            SetupTestData();
+            int originalCount = _collection.Count;
+            itsTable.Rows.Add(new object[] { null, "bo1prop1", "s1" });
+            //---------------Assert Precondition----------------
+            //Assert.AreEqual(originalCount + 1, _collection.Count);
+
+            //---------------Execute Test ----------------------
+            itsTable.RejectChanges();
+            //---------------Test Result -----------------------
+
+        }
+
         [Test]
         public void TestAcceptChangesSavesNewBusinessObjects()
         {
