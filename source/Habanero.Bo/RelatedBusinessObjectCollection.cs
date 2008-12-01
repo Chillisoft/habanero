@@ -65,7 +65,7 @@ namespace Habanero.BO
             //TODO: This should be configured in the relationship the relationship
             // should allow you to either delete the object when removing or to dereference the object.
             //for now will dereference as well as delete.
-            bo.Delete();
+            if (!bo.Status.IsNew) bo.Delete();
 
             DereferenceBO(bo);
             return base.Remove(bo);

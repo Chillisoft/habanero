@@ -262,5 +262,24 @@ namespace Habanero.Test.BO
             //-----Test results-------------------------
             Assert.AreEqual(1, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
         }
+
+        [Test]
+        public void TestRemoveRelatedObject_DoesNotDeleteIfNew()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            Address address = contactPersonTestBO.Addresses.CreateBusinessObject();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(address.Status.IsNew);
+            Assert.IsFalse(address.Status.IsDeleted);
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.CreatedBusinessObjects.Count);
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.Addresses.Remove(address);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(contactPersonTestBO.Addresses.Contains(address));
+            Assert.IsFalse(address.Status.IsDeleted);
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.CreatedBusinessObjects.Count);
+        }
     }
 }
