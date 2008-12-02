@@ -195,6 +195,26 @@ namespace Habanero.UI.VWG
             return new ReadOnlyGridControlVWG(this);
         }
 
+        public IGridWithPanelControl<T> CreateGridWithPanelControl<T>() where T : class, IBusinessObject, new()
+        {
+            return new GridWithPanelControlVWG<T>(this, "default");
+        }
+
+        public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(string uiDefName) where T : class, IBusinessObject, new()
+        {
+            return new GridWithPanelControlVWG<T>(this, uiDefName);
+        }
+
+        public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl) where T : class, IBusinessObject, new()
+        {
+            return new GridWithPanelControlVWG<T>(this, businessObjectControl);
+        }
+
+        public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl, string uiDefName) where T : class, IBusinessObject, new()
+        {
+            return new GridWithPanelControlVWG<T>(this, businessObjectControl, uiDefName);
+        }
+
         /// <summary>
         /// Creates a control to manage a group of buttons that display next to each other
         /// </summary>
@@ -210,6 +230,7 @@ namespace Habanero.UI.VWG
         {
             return new ReadOnlyGridButtonsControlVWG(this);
         }
+
 
         /// <summary>
         /// Creates a Panel control

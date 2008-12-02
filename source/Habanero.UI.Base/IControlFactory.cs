@@ -139,6 +139,28 @@ namespace Habanero.UI.Base
         IReadOnlyGridButtonsControl CreateReadOnlyGridButtonsControl();
 
         /// <summary>
+        /// Creates a GridWithPanelControl
+        /// </summary>
+        IGridWithPanelControl<T> CreateGridWithPanelControl<T>() where T : class, IBusinessObject, new();
+
+        /// <summary>
+        /// Creates a GridWithPanelControl
+        /// </summary>
+        IGridWithPanelControl<T> CreateGridWithPanelControl<T>(string uiDefName) where T : class, IBusinessObject, new();
+
+ 
+        /// <summary>
+        /// Creates a GridWithPanelControl
+        /// </summary>
+        IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl) where T : class, IBusinessObject, new();
+
+
+                /// <summary>
+        /// Creates a GridWithPanelControl
+        /// </summary>
+        IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl, string uiDefName) where T : class, IBusinessObject, new();
+
+        /// <summary>
         /// Creates a control to manage a group of buttons that display next to each other
         /// </summary>
         IButtonGroupControl CreateButtonGroupControl();

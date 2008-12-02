@@ -645,7 +645,19 @@ namespace Habanero.BO
             // check if object is already editing (i.e. another property value has 
             // been changed if it is not then check that this object is still fresh
             // if the object is not fresh then throw appropriate exception.
-            if (PropValueHasChanged(prop.Value, newPropValue))
+            object propValue;
+            object newPropValue1;
+            try
+            {
+                propValue = prop.Value == null ? prop.Value : Convert.ChangeType(prop.Value, prop.PropertyType);
+                newPropValue1 = newPropValue == null ? newPropValue : Convert.ChangeType(newPropValue, prop.PropertyType);
+            }
+            catch (Exception ex)
+            {
+                propValue = prop.Value;
+                newPropValue1 = newPropValue;
+            }
+            if (PropValueHasChanged(propValue, newPropValue1))
             {
                 if (!Status.IsEditing)
                 {

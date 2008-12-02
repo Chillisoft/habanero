@@ -1073,7 +1073,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(dataGridViewNumericUpDownColumn.GetType(), dataGridViewColumn.GetType());
         }
 
+        //TODO: write tests for CreateGridWithPanelControl
     }
-
-
 }

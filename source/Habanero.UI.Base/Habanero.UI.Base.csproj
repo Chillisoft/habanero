@@ -56,10 +56,12 @@
     <Compile Include="ControlInterfaces\Events.cs" />
     <Compile Include="ControlInterfaces\IBOColTabControl.cs" />
     <Compile Include="ControlInterfaces\IBusinessObjectControl.cs" />
+    <Compile Include="ControlInterfaces\IBusinessObjectPanel.cs" />
     <Compile Include="ControlInterfaces\IControlHabanero.cs" />
     <Compile Include="ControlInterfaces\IDateRangeComboBox.cs" />
     <Compile Include="ControlInterfaces\IFileChooser.cs" />
     <Compile Include="ControlInterfaces\IFormHabanero.cs" />
+    <Compile Include="ControlInterfaces\IGridWithPanelControl.cs" />
     <Compile Include="ControlInterfaces\IListControl.cs" />
     <Compile Include="ControlInterfaces\IStaticDataEditor.cs" />
     <Compile Include="ControlInterfaces\IUserControlHabanero.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
     <Compile Include="DateTimePicker\DateTimePickerManager.cs" />
     <Compile Include="FormController.cs" />
+    <Compile Include="GridWithPanelControlManager.cs" />
     <Compile Include="Grid\DataGridViewManager.cs" />
     <Compile Include="Grid\IDataGridViewDateTimeColumn.cs" />
     <Compile Include="Grid\IDataGridViewCellStyle.cs" />
@@ -228,6 +231,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="key.snk" />
   </ItemGroup>
   <ItemGroup>
