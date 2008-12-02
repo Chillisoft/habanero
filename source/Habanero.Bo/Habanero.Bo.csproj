@@ -348,6 +348,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="key.snk" />
     <None Include="Loaders\DTDs\businessObjectLookupList.dtd" />
     <None Include="Loaders\DTDs\class.dtd" />

@@ -72,7 +72,7 @@ namespace Habanero.BO
         {
             if (IsObjectNew && (_newObjectID != Guid.Empty))
             {
-                return "ID=" + _newObjectID;
+                return NewObjectID();
             }
             return IsObjectNew ? "" : PersistedDatabaseWhereClause(null);
         }
@@ -83,7 +83,13 @@ namespace Habanero.BO
         /// <returns>Returns a hashcode integer</returns>
         public override int GetHashCode()
         {
+            if (_newObjectID != Guid.Empty) return NewObjectID().GetHashCode();
             return GetObjectId().GetHashCode();
+        }
+
+        private string NewObjectID()
+        {
+            return "ID=" + _newObjectID;
         }
 
         /// <summary>

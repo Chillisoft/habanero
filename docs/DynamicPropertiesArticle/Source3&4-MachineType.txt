@@ -40,8 +40,8 @@ public partial class MachineType
         UIForm form = uiDef.UIForm;
         form.Title = "Add/Edit a Machine";
         UIFormTab tab = form[0];
-
         UIFormColumn column = tab[0];
+
         foreach (MachinePropertyDef machinePropertyDef in MachinePropertyDefs)
         {
             var machinePropertyPropDef = new PropDef(machinePropertyDef.PropertyName, "System",
