@@ -277,6 +277,19 @@ namespace Habanero.UI.VWG
                 _rows.RemoveAt(index);
             }
 
+            /// <summary>
+            /// Returns the index of a specified item in the collection
+            /// </summary>
+            /// <param name="dataGridViewRow">The DataGridViewRow to locate in the DataGridViewRowCollection</param>
+            /// <returns>The index of value if it is a DataGridViewRow found in the DataGridViewRowCollection; otherwise, -1.</returns>
+            public int IndexOf(IDataGridViewRow dataGridViewRow)
+            {
+                if (dataGridViewRow == null) throw new ArgumentNullException("dataGridViewRow");
+
+                DataGridViewRowVWG rowWin = (DataGridViewRowVWG)dataGridViewRow;
+                return _rows.IndexOf(rowWin.DataGridViewRow);
+            }
+
             ///<summary>
             ///Returns an enumerator that iterates through a collection.
             ///</summary>
@@ -423,6 +436,11 @@ namespace Habanero.UI.VWG
         {
             private readonly DataGridViewRow _dataGridViewRow;
 
+            public DataGridViewRow DataGridViewRow
+            {
+                get { return _dataGridViewRow; }
+            }
+
             public DataGridViewRowVWG(DataGridViewRow dataGridViewRow)
             {
                 _dataGridViewRow = dataGridViewRow;
@@ -444,6 +462,14 @@ namespace Habanero.UI.VWG
             public int Index
             {
                 get { return _dataGridViewRow.Index; }
+            }
+
+            /// <summary>
+            /// Gets a value indicating whether this row is displayed on the screen
+            /// </summary>
+            public bool Displayed
+            {
+                get { return _dataGridViewRow.Displayed; }
             }
 
             /// <summary>Sets the values of the row's cells.</summary>

@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -58,7 +59,7 @@ namespace Habanero.Test.UI.Base
                 BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
                 IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
                 gridWithPanelControl.SetBusinessObjectCollection(myBOs);
-                IButton cancelButton = gridWithPanelControl.ButtonGroupControl["Cancel"];
+                IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
 
                 MyBO currentBO = gridWithPanelControl.CurrentBusinessObject;
                 string originalValue = currentBO.TestProp;
@@ -104,7 +105,7 @@ namespace Habanero.Test.UI.Base
                 BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
                 IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
                 gridWithPanelControl.SetBusinessObjectCollection(myBOs);
-                IButton cancelButton = gridWithPanelControl.ButtonGroupControl["Cancel"];
+                IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
 
                 MyBO currentBO = gridWithPanelControl.CurrentBusinessObject;
                 string originalValue = currentBO.TestProp;
@@ -127,10 +128,10 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_WithStrategy();
 
-                IButton cancelButton = gridWithPanelControl.ButtonGroupControl["Cancel"];
-                IButton deleteButton = gridWithPanelControl.ButtonGroupControl["Delete"];
-                IButton saveButton = gridWithPanelControl.ButtonGroupControl["Save"];
-                IButton newButton = gridWithPanelControl.ButtonGroupControl["New"];
+                IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
+                IButton deleteButton = gridWithPanelControl.Buttons["Delete"];
+                IButton saveButton = gridWithPanelControl.Buttons["Save"];
+                IButton newButton = gridWithPanelControl.Buttons["New"];
                 //---------------Assert Precondition----------------
                 Assert.AreEqual(0, gridWithPanelControl.ReadOnlyGridControl.Grid.Rows.Count);
                 Assert.IsFalse(saveButton.Enabled);
@@ -155,10 +156,10 @@ namespace Habanero.Test.UI.Base
                 IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_WithStrategy();
                 gridWithPanelControl.SetBusinessObjectCollection(myBOs);
 
-                IButton cancelButton = gridWithPanelControl.ButtonGroupControl["Cancel"];
-                IButton deleteButton = gridWithPanelControl.ButtonGroupControl["Delete"];
-                IButton saveButton = gridWithPanelControl.ButtonGroupControl["Save"];
-                IButton newButton = gridWithPanelControl.ButtonGroupControl["New"];
+                IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
+                IButton deleteButton = gridWithPanelControl.Buttons["Delete"];
+                IButton saveButton = gridWithPanelControl.Buttons["Save"];
+                IButton newButton = gridWithPanelControl.Buttons["New"];
                 //---------------Assert Precondition----------------
                 Assert.AreEqual(2, gridWithPanelControl.ReadOnlyGridControl.Grid.Rows.Count);
                 Assert.IsTrue(saveButton.Enabled);
@@ -182,8 +183,8 @@ namespace Habanero.Test.UI.Base
                 //---------------Set up test pack-------------------
                 IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_WithStrategy();
                 gridWithPanelControl.SetBusinessObjectCollection(new BusinessObjectCollection<MyBO>());
-                IButton deleteButton = gridWithPanelControl.ButtonGroupControl["Delete"];
-                IButton newButton = gridWithPanelControl.ButtonGroupControl["New"];
+                IButton deleteButton = gridWithPanelControl.Buttons["Delete"];
+                IButton newButton = gridWithPanelControl.Buttons["New"];
                 newButton.PerformClick();
                 MyBO currentBO = gridWithPanelControl.CurrentBusinessObject;
                 //---------------Assert Precondition----------------
@@ -200,9 +201,7 @@ namespace Habanero.Test.UI.Base
             public void TestStrategy_ConfirmSaveDialogAlwaysReturnsFalse()
             {
                 //---------------Set up test pack-------------------
-                
                 //---------------Assert Precondition----------------
-
                 //---------------Execute Test ----------------------
                 GridWithPanelControlStrategyVWG<MyBO> strategyVWG = new GridWithPanelControlStrategyVWG<MyBO>(null);
                 //---------------Test Result -----------------------
@@ -213,13 +212,22 @@ namespace Habanero.Test.UI.Base
             public void TestStrategy_ApplyChangesReturnsFalse()
             {
                 //---------------Set up test pack-------------------
-
                 //---------------Assert Precondition----------------
-
                 //---------------Execute Test ----------------------
                 GridWithPanelControlStrategyVWG<MyBO> strategyVWG = new GridWithPanelControlStrategyVWG<MyBO>(null);
                 //---------------Test Result -----------------------
                 Assert.IsTrue(strategyVWG.CallApplyChangesToEditBusinessObject);
+            }
+
+            [Test]
+            public void TestStrategy_RefreshGridReturnsTrue()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Assert Precondition----------------
+                //---------------Execute Test ----------------------
+                GridWithPanelControlStrategyVWG<MyBO> strategyVWG = new GridWithPanelControlStrategyVWG<MyBO>(null);
+                //---------------Test Result -----------------------
+                Assert.IsTrue(strategyVWG.RefreshGrid);
             }
 
 
@@ -230,7 +238,7 @@ namespace Habanero.Test.UI.Base
                 BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
                 IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_WithStrategy();
                 gridWithPanelControl.SetBusinessObjectCollection(myBOs);
-                IButton saveButton = gridWithPanelControl.ButtonGroupControl["Save"];
+                IButton saveButton = gridWithPanelControl.Buttons["Save"];
 
                 MyBO currentBO = gridWithPanelControl.CurrentBusinessObject;
                 string originalValue = currentBO.TestProp;
@@ -280,6 +288,35 @@ namespace Habanero.Test.UI.Base
                 Assert.AreSame(firstBO, gridWithPanelControl.ReadOnlyGridControl.Grid.SelectedBusinessObject);
                 Assert.IsTrue(firstBO.Status.IsDirty);
             }
+
+            [Test]
+            public void TestCancelButton_BOAndControlsAreSynchronised()
+            {
+                //---------------Set up test pack-------------------
+                BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
+                IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_WithStrategy();
+                gridWithPanelControl.SetBusinessObjectCollection(myBOs);
+                IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
+                MyBO firstBO = myBOs[0];
+                string originalValue = firstBO.TestProp;
+                string newValue = TestUtils.RandomString;
+
+                PanelInfo.FieldInfo testPropFieldInfo = ((IBusinessObjectPanel)gridWithPanelControl.BusinessObjectControl).PanelInfo.FieldInfos["TestProp"];
+                testPropFieldInfo.ControlMapper.Control.Text = newValue;
+                //---------------Assert Precondition----------------
+                Assert.IsFalse(firstBO.Status.IsNew);
+                Assert.IsFalse(firstBO.Status.IsDirty);
+                Assert.AreNotEqual(originalValue, newValue);
+                Assert.AreNotEqual(newValue, firstBO.TestProp);   //vwg doesn't synchronise by default
+                //---------------Execute Test ----------------------
+                cancelButton.PerformClick();
+                //---------------Test Result -----------------------
+                Assert.IsFalse(firstBO.Status.IsNew);
+                Assert.IsFalse(firstBO.Status.IsDirty);
+                Assert.AreEqual(originalValue, firstBO.TestProp);
+                Assert.AreEqual(originalValue, testPropFieldInfo.ControlMapper.Control.Text);
+            }
+
         }
     
 
@@ -379,7 +416,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual(3, gridWithPanelControl.Controls.Count);
             Assert.GreaterOrEqual(gridWithPanelControl.BusinessObjectControl.Top, gridWithPanelControl.ReadOnlyGridControl.Top);
-            Assert.GreaterOrEqual(gridWithPanelControl.ButtonGroupControl.Top, gridWithPanelControl.BusinessObjectControl.Top);
+            Assert.GreaterOrEqual(gridWithPanelControl.Buttons.Top, gridWithPanelControl.BusinessObjectControl.Top);
 
         }
 
@@ -454,7 +491,7 @@ namespace Habanero.Test.UI.Base
             IGridWithPanelControl<MyBO> gridWithPanelControl =
                 GetControlFactory().CreateGridWithPanelControl<MyBO>(businessObjectControl);
             //---------------Test Result -----------------------
-            IButtonGroupControl buttonGroupControl = gridWithPanelControl.ButtonGroupControl;
+            IButtonGroupControl buttonGroupControl = gridWithPanelControl.Buttons;
             Assert.IsNotNull(buttonGroupControl);
             Assert.AreEqual(4, buttonGroupControl.Controls.Count);
             Assert.AreEqual("Cancel", buttonGroupControl.Controls[0].Text);
@@ -556,10 +593,10 @@ namespace Habanero.Test.UI.Base
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
 
-            IButton newButton = gridWithPanelControl.ButtonGroupControl["New"];
-            IButton deleteButton = gridWithPanelControl.ButtonGroupControl["Delete"];
-            IButton cancelButton = gridWithPanelControl.ButtonGroupControl["Cancel"];
-            IButton saveButton = gridWithPanelControl.ButtonGroupControl["Save"];
+            IButton newButton = gridWithPanelControl.Buttons["New"];
+            IButton deleteButton = gridWithPanelControl.Buttons["Delete"];
+            IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
+            IButton saveButton = gridWithPanelControl.Buttons["Save"];
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, myBOs.Count);
             Assert.IsFalse(newButton.Enabled);
@@ -615,7 +652,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
-            IButton newButton = gridWithPanelControl.ButtonGroupControl["New"];
+            IButton newButton = gridWithPanelControl.Buttons["New"];
             //---------------Assert Precondition----------------
             Assert.IsFalse(newButton.Enabled);
             //---------------Execute Test ----------------------
@@ -635,13 +672,13 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(0, gridWithPanelControl.ReadOnlyGridControl.Grid.Rows.Count);
             Assert.AreEqual(0, myBOs.Count);
             //---------------Execute Test ----------------------
-            gridWithPanelControl.ButtonGroupControl["New"].PerformClick();
+            gridWithPanelControl.Buttons["New"].PerformClick();
             //---------------Test Result -----------------------
             Assert.AreEqual(1, gridWithPanelControl.ReadOnlyGridControl.Grid.Rows.Count);
             Assert.AreEqual(1, myBOs.Count);
             AssertSelectedBusinessObject(myBOs[0], gridWithPanelControl);
             Assert.IsTrue(gridWithPanelControl.BusinessObjectControl.Enabled);
-            Assert.IsTrue(gridWithPanelControl.ButtonGroupControl["Cancel"].Enabled);
+            Assert.IsTrue(gridWithPanelControl.Buttons["Cancel"].Enabled);
         }
 
         [Test]
@@ -656,7 +693,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(2, myBOs.Count);
             Assert.IsFalse(gridWithPanelControl.BusinessObjectControl.Focused);
             //---------------Execute Test ----------------------
-            gridWithPanelControl.ButtonGroupControl["New"].PerformClick();
+            gridWithPanelControl.Buttons["New"].PerformClick();
             //---------------Test Result -----------------------
             Assert.AreEqual(3, gridWithPanelControl.ReadOnlyGridControl.Grid.Rows.Count);
             Assert.AreEqual(3, myBOs.Count);
@@ -664,7 +701,7 @@ namespace Habanero.Test.UI.Base
             AssertSelectedBusinessObject(myBOs[2], gridWithPanelControl);
             Assert.IsTrue(gridWithPanelControl.BusinessObjectControl.Enabled);
             //Assert.IsTrue(gridWithPanelControl.BusinessObjectControl.Focused);
-            Assert.IsTrue(gridWithPanelControl.ButtonGroupControl["Cancel"].Enabled);
+            Assert.IsTrue(gridWithPanelControl.Buttons["Cancel"].Enabled);
         }
 
         [Test]
@@ -673,7 +710,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
-            IButton newButton = gridWithPanelControl.ButtonGroupControl["New"];
+            IButton newButton = gridWithPanelControl.Buttons["New"];
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
             //---------------Assert Precondition----------------
             Assert.IsFalse(gridWithPanelControl.CurrentBusinessObject.Status.IsDirty);
@@ -696,7 +733,7 @@ namespace Habanero.Test.UI.Base
             IGridWithPanelControl<MyBO> gridWithPanelControl =
                 GetControlFactory().CreateGridWithPanelControl<MyBO>(businessObjectControl);
             //---------------Test Result -----------------------
-            IButton deleteButton = gridWithPanelControl.ButtonGroupControl["Delete"];
+            IButton deleteButton = gridWithPanelControl.Buttons["Delete"];
             Assert.IsFalse(deleteButton.Enabled);
         }
 
@@ -707,7 +744,7 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(new BusinessObjectCollection<MyBO>());
-            IButton deleteButton = gridWithPanelControl.ButtonGroupControl["Delete"];
+            IButton deleteButton = gridWithPanelControl.Buttons["Delete"];
             //---------------Assert Precondition----------------
             Assert.IsFalse(deleteButton.Enabled);
             //---------------Execute Test ----------------------
@@ -724,7 +761,7 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
-            IButton deleteButton = gridWithPanelControl.ButtonGroupControl["Delete"];
+            IButton deleteButton = gridWithPanelControl.Buttons["Delete"];
             //---------------Assert Precondition----------------
             Assert.IsTrue(deleteButton.Enabled);
             //---------------Execute Test ----------------------
@@ -740,8 +777,8 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(new BusinessObjectCollection<MyBO>());
-            IButton deleteButton = gridWithPanelControl.ButtonGroupControl["Delete"];
-            IButton newButton = gridWithPanelControl.ButtonGroupControl["New"];
+            IButton deleteButton = gridWithPanelControl.Buttons["Delete"];
+            IButton newButton = gridWithPanelControl.Buttons["New"];
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, gridWithPanelControl.ReadOnlyGridControl.Grid.Rows.Count);
             Assert.IsFalse(deleteButton.Enabled);
@@ -758,7 +795,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
-            IButton deleteButton = gridWithPanelControl.ButtonGroupControl["Delete"];
+            IButton deleteButton = gridWithPanelControl.Buttons["Delete"];
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, gridWithPanelControl.ReadOnlyGridControl.Grid.Rows.Count);
             Assert.IsFalse(deleteButton.Enabled);
@@ -776,7 +813,7 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
-            IButton deleteButton = gridWithPanelControl.ButtonGroupControl["Delete"];
+            IButton deleteButton = gridWithPanelControl.Buttons["Delete"];
             MyBO currentBO = myBOs[0];
             //---------------Assert Precondition----------------
             AssertSelectedBusinessObject(currentBO, gridWithPanelControl);
@@ -798,7 +835,7 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
-            IButton deleteButton = gridWithPanelControl.ButtonGroupControl["Delete"];
+            IButton deleteButton = gridWithPanelControl.Buttons["Delete"];
             MyBO currentBO = myBOs[0];
             MyBO otherBO = myBOs[1];
             //---------------Assert Precondition----------------
@@ -813,15 +850,15 @@ namespace Habanero.Test.UI.Base
 
         // Tests a unique set of circumstances
         [Test]
-        public void TestDeleteSelectsPreviousRow_NewTypeCancelDelete()
+        public void TestDeleteButton_SelectsPreviousRow_NewTypeCancelDelete()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
-            IButton newButton = gridWithPanelControl.ButtonGroupControl["New"];
-            IButton deleteButton = gridWithPanelControl.ButtonGroupControl["Delete"];
-            IButton cancelButton = gridWithPanelControl.ButtonGroupControl["Cancel"];
+            IButton newButton = gridWithPanelControl.Buttons["New"];
+            IButton deleteButton = gridWithPanelControl.Buttons["Delete"];
+            IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
             MyBO currentBO = gridWithPanelControl.CurrentBusinessObject;
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, gridWithPanelControl.ReadOnlyGridControl.Grid.Rows.Count);
@@ -836,13 +873,36 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void TestDeleteButton_SelectsPreviousRowWhenOldObjectDirty()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
+            IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
+            gridWithPanelControl.SetBusinessObjectCollection(myBOs);
+            IButton deleteButton = gridWithPanelControl.Buttons["Delete"];
+            MyBO firstBO = myBOs[0];
+            MyBO secondBO = myBOs[1];
+            gridWithPanelControl.ReadOnlyGridControl.SelectedBusinessObject = secondBO;
+            string newValue = TestUtils.RandomString;
+            secondBO.TestProp = newValue;
+            //---------------Assert Precondition----------------
+            Assert.AreSame(secondBO, gridWithPanelControl.CurrentBusinessObject);
+            //---------------Execute Test ----------------------
+            deleteButton.PerformClick();
+            //---------------Test Result -----------------------
+            Assert.AreSame(firstBO, gridWithPanelControl.CurrentBusinessObject);
+            Assert.AreEqual(1, gridWithPanelControl.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.IsTrue(secondBO.Status.IsDeleted);
+        }
+
+        [Test]
         public void TestCancelButton_DisabledOnConstruction()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
-            IButton cancelButton = gridWithPanelControl.ButtonGroupControl["Cancel"];
+            IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
             MyBO currentBO = myBOs[0];
             //---------------Assert Precondition----------------
             Assert.IsFalse(currentBO.Status.IsDirty);
@@ -859,7 +919,7 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
-            IButton cancelButton = gridWithPanelControl.ButtonGroupControl["Cancel"];
+            IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
             MyBO currentBO = myBOs[0];
             //---------------Assert Precondition----------------
             Assert.IsFalse(currentBO.Status.IsDirty);
@@ -877,7 +937,7 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
-            IButton cancelButton = gridWithPanelControl.ButtonGroupControl["Cancel"];
+            IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
 
             MyBO currentBO = myBOs[0];
             string originalValue = currentBO.TestProp;
@@ -899,8 +959,8 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(new BusinessObjectCollection<MyBO>());
-            IButton cancelButton = gridWithPanelControl.ButtonGroupControl["Cancel"];
-            IButton newButton = gridWithPanelControl.ButtonGroupControl["New"];
+            IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
+            IButton newButton = gridWithPanelControl.Buttons["New"];
 
             newButton.PerformClick();
             //---------------Assert Precondition----------------
@@ -921,8 +981,8 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
-            IButton cancelButton = gridWithPanelControl.ButtonGroupControl["Cancel"];
-            IButton newButton = gridWithPanelControl.ButtonGroupControl["New"];
+            IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
+            IButton newButton = gridWithPanelControl.Buttons["New"];
 
             newButton.PerformClick();
             //---------------Assert Precondition----------------
@@ -944,7 +1004,7 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
-            IButton saveButton = gridWithPanelControl.ButtonGroupControl["Save"];
+            IButton saveButton = gridWithPanelControl.Buttons["Save"];
             MyBO currentBO = myBOs[0];
             //---------------Assert Precondition----------------
             Assert.IsFalse(currentBO.Status.IsDirty);
@@ -961,7 +1021,7 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
-            IButton saveButton = gridWithPanelControl.ButtonGroupControl["Save"];
+            IButton saveButton = gridWithPanelControl.Buttons["Save"];
             MyBO currentBO = myBOs[0];
             //---------------Assert Precondition----------------
             Assert.IsFalse(currentBO.Status.IsDirty);
@@ -979,9 +1039,9 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(new BusinessObjectCollection<MyBO>());
-            IButton newButton = gridWithPanelControl.ButtonGroupControl["New"]; 
-            IButton saveButton = gridWithPanelControl.ButtonGroupControl["Save"];
-            IButton cancelButton = gridWithPanelControl.ButtonGroupControl["Cancel"];
+            IButton newButton = gridWithPanelControl.Buttons["New"]; 
+            IButton saveButton = gridWithPanelControl.Buttons["Save"];
+            IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
             newButton.PerformClick();
             MyBO currentBO = (MyBO)gridWithPanelControl.BusinessObjectControl.BusinessObject;
             currentBO.TestProp = TestUtils.RandomString;
@@ -1015,7 +1075,7 @@ namespace Habanero.Test.UI.Base
 
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(new BusinessObjectCollection<MyBO>());
-            IButton newButton = gridWithPanelControl.ButtonGroupControl["New"];
+            IButton newButton = gridWithPanelControl.Buttons["New"];
             newButton.PerformClick();
             MyBO currentBO = (MyBO)gridWithPanelControl.BusinessObjectControl.BusinessObject;
             //---------------Assert Precondition----------------
@@ -1152,6 +1212,90 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(originalValue, firstBO.TestProp);
         }
 
+        [Test]
+        public void Test_NotifyUserOfDirtyStatus_MakesButtonsBold_GridRowChange()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
+            IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
+            gridWithPanelControl.SetBusinessObjectCollection(myBOs);
+            MyBO firstBO = gridWithPanelControl.CurrentBusinessObject;
+            firstBO.TestProp = TestUtils.RandomString;
+            MyBO secondBO = myBOs[1];
+
+            IButton saveButton = gridWithPanelControl.Buttons["Save"];
+            IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
+
+            bool confirmSaveCalled = false;
+            gridWithPanelControl.ConfirmSaveDelegate -= gridWithPanelControl.ConfirmSaveDelegate;
+            gridWithPanelControl.ConfirmSaveDelegate += delegate
+            {
+                confirmSaveCalled = true;
+                return DialogResult.Cancel;
+            };
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(firstBO.Status.IsDirty);
+            Assert.AreEqual(0, gridWithPanelControl.ReadOnlyGridControl.Grid.SelectedRows[0].Index);
+            Assert.AreEqual(FontStyle.Regular, saveButton.Font.Style);
+            Assert.AreEqual(FontStyle.Regular, cancelButton.Font.Style);
+            //---------------Execute Test ----------------------
+            gridWithPanelControl.ReadOnlyGridControl.Grid.SelectedBusinessObject = secondBO;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(firstBO.Status.IsDirty);
+            Assert.AreEqual(0, gridWithPanelControl.ReadOnlyGridControl.Grid.SelectedRows[0].Index);
+            Assert.IsTrue(confirmSaveCalled);
+            Assert.AreEqual(FontStyle.Bold, saveButton.Font.Style);
+            Assert.AreEqual(FontStyle.Bold, cancelButton.Font.Style);
+        }
+
+        [Test]
+        public void Test_NotifyUserOfDirtyStatus_MakesButtonsBold_NewButton()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
+            IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
+            gridWithPanelControl.SetBusinessObjectCollection(myBOs);
+            MyBO firstBO = gridWithPanelControl.CurrentBusinessObject;
+            firstBO.TestProp = TestUtils.RandomString;
+
+            IButton saveButton = gridWithPanelControl.Buttons["Save"];
+            IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
+            IButton newButton = gridWithPanelControl.Buttons["New"];
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(firstBO.Status.IsDirty);
+            Assert.AreEqual(0, gridWithPanelControl.ReadOnlyGridControl.Grid.SelectedRows[0].Index);
+            Assert.AreEqual(FontStyle.Regular, saveButton.Font.Style);
+            Assert.AreEqual(FontStyle.Regular, cancelButton.Font.Style);
+            //---------------Execute Test ----------------------
+            newButton.Enabled = true; //this is a hack to get the test working in Win
+            newButton.PerformClick();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(firstBO.Status.IsDirty);
+            Assert.AreEqual(0, gridWithPanelControl.ReadOnlyGridControl.Grid.SelectedRows[0].Index);
+            Assert.AreEqual(FontStyle.Bold, saveButton.Font.Style);
+            Assert.AreEqual(FontStyle.Bold, cancelButton.Font.Style);
+        }
+
+        [Test]
+        public void Test_NotifyUserOfDirtyStatus_ResetsFontWhenSaving()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> myBOs = CreateSavedMyBoCollection();
+            IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
+            gridWithPanelControl.SetBusinessObjectCollection(myBOs);
+            MyBO firstBO = gridWithPanelControl.CurrentBusinessObject;
+            firstBO.TestProp = TestUtils.RandomString;
+            IButton saveButton = gridWithPanelControl.Buttons["Save"];
+            IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            cancelButton.PerformClick();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(FontStyle.Regular, saveButton.Font.Style);
+            Assert.AreEqual(FontStyle.Regular, cancelButton.Font.Style);
+        }
+
         [Test, Ignore("Review error display and fix or remove test")]
         public void Test_DisplayErrorsNotCalledWhenNewButtonClicked()
         {
@@ -1159,7 +1303,7 @@ namespace Habanero.Test.UI.Base
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             IBusinessObjectControl boControl = gridWithPanelControl.BusinessObjectControl;
             gridWithPanelControl.SetBusinessObjectCollection(new BusinessObjectCollection<MyBO>());
-            IButton newButton = gridWithPanelControl.ButtonGroupControl["New"];
+            IButton newButton = gridWithPanelControl.Buttons["New"];
             //---------------Assert Precondition----------------
             //Assert.IsFalse(boControl.DisplayErrorsCalled);  //TODO
             //---------------Execute Test ----------------------
@@ -1175,7 +1319,7 @@ namespace Habanero.Test.UI.Base
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             IBusinessObjectControl boControl = gridWithPanelControl.BusinessObjectControl;
             gridWithPanelControl.SetBusinessObjectCollection(new BusinessObjectCollection<MyBO>());
-            IButton newButton = gridWithPanelControl.ButtonGroupControl["New"];
+            IButton newButton = gridWithPanelControl.Buttons["New"];
             //---------------Assert Precondition----------------
             //Assert.IsFalse(boControl.ClearErrorsCalled);  //TODO
             //---------------Execute Test ----------------------
@@ -1280,6 +1424,11 @@ namespace Habanero.Test.UI.Base
         }
 
         public bool CallApplyChangesToEditBusinessObject
+        {
+            get { return true; }
+        }
+
+        public bool RefreshGrid
         {
             get { return true; }
         }

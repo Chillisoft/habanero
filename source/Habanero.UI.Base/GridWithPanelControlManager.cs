@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
@@ -6,7 +7,7 @@ namespace Habanero.UI.Base
 {
     /// <summary>
     /// TODO: does win version flash error providers?
-    /// TODO: consider removing BusinessObjectUpdated event (it is attached and never removed)
+    /// TODO: consider when to remove BusinessObjectUpdated event (it is attached and never removed)
     /// </summary>
     public class GridWithPanelControlManager<TBusinessObject> where TBusinessObject : class, IBusinessObject, new()
     {
@@ -16,7 +17,7 @@ namespace Habanero.UI.Base
         private IControlFactory _controlFactory;
         private IBusinessObjectControl _businessObjectControl;
         private IReadOnlyGridControl _readOnlyGridControl;
-        private IButtonGroupControl _buttonGroupControl;
+        private IButtonGroupControl _buttonControl;
         private IButton _newButton;
         private IButton _deleteButton;
         private IButton _cancelButton;
@@ -44,7 +45,7 @@ namespace Habanero.UI.Base
             BorderLayoutManager layoutManager = _controlFactory.CreateBorderLayoutManager(_gridWithPanelControl);
             layoutManager.AddControl(_readOnlyGridControl, BorderLayoutManager.Position.North);
             layoutManager.AddControl(_businessObjectControl, BorderLayoutManager.Position.Centre);
-            layoutManager.AddControl(_buttonGroupControl, BorderLayoutManager.Position.South);
+            layoutManager.AddControl(_buttonControl, BorderLayoutManager.Position.South);
 
             ConfirmSaveDelegate += CheckUserWantsToSave;
         }
@@ -64,11 +65,11 @@ namespace Habanero.UI.Base
 
         private void SetupButtonGroupControl()
         {
-            _buttonGroupControl = _controlFactory.CreateButtonGroupControl();
-            _cancelButton = _buttonGroupControl.AddButton("Cancel", CancelButtonClicked);
-            _deleteButton = _buttonGroupControl.AddButton("Delete", DeleteButtonClicked);
-            _newButton = _buttonGroupControl.AddButton("New", NewButtonClicked);
-            _saveButton = _buttonGroupControl.AddButton("Save", SaveButtonClicked);
+            _buttonControl = _controlFactory.CreateButtonGroupControl();
+            _cancelButton = _buttonControl.AddButton("Cancel", CancelButtonClicked);
+            _deleteButton = _buttonControl.AddButton("Delete", DeleteButtonClicked);
+            _newButton = _buttonControl.AddButton("New", NewButtonClicked);
+            _saveButton = _buttonControl.AddButton("Save", SaveButtonClicked);
             _cancelButton.Enabled = false;
             _deleteButton.Enabled = false;
             _newButton.Enabled = false;
@@ -107,6 +108,7 @@ namespace Habanero.UI.Base
                 {
                     SelectBusinessObjectInGrid_NoEvents(_lastSelectedBusinessObject);
                     CallApplyChangesOnPanelInfo();  // to flash the error providers
+                    RefreshGrid_IfStrategyAllows();  // otherwise incorrect row is still selected
                     return false;
                 }
 
@@ -124,12 +126,15 @@ namespace Habanero.UI.Base
                     if (dialogResult == DialogResult.No)
                     {
                         CancelChangesToBusinessObject(_lastSelectedBusinessObject, false);
+                        RefreshGrid();
                         return true;
                     }
                     //DialogResult.Cancel falls through to code below
                 }
 
                 SelectBusinessObjectInGrid_NoEvents(_lastSelectedBusinessObject);
+                NotifyUserOfDirtyStatus();
+                RefreshGrid_IfStrategyAllows();  // otherwise incorrect row is still selected
                 return false;
             }
             return true;
@@ -170,6 +175,14 @@ namespace Habanero.UI.Base
             AddGridSelectionEvent();
         }
 
+        private void RefreshGrid_IfStrategyAllows()
+        {
+            if (_strategy != null && _strategy.RefreshGrid)
+            {
+                RefreshGrid();
+            }
+        }
+
         private void RefreshGrid()
         {
             // Removing the event prevents the flicker event that happens while a grid is being refreshed
@@ -177,6 +190,15 @@ namespace Habanero.UI.Base
             RemoveGridSelectionEvent();
             _readOnlyGridControl.Grid.RefreshGrid();
             AddGridSelectionEvent();
+        }
+
+        private void RefreshBusinessObjectControl()
+        {
+            if (_businessObjectControl is IBusinessObjectPanel)
+            {
+                IBusinessObjectPanel businessObjectPanel = (IBusinessObjectPanel)_businessObjectControl;
+                businessObjectPanel.PanelInfo.BusinessObject = CurrentBusinessObject;
+            }
         }
 
         private void SaveButtonClicked(object sender, EventArgs e)
@@ -189,11 +211,12 @@ namespace Habanero.UI.Base
                 if (!currentBO.IsValid()) return;
 
                 currentBO.Save();
-                RefreshGrid();
+                RefreshGrid_IfStrategyAllows();
                 UpdateControlEnabledState();
             }
         }
 
+        // What about giving a save (yes/no/cancel) option, if so, duplicate the code from CheckRowSelectionCanChange
         private void NewButtonClicked(object sender, EventArgs e)
         {
             IBusinessObject currentBO = CurrentBusinessObject;
@@ -206,7 +229,7 @@ namespace Habanero.UI.Base
                     CallApplyChangesOnPanelInfo();  // to flash the error providers
                     return;
                 }
-                //TODO: if dirty, also return, but indicate to user what they need to do
+                NotifyUserOfDirtyStatus();
                 if (currentBO.Status.IsDirty) return;
             }
 
@@ -229,7 +252,6 @@ namespace Habanero.UI.Base
             {
                 RemoveGridSelectionEvent();
                 _readOnlyGridControl.SelectedBusinessObject = null;
-                _lastSelectedBusinessObject = null;
                 _readOnlyGridControl.Grid.GetBusinessObjectCollection().Remove(businessObject);
                 AddGridSelectionEvent();
             }
@@ -238,6 +260,8 @@ namespace Habanero.UI.Base
                 businessObject.Delete();
                 businessObject.Save();
             }
+
+            _lastSelectedBusinessObject = null;
 
             if (CurrentBusinessObject == null && _readOnlyGridControl.Grid.Rows.Count > 0)
             {
@@ -255,6 +279,7 @@ namespace Habanero.UI.Base
             }
             UpdateControlEnabledState();
             RefreshGrid();
+            RefreshBusinessObjectControl();
         }
 
         private void CancelChangesToBusinessObject(IBusinessObject currentBO, bool selectLastRowInGrid)
@@ -271,7 +296,7 @@ namespace Habanero.UI.Base
             }
         }
 
-        protected void UpdateControlEnabledState()
+        private void UpdateControlEnabledState()
         {
             IBusinessObject selectedBusinessObject = CurrentBusinessObject;
             bool selectedBusinessObjectNotNull = (selectedBusinessObject != null);
@@ -284,7 +309,6 @@ namespace Habanero.UI.Base
             }
             else
             {
-                _businessObjectControl.Enabled = false;
                 _deleteButton.Enabled = false;
                 _saveButton.Enabled = false;
                 _cancelButton.Enabled = false;
@@ -292,10 +316,19 @@ namespace Habanero.UI.Base
             }
             _businessObjectControl.Enabled = selectedBusinessObjectNotNull;
 
+            _saveButton.Font = new Font(_saveButton.Font, FontStyle.Regular);   // Set to bold in NotifyUserOfDirtyStatus
+            _cancelButton.Font = new Font(_cancelButton.Font, FontStyle.Regular);
+
             if (_strategy != null)
             {
                 _strategy.UpdateControlEnabledState(_lastSelectedBusinessObject);
             }
+        }
+
+        private void NotifyUserOfDirtyStatus()
+        {
+            _saveButton.Font = new Font(_saveButton.Font, FontStyle.Bold);
+            _cancelButton.Font = new Font(_cancelButton.Font, FontStyle.Bold);
         }
 
         private void CallApplyChangesOnPanelInfo_IfStrategyAllows()
@@ -351,9 +384,9 @@ namespace Habanero.UI.Base
             get { return _businessObjectControl; }
         }
 
-        public IButtonGroupControl ButtonGroupControl
+        public IButtonGroupControl Buttons
         {
-            get { return _buttonGroupControl; }
+            get { return _buttonControl; }
         }
 
         public TBusinessObject CurrentBusinessObject

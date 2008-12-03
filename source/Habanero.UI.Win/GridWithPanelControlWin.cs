@@ -309,7 +309,7 @@ namespace Habanero.UI.Win
         //    get { return _businessObjectControl; }
         //}
 
-        //public IButtonGroupControl ButtonGroupControl
+        //public IButtonGroupControl Buttons
         //{
         //    get { return _buttonGroupControl; }
         //}
@@ -352,9 +352,9 @@ namespace Habanero.UI.Win
             get { return _gridWithPanelControlManager.BusinessObjectControl; }
         }
 
-        public IButtonGroupControl ButtonGroupControl
+        public IButtonGroupControl Buttons
         {
-            get { return _gridWithPanelControlManager.ButtonGroupControl; }
+            get { return _gridWithPanelControlManager.Buttons; }
         }
 
         public TBusinessObject CurrentBusinessObject

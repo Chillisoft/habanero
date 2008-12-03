@@ -36,7 +36,7 @@ namespace Habanero.UI.Base
 
         IReadOnlyGridControl ReadOnlyGridControl { get; }
         IBusinessObjectControl BusinessObjectControl { get; }
-        IButtonGroupControl ButtonGroupControl { get; }
+        IButtonGroupControl Buttons { get; }
         TBusinessObject CurrentBusinessObject { get; }
         IGridWithPanelControlStrategy<TBusinessObject> GridWithPanelControlStrategy { get; set; }
 
@@ -51,7 +51,19 @@ namespace Habanero.UI.Base
 
     public interface IGridWithPanelControlStrategy<TBusinessObject>
     {
+        /// <summary>
+        /// Provides custom control state.  Since this is called after the default
+        /// implementation, it overrides it.
+        /// </summary>
+        /// <param name="lastSelectedBusinessObject">The previous selected business
+        /// object in the grid - used to revert when a user tries to change a grid
+        /// row while an object is dirty or invalid</param>
         void UpdateControlEnabledState(IBusinessObject lastSelectedBusinessObject);
+
+        /// <summary>
+        /// Whether to show the save confirmation dialog when moving away from
+        /// a dirty object
+        /// </summary>
         bool ShowConfirmSaveDialog { get; }
 
         /// <summary>
@@ -61,5 +73,12 @@ namespace Habanero.UI.Base
         /// the BO every time a control value changes.
         /// </summary>
         bool CallApplyChangesToEditBusinessObject { get; }
+
+        /// <summary>
+        /// Indicates whether the grid should be refreshed.  For instance, a VWG
+        /// implementation needs regular refreshes due to the lack of synchronisation,
+        /// but this behaviour has some adverse affects in the WinForms implementation
+        /// </summary>
+        bool RefreshGrid { get; }
     }
 }

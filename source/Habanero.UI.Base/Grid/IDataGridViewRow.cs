@@ -111,6 +111,11 @@ namespace Habanero.UI.Base
         /// </summary>
         int Index { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether this row is displayed on the screen
+        /// </summary>
+        bool Displayed { get; }
+
         ///// <summary>Gets or sets a value indicating whether the row is visible. </summary>
         ///// <returns>true if the row is visible; otherwise, false.</returns>
         ///// <exception cref="T:System.InvalidOperationException">The row is in a <see cref="IDataGridView"></see>

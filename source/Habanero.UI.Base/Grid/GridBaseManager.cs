@@ -166,6 +166,13 @@ namespace Habanero.UI.Base
                     }
                     rowNum++;
                 }
+
+                //TODO - needs tests (it moves the grid caret and also scrolls down to a row off the screen)
+                //_gridBase.CurrentCell = _gridBase.Rows[rowNum].Cells[1];
+                //if (_gridBase.CurrentRow != null && !_gridBase.CurrentRow.Displayed)
+                //{
+                //    _gridBase.FirstDisplayedScrollingRowIndex = _gridBase.Rows.IndexOf(_gridBase.CurrentRow);
+                //}
             }
         }
 
