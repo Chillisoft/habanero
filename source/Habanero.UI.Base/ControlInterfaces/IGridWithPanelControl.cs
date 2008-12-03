@@ -34,10 +34,29 @@ namespace Habanero.UI.Base
         /// </summary>
         void SetBusinessObjectCollection(IBusinessObjectCollection col);
 
+        /// <summary>
+        /// Gets the grid control
+        /// </summary>
         IReadOnlyGridControl ReadOnlyGridControl { get; }
+
+        /// <summary>
+        /// Gets the control used to edit the selected business object
+        /// </summary>
         IBusinessObjectControl BusinessObjectControl { get; }
+
+        /// <summary>
+        /// Gets the control holding the buttons
+        /// </summary>
         IButtonGroupControl Buttons { get; }
+
+        /// <summary>
+        /// Gets the business object currently selected in the grid
+        /// </summary>
         TBusinessObject CurrentBusinessObject { get; }
+
+        /// <summary>
+        /// Gets the strategy used to provide custom behaviour in the control
+        /// </summary>
         IGridWithPanelControlStrategy<TBusinessObject> GridWithPanelControlStrategy { get; set; }
 
         /// <summary>
@@ -46,9 +65,11 @@ namespace Habanero.UI.Base
         /// facility is provided primarily to facilitate testing.
         /// </summary>
         ConfirmSave ConfirmSaveDelegate { get; set;}
-
     }
 
+    /// <summary>
+    /// Provides a strategy to add custom behaviour to a GridWithPanelControl
+    /// </summary>
     public interface IGridWithPanelControlStrategy<TBusinessObject>
     {
         /// <summary>

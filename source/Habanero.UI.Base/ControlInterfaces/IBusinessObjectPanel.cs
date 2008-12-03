@@ -5,6 +5,9 @@ namespace Habanero.UI.Base
     /// </summary>
     public interface IBusinessObjectPanel : IBusinessObjectControl
     {
+        /// <summary>
+        /// Gets and sets the PanelInfo object created by the control
+        /// </summary>
         IPanelInfo PanelInfo { get; set; }
     }
 }
