@@ -634,6 +634,7 @@ namespace Habanero.DB
                     transaction = con.BeginTransaction();
                     cmd.Transaction = transaction;
                 }
+                cmd.CommandTimeout = _timeoutPeriod;
                 int totalRowsAffected = 0;
                 //log.Debug("ExecuteSql with sql statement collection: " + sql.ToString());
                 foreach (SqlStatement statement in sql)
