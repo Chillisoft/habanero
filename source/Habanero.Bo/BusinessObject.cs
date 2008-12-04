@@ -46,8 +46,6 @@ namespace Habanero.BO
         public event EventHandler<BOEventArgs> Saved;
         public event EventHandler<BOEventArgs> Deleted;
         public event EventHandler<BOEventArgs> Restored;
-
-
         public event EventHandler<BOEventArgs> PropertyUpdated;
 
         #endregion

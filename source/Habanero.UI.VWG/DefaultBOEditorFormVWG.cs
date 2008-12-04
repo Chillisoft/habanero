@@ -95,7 +95,8 @@ namespace Habanero.UI.VWG
             }
 
             PanelBuilder panelBuilder = new PanelBuilder(_controlFactory);
-            _panelInfo = panelBuilder.BuildPanelForForm(_bo.ClassDef.UIDefCol["default"].UIForm);
+            //_panelInfo = panelBuilder.BuildPanelForForm(_bo.ClassDef.UIDefCol["default"].UIForm);
+            _panelInfo = panelBuilder.BuildPanelForForm(_bo.ClassDef.UIDefCol[uiDefName].UIForm);
             _panelInfo.BusinessObject = _bo;
             _boPanel = _panelInfo.Panel;
             _buttons = _controlFactory.CreateButtonGroupControl();

@@ -277,6 +277,41 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(b, mapper.Control);
         }
 
+        [Test]
+        public void Test_Constructor()
+        {
+            //---------------Set up test pack-------------------
+            IControlFactory controlFactory = GetControlFactory();
+            ITextBox ctl = controlFactory.CreateTextBox();
+            //---------------Execute Test ----------------------
+            string propName = TestUtil.CreateRandomString();
+            ControlMapperStub mapper = new ControlMapperStub(ctl, propName, false, controlFactory);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(ControlMapper), mapper);
+            Assert.AreSame(ctl, mapper.Control);
+            Assert.AreEqual(propName, mapper.PropertyName);
+            Assert.AreEqual(false, mapper.IsReadOnly);
+            Assert.AreEqual(controlFactory, mapper.ControlFactory);
+        }
+
+        [Test]
+        public void Test_Constructor_Readonly()
+        {
+            //---------------Set up test pack-------------------
+            IControlFactory controlFactory = GetControlFactory();
+            ITextBox ctl = controlFactory.CreateTextBox();
+            //---------------Execute Test ----------------------
+            string propName = TestUtil.CreateRandomString();
+            ControlMapperStub mapper = new ControlMapperStub(ctl, propName, true, controlFactory);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(ControlMapper), mapper);
+            ControlMapper controlMapper = mapper;
+            Assert.AreSame(ctl, controlMapper.Control);
+            Assert.AreEqual(propName, controlMapper.PropertyName);
+            Assert.AreEqual(true, controlMapper.IsReadOnly);
+            Assert.AreEqual(controlFactory, controlMapper.ControlFactory);
+        }
+
         #endregion //Test Mapper Creation
 
         #region Tests for normal mapper
@@ -1042,12 +1077,13 @@ namespace Habanero.Test.UI.Base
 
     internal class ControlMapperStub : ControlMapper
     {
+
+        private MethodInvoker _onUpdateControlValueFromBusinessObject;
+
         public ControlMapperStub(IControlHabanero ctl, string propName, bool isReadOnly, IControlFactory factory)
             : base(ctl, propName, isReadOnly, factory)
         {
         }
-
-        private MethodInvoker _onUpdateControlValueFromBusinessObject;
 
 
         public MethodInvoker OnUpdateControlValueFromBusinessObject

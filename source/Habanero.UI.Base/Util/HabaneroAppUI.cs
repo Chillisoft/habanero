@@ -23,9 +23,8 @@ using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 
-
-namespace Habanero.UI.Base {
-
+namespace Habanero.UI.Base
+{
     /// <summary>
     /// Provides a template for a standard Habanero application, including
     /// standard fields and initialisations.  Specific details covered are:
@@ -66,17 +65,17 @@ namespace Habanero.UI.Base {
         }
 
         /// <summary>
-        /// Sets the control factory used to create controls
-        /// </summary>
-        protected abstract void SetupControlFactory();
-
-        /// <summary>
         /// Sets the definition class factory
         /// </summary>
         public IDefClassFactory DefClassFactory
         {
             set { _defClassFactory = value; }
         }
+
+        /// <summary>
+        /// Sets the control factory used to create controls
+        /// </summary>
+        protected abstract void SetupControlFactory();
 
         /// <summary>
         /// Sets the private key used to decrypt the database password. If your database password as supplied is
@@ -97,19 +96,21 @@ namespace Habanero.UI.Base {
         {
             try
             {
-                if (_defClassFactory != null)
-                {
-                    return new XmlClassDefsLoader(new StreamReader(ClassDefsFileName).ReadToEnd(), new DtdLoader(), _defClassFactory);
-                } else {
-                    return new XmlClassDefsLoader(new StreamReader(ClassDefsFileName).ReadToEnd(), new DtdLoader());
-                }
+                string classDefsXml;
+                if (String.IsNullOrEmpty(ClassDefsXml))
+                    classDefsXml = new StreamReader(ClassDefsFileName).ReadToEnd();
+                else
+                    classDefsXml = ClassDefsXml;
+
+                return new XmlClassDefsLoader(classDefsXml, new DtdLoader(), _defClassFactory);
             }
             catch (Exception ex)
             {
                 throw new FileNotFoundException("Unable to find Class Definitions file. " +
                                                 "This file contains all the class definitions that match " +
                                                 "objects to database tables. Ensure that you have a classdefs.xml file " +
-                                                "and that the file is being copied to your output directory (eg. bin/debug).", ex);
+                                                "and that the file is being copied to your output directory (eg. bin/debug).",
+                                                ex);
             }
         }
 
