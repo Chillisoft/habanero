@@ -25,6 +25,11 @@ namespace Habanero.UI.Base
     public delegate IFormControl FormControlCreator();
     public delegate IControlManager ControlManagerCreator(IControlFactory controlFactory);
 
+    public interface IMenuItemCreator
+    {
+        void AddToMenu(HabaneroMenu currentMenu, IControlFactory controlFactory);
+    }
+
     public class HabaneroMenu
     {
         private readonly List<HabaneroMenu> _submenus = new List<HabaneroMenu>();
