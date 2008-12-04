@@ -1,0 +1,154 @@
+//---------------------------------------------------------------------------------
+// Copyright (C) 2008 Chillisoft Solutions
+// 
+// This file is part of the Habanero framework.
+// 
+//     Habanero is a free framework: you can redistribute it and/or modify
+//     it under the terms of the GNU Lesser General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     The Habanero framework is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU Lesser General Public License for more details.
+// 
+//     You should have received a copy of the GNU Lesser General Public License
+//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
+//---------------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using Habanero.Base.Exceptions;
+using Habanero.BO.ClassDefinition;
+using NUnit.Framework;
+
+namespace Habanero.Test.BO.ClassDefinition
+{
+    [TestFixture]
+    public class TestClassDefCol
+    {
+        [TestFixtureSetUp]
+        public void TestSetup()
+        {
+            //Improve test coverage
+            ClassDefColInheritor col = new ClassDefColInheritor();
+            col.CallFinalize();
+        }
+
+        [Test]
+        public void TestThisNotFound()
+        {
+            ClassDefCol col = new ClassDefCol();
+            Assert.IsNull(col["ass", "class"]);
+        }
+
+        [Test]
+        public void TestGetsAndSets()
+        {
+            ClassDefCol col = new ClassDefCol();
+            Assert.AreEqual(0, col.Keys.Count);
+            Assert.AreEqual(0, col.Values.Count);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestAddDuplicateException()
+        {
+            ClassDef classDef = new ClassDef("ass", "class", null, null, null, null, null);
+            ClassDefCol col = new ClassDefCol();
+            col.Add(classDef);
+            col.Add(classDef);
+        }
+
+        [Test]
+        public void TestRemove()
+        {
+            ClassDef classDef = new ClassDef(typeof(String), null, null, null, null, null,null);
+            ClassDefCol col = new ClassDefCol();
+            
+            col.Add(classDef);
+            Assert.AreEqual(1, col.Count);
+            col.Remove(classDef);
+            Assert.AreEqual(0, col.Count);
+
+            col.Add(classDef);
+            Assert.AreEqual(1, col.Count);
+            col.Remove(typeof(String));
+            Assert.AreEqual(0, col.Count);
+        }
+
+        [Test, ExpectedException(typeof(HabaneroArgumentException))]
+        public void TestLoadColClassDefException()
+        {
+            ClassDefCol.LoadColClassDef(null);
+        }
+
+        [Test]
+        public void TestNullClassNamespace()
+        {
+            string nameSpace;
+            ClassDefCol.StripOutNameSpace(null, out nameSpace);
+            Assert.IsNull(nameSpace);
+        }
+
+        private class ClassDefColInheritor : ClassDefCol
+        {
+            public void CallFinalize()
+            {
+                Finalize();
+            }
+        }
+
+        [Test]
+        public void TestFindByClassName_Found()
+        {
+            //---------------Set up test pack-------------------
+            ClassDefCol col = new ClassDefCol();
+            ClassDef classDef1 = new ClassDef("assembly", "class1", null, null, null, null, null);
+            ClassDef classDef2 = new ClassDef("assembly", "class2", null, null, null, null, null);
+            ClassDef classDef3 = new ClassDef("assembly", "class3", null, null, null, null, null);
+            col.Add(classDef1);
+            col.Add(classDef2);
+            col.Add(classDef3);
+            //---------------Execute Test ----------------------
+            ClassDef foundClass1 = col.FindByClassName("class1");
+            ClassDef foundClass2 = col.FindByClassName("class2");
+            ClassDef foundClass3 = col.FindByClassName("class3");
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef1, foundClass1);
+            Assert.AreSame(classDef2, foundClass2);
+            Assert.AreSame(classDef3, foundClass3);
+
+        }
+
+        [Test]
+        public void TestFindByClassName_NotFound()
+        {
+            //---------------Set up test pack-------------------
+            ClassDefCol col = new ClassDefCol();
+            ClassDef classDef1 = new ClassDef("assembly", "class1", null, null, null, null, null);
+            ClassDef classDef2 = new ClassDef("assembly", "class2", null, null, null, null, null);
+            ClassDef classDef3 = new ClassDef("assembly", "class3", null, null, null, null, null);
+            col.Add(classDef1);
+            col.Add(classDef2);
+            col.Add(classDef3);
+            //---------------Execute Test ----------------------
+            ClassDef foundClass = col.FindByClassName("DoesNotExist");
+            //---------------Test Result -----------------------
+            Assert.IsNull(foundClass);
+        }
+
+        [Test]
+        public void TestFindByClassName_NotFound_EmptyCol()
+        {
+            //---------------Set up test pack-------------------
+            ClassDefCol col = new ClassDefCol();
+            //---------------Execute Test ----------------------
+            ClassDef foundClass = col.FindByClassName("DoesNotExist");
+            //---------------Test Result -----------------------
+            Assert.IsNull(foundClass);
+        }
+
+
+    }
+}

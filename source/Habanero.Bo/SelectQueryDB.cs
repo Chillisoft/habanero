@@ -1,0 +1,368 @@
+//---------------------------------------------------------------------------------
+// Copyright (C) 2008 Chillisoft Solutions
+// 
+// This file is part of the Habanero framework.
+// 
+//     Habanero is a free framework: you can redistribute it and/or modify
+//     it under the terms of the GNU Lesser General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     The Habanero framework is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU Lesser General Public License for more details.
+// 
+//     You should have received a copy of the GNU Lesser General Public License
+//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
+//---------------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Text;
+using Habanero.Base;
+using Habanero.BO.ClassDefinition;
+using Habanero.DB;
+using Habanero.Util;
+
+namespace Habanero.BO
+{
+    ///<summary>
+    /// A class representing a Database SelectQuery.  Wraps an ISelectQuery (Decorator pattern)
+    ///</summary>
+    public class SelectQueryDB : ISelectQuery
+    {
+        private readonly ISelectQuery _selectQuery;
+        private SqlFormatter _sqlFormatter;
+
+        ///<summary>
+        /// Creates a SelectQueryDB, wrapping an ISelectQuery (Decorator pattern)
+        ///</summary>
+        ///<param name="selectQuery"></param>
+        public SelectQueryDB(ISelectQuery selectQuery)
+        {
+            _selectQuery = selectQuery;
+        }
+
+        #region ISelectQuery Members
+
+        /// <summary>
+        /// The Criteria to use when loading. Only objects that match these criteria will be loaded.
+        /// </summary>
+        public Criteria Criteria
+        {
+            get { return _selectQuery.Criteria; }
+            set { _selectQuery.Criteria = value; }
+        }
+
+        /// <summary>
+        /// The fields to load from the data store.
+        /// </summary>
+        public Dictionary<string, QueryField> Fields
+        {
+            get { return _selectQuery.Fields; }
+        }
+
+        /// <summary>
+        /// The source of the data. In a database query this would be the first table listed in the FROM clause.
+        /// </summary>
+        public Source Source
+        {
+            get { return _selectQuery.Source; }
+            set { _selectQuery.Source = value; }
+        }
+
+        /// <summary>
+        /// The fields to use to order a collection of objects when loading them.
+        /// </summary>
+        public OrderCriteria OrderCriteria
+        {
+            get { return _selectQuery.OrderCriteria; }
+            set { _selectQuery.OrderCriteria = value; }
+        }
+
+        /// <summary>
+        /// The number of objects to load
+        /// </summary>
+        public int Limit
+        {
+            get { return _selectQuery.Limit; }
+            set { _selectQuery.Limit = value; }
+        }
+
+        /// <summary>
+        /// The classdef this select query corresponds to. This can be null if the select query is being used
+        /// without classdefs, but if it is built using the QueryBuilder 
+        /// </summary>
+        public IClassDef ClassDef
+        {
+            get { return _selectQuery.ClassDef; }
+            set { _selectQuery.ClassDef = value; }
+        }
+
+        ///<summary>
+        ///</summary>
+        public Criteria DiscriminatorCriteria
+        {
+            get { return _selectQuery.DiscriminatorCriteria; }
+            set { _selectQuery.DiscriminatorCriteria = value; }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Creates an ISqlStatement out of the SelectQuery given in the constructor, to be used to load 
+        /// from a database
+        /// </summary>
+        /// <returns>An ISqlStatement that can be executed against an IDatabaseConnection</returns>
+        public ISqlStatement CreateSqlStatement()
+        {
+            IDatabaseConnection databaseConnection = DatabaseConnection.CurrentConnection;
+            return CreateSqlStatement(new SqlFormatter(databaseConnection.LeftFieldDelimiter, databaseConnection.RightFieldDelimiter));
+        }
+
+        /// <summary>
+        /// Creates an ISqlStatement out of the SelectQuery given in the constructor, to be used to load 
+        /// from a database
+        /// </summary>
+        /// <returns>An ISqlStatement that can be executed against an IDatabaseConnection</returns>
+        public ISqlStatement CreateSqlStatement(SqlFormatter sqlFormatter)
+        {
+            _sqlFormatter = sqlFormatter;
+            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
+            StringBuilder builder = statement.Statement.Append("SELECT ");
+            AppendLimitClauseAtBeginning(builder);
+            AppendFields(builder);
+            AppendFrom(builder);
+            AppendWhereClause(builder, statement);
+            AppendOrderByClause(builder);
+            AppendLimitClauseAtEnd(builder);
+            return statement;
+        }
+
+//        private string AddRelationshipJoin(StringBuilder builder, ClassDef currentClassDef, QueryField field, Source fieldSource)
+//        {
+//            if (fieldSource == null || String.IsNullOrEmpty(fieldSource.Name))
+//            {
+//                IPropDef propDef = currentClassDef.GetPropDef(field.PropertyName, true);
+//                if (propDef != null)
+//                {
+//                    field.FieldName = propDef.DatabaseFieldName;
+//                }
+//                return currentClassDef.GetTableName();
+//            }
+//
+//            string relationshipName = fieldSource.Name;
+//            RelationshipDef relationshipDef = currentClassDef.GetRelationship(relationshipName);
+//            if (relationshipDef != null)
+//            {
+//                string joinString = GetJoinStringForRelationship(relationshipDef, currentClassDef);
+//                builder.Append(joinString);
+//                ClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
+//                if (relatedObjectClassDef != null)
+//                {
+//                    Source childSource = null;
+//                    if (fieldSource.Joins.Count > 0)
+//                    {
+//                        childSource = fieldSource.Joins[0].ToSource;
+//                    }
+//                    string relationshipJoinTable = AddRelationshipJoin(builder, relatedObjectClassDef, field, childSource);
+//                    if (String.IsNullOrEmpty(relationshipJoinTable))
+//                    {
+//                        relationshipJoinTable = relatedObjectClassDef.GetTableName();
+//                    }
+//                    return relationshipJoinTable;
+//                }
+//            }
+//            else
+//            {
+//                return currentClassDef.GetTableName();
+//            }
+//            return currentClassDef.GetTableName();
+//        }
+
+        //private string GetJoinStringForRelationship(RelationshipDef relationshipDef)
+        //{
+        //    return GetJoinStringForRelationship(relationshipDef, this.ClassDef);
+        //}
+//
+//        private string GetJoinStringForRelationship(RelationshipDef relationshipDef, IClassDef classDef)
+//        {
+//            string joinString = "";
+//            foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
+//            {
+//                ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
+//                IPropDef ownerPropDef = classDef.GetPropDef(relPropDef.OwnerPropertyName);
+//                IPropDef relatedPropDef = relatedClassDef.GetPropDef(relPropDef.RelatedClassPropName);
+//                joinString +=
+//                    GetJoinString(joinString, classDef.TableName, ownerPropDef.DatabaseFieldName,
+//                        relatedClassDef.TableName, relatedPropDef.DatabaseFieldName);
+//            }
+//            return joinString;
+//        }
+
+        private string GetJoinString(string currentJointString, string joinFromTableName, string joinFromFieldName,
+            string joinToTableName, string joinToFieldName)
+        {
+            string firstBit = "";
+            if (String.IsNullOrEmpty(currentJointString))
+            {
+                firstBit += " JOIN " + DelimitTable(joinToTableName) + " ON";
+            }
+            else
+            {
+                firstBit += " AND";
+            }
+            string joinString = String.Format("{0} {1} = {2}",
+                firstBit,
+                DelimitField(new Source(joinFromTableName), joinFromFieldName),
+                DelimitField(new Source(joinToTableName), joinToFieldName));
+            return joinString;
+        }
+
+        private void AppendFrom(StringBuilder builder)
+        {
+            SourceDB source = new SourceDB(_selectQuery.Source);
+            builder.AppendFormat(" FROM {0}", source.CreateSQL(_sqlFormatter));
+            //builder.AppendFormat(" FROM {0}", DelimitTable(_selectQuery.Source.EntityName));
+            //ClassDef currentClassDef = (ClassDef) _selectQuery.ClassDef;
+            //while (currentClassDef != null && currentClassDef.IsUsingClassTableInheritance())
+            //{
+            //    ClassDef superClassClassDef = currentClassDef.SuperClassClassDef;
+            //    IPropDef superClassPropDef = superClassClassDef.GetPrimaryKeyDef()[0];
+            //    IPropDef thisClassPropDef = currentClassDef.GetPrimaryKeyDef()[0];
+            //    builder.Append(
+            //        GetJoinString("", currentClassDef.GetTableName(), thisClassPropDef.DatabaseFieldName,
+            //            superClassClassDef.GetTableName(), superClassPropDef.DatabaseFieldName));
+            //    currentClassDef = currentClassDef.SuperClassClassDef;
+            //}
+            if (_selectQuery.OrderCriteria == null) return;
+            //foreach (OrderCriteria.Field field in _selectQuery.OrderCriteria.Fields)
+            //{
+            //    if (field.Source != null && !field.Source.Equals(this.Source))
+            //    {
+            //        currentClassDef = (ClassDef)this.ClassDef;
+            //        string relationshipJoinTable = AddRelationshipJoin(builder, currentClassDef, field, field.Source);
+            //        field.Source.EntityName = relationshipJoinTable;
+            //    }
+            //}
+        }
+
+
+        private void AppendFields(StringBuilder builder)
+        {
+            //QueryBuilder.IncludeFieldsFromOrderCriteria(_selectQuery);
+            foreach (QueryField field in _selectQuery.Fields.Values)
+            {
+                builder.AppendFormat("{0}, ", DelimitField(field.Source, field.FieldName));
+            }
+            builder.Remove(builder.Length - 2, 2);
+        }
+
+        private void AppendLimitClauseAtBeginning(StringBuilder builder)
+        {
+            if (_selectQuery.Limit < 0) return;
+
+            string limitClauseAtBeginning =
+                DatabaseConnection.CurrentConnection.GetLimitClauseForBeginning(_selectQuery.Limit);
+            if (!String.IsNullOrEmpty(limitClauseAtBeginning))
+            {
+                builder.Append(limitClauseAtBeginning + " ");
+            }
+        }
+
+        private void AppendLimitClauseAtEnd(StringBuilder builder)
+        {
+            if (_selectQuery.Limit < 0) return;
+
+            string limitClauseAtEnd = DatabaseConnection.CurrentConnection.GetLimitClauseForEnd(_selectQuery.Limit);
+            if (!String.IsNullOrEmpty(limitClauseAtEnd))
+            {
+                builder.Append(" " + limitClauseAtEnd);
+            }
+        }
+
+        private void AppendOrderByClause(StringBuilder builder)
+        {
+            if (_selectQuery.OrderCriteria == null || _selectQuery.OrderCriteria.Fields.Count == 0) return;
+
+            builder.Append(" ORDER BY ");
+            StringBuilder orderByClause = new StringBuilder();
+            foreach (OrderCriteria.Field orderField in _selectQuery.OrderCriteria.Fields)
+            {
+                AppendOrderByField(orderByClause, orderField);
+            }
+
+            builder.Append(orderByClause.ToString());
+        }
+
+        private void AppendOrderByField(StringBuilder orderByClause, OrderCriteria.Field orderField)
+        {
+            string direction = orderField.SortDirection == OrderCriteria.SortDirection.Ascending ? "ASC" : "DESC";
+
+            string tableAndFieldName;
+            if (orderField.Source != null)
+            {
+                tableAndFieldName = DelimitField(orderField.Source.ChildSourceLeaf, orderField.FieldName);
+            }
+            else
+            {
+                if (Fields.ContainsKey(orderField.PropertyName))
+                {
+                    QueryField queryField = Fields[orderField.PropertyName];
+                    tableAndFieldName = DelimitField(queryField.Source, queryField.FieldName);
+                } else
+                {
+                    tableAndFieldName = DelimitField(this.Source, orderField.FieldName);
+                }
+            }
+            StringUtilities.AppendMessage(orderByClause, tableAndFieldName + " " + direction, ", ");
+        }
+
+//        private string GetRelatedTableName(string relationshipName)
+//        {
+//            RelationshipDef relationshipDef = ((ClassDef)this.ClassDef).GetRelationship(relationshipName);
+//            ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
+//            return DelimitTable(relatedClassDef.TableName);
+//        }
+
+        private void AppendWhereClause(StringBuilder builder, SqlStatement statement)
+        {
+            Criteria fullCriteria = Criteria.MergeCriteria(_selectQuery.Criteria, _selectQuery.DiscriminatorCriteria);
+
+            if (fullCriteria == null) return;
+            builder.Append(" WHERE ");
+            CriteriaDB criteriaDB = new CriteriaDB(fullCriteria);
+            string whereClause =
+                criteriaDB.ToString(_sqlFormatter, delegate(object value)
+                       {
+                           string paramName = statement.ParameterNameGenerator.GetNextParameterName();
+                           if (value == null) value = "NULL";
+                           if (value is DateTimeToday)
+                           {
+                               value = DateTimeToday.Value;
+                           }
+                           if (value is DateTimeNow)
+                           {
+                               value = DateTimeNow.Value;
+                           }
+                           statement.AddParameter(paramName, value);
+                           return paramName;
+                       });
+
+            builder.Append(whereClause);
+        }
+
+        private string DelimitField(Source source, string fieldName)
+        {
+            if (source == null) return _sqlFormatter.DelimitField(fieldName);
+            return string.Format("{0}.{1}", _sqlFormatter.DelimitTable(source.EntityName), _sqlFormatter.DelimitField(fieldName));
+        }
+
+        private string DelimitTable(string tableName)
+        {
+            return _sqlFormatter.DelimitTable(tableName);
+        }
+
+    }
+}

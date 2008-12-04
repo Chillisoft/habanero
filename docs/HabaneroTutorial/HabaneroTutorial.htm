@@ -1,0 +1,4379 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+       
+
+
+  <title>Habanero - Open Source Enterprise Application Framework</title>
+  <link rel="shortcut icon" type="image/png" href="http://chillisoft.co.za/images/habanero/habanero.ico">
+  <link href="HabaneroTutorial_files/hab-home.css" media="screen" rel="Stylesheet" type="text/css">
+  <script src="HabaneroTutorial_files/swfobject.js" type="text/javascript"></script>
+</head><body topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
+
+<map name="bottommap">
+				<area href="http://www.chillisoft.co.za/" alt="Chillisoft Solutions" coords="15,0,150,24">
+		</map>
+  	<table cellpadding="0" cellspacing="0" width="100%">
+  <tbody><tr>
+    <td colspan="3" background="HabaneroTutorial_files/layout-topfiller.jpg" width="100%">
+    	<table cellpadding="0" cellspacing="0"><tbody><tr>
+    		<td width="100%"><img src="HabaneroTutorial_files/layout-logoleft.jpg" alt="Habanero" border="0"></td>
+    		<td align="right"><img src="HabaneroTutorial_files/layout-topright.gif"></td>
+    	</tr></tbody></table>
+    </td>
+  </tr>
+  <tr>
+		<td background="HabaneroTutorial_files/layout-sidebarfiller.jpg" valign="top" width="231" height="100%">
+			<div id="container">
+			<table cellpadding="0" cellspacing="0" width="231" height="100%"><tbody><tr><td class="sidebartop">
+				<table cellpadding="0" cellspacing="0" height="100%">
+				  <tbody><tr>
+				  	<td colspan="2" height="60"></td>
+				  </tr>
+					<tr>
+						<td width="14" height="100%"><img src="HabaneroTutorial_files/layout-sidebarspacer.gif" width="14" height="1"></td>
+						<td valign="top">
+							<table cellpadding="0" cellspacing="0">
+								<tbody><tr>
+			      			<td width="138"></td>
+			      		</tr>
+				        <tr background="HabaneroTutorial_files/layout-buttonnormal.gif">
+									<td valign="middle" height="35">
+										<div class="cssnav">
+											<a href="http://chillisoft.co.za/habanero/index"><img src="HabaneroTutorial_files/layout-buttonnormal.gif"><span>Home</span></a>
+										</div>
+				          </td>
+				        </tr>
+				        <tr background="HabaneroTutorial_files/layout-buttonnormal.gif">
+									<td valign="middle" height="35">
+										<div class="cssnav">
+											<a href="http://chillisoft.co.za/habanero/features"><img src="HabaneroTutorial_files/layout-buttonnormal.gif"><span>Features</span></a>
+										</div>
+				          </td>
+				        </tr>
+				        <tr background="HabaneroTutorial_files/layout-buttonnormal.gif">
+									<td valign="middle" height="35">
+										<div class="cssnav">
+											<a href="http://chillisoft.co.za/habanero/tour"><img src="HabaneroTutorial_files/layout-buttonnormal.gif"><span>Guided Tour</span></a>
+										</div>
+				          </td>
+				        </tr>
+				        <tr background="HabaneroTutorial_files/layout-buttonnormal.gif">
+									<td valign="middle" height="35">
+										<div class="cssnav">
+											<a href="http://chillisoft.co.za/habanero/download"><img src="HabaneroTutorial_files/layout-buttonnormal.gif"><span>Download</span></a>
+										</div>
+				          </td>
+				        </tr>
+				        <tr background="HabaneroTutorial_files/layout-buttonnormal.gif">
+									<td valign="middle" height="35">
+										<div class="cssnav">
+											<a href="http://chillisoft.co.za/habanero/tutorial"><img src="HabaneroTutorial_files/layout-buttonnormal.gif"><span>Tutorial</span></a>
+										</div>
+				          </td>
+				        </tr>
+				        <tr background="HabaneroTutorial_files/layout-buttonnormal.gif">
+									<td valign="middle" height="35">
+										<div class="cssnav">
+											<a href="http://chillisoft.co.za/habanero/wiki"><img src="HabaneroTutorial_files/layout-buttonnormal.gif"><span>Wiki</span></a>
+										</div>
+				          </td>
+				        </tr>
+				        <tr background="HabaneroTutorial_files/layout-buttonnormal.gif">
+									<td valign="middle" height="35">
+										<div class="cssnav">
+											<a href="http://chillisoft.co.za/habanero/forum"><img src="HabaneroTutorial_files/layout-buttonnormal.gif"><span>Forum</span></a>
+										</div>
+				          </td>
+				        </tr>
+				        <tr background="HabaneroTutorial_files/layout-buttonnormal.gif">
+									<td valign="middle" height="35">
+										<div class="cssnav">
+											<a href="http://chillisoft.co.za/habanero/support"><img src="HabaneroTutorial_files/layout-buttonnormal.gif"><span>Support</span></a>
+										</div>
+				          </td>
+				        </tr>
+				        <tr>
+				        	<td>
+				        		<br>
+				        		<a href="http://chillisoft.co.za/habanero/videos_promo">
+				        			<img src="HabaneroTutorial_files/video-introducing.jpg" border="0">
+				        		</a>
+				        		<br><br>
+				        		<a href="http://chillisoft.co.za/habanero/videos">
+				        			<img src="HabaneroTutorial_files/demo-videos.jpg" border="0">
+				        		</a>
+										<!--<br/><br/><br/>
+										<div align="center">
+								  		<div id="flashcontent">
+												<strong>You need to upgrade your Flash Player</strong>
+											</div>
+		
+											<script type="text/javascript">
+												var so = new SWFObject("/images/habanero/gizmox_header_125x600.swf", "gizmox_header_125x600.swf", "125", "600", "8", "#ffffff");
+												so.write("flashcontent");
+											</script>
+										</div>-->
+									</td>
+							  </tr>  
+			        </tbody></table>
+			        <br><br><br>
+		        </td>
+					</tr>
+		  	</tbody></table>
+		  </td></tr></tbody></table>
+	  	</div>
+		</td>
+		<td rowspan="2" valign="top" width="100%">
+			<span class="tutorial">
+	
+		<a name="contents_header"></a>
+		<hr>
+		<table style="border-collapse: collapse;" id="AutoNumber1" bgcolor="#f2f2f2" border="1" bordercolor="#cccccc" cellpadding="6" cellspacing="0" width="100%">
+		  <tbody><tr>
+		    <td bgcolor="#2f2f84" width="100%"><b>
+		    <font color="#ffffff" size="4" face="Verdana">
+		    	Tutorial Contents
+		    </font></b></td>
+		  </tr>
+		</tbody></table>
+		<br>
+		<p>
+	<font color="#333333" size="4" face="Verdana"><b>Habanero Tutorial</b></font>
+	- for v2.0.0b<br><br>
+</p>
+<p>This tutorial demonstrates some of Habanero's features
+by creating a demo application in C#.  You may want to build the application 
+yourself as you read each section.</p>
+<p>The source code for the full sample project is available for download at the bottom of this page.
+Included is the script for the MySQL database.  Simply use the restore option in the MySQL administration
+panel to create the database on your system.</p>
+		
+			<font size="3" face="Verdana"><br><b>Contents:</b></font>
+			<ul>
+				
+					<li>
+						<font size="2"><a href="#story">Our Story: Replace-IT</a><br>
+						Introduces a simple storyline behind the demo application</font><br>&nbsp;
+					</li>
+				
+					<li>
+						<font size="2"><a href="#think">Understanding Habanero-Think</a><br>
+						Some background understanding of the architecture along with standard concepts</font><br>&nbsp;
+					</li>
+				
+					<li>
+						<font size="2"><a href="#install">Installing Habanero</a><br>
+						Covers system requirements and installation procedures</font><br>&nbsp;
+					</li>
+				
+					<li>
+						<font size="2"><a href="#simpleapp">Setting up a Simple Application</a><br>
+						Setting up a simple application that maps classes to database tables</font><br>&nbsp;
+					</li>
+				
+					<li>
+						<font size="2"><a href="#formcontrol">Generating User Interfaces</a><br>
+						Generating user interfaces to display and edit objects</font><br>&nbsp;
+					</li>
+				
+					<li>
+						<font size="2"><a href="#change">Managing Changes</a><br>
+						Describes how to update your application with changes in your data structure</font><br>&nbsp;
+					</li>
+				
+					<li>
+						<font size="2"><a href="#inheritance">Introducing Inheritance</a><br>
+						How to inherit functionality from a parent class</font><br>&nbsp;
+					</li>
+				
+					<li>
+						<font size="2"><a href="#relate">Creating Relationships</a><br>
+						Explains how to use relationships between objects</font><br>&nbsp;
+					</li>
+				
+					<li>
+						<font size="2"><a href="#ui">User Interface Enhancements</a><br>
+						Adds more features to the user interface</font><br>&nbsp;
+					</li>
+				
+					<li>
+						<font size="2"><a href="#version">Version Control</a><br>
+						Updating your application version</font><br>&nbsp;
+					</li>
+				
+					<li>
+						<font size="2"><a href="#lookuplists">Managing Lookup-Lists</a><br>
+						Manage lookup-lists used to populate combo-boxes</font><br>&nbsp;
+					</li>
+				
+					<li>
+						<font size="2"><a href="#classdefs">Appendix I: Class Definitions</a><br>
+						Covers a list of explanations, possible options and limitations for class definitions</font><br>&nbsp;
+					</li>
+				
+					<li>
+						<font size="2"><a href="#logging">Appendix II: Logging &amp; Errors</a><br>
+						Offers logging support and ways to display error messages</font><br>&nbsp;
+					</li>
+				
+					<li>
+						<font size="2"><a href="#source">Appendix III: Habanero Source Code</a><br>
+						How to customise your application by editing Habanero source code</font><br>&nbsp;
+					</li>
+				
+					<li>
+						<font size="2"><a href="#trouble">Troubleshooting</a><br>
+						</font><br>&nbsp;
+					</li>
+				
+			</ul>
+		
+		<br><br><br><br>
+	
+		<a name="story"></a>
+		<hr>
+		<table style="border-collapse: collapse;" id="AutoNumber1" bgcolor="#f2f2f2" border="1" bordercolor="#cccccc" cellpadding="6" cellspacing="0" width="100%">
+		  <tbody><tr>
+		    <td bgcolor="#2f2f84" width="100%"><b>
+		    <font color="#ffffff" size="4" face="Verdana">
+		    	Our Story: Replace-IT
+		    </font></b></td>
+		  </tr>
+		</tbody></table>
+		<br>
+		<p><font size="2" face="Verdana">
+<img src="HabaneroTutorial_files/replaceit-logo.gif" border="0" width="151" height="46">
+Our fictitious computer 
+parts supply business, Replace-IT, has grown beyond all expectations and  
+orders are raining down from all over the country.&nbsp; It wasn't going to be long before our 
+makeshift stock control system would begin to crack up.&nbsp; The poor 
+receptionist is spending hours each day logging calls from irate customers whose 
+orders have either been wrongly fulfilled or have simply slipped through the 
+cracks.</font></p>
+<p><font size="2" face="Verdana">It's time for a customised system, and being an 
+IT firm, we feel we have enough know-how to code our own system.&nbsp; So off we 
+go, load up the coffee machine, crank up some rock music and pull out the SQL 
+manual for the first time.</font></p>
+<p><font size="2" face="Verdana">We've decided to code the system in C# with 
+object orientation, using the MySQL database to store the parts and sales data.&nbsp; 
+MySQL is a relational database, which means it will be good for reporting.
+After getting "Hello, world" working and taking fifteen minutes to celebrate, 
+it's heads-down for the real grind.</font></p>
+<p><font size="2" face="Verdana">And it all grinds to a halt.&nbsp; Having drawn 
+up a plan of our object structure, we then sit down and map out the database 
+table structure.&nbsp; It suddenly dawns on us: how do you reconcile the two?&nbsp; 
+Surely there must be a simple way?&nbsp; And it sure is going to be a mission to
+write up all the database connection code and all the SQL statements to move the data
+back and forth between the database and the application.  With a splatter of keyboard strokes and 
+a tick-tick of mouse buttons, our browser calls up the Habanero architecture to solve all 
+the world's problems ... well, except for global warming.</font></p>
+
+<p class="tuthead"><span class="tutcat">The Problem</span></p>
+
+<p><font size="2" face="Verdana">The hunt is always on to find an easier, quicker, cleaner and more 
+error-free way to achieve a programming task.&nbsp; Despite continued 
+innovation, there are still some glaring efficiency gaps, such as the jagged 
+interface between relational databases and object-oriented code.</font></p>
+<p><font size="2" face="Verdana">Habanero was developed by a group of software 
+developers that ran into the continuous problem of having to provide the 
+intermediate between object-oriented code and database tables.&nbsp; 
+A pattern of usage developed and Habanero was packaged 
+together with recurring functionality from the different applications.&nbsp; Furthermore, the architecture 
+remained in use by the team for a long period before being released onto the 
+market, considerably improving stability and ensuring that the software is 
+relevant to real-world business needs.</font></p>
+<p><font size="2" face="Verdana">What sets Habanero apart from other flavours of 
+persistence or object-relational mapping (ORM) solutions is the ability to 
+generate user interfaces that are automatically mapped to the object as well.&nbsp; 
+The implication is that you can build a functional database-dependent 
+application with visual results in far less time, which is also great news for those
+interested in building prototype applications for their clients.
+</font></p>
+
+<p class="tuthead"><span class="tutcat">Revisiting the Business</span></p>
+
+<p><font size="2" face="Verdana">Having decided on using Habanero, it's time to 
+get this vehicle out of the garage and onto the information highway.&nbsp; We'll
+build the system incrementally, getting the basic structure up and running 
+and then adding the bells and whistles as we go.</font></p>
+
+		
+		<br><br><br><br>
+	
+		<a name="think"></a>
+		<hr>
+		<table style="border-collapse: collapse;" id="AutoNumber1" bgcolor="#f2f2f2" border="1" bordercolor="#cccccc" cellpadding="6" cellspacing="0" width="100%">
+		  <tbody><tr>
+		    <td bgcolor="#2f2f84" width="100%"><b>
+		    <font color="#ffffff" size="4" face="Verdana">
+		    	Understanding Habanero-Think
+		    </font></b></td>
+		  </tr>
+		</tbody></table>
+		<br>
+		<p>This is a more theoretical explanation of the Habanero framework.&nbsp; If you prefer a 
+hands-on approach, you can skip this section and come back to it later.</p>
+
+<p class="tuthead"><span class="tutcat">What Does Habanero Try to Fix?</span></p>
+
+<p>Habanero attempts to tackle two primary problems.</p>
+<p>Firstly, there are a number of repetitive steps required to copy values from 
+relational databases, which are not object-oriented, to objects in code.&nbsp; 
+Database connections need to be coded and managed, and the particular quirks of 
+each database vendor need to be understood.&nbsp; Then Sql statements must be 
+written for each type of action (create, read, update, delete) and for each 
+property of each object.&nbsp; Concurrency checks need to be done, and some kind 
+of mapping for inheritance and relationships must also be managed.&nbsp; In 
+short, there's a vast amount of work covered in these actions, and what's more 
+frustrating is that they are largely repetitive from project to project.&nbsp; 
+Equally, making small changes to a database structure can result in a large 
+amount of readjustment in the code as well.</p>
+<p>
+Secondly, there is considerable repetition in designing a user interface and 
+mapping each control to a property, as well as ensuring that each property 
+provides up-to-date values that reflect the database content.</p>
+<p>Of course, individual requirements for user interfaces can vary vastly, and 
+it is unlikely that any one solution can automate most developers' requirements.&nbsp; 
+However, Habanero does provide a large array of functionality to create full 
+user interfaces or components of a user interface, and then map these to 
+properties as the developer specifies.&nbsp; These properties are then kept 
+up-to-date by the background engine as you use the components at run-time.&nbsp; 
+Depending on your application, this can present a considerable time-saving.</p>
+
+
+<p class="tuthead"><span class="tutcat">How Does Habanero Carry Out Mapping?</span></p>
+
+<p>
+</p><p>Habanero requires a set of class definitions that are contained 
+in a single XML file.  Here you specify:</p>
+<ul>
+  <li>Which classes map to which tables</li>
+  <li>Which properties in each class map to which fields</li>
+  <li>The primary key and any alternate keys</li>
+  <li>Property rules, types and limitations</li>
+  <li>Relationships between tables</li>
+  <li>How user interfaces can display the class data</li>
+</ul>
+
+<p>
+Habanero comes with Firestarter, a GUI application that can be used to
+manage the class definitions for you.  If you use Firestarter,
+much of the work in setting up and maintaining your
+mappings can be automated.  You can simply start with an existing database
+structure, then use Firestarter to generate the class definitions from the
+database and then generate the code for these class definitions.
+</p>
+
+<p>
+You can of course work directly with the class definitions XML - the XML
+code used to achieve common tasks in this tutorial is included.
+Carrying out the process manually, you would need to handle three steps, in any order. 
+1) Design the database. 2) Create the classes. 3) Create the XML class definitions.
+With regards to creating the classes, all entity classes are required to inherit 
+from Habanero's BusinessObject. For each property value that must be mapped, the 
+property will need <i>get</i> and <i>set</i> methods that use a Habanero-provided method to 
+carry out the persistence.  The appendices contain the full API for the class definitions.
+</p>
+
+<p class="tuthead"><span class="tutcat">What are Business Objects?</span></p>
+
+<p>Business objects are entities that in some way represent different components 
+of business logic.&nbsp; For instance, in the manufacture of a car, 
+the wheels, door, bonnet, seat and ignition all make up business objects.&nbsp; 
+An email client provides more a more abstract example: an individual email, an 
+address book, a blocked-senders list and a preference settings list could all be 
+business objects.&nbsp; Essentially business objects are well used term in the 
+IT industry to differentiate these kinds of components from other objects like 
+widgets in a user interface or components of your database connection 
+architecture.</p>
+<p>Habanero's BusinessObject provides a range of common functionality to its 
+inheritors.&nbsp; Most importantly it hands down the tools to carry out 
+persistence of the properties to and from the database.</p>
+
+<p class="tuthead"><span class="tutcat">What About Sql?</span></p>
+
+<p>There is some debate at the moment on the wisdom of either hiding developers 
+from the power of Sql or giving the developers open room to create errors 
+through faulty Sql code.&nbsp; In Habanero, both sides are catered for to some 
+extent.</p>
+<p>At a simple level, you will hardly write any Sql while using Habanero.&nbsp; 
+Basic persistence to and from the database is handled by Habanero, which 
+automatically constructs the Sql needed for each property value and adapts each 
+statement to cater for the supported database vendor you specified.</p>
+<p>There are, however, times when you will need to use some level of Sql.&nbsp; 
+At a simple level, you can place restraints on how many objects are loaded in a 
+collection of business objects, and how these are ordered.&nbsp; These are 
+provided using Sql criteria that will be appended to the Sql statements.&nbsp; 
+Secondly, Habanero provides support for migrations, so that you can take an 
+updated application to an outdated client installation, and the application will 
+automatically update the client using the Sql statements you have provided.&nbsp; 
+Finally, you can still execute a self-created Sql statement at any place in 
+your code.&nbsp; You can construct the statement with a single string, or you 
+can safely build a SqlStatement object out of components.</p>
+
+<p class="tuthead"><span class="tutcat">Supporting Alternate Data Sources</span></p>
+
+<p>
+Habanero provides the structure to support data storage other than databases.  For
+instance, testing can be done using an in-memory database that manages the data
+during the lifetime of the application.  The current device is stored using the
+GlobalRegistry.DataAccessor property.
+</p>
+
+<p class="tuthead"><span class="tutcat">Designing for Many UI Environments</span></p>
+
+<p>
+Habanero supports UI generation for forms and grids, so that developers can
+automate much of their user interface design.  Even better, Habanero uses a
+control factory structure, so that each control is an instance of an interface
+and is created by a control factory.  With this design, you need only change the
+control factory and you can convert your entire UI design to run in a different
+UI environment.
+</p>
+
+<p>
+Taking advantage Visual WebGUI by Gizmox, you can design one system to run
+either as a desktop application, or as an online web application.  Visual WebGUI
+simulates Windows Forms design for the web environment, giving you the advantage
+of reduced development time and increased responsiveness.
+</p>
+		
+		<br><br><br><br>
+	
+		<a name="install"></a>
+		<hr>
+		<table style="border-collapse: collapse;" id="AutoNumber1" bgcolor="#f2f2f2" border="1" bordercolor="#cccccc" cellpadding="6" cellspacing="0" width="100%">
+		  <tbody><tr>
+		    <td bgcolor="#2f2f84" width="100%"><b>
+		    <font color="#ffffff" size="4" face="Verdana">
+		    	Installing Habanero
+		    </font></b></td>
+		  </tr>
+		</tbody></table>
+		<br>
+		<p class="tuthead"><span class="tutcat">System Requirements</span></p>
+
+<p>Habanero is a .Net product, so you will need to install the .Net 2.0 (or 
+above) framework.&nbsp; You will also need to meet the .Net 2.0 minimum 
+requirements.&nbsp; As far as application requirements go, this depends heavily 
+on the type of application you will be developing.&nbsp; For client 
+installations, you require Windows 2000 or above and will typically need a 
+Pentium 4 1.6ghz, 256mb RAM for Windows 2000 or 512mb RAM for Windows XP.&nbsp; 
+The minimum requirements for Windows Vista applications are not yet clear.</p>
+
+<p class="tuthead"><span class="tutcat">Licensing &amp; Installation</span></p>
+
+<p>You can obtain all editions of Habanero through the  
+<a href="http://chillisoft.co.za/habanero/download">Download</a> section.
+The download file is a zip that contains two MSI installation files, one for the
+Habanero framework with its DLL's, documentation and source code.  The other installs
+Firestarter, the GUI application to manager the class definitions.
+</p>
+
+<p>
+The source comes with test classes for
+use with NUnit, which is a free testing framework - that way you will be able to
+check if any of your changes break other parts of the framework.  Note that the
+source code is distributed under the GNU Lesser GPL, implying that you cannot
+sell the source code or any modifications to it.  If you have
+fixed any bugs or made useful additions, it would be helpful to the community of
+Habanero developers if you posted the code on the Habanero forum.  Some of this
+code may be incorporated into future versions of Habanero.
+</p>
+
+<p>
+More instructions on working with the source code can be found in the appendices.
+</p>
+
+<p class="tuthead"><span class="tutcat">Files &amp; Directories</span></p>
+
+The Habanero installation will include the following folders:
+
+<ul>
+  <li><b>bin</b> - contains the Habanero DLLs</li>
+  <li><b>source</b> - contains those parts of Habanero which are open source</li>
+  <li>
+  	<b>firestarter</b> - contains the FireStarter application
+  </li>
+  <li><b>docs</b> - contains Habanero documentation, excluding the tutorials, 
+  which are only available online</li>
+  <li><b>lib</b> - some additional DLLs that may be useful</li>
+</ul>
+
+<p>If you will be using logging in your application, download and install the 
+log4net DLL's - see Appendix II for more information.</p>
+
+<p>Once you have chosen the database vendor you will be using, follow the 
+installation instructions for that database.&nbsp; Your Habanero-based 
+application will need to reference the DLL's that come with that installation.</p>
+
+<p class="tuthead"><span class="tutcat">Technical Support</span></p>
+
+<p>Chillisoft provides various types of support for Habanero.  See the 
+<a href="http://chillisoft.co.za/habanero/support">Support</a>
+ page for more information.  There is also a brief Troubleshooting section at the
+ end of this tutorial.</p>
+
+		
+		<br><br><br><br>
+	
+		<a name="simpleapp"></a>
+		<hr>
+		<table style="border-collapse: collapse;" id="AutoNumber1" bgcolor="#f2f2f2" border="1" bordercolor="#cccccc" cellpadding="6" cellspacing="0" width="100%">
+		  <tbody><tr>
+		    <td bgcolor="#2f2f84" width="100%"><b>
+		    <font color="#ffffff" size="4" face="Verdana">
+		    	Setting up a Simple Application
+		    </font></b></td>
+		  </tr>
+		</tbody></table>
+		<br>
+		<p>
+<b>NOTE:</b> You will find some sections with different markings:
+</p>
+<span class="tutpro">Auto</span> - indicates that Firestarter is used to automate some tasks.
+This is the recommended route.
+<br><br>
+<span class="tutstd">Manual</span> - indicates how you could achieve a task by working
+directly with the code or XML.  This is for advanced use and you can usually skip these sections.
+<br><br>
+
+<p class="tuthead"><span class="tutcat">Designing the Database</span></p>
+
+<p><font size="2">At this stage you'll have  chosen your database of choice 
+and installed it. For this 
+tutorial we'll be using the MySQL database.&nbsp; We open the database 
+administrator and create a new schema called "replace_it".&nbsp; It's time for 
+our first table, which will hold our computer parts.&nbsp; We'll call it 
+ComputerPart - no surprises there.&nbsp;  The first column is "ComputerPartID" 
+which serves as the primary key.&nbsp; Code conventions for C# use PascalCase for naming, so 
+it's easier if we use that same convention in the database too.  Now there is some 
+debate on primary keys and what format they take, but for our example, our 
+primary key will be a Guid and will remain hidden from the user.&nbsp; In MySQL, a Guid can 
+be represented as a CHAR(38) type.</font></p>
+<p align="center">
+<img src="HabaneroTutorial_files/database-part_setup.gif" border="0" width="651" height="83"></p>
+
+<p class="tuthead"><span class="tutpro">Auto</span>
+<span class="tutcat">Auto-Generating the Class Definitions</span></p>
+
+<p><font size="2">The class definitions are held in an XML file and are used to 
+describe how the database maps to the objects in code.  Habanero includes
+FireStarter, which is a GUI editor that helps you manage them visually.
+You can either set up the classes individually using FireStarter, or you can
+have them generated from the database for you.</font></p>
+
+<p><font size="2">Before you open FireStarter, you will need to copy the DLL of your database
+vendor (eg. MySQL.Data.dll for MySQL) into the executable directory of FireStarter in
+your Chillisoft/Habanero installation.  Once you've opened FireStarter, create a new project
+in FireStarter (through the File menu) called "Replace_it".  Then go to the Generate menu
+and select "ClassDefs from Database".  The following window should appear:
+</font></p>
+<div align="center"><img src="HabaneroTutorial_files/fs-generateclassdefs.jpg"></div>
+<p><font size="2">First add a Connection string that specifies how to access your
+database. The Default Assembly indicates which project your class files will reside in.
+Pascal Case refers to the naming of the classes and Table Name Prefix can eliminate
+any prefix you have in front of your table (eg. if all your tables are tbsomething).
+Tick the two Populate options for now, so that we can generate user interfaces for the
+classes as well.  Ignore the Show Primary Keys options and the Append options, which prevent
+a regeneration from adding columns or fields when you have previously chosen not to.  Then Test the connection
+and Generate the definitions.  ComputerPart should now be listed.  If you have any
+error messages, check that your connection string is correct (port 3306 is often a good
+choice for a localhost server).</font></p>
+
+<p class="tuthead"><span class="tutstd">Manual</span>
+<span class="tutcat">Writing the Class Definitions Manually</span></p>
+
+<p><font size="2">The class definitions are held in an XML file and are used to 
+describe how the database maps to the objects in code.  A full list of the elements
+and options available are listed in Appendix I.  Create an XML file
+called "ClassDefs.xml" and insert the following code.</font></p>
+<table class="code" border="1" cellspacing="0">
+	<tbody><tr>
+    <td class="codeclass" width="100%">
+      <font size="2"><b>ClassDefs.xml</b></font>
+    </td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%"><pre><code>&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;classes&gt;
+  &lt;class name="ComputerPart" assembly="Replace_it"&gt;
+    &lt;property name="ComputerPartID" type="Guid" /&gt;
+    &lt;property name="Description" /&gt;
+    &lt;property name="Price" type="Decimal" /&gt;
+    &lt;primaryKey&gt;
+      &lt;prop name="ComputerPartID" /&gt;
+    &lt;/primaryKey&gt;
+  &lt;/class&gt;
+&lt;/classes&gt;</code></pre></td>
+  </tr>
+</tbody></table>
+<p>
+Later on, once you've created your solution, you will need to add the XML file to your solution.
+This file must be copied to the output directory of your application.  Right-click on
+the project containing your ClassDefs.xml file, go to Build Events and add the following
+Post-build command: <i>copy "$(ProjectDir)ClassDefs.xml" "$(SolutionDir)Replace_it\bin\Debug\"</i>
+</p>
+
+<p>
+By the way, you can use Firestarter to export just the XML class definitions file for you,
+rather than generating the whole project.  Keep in mind that if you make local changes to
+your XML file and then export the class definitions from Firestarter, you may lose your
+changes.  If you edit the XML directly, you may want to use Firestarter's import utility
+which will import an existing XML file.
+</p>
+
+
+
+<p class="tuthead"><span class="tutpro">Auto</span>
+<span class="tutcat">Auto-Generating a New Solution</span></p>
+
+<p>
+When you are starting a new project from scratch, Firestarter can generate the new
+project for you as a solution (.sln) file that you can open in Microsoft Visual
+Studio.  This will contain the assemblies, the business object classes, the launch
+classes and some additional utilities.
+</p>
+
+<p>If you already have an application and want to take advantage of the code
+generation, you can take one of two approaches.  Either generate a new project and
+transfer your old code across to the new one, or generate a new project and transfer
+the classes from the new project across to your old one.  The first option is better,
+because regenerating the code after making some changes will not require the manual
+transfer to be repeated.
+</p>
+
+<p>Code generation is done by Firestarter.  Once you've set up your class definitions, simply
+go to the Generate menu and select "Generate Code".  The following window should
+pop up:</p>
+<div align="center"><img src="HabaneroTutorial_files/fs-generatecode.jpg"></div>
+<p><font size="2">You might need to specify which Connection the new solution
+will be using and you'll need to set the Solution Directory.  The Habanero DLL path
+only needs to be supplied if you want the application to reference a different set
+of DLLs to that which FireStarter is currently using.  As you can see, four projects
+are created within your solution:</font></p>
+<ul>
+	<li><b>Replace_it</b> - The startup project that defines the environment</li>
+	<li><b>Replace_it.BO</b> - Holds the business objects and the class definitions XML file</li>
+	<li><b>Replace_it.Logic</b> - Holds the application's business logic</li>
+	<li><b>Replace_it.UI</b> - Holds the user interfaces and form controller</li>
+</ul>
+<p><font size="2">Once you've clicked Generate you can open the project by
+double-clicking on the .sln file (depending on your IDE).  Add your database vendor's
+DLL to the references of the root project (eg. MySQL.Data.dll), and ensure that Replace_it is the default
+startup assembly.  The project should compile and run successfully.</font></p>
+
+
+
+<p class="tuthead"><span class="tutstd">Manual</span>
+<span class="tutcat">Setting up the Solution/Project Manually</span></p>
+
+<p><font size="2">Fire up your standard IDE or text editor and set up a new 
+solution.&nbsp; If you're using Visual Studio, add new projects as recommended above in the Auto
+solution.  For this tutorial, there should be one Windows Application project and the rest would be libraries.
+First up we'll need to reference some DLL's that are important 
+to our application.&nbsp; If you're using Visual Studio, 
+right click on the References folder and "Add reference".</font></p>
+<ul>
+  <li><font size="2"><b>Habanero*.dll</b> - These are the DLL's you installed.</font></li>
+  <li><font size="2"><b>log4net.dll</b> - This is the logging system that 
+  Habanero supports for outputting runtime information to a specified log.&nbsp; 
+  See Appendix II for more information.</font></li>
+  <li><font size="2"><b>MySql.Data.dll</b> - Used to manage MySql database 
+  connections (if you're using a different database, you'll need to make 
+  appropriate adjustments here)</font></li>
+  <li><font size="2"><b>Noogen.Winforms.dll</b> - Used to 
+  generate combo-boxes</font></li>
+</ul>
+<p><font size="2">If you've created a new project in Visual 
+Studio 2005, you'll see that two classes have been added already: "Form1.cs" and 
+"Program.cs".&nbsp; If you're using a different IDE, go ahead and create two 
+equivalent classes for consistency.  We'll also integrate Habanero at this stage -
+notice the "using" references, the two lines at the beginning of the "main" method and the
+try/catch clause which provides a neat error message box.</font></p>
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeclass" width="100%" height="20">
+    <b><font size="2">Program.cs</font></b><font size="2"> </font>
+    </td>
+  </tr>
+  <tr>
+    <td class="codeitself">
+    <pre><code>using System;
+using System.Windows.Forms;
+using Habanero.UI.Base;
+using Habanero.UI.Win;
+using Habanero.Base;
+
+namespace Replace_it
+{
+    static class Program
+    {
+        [STAThread]
+        static void Main()
+        {
+            HabaneroAppWin mainApp = new HabaneroAppWin("Replace_IT", "v1.0");
+            if (!mainApp.Startup()) return;
+
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Form1());
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex,
+                "An error has occurred in the application.",
+                "Application Error");
+            }
+        }
+    }
+}</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+<p>&nbsp;</p>
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeclass">
+    <font size="2"><b>Form1.cs<br>
+</b>Note: InitializeComponent() is implemented in an IDE-created class called Form1.Designer.cs</font>
+    </td>
+  </tr>
+  <tr>
+    <td class="codeitself"><pre><code>using System;
+using System.Collections;
+using System.Windows.Forms;
+
+namespace Replace_it
+{
+	public partial class Form1 : Form
+	{
+		public Form1()
+		{
+			InitializeComponent();
+		}
+	}
+}</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+
+<p class="tuthead"><span class="tutstd">Manual</span>
+<span class="tutcat">Configuring Database Settings</span></p>
+
+<p><font size="2">The application needs to know how to connect to the database 
+and this is done using the "app.config" file in Visual Studio (right-click on the project, 
+"add new item" and choose "Application 
+Configuration File").&nbsp; Once the file has been added to the project, it 
+should be amended to look something like that below.&nbsp; The options for 
+vendor are "mysql", "access", "sqlserver", "oracle",
+"postgresql" and "sqlite".&nbsp; Additionally, you 
+may want to add logging support to your application, which is a simple operation 
+- see Appendix II on how to add Log4net to the 
+configuration file.</font></p>
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeclass" width="100%"><b><font size="2">app.config</font></b></td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%"><pre><code>&lt;?xml version="1.0"?&gt;
+&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &nbsp; &lt;section name="DatabaseConfig" type="System.Configuration.DictionarySectionHandler"/&gt;
+  &lt;/configSections&gt;
+
+  &lt;DatabaseConfig&gt;
+    &lt;add key="vendor" value="Mysql"/&gt;
+    &lt;add key="server" value="localhost"/&gt;
+    &lt;add key="database" value="replace_it"/&gt;
+    &lt;add key="username" value="..."/&gt;
+    &lt;add key="password" value="..."/&gt;
+    &lt;add key="port" value="3306"/&gt;
+  &lt;/DatabaseConfig&gt;
+&lt;/configuration&gt;</code></pre></td>
+  </tr>
+</tbody></table>
+
+<p class="tuthead"><span class="tutstd">Manual</span>
+<span class="tutcat">Adding Business Objects</span></p>
+
+<p><font size="2">We'll need a new class for ComputerPart that will map 
+to its database table. As 
+with all such objects, ComputerPart inherits from BusinessObject.&nbsp; 
+Here is the code for a simple version of the class that provides properties to 
+manipulate the class's fields.&nbsp; Note that if you're wanting to vary this 
+for your own use, you'll only need to change the class name where appropriate 
+and add or remove the properties for each of the fields you want to display or 
+amend in your database table.</font></p>
+<p><font size="2">Just a small but important note here on properties.&nbsp;
+When you amend a property 
+directly in the code, you will then need to call Save() on the object to 
+have the changes persisted.&nbsp; Thus, you can make several changes or 
+calculations and only save the changes when you are ready.</font></p>
+<p><font size="2">Since we're working with database values which potentially have
+a null value, we use nullable types (with the ? on the 
+end) - should you need to cast a nullable type to a non-nullable type, use 
+".Value".</font></p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeclass" width="100%" height="20">
+    <b><font size="2">ComputerPart.cs</font></b>
+    </td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%" height="291">
+    <pre><code>using System;
+using Habanero.BO;
+
+namespace Replace_it
+{
+
+public class ComputerPart : BusinessObject
+{
+    public Guid? ComputerPartID
+    {
+        get { return (Guid?)GetPropertyValue("ComputerPartID"); }
+        set { SetPropertyValue("ComputerPartID", value); }
+    }
+
+    public string Description 
+    {
+        get { return (string)GetPropertyValue("Description"); }
+        set { SetPropertyValue("Description", value); }
+    }
+
+    public decimal? Price
+    {
+        get { return (decimal?)GetPropertyValue("Price"); }
+        set { SetPropertyValue("Price", value); }
+    }
+}
+}</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+
+
+
+<p class="tuthead"><span class="tutcat">Accessing Business Objects in Code</span></p>
+
+<p><font size="2">Now that we've set the Habanero environment and have a
+working persistence framework, we have ready access to our business
+objects.  Here is a sample set of code to load, edit and save a ComputerPart:</font></p>
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeitself" width="100%"><pre><code>using Habanero.BO;
+
+public SomeClass
+{
+    public void SomeMethod()
+    {
+        <font color="green">// Create a new object</font>
+        ComputerPart computerPart = new ComputerPart();
+        computerPart.Description = "320gb Hard Drive";
+        computerPart.Price = 130;
+        computerPart.Save();
+        
+        <font color="green">// Load an object</font>
+        ComputerPart copy = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject&lt;ComputerPart&gt;("Price = 130");
+        
+        <font color="green">// Load and modify a collection</font>
+        BusinessObjectCollection&lt;ComputerPart&gt; computerParts = new 
+            BusinessObjectCollection&lt;ComputerPart&gt;();
+        computerParts.Load("Price = 130", "");
+        computerParts[0].Description = "320gb Hard Disk Drive";
+        computerParts.AcceptChanges();
+    }
+}</code></pre></td>
+  </tr>
+</tbody></table>
+<p><font size="2">Note that the changes are not committed until you call Save on a
+BusinessObject or AcceptChanges on a collection.  You can also group changes together
+under one Transaction - see the Wiki for more information.</font></p>
+		
+		<br><br><br><br>
+	
+		<a name="formcontrol"></a>
+		<hr>
+		<table style="border-collapse: collapse;" id="AutoNumber1" bgcolor="#f2f2f2" border="1" bordercolor="#cccccc" cellpadding="6" cellspacing="0" width="100%">
+		  <tbody><tr>
+		    <td bgcolor="#2f2f84" width="100%"><b>
+		    <font color="#ffffff" size="4" face="Verdana">
+		    	Generating User Interfaces
+		    </font></b></td>
+		  </tr>
+		</tbody></table>
+		<br>
+		<p>
+We're about to explore a powerful feature of Habanero - generating user
+interfaces for the objects we are mapping.  This works best when you
+have a class with several properties that behave fairly simply and just
+require information, such as contact details.  When you have a complex user
+interface, Habanero can still generate most of the interface for you,
+saving you the time of mapping the controls to the properties and checking that the values
+supplied are valid according to the application's business rules.  You can then add
+customisation on top of the generated controls.
+</p>
+
+<p class="tuthead"><span class="tutcat">Multiple User Interface Environments</span></p>
+
+<p>A key feature of version 2.0 is the ability to design one application for multiple
+environments.  This would have been unthinkable in the past, but with the launch
+of Visual WebGUI by Gizmox, Habanero now allows you to design your user interface
+independently of the environment, and you can switch between the environments
+simply by changing your configuration.</p>
+
+<p>The key to achieving this is the IControlFactory class.  Whenever you want to
+create a control, like a TextBox, Grid or Form, simply call a method in the
+application's ControlFactory, which will create the right control and make sure
+it is customised for that environment.  For instance, apart from the obvious
+namespace issues, one key difference between designing for the desktop and
+designing for the web is the amount of events that are assigned.  If each
+event causes a call to the server in your web application, you can understand
+that Habanero ensures that controls for the web environment sacrifice some
+usability in order to reduce bandwidth and lag in your web application.</p>
+
+<p>The following diagram illustrates how controls are structured in Habanero, with
+"Win" indicating controls from System.Windows.Forms and "VWG" indicating controls
+from Gizmox.WebGUI.Forms.</p>
+
+<p align="center"><img src="HabaneroTutorial_files/theory-controlfactory.jpg"></p>
+
+<p>Most controls have a manager, which groups common logic used between all the variants
+of a control.  The current ControlFactory is stored in GlobalUIRegistry.ControlFactory - there
+is a default control factory initialised for you when you run StartUp on HabaneroApp.  In a
+moment we'll see how to create controls using your ControlFactory.</p>
+
+
+<p class="tuthead"><span class="tutpro">Auto</span>
+<span class="tutcat">Managing UI Design in Firestarter</span></p>
+
+<p>Using FireStarter, you manage which properties to display under each
+class's "UIs" tab.  You can generate grids and/or forms, and specify
+which control types to use to edit the data.  When you generate the
+class definitions from a database, FireStarter can automatically
+create the UI definitions as well.  The following screenshot
+demonstrates what would have been created for a grid display of
+computer parts:</p>
+
+<p align="center"><img src="HabaneroTutorial_files/fs-compart-ui.jpg"></p>
+
+<p class="tuthead"><span class="tutstd">Manual</span>
+<span class="tutcat">Editing UI Class Definitions</span></p>
+
+<p>
+You might want to edit the UI class definitions directly in the XML.  The
+result as viewed above can be added to your XML as follows for the
+ComputerPart class:
+</p>
+
+<table class="code" border="1" cellspacing="0">
+	<tbody><tr>
+    <td class="codeclass" width="100%">
+      <font size="2"><b>ClassDefs.xml</b></font>
+    </td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%"><pre><code>&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;classes&gt;
+  &lt;class name="ComputerPart" assembly="Replace_it"&gt;
+    &lt;property name="ComputerPartID" type="Guid" /&gt;
+    &lt;property name="Description" /&gt;
+    &lt;property name="Price" type="Decimal" /&gt;
+    &lt;primaryKey&gt;
+      &lt;prop name="ComputerPartID" /&gt;
+    &lt;/primaryKey&gt;
+    &lt;ui&gt;
+      &lt;grid&gt;
+        &lt;column property="Description" /&gt;
+        &lt;column property="Price" /&gt;
+      &lt;/grid&gt;
+      &lt;form&gt;
+        &lt;field property="Description" /&gt;
+        &lt;field property="Price" /&gt;
+      &lt;/form&gt;
+    &lt;/ui&gt;
+  &lt;/class&gt;
+&lt;/classes&gt;</code></pre></td>
+  </tr>
+</tbody></table>
+
+<p>
+You can see from the UI section of this definition that a lot is assumed about
+the control types and the labels.  See the Appendix on Class Definitions for more information on how
+you can control the layout and display of the different fields and columns.
+</p>
+
+<p class="tuthead"><span class="tutcat">Managing Multiple Forms</span></p>
+
+<p>
+When you generate a new project with FireStarter, the main form is set as an
+MDI form, meaning that it can contain other windows within it.  The one
+advantage of having several forms open at the same time is that when you
+switch away from a form, you should be able to return to it in its
+last state (unless you close it).  Habanero facilitates this with the
+FormController class, from which we will inherit and adapt.
+</p>
+
+<p>First we'll create a form to show our computer parts, simply adding a new
+file in the .UI project.  In order to merge this form into the form controller, 
+it needs to inherit from UserControlWin and IFormControl.</p>
+
+<p>We'll add code to load the computer 
+parts from the database into a collection of business objects and make them 
+available to be read by the grid.  At a later stage we'll want to use Sql
+criteria with the Load() method to limit just how many parts we display. We'll also 
+instantiate a grid and add it to the provided form. There are some grid variants -
+this one is read-only and provides buttons to edit the selected row.  Note that we use the 
+BorderLayoutManager supplied with Habanero - this was created to cover for user 
+interface shortfalls in .net.</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeclass" width="100%">
+      <b><font size="2">ComputerPartsForm.cs</font></b>
+    </td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%">
+      <pre><code>using System.Collections;
+using Habanero.BO;
+using Habanero.UI.Base;
+using Habanero.UI.Win;
+using Replace_it.BO;
+
+namespace Replace_it.UI
+{
+    public class ComputerPartsForm : UserControlWin, IFormControl
+    {
+        public ComputerPartsForm()
+        {
+            BusinessObjectCollection&lt;ComputerPart&gt; boCollection = 
+                new BusinessObjectCollection&lt;ComputerPart&gt;();
+            boCollection.LoadAll();
+            IReadOnlyGridControl grid = GlobalUIRegistry.ControlFactory.CreateReadOnlyGridControl();
+            grid.SetBusinessObjectCollection(boCollection);
+
+            BorderLayoutManager manager = GlobalUIRegistry.ControlFactory.CreateBorderLayoutManager(this);
+            manager.AddControl(grid, BorderLayoutManager.Position.Centre);
+        }
+
+        public void SetForm(IFormHabanero form) {}
+    }
+}</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+
+<p>
+You'll notice that when FireStarter generates code for a new project, a
+class is already created in the UI project to control the forms.  You'll simply
+need to add each form you create to the structure already provided:
+</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeclass" width="100%">
+      <b><font size="2">Replace_itFormController.cs</font></b>
+    </td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%">
+      <pre><code>using System.Windows.Forms;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
+
+namespace Replace_it.UI
+{
+    public class Replace_itFormController : FormController
+    {
+        public const string COMPUTER_PARTS = "Computer Parts";
+        
+        public Replace_itFormController(IFormHabanero parentForm, IControlFactory controlFactory) :
+        		base(parentForm, controlFactory) { }
+        
+        protected override IFormControl GetFormControl(string heading) {
+            IFormControl formCtl = null;
+            switch (heading)
+            {
+                case COMPUTER_PARTS:
+                    formCtl = new ComputerPartsForm();
+                    break;
+            }
+            return formCtl;
+        }
+    }
+}</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+
+<p>
+Finally, in ProgramForm (the master application form in the root project) we tie the form controller to the main menu so that
+the correct form opens and so that all currently open forms are listed under
+the Window menu.  Note that in order to integrate with Habanero's UI structure, we change the form to inherit from FormWin
+rather than Form itself.
+</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeclass" width="100%">
+      <font size="2"><b>ProgramForm.cs</b> (Form1.cs) (Amended)</font>
+    </td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%">
+      <pre><code>using System.Windows.Forms;
+using Habanero.Base;
+using Replace_it.UI;
+
+namespace Replace_it
+{
+    public partial class ProgramForm : FormWin
+    {
+        private Replace_itFormController _formController;
+		
+        public ProgramForm()
+        {
+            SetBounds(0, 0, 640, 480);
+            IsMdiContainer = true;
+            CreateMainMenu();
+            InitializeComponent();
+            SetupForm();
+        }
+
+        private void SetupForm()
+        {
+            Text = GlobalRegistry.ApplicationName + " " + GlobalRegistry.ApplicationVersion;
+        }
+
+        private void CreateMainMenu()
+        {
+            _formController = new Replace_itFormController(this, GlobalUIRegistry.ControlFactory);
+
+            MainMenu mainMenu = new MainMenu();
+            MenuItem fileMenu = new MenuItem("&amp;Data");
+            fileMenu.MenuItems.Add(new MenuItem("&amp;Computer Parts", delegate
+                { _formController.SetCurrentControl(Replace_itFormController.COMPUTER_PARTS); }));
+            mainMenu.MenuItems.Add(fileMenu);
+
+            MenuItem windowMenu = new MenuItem("&amp;Window");
+            windowMenu.MdiList = true;
+            mainMenu.MenuItems.Add(windowMenu);
+
+            Menu = mainMenu;
+        }
+    }
+}</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+
+<p>
+A small note here: if you prefer using the form designer in Visual Studio to handle your
+menus, simply remove the CreateMainMenu method listed above and use the designer to add the menu.
+When you double-click on a menu item, insert the "_formController.SetCurr..." code into the
+newly created method.
+</p>
+
+<p class="tuthead"><span class="tutcat">Running the Application</span></p>
+
+<p><font size="2">Everything is in place now and if we build and run the 
+project, we'll have an editing window something like this:</font></p>
+
+<p align="center">
+<img src="HabaneroTutorial_files/app-atfirst.jpg"></p>
+
+<p>You should be able to click on the "Add" button and the newly 
+added object should appear in the grid immediately.&nbsp; If that doesn't happen 
+then you will need to check your database setup, the app.config file, the class 
+definitions or the ComputerPart.cs class.&nbsp; Check, for instance, that 
+you've provided the correct field names.</p>
+
+<p>You may notice that the editing form doesn't have a title bar and can't be moved
+around.  This can be amended in FireStarter by supplying a Title for the Form,
+under the "UIs" tab.</p>
+
+
+<p>Note that in this application we haven't included the 
+ComputerPartID in the grid.&nbsp; This was partly a matter of choice and partly 
+of principle.&nbsp; Regarding choice, a Guid is not as useful as a description 
+when listing parts.&nbsp; Regarding principle, it's commonly held opinion that 
+you shouldn't be changing your primary key, so we've designed the database to 
+eliminate that possibility, keeping the primary key discrete.&nbsp; Of course, 
+we will later add a unique reference number for each computer part, but that 
+will be in a custom format rather than as a Guid, which is admittedly difficult 
+to read and communicate.</p>
+
+<p>
+Our application is nicely set for expansion now, and you can see that it will
+be easy to scale it up as we add components.  Let's try that in the next section.
+</p>
+		
+		<br><br><br><br>
+	
+		<a name="change"></a>
+		<hr>
+		<table style="border-collapse: collapse;" id="AutoNumber1" bgcolor="#f2f2f2" border="1" bordercolor="#cccccc" cellpadding="6" cellspacing="0" width="100%">
+		  <tbody><tr>
+		    <td bgcolor="#2f2f84" width="100%"><b>
+		    <font color="#ffffff" size="4" face="Verdana">
+		    	Managing Changes
+		    </font></b></td>
+		  </tr>
+		</tbody></table>
+		<br>
+		<p>
+The ComputerPart class is very limited at the moment - we don't even know how many
+parts we have in stock. We simply need to add a few more fields, but just how much work is
+this going to be?  Change management is one area where object-relational mapping begins 
+to shine.  Rather than update a whole range of SQL statements, we can manage this 
+process fairly smoothly.
+</p>
+
+<p class="tuthead"><span class="tutcat">Updating the Database</span></p>
+
+<p>
+We'll need to begin the change process by updating the database. After adding 
+some more important fields, our database structure now looks like this:
+</p>
+
+<p align="center">
+<img src="HabaneroTutorial_files/database-part_update.gif">
+</p>
+
+<p class="tuthead"><span class="tutpro">Auto</span>
+<span class="tutcat">Updating Code Automatically</span></p>
+
+<p>
+The process of updating your code is made easy with FireStarter.  Simply carry
+out the generation steps again.  Firstly, call up the menu option "Generate &gt;
+ClassDefs from Database".  Keep the same settings, except tick the two "Append" options,
+so that any new fields will also be assigned to your grid and form property lists.
+</p>
+
+<p>
+To update the code, regenerate the project using the menu option,
+"Generate &gt; Generate Code", and keep the same settings as before.  FireStarter will
+add the files that are missing and will update the business objects.  Re-open the solution
+if you have added new classes and they don't appear.  Note that each business
+object class is split into two partial files.  The first file (eg. ComputerPart.cs)
+is where you can add your custom code, knowing that it won't be affected by a
+regeneration.  The second file (eg. ComputerPart.Def.cs) holds the properties
+and relationships and will be replaced each time you regenerate.
+</p>
+
+<p class="tuthead"><span class="tutstd">Manual</span>
+<span class="tutcat">Updating Class Definitions &amp; Code Manually</span></p>
+
+<p>
+To update the class definitions, simply add the new properties and their types.
+"String" is the assumed default type and the other types can be named either by 
+their wrapper class names (eg. Int32) or their standard-use names 
+(eg. int). (see Appendix I for  a  list of data types in the class definitions).
+If you're generating user interfaces you will also add the new properties
+to your UI listings where appropriate.
+</p>
+
+<table class="code" border="1" cellspacing="0">
+	<tbody><tr>
+    <td class="codeclass" width="100%">
+      <font size="2"><b>ClassDefs.xml</b> (Amended)</font>
+    </td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%">
+    <pre><code>&lt;classes&gt;
+&lt;class name="ComputerPart" assembly="Replace_it"&gt;
+  &lt;property name="ComputerPartID" type="Guid" /&gt;
+  &lt;property name="Description" /&gt;
+  &lt;property name="Cost" type="Decimal" /&gt;
+  &lt;property name="Price" type="Decimal" /&gt;
+  &lt;property name="Stock" type="Int32" /&gt;
+  &lt;property name="PartCode" /&gt;
+  &lt;primaryKey&gt;
+    &lt;prop name="ComputerPartID" /&gt;
+  &lt;/primaryKey&gt;
+&lt;/class&gt;
+&lt;/classes&gt;</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+
+<p><font size="2" face="Verdana">The ComputerPart class also needs new
+properties to reflect the changes.</font></p>
+
+<table class="code" border="1" cellspacing="0">
+	<tbody><tr>
+    <td class="codeclass" width="100%">
+      <font size="2"><b>ComputerPart.cs</b> (Amended)</font>
+    </td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%"><pre><code>public int? Stock
+{
+    get { return (int?)GetPropertyValue("Stock"); }
+    set { SetPropertyValue("Stock", value); }
+}
+
+public decimal? Cost
+{
+    get { return (decimal?)GetPropertyValue("Cost"); }
+    set { SetPropertyValue("Cost", value); }
+}
+
+public string PartCode
+{
+    get { return (string)GetPropertyValue("PartCode"); }
+    set { SetPropertyValue("PartCode", value); }
+}</code></pre></td>
+  </tr>
+</tbody></table>
+<p><font size="2" face="Verdana">Check that the project compiles. If you get an error when you build 
+at this stage, check for mistakes like wrong capitalisation, spaces between 
+words and types that don't match up.</font></p>
+
+
+
+
+<p>Running the updated project should provide an editing form something like the
+following:</p>
+
+<p align="center"><img src="HabaneroTutorial_files/app-atsecond.jpg"></p>
+		
+		<br><br><br><br>
+	
+		<a name="inheritance"></a>
+		<hr>
+		<table style="border-collapse: collapse;" id="AutoNumber1" bgcolor="#f2f2f2" border="1" bordercolor="#cccccc" cellpadding="6" cellspacing="0" width="100%">
+		  <tbody><tr>
+		    <td bgcolor="#2f2f84" width="100%"><b>
+		    <font color="#ffffff" size="4" face="Verdana">
+		    	Introducing Inheritance
+		    </font></b></td>
+		  </tr>
+		</tbody></table>
+		<br>
+		<p>We're ready to introduce orders received by customers and orders sent to suppliers.
+It's easy to see that they have several things in common, making this
+a good opportunity to explore inheritance.
+</p>
+
+
+<p class="tuthead"><span class="tutcat">Inheritance Strategies</span></p>
+
+
+<p>Inheritance is one distinct feature supported by object-orientation but not 
+by relational databases.&nbsp; Habanero as an object relational mapping tool 
+translates an inheritance structure to database tables in three different ways.&nbsp; 
+The default "ClassTableInheritance" uses one database table per class in the 
+inheritance structure. All fields that are inherited from the parent are 
+actually stored in the database table of the parent, while the child table only 
+stores its ID, the parent's ID and any fields that are unique to the child.&nbsp; 
+"SingleTableInheritance" maps all fields of all classes of an inheritance 
+structure into a single table. "ConcreteTableInheritance" uses a table for each 
+concrete class in the inheritance hierarchy, so that the fields of an abstract 
+parent are stored in the child rather.</p>
+
+<p>In our example, supplier orders and customer orders are very similar - they 
+can both have an order number, name, price and delivery status.
+These properties can all be abstracted to a parent PartsOrder class that
+the user will never see.  ("Order" is a sql keyword)</p>
+
+<p>Now to choose an inheritance strategy.&nbsp; Each one obviously has its pros 
+and cons.&nbsp; The advantage of "ClassTableInheritance" is that we're 
+not having to duplicate the fields of each inheritor in both the database tables 
+and the class definitions - once they've been declared in the parent, they're 
+inherited automatically.&nbsp; "SingleTableInheritance" places all the data into 
+one table, which does reduce our control over the individual tables.&nbsp; 
+"ConcreteTableInheritance" separates the data distinctly but does incur 
+duplication.&nbsp; You can imagine that in a class with many fields, this 
+duplication can add up to a lot of extra work.&nbsp; We'll go with the default 
+for this example, although you may want to experiment with the other structures 
+too.</p>
+
+<p>Note that the inheritance format discussed below is one of several types
+available.  For more information on other ways of implementing inheritance,
+see the Wiki.</p>
+
+<p class="tuthead"><span class="tutcat">Adding the Database Tables</span></p>
+
+<p>Here are the three database tables.  At the moment we're keeping it simple and not
+giving the child classes any fields of their own.  This is just temporary, and it's
+easy to imagine that differences will begin to creep in. Foreign keys are created here
+to prevent a parts order from being deleted while the child order still exists.  Out of
+interest, there is no requirement for database foreign keys in Habanero, because Habanero
+can carry out deletion prevention itself.  There are two advantages of adding foreign keys 
+though - it helps FireStarter to detect relationships when generating the definitions
+and it prevents accidental deletions if someone is editing the database directly.</p>
+
+<p align="center">
+<img src="HabaneroTutorial_files/database-partsorder.gif">
+</p>
+
+<p>&nbsp;</p>
+
+<p align="center">
+<img src="HabaneroTutorial_files/database-custorder.gif">
+</p>
+
+<p>&nbsp;</p>
+
+<p align="center">
+<img src="HabaneroTutorial_files/database-suporder.gif">
+</p>
+
+<p class="tuthead"><span class="tutpro">Auto</span>
+<span class="tutcat">Auto-Generating the Classes</span></p>
+
+<p>As you did in the "Managing Changes" section, use FireStarter to regenerate the
+class definitions.  There are just some fiddly extra steps to take before you generate the
+code.  FireStarter doesn't yet detect inheritance from a database schema, so go
+to the CustomerOrder and SupplierOrder classes, select Super Class and assign
+the PartsOrder class.  Secondly, delete the PartsOrderID properties in the two child
+classes (since this is inherited).  Finally, jump across to the UI definitions for each class
+and assign which properties you would like to display in those two classes.  The
+multi-selector is an easy way of assigning the properties quickly.</p>
+
+<p>FireStarter correctly picks up that the Delivered property is a boolean, but will
+display a TextBox by default.  We'd rather use a CheckBox, so switch over to the "UIs"
+tab and the "Form" tab, and change the Delivered control to CheckBox.</p>
+
+<p>Subsequently regenerate the code as you did before, which should create three
+new classes in your project.  Re-open your solution if the new classes don't appear.</p>
+
+<p class="tuthead"><span class="tutstd">Manual</span>
+<span class="tutcat">Adding the Class Definitions</span></p>
+
+<p>In the child class definitions, the "superClass" element is used to indicate
+inheritance and the PartsOrderID is left out because it's inherited.
+If you're generating user interfaces, you'll also need to include UI
+definitions for the child classes.</p>
+
+<font size="2" face="Verdana,Arial,Helvetica">
+
+</font><table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+
+</tr></tbody></table><table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeitself" width="100%">
+    <pre><code>  &lt;class name="PartsOrder" assembly="Replace_it"&gt;
+    &lt;property name="PartsOrderID" type="Guid" /&gt;
+    &lt;property name="OrderNumber" /&gt;
+    &lt;property name="Name" /&gt;
+    &lt;property name="TotalCharge" type="Decimal" /&gt;
+    &lt;property name="Delivered" type="Boolean" default="false" /&gt;
+    &lt;primaryKey&gt;
+      &lt;prop name="PartsOrderID" /&gt;
+    &lt;/primaryKey&gt;
+  &lt;/class&gt;
+
+  &lt;class name="SupplierOrder" assembly="Replace_it"&gt;
+    &lt;superClass class="PartsOrder" assembly="Replace_it" /&gt;
+    &lt;property name="SupplierOrderID" type="Guid" /&gt;
+    &lt;primaryKey&gt;
+      &lt;prop name="SupplierOrderID"/&gt;
+    &lt;/primaryKey&gt;
+  &lt;/class&gt;
+
+  &lt;class name="CustomerOrder" assembly="Replace_it"&gt;
+    &lt;superClass class="PartsOrder" assembly="Replace_it" /&gt;
+    &lt;property name="CustomerOrderID" type="Guid" /&gt;
+    &lt;primaryKey&gt;
+      &lt;prop name="CustomerOrderID"/&gt;
+    &lt;/primaryKey&gt;
+  &lt;/class&gt;</code></pre>
+</td>
+    
+  </tr>
+</tbody></table>
+
+<p class="tuthead"><span class="tutstd">Manual</span>
+<span class="tutcat">Adding the Classes Manually</span></p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeclass" width="100%">
+    <font size="2"><b>PartsOrder.cs</b></font></td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%">
+    <pre><code>using System;
+using Habanero.BO;
+
+namespace Replace_it
+{
+public class PartsOrder : BusinessObject
+{
+    public Guid? PartsOrderID
+    {
+        get { return (Guid?)GetPropertyValue("PartsOrderID"); }
+        set { SetPropertyValue("PartsOrderID", value); }
+    }
+
+    public int? OrderNumber
+    {
+        get { return (int?)GetPropertyValue("OrderNumber"); }
+        set { SetPropertyValue("OrderNumber", value); }
+    }
+
+    public string Name
+    {
+        get { return (string)GetPropertyValue("Name"); }
+        set { SetPropertyValue("Name", value); }
+    }
+
+    public decimal? TotalCharge
+    {
+        get { return (decimal?)GetPropertyValue("TotalCharge"); }
+        set { SetPropertyValue("TotalCharge", value); }
+    }
+
+    public bool? Delivered
+    {
+        get { return (bool?)GetPropertyValue("Delivered"); }
+        set { SetPropertyValue("Delivered", value); }
+    }
+}
+}</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+
+<p>Thanks to inheritance, our two new child classes couldn't be simpler:</p>
+
+<font size="2" face="Verdana,Arial,Helvetica">
+
+    </font><font size="2" face="Verdana,Arial,Helvetica">
+
+    </font><table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+
+<td class="codeclass" width="100%"><b><font size="2">
+    SupplierOrder.cs</font></b></td>
+    
+  </tr>
+  <tr>
+
+<td class="codeitself" width="100%">
+
+<pre><code>namespace Replace_it
+{
+    class SupplierOrder : PartsOrder
+    {
+    }
+}</code></pre>
+</td>
+
+</tr>
+</tbody></table>
+
+<br>
+
+
+<font size="2" face="Verdana,Arial,Helvetica">
+
+    </font><font size="2" face="Verdana,Arial,Helvetica">
+
+    </font><table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+
+<td class="codeclass" width="100%"><b><font size="2">
+    CustomerOrder.cs</font></b></td>
+    
+  </tr>
+  <tr>
+
+<td class="codeitself" width="100%">
+
+<pre><code>namespace Replace_it
+{
+    class CustomerOrder : PartsOrder
+    {
+    }
+}</code></pre>
+</td>
+
+</tr>
+</tbody></table>
+
+
+
+<br>
+
+<p>We could just create some user interfaces for these orders, but let's go
+a step further.  Covering relationships will give us the tools needed to have a list
+of parts for each order...</p>
+		
+		<br><br><br><br>
+	
+		<a name="relate"></a>
+		<hr>
+		<table style="border-collapse: collapse;" id="AutoNumber1" bgcolor="#f2f2f2" border="1" bordercolor="#cccccc" cellpadding="6" cellspacing="0" width="100%">
+		  <tbody><tr>
+		    <td bgcolor="#2f2f84" width="100%"><b>
+		    <font color="#ffffff" size="4" face="Verdana">
+		    	Creating Relationships
+		    </font></b></td>
+		  </tr>
+		</tbody></table>
+		<br>
+		<p class="tuthead"><span class="tutcat">Introducing Relationships</span></p>
+
+<p>Relationships have a range of uses, especially in providing content for combo-boxes
+and relating a group of items that belong to a parent.  Order items are a perfect example -
+the interesting challenge is how to describe this relationship.  In database design,
+you create the child class and include a field that refers back to the parent, whereas
+in code you would probably hold a collection in the parent class.  Habanero effectively
+links both approaches.
+</p>
+
+<p>In addition to the relationship between a PartsOrder and OrderItems, we can also
+create a relationship between the OrderItem and the ComputerPart it represents.
+If we simply put a string for the part code field,
+we're opening the system up to errors.  What if the part code changes format?  It's far
+cleaner to change the part code field to an ID (in this case a Guid) that points back
+to the original ComputerPart table.  The second advantage of this is that we can
+easily construct a ComboBox, so the user simply picks the part code from a list.  The
+third advantage is that giving us the ID of the ComputerPart means we're one step away
+from all the other properties of that part, such as price and stock.</p>
+
+<p>Relationships are usually described as 1-to-1, 1-to-many or many-to-many.  Many-to-many
+relationships require an intermediate table, which we won't discuss here (there's plenty
+of web material on this subject).  What concerns Habanero is the
+immediate view from each class.  In other words, does this relationship point to single
+or multiple objects?  For a PartsOrder, a multiple relationship points to all the items in
+the order, and in an OrderItem, a single relationship points to the original order.
+Similarly, in an OrderItem, a single relationship exists to the ComputerPart and a
+multiple relationship points from the ComputerPart to all the OrderItems that use it.</p>
+
+<p>Just a note here on deletion prevention.  Habanero provides three options for deletion
+prevention on multiple relationships only.  Deletion prevention resolves the question of:
+what happens if someone accidentally deletes a ComputerPart that is being used in an
+OrderItem?  The deletion check goes on the ComputerPart's relationship rather than on
+the OrderItem.  Habanero thus poses the question to a multiple relationship: can I delete
+myself if someone is using me?  This works the opposite way to foreign keys.  The three
+options are: prevent deletion, delete related (eg. delete the order items if I get deleted)
+and dereference related (ie. in code, remove the reference so that the object will either
+continue to belong to something else that references it or be cleaned up by the garbage
+collector).  Prevention is the default and that's our preference in this example.
+</p>
+
+
+<p class="tuthead"><span class="tutcat">Adding an OrderItem Table</span></p>
+
+<p>Here is the table layout for the "OrderItem", including the two foreign keys:</p>
+<p align="center">
+<img src="HabaneroTutorial_files/database-orderitem.gif">
+</p>
+
+<p align="center">
+<img src="HabaneroTutorial_files/database-orderitem-fk.gif">
+</p>
+
+<p align="center">
+<img src="HabaneroTutorial_files/database-orderitem-fk2.gif">
+</p>
+
+<p class="tuthead"><span class="tutpro">Auto</span>
+<span class="tutcat">Regenerating the Code</span></p>
+
+<p>While you regenerate the class definitions, you need to
+watch that your previous changes are not overwritten.
+For instance, the CheckBox control for the Delivery boolean (discussed
+under Inheritance) may revert to a Textbox.  Simply turn off the two "Append"
+options, to prevent previous UI definitions being appended to.</p>
+
+<p>FireStarter detects relationships from the foreign keys you supply in the
+database, so looking under the "Relationships" tab will show the relationships
+we have discussed.</p>
+
+<p>You can then regenerate the code as well, restarting Visual Studio if no OrderItem.cs class
+is visible.  One last step is needed after generating the code - there is no way
+to know which PartsOrder an OrderItem is associated with, so we can specify that
+in the constructor.  The constructor must not be added to the OrderItem.Def.cs stub,
+otherwise it will be overwritten in the next regeneration.</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeclass" width="100%">
+      <font size="2" face="Verdana,Arial,Helvetica"><b>OrderItem.cs</b> (Amended)</font></td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%">
+
+<font face="Verdana">
+
+    </font><pre><code><font face="Verdana">    public partial class OrderItem : BusinessObject
+    {
+        public OrderItem() { }
+
+        public OrderItem(PartsOrder partsOrder)
+        {
+            PartsOrderID = partsOrder.PartsOrderID;
+        }
+    }</font></code></pre>
+<font face="Verdana"></font></td>
+  </tr>
+</tbody></table>
+
+<p class="tuthead"><span class="tutstd">Manual</span>
+<span class="tutcat">Adding Class Definitions &amp; Code Manually</span></p>
+
+<p>The new feature here is the "relationship" element.  We'll add single-type
+relationships in the OrderItem class definition and multiple-type relationships
+on the other sides.</p>
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+
+    <td class="codeitself" width="100%">
+    <pre><code>&lt;class name="OrderItem" assembly="Replace_it"&gt;
+  &lt;property name="OrderItemID" type="Guid" /&gt;
+  &lt;property name="ComputerPartID" type="Guid" /&gt;
+  &lt;property name="Quantity" type="Int32" /&gt;
+  &lt;property name="PartsOrderID" type="Guid" /&gt;
+  &lt;primaryKey&gt;
+    &lt;prop name="OrderItemID" /&gt;
+  &lt;/primaryKey&gt;
+  &lt;relationship name="PartsOrder" type="single" relatedClass="PartsOrder" relatedAssembly="Replace_it"&gt;
+    &lt;relatedProperty property="PartsOrderID" relatedProperty="PartsOrderID" /&gt;
+  &lt;/relationship&gt;
+  &lt;relationship name="ComputerPart" type="single" relatedClass="ComputerPart" relatedAssembly="Replace_it"&gt;
+    &lt;relatedProperty property="ComputerPartID" relatedProperty="ComputerPartID" /&gt;
+  &lt;/relationship&gt;
+&lt;/class&gt;</code></pre>
+</td>
+
+  </tr>
+</tbody></table>
+
+<p>Also, add the multiple relationships for the definitions of PartsOrder
+and ComputerPart:</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeitself" width="100%">
+    <pre><code>&lt;relationship name="OrderItems" type="multiple" relatedClass="OrderItem" relatedAssembly="Replace_it"&gt;
+  &lt;relatedProperty property="PartsOrderID" relatedProperty="PartsOrderID" /&gt;
+&lt;/relationship&gt;</code></pre>
+</td>
+  </tr>
+</tbody></table>
+
+<p></p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeitself" width="100%">
+    <pre><code>&lt;relationship name="OrderItems" type="multiple" relatedClass="OrderItem" relatedAssembly="Replace_it"&gt;
+  &lt;relatedProperty property="ComputerPartID" relatedProperty="ComputerPartID" /&gt;
+&lt;/relationship&gt;</code></pre>
+</td>
+  </tr>
+</tbody></table>
+
+<p>The  OrderItem class will need an additional constructor to assign the 
+ID of the parent PartsOrder and an additional method to return the parent 
+order relating to an order item.</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeclass" width="100%">
+      <b><font size="2" face="Verdana,Arial,Helvetica">OrderItem.cs</font></b> </td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%">
+
+<font face="Verdana">
+
+    </font><pre><code><font face="Verdana">using System;
+using Habanero.BO;
+
+namespace Replace_it
+{
+    public class OrderItem : BusinessObject
+    {
+        public OrderItem() { }
+
+        public OrderItem(PartsOrder partsOrder)
+        {
+            PartsOrderID = partsOrder.PartsOrderID;
+        }
+
+        public PartsOrder PartsOrder
+        {
+            get { return Relationships.GetRelatedObject&lt;PartsOrder&gt;("PartsOrder"); }
+        }
+
+        public Guid? OrderItemID
+        {
+            get { return (Guid?)GetPropertyValue("OrderItemID"); }
+            set { SetPropertyValue("OrderItemID", value); }
+        }
+
+        public Guid? ComputerPartID
+        {
+            get { return (Guid?)GetPropertyValue("ComputerPartID"); }
+            set { SetPropertyValue("ComputerPartID", value); }
+        }
+
+        public int? Quantity
+        {
+            get { return (int?)GetPropertyValue("Quantity"); }
+            set { SetPropertyValue("Quantity", value); }
+        }
+
+        public Guid? PartsOrderID
+        {
+            get { return (Guid?)GetPropertyValue("PartsOrderID"); }
+            set { SetPropertyValue("PartsOrderID", value); }
+        }
+    }
+}</font></code></pre>
+<font face="Verdana"></font></td>
+  </tr>
+</tbody></table>
+
+<p>PartsOrder.cs will require an additional method to return the collection of 
+its associated order items (between the quotes we specify the relationship name 
+as defined in the class definitions):</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeitself" width="100%">
+    <pre><code>public IBusinessObjectCollection OrderItems
+{
+    get { return Relationships.GetRelatedCollection&lt;OrderItem&gt;("OrderItems"); }
+}</code></pre>
+</td>
+  </tr>
+</tbody></table>
+
+<p>Likewise for ComputerPart.cs:</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeitself" width="100%">
+    <pre><code>public IBusinessObjectCollection OrderItems
+{
+    get { return Relationships.GetRelatedCollection&lt;OrderItem&gt;("OrderItems"); }
+}</code></pre>
+</td>
+  </tr>
+</tbody></table>
+
+<p>At this stage the application should compile successfully.</p>
+
+
+
+<p class="tuthead"><span class="tutcat">Developing the User Interface</span></p>
+
+<p>There are several ways to display the corresponding order items when you click 
+on an order.  One efficient way is to have two grids, so that clicking on the customer 
+order grid will cause the order items grid below it to show the items for that 
+order.</p>
+
+<p>The principle challenge here is to copy across the PartsOrderID when a 
+new item is added, otherwise we have no way of knowing what the parent order is.
+The DefaultBOCreator creates a new object when we click "Add", so we'll simply
+replace it with our own, passing the parent object to the constructor.  The overridden
+CreateBusinessObject will be called by the grid control just before the editing
+screen is opened.</p>
+
+<font size="2" face="Verdana,Arial,Helvetica">
+
+    </font><table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeclass" width="100%"><b><font size="2">
+    OrderItemCreator.cs</font></b></td>
+  </tr>
+  <tr>
+
+<td class="codeitself" width="100%">
+
+<pre><code>using Habanero.Base;
+using Replace_it.BO;
+
+namespace Replace_it.UI
+{
+public class OrderItemCreator : IBusinessObjectCreator
+{
+    private PartsOrder _parentObject;
+
+    public OrderItemCreator()
+    {
+        _parentObject = null;
+    }
+
+    public OrderItemCreator(PartsOrder partsOrder)
+    {
+        _parentObject = partsOrder;
+    }
+
+    public IBusinessObject CreateBusinessObject()
+    {
+        if (_parentObject != null)
+        {
+            return new OrderItem(_parentObject);
+        }
+        return null;
+    }
+}
+}</code></pre>
+</td>
+  </tr>
+</tbody></table>
+
+<p>We can now build one form to display all kinds of orders, by taking advantage of
+generics.</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeclass" width="100%">
+      <b><font size="2">OrdersForm.cs</font></b>
+    </td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%">
+      <pre><code>using System;
+using System.Windows.Forms;
+using Habanero.BO;
+using Habanero.UI.Base;
+using Habanero.UI.Win;
+using Replace_it.BO;
+
+namespace Replace_it.UI
+{
+public class OrdersForm&lt;T&gt; : UserControlWin, IFormControl where T: BusinessObject, new()
+{
+    private IReadOnlyGridControl _grid;
+    private IReadOnlyGridControl _orderItemsGrid;
+
+    public OrdersForm()
+    {
+        BusinessObjectCollection&lt;T&gt; boCollection = new BusinessObjectCollection&lt;T&gt;();
+        boCollection.LoadAll();
+        _grid = GlobalUIRegistry.ControlFactory.CreateReadOnlyGridControl();
+        _grid.SetBusinessObjectCollection(boCollection);
+        BorderLayoutManager manager = GlobalUIRegistry.ControlFactory.CreateBorderLayoutManager(this);
+        manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
+
+        _orderItemsGrid = GlobalUIRegistry.ControlFactory.CreateReadOnlyGridControl();
+        _orderItemsGrid.Height = 200;
+        SetOrderItemsCollection();
+        manager.AddControl(_orderItemsGrid, BorderLayoutManager.Position.South);
+
+        _grid.Grid.BusinessObjectSelected += delegate { SetOrderItemsCollection(); };
+    }
+
+    public void SetForm(IFormHabanero form) { }
+
+    private void SetOrderItemsCollection()
+    {
+        PartsOrder selectedPartsOrder = (PartsOrder)_grid.SelectedBusinessObject;
+        if (selectedPartsOrder != null)
+            _orderItemsGrid.SetBusinessObjectCollection(selectedPartsOrder.OrderItems);
+        _orderItemsGrid.BusinessObjectCreator = new OrderItemCreator(selectedPartsOrder);
+    }
+}
+}</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+
+<p>The form controller must be updated, and you can see here how to call the
+orders form.</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeclass" width="100%">
+      <b><font size="2">OrdersForm.cs</font></b>
+    </td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%">
+      <pre><code>using Replace_it.BO;
+
+...
+
+public const string CUSTOMER_ORDERS = "Customer Orders";
+public const string SUPPLIER_ORDERS = "Supplier Orders";
+
+...
+
+case CUSTOMER_ORDERS:
+    formCtl = new OrdersForm&lt;CustomerOrder&gt;();
+    break;
+case SUPPLIER_ORDERS:
+    formCtl = new OrdersForm&lt;SupplierOrder&gt;();
+    break;</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+
+<p>Finally, update the ProgramForm with two new menu items to access customer
+and supplier orders.</p>
+
+<p>When run, the application should appear something like the following:</p>
+
+<p align="center">
+<img src="HabaneroTutorial_files/app-custorder.jpg"></p>
+
+<p>Note that typing a value into the part code field will crash the application, 
+because it won't be a complete Guid.&nbsp; Just hang tight on that one - we'll 
+resolve that in the next section by adding lookup lists and a combo box.</p>
+		
+		<br><br><br><br>
+	
+		<a name="ui"></a>
+		<hr>
+		<table style="border-collapse: collapse;" id="AutoNumber1" bgcolor="#f2f2f2" border="1" bordercolor="#cccccc" cellpadding="6" cellspacing="0" width="100%">
+		  <tbody><tr>
+		    <td bgcolor="#2f2f84" width="100%"><b>
+		    <font color="#ffffff" size="4" face="Verdana">
+		    	User Interface Enhancements
+		    </font></b></td>
+		  </tr>
+		</tbody></table>
+		<br>
+		<p>Habanero has extensive support for generating user interfaces and provides
+access to these controls so that additional behaviour can be assigned.  In this
+section we'll look at some particular features available to the developer, along
+with techniques used to achieve common tasks.</p>
+
+<p class="tuthead"><span class="tutcat">Adding Lookup-Lists in a ComboBox</span></p>
+
+<p>In the previous section we looked at how you can specify a lookup-list using
+relationships.  A lookup-list is simply a set of options that the user can
+select from for a particular field, such as a list of countries or a list
+of address contacts.  Habanero allows you to provide values for a lookup-list
+from a pipe-separated string (eg. gender options: "M|F") or from a database.  These lookup-lists are
+defined under the property in the class definitions.</p>
+
+<p>Combo-boxes in a user interface are populated from three types of lookup-lists: BusinessObjectLookupList, 
+which creates a list from a set of loaded business objects, 
+DatabaseLookupList, which builds a list from a given sql 
+statement, and SimpleLookupList, where a static collection can be specified in 
+the class definitions.</p>
+
+<p>A lookup-list comprises a set of display-value pairs.&nbsp; The display part 
+is shown to the user and the value part is the value actually stored.
+The BusinessObjectLookupList provides the display part from the class's ToString() method, while
+the DatabaseLookupList requires a value field and a display field in the select part of the Sql string.</p>
+
+<p>To implement a combo-box for the ComputerPart in OrderItem, we'll first amend the class definitions.
+In FireStarter, select OrderItem, change to the "Properties" tab, select ComputerPartID and go to the
+"Lookup List" tab, where you can select the list type as "Business Object":</p>
+
+<p align="center">
+<img src="HabaneroTutorial_files/fs-orderitem-boll.gif">
+</p>
+
+<p>You could also have chosen the "Database" type, in which case you would have provided a sql string
+as <i>"select ComputerPartID, PartCode from computerpart order by PartCode"</i>.</p>
+
+<p>We also need to indicate that the control type to display the computer part will be a ComboBox.
+Set this under the "UIs" tab:</p>
+
+<p align="center">
+<img src="HabaneroTutorial_files/fs-orderitem-ui.jpg">
+</p>
+
+<p>Finally, we'll need a revised ToString() method in the ComputerPart class which describes how
+to display an instance in the combo-box.  Be sure to add this method in the ComputerPart.cs file
+and not the ComputerPart.Def.cs file.</p>
+
+<font size="2" face="Verdana,Arial,Helvetica">
+
+    </font><table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+
+<td class="codeitself" width="100%">
+    <pre><code>public override string ToString()
+{
+    return PartCode + " - " + Description;
+}</code></pre>
+    </td>
+    
+  </tr>
+</tbody></table>
+
+<p>This should now run successfully, with the string display showing correctly in the grids and the combo-box,
+but the Guid stored in the database.</p>
+
+<p class="tuthead"><span class="tutcat">Fulfilling Orders</span></p>
+
+<p>Where the Delivered field is set to false, we can now dispatch or receive orders 
+and automatically amend the stock quantities.  One way of doing this is to add a button
+on each orders grid. Add the following code at the bottom of the OrdersForm constructor:</p>
+
+<font size="2" face="Verdana,Arial,Helvetica">
+
+    </font><table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+
+<td class="codeitself" width="100%">
+    <pre><code>if (typeof(T) == typeof(CustomerOrder))
+{
+    _grid.Buttons.AddButton("Dispatch", new EventHandler(DispatchClickedHandler));
+}
+else if (typeof(T) == typeof(SupplierOrder))
+{
+    _grid.Buttons.AddButton("Receive", new EventHandler(ReceiveClickedHandler));
+}</code></pre>
+</td>
+    
+  </tr>
+</tbody></table>
+
+<p>The DispatchClickedHandler and ReceiveClickedHandler are implemented further along. The parts 
+stock is loaded and we check that all of the stock is available before 
+changing stock levels. Note that we call Save() on the objects in 
+order to persist the changes to the database, otherwise our stock will still be 
+the same when we restart the application.</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+
+    <td class="codeitself" width="100%">
+    <pre><code>private void DispatchClickedHandler(object sender, EventArgs e)
+{
+    PartsOrder selectedOrder = (PartsOrder)_grid.SelectedBusinessObject;
+    if (selectedOrder.Delivered.Value || selectedOrder.OrderItems.Count == 0)
+        return;
+
+    BusinessObjectCollection&lt;ComputerPart&gt; stockAvailable = new BusinessObjectCollection&lt;ComputerPart&gt;();
+    stockAvailable.LoadAll();
+
+    foreach (OrderItem orderItem in selectedOrder.OrderItems)
+    {
+        ComputerPart matchingPart = stockAvailable.FindByGuid(orderItem.ComputerPartID.Value);
+        if (matchingPart == null)
+        {
+            MessageBox.Show("Could not find some of the stock on order. Please double-check.");
+            return;
+        }
+            
+        if (orderItem.Quantity &gt; matchingPart.Stock)
+        {
+            MessageBox.Show("Insufficient stock of part: " + matchingPart.PartCode);
+            return;
+        }
+    }
+
+    foreach (OrderItem orderItem in selectedOrder.OrderItems)
+    {
+        ComputerPart matchingPart = stockAvailable.FindByGuid(orderItem.</code><font size="2" face="Verdana,Arial,Helvetica"><code>ComputerPartID.Value</code></font><code>);
+        matchingPart.Stock -= orderItem.Quantity;
+        matchingPart.Save();
+    }
+    MessageBox.Show("Stock dispatched and stock levels amended");
+    selectedOrder.Delivered = true;
+    selectedOrder.Save();
+}
+
+private void ReceiveClickedHandler(object sender, EventArgs e)
+{
+    PartsOrder selectedPartsOrder = (PartsOrder)_grid.SelectedBusinessObject;
+    if (selectedPartsOrder.Delivered.Value || selectedPartsOrder.OrderItems.Count == 0)
+        return;
+
+    BusinessObjectCollection&lt;ComputerPart&gt; stockAvailable = 
+        new BusinessObjectCollection&lt;ComputerPart&gt;();
+    stockAvailable.LoadAll();
+
+    foreach (OrderItem orderItem in selectedPartsOrder.OrderItems)
+    {
+        ComputerPart matchingPart = stockAvailable.FindByGuid(orderItem.ComputerPartID.Value);
+        if (matchingPart == null)
+        {
+            MessageBox.Show("Could not find some of the stock on order. Please double-check.");
+            return;
+        }
+    }
+
+    foreach (OrderItem orderItem in selectedPartsOrder.OrderItems)
+    {
+        ComputerPart matchingPart = stockAvailable.FindByGuid(orderItem.ComputerPartID.Value);
+        matchingPart.Stock += orderItem.Quantity;
+        matchingPart.Save();
+    }
+    MessageBox.Show("Stock received and stock levels amended");
+    selectedPartsOrder.Delivered = true;
+    selectedPartsOrder.Save();
+}</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+
+<p>At this stage we have a basic stock management system.&nbsp; Using Habanero 
+we've achieved this with very little contact with either the user interface 
+designer or 
+the database connections.</p>
+
+<p class="tuthead"><span class="tutcat">Data Validation &amp; Property Rules</span></p>
+
+<p>This is also a good time to introduce property rules (also known as validation). In our parts 
+business, we obviously don't want a negative stock, so we can create a rule that 
+prevents negative integers.&nbsp; A rule can be a combination of smaller rules, 
+so that ranges can be created for instance.&nbsp; Using FireStarter, the rule can be assigned for
+the Stock property of ComputerPart.  Similar rules could of course be designed for a wide
+range of numbers, such as the Cost and Price.</p>
+
+<p align="center">
+<img src="HabaneroTutorial_files/fs-compart-rule.gif">
+</p>
+
+<p class="tuthead"><span class="tutcat">Better Number Control</span></p>
+
+<p>While our user interface is functional, it's not very robust, and an 
+experimental user could quickly bring our application down to earth by entering strange
+characters into some of our controls.
+We can exercise some control over our numbers input by using NumericUpDown controls.</p>
+
+<p>The control types to be used in the user interface for the ComputerPart can be amended in
+FireStarter as before, except that the mapper type needs to be specified.  The mapper is a
+Habanero component used to map data back and forth between the object and the UI control.
+When you specify the NumericUpDown control and leave the mapper as "Auto-Select",
+the mapper defaults to NumericUpDownIntegerMapper.  This is fine
+for the Stock property, but for Cost and Price you should manually specify the mapper as
+NumericUpDownMoneyMapper, which assigns two decimal places.</p>
+
+<p class="tuthead"><span class="tutcat">Filtering Grid Displays</span></p>
+
+<p>Quite clearly, our grid displays could grow rather large as we begin to add 
+computer parts or customer orders.&nbsp; There are several ways to limit the 
+number of objects being shown.&nbsp; We could specify load criteria as a 
+parameter in each collection's Load() command.&nbsp; Another simple way is to 
+add a filter control, which filters out the rows to display, so that only those 
+rows that meet a requirement are shown.</p>
+
+<p>Looking first at the computer parts, how you filter your values will depend 
+on how you distinguish your parts.&nbsp; For instance, Replace IT uses a part 
+code made up of three letters which indicate the type of product and four 
+numbers which serve as a sub-code for that type.&nbsp; For example, one of the 
+optical mice might have a code of MOU1534.&nbsp; So our solution simply 
+categorises items by their three first letters, doing a non-strict string 
+comparison.</p>
+
+<p>The Habanero FilterControl comes attached with the GridControl, but can also
+be deployed independently.  You simply need to assign a set of filter controls
+and specify which columns they filter out.  The GridControl automatically detects
+when a filter control has been modified by the user and filters the grid immediately.
+Keep in mind that the this filter only works on a pre-loaded collection, so your
+grid will initially contain the full collection before filtering.
+</p>
+
+<p>In this example, the AddStringFilterComboBox method
+creates a combo-box that searches for all objects with that given string
+within the specified property.  There is also a free-type TextBox filter to search
+on the Description field.
+Add the following code at the bottom of the ComputerPartsForm constructor:</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeitself" width="100%">
+    <pre><code>string[] options = { "CDR", "KEY", "MOU", "HDD", "DVD", "MBD", "FDD", "CAS", "MON", "VID" };
+
+grid.FilterControl.AddStringFilterComboBox("Category:", "PartCode", new ArrayList(options), false);
+grid.FilterControl.AddStringFilterTextBox("Description:", "Description");</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+
+<p>This should create the following interface:</p>
+
+<p align="center">
+<img src="HabaneroTutorial_files/app-compart-filter.jpg">
+</p>
+
+<p>It would be nice to do something similar with orders, where we place a checkbox that
+allows us to show only those orders that are still to be delivered.  However, the
+Habanero checkbox filter is a strict "true" or "false" check, and doesn't provide inclusivity.
+In other words, a ticked checkbox should show only "false" values, and an unticked
+checkbox should show both "true" and "false" values, not just "true" values.  The
+better approach here is a custom implementation, to be added at the bottom of the
+OrdersForm constructor:</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeitself" width="100%">
+    <pre><code>ICheckBox checkBox = GlobalUIRegistry.ControlFactory.CreateCheckBox();
+checkBox.Text = "Undelivered orders only";
+checkBox.CheckedChanged += delegate
+   {
+       BusinessObjectCollection&lt;T&gt; col = new BusinessObjectCollection&lt;T&gt;();
+       if (checkBox.Checked) col.Load("Delivered = 'false'", "");
+       else col.LoadAll();
+       _grid.SetBusinessObjectCollection(col);
+   };
+manager.AddControl(checkBox, BorderLayoutManager.Position.North);</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+
+
+
+
+		
+		<br><br><br><br>
+	
+		<a name="version"></a>
+		<hr>
+		<table style="border-collapse: collapse;" id="AutoNumber1" bgcolor="#f2f2f2" border="1" bordercolor="#cccccc" cellpadding="6" cellspacing="0" width="100%">
+		  <tbody><tr>
+		    <td bgcolor="#2f2f84" width="100%"><b>
+		    <font color="#ffffff" size="4" face="Verdana">
+		    	Version Control
+		    </font></b></td>
+		  </tr>
+		</tbody></table>
+		<br>
+		<p class="tuthead"><span class="tutcat">Updating Database Versions</span></p>
+
+
+
+<p>When you start producing applications for business and industry, you'll 
+often find requests for new features and changes streaming in.&nbsp; Adding a 
+new database field is a multi-step process.&nbsp; When it comes to changing the 
+application, Habanero helps to simplify the process, so that you need only 
+change the class definitions, the class implementation and the user interface 
+(if not entirely defined in the class definitions).&nbsp; The result of those 
+changes is a new set of EXE's or DLL's that can simply replace what the client 
+has already.</p>
+
+
+
+<p>When it comes to database changes, however, you can't simply replace an 
+entire working database.&nbsp; Usually, you'd have to manually run a set of Sql 
+scripts to add or remove columns.&nbsp; Updating one database is manageable, but 
+multiple installations can be both tedious and prone to error - if you forget 
+the update, your application will crash.&nbsp; Habanero can automate this 
+database update process for 
+you using the IApplicationVersionUpgrader interface and the DBMigrator class, which will 
+cause the application itself to update the database automatically, so you only need to replace the application.</p>
+
+<p class="tuthead"><span class="tutcat">Database Versioning in Practice</span></p>
+
+<p>Back at Replace IT, we recently installed the latest version of the new system and it's 
+been running smoothly.&nbsp; The databases have rapidly become populated with 
+new entries.&nbsp; However, the accounts department have found the CustomerOrder 
+form a little bit lacking - they're now asking for an address column.</p>
+
+
+
+<p>We have already covered the change management process earlier on, but we'll change the
+process a bit now to explain database version control.  Instead of adding the database
+field and doing a class definition regeneration, simply add the new Address field
+straight into the class definitions for CustomerOrder (either manually or through FireStarter).  If you're
+generating user interfaces, you'll also want to amend the UI definitions so that the
+Address is shown in the editing form for the CustomerOrder.</p>
+
+<p>Next we'll implement IApplicationVersionUpgrader in the root project, which will carry out a 
+version check every time it runs.&nbsp; If the database version is out-of-date, 
+it will carry out any migration instructions to get it up to speed.&nbsp; You'll probably need
+to add a reference to the Habanero.DB.dll in your project. Here 
+is the new class:</p>
+
+
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeclass" width="100%">
+      <b><font size="2">Replace_itVersionUpgrader.cs</font></b>
+    </td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%">
+      <pre><code>using Habanero.Base;
+using Habanero.DB;
+
+namespace Replace_it
+{
+    public class Replace_itVersionUpgrader : IApplicationVersionUpgrader
+    {
+        public void Upgrade()
+        {
+            DBMigrator migrator = new DBMigrator(DatabaseConnection.CurrentConnection);
+            migrator.SetSettingsStorer(GlobalRegistry.Settings);
+
+            migrator.AddMigration(1, "ALTER TABLE CustomerOrder ADD COLUMN Address VARCHAR(200);");
+
+            migrator.MigrateToLatestVersion();
+        }
+    }
+}</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+
+
+
+<p>To extend this for each version change, simply add more AddMigration() calls, 
+and increment the version number each time.&nbsp; We'll need to point to this class right 
+at the start of our application, by adding another line in Program.cs:</p>
+
+
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeclass" width="100%">
+      <font size="2"><b>Program.cs</b> (Amended)</font>
+    </td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%">
+      <pre><code>HabaneroAppWin mainApp = new HabaneroAppWin("Replace_it", "v1.0");
+mainApp.ApplicationVersionUpgrader = new Replace_itVersionUpgrader();
+if (!mainApp.Startup()) return;</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+
+
+
+<p>There's one final step: creating the database table that will store the 
+version number.&nbsp; HabaneroApp supports both 
+DatabaseSettings and ConfigFileSettings, but the latter can't be 
+written to, so we'll need a database table called "settings", with the following 
+design:</p>
+
+
+
+<p align="center">
+<img src="HabaneroTutorial_files/database-settings.gif" border="0" width="651" height="101"></p>
+
+
+
+<p>As soon as you've created the table, add a single row with the SettingName as 
+"DATABASE_VERSION" and the SettingValue as "0".&nbsp; Our application should run 
+now, and a quick check on the database should show a new field for the address.&nbsp; 
+Running the application again should make no change.</p>
+
+		
+		<br><br><br><br>
+	
+		<a name="lookuplists"></a>
+		<hr>
+		<table style="border-collapse: collapse;" id="AutoNumber1" bgcolor="#f2f2f2" border="1" bordercolor="#cccccc" cellpadding="6" cellspacing="0" width="100%">
+		  <tbody><tr>
+		    <td bgcolor="#2f2f84" width="100%"><b>
+		    <font color="#ffffff" size="4" face="Verdana">
+		    	Managing Lookup-Lists
+		    </font></b></td>
+		  </tr>
+		</tbody></table>
+		<br>
+		<p>In the previous section on User Interface Enhancements, we introduced
+the concept of a lookup-list.  Basically, a lookup-list provides a set of
+options for a control like a combobox to display.  Sometimes your lookup-list
+will be a fixed list that doesn't change, as in the months of the
+year.  Other times you'll want the options to be dynamic so that some
+administrator can edit or add to them over time, such as the countries
+of the world.  Then again, you might
+allow the case where the list grows as the final users themselves add
+items as they need them, such as a list of customers.</p>
+
+<p>Because of its emphasis on UI generation, Habanero is well-designed to cope
+with lookup-lists.  We have already discussed how to implement the lists,
+but you may also want to be able to manage all the lookup-lists centrally.</p>
+
+<p class="tuthead"><span class="tutcat">Adding the Computer Part Types</span></p>
+
+Once our collection of computer parts starts to grow, we'll need a way of
+categorising them.  To achieve this we'll simply create a new dynamic
+lookup-list that stores all the categories in a table.  Here's the simple
+database table design:
+
+<p align="center">
+<img src="HabaneroTutorial_files/database-parttype.gif" border="0"></p>
+
+<p>In ComputerPart, we'll need a new column for ComputerPartTypeID that
+will hold the primary key of the computer part type.  A foreign key is
+useful to check data integrity and for Firestarter to generate the
+relationships.</p>
+
+<p align="center">
+<img src="HabaneroTutorial_files/database-part_typefk.gif" border="0"></p>
+
+<p class="tuthead"><span class="tutcat">Adding the Class Definitions</span></p>
+
+<p>Go ahead and generate the class definitions for ComputerPartType
+and ComputerPart.  The three properties in ComputerPartType will be a
+Guid and two strings.  For the ComputerPartTypeID in ComputerPart,
+set its lookup-list property to BusinessObjectLookupList.
+There should be two relationships: a single
+relationship from ComputerPart to ComputerPartType and a multiple
+relationship from ComputerPartType to ComputerPart.  Also remember to add
+a grid UI definition for ComputerPartType.  In ComputerPart, add the
+ComputerPartType in the form and grid - Firestarter should automatically
+convert the type to a ComboBox.</p>
+
+<p><b>NOTE:</b> Be aware that
+with Firestarter not detecting inheritance, when you regenerate, the existing
+inheritance structure might become a little corrupted.  You can either choose to auto-generate
+the classes and repair the inheritance structure, or you can manually create
+the ComputerPartType class, properties, relationships and UI changes in FireStarter.
+Either way, it's best to use FireStarter to manage your definitions and code
+generation rather than editing the XML yourself, since that will save having to
+edit both the XML file and the classes in the code.</p>
+
+<p class="tuthead"><span class="tutcat">Adding the Classes</span></p>
+
+<p>When you regenerate your project, the new ComputerPartType class should appear.
+If not, reload Visual Studio.  Importantly, you need to add a ToString() method to
+the ComputerPart class, which determines what string will be shown to the user in the
+ComboBox dropdown.  Displaying the Name property of the type is probably best.</p>
+
+<p class="tuthead"><span class="tutcat">Implementing a Lookup-List Editor</span></p>
+
+<p>Our changes are almost ready to run, except for the fact that there are no
+computer part types available to choose from.  We could easily build a new form with a grid to add
+some types to choose from, but you can imagine that we'd need a new form every
+time we add a new lookup-list.  If you've had any experience with applications like
+these, you'll know that you use lookup-lists for a wide range of options, including
+customers, countries, cities, genders and many others.</p>
+
+<p>A cleaner way of managing all your lookup-lists centrally is to use Habanero's
+StaticDataEditor, which provides a treeview on the left with all the available
+lookup-lists, and an editable grid on the right which allows the users to add
+new items.  The implementation is really simple:</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeclass" width="100%">
+      <b><font size="2">Replace_itLookupEditor.cs</font></b>
+    </td>
+  </tr>
+  <tr>
+    <td class="codeitself" width="100%">
+      <pre><code>using Habanero.BO.ClassDefinition;
+using Habanero.UI.Base;
+using Habanero.UI.Win;
+using Replace_it.BO;
+
+namespace Replace_it.UI
+{
+public class Replace_itLookupEditor : UserControlWin, IFormControl
+{
+    public Replace_itLookupEditor(IControlFactory controlFactory)
+    {
+        IStaticDataEditor staticDataEditor = controlFactory.CreateStaticDataEditor();
+        BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(this);
+        layoutManager.AddControl(staticDataEditor, BorderLayoutManager.Position.Centre);
+        staticDataEditor.AddSection("Lookup lists");
+        staticDataEditor.AddItem("Computer Part Types", ClassDef.ClassDefs[typeof(ComputerPartType)]);
+    }
+
+    public void SetForm(IFormHabanero form) {}
+}
+}</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+
+<p>As you can see, it's easy to add new types to this editor - simply use the AddItem method.
+As before you'll need to add this form to the Form Controller and include a main menu
+item to access it.</p>
+
+<p align="center">
+<img src="HabaneroTutorial_files/app-lookupeditor.jpg">
+</p>
+
+<p class="tuthead"><span class="tutcat">Adding Options on the Fly</span></p>
+
+<p>Habanero also provides a feature where users can right-click
+on a ComboBox to add options immediately.  This service requires a UI form definition to
+have been created in the XML class definitions.</p>
+		
+		<br><br><br><br>
+	
+		<a name="classdefs"></a>
+		<hr>
+		<table style="border-collapse: collapse;" id="AutoNumber1" bgcolor="#f2f2f2" border="1" bordercolor="#cccccc" cellpadding="6" cellspacing="0" width="100%">
+		  <tbody><tr>
+		    <td bgcolor="#2f2f84" width="100%"><b>
+		    <font color="#ffffff" size="4" face="Verdana">
+		    	Appendix I: Class Definitions
+		    </font></b></td>
+		  </tr>
+		</tbody></table>
+		<br>
+		<p><b>XML Class Definitions</b></p>
+<p>This section covers a list of explanations, possible options and 
+limitations for all class definitions as listed in the class definitions XML 
+file (usually called "classdefs.xml").&nbsp; The class definitions are 
+required in order for Habanero to run, and you need to include the definitions 
+for at least one valid class.</p>
+<p>This is a sample structure for a class definition file.&nbsp; Note that the 
+order of elements is enforced as per the Document Type Definition (DTD).&nbsp; See the 
+specifications further along for specific options and limitations.</p>
+<table style="border-collapse: collapse;" id="AutoNumber4" border="1" bordercolor="#808080" cellpadding="4" cellspacing="0" width="100%">
+  <tbody><tr>
+    <td bgcolor="#efeacb" width="100%"><font size="2"><b>Sample</b></font><b><font size="2"> Structure:</font></b></td>
+  </tr>
+  <tr>
+    <td bgcolor="#f9f9f0" width="100%">
+    <pre><code>&lt;classes&gt;
+&lt;class name="class_name" assembly="assembly_name"&gt;
+  &lt;superClass class="class_inherited_from" assembly="its_assembly" /&gt;
+
+  &lt;property name="property_name" /&gt;
+  &lt;property name="property_name" type="Guid" compulsory="true"&gt;
+    &lt;rule name="rule name" message="message for user if rule broken" /&gt;
+      &lt;add key="min" value="0" /&gt;
+      &lt;add key="max" value="300" /&gt;
+    &lt;/rule&gt;
+    &lt;databaseLookupList sql="select display_field, value_field from table_name" /&gt;
+  &lt;/property&gt;
+
+  &lt;key name="keydef name" message="message to user" ignoreIfNull="true"&gt;
+    &lt;prop name="property_name" /&gt;
+  &lt;/key&gt;
+
+  &lt;primaryKey&gt;
+    &lt;prop name="primary_key_name" /&gt;
+  &lt;/primaryKey&gt;
+
+  &lt;relationship name="rel_name" type="multiple" relatedClass="class" relatedAssembly="assembly"&gt;
+    &lt;relatedProperty property="related_prop_name" relatedProperty="related_prop_name" /&gt;
+  &lt;/relationship&gt;
+
+  &lt;ui&gt;
+    &lt;grid&gt;
+      &lt;column property="property_name" /&gt;
+      &lt;column heading="column_heading" property="property_name" width="100" /&gt;
+    &lt;/grid&gt;
+    &lt;form height="400" width="450" heading="edit_form_heading"&gt;
+      &lt;tab name="form_name"&gt;
+        &lt;columnLayout width="350"&gt;
+          &lt;field property="property_name" /&gt;
+        &lt;/columnLayout&gt;
+        &lt;columnLayout&gt;
+          &lt;field label="label" property="prop_name" type="ComboBox" mapperType="ListComboBoxMapper"&gt;
+            &lt;parameter name="options" value="F|M" /&gt;
+            &lt;trigger target="prop_name" conditionValue="value" action="enable" value="false" &gt;
+          &lt;/field&gt;
+        &lt;/columnLayout&gt;
+      &lt;/tab&gt;
+      &lt;tab name="form_name2"&gt;
+        &lt;field label="label" property="prop_name" type="TextBox" editable="false" /&gt;
+      &lt;/tab&gt;
+    &lt;/form&gt;
+  &lt;/ui&gt;	
+&lt;/class&gt;
+&lt;/classes&gt;</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+<p>Here follows a list of all the class definition elements.&nbsp; For 
+clarification, "attribs" means attributes and  the default settings are 
+in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
+<font size="2" face="Verdana,Arial,Helvetica">
+
+  	</font><font size="2" face="Verdana,Arial,Helvetica">
+
+    </font><table style="border-collapse: collapse;" id="AutoNumber4" border="1" bordercolor="#808080" cellpadding="5" cellspacing="0" width="100%">
+  <tbody><tr>
+
+    <td colspan="2" bgcolor="#d7ebf4" width="100%"><b>Class Definition 
+    Specifications<font size="2"><br>
+&nbsp;</font></b><table style="border-collapse: collapse;" id="AutoNumber8" border="0" bordercolor="#111111" cellpadding="0" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td width="25%">
+
+<font size="2" face="Verdana,Arial,Helvetica">
+
+        <font size="2"><a href="#add">add</a></font><br>
+</font>
+
+        <font size="2">
+        <a href="#businessObjectLookupList">businessObjectLookupList</a><br>
+        <a href="#class">class</a><br>
+        <a href="#classes">classes</a></font><br>
+
+<font size="2" face="Verdana,Arial,Helvetica">
+
+        <font size="2">
+        <a href="#column">column</a></font></font><br>
+
+<font size="2" face="Verdana,Arial,Helvetica">
+
+        <font size="2" face="Verdana,Arial,Helvetica"><a href="#columnLayout">columnLayout</a></font></font></td>
+        <td width="25%">
+
+<font size="2" face="Verdana,Arial,Helvetica">
+
+        <font size="2">
+        <a href="#databaseLookupList">databaseLookupList</a><br>
+        <a href="#field">field</a></font><br>
+        <font size="2"><a href="#form">form</a><br>
+        <a href="#grid">grid</a></font><br>
+<a href="#item">item</a><br>
+
+        <font size="2" face="Verdana,Arial,Helvetica">
+        <a href="#key">key</a></font></font></td>
+        <td width="25%">
+
+<font size="2" face="Verdana,Arial,Helvetica">
+
+        <a href="#parameter">parameter</a><font size="2"><br>
+        <a href="#primaryKey">primaryKey</a></font></font><br>
+
+<font size="2" face="Verdana,Arial,Helvetica">
+
+        <font size="2">
+        <a href="#prop">prop</a></font><br>
+        <font size="2"><a href="#property">property</a><br>
+        <a href="#relationship">relationship</a></font></font><br>
+        <font size="2">
+        <a href="#relatedProperty">relatedProperty</a></font></td>
+        <td valign="top" width="25%">
+        <font size="2" face="Verdana,Arial,Helvetica"><a href="#rule">rule</a><br>
+        <a href="#simpleLookupList">simpleLookupList</a><br>
+        <a href="#superClass">superClass</a></font><font size="2"><br>
+        <a href="#tab">tab</a><br>
+        <a href="#trigger">trigger</a><br>
+        </font><font size="2" face="Verdana,Arial,Helvetica">
+        <a href="#ui">ui</a></font></td>
+      </tr>
+    </tbody></table>
+    </td>
+  </tr>
+  <tr>
+    <td class="specclass" width="17%">
+    <b><a name="classes" class="specclasslink">classes</a> </b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">The root element of the xml document. Contains one 
+        class element for each class/table.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">class (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">-</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+  
+  <tr>
+    <td class="specclass">
+    <b><a name="class" class="specclasslink">class</a> </b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Contains a definition for each class/table.&nbsp; 
+        Holds property definitions, primary key definitions, relationships and 
+        how the data is displayed in the user interface.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">classes</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">property (1..*)<br>
+        primaryKey (1)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">superClass (1)<br>
+        key (1..*)<br>
+        relationship (1..*)<br>
+        ui (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>name</b> (name of the class in the assembly/project)<br>
+        <b>assembly</b> (name of the assembly/project)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>table</b> (table name in database, if omitted then
+        the table name is assumed to be the class name)<br>
+        <b>displayName</b> (the text to use in labels or headings where this class is shown or edited)<br>
+        </td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+  <tr>
+  	<td class="specclass">
+    <b><a name="superClass" class="specclasslink">superClass</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Indicates which class this class inherits from and 
+        the type of inheritance used. ClassTableInheritance uses one database 
+        table per class in the inheritance structure. SingleTableInheritance 
+        maps all fields of all classes of an inheritance structure into a single 
+        table. ConcreteTableInheritance uses a table for each concrete class in 
+        the inheritance hierarchy.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">class</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>class</b> (the class name from which the class 
+        inherits)<br>
+        <b>assembly</b> (the assembly/project containing the super-class)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>orMapping</b> =<i>ClassTableInheritance</i>/SingleTableInheritance/ConcreteTableInheritance 
+        (the type of inheritance used)<br>
+        <b>id</b> (in ClassTableInheritance, the property in the child class that has a 
+        copy of the parent's ID, use empty string if child has no primary key and just inherits parent's ID,
+        null value assumes child has a field with the name of the parent's ID that is not the child's ID)<br>
+        <b>discriminator</b> (in SingleTableInheritance, sets the column in the parent's db table
+        that holds the type of the class in that row)
+        </td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="property" class="specclasslink">property</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Defines an individual property or field name in a 
+        class.&nbsp; Specifies what the data type is, whether there is a 
+        specific list of options to choose from or whether there are any property rules or 
+        limitations on the property values. At the very least, the property to 
+        be used for the primary key definition needs to be defined.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">class</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">rule (1)<br>
+        databaseLookupList (1)<br>
+        businessObjectLookupList (1)<br>
+        simpleLookupList (1)</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>name</b> (the name of the property as listed in the 
+        code)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>type</b> =<i>String</i>/Guid/Int32/Boolean/Decimal/DateTime/etc (the data 
+        type at code level, standard names like 'int' are also valid, you can add your own types if desired, 
+        Habanero.Util also provides LongText and ByteString to convert Clobs and 
+        Blobs to strings)<br>
+        <b>assembly</b> =<i>System</i> (the assembly to which the property type belongs)<br>
+        <b>databaseField</b> (if the field name is different to the property name)<br>
+        <b>default</b> (any default value to be assigned)<br>
+        <b>compulsory</b> =true/<i>false</i> (whether assigning a value is compulsory, 
+        will make the field's label bold and provide error messaging to the user 
+        if not completed)<br>
+        <b>displayName</b> (the text to use in labels or headings where this value is shown or edited)<br>
+        <b>description</b> (the text to use where additional information is shown about the property, such
+        as a tooltip)<br>
+        <b>keepValuePrivate</b> (masks the value in a user control with the standard password mask character)<br>
+        <b>readWriteRule</b> =<i>ReadWrite/</i>ReadOnly/WriteOnce/WriteNotNew/WriteNew 
+        (limitations on how often the value can be read or written to, see the API for more info)<br>
+        <b>auto-incrementing</b> =true/<i>false</i> 
+        (whether this property is an auto-incrementing primary key, isObjectID must
+        be false on the primary key)<br>
+        <b>length</b> (for strings, the maximum length the string can be)
+        </td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	  	<td class="specclass">
+    <b><a name="rule" class="specclasslink">rule</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Sets specific rules that a string value must 
+        adhere to.&nbsp; This element holds the name of the rule and a message 
+        to display to the user if the rule is broken.&nbsp; A single rule can 
+        therefore be a combination of several cases.&nbsp; You can also add 
+        rules of your own by creating a class that inherits from 
+        Habanero.BO.PropRuleBase, and specifying this class here. See the 'add' 
+        element for a list of rules currently available.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">property</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">add (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>name</b> (the name of the rule, for the user's 
+        reference)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>message</b> (to display to the user if the rule 
+        is broken, if this is left out, a default explanation will be provided)<br>
+        <b>class</b> (a class that carries out checking against a custom rule)<br>
+        <b>assembly</b> (the assembly holding the above class)</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	  	<td class="specclass">
+    <b><a name="add" class="specclasslink">add</a> </b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">A key-value pair that sets a single rule that the 
+        property value must adhere 
+        to.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">rule</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>key</b> (the name of the rule, eg. "max")<br>
+        <b>value</b> (the value applicable to the rule, eg. "300")
+        <br><br>
+        The following options are available, depending on the property type you 
+        specified:<br><br>
+        <table style="border-collapse: collapse;" id="AutoNumber7" class="options" border="1" bordercolor="#c0c0c0" cellspacing="0" width="100%">
+          <tbody><tr>
+            <td class="options" width="100">string</td>
+            <td class="options">minLength (minimum number of characters)<br>
+            maxLength (maximum number of characters)<br>
+            patternMatch (a regular expression to match to)</td>
+          </tr>
+          <tr>
+            <td class="options">DateTime</td>
+            <td class="options">min (earliest date allowed)<br>
+            max (latest date allowed)</td>
+          </tr>
+          <tr>
+            <td class="options">decimal/int</td>
+            <td class="options">min<br>
+            max</td>
+          </tr>
+          </tbody></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">-</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	  	<td class="specclass">
+    <b><a name="databaseLookupList" class="specclasslink">databaseLookup-<br>List</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Provides a list of potential values for the property, using 
+        the objects loaded from the database with the given sql statement.&nbsp; 
+        Two fields must be provided to form a display-value pair - the first is the value to 
+        store and the second is the value to display to the user (eg. in a ComboBox or 
+        grid), which 
+        is useful when you are using Guids.&nbsp; The sql statement needs to be in the form of: "select 
+         
+        valueField, displayField 
+        from tableName".&nbsp; An order-by clause can also be appended.&nbsp; 
+        The class and assembly will seldom need to be specified.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">property</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>sql</b> (the select sql statement to load the objects 
+        to populate the list, use escape characters for symbols like &lt;,&gt;)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>timeout</b> =<i>10000</i> (the period in 
+        milliseconds after which the cached copy expires)<b><br>
+        class</b> (the class for the objects being loaded)<br>
+        <b>assembly</b> (the assembly/project for the objects being loaded)</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	  	<td class="specclass">
+    <b><a name="simpleLookupList" class="specclasslink">simpleLookupList</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Provides a list of potential values for the 
+        property.&nbsp; You can  specify a list of options in the 
+        "options" attribute, separated by pipes, and/or you can include  sets of 
+        display-value pairs in  "item" elements, that have the advantage of 
+        displaying a different value to the one actually stored (eg. store a 
+        Guid in the database, but display a string in a 
+        ComboBox or grid).</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">property</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">item (0..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>options</b> (a list of options, eg. 
+        "Male|Female|Not-specified")</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="item" class="specclasslink">item</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">A display-value pair  that serves as one 
+        option in a simpleLookupList.&nbsp; The display attribute appears to the user 
+        (eg. in the ComboBox or grid), while the value attribute is the value 
+        stored.&nbsp; This is a useful option when a Guid is being stored.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">simpleLookupList</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>display</b> (the value that will appear to the user in 
+        a form or grid)<br>
+        <b>value</b> (the value that will be stored for the property)
+        </td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">-</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	  	<td class="specclass">
+    <b><a name="businessObjectLookupList" class="specclasslink">businessObject-<br>LookupList</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Provides a list of potential values for the property, using 
+        the objects loaded from a particular business object type.  The primary key value
+        will be the actual value stored, while the 
+        value displayed to the user (eg. in the ComboBox or grid) will be that 
+        obtained from the object's ToString() method. You can also set criteria 
+        to limit which objects are loaded.&nbsp; This list is sorted by default, but you
+        can specify an alternative sort column or direction with the sort attribute.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">property</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>class</b> (the business object class  for the 
+        objects to be loaded)<br>
+        <b>assembly</b> (the assembly holding the above class)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>criteria</b> (a sql segment to be attached to a 
+        where-clause that limits which objects are loaded)<br>
+        <b>sort</b> (which property of the business object to sort on, format is: 
+        "property", "property asc", "property desc")
+        </td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+
+<td class="specclass">
+    <b><a name="key" class="specclasslink">key</a></b></td>
+    
+
+<td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Specifies a unique key for the class/table, 
+        which is a property or combination of properties which must be unique 
+        for each instance/row.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">class</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">prop (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>name</b> (a name that describes the key)<br>
+        <b>message</b> (to explain why a write operation violates the key, if 
+        not specified then a default message is provided)<br>
+        <b>ignoreIfNull</b> =true/<i>false</i> (whether to ignore the uniqueness 
+        check if any of the properties making up the key are null)</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+    
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="primaryKey" class="specclasslink">primaryKey</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Describes the primary key for the class, using  
+        properties that have been defined in the property elements. The "prop" 
+        sub-elements list the properties that the primary key is comprised of (a 
+        composite primary key will have more than one prop element).</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">class</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">prop (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>isObjectID</b> =<i>true</i>/false (whether this 
+        key has a single Guid property that is the object's ID, false for composite keys 
+        or non-Guids)</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="prop" class="specclasslink">prop</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Specifies the existing property definition being 
+        referred to in the composition of a primary key or alternate key</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">primaryKey, key</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>name</b> (the name of the existing property definition 
+        being referred to)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">-</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="relationship" class="specclasslink">relationship</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Describes a relationship between this class and 
+        another class (equivalent to foreign keys in a database). Note that the 
+        relationship is mapped between a particular property in one class and a 
+        primary key property in another class.&nbsp; For the delete action, 
+        DeleteRelated deletes all related objects when one is deleted, 
+        DereferenceRelated dereferences them instead, and Prevent prevents the 
+        object from being deleted when other objects related to it.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">class</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">relatedProperty (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>name</b> (the name of the relationship)<br>
+        <b>type</b> =single/multiple (if this class relates to one or many of the other 
+        class)<br>
+        <b>relatedClass</b> (the related class name)<br>
+        <b>relatedAssembly</b> (the assembly/project containing the related class)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>keepReference</b> =<i>true</i>/false 
+        (keep a reference in memory to the class, can set this to false if your 
+        application is very memory-intensive)<br>
+        <b>orderBy</b> (the field name(s) to append to the sql order-by clause)<br>
+        <b>deleteAction</b> =DeleteRelated/DereferenceRelated/<i>Prevent</i>/DoNothing (what action to take  when the related object is 
+        deleted)</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <a name="relatedProperty" class="specclasslink">
+    <b>relatedProperty </b></a></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Defines the properties on which relationship 
+        matching takes place.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">relationship</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>property</b> (the property in this class which relates to 
+        the other class)<br>
+        <b>relatedProperty</b> (the property in the other class being related to)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">-</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="ui" class="specclasslink">ui</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Defines how the class is displayed in user 
+        interfaces like grids and editing forms.&nbsp; If you will only use one 
+        set of UI definitions, you do not need to assign a "name" attribute.&nbsp; 
+        If you want to be able to choose between different sets of definitions 
+        at different times, assign different names and then use constructors in 
+        the IGridDataProvider implementations to choose the name of the 
+        definition to use.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">class</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">grid (1)<br>
+        form (1)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>name</b> =<i>default </i>(the name of the set of definitions)</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b>
+    <a name="grid" class="specclasslink">grid</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Defines how the class properties are displayed in 
+        a user interface grid, with one column element for each column 
+        to display.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">ui</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">column (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>sortColumn</b> (the column on which the grid is sorted, use
+        "PropertyName" or "PropertyName asc" or "PropertyName desc")</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="column" class="specclasslink">column</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Defines one column of data in a user interface 
+        grid.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">grid</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">parameter (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">
+        <b>property</b> (the name of the property being shown)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>heading</b> (the column heading as seen 
+        by the user, the property name will be used if this is not specified)<b><br>
+        type</b> =<i>DataGridViewTextBoxColumn </i>(the type of column to use, 
+        other standard types include DataGridViewCheckBoxColumn, DataGridViewComboBoxColumn, DataGridViewNumericUpDownColumn 
+        for decimals 
+        and DataGridViewDateTimeColumn, you can also specify custom types)<br>
+        <b>assembly</b> (of the control type, only specify this if you are using a custom 
+        type)<br>
+        <b>editable</b> =<i>true</i>/false (whether the property  can be edited 
+        directly on the grid, irrelevant if grid is read-only)<br>
+        <b>width</b> =<i>100</i> (in pixels)<br>
+        <b>alignment</b> =<i>left</i>/right/center/centre</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="form" class="specclasslink">form</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Defines how the class properties are displayed in 
+        a user interface editing form.&nbsp; Here you can list a set of tab, 
+        column or field elements, but not a combination of the three at the same 
+        level.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">ui</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">tab (1..*)<br>
+        columnLayout (1..*)<br>
+        field (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>title</b> (the window heading as it appears to 
+        the user)<br>
+        <b>width</b> =<i>300</i> (in pixels)<br>
+        <b>height</b> =<i>250</i> (in pixels)</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b>
+    <a name="tab" class="specclasslink">tab</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Creates a tab in the editing form window. Several 
+        tabs can be created, but if there is only one tab, then you don't need 
+        to include this element.&nbsp; Under this element you can have either 
+        columnLayout or field elements but not a combination of the two.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">form</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">columnLayout (1..*)<br>
+        field (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>name</b> (the name of the tab as it appears to the 
+        user)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">-</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass"><b>
+    <a name="columnLayout" class="specclasslink">columnLayout</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Holds a column of controls in an editing form.&nbsp; 
+        If you will only have one column, then you don't need to include this 
+        element.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">tab, form</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">field (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>width</b> (in pixels)</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b><a name="field" class="specclasslink">field</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Defines a control to edit a field/property in an editing form.&nbsp; 
+        "parameter" elements can be used to add further specifications for the 
+        control, and "trigger" elements can trigger a range of events (list all parameter elements
+        before triggers).  Note that there are default control types assigned when not explicitly
+        specified - these are determined by the UI environment of the ControlFactory.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">columnLayout, tab, form</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">parameter (1..*), trigger (1..*)</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue">
+        <b>property</b> (the property to edit)</td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom"><b>label</b> (the label to appear next to the 
+        control on the form, the property name will be used if this is not 
+        specified)<br>
+        <b>editable</b> =<i>true</i>/false<i><br>
+        </i><b>type</b> =<i>TextBox</i> (the class name of the type of 
+        control)<br>
+        <b>assembly</b> (the assembly of the control type)<br>
+        <b>mapperType</b> =<i>TextBoxMapper</i> (the class used to map the control 
+        to the business object property, Habanero provides mappers for the 
+        standard controls, you can leave this off for TextBox, ComboBox, 
+        CheckBox, DateTimePicker, ListView and NumericUpDown)<br>
+        <b>mapperAssembly</b> (specify this if you are using a custom mapper)<br>
+        <b>toolTipText</b> (the text to display in a tooltip for this control)
+        </td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  <tr>
+  	<td class="specclass">
+    <b>
+    <a name="parameter" class="specclasslink">parameter</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Adds additional definitions for a control being 
+        displayed in a form or grid, such as the number of decimal places to show.
+        There is no error-checking on unsupported types, so this is a fully
+        flexible system that can be used for any purpose you wish - simply use the
+        GetParameterValue method on UIFormField or UIGridColumn to access the value.
+        Parameter names are case-sensitive.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">field, column</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>name</b> (the name of the type of setting - see below 
+        for examples)<br>
+        <b>value</b> (the values to apply to the above setting - see below)<br>
+        <br>
+        The following options are available for a form field element:<br>
+        <font size="2">
+        <table style="border-collapse: collapse;" id="AutoNumber7" class="options" border="1" bordercolor="#c0c0c0" cellspacing="0" width="100%">
+          <tbody><tr>
+            <td class="options" width="100">options</td>
+            <td class="options">pipe-separated list of choices in a ComboBox 
+            (specify the mapperType as "ListComboBoxMapper")<br>
+            - eg. value="M|F"</td>
+          </tr>
+          <tr>
+            <td class="options">numLines</td>
+            <td class="options">number of lines in a TextBox</td>
+          </tr>
+          <tr>
+            <td class="options">alignment</td>
+            <td class="options">text alignment, only applies to TextBox and NumericUpDown, options
+            are: left, right, center and centre</td>
+          </tr>
+          <tr>
+            <td class="options">isEmail</td>
+            <td class="options">if so, user can double-click on a valid email and open in default 
+            mail client, value="true"</td>
+          </tr>
+          <tr>
+            <td class="options">colSpan</td>
+            <td class="options">the number of columns for the field control to 
+            span across</td>
+          </tr>
+          <tr>
+            <td class="options">rowSpan</td>
+            <td class="options">the number of rows for the field control to span 
+            across</td>
+          </tr>
+          <tr>
+            <td class="options">decimalPlaces</td>
+            <td class="options">the number of decimals to allow when 
+            NumericUpDownMoneyMapper is used</td>
+          </tr>
+          <tr>
+            <td class="options">rightClickEnabled</td>
+            <td class="options">whether a user can right-click on the ComboBox
+            to add additional options</td>
+          </tr>
+          <tr>
+            <td class="options" width="100">dateFormat</td>
+            <td class="options">the format of date displays, in the style of
+            DateTime.ToString() (eg. "dd MM yy"), including shortcuts, such as
+            "d", which uses the short date format of the culture of the user's
+            machine</td>
+          </tr>
+        </tbody></table>
+        </font>
+        <br>
+        The following options are available for a grid column element:<br>
+        <font size="2">
+        <table style="border-collapse: collapse;" id="AutoNumber7" class="options" border="1" bordercolor="#c0c0c0" cellspacing="0" width="100%">
+          <tbody><tr>
+            <td class="options" width="100">dateFormat</td>
+            <td class="options">the format of date displays, in the style of
+            DateTime.ToString() (eg. "dd MM yy"), including shortcuts, such as
+            "d", which uses the short date format of the culture of the user's
+            machine</td>
+          </tr>
+        </tbody></table>
+        </font>
+        </td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">-</td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+  
+  <tr>
+  	<td class="specclass">
+    <b>
+    <a name="trigger" class="specclasslink">trigger</a></b></td>
+    <td valign="top" width="83%">
+    <font size="2">
+    <table style="border-collapse: collapse;" id="AutoNumber6" class="spec" border="0" bordercolor="#111111" cellpadding="1" cellspacing="0" width="100%">
+      <tbody><tr>
+        <td class="specname" width="170">Description:</td>
+        <td class="specvalue">Carries out some action when a field control has its value changed.  For instance,
+        a trigger could cause a method to be executed or another field to be disabled.  A trigger usually has a
+        source control (triggeredBy) that fires the trigger when its value changes and a target control that is
+        affected by the change.  The trigger can be declared either on the source or the target and multiple
+        triggers are also permitted.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">field</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>action</b> (the type of action to carry out when the trigger fires)<br>
+        <br>
+        The following actions are available for a form field element:<br>
+        <font size="2">
+        <table style="border-collapse: collapse;" id="AutoNumber7" class="options" border="1" bordercolor="#c0c0c0" cellspacing="0" width="100%">
+          <tbody><tr>
+            <td class="options" width="100">assignLiteral</td>
+            <td class="options">Assign the given literal in "value" to the target property.  The value
+            will be converted to the type of the property.</td>
+          </tr>
+          <tr>
+            <td class="options">assignProperty</td>
+            <td class="options">Assign the value returned by a property to the target field.
+            The property must be listed in the class of the general BusinessObject being displayed
+            on the form.  List the name of the property in the "value" attribute.</td>
+          </tr>
+          <tr>
+            <td class="options">execute</td>
+            <td class="options">Execute a parameterless method found on the class of the general
+            BusinessObject being displayed on the form.  No target field required.</td>
+          </tr>
+          <tr>
+            <td class="options">filter</td>
+            <td class="options">As an example, if you have a Country ComboBox as your source
+            and a City ComboBox as your target, selecting the Country will filter City, showing
+            only those Cities with a CountryID matching the CountryID of the selected Country.
+            The target must use a BusinessObjectLookupList and must have a property with the
+            same name as the source's ID.</td>
+          </tr>
+          <tr>
+            <td class="options">filterReverse</td>
+            <td class="options">As with "filter", but with Country as the target - if you select
+            a City, the specific Country for that City will be selected.  Both source and 
+            target properties must use a BusinessObjectLookupList and the source must have a
+            property with the same name as the target's ID.</td>
+          </tr>
+          <tr>
+            <td class="options">enable</td>
+            <td class="options">Enables or disables the target property - the "value" attribute
+            must be "true" or "false" respectively.</td>
+          </tr>
+          <tr>
+            <td class="options">enableOnce</td>
+            <td class="options">As with "enable", but will only carry out the enabling or
+            disabling once, regardless of any further value changes in the source.</td>
+          </tr>
+        </tbody></table>
+        </font>
+        </td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">
+        	<b>triggeredBy</b> (the property name of the field that causes the trigger when its value
+        	changes, don't specify this if you are listing the trigger under the source field)<br>
+        	<b>target</b> (the property name of the field that is affected by a fired trigger, not
+        	required if you are listing the trigger under the target field or for actions like "execute")<br>
+        	<b>conditionValue</b> (a string literal value that the source control must have in order
+        	for the trigger to fire, the value will be converted to the type of the field's property,
+        	in the case of ComboBoxes this must be the string value as shown in the drop-down)<br>
+        	<b>value</b> (a field used by "action", see "action" above for further information)<br>
+        </td>
+      </tr>
+    </tbody></table>
+    </font>
+    </td>
+  </tr>
+
+  </tbody></table>
+
+		
+		<br><br><br><br>
+	
+		<a name="logging"></a>
+		<hr>
+		<table style="border-collapse: collapse;" id="AutoNumber1" bgcolor="#f2f2f2" border="1" bordercolor="#cccccc" cellpadding="6" cellspacing="0" width="100%">
+		  <tbody><tr>
+		    <td bgcolor="#2f2f84" width="100%"><b>
+		    <font color="#ffffff" size="4" face="Verdana">
+		    	Appendix II: Logging &amp; Errors
+		    </font></b></td>
+		  </tr>
+		</tbody></table>
+		<br>
+		<p><font size="2" face="Verdana">Log4net is a system used by Habanero for logging output from 
+your application.&nbsp; Log files give you assistance in several ways, including 
+analysing system faults remotely, tracking system usage, tracing the process 
+that led to a breakdown and understanding where the system failed when you don't 
+have any other visual response.</font></p>
+<p><font size="2" face="Verdana">Habanero logs output to this logging
+system, and you can use logging calls in your code to add to this
+output.&nbsp; Log4net is highly flexible, allowing you to specify the
+log output medium (eg. text file), the output format and the output
+detail level (eg. errors only, or all debug information).</font></p>
+
+<p class="tuthead"><span class="tutcat">Setting Up Logging Support</span></p>
+
+<p><font size="2" face="Verdana">The settings are laid out in the app.config 
+file (or your equivalent config file) between the configuration tags.&nbsp; 
+First declare the "log4net" settings type in "configSections" as follows:</font></p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+
+    <td class="codeitself" width="100%">
+    <pre><code>&lt;configSections&gt;
+  &lt;section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler, log4net"/&gt;
+&lt;/configSections&gt;</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+<p><font size="2" face="Verdana">Then specify the "log4net" settings - here is 
+an example which you could use:</font></p>
+
+<font size="2" face="Verdana,Arial,Helvetica">
+
+    </font><table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+
+<td class="codeitself" width="100%">
+    <pre><code>&lt;log4net&gt;
+  &lt;appender name="FileAppender" type="log4net.Appender.FileAppender"&gt;
+    &lt;param name="File" value="log.txt"/&gt;
+    &lt;param name="AppendToFile" value="true"/&gt;
+    &lt;layout type="log4net.Layout.PatternLayout"&gt;
+      &lt;param name="ConversionPattern" value="%d [%t] %-5p %c [%x] - %m%n"/&gt;
+    &lt;/layout&gt;
+  &lt;/appender&gt;
+  &lt;root&gt;
+    &lt;level value="INFO"/&gt;
+    &lt;appender-ref ref="FileAppender"/&gt;
+  &lt;/root&gt;
+&lt;/log4net&gt;</code></pre>
+    </td>
+    
+  </tr>
+</tbody></table>
+<p><font size="2" face="Verdana">The settings above specify the log output file 
+name, that the existing file will append new data, the output format and that all output 
+of type "INFO" or more serious will be logged.&nbsp; "DEBUG" is the 
+lowest level and will display all types of logging output.</font></p>
+
+<p class="tuthead"><span class="tutcat">Using Logging in Your Own Code</span></p>
+
+<p><font size="2" face="Verdana">To use logging in your own code, you'll need to 
+setup a logger in each class where you want to send logging output.&nbsp; 
+Include "log4net" as follows:</font></p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+
+    <td class="codeitself" width="100%">
+    <pre><code>using log4net;</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+<p>Then add the logging object to your class fields like this:</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+
+    <td class="codeitself" width="100%">
+    <pre><code>private static readonly ILog log = LogManager.GetLogger("yourClassName");</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+<p>Finally you can send log output anywhere in the code of that class like this:</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+
+    <td class="codeitself" width="100%">
+    <pre><code>log.Info("The application is starting...");
+log.Debug("System variable set to: xyz");
+log.Error("An error has occurred in the startup section.");</code></pre>
+    </td>
+  </tr>
+</tbody></table>
+<p><font size="2" face="Verdana">For more information on log4net, visit the 
+homepage at: <a href="http://logging.apache.org/log4net">http://logging.apache.org/log4net</a></font><br>
+You can also get configuration options at: <a href="http://logging.apache.org/log4net/release/manual/configuration.html">http://logging.apache.org/log4net/release/manual/configuration.html</a></p>
+
+
+<p class="tuthead"><span class="tutcat">User-Friendly Error Form</span></p>
+
+<p><font size="2">The HabaneroAppWin class has an ExceptionNotifier property, which 
+allows you to specify a standard form to display error messages (do this before 
+calling Startup).&nbsp; This form must implement IExceptionNotifier.&nbsp; By 
+default, Habanero supplies its own error display form, which hides the messy 
+details from a final user, but still allows a developer to view the stack trace.&nbsp; 
+While the form will automatically popup during the program launch, during normal 
+run-time, you will need to enclose the code in a try-catch block.&nbsp; Here is 
+a sample implementation in Program.cs, the root class.</font></p>
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeitself" width="100%"><pre><code>using Habanero.Base;</code></pre></td>
+  </tr>
+</tbody></table>
+<p><font size="2">And in the Main() method:</font></p>
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeitself" width="100%"><pre><code>try
+{
+    Application.EnableVisualStyles();
+    Application.SetCompatibleTextRenderingDefault(false);
+    Application.Run(new Form1());
+}
+catch (Exception ex)
+{
+    GlobalRegistry.UIExceptionNotifier.Notify(ex,
+    "An error has occurred in the application.",
+    "Application Error");
+}</code></pre></td>
+  </tr>
+</tbody></table>
+<p>You can also mask the exception so that naive users aren't hit with the full 
+details of a complicated error message:</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tbody><tr>
+    <td class="codeitself" width="100%"><pre><code>GlobalRegistry.UIExceptionNotifier.Notify(
+    new UserException("An error has occurred in the application.", ex),
+    "An error has occurred in the application.",
+    "Application Error");</code></pre></td>
+  </tr>
+</tbody></table>
+
+		
+		<br><br><br><br>
+	
+		<a name="source"></a>
+		<hr>
+		<table style="border-collapse: collapse;" id="AutoNumber1" bgcolor="#f2f2f2" border="1" bordercolor="#cccccc" cellpadding="6" cellspacing="0" width="100%">
+		  <tbody><tr>
+		    <td bgcolor="#2f2f84" width="100%"><b>
+		    <font color="#ffffff" size="4" face="Verdana">
+		    	Appendix III: Habanero Source Code
+		    </font></b></td>
+		  </tr>
+		</tbody></table>
+		<br>
+		<p><font size="2" face="Verdana">Included with the Habanero download is the 
+source code for the framework.&nbsp; Source is included for the Habanero components, 
+but not for FireStarter.&nbsp; 
+All the source code components can be reached from the "Habanero.sln" solution 
+file.</font></p>
+
+<p class="tuthead"><span class="tutcat">Licensing</span></p>
+
+<p>The source code is distributed under the GNU Lesser GPL.  The full license is
+included with the installation, or you can access it at 
+<a href="http://www.gnu.org/licenses/" target="new">http://www.gnu.org/licenses/</a>.
+Under this license, any changes you make to the source should be accessible to others
+and you may not sell the code you have modified.  We recommend that you post changes
+or bug fixes on the Habanero Forum for the benefit of other users.  The Habanero
+development team may in turn include those changes in future releases of Habanero.
+If you do make changes, you can include your name in the
+copyright listing at the top of the file where the changes were made.
+</p>
+
+<p class="tuthead"><span class="tutcat">Running the Tests</span></p>
+
+<p>Habanero includes a set of unit tests that can be run to make sure your changes
+don't break existing code accidentally.  Make sure the tests run successfully before
+you make changes, and then run them again after each change.</p>
+
+<ul>
+	<li>Habanero uses nUnit to carry out unit testing, so install nUnit as necessary.</li>
+  <li>The tests can be run centrally from the "Habanero.nunit" file.</li>
+  <li>The tests use a MySQL database to carry out persistence checks.  You will
+  need to install MySQL and restore the test database (located in the "docs" directory).
+  You will also need to provide a connection string for the database.</li>
+  <li>The connection string is hardcoded to (localhost, 3306, root, root) - if you have
+  a different connection string, amend the Habanero.Test.MyDBConnection class</li>
+</ul>
+
+		
+		<br><br><br><br>
+	
+		<a name="trouble"></a>
+		<hr>
+		<table style="border-collapse: collapse;" id="AutoNumber1" bgcolor="#f2f2f2" border="1" bordercolor="#cccccc" cellpadding="6" cellspacing="0" width="100%">
+		  <tbody><tr>
+		    <td bgcolor="#2f2f84" width="100%"><b>
+		    <font color="#ffffff" size="4" face="Verdana">
+		    	Troubleshooting
+		    </font></b></td>
+		  </tr>
+		</tbody></table>
+		<br>
+		<p class="tuthead"><span class="tutcat">Troubleshooting FAQ</span></p>
+
+<ul>
+
+<font size="2" face="Verdana,Arial,Helvetica">
+
+  <li><b>Application is not working</b><ul>
+    <li>Is the code correct?</li>
+    <li>Do you have an app.config file that is correctly configured?</li>
+    <li>Do you have a classdefs.xml file and is it accessible in the output 
+    folder with the executables?</li>
+    <li>Does the class definition have the required basic elements?</li>
+    <li>Is there a class element for each class,
+
+<font size="2" face="Verdana">
+
+    a class for each class element and a database table for each class element?</font></li>
+    <li>Do all the table names and field names match up case-sensitively with 
+    both the database field names and the properties in the class? (If in doubt, 
+    add a table attribute to your class element)</li>
+    <li>Are their any property names misspelt in the rest of the class 
+    definitions?</li>
+    <li>Are all the data types correct in your classes, the class definitions and the 
+    database?</li>
+  </ul>
+  </li>
+
+<font size="2" face="Verdana,Arial,Helvetica">
+
+  <li><b>"Object reference not set to an instance of an object."</b><ul>
+
+<li>This is a .Net error thrown when a null reference is being encountered.&nbsp; 
+This is a common exception that can be thrown for a wide range of activities, 
+so you'll need to do some further research to try and isolate the code that is 
+throwing the exception.</li>
+
+</ul>
+  </li>
+</font>
+
+</font>
+
+  <li><b>Class definitions</b><ul>
+  <li>Classdefs.xml not found<ul>
+  <li>While the class definitions may be stored under your project or assembly, 
+  they need to be copied to your execution directory as well (eg. bin, debug, 
+  output).&nbsp; Either add a build command to copy the file at run-time or use 
+  a feature like Visual Studio's where you can set the properties on 
+  "classdefs.xml" so that it is copied to the output directory.</li>
+</ul>
+  </li>
+  <li>Can't find control, mapper or assembly for a field/grid control<ul>
+  <li>Apart from checking for the obvious (does the type or mapper exist in the 
+  assembly as specified?), check that the assembly you're referring to has been 
+  referenced in the relevant project (try referencing it in the other projects 
+  if you've got multiple ones).</li>
+</ul>
+  </li>
+</ul>
+  </li>
+
+<font size="2">
+
+  <li><b>Database issues</b><ul>
+  <li>Changes not being saved to database<ul>
+  <li>If you edit an object in a default form, the changes should be committed 
+  automatically, but if you edit values at code level, you need to call Save() on the object to commit the changes.</li>
+  <li>You cannot edit a primary key, Habanero blocks this edit.&nbsp; For this 
+  reason, once an object has been created, you should either not make the field 
+  available for editing, or set the field's "editable" attribute to false.</li>
+</ul>
+  </li>
+  <li>Null values being saved in not-null fields<ul>
+  <li>Empty strings are not null.&nbsp; Ensure that you have catered for the 
+possibility of empty strings - some counter strategies include adding a unique 
+key constraint on the field or placing a "minLength" rule on a property.</li>
+</ul>
+  </li>
+  <li>Initial values show in form or grid, but they save as null<ul>
+  <li>Because controls like CheckBoxes have no way of 
+  showing null, it is up to the developer to add a default value to the property 
+  in the class definitions, using the "default" attribute in the "property" 
+  element.</li>
+</ul>
+  </li>
+</ul>
+  </li>
+  </font>
+
+<font size="2">
+
+  <li><b>User interface issues</b><ul>
+  <li>ComboBox displaying wrong information<ul>
+  <li>There are two means to display data in a ComboBox using the class 
+  definitions.&nbsp; You can specify a set list of options using 
+  "attribute" elements (see Appendix I), or you can set the list to be dynamically 
+  loaded when the form comes up, using the lookup-list source options.&nbsp; 
+  These need a pair of strings and Guids, with the strings displayed to the user 
+  and the Guids stored in the property values.&nbsp; Your property type therefore 
+  needs to be a Guid.</li>
+</ul>
+  </li>
+
+<font size="2" face="Verdana">
+
+  <li>No objects appear in the grid<ul>
+  <li>When you create a business object collection to pass to the grid, you need 
+  to load the objects in the collection using the collection's Load() or LoadAll() command.</li>
+</ul>
+  </li>
+  <li>Can't edit a date<ul>
+  <li>You are unable to edit a DateTime property in a textbox.&nbsp; Rather use 
+  a DateTimePicker (along with the DateTimePickerMapper), which are easier to 
+  use and have better error checking.</li>
+</ul>
+  </li>
+  </font>
+</ul>
+  </li>
+  </font>
+
+<font size="2">
+
+</font><ul>
+
+<font size="2"><li>Why do I get an empty form?<ul>
+  <li>If you've created an form-based application and nothing is showing in your 
+  form, then you need to decide what to show in the form, such as a grid 
+  containing your data or a menu that opens other grids or forms.&nbsp; See the 
+  tutorial on examples for displaying data in a form using Habanero.</li>
+  <li>If you've set a grid to display and have no data showing in the grid, even 
+  though there is a data in the database, ensure that you called the Load() 
+  command on the business object collection, or that you didn't use criteria 
+  that the data couldn't adhere to.</li>
+</ul>
+  </li>
+
+</font></ul>
+
+<font size="2"><li><b>Naming issues</b><ul>
+
+<li>Dashes in the assembly name<ul>
+
+<li>In Visual Studio, putting a dash in the assembly name will result in an 
+underscore in the namespace.&nbsp; This will cause failures with Habanero - 
+while we create a workaround for this problem, we suggest you avoid using dashes 
+in the assembly names.</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</font></ul>
+<font size="2"></font>
+
+<p>(this list is a work in progress)</p>
+
+		
+		<br><br><br><br>
+	
+</span>
+
+<br><br><br><br>
+<hr>
+<br><br>
+<div align="center">
+Please send tutorial feedback to 
+<a href="mailto:habanero@chillisoft.co.za?subject=Tutorial%20Feedback">habanero@chillisoft.co.za</a>.
+<br><br>
+<table>
+	<tbody><tr>
+		<td>
+			<img src="HabaneroTutorial_files/download.jpg" align="middle">
+			<a href="http://chillisoft.co.za/habanero/files/ReplaceIT-v2_0.zip">Download tutorial source code</a>
+		</td>
+		<td width="50"></td>
+		<td>
+			<img src="HabaneroTutorial_files/download.jpg" align="middle">
+			<a href="http://chillisoft.co.za/habanero/files/ReplaceIT-v2_1.zip">Download demo with VWG</a>
+		</td>
+	</tr>
+</tbody></table>
+</div>
+			<br><br>
+		</td>
+		<td rowspan="2" background="HabaneroTutorial_files/layout-rightfiller.jpg"></td>
+  </tr>
+  <tr>
+		<td background="HabaneroTutorial_files/layout-sidebarfiller.jpg" valign="bottom">
+			<map name="topmap">
+				<area href="http://www.chillisoft.co.za/" alt="Chillisoft Solutions" coords="15,73,150,87">
+			</map>
+			<img src="HabaneroTutorial_files/layout-sidebarbottom.jpg" usemap="#topmap" border="0"></td>
+	</tr>
+  <tr>
+  	<td><img src="HabaneroTutorial_files/layout-bottomleft.jpg" usemap="#bottommap" border="0"></td>
+  	<td background="HabaneroTutorial_files/layout-bottomfiller.jpg"></td>
+    <td valign="bottom"><img src="HabaneroTutorial_files/layout-bottomright.jpg" border="0"></td>
+  </tr>
+</tbody></table>
+
+<center>
+<br>
+  <font size="1">
+  	<a href="http://chillisoft.co.za/habanero/legal_disclaimer">Legal Disclaimer</a>&nbsp;|&nbsp;
+  	<a href="http://chillisoft.co.za/habanero/privacy_policy">Privacy Policy</a><br>
+    © 2007 <a href="http://chillisoft.co.za/">Chillisoft Solutions</a>. All rights reserved.<br>
+  </font>
+</center>
+
+</body></html>

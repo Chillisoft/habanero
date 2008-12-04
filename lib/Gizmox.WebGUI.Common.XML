@@ -1,0 +1,3740 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gizmox.WebGUI.Common</name>
+    </assembly>
+    <members>
+        <member name="T:Gizmox.WebGUI.CommonUtils">
+            <summary>
+            Summary description for WebGUIUtils.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.CommonUtils.GetMeasurementGraphics">
+            <summary>
+            Gets a mesurment graphics from the current context
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.CommonUtils.GetWebColor(System.Drawing.Color)">
+            <summary>
+            return the hexadecimal representation of the color
+            </summary>
+            <param name="color">color to convert</param>
+            <returns>the hexadecimal representation of the color</returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.CommonUtils.IsNullOrEmpty(System.String[])">
+            <summary>
+            Determins if a string is null or empty
+            </summary>
+            <param name="strInput"></param>
+            <returns></returns>
+            <remarks>Used to enable .NET1.1/.NET2.0 same code base</remarks>
+        </member>
+        <member name="M:Gizmox.WebGUI.CommonUtils.GetCombinedHashCodes(System.Int32[])">
+            <summary>
+            Gets a combined hashcode from multiple int values
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.CommonUtils.TryParse(System.String,System.Single@)">
+            <summary>
+            Simulate float.TryParse() in .NET 1.1 or calls TryParse in 2.0 and 3.5
+            </summary>
+            <param name="strValue">String value to parse</param>
+            <param name="fltValue">Out float value</param>
+            <returns>A boolean indicating of success or failure</returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.CommonUtils.TryParse(System.String,System.Double@)">
+            <summary>
+            Simulate double.TryParse() in .NET 1.1 or calls TryParse in 2.0 and 3.5
+            </summary>
+            <param name="strValue">String value to parse</param>
+            <param name="dblValue">Out double value</param>
+            <returns>A boolean indicating of success or failure</returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.CommonUtils.TryParse(System.String,System.Int32@)">
+            <summary>
+            Simulate Integer.TryParse() in .NET 1.1 or calls TryParse in 2.0 and 3.5
+            </summary>
+            <param name="strValue">String value to parse</param>
+            <param name="intValue">Out Integer value</param>
+            <returns>A boolean indicating of success or failure</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.CommonUtils.IsMono">
+            <summary>
+            Determines if running via mono
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Extensibility.ClientControllerAttribute">
+            <summary>
+            Provides reference to the client runtime time controller
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.WGConst">
+            <summary>
+            The WGConst class contains static properties exposing different Visual WebGui
+            constants.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.WGConst.Version">
+            <summary>The current Visual WebGui version.</summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.WGConst.CacheVersion">
+            <summary>
+            The current cache version which is a key that is used for different caching
+            purposes including browser cache.
+            </summary>
+            <remarks>
+            This value can be influenced by changing the PrivateVersion key value with in the
+            Visual WebGui configuration section.
+            </remarks>
+        </member>
+        <member name="P:Gizmox.WebGUI.WGConst.Prefix">
+            <summary>Gets the default Visual WebGui tag prefix.</summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.WGConst.Namespace">
+            <summary>Gets the default tag prefix namespace.</summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.WGConst.ControlsPrefix">
+            <summary>Gets the default Visual WebGui control tag prefix.</summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.WGConst.ControlsNamespace">
+             <summary>
+            Gets the default control tag prefix namespace.
+             </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.WGTags">
+            <summary>
+            Tags output representation
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.WGAttributes">
+            <summary>
+            Attributes output representation
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Configuration.Config">
+            <summary>
+            Implementation of Config class.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mobjSection">
+            <summary>
+            Xml config section
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mobjProperties">
+            <summary>
+            Config hash properties
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mobjLanguages">
+            <summary>
+            Supported langauages
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mobjThemes">
+            <summary>
+            Supported themes
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mstrThemesSemaphore">
+            <summary>
+            Provides for looking the access to mobjThemes
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mstrStaticExtension">
+            <summary>
+            Extension of static resources 
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mstrDynamicExtension">
+            <summary>
+            Extension of dynamic resources
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mstrPrivateVersion">
+            <summary>
+            Get the user private version extension
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mobjConfigInstance">
+            <summary>
+            The global config instance
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mstrDefaultFactory">
+            <summary>
+            The default factory
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mblnRightToLeft">
+            <summary>
+            Right to left enabled
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mblnUseStaticResources">
+            <summary>
+            Use static resources
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mstrRootDirectory">
+            <summary>
+            Application root directory
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mobjBrowserFlavors">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mobjFirstFlavor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mstrTimeFormat">
+            <summary>
+            Default time format
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mstrShortDateFormat">
+            <summary>
+            Default short date format
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mstrLongDateFormat">
+            <summary>
+            Default long date format
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mblnInlineWindows">
+            <summary>
+            Flag indicating if inline windows whould be used
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mblnTimersEnabled">
+            <summary>
+            Flag indicating if timers are enabled
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mblnAspCompatMode">
+            <summary>
+            Flag indicating is ASP compatible mode is requiered
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Configuration.Config.mblnGZipCompression">
+            <summary>
+            Flag indicating if GZip compression is required
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.Config.#ctor(System.Xml.XmlElement)">
+            <summary>
+            Creates a new configuration object from the config section
+            </summary>
+            <param name="objSection">The config section.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.Config.GetFormsAssembly">
+            <summary>
+            Gets the forms assembly.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.Config.GetCommonAssembly">
+            <summary>
+            Get the common assembly
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.Config.GetDirectory(System.String,System.String)">
+            <summary>
+            Get a directory path
+            </summary>
+            <param name="strCode"></param>
+            <param name="strDefault"></param>
+            <returns>if directory found return the directory path, else return strDefault</returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.Config.GetDirectory(System.String)">
+            <summary>
+            Get a directory path
+            </summary>
+            <param name="strCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.Config.GetApplication(System.String)">
+            <summary>
+            Get a application type
+            </summary>
+            <param name="strCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.Config.CheckApplication(System.String)">
+            <summary>
+            Check valid appliction
+            </summary>
+            <param name="strCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.Config.GetApplicationMode(System.String)">
+            <summary>
+            Get a application mode
+            </summary>
+            <param name="strCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.Config.GetAuthenticationParam(System.String)">
+            <summary>
+            Get a authentication parameter
+            </summary>
+            <param name="strCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.Config.IsFeatureEnabled(System.String,System.Boolean)">
+            <summary>
+            Determines whether a feature is enabled.
+            </summary>
+            <param name="strFeature">feature.</param>
+            <param name="blnDefault">default.</param>
+            <returns>
+            	<c>true</c> if feature is enabled; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.Config.GetFeatureValue(System.String,System.String)">
+            <summary>
+            Gets the value defined for a specific feature .
+            </summary>
+            <param name="strFeature">The feature name.</param>
+            <param name="strDefault">The default value if value is not defined.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.Config.GetFeatureValue(System.String,System.Int32)">
+            <summary>
+            Gets the value defined for a specific feature .
+            </summary>
+            <param name="strFeature">The feature name.</param>
+            <param name="intDefault">The default value if value is not defined.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.Config.GetFeatureValue(System.String,System.Boolean)">
+            <summary>
+            Gets the value defined for a specific feature .
+            </summary>
+            <param name="strFeature">The feature name.</param>
+            <param name="blnDefault">The default value if value is not defined.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.Config.GetSection(System.String)">
+            <summary>
+            Gets the section.
+            </summary>
+            <param name="strSection">The STR section.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.Config.GetInstance">
+            <summary>
+            Gets a single tone instance of the configuration.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.Config.GetInstance(System.Xml.XmlElement)">
+            <summary>
+            Gets a single tone instance of the configuration.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Configuration.Config.UseAuthentication">
+            <summary>
+            Gets a value indicating whether to use authentication.
+            </summary>
+            <value>
+            	<c>true</c> if use authentication; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Configuration.Config.DefaultLongDateFormat">
+            <summary>
+            Gets the default long date format
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Configuration.Config.DefaultTimeFormat">
+            <summary>
+            Gets the default time format
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Configuration.Config.DefaultShortDateFormat">
+            <summary>
+            Gets the default short date format
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Configuration.Config.AspCompatMode">
+            <summary>
+            Gets a value indicating whether ASP compat mode is required.
+            </summary>
+            <value><c>true</c> if ASP compat mode is required; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Configuration.Config.Languages">
+            <summary>
+            Gets the configured languages.
+            </summary>
+            <value>The configured languages.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Configuration.Config.Themes">
+            <summary>
+            Gets the configured themes.
+            </summary>
+            <value>The configured themes.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Configuration.Config.PrivateVersion">
+            <summary>
+            Gets the configured private version
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Configuration.Config.UseStaticResources">
+            <summary>
+            Gets a flag indicating if static resources is to be used
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Configuration.Config.StaticExtension">
+            <summary>
+            Gets the extension for static content
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Configuration.Config.DynamicExtension">
+            <summary>
+            Gets the extension for dynamic content
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Configuration.Config.InlineWindows">
+            <summary>
+            Gets a value indicating whether to use inline windows.
+            </summary>
+            <value><c>true</c> if to use inline windows; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Configuration.Config.RightToLeft">
+            <summary>
+            Is right to left enabled
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Configuration.ConfigHandler">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Configuration.ConfigHandler.Create(System.Object,System.Object,System.Xml.XmlNode)">
+            <summary>
+            Creates a configuration object from the given section.
+            </summary>
+            <param name="objParent">Section parent.</param>
+            <param name="objConfigContext">Configuration context.</param>
+            <param name="objSection">The current section.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Exceptions.LogonException">
+            <summary>
+            Summary description for LogonException.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Extensibility.SilverlightControlAttribute">
+            <summary>
+            Maps the Silverlight client control 
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Extensibility.SilverlightControlAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Common.Extensibility.SilverlightControlAttribute"/> class.
+            </summary>
+            <param name="strControlType">The mapped silverlight client control.</param>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Extensibility.WebCompilerPagesAttribute">
+            <summary>
+            Defines a component exposed pages that can be retrieved using the resources mechanism.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Extensibility.WebCompilerPagesAttribute.mobjAssembly">
+            <summary>
+            The resources assembly
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Extensibility.WebCompilerPagesAttribute.mstrNamespace">
+            <summary>
+            The resources namespace
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Extensibility.WebCompilerPagesAttribute.marrResources">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Extensibility.WebCompilerPagesAttribute.#ctor(System.Type,System.String)">
+            <summary>
+            Defines resources location by the reference type namespace and component type name.
+            </summary>
+            <param name="objReference">The reference to retrieve its namespace and assembly where the resources are located.</param>
+            <param name="strResources">The resource names seperated with a ';'.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Extensibility.WebCompilerPagesAttribute.#ctor(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="strNamespace">The namespace where the resources is located.</param>
+            <param name="strResources">The resource names seperated with a ';'.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Extensibility.WebCompilerPagesAttribute.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Defines resources location by the reference type namespace and component type name.
+            </summary>
+            <param name="strNamespace">The namespace where the resource is located.</param>
+            <param name="strAssembly">The assembly where the resource is located.</param>
+            <param name="strResources">The resource names seperated with a ';'.</param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Extensibility.WebCompilerPagesAttribute.Assembly">
+            <summary>
+            Returns the resources assembly
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Extensibility.WebCompilerPagesAttribute.Namespace">
+            <summary>
+            Returns the resources namesapce
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Extensibility.WebCompilerPagesAttribute.Resoruces">
+            <summary>
+            The resource names
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Extensibility.WebCompilerResourcesAttribute">
+            <summary>
+            Marks a component resources location
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Extensibility.WebCompilerResourcesAttribute.mobjAssembly">
+            <summary>
+            The resources assembly
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Extensibility.WebCompilerResourcesAttribute.mstrNamespace">
+            <summary>
+            The resources namespace
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Extensibility.WebCompilerResourcesAttribute.#ctor(System.Type)">
+            <summary>
+            Defines resources location by the reference type namespace and component type name.
+            </summary>
+            <param name="reference">The reference to retrieve its namespace and assembly where the resources are located.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Extensibility.WebCompilerResourcesAttribute.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="strReference">The reference to retrieve its namespace and assembly where the resources are located.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Extensibility.WebCompilerResourcesAttribute.#ctor(System.String,System.String)">
+            <summary>
+            Defines resources location by the reference type namespace and component type name.
+            </summary>
+            <param name="reference">The namespace where the resources are located.</param>
+            <param name="assembly">The assembly where the resources are located.</param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Extensibility.WebCompilerResourcesAttribute.Assembly">
+            <summary>
+            Returns the resources assembly
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Extensibility.WebCompilerResourcesAttribute.Namespace">
+            <summary>
+            Returns the resources namesapce
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Extensibility.WinCompilerControllerAttribute">
+            <summary>
+            Defines a controller and control to be used in client mode.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Extensibility.WinCompilerControllerAttribute.#ctor(System.Type,System.Type)">
+            <summary>
+            Defines a controller and control to be used in client mode
+            </summary>
+            <param name="objControllerType">The controller type.</param>
+            <param name="objControlType">The control type.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Extensibility.WinCompilerControllerAttribute.#ctor(System.String,System.String)">
+            <summary>
+            Defines a controller and control to be used in client mode
+            </summary>
+            <param name="strControllerType">The controller type.</param>
+            <param name="strControlType">The control type.</param>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.ThreadExceptionEventHandler">
+            <summary>Represents the method that will handle the <see cref="E:Gizmox.WebGUI.Forms.Application.ThreadException"></see> event of an <see cref="T:Gizmox.WebGUI.Forms.Application"></see>.</summary>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.ThreadExceptionEventArgs">
+            <summary>Provides data for the <see cref="E:Gizmox.WebGUI.Forms.Application.ThreadException"></see> event.</summary>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.ThreadExceptionEventArgs.#ctor(System.Exception)">
+            <summary>Initializes a new instance of the <see cref="T:System.Threading.ThreadExceptionEventArgs"></see> class.</summary>
+            <param name="t">The <see cref="T:System.Exception"></see> that occurred. </param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.ThreadExceptionEventArgs.Exception">
+            <summary>Gets the <see cref="T:System.Exception"></see> that occurred.</summary>
+            <returns>The <see cref="T:System.Exception"></see> that occurred.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.ThreadBookmarkEventHandler">
+            <summary>Represents the method that will handle the <see cref="E:Gizmox.WebGUI.Forms.Application.ThreadBack"></see> and <see cref="E:Gizmox.WebGUI.Forms.Application.ThreadForward"></see> events of an <see cref="T:Gizmox.WebGUI.Forms.Application"></see>.</summary>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.ThreadBookmarkEventArgs">
+            <summary>Provides data for the <see cref="E:Gizmox.WebGUI.Forms.Application.ThreadException"></see> event.</summary>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.ThreadBookmarkEventArgs.#ctor(System.Object)">
+            <summary>Initializes a new instance of the <see cref="T:System.Threading.ThreadBookmarkEventArgs"></see> class.</summary>
+            <param name="objData">The object data. </param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.ThreadBookmarkEventArgs.Data">
+            <summary>Gets the data of the bookmark.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.UnhandledExceptionMode">
+            <summary>
+            Defines where a Visual WebGui application should send unhandled exceptions.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Application">
+            <summary>Provides static methods and properties to manage an application, such as methods to start and stop an application, to process Windows messages, and properties to get information about an application. This class cannot be inherited.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Application.SetThreadBookmark(System.Object)">
+            <summary>
+            Adds a history bookmark.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Application.SetThreadBookmark(System.Object,System.String)">
+            <summary>
+            Adds a history bookmark.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Application.DoEvents">
+            <summary>Processes all Windows messages currently in the message queue.</summary>
+            <filterpriority>2</filterpriority>
+            <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Security.Permissions.UIPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Application.EnableVisualStyles">
+            <summary>Enables visual styles for the application.</summary>
+            <filterpriority>1</filterpriority>
+            <PermissionSet><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Application.Exit">
+            <summary>Informs all message pumps that they must terminate, and then closes all application windows after the messages have been processed.</summary>
+            <filterpriority>1</filterpriority>
+            <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Application.ExitThread">
+            <summary>Exits the message loop on the current thread and closes all windows on the thread.</summary>
+            <filterpriority>1</filterpriority>
+            <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Application.OnThreadException(System.Exception)">
+            <summary>Raises the <see cref="E:Gizmox.WebGUI.Forms.Application.ThreadException"></see> event.</summary>
+            <param name="t">An <see cref="T:System.Exception"></see> that represents the exception that was thrown. </param>
+            <filterpriority>1</filterpriority>
+            <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Security.Permissions.UIPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Net.WebPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Application.Restart">
+            <summary>Shuts down the application and starts a new instance immediately.</summary>
+            <exception cref="T:System.NotSupportedException">Your code is not a Windows Forms application. You cannot call this method in this context.</exception>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Application.SetCompatibleTextRenderingDefault(System.Boolean)">
+            <summary>Begins running a standard application message loop on the current thread, and makes the specified form visible.</summary>
+            <param name="mainForm">A <see cref="T:Gizmox.WebGUI.Forms.Form"></see> that represents the form to make visible. </param>
+            <exception cref="T:System.InvalidOperationException">A main message loop is already running on the current thread. </exception>
+            <filterpriority>2</filterpriority>
+            <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Security.Permissions.UIPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Application.SetUnhandledExceptionMode(Gizmox.WebGUI.Forms.UnhandledExceptionMode)">
+            <summary>Instructs the application how to respond to unhandled exceptions.</summary>
+            <param name="m ode">An UnhandledExceptionMode value describing how the application should behave if an exception is thrown without being caught.</param>        
+        </member>
+        <member name="E:Gizmox.WebGUI.Forms.Application.ApplicationExit">
+            <summary>Occurs when the application is about to shut down.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="E:Gizmox.WebGUI.Forms.Application.EnterThreadModal">
+            <summary>Occurs when the application is about to enter a modal state. </summary>
+        </member>
+        <member name="E:Gizmox.WebGUI.Forms.Application.Idle">
+            <summary>Occurs when the application finishes processing and is about to enter the idle state.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="E:Gizmox.WebGUI.Forms.Application.LeaveThreadModal">
+            <summary>Occurs when the application is about to leave a modal state. </summary>
+        </member>
+        <member name="E:Gizmox.WebGUI.Forms.Application.ThreadExit">
+            <summary>Occurs when a thread is about to shut down. When the main thread for an application is about to be shut down, this event is raised first, followed by an <see cref="E:Gizmox.WebGUI.Forms.Application.ApplicationExit"></see> event.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="E:Gizmox.WebGUI.Forms.Application.ThreadRefresh">
+            <summary>Occurs when the client is refreshing.</summary>
+        </member>
+        <member name="E:Gizmox.WebGUI.Forms.Application.ThreadBookmarkNavigate">
+            <summary>
+            Provides notification when user navigated to a thread bookmark
+            </summary>
+        </member>
+        <member name="E:Gizmox.WebGUI.Forms.Application.ThreadException">
+            <summary>Occurs when an untrapped thread exception is thrown.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="E:Gizmox.WebGUI.Forms.Application.ThreadTick">
+            <summary>Occurs when a on every thread event queue handling.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Application.AllowQuit">
+            <summary>Gets a value indicating whether the caller can quit this application.</summary>
+            <returns>true if the caller can quit this application; otherwise, false.</returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Application.CompanyName">
+            <summary>Gets the company name associated with the application.</summary>
+            <returns>The company name.</returns>
+            <filterpriority>1</filterpriority>
+            <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Application.CurrentCulture">
+            <summary>Gets or sets the culture information for the current thread.</summary>
+            <returns>A <see cref="T:System.Globalization.CultureInfo"></see> representing the culture information for the current thread.</returns>
+            <filterpriority>1</filterpriority>
+            <PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="ControlThread" /></PermissionSet>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Application.ExecutablePath">
+            <summary>Gets the path for the executable file that started the application, including the executable name.</summary>
+            <returns>The path and executable name for the executable file that started the application.</returns>
+            <filterpriority>1</filterpriority>
+            <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Application.LocalUserAppDataPath">
+            <summary>Gets the path for the application data of a local, non-roaming user.</summary>
+            <returns>The path for the application data of a local, non-roaming user.</returns>
+            <filterpriority>1</filterpriority>
+            <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Application.MessageLoop">
+            <summary>Gets a value indicating whether a message loop exists on this thread.</summary>
+            <returns>true if a message loop exists; otherwise, false.</returns>
+            <filterpriority>2</filterpriority>
+            <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Application.ProductName">
+            <summary>Gets the product name associated with this application.</summary>
+            <returns>The product name.</returns>
+            <filterpriority>1</filterpriority>
+            <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Application.ProductVersion">
+            <summary>Gets the product version associated with this application.</summary>
+            <returns>The product version.</returns>
+            <filterpriority>1</filterpriority>
+            <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.MetadataTagAttribute">
+            <summary>
+            Indicates the tag name to be used when generating the control metadata
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.MetadataTagAttribute.mstrTagName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.MetadataTagAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Forms.MetadataTagAttribute"/> class.
+            </summary>
+            <param name="strTagName">The metadata tag name to use.</param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.MetadataTagAttribute.TagName">
+            <summary>
+            Gets the name of the tag.
+            </summary>
+            <value>The name of the tag.</value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.SRCategoryAttribute">
+            <summary>
+            Summary description for SRCategoryAttribute.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Design.DesignTimeControllerAttribute">
+            <summary>
+            Provides reference to the design time controller
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Design.ToolboxItemCategoryAttribute">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Design.ToolboxItemCategoryAttribute.mstrCategory">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Design.ToolboxItemCategoryAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Forms.Design.ToolboxItemCategoryAttribute"/> class.
+            </summary>
+            <param name="strCategory">The toolbox item category.</param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Design.ToolboxItemCategoryAttribute.Category">
+            <summary>
+            Gets the toolbox item category.
+            </summary>
+            <value>The toolbox item category.</value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.CheckState">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.ExecutionMode">
+            <summary>
+            Defines application execution mode
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.ExecutionMode.Client">
+            <summary>
+            The application is running in client mode
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.ExecutionMode.Web">
+            <summary>
+            The application is running in web mode
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.DialogResult">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.KeyFilter">
+            <summary>Specifies key codes and modifiers.</summary>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.All">
+            <summary>KeyFilter enumeration 
+            Used to filter event firing for KeyDown, KeyUp and KeyPrees.
+            KeyFilter.All fires the key events for any key.
+            The other values fires the key events only for the indicated key.
+            The values can be combined in a bit mask.
+            </summary>
+            <filterpriority>1</filterpriority>
+            
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.Alt">
+            <summary>The ALT modifier key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.Control">
+            <summary>The CTRL modifier key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.Delete">
+            <summary>The DEL key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.Down">
+            <summary>The DOWN ARROW key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.End">
+            <summary>The END key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.Escape">
+            <summary>The ESC key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.F1">
+            <summary>The F1 key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.F2">
+            <summary>The F2 key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.F3">
+            <summary>The F3 key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.F4">
+            <summary>The F4 key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.F5">
+            <summary>The F5 key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.F6">
+            <summary>The F6 key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.F7">
+            <summary>The F7 key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.F8">
+            <summary>The F8 key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.F9">
+            <summary>The F9 key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.F10">
+            <summary>The F10 key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.F11">
+            <summary>The F11 key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.F12">
+            <summary>The F12 key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.Home">
+            <summary>The HOME key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.Insert">
+            <summary>The INS key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.Left">
+            <summary>The LEFT ARROW key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.PageDown">
+            <summary>The PAGE DOWN key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.PageUp">
+            <summary>The PAGE UP key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.Right">
+            <summary>The RIGHT ARROW key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.Shift">
+            <summary>The SHIFT modifier key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.Up">
+            <summary>The UP ARROW key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.KeyFilter.Enter">
+            <summary>The ENTER key.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Keys">
+            <summary>
+            Keys enumeration
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.IDataObject">
+            <summary>Provides a format-independent mechanism for transferring data.</summary>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.IDataObject.GetData(System.String)">
+            <summary>Retrieves the data associated with the specified data format.</summary>
+            <returns>The data associated with the specified format, or null.</returns>
+            <param name="format">The format of the data to retrieve. See <see cref="T:Gizmox.WebGUI.Forms.DataFormats"></see> for predefined formats. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.IDataObject.GetData(System.Type)">
+            <summary>Retrieves the data associated with the specified class type format.</summary>
+            <returns>The data associated with the specified format, or null.</returns>
+            <param name="format">A <see cref="T:System.Type"></see> representing the format of the data to retrieve. See <see cref="T:Gizmox.WebGUI.Forms.DataFormats"></see> for predefined formats. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.IDataObject.GetData(System.String,System.Boolean)">
+            <summary>Retrieves the data associated with the specified data format, using a Boolean to determine whether to convert the data to the format.</summary>
+            <returns>The data associated with the specified format, or null.</returns>
+            <param name="autoConvert">true to convert the data to the specified format; otherwise, false. </param>
+            <param name="format">The format of the data to retrieve. See <see cref="T:Gizmox.WebGUI.Forms.DataFormats"></see> for predefined formats. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.IDataObject.GetDataPresent(System.String)">
+            <summary>Determines whether data stored in this instance is associated with, or can be converted to, the specified format.</summary>
+            <returns>true if data stored in this instance is associated with, or can be converted to, the specified format; otherwise false.</returns>
+            <param name="format">The format for which to check. See <see cref="T:Gizmox.WebGUI.Forms.DataFormats"></see> for predefined formats. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.IDataObject.GetDataPresent(System.Type)">
+            <summary>Determines whether data stored in this instance is associated with, or can be converted to, the specified format.</summary>
+            <returns>true if data stored in this instance is associated with, or can be converted to, the specified format; otherwise, false.</returns>
+            <param name="format">A <see cref="T:System.Type"></see> representing the format for which to check. See <see cref="T:Gizmox.WebGUI.Forms.DataFormats"></see> for predefined formats. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.IDataObject.GetDataPresent(System.String,System.Boolean)">
+            <summary>Determines whether data stored in this instance is associated with the specified format, using a Boolean value to determine whether to convert the data to the format.</summary>
+            <returns>true if the data is in, or can be converted to, the specified format; otherwise, false.</returns>
+            <param name="autoConvert">true to determine whether data stored in this instance can be converted to the specified format; false to check whether the data is in the specified format. </param>
+            <param name="format">The format for which to check. See <see cref="T:Gizmox.WebGUI.Forms.DataFormats"></see> for predefined formats. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.IDataObject.GetFormats">
+            <summary>Returns a list of all formats that data stored in this instance is associated with or can be converted to.</summary>
+            <returns>An array of the names that represents a list of all formats that are supported by the data stored in this object.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.IDataObject.GetFormats(System.Boolean)">
+            <summary>Gets a list of all formats that data stored in this instance is associated with or can be converted to, using a Boolean value to determine whether to retrieve all formats that the data can be converted to or only native data formats.</summary>
+            <returns>An array of the names that represents a list of all formats that are supported by the data stored in this object.</returns>
+            <param name="autoConvert">true to retrieve all formats that data stored in this instance is associated with or can be converted to; false to retrieve only native data formats. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.IDataObject.SetData(System.Object)">
+            <summary>Stores the specified data in this instance, using the class of the data for the format.</summary>
+            <param name="data">The data to store. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.IDataObject.SetData(System.String,System.Object)">
+            <summary>Stores the specified data and its associated format in this instance.</summary>
+            <param name="data">The data to store. </param>
+            <param name="format">The format associated with the data. See <see cref="T:Gizmox.WebGUI.Forms.DataFormats"></see> for predefined formats. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.IDataObject.SetData(System.Type,System.Object)">
+            <summary>Stores the specified data and its associated class type in this instance.</summary>
+            <param name="data">The data to store. </param>
+            <param name="format">A <see cref="T:System.Type"></see> representing the format associated with the data. See <see cref="T:Gizmox.WebGUI.Forms.DataFormats"></see> for predefined formats. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.IDataObject.SetData(System.String,System.Boolean,System.Object)">
+            <summary>Stores the specified data and its associated format in this instance, using a Boolean value to specify whether the data can be converted to another format.</summary>
+            <param name="autoConvert">true to allow the data to be converted to another format; otherwise, false. </param>
+            <param name="data">The data to store. </param>
+            <param name="format">The format associated with the data. See <see cref="T:Gizmox.WebGUI.Forms.DataFormats"></see> for predefined formats. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.EventTypes">
+            <summary>
+            Client events enumerator
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.None">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.Click">
+            <summary>
+            Compnent click event
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.DoubleClick">
+            <summary>
+            Component double click event
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.KeyDown">
+            <summary>
+            Component key down event
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.ValueChange">
+            <summary>
+            Component value change event
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.GotFocus">
+            <summary>
+            Control has received focus
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.LostFocus">
+            <summary>
+            Control has lost focus
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.CheckedChange">
+            <summary>
+            Item checkbox/es status was changed
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.SizeChange">
+            <summary>
+            Item size was changed
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.EnterKeyDown">
+            <summary>
+            Enter key down event
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.LocationChange">
+            <summary>
+            Item location was changed
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.Expand">
+            <summary>
+            Item was expanded
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.Collapse">
+            <summary>
+            Item was collapsed
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.SelectionChange">
+            <summary>
+            Item selection changed
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.ContentClick">
+            <summary>
+            Cell content clicked.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.ContentDoubleClick">
+            <summary>
+            Cell content double clicked.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.RowHeaderMouseClick">
+            <summary>
+            Cell row header clicked.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.CellBeginEdit">
+            <summary>
+            DataGridView Cell begin edit.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.CellEndEdit">
+            <summary>
+            DataGridView Cell end edit.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.EventTypes.DragDrop">
+            <summary>
+            Drag and drop event.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.ComponentBase">
+            <summary>
+            Simple component provides a serializable component base class
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.ComponentBase.Dispose">
+            <summary>Releases all resources used by the <see cref="T:System.ComponentModel.Component"></see>.</summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.ComponentBase.Dispose(System.Boolean)">
+            <summary>Releases the unmanaged resources used by the <see cref="T:System.ComponentModel.Component"></see> and optionally releases the managed resources.</summary>
+            <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources. </param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.ComponentBase.Finalize">
+            <summary>Releases unmanaged resources and performs other cleanup operations before the <see cref="T:System.ComponentModel.Component"></see> is reclaimed by garbage collection.</summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.ComponentBase.GetService(System.Type)">
+            <summary>Returns an object that represents a service provided by the <see cref="T:System.ComponentModel.Component"></see> or by its <see cref="T:System.ComponentModel.Container"></see>.</summary>
+            <returns>An <see cref="T:System.Object"></see> that represents a service provided by the <see cref="T:System.ComponentModel.Component"></see>, or null if the <see cref="T:System.ComponentModel.Component"></see> does not provide the specified service.</returns>
+            <param name="service">A service provided by the <see cref="T:System.ComponentModel.Component"></see>. </param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.ComponentBase.ToString">
+            <summary>Returns a <see cref="T:System.String"></see> containing the name of the <see cref="T:System.ComponentModel.Component"></see>, if any. This method should not be overridden.</summary>
+            <returns>A <see cref="T:System.String"></see> containing the name of the <see cref="T:System.ComponentModel.Component"></see>, if any, or null if the <see cref="T:System.ComponentModel.Component"></see> is unnamed.</returns>
+        </member>
+        <member name="E:Gizmox.WebGUI.Forms.ComponentBase.Disposed">
+            <summary>Adds an event handler to listen to the <see cref="E:System.ComponentModel.Component.Disposed"></see> event on the component.</summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.ComponentBase.CanRaiseEvents">
+            <summary>Gets a value indicating whether the component can raise an event.</summary>
+            <returns>true if the component can raise events; otherwise, false. The default is true.</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.ComponentBase.Container">
+            <summary>Gets the <see cref="T:System.ComponentModel.IContainer"></see> that contains the <see cref="T:System.ComponentModel.Component"></see>.</summary>
+            <returns>The <see cref="T:System.ComponentModel.IContainer"></see> that contains the <see cref="T:System.ComponentModel.Component"></see>, if any, or null if the <see cref="T:System.ComponentModel.Component"></see> is not encapsulated in an <see cref="T:System.ComponentModel.IContainer"></see>.</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.ComponentBase.DesignMode">
+            <summary>Gets a value that indicates whether the <see cref="T:System.ComponentModel.Component"></see> is currently in design mode.</summary>
+            <returns>true if the <see cref="T:System.ComponentModel.Component"></see> is in design mode; otherwise, false.</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.ComponentBase.Events">
+            <summary>Gets the list of event handlers that are attached to this <see cref="T:System.ComponentModel.Component"></see>.</summary>
+            <returns>An <see cref="T:System.ComponentModel.EventHandlerList"></see> that provides the delegates for this component.</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.ComponentBase.Site">
+            <summary>Gets or sets the <see cref="T:System.ComponentModel.ISite"></see> of the <see cref="T:System.ComponentModel.Component"></see>.</summary>
+            <returns>The <see cref="T:System.ComponentModel.ISite"></see> associated with the <see cref="T:System.ComponentModel.Component"></see>, if any. null if the <see cref="T:System.ComponentModel.Component"></see> is not encapsulated in an <see cref="T:System.ComponentModel.IContainer"></see>, the <see cref="T:System.ComponentModel.Component"></see> does not have an <see cref="T:System.ComponentModel.ISite"></see> associated with it, or the <see cref="T:System.ComponentModel.Component"></see> is removed from its <see cref="T:System.ComponentModel.IContainer"></see>.</returns>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.RegisteredComponent">
+            <summary>Provides the base implementation for the <see cref="T:System.ComponentModel.IComponent"></see> interface and enables object sharing between applications.</summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IEventHandler">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IEventHandler.FireEvent(Gizmox.WebGUI.Common.Interfaces.IEvent)">
+            <summary>
+            Fires an event event to be handled by the event handler.
+            </summary>
+            <param name="objEvent">The event.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent.UnregisterComponents">
+            <summary>
+            Unregisters the components.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent.RegisterContextMenu">
+            <summary>
+            Registers the context menu.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent.UnregisterContextMenu">
+            <summary>
+            Unregisters the context menu.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent.IsRegistered">
+            <summary>
+            Gets or sets a value indicating whether this instance is registered.
+            </summary>
+            <value>
+            	<c>true</c> if this instance is registered; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent.IsConnected">
+            <summary>
+            Gets a value indicating whether this instance is connected.
+            </summary>
+            <value>
+            	<c>true</c> if this instance is connected; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent.Guid">
+            <summary>
+            Gets or sets the GUID.
+            </summary>
+            <value>The GUID.</value>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.RegisteredComponent.mintGuid">
+            <summary>
+            Control ids
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.RegisteredComponent.mblnRegistered">
+            <summary>
+            Is registerd flag
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.RegisteredComponent.mlngLastModified">
+            <summary>
+            Indicates last render identifiers
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.Update">
+            <summary>
+            Full updates of this instance.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.Update(System.Boolean)">
+            <summary>
+            Redraw only
+            </summary>
+            <param name="blnRedrawOnly"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.UpdateParams">
+            <summary>
+            Updates only the parameters of this instance.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.IsDirty(System.Int64)">
+            <summary>
+            Determines whether the specified component is dirty.
+            </summary>
+            <param name="lngRequestID">Request ID.</param>
+            <returns>
+            	<c>true</c> if the specified component is dirty; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.IsDirtyAttributes(System.Int64)">
+            <summary>
+            Determines whether the specified component is dirty.
+            </summary>
+            <param name="lngRequestID">Request ID.</param>
+            <returns>
+            	<c>true</c> if the specified component is dirty; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.GetCriticalEvents">
+            <summary>
+            Gets the critical events.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.RenderComponentEventAttributes(Gizmox.WebGUI.Common.Interfaces.IContext,Gizmox.WebGUI.Common.Interfaces.IAttributeWriter)">
+            <summary>
+            Renders the component event attributes.
+            </summary>
+            <param name="objContext">context.</param>
+            <param name="objWriter">writer.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.FireEvent(Gizmox.WebGUI.Common.Interfaces.IEvent)">
+            <summary>
+            Fires an event.
+            </summary>
+            <param name="objEvent">event.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.InvokeMethod(System.String,System.Object[])">
+            <summary>
+            Invokes a client side method from the component scope with arguments
+            </summary>
+            <param name="strMember">The client side method name</param>
+            <param name="arrArgs">The arugments to be passed to the method</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.InvokeMethodWithId(System.String,System.Object[])">
+            <summary>
+            Invokes a client side method from the component scope with arguments (Adds first component id as the first parameter)
+            </summary>
+            <param name="strMember">The client side method name</param>
+            <param name="arrArgs">The arugments to be passed to the method</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.RegisterSelf">
+            <summary>
+            Registers the control if needed.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.UnRegisterSelf">
+            <summary>
+            UnRegisters the self.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.RegisterBatch(System.Collections.ICollection)">
+            <summary>
+            Registers a batch.
+            </summary>
+            <param name="objCollection">Obj collection.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.UnRegisterBatch(System.Collections.ICollection)">
+            <summary>
+            Unregister a batch.
+            </summary>
+            <param name="objCollection">Obj collection.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.RegisterComponent(Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent)">
+            <summary>
+            Register a component.
+            </summary>
+            <param name="objComponent">Component.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.UnRegisterComponent(Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent)">
+            <summary>
+            Unregister a component.
+            </summary>
+            <param name="objComponent">Component.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.Gizmox#WebGUI#Common#Interfaces#IRegisteredComponent#RegisterContextMenu">
+            <summary>
+            Registers the component context menu.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.RegisteredComponent.Gizmox#WebGUI#Common#Interfaces#IRegisteredComponent#UnregisterContextMenu">
+            <summary>
+            Unregister the component context menu
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.RegisteredComponent.IsEventsEnabled">
+            <summary>
+            This is a recursive function that loop through a control and all of its parents 
+            cheching if one of the controls(and control containers) is hidden or
+            disabled.
+            </summary>
+            <param name="currentControl">control to check if it is visble and enabled</param>
+            <returns>false if one of the controls is hidden or disabled.</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.RegisteredComponent.Context">
+            <summary>
+            Gets the current application context.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.RegisteredComponent.Session">
+            <summary>
+            Gets the application object.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.RegisteredComponent.IsRegistered">
+            <summary>
+            Gets a value indicating whether this instance is registered.
+            </summary>
+            <value>
+            	<c>true</c> if this instance is registered; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.RegisteredComponent.Guid">
+            <summary>
+            Gets the GUID.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Theme">
+            <summary>
+            Represents a Visual WebGui theme.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.mobjDefaultTheme">
+            <summary>
+            The default theme instance
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.mstrDefaultFlavor">
+            <summary>
+            The default flavor name
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.mstrDefaultTheme">
+            <summary>
+            The default theme name
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.mstrFlavor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.mobjFlavor">
+            <summary>
+            The flavor object
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.mstrName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.mobjThemes">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.mobjThemeAssembly">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.mobjThemeFlavors">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Forms.Theme"/> class.
+            </summary>
+            <param name="strName">Name of the STR.</param>
+            <param name="strFlavor">The STR flavor.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Forms.Theme"/> class.
+            </summary>
+            <param name="strName">Name of the STR.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.GetFullName(Gizmox.WebGUI.Forms.ThemeFlavor)">
+            <summary>
+            Gets the theme/flavor full name.
+            </summary>
+            <param name="objFlavor">The flavor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.Create(System.String)">
+            <summary>
+            Creates a new theme.
+            </summary>
+            <param name="strName">The theme name.</param>
+            <returns>A theme object representing the theme.</returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.Create(System.String,System.String)">
+            <summary>
+            Creates a new theme.
+            </summary>
+            <param name="strName">The theme name.</param>
+            <param name="strFlavor">The flavor name.</param>
+            <returns>A theme object representing the theme.</returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.CreateFromFullName(System.String)">
+            <summary>
+            Creates theme from full name string.
+            </summary>
+            <param name="strFullName">Full name string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+            </summary>
+            <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>.</param>
+            <returns>
+            true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.GetHashCode">
+            <summary>
+            Serves as a hash function for a particular type.
+            </summary>
+            <returns>
+            A hash code for the current <see cref="T:System.Object"/>.
+            </returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            </summary>
+            <returns>
+            A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            </returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.op_Equality(Gizmox.WebGUI.Forms.Theme,Gizmox.WebGUI.Forms.Theme)">
+            <summary>
+            Implements the operator ==.
+            </summary>
+            <param name="objThemeA">Theme A.</param>
+            <param name="objThemeB">Theme B.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.op_Inequality(Gizmox.WebGUI.Forms.Theme,Gizmox.WebGUI.Forms.Theme)">
+            <summary>
+            Implements the operator !=.
+            </summary>
+            <param name="objThemeA">Theme A.</param>
+            <param name="objThemeB">Theme B.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.IsThemesEqual(Gizmox.WebGUI.Forms.Theme,Gizmox.WebGUI.Forms.Theme)">
+            <summary>
+            Determines whether theme A equals theme B.
+            </summary>
+            <param name="objThemeA">Theme A.</param>
+            <param name="objThemeB">Theme B.</param>
+            <returns>
+            	<c>true</c> if theme A equals theme B; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.GetResource(System.String)">
+            <summary>
+            Gets a theme resource resource.
+            </summary>
+            <param name="strResource">The theme resource name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.GetResourceFullName(System.String)">
+            <summary>
+            Gets the full name of the resource.
+            </summary>
+            <param name="strResource">The resource name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.GetXmlResource(System.String)">
+            <summary>
+            Gets the resource as an xml document.
+            </summary>
+            <param name="strResource">The resource name.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.Assembly">
+            <summary>
+            Gets the theme assembly.
+            </summary>
+            <value>The theme assembly.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.Flavors">
+            <summary>
+            Gets the theme flavors.
+            </summary>
+            <value>The theme flavors.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.ConfiguredThemes">
+            <summary>
+            Gets the configured themes.
+            </summary>
+            <value>The configured themes.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.IsValid">
+            <summary>
+            Gets a value indicating whether this theme is valid.
+            </summary>
+            <value><c>true</c> if this theme is valid; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.Default">
+            <summary>
+            Gets the default theme.
+            </summary>
+            <value>The default theme.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.Flavor">
+            <summary>
+            Gets or sets the flavor.
+            </summary>
+            <value>The flavor.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+            <value>The name.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.FullName">
+            <summary>
+            Gets the full name.
+            </summary>
+            <value>The full name.</value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Theme.ThemeCollection">
+            <summary>
+            Represents a list of themes
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.ThemeCollection.mobjThemes">
+            <summary>
+            Collection of theme instances
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.ThemeCollection.mobjThemesByName">
+            <summary>
+            Indexing of theme by name
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.ThemeCollection.mobjThemeAssembliesByName">
+            <summary>
+            Indexing of theme assemblies by name
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.ThemeCollection.mobjThemeFlavorsByName">
+            <summary>
+            The flacor collection for each them
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.ThemeCollection.mobjDefaultTheme">
+            <summary>
+            Stores reference to the default theme
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.ThemeCollection.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Forms.Theme.ThemeCollection"/> class.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.ThemeCollection.Initialize(System.Xml.XmlElement)">
+            <summary>
+            Initializes the specified obj themes node.
+            </summary>
+            <param name="objThemesNode">The themes node.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.ThemeCollection.GetThemeFlavors(System.String)">
+            <summary>
+            Gets the theme flavors.
+            </summary>
+            <param name="strThemeName">Theme name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.ThemeCollection.GetThemeAssembly(System.String)">
+            <summary>
+            Gets the theme assembly.
+            </summary>
+            <param name="strTheme">The theme name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.ThemeCollection.GetThemeAssembly(System.String,System.String)">
+            <summary>
+            Gets the theme assembly.
+            </summary>
+            <param name="strTheme">The theme name.</param>
+            <param name="strThemeAssemblyName">The theme assembly name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.ThemeCollection.GetAssembly(System.String)">
+            <summary>
+            Gets the assembly.
+            </summary>
+            <param name="strName">Assembly name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.ThemeCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+            <returns>
+            An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+            </returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.ThemeCollection.CopyTo(System.Array,System.Int32)">
+            <summary>
+            Copies the elements of the <see cref="T:System.Collections.ICollection"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
+            </summary>
+            <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.ICollection"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param>
+            <param name="index">The zero-based index in <paramref name="array"/> at which copying begins.</param>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="array"/> is null. </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            	<paramref name="index"/> is less than zero. </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="array"/> is multidimensional.-or- <paramref name="index"/> is equal to or greater than the length of <paramref name="array"/>.-or- The number of elements in the source <see cref="T:System.Collections.ICollection"/> is greater than the available space from <paramref name="index"/> to the end of the destination <paramref name="array"/>. </exception>
+            <exception cref="T:System.ArgumentException">The type of the source <see cref="T:System.Collections.ICollection"/> cannot be cast automatically to the type of the destination <paramref name="array"/>. </exception>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.ThemeCollection.Count">
+            <summary>
+            Gets the number of elements contained in the <see cref="T:System.Collections.ICollection"/>.
+            </summary>
+            <value></value>
+            <returns>The number of elements contained in the <see cref="T:System.Collections.ICollection"/>.</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.ThemeCollection.IsSynchronized">
+            <summary>
+            Gets a value indicating whether access to the <see cref="T:System.Collections.ICollection"/> is synchronized (thread safe).
+            </summary>
+            <value></value>
+            <returns>true if access to the <see cref="T:System.Collections.ICollection"/> is synchronized (thread safe); otherwise, false.</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.ThemeCollection.SyncRoot">
+            <summary>
+            Gets an object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.
+            </summary>
+            <value></value>
+            <returns>An object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.ThemeCollection.Item(System.String)">
+            <summary>
+            Gets the <see cref="T:Gizmox.WebGUI.Forms.Theme"/> with the specified theme name.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.ThemeCollection.Config">
+            <summary>
+            Gets the config instance.
+            </summary>
+            <value>The config instance.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.ThemeCollection.Default">
+            <summary>
+            Gets the default theme.
+            </summary>
+            <value>The default theme.</value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Theme.FlavorCollection">
+            <summary>
+            Represents a list of flacors
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.FlavorCollection.mobjFlavors">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.FlavorCollection.mobjFlavorByName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.FlavorCollection.mobjTheme">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.FlavorCollection.mobjFirstFlavor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.FlavorCollection.mobjBrowserFlavors">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.FlavorCollection.mobjDefaultFlavor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.Theme.FlavorCollection.mobjConfig">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.FlavorCollection.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Forms.Theme.FlavorCollection"/> class.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.FlavorCollection.Initialize(Gizmox.WebGUI.Forms.Theme)">
+            <summary>
+            Initializes the specified obj theme.
+            </summary>
+            <param name="objTheme">The obj theme.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.FlavorCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+            <returns>
+            An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+            </returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.FlavorCollection.CopyTo(System.Array,System.Int32)">
+            <summary>
+            Copies the elements of the <see cref="T:System.Collections.ICollection"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
+            </summary>
+            <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.ICollection"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param>
+            <param name="index">The zero-based index in <paramref name="array"/> at which copying begins.</param>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="array"/> is null. </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            	<paramref name="index"/> is less than zero. </exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="array"/> is multidimensional.-or- <paramref name="index"/> is equal to or greater than the length of <paramref name="array"/>.-or- The number of elements in the source <see cref="T:System.Collections.ICollection"/> is greater than the available space from <paramref name="index"/> to the end of the destination <paramref name="array"/>. </exception>
+            <exception cref="T:System.ArgumentException">The type of the source <see cref="T:System.Collections.ICollection"/> cannot be cast automatically to the type of the destination <paramref name="array"/>. </exception>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.FlavorCollection.GetFirstFlavor(System.String)">
+            <summary>
+            Gets the first flavor in the flavors file.
+            </summary>
+            <param name="strBrowser">The browser name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.FlavorCollection.GetFlavorVariables(System.String,System.String)">
+            <summary>
+            Gets the flavor variables.
+            </summary>
+            <param name="strFlavor">The flavor name.</param>
+            <param name="strBrowser">The browser name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.FlavorCollection.GetFlavors(System.String)">
+            <summary>
+            Gets the flavors collection
+            </summary>
+            <param name="strBrowser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.FlavorCollection.LoadFlavor(System.Collections.Hashtable,System.String)">
+            <summary>
+            Loads the flavor.
+            </summary>
+            <param name="objFlavors">The obj flavors.</param>
+            <param name="strBrowser">The STR browser.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.FlavorCollection.LoadFlavor(System.Collections.Hashtable,System.Xml.XmlDocument,System.String)">
+            <summary>
+            Loads the flavor.
+            </summary>
+            <param name="objFlavors">The obj flavors.</param>
+            <param name="objDefinition">The obj definition.</param>
+            <param name="strBrowser">The STR browser.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.Theme.FlavorCollection.GetThemeValue(System.String,System.String,System.String)">
+            <summary>
+            Gets the theme/flacor value.
+            </summary>
+            <param name="strFlavor">The flavor name.</param>
+            <param name="strVariable">The variable name.</param>
+            <param name="strBrowser">The browser name.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.FlavorCollection.Count">
+            <summary>
+            Gets the number of elements contained in the <see cref="T:System.Collections.ICollection"/>.
+            </summary>
+            <value></value>
+            <returns>The number of elements contained in the <see cref="T:System.Collections.ICollection"/>.</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.FlavorCollection.IsSynchronized">
+            <summary>
+            Gets a value indicating whether access to the <see cref="T:System.Collections.ICollection"/> is synchronized (thread safe).
+            </summary>
+            <value></value>
+            <returns>true if access to the <see cref="T:System.Collections.ICollection"/> is synchronized (thread safe); otherwise, false.</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.FlavorCollection.SyncRoot">
+            <summary>
+            Gets an object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.
+            </summary>
+            <value></value>
+            <returns>An object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.FlavorCollection.Config">
+            <summary>
+            Gets the config instance.
+            </summary>
+            <value>The config instance.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.FlavorCollection.Owner">
+            <summary>
+            Gets the owner theme.
+            </summary>
+            <value>The owner theme.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.FlavorCollection.Default">
+            <summary>
+            Gets the default flavor.
+            </summary>
+            <value>The default flavor.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.Theme.FlavorCollection.Item(System.String)">
+            <summary>
+            Gets the <see cref="T:Gizmox.WebGUI.Forms.ThemeFlavor"/> with the specified flavor name.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.ThemeFlavor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.ThemeFlavor.mstrName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Forms.ThemeFlavor.mobjFlavorCollection">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.ThemeFlavor.#ctor(Gizmox.WebGUI.Forms.Theme.FlavorCollection,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="!:Flavor"/> class.
+            </summary>
+            <param name="strName">Flavor name.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Forms.ThemeFlavor.GetVariable(System.String,System.String)">
+            <summary>
+            Gets a flavor variable.
+            </summary>
+            <param name="strBrowser">The browser.</param>
+            <param name="strVariableName">The variable name.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.ThemeFlavor.Name">
+            <summary>
+            Gets the flavor name.
+            </summary>
+            <value>The flavor name.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.ThemeFlavor.FullName">
+            <summary>
+            Gets the flavor full name.
+            </summary>
+            <value>The flavor full name.</value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.ThemeFonts">
+            <summary>
+            Specifies the fonts used to display text in Windows display elements.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Gateways.StaticGateway">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Gateways.StaticGateway.#ctor(Gizmox.WebGUI.Common.Interfaces.IContext)">
+            <summary>
+            Gateway constructor 
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Gateways.StaticGateway.ProcessRequest(System.Web.HttpContext)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Gateways.StaticGateway.IsReusable">
+            <summary>
+            Indicates that the request object can be pooled.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IStaticGateway">
+            <summary>
+            Summary description for IStaticGatewayHandler.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IStaticGateway.GetGatewayHandler(Gizmox.WebGUI.Common.Interfaces.IContext)">
+            <summary>
+            Gets the gateway handler.
+            </summary>
+            <param name="objContext">Request context.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Gateways.Gateway">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Gateways.Gateway.#ctor(Gizmox.WebGUI.Common.Interfaces.IContext)">
+            <summary>
+            Gateway constructor 
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Gateways.Gateway.ProcessRequest(System.Web.HttpContext)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Gateways.Gateway.IsReusable">
+            <summary>
+            Indicates that the request object can be pooled.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Gateways.GatewayHandler">
+            <summary>
+            Summary description for GatewayAction.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IGatewayHandler">
+            <summary>
+            Summary description for IGatewayHandler.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Gateways.GatewayFile.#ctor">
+            <summary>
+            Creates a new <see cref="T:Gizmox.WebGUI.Common.Gateways.GatewayFile"/> instance.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Gateways.GatewayFile.#ctor(System.String)">
+            <summary>
+            Creates a new <see cref="T:Gizmox.WebGUI.Common.Gateways.GatewayFile"/> instance.
+            </summary>
+            <param name="strPath">path.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Gateways.GatewayFile.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new <see cref="T:Gizmox.WebGUI.Common.Gateways.GatewayFile"/> instance.
+            </summary>
+            <param name="strPath">path.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Gateways.GatewayFile.ProcessRequest">
+            <summary>
+            Processes the gateway request.
+            </summary>
+            <param name="objContext">WebGUI context.</param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Gateways.GatewayFile.Path">
+            <summary>
+            Gets or sets the path.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Gateways.GatewayReference">
+            <summary>
+            Returns a reference to a gateway control
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Gateways.GatewayReference.#ctor(Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent,Gizmox.WebGUI.Common.Gateways.GatewayHandler,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Common.Gateways.GatewayReference"/> class.
+            </summary>
+            <param name="objComponent">The gateway component.</param>
+            <param name="objHandler">The gateway handler.</param>
+            <param name="strAction">The gateway action.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Gateways.GatewayReference.#ctor(Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Common.Gateways.GatewayReference"/> class.
+            </summary>
+            <param name="objComponent">The gateway component.</param>
+            <param name="strAction">The gateway action.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Gateways.GatewayReference.#cctor">
+            <summary>
+            Initializes the <see cref="T:Gizmox.WebGUI.Common.Gateways.GatewayReference"/> class.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Gateways.GatewayReference.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            </summary>
+            <returns>
+            A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            </returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Gateways.GatewayReference.Action">
+            <summary>
+            Gets the gateway action.
+            </summary>
+            <value>The gateway action.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Gateways.GatewayReference.Component">
+            <summary>
+            Gets the gateway component.
+            </summary>
+            <value>The gateway component.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Gateways.GatewayReference.Handler">
+            <summary>
+            Gets the gateway handler if specified.
+            </summary>
+            <value>The gateway handler if specified.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Gateways.GatewayReference.ReferencePrefix">
+            <summary>
+            Gets the reference prefix.
+            </summary>
+            <value>The reference prefix.</value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Gateways.GZipGatewayReference">
+            <summary>
+            Returns a reference to a gateway control that will served using GZip
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Gateways.GZipGatewayReference.#ctor(Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent,Gizmox.WebGUI.Common.Gateways.GatewayHandler,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Common.Gateways.GZipGatewayReference"/> class.
+            </summary>
+            <param name="objComponent">The gateway component.</param>
+            <param name="objHandler">The gateway handler.</param>
+            <param name="strAction">The gateway action.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Gateways.GZipGatewayReference.#ctor(Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Common.Gateways.GZipGatewayReference"/> class.
+            </summary>
+            <param name="objComponent">The gateway component.</param>
+            <param name="strAction">The gateway action.</param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Gateways.GZipGatewayReference.ReferencePrefix">
+            <summary>
+            Gets the reference prefix.
+            </summary>
+            <value>The reference prefix.</value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Global">
+            <summary>
+            Static object gateway
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Global.ClearRequestParams">
+            <summary>
+            Clears the request params.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Global.Context">
+            <summary>
+            Gets the current context.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Global.RequestParams">
+            <summary>
+            Gets the request params.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Global.RequestSession">
+            <summary>
+            Gets the HTTP session.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Global.RequestContext">
+            <summary>
+            Gets the HTTP context.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Global.RequestHash">
+            <summary>
+            Gets the request hash.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Global.RequestParamsKey">
+            <summary>
+            Gets the request params key.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Global.ContextKey">
+            <summary>
+            Gets the context key.
+            </summary>
+            <value></value>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.FireWebComponentChanged(System.Object,System.String,System.Object,System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="objSource"></param>
+             <param name="strPropertyName"></param>
+             <param name="objOldValue"></param>
+             <param name="objNewValue"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.FireWebComponentChanging(System.Object,System.String)">
+             <summary>
+            
+             </summary>
+             <param name="objSource"></param>
+             <param name="strPropertyName"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.RegisterWinComponent(System.ComponentModel.IComponent)">
+             <summary>
+            
+             </summary>
+             <param name="objWinComponent"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.IsRegisteredWinComponent(System.ComponentModel.IComponent)">
+             <summary>
+            
+             </summary>
+             <param name="objWinComponent"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.RegisterWinComponent(System.ComponentModel.IComponent,System.String)">
+             <summary>
+            
+             </summary>
+             <param name="objWinComponent"></param>
+             <param name="strName"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.RegisterWebComponent(System.ComponentModel.IComponent)">
+             <summary>
+            
+             </summary>
+             <param name="objWebComponent"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.IsRegisteredWebComponent(System.ComponentModel.IComponent)">
+             <summary>
+            
+             </summary>
+             <param name="objWebComponent"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.RegisterWebComponent(System.ComponentModel.IComponent,System.String)">
+             <summary>
+            
+             </summary>
+             <param name="objWebComponent"></param>
+             <param name="strName"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.RegisterWebComponent(System.ComponentModel.IComponent,System.ComponentModel.IComponent)">
+            <summary>
+            Registers the web component.
+            </summary>
+            <param name="objContainerComponent">The container component.</param>
+            <param name="objWebComponent">The web component.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.RegisterWebComponent(System.ComponentModel.IComponent,System.ComponentModel.IComponent,System.String)">
+            <summary>
+            Registers the web component.
+            </summary>
+            <param name="objContainerComponent">The container component.</param>
+            <param name="objWebComponent">The web component.</param>
+            <param name="strName">Name.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.GetNamedDirecotry(System.String)">
+            <summary>
+            Gets the full path of a named direcotry.
+            </summary>
+            <param name="strDirectoryName">The directory name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.UnregisterWebComponent(System.ComponentModel.IComponent)">
+             <summary>
+            
+             </summary>
+             <param name="objWebComponent"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.UnregisterWinComponent(System.ComponentModel.IComponent)">
+             <summary>
+            
+             </summary>
+             <param name="objWinComponent"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.SelectWebComponent(System.ComponentModel.IComponent)">
+             <summary>
+            
+             </summary>
+             <param name="objWebComponent"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.GetSelectedWebComponents">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.GetSelectedWinComponents">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.GetConfiguration">
+            <summary>
+            Gets the configuration instance
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClientDesignServices.RefreshDesigner">
+            <summary>
+            Updates and synchronizes the designer
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Client.Design.IClientObjectController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Client.Design.IClientObjectController.SourceObject">
+            <summary>
+            Gets the controlled web object
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Client.Design.IClientObjectController.TargetObject">
+            <summary>
+            Gets the controlled winforms object
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClinetDesignContext.CreateController(Gizmox.WebGUI.Common.Interfaces.IContext,System.Object)">
+            <summary>
+            Create controller for a web object instance
+            </summary>
+            <param name="objContext"></param>
+            <param name="objWebObject"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClinetDesignContext.CreateController(Gizmox.WebGUI.Common.Interfaces.IContext,System.Type)">
+            <summary>
+            Creates controller for a web object type
+            </summary>
+            <param name="objContext"></param>
+            <param name="objWebType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClinetDesignContext.InitializeController(Gizmox.WebGUI.Client.Design.IClientObjectController)">
+            <summary>
+            Initialized controller for design time usage
+            </summary>
+            <param name="objObjectController"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IClinetDesignContext.NotifyItemPropertyChanged(Gizmox.WebGUI.Client.Design.IClientObjectController,Gizmox.WebGUI.Common.Interfaces.ObservableItemPropertyChangedArgs,System.Boolean)">
+             <summary>
+            
+             </summary>
+             <param name="objObjectController"></param>
+             <param name="strProperty"></param>
+             <param name="blnWebEvent"></param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Client.Design.IClinetDesignContext.IsNotificationSuspened">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IContextServices.GetWinObject(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="objWebObject"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IContextServices.GetWebObject(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="objWinObject"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IContextServices.RegisterController(Gizmox.WebGUI.Client.Design.IClientObjectController)">
+             <summary>
+            
+             </summary>
+             <param name="objController"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IContextServices.UnregisterController(Gizmox.WebGUI.Client.Design.IClientObjectController)">
+             <summary>
+            
+             </summary>
+             <param name="objController"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IContextServices.GetControllerByWebObject(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="objWebObject"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IContextServices.GetControllerByWinObject(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="objWinObject"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IContextServices.CreateControllerByWinObject(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="objWinObject"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IContextServices.CreateControllerByWebObject(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="objWinObject"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IContextServices.UnregisterControllerByWebObject(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="objWebObject"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IContextServices.UnregisterControllerByWinObject(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="objWinObject"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Client.Design.IContextServices.RefreshDesigner">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IApplication">
+            <summary>
+            Summary description for IApplication.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.INonSerializable">
+            <summary>
+            Marks a class as non serializable for scalable server floating state
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IApplication.Item(System.String)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IApplication.Item(System.Int32)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IApplicationContext.SetThreadBookmark(System.Object,System.String)">
+            <summary>
+            Adds the history bookmark.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IApplicationContext.OnThreadException(System.Exception)">
+            <summary>
+            Called when an unhandeled thread exception was thrown.
+            </summary>
+            <param name="objThreadException">The thread exception.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IApplicationContext.SetFocused(Gizmox.WebGUI.Common.Interfaces.IControl)">
+            <summary>
+            Sets the focused control.
+            </summary>
+            <param name="objControl">The control.</param>
+        </member>
+        <member name="E:Gizmox.WebGUI.Common.Interfaces.IApplicationContext.ThreadException">
+            <summary>
+            Occurs when an untrapped thread exception is thrown.
+            </summary>
+        </member>
+        <member name="E:Gizmox.WebGUI.Common.Interfaces.IApplicationContext.ApplicationExit">
+            <summary>
+            Occurs when the application is about to shut down.
+            </summary>
+        </member>
+        <member name="E:Gizmox.WebGUI.Common.Interfaces.IApplicationContext.EnterThreadModal">
+            <summary>
+            Occurs when the application is about to enter a modal state. 
+            </summary>
+        </member>
+        <member name="E:Gizmox.WebGUI.Common.Interfaces.IApplicationContext.Idle">
+            <summary>
+            Occurs when the application finishes processing and is about to enter the idle state.
+            </summary>
+        </member>
+        <member name="E:Gizmox.WebGUI.Common.Interfaces.IApplicationContext.LeaveThreadModal">
+            <summary>
+            Occurs when the application is about to leave a modal state. 
+            </summary>
+        </member>
+        <member name="E:Gizmox.WebGUI.Common.Interfaces.IApplicationContext.ThreadExit">
+            <summary>
+            Occurs when a thread is about to shut down. When the main thread for 
+            an application is about to be shut down, this event is raised first, 
+            followed by an <see cref="E:Gizmox.WebGUI.Forms.Application.ApplicationExit"></see> event.
+            </summary>
+        </member>
+        <member name="E:Gizmox.WebGUI.Common.Interfaces.IApplicationContext.ThreadTick">
+            <summary>
+            Occurs when a on every thread event queue handling.
+            </summary>
+        </member>
+        <member name="E:Gizmox.WebGUI.Common.Interfaces.IApplicationContext.ThreadRefresh">
+            <summary>
+            Provides notification when client view is refreshed
+            </summary>
+        </member>
+        <member name="E:Gizmox.WebGUI.Common.Interfaces.IApplicationContext.ThreadBookmarkNavigate">
+            <summary>
+            Provides notification when user navigated to a thread bookmark
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IArgumentsProvider">
+            <summary>
+            Summary description for IArguments.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IArgumentsWriterProvider">
+            <summary>
+            Summary description for IArgumentsWriterProvider.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IAttributeWriter">
+            <summary>
+            Summary description for IAttributeWriter.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IAttributeExtender">
+            <summary>
+            Defines generic attribute container capabilities
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IAttributeExtender.SetAttribute(System.String,System.String)">
+            <summary>
+            Sets an attribute to the container
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IAttributeExtender.GetAttribute(System.String)">
+            <summary>
+            Gets an attribute from the container
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IAttributeExtender.RenderAttributes(Gizmox.WebGUI.Common.Interfaces.IAttributeWriter)">
+            <summary>
+            Writes the container attributes to an IAttributeWriter
+            </summary>
+            <param name="attributeWriter"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IAttributeExtender.RenderUpdatedAttributes(Gizmox.WebGUI.Common.Interfaces.IAttributeWriter,System.Int64)">
+            <summary>
+            Renders the updated attributes.
+            </summary>
+            <param name="objWriter">The writer.</param>
+            <param name="lngRequestID">The request ID.</param>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ICommand">
+            <summary>
+            Summary description for ICommand.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IContextTerminate">
+            <summary>
+            Handles context termination
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IContextTerminate.Terminate(System.Boolean)">
+            <summary>
+            Terminates the current context
+            </summary>
+            <param name="blnForce"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IContextTerminate.SetPendingTermination">
+            <summary>
+            Set pending termination for current context
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IContextTerminate.ClearPendingTermination">
+            <summary>
+            Clears pending termination for current context
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IContextCommongDialogHandler">
+            <summary>
+            Context support for common dialog handling
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IContextCommongDialogHandler.ShowDialog(Gizmox.WebGUI.Common.Interfaces.ICommonDialog,Gizmox.WebGUI.Common.Interfaces.IForm,System.EventHandler,System.EventHandler)">
+            <summary>
+            
+            </summary>
+            <param name="objCommonDialog"></param>
+            <param name="objOwner"></param>
+            <param name="objCloseHandler"></param>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ICommongDialogHandler">
+            <summary>
+            The actual common dialog handler
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.ICommongDialogHandler.DirectHandler">
+            <summary>
+            Gets the common dialog direct handler
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.ICommongDialogHandler.DialogResult">
+            <summary>
+            Gets the common dialog result value
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ICommonDialog">
+            <summary>
+            Common dialog interface
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IContext">
+            <summary>
+            Represents the current VWG application context.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IContext.OpenLink(Gizmox.WebGUI.Common.Interfaces.ILink)">
+            <summary>
+            Open a link in a new window without parameters.
+            </summary>
+            <param name="objLink"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IContext.OpenLink(Gizmox.WebGUI.Common.Interfaces.ILink,Gizmox.WebGUI.Common.Interfaces.ILinkParameters)">
+            <summary>
+            Opens a link in a new window with parameters.
+            </summary>
+            <param name="objLink"></param>
+            <param name="objLinkParameters"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IContext.Redirect(System.String)">
+            <summary>
+            Redirects the browser to a diffrent url
+            </summary>
+            <param name="url"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IContext.Transfer(Gizmox.WebGUI.Common.Interfaces.IForm)">
+            <summary>
+            Transfers the current application to the specified form
+            </summary>
+            <param name="objForm">The form to transfer to.</param>
+            <remarks>
+            Transfer closes the current form and provides a diffrent form.
+            </remarks>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.HttpContext">
+            <summary>
+            The current request http context.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.ExecutionMode">
+            <summary>
+            Returns the application running mode
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.Request">
+            <summary>
+            The current VWG request object.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.Session">
+            <summary>
+            The current VWG session object.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.Server">
+            <summary>
+            The current VWG server object
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.Application">
+            <summary>
+            The current VWG application object.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.Response">
+            <summary>
+            The current VWG response object.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.Cookies">
+            <summary>
+            Cookies manager helps storing data cross sessions.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.ActiveForm">
+            <summary>
+            The current active form.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.MainForm">
+            <summary>
+            The current context top form.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.Referrer">
+            <summary>
+            The refering application.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.Config">
+            <summary>
+            Get the application configuration.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.RightToLeft">
+            <summary>
+            Indicates wether the UI is order from right to lift.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.CurrentUICulture">
+            <summary>
+            The current context UI culture.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.CurrentTheme">
+            <summary>
+            The current selected theme.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.Arguments">
+            <summary>
+            Gets the arguments manager used to handle parameters passed to the current VWG application from the calling application.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.Results">
+            <summary>
+            Gets the result manager used to pass parameters to the calling VWG application.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IContext.Item(System.String)">
+            <summary>
+            Gets or sets a context parameter
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IContextClipboard">
+            <summary>
+            Provides access to the current context's clipboard
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IContextClipboard.SetDataObject(Gizmox.WebGUI.Forms.IDataObject,System.Boolean,System.Int32,System.Int32)">
+            <summary>
+            Attempts to place data on the system Clipboard the specified number of times and with the specified delay between attempts, optionally leaving the data on the Clipboard after the application exits.
+            </summary>
+            <param name="copy">true if you want data to remain on the Clipboard after this application exits; otherwise, false.</param>
+            <param name="data">The data to place on the Clipboard.</param>
+            <param name="retryTimes">The number of times to attempt placing the data on the Clipboard.</param>
+            <param name="retryDelay">The number of milliseconds to pause between attempts. </param>
+            <exception cref="T:System.ArgumentNullException">data is null.</exception>
+            <exception cref="T:System.Runtime.InteropServices.ExternalException">Data could not be placed on the Clipboard. This typically occurs when the Clipboard is being used by another process.</exception>
+            <exception cref="T:System.Threading.ThreadStateException">The current thread is not in single-threaded apartment (STA) mode. Add the <see cref="T:System.STAThreadAttribute"></see> to your application's Main method. </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">retryTimes is less than zero.-or-retryDelay is less than zero.</exception>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IContextClipboard.GetDataObject">
+            <summary>
+            Retrieves the data that is currently on the system Clipboard.
+            </summary>
+            <returns>An <see cref="T:Gizmox.WebGUI.Forms.IDataObject"></see> that represents the data currently on the Clipboard, or null if there is no data on the Clipboard.</returns>
+            <exception cref="T:System.Runtime.InteropServices.ExternalException">Data could not be retrieved from the Clipboard. This typically occurs when the Clipboard is being used by another process.</exception>
+            <exception cref="T:System.Threading.ThreadStateException">The current thread is not in single-threaded apartment (STA) mode and the <see cref="P:Gizmox.WebGUI.Forms.Application.MessageLoop"></see> property value is true. Add the <see cref="T:System.STAThreadAttribute"></see> to your application's Main method. </exception>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IContextClipboard.Clear">
+            <summary>
+            Removes all data from the Clipboard.
+            </summary>
+            <exception cref="T:System.Threading.ThreadStateException">The current thread is not in single-threaded apartment (STA) mode. Add the <see cref="T:System.STAThreadAttribute"></see> to your application's Main method.</exception>
+            <exception cref="T:System.Runtime.InteropServices.ExternalException">The Clipboard could not be cleared. This typically occurs when the Clipboard is being used by another process.</exception>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.InvokationUniqueness">
+            <summary>
+            Used to define the uniqueness of a method invokation
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Interfaces.InvokationUniqueness.None">
+            <summary>
+            Invokation can appear multiple times in a single response.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Interfaces.InvokationUniqueness.Component">
+            <summary>
+            Invokation can appear one time for every component in the a single response.
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Interfaces.InvokationUniqueness.Global">
+            <summary>
+            Invokation can appear one time in a single response
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IContextMethodInvoker">
+            <summary>
+            Summary description for IContextMethodInvoker.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IControl">
+            <summary>
+            Summary description for IControl.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ICookies">
+            <summary>
+            Summary description for ICookies.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IEvent">
+            <summary>
+            Summary description for IEvent.
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IEvent.KeyCode">
+            <summary>Gets the keyboard code for an event.</summary>
+            <returns>A <see cref="T:Gizmox.WebGUI.Forms.Keys"></see> value that is the key code for the event.</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IEvent.AltKey">
+            <summary>Gets a value indicating whether the ALT key was pressed.</summary>
+            <returns>true if the ALT key was pressed; otherwise, false.</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IEvent.ControlKey">
+            <summary>Gets a value indicating whether the CTRL key was pressed.</summary>
+            <returns>true if the CTRL key was pressed; otherwise, false.</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IEvent.ShiftKey">
+            <summary>Gets a value indicating whether the SHIFT key was pressed.</summary>
+            <returns>true if the SHIFT key was pressed; otherwise, false.</returns>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IEventCollection">
+            <summary>
+            Summary description for IEventCollection.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IForm">
+            <summary>
+            Summary description for IForm.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IFormFactory">
+            <summary>
+            Interface for external main form factoring
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IFormFactory.CreateForm(System.String,System.Object[])">
+            <summary>
+            Creates the application main form.
+            </summary>
+            <param name="strCurrentPage">The current page code.</param>
+            <param name="arrArguments">The application arguments.</param>
+            <returns>A form object that will be the main form of the application.</returns>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IGatewayControl">
+            <summary>
+            Summary description for IGatewayControl.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IGatewayControl.GetGatewayHandler(Gizmox.WebGUI.Common.Interfaces.IContext,System.String)">
+            <summary>
+            Gets the gateway handler.
+            </summary>
+            <param name="objContext">Request context.</param>
+            <param name="strAction">Request action code.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IStaticGatewayHandler">
+            <summary>
+            Summary description for IStaticGatewayHandler.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ILink">
+            <summary>
+            Summary description for ILink.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IFormLink">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IFormLink.FormType">
+            <summary>
+            Gets the form reference type 
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IFormLink.FormInstance">
+            <summary>
+            Gets the form instance id
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IFormLink.FormApplication">
+            <summary>
+            Gets the form application name
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ILinkArguments">
+            <summary>
+            Link arguments storage
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.ILinkArguments.Clear">
+            <summary>
+            Clears the argument collection
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.ILinkArguments.Item(System.String)">
+            <summary>
+            Set or get arguments
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.ILinkArguments.Names">
+            <summary>
+            Gets an array of argument names
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.ILinkArguments.Count">
+            <summary>
+            Gets the arguments count
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ILogonForm">
+            <summary>
+            Impementation for ILogonForm class.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IMenu">
+            <summary>
+            Summary description for IControl.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ObservableItemPropertyChangedHandler">
+            <summary>
+            Delegate for the IObservableItem interface
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ObservableItemPropertyChangedArgs">
+            <summary>
+            Arguments for the ObservableItemPropertyChangedHandler event handler
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Interfaces.ObservableItemPropertyChangedArgs.mstrProperty">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Interfaces.ObservableItemPropertyChangedArgs.mobjSubject">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.ObservableItemPropertyChangedArgs.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="strProperty"></param>
+            <param name="objValue"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.ObservableItemPropertyChangedArgs.#ctor(System.String,System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gizmox.WebGUI.Common.Interfaces.ObservableItemPropertyChangedArgs"/> class.
+            </summary>
+            <param name="strProperty">The property.</param>
+            <param name="objSubject">The subject.</param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.ObservableItemPropertyChangedArgs.Property">
+            <summary>
+            Gets the name of the property that has changed
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.ObservableItemPropertyChangedArgs.Subject">
+            <summary>
+            Gets the subject.
+            </summary>
+            <value>The subject.</value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IObservableItem">
+            <summary>
+            Intended to be used for objects that need to be observed
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ObservableResumeLayoutHandler">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ObservableResumeLayoutArgs">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Interfaces.ObservableResumeLayoutArgs.mblnPerformLayout">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.ObservableResumeLayoutArgs.#ctor(System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="blnPerformLayout"></param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.ObservableResumeLayoutArgs.PerformLayout">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IObservableLayoutItem">
+            <summary>
+            Intended to be used for layout objects that need to be observed
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ObservableListEventHandler">
+            <summary>
+            Delegate for the IObservableList interface
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ObservableListEventArgs">
+            <summary>
+            Arguments for the ItemPropertyChangedHandler event handler
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Interfaces.ObservableListEventArgs.mobjItem">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.ObservableListEventArgs.#ctor(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="strProperty"></param>
+            <param name="objValue"></param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.ObservableListEventArgs.Item">
+            <summary>
+            Gets the item that has been added or removed
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IObservableList">
+            <summary>
+            Intended to be used for lists that need to be observed
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IRegisteredComponentMember">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IRegisteredComponentMember.IsRegistered">
+            <summary>
+            Gets or sets a value indicating whether this instance is registered.
+            </summary>
+            <value>
+            	<c>true</c> if this instance is registered; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IRegisteredComponentMember.MemberID">
+            <summary>
+            Gets or sets the member ID.
+            </summary>
+            <value>The member ID.</value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IRegisteredComponentMember.OwnerID">
+            <summary>
+            Gets the owner ID.
+            </summary>
+            <value>The owner ID.</value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.RequestType">
+            <summary>
+            Request types
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IRequestParams">
+            <summary>
+            Summary description for IRequestParams.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IResponse">
+            <summary>
+            Summary description for IResponse.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IServerResponse">
+            <summary>
+            Summary description for IResponse.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IServerResponse.End(Gizmox.WebGUI.Common.Interfaces.IResponseWriter)">
+            <summary>
+            
+            </summary>
+            <param name="objXmlWriter"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IServerResponse.Start(System.Int64,System.Int32,Gizmox.WebGUI.Common.Interfaces.IResponseWriter@,System.Boolean,System.Int64)">
+            <summary>
+            
+            </summary>
+            <param name="lngLastRender"></param>
+            <param name="intNextInvokationTime"></param>
+            <param name="objXmlWriter"></param>
+            <param name="blnRenderParams"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IServerResponse.StartMenus(System.Int64,Gizmox.WebGUI.Common.Interfaces.IResponseWriter@)">
+            <summary>
+            
+            </summary>
+            <param name="lngLastRender"></param>
+            <param name="objXmlWriter"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IServerResponse.WriteError(System.String,System.String,Gizmox.WebGUI.Common.Interfaces.IResponseWriter@)">
+            <summary>
+            
+            </summary>
+            <param name="strSource"></param>
+            <param name="strMessage"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IServerResponse.WriteClosed(Gizmox.WebGUI.Common.Interfaces.IResponseWriter@)">
+            <summary>
+            Write closed form message
+            </summary>
+            <param name="objXmlWriter"></param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IServerResponse.WriteRefresh(Gizmox.WebGUI.Common.Interfaces.IResponseWriter@)">
+            <summary>
+            Write refresh message
+            </summary>
+            <param name="objXmlWriter"></param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IServerResponse.GeneralNamespacePrefix">
+            <summary>
+            Returns the WebGUI general namespace prefix
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.IServerResponse.GeneralNamespaceUrl">
+            <summary>
+            Returns the WebGUI general namespace url
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IResponseWriter">
+            <summary>
+            Summary description for IResponseWriter.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IResultsProvider">
+            <summary>
+            Summary description for IResultsProvider.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IResultsReaderProvider">
+            <summary>
+            Summary description for IResultsReaderProvider.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ISealedComponent">
+            <summary>
+            Summary description for ISealedComponent.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IServer">
+            <summary>
+            Summary description for IServer.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.IServer.MapPath(System.String)">
+            <summary>
+            Returns the physical file path that corresponds to the specified virtual path on the Web server.
+            </summary>
+            <param name="strPath">The virtual path on the Web server.</param>
+            <returns>The physical file path that corresponds to path.</returns>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ISession">
+            <summary>
+            Summary description for ISession.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.ISession.GetRegisteredComponent(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="strComponentId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.ISession.RegisterComponent(Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent)">
+            <summary>
+            Registers a component.
+            </summary>
+            <param name="objComponent">component.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.ISession.UnRegisterComponent(Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent)">
+            <summary>
+            Unregisters a component.
+            </summary>
+            <param name="objComponent">component.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.ISession.RegisterBatch(System.Collections.ICollection)">
+            <summary>
+            Registers the component batch.
+            </summary>
+            <param name="objCollection">Obj collection.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.ISession.UnRegisterBatch(System.Collections.ICollection)">
+            <summary>
+            Unregister component batch.
+            </summary>
+            <param name="objCollection">Obj collection.</param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.ISession.IsLoggedOn">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.ISession.Item(System.String)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.ISession.SessionID">
+            <summary>
+            Gets the current session ID.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ISessionRegistry">
+            <summary>
+            Summary description for ISessionRegistry.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ITimer">
+            <summary>
+            Defines requiered interface to be implemnented by a timer.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.ITimer.InvokeTimer">
+            <summary>
+            Invokes timer
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.ITimer.GetNextInvokation(System.Int64)">
+            <summary>
+            Gets the time to the next invokation in milliseconds
+            </summary>
+            <param name="lngCurrentTicks"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.ITimer.TimerID">
+            <summary>
+            Gets or sets the timer id
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.ITimer.Interval">
+            <summary>
+            Gets the timer interval
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Interfaces.ITimer.Enabled">
+            <summary>
+            Checks if timer is enabled
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ITimerHandler">
+            <summary>
+            Summary description for ITimerHandler.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.ITimerHandler.InvokeTimers(System.Int64)">
+            <summary>
+            Invoke all required timers
+            </summary>
+            <param name="lngCurrentTicks"></param>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.ITimerHandlerContainer">
+            <summary>
+            Summary description for ITimerHandlerContainer.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Interfaces.ITimerHandlerContainer.InvokeTimers(System.Int64)">
+            <summary>
+            Invoke all required timers
+            </summary>
+            <param name="lngCurrentTicks"></param>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IUserControl">
+            <summary>
+            Defines a UserControl
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Interfaces.IMainMenu">
+            <summary>
+            Defines a MainMenu
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.Interopability.InvokeMethodMessage">
+            <summary>
+            Summary description for InvokeMethodMessage.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Resources.FileHandle">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Resources.FileHandle.InternalStream">
+            <summary>
+            Holds the file stream. InternalStream can be null. to get
+            the Stream, use <see cref="P:Gizmox.WebGUI.Common.Resources.FileHandle.InputStream"/> property
+            </summary>        
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Resources.FileHandle.mblnIsDisposed">
+            <summary>
+            Indicates whether Dispose method was invoked
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Resources.FileHandle.SaveAs(System.String)">
+            <summary>
+            Saves the contents of the file.
+            </summary>
+            <remarks>
+            if a file with that name already exists it will be overwrite.
+            </remarks>
+            <param name="filename">
+            The name of the saved file.
+            </param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Resources.FileHandle.Dispose(System.Boolean)">
+            <summary>
+            Releases all resources used by the <see cref="T:Gizmox.WebGUI.Common.Resources.FileHandle"/>
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Resources.FileHandle.ContentLength">
+            <summary>
+            Gets the size of an uploaded file, in bytes.
+            </summary>
+            <returns>
+            The file length, in bytes.
+            </returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Resources.FileHandle.ContentType">
+            <summary>
+            Gets the MIME content type of a file sent by a client.
+            </summary>
+            <returns>
+            The MIME content type of the uploaded file.
+            </returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:Gizmox.WebGUI.Common.Resources.FileHandle.FileName" -->
+        <!-- Badly formed XML comment ignored for member "P:Gizmox.WebGUI.Common.Resources.FileHandle.InputStream" -->
+        <member name="F:Gizmox.WebGUI.Common.Resources.PhysicalFileHandle.mstrFileName">
+            <summary>
+            The file name that this phisical file handle it pointing to
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Resources.PhysicalFileHandle.Create(System.String)">
+            <summary>
+            Create new FileHandle that wraps filename string.
+            </summary>
+            <param name="filename"></param>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Resources.FileStreamHandle">
+            <summary>
+            FileStreamHandle wrap <see cref="T:System.Web.HttpPostedFile"/> object.
+            for more details see <see cref="T:Gizmox.WebGUI.Common.Resources.FileHandle"/> documentation
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Resources.FileStreamHandle.Create(System.IO.FileStream)">
+            <summary>
+            Create new FileHandle that wraps FileStream object.
+            In this case all calls made to properties and methods are being
+            being delegeted to the FileStream object.
+            </summary>
+            <param name="fileStream"></param>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Resources.HttpPostedFileHandle">
+            <summary>
+            HttpPostedFileHandle wrap <see cref="T:System.Web.HttpPostedFile"/> object.
+            for more details see <see cref="T:Gizmox.WebGUI.Common.Resources.FileHandle"/> documentation
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Resources.HttpPostedFileHandle.mintContentLength">
+            <summary>
+            Holds the content length
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Resources.HttpPostedFileHandle.mstrFileName">
+            <summary>
+            Holds the file name
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Resources.HttpPostedFileHandle.mstrContentType">
+            <summary>
+            Holds the content type
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Resources.HttpPostedFileHandle.Create(System.Web.HttpPostedFile)">
+            <summary>
+            Flushs the posted file to disk and create new HttpPostedFileHandle with the file metadata.
+            </summary>
+            <param name="postedFile"></param>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Resources.FileHandleCollection">
+            <summary>
+            Contains simple add only list of FileHandle
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Resources.FileHandleCollection.Add(System.String,Gizmox.WebGUI.Common.Resources.FileHandle)">
+            <summary>
+            Add the file to the list
+            </summary>
+            <param name="key">Identify the file for all the other file in the list.
+            must be unique</param>
+            <param name="file">File to store in the list</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Resources.FileHandleCollection.Clear">
+            <summary>
+            Clears all the contained files
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Resources.FileHandleCollection.Item(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="key">the FileHandle's key</param>
+            <returns>the FileHandle that match the key</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Resources.FileHandleCollection.Item(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="index">the FileHandle's index in the list</param>
+            <returns>the FileHandle at the index</returns>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Resources.FileHandleCollection.AllKeys">
+            <summary>
+            Gets all the keys.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Resources.ResourceHandleConverter">
+            <summary>
+            <para>Provides a type converter to convert <see cref="T:Gizmox.WebGUI.ResourceHandle" />
+            objects to and from various other representations.</para>
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Resources.ResourceManager">
+            <summary>
+            Impementation for ResourceManager class.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Resources.ResourceHandle">
+            <summary>
+            An base abstract class for resource handles to various storages
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Resources.ResourceHandle.ToStream">
+            <summary>
+            Gets the resource stream
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Resources.ResourceHandle.ToImage">
+            <summary>
+            Gets an image from the resource stream
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Resources.ResourceHandle.ToIcon">
+            <summary>
+            Gets an icon from the resource stream
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Resources.ResourceHandle.op_Implicit(System.String)~Gizmox.WebGUI.Common.Resources.ResourceHandle">
+            <summary>
+            Handle implicit converting from string to resource handle
+            </summary>
+            <param name="strResource"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Resources.ResourceHandle.op_Implicit(System.Drawing.Image)~Gizmox.WebGUI.Common.Resources.ResourceHandle">
+            <summary>
+            Handle implicit converting from image to resource handle
+            </summary>
+            <param name="objImage"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Resources.UrlResourceHandle">
+            <summary>
+            Creates a new url resource handle
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Resources.UrlResourceHandle.#ctor">
+            <summary>
+            Creates a new url resource handle
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Resources.UrlResourceHandle.#ctor(System.String)">
+            <summary>
+            Creates a new url resource handle
+            </summary>
+            <param name="strUrl">A url prefixed with http or ftp. </param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Resources.UrlResourceHandle.Url">
+            <summary>
+            Sets or gets the resource URL.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Resources.GatewayResourceHandle">
+            <summary>
+            Resource handle implementation for gateways
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Resources.GatewayResourceHandle.#ctor(Gizmox.WebGUI.Common.Gateways.GatewayReference)">
+            <summary>
+            Create a new gateway resource handle from a gateway reference
+            </summary>
+            <param name="objGatewayReference"></param>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.SR.mobjLoader">
+            <summary>
+            The singltone SR class
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.SR.mobjResources">
+            <summary>
+            The string resource resource manegar
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.SR.#cctor">
+            <summary>
+            Creates a new <see cref="T:Gizmox.WebGUI.Common.SR"/> instance.
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.SR.#ctor">
+            <summary>
+            Creates a new <see cref="T:Gizmox.WebGUI.Common.SR"/> instance.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Switches.WGTracingSwitch">
+            <summary>
+            Summary description for WGTracingSwitch.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Switches.WGTracingThresholdSwitch">
+            <summary>
+            Summary description for WGTracingThresholdSwitch.
+            </summary>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Trace.TraceRecord">
+            <summary>
+            Base class for all trace records
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Trace.TraceRecord.mlngPerformance">
+            <summary>
+            The performance time in miliseconds
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.TraceRecord.Performance">
+            <summary>
+            Gets or sets the performance.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Trace.GatewayTraceRecord">
+            <summary>
+            GAteway processing tracing record
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Trace.GatewayTraceRecord.mstrAction">
+            <summary>
+            The event type name
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Trace.GatewayTraceRecord.mstrServerType">
+            <summary>
+            The server component type
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Trace.GatewayTraceRecord.#ctor(System.String,Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent,System.Int64)">
+            <summary>
+            Creates a new <see cref="T:Gizmox.WebGUI.Common.Trace.GatewayTraceRecord"/> instance.
+            </summary>
+            <param name="strAction">event.</param>
+            <param name="objComponent">component.</param>
+            <param name="lngTimeMarker">time marker.</param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.GatewayTraceRecord.Subject">
+            <summary>
+            Gets the subject.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.GatewayTraceRecord.Description">
+            <summary>
+            Gets the description.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.GatewayTraceRecord.Type">
+            <summary>
+            Gets the type.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.GatewayTraceRecord.Section">
+            <summary>
+            Gets the section.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Trace.StaticGatewayTraceRecord">
+            <summary>
+            Static gateway processing tracing record
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Trace.StaticGatewayTraceRecord.mstrResource">
+            <summary>
+            The event type name
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Trace.StaticGatewayTraceRecord.mobjStaticGatewayType">
+            <summary>
+            The server component type
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Trace.StaticGatewayTraceRecord.#ctor(System.String,System.Type,System.Int64)">
+            <summary>
+            Creates a new <see cref="T:Gizmox.WebGUI.Common.Trace.StaticGatewayTraceRecord"/> instance.
+            </summary>
+            <param name="strAction">event.</param>
+            <param name="objComponent">component.</param>
+            <param name="lngTimeMarker">time marker.</param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.StaticGatewayTraceRecord.Subject">
+            <summary>
+            Gets the subject.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.StaticGatewayTraceRecord.Description">
+            <summary>
+            Gets the description.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.StaticGatewayTraceRecord.Type">
+            <summary>
+            Gets the type.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.StaticGatewayTraceRecord.Section">
+            <summary>
+            Gets the section.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Trace.EventTraceRecord">
+            <summary>
+            Event processing tracing record
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Trace.EventTraceRecord.mstrEventType">
+            <summary>
+            The event type name
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Trace.EventTraceRecord.mstrServerType">
+            <summary>
+            The server component type
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Trace.EventTraceRecord.#ctor(Gizmox.WebGUI.Common.Interfaces.IEvent,Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent,System.Int64)">
+            <summary>
+            Creates a new <see cref="T:Gizmox.WebGUI.Common.Trace.EventTraceRecord"/> instance.
+            </summary>
+            <param name="objEvent">event.</param>
+            <param name="objComponent">component.</param>
+            <param name="lngTimeMarker">time marker.</param>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Trace.EventTraceRecord.#ctor(System.String,Gizmox.WebGUI.Common.Interfaces.IRegisteredComponent,System.Int64)">
+            <summary>
+            
+            </summary>
+            <param name="strEventType"></param>
+            <param name="objComponent"></param>
+            <param name="lngTimeMarker"></param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.EventTraceRecord.Subject">
+            <summary>
+            Gets the subject.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.EventTraceRecord.Description">
+            <summary>
+            Gets the description.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.EventTraceRecord.Type">
+            <summary>
+            Gets the type.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.EventTraceRecord.Section">
+            <summary>
+            Gets the section.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Common.Trace.RenderTraceRecord">
+            <summary>
+            Rendering tracing record
+            </summary>
+        </member>
+        <member name="F:Gizmox.WebGUI.Common.Trace.RenderTraceRecord.mstrFormType">
+            <summary>
+            The root form type
+            </summary>
+        </member>
+        <member name="M:Gizmox.WebGUI.Common.Trace.RenderTraceRecord.#ctor(Gizmox.WebGUI.Common.Interfaces.IForm,System.Int64)">
+            <summary>
+            Creates a new <see cref="T:Gizmox.WebGUI.Common.Trace.RenderTraceRecord"/> instance.
+            </summary>
+            <param name="objForm">Form.</param>
+            <param name="lngTimeMarker">Time marker.</param>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.RenderTraceRecord.Subject">
+            <summary>
+            Gets the subject.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.RenderTraceRecord.Description">
+            <summary>
+            Gets the description.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.RenderTraceRecord.Type">
+            <summary>
+            Gets the type.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Gizmox.WebGUI.Common.Trace.RenderTraceRecord.Section">
+            <summary>
+            Gets the section.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:Gizmox.WebGUI.Forms.VWGContext">
+            <summary>
+            Holds the reference to the current VWG context object
+            </summary>
+        </member>
+        <member name="P:Gizmox.WebGUI.Forms.VWGContext.Current">
+            <summary>
+            The current VWG context
+            </summary>
+        </member>
+    </members>
+</doc>

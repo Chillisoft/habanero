@@ -1,0 +1,15 @@
+<!ELEMENT relationship (relatedProperty+)>
+<!ATTLIST relationship
+	name NMTOKEN #REQUIRED
+	type (single | multiple) #REQUIRED
+	relatedClass NMTOKEN #REQUIRED
+	relatedAssembly	NMTOKEN #REQUIRED
+	keepReference ( true | false ) "true"
+	orderBy CDATA ""
+	deleteAction ( DeleteRelated | DereferenceRelated | Prevent | DoNothing ) "Prevent"
+>
+		<!ELEMENT relatedProperty EMPTY>
+    <!ATTLIST relatedProperty
+			property NMTOKEN #REQUIRED
+			relatedProperty NMTOKEN #REQUIRED
+		>

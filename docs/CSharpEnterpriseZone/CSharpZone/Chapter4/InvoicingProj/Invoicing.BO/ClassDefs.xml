@@ -1,0 +1,31 @@
+﻿<classes>
+  <class name="Invoice" assembly="Invoicing.BO">
+    <property name="InvoiceID" type="Guid" readWriteRule="WriteNew" compulsory="true" />
+    <primaryKey>
+      <prop name="InvoiceID" />
+    </primaryKey>
+    <relationship name="InvoiceLines" type="multiple" relatedClass="InvoiceLine" relatedAssembly="Invoicing.BO" deleteAction="DeleteRelated" orderBy="InvoiceLineNumber">
+      <relatedProperty property="InvoiceID" relatedProperty="InvoiceID" />
+    </relationship>
+  </class>
+  <class name="InvoiceLine" assembly="Invoicing.BO">
+    <property name="InvoiceLineValue" type="Decimal" readWriteRule="WriteNew" compulsory="true" description="The monetary value of this invoice line (determined by the product price multiplied the mass of all the cases invoiced)">
+      <rule name="MinInvoiceLineValue">
+        <add key="min" value="0" />
+      </rule>
+    </property>
+    <property name="InvoiceLineID" type="Guid" readWriteRule="WriteNew" compulsory="true" />
+    <property name="InvoiceID" type="Guid" readWriteRule="WriteNew" compulsory="true" />
+    <property name="InvoiceLineNumber" compulsory="true" />
+    <key name="AK1" message="An invoice cannot have two invoice lines with the same invoice line number.">
+      <prop name="InvoiceID" />
+      <prop name="InvoiceLineNumber" />
+    </key>
+    <primaryKey>
+      <prop name="InvoiceLineID" />
+    </primaryKey>
+    <relationship name="Invoice" type="single" relatedClass="Invoice" relatedAssembly="Invoicing.BO" deleteAction="DoNothing">
+      <relatedProperty property="InvoiceID" relatedProperty="InvoiceID" />
+    </relationship>
+  </class>
+</classes>

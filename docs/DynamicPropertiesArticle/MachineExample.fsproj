@@ -1,0 +1,423 @@
+<Project EditorVersion="1.1.0" ProjectFileName="E:\Systems\Habanero\trunk\docs\DynamicPropertiesArticle\MachineExample.fsproj">
+  <ProjectSettings HabaneroDllPath="E:\Systems\Habanero\trunk\docs\DynamicPropertiesArticle\MachineExample\lib" ProjectName="MachineExample" SolutionDirectory="E:\Systems\Habanero\trunk\docs\DynamicPropertiesArticle\MachineExample" BaseProjectName="MachineExample" UiProjectName="MachineExample.UI" LogicProjectName="MachineExample.Logic" BoProjectName="MachineExample.BO" DefaultAssembly="MachineExample.BO">
+    <CustomPropertyTypes />
+    <CustomControlTypes />
+    <CustomControlMapperTypes />
+    <CustomGridControlTypes />
+  </ProjectSettings>
+  <Classes>
+    <Class Assembly="MachineExample.BO" ClassName="Machine" TableName="Machine" DisplayName="Machine">
+      <SuperClassDesc />
+      <PrimaryKey>
+        <KeyProperties>
+          <KeyProperty PropertyName="MachineID" />
+        </KeyProperties>
+      </PrimaryKey>
+      <Properties>
+        <Property PropertyName="MachineID" DisplayName="Machine I D" DatabaseFieldName="MachineID" Compulsory="True" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="MachineTypeID" DisplayName="Machine Type I D" DatabaseFieldName="MachineTypeID" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="MachineNo" DisplayName="Machine No" DatabaseFieldName="MachineNo" Compulsory="True" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </Properties>
+      <Relationships>
+        <Relationship RelationshipName="MachineProperties" RelationshipType="Multiple" RelatedClass="MachineProperty">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="MachineID" RelatedProperty="MachineID" />
+          </RelationshipProperties>
+        </Relationship>
+        <Relationship RelationshipName="MachineType" RelatedClass="MachineType">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="MachineTypeID" RelatedProperty="MachineTypeID" />
+          </RelationshipProperties>
+        </Relationship>
+      </Relationships>
+      <Keys />
+      <Uis>
+        <UI>
+          <UiForm>
+            <FormTabs>
+              <FormTab>
+                <FormColumns>
+                  <FormColumn>
+                    <FormFields>
+                      <FormField Label="Machine Type:" Editable="False" Property="MachineType.Name">
+                        <Parameters />
+                      </FormField>
+                      <FormField Label="Machine No:" Property="MachineNo">
+                        <Parameters />
+                      </FormField>
+                    </FormFields>
+                  </FormColumn>
+                </FormColumns>
+              </FormTab>
+            </FormTabs>
+          </UiForm>
+          <UiGrid>
+            <GridColumns>
+              <GridColumn Heading="Machine No" Property="MachineNo">
+                <Parameters />
+              </GridColumn>
+            </GridColumns>
+          </UiGrid>
+        </UI>
+      </Uis>
+      <CustomProperties>
+        <Property PropertyName="MachineType.Name" DisplayName="Machine Type . Name" DatabaseFieldName="MachineType.Name" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </CustomProperties>
+    </Class>
+    <Class Assembly="MachineExample.BO" ClassName="MachineProperty" TableName="MachineProperty" DisplayName="Machine Property">
+      <SuperClassDesc />
+      <PrimaryKey>
+        <KeyProperties>
+          <KeyProperty PropertyName="MachinePropertyID" />
+        </KeyProperties>
+      </PrimaryKey>
+      <Properties>
+        <Property PropertyName="MachineID" DisplayName="Machine I D" DatabaseFieldName="MachineID" Compulsory="True" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="MachinePropertyDefID" DisplayName="Machine Property Def I D" DatabaseFieldName="MachinePropertyDefID" Compulsory="True" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="Value" DisplayName="Value" DatabaseFieldName="Value" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="MachinePropertyID" DisplayName="Machine Property I D" DatabaseFieldName="MachinePropertyID" Compulsory="True" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </Properties>
+      <Relationships>
+        <Relationship RelationshipName="Machine" RelatedClass="Machine">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="MachineID" RelatedProperty="MachineID" />
+          </RelationshipProperties>
+        </Relationship>
+        <Relationship RelationshipName="MachinePropertyDef" RelatedClass="MachinePropertyDef">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="MachinePropertyDefID" RelatedProperty="MachinePropertyDefID" />
+          </RelationshipProperties>
+        </Relationship>
+      </Relationships>
+      <Keys />
+      <Uis>
+        <UI>
+          <UiForm>
+            <FormTabs>
+              <FormTab>
+                <FormColumns>
+                  <FormColumn>
+                    <FormFields />
+                  </FormColumn>
+                </FormColumns>
+              </FormTab>
+            </FormTabs>
+          </UiForm>
+          <UiGrid>
+            <GridColumns>
+              <GridColumn Heading="Machine No" Property="Machine.MachineNo">
+                <Parameters />
+              </GridColumn>
+              <GridColumn Heading="Property Name" Property="MachinePropertyDef.PropertyName">
+                <Parameters />
+              </GridColumn>
+              <GridColumn Heading="Value" Property="Value">
+                <Parameters />
+              </GridColumn>
+            </GridColumns>
+          </UiGrid>
+        </UI>
+      </Uis>
+      <CustomProperties>
+        <Property PropertyName="Machine.MachineNo" DisplayName="Machine . Machine No" DatabaseFieldName="Machine.MachineNo" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="MachinePropertyDef.PropertyName" DisplayName="Machine Property Def . Property Name" DatabaseFieldName="MachinePropertyDef.PropertyName" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </CustomProperties>
+    </Class>
+    <Class Assembly="MachineExample.BO" ClassName="MachinePropertyDef" TableName="MachinePropertyDef" DisplayName="Machine Property Def">
+      <SuperClassDesc />
+      <PrimaryKey>
+        <KeyProperties>
+          <KeyProperty PropertyName="MachinePropertyDefID" />
+        </KeyProperties>
+      </PrimaryKey>
+      <Properties>
+        <Property PropertyName="PropertyName" DisplayName="Property Name" DatabaseFieldName="PropertyName" Compulsory="True" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="MachinePropertyDefID" DisplayName="Machine Property Def I D" DatabaseFieldName="MachinePropertyDefID" Compulsory="True" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="PropertyType" DisplayName="Property Type" DatabaseFieldName="PropertyType" Compulsory="True" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource LookupListType="Simple">
+            <Items>
+              <KeyValuePair Key="Integer" Value="Int32" />
+              <KeyValuePair Key="String" Value="String" />
+            </Items>
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="MachineTypeID" DisplayName="Machine Type I D" DatabaseFieldName="MachineTypeID" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="IsCompulsory" DisplayName="Is Compulsory" DatabaseFieldName="IsCompulsory" Compulsory="True" DefaultValue="false" PropertyType="Boolean">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </Properties>
+      <Relationships>
+        <Relationship RelationshipName="MachineType" RelatedClass="MachineType">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="MachineTypeID" RelatedProperty="MachineTypeID" />
+          </RelationshipProperties>
+        </Relationship>
+      </Relationships>
+      <Keys />
+      <Uis>
+        <UI>
+          <UiForm>
+            <FormTabs>
+              <FormTab>
+                <FormColumns>
+                  <FormColumn>
+                    <FormFields>
+                      <FormField Label="Property Name:" Property="PropertyName">
+                        <Parameters />
+                      </FormField>
+                      <FormField Label="Property Type:" Property="PropertyType" ControlType="ComboBox">
+                        <Parameters />
+                      </FormField>
+                      <FormField Label="Is Compulsory?" Property="IsCompulsory" ControlType="CheckBox">
+                        <Parameters />
+                      </FormField>
+                    </FormFields>
+                  </FormColumn>
+                </FormColumns>
+              </FormTab>
+            </FormTabs>
+          </UiForm>
+          <UiGrid>
+            <GridColumns>
+              <GridColumn Heading="Property Name" Property="PropertyName">
+                <Parameters />
+              </GridColumn>
+              <GridColumn Heading="Property Type" Property="PropertyType">
+                <Parameters />
+              </GridColumn>
+              <GridColumn Heading="Is Compulsory" Property="IsCompulsory" GridControlType="CheckBoxColumn">
+                <Parameters />
+              </GridColumn>
+            </GridColumns>
+          </UiGrid>
+        </UI>
+      </Uis>
+      <CustomProperties>
+        <Property PropertyName="MachineType.Name" DisplayName="Machine Type . Name" DatabaseFieldName="MachineType.Name" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </CustomProperties>
+    </Class>
+    <Class Assembly="MachineExample.BO" ClassName="MachineType" TableName="MachineType" DisplayName="Machine Type">
+      <SuperClassDesc />
+      <PrimaryKey>
+        <KeyProperties>
+          <KeyProperty PropertyName="MachineTypeID" />
+        </KeyProperties>
+      </PrimaryKey>
+      <Properties>
+        <Property PropertyName="Name" DisplayName="Name" DatabaseFieldName="Name" PropertyType="String">
+          <PropertyRule>
+            <Parameters>
+              <KeyValuePair Key="maxLength" />
+              <KeyValuePair Key="minLength" />
+              <KeyValuePair Key="patternMatch" />
+              <KeyValuePair Key="patternMatchMessage" />
+            </Parameters>
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+        <Property PropertyName="MachineTypeID" DisplayName="Machine Type I D" DatabaseFieldName="MachineTypeID" Compulsory="True" PropertyType="Guid">
+          <PropertyRule>
+            <Parameters />
+          </PropertyRule>
+          <LookupListSource>
+            <Items />
+          </LookupListSource>
+        </Property>
+      </Properties>
+      <Relationships>
+        <Relationship RelationshipName="MachinePropertyDefs" KeepReferenceToRelatedObject="False" RelationshipType="Multiple" RelatedClass="MachinePropertyDef">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="MachineTypeID" RelatedProperty="MachineTypeID" />
+          </RelationshipProperties>
+        </Relationship>
+        <Relationship RelationshipName="Machines" RelationshipType="Multiple" RelatedClass="Machine">
+          <RelationshipProperties>
+            <RelationshipProperty OwnerProperty="MachineTypeID" RelatedProperty="MachineTypeID" />
+          </RelationshipProperties>
+        </Relationship>
+      </Relationships>
+      <Keys>
+        <Key KeyName="Name">
+          <KeyProperties>
+            <KeyProperty PropertyName="Name" />
+          </KeyProperties>
+        </Key>
+      </Keys>
+      <Uis>
+        <UI>
+          <UiForm Title="Add/Edit a Machine Type">
+            <FormTabs>
+              <FormTab>
+                <FormColumns>
+                  <FormColumn>
+                    <FormFields>
+                      <FormField Label="Name:" Property="Name">
+                        <Parameters />
+                      </FormField>
+                    </FormFields>
+                  </FormColumn>
+                </FormColumns>
+              </FormTab>
+            </FormTabs>
+          </UiForm>
+          <UiGrid>
+            <GridColumns>
+              <GridColumn Heading="Name" Property="Name">
+                <Parameters />
+              </GridColumn>
+            </GridColumns>
+          </UiGrid>
+        </UI>
+      </Uis>
+      <CustomProperties />
+    </Class>
+  </Classes>
+</Project>

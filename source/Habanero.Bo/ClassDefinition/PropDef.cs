@@ -1,0 +1,1127 @@
+//---------------------------------------------------------------------------------
+// Copyright (C) 2008 Chillisoft Solutions
+// 
+// This file is part of the Habanero framework.
+// 
+//     Habanero is a free framework: you can redistribute it and/or modify
+//     it under the terms of the GNU Lesser General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     The Habanero framework is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU Lesser General Public License for more details.
+// 
+//     You should have received a copy of the GNU Lesser General Public License
+//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
+//---------------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using Habanero.Base;
+using Habanero.Base.Exceptions;
+using Habanero.BO.Comparer;
+using Habanero.Util;
+using Habanero.Util;
+//using log4net;
+
+namespace Habanero.BO.ClassDefinition
+{
+    /// <summary>
+    /// A PropDef contains a Business Object property definition, with
+    /// the property name and information such as the 
+    /// access rules for the property (i.e. write-once, read-many or 
+    /// read-many-write-many).
+    /// Stores the <see cref="IPropRule"/>s for the Property Definition.
+    /// Contains functionality to determine whether a value is valid based on the 
+    /// Property rules.
+    /// </summary>
+    /// <futureEnhancements>
+    /// TODO_Future:
+    /// <ul>
+    /// <li>Add ability to store calculated properties.</li>
+    /// <li>Lazy initialisation of properties.</li>
+    /// <li>Property definitions that reference properties from related Business objects 
+    ///     e.g. An Invoice Line has a property definition that references InvoiceDate through its
+    ///     relationship Invoice.</li>
+    /// </ul>
+    /// </futureEnhancements>
+    public class PropDef : IPropDef
+    {
+//        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.ClassDefinition.PropDef");
+        private string _propertyName;
+        private string _description;
+        private Type _propType;
+        private PropReadWriteRule _propRWStatus;
+
+        private string _propTypeAssemblyName;
+        private string _propTypeName;
+        private object _defaultValue;
+        private string _defaultValueString;
+        private bool _hasDefaultValueBeenValidated;
+        private bool _compulsory;
+        private readonly List<IPropRule> _propRules = new List<IPropRule>();
+
+
+        private string _databaseFieldName; //This allows you to have a 
+                //database field name different from your property name. 
+                //We have customers whose standard for naming database 
+                //fields is DATABASE_FIELD_NAME. 
+                //This is also powerful for migrating systems 
+                //where the database has already been set up.
+
+        private ILookupList _lookupList = new NullLookupList();
+
+        private bool _autoIncrementing;
+        private int _length;
+        private string _displayName;
+        private bool _keepValuePrivate;
+        private bool _persistable = true;
+        private ClassDef _classDef;
+        private string _unitOfMeasure = "";
+
+        #region Constuctor and destructors
+
+        #region Progressive Public Constructors
+
+        /// <summary>
+        /// This constructor is used to create a propdef using it's property type and other information. 
+        /// </summary>
+        /// <param name="propertyName" >The name of the property (e.g. "surname")</param>
+        /// <param name="propType">The type of the property (e.g. string)</param>
+        /// <param name="propRWStatus">Rules for how a property can be accessed.
+        /// See PropReadWriteRule enumeration for more detail.</param>
+        /// <param name="databaseFieldName">The database field name - this
+        /// allows you to have a database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up.</param>
+        /// <param name="defaultValue">The default value that a property 
+        /// of a new object will be set to</param>
+        public PropDef
+            (string propertyName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName,
+             object defaultValue)
+            : this(propertyName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null)
+        {
+        }
+
+        /// <summary>
+        /// This constructor is used to create a propdef using it's property type and other information. 
+        /// The database field name is presumed to be the same as the property name.
+        /// </summary>
+        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
+        /// <param name="propType">The type of the property (e.g. string)</param>
+        /// <param name="propRWStatus">Rules for how a property can be accessed.
+        /// See PropReadWriteRule enumeration for more detail.</param>
+        /// <param name="defaultValue">The default value that a property 
+        /// of a new object will be set to</param>
+        public PropDef(string propertyName, Type propType, PropReadWriteRule propRWStatus, object defaultValue)
+            : this(propertyName, propType, null, null, propRWStatus, null, defaultValue, null)
+        {
+        }
+
+        /// <summary>
+        /// This constructor is used to create a propdef using property type assembly and class name and other information. 
+        /// The default value and the property type are loaded when they are needed.
+        /// </summary>
+        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
+        /// <param name="assemblyName">The assembly name of the property type</param>
+        /// <param name="typeName">The type name of the property type (e.g. "string")</param>
+        /// <param name="propRWStatus">Rules for how a property can be accessed.
+        /// See PropReadWriteRule enumeration for more detail.</param>
+        /// <param name="databaseFieldName">The database field name - this
+        /// allows you to have a database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up.</param>
+        /// <param name="defaultValueString">The default value that a property 
+        /// of a new object will be set to</param>
+        /// <param name="compulsory">Whether this property is a required field or not.</param>
+        /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
+        public PropDef
+            (string propertyName, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+             string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing)
+            : this(
+                propertyName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValueString,
+                compulsory, autoIncrementing)
+        {
+        }
+
+        /// <summary>
+        /// This constructor is used to create a propdef using property type assembly and class name and other information. 
+        /// The default value and the property type are loaded when they are needed.
+        /// </summary>
+        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
+        /// <param name="assemblyName">The assembly name of the property type</param>
+        /// <param name="typeName">The type name of the property type (e.g. "string")</param>
+        /// <param name="propRWStatus">Rules for how a property can be accessed.
+        /// See PropReadWriteRule enumeration for more detail.</param>
+        /// <param name="databaseFieldName">The database field name - this
+        /// allows you to have a database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up.</param>
+        /// <param name="defaultValueString">The default value that a property 
+        /// of a new object will be set to</param>
+        /// <param name="compulsory">Whether this property is a required field or not.</param>
+        /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
+        /// <param name="length">The maximum length for a string</param>
+        internal PropDef
+            (string propertyName, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+             string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length)
+            : this(
+                propertyName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValueString,
+                compulsory, autoIncrementing, length)
+        {
+        }
+
+        /// <summary>
+        /// This constructor is used to create a propdef using property type assembly and class name and other information. 
+        /// The default value and the property type are loaded when they are needed.
+        /// </summary>
+        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
+        /// <param name="assemblyName">The assembly name of the property type</param>
+        /// <param name="typeName">The type name of the property type (e.g. "string")</param>
+        /// <param name="propRWStatus">Rules for how a property can be accessed.
+        /// See PropReadWriteRule enumeration for more detail.</param>
+        /// <param name="databaseFieldName">The database field name - this
+        /// allows you to have a database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up.</param>
+        /// <param name="defaultValueString">The default value that a property 
+        /// of a new object will be set to</param>
+        /// <param name="compulsory">Whether this property is a required field or not.</param>
+        /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
+        /// <param name="length">The maximum length for a string</param>
+        /// <param name="displayName">The display name for the property</param>
+        /// <param name="description">The description of the property</param>
+        //public PropDef
+        //    (string propertyName, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+        //     string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length,
+        //     string displayName, string description)
+        //    : this(
+        //        propertyName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValueString,
+        //        compulsory, autoIncrementing, length, displayName, description)
+        //{
+        //}
+
+        /// <summary>
+        /// This constructor is used to create a propdef using property type assembly and class name and other information. 
+        /// The default value and the property type are loaded when they are needed.
+        /// </summary>
+        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
+        /// <param name="assemblyName">The assembly name of the property type</param>
+        /// <param name="typeName">The type name of the property type (e.g. "string")</param>
+        /// <param name="propRWStatus">Rules for how a property can be accessed.
+        /// See PropReadWriteRule enumeration for more detail.</param>
+        /// <param name="databaseFieldName">The database field name - this
+        /// allows you to have a database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up.</param>
+        /// <param name="defaultValueString">The default value that a property 
+        /// of a new object will be set to</param>
+        /// <param name="compulsory">Whether this property is a required field or not.</param>
+        /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
+        /// <param name="length">The maximum length for a string</param>
+        /// <param name="displayName">The display name for the property</param>
+        /// <param name="description">The description of the property</param>
+        /// <param name="keepValuePrivate">Whether this property must keep its value private or not</param>
+        public PropDef
+            (string propertyName, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+             string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length,
+             string displayName, string description, bool keepValuePrivate)
+            : this(
+                propertyName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValueString,
+                compulsory, autoIncrementing, length, displayName, description, keepValuePrivate)
+        {
+        }
+
+        /// <summary>
+        /// This constructor is used to create a propdef using property type assembly and class name and other information. 
+        /// The default value and the property type are loaded when they are needed.
+        /// </summary>
+        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
+        /// <param name="propType">The type of the property (e.g. string)</param>
+        /// <param name="propRWStatus">Rules for how a property can be accessed.
+        /// See PropReadWriteRule enumeration for more detail.</param>
+        /// <param name="databaseFieldName">The database field name - this
+        /// allows you to have a database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up.</param>
+        /// <param name="defaultValue">The default value that a property 
+        /// of a new object will be set to</param>
+        /// <param name="compulsory">Whether this property is a required field or not.</param>
+        /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
+        /// <param name="length">The maximum length for a string</param>
+        /// <param name="displayName">The display name for the property</param>
+        /// <param name="description">The description of the property</param>
+        public PropDef
+            (string propertyName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName,
+             object defaultValue, bool compulsory, bool autoIncrementing, int length, string displayName,
+             string description)
+            : this(
+                propertyName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null, compulsory,
+                autoIncrementing, length, displayName, description)
+        {
+        }
+
+        /// <summary>
+        /// This constructor is used to create a propdef using property type assembly and class name and other information. 
+        /// The default value and the property type are loaded when they are needed.
+        /// </summary>
+        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
+        /// <param name="propType">The type of the property (e.g. string)</param>
+        /// <param name="propRWStatus">Rules for how a property can be accessed.
+        /// See PropReadWriteRule enumeration for more detail.</param>
+        /// <param name="databaseFieldName">The database field name - this
+        /// allows you to have a database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up.</param>
+        /// <param name="defaultValue">The default value that a property 
+        /// of a new object will be set to</param>
+        /// <param name="compulsory">Whether this property is a required field or not.</param>
+        /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
+        public PropDef
+            (string propertyName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName,
+             object defaultValue, bool compulsory, bool autoIncrementing)
+            : this(
+                propertyName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null, compulsory,
+                autoIncrementing)
+        {
+        }
+
+        /// <summary>
+        /// This constructor is used to create a propdef using property type assembly and class name and other information. 
+        /// The default value and the property type are loaded when they are needed.
+        /// </summary>
+        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
+        /// <param name="propType">The type of the property (e.g. string)</param>
+        /// <param name="propRWStatus">Rules for how a property can be accessed.
+        /// See PropReadWriteRule enumeration for more detail.</param>
+        /// <param name="databaseFieldName">The database field name - this
+        /// allows you to have a database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up.</param>
+        /// <param name="defaultValue">The default value that a property 
+        /// of a new object will be set to</param>
+        /// <param name="compulsory">Whether this property is a required field or not.</param>
+        /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
+        /// <param name="length">The maximum length for a string</param>
+        /// <param name="displayName">The display name for the property</param>
+        /// <param name="description">The description of the property</param>
+        /// <param name="keepValuePrivate">Whether this property must keep its value private or not</param>
+        internal PropDef
+            (string propertyName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName,
+             object defaultValue, bool compulsory, bool autoIncrementing, int length, string displayName,
+             string description, bool keepValuePrivate)
+            : this(
+                propertyName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null, compulsory,
+                autoIncrementing, length, displayName, description, keepValuePrivate)
+        {
+        }
+
+        #endregion //Progressive Public Constructors
+
+        #region Progressive Private Constructors
+
+        //private PropDef
+        //    (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus)
+        //    : this(propertyName, propType, assemblyName, typeName, propRWStatus, null)
+        //{
+        //}
+
+        //private PropDef
+        //    (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+        //     string databaseFieldName)
+        //    : this(propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, null, null)
+        //{
+        //}
+
+        private PropDef
+            (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+             string databaseFieldName, object defaultValue, string defaultValueString)
+            : this(
+                propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue,
+                defaultValueString, false)
+        {
+        }
+
+        private PropDef
+            (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+             string databaseFieldName, object defaultValue, string defaultValueString, bool compulsory)
+            : this(
+                propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue,
+                defaultValueString, compulsory, false)
+        {
+        }
+
+        private PropDef
+            (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+             string databaseFieldName, object defaultValue, string defaultValueString, bool compulsory,
+             bool autoIncrementing)
+            : this(
+                propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue,
+                defaultValueString, compulsory, autoIncrementing, int.MaxValue)
+        {
+        }
+
+        private PropDef
+            (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+             string databaseFieldName, object defaultValue, string defaultValueString, bool compulsory,
+             bool autoIncrementing, int length)
+            : this(
+                propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue,
+                defaultValueString, compulsory, autoIncrementing, length, "")
+        {
+        }
+
+        private PropDef
+            (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+             string databaseFieldName, object defaultValue, string defaultValueString, bool compulsory,
+             bool autoIncrementing, int length, string displayName)
+            : this(
+                propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue,
+                defaultValueString, compulsory, autoIncrementing, length, displayName, "")
+        {
+        }
+
+        private PropDef
+            (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+             string databaseFieldName, object defaultValue, string defaultValueString, bool compulsory,
+             bool autoIncrementing, int length, string displayName, string description)
+            : this(
+                propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue,
+                defaultValueString, compulsory, autoIncrementing, length, displayName, description, false)
+        {
+        }
+
+        #endregion //Progressive Private Constructors
+
+        private PropDef
+            (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+             string databaseFieldName, object defaultValue, string defaultValueString, bool compulsory,
+             bool autoIncrementing, int length, string displayName, string description, bool keepValuePrivate)
+        {
+            SetupPropDef
+                (propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue,
+                 defaultValueString, compulsory, autoIncrementing, length, displayName, description, keepValuePrivate);
+        }
+
+        private void SetupPropDef
+            (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+             string databaseFieldName, object defaultValue, string defaultValueString, bool compulsory,
+             bool autoIncrementing, int length, string displayName, string description, bool keepValuePrivate)
+        {
+            ArgumentValidationHelper.CheckStringArgumentNotEmpty
+                (propertyName, "propertyName", "This field is compulsary for the PropDef class.");
+            if (propertyName.IndexOfAny(new char[] {'.', '-', '|'}) != -1)
+            {
+                throw new ArgumentException
+                    ("A property name cannot contain any of the following characters: [.-|]  Invalid property name "
+                     + propertyName);
+            }
+            _propertyName = propertyName;
+            if (propType != null)
+            {
+                MyPropertyType = propType;
+            }
+            else
+            {
+                _propTypeAssemblyName = assemblyName;
+                _propTypeName = typeName;
+            }
+            _propRWStatus = propRWStatus;
+            _databaseFieldName = databaseFieldName ?? propertyName;
+            if (defaultValue != null)
+            {
+                MyDefaultValue = defaultValue;
+            }
+            else
+            {
+                _defaultValueString = defaultValueString;
+            }
+            _compulsory = compulsory;
+            _autoIncrementing = autoIncrementing;
+            _length = length;
+            _displayName = displayName;
+            if (string.IsNullOrEmpty(_displayName))
+            {
+                _displayName = StringUtilities.DelimitPascalCase(_propertyName, " ");
+            }
+            _description = description;
+            _keepValuePrivate = keepValuePrivate;
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// The name of the property, e.g. surname
+        /// </summary>
+        public string PropertyName
+        {
+            get { return _propertyName; }
+            set { _propertyName = value; }
+        }
+
+        ///<summary>
+        /// The display name for the property.
+        ///</summary>
+        public string DisplayName
+        {
+            get { return _displayName; }
+//            set { _displayName = value; }
+        }
+
+        ///<summary>
+        /// The description of the property.
+        ///</summary>
+        public string Description
+        {
+            get { return _description; }
+            set { _description = value; }
+        }
+
+        /// <summary>
+        /// The name of the property type assembly
+        /// </summary>
+        public string PropertyTypeAssemblyName
+        {
+            get { return _propTypeAssemblyName; }
+            set
+            {
+                if (_propTypeAssemblyName != value)
+                {
+                    _propTypeName = null;
+                    _propType = null;
+                }
+                _propTypeAssemblyName = value;
+            }
+        }
+
+        /// <summary>
+        /// The name of the property type
+        /// </summary>
+        public string PropertyTypeName
+        {
+            get { return _propTypeName; }
+            set
+            {
+                if (_propTypeName != value)
+                {
+                    _propType = null;
+                }
+                _propTypeName = value;
+            }
+        }
+
+        /// <summary>
+        /// The type of the property, e.g. string
+        /// </summary>
+        public Type PropertyType
+        {
+            get { return MyPropertyType; }
+            set { MyPropertyType = value; }
+        }
+
+//        /// <summary>
+//        /// Gets and sets the property rule relevant to this definition
+//        /// </summary>
+//        public virtual IPropRule PropRule
+//        {
+//            get { return _propRule; }
+//            set { _propRule = value; }
+//        }
+
+        /// <summary>
+        /// Returns a List of PropRules <see cref="IPropRule"/> for the Property Definition.
+        /// </summary>
+        public List<IPropRule> PropRules
+        {
+            get { return _propRules; }
+        }
+
+        /// <summary>
+        /// The database field name - this allows you to have a 
+        /// database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up
+        /// </summary>
+        public string DatabaseFieldName
+        {
+            get { return _databaseFieldName; }
+            set { _databaseFieldName = value; }
+        }
+
+        /// <summary>
+        /// The default value that a property of a new object will be set to
+        /// </summary>
+        public object DefaultValue
+        {
+            get { return MyDefaultValue; }
+            set { MyDefaultValue = value; }
+        }
+
+        /// <summary>
+        /// The default value that a property of a new object will be set to
+        /// </summary>
+        public string DefaultValueString
+        {
+            get { return _defaultValueString; }
+            set
+            {
+                if (_defaultValueString != value)
+                {
+                    _defaultValue = null;
+                }
+                _defaultValueString = value;
+            }
+        }
+
+        ///<summary>
+        /// Is this property compulsary or not
+        ///</summary>
+        public bool Compulsory
+        {
+            get { return _compulsory; }
+            set { _compulsory = value; }
+        }
+
+
+        /// <summary>
+        /// Provides access to read and write the ILookupList object
+        /// in this definition
+        /// </summary>
+        public virtual ILookupList LookupList
+        {
+            get { return _lookupList; }
+            set { _lookupList = value; }
+        }
+
+        /// <summary>
+        /// Returns the rule for how the property can be accessed. 
+        /// See the PropReadWriteRule enumeration for more detail.
+        /// </summary>
+        public PropReadWriteRule ReadWriteRule
+        {
+            get { return _propRWStatus; }
+            set { _propRWStatus = value; }
+        }
+
+        /// <summary>
+        /// Indicates whether this object has a LookupList object set
+        /// </summary>
+        /// <returns>Returns true if so, or false if the local
+        /// LookupList equates to NullLookupList</returns>
+        public bool HasLookupList()
+        {
+            return (!(_lookupList is NullLookupList));
+        }
+
+        /// <summary>
+        /// Indicates whether this property is auto-incrementing (from the database)
+        /// In this case when the BusinessObject is inserted the field will be filled
+        /// from the database field.
+        /// </summary>
+        public bool AutoIncrementing
+        {
+            get { return _autoIncrementing; }
+        }
+
+        /// <summary>
+        /// Returns the maximum length for a string property
+        /// </summary>
+        public int Length
+        {
+            get { return _length; }
+        }
+
+        ///<summary>
+        /// Returns whether this property should keep its value private where possible.
+        /// This will usually be set to 'true' for password fields. This will then prevent
+        /// the value being revealed in error messages and by default controls the user interface.
+        ///</summary>
+        public bool KeepValuePrivate
+        {
+            get { return _keepValuePrivate; }
+        }
+
+
+        ///<summary>
+        /// Gets and sets the class def that this propDef is part of.
+        ///</summary>
+        public IClassDef ClassDef
+        {
+            get { return _classDef; }
+            internal set { _classDef = (ClassDef) value; }
+        }
+
+        #endregion
+
+        #region "Rules"
+
+        /// <summary>
+        /// Tests whether a specified property value is valid against the current
+        /// property rule.  A boolean is returned and an error message,
+        /// where appropriate, is stored in a referenced parameter.
+        /// </summary>
+        /// <param name="propValue">The property value to be tested</param>
+        /// <param name="errorMessage">A string which may be amended to reflect
+        /// an error message if the value is not valid</param>
+        /// in the user interface, clarifies error messaging</param>
+        /// <returns>Returns true if valid, false if not</returns>
+        public bool IsValueValid(object propValue, ref string errorMessage)
+        {
+            if (_compulsory)
+            {
+                if (propValue == null || propValue == DBNull.Value
+                    || (propValue is string && (string) propValue == String.Empty))
+                {
+                    errorMessage = String.Format("'{0}' is a compulsory field and has no value.", DisplayName);
+                    return false;
+                }
+            }
+            //Validate Type
+            if (!IsValueValidType(DisplayName, propValue, ref errorMessage))
+            {
+                return false;
+            }
+            //Valid Item in list
+            if (!IsItemInList(DisplayName, propValue, ref errorMessage))
+            {
+                return false;
+            }
+
+            if (propValue is string && _length != Int32.MaxValue)
+            {
+                if (((string) propValue).Length > _length)
+                {
+                    errorMessage = String.Format("'{0}' cannot be longer than {1} characters.", DisplayName, _length);
+                    return false;
+                }
+            }
+            errorMessage = "";
+            bool valid = true;
+            foreach (IPropRule propRule in _propRules)
+            {
+                string tmpErrMsg = "";
+                bool tmpValid = (propRule == null ||
+                                 propRule.IsPropValueValid(DisplayName, GetNewValue(propValue), ref tmpErrMsg));
+                valid = valid & tmpValid;
+                errorMessage = StringUtilities.AppendMessage(errorMessage, tmpErrMsg);
+            }
+            return valid;//_propRule == null || _propRule.IsPropValueValid(displayName, GetNewValue(propValue), ref errorMessage);
+        }
+
+        private bool IsItemInList(string displayName, object propValue, ref string errorMessage)
+        {
+            if (!this.HasLookupList()) return true;
+            if (propValue == null || string.IsNullOrEmpty(Convert.ToString(propValue))) return true;
+            //TODO: This needs to be fixed. Philosophy for lookup lists needs to be clarified and implemented.
+            //Dictionary<string, object> lookupList = this.LookupList.GetLookupList();
+            //bool hasItemInList = lookupList.ContainsKey(Convert.ToString(propValue))
+            //        || lookupList.ContainsValue(Convert.ToString(propValue))
+            //        || lookupList.ContainsValue(propValue);
+            //if (!hasItemInList)
+            //{
+            //    errorMessage += String.Format("'{0}' invalid since '{1}' is not in list.", displayName, propValue);
+            //    return false;
+            //}
+            return true;
+        }
+
+        internal object GetNewValue(object value)
+        {
+            object newValue;
+            try
+            {
+                newValue = Convert.ChangeType(value, this.PropertyType);
+            }
+            catch (InvalidCastException)
+            {
+                newValue = GetNewValueOnError(value);
+            }
+            catch (FormatException)
+            {
+                newValue = GetNewValueOnError(value);
+            }
+            return newValue;
+        }
+
+        private static object GetNewValueOnError(object value)
+        {
+            object newValue;
+            if (value is string && String.IsNullOrEmpty((string) value))
+            {
+                newValue = null;
+            }
+            else
+            {
+                newValue = value;
+            }
+            return newValue;
+        }
+
+        private bool IsValueValidType(string displayName, Object propValue, ref string errorMessage)
+        {
+            if (propValue == null) return true;
+            if (propValue is string && string.IsNullOrEmpty((string) propValue)) return true;
+            if (this.HasLookupList()) return true;
+
+            try
+            {
+                Convert.ChangeType(propValue, this.PropertyType);
+            }
+            catch (InvalidCastException)
+            {
+                if (!(propValue is Guid && this.PropertyType == typeof (string)))
+                {
+                    errorMessage = GetErrorMessage(propValue, displayName);
+                }
+            }
+            catch (FormatException)
+            {
+                errorMessage = GetErrorMessage(propValue, displayName);
+            }
+            return string.IsNullOrEmpty(errorMessage);
+        }
+
+        private string GetErrorMessage(object propValue, string displayName)
+        {
+            string errorMessage = String.Format("'{0}' for property '{1}' is not valid. ", propValue, displayName);
+            errorMessage += "It is not a type of " + this.PropertyTypeName + ".";
+            return errorMessage;
+        }
+
+        #endregion
+
+        #region "BOProps"
+
+        /// <summary>
+        /// Creates a new Business Object property (BOProp)
+        /// </summary>
+        /// <param name="assignDefaultValue">Whether the Business Object this
+        /// property is being created for is a new object or is being 
+        /// loaded from the DB. If it is new, then the property is
+        /// initialised with the default value.
+        /// </param>
+        /// <returns>The newly created BO property</returns>
+        public IBOProp CreateBOProp(bool assignDefaultValue)
+        {
+            if (assignDefaultValue)
+            {
+                object defaultValue = MyDefaultValue;
+                if (defaultValue != null)
+                {
+                    //log.Debug("Creating BoProp with default value " + _defaultValue );
+                }
+                return new BOProp(this, defaultValue);
+            }
+            return new BOProp(this);
+        }
+
+        #endregion //BOProps
+
+        #region "For Testing"
+
+        /// <summary>
+        /// Returns the type of the property
+        /// </summary>
+        protected internal Type PropType
+        {
+            get { return MyPropertyType; }
+            protected set { MyPropertyType = value; }
+        }
+
+        #endregion
+
+        # region PropertyComparer
+
+        /// <summary>
+        /// Returns an appropriate IComparer object depending on the
+        /// property type.  Can be used, for example, to provide to the
+        /// ArrayList.Sort() function in order to determine how to compare
+        /// items.  Caters for the following types: String, Int, Guid,
+        /// DateTime, Single, Double, TimeSpan 
+        /// and anything else that supports IComparable.
+        /// </summary>
+        /// <returns>Returns an IComparer object, or null if the property
+        /// type is not one of those mentioned above</returns>
+        public IPropertyComparer<T> GetPropertyComparer<T>() where T : IBusinessObject
+        {
+            Type comparerType = typeof (PropertyComparer<,>);
+            comparerType = comparerType.MakeGenericType(typeof (T), PropertyType);
+            IPropertyComparer<T> comparer =
+                (IPropertyComparer<T>) Activator.CreateInstance(comparerType, this.PropertyName);
+            return comparer;
+            //if (this.PropertyType.Equals(typeof (string)))
+            //{
+            //    return new StringComparer<T>(this.PropertyName);
+            //}
+            //else if (this.PropertyType.Equals(typeof (int)))
+            //{
+            //    return new IntComparer<T>(this.PropertyName);
+            //}
+            //else if (this.PropertyType.Equals(typeof (Guid)))
+            //{
+            //    return new GuidComparer<T>(this.PropertyName);
+            //}
+            //else if (this.PropertyType.Equals(typeof (DateTime)))
+            //{
+            //    return new DateTimeComparer<T>(this.PropertyName);
+            //}
+            //else if (this.PropertyType.Equals(typeof (Single)))
+            //{
+            //    return new SingleComparer<T>(this.PropertyName);
+            //}
+            //else if (this.PropertyType.Equals(typeof (TimeSpan)))
+            //{
+            //    return new TimeSpanComparer<T>(this.PropertyName);
+            //}
+            //return null;
+        }
+
+        #endregion //PropertyComparer
+
+        #region Type and Default Value Initialisation
+
+        private Type MyPropertyType
+        {
+            get
+            {
+                TypeLoader.LoadClassType
+                    (ref _propType, _propTypeAssemblyName, _propTypeName, "property", "property definition");
+                return _propType;
+            }
+            set
+            {
+                _propType = value;
+                TypeLoader.ClassTypeInfo(_propType, out _propTypeAssemblyName, out _propTypeName);
+            }
+        }
+
+        private object MyDefaultValue
+        {
+            get
+            {
+                object defaultValue;
+                if (MyPropertyType == typeof (DateTime) && _defaultValueString != null)
+                {
+                    switch (_defaultValueString.ToUpper())
+                    {
+                        case "TODAY":
+                            return DateTime.Today;
+                        case "NOW":
+                            return DateTime.Now;
+                    }
+                }
+                if (_defaultValue == null && _defaultValueString != null)
+                {
+                    _hasDefaultValueBeenValidated = false;
+                    if (MyPropertyType == typeof (Guid))
+                    {
+                        defaultValue = new Guid(_defaultValueString);
+                    }
+                    else if (MyPropertyType.IsEnum)
+                    {
+                        defaultValue = Enum.Parse(MyPropertyType, _defaultValueString);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            defaultValue = Convert.ChangeType(_defaultValueString, MyPropertyType);
+                        }
+                        catch (InvalidCastException ex)
+                        {
+                            throw new InvalidCastException
+                                (String.Format
+                                     ("The default value '{0}' cannot be cast to " + "the property type ({1}).",
+                                      _defaultValueString, _propTypeName), ex);
+                        }
+                        catch (FormatException ex)
+                        {
+                            throw new FormatException
+                                (String.Format
+                                     ("The default value '{0}' cannot be converted to " + "the property type ({1}).",
+                                      _defaultValueString, _propTypeName), ex);
+                        }
+                    }
+                }
+                else
+                {
+                    defaultValue = _defaultValue;
+                }
+                validateDefaultValue(defaultValue);
+                return _defaultValue;
+            }
+            set
+            {
+                _hasDefaultValueBeenValidated = false;
+                validateDefaultValue(value);
+                _defaultValueString = _defaultValue != null ? _defaultValue.ToString() : null;
+            }
+        }
+
+
+        ///<summary>
+        /// Is this property persistable or not. This is used for special properties e.g. Dynamically inserted properties
+        /// as for Asset Management System (See Intermap Asset Management) or for any reflective/calculated field that 
+        /// you would like to store propdef information for e.g. rules, Units of measure etc.
+        /// This will prevent the property from being persisted in the usual manner.
+        ///</summary>
+        public bool Persistable
+        {
+            get { return _persistable; }
+            set { _persistable = value; }
+        }
+
+        ///<summary>
+        /// The unit of measure that this property is recorded in. e.g. Weight might be recorded in Kg. Capacity in Litre, m^3 etc
+        ///</summary>
+        public string UnitOfMeasure
+        {
+            get { return _unitOfMeasure; }
+            set { _unitOfMeasure = value; }
+        }
+
+        ///<summary>
+        /// Returns the full display name for a property definition.
+        /// If there is a unit of measure then it is appended to the display name in brackets e.g. DisplayName (UOM).
+        /// If there is no display name then it will return the PascalCase Delimited property Name i.e. Display Name.
+        ///</summary>
+        public string DisplayNameFull
+        {
+            get
+            {
+                string displayName = this.DisplayName;
+                if (string.IsNullOrEmpty(displayName)) displayName = StringUtilities.DelimitPascalCase(_propertyName, " ");
+                if (!string.IsNullOrEmpty(this.UnitOfMeasure))
+                {
+                    return displayName + " (" + this.UnitOfMeasure + ")";
+                }
+                return displayName;
+            }
+        }
+
+
+        private void validateDefaultValue(object defaultValue)
+        {
+            if (!_hasDefaultValueBeenValidated)
+            {
+                if ((defaultValue == null) || MyPropertyType.IsInstanceOfType(defaultValue))
+                {
+                    _defaultValue = defaultValue;
+                    _hasDefaultValueBeenValidated = true;
+                }
+                else
+                {
+                    throw new ArgumentException
+                        (string.Format
+                             ("Default value {0} is invalid since it is " + "not of type {1}.", defaultValue,
+                              _propTypeName), "defaultValue");
+                }
+            }
+        }
+
+        #endregion
+
+        ///<summary>
+        /// Converts the 'value to convert' to the appropriate type for the Property definition.
+        /// E.g. A string 'today' will be converted to a datetimetoday object.
+        ///</summary>
+        ///<param name="valueToConvert">The value requiring conversion.</param>
+        ///<returns>The converted property value</returns>
+        public object ConvertValueToPropertyType(object valueToConvert)
+        {
+            if (valueToConvert == null) return null;
+
+            if (this.PropertyType == typeof(Guid))
+            {
+                return new Guid(valueToConvert.ToString());
+            }
+            if (this.PropertyType == typeof(string) && valueToConvert is Guid)
+            {
+                return ((Guid)valueToConvert).ToString("B");
+            }
+            if (this.PropertyType == typeof (DateTime))
+            {
+                if (valueToConvert is String)
+                {
+                    string stringValueToConvert = (string) valueToConvert;
+                    if (stringValueToConvert.ToUpper() == "TODAY")
+                    {
+                        return new DateTimeToday();
+                    }
+                    if (stringValueToConvert.ToUpper() == "NOW")
+                    {
+                        return new DateTimeNow();
+                    }
+                }
+                else if (valueToConvert is DateTimeToday)
+                {
+                    return valueToConvert;
+                }
+                else if (valueToConvert is DateTimeNow)
+                {
+                    return valueToConvert;
+                }
+            }
+
+            return Convert.ChangeType(valueToConvert, this.PropertyType);
+        }
+
+        ///<summary>
+        /// Adds an <see cref="IPropRule"/> to the <see cref="PropRules"/> for the 
+        /// Property Definiton.
+        ///</summary>
+        ///<param name="rule">The new rules to be added for the Property Definition.</param>
+        public void AddPropRule(IPropRule rule)
+        {
+            if (rule == null) throw new HabaneroApplicationException("You cannot add a null property rule to a property def");
+            _propRules.Add(rule);
+        }
+
+        public IPropDef Clone()
+        {
+            PropDef propDef = new PropDef(this.PropertyName, this.PropertyTypeAssemblyName, this.PropertyTypeName, this.ReadWriteRule,
+                this.DatabaseFieldName, this.DefaultValueString, this.Compulsory, this.AutoIncrementing, this.Length, 
+                this.DisplayName, this.Description, this.KeepValuePrivate);
+            propDef.LookupList = this.LookupList;
+            propDef.Persistable = this.Persistable;
+            propDef.DefaultValue = this.DefaultValue;
+            propDef.PropType = this.PropType;
+            foreach (IPropRule rule in _propRules)
+            {
+                propDef.AddPropRule(rule);
+            }
+            return propDef;
+        }
+
+        public override bool Equals(object obj)
+        {
+            PropDef propDef = obj as PropDef;
+            if (propDef == null) return false;
+            if (this.AutoIncrementing != propDef.AutoIncrementing) return false;
+            if (this.Compulsory != propDef.Compulsory) return false;
+            if (this.DatabaseFieldName != propDef.DatabaseFieldName) return false;
+            if (this.DefaultValue!= propDef.DefaultValue) return false;
+            if (this.DefaultValueString != propDef.DefaultValueString) return false;
+            if (this.Description != propDef.Description) return false;
+            if (this.DisplayName != propDef.DisplayName) return false;
+            if (this.KeepValuePrivate != propDef.KeepValuePrivate) return false;
+            if (this.Length != propDef.Length) return false;
+            if (this.Persistable != propDef.Persistable) return false;
+            if (this.PropertyName != propDef.PropertyName) return false;
+            if (this.ReadWriteRule != propDef.ReadWriteRule) return false;
+            if (this.PropType != propDef.PropType) return false;
+
+            if (this.UnitOfMeasure != propDef.UnitOfMeasure) return false;
+            if (this.LookupList != propDef.LookupList) return false;
+            if (_classDef != propDef.ClassDef) return false;
+            //if (this.PropertyTypeAssemblyName != propDef.PropertyTypeAssemblyName) return false;
+            //if (this.PropertyTypeName != propDef.PropertyTypeName) return false;
+//            if (this.PropRules != propDef.PropRules) return false;
+            return true;
+        }
+    }
+}
