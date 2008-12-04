@@ -41,6 +41,7 @@ namespace Habanero.Base
         private IExceptionNotifier _exceptionNotifier;
         private ISettings _settings;
         private bool _loadClassDefs = true;
+        private string _classDefsXml;
 
         //private ISynchronisationController _synchronisationController;
 
@@ -223,6 +224,15 @@ namespace Habanero.Base
         {
             get { return _classDefsFileName; }
             set { _classDefsFileName = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets the class definition Xml. You can load the xml any way and set it here.
+        /// </summary>
+        public string ClassDefsXml
+        {
+            get { return _classDefsXml; }
+            set { _classDefsXml = value; }
         }
 
         /// <summary>
