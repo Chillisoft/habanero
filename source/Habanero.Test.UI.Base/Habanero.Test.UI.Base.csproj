@@ -84,9 +84,6 @@
     <Compile Include="TestCheckBox.cs" />
     <Compile Include="TestComboBox.cs" />
     <Compile Include="TestForm.cs" />
-    <Compile Include="TestGridWithPanelControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="TestGroupBox.cs" />
     <Compile Include="TestNumericUpDown.cs" />
     <Compile Include="TestProgressBar.cs" />

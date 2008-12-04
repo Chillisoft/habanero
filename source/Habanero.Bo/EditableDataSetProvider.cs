@@ -183,6 +183,7 @@ namespace Habanero.BO
                 {
                     //changedBo = _collection.Find(e.Row["ID"].ToString());
                     changedBo = _collection.Find(_rowIDs[e.Row].ToString());
+                    changedBo.Delete();
                     _collection.Remove(changedBo);
                     _rowStates.Remove(e.Row);
                     // should deletedRowIDs be added to?

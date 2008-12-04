@@ -262,7 +262,6 @@
     <Compile Include="TestTransactionCommitterInMemory.cs" />
     <Compile Include="TestTransactionLogger.cs" />
     <Compile Include="TestUnrefRelationshipDef.cs" />
-    <Compile Include="TestUtils.cs" />
     <Compile Include="TransactionCommitterStub.cs" />
   </ItemGroup>
   <ItemGroup>

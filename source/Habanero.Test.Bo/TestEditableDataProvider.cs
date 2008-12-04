@@ -62,18 +62,16 @@ namespace Habanero.Test.BO
             MyBO bo = new MyBO();
             bo.SetPropertyValue("TestProp", "bo1prop1");
             bo.SetPropertyValue("TestProp2", "s1");
-            bo.Save();
             boCollection.Add(bo);
 
             MyBO bo2 = new MyBO();
             bo2.SetPropertyValue("TestProp", "bo2prop1");
             bo2.SetPropertyValue("TestProp2", "s2");
-            bo2.Save();
             boCollection.Add(bo2);
 
             _dataSetProvider = new EditableDataSetProvider(boCollection);
             BOMapper mapper = new BOMapper((BusinessObject)boCollection.SampleBo);
-            itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
+            itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef().GetUIGridProperties());
 
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(2, boCollection.Count);
@@ -84,9 +82,7 @@ namespace Habanero.Test.BO
             
             //---------------Test Result -----------------------
             Assert.AreEqual(1, boCollection.CreatedBusinessObjects.Count, "Adding a row to the table should use the collection to create the object");
-            //Assert.AreEqual(2, boCollection.Count, "Adding a row to the table should not add a bo to the main collection");
-            Assert.AreEqual(3, boCollection.Count, "Adding a row to the table should add a bo to the main collection");
-            //Note: This behaviour has changed and we need to asses the impact of this change.
+            Assert.AreEqual(2, boCollection.Count, "Adding a row to the table should not add a bo to the main collection");
         }
 
         [Test]
@@ -104,22 +100,6 @@ namespace Habanero.Test.BO
                 }
             }
             Assert.AreEqual(1, numDeleted, "BO should be marked as deleted.");
-        }
-
-        [Test, Ignore("Changes have been made recently (Brett?) that are now breaking editable grids.")]
-        public void TestRejectChangesRemovesNewRow()
-        {
-            //---------------Set up test pack-------------------
-            SetupTestData();
-            int originalCount = _collection.Count;
-            itsTable.Rows.Add(new object[] { null, "bo1prop1", "s1" });
-            //---------------Assert Precondition----------------
-            //Assert.AreEqual(originalCount + 1, _collection.Count);
-
-            //---------------Execute Test ----------------------
-            itsTable.RejectChanges();
-            //---------------Test Result -----------------------
-
         }
 
         [Test]

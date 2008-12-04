@@ -128,27 +128,10 @@ namespace Habanero.Test.UI.Base
                 //---------------Execute Test ----------------------
                 gridBase.ApplyFilter(filterClause);
                 //---------------Test Result -----------------------
-                Assert.IsTrue(filterUpdatedFired);
-            }
 
-            [Test]  //TODO: CurrentRow not working in VWG
-            public void TestSelectedBusinessObject_SetsCurrentRow()
-            {
-                //---------------Set up test pack-------------------
-                BusinessObjectCollection<MyBO> col;
-                IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
-                SetupGridColumnsForMyBo(gridBase);
-                MyBO firstBO = col[0];
-                MyBO secondBO = col[1];
-                //---------------Assert Precondition----------------
-                Assert.AreEqual(firstBO, gridBase.SelectedBusinessObject);
-                Assert.IsNull(gridBase.CurrentRow);
-                //Assert.AreEqual(0, gridBase.Rows.IndexOf(gridBase.CurrentRow));   //surely the currentrow should be active on setCol?
-                //---------------Execute Test ----------------------
-                gridBase.SelectedBusinessObject = secondBO;
-                //---------------Test Result -----------------------
-                Assert.AreEqual(secondBO, gridBase.SelectedBusinessObject);
-                Assert.AreEqual(1, gridBase.Rows.IndexOf(gridBase.CurrentRow));
+                Assert.IsTrue(filterUpdatedFired);
+
+                //---------------Tear Down -------------------------
             }
 
             private static System.Windows.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
@@ -161,8 +144,7 @@ namespace Habanero.Test.UI.Base
 
             protected override void AddControlToForm(IGridBase gridBase)
             {
-                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-                frm.Controls.Add((System.Windows.Forms.Control)gridBase);
+                throw new NotImplementedException();
             }
         }
 
@@ -588,30 +570,6 @@ namespace Habanero.Test.UI.Base
             //The current row is never set see ignored test TestSelectedBusinessObject_SetsCurrentRow
         }
 
-        [Test, Ignore("Works in real, but not in the tests")]
-        public void TestSetSelectedBusinessObject_ScrollsGridWhenRowIsNotVisible()
-        {
-            //---------------Set up test pack-------------------
-            BusinessObjectCollection<MyBO> col;
-            IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
-            for (int i = 0; i < 200; i++)
-            {
-                MyBO newBO = new MyBO();
-                newBO.TestProp = TestUtils.RandomString;
-                col.Add(newBO);
-            }
-            AddControlToForm(gridBase);
-            //---------------Assert Precondition----------------
-            Assert.AreSame(col[0], gridBase.SelectedBusinessObject);
-            Assert.AreEqual(204, gridBase.Rows.Count);
-            Assert.IsFalse(gridBase.Rows[203].Displayed);
-            //---------------Execute Test ----------------------
-            gridBase.SelectedBusinessObject = col[203];
-            //---------------Test Result -----------------------
-            Assert.AreSame(col[203], gridBase.SelectedBusinessObject);
-            Assert.IsTrue(gridBase.Rows[203].Displayed);
-        }
-
         [Test]
         public void TestGridFiringItemSelected()
         {
@@ -838,7 +796,7 @@ namespace Habanero.Test.UI.Base
             }
         }
         [Test]
-        public void TestSetBusinessObject_NonDefaultGridLoader()
+        public void Test_SetBusinessObject_NonDefaultGridLoader()
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();

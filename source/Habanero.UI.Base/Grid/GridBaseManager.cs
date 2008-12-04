@@ -153,43 +153,18 @@ namespace Habanero.UI.Base
                 }
                 IDataGridViewRowCollection gridRows = _gridBase.Rows;
                 ClearAllSelectedRows(gridRows);
-                if (value == null)
-                {
-                    _gridBase.CurrentCell = null;
-                    return;
-                }
+                if (value == null) return;
                 BusinessObject bo = (BusinessObject) value;
-                bool boFoundAndHighlighted = false;
                 int rowNum = 0;
                 foreach (IDataGridViewRow row in gridRows)
                 {
                     if (row.Cells["ID"].Value.ToString() == bo.ID.ToString())
                     {
                         gridRows[rowNum].Selected = true;
-                        boFoundAndHighlighted = true;
                         _gridBase.ChangeToPageOfRow(rowNum);
                         break;
                     }
                     rowNum++;
-                }
-
-                //TODO: neither of these works in VWG (and they're needed)
-                if (boFoundAndHighlighted && rowNum >= 0 && rowNum < gridRows.Count)
-                {
-                    _gridBase.CurrentCell = _gridBase.Rows[rowNum].Cells[1];
-                    if (_gridBase.CurrentRow != null && !_gridBase.CurrentRow.Displayed)
-                    {
-                        try
-                        {
-                            _gridBase.FirstDisplayedScrollingRowIndex = _gridBase.Rows.IndexOf(_gridBase.CurrentRow);
-                            gridRows[rowNum].Selected = true;  //Getting turned off for some reason
-                        }
-                        catch(InvalidOperationException ex)
-                        {
-                            //Do nothing - designed to catch error "No room is available to display rows"
-                            //  when grid height is insufficient
-                        }
-                    }
                 }
             }
         }

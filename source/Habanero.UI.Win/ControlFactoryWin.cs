@@ -811,26 +811,6 @@ namespace Habanero.UI.Win
             return new ReadOnlyGridButtonsControlWin(this);
         }
 
-        public IGridWithPanelControl<T> CreateGridWithPanelControl<T>() where T : class, IBusinessObject, new()
-        {
-            return new GridWithPanelControlWin<T>(this, "default");
-        }
-
-        public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(string uiDefName) where T : class, IBusinessObject, new()
-        {
-            return new GridWithPanelControlWin<T>(this, uiDefName);
-        }
-
-        public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl) where T : class, IBusinessObject, new()
-        {
-            return new GridWithPanelControlWin<T>(this, businessObjectControl);
-        }
-
-        public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl, string uiDefName) where T : class, IBusinessObject, new()
-        {
-            return new GridWithPanelControlWin<T>(this, businessObjectControl, uiDefName);
-        }
-
         /// <summary>
         /// Creates a Panel control
         /// </summary>

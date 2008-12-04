@@ -99,13 +99,14 @@ namespace Habanero.Console
         {
             try
             {
-                string classDefsXml;
-                if (String.IsNullOrEmpty(ClassDefsXml))
-                    classDefsXml = new StreamReader(ClassDefsFileName).ReadToEnd();
+                if (_defClassFactory != null)
+                {
+                    return new XmlClassDefsLoader(new StreamReader(ClassDefsFileName).ReadToEnd(), new DtdLoader(), _defClassFactory);
+                }
                 else
-                    classDefsXml = ClassDefsXml;
-
-                return new XmlClassDefsLoader(classDefsXml, new DtdLoader(), _defClassFactory);
+                {
+                    return new XmlClassDefsLoader(new StreamReader(ClassDefsFileName).ReadToEnd(), new DtdLoader());
+                }
             }
             catch (Exception ex)
             {

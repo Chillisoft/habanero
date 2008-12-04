@@ -33,6 +33,7 @@ namespace Habanero.BO
         where TBusinessObject : class, IBusinessObject, new()
     {
         private readonly Relationship _relationship;
+        private readonly List<TBusinessObject> _removedBusinessObjects = new List<TBusinessObject>();
 
         ///<summary>
         /// The related business object is constructed with the parent Business object of this 
@@ -44,18 +45,6 @@ namespace Habanero.BO
             _relationship = (Relationship) relationship;
         }
 
-        public override void Add(TBusinessObject bo)
-        {
-            base.Add(bo);
-            if (bo.Status.IsNew)
-            {
-                SetUpForeignKey(bo);
-            }
-            //TODO: what must we do if you add a business object to a relationship but the foreign key does not match?
-            // Possibly this is a strategy must look at this so that extendable
-            // (see similar issue for remove below)
-        }
-
         /// <summary>
         /// Removes the specified business object from the collection
         /// </summary>
@@ -64,19 +53,12 @@ namespace Habanero.BO
         {
             //TODO: This should be configured in the relationship the relationship
             // should allow you to either delete the object when removing or to dereference the object.
-            //for now will dereference as well as delete.
-            if (!bo.Status.IsNew) bo.Delete();
-
-            DereferenceBO(bo);
-            return base.Remove(bo);
-        }
-
-        private void DereferenceBO(TBusinessObject bo)
-        {
-            foreach (RelPropDef relPropDef in _relationship.RelationshipDef.RelKeyDef)
+            bo.Delete();
+            if (!_removedBusinessObjects.Contains(bo))
             {
-                bo.SetPropertyValue(relPropDef.RelatedClassPropName, null);
+                _removedBusinessObjects.Add(bo);
             }
+            return base.Remove(bo);
         }
 
         /// <summary>
@@ -107,19 +89,22 @@ namespace Habanero.BO
             //TODO: Think about this we are trying to solve the problem that you can set
             // the properties of an object but the related object is only loaded based on its persisted values.
             TBusinessObject bo = base.CreateBusinessObject();
-            SetUpForeignKey(bo);
-            //bo.Relationships this._relationship.OwningBO
-            return bo;
-        }
-
-        private void SetUpForeignKey(TBusinessObject bo)
-        {
             foreach (RelPropDef relPropDef in _relationship.RelationshipDef.RelKeyDef)
             {
                 bo.SetPropertyValue(relPropDef.RelatedClassPropName,
                                     _relationship.OwningBO.GetPropertyValue(relPropDef.OwnerPropertyName));
                 
             }
+            //bo.Relationships this._relationship.OwningBO
+            return bo;
+        }
+        ///<summary>
+        /// Returns a collection of business objects that have been removed from the relationship
+        /// but have not yet been persisted.
+        ///</summary>
+        public List<TBusinessObject> RemovedBusinessObjects
+        {
+            get { return _removedBusinessObjects; }
         }
     }
 }

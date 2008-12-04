@@ -18,8 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -278,6 +276,7 @@ namespace Habanero.BO
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="collection">The collection to refresh</param>
         public override void Refresh<T>(BusinessObjectCollection<T> collection) 
+            //where T : class, IBusinessObject, new()
         {
             IClassDef classDef = collection.ClassDef;
             SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
@@ -301,16 +300,22 @@ namespace Habanero.BO
                     IClassDef correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
                     // loads an object of the correct sub type (for single table inheritance)
                     loadedBo = GetLoadedBoOfSpecifiedType(loadedBo, correctSubClassDef);
-                    AddBusinessObjectToCollection(collection, loadedBo, clonedCol);
+                    if (clonedCol.Contains(loadedBo))
+                    {
+                        ((IBusinessObjectCollection)collection).AddWithoutEvents(loadedBo);
+                    }
+                    else
+                    {
+                        collection.Add(loadedBo);
+                    }
                 }
             }
-            //The collection should show all loaded object less removed or deleted object not yet persisted
+            //TODO: I think that the collection should show all loaded object less removed or deleted object not yet persisted
             //     plus all created or added objects not yet persisted.
-            //Note: This behaviour is fundamentally different than the business objects behaviour which 
-            //  throws and error if any of the items are dirty when it is being refreshed.
-            //Should a refresh be allowed on a dirty collection (what do we do with BO's
-            RestoreCreatedCollection(collection, clonedCol.CreatedBusinessObjects);
-            RestoreRemovedCollection(collection, clonedCol.RemovedBusinessObjects);
+//            foreach (T createdBO in collection.CreatedBusinessObjects)
+//            {
+//                ((IBusinessObjectCollection)collection).AddWithoutEvents(createdBO);
+//            }
         }
 
         /// <summary>
@@ -352,11 +357,20 @@ namespace Habanero.BO
                 while (dr.Read())
                 {
                     IBusinessObject loadedBo = LoadBOFromReader(collection.ClassDef, dr, selectQuery);
-                    AddBusinessObjectToCollection(collection, loadedBo, clonedCol);
+                    //If the origional collection had the new business object then
+                    // use add internal this adds without any events being raised etc.
+                    //else adds via the Add method (normal add) this raises events such that the 
+                    // user interface can be updated.
+                    if (clonedCol.Contains(loadedBo))
+                    {
+                        collection.AddWithoutEvents(loadedBo);
+                    }
+                    else
+                    {
+                        collection.Add(loadedBo);
+                    }
                 }
             }
-            RestoreCreatedCollection(collection, clonedCol.CreatedBOCol);
-            RestoreRemovedCollection(collection, clonedCol.RemovedBOCol);
         }
 
         /// <summary>
@@ -485,7 +499,7 @@ namespace Habanero.BO
         #endregion
 
 
-        protected new static IBusinessObjectCollection CreateCollectionOfType(Type BOType)
+        protected static IBusinessObjectCollection CreateCollectionOfType(Type BOType)
         {
             Type boColType = typeof(BusinessObjectCollection<>).MakeGenericType(BOType);
             return (IBusinessObjectCollection)Activator.CreateInstance(boColType);

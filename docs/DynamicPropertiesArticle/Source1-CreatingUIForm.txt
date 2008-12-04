@@ -1,5 +1,0 @@
-foreach (MachinePropertyDef machinePropertyDef in MachinePropertyDefs) {
-	UIFormField uiProperty = new UIFormField(null, machinePropertyDef.PropertyName, "TextBox", "System.Windows.Forms", "",
-                                        "", true, "", new Hashtable(), null);
-        form.Add(uiProperty);
-}

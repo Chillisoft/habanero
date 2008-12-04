@@ -103,9 +103,6 @@
     <Compile Include="FormVWG.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GridWithPanelControlVWG.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Grid\DataGridViewCellStyleVWG.cs" />
     <Compile Include="Grid\DataGridViewCellVWG.cs" />
     <Compile Include="Grid\DataGridViewColumnVWG.cs" />

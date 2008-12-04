@@ -117,23 +117,9 @@ namespace Habanero.Base
         /// </summary>
         void Delete();
 
-        /// <summary>
-        /// Fired every time an object is persisted.
-        ///   Whether the object is updated, inserted or deleted.
-        /// Also fired when the object is restored.
-        /// </summary>
         event EventHandler<BOEventArgs> Updated;
-        /// <summary>
-        /// Fired when an object that is not deleted is updated to the database
-        /// </summary>
         event EventHandler<BOEventArgs> Saved;
-        /// <summary>
-        /// Event fired when an object marked for deletion is persisted to the databse.
-        /// </summary>
         event EventHandler<BOEventArgs> Deleted;
-        /// <summary>
-        /// Fired when the object is restored.
-        /// </summary>
         event EventHandler<BOEventArgs> Restored;
 
         /// <summary>

@@ -193,7 +193,7 @@ namespace Habanero.Test.BO
             }
 
             [Test]
-            public void Test_GetBusinessObjectCollection_Typed_LoadOfSubTypeDoesntLoadSuperTypedObjects()
+            public void TestGetBusinessObjectCollection_Typed_LoadOfSubTypeDoesntLoadSuperTypedObjects()
             {
                 //---------------Set up test pack-------------------
                 CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
@@ -208,7 +208,7 @@ namespace Habanero.Test.BO
             }
 
             [Test]
-            public void Test_GetBusinessObjectCollection_Typed_LoadOfSubTypeDoesntLoadSuperTypedObjects_Fresh()
+            public void TestGetBusinessObjectCollection_Typed_LoadOfSubTypeDoesntLoadSuperTypedObjects_Fresh()
             {
                 //---------------Set up test pack-------------------
                 CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
@@ -227,7 +227,7 @@ namespace Habanero.Test.BO
             #region Test that the load returns the correct sub type
 
             [Test]
-            public void Test_GetBusinessObjectCollection_Typed_ReturnsSubType_Fresh()
+            public void TestGetBusinessObjectCollection_Typed_ReturnsSubType_Fresh()
             {
                 //---------------Set up test pack-------------------
                 CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
@@ -245,7 +245,7 @@ namespace Habanero.Test.BO
             }
 
             [Test]
-            public void Test_GetBusinessObjectCollection_ReturnsSubType_TwoLevelsDeep_DiscriminatorShared_Fresh()
+            public void TestGetBusinessObjectCollection_ReturnsSubType_TwoLevelsDeep_DiscriminatorShared_Fresh()
             {
                 //---------------Set up test pack-------------------
                 SetupDataAccessor();
@@ -263,7 +263,7 @@ namespace Habanero.Test.BO
             }
 
             [Test]
-            public void Test_GetBusinessObjectCollection_ReturnsSubType_TwoLevelsDeep_Fresh()
+            public void TestGetBusinessObjectCollection_ReturnsSubType_TwoLevelsDeep_Fresh()
             {
                 //---------------Set up test pack-------------------
                 SetupDataAccessor();
@@ -1444,7 +1444,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_CriteriaSetUponLoadingCollection()
+        public void TestCriteriaSetUponLoadingCollection()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1459,7 +1459,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_CriteriaSetUponLoadingCollection_Untyped()
+        public void TestCriteriaSetUponLoadingCollection_Untyped()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -1474,7 +1474,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_CriteriaSetUponLoadingCollection_Untyped_Date()
+        public void TestCriteriaSetUponLoadingCollection_Untyped_Date()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -1493,7 +1493,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_CriteriaStringSetUponLoadingCollection()
+        public void TestCriteriaStringSetUponLoadingCollection()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -1509,7 +1509,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_CriteriaStringSetUponLoadingCollection_Untyped()
+        public void TestCriteriaStringSetUponLoadingCollection_Untyped()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -1526,7 +1526,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_CriteriaObject()
+        public void TestGetBusinessObjectCollection_CriteriaObject()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1548,7 +1548,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_CriteriaObject_DateTimeToday()
+        public void TestGetBusinessObjectCollection_CriteriaObject_DateTimeToday()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1571,7 +1571,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_CriteriaObject_Untyped()
+        public void TestGetBusinessObjectCollection_CriteriaObject_Untyped()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1594,7 +1594,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_CriteriaObject_WithOrder()
+        public void TestGetBusinessObjectCollection_CriteriaObject_WithOrder()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1617,7 +1617,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_CriteriaObject_WithOrder_Untyped()
+        public void TestGetBusinessObjectCollection_CriteriaObject_WithOrder_Untyped()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1639,7 +1639,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_CriteriaString()
+        public void TestGetBusinessObjectCollection_CriteriaString()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1662,7 +1662,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_CriteriaString_ThroughRelationship()
+        public void TestGetBusinessObjectCollection_CriteriaString_ThroughRelationship()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO.LoadDefaultClassDef();
@@ -1732,7 +1732,7 @@ namespace Habanero.Test.BO
 
 
         [Test]
-        public void Test_Load_CriteriaString_ThroughRelationship_TwoLevels()
+        public void TestBusinessObjectCollection_Load_CriteriaString_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
             Engine.LoadClassDef_IncludingCarAndOwner();
@@ -1782,7 +1782,7 @@ namespace Habanero.Test.BO
 
 
         [Test]
-        public void Test_GetBusinessObjectCollection_CriteriaString_Date_Today()
+        public void TestGetBusinessObjectCollection_CriteriaString_Date_Today()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1805,7 +1805,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_CriteriaString_Untyped()
+        public void TestGetBusinessObjectCollection_CriteriaString_Untyped()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1831,7 +1831,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_CriteriaString_WithOrder_Untyped()
+        public void TestGetBusinessObjectCollection_CriteriaString_WithOrder_Untyped()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1855,7 +1855,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_CriteriaString_WithOrderString()
+        public void TestGetBusinessObjectCollection_CriteriaString_WithOrderString()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1881,7 +1881,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_CriteriaString_WithOrderString_Untyped()
+        public void TestGetBusinessObjectCollection_CriteriaString_WithOrderString_Untyped()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1902,7 +1902,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_GetsSameObjectAsGetBusinessObject()
+        public void TestGetBusinessObjectCollection_GetsSameObjectAsGetBusinessObject()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1926,7 +1926,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_GetsSameObjectAsGetBusinessObject_Untyped()
+        public void TestGetBusinessObjectCollection_GetsSameObjectAsGetBusinessObject_Untyped()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1952,7 +1952,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_NullCriteriaObject()
+        public void TestGetBusinessObjectCollection_NullCriteriaObject()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1970,7 +1970,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_NullCriteriaString()
+        public void TestGetBusinessObjectCollection_NullCriteriaString()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1989,7 +1989,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_SelectQuery()
+        public void TestGetBusinessObjectCollection_SelectQuery()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -2010,7 +2010,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_SelectQuery_Untyped()
+        public void TestGetBusinessObjectCollection_SelectQuery_Untyped()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -2031,7 +2031,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_SortOrder_ThroughRelationship()
+        public void TestGetBusinessObjectCollection_SortOrder_ThroughRelationship()
         {
             //---------------Set up test pack-------------------
             DeleteEnginesAndCars();
@@ -2055,7 +2055,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_SortOrder_ThroughRelationship_TwoLevels()
+        public void TestGetBusinessObjectCollection_SortOrder_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
             DeleteEnginesAndCars();
@@ -2083,7 +2083,7 @@ namespace Habanero.Test.BO
 
         
         [Test]
-        public void Test_GetBusinessObjectCollectionClassDef_SortOrder_ThroughRelationship_TwoLevels()
+        public void TestGetBusinessObjectCollectionClassDef_SortOrder_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
             //DeleteEnginesAndCars();
@@ -2102,7 +2102,7 @@ namespace Habanero.Test.BO
 
 
         [Test]
-        public void Test_GetBusinessObjectCollection_SortOrder_ThroughRelationship_Untyped()
+        public void TestGetBusinessObjectCollection_SortOrder_ThroughRelationship_Untyped()
         {
             //---------------Set up test pack-------------------
             DeleteEnginesAndCars();
@@ -2127,7 +2127,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_SortOrderString_ThroughRelationship()
+        public void TestGetBusinessObjectCollection_SortOrderString_ThroughRelationship()
         {
             //---------------Set up test pack-------------------
             DeleteEnginesAndCars();
@@ -2152,7 +2152,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_SortOrderString_ThroughRelationship_TwoLevels()
+        public void TestGetBusinessObjectCollection_SortOrderString_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
             DeleteEnginesAndCars();
@@ -2180,7 +2180,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_SortOrderString_ThroughRelationship_Untyped()
+        public void TestGetBusinessObjectCollection_SortOrderString_ThroughRelationship_Untyped()
         {
             //---------------Set up test pack-------------------
             DeleteEnginesAndCars();
@@ -2205,7 +2205,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_StringCriteriaObject_Untyped()
+        public void TestGetBusinessObjectCollection_StringCriteriaObject_Untyped()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -2227,7 +2227,7 @@ namespace Habanero.Test.BO
 
 
         [Test]
-        public void Test_GetBusinessObjectCollection_StringCriteriaObject_Untyped_DateOfBirth()
+        public void TestGetBusinessObjectCollection_StringCriteriaObject_Untyped_DateOfBirth()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -2249,7 +2249,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_StringCriteriaObject_WithOrder_Untyped_DateOfBirth()
+        public void TestGetBusinessObjectCollection_StringCriteriaObject_WithOrder_Untyped_DateOfBirth()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -2270,7 +2270,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_LoadAll()
+        public void TestLoadAll()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -2282,7 +2282,6 @@ namespace Habanero.Test.BO
             cpCol.LoadAll();
             //---------------Test Result -----------------------
             Assert.AreEqual(0, cpCol.Count);
-            Assert.AreEqual(0, cpCol.PersistedBOColl.Count);
         }
 
 
@@ -2331,7 +2330,7 @@ namespace Habanero.Test.BO
 
 
         [Test]
-        public void Test_LoadAll_Loader()
+        public void TestLoadAll_Loader()
         {
             //---------------Set up test pack-------------------
             SetupDataAccessor();
@@ -2346,12 +2345,10 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(1, col.Count);
             Assert.Contains(cp, col);
-            Assert.AreEqual(1, col.PersistedBOColl.Count);
-            Assert.IsTrue(col.PersistedBOColl.Contains(cp));
         }
 
         [Test]
-        public void Test_LoadWithOrderBy()
+        public void TestLoadWithOrderBy()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -2371,7 +2368,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_LoadWithOrderBy_ManualOrderbyFieldName()
+        public void TestLoadWithOrderBy_ManualOrderbyFieldName()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -2392,7 +2389,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_RefreshLoadedCollection()
+        public void TestRefreshLoadedCollection()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -2407,86 +2404,19 @@ namespace Habanero.Test.BO
 
             //---------------Assert Precondition ---------------
             Assert.AreEqual(2, col.Count);
-            Assert.AreEqual(2, col.PersistedBOColl.Count);
 
             //---------------Execute Test ----------------------
             BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(3, col.Count);
-            Assert.AreEqual(3, col.PersistedBOColl.Count);
             Assert.Contains(cp1, col);
             Assert.Contains(cp2, col);
             Assert.Contains(cp3, col);
         }
 
-        public void Test_Refresh_DoesNotRefreshDirtyOjects()
-        {
-            //---------------Set up test pack-------------------
-            BORegistry.DataAccessor = new DataAccessorDB();
-            ContactPersonTestBO.DeleteAllContactPeople();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-
-            ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson();
-            ContactPersonTestBO.CreateSavedContactPerson();
-            ContactPersonTestBO.CreateSavedContactPerson(); 
-            col.LoadAll();
-            string newSurname = Guid.NewGuid().ToString();
-
-            //--------------------Assert Preconditions----------
-            Assert.AreEqual(3, col.Count);
-
-            //---------------Execute Test ----------------------
-            cp1.Surname = newSurname;
-            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(3, col.Count);
-            Assert.AreEqual(newSurname, cp1.Surname);
-            Assert.IsTrue(cp1.Status.IsDirty);
-        }
-
         [Test]
-        public void TestRefreshCollectionRefreshesNonDirtyObjects()
-        {
-            //---------------Set up test pack-------------------
-            BORegistry.DataAccessor = new DataAccessorDB();
-            ContactPersonTestBO.DeleteAllContactPeople();
-
-            ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-
-            ContactPersonTestBO.CreateSavedContactPerson();
-            ContactPersonTestBO.CreateSavedContactPerson(); 
-            col.LoadAll();
-            string newSurname = Guid.NewGuid().ToString();
-            cp1.Surname = newSurname;
-            cp1.Save();
-            ContactPersonTestBO secondInstanceOfCP1 = col.FindByGuid(cp1.ContactPersonID);
-
-            //--------------------Assert Preconditions----------
-            Assert.IsFalse(col.Contains(cp1));
-            Assert.AreEqual(3, col.Count);
-            Assert.AreEqual(newSurname, cp1.Surname);
-            Assert.AreNotSame(secondInstanceOfCP1, cp1);
-            Assert.AreNotEqual(newSurname, secondInstanceOfCP1.Surname);
-            Assert.IsFalse(cp1.Status.IsDirty);
-            //---------------Execute Test ----------------------
-            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(3, col.Count);
-            Assert.AreNotSame(secondInstanceOfCP1, cp1);
-            Assert.AreEqual(newSurname, secondInstanceOfCP1.Surname);
-        }
-        [Test]
-        public void Test_RefreshLoadedCollection_Typed_GTEQCriteriaString()
+        public void TestRefreshLoadedCollection_Typed_GTEQCriteriaString()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -2504,8 +2434,6 @@ namespace Habanero.Test.BO
 
             //---------------Assert Precondition ---------------
             Assert.AreEqual(3, col.Count);
-            BusinessObjectCollection<ContactPersonTestBO> typedCol = (BusinessObjectCollection<ContactPersonTestBO>) col;
-            Assert.AreEqual(3, typedCol.PersistedBOColl.Count);
             Assert.Contains(cpEqual, col);
 
             //---------------Execute Test ----------------------
@@ -2513,7 +2441,6 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(4, col.Count);
-            Assert.AreEqual(4, typedCol.PersistedBOColl.Count);
             Assert.Contains(cp1, col);
             Assert.Contains(cp2, col);
             Assert.Contains(cp3, col);
@@ -2522,7 +2449,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_RefreshLoadedCollection_Typed_LTEQCriteriaString()
+        public void TestRefreshLoadedCollection_Typed_LTEQCriteriaString()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
@@ -2558,7 +2485,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_RefreshLoadedCollection_Untyped()
+        public void TestRefreshLoadedCollection_Untyped()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -2585,7 +2512,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_RefreshLoadedCollection_TypedAsBusinessObject()
+        public void TestRefreshLoadedCollection_TypedAsBusinessObject()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -2607,14 +2534,13 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(3, col.Count);
-            Assert.AreEqual(3, col.PersistedBOColl.Count);
             Assert.Contains(cp1, col);
             Assert.Contains(cp2, col);
             Assert.Contains(cp3, col);
         }
 
         [Test]
-        public void Test_RefreshLoadedCollection_Untyped_GTCriteriaObject_DoesNotLoadNewObject()
+        public void TestRefreshLoadedCollection_Untyped_GTCriteriaObject_DoesNotLoadNewObject()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -2643,7 +2569,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_RefreshLoadedCollection_Untyped_GTCriteriaObject_LoadsNewObject()
+        public void TestRefreshLoadedCollection_Untyped_GTCriteriaObject_LoadsNewObject()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -2671,7 +2597,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_RefreshLoadedCollection_Untyped_GTCriteriaString()
+        public void TestRefreshLoadedCollection_Untyped_GTCriteriaString()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
@@ -2701,7 +2627,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_RefreshLoadedCollection_Untyped_GTEQCriteriaObject()
+        public void TestRefreshLoadedCollection_Untyped_GTEQCriteriaObject()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -2734,7 +2660,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_RefreshLoadedCollection_Untyped_GTEQCriteriaString()
+        public void TestRefreshLoadedCollection_Untyped_GTEQCriteriaString()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -2768,7 +2694,7 @@ namespace Habanero.Test.BO
 
 
         [Test]
-        public void Test_RefreshLoadedCollection_Untyped_LTEQCriteriaObject()
+        public void TestRefreshLoadedCollection_Untyped_LTEQCriteriaObject()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -2803,7 +2729,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_RefreshLoadedCollection_Untyped_LTEQCriteriaString()
+        public void TestRefreshLoadedCollection_Untyped_LTEQCriteriaString()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
@@ -2839,55 +2765,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_Refresh_WithRemovedBOs_Typed()
-        {
-            //---------------Set up test pack-------------------
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
-            BusinessObjectCollection<ContactPersonTestBO> cpCol =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>("");
-            cpCol.Remove(cp);
-
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.Count);
-
-            //---------------Execute Test ----------------------
-            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cpCol);
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.Count);
-        }
-
-        [Test]
-        public void Test_Refresh_WithRemovedBOs_UnTyped()
-        {
-            //---------------Set up test pack-------------------
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
-            IBusinessObjectCollection cpCol =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, "");
-            cpCol.Remove(cp);
-
-            //---------------Assert Precondition----------------
-            BusinessObjectCollection<ContactPersonTestBO> typedBoCol = (BusinessObjectCollection<ContactPersonTestBO>) cpCol;
-            Assert.AreEqual(1, typedBoCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.Count);
-
-            //---------------Execute Test ----------------------
-            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cpCol);
-
-            //---------------Test Result -----------------------
-            typedBoCol = (BusinessObjectCollection<ContactPersonTestBO>)cpCol;
-            Assert.AreEqual(1, typedBoCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.Count);
-        }
-
-        [Test]
-        public void Test_SetColSelectQuery_null()
+        public void TestSetColSelectQuery_null()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -2910,7 +2788,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_TypedAsBusinessObject_ThrowsError_CriteriaObject()
+        public void TestGetBusinessObjectCollection_TypedAsBusinessObject_ThrowsError_CriteriaObject()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -2918,17 +2796,15 @@ namespace Habanero.Test.BO
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
 
             //---------------Execute Test ----------------------
-            AssertTypedAsBusinessObjectThrowsCorrectException(delegate
+            AssertTypedAsBusinessObjectThrowsCorrectException(delegate()
             {
-#pragma warning disable 168
                 BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
-#pragma warning restore 168
                     GetBusinessObjectCollection<BusinessObject>(criteria);
             });
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_TypedAsBusinessObject_ThrowsError_CriteriaObjectWithOrderBy()
+        public void TestGetBusinessObjectCollection_TypedAsBusinessObject_ThrowsError_CriteriaObjectWithOrderBy()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -2936,59 +2812,51 @@ namespace Habanero.Test.BO
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
 
             //---------------Execute Test ----------------------
-            AssertTypedAsBusinessObjectThrowsCorrectException(delegate
+            AssertTypedAsBusinessObjectThrowsCorrectException(delegate()
             {
-#pragma warning disable 168
                 BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
-#pragma warning restore 168
                     GetBusinessObjectCollection<BusinessObject>(criteria, null);
             });
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_TypedAsBusinessObject_ThrowsError_SelectQuery()
+        public void TestGetBusinessObjectCollection_TypedAsBusinessObject_ThrowsError_SelectQuery()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
 
             //---------------Execute Test ----------------------
-            AssertTypedAsBusinessObjectThrowsCorrectException(delegate
-                                                              {
-#pragma warning disable 168
+            AssertTypedAsBusinessObjectThrowsCorrectException(delegate()
+            {
                 BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
-#pragma warning restore 168
                     GetBusinessObjectCollection<BusinessObject>((SelectQuery) null);
             });
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_TypedAsBusinessObject_ThrowsError_CriteriaString()
+        public void TestGetBusinessObjectCollection_TypedAsBusinessObject_ThrowsError_CriteriaString()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
 
             //---------------Execute Test ----------------------
-            AssertTypedAsBusinessObjectThrowsCorrectException(delegate
-                                                              {
-#pragma warning disable 168
+            AssertTypedAsBusinessObjectThrowsCorrectException(delegate()
+            {
                 BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
-#pragma warning restore 168
                     GetBusinessObjectCollection<BusinessObject>("");
             });
         }
 
         [Test]
-        public void Test_GetBusinessObjectCollection_TypedAsBusinessObject_ThrowsError_CriteriaStringWithOrderBy()
+        public void TestGetBusinessObjectCollection_TypedAsBusinessObject_ThrowsError_CriteriaStringWithOrderBy()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
 
             //---------------Execute Test ----------------------
-            AssertTypedAsBusinessObjectThrowsCorrectException(delegate
-                                                              {
-#pragma warning disable 168
+            AssertTypedAsBusinessObjectThrowsCorrectException(delegate()
+            {
                 BusinessObjectCollection<BusinessObject> col = BORegistry.DataAccessor.BusinessObjectLoader.
-#pragma warning restore 168
                     GetBusinessObjectCollection<BusinessObject>("", "");
             });
         }
@@ -3015,7 +2883,7 @@ namespace Habanero.Test.BO
         }
 
         [Test, Ignore("No Test Implemented")]
-        public void Test_LoadWithCriteria_MultipleLevels()
+        public void TestLoadWithCriteria_MultipleLevels()
         {
             //---------------Set up test pack-------------------
             

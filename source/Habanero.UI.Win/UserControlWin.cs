@@ -63,7 +63,5 @@ namespace Habanero.UI.Win
 
             }
         }
-
-
     }
 }

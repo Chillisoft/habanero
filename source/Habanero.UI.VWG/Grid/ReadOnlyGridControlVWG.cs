@@ -302,7 +302,7 @@ namespace Habanero.UI.VWG
 
         public void DisableDefaultRowDoubleClickEventHandler()
         {
-            //throw new System.NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
         #endregion

@@ -203,27 +203,5 @@ namespace Habanero.Test.BO
             Assert.IsNull(col.SelectQuery.Criteria);
             //---------------Tear Down -------------------------
         }
-
-        [Test]
-        public void TestCompositeKeyObject()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            DataStoreInMemory dataStore = new DataStoreInMemory();
-            DataStoreInMemory otherDataStore = new DataStoreInMemory();
-            BORegistry.DataAccessor = new DataAccessorInMemory(otherDataStore);
-            ContactPersonCompositeKey contactPerson = new ContactPersonCompositeKey();
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-            dataStore.Add(contactPerson);
-            // in the save process the ID is updated to the persisted field values, so the hash of the ID changes
-            // this is why the object is removed and re-added to the BusinessObjectManager (to ensure the dictionary
-            // of objects is hashed on the correct, updated value.
-            contactPerson.Save();  
-            //---------------Test Result -----------------------
-            Assert.IsTrue(dataStore.AllObjects.ContainsKey(contactPerson.ID));
-
-        }
     }
 }

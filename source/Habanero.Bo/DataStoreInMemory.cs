@@ -66,6 +66,27 @@ namespace Habanero.BO
         public T Find<T>(Criteria criteria) where T : class, IBusinessObject
         {
             return (T) Find(typeof (T), criteria);
+            //T currentBO = null;
+            //foreach (IBusinessObject bo in _objects.Values)
+            //{
+            //    T boAsT = bo as T;
+            //    if (boAsT == null) continue;
+            //    ;
+            //    if (!criteria.IsMatch(boAsT)) continue;
+
+            //    if (currentBO == null)
+            //    {
+            //        currentBO = boAsT;
+            //    }
+            //    else
+            //    {
+            //        throw new HabaneroDeveloperException("There was an error with loading the class '"
+            //                  + bo.ClassDef.ClassNameFull + "'", "Loading a '"
+            //                  + bo.ClassDef.ClassNameFull + "' with criteria '" + criteria
+            //                  + "' returned more than one record when only one was expected.");
+            //    }
+            //}
+            //return currentBO;
         }
 
         ///<summary>

@@ -43,10 +43,11 @@ namespace Habanero.BO
         #region IBusinessObject Members
 
         public event EventHandler<BOEventArgs> Updated;
-
         public event EventHandler<BOEventArgs> Saved;
         public event EventHandler<BOEventArgs> Deleted;
         public event EventHandler<BOEventArgs> Restored;
+
+
         public event EventHandler<BOEventArgs> PropertyUpdated;
 
         #endregion
@@ -116,7 +117,6 @@ namespace Habanero.BO
                     currentClassDef = currentClassDef.SuperClassClassDef;
                 }
 
-                if (currentClassDef.SuperClassClassDef == null) continue;
                 if (currentClassDef.SuperClassClassDef.PrimaryKeyDef != null)
                 {
                     InitialisePropertyValue(currentClassDef.SuperClassClassDef.PrimaryKeyDef.KeyName, myID);
@@ -202,13 +202,10 @@ namespace Habanero.BO
             if (_classDef == null)
             {
                 throw new NullReferenceException(String.Format(
-                                                     "An error occurred while loading the class definitions (ClassDef.xml) for " +
+                                                     "An error occurred while loading the class definitions for " +
                                                      "'{0}'. Check that the class exists in that " +
                                                      "namespace and assembly and that there are corresponding " +
-                                                     "class definitions for this class.\n" + 
-                                                     "Please check that the ClassDef.xml file is either an imbedded resource " + 
-                                                     "or is copied to the output directory via the appropriate postbuild command " + 
-                                                     "(for more help see FAQ)", GetType()));
+                                                     "class definitions for this class.", GetType()));
             }
         }
 
@@ -645,19 +642,7 @@ namespace Habanero.BO
             // check if object is already editing (i.e. another property value has 
             // been changed if it is not then check that this object is still fresh
             // if the object is not fresh then throw appropriate exception.
-            object propValue;
-            object newPropValue1;
-            try
-            {
-                propValue = prop.Value == null ? prop.Value : Convert.ChangeType(prop.Value, prop.PropertyType);
-                newPropValue1 = newPropValue == null ? newPropValue : Convert.ChangeType(newPropValue, prop.PropertyType);
-            }
-            catch (Exception ex)
-            {
-                propValue = prop.Value;
-                newPropValue1 = newPropValue;
-            }
-            if (PropValueHasChanged(propValue, newPropValue1))
+            if (PropValueHasChanged(prop.Value, newPropValue))
             {
                 if (!Status.IsEditing)
                 {
@@ -978,6 +963,7 @@ namespace Habanero.BO
                 {
                     BusinessObjectManager.Instance.Add(this);
                 }
+
                 FireSaved();
             }
             AfterSave();

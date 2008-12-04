@@ -258,11 +258,6 @@ namespace Habanero.UI.Base
         // SRCategory("CatBehavior")]
         //DataGridViewEditMode EditMode { get; set; }
 
-        /// <summary>
-        /// Gets or sets the index of the row that is the first row displayed on the DataGridView
-        /// </summary>
-        int FirstDisplayedScrollingRowIndex { get; set; }
-
         /// <summary>Gets a value indicating whether the current cell has uncommitted changes.</summary>
         /// <returns>true if the current cell has uncommitted changes; otherwise, false.</returns>
         /// <filterpriority>1</filterpriority>

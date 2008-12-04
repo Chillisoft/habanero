@@ -148,11 +148,6 @@ namespace Habanero.UI.Base
         /// <filterpriority>1</filterpriority>
         void RemoveAt(int index);
 
-        /// <summary>
-        /// Returns the index of a specified item in the collection
-        /// </summary>
-        /// <param name="dataGridViewRow">The DataGridViewRow to locate in the DataGridViewRowCollection</param>
-        /// <returns>The index of value if it is a DataGridViewRow found in the DataGridViewRowCollection; otherwise, -1.</returns>
-        int IndexOf(IDataGridViewRow dataGridViewRow);
+        
     }
 }

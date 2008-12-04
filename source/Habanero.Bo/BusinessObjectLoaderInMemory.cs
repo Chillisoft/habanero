@@ -215,12 +215,26 @@ namespace Habanero.BO
 
             BusinessObjectCollection<T> clonedCol = collection.Clone();
             collection.Clear();
+
             foreach (T loadedBo in loadedBos)
             {
-                AddBusinessObjectToCollection(collection, loadedBo, clonedCol);
+                if (clonedCol.Contains(loadedBo))
+                {
+                    ((IBusinessObjectCollection)collection).AddWithoutEvents(loadedBo);
+                }
+                else
+                {
+                    collection.Add(loadedBo);
+                }
             }
-            RestoreCreatedCollection(collection, clonedCol.CreatedBusinessObjects);
-            RestoreRemovedCollection(collection, clonedCol.RemovedBusinessObjects);
+            //TODO: I think that the collection should show all loaded object less removed or deleted object not yet persisted
+            //     plus all created or added objects not yet persisted.
+//            foreach (T createdBO in collection.CreatedBusinessObjects)
+//            {
+//                ((IBusinessObjectCollection)collection).AddWithoutEvents(createdBO);
+//            }
+            //collection.ForEach(delegate(T obj) { if (!updatedCol.Contains(obj)) collection.RemoveInternal(obj); });
+            //updatedCol.ForEach(delegate(T obj) { if (!collection.Contains(obj)) collection.Add(obj); });
         }
 
         /// <summary>
@@ -254,10 +268,23 @@ namespace Habanero.BO
 
             foreach (BusinessObject loadedBo in loadedBos)
             {
-                AddBusinessObjectToCollection(collection, loadedBo, clonedCol);
+                if (clonedCol.Contains(loadedBo))
+                {
+                    collection.AddWithoutEvents(loadedBo);
+                }
+                else
+                {
+                    collection.Add(loadedBo);
+                }
             }
-            RestoreCreatedCollection(collection, clonedCol.CreatedBOCol);
-            RestoreRemovedCollection(collection, clonedCol.RemovedBOCol);
+            //foreach (IBusinessObject obj in collection)
+            //{
+            //    if (!updatedCol.Contains(obj)) collection.Remove(obj);
+            //}
+            //foreach (IBusinessObject obj in updatedCol)
+            //{
+            //    if (!collection.Contains(obj)) collection.Add(obj);
+            //}
         }
 
         #endregion //GetBusinessObjectCollection Members

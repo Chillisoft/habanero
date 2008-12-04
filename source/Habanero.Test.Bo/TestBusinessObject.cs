@@ -441,24 +441,6 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestPropValueHasChanged_DiffTypes()
-        {
-            int? x = 1;
-            int? y = 1;
-            Assert.IsFalse(BusinessObject.PropValueHasChanged(x, y));
-
-            string z = "1";
-            Type type = x.GetType();
-            Assert.IsFalse(BusinessObject.PropValueHasChanged(Convert.ChangeType(x,type), Convert.ChangeType(z,type)));
-
-            Assert.IsFalse(BusinessObject.PropValueHasChanged(null, null));
-            Assert.IsTrue(BusinessObject.PropValueHasChanged(null, x));
-            Assert.IsTrue(BusinessObject.PropValueHasChanged(x, null));
-            x = null;
-            Assert.IsTrue(BusinessObject.PropValueHasChanged(x, y));
-        }
-
-        [Test]
         public void TestSaveUsesFactoryGeneratedTransactionCommitter()
         {
             //---------------Set up test pack-------------------
