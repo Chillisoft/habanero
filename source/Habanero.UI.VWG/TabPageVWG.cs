@@ -57,8 +57,8 @@ namespace Habanero.UI.VWG
         /// </summary>
         Base.DockStyle IControlHabanero.Dock
         {
-            get { return (Base.DockStyle)base.Dock; }
-            set { base.Dock = (Gizmox.WebGUI.Forms.DockStyle)value; }
+            get { return DockStyleVWG.GetDockStyle(base.Dock); }
+            set { base.Dock = DockStyleVWG.GetDockStyle(value); }
         }
     }
 }

@@ -258,7 +258,7 @@ namespace Habanero.UI.VWG
         /// <returns>Returns the transaction object</returns>
         protected virtual TransactionCommitter CreateSaveTransaction()
         {
-            TransactionCommitterDB committer = new TransactionCommitterDB();
+            TransactionCommitter committer = (TransactionCommitter)BORegistry.DataAccessor.CreateTransactionCommitter();
             committer.AddBusinessObject(_bo);
             return committer;
         }
