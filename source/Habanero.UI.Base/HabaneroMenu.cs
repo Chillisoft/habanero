@@ -25,9 +25,9 @@ namespace Habanero.UI.Base
     public delegate IFormControl FormControlCreator();
     public delegate IControlManager ControlManagerCreator(IControlFactory controlFactory);
 
-    public interface IMenuItemCreator
+    public abstract class MenuItemCreator
     {
-        void AddToMenu(HabaneroMenu currentMenu, IControlFactory controlFactory);
+        public abstract void AddToMenu(HabaneroMenu currentMenu, IControlFactory controlFactory);
     }
 
     public class HabaneroMenu
