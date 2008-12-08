@@ -25,12 +25,12 @@ using System.Reflection;
 namespace Habanero.BO.Comparer
 {
 	/// <summary>
-	/// Compares two properties.  Used by Sort().
+	/// Compares a property of two different business objects using reflection.  Used by Sort().
 	/// </summary>
 	public class ReflectedPropertyComparer<T> : IComparer<T>
 	{
-		private string _propertyName;
-		private PropertyInfo _propInfo;
+		private readonly string _propertyName;
+		private readonly PropertyInfo _propInfo;
 
 		/// <summary>
 		/// Constructor to instantiate a new comparer
@@ -60,17 +60,17 @@ namespace Habanero.BO.Comparer
 			if (x1 == null && y1 == null)
 			{
 				return 0;
-			} else if (x1 == null)
-			{
-				return -1;
-			} else if (y1 == null)
-			{
-				return 1;
 			}
+	        if (x1 == null)
+	        {
+	            return -1;
+	        }
+	        if (y1 == null)
+	        {
+	            return 1;
+	        }
 
-
-
-            if (x1 is string)
+	        if (x1 is string)
             {
                 return String.Compare((string)x1, (string)y1);
             }
@@ -96,7 +96,6 @@ namespace Habanero.BO.Comparer
 
             IComparer comparer = Comparer<T>.Default;
             return comparer.Compare(x1, y1);
-			//return 0;
 		}
 	}
 }

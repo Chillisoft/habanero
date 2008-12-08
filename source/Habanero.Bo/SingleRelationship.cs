@@ -72,25 +72,25 @@ namespace Habanero.BO
         public virtual IBusinessObject GetRelatedObject()
         {
             IExpression newRelationshipExpression = _relKey.RelationshipExpression();
+
+            if (RelatedBoForeignKeyHasChanged()) _relatedBo = null;
+
             if (_relatedBo == null ||
                 (_storedRelationshipExpression != newRelationshipExpression.ExpressionString()))
             {
-                //log.Debug("Retrieving related object, in relationship " + this.RelationshipName) ;
                 if (HasRelationship())
                 {
                     //log.Debug("HasRelationship returned true, loading object.") ; 
                     IBusinessObject busObj = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject(this);
-                    // Peter-Working:  IBusinessObject busObj = (BusinessObject)Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
-                    // Peter-Working:  busObj = BOLoader.Instance.GetBusinessObject(busObj, newRelationshipExpression);
-                    if (_relDef.KeepReferenceToRelatedObject)
-                    {
+//                    if (_relDef.KeepReferenceToRelatedObject)
+//                    {
                         _relatedBo = busObj;
                         _storedRelationshipExpression = newRelationshipExpression.ExpressionString();
-                    }
-                    else
-                    {
-                        return busObj;
-                    }
+//                    }
+//                    else
+//                    {
+//                        return busObj;
+//                    }
                 }
                 else
                 {
@@ -98,11 +98,27 @@ namespace Habanero.BO
                     _storedRelationshipExpression = newRelationshipExpression.ExpressionString();
                 }
             }
-            else
-            {
-                //log.Debug("Related Object is already loaded, returning cached one.") ;
-            }
+            if (RelatedBoForeignKeyHasChanged()) _relatedBo = null;
             return _relatedBo;
+        }
+
+        private bool RelatedBoForeignKeyHasChanged()
+        {
+            if (_relatedBo != null )
+            {
+                foreach (IRelProp prop in this.RelKey)
+                {
+                    object relatedPropValue = _relatedBo.GetPropertyValue(prop.RelatedClassPropName);
+                    if (prop.BOProp.Value == null )
+                    {
+                        if (relatedPropValue == null) continue;
+                        return true;
+                    }
+                    if (prop.BOProp.Value.Equals(relatedPropValue)) continue;
+                    return true;
+                }
+            }
+            return false;
         }
 
 
@@ -125,14 +141,7 @@ namespace Habanero.BO
             _relatedBo = relatedObject;
             foreach (RelProp relProp in _relKey)
             {
-                object relatedObjectValue;
-                if (_relatedBo != null)
-                {
-                    relatedObjectValue = _relatedBo.GetPropertyValue(relProp.RelatedClassPropName);
-                } else
-                {
-                    relatedObjectValue = null;
-                }
+                object relatedObjectValue = _relatedBo == null ? null: _relatedBo.GetPropertyValue(relProp.RelatedClassPropName);
                 _owningBo.SetPropertyValue(relProp.OwnerPropertyName, relatedObjectValue);
             }
             _storedRelationshipExpression = _relKey.RelationshipExpression().ExpressionString();

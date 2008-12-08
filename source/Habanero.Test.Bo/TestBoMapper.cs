@@ -71,6 +71,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestGetPropertyValueToDisplay_BusinessObjectLookupList_NotInList()
         {
+            ContactPersonTestBO.DeleteAllContactPeople();
             ContactPersonTestBO.CreateSampleData();
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadClassDefWithBOLookup("Surname <> abc");

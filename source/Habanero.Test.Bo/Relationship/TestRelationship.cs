@@ -97,7 +97,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(0, addresses.Count);
         }
         [Test]
-        public void TestRefreshWithRemovedChild_Dereference_Single()
+        public void TestChangedEnginesForeignKey_Dereference_Single_Saved()
         {
             //---------------Set up test pack-------------------
             Car car = new Car();
@@ -107,7 +107,7 @@ namespace Habanero.Test.BO
             car.Save();
             car2.Save();
             engine.Save();
-            //engine.EngineNo = Guid.
+
             //---------------Assert Precondition----------------
             Assert.AreSame(engine, car.GetEngine());
             Assert.AreSame(car, engine.GetCar());
@@ -119,9 +119,31 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.IsNull(loadedEngine);
-
         }
 
+        [Test]
+        public void TestChangedEnginesForeignKey_Dereference_Single()
+        {
+            //---------------Set up test pack-------------------
+            Car car = new Car();
+            Car car2 = new Car();
+            Engine engine = new Engine();
+            engine.CarID = car.CarID;
+            car.Save();
+            car2.Save();
+            engine.Save();
+
+            //---------------Assert Precondition----------------
+            Assert.AreSame(engine, car.GetEngine());
+            Assert.AreSame(car, engine.GetCar());
+
+            //---------------Execute Test ----------------------
+            engine.CarID = car2.CarID;
+            Engine loadedEngine = car.GetEngine();
+
+            //---------------Test Result -----------------------
+            Assert.IsNull(loadedEngine);
+        }
 
         [Test]
         public void TestGetRelatedBusinessObjectCollection_SortOrder()
@@ -206,7 +228,7 @@ namespace Habanero.Test.BO
 
             Assert.AreSame(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection));
             BusinessObjectManager.Instance.ClearLoadedObjects();
-            Assert.AreNotSame(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection));
+            Assert.AreSame(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection));
             mMockBo.Delete();
             mMockBo.Save();
         }

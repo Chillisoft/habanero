@@ -47,6 +47,9 @@ namespace Habanero.BO
         public event EventHandler<BOEventArgs> Saved;
         public event EventHandler<BOEventArgs> Deleted;
         public event EventHandler<BOEventArgs> Restored;
+        public event EventHandler<BOEventArgs> MarkedForDelete;
+
+
         public event EventHandler<BOEventArgs> PropertyUpdated;
 
         #endregion
@@ -926,10 +929,10 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Marks the business object for deleting.  Calling Save() will
+        /// Marks the business object for deleting.  Calling Save() or saving the transaction will
         /// then carry out the deletion from the database.
         /// </summary>
-        public void Delete()
+        public void MarkForDelete()
         {
             CheckIsDeletable();
             if (Status.IsNew)
@@ -947,6 +950,18 @@ namespace Habanero.BO
             }
             _boStatus.IsDirty = true;
             _boStatus.IsDeleted = true;
+            FireMarkForDeleteEvent();
+        }
+
+
+        /// <summary>
+        /// Marks the business object for deleting.  Calling Save() will
+        /// then carry out the deletion from the database.
+        /// </summary>
+        [Obsolete("This method has been replaced with MarkForDelete() since it is far more explicit that this does not instantly delete the business object.")]
+        public void Delete()
+        {
+            MarkForDelete();
         }
 
         /// <summary>
@@ -1043,6 +1058,14 @@ namespace Habanero.BO
             if (!IsDeletable(out errMsg))
             {
                 throw new BusObjDeleteException(this, errMsg);
+            }
+        }
+
+        protected void FireMarkForDeleteEvent()
+        {
+            if (MarkedForDelete != null)
+            {
+                MarkedForDelete(this, new BOEventArgs(this));
             }
         }
 
@@ -1220,5 +1243,6 @@ namespace Habanero.BO
             return !this.Status.IsDirty || this.IsEditable(out errMsg);
         }
 
+ 
     }
 }

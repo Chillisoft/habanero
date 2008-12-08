@@ -24,6 +24,7 @@ using System.Data;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -284,8 +285,7 @@ namespace Habanero.BO
             QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
 
             ISqlStatement statement = selectQuery.CreateSqlStatement();
-            BusinessObjectCollection<T> clonedCol = collection.Clone();
-            collection.Clear();
+            ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
 
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
             {
@@ -301,16 +301,48 @@ namespace Habanero.BO
                     IClassDef correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
                     // loads an object of the correct sub type (for single table inheritance)
                     loadedBo = GetLoadedBoOfSpecifiedType(loadedBo, correctSubClassDef);
-                    AddBusinessObjectToCollection(collection, loadedBo, clonedCol);
+                    AddBusinessObjectToCollection(collection, loadedBo);
                 }
             }
+
             //The collection should show all loaded object less removed or deleted object not yet persisted
             //     plus all created or added objects not yet persisted.
             //Note: This behaviour is fundamentally different than the business objects behaviour which 
             //  throws and error if any of the items are dirty when it is being refreshed.
             //Should a refresh be allowed on a dirty collection (what do we do with BO's
-            RestoreCreatedCollection(collection, clonedCol.CreatedBusinessObjects);
-            RestoreRemovedCollection(collection, clonedCol.RemovedBusinessObjects);
+            //TODO: I think this could be done via reflection instead of having all these public methods.
+            //   especially where done via the interface.
+            //  the other option would be for the business object collection to have another method (other than clone)
+            //   that returns another type of object that has these methods to eliminate all these 
+            //   public accessors
+            RestoreEditedLists(collection);
+        }
+
+
+        /// <summary>
+        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
+        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
+        /// only fire for the new objects added to the collection, not for the ones that already existed).
+        /// </summary>
+        /// <param name="collection">The collection to refresh</param>
+        public override void Refresh(IBusinessObjectCollection collection)
+        {
+            SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
+            QueryBuilder.PrepareCriteria(collection.ClassDef, selectQuery.Criteria);
+            ISqlStatement statement = selectQuery.CreateSqlStatement();
+
+            ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
+
+
+            using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
+            {
+                while (dr.Read())
+                {
+                    IBusinessObject loadedBo = LoadBOFromReader(collection.ClassDef, dr, selectQuery);
+                    AddBusinessObjectToCollection(collection, loadedBo);
+                }
+            }
+            RestoreEditedLists(collection);
         }
 
         /// <summary>
@@ -330,33 +362,6 @@ namespace Habanero.BO
                 loadedBo = (T)subClassBusinessObject;
             }
             return loadedBo;
-        }
-
-        /// <summary>
-        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
-        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
-        /// only fire for the new objects added to the collection, not for the ones that already existed).
-        /// </summary>
-        /// <param name="collection">The collection to refresh</param>
-        public override void Refresh(IBusinessObjectCollection collection)
-        {
-            SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
-            QueryBuilder.PrepareCriteria(collection.ClassDef, selectQuery.Criteria);
-            ISqlStatement statement = selectQuery.CreateSqlStatement();
-
-            IBusinessObjectCollection clonedCol = collection.Clone();
-            collection.Clear();
-
-            using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
-            {
-                while (dr.Read())
-                {
-                    IBusinessObject loadedBo = LoadBOFromReader(collection.ClassDef, dr, selectQuery);
-                    AddBusinessObjectToCollection(collection, loadedBo, clonedCol);
-                }
-            }
-            RestoreCreatedCollection(collection, clonedCol.CreatedBOCol);
-            RestoreRemovedCollection(collection, clonedCol.RemovedBOCol);
         }
 
         /// <summary>
@@ -381,7 +386,7 @@ namespace Habanero.BO
             businessObject = GetBusinessObject(businessObject.ClassDef, businessObject.ID);
             return businessObject;
         }
-        
+
         #endregion
 
 
@@ -478,8 +483,10 @@ namespace Habanero.BO
         /// <returns>An object of the type defined by the relationship if one was found, otherwise null</returns>
         public IBusinessObject GetRelatedBusinessObject(SingleRelationship relationship)
         {
-            return GetBusinessObject(relationship.RelationshipDef.RelatedObjectClassDef,
-                                     Criteria.FromRelationship(relationship));
+            if (relationship.RelationshipDef.RelatedObjectClassDef != null)
+                return GetBusinessObject(relationship.RelationshipDef.RelatedObjectClassDef,
+                                         Criteria.FromRelationship(relationship));
+            return null;
         }
 
         #endregion

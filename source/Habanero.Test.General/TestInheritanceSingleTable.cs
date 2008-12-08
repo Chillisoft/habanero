@@ -69,12 +69,14 @@ namespace Habanero.Test.General
             Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
             BusinessObjectCollection<Shape> shapes = 
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Shape>(criteria, null);
-            foreach (Shape shape in shapes)
+            while (shapes.Count > 0)
             {
+                Shape shape = shapes[0];
                 shape.Delete();
                 committer.AddBusinessObject(shape);
             }
-                        criteria1 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "Circle");
+
+            criteria1 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "Circle");
             criteria2 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "CircleChanged");
             criteria = new Criteria(criteria1, Criteria.LogicalOp.Or, criteria2);
             BusinessObjectCollection<CircleNoPrimaryKey> circles 

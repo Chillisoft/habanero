@@ -21,6 +21,7 @@ using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -99,6 +100,7 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public IBusinessObject GetBusinessObject(IClassDef classDef, Criteria criteria)
         {
+            if (classDef == null) throw new ArgumentNullException("classDef");
             return _dataStore.Find(classDef.ClassType, criteria);
         }
 
@@ -204,7 +206,6 @@ namespace Habanero.BO
 
             BusinessObjectCollection<T> loadedBos = _dataStore.FindAll<T>(criteria);
             loadedBos.Sort(delegate(T x, T y) { return orderCriteria.Compare(x, y); });
-            //updatedCol.Sort(orderCriteria);
             if (selectQuery.Limit >= 0)
             {
                 while (loadedBos.Count > selectQuery.Limit)
@@ -212,15 +213,19 @@ namespace Habanero.BO
                     loadedBos.RemoveAt(selectQuery.Limit);
                 }
             }
+            LoadBOCollection(collection, loadedBos);
+        }
 
-            BusinessObjectCollection<T> clonedCol = collection.Clone();
-            collection.Clear();
-            foreach (T loadedBo in loadedBos)
+        private static void LoadBOCollection(IBusinessObjectCollection collection, IBusinessObjectCollection loadedBos)
+        {
+            ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
+            // made internal or something and used via reflection.
+            // I am not comfortable with it being on the Interface.
+            foreach (IBusinessObject loadedBo in loadedBos)
             {
-                AddBusinessObjectToCollection(collection, loadedBo, clonedCol);
+                AddBusinessObjectToCollection(collection, loadedBo);
             }
-            RestoreCreatedCollection(collection, clonedCol.CreatedBusinessObjects);
-            RestoreRemovedCollection(collection, clonedCol.RemovedBusinessObjects);
+            RestoreEditedLists(collection);
         }
 
         /// <summary>
@@ -231,7 +236,6 @@ namespace Habanero.BO
         /// <param name="collection">The collection to refresh</param>
         public override void Refresh(IBusinessObjectCollection collection)
         {
-
             ISelectQuery selectQuery = collection.SelectQuery;
             Criteria criteria = selectQuery.Criteria;
             OrderCriteria orderCriteria = selectQuery.OrderCriteria;
@@ -248,17 +252,10 @@ namespace Habanero.BO
                     loadedBos.RemoveAt(selectQuery.Limit);
                 }
             }
-
-            IBusinessObjectCollection clonedCol = collection.Clone();
-            collection.Clear();
-
-            foreach (BusinessObject loadedBo in loadedBos)
-            {
-                AddBusinessObjectToCollection(collection, loadedBo, clonedCol);
-            }
-            RestoreCreatedCollection(collection, clonedCol.CreatedBOCol);
-            RestoreRemovedCollection(collection, clonedCol.RemovedBOCol);
+            LoadBOCollection(collection, loadedBos);
         }
+
+
 
         #endregion //GetBusinessObjectCollection Members
 
@@ -349,10 +346,16 @@ namespace Habanero.BO
         /// <returns>An object of the type defined by the relationship if one was found, otherwise null</returns>
         public IBusinessObject GetRelatedBusinessObject(SingleRelationship relationship)
         {
-            return GetBusinessObject(relationship.RelationshipDef.RelatedObjectClassDef,
-                                     Criteria.FromRelationship(relationship));
+            if (relationship.RelationshipDef.RelatedObjectClassDef != null)
+                return GetBusinessObject(relationship.RelationshipDef.RelatedObjectClassDef,
+                                         Criteria.FromRelationship(relationship));
+            return null;
         }
 
+        ///<summary>
+        /// Returns the In memory datastore that this Loader is using
+        ///</summary>
+        ///<returns></returns>
         public DataStoreInMemory GetMemoryDatabase()
         {
             return _dataStore;

@@ -39,7 +39,7 @@ namespace Habanero.BO
     /// class. The business objects contained in this collection must
     /// inherit from BusinessObject.
     /// 
-    ///   The business object collection differentiates between
+    ///   The business object co\llection differentiates between
     ///   - business objects deleted from it since it was last synchronised with the datastore.
     ///   - business objects added to it since it was last synchronised.
     ///   - business objects created by it since it was last synchronised.
@@ -84,14 +84,17 @@ namespace Habanero.BO
         private IBusinessObject _sampleBo;
         private Hashtable _keyObjectHashTable;
         private readonly List<TBusinessObject> _createdBusinessObjects = new List<TBusinessObject>();
-        private ISelectQuery _selectQuery;
         private readonly List<TBusinessObject> _persistedObjectsCollection = new List<TBusinessObject>();
-//        private EventHandler<BOEventArgs> _savedEventHandler;
-//        private EventHandler<BOEventArgs> _restoredEventHandler;
         protected readonly List<TBusinessObject> _removedBusinessObjects = new List<TBusinessObject>();
-        private readonly EventHandler<BOEventArgs> _savedEventHandler ;
+        private readonly List<TBusinessObject> _addedBusinessObjects = new List<TBusinessObject>();
+        private readonly List<TBusinessObject> _markForDeleteBusinessObjects = new List<TBusinessObject>();
+
+        private ISelectQuery _selectQuery;
+        private readonly EventHandler<BOEventArgs> _savedEventHandler;
         private readonly EventHandler<BOEventArgs> _deletedEventHandler;
         private readonly EventHandler<BOEventArgs> _restoredEventHandler;
+        private readonly EventHandler<BOKeyEventArgs> _updateIDEventHandler;
+        private readonly EventHandler<BOEventArgs> _markForDeleteEventHandler;
 
         /// <summary>
         /// Default constructor. 
@@ -137,20 +140,17 @@ namespace Habanero.BO
             this._savedEventHandler = SavedEventHandler;
             this._deletedEventHandler = DeletedEventHandler;
             this._restoredEventHandler = RestoredEventHandler;
+            this._updateIDEventHandler = UpdateHashTable;
+            this._markForDeleteEventHandler = MarkForDeleteEventHandler;
         }
 
         private void Initialise(IClassDef classDef, TBusinessObject sampleBo)
         {
             if (classDef == null)
             {
-                if (sampleBo == null)
-                {
-                    _boClassDef = ClassDefinition.ClassDef.ClassDefs[typeof (TBusinessObject)];
-                }
-                else
-                {
-                    _boClassDef = sampleBo.ClassDef;
-                }
+                _boClassDef = sampleBo == null
+                                  ? ClassDefinition.ClassDef.ClassDefs[typeof (TBusinessObject)]
+                                  : sampleBo.ClassDef;
             }
             else
             {
@@ -192,6 +192,7 @@ namespace Habanero.BO
                 this.AddCreatedBusinessObject
                     ((TBusinessObject) info.GetValue(CREATED_BUSINESS_OBJECT + i, typeof (TBusinessObject)));
             }
+            _updateIDEventHandler = UpdateHashTable;
         }
 
         /// <summary>
@@ -277,23 +278,37 @@ namespace Habanero.BO
         /// <param name="businessObject"></param>
         private void AddToPersistedCollection(IBusinessObject businessObject)
         {
-            this.PersistedBOColl.Add(businessObject);
+            this.PersistedBOCol.Add(businessObject);
         }
 
         private void AddWithoutEvents(TBusinessObject bo)
         {
             if (bo == null) throw new ArgumentNullException("bo");
 
-
             base.Add(bo);
-            _keyObjectHashTable.Add(bo.ID.ToString(), bo);
+            if (bo.ID != null) KeyObjectHashTable.Add(bo.ID.ToString(), bo);
+            RegisterForBOEvents(bo);
+        }
+
+        private void RegisterForBOEvents(TBusinessObject bo)
+        {
             bo.Saved += _savedEventHandler;
             bo.Deleted += _deletedEventHandler;
             bo.Restored += _restoredEventHandler;
-            if (bo.ID != null)
-                bo.ID.Updated += UpdateHashTable;
+            //TODO: businessObject.Updated += _updatedEventHandler;
+            if (bo.ID != null) bo.ID.Updated += _updateIDEventHandler;
+            bo.MarkedForDelete += _markForDeleteEventHandler;
         }
 
+        private void DeRegisterForBOEvents(TBusinessObject businessObject)
+        {
+            businessObject.Saved -= _savedEventHandler;
+            businessObject.Restored -= _restoredEventHandler;
+            businessObject.Deleted -= _deletedEventHandler;
+            //TODO: businessObject.Updated -= _updatedEventHandler;
+            if (businessObject.ID != null) businessObject.ID.Updated -= _updateIDEventHandler;
+            businessObject.MarkedForDelete -= _markForDeleteEventHandler;
+        }
 
         /// <summary>
         /// Updates the lookup table when a primary key property has
@@ -302,12 +317,26 @@ namespace Habanero.BO
         private void UpdateHashTable(object sender, BOKeyEventArgs e)
         {
             string oldID = e.BOKey.PropertyValueStringBeforeLastEdit();
-            if (_keyObjectHashTable.Contains(oldID))
+            if (KeyObjectHashTable.Contains(oldID))
             {
-                BusinessObject bo = (BusinessObject) _keyObjectHashTable[oldID];
-                _keyObjectHashTable.Remove(oldID);
-                _keyObjectHashTable.Add(bo.ID.ToString(), bo);
+                BusinessObject bo = (BusinessObject) KeyObjectHashTable[oldID];
+                KeyObjectHashTable.Remove(oldID);
+                KeyObjectHashTable.Add(bo.ID.ToString(), bo);
             }
+        }
+        /// <summary>
+        /// Updates the lookup table when a primary key property has
+        /// changed
+        /// </summary>
+        private void MarkForDeleteEventHandler(object sender, BOEventArgs e)
+        {
+            TBusinessObject bo = e.BusinessObject as TBusinessObject;
+            if (bo == null) return;
+       
+            this.MarkForDeleteBusinessObjects.Add(bo);
+            base.Remove(bo);
+            KeyObjectHashTable.Remove(bo.ID.ToString());
+            this.FireBusinessObjectRemoved(bo);
         }
 
         /// <summary>
@@ -320,13 +349,12 @@ namespace Habanero.BO
             TBusinessObject bo = e.BusinessObject as TBusinessObject;
             if (bo == null) return;
             this.RemoveInternal(bo);
-            this.PersistedBOColl.Remove(bo);
+            this.PersistedBOCol.Remove(bo);
             this.RemovedBusinessObjects.Remove(bo);
-
-            bo.Deleted -= _deletedEventHandler;
-            bo.Saved -= _savedEventHandler;
-            bo.Restored -= _restoredEventHandler;
+            this.MarkForDeleteBusinessObjects.Remove(bo);
+            DeRegisterForBOEvents(bo);
         }
+
         /// <summary>
         /// Copies the business objects in one collection across to this one
         /// </summary>
@@ -511,9 +539,12 @@ namespace Habanero.BO
         public new void Clear()
         {
             base.Clear();
-            _keyObjectHashTable.Clear();
-            this.PersistedBOColl.Clear();
+            KeyObjectHashTable.Clear();
+            this.PersistedBOCol.Clear();
             this.CreatedBusinessObjects.Clear();
+            this.RemovedBusinessObjects.Clear();
+            this.AddedBusinessObjects.Clear();
+            this.MarkForDeleteBusinessObjects.Clear();
         }
 
         public IList CreatedBOCol
@@ -531,6 +562,25 @@ namespace Habanero.BO
         {
             get { return this.RemovedBusinessObjects; }
         }
+
+        /// <summary>
+        /// Returns a list of the business objects that are currently added for the
+        ///   collection but have not cessarily been persisted to the database.
+        /// </summary>
+        public IList AddedBOCol
+        {
+            get { return this.AddedBusinessObjects; }
+        }
+
+        /// <summary>
+        /// Returns a list of the business objects that are currently marked for deletion for the
+        ///   collection but have not cessarily been persisted to the database.
+        /// </summary>
+        public IList MarkForDeletionBOs
+        {
+            get { return this.MarkForDeleteBusinessObjects; }
+        }
+
 
         /// <summary>
         /// Removes the business object at the index position specified
@@ -551,6 +601,19 @@ namespace Habanero.BO
             return RemoveInternal(bo);
         }
 
+        ///<summary>
+        /// Clears only the current collection i.e. the persisted, removed, added and created lists 
+        ///    are retained.
+        ///</summary>
+        /// Note: This is used by reflection by the collection loader.
+// ReSharper disable UnusedPrivateMember
+        internal void ClearCurrentCollection()
+        {
+            base.Clear();
+            KeyObjectHashTable.Clear();
+        }
+// ReSharper restore UnusedPrivateMember
+
         /// <summary>
         /// Removes the specified business object from the collection. This is used when refreshing
         /// a collection so that any overriden behaviour (from overriding Remove) is not applied
@@ -560,15 +623,15 @@ namespace Habanero.BO
         /// <returns></returns>
         internal bool RemoveInternal(TBusinessObject businessObject)
         {
+            //TODO: If Created then do not add to removed.
             if (!_removedBusinessObjects.Contains(businessObject)) _removedBusinessObjects.Add(businessObject);
 
             bool removed = base.Remove(businessObject);
-            _keyObjectHashTable.Remove(businessObject.ID.ToString());
+            KeyObjectHashTable.Remove(businessObject.ID.ToString());
             RemoveCreatedBusinessObject(businessObject);
 
-            businessObject.Deleted -= _deletedEventHandler;
-            businessObject.Saved -= _savedEventHandler;
-            businessObject.Restored -= _restoredEventHandler;
+            //TODO: Verify this but i think should not remove event registering
+            DeRegisterForBOEvents(businessObject);
             this.FireBusinessObjectRemoved(businessObject);
             return removed;
         }
@@ -578,10 +641,7 @@ namespace Habanero.BO
             if (!this.CreatedBusinessObjects.Remove(businessObject)) return;
 
             this.RemovedBusinessObjects.Remove(businessObject);
-            businessObject.Saved -= _savedEventHandler;
-            businessObject.Restored -= _restoredEventHandler;
-            businessObject.Deleted -= _deletedEventHandler;
-            //businessObject.Updated -= Up;
+            DeRegisterForBOEvents(businessObject);
         }
 
         ///// <summary>
@@ -683,11 +743,11 @@ namespace Habanero.BO
         /// <returns>Returns the business object if found, or null if not</returns>
         public TBusinessObject Find(string key)
         {
-            if (_keyObjectHashTable.ContainsKey(key))
+            if (KeyObjectHashTable.ContainsKey(key))
             {
-                TBusinessObject bo = (TBusinessObject) _keyObjectHashTable[key];
+                TBusinessObject bo = (TBusinessObject) KeyObjectHashTable[key];
                 if (this.Contains(bo))
-                    return (TBusinessObject) _keyObjectHashTable[key];
+                    return (TBusinessObject) KeyObjectHashTable[key];
 
                 return null;
             }
@@ -711,9 +771,9 @@ namespace Habanero.BO
             string formattedSearchItem = string.Format
                 ("{0}={1}", ((ClassDef) _boClassDef).GetPrimaryKeyDef().KeyName, searchTerm.ToString("B"));
 
-            if (_keyObjectHashTable.ContainsKey(formattedSearchItem))
+            if (KeyObjectHashTable.ContainsKey(formattedSearchItem))
             {
-                return (TBusinessObject) _keyObjectHashTable[formattedSearchItem];
+                return (TBusinessObject) KeyObjectHashTable[formattedSearchItem];
             }
             return null;
         }
@@ -811,6 +871,10 @@ namespace Habanero.BO
                 {
                     clonedCol.RemovedBusinessObjects.Add(removedBusinessObject);
                 }
+            }
+            foreach (TBusinessObject addedBusinessObject in this.AddedBusinessObjects)
+            {
+                clonedCol.AddedBusinessObjects.Add(addedBusinessObject);
             }
             return clonedCol;
         }
@@ -956,6 +1020,7 @@ namespace Habanero.BO
 
         protected virtual void SaveAllInTransaction(ITransactionCommitter transaction)
         {
+            //TODO: Save all added business object.
             foreach (TBusinessObject bo in this)
             {
                 if (bo.Status.IsDirty || bo.Status.IsNew)
@@ -967,9 +1032,14 @@ namespace Habanero.BO
             {
                 transaction.AddBusinessObject(bo);
             }
+            foreach (TBusinessObject businessObject in this.MarkForDeleteBusinessObjects)
+            {
+                transaction.AddBusinessObject(businessObject);
+            }
             transaction.CommitTransaction();
             CreatedBusinessObjects.Clear();
             RemovedBusinessObjects.Clear();
+            //TODO: Markfor delete clear.
         }
 
         /// <summary>
@@ -981,6 +1051,27 @@ namespace Habanero.BO
             foreach (TBusinessObject bo in this.Clone())
             {
                 bo.Restore();
+            }
+            while (this.MarkForDeleteBusinessObjects.Count > 0)
+            {
+                TBusinessObject bo = this.MarkForDeleteBusinessObjects[0];
+                bo.Restore();
+            }
+            while (this.CreatedBusinessObjects.Count > 0)
+            {
+                TBusinessObject bo = this.CreatedBusinessObjects[0];
+                this.CreatedBusinessObjects.Remove(bo);
+                bo.Restore();
+                this.RemoveInternal(bo);
+                this.RemovedBusinessObjects.Remove(bo);
+                DeRegisterForBOEvents(bo);
+            }
+            while (this.RemovedBusinessObjects.Count > 0)
+            {
+                TBusinessObject bo = this.RemovedBusinessObjects[0];
+                this.RemovedBusinessObjects.Remove(bo);
+                bo.Restore();
+                this.Add(bo);
             }
         }
 
@@ -1138,7 +1229,7 @@ namespace Habanero.BO
         ///    objects.
         /// Hack: This method was created to overcome the shortfall of using a Generic Collection.
         /// </summary>
-        public IList PersistedBOColl
+        public IList PersistedBOCol
         {
             get { return _persistedObjectsCollection; }
         }
@@ -1155,12 +1246,37 @@ namespace Habanero.BO
         }
 
         ///<summary>
-        /// Returns a collection of business objects that have been removed from the relationship
-        /// but have not yet been persisted.
+        /// Returns a collection of business objects that have been removed from the collection
+        /// but the collection has not yet been persisted.
         ///</summary>
         public List<TBusinessObject> RemovedBusinessObjects
         {
             get { return _removedBusinessObjects; }
+        }
+
+        ///<summary>
+        /// Returns a collection of business objects that have been marked for deletion from the collection
+        /// but the collection has not yet been persisted.
+        ///</summary>
+        ///<exception cref="NotImplementedException"></exception>
+        public List<TBusinessObject> MarkForDeleteBusinessObjects
+        {
+            get { return _markForDeleteBusinessObjects; }
+        }
+
+        /// <summary>
+        /// The list of business objects that have been adde to this relationship 
+        /// collection (<see cref="RelatedBusinessObjectCollection{TBusinessObject}.Add(TBusinessObject)"/>) and have not
+        /// yet been persisted.
+        /// </summary>
+        public List<TBusinessObject> AddedBusinessObjects
+        {
+            get { return _addedBusinessObjects; }
+        }
+
+        private Hashtable KeyObjectHashTable
+        {
+            get { return _keyObjectHashTable; }
         }
 
         #endregion
@@ -1202,25 +1318,30 @@ namespace Habanero.BO
 
         private void AddCreatedBusinessObject(TBusinessObject newBO)
         {
-//            _savedEventHandler = SavedEventHandler;
-//            _restoredEventHandler = RestoredEventHandler;
-
-            newBO.Restored += RestoredEventHandler;
-            newBO.Saved += SavedEventHandler;
-
             CreatedBusinessObjects.Add(newBO);
-            if (!this.Contains(newBO)) Add(newBO);
+            if (this.Contains(newBO)) return;
+
+            AddWithoutEvents(newBO);
+            this.FireBusinessObjectAdded(newBO);
         }
 
         private void RestoredEventHandler(object sender, BOEventArgs e)
         {
             TBusinessObject bo = (TBusinessObject) e.BusinessObject;
-            CreatedBusinessObjects.Remove(bo);
-            if (bo.Status.IsNew)
+//TODO: Brett removed this Restoring (cancelling edits) on a created bo should not 
+            //affect the collection restoring the collection is a different matter.
+//            bool createdContains = CreatedBusinessObjects.Contains(bo);
+//            if (bo.Status.IsNew || createdContains)
+//            {
+//                //Cancel Edits (Restore) has been called 
+//                // on a created business object.
+//                RemoveInternal(bo);
+//                this.RemovedBusinessObjects.Remove(bo);//The remove inte
+//            }
+            if (this.MarkForDeleteBusinessObjects.Remove(bo))
             {
-                Remove(bo);
+                this.Add(bo);
             }
-            //bo.Restored -= _restoredEventHandler;
         }
 
         private void SavedEventHandler(object sender, BOEventArgs e)
@@ -1235,6 +1356,7 @@ namespace Habanero.BO
 //                //should remove from main col if deleted
 //                return;
 //            }
+            //TODO: Mark for deleted items will not be handled.
             if (!this.RemovedBusinessObjects.Remove(bo))
             {
                 if (!this.Contains(bo))
@@ -1280,5 +1402,27 @@ namespace Habanero.BO
                 createdCount++;
             }
         }
+
+        ///<summary>
+        /// Marks the business object as MarkedForDelete and places the 
+        ///</summary>
+        ///<param name="businessObject"></param>
+        public void MarkForDelete(TBusinessObject businessObject)
+        {
+            businessObject.MarkForDelete();
+        }
+
+        ///<summary>
+        /// Marks the business object as MarkedForDelete and places the 
+        ///</summary>
+        ///<param name="index">The index position to remove from</param>if index does not exist in col
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public void MarkForDeleteAt(int index)
+        {
+            TBusinessObject boToMark = this[index];
+            MarkForDelete(boToMark);            
+        }
+
+
     }
 }

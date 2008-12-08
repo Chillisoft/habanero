@@ -23,7 +23,6 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
-using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
 using Rhino.Mocks;
 
@@ -105,8 +104,9 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
 
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
-            ContactPersonTestBO cp = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
-            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
+            ContactPersonTestBO cp =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", cp);
             Assert.AreEqual(cp.ContactPersonID, bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
@@ -122,8 +122,9 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
 
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
-            ContactPersonTestBO cp = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
-            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
+            ContactPersonTestBO cp =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", "abc");
             Assert.AreEqual(cp.ContactPersonID.ToString(), bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
@@ -139,7 +140,7 @@ namespace Habanero.Test.BO
 
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
             BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
-            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
+            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", null);
             Assert.AreEqual(null, bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual(null, bo.GetPropertyValueToDisplay("TestProp2"));
@@ -156,12 +157,17 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, propDef.PropRules.Count);
             Assert.IsNotNull(propDef.PropRules[0], "TestProp must have a rule");
             string errorMessage = "";
-            Assert.IsTrue(propDef.PropRules[0].IsPropValueValid("TestProp", "abcde", ref errorMessage), "Property value of length 5 must pass");
-            Assert.IsFalse(propDef.PropRules[0].IsPropValueValid("TestProp", "abcdef", ref errorMessage), "Property value of length 6 must not pass");
+            Assert.IsTrue
+                (propDef.PropRules[0].IsPropValueValid("TestProp", "abcde", ref errorMessage),
+                 "Property value of length 5 must pass");
+            Assert.IsFalse
+                (propDef.PropRules[0].IsPropValueValid("TestProp", "abcdef", ref errorMessage),
+                 "Property value of length 6 must not pass");
             BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "abcde");
             string reason;
-            Assert.IsTrue(bo.IsValid(out reason), "BO should be valid with a TestProp value of 'abcde' but returned : " + reason);
+            Assert.IsTrue
+                (bo.IsValid(out reason), "BO should be valid with a TestProp value of 'abcde' but returned : " + reason);
             bo.SetPropertyValue("TestProp", "abcdef");
             Assert.IsFalse(bo.IsValid(), "BO should not be valid with a TestProp value of 'abcdef'");
         }
@@ -171,26 +177,22 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadDefaultClassDef();
-			MockRepository mock = new MockRepository();
-        	IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
+            MockRepository mock = new MockRepository();
+            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
             //Mock itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
             //IDatabaseConnection itsConnection = (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
-        	Expect.Call(itsConnection.GetConnection())
-				.Return(DatabaseConnection.CurrentConnection.GetConnection())
-				.Repeat.Times(2);
-			Expect.Call(itsConnection.ExecuteSql(null, null))
-                .IgnoreArguments()
-				.Return(1)
-				.Repeat.Times(1);
-			//itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-			//                                                 DatabaseConnection.CurrentConnection.GetConnection());
-			//itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
-			mock.ReplayAll();
+            Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
+                Repeat.Times(2);
+            Expect.Call(itsConnection.ExecuteSql(null, null)).IgnoreArguments().Return(1).Repeat.Times(1);
+            //itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+            //                                                 DatabaseConnection.CurrentConnection.GetConnection());
+            //itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
+            mock.ReplayAll();
 
             //MyBO bo = (MyBO) classDef.CreateNewBusinessObject(itsConnection);
             MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
-			//bo.SetPropertyValue("TestProp", "Hello") ;
-			//bo.Save() ;
+            //bo.SetPropertyValue("TestProp", "Hello") ;
+            //bo.Save() ;
 
 
             bo.SetPropertyValue("TestProp", "Goodbye");
@@ -221,7 +223,7 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = BeforeSaveBo.LoadDefaultClassDef();
-            BeforeSaveBo bo = (BeforeSaveBo)classDef.CreateNewBusinessObject();
+            BeforeSaveBo bo = (BeforeSaveBo) classDef.CreateNewBusinessObject();
             bo.FirstPart = "foo";
             bo.SecondPart = "bar";
             Assert.AreEqual("", bo.CombinedParts);
@@ -240,7 +242,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = AfterSaveBO.LoadDefaultClassDef();
 
-            AfterSaveBO bo = (AfterSaveBO)classDef.CreateNewBusinessObject();
+            AfterSaveBO bo = (AfterSaveBO) classDef.CreateNewBusinessObject();
             bo.FirstPart = "foo";
             bo.SecondPart = "bar";
 
@@ -283,7 +285,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = AfterSaveBO.LoadDefaultClassDef();
 
-            AfterSaveBO bo = (AfterSaveBO)classDef.CreateNewBusinessObject();
+            AfterSaveBO bo = (AfterSaveBO) classDef.CreateNewBusinessObject();
             bo.FirstPart = "foo";
             bo.SecondPart = "bar";
             TransactionCommitterStub committer = new TransactionCommitterStub();
@@ -301,7 +303,8 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual("deleted", bo.CombinedParts);
         }
-        [Test, ExpectedException(typeof(BusObjDeleteException))]
+
+        [Test, ExpectedException(typeof (BusObjDeleteException))]
         public void TestCannotDelete_IsDeletable_False()
         {
             ClassDef.ClassDefs.Clear();
@@ -320,9 +323,9 @@ namespace Habanero.Test.BO
             }
             catch (BusObjDeleteException ex)
             {
-                Assert.IsTrue(
-                    ex.Message.Contains(
-                        "You cannot delete the 'MyBoNotEditableDeletable', as the IsDeleted is set to false for the object"));
+                Assert.IsTrue
+                    (ex.Message.Contains
+                         ("You cannot delete the 'MyBoNotEditableDeletable', as the IsDeleted is set to false for the object"));
             }
         }
 
@@ -339,24 +342,54 @@ namespace Habanero.Test.BO
             try
             {
                 bo.Delete();
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
                 Assert.Fail("Should have thrown an exception");
             }
             catch (HabaneroDeveloperException ex)
             {
-                Assert.AreEqual("This 'My B O' cannot be deleted as it has never existed in the database.",
-                    ex.Message);
-                Assert.AreEqual("A 'MyBO' cannot be deleted when its status is new and does not exist in the database.",
-                    ex.DeveloperMessage);
+                Assert.AreEqual("This 'My B O' cannot be deleted as it has never existed in the database.", ex.Message);
+                Assert.AreEqual
+                    ("A 'MyBO' cannot be deleted when its status is new and does not exist in the database.",
+                     ex.DeveloperMessage);
             }
         }
 
-        [Test, ExpectedException(typeof(BusObjEditableException))]
+        [Test]
+        public void Test_MarkForDelete()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
+            bo.Save();
+            bool markForDeleteEventFired = false;
+            bo.MarkedForDelete += delegate { markForDeleteEventFired = true; };
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(bo.Status.IsDeleted);
+            Assert.IsFalse(bo.Status.IsNew);
+            Assert.IsFalse(bo.Status.IsDirty);
+            Assert.IsFalse(bo.Status.IsEditing);
+            Assert.IsFalse(markForDeleteEventFired);
+
+            //---------------Execute Test ----------------------
+            bo.MarkForDelete();
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(bo.Status.IsDeleted);
+            Assert.IsFalse(bo.Status.IsNew);
+            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsTrue(bo.Status.IsEditing);
+            Assert.IsTrue(markForDeleteEventFired);
+        }
+
+        [Test, ExpectedException(typeof (BusObjEditableException))]
         public void TestCannotEdit_IsEditable_False()
         {
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
-            MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable)classDef.CreateNewBusinessObject();
+            MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable) classDef.CreateNewBusinessObject();
             bo.TestProp = "new";
         }
 
@@ -370,9 +403,9 @@ namespace Habanero.Test.BO
             }
             catch (BusObjEditableException ex)
             {
-                Assert.IsTrue(
-                    ex.Message.Contains(
-                        "You cannot Edit the 'MyBoNotEditableDeletable', as the IsEditable is set to false for the object"));
+                Assert.IsTrue
+                    (ex.Message.Contains
+                         ("You cannot Edit the 'MyBoNotEditableDeletable', as the IsEditable is set to false for the object"));
             }
         }
 
@@ -382,7 +415,7 @@ namespace Habanero.Test.BO
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
-            MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable)classDef.CreateNewBusinessObject();
+            MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable) classDef.CreateNewBusinessObject();
             bo.Save();
             bo.Deletable = true;
             bo.Editable = true;
@@ -394,7 +427,7 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
-            MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable)classDef.CreateNewBusinessObject();
+            MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable) classDef.CreateNewBusinessObject();
             bo.Editable = true;
             bo.TestProp = "new";
         }
@@ -404,7 +437,7 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
-            MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable)classDef.CreateNewBusinessObject();
+            MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable) classDef.CreateNewBusinessObject();
             bo.Editable = true;
             bo.Deletable = false;
             bo.TestProp = "new";
@@ -416,7 +449,7 @@ namespace Habanero.Test.BO
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
-            MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable)classDef.CreateNewBusinessObject();
+            MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable) classDef.CreateNewBusinessObject();
             bo.Save();
             bo.Editable = false;
             bo.Deletable = true;
@@ -469,9 +502,10 @@ namespace Habanero.Test.BO
 
             BORegistry.DataAccessor = new DataAccessorInMemory();
             //---------------Execute Test ----------------------
-            cp.Save(); 
+            cp.Save();
             //---------------Test Result -----------------------
-            ContactPersonTestBO loadedCP = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cp.ID);
+            ContactPersonTestBO loadedCP =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cp.ID);
             Assert.IsNotNull(loadedCP);
             Assert.AreSame(cp, loadedCP);
             //---------------Tear Down -------------------------
@@ -524,7 +558,7 @@ namespace Habanero.Test.BO
             string surname = TestUtil.CreateRandomString();
             ContactPerson owner = ContactPerson.CreateSavedContactPerson(surname);
             Car car = Car.CreateSavedCar("5", owner);
-            Engine engine = Engine.CreateSavedEngine( car, "20");
+            Engine engine = Engine.CreateSavedEngine(car, "20");
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -549,11 +583,11 @@ namespace Habanero.Test.BO
             boStatus2.SetBOFlagValue(BOStatus.Statuses.isDirty, false);
             boStatus2.SetBOFlagValue(BOStatus.Statuses.isEditing, true);
             boStatus2.SetBOFlagValue(BOStatus.Statuses.isNew, false);
-                        
+
             //---------------Execute Test ----------------------
             bool equal = boStatus1.Equals(boStatus2);
             //---------------Test Result -----------------------
-            Assert.IsTrue(equal);          
+            Assert.IsTrue(equal);
             Assert.AreEqual(boStatus1.GetHashCode(), boStatus2.GetHashCode());
         }
 
@@ -567,8 +601,8 @@ namespace Habanero.Test.BO
             bool equal = boStatus1.Equals(null);
             //---------------Test Result -----------------------
             Assert.IsFalse(equal);
-            
         }
+
         [Test]
         public void TestBoStatusNotEqual()
         {
@@ -592,16 +626,15 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             Engine engine1 = new Engine();
             bool propertyEventFired = false;
- 
+
             //-------------Assert Preconditions -------------
             Assert.IsFalse(propertyEventFired);
             //---------------Execute Test ----------------------
-            engine1.PropertyUpdated += delegate {propertyEventFired = true;};
+            engine1.PropertyUpdated += delegate { propertyEventFired = true; };
             engine1.EngineNo = "20";
 
             //---------------Test Result -----------------------
             Assert.IsTrue(propertyEventFired);
-
         }
 
         [Test]
@@ -616,7 +649,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             engine1.Updated += delegate { updatedEventFired = true; };
             engine1.EngineNo = "20";
-          
+
 
             //---------------Test Result -----------------------
             Assert.IsFalse(updatedEventFired);
@@ -641,5 +674,4 @@ namespace Habanero.Test.BO
             Assert.IsTrue(updatedEventFired);
         }
     }
-
 }

@@ -40,10 +40,9 @@ namespace Habanero.BO
 
         #region GetBusinessObjectCollection
 
-        private static void CheckNotTypedAsBusinessObject<T>()
-            where T : class, IBusinessObject, new()
+        private static void CheckNotTypedAsBusinessObject<T>() where T : class, IBusinessObject, new()
         {
-            if (typeof(T) == typeof(BusinessObject))
+            if (typeof (T) == typeof (BusinessObject))
             {
                 throw ExceptionHelper.CreateLoaderGenericTypeMethodException();
             }
@@ -64,16 +63,18 @@ namespace Habanero.BO
             Refresh(col);
             return col;
         }
+
         /// <summary>
         /// Loads a BusinessObjectCollection using the criteria given. 
         /// </summary>
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="criteriaString">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString) where T : class, IBusinessObject, new()
+        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString)
+            where T : class, IBusinessObject, new()
         {
             CheckNotTypedAsBusinessObject<T>();
-            Criteria criteria = GetCriteriaObject(ClassDef.ClassDefs[typeof(T)], criteriaString);
+            Criteria criteria = GetCriteriaObject(ClassDef.ClassDefs[typeof (T)], criteriaString);
             //            Criteria criteria = CriteriaParser.CreateCriteria(criteriaString);
             //            QueryBuilder.PrepareCriteria(ClassDef.ClassDefs[typeof(T)], criteria);
             return GetBusinessObjectCollection<T>(criteria);
@@ -101,8 +102,7 @@ namespace Habanero.BO
         /// </summary>
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="collection">The collection to refresh</param>
-        public abstract void Refresh<T>(BusinessObjectCollection<T> collection)
-            where T : class, IBusinessObject, new();
+        public abstract void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new();
 
         /// <summary>
         /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
@@ -120,7 +120,8 @@ namespace Habanero.BO
         /// <param name="criteriaString">The select query to use to load from the data source</param>
         /// <param name="orderCriteria">The order that the collections must be loaded in e.g. Surname, FirstName</param>
         /// <returns>The loaded collection</returns>
-        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, string criteriaString, string orderCriteria)
+        public IBusinessObjectCollection GetBusinessObjectCollection
+            (IClassDef classDef, string criteriaString, string orderCriteria)
         {
             Criteria criteria = GetCriteriaObject(classDef, criteriaString);
             OrderCriteria orderCriteriaObj = QueryBuilder.CreateOrderCriteria(classDef, orderCriteria);
@@ -148,10 +149,11 @@ namespace Habanero.BO
         /// <param name="criteriaString">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString, string orderCriteria) where T : class, IBusinessObject, new()
+        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString, string orderCriteria)
+            where T : class, IBusinessObject, new()
         {
             CheckNotTypedAsBusinessObject<T>();
-            ClassDef classDef = ClassDef.ClassDefs[typeof(T)];
+            ClassDef classDef = ClassDef.ClassDefs[typeof (T)];
             Criteria criteria = GetCriteriaObject(classDef, criteriaString);
             OrderCriteria orderCriteriaObj = QueryBuilder.CreateOrderCriteria(classDef, orderCriteria);
             return GetBusinessObjectCollection<T>(criteria, orderCriteriaObj);
@@ -164,8 +166,8 @@ namespace Habanero.BO
         /// <param name="criteria">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria)
-            where T : class, IBusinessObject, new()
+        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>
+            (Criteria criteria, OrderCriteria orderCriteria) where T : class, IBusinessObject, new()
         {
             CheckNotTypedAsBusinessObject<T>();
             BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
@@ -182,8 +184,8 @@ namespace Habanero.BO
         /// <param name="criteria">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
-        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria,
-                                                                     OrderCriteria orderCriteria)
+        public IBusinessObjectCollection GetBusinessObjectCollection
+            (IClassDef classDef, Criteria criteria, OrderCriteria orderCriteria)
         {
             IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
             col.ClassDef = classDef;
@@ -235,46 +237,111 @@ namespace Habanero.BO
 
         protected static IBusinessObjectCollection CreateCollectionOfType(Type BOType)
         {
-            Type boColType = typeof(BusinessObjectCollection<>).MakeGenericType(BOType);
-            return (IBusinessObjectCollection)Activator.CreateInstance(boColType);
+            Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(BOType);
+            return (IBusinessObjectCollection) Activator.CreateInstance(boColType);
         }
 
-        protected static void AddBusinessObjectToCollection<T>(BusinessObjectCollection<T> collection, T loadedBo, BusinessObjectCollection<T> clonedCol)
-            where T : class, IBusinessObject, new()
+//        protected static void AddBusinessObjectToCollection<T>
+//            (BusinessObjectCollection<T> collection, T loadedBo, BusinessObjectCollection<T> clonedCol)
+//            where T : class, IBusinessObject, new()
+//        {
+//            //If the origional collection had the new business object then
+//            // use add internal this adds without any events being raised etc.
+//            //else adds via the Add method (normal add) this raises events such that the 
+//            // user interface can be updated.
+//            if (clonedCol.Contains(loadedBo))
+//            {
+//                ((IBusinessObjectCollection) collection).AddWithoutEvents(loadedBo);
+//            }
+//            else
+//            {
+//                collection.Add(loadedBo);
+//            }
+//            collection.PersistedBOCol.Add(loadedBo);
+//        }
+
+        protected static void AddBusinessObjectToCollection
+            (IBusinessObjectCollection collection, IBusinessObject loadedBo)
         {
             //If the origional collection had the new business object then
             // use add internal this adds without any events being raised etc.
             //else adds via the Add method (normal add) this raises events such that the 
             // user interface can be updated.
-            if (clonedCol.Contains(loadedBo))
-            {
-                ((IBusinessObjectCollection)collection).AddWithoutEvents(loadedBo);
-            }
-            else
-            {
-                collection.Add(loadedBo);
-            }
-            collection.PersistedBOColl.Add(loadedBo);
-        }
-        protected static void AddBusinessObjectToCollection(IBusinessObjectCollection collection, IBusinessObject loadedBo, IBusinessObjectCollection clonedCol)
-        {
-            //If the origional collection had the new business object then
-            // use add internal this adds without any events being raised etc.
-            //else adds via the Add method (normal add) this raises events such that the 
-            // user interface can be updated.
-            if (clonedCol.Contains(loadedBo))
+            if (collection.PersistedBOCol.Contains(loadedBo))
             {
                 collection.AddWithoutEvents(loadedBo);
             }
             else
             {
+                collection.PersistedBOCol.Add(loadedBo);
                 collection.Add(loadedBo);
             }
-            collection.PersistedBOColl.Add(loadedBo);
-
         }
 
-        protected static void RestoreCreatedCollection(IBusinessObjectCollection collection, IList createdBusinessObjects)
+        protected static void RestoreAddedCollection(IBusinessObjectCollection collection, IList addedBOCol)
+        {
+            //The collection should show all loaded object less removed or deleted object not yet persisted
+            //     plus all created or added objects not yet persisted.
+            //Note: This behaviour is fundamentally different than the business objects behaviour which 
+            //  throws and error if any of the items are dirty when it is being refreshed.
+            //Should a refresh be allowed on a dirty collection (what do we do with BO's
+            foreach (IBusinessObject addedBO in addedBOCol)
+            {
+                if (!collection.AddedBOCol.Contains(addedBO))
+                {
+                    collection.AddedBOCol.Add(addedBO);                    
+                }
+                if (!collection.Contains(addedBO))
+                {
+                    collection.AddWithoutEvents(addedBO);
+                }
+            }
+        }
+        //The collection should show all loaded object less removed or deleted object not yet persisted
+        //     plus all created or added objects not yet persisted.
+        //Note: This behaviour is fundamentally different than the business objects behaviour which 
+        //  throws and error if any of the items are dirty when it is being refreshed.
+        //Should a refresh be allowed on a dirty collection (what do we do with BO's
+        //TODO: I think this could be done via reflection instead of having all these public methods.
+        //   especially where done via the interface.
+        //  the other option would be for the business object collection to have another method (other than clone)
+        //   that returns another type of object that has these methods to eliminate all these 
+        //   public accessors
+        protected static void RestoreEditedLists(IBusinessObjectCollection collection)
+        {
+            RestoreCreatedCollection(collection);
+            RestoreRemovedCollection(collection);
+            RestoreMarkForDeleteCollection(collection);
+        }
+
+        private static void RestoreMarkForDeleteCollection(IBusinessObjectCollection collection)
+        {
+            foreach (BusinessObject businessObject in collection.MarkForDeletionBOs)
+            {
+                collection.Remove(businessObject);
+                collection.RemovedBOCol.Remove(businessObject);
+            }            
+        }
+
+        private static void RestoreRemovedCollection(IBusinessObjectCollection collection)
+        {
+            foreach (BusinessObject businessObject in collection.RemovedBOCol)
+            {
+                collection.Remove(businessObject);
+            }
+        }
+
+        private static void RestoreCreatedCollection(IBusinessObjectCollection collection)
+        {
+            foreach (BusinessObject businessObject in collection.CreatedBOCol)
+            {
+                collection.AddWithoutEvents(businessObject);
+            }
+        }
+
+
+        protected static void RestoreCreatedCollection
+            (IBusinessObjectCollection collection, IList createdBusinessObjects)
         {
             //The collection should show all loaded object less removed or deleted object not yet persisted
             //     plus all created or added objects not yet persisted.
@@ -287,7 +354,9 @@ namespace Habanero.BO
                 collection.AddWithoutEvents(createdBO);
             }
         }
-        protected static void RestoreRemovedCollection(IBusinessObjectCollection collection, IList removedBusinessObjects)
+
+        protected static void RestoreRemovedCollection
+            (IBusinessObjectCollection collection, IList removedBusinessObjects)
         {
             //The collection should show all loaded object less removed or deleted object not yet persisted
             //     plus all created or added objects not yet persisted.
@@ -299,5 +368,25 @@ namespace Habanero.BO
                 collection.Remove(removedBO);
             }
         }
+
+//        /// <summary>
+//        /// Ensures that the added collection and main collection are synchronised after a refresh.
+//        /// </summary>
+//        /// <param name="collection">the main bo collection</param>
+//        /// <param name="addedBusinessObjects">The list of added BO's prior to loading</param>
+//        protected static void RestoreAddedCollection(IBusinessObjectCollection collection, IList addedBusinessObjects)
+//        {
+//            //The collection should show all loaded object less removed or deleted object not yet persisted
+//            //     plus all created or added objects not yet persisted.
+//            //Note: This behaviour is fundamentally different than the business objects behaviour which 
+//            //  throws and error if any of the items are dirty when it is being refreshed.
+//            //Should a refresh be allowed on a dirty collection (what do we do with BO's
+//            foreach (IBusinessObject addedBO in addedBusinessObjects)
+//            {
+//                if (collection.Contains(addedBO)) continue;
+//                collection.Add(addedBO);
+////                collection.AddedBOCol.Add(addedBO);
+//            }
+//        }
     }
 }

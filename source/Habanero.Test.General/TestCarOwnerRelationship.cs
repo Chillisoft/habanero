@@ -59,7 +59,7 @@ namespace Habanero.Test.General
 
         //Test that the related object does not have a reference held
         [Test]
-        public void TestGetCarOwnerIsNotSame()
+        public void TestGetCarOwnerIsSame()
         {
             Car.DeleteAllCars();
             ContactPerson.DeleteAllContactPeople();
@@ -71,15 +71,15 @@ namespace Habanero.Test.General
             car.SetPropertyValue("CarRegNo", "NP32459");
             car.SetPropertyValue("OwnerId", person.GetPropertyValue("ContactPersonID"));
             Assert.AreEqual(car.GetOwner().ID, person.ID);
-            Assert.IsTrue(ReferenceEquals(person, car.GetOwner()),
+            Assert.AreSame(person, car.GetOwner(),
                           "Should be the same since GetOwner recovers object from object manager");
 
             person = car.GetOwner();
             BusinessObjectManager.Instance.ClearLoadedObjects();
-            Assert.IsFalse(ReferenceEquals(person, car.GetOwner()),
-                           "Should not be the same since the Owner reference is being " +
-                           " not maintained in the car class and the object is therefore " +
-                           " being reloaded each time");
+            Assert.AreSame(person, car.GetOwner(),
+                           "Should  be the same since the Owner reference is being " +
+                           " maintained in the car class and the object is therefore " +
+                           " not being reloaded each time");
         }
 
         [Test]

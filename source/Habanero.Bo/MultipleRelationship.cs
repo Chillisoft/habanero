@@ -66,10 +66,10 @@ namespace Habanero.BO
 
             IBusinessObjectCollection boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
 
-            if (_relDef.KeepReferenceToRelatedObject)
-            {
+//            if (_relDef.KeepReferenceToRelatedObject)
+//            {
                 _boCol = boCol;
-            }
+//            }
             return boCol;
         }
 

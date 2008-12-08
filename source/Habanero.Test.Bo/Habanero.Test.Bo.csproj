@@ -74,6 +74,26 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Habanero, Version=1.5.0.0, Culture=neutral, PublicKeyToken=eae2c64fef8aa18b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Habanero.dll</HintPath>
+    </Reference>
+    <Reference Include="Habanero.Test.Structure, Version=2.0.1.0, Culture=neutral, PublicKeyToken=ff01a7e23d791dfe, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Habanero.Test.Structure.dll</HintPath>
+    </Reference>
+    <Reference Include="Habanero.UI, Version=1.5.0.0, Culture=neutral, PublicKeyToken=71779386dead1c10, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Habanero.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Habanero.UI.Base, Version=2.0.1.0, Culture=neutral, PublicKeyToken=a8408464fc128d8b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Habanero.UI.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Habanero.UI.Win, Version=2.0.1.0, Culture=neutral, PublicKeyToken=0e9ee1bfff5ba48c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Habanero.UI.Win.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=5.1.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\MySql.Data.dll</HintPath>
@@ -103,43 +123,21 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
-      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
-      <Name>Habanero.BO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
-      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
-      <Name>Habanero.DB</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
-      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
-      <Name>Habanero.Base</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Test.Structure\Habanero.Test.Structure.csproj">
-      <Project>{D59DAD41-663F-4AD7-9B22-04C2A7D7F9C2}</Project>
-      <Name>Habanero.Test.Structure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
-      <Project>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</Project>
-      <Name>Habanero.Test</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.UI.Win\Habanero.UI.Win.csproj">
-      <Project>{E761E05B-B9CC-4EAC-B940-C19E42D3819C}</Project>
-      <Name>Habanero.UI.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
-      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
-      <Name>Habanero.Util</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection.cs" />
+    <Compile Include="BusinessObjectCollection\TestOrderCriteria.cs" />
+    <Compile Include="BusinessObjectCollection\TestRelatedBusinessObjectCollection.cs" />
+    <Compile Include="BusxinessObjectLoader\TestBusinessObjectLoader.cs" />
+    <Compile Include="BusxinessObjectLoader\TestBusinessObjectLoaderWithInheritance.cs" />
+    <Compile Include="BusxinessObjectLoader\TestBusinessObjectLoader_GetBusinessObjectCollection.cs" />
+    <Compile Include="BusxinessObjectLoader\TestBusinessObjectLoader_RefreshCollection.cs" />
     <Compile Include="CriteriaManager\TestCriteriaDB.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
     <Compile Include="CriteriaManager\TestHabaneroStringBuilder.cs" />
     <Compile Include="Security\TestBOPropAuthorisation.cs" />
     <Compile Include="Security\TestBusinessObjectAuthorisation.cs" />
-    <Compile Include="TestBusinessObjectLoaderWithInheritance.cs" />
-    <Compile Include="TestBusinessObjectLoader_GetBusinessObjectCollection.cs" />
+    <Compile Include="TestBusinessObjectCollection_Edits.cs" />
     <Compile Include="TestBusinessObjectSerialisation.cs" />
     <Compile Include="TestPack\AddressTestBO.cs" />
     <Compile Include="ClassDefinition\TestTriggerCol.cs" />
@@ -174,27 +172,24 @@
     <Compile Include="ConcurrencyControl\TestConcurrencyControl_OptimisticLockingVersionNumberDB.cs" />
     <Compile Include="ConcurrencyControl\TestConcurrencyControl_PessimisticLockingDB.cs" />
     <Compile Include="TestBORegistry.cs" />
-    <Compile Include="TestBusinessObjectLoader.cs" />
     <Compile Include="TestBusinessObjectManager.cs" />
     <Compile Include="CriteriaManager\TestCriteria.cs" />
-    <Compile Include="TestQueryBuilderWithInheritance.cs" />
-    <Compile Include="TestSource_Join.cs" />
-    <Compile Include="TestSource_JoinList.cs" />
-    <Compile Include="TestSqlFormatter.cs" />
+    <Compile Include="BusxinessObjectLoader\TestQueryBuilderWithInheritance.cs" />
+    <Compile Include="BusxinessObjectLoader\TestSource_Join.cs" />
+    <Compile Include="BusxinessObjectLoader\TestSource_JoinList.cs" />
+    <Compile Include="BusxinessObjectLoader\TestSqlFormatter.cs" />
     <Compile Include="TestDataStoreInMemory.cs" />
     <Compile Include="TestBusinessObjectLastUpdatePropertiesLog.cs" />
     <Compile Include="TestBusinessObjectUpdateLog.cs" />
     <Compile Include="TestNumberGenerator.cs" />
-    <Compile Include="TestOrderCriteria.cs" />
     <Compile Include="TestPropertyComparer.cs" />
-    <Compile Include="TestQueryBuilder.cs" />
-    <Compile Include="TestSelectQuery.cs" />
-    <Compile Include="TestSelectQueryDB.cs" />
-    <Compile Include="TestSource.cs" />
-    <Compile Include="TestSourceDB.cs" />
+    <Compile Include="BusxinessObjectLoader\TestQueryBuilder.cs" />
+    <Compile Include="BusxinessObjectLoader\TestSelectQuery.cs" />
+    <Compile Include="BusxinessObjectLoader\TestSelectQueryDB.cs" />
+    <Compile Include="BusxinessObjectLoader\TestSource.cs" />
+    <Compile Include="BusxinessObjectLoader\TestSourceDB.cs" />
     <Compile Include="TestTransactionCommitter.cs" />
-    <Compile Include="TestMultipleRelationship.cs" />
-    <Compile Include="TestRelatedBusinessObjectCollection.cs" />
+    <Compile Include="Relationship\TestMultipleRelationship.cs" />
     <Compile Include="Loaders\TestXmlTriggerLoader.cs" />
     <Compile Include="SqlGeneration\TestDeleteStatementGenerator.cs" />
     <Compile Include="SqlGeneration\TestUpdateStatementGenerator.cs" />
@@ -230,30 +225,28 @@
     <Compile Include="TestEditableDataProvider.cs" />
     <Compile Include="TestReadOnlyDataSetProvider.cs" />
     <Compile Include="TestBoKey.cs" />
-    <Compile Include="TestBOLoader.cs" />
     <Compile Include="TestBoMapper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestBoProp.cs" />
     <Compile Include="TestBoPropCol.cs" />
     <Compile Include="TestBusinessObject.cs" />
-    <Compile Include="TestBusinessObjectCollection.cs" />
     <Compile Include="TestBusinessObjectLookupList.cs" />
     <Compile Include="ClassDefinition\TestClassDefWithDyamicAttributes.cs" />
     <Compile Include="TestDatabaseLookupList.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestDeleteHelper.cs" />
-    <Compile Include="TestPropRuleDate.cs" />
-    <Compile Include="TestPropRuleDecimal.cs" />
-    <Compile Include="TestPropRuleInt.cs" />
-    <Compile Include="TestPropRuleString.cs" />
-    <Compile Include="TestRelationship.cs" />
-    <Compile Include="TestRelationshipCol.cs">
+    <Compile Include="PropRule\TestPropRuleDate.cs" />
+    <Compile Include="PropRule\TestPropRuleDecimal.cs" />
+    <Compile Include="PropRule\TestPropRuleInt.cs" />
+    <Compile Include="PropRule\TestPropRuleString.cs" />
+    <Compile Include="Relationship\TestRelationship.cs" />
+    <Compile Include="Relationship\TestRelationshipCol.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestRelProp.cs" />
-    <Compile Include="TestSingleRelationship.cs">
+    <Compile Include="Relationship\TestRelProp.cs" />
+    <Compile Include="Relationship\TestSingleRelationship.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestTransactionCommitterDB.cs" />
@@ -261,12 +254,34 @@
     <Compile Include="TestTransactionCommitterHelper.cs" />
     <Compile Include="TestTransactionCommitterInMemory.cs" />
     <Compile Include="TestTransactionLogger.cs" />
-    <Compile Include="TestUnrefRelationshipDef.cs" />
+    <Compile Include="Relationship\TestUnrefRelationshipDef.cs" />
     <Compile Include="TestUtils.cs" />
     <Compile Include="TransactionCommitterStub.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.Bo.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.Bo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Db\Habanero.Db.csproj">
+      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
+      <Name>Habanero.Db</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
+      <Project>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</Project>
+      <Name>Habanero.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
+      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
+      <Name>Habanero.Util</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

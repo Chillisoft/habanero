@@ -158,5 +158,12 @@ namespace Habanero.BO
             col.SelectQuery.Criteria = criteria;
             return col;
         }
+        /// <summary>
+        /// Clears all the objects in the memory datastore
+        /// </summary>
+        public void ClearAllBusinessObjects()
+        {
+            _objects.Clear();
+        }
     }
 }

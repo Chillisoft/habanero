@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Util;
@@ -118,6 +119,12 @@ namespace Habanero.BO
         public ISqlStatement CreateSqlStatement()
         {
             IDatabaseConnection databaseConnection = DatabaseConnection.CurrentConnection;
+
+            if (databaseConnection == null)
+            {
+                throw new HabaneroDeveloperException("The Sql cannot be created because the database connection is not set up. Please contact your system administrator", "");
+            }
+
             return CreateSqlStatement(new SqlFormatter(databaseConnection.LeftFieldDelimiter, databaseConnection.RightFieldDelimiter));
         }
 

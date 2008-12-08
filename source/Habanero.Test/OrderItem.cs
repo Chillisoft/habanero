@@ -105,9 +105,11 @@ namespace Habanero.Test
         {
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
             col.LoadAll();
-            foreach (OrderItem item in col)
+            OrderItem item;
+            while (col.Count > 0)
             {
-                item.Delete();
+                item = col[0];
+                item.MarkForDelete();
             }
             col.SaveAll();
         }

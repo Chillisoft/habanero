@@ -361,7 +361,7 @@ namespace Habanero.Base
         ///   - business objects removed from it since it was last synchronised.
         /// </summary>
         /// Hack: This method was created to overcome the shortfall of using a Generic Collection.
-        IList PersistedBOColl { get; }
+        IList PersistedBOCol { get; }
 
         /// <summary>
         /// Returns a list of the business objects that are currently created for the
@@ -380,9 +380,31 @@ namespace Habanero.Base
         IList RemovedBOCol { get; }
 
         /// <summary>
+        /// Returns a list of the business objects that are currently added for the
+        ///   collection but have not cessarily been persisted to the database.
+        /// </summary>
+        /// Hack: This method was created returning a type IList to overcome problems with 
+        ///   BusinessObjectCollecion being a generic collection.
+        IList AddedBOCol { get; }
+
+        /// <summary>
+        /// Returns a list of the business objects that are currently marked for deletion for the
+        ///   collection but have not cessarily been persisted to the database.
+        /// </summary>
+        /// Hack: This method was created returning a type IList to overcome problems with 
+        ///   BusinessObjectCollecion being a generic collection.
+        IList MarkForDeletionBOs { get; }
+
+        /// <summary>
         /// Removes the business object at the index position specified
         /// </summary>
         /// <param name="index">The index position to remove from</param>
         void RemoveAt(int index);
+
+        /// <summary>
+        /// Restores all the business objects to their last persisted state, that
+        /// is their state and values at the time they were last saved to the database
+        /// </summary>
+        void RestoreAll();
 	}
 }

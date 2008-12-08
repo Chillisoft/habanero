@@ -80,7 +80,11 @@ namespace Habanero.Test.BO
             BusinessObjectCollection<OrganisationTestBO> col = new BusinessObjectCollection<OrganisationTestBO>();
             col.LoadAll();
 
-            col.ForEach(delegate(OrganisationTestBO obj) { obj.Delete(); });
+            while (col.Count > 0)
+            {
+                OrganisationTestBO obj = col[0];
+                obj.MarkForDelete();   
+            }
             col.SaveAll();
         }
 

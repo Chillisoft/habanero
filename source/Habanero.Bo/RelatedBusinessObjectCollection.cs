@@ -17,7 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
@@ -44,17 +43,33 @@ namespace Habanero.BO
             _relationship = (Relationship) relationship;
         }
 
+        //Relationship 
+        //-- should this reference the reverse relationship if exists 
+        //  (i.e. bidirectional navigatable relationship).
+
+        //-- 
+
         public override void Add(TBusinessObject bo)
         {
+            //TODO Add object to this relationship it already exists 
+            // in another relationshp what to do.
             base.Add(bo);
-            if (bo.Status.IsNew)
+            if (IsForeignKeySetup(bo)) return;
+
+            SetUpForeignKey(bo);
+            //TODO: should set up relationshp regardless of fk set of not 
+            SetupRelatedObject(bo);
+            //TODO: this fxn is now in Base class so can remove.
+            if (!bo.Status.IsNew)
             {
-                SetUpForeignKey(bo);
+                AddedBusinessObjects.Add(bo);    
             }
+        
             //TODO: what must we do if you add a business object to a relationship but the foreign key does not match?
             // Possibly this is a strategy must look at this so that extendable
             // (see similar issue for remove below)
         }
+
 
         /// <summary>
         /// Removes the specified business object from the collection
@@ -87,11 +102,12 @@ namespace Habanero.BO
         {
             ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
 
-            
+
             foreach (TBusinessObject bo in _removedBusinessObjects)
             {
                 committer.AddBusinessObject(bo);
             }
+            //TODO Remove save.
             SaveAllInTransaction(committer);
             _removedBusinessObjects.Clear();
         }
@@ -108,17 +124,60 @@ namespace Habanero.BO
             // the properties of an object but the related object is only loaded based on its persisted values.
             TBusinessObject bo = base.CreateBusinessObject();
             SetUpForeignKey(bo);
-            //bo.Relationships this._relationship.OwningBO
+            SetupRelatedObject(bo);
             return bo;
+        }
+
+        private void SetupRelatedObject(TBusinessObject bo)
+        {
+            SingleRelationship reverseRelationship = GetReverseRelationship(bo) as SingleRelationship;
+            if (reverseRelationship != null)
+            {
+                reverseRelationship.SetRelatedObject(this._relationship.OwningBO);
+            }
+        }
+        private bool IsForeignKeySetup(TBusinessObject bo)
+        {
+            SingleRelationship reverseRelationship = GetReverseRelationship(bo) as SingleRelationship;
+            if (reverseRelationship != null)
+            {
+                IBusinessObject relatedObject = reverseRelationship.GetRelatedObject();
+                return relatedObject == this._relationship.OwningBO;
+            }
+            return false;
+        }
+
+        //This should be temporary code and will b removed.
+        internal IRelationship GetReverseRelationship(TBusinessObject bo)
+        {
+//This is a horrrible Hack but I do not want to do the reverse relationship 
+            IRelationship reverseRelationship = null;
+            foreach (IRelationship relationship in bo.Relationships)
+            {
+                bool reverseRelatedPropFound = false;
+                foreach (IRelProp prop in this._relationship._relKey)
+                {
+                    foreach (IRelProp relProp in relationship.RelKey)
+                    {
+                        if (prop.RelatedClassPropName != relProp.OwnerPropertyName) continue;
+                        reverseRelatedPropFound = true;
+                        break;
+                    }
+                }
+                if (!reverseRelatedPropFound) continue;
+                reverseRelationship = relationship;
+                break;
+            }
+            return reverseRelationship;
         }
 
         private void SetUpForeignKey(TBusinessObject bo)
         {
             foreach (RelPropDef relPropDef in _relationship.RelationshipDef.RelKeyDef)
             {
-                bo.SetPropertyValue(relPropDef.RelatedClassPropName,
-                                    _relationship.OwningBO.GetPropertyValue(relPropDef.OwnerPropertyName));
-                
+                bo.SetPropertyValue
+                    (relPropDef.RelatedClassPropName,
+                     _relationship.OwningBO.GetPropertyValue(relPropDef.OwnerPropertyName));
             }
         }
     }

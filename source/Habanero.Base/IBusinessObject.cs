@@ -115,6 +115,12 @@ namespace Habanero.Base
         /// Marks the business object for deleting.  Calling Save() will
         /// then carry out the deletion from the database.
         /// </summary>
+        void MarkForDelete();
+
+        /// <summary>
+        /// Marks the business object for deleting.  Calling Save() will
+        /// then carry out the deletion from the database.
+        /// </summary>
         void Delete();
 
         /// <summary>
@@ -159,5 +165,6 @@ namespace Habanero.Base
         bool IsCreatable(out string message);
 
         event EventHandler<BOEventArgs> PropertyUpdated;
+        event EventHandler<BOEventArgs> MarkedForDelete;
     }
 }

@@ -1,4 +1,0 @@
-BOLOader TODO:
-
-1) How to handle Concurrency control stuff e.g. DB Concurrency Control version number tries to be called with 
-no DB.

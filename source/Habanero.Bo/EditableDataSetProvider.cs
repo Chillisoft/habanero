@@ -190,7 +190,10 @@ namespace Habanero.BO
                 else if ((RowState)_rowStates[e.Row] == RowState.Deleted)
                 {
                     changedBo = _collection.Find((string) _deletedRowIDs[e.Row]);
-                    changedBo.Restore();
+                    if (changedBo != null)
+                    {
+                        changedBo.Restore();
+                    }
                     _rowStates.Remove(e.Row);
                     _deletedRowIDs.Remove(e.Row);
                 }

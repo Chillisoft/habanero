@@ -288,7 +288,7 @@ namespace Habanero.Test.UI.Base
             OrganisationTestBO.CreateSavedOrganisation();
             OrganisationTestBO.CreateSavedOrganisation();
             ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-
+            TestUtil.WaitForGC();
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
             col.LoadAll();
 

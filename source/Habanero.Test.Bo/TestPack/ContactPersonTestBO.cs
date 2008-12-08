@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -291,6 +290,45 @@ namespace Habanero.Test.BO
 			    </class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static ClassDef LoadClassDefWithAddresBOsRelationship_AddressReverseRelationshipConfigured()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property  name=""FirstName"" databaseField=""FirstName_field"" compulsory=""true"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+                    <property  name=""OrganisationID"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+					<relationship name=""AddressTestBOs"" type=""multiple"" relatedClass=""AddressTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"">
+						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
+					</relationship>
+			    </class>
+			");
+            XmlClassLoader addressLoader = new XmlClassLoader();
+            ClassDef addressClassDef = addressLoader.LoadClass
+                (@"				
+                <class name=""AddressTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person_address"">
+					<property  name=""ContactPersonID"" compulsory=""true"" type=""Guid"" />
+					<property  name=""AddressID"" compulsory=""true"" type=""Guid""/>
+                    <property  name=""AddressLine1"" />
+					<primaryKey>
+						<prop name=""AddressID"" />
+					</primaryKey>
+					<relationship name=""ContactPersonTestBO"" type=""single"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"">
+						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
+					</relationship>
+			    </class>");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            ClassDef.ClassDefs.Add(addressClassDef);
             return itsClassDef;
         }
 
@@ -610,11 +648,25 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
             return contactPersonTestBO;
         }
+        private static ContactPersonTestBO CreateContactPersonTestBO(out AddressTestBO address)
+        {
+            ContactPersonTestBO contactPersonTestBO = CreateSavedContactPersonNoAddresses();
+            address = contactPersonTestBO.AddressTestBOs.CreateBusinessObject();
+            address.Save();
+            Assert.AreEqual(1, contactPersonTestBO.AddressTestBOs.Count);
+            return contactPersonTestBO;
+        }
 
         public static ContactPersonTestBO CreateContactPersonWithOneAddress_DeleteDoNothing(out Address address)
         {
             LoadClassDefWithAddressesRelationship_DeleteDoNothing();
             return CreateContactPerson(out address);
+        }
+
+        public static ContactPersonTestBO CreateContactPersonWithOneAddressTestBO(out AddressTestBO address)
+        {
+            LoadClassDefWithAddresBOsRelationship_AddressReverseRelationshipConfigured();
+            return CreateContactPersonTestBO(out address);
         }
 
         public static ContactPersonTestBO CreateSavedContactPerson(DateTime? dteBirth, string surname, string firstName)

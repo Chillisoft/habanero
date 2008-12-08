@@ -26,7 +26,9 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
-    //test if state is editing then call after load else not got to do with refresh strategy.
+    /// <summary>
+    ///Test Business object loading individual business objects. 
+    /// </summary>
     public abstract class TestBusinessObjectLoader
     {
         protected abstract void SetupDataAccessor();

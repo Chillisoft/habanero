@@ -28,7 +28,8 @@ namespace Habanero.Base
         /// Returns the set of business objects that relate to this one
         /// through the specific relationship
         /// </summary>
-        /// <returns>Returns a collection of business objects</returns>
+        /// <returns>Returns a collection of business objects. If this is a single relationship then
+        /// returns a single object in the collection.</returns>
         IBusinessObjectCollection GetRelatedBusinessObjectCol();
 
         ///<summary>

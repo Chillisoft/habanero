@@ -163,6 +163,7 @@ namespace Habanero.Test.BO
         public ContactPersonTestBO ContactPersonTestBO
         {
             get { return Relationships.GetRelatedObject<ContactPersonTestBO>("ContactPersonTestBO"); }
+            set { Relationships.SetRelatedObject("ContactPersonTestBO", value); }
         }
 
         public Guid? OrganisationID

@@ -121,23 +121,10 @@ namespace Habanero.BO
 
         protected virtual IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
         {
-            //if (_boCol != null)
-            //{
-            //    //BOLoader.Instance.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderCriteria, "");
-            //    //TODO: Peters new code how the hell do we do this.
-            //    _boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection(this.RelationshipName)
-            //    return _boCol;
-            //}
 
             Type type = _relDef.RelatedObjectClassType;
             CheckTypeCanBeCreated(type);
-            //TODO: Peter Changet to new BusinessoBjectLoader 
-//            IBusinessObjectCollection boCol = CreateRelatedBusinessObjectCollection(type, this);
             IBusinessObjectCollection boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(type, this);
-//            if (_relDef.KeepReferenceToRelatedObject)
-//            {
-//                _boCol = boCol;
-//            }
             return boCol;
         }
 

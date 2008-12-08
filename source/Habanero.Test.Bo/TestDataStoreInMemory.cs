@@ -72,6 +72,22 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_ClearAll()
+        {
+            //---------------Set up test pack-------------------
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            dataStore.Add(new ContactPerson());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, dataStore.Count);
+
+            //---------------Execute Test ----------------------
+            dataStore.ClearAllBusinessObjects();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, dataStore.Count);
+        }
+
+        [Test]
         public void TestFind()
         {
             //---------------Set up test pack-------------------
