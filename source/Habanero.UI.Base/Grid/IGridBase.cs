@@ -160,5 +160,16 @@ namespace Habanero.UI.Base
         /// Occurs when a row is double-clicked by the user
         /// </summary>
         event RowDoubleClickedHandler RowDoubleClicked;
+
+        /// <summary>
+        /// Gets and sets the UI definition used to initialise the grid structure (the UI name is indicated
+        /// by the "name" attribute on the UI element in the class definitions
+        /// </summary>
+        string UiDefName { get; set; }
+
+        /// <summary>
+        /// Gets and sets the class definition used to initialise the grid structure
+        /// </summary>
+        IClassDef ClassDef { get; set;}
     }
 }

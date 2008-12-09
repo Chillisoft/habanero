@@ -92,8 +92,8 @@ namespace Habanero.UI.Win
         /// </summary>
         public string UiDefName
         {
-            get { return _editableGridManager.UiDefName; }
-            set { _editableGridManager.UiDefName = value; }
+            get { return _grid.UiDefName; }
+            set { _grid.UiDefName = value; }
         }
 
         /// <summary>
@@ -101,8 +101,8 @@ namespace Habanero.UI.Win
         /// </summary>
         public IClassDef ClassDef
         {
-            get { return _editableGridManager.ClassDef; }
-            set { _editableGridManager.ClassDef = value; }
+            get { return _grid.ClassDef; }
+            set { _grid.ClassDef = value; }
         }
 
         /// <summary>
