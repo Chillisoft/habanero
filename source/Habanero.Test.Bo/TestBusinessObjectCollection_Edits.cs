@@ -529,7 +529,7 @@ namespace Habanero.Test.BO
             //---------------Test Result ----------------------- - Result
             Assert.AreEqual(3, cpCol.Count, "Three objects should be in the copied collection");
             Assert.AreEqual
-                (0, cpCol.AddedBusinessObjects.Count,
+                (3, cpCol.AddedBusinessObjects.Count,
                  "The persisted business objects should not be in the AddedList since this is a normal collection which does not modify the added objects alternate key etc unlike the RelatedBusinessObjectCollection");
             Assert.IsTrue(_addedEventFired);
         }
