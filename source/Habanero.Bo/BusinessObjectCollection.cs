@@ -240,7 +240,8 @@ namespace Habanero.BO
         private void AddWithoutEvents(TBusinessObject bo)
         {
             if (bo == null) throw new ArgumentNullException("bo");
-        
+
+            if (this.Contains(bo)) return;
             base.Add(bo);
             _keyObjectHashTable.Add(bo.ID.ToString(), bo);
             bo.Deleted += BusinessObjectDeletedHandler;

@@ -225,6 +225,22 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestAddMethod_IgnoresAddWhenItemAlreadyExists()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            MyBO myBO = new MyBO();
+            MyBO myBO2 = myBO;
+            col.Add(myBO);
+            
+            //---------------Execute Test ----------------------
+            col.Add(myBO2);
+            
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count, "One object should be in the collection");
+        }
+
+        [Test]
         public void TestCreateBusinessObject()
         {
             ContactPersonTestBO.LoadDefaultClassDef();
