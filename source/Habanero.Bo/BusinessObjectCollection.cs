@@ -253,6 +253,7 @@ namespace Habanero.BO
         public new virtual void Add(TBusinessObject bo)
         {
             if (bo == null) throw new ArgumentNullException("bo");
+            if (this.Contains(bo)) return;
             if (bo.Status.IsNew && !this.CreatedBusinessObjects.Contains(bo))
             {
                 AddCreatedBusinessObject(bo);

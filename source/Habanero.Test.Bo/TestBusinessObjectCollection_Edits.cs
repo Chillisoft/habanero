@@ -584,6 +584,23 @@ namespace Habanero.Test.BO
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
         }
 
+        [Test]
+        public void TestAddMethod_IgnoresAddWhenItemAlreadyExists()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            MyBO myBO = new MyBO();
+            MyBO myBO2 = myBO;
+            col.Add(myBO);
+
+            //---------------Execute Test ----------------------
+            col.Add(myBO2);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count, "One object should be in the collection");
+        }
+
         #endregion
 
         #region Remove

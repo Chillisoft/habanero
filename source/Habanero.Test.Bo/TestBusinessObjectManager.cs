@@ -836,10 +836,12 @@ namespace Habanero.Test.BO
             TestUtil.WaitForGC();
             boMan.ClearLoadedObjects();
 
-            AddressTestBO addressOut;
-            CreateSavedCP_WithOneAddresss(out addressOut);
-            CreateSavedCP_WithOneAddresss(out addressOut);
-            CreateSavedCP_WithOneAddresss(out addressOut);
+            AddressTestBO addressOut1;
+            AddressTestBO addressOut2;
+            AddressTestBO addressOut3;
+            ContactPersonTestBO cp2 = CreateSavedCP_WithOneAddresss(out addressOut1);
+            ContactPersonTestBO cp3 = CreateSavedCP_WithOneAddresss(out addressOut2);
+            ContactPersonTestBO cp4 = CreateSavedCP_WithOneAddresss(out addressOut3);
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(6, boMan.Count);
