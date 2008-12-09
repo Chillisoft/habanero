@@ -159,6 +159,30 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void TestInitialise_CopiesValuesToGrid()
+        {
+            //---------------Set up test pack-------------------
+            IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
+            MyBO.LoadDefaultClassDef();
+            ClassDef def = ClassDef.ClassDefs[typeof(MyBO)];
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string uiDefName = "Alternate";
+            gridControl.Initialise(def, uiDefName);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, gridControl.Grid.Columns.Count);
+            Assert.IsFalse(gridControl.Grid.ReadOnly);
+            Assert.IsTrue(gridControl.Grid.AllowUserToAddRows);
+            Assert.IsTrue(gridControl.Grid.AllowUserToDeleteRows);
+
+            Assert.AreEqual(uiDefName, gridControl.UiDefName);
+            Assert.AreEqual(uiDefName, gridControl.Grid.UiDefName);
+            Assert.AreEqual(def, gridControl.ClassDef);
+            Assert.AreEqual(def, gridControl.Grid.ClassDef);
+        }
+
+        [Test]
         public void Test_SetCollection()
         {
             //---------------Set up test pack-------------------

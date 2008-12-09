@@ -30,31 +30,11 @@ namespace Habanero.UI.Base
     {
         private readonly IEditableGridControl _gridControl;
         private readonly IGridInitialiser _gridInitialiser;
-        private IClassDef _classDef;
-        private string _uiDefName;
 
         public EditableGridControlManager(IEditableGridControl gridControl, IControlFactory controlFactory)
         {
             _gridControl = gridControl;
             _gridInitialiser = new GridInitialiser(gridControl, controlFactory);
-        }
-
-        /// <summary>
-        /// See <see cref="IGridControl.UiDefName"/>
-        /// </summary>
-        public string UiDefName
-        {
-            get { return _uiDefName; }
-            set { _uiDefName = value; }
-        }
-
-        /// <summary>
-        /// See <see cref="IGridControl.ClassDef"/>
-        /// </summary>
-        public IClassDef ClassDef
-        {
-            get { return _classDef; }
-            set { _classDef = value; }
         }
 
         /// <summary>

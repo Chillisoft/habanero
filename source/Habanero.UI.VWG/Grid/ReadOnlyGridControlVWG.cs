@@ -177,8 +177,8 @@ namespace Habanero.UI.VWG
         /// </summary>
         public string UiDefName
         {
-            get { return _grid.GridBaseManager.UiDefName; }
-            set { _grid.GridBaseManager.UiDefName = value; }
+            get { return _grid.UiDefName; }
+            set { _grid.UiDefName = value; }
         }
 
         /// <summary>
@@ -186,8 +186,8 @@ namespace Habanero.UI.VWG
         /// </summary>
         public IClassDef ClassDef
         {
-            get { return _grid.GridBaseManager.ClassDef; }
-            set { _grid.GridBaseManager.ClassDef = value; }
+            get { return _grid.ClassDef; }
+            set { _grid.ClassDef = value; }
         }
 
         /// <summary>

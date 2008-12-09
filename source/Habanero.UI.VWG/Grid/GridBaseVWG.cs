@@ -44,6 +44,25 @@ namespace Habanero.UI.VWG
         public event RowDoubleClickedHandler RowDoubleClicked;
 
         /// <summary>
+        /// Gets and sets the UI definition used to initialise the grid structure (the UI name is indicated
+        /// by the "name" attribute on the UI element in the class definitions
+        /// </summary>
+        public string UiDefName
+        {
+            get { return _manager.UiDefName; }
+            set { _manager.UiDefName = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets the class definition used to initialise the grid structure
+        /// </summary>
+        public IClassDef ClassDef
+        {
+            get { return _manager.ClassDef; }
+            set { _manager.ClassDef = value; }
+        }
+
+        /// <summary>
         /// Occurs when the collection in the grid is changed
         /// </summary>
         public event EventHandler CollectionChanged;
