@@ -248,19 +248,20 @@ namespace Habanero.UI.Base
             if (CurrentBusinessObject == null) return;
 
             IBusinessObject businessObject = CurrentBusinessObject;
+            RemoveGridSelectionEvent();
             if (businessObject.Status.IsNew)
             {
-                RemoveGridSelectionEvent();
+                //RemoveGridSelectionEvent();
                 _readOnlyGridControl.SelectedBusinessObject = null;
                 _readOnlyGridControl.Grid.GetBusinessObjectCollection().Remove(businessObject);
-                AddGridSelectionEvent();
+                //AddGridSelectionEvent();
             }
             else
             {
                 businessObject.Delete();
                 businessObject.Save();
             }
-
+            AddGridSelectionEvent();
             _lastSelectedBusinessObject = null;
 
             if (CurrentBusinessObject == null && _readOnlyGridControl.Grid.Rows.Count > 0)
