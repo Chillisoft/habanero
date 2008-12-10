@@ -188,6 +188,7 @@
     <Compile Include="BusxinessObjectLoader\TestSelectQueryDB.cs" />
     <Compile Include="BusxinessObjectLoader\TestSource.cs" />
     <Compile Include="BusxinessObjectLoader\TestSourceDB.cs" />
+    <Compile Include="TestPropertyLink.cs" />
     <Compile Include="TestTransactionCommitter.cs" />
     <Compile Include="Relationship\TestMultipleRelationship.cs" />
     <Compile Include="Loaders\TestXmlTriggerLoader.cs" />

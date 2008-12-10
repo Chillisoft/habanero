@@ -182,6 +182,7 @@
     <Compile Include="IBusinessObjectCollectionLoader.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PropertyLink.cs" />
     <Compile Include="QueryBuilder.cs" />
     <Compile Include="ReadOnlyDataSetProvider.cs">
       <SubType>Code</SubType>

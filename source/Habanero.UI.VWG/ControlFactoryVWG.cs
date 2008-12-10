@@ -207,7 +207,7 @@ namespace Habanero.UI.VWG
 
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl) where T : class, IBusinessObject, new()
         {
-            return new GridWithPanelControlVWG<T>(this, businessObjectControl);
+            return new GridWithPanelControlVWG<T>(this, businessObjectControl, "default");
         }
 
         public IGridWithPanelControl<T> CreateGridWithPanelControl<T>(IBusinessObjectControl businessObjectControl, string uiDefName) where T : class, IBusinessObject, new()
