@@ -850,7 +850,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Tear Down -------------------------
         }
 
-        [Test]
+        [Test, ExpectedException(typeof(HabaneroDeveloperException))]
         public void TestGet_NonExistant()
         {
             //---------------Set up test pack-------------------
@@ -858,10 +858,17 @@ namespace Habanero.Test.BO.ClassDefinition
             MyBO.LoadDefaultClassDef();
 
             //---------------Execute Test ----------------------
-            ClassDef gotClassDef = ClassDef.Get<ContactPerson>();
+            try
+            {
+                ClassDef gotClassDef = ClassDef.Get<ContactPerson>();
+                Assert.Fail("Get<ContactPerson> should have thrown an error as there is no ClassDef for ContactPerson");
+            }
+            catch (HabaneroDeveloperException ex)
+            {
             //---------------Test Result -----------------------
-
-            Assert.IsNull(gotClassDef);
+                StringAssert.Contains("No ClassDef has been loaded for " + typeof(ContactPerson).FullName, ex.Message);
+                throw;
+            }
             //---------------Tear Down -------------------------
         }
 
