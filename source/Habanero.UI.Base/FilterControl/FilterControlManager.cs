@@ -197,7 +197,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// See <see cref="IFilterControl.ClearFilters"/>
+        /// See <see cref="IFilterControl.Clear_Filter_Click"/>
         /// </summary>
         public void ClearFilters()
         {

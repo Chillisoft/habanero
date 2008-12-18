@@ -268,10 +268,16 @@ namespace Habanero.UI.Win
             return _filterControlManager.GetChildControl(propertyName);
         }
 
+        public void ClearFilters()
+        {
+            _filterControlManager.ClearFilters();
+        }
+
+
         /// <summary>
         /// Clears all the values from the filter and calls <see cref="IFilterControl.ApplyFilter"/>
         /// </summary>
-        public void ClearFilters()
+        public void Clear_Filter_Click(object sender, EventArgs e)
         {
             _filterControlManager.ClearFilters();
             FireFilterEvent();
@@ -364,7 +370,7 @@ namespace Habanero.UI.Win
             clearButton.Height = buttonHeight;
             clearButton.Top = _filterButton.Height + 2;
             clearButton.Text = "Clear";
-            clearButton.Click += delegate { ClearFilters(); };
+            clearButton.Click += Clear_Filter_Click;
             return clearButton;
         }
 
@@ -375,14 +381,60 @@ namespace Habanero.UI.Win
             filterButton.Height = buttonHeight;
             filterButton.Top = 0;
             filterButton.Text = "Filter";
-            filterButton.Click += delegate { FireFilterEvent(); };
+            filterButton.Click += Filter_Button_Click;
             return filterButton;
+        }
+
+        private void Filter_Button_Click(object sender, EventArgs e)
+        {
+            FireFilterEvent();
         }
 
         //private void AssignControlEventHandlers(IControlHabanero control)
         //{
             
         //}
+
+        /// <summary>
+        /// Removes the default Click Event. 
+        /// Enables the developer to add custom functionality on the button click 
+        /// before the filter or search happens.
+        /// </summary>
+        public void RemoveDefaultFilterClickEvent()
+        {
+            FilterButton.Click -= Filter_Button_Click;
+        }
+
+        /// <summary>
+        /// Adds the default Click Event. 
+        /// Enables the developer to add the default functionality back on the button click 
+        /// if previously removed.
+        /// </summary>
+        public void AddDefaultFilterClickEvent()
+        {
+            FilterButton.Click += Filter_Button_Click;
+        }
+
+        /// <summary>
+        /// Removes the default Click Event. 
+        /// Enables the developer to add custom functionality on the button click 
+        /// before the Clear or search happens.
+        /// </summary>
+        public void RemoveDefaultClearClickEvent()
+        {
+            ClearButton.Click -= Clear_Filter_Click;
+        }
+
+        /// <summary>
+        /// Adds the default Click Event. 
+        /// Enables the developer to add the default functionality back on the button click 
+        /// if previously removed.
+        /// </summary>
+        public void AddDefaultClearClickEvent()
+        {
+            ClearButton.Click += Clear_Filter_Click;
+        }
+
 
         private void FireFilterEvent()
         {

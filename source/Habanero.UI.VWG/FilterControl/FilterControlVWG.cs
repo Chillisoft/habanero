@@ -360,5 +360,25 @@ namespace Habanero.UI.VWG
         {
             return _filterControlManager.AddCustomFilter(labelText, propertyName, customFilter);
         }
+
+        public void RemoveDefaultClearClickEvent()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void AddDefaultClearClickEvent()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void RemoveDefaultFilterClickEvent()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void AddDefaultFilterClickEvent()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
