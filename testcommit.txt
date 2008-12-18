@@ -7,3 +7,4 @@ This is a test to see the Post-Commit hook works.
 6 change
 7 change
 8 change
+9 change
