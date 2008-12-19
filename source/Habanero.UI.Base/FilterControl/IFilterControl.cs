@@ -193,5 +193,33 @@ namespace Habanero.UI.Base
         ///<param name="customFilter">The custom filter</param>
         ///<returns>Returns the new Custom Filter Control </returns>
         IControlHabanero AddCustomFilter(string labelText,string propertyName, FilterControlManager.ICustomFilter customFilter);
+
+        /// <summary>
+        /// Removes the default Click Event. 
+        /// Enables the developer to add custom functionality on the button click 
+        /// before the filter or search happens.
+        /// </summary>
+        void RemoveDefaultFilterClickEvent();
+
+        /// <summary>
+        /// Adds the default Click Event. 
+        /// Enables the developer to add the default functionality back on the button click 
+        /// if previously removed.
+        /// </summary>
+        void AddDefaultFilterClickEvent();
+
+        /// <summary>
+        /// Removes the default Click Event. 
+        /// Enables the developer to add custom functionality on the button click 
+        /// before the Clear or search happens.
+        /// </summary>
+        void RemoveDefaultClearClickEvent();
+
+        /// <summary>
+        /// Adds the default Click Event. 
+        /// Enables the developer to add the default functionality back on the button click 
+        /// if previously removed.
+        /// </summary>
+        void AddDefaultClearClickEvent();
     }
 }
