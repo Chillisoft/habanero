@@ -26,7 +26,7 @@ namespace Habanero.BO
     ///</summary>
     public class DataAccessorInMemory : IDataAccessor
     {
-        private readonly DataStoreInMemory _dataStore;
+        protected readonly DataStoreInMemory _dataStore;
         private readonly IBusinessObjectLoader _businessObjectLoader;
 
         ///<summary>
@@ -39,7 +39,6 @@ namespace Habanero.BO
         internal DataAccessorInMemory(DataStoreInMemory dataStore)
         {
             _dataStore = dataStore;
-
             _businessObjectLoader = new BusinessObjectLoaderInMemory(_dataStore);
         }
 
@@ -56,7 +55,7 @@ namespace Habanero.BO
         /// each time an object or set of objects is persisted.
         /// </summary>
         /// <returns></returns>
-        public ITransactionCommitter CreateTransactionCommitter()
+        public virtual ITransactionCommitter CreateTransactionCommitter()
         {
             return new TransactionCommitterInMemory(_dataStore);
         }
