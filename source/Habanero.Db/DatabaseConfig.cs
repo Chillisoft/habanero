@@ -211,7 +211,7 @@ namespace Habanero.DB
         ///<returns>Returns a DatabaseConfig object</returns>
 	    public static DatabaseConfig ReadFromConfigFile(string configSectionName)
 	    {
-	        return new DatabaseConfig((IDictionary) ConfigurationSettings.GetConfig(configSectionName));
+	        return new DatabaseConfig((IDictionary) ConfigurationManager.GetSection(configSectionName));
 	    }
 
 	    /// <summary>

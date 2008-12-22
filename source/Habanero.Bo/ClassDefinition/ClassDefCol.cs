@@ -375,9 +375,10 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="includeNamespace">Should the TypeId include the namespace or not</param>
         private static string GetTypeId(Type classType, bool includeNamespace)
         {
-            return includeNamespace
-                       ? GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.FullName, includeNamespace)
-                       : GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.Name, includeNamespace);
+            string assemblyName;
+            string className;
+            TypeLoader.ClassTypeInfo(classType, out assemblyName, out className );
+            return GetTypeId(assemblyName, className, includeNamespace);
         }
 
         internal static string StripOutNameSpace(string className)

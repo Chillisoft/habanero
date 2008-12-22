@@ -19,7 +19,9 @@
 
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
@@ -149,6 +151,26 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsNull(foundClass);
         }
 
+        [Test]
+        public void TestIndexer_Get()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = new ClassDef(typeof(MockBo), new PrimaryKeyDef(),
+                new PropDefCol(), new KeyDefCol(), new RelationshipDefCol());
+            ClassDefCol col = new ClassDefCol();
+            col.Add(classDef);
+            //---------------Assert Preconditions --------------
+
+            //---------------Execute Test ----------------------
+            ClassDef returnedClassDef = col[typeof (MockBo)];
+            //---------------Test Result -----------------------
+            Assert.AreEqual(classDef, returnedClassDef);
+        }
+
+        private class MockBo : BusinessObject
+        {
+            
+        }
 
     }
 }
