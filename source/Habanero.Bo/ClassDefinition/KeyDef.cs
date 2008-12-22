@@ -188,7 +188,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="index">The index of the property</param>
         /// <returns>Returns the property stored under that index</returns>
-        internal IPropDef this[int index]
+        public IPropDef this[int index]
         {
             get
             {
