@@ -220,7 +220,7 @@ namespace Habanero.BO
         {
             ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
             // made internal or something and used via reflection.
-            // I am not comfortable with it being on the Interface.
+            // I (Brett) am not comfortable with it being on the Interface. 
             foreach (IBusinessObject loadedBo in loadedBos)
             {
                 AddBusinessObjectToCollection(collection, loadedBo);

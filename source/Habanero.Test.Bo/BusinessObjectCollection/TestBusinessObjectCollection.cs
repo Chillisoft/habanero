@@ -29,7 +29,7 @@ using Habanero.DB;
 using Habanero.Util;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.TestBusinessObjectCollection
 {
     /// <summary>
     /// Summary description for TestBusinessObjectCollection.
@@ -614,7 +614,6 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
 
-            cpCol.AddedBusinessObjects.Add(cp);
             cpCol.Add(cp);
 
             //---------------Assert Precondition----------------

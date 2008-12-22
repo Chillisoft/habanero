@@ -541,7 +541,6 @@ namespace Habanero.Test.UI.Base
                 object rowID = readOnlyGridControl.Grid.Rows[rowNum++].Cells["ID"].Value;
                 Assert.AreEqual(person.ID.ToString(), rowID.ToString());
             }
-            //---------------Tear Down -------------------------          
         }
 
         [Test]

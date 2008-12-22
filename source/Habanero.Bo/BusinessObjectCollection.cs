@@ -260,8 +260,12 @@ namespace Habanero.BO
             }
             else
             {
+                if (bo.Status.IsDeleted) return;
                 AddWithoutEvents(bo);
-                AddedBusinessObjects.Add(bo);
+                if (!AddedBusinessObjects.Contains(bo))
+                {
+                    AddedBusinessObjects.Add(bo);                    
+                }
                 this.FireBusinessObjectAdded(bo);
             }
         }
@@ -334,7 +338,8 @@ namespace Habanero.BO
         {
             TBusinessObject bo = e.BusinessObject as TBusinessObject;
             if (bo == null) return;
-       
+            if (this.MarkForDeleteBusinessObjects.Contains(bo)) return;
+
             this.MarkForDeleteBusinessObjects.Add(bo);
             base.Remove(bo);
             KeyObjectHashTable.Remove(bo.ID.ToString());
@@ -354,7 +359,57 @@ namespace Habanero.BO
             this.PersistedBOCol.Remove(bo);
             this.RemovedBusinessObjects.Remove(bo);
             this.MarkForDeleteBusinessObjects.Remove(bo);
+            if (bo.Status.IsDeleted) this.AddedBusinessObjects.Remove(bo);
             DeRegisterForBOEvents(bo);
+        }
+
+
+        private void RestoredEventHandler(object sender, BOEventArgs e)
+        {
+            TBusinessObject bo = (TBusinessObject)e.BusinessObject;
+            //TODO: Brett removed this Restoring (cancelling edits) on a created bo should not 
+            //affect the collection restoring the collection is a different matter.
+            //            bool createdContains = CreatedBusinessObjects.Contains(bo);
+            //            if (bo.Status.IsNew || createdContains)
+            //            {
+            //                //Cancel Edits (Restore) has been called 
+            //                // on a created business object.
+            //                RemoveInternal(bo);
+            //                this.RemovedBusinessObjects.Remove(bo);//The remove inte
+            //            }
+            if (this.MarkForDeleteBusinessObjects.Remove(bo))
+            {
+                this.Add(bo);
+            }
+        }
+
+        private void SavedEventHandler(object sender, BOEventArgs e)
+        {
+            TBusinessObject bo = (TBusinessObject)e.BusinessObject;
+            CreatedBusinessObjects.Remove(bo);
+
+            //Remove the deleted bo from the removed collection
+            //            if(bo.Status.IsNew && bo.Status.IsDeleted)
+            //            {
+            //                this.RemovedBusinessObjects.Remove(bo);
+            ////                bo.Saved -= _savedEventHandler;
+            //                //should remove from main col if deleted
+            //                return;
+            //            }
+            //TODO: Mark for deleted items will not be handled.
+            if (!this.RemovedBusinessObjects.Remove(bo))
+            {
+                if (!this.Contains(bo))
+                {
+                    Add(bo);
+                }
+                if (!bo.Status.IsNew && !bo.Status.IsDeleted && !this.PersistedBusinessObjects.Contains(bo))
+                {
+                    AddToPersistedCollection(bo);
+                }
+            }
+
+            //bo.Saved -= _savedEventHandler;
         }
 
         /// <summary>
@@ -626,12 +681,15 @@ namespace Habanero.BO
         internal bool RemoveInternal(TBusinessObject businessObject)
         {
             //TODO: If Created then do not add to removed.
-            if (!_removedBusinessObjects.Contains(businessObject)) _removedBusinessObjects.Add(businessObject);
+            if (!_removedBusinessObjects.Contains(businessObject) && !_markForDeleteBusinessObjects.Contains(businessObject))
+            {
+                _removedBusinessObjects.Add(businessObject);
+            }
 
             bool removed = base.Remove(businessObject);
             KeyObjectHashTable.Remove(businessObject.ID.ToString());
             RemoveCreatedBusinessObject(businessObject);
-
+            RemoveAddedBusinessObject(businessObject);
             //TODO: Verify this but i think should not remove event registering
             DeRegisterForBOEvents(businessObject);
             this.FireBusinessObjectRemoved(businessObject);
@@ -641,6 +699,16 @@ namespace Habanero.BO
         private void RemoveCreatedBusinessObject(TBusinessObject businessObject)
         {
             if (!this.CreatedBusinessObjects.Remove(businessObject)) return;
+
+            this.RemovedBusinessObjects.Remove(businessObject);
+            DeRegisterForBOEvents(businessObject);
+        }
+
+        private void RemoveAddedBusinessObject(TBusinessObject businessObject)
+        {
+            if (this.MarkForDeletionBOs.Contains(businessObject)) return;
+
+            if (!this.AddedBusinessObjects.Remove(businessObject)) return;
 
             this.RemovedBusinessObjects.Remove(businessObject);
             DeRegisterForBOEvents(businessObject);
@@ -1075,6 +1143,14 @@ namespace Habanero.BO
                 bo.Restore();
                 this.Add(bo);
             }
+            while(this.AddedBusinessObjects.Count > 0)
+            {
+                TBusinessObject bo = this.AddedBusinessObjects[0];
+                this.AddedBusinessObjects.Remove(bo);
+                bo.Restore();
+                this.RemoveInternal(bo);
+                this.RemovedBusinessObjects.Remove(bo);
+            }
         }
 
         #region IBusinessObjectCollection Members
@@ -1325,53 +1401,6 @@ namespace Habanero.BO
 
             AddWithoutEvents(newBO);
             this.FireBusinessObjectAdded(newBO);
-        }
-
-        private void RestoredEventHandler(object sender, BOEventArgs e)
-        {
-            TBusinessObject bo = (TBusinessObject) e.BusinessObject;
-//TODO: Brett removed this Restoring (cancelling edits) on a created bo should not 
-            //affect the collection restoring the collection is a different matter.
-//            bool createdContains = CreatedBusinessObjects.Contains(bo);
-//            if (bo.Status.IsNew || createdContains)
-//            {
-//                //Cancel Edits (Restore) has been called 
-//                // on a created business object.
-//                RemoveInternal(bo);
-//                this.RemovedBusinessObjects.Remove(bo);//The remove inte
-//            }
-            if (this.MarkForDeleteBusinessObjects.Remove(bo))
-            {
-                this.Add(bo);
-            }
-        }
-
-        private void SavedEventHandler(object sender, BOEventArgs e)
-        {
-            TBusinessObject bo = (TBusinessObject) e.BusinessObject;
-            CreatedBusinessObjects.Remove(bo);
-            //Remove the deleted bo from the removed collection
-//            if(bo.Status.IsNew && bo.Status.IsDeleted)
-//            {
-//                this.RemovedBusinessObjects.Remove(bo);
-////                bo.Saved -= _savedEventHandler;
-//                //should remove from main col if deleted
-//                return;
-//            }
-            //TODO: Mark for deleted items will not be handled.
-            if (!this.RemovedBusinessObjects.Remove(bo))
-            {
-                if (!this.Contains(bo))
-                {
-                    Add(bo);
-                }
-                if (!bo.Status.IsNew && !bo.Status.IsDeleted && !this.PersistedBusinessObjects.Contains(bo))
-                {
-                    AddToPersistedCollection(bo);
-                }
-            }
-
-            //bo.Saved -= _savedEventHandler;
         }
 
         /// <summary>

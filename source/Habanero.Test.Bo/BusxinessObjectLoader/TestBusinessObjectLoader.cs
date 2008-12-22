@@ -1265,7 +1265,7 @@ namespace Habanero.Test.BO
             }
 
             [Test]
-            public void TestRefreshLoadedCollection_DeletedItem()
+            public void TestRefreshLoadedCollection_RemovedItem()
             {
                 //---------------Set up test pack-------------------
                 DataStoreInMemory dataStore = new DataStoreInMemory();

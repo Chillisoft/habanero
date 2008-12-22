@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
@@ -278,25 +279,6 @@ namespace Habanero.BO
             }
         }
 
-        protected static void RestoreAddedCollection(IBusinessObjectCollection collection, IList addedBOCol)
-        {
-            //The collection should show all loaded object less removed or deleted object not yet persisted
-            //     plus all created or added objects not yet persisted.
-            //Note: This behaviour is fundamentally different than the business objects behaviour which 
-            //  throws and error if any of the items are dirty when it is being refreshed.
-            //Should a refresh be allowed on a dirty collection (what do we do with BO's
-            foreach (IBusinessObject addedBO in addedBOCol)
-            {
-                if (!collection.AddedBOCol.Contains(addedBO))
-                {
-                    collection.AddedBOCol.Add(addedBO);                    
-                }
-                if (!collection.Contains(addedBO))
-                {
-                    collection.AddWithoutEvents(addedBO);
-                }
-            }
-        }
         //The collection should show all loaded object less removed or deleted object not yet persisted
         //     plus all created or added objects not yet persisted.
         //Note: This behaviour is fundamentally different than the business objects behaviour which 
@@ -309,9 +291,36 @@ namespace Habanero.BO
         //   public accessors
         protected static void RestoreEditedLists(IBusinessObjectCollection collection)
         {
+            ArrayList addedBoArray = new ArrayList();
+            addedBoArray.AddRange(collection.AddedBOCol);
+            
             RestoreCreatedCollection(collection);
             RestoreRemovedCollection(collection);
             RestoreMarkForDeleteCollection(collection);
+            RestoreAddedCollection(collection, addedBoArray);
+        }
+        protected static void RestoreAddedCollection(IBusinessObjectCollection collection, ArrayList addedBoArray)
+        {
+            if (collection == null) throw new ArgumentNullException("collection");
+            if (addedBoArray == null) throw new ArgumentNullException("addedBoArray");
+            //The collection should show all loaded object less removed or deleted object not yet persisted
+           //      plus all created or added objects not yet persisted.
+            //Note: This behaviour is fundamentally different than the business objects behaviour which 
+            //  throws and error if any of the items are dirty when it is being refreshed.
+            //Should a refresh be allowed on a dirty collection (what do we do with BO's
+            foreach (IBusinessObject addedBO in addedBoArray)
+            {
+                if (!collection.Contains(addedBO) && !collection.MarkForDeletionBOs.Contains(addedBO))
+                {
+                    collection.AddWithoutEvents(addedBO);
+                }
+                                
+                if (!collection.AddedBOCol.Contains(addedBO))
+                {
+                    collection.AddedBOCol.Add(addedBO);
+                }
+
+            }
         }
 
         private static void RestoreMarkForDeleteCollection(IBusinessObjectCollection collection)

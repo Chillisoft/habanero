@@ -126,6 +126,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection.cs" />
+    <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_AddedBOs.cs" />
+    <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_CreateBO.cs" />
     <Compile Include="BusinessObjectCollection\TestOrderCriteria.cs" />
     <Compile Include="BusinessObjectCollection\TestRelatedBusinessObjectCollection.cs" />
     <Compile Include="BusxinessObjectLoader\TestBusinessObjectLoader.cs" />
@@ -137,7 +139,7 @@
     <Compile Include="CriteriaManager\TestHabaneroStringBuilder.cs" />
     <Compile Include="Security\TestBOPropAuthorisation.cs" />
     <Compile Include="Security\TestBusinessObjectAuthorisation.cs" />
-    <Compile Include="TestBusinessObjectCollection_Edits.cs" />
+    <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_Edits.cs" />
     <Compile Include="TestBusinessObjectSerialisation.cs" />
     <Compile Include="TestPack\AddressTestBO.cs" />
     <Compile Include="ClassDefinition\TestTriggerCol.cs" />
