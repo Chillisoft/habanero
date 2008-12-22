@@ -261,6 +261,7 @@ namespace Habanero.BO
             else
             {
                 AddWithoutEvents(bo);
+                AddedBusinessObjects.Add(bo);
                 this.FireBusinessObjectAdded(bo);
             }
         }

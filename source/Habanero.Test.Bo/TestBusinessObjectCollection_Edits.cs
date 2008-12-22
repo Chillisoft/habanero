@@ -519,7 +519,6 @@ namespace Habanero.Test.BO
             _addedEventFired = false;
             cpCol.BusinessObjectAdded += delegate { _addedEventFired = true; };
 
-
             //-------Assert Preconditions
             Assert.AreEqual(0, cpCol.Count, "Three objects should be in the collection");
 
