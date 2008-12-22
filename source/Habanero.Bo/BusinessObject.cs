@@ -255,6 +255,7 @@ namespace Habanero.BO
         {
             return ClassDef.ClassDefs.Contains(GetType()) ? ClassDef.ClassDefs[GetType()] : null;
         }
+
         #endregion //Constructors
 
         #region Properties
@@ -624,6 +625,13 @@ namespace Habanero.BO
                 if (newPropValue != null && prop.PropertyType != newPropValue.GetType())
                 {
                     newPropValue = Activator.CreateInstance(prop.PropertyType, new object[] {newPropValue, false});
+                }
+            }
+            if (prop.PropertyType.IsEnum && newPropValue is string)
+            {
+                if(Enum.IsDefined(prop.PropertyType, (string)newPropValue))
+                {
+                    newPropValue = Enum.Parse(prop.PropertyType, (string)newPropValue);
                 }
             }
             if (newPropValue is IBusinessObject)

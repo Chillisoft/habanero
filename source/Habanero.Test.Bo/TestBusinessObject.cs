@@ -51,6 +51,7 @@ namespace Habanero.Test.BO
         {
             SetupDBConnection();
             BORegistry.DataAccessor = new DataAccessorDB();
+            ClassDef.ClassDefs.Clear();
         }
 
         [Test]
@@ -672,6 +673,99 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.IsTrue(updatedEventFired);
+        }
+
+        [Test]
+        public void Test_SetPropertyValue_WithDateTime()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            DateTime newDateTime = DateTime.Now;
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.SetPropertyValue("DateOfBirth", newDateTime);
+            //---------------Test Result -----------------------
+            object value = contactPersonTestBO.GetPropertyValue("DateOfBirth");
+            Assert.IsInstanceOfType(typeof(DateTime), value);
+            Assert.AreEqual(newDateTime, value);
+        }
+
+        [Test]
+        public void Test_SetPropertyValue_WithDateTimeString()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            DateTime newDateTime = DateTime.Today.Add(new TimeSpan(6, 3, 2));
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.SetPropertyValue("DateOfBirth", newDateTime.ToString());
+            //---------------Test Result -----------------------
+            object value = contactPersonTestBO.GetPropertyValue("DateOfBirth");
+            Assert.IsInstanceOfType(typeof(DateTime), value);
+            Assert.AreEqual(newDateTime, value);
+        }
+
+        [Test]
+        public void Test_SetPropertyValue_WithDateTimeString_Invalid()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            string newDateTime = "31/11/2008";
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.SetPropertyValue("DateOfBirth", newDateTime);
+            //---------------Test Result -----------------------
+            object value = contactPersonTestBO.GetPropertyValue("DateOfBirth");
+            Assert.IsInstanceOfType(typeof(string), value);
+            Assert.AreEqual(newDateTime, value);
+            IBOProp prop = contactPersonTestBO.Props["DateOfBirth"];
+            Assert.IsFalse(prop.IsValid);
+            StringAssert.Contains("for property 'Date Of Birth' is not valid. It is not a type of DateTime.", prop.InvalidReason);
+           
+        }
+
+        [Test]
+        public void Test_SetPropertyValue_WithEnumString()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDefWithEnum();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.SetPropertyValue("ContactType", "Business");
+            //---------------Test Result -----------------------
+            object value = contactPersonTestBO.GetPropertyValue("ContactType");
+            Assert.IsInstanceOfType(typeof(ContactPersonTestBO.ContactType), value);
+            Assert.AreEqual(ContactPersonTestBO.ContactType.Business, value);
+        }
+
+        [Test]
+        public void Test_SetPropertyValue_WithEnumString_Invalid()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDefWithEnum();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            string newValue = "InvalidOption";
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.SetPropertyValue("ContactType", newValue);
+            //---------------Test Result -----------------------
+            object value = contactPersonTestBO.GetPropertyValue("ContactType");
+            Assert.IsInstanceOfType(typeof (string), value);
+            Assert.AreEqual(newValue, value);
+            IBOProp prop = contactPersonTestBO.Props["ContactType"];
+            Assert.IsFalse(prop.IsValid);
+            StringAssert.Contains(
+                "for property 'Contact Type' is not valid. It is not a type of ContactPersonTestBO+ContactType.",
+                prop.InvalidReason);
         }
     }
 }

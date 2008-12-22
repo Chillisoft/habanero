@@ -207,6 +207,7 @@
     <Compile Include="..\Common\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
+    <Compile Include="Util\DialogUtilities.cs" />
     <Compile Include="Wizard\MessageWizardStepWin.cs">
       <SubType>UserControl</SubType>
     </Compile>
