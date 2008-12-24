@@ -125,5 +125,10 @@ namespace Habanero.UI.VWG
             }
             return -1;
         }
+
+        public void Clear()
+        {
+            _tabPages.Clear();
+        }
     }
 }

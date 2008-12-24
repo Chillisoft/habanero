@@ -76,16 +76,16 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Adds a control to the layout
         /// </summary>
-        /// <param name="ctl">The control to add</param>
+        /// <param name="control">The control to add</param>
         /// <returns>Returns the control once it has been added</returns>
-        public override IControlHabanero AddControl(IControlHabanero ctl)
+        public override IControlHabanero AddControl(IControlHabanero control)
         {
-            _controls.Add(ctl);
+            _controls.Add(control);
             RefreshControlPositions();
-            ctl.VisibleChanged += ControlVisibleChangedHandler;
-            ctl.Resize += ControlResizedHandler;
-            this.ManagedControl.Controls.Add(ctl);
-            return ctl;
+            control.VisibleChanged += ControlVisibleChangedHandler;
+            control.Resize += ControlResizedHandler;
+            this.ManagedControl.Controls.Add(control);
+            return control;
         }
 
         //TODO: This has been commented out since there are not tests for it.
@@ -352,6 +352,21 @@ namespace Habanero.UI.Base
                 if (gluePosition == pos) return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Removes a control.
+        /// </summary>
+        /// <param name="controlHabanero">Control to be removed.</param>
+        /// <returns>The control being removed.</returns>
+        public IControlHabanero RemoveControl(IControlHabanero controlHabanero)
+        {
+            _controls.Remove(controlHabanero);
+            RefreshControlPositions();
+            controlHabanero.VisibleChanged += ControlVisibleChangedHandler;
+            controlHabanero.Resize += ControlResizedHandler;
+            this.ManagedControl.Controls.Remove(controlHabanero);
+            return controlHabanero;
         }
     }
 }

@@ -103,5 +103,18 @@ namespace Habanero.UI.Base
             control.Resize += delegate { RefreshControlPositions(); };
             return control;
         }
+        //Todo : This needs to be moved up to the base class
+        /// <summary>
+        /// Removes a control from layout manager.
+        /// </summary>
+        /// <param name="control">The Control to be removed.</param>
+        /// <returns>Returns the control being removed.</returns>
+        public IControlHabanero RemoveControl(IControlHabanero control)
+        {
+            this.ManagedControl.Controls.Remove(control);
+            RefreshControlPositions();
+            control.Resize += delegate { RefreshControlPositions(); };
+            return control;
+        }
     }
 }

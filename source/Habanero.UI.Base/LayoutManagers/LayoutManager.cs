@@ -117,9 +117,10 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Add a control to the layout
         /// </summary>
-        /// <param name="label">The control to add</param>
+        /// <param name="control">The control to add</param>
         /// <returns>Returns the control added</returns>
-        public abstract IControlHabanero AddControl(IControlHabanero label);
+        public abstract IControlHabanero AddControl(IControlHabanero control);
+
     }
 
     /// <summary>
