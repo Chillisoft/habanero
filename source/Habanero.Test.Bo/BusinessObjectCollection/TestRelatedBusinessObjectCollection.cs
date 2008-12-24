@@ -30,14 +30,14 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestRelatedBusinessObjectCollection : TestUsingDatabase
     {
+
         #region SetupTeardown
 
         [SetUp]
         public void TestSetup()
         {
             //Code that is run before every single test
-            ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorDB();
+
         }
         [TestFixtureSetUp]
         public void TestFixtureSetup()

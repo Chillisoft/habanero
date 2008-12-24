@@ -148,6 +148,20 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         #region Methods On loaded collection
 
         [Test]
+        public void Test_LoadBoCol()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>("");
+
+            //---------------Test Result -----------------------
+            AssertOneObjectInCurrentAndPersistedCollection(cpCol);
+        }
+
+        [Test]
         public void Test_LoadedBo_Add()
         {
             //-----Create Test pack---------------------

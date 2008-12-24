@@ -129,6 +129,7 @@
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_AddedBOs.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_CreateBO.cs" />
     <Compile Include="BusinessObjectCollection\TestOrderCriteria.cs" />
+    <Compile Include="BusinessObjectCollection\TestRelatedBOCol_Created.cs" />
     <Compile Include="BusinessObjectCollection\TestRelatedBusinessObjectCollection.cs" />
     <Compile Include="BusxinessObjectLoader\TestBusinessObjectLoader.cs" />
     <Compile Include="BusxinessObjectLoader\TestBusinessObjectLoaderWithInheritance.cs" />
