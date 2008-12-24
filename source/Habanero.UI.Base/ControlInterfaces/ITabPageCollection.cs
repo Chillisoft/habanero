@@ -47,5 +47,10 @@ namespace Habanero.UI.Base
         /// <returns>A zero-based index value that represents the position of the specified
         /// tab page in the collection</returns>
         int IndexOf(ITabPage page);
+
+        /// <summary>
+        /// Clears all the tab pages.
+        /// </summary>
+        void Clear();
     }
 }

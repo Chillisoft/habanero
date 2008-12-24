@@ -96,6 +96,22 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(addedControl, createdControl);
         }
 
+        [Test]
+        public void TestRemoveControl()
+        {
+            //---------------Set up test pack-------------------
+            IControlHabanero managedControl = GetControlFactory().CreatePanel();
+            IControlHabanero createdControl = GetControlFactory().CreateControl();
+            ColumnLayoutManager columnLayoutManager = new ColumnLayoutManager(managedControl, GetControlFactory());
+            columnLayoutManager.AddControl(createdControl);
+            //---------------Assert Pre-Conditions--------------
+            Assert.AreEqual(1, managedControl.Controls.Count);
+            //---------------Execute Test ----------------------
+            columnLayoutManager.RemoveControl(createdControl);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, managedControl.Controls.Count);
+        }
+
 
         private ColumnLayoutManager GetColumnLayoutManager()
         {

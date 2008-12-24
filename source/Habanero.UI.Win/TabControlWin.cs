@@ -93,6 +93,10 @@ namespace Habanero.UI.Win
             _tabPages.Add((TabPage)page);
         }
 
+        public void Clear()
+        {
+            _tabPages.Clear();
+        }
         /// <summary>
         /// Indicates the tab page at the specified indexed location in the collection
         /// </summary>
