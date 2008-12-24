@@ -165,7 +165,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns the property stored under that property name</returns>
-        internal IPropDef this[string propName]
+        public IPropDef this[string propName]
         {
             get
             {
