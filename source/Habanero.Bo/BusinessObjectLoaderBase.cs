@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
@@ -264,19 +263,25 @@ namespace Habanero.BO
         protected static void AddBusinessObjectToCollection
             (IBusinessObjectCollection collection, IBusinessObject loadedBo)
         {
+            if (collection == null) throw new ArgumentNullException("collection");
+            if (loadedBo == null) throw new ArgumentNullException("loadedBo");
             //If the origional collection had the new business object then
             // use add internal this adds without any events being raised etc.
             //else adds via the Add method (normal add) this raises events such that the 
             // user interface can be updated.
+            if (collection.AddedBOCol.Contains(loadedBo))
+            {
+                collection.AddWithoutEvents(loadedBo);
+                collection.PersistedBOCol.Add(loadedBo);
+                return;
+            }
             if (collection.PersistedBOCol.Contains(loadedBo))
             {
                 collection.AddWithoutEvents(loadedBo);
+                return;
             }
-            else
-            {
-                collection.PersistedBOCol.Add(loadedBo);
-                collection.Add(loadedBo);
-            }
+            collection.PersistedBOCol.Add(loadedBo);
+            collection.Add(loadedBo);
         }
 
         //The collection should show all loaded object less removed or deleted object not yet persisted

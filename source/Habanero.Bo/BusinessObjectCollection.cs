@@ -262,10 +262,11 @@ namespace Habanero.BO
             {
                 if (bo.Status.IsDeleted) return;
                 AddWithoutEvents(bo);
-                if (!AddedBusinessObjects.Contains(bo))
+                if (!AddedBusinessObjects.Contains(bo) && !PersistedBOCol.Contains(bo))
                 {
                     AddedBusinessObjects.Add(bo);                    
                 }
+                this.RemovedBusinessObjects.Remove(bo);
                 this.FireBusinessObjectAdded(bo);
             }
         }
@@ -343,7 +344,10 @@ namespace Habanero.BO
             this.MarkForDeleteBusinessObjects.Add(bo);
             base.Remove(bo);
             KeyObjectHashTable.Remove(bo.ID.ToString());
-            this.FireBusinessObjectRemoved(bo);
+            if (!this.RemovedBusinessObjects.Remove(bo))
+            {
+                this.FireBusinessObjectRemoved(bo);
+            }
         }
 
         /// <summary>
@@ -377,7 +381,12 @@ namespace Habanero.BO
             //                RemoveInternal(bo);
             //                this.RemovedBusinessObjects.Remove(bo);//The remove inte
             //            }
-            if (this.MarkForDeleteBusinessObjects.Remove(bo))
+            if (!this.MarkForDeleteBusinessObjects.Remove(bo) || (this.Contains(bo))) return;
+            if (this.AddedBusinessObjects.Contains(bo) && this.Contains(bo))
+            {
+                this.AddWithoutEvents(bo);
+            }
+            else
             {
                 this.Add(bo);
             }
@@ -681,18 +690,20 @@ namespace Habanero.BO
         internal bool RemoveInternal(TBusinessObject businessObject)
         {
             //TODO: If Created then do not add to removed.
-            if (!_removedBusinessObjects.Contains(businessObject) && !_markForDeleteBusinessObjects.Contains(businessObject))
-            {
-                _removedBusinessObjects.Add(businessObject);
-            }
+
 
             bool removed = base.Remove(businessObject);
             KeyObjectHashTable.Remove(businessObject.ID.ToString());
-            RemoveCreatedBusinessObject(businessObject);
-            RemoveAddedBusinessObject(businessObject);
+
             //TODO: Verify this but i think should not remove event registering
-            DeRegisterForBOEvents(businessObject);
-            this.FireBusinessObjectRemoved(businessObject);
+            //DeRegisterForBOEvents(businessObject);
+            if (!_removedBusinessObjects.Contains(businessObject) && !_markForDeleteBusinessObjects.Contains(businessObject))
+            {
+                _removedBusinessObjects.Add(businessObject);
+                this.FireBusinessObjectRemoved(businessObject);
+            }
+            RemoveCreatedBusinessObject(businessObject);
+            RemoveAddedBusinessObject(businessObject);            
             return removed;
         }
 
@@ -944,7 +955,10 @@ namespace Habanero.BO
             }
             foreach (TBusinessObject addedBusinessObject in this.AddedBusinessObjects)
             {
-                clonedCol.AddedBusinessObjects.Add(addedBusinessObject);
+                if (!clonedCol.AddedBusinessObjects.Contains(addedBusinessObject))
+                {
+                    clonedCol.AddedBusinessObjects.Add(addedBusinessObject);
+                }
             }
             return clonedCol;
         }
@@ -1148,7 +1162,12 @@ namespace Habanero.BO
                 TBusinessObject bo = this.AddedBusinessObjects[0];
                 this.AddedBusinessObjects.Remove(bo);
                 bo.Restore();
-                this.RemoveInternal(bo);
+                bool removed = base.Remove(bo);
+                KeyObjectHashTable.Remove(bo.ID.ToString());
+                if (removed)
+                {
+                    this.FireBusinessObjectRemoved(bo);
+                }
                 this.RemovedBusinessObjects.Remove(bo);
             }
         }

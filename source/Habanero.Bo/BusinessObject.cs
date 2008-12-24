@@ -921,6 +921,7 @@ namespace Habanero.BO
             committer.CommitTransaction();
         }
 
+        [Obsolete("use Cancel Edits")]
         /// <summary>
         /// Cancel all edits made to the object since it was loaded from the 
         /// database or last saved to the database
@@ -936,6 +937,20 @@ namespace Habanero.BO
             FireRestoredEvent();
         }
 
+        /// <summary>
+        /// Cancel all edits made to the object since it was loaded from the 
+        /// database or last saved to the database
+        /// </summary>
+        public void CancelEdits()
+        {
+            _boPropCol.RestorePropertyValues();
+            _boStatus.IsDeleted = false;
+            _boStatus.IsEditing = false;
+            _boStatus.IsDirty = false;
+            ReleaseWriteLocks();
+            FireUpdatedEvent();
+            FireRestoredEvent();
+        }
         /// <summary>
         /// Marks the business object for deleting.  Calling Save() or saving the transaction will
         /// then carry out the deletion from the database.

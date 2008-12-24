@@ -11,8 +11,11 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
     public class TestBusinessObjectCollection_AddedBOs //:TestBase
     {
         private bool _addedEventFired;
+        private bool _removedEventFired;
         private DataAccessorInMemory _dataAccessor;
         private DataStoreInMemory _dataStore;
+
+        #region Setup
 
         [TestFixtureSetUp]
         public void TestFixtureSetup()
@@ -41,20 +44,30 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             TestUtil.WaitForGC();
         }
 
-        #region Added Business object in current collection
+        #endregion
+
+
+        #region Added Business object in current cpCollection
 
         [Test]
         public void Test_AddMethod()
         {
             //---------------Set up test pack-------------------
             //ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = new ContactPersonTestBO();
+            RegisterForAddedEvent(cpCol);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, cpCol.Count);
+            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
+            Assert.IsFalse(_addedEventFired);
             //---------------Execute Test ----------------------
-            col.Add(myBO);
+            cpCol.Add(myBO);
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, col.Count, "One object should be in the collection");
-            Assert.AreEqual(myBO, col[0], "Added object should be in the collection");
+            Assert.AreEqual(1, cpCol.Count, "One object should be in the cpCollection");
+            AssertOneObjectInCurrentAndCreatedCollection(cpCol);
+            Assert.IsTrue(_addedEventFired);
+            Assert.AreEqual(myBO, cpCol[0], "Added object should be in the cpCollection");
         }
 
         [Test]
@@ -65,8 +78,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO newCP = ContactPersonTestBO.CreateUnsavedContactPerson
                 (TestUtils.RandomString, TestUtils.RandomString);
-            _addedEventFired = false;
-            cpCol.BusinessObjectAdded += delegate { _addedEventFired = true; };
+            RegisterForAddedEvent(cpCol);
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, cpCol.Count);
@@ -88,21 +100,21 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             //ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = new ContactPersonTestBO();
             ContactPersonTestBO myBO2 = new ContactPersonTestBO();
             ContactPersonTestBO myBO3 = new ContactPersonTestBO();
-            Collection<ContactPersonTestBO> collection = new Collection<ContactPersonTestBO>();
-            collection.Add(myBO);
-            collection.Add(myBO2);
-            collection.Add(myBO3);
+            Collection<ContactPersonTestBO> cpCollection = new Collection<ContactPersonTestBO>();
+            cpCollection.Add(myBO);
+            cpCollection.Add(myBO2);
+            cpCollection.Add(myBO3);
             //---------------Execute Test ----------------------
-            col.Add(collection);
+            cpCol.Add(cpCollection);
             //---------------Test Result -----------------------
-            Assert.AreEqual(3, col.Count, "Three objects should be in the collection");
-            Assert.AreEqual(myBO, col[0], "Added object should be in the collection");
-            Assert.AreEqual(myBO2, col[1], "Added object should be in the collection");
-            Assert.AreEqual(myBO3, col[2], "Added object should be in the collection");
+            Assert.AreEqual(3, cpCol.Count, "Three objects should be in the cpCollection");
+            Assert.AreEqual(myBO, cpCol[0], "Added object should be in the cpCollection");
+            Assert.AreEqual(myBO2, cpCol[1], "Added object should be in the cpCollection");
+            Assert.AreEqual(myBO3, cpCol[2], "Added object should be in the cpCollection");
         }
 
 
@@ -111,7 +123,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             //ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = new ContactPersonTestBO();
             ContactPersonTestBO myBO2 = new ContactPersonTestBO();
             ContactPersonTestBO myBO3 = new ContactPersonTestBO();
@@ -120,12 +132,12 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             list.Add(myBO2);
             list.Add(myBO3);
             //---------------Execute Test ----------------------
-            col.Add(list);
+            cpCol.Add(list);
             //---------------Test Result -----------------------
-            Assert.AreEqual(3, col.Count, "Three objects should be in the collection");
-            Assert.AreEqual(myBO, col[0], "Added object should be in the collection");
-            Assert.AreEqual(myBO2, col[1], "Added object should be in the collection");
-            Assert.AreEqual(myBO3, col[2], "Added object should be in the collection");
+            Assert.AreEqual(3, cpCol.Count, "Three objects should be in the cpCollection");
+            Assert.AreEqual(myBO, cpCol[0], "Added object should be in the cpCollection");
+            Assert.AreEqual(myBO2, cpCol[1], "Added object should be in the cpCollection");
+            Assert.AreEqual(myBO3, cpCol[2], "Added object should be in the cpCollection");
         }
 
         [Test]
@@ -133,17 +145,17 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             //ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = new ContactPersonTestBO();
             ContactPersonTestBO myBO2 = new ContactPersonTestBO();
             ContactPersonTestBO myBO3 = new ContactPersonTestBO();
             //---------------Execute Test ----------------------
-            col.Add(myBO, myBO2, myBO3);
+            cpCol.Add(myBO, myBO2, myBO3);
             //---------------Test Result -----------------------
-            Assert.AreEqual(3, col.Count, "Three objects should be in the collection");
-            Assert.AreEqual(myBO, col[0], "Added object should be in the collection");
-            Assert.AreEqual(myBO2, col[1], "Added object should be in the collection");
-            Assert.AreEqual(myBO3, col[2], "Added object should be in the collection");
+            Assert.AreEqual(3, cpCol.Count, "Three objects should be in the cpCollection");
+            Assert.AreEqual(myBO, cpCol[0], "Added object should be in the cpCollection");
+            Assert.AreEqual(myBO2, cpCol[1], "Added object should be in the cpCollection");
+            Assert.AreEqual(myBO3, cpCol[2], "Added object should be in the cpCollection");
         }
 
         [Test]
@@ -151,50 +163,49 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             //ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = new ContactPersonTestBO();
             ContactPersonTestBO myBO2 = new ContactPersonTestBO();
             ContactPersonTestBO myBO3 = new ContactPersonTestBO();
-            col.Add(myBO, myBO2, myBO3);
+            cpCol.Add(myBO, myBO2, myBO3);
             //-------Assert Preconditions
-            Assert.AreEqual(3, col.Count, "Three objects should be in the collection");
+            Assert.AreEqual(3, cpCol.Count, "Three objects should be in the cpCollection");
             ///---------------Execute Test ----------------------
-            BusinessObjectCollection<ContactPersonTestBO> colCopied = new BusinessObjectCollection<ContactPersonTestBO>
-                ();
-            colCopied.Add(col);
+            BusinessObjectCollection<ContactPersonTestBO> cpColCopied =
+                new BusinessObjectCollection<ContactPersonTestBO>();
+            cpColCopied.Add(cpCol);
             //---------------Test Result ----------------------- - Result
-            Assert.AreEqual(3, colCopied.Count, "Three objects should be in the copied collection");
-            Assert.AreEqual(3, colCopied.CreatedBusinessObjects.Count);
-            Assert.AreEqual(0, colCopied.AddedBusinessObjects.Count);
-            Assert.AreEqual(myBO, colCopied[0], "Added object should be in the copied collection");
-            Assert.AreEqual(myBO2, colCopied[1], "Added object should be in the copied collection");
-            Assert.AreEqual(myBO3, colCopied[2], "Added object should be in the copied collection");
+            Assert.AreEqual(3, cpColCopied.Count, "Three objects should be in the copied cpCollection");
+            Assert.AreEqual(3, cpColCopied.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, cpColCopied.AddedBusinessObjects.Count);
+            Assert.AreEqual(myBO, cpColCopied[0], "Added object should be in the copied cpCollection");
+            Assert.AreEqual(myBO2, cpColCopied[1], "Added object should be in the copied cpCollection");
+            Assert.AreEqual(myBO3, cpColCopied[2], "Added object should be in the copied cpCollection");
         }
 
         [Test]
         public void Test_Add_PersistedBO()
         {
             //---------------Set up test pack-------------------
-            //The persisted business objects should not be added since this is a normal collection which does not 
+            //The persisted business objects should not be added since this is a normal cpCollection which does not 
             // modify the added objects alternate key etc unlike the RelatedBusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
             ContactPersonTestBO myBO2 = ContactPersonTestBO.CreateSavedContactPerson();
             ContactPersonTestBO myBO3 = ContactPersonTestBO.CreateSavedContactPerson();
-            _addedEventFired = false;
-            cpCol.BusinessObjectAdded += delegate { _addedEventFired = true; };
+            RegisterForAddedEvent(cpCol);
 
             //-------Assert Preconditions
-            Assert.AreEqual(0, cpCol.Count, "Three objects should be in the collection");
+            Assert.AreEqual(0, cpCol.Count, "Three objects should be in the cpCollection");
 
             ///---------------Execute Test ----------------------
             cpCol.Add(myBO, myBO2, myBO3);
 
             //---------------Test Result ----------------------- - Result
-            Assert.AreEqual(3, cpCol.Count, "Three objects should be in the copied collection");
+            Assert.AreEqual(3, cpCol.Count, "Three objects should be in the copied cpCollection");
             Assert.AreEqual
                 (3, cpCol.AddedBusinessObjects.Count,
-                 "The persisted business objects should not be in the AddedList since this is a normal collection which does not modify the added objects alternate key etc unlike the RelatedBusinessObjectCollection");
+                 "The persisted business objects should not be in the AddedList since this is a normal cpCollection which does not modify the added objects alternate key etc unlike the RelatedBusinessObjectCollection");
             Assert.IsTrue(_addedEventFired);
         }
 
@@ -203,23 +214,25 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         public void Test_Add_PersistedBO_RestoreAll()
         {
             //---------------Set up test pack-------------------
-            //The persisted objects are added to the added collection
-            // when restore is called the added objects should be removed from the collection.
+            //The persisted objects are added to the added cpCollection
+            // when restore is called the added objects should be removed from the cpCollection.
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
             ContactPersonTestBO myBO2 = ContactPersonTestBO.CreateSavedContactPerson();
             ContactPersonTestBO myBO3 = ContactPersonTestBO.CreateSavedContactPerson();
             cpCol.Add(myBO, myBO2, myBO3);
+            RegisterForRemovedEvent(cpCol);
 
             //-------Assert Preconditions
-            Assert.AreEqual(3, cpCol.Count, "Three objects should be in the copied collection");
-            Assert.AreEqual(3, cpCol.AddedBusinessObjects.Count, "Three objects should be in the collection");
-
+            Assert.AreEqual(3, cpCol.Count, "Three objects should be in the copied cpCollection");
+            Assert.AreEqual(3, cpCol.AddedBusinessObjects.Count, "Three objects should be in the cpCollection");
+            Assert.IsFalse(_removedEventFired);
             ///---------------Execute Test ----------------------
             cpCol.RestoreAll();
 
             //---------------Test Result ----------------------- - Result
             AssertAllCollectionsHaveNoItems(cpCol);
+            Assert.IsTrue(_removedEventFired);
         }
 
 
@@ -228,52 +241,61 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            BusinessObjectCollection<MyBO> cpCol = new BusinessObjectCollection<MyBO>();
             MyBO myBO = new MyBO();
-            col.Add(myBO);
+            cpCol.Add(myBO);
+            RegisterForAddedEvent(cpCol);
             //---------------Assert Precondition----------------
-            AssertOneObjectInCurrentAndCreatedCollection(col);
+            AssertOneObjectInCurrentAndCreatedCollection(cpCol);
+            Assert.IsFalse(_addedEventFired);
 
             //---------------Execute Test ----------------------
-            col.Add(myBO);
+            cpCol.Add(myBO);
 
             //---------------Test Result -----------------------
-            AssertOneObjectInCurrentAndCreatedCollection(col);
+            AssertOneObjectInCurrentAndCreatedCollection(cpCol);
+            Assert.IsFalse(_addedEventFired);
         }
 
         [Test]
         public void TestAddMethod_PersistedObject_IgnoresAddWhenItemAlreadyExists()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
-            col.Add(myBO);
+            cpCol.Add(myBO);
+            RegisterForAddedEvent(cpCol);
+
             //---------------Assert Precondition----------------
-            AssertOneObjectInCurrentAndAddedCollection(col);
+            AssertOneObjectInCurrentAndAddedCollection(cpCol);
+            Assert.IsFalse(_addedEventFired);
             //---------------Execute Test ----------------------
-            col.Add(myBO);
+            cpCol.Add(myBO);
 
             //---------------Test Result -----------------------
-            AssertOneObjectInCurrentAndAddedCollection(col);
+            AssertOneObjectInCurrentAndAddedCollection(cpCol);
+            Assert.IsFalse(_addedEventFired);
         }
 
         [Test]
         public void TestAddMethod_SaveBusinessObject()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
-            col.Add(myBO);
+            cpCol.Add(myBO);
             myBO.Surname = TestUtil.CreateRandomString();
-
+            RegisterForAddedEvent(cpCol);
             //---------------Assert Precondition----------------
-            AssertOneObjectInCurrentAndAddedCollection(col);
+            AssertOneObjectInCurrentAndAddedCollection(cpCol);
+            Assert.IsFalse(_addedEventFired);
 
             //---------------Execute Test ----------------------
             myBO.Save();
 
             //---------------Test Result -----------------------
-            AssertOneObjectInCurrentPersistedAndAddedCollection(col);
+            AssertOneObjectInCurrentPersistedAndAddedCollection(cpCol);
+            Assert.IsFalse(_addedEventFired);
         }
 
 
@@ -281,164 +303,186 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         public void TestAddMethod_SaveAllBusinessObject()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
-            col.Add(myBO);
+            cpCol.Add(myBO);
             myBO.Surname = TestUtil.CreateRandomString();
-
+            RegisterForAddedEvent(cpCol);
             //---------------Assert Precondition----------------
-            AssertOneObjectInCurrentAndAddedCollection(col);
+            AssertOneObjectInCurrentAndAddedCollection(cpCol);
             Assert.IsTrue(myBO.Status.IsDirty);
+            Assert.IsFalse(_addedEventFired);
             //---------------Execute Test ----------------------
-            col.SaveAll();
+            cpCol.SaveAll();
 
             //---------------Test Result -----------------------
-            AssertOneObjectInCurrentPersistedAndAddedCollection(col);
+            AssertOneObjectInCurrentPersistedAndAddedCollection(cpCol);
             Assert.IsFalse(myBO.Status.IsDirty);
+            Assert.IsFalse(_addedEventFired);
         }
 
-        private static void AssertOneObjectInCurrentAndAddedCollection(IBusinessObjectCollection col)
+        private static void AssertOneObjectInCurrentAndAddedCollection(IBusinessObjectCollection cpCol)
         {
-            Assert.AreEqual(1, col.Count, "One object should be in the collection");
-            Assert.AreEqual(1, col.AddedBOCol.Count, "One object should be in the collection");
-            Assert.AreEqual(0, col.RemovedBOCol.Count);
-            Assert.AreEqual(0, col.PersistedBOCol.Count);
-            Assert.AreEqual(0, col.MarkForDeletionBOs.Count);
-            Assert.AreEqual(0, col.CreatedBOCol.Count);
+            Assert.AreEqual(1, cpCol.Count, "One object should be in the cpCollection");
+            Assert.AreEqual(1, cpCol.AddedBOCol.Count, "One object should be in the cpCollection");
+            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
+            Assert.AreEqual(0, cpCol.PersistedBOCol.Count);
+            Assert.AreEqual(0, cpCol.MarkForDeletionBOs.Count);
+            Assert.AreEqual(0, cpCol.CreatedBOCol.Count);
         }
 
-        private static void AssertOneObjectInCurrentAndCreatedCollection(IBusinessObjectCollection col)
+        private static void AssertOneObjectInCurrentAndCreatedCollection(IBusinessObjectCollection cpCol)
         {
-            Assert.AreEqual(1, col.Count, "One object should be in the collection");
-            Assert.AreEqual(0, col.AddedBOCol.Count, "One object should be in the collection");
-            Assert.AreEqual(0, col.RemovedBOCol.Count);
-            Assert.AreEqual(0, col.PersistedBOCol.Count);
-            Assert.AreEqual(0, col.MarkForDeletionBOs.Count);
-            Assert.AreEqual(1, col.CreatedBOCol.Count);
+            Assert.AreEqual(1, cpCol.Count, "One object should be in the cpCollection");
+            Assert.AreEqual(0, cpCol.AddedBOCol.Count, "One object should be in the cpCollection");
+            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
+            Assert.AreEqual(0, cpCol.PersistedBOCol.Count);
+            Assert.AreEqual(0, cpCol.MarkForDeletionBOs.Count);
+            Assert.AreEqual(1, cpCol.CreatedBOCol.Count);
         }
 
         [Test]
         public void TestAddMethod_RestoreBusinessObject()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
-            col.Add(myBO);
+            cpCol.Add(myBO);
             myBO.Surname = TestUtil.CreateRandomString();
+            RegisterForAddedAndRemovedEvents(cpCol);
+
             //---------------Assert Precondition----------------
-            AssertOneObjectInCurrentAndAddedCollection(col);
+            AssertOneObjectInCurrentAndAddedCollection(cpCol);
             Assert.IsTrue(myBO.Status.IsDirty);
+            AssertAddedAndRemovedEventsNotFired();
 
             //---------------Execute Test ----------------------
-            myBO.Restore();
+            myBO.CancelEdits();
 
             //---------------Test Result -----------------------
-            AssertOneObjectInCurrentAndAddedCollection(col);
+            AssertOneObjectInCurrentAndAddedCollection(cpCol);
             Assert.IsFalse(myBO.Status.IsDirty);
+            AssertAddedAndRemovedEventsNotFired();
         }
 
         [Test]
         public void TestAddMethod_RefreshAllBusinessObject()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
 
-            col.Add(myBO);
+            cpCol.Add(myBO);
+            RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
-            AssertOneObjectInCurrentAndAddedCollection(col);
+            AssertOneObjectInCurrentAndAddedCollection(cpCol);
             Assert.IsFalse(myBO.Status.IsDirty);
+            AssertAddedAndRemovedEventsNotFired();
 
             //---------------Execute Test ----------------------
-            col.Refresh();
+            cpCol.Refresh();
 
             //---------------Test Result -----------------------
-            AssertOneObjectInCurrentPersistedAndAddedCollection(col);
+            AssertOneObjectInCurrentPersistedAndAddedCollection(cpCol);
             Assert.IsFalse(myBO.Status.IsDirty);
+            AssertAddedAndRemovedEventsNotFired();
         }
+
+ 
 
         [Test]
         public void TestAddMethod_Refresh_LoadWithCriteria_BusinessObject()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-            col.Load("Surname='bbb'", "");
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+            cpCol.Load("Surname='bbb'", "");
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson("aaa");
 
-            col.Add(myBO);
+            cpCol.Add(myBO);
+            RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
-            AssertOneObjectInCurrentAndAddedCollection(col);
+            AssertOneObjectInCurrentAndAddedCollection(cpCol);
             Assert.IsFalse(myBO.Status.IsDirty);
-
+            AssertAddedAndRemovedEventsNotFired();
             //---------------Execute Test ----------------------
-            col.Refresh();
+            cpCol.Refresh();
 
             //---------------Test Result -----------------------
-            AssertOneObjectInCurrentAndAddedCollection(col);
+            AssertOneObjectInCurrentAndAddedCollection(cpCol);
             Assert.IsFalse(myBO.Status.IsDirty);
+            AssertAddedAndRemovedEventsNotFired();
         }
 
         [Test]
         public void TestAddMethod_Remove_Added_NonPersisted_BusinessObject()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateUnsavedContactPerson
                 (TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
-            col.Add(myBO);
+            cpCol.Add(myBO);
+            RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
-            AssertOneObjectInCurrentAndCreatedCollection(col);
+            AssertOneObjectInCurrentAndCreatedCollection(cpCol);
             Assert.IsTrue(myBO.Status.IsDirty);
+            AssertAddedAndRemovedEventsNotFired();
 
             //---------------Execute Test ----------------------
-            col.Remove(myBO);
+            cpCol.Remove(myBO);
 
             //---------------Test Result -----------------------
-            AssertAllCollectionsHaveNoItems(col);
+            AssertAllCollectionsHaveNoItems(cpCol);
             Assert.IsTrue(myBO.Status.IsDirty);
+            AssertRemovedEventFired();
+            AssertAddedEventNotFired();
         }
 
         [Test]
         public void TestAddMethod_RemoveAddedBusinessObject()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
-            col.Add(myBO);
+            cpCol.Add(myBO);
+            RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
-            AssertOneObjectInCurrentAndAddedCollection(col);
+            AssertOneObjectInCurrentAndAddedCollection(cpCol);
             Assert.IsFalse(myBO.Status.IsDirty);
-
+            AssertAddedAndRemovedEventsNotFired();
             //---------------Execute Test ----------------------
-            col.Remove(myBO);
+            cpCol.Remove(myBO);
 
             //---------------Test Result -----------------------
-            AssertAllCollectionsHaveNoItems(col);
+            AssertAllCollectionsHaveNoItems(cpCol);
             Assert.IsFalse(myBO.Status.IsDirty);
+            AssertRemovedEventFired();
+            AssertAddedEventNotFired();
         }
 
         [Test]
         public void TestAddMethod_MarkForDeleteAddedBusinessObject()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
-            col.Add(myBO);
+            cpCol.Add(myBO);
+            RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
-            AssertOneObjectInCurrentAndAddedCollection(col);
+            AssertOneObjectInCurrentAndAddedCollection(cpCol);
             Assert.IsFalse(myBO.Status.IsDirty);
-
+            AssertAddedAndRemovedEventsNotFired();
             //---------------Execute Test ----------------------
-            col.MarkForDelete(myBO);
+            cpCol.MarkForDelete(myBO);
 
             //---------------Test Result -----------------------
-            AssertOneObjectInMarkForDeleteAndAddedCollection(col);
+            AssertOneObjectInMarkForDeleteAndAddedCollection(cpCol);
             Assert.IsTrue(myBO.Status.IsDirty);
+            AssertRemovedEventFired();
         }
 
         #endregion
@@ -453,22 +497,19 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
             cpCol.Add(myBO);
             myBO.MarkForDelete();
+            RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
             AssertOneObjectInMarkForDeleteAndAddedCollection(cpCol);
             Assert.IsTrue(myBO.Status.IsDirty);
-
+            AssertAddedAndRemovedEventsNotFired();
             //---------------Execute Test ----------------------
             cpCol.Refresh();
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(0, cpCol.Count);
-            Assert.AreEqual(1, cpCol.AddedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
-            Assert.AreEqual(1, cpCol.MarkForDeleteBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+            AssertOneObjectInMarkForDeleteAndAddedCollection(cpCol);
             Assert.IsTrue(myBO.Status.IsDirty);
+            AssertAddedAndRemovedEventsNotFired();
         }
 
         [Test]
@@ -480,6 +521,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson("BB");
             cpCol.Add(myBO);
             myBO.MarkForDelete();
+            RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
             AssertOneObjectInMarkForDeleteAndAddedCollection(cpCol);
@@ -491,6 +533,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //---------------Test Result -----------------------
             AssertOneObjectInMarkForDeleteAndAddedCollection(cpCol);
             Assert.IsTrue(myBO.Status.IsDirty);
+            AssertAddedAndRemovedEventsNotFired();
         }
 
         [Test]
@@ -502,17 +545,21 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson("BB");
             cpCol.Add(myBO);
             myBO.MarkForDelete();
+            RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
             AssertOneObjectInMarkForDeleteAndAddedCollection(cpCol);
             Assert.IsTrue(myBO.Status.IsDirty);
+            AssertAddedAndRemovedEventsNotFired();
 
             //---------------Execute Test ----------------------
-            myBO.Restore();
+            myBO.CancelEdits();
 
             //---------------Test Result -----------------------
             AssertOneObjectInCurrentAndAddedCollection(cpCol);
             Assert.IsFalse(myBO.Status.IsDirty);
+            AssertAddedEventFired();
+            AssertRemovedEventNotFired();
         }
 
         [Test]
@@ -524,17 +571,20 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson("BB");
             cpCol.Add(myBO);
             myBO.MarkForDelete();
+            RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
             AssertOneObjectInMarkForDeleteAndAddedCollection(cpCol);
             Assert.IsTrue(myBO.Status.IsDirty);
 
             //---------------Execute Test ----------------------
-            myBO.Restore();
+            myBO.CancelEdits();
 
             //---------------Test Result -----------------------
             AssertOneObjectInCurrentAndAddedCollection(cpCol);
             Assert.IsFalse(myBO.Status.IsDirty);
+            AssertAddedEventFired();
+            AssertRemovedEventNotFired();
         }
 
         [Test]
@@ -546,7 +596,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson("BB");
             cpCol.Add(myBO);
             myBO.MarkForDelete();
-
+            RegisterForAddedAndRemovedEvents(cpCol);
             //---------------Assert Precondition----------------
             AssertOneObjectInMarkForDeleteAndAddedCollection(cpCol);
             Assert.IsTrue(myBO.Status.IsDirty);
@@ -557,7 +607,9 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //---------------Test Result -----------------------
             AssertOneObjectInMarkForDeleteAndAddedCollection(cpCol);
             Assert.IsTrue(myBO.Status.IsDirty);
+            AssertAddedAndRemovedEventsNotFired();
         }
+
         [Test]
         public void Test_Mark4Delete_Added_Mark4DeleteBO()
         {
@@ -611,6 +663,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson("BB");
             cpCol.Add(myBO);
             myBO.MarkForDelete();
+            RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
             AssertOneObjectInMarkForDeleteAndAddedCollection(cpCol);
@@ -622,7 +675,9 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //---------------Test Result -----------------------
             AssertOneObjectInMarkForDeleteAndAddedCollection(cpCol);
             Assert.IsTrue(myBO.Status.IsDirty);
+            AssertAddedAndRemovedEventsNotFired();
         }
+
         [Test]
         public void Test_Mark4Delete_Added_RestoreAll()
         {
@@ -632,6 +687,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson("BB");
             cpCol.Add(myBO);
             myBO.MarkForDelete();
+            RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
             AssertOneObjectInMarkForDeleteAndAddedCollection(cpCol);
@@ -643,7 +699,10 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //---------------Test Result -----------------------
             AssertAllCollectionsHaveNoItems(cpCol);
             Assert.IsFalse(myBO.Status.IsDirty);
+            AssertAddedEventFired();
+            AssertRemovedEventFired();
         }
+
         [Test]
         public void Test_Mark4Delete_Added_SaveAll()
         {
@@ -687,6 +746,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             AssertAllCollectionsHaveNoItems(cpCol);
             Assert.IsFalse(myBO.Status.IsDirty);
         }
+
         #endregion
 
         private static void AssertOneObjectInMarkForDeleteAndAddedCollection
@@ -719,6 +779,50 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.MarkForDeleteBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+        }
+
+        private void AssertAddedAndRemovedEventsNotFired()
+        {
+            AssertAddedEventNotFired();
+            AssertRemovedEventNotFired();
+        }
+
+        private void AssertRemovedEventNotFired()
+        {
+            Assert.IsFalse(_removedEventFired, "Removed event should not be fired");
+        }
+
+        private void AssertAddedEventNotFired()
+        {
+            Assert.IsFalse(_addedEventFired, "Added event should not be fired");
+        }
+
+        private void AssertRemovedEventFired()
+        {
+            Assert.IsTrue(_removedEventFired, "Removed event should be fired");
+        }
+
+        private void AssertAddedEventFired()
+        {
+            Assert.IsTrue(_addedEventFired, "Added event should be fired");
+        }
+
+        private void RegisterForAddedAndRemovedEvents(IBusinessObjectCollection cpCol)
+        {
+            RegisterForAddedEvent(cpCol);
+            RegisterForRemovedEvent(cpCol);
+        }
+
+        private void RegisterForRemovedEvent(IBusinessObjectCollection cpCol)
+        {
+            _removedEventFired = false;
+            cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
+        }
+
+        private void RegisterForAddedEvent(IBusinessObjectCollection cpCol)
+        {
+            _addedEventFired = false;
+            cpCol.BusinessObjectAdded += delegate { _addedEventFired = true; };
         }
     }
 }
