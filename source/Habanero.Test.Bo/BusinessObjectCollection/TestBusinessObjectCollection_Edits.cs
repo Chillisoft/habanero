@@ -62,8 +62,8 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
 
 
         private bool _addedEventFired;
-        private DataAccessorInMemory _dataAccessor;
-        private DataStoreInMemory _dataStore;
+        //private DataAccessorInMemory _dataAccessor;
+        //private DataStoreInMemory _dataStore;
         private bool _removedEventFired;
         private ClassDef _cpDefaultClassDef;
 
@@ -75,9 +75,9 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
             ClassDef.ClassDefs.Clear();
-            _dataStore = new DataStoreInMemory();
-            _dataAccessor = new DataAccessorInMemory(_dataStore);
-            BORegistry.DataAccessor = _dataAccessor;
+            //_dataStore = new DataStoreInMemory();
+            //_dataAccessor = new DataAccessorInMemory(_dataStore);
+            //BORegistry.DataAccessor = _dataAccessor;
             _cpDefaultClassDef = ContactPersonTestBO.LoadDefaultClassDef();
         }
 
@@ -85,6 +85,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         public void SetupTest()
         {
             //Runs every time that any testmethod is executed
+            BORegistry.DataAccessor = new DataAccessorInMemory(); ;
         }
 
         [TearDown]
@@ -92,7 +93,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //runs every time any testmethod is complete
 //            ClassDef.ClassDefs.Clear();
-            _dataStore.ClearAllBusinessObjects();
+          //  _dataStore.ClearAllBusinessObjects();
             TestUtil.WaitForGC();
         }
 
