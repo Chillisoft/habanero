@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -48,6 +49,20 @@ namespace Habanero.BO
         public SingleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {
+        }
+
+        ///<summary>
+        /// Returns whether the relationship is dirty or not.
+        /// A relationship is always dirty if it has Added, created, removed or deleted Related business objects.
+        /// If the relationship is of type composition or aggregation then it is dirty if it has any 
+        ///  related (children) business objects that are dirty.
+        ///</summary>
+        public override bool IsDirty
+        {
+            get
+            {
+                return _relatedBo != null && _relatedBo.Status.IsDirty;
+            }
         }
 
         /// <summary>
@@ -140,8 +155,9 @@ namespace Habanero.BO
         {
 
             if (_relatedBo == null) GetRelatedObject();
-
-            if ((relatedObject != _relatedBo) && relatedObject != null)
+            if (_relatedBo == relatedObject) return;
+            IBusinessObject previousRelatedBO = _relatedBo;
+            if (relatedObject != null)
             {
                 RelationshipDef.CheckCanAddChild(relatedObject);
                 //Add to reverse relationship
@@ -172,7 +188,8 @@ namespace Habanero.BO
                     }
                 }
             }
-            if (_relatedBo != relatedObject && _relatedBo != null)
+            //Remove the this object from the previuosly related object
+            if (previousRelatedBO != null)
             {
                 this.RelationshipDef.CheckCanRemoveChild(_relatedBo);
 
@@ -186,7 +203,6 @@ namespace Habanero.BO
                 if (singleReverseRelationship != null)
                 {
                     singleReverseRelationship.RelationshipDef.CheckCanRemoveChild(this.OwningBO);
-//                    singleReverseRelationship.SetRelatedObject(relatedObject);
                 }
             }
             _relatedBo = relatedObject;
@@ -229,6 +245,24 @@ namespace Habanero.BO
             IBusinessObjectCollection boCol =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(type, this);
             return boCol;
+        }
+
+        ///<summary>
+        /// Returns a list of all the related objects that are dirty.
+        /// In the case of a composition or aggregation this will be a list of all 
+        ///   dirty related objects (child objects). 
+        /// In the case of association
+        ///   this will only be a list of related objects that are added, removed, marked4deletion or created
+        ///   as part of the relationship.
+        ///</summary>
+        public override IList<IBusinessObject> GetDirtyChildren()
+        {
+            IList<IBusinessObject> dirtyBusinessObjects = new List<IBusinessObject>();
+            if (_relatedBo != null && _relatedBo.Status.IsDirty)
+            {
+                dirtyBusinessObjects.Add(_relatedBo);
+            }
+            return dirtyBusinessObjects;
         }
     }
 }

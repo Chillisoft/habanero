@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -43,6 +44,39 @@ namespace Habanero.BO
         public MultipleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {
+        }
+
+        ///<summary>
+        /// Returns whether the relationship is dirty or not.
+        /// A relationship is always dirty if it has Added, created, removed or deleted Related business objects.
+        /// If the relationship is of type composition or aggregation then it is dirty if it has any 
+        ///  related (children) business objects that are dirty.
+        ///</summary>
+        public override bool IsDirty
+        {
+            get
+            {
+                if (!IsRelationshipLoaded) return false;
+                bool dirtyCollections = HasDirtyEditingCollections;
+                if (dirtyCollections) return true;
+                foreach (IBusinessObject bo  in _boCol.PersistedBOCol)
+                {
+                    if (bo.Status.IsDirty)
+                    {
+                        return true;
+                    }
+                }
+                return false; // || 
+            }
+        }
+
+        protected bool HasDirtyEditingCollections
+        {
+            get
+            {
+                if (!IsRelationshipLoaded) return false;
+                return (_boCol.CreatedBOCol.Count > 0) || (_boCol.MarkForDeletionBOCol.Count > 0);
+            }
         }
 
         protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>()
@@ -111,6 +145,39 @@ namespace Habanero.BO
                           + "defined in the relationship and class definitions for the classes " + "involved.", type),
                      ex);
             }
+        }
+
+        ///<summary>
+        /// Returns a list of all the related objects that are dirty.
+        /// In the case of a composition or aggregation this will be a list of all 
+        ///   dirty related objects (child objects). 
+        /// In the case of association
+        ///   this will only be a list of related objects that are added, removed, marked4deletion or created
+        ///   as part of the relationship.
+        ///</summary>
+        public override IList<IBusinessObject> GetDirtyChildren()
+        {
+            IList<IBusinessObject> dirtyBusinessObjects = new List<IBusinessObject>();
+            if (!IsRelationshipLoaded) return dirtyBusinessObjects;
+            if (HasDirtyEditingCollections)
+            {
+                foreach (IBusinessObject bo in _boCol.CreatedBOCol)
+                {
+                    dirtyBusinessObjects.Add(bo);
+                }
+                foreach (IBusinessObject bo in _boCol.MarkForDeletionBOCol)
+                {
+                    dirtyBusinessObjects.Add(bo);
+                }
+            }
+            foreach (IBusinessObject bo in _boCol.PersistedBOCol)
+            {
+                if (bo.Status.IsDirty && !dirtyBusinessObjects.Contains(bo))
+                {
+                    dirtyBusinessObjects.Add(bo);
+                }
+            }
+            return dirtyBusinessObjects;
         }
     }
 }

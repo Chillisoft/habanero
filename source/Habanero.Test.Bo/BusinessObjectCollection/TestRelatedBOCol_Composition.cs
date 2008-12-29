@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -399,7 +400,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.IsFalse(compositionRelationship.IsDirty);
 
             //---------------Execute Test ----------------------
-            cpCol.CreateBusinessObject();           
+            cpCol.CreateBusinessObject();
 
             //---------------Test Result -----------------------
             Assert.IsTrue(compositionRelationship.IsDirty);
@@ -567,6 +568,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             RelationshipCol relationships = organisationTestBO.Relationships;
             Relationship compositionRelationship = (Relationship)relationships["ContactPeople"];
+            compositionRelationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
                 (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
             ContactPersonTestBO myBO_delete = CreateSavedContactPerson_AsChild(cpCol);
@@ -585,10 +587,10 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             IList<IBusinessObject> dirtyChildren = compositionRelationship.GetDirtyChildren();
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(3, dirtyChildren.Count);
             Assert.IsTrue(dirtyChildren.Contains(myBO_delete));
             Assert.IsTrue(dirtyChildren.Contains(myBO_Edited));
             Assert.IsTrue(dirtyChildren.Contains(myBo_Created));
+            Assert.AreEqual(3, dirtyChildren.Count);
         }
 
         [Test]
@@ -598,6 +600,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             RelationshipCol relationships = organisationTestBO.Relationships;
             Relationship compositionRelationship = (Relationship)relationships["ContactPeople"];
+            compositionRelationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
                 (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
             ContactPersonTestBO myBO_delete = CreateSavedContactPerson_AsChild(cpCol);
@@ -611,15 +614,16 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.IsTrue(compositionRelationship.IsDirty);
             Assert.IsTrue(relationships.IsDirty);
             Assert.IsTrue(organisationTestBO.Status.IsDirty);
+            Assert.AreEqual(1, cpCol.MarkForDeleteBusinessObjects.Count);
 
             //---------------Execute Test ----------------------
             IList<IBusinessObject> dirtyChildren = relationships.GetDirtyChildren();
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(3, dirtyChildren.Count);
-            Assert.IsTrue(dirtyChildren.Contains(myBO_delete));
+            Assert.Contains(myBO_delete, (ICollection) dirtyChildren);
             Assert.IsTrue(dirtyChildren.Contains(myBO_Edited));
             Assert.IsTrue(dirtyChildren.Contains(myBo_Created));
+            Assert.AreEqual(3, dirtyChildren.Count);
         }
 
         /// <summary>

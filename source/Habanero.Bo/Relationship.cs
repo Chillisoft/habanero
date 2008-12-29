@@ -168,32 +168,7 @@ namespace Habanero.BO
         /// If the relationship is of type composition or aggregation then it is dirty if it has any 
         ///  related (children) business objects that are dirty.
         ///</summary>
-        public bool IsDirty
-        {
-            get
-            {
-                if (!IsRelationshipLoaded) return false;
-                bool dirtyCollections = HasDirtyEditingCollections;
-                if (dirtyCollections) return true;
-                foreach (IBusinessObject bo  in _boCol.PersistedBOCol)
-                {
-                    if (bo.Status.IsDirty)
-                    {
-                        return true;
-                    }
-                }
-                return false; // || 
-            }
-        }
-
-        private bool HasDirtyEditingCollections
-        {
-            get
-            {
-                if (!IsRelationshipLoaded) return false;
-                return (_boCol.CreatedBOCol.Count > 0) || (_boCol.MarkForDeletionBOCol.Count > 0);
-            }
-        }
+        public abstract bool IsDirty { get; }
 
         ///<summary>
         /// Returns true if the relationship has already been loaded. I.e. if the Related objects have been loaded from the 
@@ -212,30 +187,7 @@ namespace Habanero.BO
         ///   this will only be a list of related objects that are added, removed, marked4deletion or created
         ///   as part of the relationship.
         ///</summary>
-        public IList<IBusinessObject> GetDirtyChildren()
-        {
-            IList<IBusinessObject> dirtyBusinessObjects = new List<IBusinessObject>();
-            if (!IsRelationshipLoaded) return dirtyBusinessObjects;
-            if (HasDirtyEditingCollections)
-            {
-                foreach (IBusinessObject bo in _boCol.CreatedBOCol)
-                {
-                    dirtyBusinessObjects.Add(bo);
-                }
-                foreach (IBusinessObject bo in _boCol.MarkForDeletionBOCol)
-                {
-                    dirtyBusinessObjects.Add(bo);
-                }
-            }
-            foreach (IBusinessObject bo in _boCol.PersistedBOCol)
-            {
-                if (bo.Status.IsDirty && !dirtyBusinessObjects.Contains(bo))
-                {
-                    dirtyBusinessObjects.Add(bo);
-                }
-            }
-            return dirtyBusinessObjects;
-        }
+        public abstract IList<IBusinessObject> GetDirtyChildren();
 
         //TODO: This should be temporary code and will b removed when define reverse relationships in Firestarter and classdefs.
         /// <summary>

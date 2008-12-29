@@ -1,15 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.Util;
 using NUnit.Framework;
-using Relationship=Habanero.BO.Relationship;
-using System;
 
 namespace Habanero.Test.BO
 {
     [TestFixture]
-    public class TestSingleRelationship_Composition //:TestBase
+    public class TestSingleRelationship_Composition
     {
         [SetUp]
         public void SetupTest()
@@ -25,9 +25,6 @@ namespace Habanero.Test.BO
         {
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
-         
-         
-          
         }
 
         [TearDown]
@@ -207,7 +204,6 @@ namespace Habanero.Test.BO
 
         }
 
-        //
         [Test]
         public void Test_RemoveMethod()
         {
@@ -237,6 +233,68 @@ namespace Habanero.Test.BO
                 StringAssert.Contains("The " + compositionRelationship.RelationshipDef.RelatedObjectClassName, ex.Message);
                 StringAssert.Contains("could not be removed since the " + compositionRelationship.RelationshipName + " relationship is set up as ", ex.Message);
             }
+        }
+
+        /// <summary>
+        /// An invoice is considered to be dirty if it has any dirty invoice line. 
+        ///   A dirty invoice line would be any invoice line that is dirty and would include a newly created invoice line 
+        ///   and an invoice line that has been marked for deletion.
+        /// </summary>
+        [Test]
+        public void Test_ParentDirtyIfHasDirtyChildren()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship compositionRelationship = (SingleRelationship)organisation.Relationships["ContactPerson"];
+            compositionRelationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            compositionRelationship.SetRelatedObject(contactPerson);
+            contactPerson.Surname = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Save();
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(contactPerson.Status.IsDirty);
+            Assert.IsFalse(compositionRelationship.IsDirty);
+            Assert.IsFalse(organisation.Relationships.IsDirty);
+            Assert.IsFalse(organisation.Status.IsDirty);
+
+            //---------------Execute Test ----------------------
+            contactPerson.FirstName = TestUtil.CreateRandomString();
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(contactPerson.Status.IsDirty);
+            Assert.IsTrue(compositionRelationship.IsDirty);
+            Assert.IsTrue(organisation.Relationships.IsDirty);
+            Assert.IsTrue(organisation.Status.IsDirty);
+        }
+        [Test]
+        public void Test_GetDirtyChildren_ReturnAllDirty()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship compositionRelationship = (SingleRelationship)organisation.Relationships["ContactPerson"];
+            compositionRelationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            compositionRelationship.SetRelatedObject(contactPerson);
+            contactPerson.Surname = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Save();
+            contactPerson.Surname = TestUtil.CreateRandomString();
+
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(contactPerson.Status.IsDirty);
+
+            //---------------Execute Test ----------------------
+            IList<IBusinessObject> dirtyChildren = compositionRelationship.GetDirtyChildren();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, dirtyChildren.Count);
+            Assert.Contains(contactPerson ,(ICollection) dirtyChildren);
         }
 
         private static Relationship GetCompositionRelationship(OrganisationTestBO organisation)

@@ -22,6 +22,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
 {
@@ -56,10 +57,13 @@ namespace Habanero.BO
             get {
                 foreach (KeyValuePair<string, IRelationship> pair in _relationships)
                 {
-                    if (pair.Value != null && pair.Value.IsDirty)
+                    Relationship relationship = (Relationship) pair.Value;
+                    if (relationship != null 
+                            && relationship.RelationshipDef.RelationshipType == RelationshipType.Composition 
+                            && relationship.IsDirty)
                     {
                         return true;
-                    }        
+                    }
                 }
                 return false;
             }
@@ -70,9 +74,12 @@ namespace Habanero.BO
             IList<IBusinessObject> dirtyBusinessObjects = new List<IBusinessObject>();
             foreach (KeyValuePair<string, IRelationship> pair in _relationships)
             {
-                foreach (IBusinessObject bo in pair.Value.GetDirtyChildren())
+                if (((Relationship)pair.Value).RelationshipDef.RelationshipType == RelationshipType.Composition)
                 {
-                    dirtyBusinessObjects.Add(bo);
+                    foreach (IBusinessObject bo in pair.Value.GetDirtyChildren())
+                    {
+                        dirtyBusinessObjects.Add(bo);
+                    }
                 }
             }
             return dirtyBusinessObjects;
