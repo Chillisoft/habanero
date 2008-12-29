@@ -23,59 +23,7 @@ using Habanero.Base.Exceptions;
 
 namespace Habanero.BO.ClassDefinition
 {
-    /// <summary>
-    /// An enumeration that gives some instructions or limitations in the
-    /// case where a parent is to be deleted.
-    /// </summary>
-    public enum DeleteParentAction
-    {
-        /// <summary>Delete all related objects when the parent is deleted</summary>
-        DeleteRelated = 1,
-        /// <summary>Dereference all related objects when the parent is deleted</summary>
-        DereferenceRelated = 2,
-        /// <summary>Prevent deletion of parent if it has related objects</summary>
-        Prevent = 3,
-        /// <summary>Don't perform any delete related activities on the businessobjects in this relationship</summary>
-        DoNothing = 4
-    }
-    /// <summary>
-    /// An enumeration that gives some instructions or limitations in the
-    /// on a child business object being removed from the relationship.
-    /// This typically differentiats between a composition, aggregation and Association relationship.
-    /// </summary>
-    public enum RemoveChildAction
-    {
-        /// <summary>Dereference the child being removed. 
-        /// This is allowed for an aggregation and association relationship.
-        /// E.g. if a wheel is removed from a car.
-        /// </summary>
-        Dereference = 1,
-        /// <summary>Prevents the child from being removed (Composition relationship). Raises an error if the 
-        /// RelatedBusinessObjectCollection.Remove method is called. E.g. an invoice line
-        /// cannot exist independently of the invoice and cannot be moved from one invoice
-        /// to another (it therefore cannot be removed.) </summary>
-        Prevent = 2,
-    }
 
-    /// <summary>
-    /// An enumeration that gives some instructions or limitations in the
-    /// on a child business object being added to the relationship.
-    /// This typically differentiats between a composition, aggregation and Association relationship.
-    /// </summary>
-    public enum AddChildAction
-    {
-        /// <summary>Adds a persisted or non persisted child to the relationship. This is allowed for an
-        /// aggregation and association relationship.
-        /// E.g. if a wheel is removed from a car it can be added to another car.</summary>
-        AddChild = 1,
-        /// <summary>Prevents a persisted child from being added (Composition relationship). Raises an error if the 
-        /// RelatedBusinessObjectCollection.Add method is called with a perssited business object.
-        /// E.g. an invoice line
-        /// cannot exist independently of the invoice and cannot be moved from one invoice to 
-        /// another (it therefore cannot be added). A new (non persisted) business object can always be added to 
-        /// a relationship </summary>
-        Prevent = 2,
-    }
     /// <summary>
     /// Defines a relationship where the owner may relate to more than one object.
     /// </summary>

@@ -114,9 +114,9 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        public Guid OrganisationID
+        public Guid? OrganisationID
         {
-            get { return (Guid)this.GetPropertyValue("OrganisationID"); }
+            get { return (Guid?)this.GetPropertyValue("OrganisationID"); }
         }
 
         public ContactPersonTestBO ContactPerson

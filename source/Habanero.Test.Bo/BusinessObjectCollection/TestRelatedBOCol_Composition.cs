@@ -347,7 +347,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             myBO.Save();
 
             //---------------Assert Precondition----------------
-            Assert.IsFalse(((MultipleRelationship)compositionRelationship).IsRelationshipLoaded);
+            Assert.IsFalse(compositionRelationship.IsRelationshipLoaded);
 
             //---------------Execute Test ----------------------
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol<ContactPersonTestBO>();
@@ -368,7 +368,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             myBO.Save();
 
             //---------------Assert Precondition----------------
-            Assert.IsFalse(((MultipleRelationship)compositionRelationship).IsRelationshipLoaded);
+            Assert.IsFalse(compositionRelationship.IsRelationshipLoaded);
 
             //---------------Execute Test ----------------------
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
@@ -377,6 +377,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.IsTrue(((MultipleRelationship)compositionRelationship).IsRelationshipLoaded);
             Assert.AreEqual(1, cpCol.Count);
         }
+
         /// <summary>
         /// An invoice is considered to be dirty if it has any dirty invoice line. 
         ///   A dirty invoice line would be any invoice line that is dirty and would include a newly created invoice line 
@@ -405,6 +406,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.IsTrue(organisationTestBO.Status.IsDirty);
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
         }
+
         /// <summary>
         /// An invoice is considered to be dirty if it has any dirty invoice line. 
         ///   A dirty invoice line would be any invoice line that is dirty and would include a newly created invoice line 

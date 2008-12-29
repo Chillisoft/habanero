@@ -1228,7 +1228,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.CreateSavedContactPerson(surname);
             ContactPersonTestBO.CreateSavedContactPerson();
             //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            string criteria = string.Format("Organisation.OrganisationID = '{0}'", organisation.OrganisationID.ToString("B"));
+            string criteria = string.Format("Organisation.OrganisationID = '{0}'", organisation.OrganisationID.Value.ToString("B"));
 
             //---------------Execute Test ----------------------
             BusinessObjectCollection<ContactPersonTestBO> col =

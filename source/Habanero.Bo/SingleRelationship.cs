@@ -140,6 +140,7 @@ namespace Habanero.BO
         {
 
             if (_relatedBo == null) GetRelatedObject();
+
             if ((relatedObject != _relatedBo) && relatedObject != null)
             {
                 RelationshipDef.CheckCanAddChild(relatedObject);
@@ -173,11 +174,19 @@ namespace Habanero.BO
             }
             if (_relatedBo != relatedObject && _relatedBo != null)
             {
+                this.RelationshipDef.CheckCanRemoveChild(_relatedBo);
+
                 //Remove from previous relationship
                 MultipleRelationship reverseRelationship = GetReverseRelationship(_relatedBo) as MultipleRelationship;
                 if (reverseRelationship != null && reverseRelationship.IsRelationshipLoaded)
                 {
                     reverseRelationship.GetLoadedBOColInternal().Remove(this.OwningBO);
+                }
+                SingleRelationship singleReverseRelationship = GetReverseRelationship(_relatedBo) as SingleRelationship;
+                if (singleReverseRelationship != null)
+                {
+                    singleReverseRelationship.RelationshipDef.CheckCanRemoveChild(this.OwningBO);
+//                    singleReverseRelationship.SetRelatedObject(relatedObject);
                 }
             }
             _relatedBo = relatedObject;

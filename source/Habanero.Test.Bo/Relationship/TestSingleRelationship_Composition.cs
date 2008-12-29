@@ -130,15 +130,115 @@ namespace Habanero.Test.BO
         public void Test_SetParentNull_PersistedChild()
         {
             //---------------Set up test pack-------------------
-            
+            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            Relationship compositionRelationship = (Relationship)organisation.Relationships["ContactPerson"];
+            compositionRelationship.RelationshipDef.RemoveChildAction = RemoveChildAction.Prevent;
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            contactPerson.Organisation = organisation;
+            contactPerson.Save();
             //---------------Assert Precondition----------------
+            Assert.IsNotNull(contactPerson.Organisation);
 
             //---------------Execute Test ----------------------
-
+            try
+            {
+                contactPerson.Organisation = null;
+                Assert.Fail("expected Err");
+            }
             //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("The " + compositionRelationship.RelationshipDef.RelatedObjectClassName, ex.Message);
+                StringAssert.Contains("could not be removed since the " + compositionRelationship.RelationshipName + " relationship is set up as ", ex.Message);
+            }
 
         }
 
+        [Test]
+        public void Test_ResetParent_NewChild_SetToNull()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            Relationship compositionRelationship = (Relationship) organisation.Relationships["ContactPerson"];
+            compositionRelationship.RelationshipDef.RemoveChildAction = RemoveChildAction.Prevent;
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            contactPerson.Organisation = organisation;
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(contactPerson.Organisation);
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                contactPerson.Organisation = null;
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains
+                    ("The " + compositionRelationship.RelationshipDef.RelatedObjectClassName, ex.Message);
+                StringAssert.Contains
+                    ("could not be removed since the " + compositionRelationship.RelationshipName
+                     + " relationship is set up as ", ex.Message);
+            }
+        }
+        [Test]
+        public void Test_SetParentNull()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            Relationship compositionRelationship = (Relationship)organisation.Relationships["ContactPerson"];
+            compositionRelationship.RelationshipDef.RemoveChildAction = RemoveChildAction.Prevent;
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(contactPerson.Organisation);
+
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = null;
+
+            //---------------Test Result -----------------------
+            Assert.IsNull(contactPerson.Organisation);
+
+        }
+
+        //
+        [Test]
+        public void Test_RemoveMethod()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship compositionRelationship = (SingleRelationship)organisation.Relationships["ContactPerson"];
+            compositionRelationship.RelationshipDef.RemoveChildAction = RemoveChildAction.Prevent;
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            compositionRelationship.SetRelatedObject(contactPerson);
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(contactPerson.OrganisationID, organisation.OrganisationID);
+            Assert.AreSame(organisation.ContactPerson, contactPerson);
+            Assert.AreEqual(RemoveChildAction.Prevent , compositionRelationship.RelationshipDef.RemoveChildAction);
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                compositionRelationship.SetRelatedObject(null);
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("The " + compositionRelationship.RelationshipDef.RelatedObjectClassName, ex.Message);
+                StringAssert.Contains("could not be removed since the " + compositionRelationship.RelationshipName + " relationship is set up as ", ex.Message);
+            }
+
+        }
         private static Relationship GetCompositionRelationship(OrganisationTestBO organisation)
         {
             RelKeyDef def = new RelKeyDef();
