@@ -196,6 +196,7 @@ namespace Habanero.Test.BO
         {
             public MyBusinessObjectUpdateLogBo()
             {
+                LoadDefaultClassDef();
                 SetBusinessObjectUpdateLog(new BusinessObjectUpdateLogStub());
             }
 

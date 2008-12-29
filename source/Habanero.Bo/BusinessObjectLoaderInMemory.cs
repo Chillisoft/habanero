@@ -280,7 +280,8 @@ namespace Habanero.BO
                 QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
 
             BusinessObjectCollection<T> col = GetBusinessObjectCollection<T>(relationshipCriteria, preparedOrderCriteria);
-            col.ForEach(delegate(T obj) { relatedCol.Add(obj); });
+//            col.ForEach(delegate(T obj) { relatedCol.Add(obj); });
+            LoadBOCollection(relatedCol, col);
             relatedCol.SelectQuery = col.SelectQuery;
             return relatedCol;
         }
@@ -304,10 +305,7 @@ namespace Habanero.BO
 
             IBusinessObjectCollection col = GetBusinessObjectCollection(relationship.RelatedObjectClassDef,
                         relationshipCriteria, preparedOrderCriteria);
-            foreach (IBusinessObject businessObject in col)
-            {
-                relatedCol.Add(businessObject);
-            }
+            LoadBOCollection(relatedCol, col);
             relatedCol.SelectQuery = col.SelectQuery;
             return relatedCol;
         }

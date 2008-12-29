@@ -559,9 +559,32 @@ namespace Habanero.BO
                 return businessObject.GetPropertyValue(source.Joins[0].ToSource, propName);
             } 
             return businessObject.GetPropertyValue(propName);
-            
         }
 
+        /// <summary>
+        /// Returns the value stored in the DataStore for the property name specified, accessing it through the 'source'
+        /// </summary>
+        /// <param name="source">The source of the property ie - the relationship or C# property this property is on</param>
+        /// <param name="propName">The property name</param>
+        /// <returns>Returns the value if found</returns>
+        public object GetPersistedPropertyValue(Source source, string propName)
+        {
+            if (String.IsNullOrEmpty(propName)) throw new ArgumentNullException("propName");
+            IBOProp prop;
+            if (source == null || String.IsNullOrEmpty(source.Name))
+            {
+                prop = Props[propName];
+                return prop.PersistedPropertyValue;
+            }
+
+            BusinessObject businessObject = (BusinessObject) Relationships.GetRelatedObject(source.Name);
+            if (businessObject == null) return null;
+            if (source.Joins.Count > 0)
+            {
+                return businessObject.GetPersistedPropertyValue(source.Joins[0].ToSource, propName);
+            }
+            return businessObject.GetPersistedPropertyValue(null, propName);
+        }
 
         /// <summary>
         /// Sets a property value to a new value
@@ -629,7 +652,7 @@ namespace Habanero.BO
             }
             if (prop.PropertyType.IsEnum && newPropValue is string)
             {
-                if(Enum.IsDefined(prop.PropertyType, (string)newPropValue))
+                if(Enum.IsDefined(prop.PropertyType, newPropValue))
                 {
                     newPropValue = Enum.Parse(prop.PropertyType, (string)newPropValue);
                 }
@@ -663,7 +686,7 @@ namespace Habanero.BO
                 propValue = prop.Value == null ? prop.Value : Convert.ChangeType(prop.Value, prop.PropertyType);
                 newPropValue1 = newPropValue == null ? newPropValue : Convert.ChangeType(newPropValue, prop.PropertyType);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 propValue = prop.Value;
                 newPropValue1 = newPropValue;

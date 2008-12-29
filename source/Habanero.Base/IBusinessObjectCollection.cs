@@ -393,7 +393,7 @@ namespace Habanero.Base
         /// </summary>
         /// Hack: This method was created returning a type IList to overcome problems with 
         ///   BusinessObjectCollecion being a generic collection.
-        IList MarkForDeletionBOs { get; }
+        IList MarkForDeletionBOCol { get; }
 
         /// <summary>
         /// Removes the business object at the index position specified

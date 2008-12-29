@@ -84,7 +84,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
-        private ContactPersonTestBO GetContactPerson()
+        private static ContactPersonTestBO GetContactPerson()
         {
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
@@ -107,7 +107,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, dataStore.Count);
 
             //---------------Execute Test ----------------------
-            cp.Delete();
+            cp.MarkForDelete();
             ITransactionCommitter secondTransactionCommitter = new TransactionCommitterInMemory(dataStore);
             secondTransactionCommitter.AddBusinessObject(cp);
             secondTransactionCommitter.CommitTransaction();
@@ -124,10 +124,10 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             DataStoreInMemory dataStoreInMemory = new DataStoreInMemory();
             BORegistry.DataAccessor = new DataAccessorInMemory(dataStoreInMemory);
-            Address address;
+            AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO =
                 ContactPersonTestBO.CreateContactPersonWithOneAddress_PreventDelete(out address);
-            contactPersonTestBO.Delete();
+            contactPersonTestBO.MarkForDelete();
 
             ITransactionCommitter committer = new TransactionCommitterInMemory(dataStoreInMemory);
             committer.AddBusinessObject(contactPersonTestBO);

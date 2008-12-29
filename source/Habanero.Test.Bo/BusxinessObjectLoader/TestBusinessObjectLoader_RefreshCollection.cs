@@ -253,7 +253,7 @@ namespace Habanero.Test.BO.BusxinessObjectLoader
             //---------------Test Result -----------------------
             Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
             Assert.AreEqual(0, cpCol.Count);
-            Assert.AreEqual(1, cpCol.MarkForDeletionBOs.Count);
+            Assert.AreEqual(1, cpCol.MarkForDeletionBOCol.Count);
         }
 
         [Test]
@@ -394,7 +394,7 @@ namespace Habanero.Test.BO.BusxinessObjectLoader
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cpCol.Count);
-            Assert.AreEqual(1, cpCol.MarkForDeletionBOs.Count);
+            Assert.AreEqual(1, cpCol.MarkForDeletionBOCol.Count);
             Assert.AreEqual(2, cpCol.PersistedBOCol.Count);
 
             //---------------Execute Test ----------------------
@@ -402,7 +402,7 @@ namespace Habanero.Test.BO.BusxinessObjectLoader
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, cpCol.Count);
-            Assert.AreEqual(1, cpCol.MarkForDeletionBOs.Count);
+            Assert.AreEqual(1, cpCol.MarkForDeletionBOCol.Count);
             Assert.AreEqual(2, cpCol.PersistedBOCol.Count);
             Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
         }

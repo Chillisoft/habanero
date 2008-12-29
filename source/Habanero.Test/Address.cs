@@ -33,6 +33,7 @@ namespace Habanero.Test
 
         public Address()
         {
+            GetClassDef();
         }
 
         public Address(ClassDef classDef)
@@ -163,7 +164,7 @@ namespace Habanero.Test
 
         public static void DeleteAllAddresses()
         {
-            string sql = "DELETE FROM contact_person_address";
+            const string sql = "DELETE FROM contact_person_address";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 

@@ -38,14 +38,53 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>Don't perform any delete related activities on the businessobjects in this relationship</summary>
         DoNothing = 4
     }
+    /// <summary>
+    /// An enumeration that gives some instructions or limitations in the
+    /// on a child business object being removed from the relationship.
+    /// This typically differentiats between a composition, aggregation and Association relationship.
+    /// </summary>
+    public enum RemoveChildAction
+    {
+        /// <summary>Dereference the child being removed. 
+        /// This is allowed for an aggregation and association relationship.
+        /// E.g. if a wheel is removed from a car.
+        /// </summary>
+        Dereference = 1,
+        /// <summary>Prevents the child from being removed (Composition relationship). Raises an error if the 
+        /// RelatedBusinessObjectCollection.Remove method is called. E.g. an invoice line
+        /// cannot exist independently of the invoice and cannot be moved from one invoice
+        /// to another (it therefore cannot be removed.) </summary>
+        Prevent = 2,
+    }
 
+    /// <summary>
+    /// An enumeration that gives some instructions or limitations in the
+    /// on a child business object being added to the relationship.
+    /// This typically differentiats between a composition, aggregation and Association relationship.
+    /// </summary>
+    public enum AddChildAction
+    {
+        /// <summary>Adds a persisted or non persisted child to the relationship. This is allowed for an
+        /// aggregation and association relationship.
+        /// E.g. if a wheel is removed from a car it can be added to another car.</summary>
+        AddChild = 1,
+        /// <summary>Prevents a persisted child from being added (Composition relationship). Raises an error if the 
+        /// RelatedBusinessObjectCollection.Add method is called with a perssited business object.
+        /// E.g. an invoice line
+        /// cannot exist independently of the invoice and cannot be moved from one invoice to 
+        /// another (it therefore cannot be added). A new (non persisted) business object can always be added to 
+        /// a relationship </summary>
+        Prevent = 2,
+    }
     /// <summary>
     /// Defines a relationship where the owner may relate to more than one object.
     /// </summary>
     public class MultipleRelationshipDef : RelationshipDef
     {
+        private readonly RemoveChildAction _removeChildAction;
+        private readonly AddChildAction _addChildAction;
 
-       // protected int _minNoOfRelatedObjects;
+        // protected int _minNoOfRelatedObjects;
        // protected int _maxNoOfRelatedObjects;
 
 		#region Constructors
@@ -106,6 +145,38 @@ namespace Habanero.BO.ClassDefinition
 
 		}
 
+        /// <summary>
+        /// Constructor to create a new single relationship definition
+        /// </summary>
+        /// <param name="relationshipName">A name for the relationship</param>
+        /// <param name="relatedObjectAssemblyName">The assembly name of the related object</param>
+        /// <param name="relatedObjectClassName">The class name of the related object</param>
+        /// <param name="relKeyDef">The related key definition</param>
+        /// <param name="keepReferenceToRelatedObject">Whether to keep a
+        /// reference to the related object.  Could be false for memory-
+        /// intensive applications.</param>
+        /// <param name="orderBy">The sql order-by clause</param>
+        /// <param name="deleteParentAction">Provides specific instructions 
+        /// with regards to deleting a parent object.  See the DeleteParentAction 
+        /// enumeration for more detail.</param>
+        /// <param name="removeChildAction">Provides specific instructions for removing a child object.</param>
+        /// <param name="addChildAction">Provides specific instructions for adding a child object.</param>
+        public MultipleRelationshipDef(string relationshipName, string relatedObjectAssemblyName,
+                                       string relatedObjectClassName, RelKeyDef relKeyDef,
+                                       bool keepReferenceToRelatedObject, string orderBy,
+                                      DeleteParentAction deleteParentAction,
+            RemoveChildAction removeChildAction, 
+            AddChildAction addChildAction)
+            : base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
+        {
+            ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
+            _removeChildAction = removeChildAction;
+            _addChildAction = addChildAction;
+            _orderCriteria = OrderCriteria.FromString(orderBy);
+            //_minNoOfRelatedObjects = minNoOfRelatedObjects;
+            //_maxNoOfRelatedObjects = maxNoOfRelatedObjects;
+
+        }
 		#endregion Constructors
 
 		#region Properties
@@ -142,7 +213,25 @@ namespace Habanero.BO.ClassDefinition
 
         #endregion Properties
 
-		/// <summary>
+        ///<summary>
+        /// Returns the specific action that the relationship must carry out in the case of a child being added to it.
+        /// <see cref="AddChildAction"/>
+        ///</summary>
+        public AddChildAction AddChildAction
+        {
+            get { return _addChildAction; }
+        }
+
+        ///<summary>
+        /// Returns the specific action that the relationship must carry out in the case of a child being removed from it.
+        ///  <see cref="RemoveChildAction"/>
+        ///</summary>
+        public RemoveChildAction RemoveChildAction
+        {
+            get { return _removeChildAction; }
+        }
+
+        /// <summary>
 		/// Overrides abstract method of parent to facilitate creation of 
 		/// a new Multiple Relationship
 		/// </summary>

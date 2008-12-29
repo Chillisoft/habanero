@@ -5,10 +5,10 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.TestBusinessObjectCollection
+namespace Habanero.Test.BO.RelatedBusinessObjectCollection
 {
     [TestFixture]
-    public class TestBusinessObjectCollection_Edits
+    public class TestRelatedBoCol_Edits
     {
         //Making edits to a Business Object Collection
         //In addition to loading a collection the developer can manipulate the collection in a number of ways. 
@@ -54,8 +54,8 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         //If the business object is not new then it is removed from the main list, marked for deletion and 
         //added to the DeletedBusinessObjects list See test
 
-        //See Also TestBusinessObjectCollection_AddedBos
-        //         TestBusinessObjectCollection_CreatedBo
+        //See Also TestRelatedBusinessObjectCollection_AddedBos
+        //         TestRelatedBusinessObjectCollection_CreatedBo
 
         //TODO: Test for refresh mark for delete
         //TODO: Mark 4 deletion with a collection of objects.
@@ -65,7 +65,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         private DataAccessorInMemory _dataAccessor;
         private DataStoreInMemory _dataStore;
         private bool _removedEventFired;
-        private ClassDef _cpDefaultClassDef;
+        private static OrganisationTestBO _organisationTestBO;
 
         #region SetupTearDown
 
@@ -78,13 +78,15 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             _dataStore = new DataStoreInMemory();
             _dataAccessor = new DataAccessorInMemory(_dataStore);
             BORegistry.DataAccessor = _dataAccessor;
-            _cpDefaultClassDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            OrganisationTestBO.LoadDefaultClassDef();
         }
 
         [SetUp]
         public void SetupTest()
         {
             //Runs every time that any testmethod is executed
+            _organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
         }
 
         [TearDown]
@@ -100,17 +102,55 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
 
         //TODO: Add tests for this and remove in derigister
         //   bo.ID.Updated += UpdateHashTable;
+        #region Utils
+
+
+        private static RelatedBusinessObjectCollection<ContactPersonTestBO> CreateCol_OneCP(out ContactPersonTestBO cp)
+        {
+            cp = CreateSavedContactPerson();
+            return CreateRelatedCPCol();
+        }
+
+        private static RelatedBusinessObjectCollection<ContactPersonTestBO> CreateRelatedCPCol()
+        {
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<ContactPersonTestBO>(GetContactPersonRelationship());
+        }
+
+        private static MultipleRelationship GetContactPersonRelationship()
+        {
+            if (_organisationTestBO == null)
+            {
+                _organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();                
+            } 
+            return (MultipleRelationship)_organisationTestBO.Relationships["ContactPeople"];
+        }
+
+        private static RelatedBusinessObjectCollection<ContactPersonTestBO> CreateCollectionWith_OneBO()
+        {
+            CreateSavedContactPerson();
+            return CreateRelatedCPCol();
+        }
+
+        private static ContactPersonTestBO CreateSavedContactPerson()
+        {
+            MultipleRelationship relationship = GetContactPersonRelationship();
+            ContactPersonTestBO cp = (ContactPersonTestBO) relationship.GetRelatedBusinessObjectCol().CreateBusinessObject();
+            cp.Surname = TestUtil.CreateRandomString();
+            cp.FirstName = TestUtil.CreateRandomString();
+            cp.Save();
+            return cp;
+        }
 
         #region Custom Asserts
 
-        private static void AssertAllCollectionsHaveNoItems(BusinessObjectCollection<ContactPersonTestBO> cpCol)
+        private static void AssertAllCollectionsHaveNoItems(IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(0, cpCol.Count);
-            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeleteBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.AddedBOCol.Count);
+            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
+            Assert.AreEqual(0, cpCol.PersistedBOCol.Count);
+            Assert.AreEqual(0, cpCol.MarkForDeletionBOCol.Count);
+            Assert.AreEqual(0, cpCol.CreatedBOCol.Count);
         }
 
         private static void AssertOneObjectInCurrentAndPersistedCollection
@@ -125,27 +165,32 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         }
 
         private static void AssertOneObjectInRemovedAndPersistedCollection
-            (BusinessObjectCollection<ContactPersonTestBO> cpCol)
+            (IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(0, cpCol.Count);
-            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
-            Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeleteBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.AddedBOCol.Count);
+            Assert.AreEqual(1, cpCol.RemovedBOCol.Count, "Should b one removed item");
+            Assert.AreEqual(1, cpCol.PersistedBOCol.Count, "should b one persisted item");
+            Assert.AreEqual(0, cpCol.MarkForDeletionBOCol.Count);
+            Assert.AreEqual(0, cpCol.CreatedBOCol.Count);
         }
 
-        private static void AssertOnePersisted_OneMark4Delete(BusinessObjectCollection<ContactPersonTestBO> cpCol)
+        private static void AssertOnePersisted_OneMark4Delete(IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(0, cpCol.Count);
-            Assert.AreEqual(1, cpCol.MarkForDeleteBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
-            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.MarkForDeletionBOCol.Count);
+            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
+            Assert.AreEqual(0, cpCol.AddedBOCol.Count);
+            Assert.AreEqual(0, cpCol.CreatedBOCol.Count);
+            Assert.AreEqual(1, cpCol.PersistedBOCol.Count);
         }
 
         #endregion
+
+
+
+        #endregion
+
 
         #region Methods On loaded collection
 
@@ -153,13 +198,12 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         public void Test_LoadBoCol_Generic()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.CreateSavedContactPerson();
+            CreateSavedContactPerson();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            BusinessObjectCollection<ContactPersonTestBO> cpCol =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>("");
-
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateRelatedCPCol();
+            
             //---------------Test Result -----------------------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
         }
@@ -168,23 +212,24 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         public void Test_LoadBoCol()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.CreateSavedContactPerson();
+            CreateSavedContactPerson();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection cpCol = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
-                (_cpDefaultClassDef, "");
+            MultipleRelationship cpRelationship = (MultipleRelationship)_organisationTestBO.Relationships["ContactPeople"];
+            IBusinessObjectCollection cpCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(typeof(ContactPersonTestBO), cpRelationship);
 
             //---------------Test Result -----------------------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
         }
+
 
         [Test]
         public void Test_LoadedBo_Add()
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             //--------------Assert Preconditions--------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
 
@@ -200,7 +245,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             cp.FirstName = TestUtil.CreateRandomString();
 
             //--------------Assert Preconditions--------
@@ -218,7 +263,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             cp.FirstName = TestUtil.CreateRandomString();
 
             //--------------Assert Preconditions--------
@@ -236,14 +281,14 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             cp.FirstName = TestUtil.CreateRandomString();
 
             //--------------Assert Preconditions--------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
 
             //-----Run tests----------------------------
-            cp.CancelEdits();
+            cpCol.CancelEdits();
 
             ////-----Test results-------------------------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
@@ -254,7 +299,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
 //            cp.FirstName = TestUtil.CreateRandomString();
 
             //--------------Assert Preconditions--------
@@ -272,7 +317,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             cp.FirstName = TestUtil.CreateRandomString();
 
             //--------------Assert Preconditions--------
@@ -294,15 +339,19 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             //--------------Assert Preconditions--------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
+            Assert.IsFalse(cp.Status.IsDirty);
+            Assert.IsNotNull(cp.OrganisationID);
 
             //-----Run tests----------------------------
             cpCol.Remove(cp);
 
             ////-----Test results-------------------------
             AssertOneObjectInRemovedAndPersistedCollection(cpCol);
+            Assert.IsTrue(cp.Status.IsDirty, "Should be edited since the remove modifies the alternate key");
+            Assert.IsNull(cp.OrganisationID);
         }
 
         [Test]
@@ -310,12 +359,13 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             _removedEventFired = false;
             cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
             //--------------Assert Preconditions--------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
             Assert.IsFalse(_removedEventFired);
+            Assert.IsNotNull(cp.OrganisationID);
 
             //-----Run tests----------------------------
             cpCol.RemoveAt(0);
@@ -323,6 +373,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             ////-----Test results-------------------------
             AssertOneObjectInRemovedAndPersistedCollection(cpCol);
             Assert.IsTrue(_removedEventFired);
+            Assert.IsNull(cp.OrganisationID);
         }
 
         [Test]
@@ -330,7 +381,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             cpCol.Remove(cp);
             _removedEventFired = false;
             cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
@@ -346,30 +397,67 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             Assert.IsFalse(_removedEventFired);
         }
 
+        [Test]
+        public void Test_RemovedBOs_Refresh()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            cpCol.Remove(cp);
+
+            //---------------Assert Precondition----------------
+            AssertOneObjectInRemovedAndPersistedCollection(cpCol);
+
+            Assert.AreEqual(0, cpCol.Count);
+            //---------------Execute Test ----------------------
+            cpCol.Refresh();
+
+            //---------------Test Result -----------------------
+            AssertOneObjectInRemovedAndPersistedCollection(cpCol);
+        }
+
         //Persisting business object collections
         //A business object collection can be persisted via the .SaveAll method. 
         //All the added, removed, created and deleted business objects will be persisted and their collections cleared. 
-
         [Test]
         public void Test_Remove_SaveAll()
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
 
             //--------------Assert Preconditions--------
-            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(1, cpCol.Count);
-            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
+            AssertOneObjectInCurrentAndPersistedCollection(cpCol);
+
             //-----Run tests----------------------------
 
             cpCol.Remove(cp);
             cpCol.SaveAll();
 
             ////-----Test results-------------------------
-            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.Count);
-            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
+            AssertAllCollectionsHaveNoItems(cpCol);
+            Assert.IsFalse(cp.Status.IsDirty);
+            Assert.IsNull(cp.OrganisationID);
+        }
+
+        [Test]
+        public void Test_Remove_Save()
+        {
+            //-----Create Test pack---------------------
+            ContactPersonTestBO cp;
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            cpCol.Remove(cp);
+
+            //--------------Assert Preconditions--------
+            AssertOneObjectInRemovedAndPersistedCollection(cpCol);
+
+            //-----Run tests----------------------------
+            cp.Save();
+
+            ////-----Test results-------------------------
+            AssertAllCollectionsHaveNoItems(cpCol);
+            Assert.IsFalse(cp.Status.IsDirty);
+            Assert.IsNull(cp.OrganisationID);
         }
 
         [Test]
@@ -377,7 +465,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             cpCol.Remove(cp);
             _addedEventFired = false;
             cpCol.BusinessObjectAdded += delegate { _addedEventFired = true; };
@@ -387,7 +475,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             Assert.IsFalse(_addedEventFired);
 
             //-----Run tests----------------------------
-            cpCol.RestoreAll();
+            cpCol.CancelEdits();
 
             //-----Test results-------------------------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
@@ -395,11 +483,35 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         }
 
         [Test]
+        public void Test_Remove_Restore()
+        {
+            //-----Create Test pack---------------------
+            ContactPersonTestBO cp;
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            cpCol.Remove(cp);
+            _addedEventFired = false;
+            cpCol.BusinessObjectAdded += delegate { _addedEventFired = true; };
+
+            //--------------Assert Preconditions--------
+            AssertOneObjectInRemovedAndPersistedCollection(cpCol);
+            Assert.IsFalse(_addedEventFired);
+            Assert.IsNull(cp.OrganisationID);
+
+            //-----Run tests----------------------------
+            cp.CancelEdits();
+
+            //-----Test results-------------------------
+            AssertOneObjectInCurrentAndPersistedCollection(cpCol);
+            Assert.IsTrue(_addedEventFired);
+            Assert.IsNotNull(cp.OrganisationID);
+        }
+
+        [Test]
         public void Test_Remove_RefreshAll()
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             cpCol.Remove(cp);
 
             //--------------Assert Preconditions--------
@@ -412,12 +524,12 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             AssertOneObjectInRemovedAndPersistedCollection(cpCol);
         }
 
-        [Test]
+        [Test, ExpectedException(typeof(HabaneroDeveloperException))]
         public void Test_Remove_Refresh()
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             cpCol.Remove(cp);
 
             //--------------Assert Preconditions--------
@@ -430,30 +542,14 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             AssertOneObjectInRemovedAndPersistedCollection(cpCol);
         }
 
-        [Test]
-        public void Test_Remove_BoCancelEdits()
-        {
-            //-----Create Test pack---------------------
-            ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
-            cpCol.Remove(cp);
 
-            //--------------Assert Preconditions--------
-            AssertOneObjectInRemovedAndPersistedCollection(cpCol);
-
-            //-----Run tests----------------------------
-            cp.CancelEdits();
-
-            ////-----Test results-------------------------
-            AssertOneObjectInRemovedAndPersistedCollection(cpCol);
-        }
 
         [Test]
         public void Test_Remove_Add()
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             cpCol.Remove(cp);
 
             //--------------Assert Preconditions--------
@@ -471,7 +567,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             cpCol.Remove(cp);
             _removedEventFired = false;
             cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
@@ -492,7 +588,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             cpCol.Remove(cp);
             _removedEventFired = false;
             cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
@@ -520,7 +616,8 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
+
             //---------------Test Result -----------------------
             Assert.IsNotNull(cpCol.MarkForDeleteBusinessObjects);
         }
@@ -531,7 +628,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //A Business object that exists in the collection can be marked for deletion either as a bo or
             //  as an index in the collection
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO markForDeleteCP = cpCol[0];
             _removedEventFired = false;
             cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
@@ -554,7 +651,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //A Business object that exists in the collection can be marked for deletion either as a bo or
             //  as an index in the collection
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO markForDeleteCP = cpCol[0];
             _removedEventFired = false;
             cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
@@ -578,7 +675,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //A Business object that exists in the collection can be marked for deletion either as a bo or
             //  as an index in the collection
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO markForDeleteCP = cpCol[0];
             cpCol.MarkForDelete(markForDeleteCP);
             _removedEventFired = false;
@@ -603,7 +700,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //A Business object that exists in the collection can be marked for deletion either as a bo or
             //  as an index in the collection
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO markForDeleteCP = cpCol[0];
             cpCol.MarkForDelete(markForDeleteCP);
             _removedEventFired = false;
@@ -628,7 +725,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //A Business object that exists in the collection can be marked for deletion either as a bo or
             //  as an index in the collection
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO markForDeleteCP = cpCol[0];
             cpCol.MarkForDelete(markForDeleteCP);
             _removedEventFired = false;
@@ -654,7 +751,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //A Business object that exists in the collection can be marked for deletion either as a bo or
             //  as an index in the collection
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO markForDeleteCP = cpCol[0];
 
             //---------------Assert Precondition----------------
@@ -675,7 +772,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //A Business object that exists in the collection can be marked for deletion either as a bo or
             //  as an index in the collection
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cpCol.Count);
@@ -703,8 +800,10 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         public void Test_MarkForDeleteBO_SaveAll()
         {
             //---------------Set up test pack-------------------
+
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
+            _organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO cp = cpCol[0];
 
             //---------------Assert Precondition----------------
@@ -728,7 +827,8 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
+            _organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO cp = cpCol[0];
 
             //---------------Assert Precondition----------------
@@ -753,7 +853,8 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
+            _organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO cp = cpCol[0];
             cpCol.MarkForDelete(cp);
 
@@ -761,7 +862,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             AssertOnePersisted_OneMark4Delete(cpCol);
 
             //---------------Execute Test ----------------------
-            cpCol.RestoreAll();
+            cpCol.CancelEdits();
 
             //---------------Test Result -----------------------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
@@ -774,7 +875,8 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
+            _organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO cp = cpCol[0];
             cpCol.MarkForDelete(cp);
             _addedEventFired = false;
@@ -797,7 +899,8 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
+            _organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO cp = cpCol[0];
             cpCol.MarkForDelete(cp);
 
@@ -810,51 +913,6 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
 
         #endregion
 
-        #region Utils
 
-//        private static void CreateSavedContactPerson()
-//        {
-//            ContactPersonTestBO.CreateSavedContactPerson();
-//        }
-
-        private static BusinessObjectCollection<ContactPersonTestBO> CreateCol_OneCP(out ContactPersonTestBO cp)
-        {
-            cp = ContactPersonTestBO.CreateSavedContactPerson();
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>("");
-        }
-
-//
-//        private static void CreateTwoSavedContactPeople()
-//        {
-//            CreateSavedContactPerson();
-//            CreateSavedContactPerson();
-//        }
-
-        private static BusinessObjectCollection<ContactPersonTestBO> CreateCollectionWith_OneBO()
-        {
-            ContactPersonTestBO.CreateSavedContactPerson();
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>("");
-        }
-
-        [Test]
-        public void Test_Refresh_W_RemovedBOs()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonTestBO cp;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
-            cpCol.Remove(cp);
-
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.Count);
-            //---------------Execute Test ----------------------
-            cpCol.Refresh();
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.Count);
-        }
-
-        #endregion
     }
 }

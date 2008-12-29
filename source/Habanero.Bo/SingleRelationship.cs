@@ -17,9 +17,12 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
+
 //using log4net;
 
 namespace Habanero.BO
@@ -62,7 +65,7 @@ namespace Habanero.BO
         /// <returns>Returns the related business object</returns>
         public IBusinessObject GetRelatedObject(IDatabaseConnection connection)
         {
-        	return GetRelatedObject<BusinessObject>();
+            return GetRelatedObject<BusinessObject>();
         }
 
         ///<summary>
@@ -75,8 +78,7 @@ namespace Habanero.BO
 
             if (RelatedBoForeignKeyHasChanged()) _relatedBo = null;
 
-            if (_relatedBo == null ||
-                (_storedRelationshipExpression != newRelationshipExpression.ExpressionString()))
+            if (_relatedBo == null || (_storedRelationshipExpression != newRelationshipExpression.ExpressionString()))
             {
                 if (HasRelationship())
                 {
@@ -84,8 +86,8 @@ namespace Habanero.BO
                     IBusinessObject busObj = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject(this);
 //                    if (_relDef.KeepReferenceToRelatedObject)
 //                    {
-                        _relatedBo = busObj;
-                        _storedRelationshipExpression = newRelationshipExpression.ExpressionString();
+                    _relatedBo = busObj;
+                    _storedRelationshipExpression = newRelationshipExpression.ExpressionString();
 //                    }
 //                    else
 //                    {
@@ -104,12 +106,12 @@ namespace Habanero.BO
 
         private bool RelatedBoForeignKeyHasChanged()
         {
-            if (_relatedBo != null )
+            if (_relatedBo != null)
             {
                 foreach (IRelProp prop in this.RelKey)
                 {
                     object relatedPropValue = _relatedBo.GetPropertyValue(prop.RelatedClassPropName);
-                    if (prop.BOProp.Value == null )
+                    if (prop.BOProp.Value == null)
                     {
                         if (relatedPropValue == null) continue;
                         return true;
@@ -121,13 +123,11 @@ namespace Habanero.BO
             return false;
         }
 
-
         /// <summary>
         /// Returns the related object 
         /// </summary>
         /// <returns>Returns the related business object</returns>
-        public virtual T GetRelatedObject<T>()
-			where T : class, IBusinessObject, new()
+        public virtual T GetRelatedObject<T>() where T : class, IBusinessObject, new()
         {
             return (T) GetRelatedObject();
         }
@@ -138,10 +138,42 @@ namespace Habanero.BO
         /// <param name="relatedObject">The object to relate to</param>
         public virtual void SetRelatedObject(IBusinessObject relatedObject)
         {
+            if (_relatedBo == null) GetRelatedObject();
+            if ((relatedObject != _relatedBo) && relatedObject != null)
+            {
+                MultipleRelationship reverseRelationship = GetReverseRelationship(relatedObject) as MultipleRelationship;
+                if (reverseRelationship != null)
+                {
+                    MultipleRelationshipDef relationshipDef =
+                        reverseRelationship.RelationshipDef as MultipleRelationshipDef;
+                    if (relationshipDef != null && _relatedBo != null && relationshipDef.AddChildAction == AddChildAction.Prevent)
+                    {
+                        string message = "The " + relationshipDef.RelatedObjectClassName
+                                         + " could not be added since the " + relationshipDef.RelationshipName
+                                         +
+                                         " relationship is set up as a composition relationship (AddChildAction.Prevent)";
+                        throw new HabaneroDeveloperException(message, message);
+                    }
+                    if (reverseRelationship.IsRelationshipLoaded)
+                    {
+                        reverseRelationship.GetLoadedBOColInternal().Add(this.OwningBO);
+                    }
+                }
+            }
+            if (_relatedBo != relatedObject && _relatedBo != null)
+            {
+                MultipleRelationship reverseRelationship = GetReverseRelationship(_relatedBo) as MultipleRelationship;
+                if (reverseRelationship != null && reverseRelationship.IsRelationshipLoaded)
+                {
+                    reverseRelationship.GetLoadedBOColInternal().Remove(this.OwningBO);
+                }
+            }
             _relatedBo = relatedObject;
             foreach (RelProp relProp in _relKey)
             {
-                object relatedObjectValue = _relatedBo == null ? null: _relatedBo.GetPropertyValue(relProp.RelatedClassPropName);
+                object relatedObjectValue = _relatedBo == null
+                                                ? null
+                                                : _relatedBo.GetPropertyValue(relProp.RelatedClassPropName);
                 _owningBo.SetPropertyValue(relProp.OwnerPropertyName, relatedObjectValue);
             }
             _storedRelationshipExpression = _relKey.RelationshipExpression().ExpressionString();
@@ -162,14 +194,20 @@ namespace Habanero.BO
             BusinessObjectCollection<TBusinessObject> col = new BusinessObjectCollection<TBusinessObject>();
 
             TBusinessObject bo = this.GetRelatedObject<TBusinessObject>();
-            if (bo !=null)
+            if (bo != null)
             {
                 col.Add(bo);
             }
             return col;
         }
 
+        protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
+        {
+            Type type = _relDef.RelatedObjectClassType;
+            CheckTypeCanBeCreated(type);
+            IBusinessObjectCollection boCol =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(type, this);
+            return boCol;
+        }
     }
-
-    
 }

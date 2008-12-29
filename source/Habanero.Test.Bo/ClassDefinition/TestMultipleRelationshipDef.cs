@@ -29,7 +29,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestProtectedSets()
         {
-            MultipleRelationshipDefInheritor relDef = new MultipleRelationshipDefInheritor();
+            MultipleRelationshipDefStub relDef = new MultipleRelationshipDefStub();
 
             Assert.AreEqual("acolumn ASC", relDef.OrderCriteria.ToString());
             relDef.SetOrderBy(new OrderCriteria().Add("somecolumn"));
@@ -40,9 +40,9 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(DeleteParentAction.DeleteRelated, relDef.DeleteParentAction);
         }
 
-        private class MultipleRelationshipDefInheritor : MultipleRelationshipDef
+        private class MultipleRelationshipDefStub : MultipleRelationshipDef
         {
-            public MultipleRelationshipDefInheritor() : base("relName", typeof(MyRelatedBo),
+            public MultipleRelationshipDefStub() : base("relName", typeof(MyRelatedBo),
                 new RelKeyDef(), true, "acolumn", DeleteParentAction.Prevent) {}
 
             public void SetOrderBy(OrderCriteria orderCriteria)
@@ -55,5 +55,54 @@ namespace Habanero.Test.BO.ClassDefinition
                 DeleteParentAction = deleteParentAction;
             }
         }
+
+        [Test]
+        public void Test_CreateMultipleRelationshipDef_Association()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef(TestUtil.CreateRandomString(),
+                TestUtil.CreateRandomString(), TestUtil.CreateRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated
+                , RemoveChildAction.Dereference, AddChildAction.AddChild);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(RemoveChildAction.Dereference, relationshipDef.RemoveChildAction);
+            Assert.AreEqual(AddChildAction.AddChild, relationshipDef.AddChildAction);
+        }
+
+        [Test]
+        public void Test_CreateMultipleRelationshipDef_Aggregation()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef(TestUtil.CreateRandomString(),
+                TestUtil.CreateRandomString(), TestUtil.CreateRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated
+                , RemoveChildAction.Dereference, AddChildAction.AddChild);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(RemoveChildAction.Dereference, relationshipDef.RemoveChildAction);
+            Assert.AreEqual(AddChildAction.AddChild, relationshipDef.AddChildAction);
+        }
+
+        [Test]
+        public void Test_CreateMultipleRelationshipDef_Composition()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef(TestUtil.CreateRandomString(),
+                TestUtil.CreateRandomString(), TestUtil.CreateRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated
+                , RemoveChildAction.Prevent, AddChildAction.Prevent);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(RemoveChildAction.Prevent, relationshipDef.RemoveChildAction);
+            Assert.AreEqual(AddChildAction.Prevent, relationshipDef.AddChildAction);
+        }
+
     }
 }

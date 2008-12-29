@@ -96,7 +96,10 @@ namespace Habanero.BO
         /// </summary>
         public bool IsDirty
         {
-            get { return GetBOFlagValue(Statuses.isDirty); }
+            get
+            {
+                return (GetBOFlagValue(Statuses.isDirty)) || this._bo.Relationships.IsDirty;
+            }
             internal set { SetBOFlagValue(Statuses.isDirty, value); }
         }
 

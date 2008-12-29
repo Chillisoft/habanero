@@ -95,7 +95,7 @@ namespace Habanero.BO
         private readonly EventHandler<BOEventArgs> _restoredEventHandler;
         private readonly EventHandler<BOKeyEventArgs> _updateIDEventHandler;
         private readonly EventHandler<BOEventArgs> _markForDeleteEventHandler;
-
+        private bool _loading = false;
         /// <summary>
         /// Default constructor. 
         /// The classdef will be implied from TBusinessObject and the Current Database Connection will be used.
@@ -368,7 +368,7 @@ namespace Habanero.BO
         }
 
 
-        private void RestoredEventHandler(object sender, BOEventArgs e)
+        protected virtual void RestoredEventHandler(object sender, BOEventArgs e)
         {
             TBusinessObject bo = (TBusinessObject)e.BusinessObject;
             //TODO: Brett removed this Restoring (cancelling edits) on a created bo should not 
@@ -392,20 +392,11 @@ namespace Habanero.BO
             }
         }
 
-        private void SavedEventHandler(object sender, BOEventArgs e)
+        protected virtual void SavedEventHandler(object sender, BOEventArgs e)
         {
             TBusinessObject bo = (TBusinessObject)e.BusinessObject;
             CreatedBusinessObjects.Remove(bo);
 
-            //Remove the deleted bo from the removed collection
-            //            if(bo.Status.IsNew && bo.Status.IsDeleted)
-            //            {
-            //                this.RemovedBusinessObjects.Remove(bo);
-            ////                bo.Saved -= _savedEventHandler;
-            //                //should remove from main col if deleted
-            //                return;
-            //            }
-            //TODO: Mark for deleted items will not be handled.
             if (!this.RemovedBusinessObjects.Remove(bo))
             {
                 if (!this.Contains(bo))
@@ -642,7 +633,7 @@ namespace Habanero.BO
         /// Returns a list of the business objects that are currently marked for deletion for the
         ///   collection but have not cessarily been persisted to the database.
         /// </summary>
-        public IList MarkForDeletionBOs
+        public IList MarkForDeletionBOCol
         {
             get { return this.MarkForDeleteBusinessObjects; }
         }
@@ -717,7 +708,7 @@ namespace Habanero.BO
 
         private void RemoveAddedBusinessObject(TBusinessObject businessObject)
         {
-            if (this.MarkForDeletionBOs.Contains(businessObject)) return;
+            if (this.MarkForDeletionBOCol.Contains(businessObject)) return;
 
             if (!this.AddedBusinessObjects.Remove(businessObject)) return;
 
@@ -1125,12 +1116,11 @@ namespace Habanero.BO
             RemovedBusinessObjects.Clear();
             //TODO: Markfor delete clear.
         }
-
         /// <summary>
         /// Restores all the business objects to their last persisted state, that
         /// is their state and values at the time they were last saved to the database
         /// </summary>
-        public void RestoreAll()
+        public void CancelEdits()
         {
             foreach (TBusinessObject bo in this.Clone())
             {
@@ -1157,7 +1147,7 @@ namespace Habanero.BO
                 bo.Restore();
                 this.Add(bo);
             }
-            while(this.AddedBusinessObjects.Count > 0)
+            while (this.AddedBusinessObjects.Count > 0)
             {
                 TBusinessObject bo = this.AddedBusinessObjects[0];
                 this.AddedBusinessObjects.Remove(bo);
@@ -1170,6 +1160,16 @@ namespace Habanero.BO
                 }
                 this.RemovedBusinessObjects.Remove(bo);
             }
+        }
+
+        [Obsolete("Should use Cancel Edits")]
+        /// <summary>
+        /// Restores all the business objects to their last persisted state, that
+        /// is their state and values at the time they were last saved to the database
+        /// </summary>
+        public void RestoreAll()
+        {
+            CancelEdits();
         }
 
         #region IBusinessObjectCollection Members
@@ -1376,6 +1376,19 @@ namespace Habanero.BO
             get { return _keyObjectHashTable; }
         }
 
+// ReSharper disable UnusedPrivateMember 
+        //This method is used by reflection only
+        /// <summary>
+        /// This property is set to true while loading the collection from the datastore so as to 
+        /// prevent certain checks being done (e.g. Adding persisted business objects to a collection.
+        /// </summary>
+        protected bool Loading
+        {
+            get { return _loading; }
+            set { _loading = value; }
+        }
+
+// ReSharper restore UnusedPrivateMember
         #endregion
 
         /// <summary>

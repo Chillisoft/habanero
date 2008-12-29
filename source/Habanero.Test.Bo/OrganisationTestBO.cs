@@ -46,7 +46,29 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-
+        public static ClassDef LoadDefaultClassDef_PreventAddChild()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
+					<property  name=""OrganisationID"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""OrganisationID"" />
+					</primaryKey>
+			    </class>
+			");
+            RelPropDef relPropDef = new RelPropDef(itsClassDef.PropDefcol["OrganisationID"], "OrganisationID");
+            RelKeyDef relKeyDef = new RelKeyDef();
+            relKeyDef.Add(relPropDef);
+            MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef("ContactPeople", "Habanero.Test.BO",
+                    "ContactPersonTestBO", relKeyDef, true, "", DeleteParentAction.DeleteRelated
+                    , RemoveChildAction.Prevent, AddChildAction.Prevent);
+            itsClassDef.RelationshipDefCol.Add(relationshipDef);
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         public static ClassDef LoadDefaultClassDef_WithRelationShipToAddress()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -58,7 +80,7 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""OrganisationID"" />
 					</primaryKey>
-					<relationship name=""Addresses"" type=""multiple"" relatedClass=""Address"" relatedAssembly=""Habanero.Test"" deleteAction=""DeleteRelated"">
+					<relationship name=""Addresses"" type=""multiple"" relatedClass=""AddressTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"">
 						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
 					</relationship>
                     <relationship name=""ContactPeople"" type=""multiple"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"">

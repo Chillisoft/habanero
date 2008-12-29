@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+
 namespace Habanero.Base
 {
     ///<summary>
@@ -54,5 +56,23 @@ namespace Habanero.Base
         /// The class Definition for the related object.
         /// </summary>
         IClassDef RelatedObjectClassDef { get; }
+
+        ///<summary>
+        /// Returns whether the relationship is dirty or not.
+        /// A relationship is always dirty if it has Added, created, removed or deleted Related business objects.
+        /// If the relationship is of type composition or aggregation then it is dirty if it has any 
+        ///  related (children) business objects that are dirty.
+        ///</summary>
+        bool IsDirty { get; }
+
+        ///<summary>
+        /// Returns a list of all the related objects that are dirty.
+        /// In the case of a composition or aggregation this will be a list of all 
+        ///   dirty related objects (child objects). 
+        /// In the case of association
+        ///   this will only be a list of related objects that are added, removed, marked4deletion or created
+        ///   as part of the relationship.
+        ///</summary>
+        IList<IBusinessObject> GetDirtyChildren();
     }
 }

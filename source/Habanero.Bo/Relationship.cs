@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -79,8 +80,11 @@ namespace Habanero.BO
         ///</summary>
         public OrderCriteria OrderCriteria
         {
-            get { if (_relDef.OrderCriteria == null) return new OrderCriteria();
-                return _relDef.OrderCriteria; }
+            get
+            {
+                if (_relDef.OrderCriteria == null) return new OrderCriteria();
+                return _relDef.OrderCriteria;
+            }
         }
 
         ///<summary>
@@ -108,27 +112,20 @@ namespace Habanero.BO
         /// </summary>
         /// <returns>Returns a collection of business objects</returns>
         public virtual BusinessObjectCollection<TBusinessObject> GetRelatedBusinessObjectCol<TBusinessObject>()
-            where TBusinessObject : BusinessObject, new() 
+            where TBusinessObject : BusinessObject, new()
         {
             IBusinessObjectCollection boCol = GetRelatedBusinessObjectColInternal<TBusinessObject>();
-            return (BusinessObjectCollection<TBusinessObject>)boCol;
+            return (BusinessObjectCollection<TBusinessObject>) boCol;
         }
 
         protected abstract IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>()
-            where TBusinessObject : BusinessObject, new() ;
+            where TBusinessObject : BusinessObject, new();
 
-        
 
-        protected virtual IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
-        {
+        protected abstract IBusinessObjectCollection GetRelatedBusinessObjectColInternal();
 
-            Type type = _relDef.RelatedObjectClassType;
-            CheckTypeCanBeCreated(type);
-            IBusinessObjectCollection boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(type, this);
-            return boCol;
-        }
 
-        private static void CheckTypeCanBeCreated(Type type)
+        protected static void CheckTypeCanBeCreated(Type type)
         {
             //Check that the type can be created and raise appropriate error 
             try
@@ -137,12 +134,13 @@ namespace Habanero.BO
             }
             catch (Exception ex)
             {
-                throw new UnknownTypeNameException(String.Format(
-                                                       "An error occurred while attempting to load a related " +
-                                                       "business object collection, with the type given as '{0}'. " +
-                                                       "Check that the given type exists and has been correctly " +
-                                                       "defined in the relationship and class definitions for the classes " +
-                                                       "involved.", type), ex);
+                throw new UnknownTypeNameException
+                    (String.Format
+                         ("An error occurred while attempting to load a related "
+                          + "business object collection, with the type given as '{0}'. "
+                          + "Check that the given type exists and has been correctly "
+                          + "defined in the relationship and class definitions for the classes " + "involved.", type),
+                     ex);
             }
         }
 
@@ -155,12 +153,111 @@ namespace Habanero.BO
         {
             get { return _relKey; }
         }
+
         /// <summary>
         /// The class Definition for the related object.
         /// </summary>
         public IClassDef RelatedObjectClassDef
         {
             get { return _relDef.RelatedObjectClassDef; }
+        }
+
+        ///<summary>
+        /// Returns whether the relationship is dirty or not.
+        /// A relationship is always dirty if it has Added, created, removed or deleted Related business objects.
+        /// If the relationship is of type composition or aggregation then it is dirty if it has any 
+        ///  related (children) business objects that are dirty.
+        ///</summary>
+        public bool IsDirty
+        {
+            get
+            {
+                if (_boCol == null) return false;
+                bool dirtyCollections = HasDirtyEditingCollections;
+                if (dirtyCollections) return true;
+                foreach (IBusinessObject bo  in _boCol.PersistedBOCol)
+                {
+                    if (bo.Status.IsDirty)
+                    {
+                        return true;
+                    }
+                }
+                return false; // || 
+            }
+        }
+
+        private bool HasDirtyEditingCollections
+        {
+            get { return (_boCol.CreatedBOCol.Count > 0) || (_boCol.MarkForDeletionBOCol.Count > 0); }
+        }
+
+        ///<summary>
+        /// Returns a list of all the related objects that are dirty.
+        /// In the case of a composition or aggregation this will be a list of all 
+        ///   dirty related objects (child objects). 
+        /// In the case of association
+        ///   this will only be a list of related objects that are added, removed, marked4deletion or created
+        ///   as part of the relationship.
+        ///</summary>
+        public IList<IBusinessObject> GetDirtyChildren()
+        {
+            IList<IBusinessObject> dirtyBusinessObjects = new List<IBusinessObject>();
+            if (HasDirtyEditingCollections)
+            {
+                foreach (IBusinessObject bo in _boCol.CreatedBOCol)
+                {
+                    dirtyBusinessObjects.Add(bo);
+                }
+                foreach (IBusinessObject bo in _boCol.MarkForDeletionBOCol)
+                {
+                    dirtyBusinessObjects.Add(bo);
+                }
+            }
+            foreach (IBusinessObject bo in _boCol.PersistedBOCol)
+            {
+                if (bo.Status.IsDirty && !dirtyBusinessObjects.Contains(bo))
+                {
+                    dirtyBusinessObjects.Add(bo);
+                    //TODO: Deal with object not dirty but children are.
+                }
+            }
+            return dirtyBusinessObjects;
+        }
+
+        //TODO: This should be temporary code and will b removed when define reverse relationships in Firestarter and classdefs.
+        /// <summary>
+        /// Returns the reverse relationship for this relationship i.e. If invoice has invoice lines and you 
+        /// can navigate from invoice lines to invoices then the invoicelines to invoice relationship is the
+        /// reverse relationship of the invoice to invoicelines relationship and vica versa.
+        /// </summary>
+        /// <param name="bo">The related Business object (in the example the invoice lines)</param>
+        /// <returns>The reverse relationship or null if no reverse relationship is set up.</returns>
+        internal IRelationship GetReverseRelationship(IBusinessObject bo)
+        {
+            //This is a horrrible Hack but I do not want to do the reverse relationship 
+            IRelationship reverseRelationship = null;
+            foreach (IRelationship relationship in bo.Relationships)
+            {
+                bool reverseRelatedPropFound = false;
+                foreach (IRelProp prop in this._relKey)
+                {
+                    foreach (IRelProp relProp in relationship.RelKey)
+                    {
+                        if (prop.RelatedClassPropName != relProp.OwnerPropertyName) continue;
+                        reverseRelatedPropFound = true;
+                        break;
+                    }
+                }
+                if (!reverseRelatedPropFound) continue;
+                reverseRelationship = relationship;
+                break;
+            }
+            return reverseRelationship;
+        }
+
+        internal IBusinessObjectCollection GetLoadedBOColInternal()
+        {
+            return _boCol;
         }
     }
 }

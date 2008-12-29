@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
@@ -51,23 +52,20 @@ namespace Habanero.BO
 
         public override void Add(TBusinessObject bo)
         {
-            //TODO Add object to this relationship it already exists 
-            // in another relationshp what to do.
+            MultipleRelationshipDef def =  this._relationship.RelationshipDef as MultipleRelationshipDef;
+            if (def != null && !Loading && !bo.Status.IsNew && (def.AddChildAction == AddChildAction.Prevent))
+            {
+                string message = "The " + def.RelatedObjectClassName + 
+                                 " could not be added since the " + def.RelationshipName + 
+                                 " relationship is set up as a composition relationship (AddChildAction.Prevent)";
+                throw new HabaneroDeveloperException(message, message);
+            }
             base.Add(bo);
+            if (this.Loading) return;
             if (IsForeignKeySetup(bo)) return;
 
             SetUpForeignKey(bo);
-            //TODO: should set up relationshp regardless of fk set of not 
             SetupRelatedObject(bo);
-            //TODO: this fxn is now in Base class so can remove.
-            if (!bo.Status.IsNew)
-            {
-                AddedBusinessObjects.Add(bo);    
-            }
-        
-            //TODO: what must we do if you add a business object to a relationship but the foreign key does not match?
-            // Possibly this is a strategy must look at this so that extendable
-            // (see similar issue for remove below)
         }
 
 
@@ -77,11 +75,14 @@ namespace Habanero.BO
         /// <param name="bo">The business object to remove</param>
         public override bool Remove(TBusinessObject bo)
         {
-            //TODO: This should be configured in the relationship the relationship
-            // should allow you to either delete the object when removing or to dereference the object.
-            //for now will dereference as well as delete.
-            if (!bo.Status.IsNew) bo.Delete();
-
+            MultipleRelationshipDef def = this._relationship.RelationshipDef as MultipleRelationshipDef;
+            if (def != null && !Loading && (def.RemoveChildAction == RemoveChildAction.Prevent))
+            {
+                string message = "The " + def.RelatedObjectClassName +
+                                 " could not be removed since the " + def.RelationshipName +
+                                 " relationship is set up as a composition relationship (RemoveChildAction.Prevent)";
+                throw new HabaneroDeveloperException(message, message);
+            }
             DereferenceBO(bo);
             return base.Remove(bo);
         }
@@ -142,33 +143,14 @@ namespace Habanero.BO
             if (reverseRelationship != null)
             {
                 IBusinessObject relatedObject = reverseRelationship.GetRelatedObject();
-                return relatedObject == this._relationship.OwningBO;
+                return (relatedObject == this._relationship.OwningBO);
             }
             return false;
         }
 
-        //This should be temporary code and will b removed.
         internal IRelationship GetReverseRelationship(TBusinessObject bo)
         {
-//This is a horrrible Hack but I do not want to do the reverse relationship 
-            IRelationship reverseRelationship = null;
-            foreach (IRelationship relationship in bo.Relationships)
-            {
-                bool reverseRelatedPropFound = false;
-                foreach (IRelProp prop in this._relationship._relKey)
-                {
-                    foreach (IRelProp relProp in relationship.RelKey)
-                    {
-                        if (prop.RelatedClassPropName != relProp.OwnerPropertyName) continue;
-                        reverseRelatedPropFound = true;
-                        break;
-                    }
-                }
-                if (!reverseRelatedPropFound) continue;
-                reverseRelationship = relationship;
-                break;
-            }
-            return reverseRelationship;
+            return this._relationship.GetReverseRelationship(bo);
         }
 
         private void SetUpForeignKey(TBusinessObject bo)
@@ -179,6 +161,29 @@ namespace Habanero.BO
                     (relPropDef.RelatedClassPropName,
                      _relationship.OwningBO.GetPropertyValue(relPropDef.OwnerPropertyName));
             }
+        }
+
+        protected override void RestoredEventHandler(object sender, BOEventArgs e)
+        {
+            TBusinessObject bo = (TBusinessObject)e.BusinessObject;
+            bool removedListContains = this.RemovedBusinessObjects.Contains(bo);
+            bool addedListContains = this.AddedBusinessObjects.Contains(bo);
+            base.RestoredEventHandler(sender, e);
+            if (removedListContains) this.Add(bo);
+            if (addedListContains) DereferenceBO(bo);
+        }
+
+        protected override void SavedEventHandler(object sender, BOEventArgs e)
+        {
+            TBusinessObject bo = (TBusinessObject)e.BusinessObject;
+            bool removedListContains = this.RemovedBusinessObjects.Contains(bo);
+            base.SavedEventHandler(sender,e);
+            if (removedListContains) RemoveFromPersistedCollection(bo);
+        }
+
+        private void RemoveFromPersistedCollection(TBusinessObject bo)
+        {
+            this.PersistedBusinessObjects.Remove(bo);
         }
     }
 }

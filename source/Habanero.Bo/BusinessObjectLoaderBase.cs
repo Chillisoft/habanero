@@ -21,6 +21,7 @@ using System;
 using System.Collections;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -281,7 +282,9 @@ namespace Habanero.BO
                 return;
             }
             collection.PersistedBOCol.Add(loadedBo);
+            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
             collection.Add(loadedBo);
+            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
         }
 
         //The collection should show all loaded object less removed or deleted object not yet persisted
@@ -315,22 +318,20 @@ namespace Habanero.BO
             //Should a refresh be allowed on a dirty collection (what do we do with BO's
             foreach (IBusinessObject addedBO in addedBoArray)
             {
-                if (!collection.Contains(addedBO) && !collection.MarkForDeletionBOs.Contains(addedBO))
+                if (!collection.Contains(addedBO) && !collection.MarkForDeletionBOCol.Contains(addedBO))
                 {
                     collection.AddWithoutEvents(addedBO);
                 }
-                                
                 if (!collection.AddedBOCol.Contains(addedBO))
                 {
                     collection.AddedBOCol.Add(addedBO);
                 }
-
             }
         }
 
         private static void RestoreMarkForDeleteCollection(IBusinessObjectCollection collection)
         {
-            foreach (BusinessObject businessObject in collection.MarkForDeletionBOs)
+            foreach (BusinessObject businessObject in collection.MarkForDeletionBOCol)
             {
                 collection.Remove(businessObject);
                 collection.RemovedBOCol.Remove(businessObject);
@@ -352,7 +353,6 @@ namespace Habanero.BO
                 collection.AddWithoutEvents(businessObject);
             }
         }
-
 
         protected static void RestoreCreatedCollection
             (IBusinessObjectCollection collection, IList createdBusinessObjects)

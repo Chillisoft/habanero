@@ -4,7 +4,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.BusinessObjectCollection
+namespace Habanero.Test.BO.RelatedBusinessObjectCollection
 {
     [TestFixture]
     public class TestRelatedBOCol_Created //:TestBase
@@ -47,7 +47,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         #region CreateNewBusinessObject
 
         [Test]
-        public void Test_LoadRelatedBoCol()
+        public void Test_LoadRelatedBoCol_Generic()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
@@ -64,7 +64,24 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Test Result -----------------------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
         }
+        [Test]
+        public void Test_LoadRelatedBoCol()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            MultipleRelationship cpRelationship = (MultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
+            ContactPersonTestBO cp = (ContactPersonTestBO)cpRelationship.GetRelatedBusinessObjectCol().CreateBusinessObject();
+            cp.FirstName = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.CreateRandomString();
+            cp.Save();
+            //---------------Assert Precondition----------------
 
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection cpCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(typeof(ContactPersonTestBO), cpRelationship);
+
+            //---------------Test Result -----------------------
+            AssertOneObjectInCurrentAndPersistedCollection(cpCol);
+        }
         [Test]
         public void Test_CreateBusObject()
         {
@@ -165,6 +182,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
             ContactPersonTestBO createdCp = cpCol.CreateBusinessObject();
             createdCp.Surname = TestUtils.RandomString;
+            createdCp.FirstName = TestUtils.RandomString;
             RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
@@ -191,6 +209,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
             newCP.Surname = TestUtil.CreateRandomString();
+            newCP.FirstName = TestUtil.CreateRandomString();
             newCP.Save();
 
             //---------------Assert Precondition----------------
@@ -429,6 +448,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO createdCp = cpCol.CreateBusinessObject();
             createdCp.Surname = TestUtils.RandomString;
+            createdCp.FirstName = TestUtils.RandomString;
             cpCol.Remove(createdCp);
             RegisterForAddedAndRemovedEvents(cpCol);
             //---------------Assert Precondition----------------
@@ -505,45 +525,45 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             cpCol.BusinessObjectAdded += delegate { _addedEventFired = true; };
         }
         private static void AssertOneObjectInCurrentAndCreatedCollection
-            (RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol)
+            (IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(1, cpCol.Count);
-            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeleteBusinessObjects.Count);
-            Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.AddedBOCol.Count);
+            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
+            Assert.AreEqual(0, cpCol.PersistedBOCol.Count);
+            Assert.AreEqual(0, cpCol.MarkForDeletionBOCol.Count);
+            Assert.AreEqual(1, cpCol.CreatedBOCol.Count);
         }
 
         private static void AssertTwoCurrentObjects_OnePsersisted_OneCreated
-            (RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol)
+            (IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(2, cpCol.Count);
-            Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.CreatedBOCol.Count);
             Assert.AreEqual(1, cpCol.PersistedBOCol.Count);
-            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
+            Assert.AreEqual(0, cpCol.AddedBOCol.Count);
         }
 
         private static void AssertOneObjectInCurrentAndPersistedCollection
-            (RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol)
+            (IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(1, cpCol.Count);
-            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeleteBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.AddedBOCol.Count);
+            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
+            Assert.AreEqual(1, cpCol.PersistedBOCol.Count);
+            Assert.AreEqual(0, cpCol.MarkForDeletionBOCol.Count);
+            Assert.AreEqual(0, cpCol.CreatedBOCol.Count);
         }
 
-        private static void AssertAllCollectionsHaveNoItems(RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol)
+        private static void AssertAllCollectionsHaveNoItems(IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(0, cpCol.Count);
-            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeleteBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.AddedBOCol.Count);
+            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
+            Assert.AreEqual(0, cpCol.PersistedBOCol.Count);
+            Assert.AreEqual(0, cpCol.MarkForDeletionBOCol.Count);
+            Assert.AreEqual(0, cpCol.CreatedBOCol.Count);
         }
 
         #endregion

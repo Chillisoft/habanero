@@ -20,6 +20,7 @@
 using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
@@ -32,6 +33,9 @@ namespace Habanero.Test.BO
         public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            DataAccessorInMemory dataAccessor = new DataAccessorInMemory(dataStore);
+            BORegistry.DataAccessor = dataAccessor;
         }
 
         [Test]
@@ -390,7 +394,7 @@ namespace Habanero.Test.BO
             cp.DateOfBirth = dob;
             string surname = Guid.NewGuid().ToString("N");
             cp.Surname = surname;
-
+            cp.Save();
             Criteria dobCriteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, dob.AddDays(2));
             Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
 
@@ -516,9 +520,11 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             DateTime dob = DateTime.Now;
+
             cp.DateOfBirth = dob;
             string surname = Guid.NewGuid().ToString("N");
             cp.Surname = surname;
+            cp.Save();
 
             Criteria dobCriteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, dob);
             Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
@@ -528,7 +534,6 @@ namespace Habanero.Test.BO
             bool isMatch = twoPropCriteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
-            //---------------Tear Down -------------------------
         }
 
         [Test]
@@ -632,7 +637,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString("N");
-
+            cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, cp.Surname);
@@ -708,7 +713,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.DateOfBirth = DateTime.Now;
-
+            cp.Surname = TestUtil.CreateRandomString();
+            cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, DateTime.Now.AddDays(-1));
@@ -746,6 +752,7 @@ namespace Habanero.Test.BO
             cp.Surname = Guid.NewGuid().ToString("N");
             DateTimeToday dateTimeToday = new DateTimeToday();
             cp.DateOfBirth = DateTime.Today.AddDays(1);
+            cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, dateTimeToday);
@@ -785,6 +792,7 @@ namespace Habanero.Test.BO
             cp.Surname = Guid.NewGuid().ToString("N");
             DateTimeNow dateTimeToday = new DateTimeNow();
             cp.DateOfBirth = DateTime.Today.AddDays(1);
+            cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, dateTimeToday);
@@ -856,7 +864,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.DateOfBirth = DateTime.Now;
-
+            cp.Surname = TestUtil.CreateRandomString();
+            cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThan, DateTime.Now.AddDays(1));
@@ -909,6 +918,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
             Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThan, new System.Drawing.Bitmap(20, 20));
+            cp.Surname = TestUtil.CreateRandomString();
+            cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             try
@@ -971,7 +982,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.DateOfBirth = DateTime.Now;
-
+            cp.Surname = TestUtil.CreateRandomString();
+            cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThanEqual, DateTime.Now.AddDays(1));
@@ -988,7 +1000,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.DateOfBirth = DateTime.Now;
-
+            cp.Surname = TestUtil.CreateRandomString();
+            cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThanEqual, cp.DateOfBirth);
@@ -1041,6 +1054,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
             Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThanEqual, new System.Drawing.Bitmap(20, 20));
+            cp.Surname = TestUtil.CreateRandomString();
+            cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             try
@@ -1103,7 +1118,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.DateOfBirth = DateTime.Now;
-
+            cp.Surname = TestUtil.CreateRandomString();
+            cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThanEqual, DateTime.Now.AddDays(-1));
@@ -1120,7 +1136,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.DateOfBirth = DateTime.Now;
-
+            cp.Surname = TestUtil.CreateRandomString();
+            cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThanEqual, cp.DateOfBirth);
@@ -1173,6 +1190,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
             Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.GreaterThanEqual, new System.Drawing.Bitmap(20, 20));
+            cp.Surname = TestUtil.CreateRandomString();
+            cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             try
@@ -1255,7 +1274,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString("N");
-
+            cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotEquals, cp.Surname);
@@ -1306,6 +1325,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "Surname";
             Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.NotEquals, null);
+            cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             bool isMatch = nameCriteria.IsMatch(cp);
@@ -1357,6 +1377,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "This is MyValue Surname";
+            cp.Save();
+
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Like, "%MyValue%");
@@ -1373,6 +1395,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "MyValue";
+            cp.Save();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1390,6 +1413,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "MyValue is surname";
+            cp.Save();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1408,6 +1432,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "surname is MyValue";
+            cp.Save();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1442,6 +1467,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "MyValue";
+            cp.Save();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1459,6 +1485,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "MyValue is surname";
+            cp.Save();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1512,6 +1539,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "MyValue";
+            cp.Save();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1547,6 +1575,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "surname is MyValue";
+            cp.Save();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1617,6 +1646,9 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
             Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.Like, new System.Drawing.Bitmap(20, 20));
+            cp.Surname = TestUtil.CreateRandomString();
+            cp.Save();
+
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             try
@@ -1678,6 +1710,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "This is MyValue Surname";
+            cp.Save();
+
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.NotLike, "%MyValue%");
@@ -1694,6 +1728,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "MyValue";
+            cp.Save();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1711,6 +1746,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "MyValue is surname";
+            cp.Save();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1729,6 +1765,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "surname is MyValue";
+            cp.Save();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1762,6 +1799,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "MyValue";
+            cp.Save();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1778,6 +1816,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "MyValue is surname";
+            cp.Save();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1828,6 +1867,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "MyValue";
+            cp.Save();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1862,6 +1902,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "surname is MyValue";
+            cp.Save();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1928,6 +1969,9 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
             Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.NotLike, new System.Drawing.Bitmap(20, 20));
+            cp.Surname = TestUtil.CreateRandomString();
+            cp.Save();
+            
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             try
@@ -2005,6 +2049,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "MyValue";
+            cp.Save();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -2073,6 +2118,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = "MyValue";
+            cp.Save();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -2135,6 +2181,8 @@ namespace Habanero.Test.BO
             cp.Surname = Guid.NewGuid().ToString("N");
             DateTimeToday dateTimeToday = new DateTimeToday();
             cp.DateOfBirth = DateTime.Today;
+            cp.Save();
+
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, dateTimeToday);
@@ -2192,6 +2240,8 @@ namespace Habanero.Test.BO
             cp.Surname = Guid.NewGuid().ToString("N");
             DateTimeToday dateTimeToday = new DateTimeToday();
             cp.DateOfBirth = DateTime.Today.AddDays(-1);
+            cp.Save();
+
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThan, dateTimeToday);
@@ -2230,6 +2280,8 @@ namespace Habanero.Test.BO
             cp.Surname = Guid.NewGuid().ToString("N");
             DateTimeNow dateTimeToday = new DateTimeNow();
             cp.DateOfBirth = DateTime.Today.AddDays(-1);
+            cp.Save();
+
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThan, dateTimeToday);

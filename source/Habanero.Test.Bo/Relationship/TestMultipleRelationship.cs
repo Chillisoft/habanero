@@ -43,18 +43,18 @@ namespace Habanero.Test.BO
         public void TestTypeOfMultipleCollection()
         {
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
-            new Address();
+            new AddressTestBO();
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
-            
-            Assert.AreSame(typeof(RelatedBusinessObjectCollection<Address>), cp.Addresses.GetType());
+
+            Assert.AreSame(typeof(RelatedBusinessObjectCollection<AddressTestBO>), cp.Addresses.GetType());
         }
 
         [Test]
         public void TestReloadingRelationship()
         {
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
-            new Address();
+            new AddressTestBO();
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
             IBusinessObjectCollection addresses = cp.Addresses;

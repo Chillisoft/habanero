@@ -246,8 +246,11 @@ namespace Habanero.Base
 
             //todo: criterias with relationships - this will pass the source through to the GetPropertyValue
             object leftValue = null;
-            if (_field.Source != null && _field.Source.ChildSource != null) leftValue = businessObject.GetPropertyValue(_field.Source.ChildSource, _field.PropertyName);
-            else leftValue = businessObject.GetPropertyValue( _field.PropertyName);
+            if (_field.Source != null && _field.Source.ChildSource != null)
+            {
+                leftValue = businessObject.GetPersistedPropertyValue(_field.Source.ChildSource, _field.PropertyName);
+            }
+            else leftValue = businessObject.GetPersistedPropertyValue(null, _field.PropertyName);
             if (leftValue == null)
             {
                 return IsNullMatch();

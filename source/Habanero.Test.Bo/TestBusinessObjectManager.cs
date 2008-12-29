@@ -915,7 +915,7 @@ namespace Habanero.Test.BO
             BORegistry.DataAccessor = new DataAccessorDB();
             OrganisationTestBO.LoadDefaultClassDef();
             TestUtil.WaitForGC();
-            Address address;
+            AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO =
                 ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
 
@@ -931,7 +931,7 @@ namespace Habanero.Test.BO
             IBusinessObjectCollection colContactPeople = org.Relationships["ContactPeople"].GetRelatedBusinessObjectCol();
             ContactPersonTestBO loadedCP = (ContactPersonTestBO) colContactPeople[0];
             IBusinessObjectCollection colAddresses = loadedCP.Relationships["Addresses"].GetRelatedBusinessObjectCol();
-            Address loadedAdddress = (Address) colAddresses[0];
+            AddressTestBO loadedAdddress = (AddressTestBO) colAddresses[0];
 
             //---------------Test Result -----------------------
             Assert.AreEqual(3, BusinessObjectManager.Instance.Count);

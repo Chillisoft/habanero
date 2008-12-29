@@ -166,5 +166,13 @@ namespace Habanero.Base
 
         event EventHandler<BOEventArgs> PropertyUpdated;
         event EventHandler<BOEventArgs> MarkedForDelete;
+
+        /// <summary>
+        /// Returns the value stored in the DataStore for the property name specified, accessing it through the 'source'
+        /// </summary>
+        /// <param name="source">The source of the property ie - the relationship or C# property this property is on</param>
+        /// <param name="propName">The property name</param>
+        /// <returns>Returns the value if found</returns>
+        object GetPersistedPropertyValue(Source source, string propName);
     }
 }

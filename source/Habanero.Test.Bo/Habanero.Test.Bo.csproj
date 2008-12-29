@@ -129,12 +129,16 @@
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_AddedBOs.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_CreateBO.cs" />
     <Compile Include="BusinessObjectCollection\TestOrderCriteria.cs" />
+    <Compile Include="BusinessObjectCollection\TestRelatedBoCol_Added.cs" />
     <Compile Include="BusinessObjectCollection\TestRelatedBOCol_Created.cs" />
+    <Compile Include="BusinessObjectCollection\TestRelatedBoCol_Edits.cs" />
     <Compile Include="BusinessObjectCollection\TestRelatedBusinessObjectCollection.cs" />
+    <Compile Include="BusinessObjectCollection\TestUtilsRelated.cs" />
     <Compile Include="BusxinessObjectLoader\TestBusinessObjectLoader.cs" />
     <Compile Include="BusxinessObjectLoader\TestBusinessObjectLoaderWithInheritance.cs" />
     <Compile Include="BusxinessObjectLoader\TestBusinessObjectLoader_GetBusinessObjectCollection.cs" />
     <Compile Include="BusxinessObjectLoader\TestBusinessObjectLoader_RefreshCollection.cs" />
+    <Compile Include="BusinessObjectCollection\TestRelatedBOCol_Composistion.cs" />
     <Compile Include="CriteriaManager\TestCriteriaDB.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
     <Compile Include="CriteriaManager\TestHabaneroStringBuilder.cs" />

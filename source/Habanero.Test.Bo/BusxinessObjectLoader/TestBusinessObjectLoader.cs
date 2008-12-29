@@ -97,8 +97,8 @@ namespace Habanero.Test.BO
 
         private static SelectQuery CreateSelectQuery(ContactPersonTestBO cp)
         {
-            string surname = "Surname";
-            string surnameField = "Surname_field";
+            const string surname = "Surname";
+            const string surnameField = "Surname_field";
             Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.Equals, cp.Surname);
             criteria.Field.Source = new Source(cp.ClassDef.ClassName);
             criteria.Field.FieldName = surnameField;
@@ -225,7 +225,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO personToDelete = ContactPersonTestBO.CreateSavedContactPerson();
-            personToDelete.Delete();
+            personToDelete.MarkForDelete();
             personToDelete.Save();
 
             //Ensure that a fresh object is loaded from DB
@@ -242,7 +242,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO personToDelete = ContactPersonTestBO.CreateSavedContactPerson();
-            personToDelete.Delete();
+            personToDelete.MarkForDelete();
             personToDelete.Save();
 
             //Ensure that a fresh object is loaded from DB
@@ -377,14 +377,14 @@ namespace Habanero.Test.BO
         public void TestGetRelatedBusinessObjectCollection_Generic()
         {
             //---------------Set up test pack-------------------
-            Address address;
+            AddressTestBO address;
             ContactPersonTestBO cp = ContactPersonTestBO.CreateContactPersonWithOneAddress_DeleteDoNothing(out address);
             address.ContactPersonID = cp.ContactPersonID;
             address.Save();
          
             //---------------Execute Test ----------------------
-            RelatedBusinessObjectCollection<Address> addresses =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<Address>(cp.Relationships["Addresses"]);
+            RelatedBusinessObjectCollection<AddressTestBO> addresses =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<AddressTestBO>(cp.Relationships["Addresses"]);
 
             //---------------Test Result -----------------------
             Criteria relationshipCriteria = Criteria.FromRelationship(cp.Relationships["Addresses"]);
@@ -399,7 +399,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteDoNothing();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-            Address address = new Address();
+            AddressTestBO address = new AddressTestBO();
             address.ContactPersonID = cp.ContactPersonID;
             address.Save();
 
@@ -409,7 +409,7 @@ namespace Habanero.Test.BO
 
             IBusinessObjectCollection addresses =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(
-                    typeof(Address), cp.Relationships["Addresses"]);
+                    typeof(AddressTestBO), cp.Relationships["Addresses"]);
 
             //---------------Test Result -----------------------
             Criteria relationshipCriteria = Criteria.FromRelationship(cp.Relationships["Addresses"]);
@@ -426,12 +426,12 @@ namespace Habanero.Test.BO
             SetupDataAccessor();
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_SortOrder_AddressLine1();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-            Address address1 = Address.CreateSavedAddress(cp.ContactPersonID, "ffff");
-            Address address2 = Address.CreateSavedAddress(cp.ContactPersonID, "bbbb");
+            AddressTestBO address1 = AddressTestBO.CreateSavedAddress(cp.ContactPersonID, "ffff");
+            AddressTestBO address2 = AddressTestBO.CreateSavedAddress(cp.ContactPersonID, "bbbb");
 
             //---------------Execute Test ----------------------
-            RelatedBusinessObjectCollection<Address> addresses =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<Address>(cp.Relationships["Addresses"]);
+            RelatedBusinessObjectCollection<AddressTestBO> addresses =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<AddressTestBO>(cp.Relationships["Addresses"]);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, addresses.Count);
@@ -446,11 +446,11 @@ namespace Habanero.Test.BO
             SetupDataAccessor();
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_SortOrder_AddressLine1();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-            Address address1 = new Address();
+            AddressTestBO address1 = new AddressTestBO();
             address1.ContactPersonID = cp.ContactPersonID;
             address1.AddressLine1 = "ffff";
             address1.Save();
-            Address address2 = new Address();
+            AddressTestBO address2 = new AddressTestBO();
             address2.ContactPersonID = cp.ContactPersonID;
             address2.AddressLine1 = "bbbb";
             address2.Save();
@@ -459,7 +459,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
 
             IBusinessObjectCollection addresses =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(typeof(Address),
+                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(typeof(AddressTestBO),
                     cp.Relationships["Addresses"]);
             //---------------Test Result -----------------------
             Assert.AreEqual(2, addresses.Count);
@@ -474,11 +474,11 @@ namespace Habanero.Test.BO
             SetupDataAccessor();
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_SortOrder_AddressLine1();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-            Address address1 = new Address();
+            AddressTestBO address1 = new AddressTestBO();
             address1.ContactPersonID = cp.ContactPersonID;
             address1.AddressLine1 = "ffff";
             address1.Save();
-            Address address2 = new Address();
+            AddressTestBO address2 = new AddressTestBO();
             address2.ContactPersonID = cp.ContactPersonID;
             address2.AddressLine1 = "bbbb";
             address2.Save();
@@ -503,10 +503,10 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteDoNothing();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-            Address address = Address.CreateSavedAddress(cp.ContactPersonID);
+            AddressTestBO address = AddressTestBO.CreateSavedAddress(cp.ContactPersonID);
 
             //---------------Execute Test ----------------------
-            RelatedBusinessObjectCollection<Address> addresses = cp.Addresses;
+            RelatedBusinessObjectCollection<AddressTestBO> addresses = cp.Addresses;
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, addresses.Count);
@@ -531,7 +531,7 @@ namespace Habanero.Test.BO
         public void Test3LayersLoadRelated_LoadsObjectFromObjectManager()
         {
             //---------------Set up test pack-------------------
-            Address address;
+            AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO =
                 ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
             OrganisationTestBO.LoadDefaultClassDef();
@@ -545,11 +545,11 @@ namespace Habanero.Test.BO
             IBusinessObjectCollection col = org.Relationships["ContactPeople"].GetRelatedBusinessObjectCol();
             ContactPersonTestBO loadedContactPerson = (ContactPersonTestBO) col[0];
             IBusinessObjectCollection colAddresses = loadedContactPerson.Relationships["Addresses"].GetRelatedBusinessObjectCol();
-            IBusinessObject loadedAddress = colAddresses[0];
+            IBusinessObject loadedAddressTestBO = colAddresses[0];
 
             //---------------Test Result -----------------------
             Assert.AreSame(loadedContactPerson, contactPersonTestBO);
-            Assert.AreSame(loadedAddress, address);
+            Assert.AreSame(loadedAddressTestBO, address);
         }
         
         [Test, ExpectedException(typeof(InvalidPropertyNameException))]
@@ -1196,7 +1196,7 @@ namespace Habanero.Test.BO
 
                 ContactPersonTestBO cpLoaded =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cpTemp.ID);
-                cpTemp.Delete();
+                cpTemp.MarkForDelete();
                 cpTemp.Save();
 
                 //-------------Execute Test ---------------------

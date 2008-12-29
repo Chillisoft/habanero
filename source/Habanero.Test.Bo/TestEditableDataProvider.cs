@@ -110,7 +110,7 @@ namespace Habanero.Test.BO
 //                }
 //            }
 
-            numDeleted = _collection.MarkForDeletionBOs.Count;
+            numDeleted = _collection.MarkForDeletionBOCol.Count;
             Assert.AreEqual(1, numDeleted, "BO should be marked as deleted.");
         }
 

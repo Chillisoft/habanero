@@ -305,12 +305,13 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
-					<relationship name=""Addresses"" type=""multiple"" relatedClass=""Address"" relatedAssembly=""Habanero.Test"" deleteAction=""DeleteRelated"">
+					<relationship name=""Addresses"" type=""multiple"" relatedClass=""AddressTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"">
 						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
 					</relationship>
 			    </class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
+            CreateRelatedAddressClassDef(itsLoader);
             return itsClassDef;
         }
 
@@ -368,12 +369,13 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
-					<relationship name=""Addresses"" type=""multiple"" relatedClass=""Address"" relatedAssembly=""Habanero.Test"" deleteAction=""Prevent"">
+					<relationship name=""Addresses"" type=""multiple"" relatedClass=""AddressTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""Prevent"">
 						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
 					</relationship>
 			    </class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
+            CreateRelatedAddressClassDef(itsLoader);
             return itsClassDef;
         }
 
@@ -454,13 +456,36 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
-					<relationship name=""Addresses"" type=""multiple"" relatedClass=""Address"" relatedAssembly=""Habanero.Test"" deleteAction=""DoNothing"">
+					<relationship name=""Addresses"" type=""multiple"" relatedClass=""AddressTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DoNothing"">
 						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
 					</relationship>
 			    </class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
+
+            CreateRelatedAddressClassDef(itsLoader);
             return itsClassDef;
+        }
+
+        private static void CreateRelatedAddressClassDef(XmlClassLoader itsLoader)
+        {
+            ClassDef addressClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""AddressTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person_address"">
+					<property  name=""AddressID"" type=""Guid"" />
+                    <property name=""AddressLine1"" />
+                    <property name=""OrganisationID"" type=""Guid"" />
+                    <property  name=""ContactPersonID"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""AddressID"" />
+					</primaryKey>
+					<relationship name=""ContactPersonTestBO"" type=""single"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DoNothing"">
+						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
+					</relationship>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(addressClassDef);
         }
 
 
@@ -479,12 +504,13 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
-					<relationship name=""Addresses"" type=""multiple"" relatedClass=""Address"" relatedAssembly=""Habanero.Test"" deleteAction=""DoNothing"" orderBy=""AddressLine1"">
+					<relationship name=""Addresses"" type=""multiple"" relatedClass=""AddressTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DoNothing"" orderBy=""AddressLine1"">
 						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
 					</relationship>
 			    </class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
+            CreateRelatedAddressClassDef(itsLoader);
             return itsClassDef;
         }
 
@@ -649,19 +675,19 @@ namespace Habanero.Test.BO
             return contactPersonTestBO;
         }
 
-        public static ContactPersonTestBO CreateContactPersonWithOneAddress_CascadeDelete(out Address address)
+        public static ContactPersonTestBO CreateContactPersonWithOneAddress_CascadeDelete(out AddressTestBO address)
         {
             LoadClassDefWithAddressesRelationship_DeleteRelated();
             return CreateContactPerson(out address);
         }
 
-        public static ContactPersonTestBO CreateContactPersonWithOneAddress_PreventDelete(out Address address)
+        public static ContactPersonTestBO CreateContactPersonWithOneAddress_PreventDelete(out AddressTestBO address)
         {
             LoadClassDefWithAddressesRelationship_PreventDelete();
             return CreateContactPerson(out address);
         }
 
-        private static ContactPersonTestBO CreateContactPerson(out Address address)
+        private static ContactPersonTestBO CreateContactPerson(out AddressTestBO address)
         {
             ContactPersonTestBO contactPersonTestBO = CreateSavedContactPersonNoAddresses();
             address = contactPersonTestBO.Addresses.CreateBusinessObject();
@@ -678,7 +704,7 @@ namespace Habanero.Test.BO
             return contactPersonTestBO;
         }
 
-        public static ContactPersonTestBO CreateContactPersonWithOneAddress_DeleteDoNothing(out Address address)
+        public static ContactPersonTestBO CreateContactPersonWithOneAddress_DeleteDoNothing(out AddressTestBO address)
         {
             LoadClassDefWithAddressesRelationship_DeleteDoNothing();
             return CreateContactPerson(out address);
@@ -793,18 +819,18 @@ namespace Habanero.Test.BO
             set { SetPropertyValue("DateOfBirth", value); }
         }
 
-        public RelatedBusinessObjectCollection<Address> Addresses
+        public RelatedBusinessObjectCollection<AddressTestBO> Addresses
         {
             get
             {
                 return
-                    (RelatedBusinessObjectCollection<Address>)Relationships.GetRelatedCollection<Address>("Addresses");
+                    (RelatedBusinessObjectCollection<AddressTestBO>)Relationships.GetRelatedCollection<AddressTestBO>("Addresses");
             }
         }
 
-        public Guid OrganisationID
+        public Guid? OrganisationID
         {
-            get { return (Guid)GetPropertyValue("OrganisationID"); }
+            get { return (Guid?)GetPropertyValue("OrganisationID"); }
             set { SetPropertyValue("OrganisationID", value); }
         }
 
@@ -823,9 +849,11 @@ namespace Habanero.Test.BO
                     Relationships.GetRelatedCollection<AddressTestBO>("AddressTestBOs");
             }
         }
-
-
-
+        public OrganisationTestBO Organisation
+        {
+            get { return Relationships.GetRelatedObject<OrganisationTestBO>("Organisation"); }
+            set { Relationships.SetRelatedObject("Organisation", value); }
+        }
 
         protected internal override void AfterLoad()
         {

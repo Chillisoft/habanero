@@ -45,6 +45,36 @@ namespace Habanero.BO
             _relationships = new Dictionary<string, IRelationship>();
         }
 
+        ///<summary>
+        /// Returns whether the relationship is dirty or not.
+        /// A relationship is always dirty if it has Added, created, removed or deleted Related business objects.
+        /// If the relationship is of type composition or aggregation then it is dirty if it has any 
+        ///  related (children) business objects that are dirty.
+        ///</summary>
+        public bool IsDirty
+        {
+            get {
+                foreach (KeyValuePair<string, IRelationship> pair in _relationships)
+                {
+                    if (pair.Value != null && pair.Value.IsDirty)
+                    {
+                        return true;
+                    }        
+                }
+                return false;
+            }
+        }
+
+        internal IList<IBusinessObject> GetDirtyChildren()
+        {
+            IList<IBusinessObject> dirtyBusinessObjects = new List<IBusinessObject>();
+            foreach (KeyValuePair<string, IRelationship> pair in _relationships)
+            {
+                pair.Value.GetDirtyChildren();
+            }
+            return dirtyBusinessObjects;
+        }
+
         /// <summary>
         /// Adds a relationship to the business object
         /// </summary>
@@ -155,6 +185,8 @@ namespace Habanero.BO
     	}
 
     	#endregion
+
+
 
     	/// <summary>
 		/// Returns a collection of business objects that are connected to

@@ -45,15 +45,24 @@ namespace Habanero.BO
         {
         }
 
+        ///<summary>
+        /// Returns true if the relationship has already been loaded. I.e. if the Related objects have been loaded from the 
+        ///   datastore.
+        ///</summary>
+        internal bool IsRelationshipLoaded
+        {
+            get { return (_boCol != null); }
+        }
+
         protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>()
         {
             //TODO: Need a strategy for what should be happening here when the collection is previously loaded.
             //I would suggest option 1
             //1) The collection is reloaded from the database as is currently being done.
             //2) The collection is is returned
-            if(_boCol != null)
+            if (_boCol != null)
             {
-                BORegistry.DataAccessor.BusinessObjectLoader.Refresh((BusinessObjectCollection<TBusinessObject>)_boCol);
+                BORegistry.DataAccessor.BusinessObjectLoader.Refresh((BusinessObjectCollection<TBusinessObject>) _boCol);
                 return _boCol;
             }
 
@@ -64,24 +73,33 @@ namespace Habanero.BO
 
             CheckTypeIsASubClassOfGenericType<TBusinessObject>(relatedBusinessObjectType, genericType);
 
-            IBusinessObjectCollection boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
+            _boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
 
-//            if (_relDef.KeepReferenceToRelatedObject)
-//            {
-                _boCol = boCol;
-//            }
-            return boCol;
+            return _boCol;
+        }
+
+        protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
+        {
+            if (_boCol != null)
+            {
+                BORegistry.DataAccessor.BusinessObjectLoader.Refresh(_boCol);
+                return _boCol;
+            }
+            Type type = _relDef.RelatedObjectClassType;
+            CheckTypeCanBeCreated(type);
+            _boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(type, this);
+            return _boCol;
         }
 
         private static void CheckTypeIsASubClassOfGenericType<TBusinessObject>(Type type, Type collectionItemType)
         {
             if (!(type == collectionItemType || type.IsSubclassOf(collectionItemType)))
             {
-                throw new HabaneroArgumentException(String.Format(
-                                                        "An error occurred while attempting to load a related " +
-                                                        "business object collection of type '{0}' into a " +
-                                                        "collection of the specified generic type('{1}').",
-                                                        type, typeof(TBusinessObject)));
+                throw new HabaneroArgumentException
+                    (String.Format
+                         ("An error occurred while attempting to load a related "
+                          + "business object collection of type '{0}' into a "
+                          + "collection of the specified generic type('{1}').", type, typeof (TBusinessObject)));
             }
         }
 
@@ -94,12 +112,13 @@ namespace Habanero.BO
             }
             catch (Exception ex)
             {
-                throw new UnknownTypeNameException(String.Format(
-                                                       "An error occurred while attempting to load a related " +
-                                                       "business object collection, with the type given as '{0}'. " +
-                                                       "Check that the given type exists and has been correctly " +
-                                                       "defined in the relationship and class definitions for the classes " +
-                                                       "involved.", type), ex);
+                throw new UnknownTypeNameException
+                    (String.Format
+                         ("An error occurred while attempting to load a related "
+                          + "business object collection, with the type given as '{0}'. "
+                          + "Check that the given type exists and has been correctly "
+                          + "defined in the relationship and class definitions for the classes " + "involved.", type),
+                     ex);
             }
         }
     }

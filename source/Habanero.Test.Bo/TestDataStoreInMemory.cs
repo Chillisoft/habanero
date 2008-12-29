@@ -91,10 +91,12 @@ namespace Habanero.Test.BO
         public void TestFind()
         {
             //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory(new DataStoreInMemory());
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString("N");
+            cp.Save();
             DataStoreInMemory dataStore = new DataStoreInMemory();
             dataStore.Add(cp);
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, cp.Surname);
@@ -111,10 +113,12 @@ namespace Habanero.Test.BO
         public void TestFind_Untyped()
         {
             //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory(new DataStoreInMemory());
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString("N");
+            cp.Save();
             DataStoreInMemory dataStore = new DataStoreInMemory();
             dataStore.Add(cp);
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, cp.Surname);
@@ -151,17 +155,22 @@ namespace Habanero.Test.BO
         public void TestFindAll()
         {
             //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory(new DataStoreInMemory());
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
             DataStoreInMemory dataStore = new DataStoreInMemory();
             DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = new ContactPersonTestBO();
             cp1.DateOfBirth = now;
+            cp1.Surname = TestUtil.CreateRandomString();
+            cp1.Save();
             dataStore.Add(cp1);
             ContactPersonTestBO cp2 = new ContactPersonTestBO();
             cp2.DateOfBirth = now;
             dataStore.Add(cp2);
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            cp2.Surname = TestUtil.CreateRandomString();
+            cp2.Save();
 
             //---------------Execute Test ----------------------
             BusinessObjectCollection<ContactPersonTestBO> col = dataStore.FindAll<ContactPersonTestBO>(criteria);
@@ -173,20 +182,24 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
-
         [Test]
         public void TestFindAll_Untyped()
         {
             //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory(new DataStoreInMemory());
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
             DataStoreInMemory dataStore = new DataStoreInMemory();
             DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = new ContactPersonTestBO();
             cp1.DateOfBirth = now;
+            cp1.Surname = TestUtil.CreateRandomString();
+            cp1.Save();
             dataStore.Add(cp1);
             ContactPersonTestBO cp2 = new ContactPersonTestBO();
             cp2.DateOfBirth = now;
+            cp2.Surname = TestUtil.CreateRandomString();
+            cp2.Save();
             dataStore.Add(cp2);
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
 

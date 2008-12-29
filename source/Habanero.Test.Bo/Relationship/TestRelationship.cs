@@ -61,14 +61,14 @@ namespace Habanero.Test.BO
         public void TestRefreshWithRemovedChild()
         {
             //---------------Set up test pack-------------------
-            Address address;
+            AddressTestBO address;
             ContactPersonTestBO cp = ContactPersonTestBO.CreateContactPersonWithOneAddress_DeleteDoNothing(out address);
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cp.Addresses.Count);
 
             //---------------Execute Test ----------------------
-            address.Delete();
+            address.MarkForDelete();
             address.Save();
 
             //---------------Test Result -----------------------
@@ -78,7 +78,7 @@ namespace Habanero.Test.BO
         public void TestRefreshWithRemovedChild_DereferenceChild()
         {
             //---------------Set up test pack-------------------
-            Address address;
+            AddressTestBO address;
             ContactPersonTestBO cp = ContactPersonTestBO.CreateContactPersonWithOneAddress_DeleteDoNothing(out address);
             ContactPersonTestBO cp2 = new ContactPersonTestBO();
             cp2.Surname = Guid.NewGuid().ToString("N");
@@ -91,7 +91,7 @@ namespace Habanero.Test.BO
             address.ContactPersonID = cp2.ContactPersonID;
             address.Save();
             address.SetDeletable(false);
-            BusinessObjectCollection<Address> addresses = cp.Addresses;
+            RelatedBusinessObjectCollection<AddressTestBO> addresses = cp.Addresses;
 
             //---------------Test Result -----------------------
             Assert.AreEqual(0, addresses.Count);
@@ -151,11 +151,11 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_SortOrder_AddressLine1();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-            Address address1 = new Address();
+            AddressTestBO address1 = new AddressTestBO();
             address1.ContactPersonID = cp.ContactPersonID;
             address1.AddressLine1 = "ffff";
             address1.Save();
-            Address address2 = new Address();
+            AddressTestBO address2 = new AddressTestBO();
             address2.ContactPersonID = cp.ContactPersonID;
             address2.AddressLine1 = "bbbb";
             address2.Save();
@@ -163,7 +163,7 @@ namespace Habanero.Test.BO
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
 
-            RelatedBusinessObjectCollection<Address> addresses = cp.Addresses;
+            RelatedBusinessObjectCollection<AddressTestBO> addresses = cp.Addresses;
             //---------------Test Result -----------------------
             Assert.AreEqual(2, addresses.Count);
             Assert.AreSame(address1, addresses[1]);
@@ -178,17 +178,17 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_SortOrder_AddressLine1();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-            Address address1 = new Address();
+            AddressTestBO address1 = new AddressTestBO();
             address1.ContactPersonID = cp.ContactPersonID;
             address1.AddressLine1 = "ffff";
             address1.Save();
-            Address address2 = new Address();
+            AddressTestBO address2 = new AddressTestBO();
             address2.ContactPersonID = cp.ContactPersonID;
             address2.AddressLine1 = "bbbb";
             address2.Save();
 
             //---------------Assert PreConditions---------------     
-            RelatedBusinessObjectCollection<Address> addresses = cp.Addresses;
+            RelatedBusinessObjectCollection<AddressTestBO> addresses = cp.Addresses;
             Assert.AreEqual(2, addresses.Count);
             Assert.AreSame(address1, addresses[1]);
             Assert.AreSame(address2, addresses[0]);
@@ -196,7 +196,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             address2.AddressLine1 = "zzzzz";
             address2.Save();
-            RelatedBusinessObjectCollection<Address> addressesAfterChangeOrder = cp.Addresses;
+            RelatedBusinessObjectCollection<AddressTestBO> addressesAfterChangeOrder = cp.Addresses;
             
             //---------------Test Result -----------------------
 
@@ -229,7 +229,7 @@ namespace Habanero.Test.BO
             Assert.AreSame(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection));
             BusinessObjectManager.Instance.ClearLoadedObjects();
             Assert.AreSame(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection));
-            mMockBo.Delete();
+            mMockBo.MarkForDelete();
             mMockBo.Save();
         }
 
@@ -258,7 +258,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(ReferenceEquals(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection)));
             BusinessObjectManager.Instance.ClearLoadedObjects();
             Assert.IsTrue(ReferenceEquals(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection)));
-            mMockBo.Delete();
+            mMockBo.MarkForDelete();
             mMockBo.Save();
         }
 
@@ -287,7 +287,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(rel.HasRelationship(), "Should have a related object since the relating props have values again");
             ltempBO = (MockBO)rel.GetRelatedObject(DatabaseConnection.CurrentConnection);
             Assert.IsNotNull(ltempBO, "The related object should exist again"); 
-            mMockBo.Delete();
+            mMockBo.MarkForDelete();
             mMockBo.Save();
         }
     }

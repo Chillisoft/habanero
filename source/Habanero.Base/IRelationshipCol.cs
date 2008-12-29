@@ -102,5 +102,13 @@ namespace Habanero.Base
         ///<param name="relationshipName">The name of the relationship to search for</param>
         ///<returns></returns>
         bool Contains(string relationshipName);
+
+        ///<summary>
+        /// Returns whether the relationship is dirty or not.
+        /// A relationship is always dirty if it has Added, created, removed or deleted Related business objects.
+        /// If the relationship is of type composition or aggregation then it is dirty if it has any 
+        ///  related (children) business objects that are dirty.
+        ///</summary>
+        bool IsDirty { get; }
     }
 }
