@@ -103,12 +103,10 @@ namespace Habanero.BO
         {
             ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
 
-
             foreach (TBusinessObject bo in _removedBusinessObjects)
             {
                 committer.AddBusinessObject(bo);
             }
-            //TODO Remove save.
             SaveAllInTransaction(committer);
             _removedBusinessObjects.Clear();
         }

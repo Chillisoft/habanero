@@ -208,12 +208,15 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
                 Assert.Fail("HabaneroDeveloperException not thrown. Exception Thrown was : " + ex.Message);
             }
         }
+
         [Test]
         public void Test_ResetParent_NewChild_ReverseRelationship_Loaded()
         {
             //An new invoice line can be added to an Invoice 
             //(In Habanero a new invoice line can be added to an invoice). 
-            // This rule must be applied for the reverse relationship
+            // This rule is also be applied for the reverse relationship
+            // In this case the organisation can be set for myBO since myBO has never
+            //   been associated with am organisation.
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             Relationship compositionRelationship = (Relationship)organisationTestBO.Relationships["ContactPeople"]; 
@@ -239,7 +242,9 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         {
             //An new invoice line can be added to an Invoice 
             //(In Habanero a new invoice line can be added to an invoice). 
-            // This rule must be applied for the reverse relationship
+            // This rule is also be applied for the reverse relationship
+            // In this case the organisation can be set to null for myBO since myBO has never
+            //   been associated with am organisation.
             //---------------Set up test pack-------------------
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
 
@@ -258,7 +263,9 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         {
             //An new invoice line can be added to an Invoice 
             //(In Habanero a new invoice line can be added to an invoice). 
-            // This rule must be applied for the reverse relationship
+            // This rule is also be applied for the reverse relationship
+            // In this case the organisation can not be set to null for myBO since myBO has
+            //   been associated with am organisation.
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             Relationship compositionRelationship = (Relationship)organisationTestBO.Relationships["ContactPeople"];
@@ -294,51 +301,9 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         }
 
         [Test]
-        public void Test_MultipleRelationship_CollectionIsLoaded_Generic()
-        {
-            //---------------Set up test pack-------------------
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            Relationship compositionRelationship = (Relationship)organisationTestBO.Relationships["ContactPeople"]; 
-            ContactPersonTestBO myBO = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
-            myBO.OrganisationID = organisationTestBO.OrganisationID;
-            myBO.Save();
-
-            //---------------Assert Precondition----------------
-            Assert.IsFalse(((MultipleRelationship)compositionRelationship).IsRelationshipLoaded);
-
-            //---------------Execute Test ----------------------
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol < ContactPersonTestBO>();
-
-            //---------------Test Result -----------------------
-            Assert.IsTrue(((MultipleRelationship)compositionRelationship).IsRelationshipLoaded);
-            Assert.AreEqual(1, cpCol.Count);
-        }
-
-        [Test]
-        public void Test_MultipleRelationship_CollectionIsLoaded()
-        {
-            //---------------Set up test pack-------------------
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            Relationship compositionRelationship = (Relationship)organisationTestBO.Relationships["ContactPeople"];             //            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-            //                new RelatedBusinessObjectCollection<ContactPersonTestBO>(compositionRelationship);
-            ContactPersonTestBO myBO = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
-            myBO.OrganisationID = organisationTestBO.OrganisationID;
-            myBO.Save();
-
-            //---------------Assert Precondition----------------
-            Assert.IsFalse(((MultipleRelationship)compositionRelationship).IsRelationshipLoaded);
-
-            //---------------Execute Test ----------------------
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, cpCol.Count);
-            Assert.IsTrue(((MultipleRelationship)compositionRelationship).IsRelationshipLoaded);
-        }
-        [Test]
         public void Test_RemoveMethod()
         {
-            //An invoice line cannot be removed from an Invoice 
+            //An invoice line cannot be removed from an Invoice.
             //---------------Set up test pack-------------------
             Relationship compositionRelationship = GetCompositionRelationship();
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
@@ -373,6 +338,52 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         }
 
         [Test]
+        public void Test_MultipleRelationship_CollectionIsLoaded_Generic()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            Relationship compositionRelationship = (Relationship)organisationTestBO.Relationships["ContactPeople"];
+            ContactPersonTestBO myBO = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
+            myBO.OrganisationID = organisationTestBO.OrganisationID;
+            myBO.Save();
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(((MultipleRelationship)compositionRelationship).IsRelationshipLoaded);
+
+            //---------------Execute Test ----------------------
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol<ContactPersonTestBO>();
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(((MultipleRelationship)compositionRelationship).IsRelationshipLoaded);
+            Assert.AreEqual(1, cpCol.Count);
+        }
+
+        [Test]
+        public void Test_MultipleRelationship_CollectionIsLoaded()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            Relationship compositionRelationship = (Relationship)organisationTestBO.Relationships["ContactPeople"];
+            ContactPersonTestBO myBO = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
+            myBO.OrganisationID = organisationTestBO.OrganisationID;
+            myBO.Save();
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(((MultipleRelationship)compositionRelationship).IsRelationshipLoaded);
+
+            //---------------Execute Test ----------------------
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(((MultipleRelationship)compositionRelationship).IsRelationshipLoaded);
+            Assert.AreEqual(1, cpCol.Count);
+        }
+        /// <summary>
+        /// An invoice is considered to be dirty if it has any dirty invoice line. 
+        ///   A dirty invoice line would be any invoice line that is dirty and would include a newly created invoice line 
+        ///   and an invoice line that has been marked for deletion.
+        /// </summary>
+        [Test]
         public void Test_ParentDirtyIfHasCreatedChildren()
         {
             //---------------Set up test pack-------------------
@@ -392,10 +403,14 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
 
             //---------------Test Result -----------------------
             Assert.IsTrue(compositionRelationship.IsDirty);
-            Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
             Assert.IsTrue(organisationTestBO.Status.IsDirty);
+            Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
         }
-
+        /// <summary>
+        /// An invoice is considered to be dirty if it has any dirty invoice line. 
+        ///   A dirty invoice line would be any invoice line that is dirty and would include a newly created invoice line 
+        ///   and an invoice line that has been marked for deletion.
+        /// </summary>
         [Test]
         public void Test_ParentDirtyIfHasMark4DeleteChildren()
         {
@@ -420,10 +435,15 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
 
             //---------------Test Result -----------------------
             Assert.IsTrue(compositionRelationship.IsDirty);
-            Assert.AreEqual(1, cpCol.MarkForDeleteBusinessObjects.Count);
             Assert.IsTrue(organisationTestBO.Status.IsDirty);
+            Assert.AreEqual(1, cpCol.MarkForDeleteBusinessObjects.Count);
         }
 
+        /// <summary>
+        /// An invoice is considered to be dirty if it has any dirty invoice line. 
+        ///   A dirty invoice line would be any invoice line that is dirty and would include a newly created invoice line 
+        ///   and an invoice line that has been marked for deletion.
+        /// </summary>
         [Test]
         public void Test_ParentDirtyIfHasDirtyChildren()
         {
@@ -454,6 +474,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.IsTrue(relationships.IsDirty);
             Assert.IsTrue(organisationTestBO.Status.IsDirty);
         }
+
         [Test]
         public void Test_GetDirtyChildren_ReturnDirtyChildren()
         {
@@ -482,6 +503,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.AreEqual(1, dirtyChildren.Count);
             Assert.IsTrue(dirtyChildren.Contains(myBO));
         }
+
         [Test]
         public void Test_GetDirtyChildren_ReturnCreatedChildren()
         {

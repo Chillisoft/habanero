@@ -680,14 +680,9 @@ namespace Habanero.BO
         /// <returns></returns>
         internal bool RemoveInternal(TBusinessObject businessObject)
         {
-            //TODO: If Created then do not add to removed.
-
-
             bool removed = base.Remove(businessObject);
             KeyObjectHashTable.Remove(businessObject.ID.ToString());
 
-            //TODO: Verify this but i think should not remove event registering
-            //DeRegisterForBOEvents(businessObject);
             if (!_removedBusinessObjects.Contains(businessObject) && !_markForDeleteBusinessObjects.Contains(businessObject))
             {
                 _removedBusinessObjects.Add(businessObject);
