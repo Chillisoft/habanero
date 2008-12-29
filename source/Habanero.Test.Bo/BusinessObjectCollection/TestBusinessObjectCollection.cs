@@ -44,6 +44,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             ClassDef.ClassDefs.Clear();
             MyBO.LoadDefaultClassDef();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         #endregion
