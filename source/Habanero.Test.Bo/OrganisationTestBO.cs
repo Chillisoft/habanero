@@ -86,7 +86,7 @@ namespace Habanero.Test.BO
             relKeyDef.Add(relPropDef);
             MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef("ContactPeople", "Habanero.Test.BO",
                     "ContactPersonTestBO", relKeyDef, true, "", DeleteParentAction.DeleteRelated
-                    , RemoveChildAction.Prevent, AddChildAction.Prevent);
+                    , RelationshipType.Composition);
             itsClassDef.RelationshipDefCol.Add(relationshipDef);
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;

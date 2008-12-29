@@ -676,7 +676,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         {
             MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef(TestUtil.CreateRandomString(),
                                                                                   TestUtil.CreateRandomString(), TestUtil.CreateRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated
-                                                                                  , RemoveChildAction.Prevent, AddChildAction.Prevent);
+                                                                                  , RelationshipType.Composition);
             return relationshipDef.CreateRelationship(_organisationTestBO, _organisationTestBO.Props);
         }
 

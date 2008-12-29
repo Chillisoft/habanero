@@ -88,7 +88,7 @@ namespace Habanero.Test.BO
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             Relationship compositionRelationship = (Relationship)organisation.Relationships["ContactPerson"];
-            compositionRelationship.RelationshipDef.AddChildAction = AddChildAction.Prevent;
+            compositionRelationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
 
@@ -114,7 +114,7 @@ namespace Habanero.Test.BO
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             Relationship compositionRelationship = (Relationship)organisation.Relationships["ContactPerson"];
-            compositionRelationship.RelationshipDef.AddChildAction = AddChildAction.Prevent;
+            compositionRelationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
 
@@ -133,7 +133,7 @@ namespace Habanero.Test.BO
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             Relationship compositionRelationship = (Relationship)organisation.Relationships["ContactPerson"];
-            compositionRelationship.RelationshipDef.RemoveChildAction = RemoveChildAction.Prevent;
+            compositionRelationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             contactPerson.Organisation = organisation;
@@ -163,7 +163,7 @@ namespace Habanero.Test.BO
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             Relationship compositionRelationship = (Relationship) organisation.Relationships["ContactPerson"];
-            compositionRelationship.RelationshipDef.RemoveChildAction = RemoveChildAction.Prevent;
+            compositionRelationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             contactPerson.Organisation = organisation;
@@ -193,7 +193,7 @@ namespace Habanero.Test.BO
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             Relationship compositionRelationship = (Relationship)organisation.Relationships["ContactPerson"];
-            compositionRelationship.RelationshipDef.RemoveChildAction = RemoveChildAction.Prevent;
+            compositionRelationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             //---------------Assert Precondition----------------
@@ -215,7 +215,7 @@ namespace Habanero.Test.BO
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             SingleRelationship compositionRelationship = (SingleRelationship)organisation.Relationships["ContactPerson"];
-            compositionRelationship.RelationshipDef.RemoveChildAction = RemoveChildAction.Prevent;
+            compositionRelationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             compositionRelationship.SetRelatedObject(contactPerson);
@@ -223,7 +223,7 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
             Assert.AreEqual(contactPerson.OrganisationID, organisation.OrganisationID);
             Assert.AreSame(organisation.ContactPerson, contactPerson);
-            Assert.AreEqual(RemoveChildAction.Prevent , compositionRelationship.RelationshipDef.RemoveChildAction);
+            Assert.AreEqual(RelationshipType.Composition , compositionRelationship.RelationshipDef.RelationshipType);
 
             //---------------Execute Test ----------------------
             try
@@ -237,8 +237,8 @@ namespace Habanero.Test.BO
                 StringAssert.Contains("The " + compositionRelationship.RelationshipDef.RelatedObjectClassName, ex.Message);
                 StringAssert.Contains("could not be removed since the " + compositionRelationship.RelationshipName + " relationship is set up as ", ex.Message);
             }
-
         }
+
         private static Relationship GetCompositionRelationship(OrganisationTestBO organisation)
         {
             RelKeyDef def = new RelKeyDef();
@@ -246,7 +246,7 @@ namespace Habanero.Test.BO
             SingleRelationshipDef relationshipDef = 
                 new SingleRelationshipDef(TestUtil.CreateRandomString(), TestUtil.CreateRandomString(), 
                     TestUtil.CreateRandomString(), def, false, DeleteParentAction.DeleteRelated, 
-                    RemoveChildAction.Prevent, AddChildAction.Prevent);
+                    RelationshipType.Composition);
             return relationshipDef.CreateRelationship(organisation, organisation.Props);
         }
 

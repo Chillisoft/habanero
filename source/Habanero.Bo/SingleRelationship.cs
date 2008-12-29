@@ -150,7 +150,7 @@ namespace Habanero.BO
                 {
                     RelationshipDef relationshipDef =
                         reverseRelationship.RelationshipDef as RelationshipDef;
-                    if (relationshipDef != null && _relatedBo != null && relationshipDef.AddChildAction == AddChildAction.Prevent)
+                    if (relationshipDef != null && _relatedBo != null && relationshipDef.RelationshipType == RelationshipType.Composition)
                     {
                         string message = "The " + relationshipDef.RelatedObjectClassName
                                          + " could not be added since the " + relationshipDef.RelationshipName

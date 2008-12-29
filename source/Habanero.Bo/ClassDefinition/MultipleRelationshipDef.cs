@@ -80,8 +80,8 @@ namespace Habanero.BO.ClassDefinition
     	public MultipleRelationshipDef(string relationshipName, string relatedObjectAssemblyName,
     	                               string relatedObjectClassName, RelKeyDef relKeyDef,
     	                               bool keepReferenceToRelatedObject, string orderBy,
-    	                              DeleteParentAction deleteParentAction)
-    		: base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, RemoveChildAction.Dereference, AddChildAction.AddChild)
+    	                               DeleteParentAction deleteParentAction)
+    		: base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, RelationshipType.Association)
 		{
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
     	    _orderCriteria = OrderCriteria.FromString(orderBy);
@@ -104,14 +104,12 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="deleteParentAction">Provides specific instructions 
         /// with regards to deleting a parent object.  See the DeleteParentAction 
         /// enumeration for more detail.</param>
-        /// <param name="removeChildAction">Provides specific instructions for removing a child object.</param>
-        /// <param name="addChildAction">Provides specific instructions for adding a child object.</param>
+        /// <param name="relationshipType">Provides specific instructions for adding/removing a child object.</param>
         public MultipleRelationshipDef(string relationshipName, string relatedObjectAssemblyName,
                                        string relatedObjectClassName, RelKeyDef relKeyDef,
                                        bool keepReferenceToRelatedObject, string orderBy,
-                                      DeleteParentAction deleteParentAction, RemoveChildAction removeChildAction, 
-                                        AddChildAction addChildAction)
-            : base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, removeChildAction, addChildAction)
+                                      DeleteParentAction deleteParentAction, RelationshipType relationshipType)
+            : base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, relationshipType)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
             _orderCriteria = OrderCriteria.FromString(orderBy);

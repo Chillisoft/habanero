@@ -41,41 +41,50 @@ namespace Habanero.BO.ClassDefinition
     }
     /// <summary>
     /// An enumeration that gives some instructions or limitations in the
-    /// on a child business object being removed from the relationship.
+    /// on a child business object being added/removed from the relationship as well
+    ///  as differnetiating when the owning business object is viewed as dirty.
     /// This typically differentiats between a composition, aggregation and Association relationship.
     /// </summary>
-    public enum RemoveChildAction
+    public enum RelationshipType
     {
-        /// <summary>Dereference the child being removed. 
-        /// This is allowed for an aggregation and association relationship.
-        /// E.g. if a wheel is removed from a car.
+        /// <summary>
+        /// Association a related object can be removed, added, deleted or created via the relationship.
+        ///   A related object being removed will be dereferenceed.
+        ///   A related object being added will be referenced.
+        ///   The owning business object is not considered to be dirty because its 
+        ///     related business objects are dirty.
+        ///•	A typical example of an associative relationship is a Manager and her Departments (assuming a Manager can manage many departments but a department may only have one manager). A Manager can exist independently of any Department and a Department can exist independently of a Manager. The Manager may however be associated with one Department and later associated with a different Department.
+        ///•	Unlike a Car and its wheels the Department is not part of a Manager or visa versa.
+        ///•	The rules for whether a manager that is associated with one or more departments can be deleted or not is dependent upon the rules configured for the Departments relationship (i.e. a Manager’s Departments relationship could be marked prevent delete, dereference or do nothing). 
+        ///•	An already persisted Department can be added to a the Manager’s Departments relationship (In Habanero a new Department can be added to a Manager’s Departments relationship).
+        ///•	A driver can be removed from its related car. 
+        ///•	A Manager can create a new Department via its Departments Relationship (this is not a strict implementation of domain design but is allowed due to the convenience of this).
+        ///•	A Manager is considered to be dirty only if it has added, created, MarkedForDelete or removed dirty Departments. 
+        ///•	If a Manager is persisted then it will only persist its Department’s relationship and will not persist a related Department that is dirty (I.e. if a department has been added to the Relationship then it’s foreign key (ManagerID) will be updated. The department name could also have been edited. If the manager is saved then the foreign key (ManagerID) will be updated but the department name will not be updated).
         /// </summary>
-        Dereference = 1,
-        /// <summary>Prevents the child from being removed (Composition relationship). Raises an error if the 
-        /// RelatedBusinessObjectCollection.Remove method is called. E.g. an invoice line
-        /// cannot exist independently of the invoice and cannot be moved from one invoice
-        /// to another (it therefore cannot be removed.) </summary>
-        Prevent = 2,
-    }
+        Association = 1,
 
-    /// <summary>
-    /// An enumeration that gives some instructions or limitations in the
-    /// on a child business object being added to the relationship.
-    /// This typically differentiats between a composition, aggregation and Association relationship.
-    /// </summary>
-    public enum AddChildAction
-    {
-        /// <summary>Adds a persisted or non persisted child to the relationship. This is allowed for an
-        /// aggregation and association relationship.
-        /// E.g. if a wheel is removed from a car it can be added to another car.</summary>
-        AddChild = 1,
-        /// <summary>Prevents a persisted child from being added (Composition relationship). Raises an error if the 
-        /// RelatedBusinessObjectCollection.Add method is called with a perssited business object.
-        /// E.g. an invoice line
-        /// cannot exist independently of the invoice and cannot be moved from one invoice to 
-        /// another (it therefore cannot be added). A new (non persisted) business object can always be added to 
-        /// a relationship </summary>
-        Prevent = 2,
+        /// <summary>
+        /// •	A typical example of an aggregation relationship is a Car and its Tyres. A Tyre is part of a Car. A Tyre can exist independently of its Car and a Tyre can only belong to a single Car at any point in time. The Tyre may however be transferred from one car to another. 
+        ///•	The Car that has tyres cannot be deleted without it deleting or removing its tyres. The car’s Tyres relationship would be marked as either prevent delete, dereference tyres, delete tyres or do nothing. 
+        ///•	An already persisted tyre can be added to a car (In Habanero a new tyre can be added to a car). 
+        ///•	A tyre can be removed from its car. 
+        ///•	A car can create a new tyre via its Tyres Relationship (This is not a strict implementation of Domain modelling rules but is allowed due to the convenience of this method).
+        ///•	A car is considered to be dirty if it has any dirty tyres. A dirty tyre would be any tyre that has had any edits and would include a newly created tyre, an added tyre, a removed tyre or a tyre that has been marked for deletion.
+        ///•	If a car is persisted then it must persist all its tyres.
+        /// </summary>
+        Aggregation = 2,
+
+        /// <summary>
+        /// •	A typical example of a composition relationship is an Invoice and its Invoice lines. An invoice is made up of its invoice lines. An Invoice Line is part of an Invoice. An invoice Line cannot exist independently of its invoice and an invoice line can only belong to a single invoice.
+        ///•	An invoice that has invoice lines cannot be deleted without it deleting its invoice lines. The invoice’s InvoiceLines relationship would be marked as either prevent delete, delete invoice lines or do nothing.
+        ///•	An already persisted invoice line cannot be added to an Invoice (In Habanero a new invoice line can be added to an invoice). 
+        ///•	An Invoice line cannot be removed from its invoice.
+        ///•	An invoice can create a new invoice line via its InvoiceLines Relationship.
+        ///•	An invoice is considered to be dirty if it has any dirty invoice line. A dirty invoice line would be any invoice line that is dirty and would include a newly created invoice line and an invoice line that has been marked for deletion.
+        ///•	If an invoice is persisted then it must persist all its invoice lines.
+        ///</summary>
+        Composition = 3,
     }
 
     /// <summary>
@@ -111,8 +120,7 @@ namespace Habanero.BO.ClassDefinition
 		private string _relationshipName;
 		private bool _keepReferenceToRelatedObject;
         private DeleteParentAction _deleteParentAction;
-        private RemoveChildAction _removeChildAction;
-        private AddChildAction _addChildAction;
+        private RelationshipType _relationshipType;
 
         protected OrderCriteria _orderCriteria;
 
@@ -133,7 +141,7 @@ namespace Habanero.BO.ClassDefinition
 							   RelKeyDef relKeyDef,
                                bool keepReferenceToRelatedObject,
                                DeleteParentAction deleteParentAction)
-			:this(relationshipName, relatedObjectClassType, null,null,relKeyDef, keepReferenceToRelatedObject, deleteParentAction, RemoveChildAction.Dereference, AddChildAction.AddChild)
+            : this(relationshipName, relatedObjectClassType, null, null, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, RelationshipType.Association)
 		{
 
 		}
@@ -155,10 +163,9 @@ namespace Habanero.BO.ClassDefinition
 								RelKeyDef relKeyDef,
 								bool keepReferenceToRelatedObject,
                                 DeleteParentAction deleteParentAction,
-                                RemoveChildAction removeChildAction, 
-                                AddChildAction addChildAction
+                                RelationshipType relationshipType 
             )
-            : this(relationshipName, null, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, removeChildAction, addChildAction)
+            : this(relationshipName, null, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, relationshipType)
 		{
 
  
@@ -171,8 +178,7 @@ namespace Habanero.BO.ClassDefinition
 								RelKeyDef relKeyDef,
 								bool keepReferenceToRelatedObject,
                                 DeleteParentAction deleteParentAction,
-                                RemoveChildAction removeChildAction,
-                                AddChildAction addChildAction)
+                                RelationshipType relationshipType)
 		{
             ArgumentValidationHelper.CheckArgumentNotNull(relKeyDef, "relKeyDef");
             ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
@@ -189,8 +195,7 @@ namespace Habanero.BO.ClassDefinition
             _relationshipName = relationshipName;
             _keepReferenceToRelatedObject = keepReferenceToRelatedObject;
             _deleteParentAction = deleteParentAction;
-    	    _removeChildAction = removeChildAction;
-    	    _addChildAction = addChildAction;
+    	    _relationshipType = relationshipType;
 		}
 
 		#endregion Constructors
@@ -311,23 +316,14 @@ namespace Habanero.BO.ClassDefinition
 
         ///<summary>
         /// Returns the specific action that the relationship must carry out in the case of a child being added to it.
-        /// <see cref="AddChildAction"/>
+        /// <see cref="RelationshipType"/>
         ///</summary>
-        public AddChildAction AddChildAction
+        public RelationshipType RelationshipType
         {
-            get { return _addChildAction; }
-            internal set { _addChildAction = value; }
+            get { return _relationshipType; }
+            internal set { _relationshipType = value; }
         }
 
-        ///<summary>
-        /// Returns the specific action that the relationship must carry out in the case of a child being removed from it.
-        ///  <see cref="RemoveChildAction"/>
-        ///</summary>
-        public RemoveChildAction RemoveChildAction
-        {
-            get { return _removeChildAction; }
-            internal set { _removeChildAction = value; }
-        }
 
         #endregion Type Initialisation
 
@@ -342,7 +338,7 @@ namespace Habanero.BO.ClassDefinition
 
         internal void CheckCanAddChild(IBusinessObject bo)
         {
-            if (!bo.Status.IsNew && (this.AddChildAction == AddChildAction.Prevent))
+            if (!bo.Status.IsNew && (this.RelationshipType == RelationshipType.Composition))
             {
                 string message = "The " + this.RelatedObjectClassName + " could not be added since the "
                                  + this.RelationshipName +
@@ -352,7 +348,7 @@ namespace Habanero.BO.ClassDefinition
         }
         internal void CheckCanRemoveChild(IBusinessObject bo)
         {
-            if (this.RemoveChildAction == RemoveChildAction.Prevent)
+            if (this.RelationshipType == RelationshipType.Composition)
             {
                 string message = "The " + this.RelatedObjectClassName + " could not be removed since the "
                                  + this.RelationshipName

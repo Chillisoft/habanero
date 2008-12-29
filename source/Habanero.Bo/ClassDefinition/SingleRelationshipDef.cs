@@ -63,7 +63,7 @@ namespace Habanero.BO.ClassDefinition
              RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction)
             : this(
                 relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef,
-                keepReferenceToRelatedObject, deleteParentAction, RemoveChildAction.Dereference, AddChildAction.AddChild
+                keepReferenceToRelatedObject, deleteParentAction, RelationshipType.Association
                 )
         {
         }
@@ -73,12 +73,10 @@ namespace Habanero.BO.ClassDefinition
                                         string relatedObjectClassName,
                                         RelKeyDef relKeyDef, 
                                         bool keepReferenceToRelatedObject, 
-                                        DeleteParentAction deleteParentAction,
-                                        RemoveChildAction removeChildAction, 
-                                        AddChildAction addChildAction)
+                                        DeleteParentAction deleteParentAction, RelationshipType relationshipType)
             : base(
                 relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef,
-                keepReferenceToRelatedObject, deleteParentAction, removeChildAction, addChildAction)
+                keepReferenceToRelatedObject, deleteParentAction, relationshipType)
         {
         }
 

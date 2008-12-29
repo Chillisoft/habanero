@@ -65,28 +65,12 @@ namespace Habanero.Test.BO.ClassDefinition
 
             //---------------Execute Test ----------------------
             MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef(TestUtil.CreateRandomString(),
-                TestUtil.CreateRandomString(), TestUtil.CreateRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated
-                , RemoveChildAction.Dereference, AddChildAction.AddChild);
+                TestUtil.CreateRandomString(), TestUtil.CreateRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated);
+
             //---------------Test Result -----------------------
-            Assert.AreEqual(RemoveChildAction.Dereference, relationshipDef.RemoveChildAction);
-            Assert.AreEqual(AddChildAction.AddChild, relationshipDef.AddChildAction);
+            Assert.AreEqual(RelationshipType.Association, relationshipDef.RelationshipType);
         }
 
-        [Test]
-        public void Test_CreateMultipleRelationshipDef_Aggregation()
-        {
-            //---------------Set up test pack-------------------
-
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-            MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef(TestUtil.CreateRandomString(),
-                TestUtil.CreateRandomString(), TestUtil.CreateRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated
-                , RemoveChildAction.Dereference, AddChildAction.AddChild);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(RemoveChildAction.Dereference, relationshipDef.RemoveChildAction);
-            Assert.AreEqual(AddChildAction.AddChild, relationshipDef.AddChildAction);
-        }
 
         [Test]
         public void Test_CreateMultipleRelationshipDef_Composition()
@@ -98,10 +82,9 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Execute Test ----------------------
             MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef(TestUtil.CreateRandomString(),
                 TestUtil.CreateRandomString(), TestUtil.CreateRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated
-                , RemoveChildAction.Prevent, AddChildAction.Prevent);
+                , RelationshipType.Composition);
             //---------------Test Result -----------------------
-            Assert.AreEqual(RemoveChildAction.Prevent, relationshipDef.RemoveChildAction);
-            Assert.AreEqual(AddChildAction.Prevent, relationshipDef.AddChildAction);
+            Assert.AreEqual(RelationshipType.Composition, relationshipDef.RelationshipType);
         }
 
     }
