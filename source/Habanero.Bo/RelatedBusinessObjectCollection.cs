@@ -52,21 +52,21 @@ namespace Habanero.BO
 
         public override void Add(TBusinessObject bo)
         {
-            MultipleRelationshipDef def =  this._relationship.RelationshipDef as MultipleRelationshipDef;
-            if (def != null && !Loading && !bo.Status.IsNew && (def.AddChildAction == AddChildAction.Prevent))
+            if (!Loading)
             {
-                string message = "The " + def.RelatedObjectClassName + 
-                                 " could not be added since the " + def.RelationshipName + 
-                                 " relationship is set up as a composition relationship (AddChildAction.Prevent)";
-                throw new HabaneroDeveloperException(message, message);
+                MultipleRelationshipDef def = this._relationship.RelationshipDef as MultipleRelationshipDef;
+                if (def != null) def.CheckCanAddChild(bo);
             }
             base.Add(bo);
             if (this.Loading) return;
+
             if (IsForeignKeySetup(bo)) return;
 
             SetUpForeignKey(bo);
             SetupRelatedObject(bo);
         }
+
+
 
 
         /// <summary>

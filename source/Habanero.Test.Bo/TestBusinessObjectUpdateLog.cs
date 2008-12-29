@@ -43,6 +43,8 @@ namespace Habanero.Test.BO
         public void SetupTest()
         {
             //Runs every time that any testmethod is executed
+            ClassDef.ClassDefs.Clear();
+            MyBusinessObjectUpdateLogBo.LoadDefaultClassDef();
 
         }
         [TestFixtureSetUp]
@@ -50,8 +52,7 @@ namespace Habanero.Test.BO
         {
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
-            ClassDef.ClassDefs.Clear();
-            MyBusinessObjectUpdateLogBo.LoadDefaultClassDef();
+           
         }
 
         [TearDown]
@@ -176,41 +177,43 @@ namespace Habanero.Test.BO
         }
 
 
-        private class BusinessObjectUpdateLogStub: IBusinessObjectUpdateLog
+      
+
+    
+    }
+    internal class BusinessObjectUpdateLogStub : IBusinessObjectUpdateLog
+    {
+        private bool _called = false;
+
+        public bool Called
         {
-            private bool _called = false;
-
-            public bool Called
-            {
-                get { return _called; }
-                set { _called = value; }
-            }
-
-            public void Update()
-            {
-                _called = true;
-            }
+            get { return _called; }
+            set { _called = value; }
         }
 
-        private class MyBusinessObjectUpdateLogBo : BusinessObject
+        public void Update()
         {
-            public MyBusinessObjectUpdateLogBo()
-            {
-                LoadDefaultClassDef();
-                SetBusinessObjectUpdateLog(new BusinessObjectUpdateLogStub());
-            }
+            _called = true;
+        }
+    }
+    internal class MyBusinessObjectUpdateLogBo : BusinessObject
+    {
+        public MyBusinessObjectUpdateLogBo()
+        {
+            SetBusinessObjectUpdateLog(new BusinessObjectUpdateLogStub());
+        }
 
-            public IBusinessObjectUpdateLog BusinessObjectUpdateLog
-            {
-                get { return _businessObjectUpdateLog; }
-            }
+        public IBusinessObjectUpdateLog BusinessObjectUpdateLog
+        {
+            get { return _businessObjectUpdateLog; }
+        }
 
-            public static ClassDef LoadDefaultClassDef()
-            {
-                XmlClassLoader itsLoader = new XmlClassLoader();
-                ClassDef itsClassDef =
-                    itsLoader.LoadClass(
-                        @"
+        public static ClassDef LoadDefaultClassDef()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
 				<class name=""MyBusinessObjectUpdateLogBo"" assembly=""Habanero.Test.BO"" table=""My_Table"">
 					<property  name=""MyID"" type=""Guid"" />
 					<property  name=""MyName"" />                
@@ -219,25 +222,24 @@ namespace Habanero.Test.BO
 					</primaryKey>
 			    </class>
 			");
-                ClassDef.ClassDefs.Add(itsClassDef);
-                return itsClassDef;
-            }
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
 
-            public Guid MyID
-            {
-                get { return (Guid)GetPropertyValue("MyID"); }
-                set { this.SetPropertyValue("MyID", value); }
-            }
+        public Guid MyID
+        {
+            get { return (Guid)GetPropertyValue("MyID"); }
+            set { this.SetPropertyValue("MyID", value); }
+        }
 
-            public string MyName
-            {
-                get { return (string)GetPropertyValue("MyName"); }
-                set { SetPropertyValue("MyName", value); }
-            }
-            public override string ToString()
-            {
-                return MyName;
-            }
+        public string MyName
+        {
+            get { return (string)GetPropertyValue("MyName"); }
+            set { SetPropertyValue("MyName", value); }
+        }
+        public override string ToString()
+        {
+            return MyName;
         }
     }
 }

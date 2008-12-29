@@ -46,6 +46,28 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+
+
+        public static ClassDef LoadDefaultClassDef_WithSingleRelationship()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
+					<property  name=""OrganisationID"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""OrganisationID"" />
+					</primaryKey>
+					<relationship name=""ContactPerson"" type=""single"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"">
+						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
+					</relationship>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
         public static ClassDef LoadDefaultClassDef_PreventAddChild()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -97,6 +119,12 @@ namespace Habanero.Test.BO
             get { return (Guid)this.GetPropertyValue("OrganisationID"); }
         }
 
+        public ContactPersonTestBO ContactPerson
+        {
+            get { return Relationships.GetRelatedObject<ContactPersonTestBO>("ContactPerson"); }
+            set { Relationships.SetRelatedObject("ContactPerson", value); }
+        }
+
         public static void ClearAllFromDB()
         {
             BusinessObjectCollection<OrganisationTestBO> col = new BusinessObjectCollection<OrganisationTestBO>();
@@ -116,5 +144,6 @@ namespace Habanero.Test.BO
             bo.Save();
             return bo;
         }
+
     }
 }

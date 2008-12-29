@@ -1080,10 +1080,15 @@ namespace Habanero.BO
         ///<param name="transactionCommitter">the transaction committer that is executing the transaction</param>
         protected internal virtual void UpdateObjectBeforePersisting(ITransactionCommitter transactionCommitter)
         {
+            //TODO: solidify method for using the transactionlog (either in constructor or in updateobjectbeforepersisting)
             //if (_transactionLog != null)
             //{
             //    transactionCommitter.AddTransaction(_transactionLog);
             //}
+            foreach (IBusinessObject dirtyChild in this.Relationships.GetDirtyChildren())
+            {
+                transactionCommitter.AddBusinessObject(dirtyChild);
+            }
             if (_businessObjectUpdateLog != null && (Status.IsNew || (Status.IsDirty && !Status.IsDeleted)))
             {
                 _businessObjectUpdateLog.Update();

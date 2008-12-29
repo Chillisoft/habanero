@@ -45,15 +45,6 @@ namespace Habanero.BO
         {
         }
 
-        ///<summary>
-        /// Returns true if the relationship has already been loaded. I.e. if the Related objects have been loaded from the 
-        ///   datastore.
-        ///</summary>
-        internal bool IsRelationshipLoaded
-        {
-            get { return (_boCol != null); }
-        }
-
         protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>()
         {
             //TODO: Need a strategy for what should be happening here when the collection is previously loaded.

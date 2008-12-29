@@ -138,10 +138,11 @@
     <Compile Include="BusxinessObjectLoader\TestBusinessObjectLoaderWithInheritance.cs" />
     <Compile Include="BusxinessObjectLoader\TestBusinessObjectLoader_GetBusinessObjectCollection.cs" />
     <Compile Include="BusxinessObjectLoader\TestBusinessObjectLoader_RefreshCollection.cs" />
-    <Compile Include="BusinessObjectCollection\TestRelatedBOCol_Composistion.cs" />
+    <Compile Include="BusinessObjectCollection\TestRelatedBOCol_Composition.cs" />
     <Compile Include="CriteriaManager\TestCriteriaDB.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
     <Compile Include="CriteriaManager\TestHabaneroStringBuilder.cs" />
+    <Compile Include="Relationship\TestSingleRelationship_Composition.cs" />
     <Compile Include="Security\TestBOPropAuthorisation.cs" />
     <Compile Include="Security\TestBusinessObjectAuthorisation.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_Edits.cs" />

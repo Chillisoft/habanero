@@ -70,7 +70,10 @@ namespace Habanero.BO
             IList<IBusinessObject> dirtyBusinessObjects = new List<IBusinessObject>();
             foreach (KeyValuePair<string, IRelationship> pair in _relationships)
             {
-                pair.Value.GetDirtyChildren();
+                foreach (IBusinessObject bo in pair.Value.GetDirtyChildren())
+                {
+                    dirtyBusinessObjects.Add(bo);
+                }
             }
             return dirtyBusinessObjects;
         }

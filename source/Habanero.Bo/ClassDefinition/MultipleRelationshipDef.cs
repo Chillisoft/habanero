@@ -81,9 +81,6 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class MultipleRelationshipDef : RelationshipDef
     {
-        private readonly RemoveChildAction _removeChildAction;
-        private readonly AddChildAction _addChildAction;
-
         // protected int _minNoOfRelatedObjects;
        // protected int _maxNoOfRelatedObjects;
 
@@ -136,7 +133,7 @@ namespace Habanero.BO.ClassDefinition
     	                               string relatedObjectClassName, RelKeyDef relKeyDef,
     	                               bool keepReferenceToRelatedObject, string orderBy,
     	                              DeleteParentAction deleteParentAction)
-    		: base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
+    		: base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, RemoveChildAction.Dereference, AddChildAction.AddChild)
 		{
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
     	    _orderCriteria = OrderCriteria.FromString(orderBy);
@@ -164,14 +161,11 @@ namespace Habanero.BO.ClassDefinition
         public MultipleRelationshipDef(string relationshipName, string relatedObjectAssemblyName,
                                        string relatedObjectClassName, RelKeyDef relKeyDef,
                                        bool keepReferenceToRelatedObject, string orderBy,
-                                      DeleteParentAction deleteParentAction,
-            RemoveChildAction removeChildAction, 
-            AddChildAction addChildAction)
-            : base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
+                                      DeleteParentAction deleteParentAction, RemoveChildAction removeChildAction, 
+                                        AddChildAction addChildAction)
+            : base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, removeChildAction, addChildAction)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
-            _removeChildAction = removeChildAction;
-            _addChildAction = addChildAction;
             _orderCriteria = OrderCriteria.FromString(orderBy);
             //_minNoOfRelatedObjects = minNoOfRelatedObjects;
             //_maxNoOfRelatedObjects = maxNoOfRelatedObjects;
@@ -212,24 +206,6 @@ namespace Habanero.BO.ClassDefinition
         //}
 
         #endregion Properties
-
-        ///<summary>
-        /// Returns the specific action that the relationship must carry out in the case of a child being added to it.
-        /// <see cref="AddChildAction"/>
-        ///</summary>
-        public AddChildAction AddChildAction
-        {
-            get { return _addChildAction; }
-        }
-
-        ///<summary>
-        /// Returns the specific action that the relationship must carry out in the case of a child being removed from it.
-        ///  <see cref="RemoveChildAction"/>
-        ///</summary>
-        public RemoveChildAction RemoveChildAction
-        {
-            get { return _removeChildAction; }
-        }
 
         /// <summary>
 		/// Overrides abstract method of parent to facilitate creation of 

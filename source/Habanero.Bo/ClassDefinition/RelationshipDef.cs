@@ -57,6 +57,9 @@ namespace Habanero.BO.ClassDefinition
 		private string _relationshipName;
 		private bool _keepReferenceToRelatedObject;
         private DeleteParentAction _deleteParentAction;
+        private RemoveChildAction _removeChildAction;
+        private AddChildAction _addChildAction;
+
         protected OrderCriteria _orderCriteria;
 
 		#region Constructors
@@ -76,7 +79,7 @@ namespace Habanero.BO.ClassDefinition
 							   RelKeyDef relKeyDef,
                                bool keepReferenceToRelatedObject,
                                DeleteParentAction deleteParentAction)
-			:this(relationshipName, relatedObjectClassType, null,null,relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
+			:this(relationshipName, relatedObjectClassType, null,null,relKeyDef, keepReferenceToRelatedObject, deleteParentAction, RemoveChildAction.Dereference, AddChildAction.AddChild)
 		{
 
 		}
@@ -97,8 +100,11 @@ namespace Habanero.BO.ClassDefinition
 								string relatedObjectClassName,
 								RelKeyDef relKeyDef,
 								bool keepReferenceToRelatedObject,
-                                DeleteParentAction deleteParentAction)
-			:this(relationshipName, null, relatedObjectAssemblyName,relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
+                                DeleteParentAction deleteParentAction,
+                                RemoveChildAction removeChildAction, 
+                                AddChildAction addChildAction
+            )
+            : this(relationshipName, null, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, removeChildAction, addChildAction)
 		{
 
  
@@ -110,7 +116,9 @@ namespace Habanero.BO.ClassDefinition
 								string relatedObjectClassName,
 								RelKeyDef relKeyDef,
 								bool keepReferenceToRelatedObject,
-                                DeleteParentAction deleteParentAction)
+                                DeleteParentAction deleteParentAction,
+                                RemoveChildAction removeChildAction,
+                                AddChildAction addChildAction)
 		{
             ArgumentValidationHelper.CheckArgumentNotNull(relKeyDef, "relKeyDef");
             ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
@@ -127,7 +135,9 @@ namespace Habanero.BO.ClassDefinition
             _relationshipName = relationshipName;
             _keepReferenceToRelatedObject = keepReferenceToRelatedObject;
             _deleteParentAction = deleteParentAction;
-        }
+    	    _removeChildAction = removeChildAction;
+    	    _addChildAction = addChildAction;
+		}
 
 		#endregion Constructors
 
@@ -245,6 +255,26 @@ namespace Habanero.BO.ClassDefinition
             protected set { _orderCriteria = value; }
         }
 
+        ///<summary>
+        /// Returns the specific action that the relationship must carry out in the case of a child being added to it.
+        /// <see cref="AddChildAction"/>
+        ///</summary>
+        public AddChildAction AddChildAction
+        {
+            get { return _addChildAction; }
+            internal set { _addChildAction = value; }
+        }
+
+        ///<summary>
+        /// Returns the specific action that the relationship must carry out in the case of a child being removed from it.
+        ///  <see cref="RemoveChildAction"/>
+        ///</summary>
+        public RemoveChildAction RemoveChildAction
+        {
+            get { return _removeChildAction; }
+            internal set { _removeChildAction = value; }
+        }
+
         #endregion Type Initialisation
 
         /// <summary>
@@ -255,5 +285,16 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="lBOPropCol">The collection of properties of the Business object</param>
         /// <returns>The new relationship object created</returns>
         public abstract Relationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol);
+
+        internal void CheckCanAddChild(IBusinessObject bo)
+        {
+            if (!bo.Status.IsNew && (this.AddChildAction == AddChildAction.Prevent))
+            {
+                string message = "The " + this.RelatedObjectClassName + " could not be added since the "
+                                 + this.RelationshipName +
+                                 " relationship is set up as a composition relationship (AddChildAction.Prevent)";
+                throw new HabaneroDeveloperException(message, message);
+            }
+        }
     }
 }

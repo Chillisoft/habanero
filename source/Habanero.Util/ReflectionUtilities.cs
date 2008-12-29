@@ -215,7 +215,7 @@ namespace Habanero.Util
             if (String.IsNullOrEmpty(propertyName)) throw new HabaneroArgumentException("propertyName");
             try
             {
-                return type.GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField);
+                return type.GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Instance);
             }
             catch
             {

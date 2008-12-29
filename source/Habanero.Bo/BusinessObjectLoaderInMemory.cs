@@ -190,12 +190,12 @@ namespace Habanero.BO
         /// </summary>
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="collection">The collection to refresh</param>
-        public override void Refresh<T>(BusinessObjectCollection<T> collection) 
+        protected override void DoRefresh<T>(BusinessObjectCollection<T> collection) 
             //where T : class, IBusinessObject, new()
         {
             if (typeof(T) == typeof(BusinessObject))
             {
-                Refresh((IBusinessObjectCollection)collection);
+                Refresh(collection);
                 return;
             }
             ISelectQuery selectQuery = collection.SelectQuery;
@@ -216,25 +216,13 @@ namespace Habanero.BO
             LoadBOCollection(collection, loadedBos);
         }
 
-        private static void LoadBOCollection(IBusinessObjectCollection collection, IBusinessObjectCollection loadedBos)
-        {
-            ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
-            // made internal or something and used via reflection.
-            // I (Brett) am not comfortable with it being on the Interface. 
-            foreach (IBusinessObject loadedBo in loadedBos)
-            {
-                AddBusinessObjectToCollection(collection, loadedBo);
-            }
-            RestoreEditedLists(collection);
-        }
-
         /// <summary>
         /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
         /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
         /// only fire for the new objects added to the collection, not for the ones that already existed).
         /// </summary>
         /// <param name="collection">The collection to refresh</param>
-        public override void Refresh(IBusinessObjectCollection collection)
+        protected override void DoRefresh(IBusinessObjectCollection collection)
         {
             ISelectQuery selectQuery = collection.SelectQuery;
             Criteria criteria = selectQuery.Criteria;
@@ -260,69 +248,6 @@ namespace Habanero.BO
         #endregion //GetBusinessObjectCollection Members
 
         #region GetRelatedBusinessObjectCollection Members
-
-        /// <summary>
-        /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
-        /// fields defined in the relationship.
-        /// </summary>
-        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        /// <param name="relationship">The relationship that defines the criteria that must be loaded.  For example, a Person might have
-        /// a Relationship called Addresses, which defines the PersonID property as the relationship property. In this case, calling this method
-        /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
-        /// PersonID</param>
-        /// <returns>The loaded RelatedBusinessObjectCollection</returns>
-        public RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IRelationship relationship)
-            where T : class, IBusinessObject, new()
-        {
-            RelatedBusinessObjectCollection<T> relatedCol = new RelatedBusinessObjectCollection<T>(relationship);
-            Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
-            OrderCriteria preparedOrderCriteria =
-                QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
-
-            BusinessObjectCollection<T> col = GetBusinessObjectCollection<T>(relationshipCriteria, preparedOrderCriteria);
-//            col.ForEach(delegate(T obj) { relatedCol.Add(obj); });
-            LoadBOCollection(relatedCol, col);
-            relatedCol.SelectQuery = col.SelectQuery;
-            return relatedCol;
-        }
-
-        /// <summary>
-        /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
-        /// fields defined in the relationship.
-        /// </summary>
-        /// <param name="type">The type of collection to load. This must be a class that implements IBusinessObject</typeparam>
-        /// <param name="relationship">The relationship that defines the criteria that must be loaded.  For example, a Person might have
-        /// a Relationship called Addresses, which defines the PersonID property as the relationship property. In this case, calling this method
-        /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
-        /// PersonID</param>
-        /// <returns>The loaded RelatedBusinessObjectCollection</returns>
-        public IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IRelationship relationship)
-        {
-            IBusinessObjectCollection relatedCol = CreateRelatedBusinessObjectCollection(type, relationship);
-            Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
-            OrderCriteria preparedOrderCriteria =
-                QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
-
-            IBusinessObjectCollection col = GetBusinessObjectCollection(relationship.RelatedObjectClassDef,
-                        relationshipCriteria, preparedOrderCriteria);
-            LoadBOCollection(relatedCol, col);
-            relatedCol.SelectQuery = col.SelectQuery;
-            return relatedCol;
-        }
-
-        ///<summary>
-        /// Creates a RelatedBusinessObjectCollection.
-        ///</summary>
-        /// <param name="boType">The type of BO to make a generic collection of</param>
-        /// <param name="relationship">The multiple relationship this collection is for</param>
-        ///<returns> A BusinessObjectCollection of the correct type. </returns>
-        private static IBusinessObjectCollection CreateRelatedBusinessObjectCollection(Type boType,
-                                                                                IRelationship relationship)
-        {
-            Type type = typeof(RelatedBusinessObjectCollection<>);
-            type = type.MakeGenericType(boType);
-            return (IBusinessObjectCollection)Activator.CreateInstance(type, relationship);
-        }
 
         /// <summary>
         /// Loads a business object of type T using the relationship given. The relationship will be converted into a

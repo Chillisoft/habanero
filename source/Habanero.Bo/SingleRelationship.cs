@@ -138,14 +138,17 @@ namespace Habanero.BO
         /// <param name="relatedObject">The object to relate to</param>
         public virtual void SetRelatedObject(IBusinessObject relatedObject)
         {
+
             if (_relatedBo == null) GetRelatedObject();
             if ((relatedObject != _relatedBo) && relatedObject != null)
             {
-                MultipleRelationship reverseRelationship = GetReverseRelationship(relatedObject) as MultipleRelationship;
+                RelationshipDef.CheckCanAddChild(relatedObject);
+                //Add to reverse relationship
+                Relationship reverseRelationship = GetReverseRelationship(relatedObject) as Relationship;
                 if (reverseRelationship != null)
                 {
-                    MultipleRelationshipDef relationshipDef =
-                        reverseRelationship.RelationshipDef as MultipleRelationshipDef;
+                    RelationshipDef relationshipDef =
+                        reverseRelationship.RelationshipDef as RelationshipDef;
                     if (relationshipDef != null && _relatedBo != null && relationshipDef.AddChildAction == AddChildAction.Prevent)
                     {
                         string message = "The " + relationshipDef.RelatedObjectClassName
@@ -154,14 +157,23 @@ namespace Habanero.BO
                                          " relationship is set up as a composition relationship (AddChildAction.Prevent)";
                         throw new HabaneroDeveloperException(message, message);
                     }
-                    if (reverseRelationship.IsRelationshipLoaded)
+
+                    if (reverseRelationship is MultipleRelationship && reverseRelationship.IsRelationshipLoaded)
                     {
                         reverseRelationship.GetLoadedBOColInternal().Add(this.OwningBO);
+                    }
+
+                    if (reverseRelationship is SingleRelationship)
+                    {
+                        reverseRelationship.RelationshipDef.CheckCanAddChild(this.OwningBO);
+                        _relatedBo = relatedObject;
+                        ((SingleRelationship)reverseRelationship).SetRelatedObject(this.OwningBO);
                     }
                 }
             }
             if (_relatedBo != relatedObject && _relatedBo != null)
             {
+                //Remove from previous relationship
                 MultipleRelationship reverseRelationship = GetReverseRelationship(_relatedBo) as MultipleRelationship;
                 if (reverseRelationship != null && reverseRelationship.IsRelationshipLoaded)
                 {

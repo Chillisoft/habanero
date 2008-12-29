@@ -761,7 +761,7 @@ namespace Habanero.Test.BO
             return contact;
         }
 
-        private static ContactPersonTestBO CreateUnsavedContactPerson()
+        public static ContactPersonTestBO CreateUnsavedContactPerson()
         {
             return CreateUnsavedContactPerson(TestUtil.CreateRandomString());
         }
@@ -773,7 +773,7 @@ namespace Habanero.Test.BO
             return contact;
         }
 
-        private static ContactPersonTestBO CreateUnsavedContactPerson(string surname)
+        public static ContactPersonTestBO CreateUnsavedContactPerson(string surname)
         {
             return CreateUnsavedContactPerson(surname, TestUtil.CreateRandomString());
         }

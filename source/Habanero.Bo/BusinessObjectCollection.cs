@@ -1382,7 +1382,6 @@ namespace Habanero.BO
             get { return _loading; }
             set { _loading = value; }
         }
-
 // ReSharper restore UnusedPrivateMember
         #endregion
 

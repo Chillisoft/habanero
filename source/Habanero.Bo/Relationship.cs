@@ -172,7 +172,7 @@ namespace Habanero.BO
         {
             get
             {
-                if (_boCol == null) return false;
+                if (!IsRelationshipLoaded) return false;
                 bool dirtyCollections = HasDirtyEditingCollections;
                 if (dirtyCollections) return true;
                 foreach (IBusinessObject bo  in _boCol.PersistedBOCol)
@@ -188,7 +188,20 @@ namespace Habanero.BO
 
         private bool HasDirtyEditingCollections
         {
-            get { return (_boCol.CreatedBOCol.Count > 0) || (_boCol.MarkForDeletionBOCol.Count > 0); }
+            get
+            {
+                if (!IsRelationshipLoaded) return false;
+                return (_boCol.CreatedBOCol.Count > 0) || (_boCol.MarkForDeletionBOCol.Count > 0);
+            }
+        }
+
+        ///<summary>
+        /// Returns true if the relationship has already been loaded. I.e. if the Related objects have been loaded from the 
+        ///   datastore.
+        ///</summary>
+        internal bool IsRelationshipLoaded
+        {
+            get { return (_boCol != null); }
         }
 
         ///<summary>
@@ -202,6 +215,7 @@ namespace Habanero.BO
         public IList<IBusinessObject> GetDirtyChildren()
         {
             IList<IBusinessObject> dirtyBusinessObjects = new List<IBusinessObject>();
+            if (!IsRelationshipLoaded) return dirtyBusinessObjects;
             if (HasDirtyEditingCollections)
             {
                 foreach (IBusinessObject bo in _boCol.CreatedBOCol)
@@ -218,7 +232,6 @@ namespace Habanero.BO
                 if (bo.Status.IsDirty && !dirtyBusinessObjects.Contains(bo))
                 {
                     dirtyBusinessObjects.Add(bo);
-                    //TODO: Deal with object not dirty but children are.
                 }
             }
             return dirtyBusinessObjects;

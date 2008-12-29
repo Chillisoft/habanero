@@ -31,7 +31,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
 
     //TODO: Tests for Single CompositionRelationship
     [TestFixture]
-    public class TestRelatedBOCol_Composistion
+    public class TestRelatedBOCol_Composition
     {
         private DataStoreInMemory _dataStore;
         private DataAccessorInMemory _dataAccessor;
@@ -69,10 +69,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             TestUtil.WaitForGC();
         }
 
-        //TODO: All reverse relationship stuff e.g. cannot do
-        //   contact person.organisation = fdafdsafsa
-        //   also cannot do contactPerson.OrganisationID = xcsd.
-        //   if the contact person is not new since these are equivalent to below.
+        //   TODO: remove option to do contactPerson.OrganisationID = xcsd.
         [Test]
         public void Test_AddMethod_AddPersistedChild()
         {
@@ -230,13 +227,15 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.IsTrue(((MultipleRelationship)compositionRelationship).IsRelationshipLoaded);
 
             //---------------Execute Test ----------------------
-            myBO.Organisation = (OrganisationTestBO)compositionRelationship.OwningBO;
+            myBO.Organisation = organisationTestBO;
 
             //---------------Test Result -----------------------
             Assert.AreEqual(myBO.OrganisationID, organisationTestBO.OrganisationID);
             util.AssertOneObjectInCurrentAndCreatedCollection(cpCol);
+            Assert.IsTrue(cpCol.Contains(myBO));
             util.AssertAddedEventFired();
         }
+
         [Test]
         public void Test_SetParentNull()
         {
@@ -489,7 +488,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             myBO.FirstName = TestUtil.CreateRandomString();
             myBO.Save();
             myBO.FirstName = TestUtil.CreateRandomString();
-
+             
             //---------------Assert Precondition----------------
             Assert.IsTrue(compositionRelationship.IsDirty);
             Assert.IsTrue(myBO.Status.IsDirty);
@@ -558,6 +557,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.AreEqual(1, dirtyChildren.Count);
             Assert.IsTrue(dirtyChildren.Contains(myBO));
         }
+
         [Test]
         public void Test_GetDirtyChildren_ReturnAllDirty()
         {
@@ -620,6 +620,9 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.IsTrue(dirtyChildren.Contains(myBo_Created));
         }
 
+        /// <summary>
+        /// •	If an invoice is persisted then it must persist all its invoice lines.  
+        /// </summary>
         [Test]
         public void Test_ParentPersistsDirtyChildren()
         {
@@ -651,7 +654,6 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.IsFalse(relationships.IsDirty);
             Assert.IsFalse(organisationTestBO.Status.IsDirty);
         }
-
         #region Utils
 
         private static ContactPersonTestBO CreateSavedContactPerson_AsChild(BusinessObjectCollection<ContactPersonTestBO> cpCol)

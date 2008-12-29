@@ -27,8 +27,7 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class SingleRelationshipDef : RelationshipDef
     {
-	
-		#region Constructors
+        #region Constructors
 
         /// <summary>
         /// Constructor to create a new single relationship definition
@@ -40,32 +39,52 @@ namespace Habanero.BO.ClassDefinition
         /// reference to the related object.  Could be false for memory-
         /// intensive applications.</param>
         /// <param name="deleteParentAction"></param>
-        public SingleRelationshipDef(string relationshipName, Type relatedObjectClassType, RelKeyDef relKeyDef,
-                                     bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction)
-            : base(relationshipName, relatedObjectClassType, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
+        public SingleRelationshipDef
+            (string relationshipName, Type relatedObjectClassType, RelKeyDef relKeyDef,
+             bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction)
+            : base(relationshipName, relatedObjectClassType, relKeyDef, keepReferenceToRelatedObject, deleteParentAction
+                )
         {
-		}
+        }
 
-		/// <summary>
-		/// Constructor to create a new single relationship definition
-		/// </summary>
-		/// <param name="relationshipName">A name for the relationship</param>
-		/// <param name="relatedObjectAssemblyName">The assembly name of the related object</param>
-		/// <param name="relatedObjectClassName">The class name of the related object</param>
-		/// <param name="relKeyDef">The related key definition</param>
-		/// <param name="keepReferenceToRelatedObject">Whether to keep a
+        /// <summary>
+        /// Constructor to create a new single relationship definition
+        /// </summary>
+        /// <param name="relationshipName">A name for the relationship</param>
+        /// <param name="relatedObjectAssemblyName">The assembly name of the related object</param>
+        /// <param name="relatedObjectClassName">The class name of the related object</param>
+        /// <param name="relKeyDef">The related key definition</param>
+        /// <param name="keepReferenceToRelatedObject">Whether to keep a
         /// reference to the related object.  Could be false for memory-
         /// intensive applications.</param>
-		/// <param name="deleteParentAction"></param>
-		public SingleRelationshipDef(string relationshipName, string relatedObjectAssemblyName, string relatedObjectClassName, RelKeyDef relKeyDef,
-                                     bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction)
-			: base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
-		{
-		}
+        /// <param name="deleteParentAction"></param>
+        public SingleRelationshipDef
+            (string relationshipName, string relatedObjectAssemblyName, string relatedObjectClassName,
+             RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction)
+            : this(
+                relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef,
+                keepReferenceToRelatedObject, deleteParentAction, RemoveChildAction.Dereference, AddChildAction.AddChild
+                )
+        {
+        }
 
-		#endregion Constructors
+        public SingleRelationshipDef (  string relationshipName, 
+                                        string relatedObjectAssemblyName, 
+                                        string relatedObjectClassName,
+                                        RelKeyDef relKeyDef, 
+                                        bool keepReferenceToRelatedObject, 
+                                        DeleteParentAction deleteParentAction,
+                                        RemoveChildAction removeChildAction, 
+                                        AddChildAction addChildAction)
+            : base(
+                relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef,
+                keepReferenceToRelatedObject, deleteParentAction, removeChildAction, addChildAction)
+        {
+        }
 
-		/// <summary>
+        #endregion Constructors
+
+        /// <summary>
         /// Overrides abstract method of RelationshipDef to create a new
         /// relationship
         /// </summary>
@@ -78,5 +97,4 @@ namespace Habanero.BO.ClassDefinition
             return new SingleRelationship(owningBo, this, lBOPropCol);
         }
     }
-
 }
