@@ -58,8 +58,9 @@ namespace Habanero.BO
                 foreach (KeyValuePair<string, IRelationship> pair in _relationships)
                 {
                     Relationship relationship = (Relationship) pair.Value;
-                    if (relationship != null 
-                            && relationship.RelationshipDef.RelationshipType == RelationshipType.Composition 
+                    RelationshipType relationshipType = relationship.RelationshipDef.RelationshipType;
+                    if ((relationshipType == RelationshipType.Composition 
+                         || relationshipType == RelationshipType.Aggregation)
                             && relationship.IsDirty)
                     {
                         return true;
@@ -74,7 +75,8 @@ namespace Habanero.BO
             IList<IBusinessObject> dirtyBusinessObjects = new List<IBusinessObject>();
             foreach (KeyValuePair<string, IRelationship> pair in _relationships)
             {
-                if (((Relationship)pair.Value).RelationshipDef.RelationshipType == RelationshipType.Composition)
+                RelationshipType relationshipType = ((Relationship)pair.Value).RelationshipDef.RelationshipType;
+                if (relationshipType == RelationshipType.Composition || relationshipType == RelationshipType.Aggregation)
                 {
                     foreach (IBusinessObject bo in pair.Value.GetDirtyChildren())
                     {
@@ -130,9 +132,36 @@ namespace Habanero.BO
                                                             " was not found on a BusinessObject of type " +
                                                             this._bo.GetType());
                 }
-                return _relationships[relationshipName];
+
+                Relationship relationship = (Relationship) _relationships[relationshipName];
+                relationship.Initialise();
+                return relationship;
             }
 		}
+
+        ///// <summary>
+        ///// Provides an indexing facility so the relationships can be
+        ///// accessed with square brackets like an array.
+        ///// Returns the relationship with the given name.
+        ///// </summary>
+        ///// <exception cref="RelationshipNotFoundException">Thrown
+        ///// if a relationship with the given name is not found</exception>
+        //public Relationship<TBusinessObject> this<TBusinessObject>[string relationshipName]
+        //{
+        //    get
+        //    {
+        //        if (!_relationships.ContainsKey(relationshipName))
+        //        {
+        //            throw new RelationshipNotFoundException("The relationship " + relationshipName +
+        //                                                    " was not found on a BusinessObject of type " +
+        //                                                    this._bo.GetType());
+        //        }
+
+        //        Relationship relationship = (Relationship)_relationships[relationshipName];
+        //        relationship.Initialise();
+        //        return relationship;
+        //    }
+        //}
 
     	#region IRelationshipCol Members
 
@@ -149,7 +178,6 @@ namespace Habanero.BO
         /// single one was expected</exception>
         public IBusinessObject GetRelatedObject(string relationshipName)
         {
-
             SingleRelationship relationship = FindSingleRelationship(relationshipName);
             return relationship.GetRelatedObject();
         }
@@ -183,7 +211,6 @@ namespace Habanero.BO
             return (SingleRelationship)relationship;
         }
 
-
         ///<summary>
     	/// Determines whether the Relationship Collections contains the specified Relationship
     	///</summary>
@@ -195,8 +222,6 @@ namespace Habanero.BO
     	}
 
     	#endregion
-
-
 
     	/// <summary>
 		/// Returns a collection of business objects that are connected to

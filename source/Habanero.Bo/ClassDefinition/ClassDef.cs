@@ -1132,17 +1132,8 @@ namespace Habanero.BO.ClassDefinition
         ///<returns></returns>
         public static ClassDef Get<T>() where T : class, IBusinessObject
         {
-            ClassDef def = ClassDefs[typeof (T)];
-            if (def == null)
-            {
-                throw new HabaneroDeveloperException(
-                    string.Format("No ClassDef has been loaded for {0}. " + 
-                            "If you have loaded your ClassDefs please check that the Assembly specified matches the Assembly the class is in. " + 
-                            "In this case, make sure that the ClassDef of {1} specifies the assembly {2}, or move the class into the assembly " +
-                            "specified in the ClassDef.", 
-                            typeof(T).FullName, typeof(T).Name, typeof(T).Assembly.GetName().Name), "");
-            }
-            return def;
+            return ClassDefs[typeof(T)];
         }
+
     }
 }

@@ -60,5 +60,32 @@ namespace Habanero.Test.BO
             IBusinessObjectCollection addresses = cp.Addresses;
             Assert.AreSame(addresses, cp.Addresses);
         }
+
+        [Test]
+        public void TestColIsInstantiatedButNotLoaded()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO.LoadDefaultClassDef();
+            ClassDef contactPersonClassDef = ContactPersonTestBO.LoadClassDefOrganisationRelationship();
+            RelKeyDef keyDef = new RelKeyDef();
+            keyDef.Add(new RelPropDef(contactPersonClassDef.PropDefcol["OrganisationID"], "OrganisationID"));
+            MultipleRelationshipDef def = new MultipleRelationshipDef
+                (TestUtil.CreateRandomString(), typeof(ContactPersonTestBO),
+                 keyDef, false, "", DeleteParentAction.DoNothing);
+
+            OrganisationTestBO organisation = new OrganisationTestBO();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            MultipleRelationship rel = (MultipleRelationship)def.CreateRelationship(organisation, organisation.Props);
+
+            //---------------Test Result -----------------------
+
+            IBusinessObjectCollection collection = rel.GetLoadedBOColInternal();
+            Assert.IsNotNull(collection);
+            Assert.AreEqual(0, rel.GetRelatedBusinessObjectCol().Count);
+            Assert.AreSame(contactPersonClassDef, collection.ClassDef);
+            Assert.IsInstanceOfType(typeof(ContactPersonTestBO), collection.CreateBusinessObject());
+        }
     }
 }

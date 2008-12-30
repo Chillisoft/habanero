@@ -63,15 +63,6 @@ namespace Habanero.Base
         /// </summary>
         bool IsDirty { get; }
 
-		/// <summary>
-		/// Returns a sample business object held by the collection, which is
-		/// constructed from the class definition
-		/// </summary>
-		IBusinessObject SampleBo
-		{
-			get;
-		}
-
         ///<summary>
         /// the select query that is used to load this business object collection.
         ///</summary>
@@ -80,8 +71,6 @@ namespace Habanero.Base
             get;
             set;
         }
-
- 
 
         /// <summary>
 		/// Finds a business object that has the key string specified.<br/>

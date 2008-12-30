@@ -32,12 +32,15 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBusinessObjectSerialisation
     {
+        //TODO: refactor these since there is much duplicated set up code.
         [Test]
         public void Test_SerialiseDeserialise_ReturnsCorrectType()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
+            Structure.Car.LoadDefaultClassDef();
+            Structure.OrganisationPerson.LoadDefaultClassDef();
             Person.LoadDefaultClassDef();
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
@@ -58,6 +61,8 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
+            Structure.Car.LoadDefaultClassDef();
+            Structure.OrganisationPerson.LoadDefaultClassDef();
             ClassDef classDef = Person.LoadDefaultClassDef();
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
@@ -78,6 +83,8 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
+            Structure.Car.LoadDefaultClassDef();
+            Structure.OrganisationPerson.LoadDefaultClassDef();
             Person.LoadDefaultClassDef();
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
@@ -107,6 +114,8 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
+            Structure.Car.LoadDefaultClassDef();
+            Structure.OrganisationPerson.LoadDefaultClassDef();
             Person.LoadDefaultClassDef();
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
@@ -127,6 +136,8 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
+            Structure.Car.LoadDefaultClassDef();
+            Structure.OrganisationPerson.LoadDefaultClassDef();
             Person.LoadDefaultClassDef();
             BusinessObjectCollection<Person> originalPeople = new BusinessObjectCollection<Person>();
             Person person1 = Person.CreateSavedPerson();
@@ -159,6 +170,8 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
+            Structure.Car.LoadDefaultClassDef();
+            Structure.OrganisationPerson.LoadDefaultClassDef();
             Person.LoadDefaultClassDef();
             BusinessObjectCollection<Person> originalPeople = new BusinessObjectCollection<Person>();
             Person person1 = originalPeople.CreateBusinessObject();

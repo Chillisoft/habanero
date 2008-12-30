@@ -264,12 +264,7 @@ namespace Habanero.BO.ClassDefinition
     	{
     		get
     		{
-				ClassDef classDef = null;
-				if (ClassDef.ClassDefs.Contains(RelatedObjectAssemblyName, RelatedObjectClassName))
-				{
-					classDef = ClassDef.ClassDefs[RelatedObjectAssemblyName, RelatedObjectClassName];
-				}
-    			return classDef;
+    		    return ClassDef.ClassDefs[RelatedObjectAssemblyName, RelatedObjectClassName];
     		}
     	}
 

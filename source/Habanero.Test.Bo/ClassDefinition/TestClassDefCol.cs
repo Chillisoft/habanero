@@ -39,10 +39,23 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
-        public void TestThisNotFound()
+        public void TestIndexer_NotFound()
         {
+            //---------------Set up test pack-------------------
             ClassDefCol col = new ClassDefCol();
-            Assert.IsNull(col["ass", "class"]);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                ClassDef classDef = col["ass", "class"];
+                Assert.Fail("Expected error when trying to get a classdef that doesn't exist using the indexer");
+            }
+            catch (HabaneroDeveloperException ex)
+            {
+                //---------------Test Result -----------------------
+                StringAssert.Contains("No ClassDef has been loaded for ", ex.Message);
+            }
         }
 
         [Test]

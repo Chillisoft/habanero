@@ -42,7 +42,7 @@ namespace Habanero.Test.General
         {
             Car.DeleteAllCars();
             ContactPerson.DeleteAllContactPeople();
-
+            new Engine();
             Car car = new Car();
             ContactPerson person = new ContactPerson();
             person.Surname = "Owner Surname";

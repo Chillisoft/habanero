@@ -56,7 +56,7 @@ namespace Habanero.Test.BO.ClassDefinition
                 new SuperClassDef("ass", "class", ORMapping.ClassTableInheritance, null, "disc");
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test, ExpectedException(typeof(HabaneroDeveloperException))]
         public void TestCantFindSuperClassClassDefException()
         {
             SuperClassDef superClassDef =

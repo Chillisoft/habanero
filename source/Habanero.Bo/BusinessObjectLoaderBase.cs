@@ -437,7 +437,9 @@ namespace Habanero.BO
 
             BusinessObjectCollection<T> col = GetBusinessObjectCollection<T>(relationshipCriteria, preparedOrderCriteria);
             LoadBOCollection(relatedCol, col);
-            relatedCol.SelectQuery = col.SelectQuery;
+            //QueryBuilder.PrepareCriteria(relationship.RelatedObjectClassDef, relationshipCriteria);
+            relatedCol.SelectQuery.Criteria = relationshipCriteria;
+            relatedCol.SelectQuery.OrderCriteria = preparedOrderCriteria;
             ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", false);
             return relatedCol;
         }
@@ -469,32 +471,18 @@ namespace Habanero.BO
         public IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IRelationship relationship)
         {
             //TODO: generalise with generic version of this method
-            IBusinessObjectCollection relatedCol = CreateRelatedBusinessObjectCollection(type, relationship);
+            IBusinessObjectCollection relatedCol = MultipleRelationship.CreateRelatedBusinessObjectCollection(type, relationship);
+            
             ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", true);
-            Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
-            OrderCriteria preparedOrderCriteria =
-                QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
 
             IBusinessObjectCollection col = GetBusinessObjectCollection(relationship.RelatedObjectClassDef,
-                                                                        relationshipCriteria, preparedOrderCriteria);
+                                                                        relatedCol.SelectQuery.Criteria, relatedCol.SelectQuery.OrderCriteria);
+
             LoadBOCollection(relatedCol, col);
             relatedCol.SelectQuery = col.SelectQuery;
             ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", false);
             return relatedCol;
         }
 
-        ///<summary>
-        /// Creates a RelatedBusinessObjectCollection.
-        ///</summary>
-        /// <param name="boType">The type of BO to make a generic collection of</param>
-        /// <param name="relationship">The multiple relationship this collection is for</param>
-        ///<returns> A BusinessObjectCollection of the correct type. </returns>
-        private static IBusinessObjectCollection CreateRelatedBusinessObjectCollection(Type boType,
-                                                                                IRelationship relationship)
-        {
-            Type type = typeof(RelatedBusinessObjectCollection<>);
-            type = type.MakeGenericType(boType);
-            return (IBusinessObjectCollection)Activator.CreateInstance(type, relationship);
-        }
     }
 }

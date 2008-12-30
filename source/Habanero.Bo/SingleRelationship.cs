@@ -23,6 +23,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
+using Habanero.Util;
 
 //using log4net;
 
@@ -175,8 +176,9 @@ namespace Habanero.BO
                         throw new HabaneroDeveloperException(message, message);
                     }
 
-                    if (reverseRelationship is MultipleRelationship && reverseRelationship.IsRelationshipLoaded)
+                    if (reverseRelationship is MultipleRelationship)
                     {
+                        _relatedBo = relatedObject;
                         reverseRelationship.GetLoadedBOColInternal().Add(this.OwningBO);
                     }
 
@@ -191,27 +193,40 @@ namespace Habanero.BO
             //Remove the this object from the previuosly related object
             if (previousRelatedBO != null)
             {
-                this.RelationshipDef.CheckCanRemoveChild(_relatedBo);
+                this.RelationshipDef.CheckCanRemoveChild(previousRelatedBO);
 
                 //Remove from previous relationship
-                MultipleRelationship reverseRelationship = GetReverseRelationship(_relatedBo) as MultipleRelationship;
-                if (reverseRelationship != null && reverseRelationship.IsRelationshipLoaded)
+                MultipleRelationship reverseRelationship = GetReverseRelationship(previousRelatedBO) as MultipleRelationship;
+                if (reverseRelationship != null) // && reverseRelationship.IsRelationshipLoaded)
                 {
-                    reverseRelationship.GetLoadedBOColInternal().Remove(this.OwningBO);
+                    IBusinessObjectCollection colInternal = reverseRelationship.GetLoadedBOColInternal();
+                    if (colInternal.Contains(this.OwningBO)) colInternal.Remove(this.OwningBO);
                 }
-                SingleRelationship singleReverseRelationship = GetReverseRelationship(_relatedBo) as SingleRelationship;
+                SingleRelationship singleReverseRelationship = GetReverseRelationship(previousRelatedBO) as SingleRelationship;
                 if (singleReverseRelationship != null)
                 {
                     singleReverseRelationship.RelationshipDef.CheckCanRemoveChild(this.OwningBO);
+                    _relatedBo = null;
+                    UpdatedForeignKeyAndStoredRelationshipExpression();
+                    singleReverseRelationship.SetRelatedObject(null);
                 }
             }
             _relatedBo = relatedObject;
-            foreach (RelProp relProp in _relKey)
+            
+            UpdatedForeignKeyAndStoredRelationshipExpression();
+        }
+
+        private void UpdatedForeignKeyAndStoredRelationshipExpression()
+        {
+            if (this.RelationshipDef.RelationshipType != RelationshipType.Aggregation)
             {
-                object relatedObjectValue = _relatedBo == null
-                                                ? null
-                                                : _relatedBo.GetPropertyValue(relProp.RelatedClassPropName);
-                _owningBo.SetPropertyValue(relProp.OwnerPropertyName, relatedObjectValue);
+                foreach (RelProp relProp in _relKey)
+                {
+                    object relatedObjectValue = _relatedBo == null
+                                                    ? null
+                                                    : _relatedBo.GetPropertyValue(relProp.RelatedClassPropName);
+                    _owningBo.SetPropertyValue(relProp.OwnerPropertyName, relatedObjectValue);
+                }
             }
             _storedRelationshipExpression = _relKey.RelationshipExpression().ExpressionString();
         }
@@ -241,7 +256,7 @@ namespace Habanero.BO
         protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
         {
             Type type = _relDef.RelatedObjectClassType;
-            CheckTypeCanBeCreated(type);
+            Utilities.CheckTypeCanBeCreated(type);
             IBusinessObjectCollection boCol =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(type, this);
             return boCol;
@@ -263,6 +278,11 @@ namespace Habanero.BO
                 dirtyBusinessObjects.Add(_relatedBo);
             }
             return dirtyBusinessObjects;
+        }
+
+        protected override void DoInitialisation()
+        {
+            // do nothing
         }
     }
 }

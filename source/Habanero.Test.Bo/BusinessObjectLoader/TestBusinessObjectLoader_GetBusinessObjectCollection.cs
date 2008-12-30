@@ -24,7 +24,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.BusinessObjectLoader
 {
     /// <summary>
     /// Tests Business Object loader. Loading a collection of business objects.
@@ -1611,6 +1611,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             DeleteEnginesAndCars();
+            new Engine(); new Car();
             ContactPerson contactPerson1 = ContactPerson.CreateSavedContactPerson("zzzz");
             ContactPerson contactPerson2 = ContactPerson.CreateSavedContactPerson("aaaa");
             Car car1 = Car.CreateSavedCar("2", contactPerson1);
@@ -1639,12 +1640,13 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             //DeleteEnginesAndCars();
+            new Engine(); new Car();
             ContactPerson contactPerson1 = ContactPerson.CreateSavedContactPerson("zzzz");
             Car car1 = Car.CreateSavedCar("2", contactPerson1);
             Engine.CreateSavedEngine(car1, "20");
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection carsOwned = contactPerson1.GetCarsOwnedOrdered();
+            IBusinessObjectCollection carsOwned = contactPerson1.GetCarsOwned();
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, carsOwned.Count);
@@ -1708,6 +1710,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             DeleteEnginesAndCars();
+            new Engine(); new Car();
             ContactPerson contactPerson1 = ContactPerson.CreateSavedContactPerson("zzzz");
             ContactPerson contactPerson2 = ContactPerson.CreateSavedContactPerson("aaaa");
             Car car1 = Car.CreateSavedCar("2", contactPerson1);

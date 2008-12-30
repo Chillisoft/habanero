@@ -130,16 +130,14 @@ namespace Habanero.Test
             propDef = lPropDefCol["ContactPersonID"];
             lRelPropDef = new RelPropDef(propDef, "OwnerId");
             relKeyDef.Add(lRelPropDef);
-            //relDef = new MultipleRelationshipDef("Owner", typeof(Car),
-            //                                     relKeyDef, false, "",
-            //                                     DeleteParentAction.DereferenceRelated);
-            RelationshipDef relDef1 = new MultipleRelationshipDef("Owner", typeof(Car),
-                                     relKeyDef, false, "",
-                                     DeleteParentAction.DereferenceRelated);
+
+            //RelationshipDef relDef1 = new MultipleRelationshipDef("Owner", typeof(Car),
+            //                         relKeyDef, false, "",
+            //                         DeleteParentAction.DereferenceRelated);
             RelationshipDef relDef2 = new MultipleRelationshipDef("Cars", typeof(Car),
                          relKeyDef, false, "Engine.EngineNo",
                          DeleteParentAction.DereferenceRelated);
-            relDefCol.Add(relDef1);
+            //relDefCol.Add(relDef1);
             relDefCol.Add(relDef2);
             relKeyDef = new RelKeyDef();
             propDef = lPropDefCol["ContactPersonID"];
@@ -264,11 +262,7 @@ namespace Habanero.Test
 
         #region Relationships
 
-        public IBusinessObjectCollection  GetCarsOwned()
-        {
-            return Relationships.GetRelatedCollection("Owner");
-        }
-        public IBusinessObjectCollection GetCarsOwnedOrdered()
+        public IBusinessObjectCollection GetCarsOwned()
         {
             return Relationships.GetRelatedCollection("Cars");
         }
@@ -337,6 +331,7 @@ namespace Habanero.Test
 
         public static ContactPerson CreateSavedContactPerson()
         {
+            new Engine(); new Car();
             ContactPerson cp = CreateUnsavedContactPerson();
             cp.Save();
             return cp;

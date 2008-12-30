@@ -4,7 +4,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.BusxinessObjectLoader
+namespace Habanero.Test.BO.BusinessObjectLoader
 {
     public abstract class TestBusinessObjectLoader_RefreshCollection 
     {

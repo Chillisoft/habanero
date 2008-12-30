@@ -24,7 +24,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.BusinessObjectLoader
 {
     /// <summary>
     ///Test Business object loading individual business objects. 
@@ -600,6 +600,7 @@ namespace Habanero.Test.BO
         public void TestRefresh_DoesNotRefreshNewBo()
         {
             //-------------Setup Test Pack ------------------
+            new Engine(); new Car();
             ContactPerson contactPerson = new ContactPerson();
 
             //-------------Execute test ---------------------
@@ -766,6 +767,7 @@ namespace Habanero.Test.BO
             {
                 //---------------Set up test pack-------------------
                 //------------------------------Setup Test
+                new Engine(); new Car();
                 ContactPerson originalContactPerson = new ContactPerson();
                 originalContactPerson.Surname = "FirstSurname";
                 originalContactPerson.Save();
@@ -1021,6 +1023,7 @@ namespace Habanero.Test.BO
             public void TestLoadFromDatabaseAlwaysLoadsSameObject()
             {
                 //---------------Set up test pack-------------------
+                new Engine(); new Car();
                 ContactPerson originalContactPerson = new ContactPerson();
                 const string firstSurname = "FirstSurname";
                 originalContactPerson.Surname = firstSurname;
@@ -1241,6 +1244,7 @@ namespace Habanero.Test.BO
             {
                 //---------------Set up test pack-------------------
                 //------------------------------Setup Test
+                new Engine(); new Car();
                 ContactPerson originalContactPerson = new ContactPerson();
                 originalContactPerson.Surname = "FirstSurname";
                 originalContactPerson.Save();

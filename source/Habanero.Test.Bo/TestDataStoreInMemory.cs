@@ -29,6 +29,12 @@ namespace Habanero.Test.BO
     public class TestDataStoreInMemory
     {
 
+        [SetUp]
+        public void Setup()
+        {
+            ClassDef.ClassDefs.Clear();
+        }
+
         [Test]
         public void TestDataStoreConstructor()
         {
@@ -48,10 +54,11 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             DataStoreInMemory dataStore = new DataStoreInMemory();
+            ContactPersonTestBO.LoadDefaultClassDef();
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
-            dataStore.Add(new ContactPerson());
+            dataStore.Add(new ContactPersonTestBO());
             //---------------Test Result -----------------------
             Assert.AreEqual(1, dataStore.Count);
             //---------------Tear Down -------------------------          
@@ -62,7 +69,8 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             DataStoreInMemory dataStore = new DataStoreInMemory();
-            ContactPerson cp = new ContactPerson();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
             dataStore.Add(cp);
             //---------------Execute Test ----------------------
             dataStore.Remove(cp);
@@ -76,7 +84,8 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             DataStoreInMemory dataStore = new DataStoreInMemory();
-            dataStore.Add(new ContactPerson());
+            ContactPersonTestBO.LoadDefaultClassDef();
+            dataStore.Add(new ContactPersonTestBO());
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, dataStore.Count);
 

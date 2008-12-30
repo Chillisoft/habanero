@@ -14,8 +14,6 @@ namespace Habanero.Test.BO
         [SetUp]
         public void SetupTest()
         {
-            //Runs every time that any testmethod is executed
-            //base.SetupTest();
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
         }
@@ -23,15 +21,11 @@ namespace Habanero.Test.BO
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
-            //Code that is executed before any test is run in this class. If multiple tests
-            // are executed then it will still only be called once.
         }
 
         [TearDown]
         public void TearDownTest()
         {
-            //runs every time any testmethod is complete
-            //base.TearDownTest();
         }
 
        [Test]
@@ -40,9 +34,10 @@ namespace Habanero.Test.BO
             //An already persi`sted Brain cannot be set as the brain of a person.
             //---------------Set up test pack-------------------
            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
+           ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
            SingleRelationship compositionRelationship = (SingleRelationship) GetCompositionRelationship(organisation);
-           ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+           
            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
 
             //---------------Execute Test ----------------------
@@ -66,9 +61,10 @@ namespace Habanero.Test.BO
             // it is rather recommended that the Person creates the Brain.
             //---------------Set up test pack-------------------
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             SingleRelationship compositionRelationship = (SingleRelationship)GetCompositionRelationship(organisation);
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+           
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
 
             //---------------Execute Test ----------------------
@@ -302,8 +298,8 @@ namespace Habanero.Test.BO
             RelKeyDef def = new RelKeyDef();
             def.Add(new RelPropDef(organisation.Props["OrganisationID"].PropDef, "OrganisationID"));
             SingleRelationshipDef relationshipDef = 
-                new SingleRelationshipDef(TestUtil.CreateRandomString(), TestUtil.CreateRandomString(), 
-                    TestUtil.CreateRandomString(), def, false, DeleteParentAction.DeleteRelated, 
+                new SingleRelationshipDef(TestUtil.CreateRandomString(), "Habanero.Test.BO", 
+                    "ContactPersonTestBO", def, false, DeleteParentAction.DeleteRelated, 
                     RelationshipType.Composition);
             return relationshipDef.CreateRelationship(organisation, organisation.Props);
         }

@@ -188,9 +188,13 @@ namespace Habanero.Test
 
         public static ClassDef LoadClassDef_IncludingCarAndOwner()
         {
-            new ContactPerson();
+
+            new Engine();
             new Car();
-           return new Engine().ClassDef;
+            new ContactPerson();
+            return ClassDef.Get<Engine>();
+          
+      
         }
     }
 }

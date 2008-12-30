@@ -617,7 +617,7 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
-                    <relationship name=""Organisation"" type=""single"" relatedClass=""OrganisationTestBO"" relatedAssembly=""Habanero.Test.BO"">
+                    <relationship name=""Organisation"" type=""single"" relatedClass=""OrganisationTestBO"" relatedAssembly=""Habanero.Test.BO"" >
 						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
 					</relationship>
 					<ui>
@@ -863,6 +863,19 @@ namespace Habanero.Test.BO
 
         #endregion //Properties
 
-       
+        public static ContactPersonTestBO CreateSavedContactPerson_AsChild(BusinessObjectCollection<ContactPersonTestBO> cpCol)
+        {
+            ContactPersonTestBO myBO = CreateUnsavedContactPerson_AsChild(cpCol);
+            myBO.Save();
+            return myBO;
+        }
+
+        public static ContactPersonTestBO CreateUnsavedContactPerson_AsChild(BusinessObjectCollection<ContactPersonTestBO> cpCol)
+        {
+            ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
+            myBO.Surname = TestUtil.CreateRandomString();
+            myBO.FirstName = TestUtil.CreateRandomString();
+            return myBO;
+        }
     }
 }

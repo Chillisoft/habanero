@@ -56,17 +56,37 @@ namespace Habanero.BO.ClassDefinition
             {
                 bool found;
                 string typeId = GetTypeIdForItem(key, out found);
-                return found ? _classDefs[typeId] : null;
+                if (found) 
+                    return _classDefs[typeId];
+                
+                ThrowClassDefNotFoundForTypeException(key);
+                
                 //TODO error: When converted to use generic collection then 
-                // an error (KeyNotFoundException) should be thrown if the item is not in the collection?
+                
+                return null;
             }
         }
 
-        //public ClassDef Get<T>()
-        //    where T : BusinessObject
-        //{
-        //    return this[typeof(T)];
-        //}
+
+        private static void ThrowClassDefNotFoundForTypeException(Type type)
+        {
+            throw new HabaneroDeveloperException(
+                string.Format("No ClassDef has been loaded for {0}. " +
+                              "If you have loaded your ClassDefs please check that the Assembly specified matches the Assembly the class is in. " +
+                              "In this case, make sure that the ClassDef of {1} specifies the assembly {2}, or move the class into the assembly " +
+                              "specified in the ClassDef.",
+                              type.FullName, type.Name, type.Assembly.GetName().Name), "");
+        }
+
+        private static void ThrowClassDefNotFoundForTypeException(string assemblyName, string className, string typeid)
+        {
+            throw new HabaneroDeveloperException(
+                string.Format("No ClassDef has been loaded for {0}. " +
+                              "If you have loaded your ClassDefs please check that the Assembly specified matches the Assembly the class is in. " +
+                              "In this case, make sure that the ClassDef of {1} specifies the assembly {2}, or move the class into the assembly " +
+                              "specified in the ClassDef.",
+                              typeid, className, assemblyName), "");
+        }
 
         /// <summary>
         /// Provides an indexing facility for the collection so that items
@@ -83,9 +103,13 @@ namespace Habanero.BO.ClassDefinition
             {
                 bool found;
                 string typeId = GetTypeIdForItem(assemblyName, className, out found);
-                return found ? _classDefs[typeId] : null;
+                if (found)
+                    return _classDefs[typeId];
+
+                ThrowClassDefNotFoundForTypeException(assemblyName, className, typeId);
                 //TODO error: When converted to use generic collection then 
-                // an error (KeyNotFoundException) should be thrown if the item is not in the collection?
+
+                return null;
             }
         }
 

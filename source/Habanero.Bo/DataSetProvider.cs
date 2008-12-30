@@ -56,8 +56,7 @@ namespace Habanero.BO
             _table = new DataTable();
             this.InitialiseLocalData();
 
-            //BusinessObject sampleBo = _collection.ClassDef.InstantiateBusinessObjectWithClassDef();
-            _uiGridProperties = uiGrid; //sampleBo.GetUIDef().GetUIGridProperties();
+            _uiGridProperties = uiGrid; 
             DataColumn column = _table.Columns.Add();
             column.Caption = "ID";
             column.ColumnName = "ID";

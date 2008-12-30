@@ -43,7 +43,7 @@ namespace Habanero.Test.General
             BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonCompositeKey.DeleteAllContactPeople();
             ContactPersonCompositeKey.ClearContactPersonCol();
-
+            new Engine();
             Car car = new Car();
             ContactPersonCompositeKey person = new ContactPersonCompositeKey();
             person.SetPropertyValue("Surname", "Driver Surname");
@@ -66,7 +66,7 @@ namespace Habanero.Test.General
         {
             Car.DeleteAllCars();
             ContactPersonCompositeKey.DeleteAllContactPeople();
-
+            new Engine();
             Car car = new Car();
             ContactPersonCompositeKey person = new ContactPersonCompositeKey();
             person.SetPropertyValue("Surname", "Driver Surname");

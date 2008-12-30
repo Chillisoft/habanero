@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.Util
 {
@@ -37,6 +38,25 @@ namespace Habanero.Util
         {
             WeakReference testNull = new WeakReference(obj);
             return !testNull.IsAlive;
+        }
+
+        public static void CheckTypeCanBeCreated(Type type)
+        {
+            //Check that the type can be created and raise appropriate error 
+            try
+            {
+                Activator.CreateInstance(type, true);
+            }
+            catch (Exception ex)
+            {
+                throw new UnknownTypeNameException
+                    (String.Format
+                         ("An error occurred while attempting to load a related "
+                          + "business object collection, with the type given as '{0}'. "
+                          + "Check that the given type exists and has been correctly "
+                          + "defined in the relationship and class definitions for the classes " + "involved.", type),
+                     ex);
+            }
         }
     }
 }

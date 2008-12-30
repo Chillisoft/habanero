@@ -483,6 +483,7 @@ namespace Habanero.Test.BO
         public void TestFromIRelationship_MultipleProps()
         {
             //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
             RelKeyDef relKeyDef = new RelKeyDef();
             const string propValue1 = "bob1";
             PropDef boPropDef1 = new PropDef("Prop1", typeof(String), PropReadWriteRule.ReadWrite, propValue1);
@@ -491,7 +492,7 @@ namespace Habanero.Test.BO
             PropDef boPropDef2 = new PropDef("Prop2", typeof(String), PropReadWriteRule.ReadWrite, propValue2);
             relKeyDef.Add(new RelPropDef(boPropDef2, "RelatedProp2"));
             RelationshipDef reldef =
-                new MultipleRelationshipDef("bob", "bob", "bob", relKeyDef, false, "", DeleteParentAction.DoNothing);
+                new MultipleRelationshipDef("bob", "Habanero.Test", "MyBO", relKeyDef, false, "", DeleteParentAction.DoNothing);
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             BOPropCol col = new BOPropCol();

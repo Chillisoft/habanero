@@ -223,6 +223,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropertyWithDatabaseLookupList()
         {
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
             PropDef def =
                 itsLoader.LoadProperty(
                     @"<property  name=""TestProp""><databaseLookupList sql=""Source"" timeout=""100"" class=""MyBO"" assembly=""Habanero.Test"" /></property>");
@@ -234,7 +235,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(100, source.TimeOut);
             Assert.AreEqual("MyBO", source.ClassName);
             Assert.AreEqual("Habanero.Test", source.AssemblyName);
-            Assert.IsNull(source.ClassDef);
+            Assert.AreSame(classDef, source.ClassDef);
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]

@@ -123,6 +123,7 @@ namespace Habanero.Test.BO
         public void TestUpdatesProperties_GivenBo_UserNameAndDate()
         {
             //-------------Setup Test Pack ------------------
+            new Engine(); new Car();
             ContactPerson contactPerson = new ContactPerson();
             IBOProp dateBoProp = contactPerson.Props["DateLastUpdated"];
             IBOProp userBoProp = contactPerson.Props["UserLastUpdated"];
@@ -147,6 +148,7 @@ namespace Habanero.Test.BO
         public void TestUpdatesProperties_GivenBo_UserNameAndDate_AndSecurityController()
         {
             //-------------Setup Test Pack ------------------
+            new Engine(); new Car();
             ContactPerson contactPerson = new ContactPerson();
             IBOProp dateBoProp = contactPerson.Props["DateLastUpdated"];
             IBOProp userBoProp = contactPerson.Props["UserLastUpdated"];
@@ -170,6 +172,7 @@ namespace Habanero.Test.BO
         public void TestUpdatesProperties_GivenBo_WithoutUserNameAndDate()
         {
             //-------------Setup Test Pack ------------------
+            new Engine(); new Car();
             ContactPerson contactPerson = new ContactPerson();
             contactPerson.Props.Remove("DateLastUpdated");
             contactPerson.Props.Remove("UserLastUpdated");

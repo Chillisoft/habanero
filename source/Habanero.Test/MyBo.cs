@@ -1265,6 +1265,26 @@ namespace Habanero.Test
             return itsClassDef;    
         }
 
+        public static ClassDef LoadClassDefWithAssociationRelationship()
+        {
+            ClassDef classDef = LoadClassDefWithRelationship();
+            classDef.RelationshipDefCol["MyMultipleRelationship"].RelationshipType = RelationshipType.Association;
+            return classDef;
+        }
+
+        public static ClassDef LoadClassDefWithAggregationRelationship()
+        {
+            ClassDef classDef = LoadClassDefWithRelationship();
+            classDef.RelationshipDefCol["MyMultipleRelationship"].RelationshipType = RelationshipType.Aggregation;
+            return classDef;
+        }
+
+        public static ClassDef LoadClassDefWithCompositionRelationship()
+        {
+            ClassDef classDef = LoadClassDefWithRelationship();
+            classDef.RelationshipDefCol["MyMultipleRelationship"].RelationshipType = RelationshipType.Composition;
+            return classDef;
+        }
     }
 
     public class MyRelatedBo : BusinessObject

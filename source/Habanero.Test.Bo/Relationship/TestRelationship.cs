@@ -290,6 +290,60 @@ namespace Habanero.Test.BO
             mMockBo.MarkForDelete();
             mMockBo.Save();
         }
+
+        [Test]
+        public void TestGetReverseRelationship_Addresses()
+        {
+            //---------------Set up test pack-------------------
+            new Engine();
+            new Car();
+            ContactPerson person = new ContactPerson();
+            Address address = new Address();
+            Relationship relationship = (Relationship)address.Relationships["ContactPerson"];
+            IRelationship expectedRelationship = person.Relationships["Addresses"];
+
+            //---------------Execute Test ----------------------
+            IRelationship reverseRelationship = (Relationship) relationship.GetReverseRelationship(person);
+            
+            //---------------Test Result -----------------------
+            Assert.AreSame(expectedRelationship, reverseRelationship);
+        }
+
+        [Test]
+        public void TestGetReverseRelationship_Cars()
+        {
+            //---------------Set up test pack-------------------
+            new Engine();
+            new Car();
+            ContactPerson person = new ContactPerson();
+            Car car = new Car();
+            Relationship relationship = (Relationship)car.Relationships["Owner"];
+            IRelationship expectedRelationship = person.Relationships["Cars"];
+
+            //---------------Execute Test ----------------------
+            IRelationship reverseRelationship = (Relationship) relationship.GetReverseRelationship(person);
+            
+            //---------------Test Result -----------------------
+            Assert.AreSame(expectedRelationship, reverseRelationship);
+        }
+
+        //[Test]
+        //public void TestGetReverseRelationship()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    new Engine();
+        //    new Car();
+        //    ContactPerson person = new ContactPerson();
+        //    Address address = new Address();
+        //    Relationship relationship = (Relationship)address.Relationships["ContactPerson"];
+        //    IRelationship expectedRelationship =  person.Relationships["Addresses"]
+
+        //    //---------------Execute Test ----------------------
+        //    IRelationship reverseRelationship = (Relationship) relationship.GetReverseRelationship(person);
+            
+        //    //---------------Test Result -----------------------
+        //    Assert.AreSame(expectedRelationship, reverseRelationship);
+        //}
     }
 
     

@@ -752,7 +752,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCP = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(contactPersonID);
             RelatedBusinessObjectCollection<AddressTestBO> addresses = loadedCP.AddressTestBOs;
-
+            
             //---------------Test Result -----------------------
             Assert.AreEqual(1, addresses.Count);
             Assert.AreEqual(2, boMan.Count);

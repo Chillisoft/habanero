@@ -126,7 +126,7 @@ namespace Habanero.Test
                 new PropDef("CarRegNo", typeof (String), PropReadWriteRule.ReadWrite, "CAR_REG_NO", null);
             lPropDefCol.Add(propDef);
 
-            lPropDefCol.Add("OwnerId", typeof (Guid), PropReadWriteRule.WriteOnce, "OWNER_ID", null);
+            lPropDefCol.Add("OwnerId", typeof (Guid), PropReadWriteRule.ReadWrite, "OWNER_ID", null);
 
             lPropDefCol.Add("CarID", typeof (Guid), PropReadWriteRule.WriteOnce, "CAR_ID", null);
             lPropDefCol.Add("DriverFK1", typeof (String), PropReadWriteRule.WriteOnce, "Driver_FK1", null);

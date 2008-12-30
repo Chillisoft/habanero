@@ -602,10 +602,6 @@ namespace Habanero.UI.Base
             }
             IBusinessObjectCollection collection =
                 bo.Relationships.GetRelatedCollection(formGrid.RelationshipName);
-            //foreach (UIGridColumn property in collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties())
-            //{
-            //    //log.Debug("Heading: " + property.Heading + ", controlType: " + property.GridControlType.Name);
-            //}
 
             myGrid.SetBusinessObjectCollection(collection);
 

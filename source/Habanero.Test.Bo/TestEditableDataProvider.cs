@@ -71,7 +71,7 @@ namespace Habanero.Test.BO
             boCollection.Add(bo2);
 
             _dataSetProvider = new EditableDataSetProvider(boCollection);
-            BOMapper mapper = new BOMapper(boCollection.SampleBo);
+            BOMapper mapper = new BOMapper(boCollection.ClassDef.CreateNewBusinessObject());
             itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
 
             //--------------Assert PreConditions----------------            
@@ -194,7 +194,7 @@ namespace Habanero.Test.BO
         public void TestDuplicateColumnNames()
         {
             SetupTestData();
-            BOMapper mapper = new BOMapper((BusinessObject) _collection.SampleBo);
+            BOMapper mapper = new BOMapper(_collection.ClassDef.CreateNewBusinessObject());
             itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef("duplicateColumns").GetUIGridProperties());
         }
 

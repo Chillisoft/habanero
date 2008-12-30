@@ -81,7 +81,6 @@ namespace Habanero.BO
         #endregion//StronglyTypedComparer
 
         private IClassDef _boClassDef;
-        private IBusinessObject _sampleBo;
         private Hashtable _keyObjectHashTable;
         private readonly List<TBusinessObject> _createdBusinessObjects = new List<TBusinessObject>();
         private readonly List<TBusinessObject> _persistedObjectsCollection = new List<TBusinessObject>();
@@ -123,16 +122,6 @@ namespace Habanero.BO
         {
         }
 
-        ///// <summary>
-        ///// Constructor to initialise a new collection with a specified Database Connection.
-        ///// This Database Connection will be used to load the collection.
-        ///// </summary>
-        ///// <param name="databaseConnection">The Database Connection to used to load the collection</param>
-        //public BusinessObjectCollection(IDatabaseConnection databaseConnection)
-        //    : this(null, null)
-        //{
-        //    _sampleBo.SetDatabaseConnection(databaseConnection);
-        //}
 
         private BusinessObjectCollection(IClassDef classDef, TBusinessObject sampleBo)
         {
@@ -155,23 +144,6 @@ namespace Habanero.BO
             else
             {
                 _boClassDef = classDef;
-            }
-            if (sampleBo != null)
-            {
-                _sampleBo = sampleBo;
-            }
-            else
-            {
-                if (_boClassDef == null)
-                {
-                    throw new HabaneroDeveloperException
-                        (String.Format
-                             ("A business object collection is "
-                              + "being created for the type '{0}', but no class definitions have "
-                              + "been loaded for this type.", typeof (TBusinessObject).Name),
-                         "Class Definitions not loaded");
-                }
-                _sampleBo = _boClassDef.CreateNewBusinessObject();
             }
             _keyObjectHashTable = new Hashtable();
             _selectQuery = QueryBuilder.CreateSelectQuery(_boClassDef);
@@ -852,15 +824,6 @@ namespace Habanero.BO
         {
             get { return _boClassDef; }
             set { _boClassDef = value; }
-        }
-
-        /// <summary>
-        /// Returns a sample business object held by the collection, which is
-        /// constructed from the class definition
-        /// </summary>
-        public IBusinessObject SampleBo
-        {
-            get { return _sampleBo; }
         }
 
         /// <summary>

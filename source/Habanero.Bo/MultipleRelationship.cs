@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -44,6 +45,47 @@ namespace Habanero.BO
         public MultipleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {
+            _boCol = CreateNewRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> with boType as its type parameter, using the Activator.
+        /// </summary>
+        /// <param name="boType">The type parameter to be used</param>
+        /// <param name="relationship">The relationship that this <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> is the collection for</param>
+        /// <returns>The instantiated <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/></returns>
+        public static IBusinessObjectCollection CreateRelatedBusinessObjectCollection(Type boType, IRelationship relationship)
+        {
+            IBusinessObjectCollection collection = CreateNewRelatedBusinessObjectCollection(boType, relationship);
+            SetupCriteriaForRelationship(relationship, collection);
+            return collection;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> with boType as its type parameter, using the Activator.
+        /// </summary>
+        /// <param name="boType">The type parameter to be used</param>
+        /// <param name="relationship">The relationship that this <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> is the collection for</param>
+        /// <returns>The instantiated <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/></returns>
+        private static IBusinessObjectCollection CreateNewRelatedBusinessObjectCollection(Type boType, IRelationship relationship)
+        {
+            Utilities.CheckTypeCanBeCreated(boType);
+            Type relatedCollectionType = typeof(RelatedBusinessObjectCollection<>);
+            relatedCollectionType = relatedCollectionType.MakeGenericType(boType);
+            IBusinessObjectCollection collection = (IBusinessObjectCollection)Activator.CreateInstance(relatedCollectionType, relationship);
+            return collection;
+        }
+
+        private static void SetupCriteriaForRelationship(IRelationship relationship, IBusinessObjectCollection collection)
+        {
+            Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
+
+            OrderCriteria preparedOrderCriteria =
+                QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
+
+            //QueryBuilder.PrepareCriteria(relationship.RelatedObjectClassDef, relationshipCriteria);
+            collection.SelectQuery.Criteria = relationshipCriteria;
+            collection.SelectQuery.OrderCriteria = preparedOrderCriteria;
         }
 
         ///<summary>
@@ -56,7 +98,7 @@ namespace Habanero.BO
         {
             get
             {
-                if (!IsRelationshipLoaded) return false;
+                //if (!IsRelationshipLoaded) return false;
                 bool dirtyCollections = HasDirtyEditingCollections;
                 if (dirtyCollections) return true;
                 foreach (IBusinessObject bo  in _boCol.PersistedBOCol)
@@ -74,7 +116,7 @@ namespace Habanero.BO
         {
             get
             {
-                if (!IsRelationshipLoaded) return false;
+                //if (!IsRelationshipLoaded) return false;
                 return (_boCol.CreatedBOCol.Count > 0) || (_boCol.MarkForDeletionBOCol.Count > 0);
             }
         }
@@ -105,6 +147,8 @@ namespace Habanero.BO
 
         protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
         {
+
+
             if (_boCol != null)
             {
                 BORegistry.DataAccessor.BusinessObjectLoader.Refresh(_boCol);
@@ -158,7 +202,6 @@ namespace Habanero.BO
         public override IList<IBusinessObject> GetDirtyChildren()
         {
             IList<IBusinessObject> dirtyBusinessObjects = new List<IBusinessObject>();
-            if (!IsRelationshipLoaded) return dirtyBusinessObjects;
             if (HasDirtyEditingCollections)
             {
                 foreach (IBusinessObject bo in _boCol.CreatedBOCol)
@@ -179,5 +222,12 @@ namespace Habanero.BO
             }
             return dirtyBusinessObjects;
         }
+
+        protected override void DoInitialisation()
+        {
+            SetupCriteriaForRelationship(this, _boCol);
+        }
+
+     
     }
 }

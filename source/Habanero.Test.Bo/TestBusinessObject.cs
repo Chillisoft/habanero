@@ -557,6 +557,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             string surname = TestUtil.CreateRandomString();
+            new Engine(); new Car(); new ContactPerson();
             ContactPerson owner = ContactPerson.CreateSavedContactPerson(surname);
             Car car = Car.CreateSavedCar("5", owner);
             Engine engine = Engine.CreateSavedEngine(car, "20");

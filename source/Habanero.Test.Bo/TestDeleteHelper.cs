@@ -92,15 +92,6 @@ namespace Habanero.Test.BO
 					result);
 		}
 
-		[Test, ExpectedException(typeof(BusinessObjectReferentialIntegrityException))]
-		public void TestDeleteFailureWithSomePrevents()
-		{
-		    TestBO1 testBO1 = PopulateObjectWithSomePrevents();
-			testBO1.Delete();
-			testBO1.Save();
-			Assert.Fail("The Save should not succeed!");
-		}
-
 		#region Object Structure
 
 		private static TestBO1 PopulateObjectWithSomePrevents()

@@ -22,18 +22,22 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
     /// <summary>
     /// Provides a super-class for relationships between business objects
     /// </summary>
-    public abstract class Relationship : IRelationship
+    public abstract class Relationship : IRelationship // <TBusinessObject> : IRelationship
+        //where TBusinessObject : class, IBusinessObject, new() 
+
     {
         protected RelationshipDef _relDef;
         protected readonly IBusinessObject _owningBo;
         protected internal RelKey _relKey;
         protected IBusinessObjectCollection _boCol;
+        private bool _initialised = false;
 
         /// <summary>
         /// Constructor to initialise a new relationship
@@ -125,24 +129,7 @@ namespace Habanero.BO
         protected abstract IBusinessObjectCollection GetRelatedBusinessObjectColInternal();
 
 
-        protected static void CheckTypeCanBeCreated(Type type)
-        {
-            //Check that the type can be created and raise appropriate error 
-            try
-            {
-                Activator.CreateInstance(type, true);
-            }
-            catch (Exception ex)
-            {
-                throw new UnknownTypeNameException
-                    (String.Format
-                         ("An error occurred while attempting to load a related "
-                          + "business object collection, with the type given as '{0}'. "
-                          + "Check that the given type exists and has been correctly "
-                          + "defined in the relationship and class definitions for the classes " + "involved.", type),
-                     ex);
-            }
-        }
+
 
 
         ///<summary>
@@ -170,14 +157,6 @@ namespace Habanero.BO
         ///</summary>
         public abstract bool IsDirty { get; }
 
-        ///<summary>
-        /// Returns true if the relationship has already been loaded. I.e. if the Related objects have been loaded from the 
-        ///   datastore.
-        ///</summary>
-        internal bool IsRelationshipLoaded
-        {
-            get { return (_boCol != null); }
-        }
 
         ///<summary>
         /// Returns a list of all the related objects that are dirty.
@@ -201,8 +180,9 @@ namespace Habanero.BO
         {
             //This is a horrrible Hack but I do not want to do the reverse relationship 
             IRelationship reverseRelationship = null;
-            foreach (IRelationship relationship in bo.Relationships)
+            foreach (Relationship relationship in bo.Relationships)
             {
+                if (relationship.RelationshipDef.RelatedObjectClassType != this.OwningBO.GetType()) continue;
                 bool reverseRelatedPropFound = false;
                 foreach (IRelProp prop in this._relKey)
                 {
@@ -224,5 +204,14 @@ namespace Habanero.BO
         {
             return _boCol;
         }
+
+        public void Initialise()
+        {
+            if (_initialised) return;
+            DoInitialisation();
+            _initialised = true;
+        }
+
+        protected abstract void DoInitialisation();
     }
 }

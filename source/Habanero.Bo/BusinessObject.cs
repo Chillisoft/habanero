@@ -160,7 +160,11 @@ namespace Habanero.BO
             _boStatus.IsDirty = false;
             _boStatus.IsEditing = false;
             _boStatus.IsNew = true;
-            _classDef = classDef ?? ClassDef.ClassDefs[GetType()];
+            if (classDef == null)
+            {
+                if (ClassDef.ClassDefs.Contains(GetType()))
+                    _classDef = ClassDef.ClassDefs[GetType()];
+            } else _classDef = classDef;
             ConstructFromClassDef(true);
             Guid myID = Guid.NewGuid();
             if (_primaryKey != null)
