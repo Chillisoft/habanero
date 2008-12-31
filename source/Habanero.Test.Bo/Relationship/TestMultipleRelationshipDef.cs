@@ -22,7 +22,6 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
 
@@ -30,7 +29,7 @@ namespace Habanero.Test.BO
 {
 
     [TestFixture]
-    public class TestMultipleRelationshipDef : TestUsingDatabase
+    public class TestMultipleRelationshipDef 
     {
         private RelationshipDef _multipleRelationshipDef;
         private RelKeyDef _RelKeyDef;
@@ -41,12 +40,12 @@ namespace Habanero.Test.BO
         [TestFixtureSetUp]
         public void SetupFixture()
         {
-            this.SetupDBConnection();
         }
 
         [SetUp]
         public void init()
         {
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             _mockBo = new MockBO();
             _propDefCol = _mockBo.PropDefCol;
 
@@ -64,7 +63,6 @@ namespace Habanero.Test.BO
             _singleRelationshipDef = new SingleRelationshipDef("Single", typeof(MockBO),
                                                        _RelKeyDef, false,
                                                        DeleteParentAction.DeleteRelated);
-            DatabaseConnection.CurrentConnection.ConnectionString = MyDBConnection.GetConnectionString();
         }
 
         [Test]
@@ -86,50 +84,26 @@ namespace Habanero.Test.BO
         [Test]
         public void TestCreateRelationship()
         {
-            MultipleRelationship rel =
-                (MultipleRelationship)_multipleRelationshipDef.CreateRelationship(_mockBo, _mockBo.PropCol);
+            IMultipleRelationship rel =
+                (IMultipleRelationship)_multipleRelationshipDef.CreateRelationship(_mockBo, _mockBo.PropCol);
             Assert.AreEqual(_multipleRelationshipDef.RelationshipName, rel.RelationshipName);
 
             Assert.IsTrue(_mockBo.GetPropertyValue("MockBOProp1") == null);
 
-            Assert.IsTrue(rel.GetRelatedBusinessObjectCol().Count == 0);
+            Assert.AreEqual(0, rel.BusinessObjectCollection.Count );
         }
 
-		[Test]
-		public void TestCreateRelationshipUsingGenerics()
-		{
-			MultipleRelationship rel =
-				(MultipleRelationship)_multipleRelationshipDef.CreateRelationship(_mockBo, _mockBo.PropCol);
-			Assert.AreEqual(_multipleRelationshipDef.RelationshipName, rel.RelationshipName);
-
-			Assert.IsTrue(_mockBo.GetPropertyValue("MockBOProp1") == null);
-
-		    BusinessObjectCollection<MockBO> relatedObjects = rel.GetRelatedBusinessObjectCol<MockBO>();
-			Assert.IsTrue(relatedObjects.Count == 0);
-		}
         [Test]
         public void TestCreateSingleRelationship()
         {
-            SingleRelationship rel =
-                (SingleRelationship)_singleRelationshipDef.CreateRelationship(_mockBo, _mockBo.Props);
+            ISingleRelationship rel =
+                (ISingleRelationship)_singleRelationshipDef.CreateRelationship(_mockBo, _mockBo.Props);
 
             //-------------Execute Test ------------------------
-            IBusinessObjectCollection relatedObjects = rel.GetRelatedBusinessObjectCol();
+            bool hasRelatedObject = rel.HasRelatedObject();
             //-------------Test Result -------------------------
-            Assert.IsTrue(relatedObjects.Count == 0);
+            Assert.IsTrue(hasRelatedObject);
         }
-        [Test]
-        public void TestCreateSingleRelationshipUsingGenerics()
-        {
 
-            //---------------Set up test pack-------------------
-
-            SingleRelationship rel =
-                (SingleRelationship)_singleRelationshipDef.CreateRelationship(_mockBo, _mockBo.Props);
-            //-------------Execute Test ------------------------
-            BusinessObjectCollection<MockBO> relatedObjects = rel.GetRelatedBusinessObjectCol<MockBO>();
-            //-------------Test Result -------------------------
-            Assert.IsTrue(relatedObjects.Count == 0);
-        }
     }
 }

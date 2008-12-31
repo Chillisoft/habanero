@@ -61,7 +61,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestContainsPropDef()
         {
             Assert.IsTrue(mRelKeyDef.Contains("Prop"));
-            RelPropDef lPropDef = mRelKeyDef["Prop"];
+            IRelPropDef lPropDef = mRelKeyDef["Prop"];
             Assert.AreEqual("Prop", lPropDef.OwnerPropertyName);
         }
 
@@ -69,7 +69,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestCreateRelKey()
         {
             BOPropCol propCol = mPropDefCol.CreateBOPropertyCol(true);
-            RelKey relKey = mRelKeyDef.CreateRelKey(propCol);
+            IRelKey relKey = mRelKeyDef.CreateRelKey(propCol);
             Assert.IsTrue(relKey.Contains("Prop"));
             Assert.IsTrue(relKey.Contains("Prop2"));
             IRelProp relProp = relKey["Prop"];
@@ -110,7 +110,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestThisIndexerException()
         {
             RelKeyDef relKeyDef = new RelKeyDef();
-            RelPropDef relPropDef = relKeyDef["prop"];
+            IRelPropDef relPropDef = relKeyDef["prop"];
         }
 
         // Grants access to protected methods

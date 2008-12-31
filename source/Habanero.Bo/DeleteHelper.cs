@@ -86,11 +86,11 @@ namespace Habanero.BO
 				string relationshipName = pair.Key;
 				if (!bo.Relationships.Contains(relationshipName)) return;
 				string thisRelationshipPath = currentRelationshipPath + relationshipName;
-				MultipleRelationship relationship = bo.Relationships[relationshipName] as MultipleRelationship;
+				IMultipleRelationship relationship = bo.Relationships[relationshipName] as IMultipleRelationship;
 				if (relationship == null) continue;
 				if (pair.Value == null)
 				{
-				    IBusinessObjectCollection boCol = relationship.GetRelatedBusinessObjectCol();
+				    IBusinessObjectCollection boCol = relationship.BusinessObjectCollection;
 				    if (boCol.Count > 0)
 					{
 						if (!results.ContainsKey(thisRelationshipPath))
@@ -104,7 +104,7 @@ namespace Habanero.BO
 				}
 				else if (pair.Value.Count > 0)
 				{
-				    IBusinessObjectCollection boCol = relationship.GetRelatedBusinessObjectCol();
+				    IBusinessObjectCollection boCol = relationship.BusinessObjectCollection;
 				    foreach (BusinessObject businessObject in boCol)
 					{
 						CheckCanDeleteSafe(businessObject, alreadyChecked, pair.Value, thisRelationshipPath, ref results);

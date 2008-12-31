@@ -29,14 +29,36 @@ using Habanero.Util;
 
 namespace Habanero.BO
 {
+
+    public interface ISingleRelationship : IRelationship {
+        /// <summary>
+        /// Sets the related object to that provided
+        /// </summary>
+        /// <param name="relatedObject">The object to relate to</param>
+        void SetRelatedObject(IBusinessObject relatedObject);
+
+        ///<summary>
+        /// Returns the related object for the single relationship.
+        ///</summary>
+        ///<returns>returns the related business object</returns>
+        IBusinessObject GetRelatedObject();
+
+        /// <summary>
+        /// Indicates whether the related object has been specified
+        /// </summary>
+        /// <returns>Returns true if related object exists</returns>
+        bool HasRelatedObject();
+    }
+
     /// <summary>
     /// Manages a relationship where the relationship owner relates to one
     /// other object
     /// </summary>
-    public class SingleRelationship : Relationship
+    public class SingleRelationship<TBusinessObject> : Relationship<TBusinessObject>, ISingleRelationship
+        where TBusinessObject : class, IBusinessObject, new()
     {
         //TODO: Implement logging private static readonly ILog log = LogManager.GetLogger("Habanero.BO.SingleRelationship");
-        private IBusinessObject _relatedBo;
+        private TBusinessObject _relatedBo;
         private string _storedRelationshipExpression;
 
         /// <summary>
@@ -70,25 +92,25 @@ namespace Habanero.BO
         /// Indicates whether the related object has been specified
         /// </summary>
         /// <returns>Returns true if related object exists</returns>
-        public virtual bool HasRelationship()
+        public virtual bool HasRelatedObject()
         {
             return _relKey.HasRelatedObject();
-        }
-
-        /// <summary>
-        /// Returns the related object 
-        /// </summary>
-        /// <returns>Returns the related business object</returns>
-        public IBusinessObject GetRelatedObject(IDatabaseConnection connection)
-        {
-            return GetRelatedObject<BusinessObject>();
         }
 
         ///<summary>
         /// Returns the related object for the single relationship.
         ///</summary>
         ///<returns>returns the related business object</returns>
-        public virtual IBusinessObject GetRelatedObject()
+        IBusinessObject ISingleRelationship.GetRelatedObject()
+        {
+            return GetRelatedObject();
+        }
+
+        ///<summary>
+        /// Returns the related object for the single relationship.
+        ///</summary>
+        ///<returns>returns the related business object</returns>
+        public virtual TBusinessObject GetRelatedObject()
         {
             IExpression newRelationshipExpression = _relKey.RelationshipExpression();
 
@@ -96,19 +118,11 @@ namespace Habanero.BO
 
             if (_relatedBo == null || (_storedRelationshipExpression != newRelationshipExpression.ExpressionString()))
             {
-                if (HasRelationship())
+                if (HasRelatedObject())
                 {
-                    //log.Debug("HasRelationship returned true, loading object.") ; 
                     IBusinessObject busObj = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject(this);
-//                    if (_relDef.KeepReferenceToRelatedObject)
-//                    {
-                    _relatedBo = busObj;
+                    _relatedBo = (TBusinessObject) busObj;
                     _storedRelationshipExpression = newRelationshipExpression.ExpressionString();
-//                    }
-//                    else
-//                    {
-//                        return busObj;
-//                    }
                 }
                 else
                 {
@@ -139,30 +153,30 @@ namespace Habanero.BO
             return false;
         }
 
-        /// <summary>
-        /// Returns the related object 
-        /// </summary>
-        /// <returns>Returns the related business object</returns>
-        public virtual T GetRelatedObject<T>() where T : class, IBusinessObject, new()
+        void ISingleRelationship.SetRelatedObject(IBusinessObject relatedObject)
         {
-            return (T) GetRelatedObject();
+            SetRelatedObject((TBusinessObject) relatedObject);
         }
 
         /// <summary>
         /// Sets the related object to that provided
         /// </summary>
         /// <param name="relatedObject">The object to relate to</param>
-        public virtual void SetRelatedObject(IBusinessObject relatedObject)
+        public virtual void SetRelatedObject(TBusinessObject relatedObject)
         {
 
             if (_relatedBo == null) GetRelatedObject();
             if (_relatedBo == relatedObject) return;
             IBusinessObject previousRelatedBO = _relatedBo;
+
+           
+
             if (relatedObject != null)
             {
-                RelationshipDef.CheckCanAddChild(relatedObject);
+                RelationshipDef def = (RelationshipDef) RelationshipDef;
+                def.CheckCanAddChild(relatedObject);
                 //Add to reverse relationship
-                Relationship reverseRelationship = GetReverseRelationship(relatedObject) as Relationship;
+                IRelationship reverseRelationship = GetReverseRelationship(relatedObject);
                 if (reverseRelationship != null)
                 {
                     RelationshipDef relationshipDef =
@@ -176,33 +190,37 @@ namespace Habanero.BO
                         throw new HabaneroDeveloperException(message, message);
                     }
 
-                    if (reverseRelationship is MultipleRelationship)
+                    if (reverseRelationship is IMultipleRelationship)
                     {
+                        IMultipleRelationship multipleRelationship = (IMultipleRelationship) reverseRelationship;
+
                         _relatedBo = relatedObject;
-                        reverseRelationship.GetLoadedBOColInternal().Add(this.OwningBO);
+                        multipleRelationship.BusinessObjectCollection.Add(this.OwningBO);
                     }
 
-                    if (reverseRelationship is SingleRelationship)
+                    if (reverseRelationship is ISingleRelationship)
                     {
-                        reverseRelationship.RelationshipDef.CheckCanAddChild(this.OwningBO);
+                        relationshipDef.CheckCanAddChild(this.OwningBO);
                         _relatedBo = relatedObject;
-                        ((SingleRelationship)reverseRelationship).SetRelatedObject(this.OwningBO);
+                        ((ISingleRelationship)reverseRelationship).SetRelatedObject(this.OwningBO);
                     }
                 }
             }
+
             //Remove the this object from the previuosly related object
+
             if (previousRelatedBO != null)
             {
                 this.RelationshipDef.CheckCanRemoveChild(previousRelatedBO);
 
                 //Remove from previous relationship
-                MultipleRelationship reverseRelationship = GetReverseRelationship(previousRelatedBO) as MultipleRelationship;
+                IMultipleRelationship reverseRelationship = GetReverseRelationship(previousRelatedBO) as IMultipleRelationship;
                 if (reverseRelationship != null) // && reverseRelationship.IsRelationshipLoaded)
                 {
-                    IBusinessObjectCollection colInternal = reverseRelationship.GetLoadedBOColInternal();
+                    IBusinessObjectCollection colInternal = reverseRelationship.BusinessObjectCollection;
                     if (colInternal.Contains(this.OwningBO)) colInternal.Remove(this.OwningBO);
                 }
-                SingleRelationship singleReverseRelationship = GetReverseRelationship(previousRelatedBO) as SingleRelationship;
+                ISingleRelationship singleReverseRelationship = GetReverseRelationship(previousRelatedBO) as ISingleRelationship;
                 if (singleReverseRelationship != null)
                 {
                     singleReverseRelationship.RelationshipDef.CheckCanRemoveChild(this.OwningBO);
@@ -211,6 +229,7 @@ namespace Habanero.BO
                     singleReverseRelationship.SetRelatedObject(null);
                 }
             }
+
             _relatedBo = relatedObject;
             
             UpdatedForeignKeyAndStoredRelationshipExpression();
@@ -240,28 +259,6 @@ namespace Habanero.BO
             _relatedBo = null;
         }
 
-
-        protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>()
-        {
-            BusinessObjectCollection<TBusinessObject> col = new BusinessObjectCollection<TBusinessObject>();
-
-            TBusinessObject bo = this.GetRelatedObject<TBusinessObject>();
-            if (bo != null)
-            {
-                col.Add(bo);
-            }
-            return col;
-        }
-
-        protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
-        {
-            Type type = _relDef.RelatedObjectClassType;
-            Utilities.CheckTypeCanBeCreated(type);
-            IBusinessObjectCollection boCol =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(type, this);
-            return boCol;
-        }
-
         ///<summary>
         /// Returns a list of all the related objects that are dirty.
         /// In the case of a composition or aggregation this will be a list of all 
@@ -270,19 +267,26 @@ namespace Habanero.BO
         ///   this will only be a list of related objects that are added, removed, marked4deletion or created
         ///   as part of the relationship.
         ///</summary>
-        public override IList<IBusinessObject> GetDirtyChildren()
+        protected override IList<IBusinessObject> DoGetDirtyChildren()
         {
             IList<IBusinessObject> dirtyBusinessObjects = new List<IBusinessObject>();
-            if (_relatedBo != null && _relatedBo.Status.IsDirty)
-            {
-                dirtyBusinessObjects.Add(_relatedBo);
-            }
+            if (IsRelatedBODirty()) dirtyBusinessObjects.Add(_relatedBo); 
             return dirtyBusinessObjects;
         }
+
+        protected override IList<TBusinessObject> DoGetDirtyChildren_Typed()
+        {
+            IList<TBusinessObject> dirtyBusinessObjects = new List<TBusinessObject>();
+            if (IsRelatedBODirty()) dirtyBusinessObjects.Add(_relatedBo); 
+            return dirtyBusinessObjects;
+        }
+
+        private bool IsRelatedBODirty() { return _relatedBo != null && _relatedBo.Status.IsDirty; }
 
         protected override void DoInitialisation()
         {
             // do nothing
         }
     }
+
 }

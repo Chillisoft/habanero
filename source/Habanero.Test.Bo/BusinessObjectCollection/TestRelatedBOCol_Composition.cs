@@ -16,19 +16,19 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
     //      The invoices lines only make sense in terms of the invoice. The invoice lines cannot be created, retrieved, 
     //      deleted or persisted independently of the invoice. The invoice lines can never be moved to another invoice.
 
-        //The composition relationship can be either a 1:M or a 1:1. By definition a M:1 and a M:M cannot be a composition relationship. 
-        //•	A typical example of a composition relationship is an Invoice and its Invoice lines. An invoice is made up of its invoice lines. 
-            //An Invoice Line is part of an Invoice. An invoice Line cannot exist independently of its invoice and an invoice 
-            //line can only belong to a single invoice.
-        //•	An invoice that has invoice lines cannot be deleted without it deleting its invoice lines. 
-            //The invoice’s InvoiceLines relationship would be marked as either prevent delete, delete invoice lines or do nothing.
-        //•	An already persisted invoice line cannot be added to an Invoice (In Habanero a new invoice line can be added to an invoice). 
-        //•	An Invoice line cannot be removed from its invoice.
-        //•	An invoice can create a new invoice line via its InvoiceLines Relationship.
-        //•	An invoice is considered to be dirty if it has any dirty invoice line. 
-            //A dirty invoice line would be any invoice line that is dirty (edited) and would include a newly created invoice line and an 
-            //invoice line that has been marked for deletion.
-        //•	If an invoice is persisted then it must persist all its invoice lines.
+    //The composition relationship can be either a 1:M or a 1:1. By definition a M:1 and a M:M cannot be a composition relationship. 
+    //•	A typical example of a composition relationship is an Invoice and its Invoice lines. An invoice is made up of its invoice lines. 
+    //An Invoice Line is part of an Invoice. An invoice Line cannot exist independently of its invoice and an invoice 
+    //line can only belong to a single invoice.
+    //•	An invoice that has invoice lines cannot be deleted without it deleting its invoice lines. 
+    //The invoice’s InvoiceLines relationship would be marked as either prevent delete, delete invoice lines or do nothing.
+    //•	An already persisted invoice line cannot be added to an Invoice (In Habanero a new invoice line can be added to an invoice). 
+    //•	An Invoice line cannot be removed from its invoice.
+    //•	An invoice can create a new invoice line via its InvoiceLines Relationship.
+    //•	An invoice is considered to be dirty if it has any dirty invoice line. 
+    //A dirty invoice line would be any invoice line that is dirty (edited) and would include a newly created invoice line and an 
+    //invoice line that has been marked for deletion.
+    //•	If an invoice is persisted then it must persist all its invoice lines.
 
     [TestFixture]
     public class TestRelatedBOCol_Composition
@@ -52,7 +52,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         [TearDown]
         public void TearDownTest()
         {
-           TestUtil.WaitForGC();
+            TestUtil.WaitForGC();
         }
 
         //   TODO: remove option to do contactPerson.OrganisationID = xcsd.
@@ -63,13 +63,9 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             //An already persisted invoice line cannot be added to an Invoice 
             //(In Habanero a new invoice line can be added to an invoice). 
             //---------------Set up test pack-------------------
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            //Relationship<ContactPersonTestBO> compositionRelationship = organisationTestBO.Relationships<ContactPersonTestBO>["ContactPeople"];
-            Relationship compositionRelationship = (Relationship) organisationTestBO.Relationships["ContactPeople"];
-            compositionRelationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                (RelatedBusinessObjectCollection<ContactPersonTestBO>) compositionRelationship.GetRelatedBusinessObjectCol();
-            ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol);
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
 
             //---------------Assert Precondition----------------
             util.AssertAllCollectionsHaveNoItems(cpCol);
@@ -77,7 +73,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             //---------------Execute Test ----------------------
             try
             {
-                cpCol.Add(myBO);
+                cpCol.Add(contactPerson);
                 Assert.Fail("expected Err");
             }
             //---------------Test Result -----------------------
@@ -91,6 +87,21 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             }
         }
 
+        private MultipleRelationship<ContactPersonTestBO> GetCompositionRelationship(out BusinessObjectCollection<ContactPersonTestBO> cpCol) {
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            return GetCompositionRelationship(out cpCol, organisationTestBO);
+        }
+
+        private MultipleRelationship<ContactPersonTestBO> GetCompositionRelationship(out BusinessObjectCollection<ContactPersonTestBO> cpCol, OrganisationTestBO organisationTestBO)
+        {
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship =
+                organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            RelationshipDef relationshipDef = (RelationshipDef)compositionRelationship.RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Composition;
+            cpCol = compositionRelationship.BusinessObjectCollection;
+            return compositionRelationship;
+        }
+
 
         [Test]
         public void Test_AddMethod_AddNewChild()
@@ -98,11 +109,8 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             //An new invoice line can be added to an Invoice 
             //(In Habanero a new invoice line can be added to an invoice). 
             //---------------Set up test pack-------------------
-
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            Relationship compositionRelationship = (Relationship)organisationTestBO.Relationships["ContactPeople"];
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol);
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
             util.RegisterForAddedAndRemovedEvents(cpCol);
 
@@ -125,9 +133,8 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             // This rule must also be implemented for the reverse relationship.
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            Relationship compositionRelationship = (Relationship)organisationTestBO.Relationships["ContactPeople"]; 
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                (RelatedBusinessObjectCollection<ContactPersonTestBO>) compositionRelationship.GetRelatedBusinessObjectCol();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.CreateRandomString();
             contactPerson.FirstName = TestUtil.CreateRandomString();
@@ -164,9 +171,8 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             // This rule must also be implemented for the reverse relationship.
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            Relationship compositionRelationship = (Relationship)organisationTestBO.Relationships["ContactPeople"];
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.CreateRandomString();
             contactPerson.FirstName = TestUtil.CreateRandomString();
@@ -205,9 +211,8 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             //   been associated with am organisation.
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            Relationship compositionRelationship = (Relationship)organisationTestBO.Relationships["ContactPeople"]; 
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
             util.RegisterForAddedAndRemovedEvents(cpCol);
 
@@ -251,9 +256,8 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             //An invoice line cannot be removed from an Invoice.
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            Relationship compositionRelationship = GetCompositionRelationship(organisationTestBO);
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                new RelatedBusinessObjectCollection<ContactPersonTestBO>(compositionRelationship);
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             contactPerson.Save();
@@ -262,7 +266,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
 
             //---------------Assert Precondition----------------
             util.AssertOneObjectInCurrentPersistedCollection(cpCol);
-            Assert.IsFalse((bool) ReflectionUtilities.GetPrivatePropertyValue(cpCol, "Loading"));
+            Assert.IsFalse((bool)ReflectionUtilities.GetPrivatePropertyValue(cpCol, "Loading"));
 
             //---------------Execute Test ----------------------
             try
@@ -270,7 +274,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
                 cpCol.Remove(contactPerson);
                 Assert.Fail("expected Err");
             }
-                //---------------Test Result -----------------------
+            //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
             {
                 StringAssert.Contains("The " + compositionRelationship.RelationshipDef.RelatedObjectClassName, ex.Message);
@@ -293,9 +297,8 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             //   been associated with am organisation.
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            Relationship compositionRelationship = (Relationship)organisationTestBO.Relationships["ContactPeople"];
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
             contactPerson.Organisation = (OrganisationTestBO)compositionRelationship.OwningBO;
             util.RegisterForAddedAndRemovedEvents(cpCol);
@@ -334,10 +337,9 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            Relationship compositionRelationship = (Relationship)organisationTestBO.Relationships["ContactPeople"];
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
-            
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
+
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, cpCol.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
@@ -363,9 +365,8 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            Relationship compositionRelationship = (Relationship)organisationTestBO.Relationships["ContactPeople"];
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
             myBO.Surname = TestUtil.CreateRandomString();
             myBO.FirstName = TestUtil.CreateRandomString();
@@ -397,9 +398,8 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             RelationshipCol relationships = organisationTestBO.Relationships;
-            Relationship compositionRelationship = (Relationship)relationships["ContactPeople"];
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.CreateRandomString();
             contactPerson.FirstName = TestUtil.CreateRandomString();
@@ -428,15 +428,14 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             RelationshipCol relationships = organisationTestBO.Relationships;
-            Relationship compositionRelationship = (Relationship)relationships["ContactPeople"];
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.CreateRandomString();
             contactPerson.FirstName = TestUtil.CreateRandomString();
             contactPerson.Save();
             contactPerson.FirstName = TestUtil.CreateRandomString();
-             
+
             //---------------Assert Precondition----------------
             Assert.IsTrue(compositionRelationship.IsDirty);
             Assert.IsTrue(contactPerson.Status.IsDirty);
@@ -444,7 +443,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.IsTrue(organisationTestBO.Status.IsDirty);
 
             //---------------Execute Test ----------------------
-            IList<IBusinessObject> dirtyChildren = compositionRelationship.GetDirtyChildren();
+            IList<ContactPersonTestBO> dirtyChildren = compositionRelationship.GetDirtyChildren();
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, dirtyChildren.Count);
@@ -457,9 +456,8 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             RelationshipCol relationships = organisationTestBO.Relationships;
-            Relationship compositionRelationship = (Relationship)relationships["ContactPeople"];
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.CreateRandomString();
             contactPerson.FirstName = TestUtil.CreateRandomString();
@@ -471,7 +469,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.IsTrue(organisationTestBO.Status.IsDirty);
 
             //---------------Execute Test ----------------------
-            IList<IBusinessObject> dirtyChildren = compositionRelationship.GetDirtyChildren();
+            IList<ContactPersonTestBO> dirtyChildren = compositionRelationship.GetDirtyChildren();
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, dirtyChildren.Count);
@@ -483,9 +481,8 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             RelationshipCol relationships = organisationTestBO.Relationships;
-            Relationship compositionRelationship = (Relationship)relationships["ContactPeople"];
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.CreateRandomString();
             contactPerson.FirstName = TestUtil.CreateRandomString();
@@ -499,7 +496,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.IsTrue(organisationTestBO.Status.IsDirty);
 
             //---------------Execute Test ----------------------
-            IList<IBusinessObject> dirtyChildren = compositionRelationship.GetDirtyChildren();
+            IList<ContactPersonTestBO> dirtyChildren = compositionRelationship.GetDirtyChildren();
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, dirtyChildren.Count);
@@ -512,10 +509,8 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             RelationshipCol relationships = organisationTestBO.Relationships;
-            Relationship compositionRelationship = (Relationship)relationships["ContactPeople"];
-            compositionRelationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
             ContactPersonTestBO myBO_delete = ContactPersonTestBO.CreateSavedContactPerson_AsChild(cpCol);
             cpCol.MarkForDelete(myBO_delete);
             ContactPersonTestBO myBO_Edited = ContactPersonTestBO.CreateSavedContactPerson_AsChild(cpCol);
@@ -529,12 +524,12 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.IsTrue(organisationTestBO.Status.IsDirty);
 
             //---------------Execute Test ----------------------
-            IList<IBusinessObject> dirtyChildren = compositionRelationship.GetDirtyChildren();
+            IList<ContactPersonTestBO> dirtyChildren = compositionRelationship.GetDirtyChildren();
 
             //---------------Test Result -----------------------
-            Assert.Contains(myBO_delete, (ICollection) dirtyChildren);
-            Assert.Contains(myBO_Edited, (ICollection) dirtyChildren);
-            Assert.Contains(myBo_Created, (ICollection) dirtyChildren);
+            Assert.Contains(myBO_delete, (ICollection)dirtyChildren);
+            Assert.Contains(myBO_Edited, (ICollection)dirtyChildren);
+            Assert.Contains(myBo_Created, (ICollection)dirtyChildren);
             Assert.AreEqual(3, dirtyChildren.Count);
         }
 
@@ -544,10 +539,8 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             RelationshipCol relationships = organisationTestBO.Relationships;
-            Relationship compositionRelationship = (Relationship)relationships["ContactPeople"];
-            compositionRelationship.RelationshipDef.RelationshipType = RelationshipType.Composition;
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
             ContactPersonTestBO myBO_delete = ContactPersonTestBO.CreateSavedContactPerson_AsChild(cpCol);
             cpCol.MarkForDelete(myBO_delete);
             ContactPersonTestBO myBO_Edited = ContactPersonTestBO.CreateSavedContactPerson_AsChild(cpCol);
@@ -580,9 +573,8 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             RelationshipCol relationships = organisationTestBO.Relationships;
-            Relationship compositionRelationship = (Relationship)relationships["ContactPeople"];
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                (RelatedBusinessObjectCollection<ContactPersonTestBO>)compositionRelationship.GetRelatedBusinessObjectCol();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
             myBO.Surname = TestUtil.CreateRandomString();
             myBO.FirstName = TestUtil.CreateRandomString();
@@ -606,14 +598,6 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.IsFalse(organisationTestBO.Status.IsDirty);
         }
         #region Utils
-
-        private static Relationship GetCompositionRelationship(OrganisationTestBO organisationTestBO)
-        {
-            MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef(TestUtil.CreateRandomString(),
-                                                                                  "Habanero.Test.BO", "ContactPersonTestBO", new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated
-                                                                                  , RelationshipType.Composition);
-            return relationshipDef.CreateRelationship(organisationTestBO, organisationTestBO.Props);
-        }
 
         private void AssertMessageIsCorrect(HabaneroDeveloperException ex, string relatedObjectClassName, string operation, string relationshipName)
         {

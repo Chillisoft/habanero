@@ -342,13 +342,13 @@ namespace Habanero.Test.BO
                 {
                 }
 
-                public override Relationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol)
+                public override IRelationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol)
                 {
                     return new MySingleRelationship(owningBo, this, lBOPropCol);
                 }
             }
 
-            public class MySingleRelationship : SingleRelationship
+            public class MySingleRelationship : SingleRelationship<MyContactPerson>, ISingleRelationship
             {
                 private MyContactPerson _myContactPerson;
 
@@ -356,21 +356,11 @@ namespace Habanero.Test.BO
                 {
                 }
 
-
                 /// <summary>
                 /// Returns the related object 
                 /// </summary>
                 /// <returns>Returns the related business object</returns>
-                public override T GetRelatedObject<T>() 
-                {
-                    return _myContactPerson as T;
-                }
-
-                /// <summary>
-                /// Returns the related object 
-                /// </summary>
-                /// <returns>Returns the related business object</returns>
-                public override IBusinessObject GetRelatedObject()
+                public override MyContactPerson GetRelatedObject()
                 {
                     return _myContactPerson;
                 }
@@ -378,7 +368,7 @@ namespace Habanero.Test.BO
                 /// Sets the related object to that provided
                 /// </summary>
                 /// <param name="relatedObject">The object to relate to</param>
-                public override void SetRelatedObject(IBusinessObject relatedObject)
+                    void ISingleRelationship.SetRelatedObject(IBusinessObject relatedObject)
                 {
                     _myContactPerson = relatedObject as MyContactPerson;
                 }

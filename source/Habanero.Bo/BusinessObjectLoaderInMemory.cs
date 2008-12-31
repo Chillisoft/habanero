@@ -256,7 +256,7 @@ namespace Habanero.BO
         /// <typeparam name="T">The type of the business object to load</typeparam>
         /// <param name="relationship">The relationship to use to load the object</param>
         /// <returns>An object of type T if one was found, otherwise null</returns>
-        public T GetRelatedBusinessObject<T>(SingleRelationship relationship) where T : class, IBusinessObject, new()
+        public T GetRelatedBusinessObject<T>(SingleRelationship<T> relationship) where T : class, IBusinessObject, new()
         {
             return GetBusinessObject<T>(Criteria.FromRelationship(relationship));
         }
@@ -267,10 +267,11 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="relationship">The relationship to use to load the object</param>
         /// <returns>An object of the type defined by the relationship if one was found, otherwise null</returns>
-        public IBusinessObject GetRelatedBusinessObject(SingleRelationship relationship)
+        public IBusinessObject GetRelatedBusinessObject(ISingleRelationship relationship)
         {
-            if (relationship.RelationshipDef.RelatedObjectClassDef != null)
-                return GetBusinessObject(relationship.RelationshipDef.RelatedObjectClassDef,
+            RelationshipDef relationshipDef = (RelationshipDef) relationship.RelationshipDef;
+            if (relationshipDef.RelatedObjectClassDef != null)
+                return GetBusinessObject(relationshipDef.RelatedObjectClassDef,
                                          Criteria.FromRelationship(relationship));
             return null;
         }

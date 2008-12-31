@@ -26,14 +26,43 @@ using Habanero.Util;
 
 namespace Habanero.BO
 {
+
+
+    public interface IMultipleRelationship : IRelationship
+    {
+        ///// <summary>
+        ///// Returns the set of business objects that relate to this one
+        ///// through the specific relationship
+        ///// </summary>
+        ///// <returns>Returns a collection of business objects. If this is a single relationship then
+        ///// returns a single object in the collection.</returns>
+        //IBusinessObjectCollection GetRelatedBusinessObjectCol();
+
+
+        ///<summary>
+        /// The criteria by which this relationship is ordered. I.e. by default all the
+        /// related objects are loaded in this order.
+        ///</summary>
+        OrderCriteria OrderCriteria
+        {
+            get;
+        }
+
+        IBusinessObjectCollection BusinessObjectCollection
+        {
+            get;
+        }
+    }
+
     /// <summary>
     /// Manages a relationship where the relationship owner relates to several
     /// other objects
     /// </summary>
-    public class MultipleRelationship : Relationship
+    public class MultipleRelationship<TBusinessObject> : Relationship<TBusinessObject>, IMultipleRelationship
+        where TBusinessObject : class, IBusinessObject, new()
     {
-        //private BusinessObjectCollection<BusinessObject> _boCol;
-
+        protected BusinessObjectCollection<TBusinessObject> _boCol;
+        
         /// <summary>
         /// Constructor to initialise a new relationship
         /// </summary>
@@ -45,47 +74,7 @@ namespace Habanero.BO
         public MultipleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {
-            _boCol = CreateNewRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
-        }
-
-        /// <summary>
-        /// Creates a <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> with boType as its type parameter, using the Activator.
-        /// </summary>
-        /// <param name="boType">The type parameter to be used</param>
-        /// <param name="relationship">The relationship that this <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> is the collection for</param>
-        /// <returns>The instantiated <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/></returns>
-        public static IBusinessObjectCollection CreateRelatedBusinessObjectCollection(Type boType, IRelationship relationship)
-        {
-            IBusinessObjectCollection collection = CreateNewRelatedBusinessObjectCollection(boType, relationship);
-            SetupCriteriaForRelationship(relationship, collection);
-            return collection;
-        }
-
-        /// <summary>
-        /// Creates a <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> with boType as its type parameter, using the Activator.
-        /// </summary>
-        /// <param name="boType">The type parameter to be used</param>
-        /// <param name="relationship">The relationship that this <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> is the collection for</param>
-        /// <returns>The instantiated <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/></returns>
-        private static IBusinessObjectCollection CreateNewRelatedBusinessObjectCollection(Type boType, IRelationship relationship)
-        {
-            Utilities.CheckTypeCanBeCreated(boType);
-            Type relatedCollectionType = typeof(RelatedBusinessObjectCollection<>);
-            relatedCollectionType = relatedCollectionType.MakeGenericType(boType);
-            IBusinessObjectCollection collection = (IBusinessObjectCollection)Activator.CreateInstance(relatedCollectionType, relationship);
-            return collection;
-        }
-
-        private static void SetupCriteriaForRelationship(IRelationship relationship, IBusinessObjectCollection collection)
-        {
-            Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
-
-            OrderCriteria preparedOrderCriteria =
-                QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
-
-            //QueryBuilder.PrepareCriteria(relationship.RelatedObjectClassDef, relationshipCriteria);
-            collection.SelectQuery.Criteria = relationshipCriteria;
-            collection.SelectQuery.OrderCriteria = preparedOrderCriteria;
+            _boCol = (RelatedBusinessObjectCollection<TBusinessObject>)RelationshipUtils.CreateNewRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
         }
 
         ///<summary>
@@ -121,75 +110,97 @@ namespace Habanero.BO
             }
         }
 
-        protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>()
+        //protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
+        //{
+        //    //TODO: Need a strategy for what should be happening here when the collection is previously loaded.
+        //    //I would suggest option 1
+        //    //1) The collection is reloaded from the database as is currently being done.
+        //    //2) The collection is is returned
+        //    if (_boCol != null)
+        //    {
+        //        BORegistry.DataAccessor.BusinessObjectLoader.Refresh((BusinessObjectCollection<TBusinessObject>) _boCol);
+        //        return _boCol;
+        //    }
+
+        //    Type relatedBusinessObjectType = _relDef.RelatedObjectClassType;
+        //    Type genericType = typeof (TBusinessObject);
+
+        //    CheckTypeCanBeCreated(relatedBusinessObjectType);
+
+        //    CheckTypeIsASubClassOfGenericType<TBusinessObject>(relatedBusinessObjectType, genericType);
+
+        //    _boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
+
+        //    return _boCol;
+        //}
+
+        IBusinessObjectCollection IMultipleRelationship.BusinessObjectCollection
         {
-            //TODO: Need a strategy for what should be happening here when the collection is previously loaded.
-            //I would suggest option 1
-            //1) The collection is reloaded from the database as is currently being done.
-            //2) The collection is is returned
-            if (_boCol != null)
-            {
-                BORegistry.DataAccessor.BusinessObjectLoader.Refresh((BusinessObjectCollection<TBusinessObject>) _boCol);
-                return _boCol;
-            }
-
-            Type relatedBusinessObjectType = _relDef.RelatedObjectClassType;
-            Type genericType = typeof (TBusinessObject);
-
-            CheckTypeCanBeCreated(relatedBusinessObjectType);
-
-            CheckTypeIsASubClassOfGenericType<TBusinessObject>(relatedBusinessObjectType, genericType);
-
-            _boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
-
-            return _boCol;
-        }
-
-        protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
-        {
-
-
-            if (_boCol != null)
+            get
             {
                 BORegistry.DataAccessor.BusinessObjectLoader.Refresh(_boCol);
                 return _boCol;
             }
-            Type type = _relDef.RelatedObjectClassType;
-            CheckTypeCanBeCreated(type);
-            _boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(type, this);
-            return _boCol;
         }
 
-        private static void CheckTypeIsASubClassOfGenericType<TBusinessObject>(Type type, Type collectionItemType)
+        public BusinessObjectCollection<TBusinessObject> BusinessObjectCollection
         {
-            if (!(type == collectionItemType || type.IsSubclassOf(collectionItemType)))
+            get
             {
-                throw new HabaneroArgumentException
-                    (String.Format
-                         ("An error occurred while attempting to load a related "
-                          + "business object collection of type '{0}' into a "
-                          + "collection of the specified generic type('{1}').", type, typeof (TBusinessObject)));
+                BORegistry.DataAccessor.BusinessObjectLoader.Refresh(_boCol);
+                return _boCol;
             }
         }
 
-        private static void CheckTypeCanBeCreated(Type type)
-        {
-            //Check that the type can be created and raise appropriate error 
-            try
-            {
-                Activator.CreateInstance(type, true);
-            }
-            catch (Exception ex)
-            {
-                throw new UnknownTypeNameException
-                    (String.Format
-                         ("An error occurred while attempting to load a related "
-                          + "business object collection, with the type given as '{0}'. "
-                          + "Check that the given type exists and has been correctly "
-                          + "defined in the relationship and class definitions for the classes " + "involved.", type),
-                     ex);
-            }
-        }
+        //protected BusinessObjectCollection<TBusinessObject> GetRelatedBusinessObjectColInternal()
+        //{
+
+
+        //    if (_boCol != null)
+        //    {
+        //        BORegistry.DataAccessor.BusinessObjectLoader.Refresh(_boCol);
+        //        return _boCol;
+        //    }
+        //    //Type type = _relDef.RelatedObjectClassType;
+        //    //CheckTypeCanBeCreated(type);
+        //    _boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
+        //    return _boCol;
+        //}
+
+        //private static void CheckTypeIsASubClassOfGenericType<TBusinessObject>(Type type, Type collectionItemType)
+        //{
+        //    if (!(type == collectionItemType || type.IsSubclassOf(collectionItemType)))
+        //    {
+        //        throw new HabaneroArgumentException
+        //            (String.Format
+        //                 ("An error occurred while attempting to load a related "
+        //                  + "business object collection of type '{0}' into a "
+        //                  + "collection of the specified generic type('{1}').", type, typeof (TBusinessObject)));
+        //    }
+        //}
+
+        //private static void CheckTypeCanBeCreated(Type type)
+        //{
+        //    //Check that the type can be created and raise appropriate error 
+        //    try
+        //    {
+        //        Activator.CreateInstance(type, true);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new UnknownTypeNameException
+        //            (String.Format
+        //                 ("An error occurred while attempting to load a related "
+        //                  + "business object collection, with the type given as '{0}'. "
+        //                  + "Check that the given type exists and has been correctly "
+        //                  + "defined in the relationship and class definitions for the classes " + "involved.", type),
+        //             ex);
+        //    }
+        //}
+
+        private delegate void Add(IBusinessObject bo);
+        private delegate bool Contains(IBusinessObject bo);
+
 
         ///<summary>
         /// Returns a list of all the related objects that are dirty.
@@ -199,35 +210,87 @@ namespace Habanero.BO
         ///   this will only be a list of related objects that are added, removed, marked4deletion or created
         ///   as part of the relationship.
         ///</summary>
-        public override IList<IBusinessObject> GetDirtyChildren()
+        protected override IList<IBusinessObject> DoGetDirtyChildren()
         {
             IList<IBusinessObject> dirtyBusinessObjects = new List<IBusinessObject>();
+            PopulateDirtyBusinessObjects(dirtyBusinessObjects.Add, dirtyBusinessObjects.Contains);
+            return dirtyBusinessObjects;
+        }
+
+        protected override IList<TBusinessObject> DoGetDirtyChildren_Typed()
+        {
+            IList<TBusinessObject> dirtyBusinessObjects = new List<TBusinessObject>();
+            PopulateDirtyBusinessObjects(bo => dirtyBusinessObjects.Add((TBusinessObject) bo), bo => dirtyBusinessObjects.Contains((TBusinessObject) bo));
+            return dirtyBusinessObjects;
+        }
+        
+        private void PopulateDirtyBusinessObjects(Add add, Contains contains)
+        {
             if (HasDirtyEditingCollections)
             {
                 foreach (IBusinessObject bo in _boCol.CreatedBOCol)
                 {
-                    dirtyBusinessObjects.Add(bo);
+                    add(bo);
                 }
                 foreach (IBusinessObject bo in _boCol.MarkForDeletionBOCol)
                 {
-                    dirtyBusinessObjects.Add(bo);
+                    add(bo);
                 }
             }
             foreach (IBusinessObject bo in _boCol.PersistedBOCol)
             {
-                if (bo.Status.IsDirty && !dirtyBusinessObjects.Contains(bo))
+                if (bo.Status.IsDirty && !contains(bo))
                 {
-                    dirtyBusinessObjects.Add(bo);
+                    add(bo);
                 }
             }
-            return dirtyBusinessObjects;
         }
 
         protected override void DoInitialisation()
         {
-            SetupCriteriaForRelationship(this, _boCol);
+            RelationshipUtils.SetupCriteriaForRelationship(this, _boCol);
         }
 
+        internal IBusinessObjectCollection GetLoadedBOColInternal()
+        {
+            return _boCol;
+        }
+
+
+        ///// <summary>
+        ///// Returns the set of business objects that relate to this one
+        ///// through the specific relationship
+        ///// </summary>
+        ///// <returns>Returns a collection of business objects</returns>
+        //public virtual IBusinessObjectCollection GetRelatedBusinessObjectCol()
+        //{
+        //    return GetRelatedBusinessObjectColInternal();
+        //}
+
+        ///// <summary>
+        ///// Returns the set of business objects that relate to this one
+        ///// through the specific relationship
+        ///// </summary>
+        ///// <returns>Returns a collection of business objects</returns>
+        //public virtual BusinessObjectCollection<TBusinessObject> GetRelatedBusinessObjectCollection()
+        //{
+        //    return GetRelatedBusinessObjectColInternal();
+        //}
+
+        //protected abstract BusinessObjectCollection<TBusinessObject> GetRelatedBusinessObjectColInternal();
+
+
+        ///<summary>
+        /// 
+        ///</summary>
+        public OrderCriteria OrderCriteria
+        {
+            get
+            {
+                if (_relDef.OrderCriteria == null) return new OrderCriteria();
+                return _relDef.OrderCriteria;
+            }
+        }
      
     }
 }

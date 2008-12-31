@@ -47,5 +47,10 @@ namespace Habanero.Base
         {
             get;
         }
+
+        /// <summary>
+        /// Indicates if the property is null
+        /// </summary>
+        bool IsNull { get; }
     }
 }

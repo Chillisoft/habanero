@@ -25,29 +25,6 @@ namespace Habanero.BO.CriteriaManager
 {
     
     /// <summary>
-    /// An enumeration to list possible parameter types
-    /// </summary>
-    public enum ParameterType
-    {
-        ///<summary>
-        /// parameter type is string.
-        ///</summary>
-        String = 1,     //Any string, text etc
-        ///<summary>
-        /// parameter type is Date
-        ///</summary>
-        Date = 2,       //Any date datetime etc
-        ///<summary>
-        /// parameter type is Numeric long, int, double etc
-        ///</summary>
-        Number = 3,     //Any number int long, double etc
-        ///<summary>
-        /// parameter type is boolean
-        ///</summary>
-        Bool = 4,       //Boolean
-    }
-
-    /// <summary>
     /// The parameter is a terminal expression that is just a specialised 
     /// IExpression.  It was created separately from Expression so that it 
     /// could store the additional parameters of the field name, table name 

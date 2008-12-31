@@ -33,7 +33,7 @@ namespace Habanero.BO
     public class RelatedBusinessObjectCollection<TBusinessObject> : BusinessObjectCollection<TBusinessObject>
         where TBusinessObject : class, IBusinessObject, new()
     {
-        private readonly Relationship _relationship;
+        private readonly Relationship<TBusinessObject> _relationship;
 
         ///<summary>
         /// The related business object is constructed with the parent Business object of this 
@@ -42,7 +42,7 @@ namespace Habanero.BO
         ///<param name="relationship"></param>
         public RelatedBusinessObjectCollection(IRelationship relationship)
         {
-            _relationship = (Relationship) relationship;
+            _relationship = (Relationship<TBusinessObject>) relationship;
         }
 
         //Relationship 
@@ -130,7 +130,7 @@ namespace Habanero.BO
 
         private void SetupRelatedObject(TBusinessObject bo)
         {
-            SingleRelationship reverseRelationship = GetReverseRelationship(bo) as SingleRelationship;
+            ISingleRelationship reverseRelationship = GetReverseRelationship(bo) as ISingleRelationship;
             if (reverseRelationship != null)
             {
                 reverseRelationship.SetRelatedObject(this._relationship.OwningBO);
@@ -138,7 +138,7 @@ namespace Habanero.BO
         }
         private bool IsForeignKeySetup(TBusinessObject bo)
         {
-            SingleRelationship reverseRelationship = GetReverseRelationship(bo) as SingleRelationship;
+            ISingleRelationship reverseRelationship = GetReverseRelationship(bo) as ISingleRelationship;
             if (reverseRelationship != null)
             {
                 IBusinessObject relatedObject = reverseRelationship.GetRelatedObject();

@@ -132,7 +132,7 @@ namespace Habanero.BO
         /// <typeparam name="T">The type of the business object to load</typeparam>
         /// <param name="relationship">The relationship to use to load the object</param>
         /// <returns>An object of type T if one was found, otherwise null</returns>
-        public static T GetRelatedBusinessObject<T>(SingleRelationship relationship) where T : class, IBusinessObject, new()
+        public static T GetRelatedBusinessObject<T>(SingleRelationship<T> relationship) where T : class, IBusinessObject, new()
         {
             return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject<T>(relationship);
         }
@@ -143,7 +143,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="relationship">The relationship to use to load the object</param>
         /// <returns>An object of the type defined by the relationship if one was found, otherwise null</returns>
-        public static IBusinessObject GetRelatedBusinessObject(SingleRelationship relationship)
+        public static IBusinessObject GetRelatedBusinessObject(ISingleRelationship relationship)
         {
             return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject(relationship);
         }
@@ -318,7 +318,7 @@ namespace Habanero.BO
         /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
         /// PersonID</param>
         /// <returns>The loaded RelatedBusinessObjectCollection</returns>
-        public static RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IRelationship relationship) where T : class, IBusinessObject, new()
+        public static RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IMultipleRelationship relationship) where T : class, IBusinessObject, new()
         {
             return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<T>(relationship);
         }
@@ -333,7 +333,7 @@ namespace Habanero.BO
         /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
         /// PersonID</param>
         /// <returns>The loaded RelatedBusinessObjectCollection</returns>
-        public static IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IRelationship relationship)
+        public static IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IMultipleRelationship relationship)
         {
             return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(type,relationship);
         }

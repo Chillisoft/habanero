@@ -59,13 +59,13 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<ContactPersonTestBO>(GetContactPersonRelationship());
         }
 
-        private static MultipleRelationship GetContactPersonRelationship()
+        private static MultipleRelationship<ContactPersonTestBO> GetContactPersonRelationship()
         {
             if (_organisationTestBO == null)
             {
                 _organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             }
-            return (MultipleRelationship) _organisationTestBO.Relationships["ContactPeople"];
+            return _organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
         }
 
 //        private static RelatedBusinessObjectCollection<ContactPersonTestBO> CreateCollectionWith_OneBO()
@@ -76,9 +76,9 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
 
         private static ContactPersonTestBO CreateSavedContactPerson()
         {
-            MultipleRelationship relationship = GetContactPersonRelationship();
+            MultipleRelationship<ContactPersonTestBO> relationship = GetContactPersonRelationship();
             ContactPersonTestBO cp =
-                (ContactPersonTestBO) relationship.GetRelatedBusinessObjectCol().CreateBusinessObject();
+                (ContactPersonTestBO) relationship.BusinessObjectCollection.CreateBusinessObject();
             cp.Surname = TestUtil.CreateRandomString();
             cp.FirstName = TestUtil.CreateRandomString();
             cp.Save();

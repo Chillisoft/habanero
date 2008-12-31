@@ -192,12 +192,12 @@ namespace Habanero.Test.BO
             Assert.AreEqual(2, addresses.Count);
             Assert.AreSame(address1, addresses[1]);
             Assert.AreSame(address2, addresses[0]);
-            
+
             //---------------Execute Test ----------------------
             address2.AddressLine1 = "zzzzz";
             address2.Save();
             RelatedBusinessObjectCollection<AddressTestBO> addressesAfterChangeOrder = cp.Addresses;
-            
+
             //---------------Test Result -----------------------
 
             Assert.AreSame(address1, addressesAfterChangeOrder[0]);
@@ -208,16 +208,16 @@ namespace Habanero.Test.BO
         [Test]
         public void TestCreateRelationship()
         {
-            SingleRelationship rel = (SingleRelationship)mRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
+            ISingleRelationship rel = (ISingleRelationship)mRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
             Assert.AreEqual(mRelationshipDef.RelationshipName, rel.RelationshipName);
             Assert.IsTrue(mMockBo.GetPropertyValue("MockBOProp1") == null);
-            Assert.IsFalse(rel.HasRelationship(), "Should be false since props are not defaulted in Mock bo");
+            Assert.IsFalse(rel.HasRelatedObject(), "Should be false since props are not defaulted in Mock bo");
             mMockBo.SetPropertyValue("MockBOProp1", mMockBo.GetPropertyValue("MockBOID"));
             mMockBo.Save();
-            Assert.IsTrue(rel.HasRelationship(), "Should be true since prop MockBOProp1 has been set");
+            Assert.IsTrue(rel.HasRelatedObject(), "Should be true since prop MockBOProp1 has been set");
 
             Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1"), mMockBo.GetPropertyValue("MockBOID"));
-            MockBO ltempBO = (MockBO)rel.GetRelatedObject(DatabaseConnection.CurrentConnection);
+            MockBO ltempBO = (MockBO)rel.GetRelatedObject();
             Assert.IsFalse(ltempBO == null);
             Assert.AreEqual(mMockBo.GetPropertyValue("MockBOID"), ltempBO.GetPropertyValue("MockBOID"),
                             "The object returned should be the one with the ID = MockBOID");
@@ -226,9 +226,9 @@ namespace Habanero.Test.BO
             Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1"), ltempBO.GetPropertyValue("MockBOID"),
                             "The object returned should be the one with the ID = MockBOID");
 
-            Assert.AreSame(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection));
+            Assert.AreSame(ltempBO, rel.GetRelatedObject());
             BusinessObjectManager.Instance.ClearLoadedObjects();
-            Assert.AreSame(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection));
+            Assert.AreSame(ltempBO, rel.GetRelatedObject());
             mMockBo.MarkForDelete();
             mMockBo.Save();
         }
@@ -237,16 +237,16 @@ namespace Habanero.Test.BO
         public void TestCreateRelationshipHoldRelRef()
         {
             RelationshipDef lRelationshipDef = new SingleRelationshipDef("Relation1", typeof(MockBO), mRelKeyDef, true, DeleteParentAction.Prevent);
-            SingleRelationship rel = (SingleRelationship)lRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
+            ISingleRelationship rel = (ISingleRelationship)lRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
             Assert.AreEqual(lRelationshipDef.RelationshipName, rel.RelationshipName);
             Assert.IsTrue(mMockBo.GetPropertyValue("MockBOProp1") == null);
-            Assert.IsFalse(rel.HasRelationship(), "Should be false since props are not defaulted in Mock bo");
+            Assert.IsFalse(rel.HasRelatedObject(), "Should be false since props are not defaulted in Mock bo");
             mMockBo.SetPropertyValue("MockBOProp1", mMockBo.GetPropertyValue("MockBOID"));
             mMockBo.Save();
-            Assert.IsTrue(rel.HasRelationship(), "Should be true since prop MockBOProp1 has been set");
+            Assert.IsTrue(rel.HasRelatedObject(), "Should be true since prop MockBOProp1 has been set");
 
             Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1"), mMockBo.GetPropertyValue("MockBOID"));
-            MockBO ltempBO = (MockBO)rel.GetRelatedObject(DatabaseConnection.CurrentConnection);
+            MockBO ltempBO = (MockBO)rel.GetRelatedObject();
             Assert.IsFalse(ltempBO == null);
             Assert.AreEqual(mMockBo.GetPropertyValue("MockBOID"), ltempBO.GetPropertyValue("MockBOID"),
                             "The object returned should be the one with the ID = MockBOID");
@@ -255,9 +255,9 @@ namespace Habanero.Test.BO
             Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1"), ltempBO.GetPropertyValue("MockBOID"),
                             "The object returned should be the one with the ID = MockBOID");
 
-            Assert.IsTrue(ReferenceEquals(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection)));
+            Assert.IsTrue(ReferenceEquals(ltempBO, rel.GetRelatedObject()));
             BusinessObjectManager.Instance.ClearLoadedObjects();
-            Assert.IsTrue(ReferenceEquals(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection)));
+            Assert.IsTrue(ReferenceEquals(ltempBO, rel.GetRelatedObject()));
             mMockBo.MarkForDelete();
             mMockBo.Save();
         }
@@ -266,27 +266,27 @@ namespace Habanero.Test.BO
         public void TestGetRelatedObject()
         {
             RelationshipDef lRelationshipDef = new SingleRelationshipDef("Relation1", typeof(MockBO), mRelKeyDef, true, DeleteParentAction.Prevent);
-            SingleRelationship rel = (SingleRelationship)lRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
+            ISingleRelationship rel = (ISingleRelationship)lRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
             Assert.AreEqual(lRelationshipDef.RelationshipName, rel.RelationshipName);
             Assert.IsTrue(mMockBo.GetPropertyValue("MockBOProp1") == null);
-            Assert.IsFalse(rel.HasRelationship(), "Should be false since props are not defaulted in Mock bo");
+            Assert.IsFalse(rel.HasRelatedObject(), "Should be false since props are not defaulted in Mock bo");
             //Set a related object
             mMockBo.SetPropertyValue("MockBOProp1", mMockBo.GetPropertyValue("MockBOID"));
             //Save the object, so that the relationship can retrieve the object from the database
             mMockBo.Save();
-            Assert.IsTrue(rel.HasRelationship(), "Should have a related object since the relating props have values");
-            MockBO ltempBO = (MockBO)rel.GetRelatedObject(DatabaseConnection.CurrentConnection);
+            Assert.IsTrue(rel.HasRelatedObject(), "Should have a related object since the relating props have values");
+            MockBO ltempBO = (MockBO)rel.GetRelatedObject();
             Assert.IsNotNull(ltempBO, "The related object should exist");
             //Clear the related object
             mMockBo.SetPropertyValue("MockBOProp1", null);
-            Assert.IsFalse(rel.HasRelationship(), "Should not have a related object since the relating props have been set to null");
-            ltempBO = (MockBO)rel.GetRelatedObject(DatabaseConnection.CurrentConnection);
+            Assert.IsFalse(rel.HasRelatedObject(), "Should not have a related object since the relating props have been set to null");
+            ltempBO = (MockBO)rel.GetRelatedObject();
             Assert.IsNull(ltempBO, "The related object should now be null");
             //Set a related object again
             mMockBo.SetPropertyValue("MockBOProp1", mMockBo.GetPropertyValue("MockBOID"));
-            Assert.IsTrue(rel.HasRelationship(), "Should have a related object since the relating props have values again");
-            ltempBO = (MockBO)rel.GetRelatedObject(DatabaseConnection.CurrentConnection);
-            Assert.IsNotNull(ltempBO, "The related object should exist again"); 
+            Assert.IsTrue(rel.HasRelatedObject(), "Should have a related object since the relating props have values again");
+            ltempBO = (MockBO)rel.GetRelatedObject();
+            Assert.IsNotNull(ltempBO, "The related object should exist again");
             mMockBo.MarkForDelete();
             mMockBo.Save();
         }
@@ -299,12 +299,12 @@ namespace Habanero.Test.BO
             new Car();
             ContactPerson person = new ContactPerson();
             Address address = new Address();
-            Relationship relationship = (Relationship)address.Relationships["ContactPerson"];
+            SingleRelationship<ContactPerson> relationship = address.Relationships.GetSingle<ContactPerson>("ContactPerson");
             IRelationship expectedRelationship = person.Relationships["Addresses"];
 
             //---------------Execute Test ----------------------
-            IRelationship reverseRelationship = (Relationship) relationship.GetReverseRelationship(person);
-            
+            IRelationship reverseRelationship = relationship.GetReverseRelationship(person);
+
             //---------------Test Result -----------------------
             Assert.AreSame(expectedRelationship, reverseRelationship);
         }
@@ -317,12 +317,12 @@ namespace Habanero.Test.BO
             new Car();
             ContactPerson person = new ContactPerson();
             Car car = new Car();
-            Relationship relationship = (Relationship)car.Relationships["Owner"];
+            SingleRelationship<ContactPerson> relationship = car.Relationships.GetSingle<ContactPerson>("Owner");
             IRelationship expectedRelationship = person.Relationships["Cars"];
 
             //---------------Execute Test ----------------------
-            IRelationship reverseRelationship = (Relationship) relationship.GetReverseRelationship(person);
-            
+            IRelationship reverseRelationship = relationship.GetReverseRelationship(person);
+
             //---------------Test Result -----------------------
             Assert.AreSame(expectedRelationship, reverseRelationship);
         }
@@ -340,11 +340,11 @@ namespace Habanero.Test.BO
 
         //    //---------------Execute Test ----------------------
         //    IRelationship reverseRelationship = (Relationship) relationship.GetReverseRelationship(person);
-            
+
         //    //---------------Test Result -----------------------
         //    Assert.AreSame(expectedRelationship, reverseRelationship);
         //}
     }
 
-    
+
 }

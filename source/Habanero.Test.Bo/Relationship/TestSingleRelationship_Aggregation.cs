@@ -37,8 +37,9 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             RelationshipCol relationships = organisationTestBO.Relationships;
-            SingleRelationship aggregateRelationship = (SingleRelationship)relationships["ContactPerson"];
-            aggregateRelationship.RelationshipDef.RelationshipType = RelationshipType.Aggregation;
+            ISingleRelationship aggregateRelationship = (ISingleRelationship)relationships["ContactPerson"];
+            RelationshipDef relationshipDef = (RelationshipDef) aggregateRelationship.RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Aggregation;
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
 
             //---------------Execute Test ----------------------
@@ -56,8 +57,9 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             RelationshipCol relationships = organisationTestBO.Relationships;
-            SingleRelationship aggregateRelationship = (SingleRelationship)relationships["ContactPerson"];
-            aggregateRelationship.RelationshipDef.RelationshipType = RelationshipType.Aggregation;
+            ISingleRelationship aggregateRelationship = (ISingleRelationship)relationships["ContactPerson"];
+            RelationshipDef relationshipDef = (RelationshipDef)aggregateRelationship.RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Aggregation;
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
 
             //---------------Execute Test ----------------------
@@ -72,15 +74,17 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            Relationship aggregateRelationship = (Relationship)organisation.Relationships["ContactPerson"];
-            aggregateRelationship.RelationshipDef.RelationshipType = RelationshipType.Aggregation;
+            RelationshipCol relationships = organisation.Relationships;
+            ISingleRelationship aggregateRelationship = (ISingleRelationship)relationships["ContactPerson"];
+            RelationshipDef relationshipDef = (RelationshipDef)aggregateRelationship.RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Aggregation;
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
 
             //---------------Execute Test ----------------------
             contactPerson.Organisation = organisation;
 
             //---------------Test Result -----------------------
-             Assert.AreSame(contactPerson, organisation.ContactPerson);
+            Assert.AreSame(contactPerson, organisation.ContactPerson);
             Assert.AreSame(organisation, contactPerson.Organisation);
         }
 
@@ -89,8 +93,10 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            Relationship aggregateRelationship = (Relationship)organisation.Relationships["ContactPerson"];
-            aggregateRelationship.RelationshipDef.RelationshipType = RelationshipType.Aggregation;
+            RelationshipCol relationships = organisation.Relationships;
+            ISingleRelationship aggregateRelationship = (ISingleRelationship)relationships["ContactPerson"];
+            RelationshipDef relationshipDef = (RelationshipDef)aggregateRelationship.RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Aggregation;
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
 
             //---------------Execute Test ----------------------
@@ -106,8 +112,10 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            Relationship aggregateRelationship = (Relationship)organisation.Relationships["ContactPerson"];
-            aggregateRelationship.RelationshipDef.RelationshipType = RelationshipType.Aggregation;
+            RelationshipCol relationships = organisation.Relationships;
+            ISingleRelationship aggregateRelationship = (ISingleRelationship)relationships["ContactPerson"];
+            RelationshipDef relationshipDef = (RelationshipDef)aggregateRelationship.RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Aggregation;
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             contactPerson.Organisation = organisation;
             contactPerson.Save();
@@ -126,8 +134,10 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            Relationship aggregateRelationship = (Relationship)organisation.Relationships["ContactPerson"];
-            aggregateRelationship.RelationshipDef.RelationshipType = RelationshipType.Aggregation;
+            RelationshipCol relationships = organisation.Relationships;
+            ISingleRelationship aggregateRelationship = (ISingleRelationship)relationships["ContactPerson"];
+            RelationshipDef relationshipDef = (RelationshipDef)aggregateRelationship.RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Aggregation;
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             contactPerson.Organisation = organisation;
             //---------------Assert Precondition----------------
@@ -143,8 +153,10 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            Relationship aggregateRelationship = (Relationship)organisation.Relationships["ContactPerson"];
-            aggregateRelationship.RelationshipDef.RelationshipType = RelationshipType.Aggregation;     
+            RelationshipCol relationships = organisation.Relationships;
+            ISingleRelationship aggregateRelationship = (ISingleRelationship)relationships["ContactPerson"];
+            RelationshipDef relationshipDef = (RelationshipDef)aggregateRelationship.RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Aggregation;
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             //---------------Assert Precondition----------------
             Assert.IsNull(contactPerson.Organisation);
@@ -162,8 +174,10 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship aggregateRelationship = (SingleRelationship)organisation.Relationships["ContactPerson"];
-            aggregateRelationship.RelationshipDef.RelationshipType = RelationshipType.Aggregation;
+            RelationshipCol relationships = organisation.Relationships;
+            ISingleRelationship aggregateRelationship = (ISingleRelationship)relationships["ContactPerson"];
+            RelationshipDef relationshipDef = (RelationshipDef)aggregateRelationship.RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Aggregation;
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             aggregateRelationship.SetRelatedObject(contactPerson);
 
@@ -188,8 +202,10 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship aggregateRelationship = (SingleRelationship)organisation.Relationships["ContactPerson"];
-            aggregateRelationship.RelationshipDef.RelationshipType = RelationshipType.Aggregation;
+            RelationshipCol relationships = organisation.Relationships;
+            ISingleRelationship aggregateRelationship = (ISingleRelationship)relationships["ContactPerson"];
+            RelationshipDef relationshipDef = (RelationshipDef)aggregateRelationship.RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Aggregation;
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             aggregateRelationship.SetRelatedObject(contactPerson);
             contactPerson.Surname = TestUtil.CreateRandomString();
@@ -217,8 +233,10 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship aggregateRelationship = (SingleRelationship)organisation.Relationships["ContactPerson"];
-            aggregateRelationship.RelationshipDef.RelationshipType = RelationshipType.Aggregation;
+            RelationshipCol relationships = organisation.Relationships;
+            ISingleRelationship aggregateRelationship = (ISingleRelationship)relationships["ContactPerson"];
+            RelationshipDef relationshipDef = (RelationshipDef)aggregateRelationship.RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Aggregation;
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             aggregateRelationship.SetRelatedObject(contactPerson);
             contactPerson.Surname = TestUtil.CreateRandomString();

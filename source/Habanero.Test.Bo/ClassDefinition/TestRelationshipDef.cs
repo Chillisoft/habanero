@@ -77,16 +77,16 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestCreateRelationship()
         {
-            SingleRelationship rel = (SingleRelationship)mRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
+            ISingleRelationship rel = (ISingleRelationship) mRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
             Assert.AreEqual(mRelationshipDef.RelationshipName, rel.RelationshipName);
             Assert.IsTrue(mMockBo.GetPropertyValue("MockBOProp1") == null);
-            Assert.IsFalse(rel.HasRelationship(), "Should be false since props are not defaulted in Mock bo");
+            Assert.IsFalse(rel.HasRelatedObject(), "Should be false since props are not defaulted in Mock bo");
             mMockBo.SetPropertyValue("MockBOProp1", mMockBo.GetPropertyValue("MockBOID"));
             mMockBo.Save();
-            Assert.IsTrue(rel.HasRelationship(), "Should be true since prop MockBOProp1 has been set");
+            Assert.IsTrue(rel.HasRelatedObject(), "Should be true since prop MockBOProp1 has been set");
 
             Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1"), mMockBo.GetPropertyValue("MockBOID"));
-            MockBO ltempBO = (MockBO)rel.GetRelatedObject(DatabaseConnection.CurrentConnection);
+            MockBO ltempBO = (MockBO)rel.GetRelatedObject();
             Assert.IsFalse(ltempBO == null);
             Assert.AreEqual(mMockBo.GetPropertyValue("MockBOID"), ltempBO.GetPropertyValue("MockBOID"),
                             "The object returned should be the one with the ID = MockBOID");
@@ -137,9 +137,9 @@ namespace Habanero.Test.BO.ClassDefinition
                 : base("rel", typeof(MyRelatedBo), new RelKeyDef(), true, DeleteParentAction.Prevent)
             {}
 
-            public override Relationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol)
+            public override IRelationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol)
             {
-                return new SingleRelationship(null, null, null);
+                return null;
             }
 
             public void SetRelationshipName(string name)

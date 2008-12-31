@@ -36,6 +36,14 @@ namespace Habanero.Base
         }
 
         /// <summary>
+        /// Provides an indexing facility so that the properties can be
+        /// accessed with square brackets like an array
+        /// </summary>
+        /// <param name="propName">The property name</param>
+        /// <returns>Returns the RelProp object found with that name</returns>
+        IRelProp this[string propName] { get; }
+
+        /// <summary>
         /// Indexes the array of relprops this relkey contains.
         /// </summary>
         /// <param name="index">The position of the relprop to get</param>
@@ -44,5 +52,26 @@ namespace Habanero.Base
         {
             get;
         }
+
+        /// <summary>
+        /// Indicates if there is a related object.
+        /// If all relationship properties are null then it is assumed that 
+        /// there is no related object.
+        /// </summary>
+        /// <returns>Returns true if there is a valid relationship</returns>
+        bool HasRelatedObject();
+
+        /// <summary>
+        /// Returns the relationship expression. This is a copy of the expression as stored in the <see cref="Habanero.BO.RelKey"/>
+        /// </summary>
+        /// <returns>Returns an IExpression object</returns>
+        IExpression RelationshipExpression();
+
+        /// <summary>
+        /// Indicates whether a property with the given name is part of the key
+        /// </summary>
+        /// <param name="propName">The property name</param>
+        /// <returns>Returns true if a property with this name is held</returns>
+        bool Contains(string propName);
     }
 }

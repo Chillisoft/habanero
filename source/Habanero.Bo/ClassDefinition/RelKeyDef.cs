@@ -25,6 +25,9 @@ using Habanero.Base.Exceptions;
 
 namespace Habanero.BO.ClassDefinition
 {
+
+
+
     /// <summary>
     /// This class contains the definition of a Foreign Key that defines the properties <see cref="RelPropDef"/> that
     ///   that forms a relationship between two Classes. 
@@ -42,16 +45,16 @@ namespace Habanero.BO.ClassDefinition
     ///   two Business object defitions (<see cref="ClassDef"/>.
     ///   <see cref="IBusinessObject"/>.
     /// </summary>
-    public class RelKeyDef : IEnumerable<RelPropDef>
+    public class RelKeyDef : IRelKeyDef
     {
-        private readonly Dictionary<string, RelPropDef> _relPropDefs;
+        private readonly Dictionary<string, IRelPropDef> _relPropDefs;
 
         /// <summary>
         /// Constructor to create a new RelKeyDef object
         /// </summary>
         public RelKeyDef()
         {
-            _relPropDefs = new Dictionary<string, RelPropDef>();
+            _relPropDefs = new Dictionary<string, IRelPropDef>();
         }
 
         /// <summary>
@@ -61,7 +64,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="propName">The name of the property</param>
         /// <returns>Returns the corresponding RelPropDef object</returns>
-        public RelPropDef this[string propName]
+        public IRelPropDef this[string propName]
         {
             get
             {
@@ -83,7 +86,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="relPropDef">The RelPropDef object to be added.</param>
         /// <exception cref="HabaneroArgumentException">Thrown if the
         /// argument passed is null</exception>
-        public virtual void Add(RelPropDef relPropDef)
+        public virtual void Add(IRelPropDef relPropDef)
         {
             if (relPropDef == null)
             {
@@ -100,7 +103,7 @@ namespace Habanero.BO.ClassDefinition
 		/// Removes a Related Property definition from the key
 		/// </summary>
 		/// <param name="relPropDef">The Related Property Definition to remove</param>
-		protected void Remove(RelPropDef relPropDef)
+		protected void Remove(IRelPropDef relPropDef)
 		{
 			if (Contains(relPropDef))
 			{
@@ -113,7 +116,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
 		/// <param name="relPropDef">The Related Property Definition to search for</param>
 		/// <returns>Returns true if found, false if not</returns>
-		internal protected bool Contains(RelPropDef relPropDef)
+		internal protected bool Contains(IRelPropDef relPropDef)
         {
 			return (_relPropDefs.ContainsKey(relPropDef.OwnerPropertyName));
         }
@@ -134,7 +137,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="lBoPropCol">The collection of properties</param>
         /// <returns>Returns the new RelKey object</returns>
-        public RelKey CreateRelKey(BOPropCol lBoPropCol)
+        public IRelKey CreateRelKey(BOPropCol lBoPropCol)
         {
             RelKey lRelKey = new RelKey(this, lBoPropCol);
             return lRelKey;
@@ -161,7 +164,7 @@ namespace Habanero.BO.ClassDefinition
         ///A <see cref="T:System.Collections.Generic.IEnumerator`1"></see> that can be used to iterate through the collection.
         ///</returns>
         ///<filterpriority>1</filterpriority>
-        IEnumerator<RelPropDef> IEnumerable<RelPropDef>.GetEnumerator()
+        IEnumerator<IRelPropDef> IEnumerable<IRelPropDef>.GetEnumerator()
 		{
 			return _relPropDefs.Values.GetEnumerator();
 		}

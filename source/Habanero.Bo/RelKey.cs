@@ -59,7 +59,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns the RelProp object found with that name</returns>
-        internal IRelProp this[string propName]
+        public IRelProp this[string propName]
         {
             get
             {
@@ -113,7 +113,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns true if a property with this name is held</returns>
-        internal bool Contains(string propName)
+        public bool Contains(string propName)
         {
             return (_relProps.ContainsKey(propName));
         }
@@ -124,7 +124,7 @@ namespace Habanero.BO
         /// there is no related object.
         /// </summary>
         /// <returns>Returns true if there is a valid relationship</returns>
-        internal bool HasRelatedObject()
+        public bool HasRelatedObject()
         {
             foreach (RelProp relProp in this)
             {
@@ -137,10 +137,10 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Returns the relationship expression
+        /// Returns the relationship expression. This is a copy of the expression as stored in the <see cref="RelKey"/>
         /// </summary>
         /// <returns>Returns an IExpression object</returns>
-        internal IExpression RelationshipExpression()
+        public IExpression RelationshipExpression()
         {
             if (_relProps.Count >= 1)
             {

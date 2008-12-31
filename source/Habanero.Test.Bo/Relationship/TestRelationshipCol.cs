@@ -115,24 +115,167 @@ namespace Habanero.Test.BO
             Assert.IsNotNull(relationship);
         }
 
-        //[Test]
-        //public void TestIndexer_Generic()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    ClassDef classDef = MyBO.LoadClassDefWithRelationship();
-        //    MyRelatedBo.LoadClassDef();
-        //    MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
+   
+        [Test]
+        public void TestGetSingle_Generic()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
+            string relationshipName = "MyRelationship";
 
-        //    //---------------Execute Test ----------------------
-        //    Relationship<MyRelatedBo> relationship = bo1.Relationships<MyRelatedBo>["MyMultipleRelationship"];
+            //---------------Execute Test ----------------------
+            SingleRelationship<MyRelatedBo> relationship = bo1.Relationships.GetSingle<MyRelatedBo>(relationshipName);
             
-        //    //---------------Test Result -----------------------
+            //---------------Test Result -----------------------
 
-        //    Assert.IsNotNull(relationship);
-        //    //MultipleRelationship<MyRelatedBo> multipleRelationship = relationship as MultipleRelationship<MyRelatedBo>;
-        //    //Assert.IsNotNull(multipleRelationship);
+            Assert.IsNotNull(relationship);
+            Assert.AreEqual(relationshipName, relationship.RelationshipName);
+        }
 
-        //}
+        [Test]
+        public void TestGetSingle_Generic_Fail()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
+            string relationshipName = "MyMultipleRelationship";
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                SingleRelationship<MyRelatedBo> relationship = bo1.Relationships.GetSingle<MyRelatedBo>(relationshipName);
+                Assert.Fail("Should have failed because we're accessing a multiple relationship as a single.");
+            //---------------Test Result -----------------------
+            }
+            catch (InvalidRelationshipAccessException ex)
+            {
+
+            }
+        }
+
+        [Test]
+        public void TestGetMultiple_Generic()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
+            string relationshipName = "MyMultipleRelationship";
+
+            //---------------Execute Test ----------------------
+            MultipleRelationship<MyRelatedBo> relationship = bo1.Relationships.GetMultiple<MyRelatedBo>(relationshipName);
+
+            //---------------Test Result -----------------------
+
+            Assert.IsNotNull(relationship);
+            Assert.AreEqual(relationshipName, relationship.RelationshipName);
+        }
+
+        [Test]
+        public void TestGetMultiple_Generic_Fail()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
+            string relationshipName = "MyRelationship";
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                MultipleRelationship<MyRelatedBo> relationship = bo1.Relationships.GetMultiple<MyRelatedBo>(relationshipName);
+                Assert.Fail("Should have failed because we're accessing a single relationship as a multiple.");
+                //---------------Test Result -----------------------
+            }
+            catch (InvalidRelationshipAccessException ex)
+            {
+
+            }
+        }
+
+
+        [Test]
+        public void TestGetSingle()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
+            string relationshipName = "MyRelationship";
+
+            //---------------Execute Test ----------------------
+            ISingleRelationship relationship = bo1.Relationships.GetSingle(relationshipName);
+
+            //---------------Test Result -----------------------
+
+            Assert.IsNotNull(relationship);
+            Assert.AreEqual(relationshipName, relationship.RelationshipName);
+        }
+
+        [Test]
+        public void TestGetSingle_Fail()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
+            string relationshipName = "MyMultipleRelationship";
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                ISingleRelationship relationship = bo1.Relationships.GetSingle(relationshipName);
+                Assert.Fail("Should have failed because we're accessing a multiple relationship as a single.");
+                //---------------Test Result -----------------------
+            }
+            catch (InvalidRelationshipAccessException ex)
+            {
+
+            }
+        }
+
+        [Test]
+        public void TestGetMultiple()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
+            string relationshipName = "MyMultipleRelationship";
+
+            //---------------Execute Test ----------------------
+            IMultipleRelationship relationship = bo1.Relationships.GetMultiple(relationshipName);
+
+            //---------------Test Result -----------------------
+
+            Assert.IsNotNull(relationship);
+            Assert.AreEqual(relationshipName, relationship.RelationshipName);
+        }
+
+        [Test]
+        public void TestGetMultiple_Fail()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo1 = (MyBO)classDef.CreateNewBusinessObject();
+            string relationshipName = "MyRelationship";
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                IMultipleRelationship relationship = bo1.Relationships.GetMultiple(relationshipName);
+                Assert.Fail("Should have failed because we're accessing a single relationship as a multiple.");
+                //---------------Test Result -----------------------
+            }
+            catch (InvalidRelationshipAccessException ex)
+            {
+
+            }
+        }
 
         [Test]
         public void TestSetRelatedBusinessObject()

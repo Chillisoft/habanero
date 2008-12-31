@@ -53,8 +53,8 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            MultipleRelationship cpRelationship = (MultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
-            ContactPersonTestBO cp = (ContactPersonTestBO) cpRelationship.GetRelatedBusinessObjectCol().CreateBusinessObject();
+            var cpRelationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            ContactPersonTestBO cp = cpRelationship.BusinessObjectCollection.CreateBusinessObject();
             cp.FirstName = TestUtil.CreateRandomString();
             cp.Surname = TestUtil.CreateRandomString();
             cp.Save();
@@ -71,8 +71,8 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            MultipleRelationship cpRelationship = (MultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
-            ContactPersonTestBO cp = (ContactPersonTestBO)cpRelationship.GetRelatedBusinessObjectCol().CreateBusinessObject();
+            IMultipleRelationship cpRelationship = (IMultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
+            ContactPersonTestBO cp = (ContactPersonTestBO)cpRelationship.BusinessObjectCollection.CreateBusinessObject();
             cp.FirstName = TestUtil.CreateRandomString();
             cp.Surname = TestUtil.CreateRandomString();
             cp.Save();
@@ -89,7 +89,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            MultipleRelationship cpRelationship = (MultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
+            IMultipleRelationship cpRelationship = (IMultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = new RelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
             cpCol.LoadAll();
             RegisterForAddedEvent(cpCol);
@@ -119,7 +119,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             // the main collection and should be added to the persisted collection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            MultipleRelationship cpRelationship = (MultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
+            IMultipleRelationship cpRelationship = (IMultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = new RelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
             cpCol.LoadAll();
 
@@ -154,7 +154,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             //---------------Set up test pack-------------------
 
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            MultipleRelationship cpRelationship = (MultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
+            IMultipleRelationship cpRelationship = (IMultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = new RelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
             cpCol.LoadAll();
 
@@ -228,7 +228,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         private static RelatedBusinessObjectCollection<ContactPersonTestBO> CreateRelatedCPCol()
         {
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            MultipleRelationship cpRelationship = (MultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
+            IMultipleRelationship cpRelationship = (IMultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
             return new RelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
         }
 
@@ -473,7 +473,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         private static RelatedBusinessObjectCollection<ContactPersonTestBO> CreateCollectionWith_OneBO()
         {
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            MultipleRelationship cpRelationship = (MultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
+            IMultipleRelationship cpRelationship = (IMultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = new RelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
 
             ContactPersonTestBO cp = cpCol.CreateBusinessObject();

@@ -77,13 +77,13 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            MultipleRelationship rel = (MultipleRelationship)def.CreateRelationship(organisation, organisation.Props);
+            IMultipleRelationship rel = (IMultipleRelationship) def.CreateRelationship(organisation, organisation.Props);
 
             //---------------Test Result -----------------------
 
-            IBusinessObjectCollection collection = rel.GetLoadedBOColInternal();
+            IBusinessObjectCollection collection = rel.BusinessObjectCollection;
             Assert.IsNotNull(collection);
-            Assert.AreEqual(0, rel.GetRelatedBusinessObjectCol().Count);
+            Assert.AreEqual(0, collection.Count);
             Assert.AreSame(contactPersonClassDef, collection.ClassDef);
             Assert.IsInstanceOfType(typeof(ContactPersonTestBO), collection.CreateBusinessObject());
         }

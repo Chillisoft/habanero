@@ -54,7 +54,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestCreateRelProp()
         {
             BOPropCol propCol = _propDefCol.CreateBOPropertyCol(true);
-            RelProp relProp = _relPropDef.CreateRelProp(propCol);
+            IRelProp relProp = _relPropDef.CreateRelProp(propCol);
 
             Assert.AreEqual("Prop", relProp.OwnerPropertyName);
             Assert.AreEqual("PropName", relProp.RelatedClassPropName);
@@ -66,7 +66,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //-------------Setup Test Pack ------------------
             BOPropCol propCol = new BOPropCol();
             Exception exception = null;
-            RelProp relProp = null;
+            IRelProp relProp = null;
             //-------------Execute test ---------------------
             try
             {

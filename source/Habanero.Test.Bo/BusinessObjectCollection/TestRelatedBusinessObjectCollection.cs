@@ -69,7 +69,7 @@ namespace Habanero.Test.BO
             MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = new MyBO();
-            MultipleRelationship rel = (MultipleRelationship) bo.Relationships["MyMultipleRelationship"];
+            IMultipleRelationship rel = bo.Relationships.GetMultiple("MyMultipleRelationship");
             RelatedBusinessObjectCollection<MyRelatedBo> col = new RelatedBusinessObjectCollection<MyRelatedBo>(rel);
 
             //Run tests
@@ -92,7 +92,7 @@ namespace Habanero.Test.BO
             MyBO.LoadClassDefWithRelationship();
             MyRelatedBo.LoadClassDef();
             MyBO bo = new MyBO();
-            MultipleRelationship rel = (MultipleRelationship)bo.Relationships["MyMultipleRelationship"];
+            IMultipleRelationship rel = bo.Relationships.GetMultiple("MyMultipleRelationship");
             RelatedBusinessObjectCollection<MyRelatedBo> col = new RelatedBusinessObjectCollection<MyRelatedBo>(rel);
             MyRelatedBo relatedBo = new MyRelatedBo();
 

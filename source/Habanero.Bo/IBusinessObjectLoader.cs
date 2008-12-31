@@ -127,7 +127,7 @@ namespace Habanero.BO
         /// <typeparam name="T">The type of the business object to load</typeparam>
         /// <param name="relationship">The relationship to use to load the object</param>
         /// <returns>An object of type T if one was found, otherwise null</returns>
-        T GetRelatedBusinessObject<T>(SingleRelationship relationship) where T : class, IBusinessObject, new();
+        T GetRelatedBusinessObject<T>(SingleRelationship<T> relationship) where T : class, IBusinessObject, new();
 
         /// <summary>
         /// Loads a business object using the relationship given. The relationship will be converted into a
@@ -135,7 +135,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="relationship">The relationship to use to load the object</param>
         /// <returns>An object of the type defined by the relationship if one was found, otherwise null</returns>
-        IBusinessObject GetRelatedBusinessObject(SingleRelationship relationship);
+        IBusinessObject GetRelatedBusinessObject(ISingleRelationship relationship);
 
         /// <summary>
         /// Loads a BusinessObjectCollection using the criteria given. 
@@ -265,7 +265,7 @@ namespace Habanero.BO
         /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
         /// PersonID</param>
         /// <returns>The loaded RelatedBusinessObjectCollection</returns>
-        RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IRelationship relationship) where T : class, IBusinessObject, new();
+        RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IMultipleRelationship relationship) where T : class, IBusinessObject, new();
 
         /// <summary>
         /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
@@ -277,7 +277,7 @@ namespace Habanero.BO
         /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
         /// PersonID</param>
         /// <returns>The loaded RelatedBusinessObjectCollection</returns>
-        IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IRelationship relationship);
+        IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IMultipleRelationship relationship);
 
 
 

@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D04BB138-C144-4406-9A41-17192E7D44BF}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -115,6 +115,11 @@
     <Compile Include="IClassDef.cs" />
     <Compile Include="IBusinessObjectUpdateLog.cs" />
     <Compile Include="IConcurrencyControl.cs" />
+    <Compile Include="IExpression.cs" />
+    <Compile Include="IParameterSQLInfo.cs" />
+    <Compile Include="IRelationshipDef.cs" />
+    <Compile Include="IRelKeyDef.cs" />
+    <Compile Include="IRelPropDef.cs" />
     <Compile Include="ISqlFormatter.cs" />
     <Compile Include="IDBNumberGenerator.cs" />
     <Compile Include="IKeyDef.cs" />

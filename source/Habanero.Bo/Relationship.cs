@@ -26,18 +26,62 @@ using Habanero.Util;
 
 namespace Habanero.BO
 {
+
+    internal static class RelationshipUtils
+    {
+        /// <summary>
+        /// Creates a <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> with boType as its type parameter, using the Activator.
+        /// </summary>
+        /// <param name="boType">The type parameter to be used</param>
+        /// <param name="relationship">The relationship that this <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> is the collection for</param>
+        /// <returns>The instantiated <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/></returns>
+        public static IBusinessObjectCollection CreateRelatedBusinessObjectCollection(Type boType, IMultipleRelationship relationship)
+        {
+            IBusinessObjectCollection collection = CreateNewRelatedBusinessObjectCollection(boType, relationship);
+            SetupCriteriaForRelationship(relationship, collection);
+            return collection;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> with boType as its type parameter, using the Activator.
+        /// </summary>
+        /// <param name="boType">The type parameter to be used</param>
+        /// <param name="relationship">The relationship that this <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/> is the collection for</param>
+        /// <returns>The instantiated <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/></returns>
+        internal static IBusinessObjectCollection CreateNewRelatedBusinessObjectCollection(Type boType, IRelationship relationship)
+        {
+            Utilities.CheckTypeCanBeCreated(boType);
+            Type relatedCollectionType = typeof(RelatedBusinessObjectCollection<>);
+            relatedCollectionType = relatedCollectionType.MakeGenericType(boType);
+            IBusinessObjectCollection collection = (IBusinessObjectCollection)Activator.CreateInstance(relatedCollectionType, relationship);
+            return collection;
+        }
+
+        internal static void SetupCriteriaForRelationship(IMultipleRelationship relationship, IBusinessObjectCollection collection)
+        {
+            Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
+
+            OrderCriteria preparedOrderCriteria =
+                QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
+
+            //QueryBuilder.PrepareCriteria(relationship.RelatedObjectClassDef, relationshipCriteria);
+            collection.SelectQuery.Criteria = relationshipCriteria;
+            collection.SelectQuery.OrderCriteria = preparedOrderCriteria;
+        }
+
+    }
+
     /// <summary>
     /// Provides a super-class for relationships between business objects
     /// </summary>
-    public abstract class Relationship : IRelationship // <TBusinessObject> : IRelationship
-        //where TBusinessObject : class, IBusinessObject, new() 
+    public abstract class Relationship<TBusinessObject> : IRelationship
+        where TBusinessObject : class, IBusinessObject, new() 
 
     {
         protected RelationshipDef _relDef;
         protected readonly IBusinessObject _owningBo;
-        protected internal RelKey _relKey;
-        protected IBusinessObjectCollection _boCol;
-        private bool _initialised = false;
+        protected internal IRelKey _relKey;
+       private bool _initialised = false;
 
         /// <summary>
         /// Constructor to initialise a new relationship
@@ -65,7 +109,7 @@ namespace Habanero.BO
         /// <summary>
         /// Returns the relationship definition
         /// </summary>
-        public RelationshipDef RelationshipDef
+        public IRelationshipDef RelationshipDef
         {
             get { return _relDef; }
         }
@@ -79,17 +123,6 @@ namespace Habanero.BO
             get { return _relDef.DeleteParentAction; }
         }
 
-        ///<summary>
-        /// 
-        ///</summary>
-        public OrderCriteria OrderCriteria
-        {
-            get
-            {
-                if (_relDef.OrderCriteria == null) return new OrderCriteria();
-                return _relDef.OrderCriteria;
-            }
-        }
 
         ///<summary>
         /// Returns the business object that owns this relationship e.g. Invoice has many lines
@@ -99,39 +132,7 @@ namespace Habanero.BO
         {
             get { return _owningBo; }
         }
-
-        /// <summary>
-        /// Returns the set of business objects that relate to this one
-        /// through the specific relationship
-        /// </summary>
-        /// <returns>Returns a collection of business objects</returns>
-        public virtual IBusinessObjectCollection GetRelatedBusinessObjectCol()
-        {
-            return GetRelatedBusinessObjectColInternal();
-        }
-
-        /// <summary>
-        /// Returns the set of business objects that relate to this one
-        /// through the specific relationship
-        /// </summary>
-        /// <returns>Returns a collection of business objects</returns>
-        public virtual BusinessObjectCollection<TBusinessObject> GetRelatedBusinessObjectCol<TBusinessObject>()
-            where TBusinessObject : BusinessObject, new()
-        {
-            IBusinessObjectCollection boCol = GetRelatedBusinessObjectColInternal<TBusinessObject>();
-            return (BusinessObjectCollection<TBusinessObject>) boCol;
-        }
-
-        protected abstract IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>()
-            where TBusinessObject : BusinessObject, new();
-
-
-        protected abstract IBusinessObjectCollection GetRelatedBusinessObjectColInternal();
-
-
-
-
-
+        
         ///<summary>
         /// The key that identifies this relationship i.e. the properties in the 
         /// source object and how they are related to properties in the related object.
@@ -166,7 +167,27 @@ namespace Habanero.BO
         ///   this will only be a list of related objects that are added, removed, marked4deletion or created
         ///   as part of the relationship.
         ///</summary>
-        public abstract IList<IBusinessObject> GetDirtyChildren();
+        IList<IBusinessObject> IRelationship.GetDirtyChildren()
+        {
+            return DoGetDirtyChildren();
+        }
+
+        ///<summary>
+        /// Returns a list of all the related objects that are dirty.
+        /// In the case of a composition or aggregation this will be a list of all 
+        ///   dirty related objects (child objects). 
+        /// In the case of association
+        ///   this will only be a list of related objects that are added, removed, marked4deletion or created
+        ///   as part of the relationship.
+        ///</summary>
+        public IList<TBusinessObject> GetDirtyChildren()
+        {
+            return DoGetDirtyChildren_Typed();
+        }
+
+        protected abstract IList<IBusinessObject> DoGetDirtyChildren();
+        protected abstract IList<TBusinessObject> DoGetDirtyChildren_Typed();
+
 
         //TODO: This should be temporary code and will b removed when define reverse relationships in Firestarter and classdefs.
         /// <summary>
@@ -180,7 +201,7 @@ namespace Habanero.BO
         {
             //This is a horrrible Hack but I do not want to do the reverse relationship 
             IRelationship reverseRelationship = null;
-            foreach (Relationship relationship in bo.Relationships)
+            foreach (IRelationship relationship in bo.Relationships)
             {
                 if (relationship.RelationshipDef.RelatedObjectClassType != this.OwningBO.GetType()) continue;
                 bool reverseRelatedPropFound = false;
@@ -197,15 +218,12 @@ namespace Habanero.BO
                 reverseRelationship = relationship;
                 break;
             }
+            if (reverseRelationship != null && !reverseRelationship.Initialised)
+                ReflectionUtilities.ExecutePrivateMethod(reverseRelationship, "Initialise");
             return reverseRelationship;
         }
 
-        internal IBusinessObjectCollection GetLoadedBOColInternal()
-        {
-            return _boCol;
-        }
-
-        public void Initialise()
+        internal void Initialise()
         {
             if (_initialised) return;
             DoInitialisation();
@@ -213,5 +231,6 @@ namespace Habanero.BO
         }
 
         protected abstract void DoInitialisation();
+        public bool Initialised { get { return _initialised; } }
     }
 }

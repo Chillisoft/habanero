@@ -321,7 +321,7 @@ namespace Habanero.Test
             ClassDef.RelationshipDefCol = new RelationshipDefCol();
             ClassDef.RelationshipDefCol.Add(relDef);
 
-            Relationships.Add(new MultipleRelationship(this, relDef, Props));
+            Relationships.Add(new MultipleRelationship<Address>(this, relDef, Props));
         }
 
         public override string ToString()

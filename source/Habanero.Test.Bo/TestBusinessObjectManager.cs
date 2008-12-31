@@ -928,10 +928,10 @@ namespace Habanero.Test.BO
             Assert.AreEqual(3, BusinessObjectManager.Instance.Count);
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection colContactPeople = org.Relationships["ContactPeople"].GetRelatedBusinessObjectCol();
-            ContactPersonTestBO loadedCP = (ContactPersonTestBO) colContactPeople[0];
-            IBusinessObjectCollection colAddresses = loadedCP.Relationships["Addresses"].GetRelatedBusinessObjectCol();
-            AddressTestBO loadedAdddress = (AddressTestBO) colAddresses[0];
+            var colContactPeople = org.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople").BusinessObjectCollection;
+            ContactPersonTestBO loadedCP = colContactPeople[0];
+            var colAddresses = loadedCP.Relationships.GetMultiple<AddressTestBO>("Addresses").BusinessObjectCollection;
+            AddressTestBO loadedAdddress = colAddresses[0];
 
             //---------------Test Result -----------------------
             Assert.AreEqual(3, BusinessObjectManager.Instance.Count);

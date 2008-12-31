@@ -18,9 +18,12 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 using NUnit.Framework;
+using IExpression=Habanero.Base.IExpression;
+using IParameterSqlInfo=Habanero.Base.IParameterSqlInfo;
 
 namespace Habanero.Test.BO
 {
@@ -203,7 +206,7 @@ namespace Habanero.Test.BO
         public void TestParameterSqlInfo()
         {
             IParameterSqlInfo paramSql1 =
-                new MockParameterSqlInfo("testfieldname", "paramName", ParameterType.String, "tbl");
+                new MockParameterSqlInfo("testfieldname", "paramName", Habanero.Base.ParameterType.String, "tbl");
             IExpression exp = Expression.CreateExpression("paramName = 'test'");
             exp.SetParameterSqlInfo(paramSql1);
             SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);

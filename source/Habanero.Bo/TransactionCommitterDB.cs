@@ -102,45 +102,72 @@ namespace Habanero.BO
 
         private void DereferenceRelatedChildren(TransactionalBusinessObject transaction)
         {
-            foreach (Relationship relationship in transaction.BusinessObject.Relationships)
+            foreach (IRelationship relationship in transaction.BusinessObject.Relationships)
             {
                 if (!MustDereferenceRelatedObjects(relationship)) continue;
-                IBusinessObjectCollection col = relationship.GetRelatedBusinessObjectCol();
-                for (int i = col.Count - 1; i >= 0; i--)
+                if (relationship is IMultipleRelationship)
                 {
-                    BusinessObject bo = (BusinessObject) col[i];
-                    foreach (RelPropDef relPropDef in relationship.RelationshipDef.RelKeyDef)
+                    IMultipleRelationship multipleRelationship = (IMultipleRelationship) relationship;
+                    IBusinessObjectCollection col = multipleRelationship.BusinessObjectCollection;
+                    for (int i = col.Count - 1; i >= 0; i--)
                     {
-                        bo.SetPropertyValue(relPropDef.RelatedClassPropName, null);
+                        DereferenceChild(multipleRelationship, col[i]);
                     }
-                    ExecuteTransactionToDataSource(new TransactionalBusinessObjectDB(bo));
+                } else if (relationship is ISingleRelationship)
+                {
+                    ISingleRelationship singleRelationship = (ISingleRelationship)relationship;
+                    DereferenceChild(singleRelationship, singleRelationship.GetRelatedObject());
                 }
             }
         }
 
-        private static bool MustDereferenceRelatedObjects(Relationship relationship)
+        private void DereferenceChild(IRelationship relationship, IBusinessObject bo) {
+            foreach (RelPropDef relPropDef in relationship.RelationshipDef.RelKeyDef)
+            {
+                bo.SetPropertyValue(relPropDef.RelatedClassPropName, null);
+            }
+            ExecuteTransactionToDataSource(new TransactionalBusinessObjectDB(bo));
+        }
+
+        private static bool MustDereferenceRelatedObjects(IRelationship relationship)
         {
             return relationship.DeleteParentAction == DeleteParentAction.DereferenceRelated;
         }
 
         private void DeleteRelatedChildren(TransactionalBusinessObject transaction)
         {
-            foreach (Relationship relationship in transaction.BusinessObject.Relationships)
+            foreach (IRelationship relationship in transaction.BusinessObject.Relationships)
             {
                 if (MustDeleteRelatedObjects(relationship))
                 {
-                    IBusinessObjectCollection col = relationship.GetRelatedBusinessObjectCol();
-                    for (int i = col.Count - 1; i >= 0; i--)
+                    if (relationship is IMultipleRelationship)
                     {
-                        BusinessObject bo = (BusinessObject) col[i];
-                        bo.Delete();
-                        ExecuteTransactionToDataSource(new TransactionalBusinessObjectDB(bo));
+                        IMultipleRelationship multipleRelationship = (IMultipleRelationship) relationship;
+                        IBusinessObjectCollection col = multipleRelationship.BusinessObjectCollection;
+                        for (int i = col.Count - 1; i >= 0; i--)
+                        {
+                            DeleteChild(col[i]);
+                        }
+                    }
+                    else if (relationship is ISingleRelationship)
+                    {
+                        ISingleRelationship singleRelationship = (ISingleRelationship) relationship;
+                        //if (singleRelationship.HasRelatedObject()) 
+                        DeleteChild(singleRelationship.GetRelatedObject());
                     }
                 }
+
+
             }
         }
 
-        private static bool MustDeleteRelatedObjects(Relationship relationship)
+        private void DeleteChild(IBusinessObject bo) {
+            if (bo == null) return;
+            bo.Delete();
+            ExecuteTransactionToDataSource(new TransactionalBusinessObjectDB(bo));
+        }
+
+        private static bool MustDeleteRelatedObjects(IRelationship relationship)
         {
             return relationship.DeleteParentAction == DeleteParentAction.DeleteRelated;
         }

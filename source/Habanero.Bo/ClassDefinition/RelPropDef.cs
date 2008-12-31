@@ -22,6 +22,8 @@ using Habanero.Base.Exceptions;
 
 namespace Habanero.BO.ClassDefinition
 {
+
+
     /// <summary>
     /// This class contains the definition of a property that participates in a relationship between two Classes.
     /// This class collaborates with the <see cref="RelKeyDef"/>, the <see cref="ClassDef"/> 
@@ -38,7 +40,7 @@ namespace Habanero.BO.ClassDefinition
     ///   Property Definition is mapped to. A <see cref="RelProp"/> is created from this definition for a particular 
     ///   <see cref="IBusinessObject"/>.
     /// </summary>
-    public class RelPropDef
+    public class RelPropDef : IRelPropDef
     {
         private IPropDef _ownerPropDef;
 		private string _relatedClassPropName;
@@ -93,7 +95,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="boPropCol">The collection of properties</param>
         /// <returns>The newly created RelProp object</returns>
-        protected internal RelProp CreateRelProp(BOPropCol boPropCol)
+        protected internal IRelProp CreateRelProp(BOPropCol boPropCol)
 		{
 		    IBOProp boProp = boPropCol[OwnerPropertyName];
 		    return new RelProp(this, boProp);

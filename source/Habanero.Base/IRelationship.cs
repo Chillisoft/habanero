@@ -26,28 +26,11 @@ namespace Habanero.Base
     ///</summary>
     public interface IRelationship
     {
-        /// <summary>
-        /// Returns the set of business objects that relate to this one
-        /// through the specific relationship
-        /// </summary>
-        /// <returns>Returns a collection of business objects. If this is a single relationship then
-        /// returns a single object in the collection.</returns>
-        IBusinessObjectCollection GetRelatedBusinessObjectCol();
-
         ///<summary>
         /// The key that identifies this relationship i.e. the properties in the 
         /// source object and how they are related to properties in the related object.
         ///</summary>
         IRelKey RelKey
-        {
-            get;
-        }
-
-        ///<summary>
-        /// The criteria by which this relationship is ordered. I.e. by default all the
-        /// related objects are loaded in this order.
-        ///</summary>
-        OrderCriteria OrderCriteria
         {
             get;
         }
@@ -64,6 +47,24 @@ namespace Habanero.Base
         ///  related (children) business objects that are dirty.
         ///</summary>
         bool IsDirty { get; }
+
+        /// <summary>
+        /// Returns the relationship definition
+        /// </summary>
+        IRelationshipDef RelationshipDef { get; }
+
+        /// <summary>
+        /// Returns the relationship name
+        /// </summary>
+        string RelationshipName { get; }
+
+        bool Initialised { get; }
+
+        ///<summary>
+        /// Returns the appropriate delete action when the parent is deleted.
+        /// i.e. delete related objects, dereference related objects, prevent deletion.
+        ///</summary>
+        DeleteParentAction DeleteParentAction { get; }
 
         ///<summary>
         /// Returns a list of all the related objects that are dirty.

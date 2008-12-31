@@ -425,7 +425,7 @@ namespace Habanero.BO
         /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
         /// PersonID</param>
         /// <returns>The loaded RelatedBusinessObjectCollection</returns>
-        public RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IRelationship relationship)
+        public RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IMultipleRelationship relationship)
             where T : class, IBusinessObject, new()
         {
             RelatedBusinessObjectCollection<T> relatedCol = new RelatedBusinessObjectCollection<T>(relationship);
@@ -468,10 +468,10 @@ namespace Habanero.BO
         /// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
         /// PersonID</param>
         /// <returns>The loaded RelatedBusinessObjectCollection</returns>
-        public IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IRelationship relationship)
+        public IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IMultipleRelationship relationship)
         {
             //TODO: generalise with generic version of this method
-            IBusinessObjectCollection relatedCol = MultipleRelationship.CreateRelatedBusinessObjectCollection(type, relationship);
+            IBusinessObjectCollection relatedCol = RelationshipUtils.CreateRelatedBusinessObjectCollection(type, relationship);
             
             ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", true);
 

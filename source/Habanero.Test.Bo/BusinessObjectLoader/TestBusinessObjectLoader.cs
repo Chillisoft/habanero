@@ -352,7 +352,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             //---------------Execute Test ----------------------
             Car loadedCar = BORegistry.DataAccessor.BusinessObjectLoader.
-                GetRelatedBusinessObject<Car>((SingleRelationship) engine.Relationships["Car"]);
+                GetRelatedBusinessObject(engine.Relationships.GetSingle<Car>("Car"));
 
             //---------------Test Result -----------------------
             Assert.AreSame(car, loadedCar);
@@ -367,7 +367,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             //---------------Execute Test ----------------------
             Car loadedCar = (Car) 
-                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject((SingleRelationship) engine.Relationships["Car"]);
+                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject((ISingleRelationship) engine.Relationships["Car"]);
 
             //---------------Test Result -----------------------
             Assert.AreSame(car, loadedCar);
@@ -384,7 +384,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
          
             //---------------Execute Test ----------------------
             RelatedBusinessObjectCollection<AddressTestBO> addresses =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<AddressTestBO>(cp.Relationships["Addresses"]);
+                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<AddressTestBO>((IMultipleRelationship) cp.Relationships["Addresses"]);
 
             //---------------Test Result -----------------------
             Criteria relationshipCriteria = Criteria.FromRelationship(cp.Relationships["Addresses"]);
@@ -409,7 +409,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             IBusinessObjectCollection addresses =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(
-                    typeof(AddressTestBO), cp.Relationships["Addresses"]);
+                    typeof(AddressTestBO), cp.Relationships.GetMultiple("Addresses"));
 
             //---------------Test Result -----------------------
             Criteria relationshipCriteria = Criteria.FromRelationship(cp.Relationships["Addresses"]);
@@ -431,7 +431,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             //---------------Execute Test ----------------------
             RelatedBusinessObjectCollection<AddressTestBO> addresses =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<AddressTestBO>(cp.Relationships["Addresses"]);
+                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<AddressTestBO>(cp.Relationships.GetMultiple("Addresses"));
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, addresses.Count);
@@ -460,7 +460,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             IBusinessObjectCollection addresses =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(typeof(AddressTestBO),
-                    cp.Relationships["Addresses"]);
+                    cp.Relationships.GetMultiple("Addresses"));
             //---------------Test Result -----------------------
             Assert.AreEqual(2, addresses.Count);
             Assert.AreSame(address1, addresses[1]);
@@ -485,7 +485,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection addresses = cp.Relationships["Addresses"].GetRelatedBusinessObjectCol();
+            IBusinessObjectCollection addresses = cp.Relationships.GetMultiple("Addresses").BusinessObjectCollection;
             //IBusinessObjectCollection addresses =
             //    BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection(typeof(Address),
             //        cp.Relationships["Addresses"]);
@@ -542,9 +542,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             contactPersonTestBO.Save();
 
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection col = org.Relationships["ContactPeople"].GetRelatedBusinessObjectCol();
+            IBusinessObjectCollection col = org.Relationships.GetMultiple("ContactPeople").BusinessObjectCollection;
             ContactPersonTestBO loadedContactPerson = (ContactPersonTestBO) col[0];
-            IBusinessObjectCollection colAddresses = loadedContactPerson.Relationships["Addresses"].GetRelatedBusinessObjectCol();
+            IBusinessObjectCollection colAddresses = loadedContactPerson.Relationships.GetMultiple("Addresses").BusinessObjectCollection;
             IBusinessObject loadedAddressTestBO = colAddresses[0];
 
             //---------------Test Result -----------------------

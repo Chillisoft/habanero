@@ -61,7 +61,7 @@ namespace Habanero.BO
         /// <summary>
         /// Indicates if the property is null
         /// </summary>
-        internal bool IsNull
+        public bool IsNull
         {
             get { return _boProp == null || _boProp.Value == null; }
         }

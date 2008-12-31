@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System.Data;
+using Habanero.Base;
 using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 using NUnit.Framework;
