@@ -745,6 +745,7 @@ namespace Habanero.DB
         /// </exception>
         public DataTable LoadDataTable(ISqlStatement selectSql, string strSearchCriteria, string strOrderByCriteria)
         {
+            //TODO: This should be rewritten to use dataadaptor.
             if (selectSql == null) throw new ArgumentNullException("selectSql");
             IDbConnection con;
             try
@@ -755,6 +756,7 @@ namespace Habanero.DB
                 IDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
                 
                 DataTable dt = new DataTable();
+                dt.TableName = "TableName";
                 if (reader.Read())
                 {
                     for (int i = 0; i < reader.FieldCount; i++)
