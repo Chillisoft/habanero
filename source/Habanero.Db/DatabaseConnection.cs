@@ -48,7 +48,6 @@ namespace Habanero.DB
         private readonly string _className;
         private string _connectString;
         private IList _connections;
-        //protected IDbConnection _currentDbConnection;
         private static IDatabaseConnection _currentDatabaseConnection;
         private static readonly ILog log = LogManager.GetLogger("Habanero.DB.DatabaseConnection");
         private int _timeoutPeriod = 30;
@@ -653,7 +652,7 @@ namespace Habanero.DB
                 log.Error("Error writing to database : " + Environment.NewLine +
                           ExceptionUtilities.GetExceptionString(ex, 10, true));
                 log.Error("Sql: " + sql);
-                if (!inTransaction && transaction != null)
+                if (transaction != null)
                 {
                     transaction.Rollback();
                 }
@@ -754,13 +753,15 @@ namespace Habanero.DB
                 IDbCommand cmd = con.CreateCommand();
                 selectSql.SetupCommand(cmd);
                 IDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-                    //CommandBehavior.CloseConnection);
+                
                 DataTable dt = new DataTable();
                 if (reader.Read())
                 {
                     for (int i = 0; i < reader.FieldCount; i++)
                     {
-                        dt.Columns.Add();
+                        DataColumn add = dt.Columns.Add();
+                        add.ColumnName = reader.GetName(i);
+                        add.DataType = reader.GetFieldType(i);
                     }
                     do
                     {

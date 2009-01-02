@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 
 namespace Habanero.BO
@@ -73,7 +74,7 @@ namespace Habanero.BO
         /// <see cref="TransactionCommitter.ExecuteTransactionToDataSource"/> or during committing to the datasource
         /// <see cref="TransactionCommitter.CommitToDatasource"/>
         /// </summary>
-        protected override void TryRollback()
+        protected override void TryRollback(Exception origException)
         {
             
         }

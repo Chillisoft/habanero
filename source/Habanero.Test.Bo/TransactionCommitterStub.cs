@@ -16,6 +16,7 @@
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
+using System;
 using Habanero.Base;
 using Habanero.BO;
 
@@ -45,7 +46,7 @@ namespace Habanero.Test.BO
         /// <see cref="TransactionCommitter.ExecuteTransactionToDataSource"/> or during committing to the datasource
         /// <see cref="TransactionCommitter.CommitToDatasource"/>
         /// </summary>
-        protected override void TryRollback()
+        protected override void TryRollback(Exception origException)
         {
             
         }

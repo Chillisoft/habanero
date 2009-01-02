@@ -350,7 +350,7 @@ namespace Habanero.BO
             {
                 log.Error("Error rolling back transaction: " + Environment.NewLine +
                           ExceptionUtilities.GetExceptionString(ex, 4, true));
-                TryRollback();
+                TryRollback(ex);
                 UpdateTransactionsAsRolledBack();
                 throw;
             }
@@ -408,7 +408,7 @@ namespace Habanero.BO
         /// <see cref="ExecuteTransactionToDataSource"/> or during committing to the datasource
         /// <see cref="CommitToDatasource"/>
         /// </summary>
-        protected abstract void TryRollback();
+        protected abstract void TryRollback(Exception origException);
 
         ///// <summary>
         ///// Tries to execute an individual transaction against the datasource.
