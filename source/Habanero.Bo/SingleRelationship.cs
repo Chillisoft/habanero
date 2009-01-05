@@ -48,6 +48,8 @@ namespace Habanero.BO
         /// </summary>
         /// <returns>Returns true if related object exists</returns>
         bool HasRelatedObject();
+
+        bool OwningBOHasForeignKey { get; set; }
     }
 
     /// <summary>
@@ -60,7 +62,10 @@ namespace Habanero.BO
         //TODO: Implement logging private static readonly ILog log = LogManager.GetLogger("Habanero.BO.SingleRelationship");
         private TBusinessObject _relatedBo;
         private string _storedRelationshipExpression;
-
+        private bool _isRemoved;
+        private TBusinessObject _removedBO;
+        private bool _owningBOHasForeignKey = true;
+        
         /// <summary>
         /// Constructor to initialise a new relationship
         /// </summary>
@@ -84,9 +89,31 @@ namespace Habanero.BO
         {
             get
             {
-                return _relatedBo != null && _relatedBo.Status.IsDirty;
+                if (_relatedBo != null)
+                {
+                    if (_relatedBo.Status.IsNew) return true;
+                    if (_relatedBo.Status.IsDeleted) return true;
+                }
+                if (_relatedBo == null)
+                {
+                    if (_isRemoved) return true;
+                }
+                
+                if (this.RelationshipDef.RelationshipType == RelationshipType.Composition
+                    || this.RelationshipDef.RelationshipType == RelationshipType.Aggregation)
+                    return IsRelatedBODirty();
+                else
+                    return false;
             }
         }
+
+        internal bool IsRemoved
+        { get { return _isRemoved; } }
+
+        internal TBusinessObject RemovedBO
+        { get { return _removedBO; } }
+
+        public bool OwningBOHasForeignKey { get { return _owningBOHasForeignKey; } set { _owningBOHasForeignKey = value; } }
 
         /// <summary>
         /// Indicates whether the related object has been specified
@@ -167,10 +194,7 @@ namespace Habanero.BO
 
             if (_relatedBo == null) GetRelatedObject();
             if (_relatedBo == relatedObject) return;
-            IBusinessObject previousRelatedBO = _relatedBo;
-
-           
-
+            TBusinessObject previousRelatedBO = _relatedBo;
             if (relatedObject != null)
             {
                 RelationshipDef def = (RelationshipDef) RelationshipDef;
@@ -223,6 +247,15 @@ namespace Habanero.BO
                 ISingleRelationship singleReverseRelationship = GetReverseRelationship(previousRelatedBO) as ISingleRelationship;
                 if (singleReverseRelationship != null)
                 {
+                    if (this.RelationshipDef.RelationshipType == RelationshipType.Association && singleReverseRelationship.RelationshipDef.RelationshipType == RelationshipType.Association
+                        && this.OwningBOHasForeignKey && singleReverseRelationship.OwningBOHasForeignKey)
+                    {
+                        string message = string.Format("The corresponding single (one to one) relationships " + 
+                            "{0} (on {1}) and {2} (on {3}) cannot both be configured as having the foreign key " + 
+                            "(OwningBOHasForeignKey). Please set this property to false on one of these relationships.", 
+                            this.RelationshipName, this.OwningBO.GetType().Name, singleReverseRelationship.RelationshipName, this.RelatedObjectClassDef.ClassName);
+                        throw new HabaneroDeveloperException(message, "");
+                    }
                     singleReverseRelationship.RelationshipDef.CheckCanRemoveChild(this.OwningBO);
                     _relatedBo = null;
                     UpdatedForeignKeyAndStoredRelationshipExpression();
@@ -231,13 +264,23 @@ namespace Habanero.BO
             }
 
             _relatedBo = relatedObject;
+
+             if (previousRelatedBO != null && _relatedBo == null)
+             {
+                 _isRemoved = true;
+                 _removedBO = previousRelatedBO;
+             } else
+             {
+                 _isRemoved = false;
+                 _removedBO = null;
+             }
             
             UpdatedForeignKeyAndStoredRelationshipExpression();
         }
 
         private void UpdatedForeignKeyAndStoredRelationshipExpression()
         {
-            if (this.RelationshipDef.RelationshipType != RelationshipType.Aggregation)
+            if (this.RelationshipDef.RelationshipType != RelationshipType.Aggregation && this.OwningBOHasForeignKey)
             {
                 foreach (RelProp relProp in _relKey)
                 {
@@ -270,18 +313,31 @@ namespace Habanero.BO
         protected override IList<IBusinessObject> DoGetDirtyChildren()
         {
             IList<IBusinessObject> dirtyBusinessObjects = new List<IBusinessObject>();
-            if (IsRelatedBODirty()) dirtyBusinessObjects.Add(_relatedBo); 
+            if (MustAddToDirtyBusinessObjects()) dirtyBusinessObjects.Add(_relatedBo);
+            if (MustAddRemovedBOToDirtyBusinessObjects()) dirtyBusinessObjects.Add(_removedBO);
             return dirtyBusinessObjects;
         }
-
+        
         protected override IList<TBusinessObject> DoGetDirtyChildren_Typed()
         {
             IList<TBusinessObject> dirtyBusinessObjects = new List<TBusinessObject>();
-            if (IsRelatedBODirty()) dirtyBusinessObjects.Add(_relatedBo); 
+            if (MustAddToDirtyBusinessObjects()) dirtyBusinessObjects.Add(_relatedBo);
+            if (MustAddRemovedBOToDirtyBusinessObjects()) dirtyBusinessObjects.Add(_removedBO);
             return dirtyBusinessObjects;
         }
 
-        private bool IsRelatedBODirty() { return _relatedBo != null && _relatedBo.Status.IsDirty; }
+        private bool IsRelatedBODirty() { return _relatedBo != null && _relatedBo.Status.IsDirty ; }
+
+        private bool MustAddToDirtyBusinessObjects()
+        {
+            return IsRelatedBODirty() &&
+                   ((this.RelationshipDef.RelationshipType == RelationshipType.Aggregation
+                    || this.RelationshipDef.RelationshipType == RelationshipType.Composition)
+                   || _relatedBo.Status.IsNew
+                   || _relatedBo.Status.IsDeleted);
+        }
+
+        private bool MustAddRemovedBOToDirtyBusinessObjects() { return _isRemoved; }
 
         protected override void DoInitialisation()
         {

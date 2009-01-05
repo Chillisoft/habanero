@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -29,25 +31,125 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestSingleRelationship
     {
-        private ClassDef itsClassDef;
-        private ClassDef itsRelatedClassDef;
 
-        [TestFixtureSetUp]
-        public void SetupTestFixture()
+        [SetUp]
+        public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-            itsClassDef = MyBO.LoadClassDefWithRelationship();
-            itsRelatedClassDef = MyRelatedBo.LoadClassDef();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
+           
         }
 
         [Test]
         public void TestSetRelatedObject()
         {
-            MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject();
-            MyRelatedBo relatedBo1 = (MyRelatedBo) itsRelatedClassDef.CreateNewBusinessObject();
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            ClassDef relatedClassDef = MyRelatedBo.LoadClassDef();
+            MyBO bo1 = (MyBO) classDef.CreateNewBusinessObject();
+            MyRelatedBo relatedBo1 = (MyRelatedBo) relatedClassDef.CreateNewBusinessObject();
             bo1.Relationships.GetSingle("MyRelationship").SetRelatedObject(relatedBo1);
             Assert.AreSame(relatedBo1, bo1.Relationships.GetRelatedObject<MyRelatedBo>("MyRelationship"));
             Assert.AreSame(bo1.GetPropertyValue("RelatedID"), relatedBo1.GetPropertyValue("MyRelatedBoID"));
+        }
+
+        [Test]
+        public void Test_IsRemoved()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
+            relationship.OwningBOHasForeignKey = false;
+            ContactPersonTestBO myBO = new ContactPersonTestBO();
+            myBO.Surname = TestUtil.CreateRandomString();
+            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.Organisation = organisationTestBO;
+            myBO.Save();
+            
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(relationship.IsRemoved);
+            Assert.IsNull(relationship.RemovedBO);
+
+            //---------------Execute Test ----------------------
+            organisationTestBO.ContactPerson = null;
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(relationship.IsRemoved);
+            Assert.AreSame(myBO, relationship.RemovedBO);
+
+        }
+
+
+       [Test]
+        public void Test_IsRemoved_False()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
+            relationship.OwningBOHasForeignKey = false;
+            ContactPersonTestBO myBO = new ContactPersonTestBO();
+            myBO.Surname = TestUtil.CreateRandomString();
+            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.Organisation = organisationTestBO;
+            myBO.Save();
+            organisationTestBO.ContactPerson = null;
+
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(relationship.IsRemoved);
+            Assert.AreSame(myBO, relationship.RemovedBO);
+
+            //---------------Execute Test ----------------------
+
+            organisationTestBO.ContactPerson = myBO;
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(relationship.IsRemoved);
+            Assert.IsNull(relationship.RemovedBO);
+        }
+
+        [Test]
+        public void Test_ErrorIfBothOwningBOHasForeignKey()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            relationship.SetRelatedObject(contactPerson);
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(contactPerson.OrganisationID, organisation.OrganisationID);
+            Assert.AreSame(organisation.ContactPerson, contactPerson);
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                relationship.SetRelatedObject(null);
+                Assert.Fail("An error should have occurred as corresponding single relationships are not configured correctly (one should have the OwningBOHasForeignKey property set to false)");
+            } catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("The corresponding single (one to one) relationships ", ex.Message);
+                StringAssert.Contains("ContactPerson (on OrganisationTestBO)", ex.Message);
+                StringAssert.Contains("Organisation (on ContactPersonTestBO)", ex.Message);
+                StringAssert.Contains("cannot both be configured as having the foreign key", ex.Message);
+            }
+        }
+
+
+
+        private SingleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO)
+        {
+            RelationshipType relationshipType = RelationshipType.Association;
+            return GetRelationship(organisationTestBO, relationshipType);
+        }
+
+        private SingleRelationship<ContactPersonTestBO> GetRelationship(OrganisationTestBO organisationTestBO, RelationshipType relationshipType)
+        {
+            SingleRelationship<ContactPersonTestBO> compositionRelationship =
+                organisationTestBO.Relationships.GetSingle<ContactPersonTestBO>("ContactPerson");
+            RelationshipDef relationshipDef = (RelationshipDef)compositionRelationship.RelationshipDef;
+            relationshipDef.RelationshipType = relationshipType;
+            return compositionRelationship;
         }
     }
 }

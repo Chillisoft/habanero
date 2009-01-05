@@ -60,7 +60,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, cpCol.Count);
             Assert.IsFalse(_addedEventFired);
-            Assert.AreEqual(0, cpCol.PersistedBOCol.Count);
+            Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
@@ -70,7 +70,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
 
             Assert.Contains(newCP, cpCol.CreatedBusinessObjects);
             Assert.Contains(newCP, cpCol);
-            Assert.IsFalse(cpCol.PersistedBOCol.Contains(newCP));
+            Assert.IsFalse(cpCol.PersistedBusinessObjects.Contains(newCP));
             Assert.IsTrue(_addedEventFired);
         }
 
@@ -148,7 +148,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, cpCol.Count);
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
-            Assert.AreEqual(1, cpCol.PersistedBOCol.Count);
+            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
 
             //---------------Execute Test ----------------------
             cpCol.Refresh();
@@ -157,7 +157,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //---------------Test Result -----------------------
             Assert.AreEqual(2, cpCol.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
-            Assert.AreEqual(2, cpCol.PersistedBOCol.Count);
+            Assert.AreEqual(2, cpCol.PersistedBusinessObjects.Count);
             AssertAddedAndRemovedEventsNotFired();
         }
 
@@ -468,7 +468,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
         }
 
@@ -477,7 +477,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             Assert.AreEqual(2, cpCol.Count);
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
-            Assert.AreEqual(1, cpCol.PersistedBOCol.Count);
+            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
         }
@@ -489,7 +489,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
         }
 
@@ -499,7 +499,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
         }
 

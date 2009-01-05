@@ -21,72 +21,72 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         public void AssertOneObjectInCurrentAndAddedCollection(IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(1, cpCol.Count, "One object should be in the cpCollection");
-            Assert.AreEqual(1, cpCol.AddedBOCol.Count, "One object should be in the cpCollection");
-            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
-            Assert.AreEqual(0, cpCol.PersistedBOCol.Count, "There should b no persisted items");
-            Assert.AreEqual(0, cpCol.MarkForDeletionBOCol.Count);
-            Assert.AreEqual(0, cpCol.CreatedBOCol.Count);
+            Assert.AreEqual(1, cpCol.AddedBusinessObjects.Count, "One object should be in the cpCollection");
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count, "There should b no persisted items");
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
         }
 
         public void AssertOneObjectInCurrentAndCreatedCollection(IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(1, cpCol.Count, "One object should be in the cpCollection");
-            Assert.AreEqual(0, cpCol.AddedBOCol.Count, "One object should be in the cpCollection");
-            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
-            Assert.AreEqual(0, cpCol.PersistedBOCol.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeletionBOCol.Count);
-            Assert.AreEqual(1, cpCol.CreatedBOCol.Count);
+            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count, "One object should be in the cpCollection");
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
         }
 
         public void AssertOneObjectInMarkForDeleteAndAddedCollection
             (IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(0, cpCol.Count);
-            Assert.AreEqual(1, cpCol.AddedBOCol.Count);
-            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
-            Assert.AreEqual(0, cpCol.PersistedBOCol.Count);
-            Assert.AreEqual(1, cpCol.MarkForDeletionBOCol.Count);
-            Assert.AreEqual(0, cpCol.CreatedBOCol.Count);
+            Assert.AreEqual(1, cpCol.AddedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
         }
 
         public void AssertOneObjectInRemovedAndPersisted(IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(0, cpCol.Count);
-            Assert.AreEqual(0, cpCol.AddedBOCol.Count);
-            Assert.AreEqual(1, cpCol.RemovedBOCol.Count);
-            Assert.AreEqual(1, cpCol.PersistedBOCol.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeletionBOCol.Count);
-            Assert.AreEqual(0, cpCol.CreatedBOCol.Count);
+            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
         }
 
         public void AssertAllCollectionsHaveNoItems(IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(0, cpCol.Count);
-            Assert.AreEqual(0, cpCol.AddedBOCol.Count);
-            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
-            Assert.AreEqual(0, cpCol.PersistedBOCol.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeletionBOCol.Count);
-            Assert.AreEqual(0, cpCol.CreatedBOCol.Count);
+            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
         }
 
         public void AssertOneObjectInCurrentPersistedAndAddedCollection(IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(1, cpCol.Count);
-            Assert.AreEqual(1, cpCol.AddedBOCol.Count);
-            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
-            Assert.AreEqual(1, cpCol.PersistedBOCol.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeletionBOCol.Count);
-            Assert.AreEqual(0, cpCol.CreatedBOCol.Count);
+            Assert.AreEqual(1, cpCol.AddedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
         }
 
         public void AssertOneObjectInCurrentPersistedCollection (IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(1, cpCol.Count);
-            Assert.AreEqual(0, cpCol.AddedBOCol.Count);
-            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
-            Assert.AreEqual(1, cpCol.PersistedBOCol.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeletionBOCol.Count);
-            Assert.AreEqual(0, cpCol.CreatedBOCol.Count);
+            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
         }
 
         public void AssertAddedAndRemovedEventsNotFired()

@@ -61,10 +61,7 @@ namespace Habanero.BO
                 foreach (KeyValuePair<string, IRelationship> pair in _relationships)
                 {
                     IRelationship relationship = pair.Value;
-                    RelationshipType relationshipType = relationship.RelationshipDef.RelationshipType;
-                    if ((relationshipType == RelationshipType.Composition 
-                         || relationshipType == RelationshipType.Aggregation)
-                            && relationship.IsDirty)
+                    if (relationship.IsDirty)
                     {
                         return true;
                     }
@@ -78,14 +75,11 @@ namespace Habanero.BO
             IList<IBusinessObject> dirtyBusinessObjects = new List<IBusinessObject>();
             foreach (KeyValuePair<string, IRelationship> pair in _relationships)
             {
-                RelationshipType relationshipType = pair.Value.RelationshipDef.RelationshipType;
-                if (relationshipType == RelationshipType.Composition || relationshipType == RelationshipType.Aggregation)
-                {
                     foreach (IBusinessObject bo in pair.Value.GetDirtyChildren())
                     {
                         dirtyBusinessObjects.Add(bo);
                     }
-                }
+                
             }
             return dirtyBusinessObjects;
         }

@@ -146,43 +146,43 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         private static void AssertAllCollectionsHaveNoItems(IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(0, cpCol.Count);
-            Assert.AreEqual(0, cpCol.AddedBOCol.Count);
-            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
-            Assert.AreEqual(0, cpCol.PersistedBOCol.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeletionBOCol.Count);
-            Assert.AreEqual(0, cpCol.CreatedBOCol.Count);
+            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
         }
 
         private static void AssertOneObjectInCurrentAndPersistedCollection
             (IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(1, cpCol.Count);
-            Assert.AreEqual(0, cpCol.AddedBOCol.Count);
-            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
-            Assert.AreEqual(1, cpCol.PersistedBOCol.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeletionBOCol.Count);
-            Assert.AreEqual(0, cpCol.CreatedBOCol.Count);
+            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
         }
 
         private static void AssertOneObjectInRemovedAndPersistedCollection
             (IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(0, cpCol.Count);
-            Assert.AreEqual(0, cpCol.AddedBOCol.Count);
-            Assert.AreEqual(1, cpCol.RemovedBOCol.Count, "Should b one removed item");
-            Assert.AreEqual(1, cpCol.PersistedBOCol.Count, "should b one persisted item");
-            Assert.AreEqual(0, cpCol.MarkForDeletionBOCol.Count);
-            Assert.AreEqual(0, cpCol.CreatedBOCol.Count);
+            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count, "Should b one removed item");
+            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count, "should b one persisted item");
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
         }
 
         private static void AssertOnePersisted_OneMark4Delete(IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(0, cpCol.Count);
-            Assert.AreEqual(1, cpCol.MarkForDeletionBOCol.Count);
-            Assert.AreEqual(0, cpCol.RemovedBOCol.Count);
-            Assert.AreEqual(0, cpCol.AddedBOCol.Count);
-            Assert.AreEqual(0, cpCol.CreatedBOCol.Count);
-            Assert.AreEqual(1, cpCol.PersistedBOCol.Count);
+            Assert.AreEqual(1, cpCol.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
         }
 
         #endregion
@@ -619,7 +619,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
 
             //---------------Test Result -----------------------
-            Assert.IsNotNull(cpCol.MarkForDeleteBusinessObjects);
+            Assert.IsNotNull(cpCol.MarkedForDeleteBusinessObjects);
         }
 
         [Test]
@@ -756,7 +756,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cpCol.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
 
             //---------------Execute Test ----------------------
             cpCol.MarkForDeleteAt(0);
@@ -776,7 +776,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cpCol.Count);
-            Assert.AreEqual(0, cpCol.MarkForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
 
             //---------------Execute Test ----------------------
             try

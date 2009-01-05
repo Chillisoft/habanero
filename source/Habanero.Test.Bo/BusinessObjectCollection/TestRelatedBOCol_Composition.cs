@@ -341,18 +341,13 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(0, cpCol.Count);
-            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
             Assert.IsFalse(organisationTestBO.Status.IsDirty);
-            Assert.IsFalse(compositionRelationship.IsDirty);
 
             //---------------Execute Test ----------------------
             cpCol.CreateBusinessObject();
 
             //---------------Test Result -----------------------
-            Assert.IsTrue(compositionRelationship.IsDirty);
             Assert.IsTrue(organisationTestBO.Status.IsDirty);
-            Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
         }
 
         /// <summary>
@@ -373,18 +368,13 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             myBO.Save();
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(1, cpCol.Count);
-            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.IsFalse(organisationTestBO.Status.IsDirty);
-            Assert.IsFalse(compositionRelationship.IsDirty);
 
             //---------------Execute Test ----------------------
             cpCol.MarkForDelete(myBO);
 
             //---------------Test Result -----------------------
-            Assert.IsTrue(compositionRelationship.IsDirty);
             Assert.IsTrue(organisationTestBO.Status.IsDirty);
-            Assert.AreEqual(1, cpCol.MarkForDeleteBusinessObjects.Count);
         }
 
         /// <summary>
@@ -406,162 +396,13 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             contactPerson.Save();
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(1, cpCol.Count);
-            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.IsFalse(organisationTestBO.Status.IsDirty);
-            Assert.IsFalse(compositionRelationship.IsDirty);
-            Assert.IsFalse(relationships.IsDirty);
 
             //---------------Execute Test ----------------------
             contactPerson.FirstName = TestUtil.CreateRandomString();
 
             //---------------Test Result -----------------------
-            Assert.IsTrue(compositionRelationship.IsDirty);
-            Assert.IsTrue(contactPerson.Status.IsDirty);
-            Assert.IsTrue(relationships.IsDirty);
             Assert.IsTrue(organisationTestBO.Status.IsDirty);
-        }
-
-        [Test]
-        public void Test_GetDirtyChildren_ReturnDirtyChildren()
-        {
-            //---------------Set up test pack-------------------
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            RelationshipCol relationships = organisationTestBO.Relationships;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
-            ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
-            contactPerson.Save();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
-
-            //---------------Assert Precondition----------------
-            Assert.IsTrue(compositionRelationship.IsDirty);
-            Assert.IsTrue(contactPerson.Status.IsDirty);
-            Assert.IsTrue(relationships.IsDirty);
-            Assert.IsTrue(organisationTestBO.Status.IsDirty);
-
-            //---------------Execute Test ----------------------
-            IList<ContactPersonTestBO> dirtyChildren = compositionRelationship.GetDirtyChildren();
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, dirtyChildren.Count);
-            Assert.IsTrue(dirtyChildren.Contains(contactPerson));
-        }
-
-        [Test]
-        public void Test_GetDirtyChildren_ReturnCreatedChildren()
-        {
-            //---------------Set up test pack-------------------
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            RelationshipCol relationships = organisationTestBO.Relationships;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
-            ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
-
-            //---------------Assert Precondition----------------
-            Assert.IsTrue(compositionRelationship.IsDirty);
-            Assert.IsTrue(contactPerson.Status.IsDirty);
-            Assert.IsTrue(relationships.IsDirty);
-            Assert.IsTrue(organisationTestBO.Status.IsDirty);
-
-            //---------------Execute Test ----------------------
-            IList<ContactPersonTestBO> dirtyChildren = compositionRelationship.GetDirtyChildren();
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, dirtyChildren.Count);
-            Assert.IsTrue(dirtyChildren.Contains(contactPerson));
-        }
-        [Test]
-        public void Test_GetDirtyChildren_ReturnMark4DeleteChildren()
-        {
-            //---------------Set up test pack-------------------
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            RelationshipCol relationships = organisationTestBO.Relationships;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
-            ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
-            contactPerson.Save();
-            cpCol.MarkForDelete(contactPerson);
-
-            //---------------Assert Precondition----------------
-            Assert.IsTrue(compositionRelationship.IsDirty);
-            Assert.IsTrue(contactPerson.Status.IsDirty);
-            Assert.IsTrue(relationships.IsDirty);
-            Assert.IsTrue(organisationTestBO.Status.IsDirty);
-
-            //---------------Execute Test ----------------------
-            IList<ContactPersonTestBO> dirtyChildren = compositionRelationship.GetDirtyChildren();
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, dirtyChildren.Count);
-            Assert.IsTrue(dirtyChildren.Contains(contactPerson));
-        }
-
-        [Test]
-        public void Test_GetDirtyChildren_ReturnAllDirty()
-        {
-            //---------------Set up test pack-------------------
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            RelationshipCol relationships = organisationTestBO.Relationships;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
-            ContactPersonTestBO myBO_delete = ContactPersonTestBO.CreateSavedContactPerson_AsChild(cpCol);
-            cpCol.MarkForDelete(myBO_delete);
-            ContactPersonTestBO myBO_Edited = ContactPersonTestBO.CreateSavedContactPerson_AsChild(cpCol);
-            myBO_Edited.Surname = TestUtil.CreateRandomString();
-
-            ContactPersonTestBO myBo_Created = ContactPersonTestBO.CreateUnsavedContactPerson_AsChild(cpCol);
-
-            //---------------Assert Precondition----------------
-            Assert.IsTrue(compositionRelationship.IsDirty);
-            Assert.IsTrue(relationships.IsDirty);
-            Assert.IsTrue(organisationTestBO.Status.IsDirty);
-
-            //---------------Execute Test ----------------------
-            IList<ContactPersonTestBO> dirtyChildren = compositionRelationship.GetDirtyChildren();
-
-            //---------------Test Result -----------------------
-            Assert.Contains(myBO_delete, (ICollection)dirtyChildren);
-            Assert.Contains(myBO_Edited, (ICollection)dirtyChildren);
-            Assert.Contains(myBo_Created, (ICollection)dirtyChildren);
-            Assert.AreEqual(3, dirtyChildren.Count);
-        }
-
-        [Test]
-        public void Test_Relationships_GetDirtyChildren_ReturnAllDirty()
-        {
-            //---------------Set up test pack-------------------
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            RelationshipCol relationships = organisationTestBO.Relationships;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
-            ContactPersonTestBO myBO_delete = ContactPersonTestBO.CreateSavedContactPerson_AsChild(cpCol);
-            cpCol.MarkForDelete(myBO_delete);
-            ContactPersonTestBO myBO_Edited = ContactPersonTestBO.CreateSavedContactPerson_AsChild(cpCol);
-            myBO_Edited.Surname = TestUtil.CreateRandomString();
-
-            ContactPersonTestBO myBo_Created = ContactPersonTestBO.CreateUnsavedContactPerson_AsChild(cpCol);
-
-            //---------------Assert Precondition----------------
-            Assert.IsTrue(compositionRelationship.IsDirty);
-            Assert.IsTrue(relationships.IsDirty);
-            Assert.IsTrue(organisationTestBO.Status.IsDirty);
-            Assert.AreEqual(1, cpCol.MarkForDeleteBusinessObjects.Count);
-
-            //---------------Execute Test ----------------------
-            IList<IBusinessObject> dirtyChildren = relationships.GetDirtyChildren();
-
-            //---------------Test Result -----------------------
-            Assert.Contains(myBO_delete, (ICollection)dirtyChildren);
-            Assert.Contains(myBO_Edited, (ICollection)dirtyChildren);
-            Assert.Contains(myBo_Created, (ICollection)dirtyChildren);
-            Assert.AreEqual(3, dirtyChildren.Count);
         }
 
         /// <summary>

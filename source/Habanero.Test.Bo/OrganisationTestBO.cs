@@ -36,6 +36,7 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
 					<property  name=""OrganisationID"" type=""Guid"" />
+                    <property name=""Name"" />
 					<primaryKey>
 						<prop name=""OrganisationID"" />
 					</primaryKey>
@@ -57,6 +58,7 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
 					<property  name=""OrganisationID"" type=""Guid"" />
+                    <property name=""Name"" />
 					<primaryKey>
 						<prop name=""OrganisationID"" />
 					</primaryKey>
@@ -77,6 +79,7 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
 					<property  name=""OrganisationID"" type=""Guid"" />
+                    <property name=""Name"" />
 					<primaryKey>
 						<prop name=""OrganisationID"" />
 					</primaryKey>
@@ -100,6 +103,7 @@ namespace Habanero.Test.BO
                     @"
 				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
 					<property  name=""OrganisationID"" type=""Guid"" />
+                    <property name=""Name"" />
 					<primaryKey>
 						<prop name=""OrganisationID"" />
 					</primaryKey>
@@ -119,6 +123,12 @@ namespace Habanero.Test.BO
         {
             get { return (Guid?)this.GetPropertyValue("OrganisationID"); }
         }
+        
+        public string Name
+        {
+            get { return (String) this.GetPropertyValue("Name"); }
+            set { this.SetPropertyValue("Name", value);}
+        }
 
         public ContactPersonTestBO ContactPerson
         {
@@ -126,6 +136,13 @@ namespace Habanero.Test.BO
             set { Relationships.SetRelatedObject("ContactPerson", value); }
         }
 
+        public BusinessObjectCollection<ContactPersonTestBO> ContactPeople
+        {
+            get
+            {
+                return Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople").BusinessObjectCollection;
+            }
+        }
         public static void ClearAllFromDB()
         {
             BusinessObjectCollection<OrganisationTestBO> col = new BusinessObjectCollection<OrganisationTestBO>();

@@ -28,39 +28,27 @@ using NUnit.Framework;
 namespace Habanero.Test.BO
 {
     [TestFixture]
-    public class TestRelationship : TestUsingDatabase
+    public class TestRelationship 
     {
-        private RelationshipDef mRelationshipDef;
-        private RelKeyDef mRelKeyDef;
-        private IPropDefCol mPropDefCol;
-        private MockBO mMockBo;
 
         [TestFixtureSetUp]
         public void SetupFixture()
         {
-            SetupDBConnection();
         }
         [SetUp]
         public void init()
         {
             ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorDB();
-            mMockBo = new MockBO();
-            mPropDefCol = mMockBo.PropDefCol;
+            BORegistry.DataAccessor = new DataAccessorInMemory();
 
-            mRelKeyDef = new RelKeyDef();
-            IPropDef propDef = mPropDefCol["MockBOProp1"];
 
-            RelPropDef lRelPropDef = new RelPropDef(propDef, "MockBOID");
-            mRelKeyDef.Add(lRelPropDef);
-
-            mRelationshipDef = new SingleRelationshipDef("Relation1", typeof(MockBO), mRelKeyDef, false, DeleteParentAction.Prevent);
         }
 
         [Test]
         public void TestRefreshWithRemovedChild()
         {
             //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
             AddressTestBO address;
             ContactPersonTestBO cp = ContactPersonTestBO.CreateContactPersonWithOneAddress_DeleteDoNothing(out address);
 
@@ -78,6 +66,7 @@ namespace Habanero.Test.BO
         public void TestRefreshWithRemovedChild_DereferenceChild()
         {
             //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
             AddressTestBO address;
             ContactPersonTestBO cp = ContactPersonTestBO.CreateContactPersonWithOneAddress_DeleteDoNothing(out address);
             ContactPersonTestBO cp2 = new ContactPersonTestBO();
@@ -149,6 +138,7 @@ namespace Habanero.Test.BO
         public void TestGetRelatedBusinessObjectCollection_SortOrder()
         {
             //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_SortOrder_AddressLine1();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             AddressTestBO address1 = new AddressTestBO();
@@ -176,6 +166,7 @@ namespace Habanero.Test.BO
         public void TestGetRelatedBusinessObjectCollection_SortOrder_ChangeOrder()
         {
             //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_SortOrder_AddressLine1();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             AddressTestBO address1 = new AddressTestBO();
@@ -208,6 +199,10 @@ namespace Habanero.Test.BO
         [Test]
         public void TestCreateRelationship()
         {
+            RelationshipDef mRelationshipDef;
+            RelKeyDef mRelKeyDef;
+            MockBO mMockBo = GetMockBO(out mRelationshipDef, out mRelKeyDef);
+
             ISingleRelationship rel = (ISingleRelationship)mRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
             Assert.AreEqual(mRelationshipDef.RelationshipName, rel.RelationshipName);
             Assert.IsTrue(mMockBo.GetPropertyValue("MockBOProp1") == null);
@@ -233,9 +228,23 @@ namespace Habanero.Test.BO
             mMockBo.Save();
         }
 
+        private MockBO GetMockBO(out RelationshipDef mRelationshipDef, out RelKeyDef mRelKeyDef) {
+            MockBO mMockBo = new MockBO();
+            IPropDefCol mPropDefCol = mMockBo.PropDefCol;
+            mRelKeyDef = new RelKeyDef();
+            IPropDef propDef = mPropDefCol["MockBOProp1"];
+            RelPropDef lRelPropDef = new RelPropDef(propDef, "MockBOID");
+            mRelKeyDef.Add(lRelPropDef);
+            mRelationshipDef = new SingleRelationshipDef("Relation1", typeof(MockBO), mRelKeyDef, false, DeleteParentAction.Prevent);
+            return mMockBo;
+        }
+
         [Test]
         public void TestCreateRelationshipHoldRelRef()
         {
+            RelationshipDef mRelationshipDef;
+            RelKeyDef mRelKeyDef;
+            MockBO mMockBo = GetMockBO(out mRelationshipDef, out mRelKeyDef);
             RelationshipDef lRelationshipDef = new SingleRelationshipDef("Relation1", typeof(MockBO), mRelKeyDef, true, DeleteParentAction.Prevent);
             ISingleRelationship rel = (ISingleRelationship)lRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
             Assert.AreEqual(lRelationshipDef.RelationshipName, rel.RelationshipName);
@@ -265,6 +274,9 @@ namespace Habanero.Test.BO
         [Test]
         public void TestGetRelatedObject()
         {
+            RelationshipDef mRelationshipDef;
+            RelKeyDef mRelKeyDef;
+            MockBO mMockBo = GetMockBO(out mRelationshipDef, out mRelKeyDef);
             RelationshipDef lRelationshipDef = new SingleRelationshipDef("Relation1", typeof(MockBO), mRelKeyDef, true, DeleteParentAction.Prevent);
             ISingleRelationship rel = (ISingleRelationship)lRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
             Assert.AreEqual(lRelationshipDef.RelationshipName, rel.RelationshipName);
@@ -327,23 +339,6 @@ namespace Habanero.Test.BO
             Assert.AreSame(expectedRelationship, reverseRelationship);
         }
 
-        //[Test]
-        //public void TestGetReverseRelationship()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    new Engine();
-        //    new Car();
-        //    ContactPerson person = new ContactPerson();
-        //    Address address = new Address();
-        //    Relationship relationship = (Relationship)address.Relationships["ContactPerson"];
-        //    IRelationship expectedRelationship =  person.Relationships["Addresses"]
-
-        //    //---------------Execute Test ----------------------
-        //    IRelationship reverseRelationship = (Relationship) relationship.GetReverseRelationship(person);
-
-        //    //---------------Test Result -----------------------
-        //    Assert.AreSame(expectedRelationship, reverseRelationship);
-        //}
     }
 
 

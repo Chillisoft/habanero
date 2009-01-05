@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -310,6 +312,26 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestIsDirty_NotDirtyRelationship()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            MyBO.LoadClassDefWithAssociationRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo = new MyBO();
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(bo.MyMultipleRelationship.IsDirty);
+
+            //---------------Execute Test ----------------------
+            bool isDirty = bo.Relationships.IsDirty;
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isDirty, "Should be dirty since dirty Association relationships do make the RelationshipCol dirty");
+        }
+
+
+        [Test]
         public void TestIsDirty_AssociationRelationship()
         {
             //---------------Set up test pack-------------------
@@ -326,7 +348,7 @@ namespace Habanero.Test.BO
             bool isDirty = bo.Relationships.IsDirty;
 
             //---------------Test Result -----------------------
-            Assert.IsFalse(isDirty, "Should not be dirty since dirty Association relationships do not make the RelationshipCol dirty");
+            Assert.IsTrue(isDirty, "Should be dirty since dirty Association relationships do make the RelationshipCol dirty");
         }
 
         [Test]
@@ -367,6 +389,31 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.IsTrue(isDirty, "Should be dirty since dirty Composition relationships do make the RelationshipCol dirty");
+        }
+
+        [Test]
+        public void Test_GetDirtyChildren()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            OrganisationTestBO.LoadDefaultClassDef_WithRelationShipToAddress();
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            RelationshipCol relationships = organisationTestBO.Relationships;
+            MultipleRelationship<ContactPersonTestBO> contactPersonRelationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            BusinessObjectCollection<ContactPersonTestBO> contactPersonCol = contactPersonRelationship.BusinessObjectCollection;
+            MultipleRelationship<AddressTestBO> addressRelationship = organisationTestBO.Relationships.GetMultiple<AddressTestBO>("Addresses");
+            BusinessObjectCollection<AddressTestBO> addressCol = addressRelationship.BusinessObjectCollection;
+
+            ContactPersonTestBO contactPersonTestBO = contactPersonCol.CreateBusinessObject();
+            AddressTestBO addressTestBO = addressCol.CreateBusinessObject();
+
+            //---------------Execute Test ----------------------
+            IList<IBusinessObject> dirtyChildren = relationships.GetDirtyChildren();
+
+            //---------------Test Result -----------------------
+            Assert.Contains(contactPersonTestBO, (ICollection) dirtyChildren);
+            Assert.Contains(addressTestBO, (ICollection)dirtyChildren);
+            Assert.AreEqual(2, dirtyChildren.Count);
         }
     }
 }

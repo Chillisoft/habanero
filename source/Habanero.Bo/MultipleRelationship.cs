@@ -87,14 +87,17 @@ namespace Habanero.BO
         {
             get
             {
-                //if (!IsRelationshipLoaded) return false;
                 bool dirtyCollections = HasDirtyEditingCollections;
                 if (dirtyCollections) return true;
-                foreach (IBusinessObject bo  in _boCol.PersistedBOCol)
+                if (this.RelationshipDef.RelationshipType == RelationshipType.Aggregation ||
+                    RelationshipDef.RelationshipType == RelationshipType.Composition)
                 {
-                    if (bo.Status.IsDirty)
+                    foreach (IBusinessObject bo in _boCol.PersistedBusinessObjects)
                     {
-                        return true;
+                        if (bo.Status.IsDirty)
+                        {
+                            return true;
+                        }
                     }
                 }
                 return false; // || 
@@ -105,8 +108,7 @@ namespace Habanero.BO
         {
             get
             {
-                //if (!IsRelationshipLoaded) return false;
-                return (_boCol.CreatedBOCol.Count > 0) || (_boCol.MarkForDeletionBOCol.Count > 0);
+                return (_boCol.CreatedBusinessObjects.Count > 0) || (_boCol.MarkedForDeleteBusinessObjects.Count > 0) || (_boCol.RemovedBusinessObjects.Count > 0);
             }
         }
 
@@ -228,20 +230,28 @@ namespace Habanero.BO
         {
             if (HasDirtyEditingCollections)
             {
-                foreach (IBusinessObject bo in _boCol.CreatedBOCol)
+                foreach (IBusinessObject bo in _boCol.CreatedBusinessObjects)
                 {
                     add(bo);
                 }
-                foreach (IBusinessObject bo in _boCol.MarkForDeletionBOCol)
+                foreach (IBusinessObject bo in _boCol.MarkedForDeleteBusinessObjects)
+                {
+                    add(bo);
+                }
+                foreach (IBusinessObject bo in _boCol.RemovedBusinessObjects)
                 {
                     add(bo);
                 }
             }
-            foreach (IBusinessObject bo in _boCol.PersistedBOCol)
+            if (this.RelationshipDef.RelationshipType == RelationshipType.Composition
+                || this.RelationshipDef.RelationshipType == RelationshipType.Aggregation)
             {
-                if (bo.Status.IsDirty && !contains(bo))
+                foreach (IBusinessObject bo in _boCol.PersistedBusinessObjects)
                 {
-                    add(bo);
+                    if (bo.Status.IsDirty && !contains(bo))
+                    {
+                        add(bo);
+                    }
                 }
             }
         }

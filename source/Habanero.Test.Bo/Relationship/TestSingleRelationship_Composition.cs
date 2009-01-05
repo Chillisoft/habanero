@@ -16,6 +16,8 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
         }
 
         [TestFixtureSetUp]
@@ -33,8 +35,6 @@ namespace Habanero.Test.BO
         {
             //An already persi`sted Brain cannot be set as the brain of a person.
             //---------------Set up test pack-------------------
-            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ISingleRelationship compositionRelationship = GetCompositionRelationship(organisation);
 
@@ -60,8 +60,6 @@ namespace Habanero.Test.BO
             //A new Brain can be set as the brain of a person.  This is allowed in Habanero for flexibility, but
             // it is rather recommended that the Person creates the Brain.
             //---------------Set up test pack-------------------
-            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ISingleRelationship compositionRelationship = GetCompositionRelationship(organisation);
 
@@ -78,12 +76,10 @@ namespace Habanero.Test.BO
         public void Test_SetParent_PersistedChild()
         {
             //---------------Set up test pack-------------------
-            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ISingleRelationship compositionRelationship = (ISingleRelationship)organisation.Relationships["ContactPerson"];
             RelationshipDef relationshipDef = (RelationshipDef) compositionRelationship.RelationshipDef;
             relationshipDef.RelationshipType = RelationshipType.Composition;
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
 
             //---------------Execute Test ----------------------
@@ -105,12 +101,10 @@ namespace Habanero.Test.BO
         public void Test_SetParent_NewChild()
         {
             //---------------Set up test pack-------------------
-            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ISingleRelationship compositionRelationship = (ISingleRelationship)organisation.Relationships["ContactPerson"];
             RelationshipDef relationshipDef = (RelationshipDef)compositionRelationship.RelationshipDef;
             relationshipDef.RelationshipType = RelationshipType.Composition;
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
 
             //---------------Execute Test ----------------------
@@ -125,12 +119,10 @@ namespace Habanero.Test.BO
         public void Test_SetParentNull_PersistedChild()
         {
             //---------------Set up test pack-------------------
-            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ISingleRelationship compositionRelationship = (ISingleRelationship)organisation.Relationships["ContactPerson"];
             RelationshipDef relationshipDef = (RelationshipDef)compositionRelationship.RelationshipDef;
             relationshipDef.RelationshipType = RelationshipType.Composition;
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             contactPerson.Organisation = organisation;
             contactPerson.Save();
@@ -156,12 +148,10 @@ namespace Habanero.Test.BO
         public void Test_ResetParent_NewChild_SetToNull()
         {
             //---------------Set up test pack-------------------
-            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ISingleRelationship compositionRelationship = (ISingleRelationship)organisation.Relationships["ContactPerson"];
             RelationshipDef relationshipDef = (RelationshipDef)compositionRelationship.RelationshipDef;
             relationshipDef.RelationshipType = RelationshipType.Composition;
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             contactPerson.Organisation = organisation;
             //---------------Assert Precondition----------------
@@ -187,12 +177,10 @@ namespace Habanero.Test.BO
         public void Test_SetParentNull()
         {
             //---------------Set up test pack-------------------
-            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ISingleRelationship compositionRelationship = (ISingleRelationship)organisation.Relationships["ContactPerson"];
             RelationshipDef relationshipDef = (RelationshipDef)compositionRelationship.RelationshipDef;
             relationshipDef.RelationshipType = RelationshipType.Composition;
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             //---------------Assert Precondition----------------
             Assert.IsNull(contactPerson.Organisation);
@@ -209,12 +197,10 @@ namespace Habanero.Test.BO
         public void Test_RemoveMethod()
         {
             //---------------Set up test pack-------------------
-            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             ISingleRelationship compositionRelationship = (ISingleRelationship)organisation.Relationships["ContactPerson"];
             RelationshipDef relationshipDef = (RelationshipDef)compositionRelationship.RelationshipDef;
             relationshipDef.RelationshipType = RelationshipType.Composition;
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             compositionRelationship.SetRelatedObject(contactPerson);
 
@@ -237,6 +223,141 @@ namespace Habanero.Test.BO
             }
         }
 
+        [Test]
+        public void Test_DirtyIfHasCreatedChildren()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetCompositionRelationship(organisationTestBO);
+            ContactPersonTestBO myBO = new ContactPersonTestBO();
+            myBO.Surname = TestUtil.CreateRandomString();
+            myBO.FirstName = TestUtil.CreateRandomString();
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(relationship.IsDirty);
+
+            //---------------Execute Test ----------------------
+            myBO.Organisation = organisationTestBO;
+            bool isDirty = relationship.IsDirty;
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isDirty);
+        }
+
+        [Test]
+        public void Test_GetDirtyChildren_Created()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetCompositionRelationship(organisationTestBO);
+            ContactPersonTestBO myBO = new ContactPersonTestBO();
+            myBO.Surname = TestUtil.CreateRandomString();
+            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.Organisation = organisationTestBO;
+            //---------------Execute Test ----------------------
+
+            IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();
+
+            //---------------Test Result -----------------------
+            Assert.Contains(myBO, (ICollection)dirtyChildren);
+            Assert.AreEqual(1, dirtyChildren.Count);
+        }
+        
+
+        [Test]
+        public void Test_DirtyIfHasMarkForDeleteChildren()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetCompositionRelationship(organisationTestBO);
+            ContactPersonTestBO myBO = new ContactPersonTestBO();
+            myBO.Surname = TestUtil.CreateRandomString();
+            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.Organisation = organisationTestBO;
+            organisationTestBO.Save();
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(relationship.IsDirty);
+
+            //---------------Execute Test ----------------------
+            myBO.MarkForDelete();
+            bool isDirty = relationship.IsDirty;
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isDirty);
+        }
+
+
+        [Test]
+        public void Test_GetDirtyChildren_MarkedForDelete()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetCompositionRelationship(organisationTestBO);
+            ContactPersonTestBO myBO = new ContactPersonTestBO();
+            myBO.Surname = TestUtil.CreateRandomString();
+            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.Organisation = organisationTestBO;
+            organisationTestBO.Save();
+            myBO.MarkForDelete();
+
+            //---------------Execute Test ----------------------
+
+            IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();
+
+            //---------------Test Result -----------------------
+            Assert.Contains(myBO, (ICollection)dirtyChildren);
+            Assert.AreEqual(1, dirtyChildren.Count);
+        }
+        
+
+
+        [Test]
+        public void Test_DirtyIfHasDirtyChildren()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetCompositionRelationship(organisationTestBO);
+
+            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
+            contactPerson.Surname = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Organisation = organisationTestBO;
+            contactPerson.Save();
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(relationship.IsDirty);
+
+            //---------------Execute Test ----------------------
+            contactPerson.FirstName = TestUtil.CreateRandomString();
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(relationship.IsDirty);
+        }
+
+        [Test]
+        public void Test_GetDirtyChildren_Edited()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetCompositionRelationship(organisationTestBO);
+            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
+            contactPerson.Surname = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Organisation = organisationTestBO;
+            contactPerson.Save();
+            contactPerson.FirstName = TestUtil.CreateRandomString();
+
+            //---------------Execute Test ----------------------
+
+            IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();
+
+            //---------------Test Result -----------------------
+            Assert.Contains(contactPerson, (ICollection)dirtyChildren);
+            Assert.AreEqual(1, dirtyChildren.Count);
+        }
+
+
         /// <summary>
         /// An invoice is considered to be dirty if it has any dirty invoice line. 
         ///   A dirty invoice line would be any invoice line that is dirty and would include a newly created invoice line 
@@ -246,21 +367,17 @@ namespace Habanero.Test.BO
         public void Test_ParentDirtyIfHasDirtyChildren()
         {
             //---------------Set up test pack-------------------
-            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            ISingleRelationship compositionRelationship = (ISingleRelationship)organisation.Relationships["ContactPerson"];
-            RelationshipDef relationshipDef = (RelationshipDef)compositionRelationship.RelationshipDef;
-            relationshipDef.RelationshipType = RelationshipType.Composition;
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            SingleRelationship<ContactPersonTestBO> relationship = GetCompositionRelationship(organisation);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
-            compositionRelationship.SetRelatedObject(contactPerson);
+            relationship.SetRelatedObject(contactPerson);
             contactPerson.Surname = TestUtil.CreateRandomString();
             contactPerson.FirstName = TestUtil.CreateRandomString();
             contactPerson.Save();
 
             //---------------Assert Precondition----------------
             Assert.IsFalse(contactPerson.Status.IsDirty);
-            Assert.IsFalse(compositionRelationship.IsDirty);
+            Assert.IsFalse(relationship.IsDirty);
             Assert.IsFalse(organisation.Relationships.IsDirty);
             Assert.IsFalse(organisation.Status.IsDirty);
 
@@ -269,49 +386,19 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.IsTrue(contactPerson.Status.IsDirty);
-            Assert.IsTrue(compositionRelationship.IsDirty);
+            Assert.IsTrue(relationship.IsDirty);
             Assert.IsTrue(organisation.Relationships.IsDirty);
             Assert.IsTrue(organisation.Status.IsDirty);
         }
-        [Test]
-        public void Test_GetDirtyChildren_ReturnAllDirty()
+
+        private SingleRelationship<ContactPersonTestBO> GetCompositionRelationship(OrganisationTestBO organisationTestBO)
         {
-            //---------------Set up test pack-------------------
-            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
-            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            ISingleRelationship compositionRelationship = (ISingleRelationship)organisation.Relationships["ContactPerson"];
+            RelationshipType relationshipType = RelationshipType.Composition;
+            SingleRelationship<ContactPersonTestBO> compositionRelationship =
+                organisationTestBO.Relationships.GetSingle<ContactPersonTestBO>("ContactPerson");
             RelationshipDef relationshipDef = (RelationshipDef)compositionRelationship.RelationshipDef;
-            relationshipDef.RelationshipType = RelationshipType.Composition;
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
-            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
-            compositionRelationship.SetRelatedObject(contactPerson);
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
-            contactPerson.Save();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-
-            //---------------Assert Precondition----------------
-            Assert.IsTrue(contactPerson.Status.IsDirty);
-
-            //---------------Execute Test ----------------------
-            IList<IBusinessObject> dirtyChildren = compositionRelationship.GetDirtyChildren();
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, dirtyChildren.Count);
-            Assert.Contains(contactPerson, (ICollection)dirtyChildren);
+            relationshipDef.RelationshipType = relationshipType;
+            return compositionRelationship;
         }
-
-        private static ISingleRelationship GetCompositionRelationship(OrganisationTestBO organisation)
-        {
-            RelKeyDef def = new RelKeyDef();
-            def.Add(new RelPropDef(organisation.Props["OrganisationID"].PropDef, "OrganisationID"));
-            SingleRelationshipDef relationshipDef =
-                new SingleRelationshipDef(TestUtil.CreateRandomString(), "Habanero.Test.BO",
-                    "ContactPersonTestBO", def, false, DeleteParentAction.DeleteRelated,
-                    RelationshipType.Composition);
-            return (ISingleRelationship)relationshipDef.CreateRelationship(organisation, organisation.Props);
-        }
-
-
     }
 }

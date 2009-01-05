@@ -1837,7 +1837,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             cpCol.LoadAll();
             //---------------Test Result -----------------------
             Assert.AreEqual(0, cpCol.Count);
-            Assert.AreEqual(0, cpCol.PersistedBOCol.Count);
+            Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
         }
 
 
@@ -1901,8 +1901,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Test Result -----------------------
             Assert.AreEqual(1, col.Count);
             Assert.Contains(cp, col);
-            Assert.AreEqual(1, col.PersistedBOCol.Count);
-            Assert.IsTrue(col.PersistedBOCol.Contains(cp));
+            Assert.AreEqual(1, col.PersistedBusinessObjects.Count);
+            Assert.IsTrue(col.PersistedBusinessObjects.Contains(cp));
         }
 
         [Test]

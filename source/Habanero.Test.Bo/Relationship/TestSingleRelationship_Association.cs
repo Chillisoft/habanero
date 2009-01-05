@@ -1,7 +1,8 @@
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -9,7 +10,7 @@ using NUnit.Framework;
 namespace Habanero.Test.BO
 {
     [TestFixture]
-    public class TestSingleRelationship_Aggregation
+    public class TestSingleRelationship_Association
     {
         [SetUp]
         public void SetupTest()
@@ -20,23 +21,14 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
         }
 
-        [TestFixtureSetUp]
-        public void TestFixtureSetup()
-        {
-        }
-
-        [TearDown]
-        public void TearDownTest()
-        {
-        }
 
         [Test]
         public void Test_SetChild_PersistedChild()
         {
-            //An already persisted Heart can be set as the heart of a person (since you can transplant hearts)
+            //An already persisted contactperson can be set as the contact person of an organisation
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
 
             //---------------Execute Test ----------------------
@@ -49,11 +41,10 @@ namespace Habanero.Test.BO
         [Test]
         public void Test_SetChild_NewChild()
         {
-            //A new Heart can be set as the heart of a person.  This is allowed in Habanero for flexibility, but
-            // it is rather recommended that the Person creates the Heart.
+            //A new ContactPerson can be set as the contact person of an organisation.
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
 
             //---------------Execute Test ----------------------
@@ -68,7 +59,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisation);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
 
             //---------------Execute Test ----------------------
@@ -84,7 +75,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisation);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
 
             //---------------Execute Test ----------------------
@@ -95,12 +86,14 @@ namespace Habanero.Test.BO
             Assert.AreSame(organisation, contactPerson.Organisation);
         }
 
+
         [Test]
         public void Test_SetParentNull_PersistedChild()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisation);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
+            relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             contactPerson.Organisation = organisation;
             contactPerson.Save();
@@ -114,12 +107,14 @@ namespace Habanero.Test.BO
 
         }
 
+
         [Test]
         public void Test_ResetParent_NewChild_SetToNull()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisation);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
+            relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             contactPerson.Organisation = organisation;
             //---------------Assert Precondition----------------
@@ -130,12 +125,13 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsNull(contactPerson.Organisation);
         }
+
         [Test]
         public void Test_SetParentNull()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisation);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             //---------------Assert Precondition----------------
             Assert.IsNull(contactPerson.Organisation);
@@ -153,7 +149,8 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisation);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
+            relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             relationship.SetRelatedObject(contactPerson);
 
@@ -169,14 +166,13 @@ namespace Habanero.Test.BO
             Assert.IsNull(organisation.ContactPerson);
             Assert.IsNotNull(organisation.OrganisationID);
         }
-
-
+        
         [Test]
         public void Test_DirtyIfHasCreatedChildren()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             ContactPersonTestBO myBO = new ContactPersonTestBO();
             myBO.Surname = TestUtil.CreateRandomString();
             myBO.FirstName = TestUtil.CreateRandomString();
@@ -198,7 +194,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             ContactPersonTestBO myBO = new ContactPersonTestBO();
             myBO.Surname = TestUtil.CreateRandomString();
             myBO.FirstName = TestUtil.CreateRandomString();
@@ -208,21 +204,22 @@ namespace Habanero.Test.BO
             IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();
 
             //---------------Test Result -----------------------
-            Assert.Contains(myBO, (ICollection) dirtyChildren);
+            Assert.Contains(myBO, (ICollection)dirtyChildren);
             Assert.AreEqual(1, dirtyChildren.Count);
         }
-        
+
         [Test]
         public void Test_DirtyIfHasMarkForDeleteChildren()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             ContactPersonTestBO myBO = new ContactPersonTestBO();
             myBO.Surname = TestUtil.CreateRandomString();
             myBO.FirstName = TestUtil.CreateRandomString();
             myBO.Organisation = organisationTestBO;
-            organisationTestBO.Save();
+            myBO.Save();
+            myBO = organisationTestBO.ContactPerson;
 
             //---------------Assert Precondition----------------
             Assert.IsFalse(relationship.IsDirty);
@@ -240,7 +237,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             ContactPersonTestBO myBO = new ContactPersonTestBO();
             myBO.Surname = TestUtil.CreateRandomString();
             myBO.FirstName = TestUtil.CreateRandomString();
@@ -256,13 +253,14 @@ namespace Habanero.Test.BO
             Assert.Contains(myBO, (ICollection)dirtyChildren);
             Assert.AreEqual(1, dirtyChildren.Count);
         }
-        
+
         [Test]
-        public void Test_DirtyIfHasRemovedChildren()
+        public void Test_DirtyIfHasRemoveChildren()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
+            relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO myBO = new ContactPersonTestBO();
             myBO.Surname = TestUtil.CreateRandomString();
             myBO.FirstName = TestUtil.CreateRandomString();
@@ -285,7 +283,8 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
+            relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO myBO = new ContactPersonTestBO();
             myBO.Surname = TestUtil.CreateRandomString();
             myBO.FirstName = TestUtil.CreateRandomString();
@@ -304,11 +303,11 @@ namespace Habanero.Test.BO
 
 
         [Test]
-        public void Test_DirtyIfHasDirtyChildren()
+        public void Test_NotDirtyIfHasDirtyChildren()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
 
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
             contactPerson.Surname = TestUtil.CreateRandomString();
@@ -323,7 +322,7 @@ namespace Habanero.Test.BO
             contactPerson.FirstName = TestUtil.CreateRandomString();
 
             //---------------Test Result -----------------------
-            Assert.IsTrue(relationship.IsDirty);
+            Assert.IsFalse(relationship.IsDirty);
         }
 
         [Test]
@@ -331,7 +330,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
             contactPerson.Surname = TestUtil.CreateRandomString();
             contactPerson.FirstName = TestUtil.CreateRandomString();
@@ -344,20 +343,18 @@ namespace Habanero.Test.BO
             IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();
 
             //---------------Test Result -----------------------
-            Assert.Contains(contactPerson, (ICollection)dirtyChildren);
-            Assert.AreEqual(1, dirtyChildren.Count);
+            Assert.AreEqual(0, dirtyChildren.Count);
         }
 
-        
         /// <summary>
-        /// A Person is considered dirty if it has a dirty heart.
+        /// An Organisation is not considered dirty if it has a dirty contact person.
         /// </summary>
         [Test]
-        public void Test_ParentDirtyIfHasDirtyChildren()
+        public void Test_ParentNotDirtyIfHasDirtyChildren()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisation);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             relationship.SetRelatedObject(contactPerson);
             contactPerson.Surname = TestUtil.CreateRandomString();
@@ -371,12 +368,13 @@ namespace Habanero.Test.BO
             contactPerson.FirstName = TestUtil.CreateRandomString();
 
             //---------------Test Result -----------------------
-            Assert.IsTrue(organisation.Status.IsDirty);
+            Assert.IsFalse(organisation.Status.IsDirty);
         }
 
-        private SingleRelationship<ContactPersonTestBO> GetAggregationRelationship(OrganisationTestBO organisationTestBO)
+
+        private SingleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO)
         {
-            RelationshipType relationshipType = RelationshipType.Aggregation;
+            RelationshipType relationshipType = RelationshipType.Association;
             SingleRelationship<ContactPersonTestBO> compositionRelationship =
                 organisationTestBO.Relationships.GetSingle<ContactPersonTestBO>("ContactPerson");
             RelationshipDef relationshipDef = (RelationshipDef)compositionRelationship.RelationshipDef;

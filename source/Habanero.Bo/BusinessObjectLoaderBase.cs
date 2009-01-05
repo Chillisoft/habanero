@@ -283,18 +283,18 @@ namespace Habanero.BO
             // use add internal this adds without any events being raised etc.
             //else adds via the Add method (normal add) this raises events such that the 
             // user interface can be updated.
-            if (collection.AddedBOCol.Contains(loadedBo))
+            if (collection.AddedBusinessObjects.Contains(loadedBo))
             {
                 collection.AddWithoutEvents(loadedBo);
-                collection.PersistedBOCol.Add(loadedBo);
+                collection.PersistedBusinessObjects.Add(loadedBo);
                 return;
             }
-            if (collection.PersistedBOCol.Contains(loadedBo))
+            if (collection.PersistedBusinessObjects.Contains(loadedBo))
             {
                 collection.AddWithoutEvents(loadedBo);
                 return;
             }
-            collection.PersistedBOCol.Add(loadedBo);
+            collection.PersistedBusinessObjects.Add(loadedBo);
            // ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
             collection.Add(loadedBo);
            // ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
@@ -313,7 +313,7 @@ namespace Habanero.BO
         protected static void RestoreEditedLists(IBusinessObjectCollection collection)
         {
             ArrayList addedBoArray = new ArrayList();
-            addedBoArray.AddRange(collection.AddedBOCol);
+            addedBoArray.AddRange(collection.AddedBusinessObjects);
             
             RestoreCreatedCollection(collection);
             RestoreRemovedCollection(collection);
@@ -331,29 +331,29 @@ namespace Habanero.BO
             //Should a refresh be allowed on a dirty collection (what do we do with BO's
             foreach (IBusinessObject addedBO in addedBoArray)
             {
-                if (!collection.Contains(addedBO) && !collection.MarkForDeletionBOCol.Contains(addedBO))
+                if (!collection.Contains(addedBO) && !collection.MarkedForDeleteBusinessObjects.Contains(addedBO))
                 {
                     collection.AddWithoutEvents(addedBO);
                 }
-                if (!collection.AddedBOCol.Contains(addedBO))
+                if (!collection.AddedBusinessObjects.Contains(addedBO))
                 {
-                    collection.AddedBOCol.Add(addedBO);
+                    collection.AddedBusinessObjects.Add(addedBO);
                 }
             }
         }
 
         private static void RestoreMarkForDeleteCollection(IBusinessObjectCollection collection)
         {
-            foreach (BusinessObject businessObject in collection.MarkForDeletionBOCol)
+            foreach (BusinessObject businessObject in collection.MarkedForDeleteBusinessObjects)
             {
                 collection.Remove(businessObject);
-                collection.RemovedBOCol.Remove(businessObject);
+                collection.RemovedBusinessObjects.Remove(businessObject);
             }            
         }
 
         private static void RestoreRemovedCollection(IBusinessObjectCollection collection)
         {
-            foreach (BusinessObject businessObject in collection.RemovedBOCol)
+            foreach (BusinessObject businessObject in collection.RemovedBusinessObjects)
             {
                 collection.Remove(businessObject);
             }
@@ -361,7 +361,7 @@ namespace Habanero.BO
 
         private static void RestoreCreatedCollection(IBusinessObjectCollection collection)
         {
-            foreach (BusinessObject businessObject in collection.CreatedBOCol)
+            foreach (BusinessObject businessObject in collection.CreatedBusinessObjects)
             {
                 collection.AddWithoutEvents(businessObject);
             }
@@ -377,7 +377,7 @@ namespace Habanero.BO
             //Should a refresh be allowed on a dirty collection (what do we do with BO's
             foreach (IBusinessObject createdBO in createdBusinessObjects)
             {
-                collection.CreatedBOCol.Add(createdBO);
+                collection.CreatedBusinessObjects.Add(createdBO);
                 collection.AddWithoutEvents(createdBO);
             }
         }

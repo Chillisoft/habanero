@@ -350,7 +350,7 @@ namespace Habanero.Base
         ///   - business objects removed from it since it was last synchronised.
         /// </summary>
         /// Hack: This method was created to overcome the shortfall of using a Generic Collection.
-        IList PersistedBOCol { get; }
+        IList PersistedBusinessObjects { get; }
 
         /// <summary>
         /// Returns a list of the business objects that are currently created for the
@@ -358,7 +358,7 @@ namespace Habanero.Base
         /// </summary>
         /// Hack: This method was created returning a type IList to overcome problems with 
         ///   BusinessObjectCollecion being a generic collection.
-        IList CreatedBOCol { get; }
+        IList CreatedBusinessObjects { get; }
 
         /// <summary>
         /// Returns a list of the business objects that are currently removed for the
@@ -366,7 +366,7 @@ namespace Habanero.Base
         /// </summary>
         /// Hack: This method was created returning a type IList to overcome problems with 
         ///   BusinessObjectCollecion being a generic collection.
-        IList RemovedBOCol { get; }
+        IList RemovedBusinessObjects { get; }
 
         /// <summary>
         /// Returns a list of the business objects that are currently added for the
@@ -374,7 +374,7 @@ namespace Habanero.Base
         /// </summary>
         /// Hack: This method was created returning a type IList to overcome problems with 
         ///   BusinessObjectCollecion being a generic collection.
-        IList AddedBOCol { get; }
+        IList AddedBusinessObjects { get; }
 
         /// <summary>
         /// Returns a list of the business objects that are currently marked for deletion for the
@@ -382,7 +382,7 @@ namespace Habanero.Base
         /// </summary>
         /// Hack: This method was created returning a type IList to overcome problems with 
         ///   BusinessObjectCollecion being a generic collection.
-        IList MarkForDeletionBOCol { get; }
+        IList MarkedForDeleteBusinessObjects { get; }
 
         /// <summary>
         /// Removes the business object at the index position specified

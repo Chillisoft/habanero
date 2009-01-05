@@ -86,7 +86,7 @@ namespace Habanero.BO
         private readonly List<TBusinessObject> _persistedObjectsCollection = new List<TBusinessObject>();
         protected readonly List<TBusinessObject> _removedBusinessObjects = new List<TBusinessObject>();
         private readonly List<TBusinessObject> _addedBusinessObjects = new List<TBusinessObject>();
-        private readonly List<TBusinessObject> _markForDeleteBusinessObjects = new List<TBusinessObject>();
+        private readonly List<TBusinessObject> _markedForDeleteBusinessObjects = new List<TBusinessObject>();
 
         private ISelectQuery _selectQuery;
         private readonly EventHandler<BOEventArgs> _savedEventHandler;
@@ -234,7 +234,7 @@ namespace Habanero.BO
             {
                 if (bo.Status.IsDeleted) return;
                 AddWithoutEvents(bo);
-                if (!AddedBusinessObjects.Contains(bo) && !PersistedBOCol.Contains(bo))
+                if (!AddedBusinessObjects.Contains(bo) && !PersistedBusinessObjects.Contains(bo))
                 {
                     AddedBusinessObjects.Add(bo);                    
                 }
@@ -255,9 +255,9 @@ namespace Habanero.BO
         /// This is intended to be used for internal use only.
         /// </summary>
         /// <param name="businessObject"></param>
-        private void AddToPersistedCollection(IBusinessObject businessObject)
+        private void AddToPersistedCollection(TBusinessObject businessObject)
         {
-            this.PersistedBOCol.Add(businessObject);
+            this.PersistedBusinessObjects.Add(businessObject);
         }
 
         private void AddWithoutEvents(TBusinessObject bo)
@@ -311,9 +311,9 @@ namespace Habanero.BO
         {
             TBusinessObject bo = e.BusinessObject as TBusinessObject;
             if (bo == null) return;
-            if (this.MarkForDeleteBusinessObjects.Contains(bo)) return;
+            if (this.MarkedForDeleteBusinessObjects.Contains(bo)) return;
 
-            this.MarkForDeleteBusinessObjects.Add(bo);
+            this.MarkedForDeleteBusinessObjects.Add(bo);
             base.Remove(bo);
             KeyObjectHashTable.Remove(bo.ID.ToString());
             if (!this.RemovedBusinessObjects.Remove(bo))
@@ -332,9 +332,9 @@ namespace Habanero.BO
             TBusinessObject bo = e.BusinessObject as TBusinessObject;
             if (bo == null) return;
             this.RemoveInternal(bo);
-            this.PersistedBOCol.Remove(bo);
+            this.PersistedBusinessObjects.Remove(bo);
             this.RemovedBusinessObjects.Remove(bo);
-            this.MarkForDeleteBusinessObjects.Remove(bo);
+            this.MarkedForDeleteBusinessObjects.Remove(bo);
             if (bo.Status.IsDeleted) this.AddedBusinessObjects.Remove(bo);
             DeRegisterForBOEvents(bo);
         }
@@ -353,7 +353,7 @@ namespace Habanero.BO
             //                RemoveInternal(bo);
             //                this.RemovedBusinessObjects.Remove(bo);//The remove inte
             //            }
-            if (!this.MarkForDeleteBusinessObjects.Remove(bo) || (this.Contains(bo))) return;
+            if (!this.MarkedForDeleteBusinessObjects.Remove(bo) || (this.Contains(bo))) return;
             if (this.AddedBusinessObjects.Contains(bo) && this.Contains(bo))
             {
                 this.AddWithoutEvents(bo);
@@ -569,46 +569,14 @@ namespace Habanero.BO
         {
             base.Clear();
             KeyObjectHashTable.Clear();
-            this.PersistedBOCol.Clear();
+            this.PersistedBusinessObjects.Clear();
             this.CreatedBusinessObjects.Clear();
             this.RemovedBusinessObjects.Clear();
             this.AddedBusinessObjects.Clear();
-            this.MarkForDeleteBusinessObjects.Clear();
+            this.MarkedForDeleteBusinessObjects.Clear();
         }
 
-        public IList CreatedBOCol
-        {
-            get { return _createdBusinessObjects; }
-        }
 
-        /// <summary>
-        /// Returns a list of the business objects that are currently removed for the
-        ///   collection but have not yet been persisted to the database.
-        /// </summary>
-        /// Hack: This method was created returning a type IList to overcome problems with 
-        ///   BusinessObjectCollecion being a generic collection.
-        public IList RemovedBOCol
-        {
-            get { return this.RemovedBusinessObjects; }
-        }
-
-        /// <summary>
-        /// Returns a list of the business objects that are currently added for the
-        ///   collection but have not cessarily been persisted to the database.
-        /// </summary>
-        public IList AddedBOCol
-        {
-            get { return this.AddedBusinessObjects; }
-        }
-
-        /// <summary>
-        /// Returns a list of the business objects that are currently marked for deletion for the
-        ///   collection but have not cessarily been persisted to the database.
-        /// </summary>
-        public IList MarkForDeletionBOCol
-        {
-            get { return this.MarkForDeleteBusinessObjects; }
-        }
 
 
         /// <summary>
@@ -655,7 +623,7 @@ namespace Habanero.BO
             bool removed = base.Remove(businessObject);
             KeyObjectHashTable.Remove(businessObject.ID.ToString());
 
-            if (!_removedBusinessObjects.Contains(businessObject) && !_markForDeleteBusinessObjects.Contains(businessObject))
+            if (!_removedBusinessObjects.Contains(businessObject) && !_markedForDeleteBusinessObjects.Contains(businessObject))
             {
                 _removedBusinessObjects.Add(businessObject);
                 this.FireBusinessObjectRemoved(businessObject);
@@ -675,7 +643,7 @@ namespace Habanero.BO
 
         private void RemoveAddedBusinessObject(TBusinessObject businessObject)
         {
-            if (this.MarkForDeletionBOCol.Contains(businessObject)) return;
+            if (this.MarkedForDeleteBusinessObjects.Contains(businessObject)) return;
 
             if (!this.AddedBusinessObjects.Remove(businessObject)) return;
 
@@ -1065,7 +1033,7 @@ namespace Habanero.BO
             {
                 transaction.AddBusinessObject(bo);
             }
-            foreach (TBusinessObject businessObject in this.MarkForDeleteBusinessObjects)
+            foreach (TBusinessObject businessObject in this.MarkedForDeleteBusinessObjects)
             {
                 transaction.AddBusinessObject(businessObject);
             }
@@ -1084,9 +1052,9 @@ namespace Habanero.BO
             {
                 bo.Restore();
             }
-            while (this.MarkForDeleteBusinessObjects.Count > 0)
+            while (this.MarkedForDeleteBusinessObjects.Count > 0)
             {
-                TBusinessObject bo = this.MarkForDeleteBusinessObjects[0];
+                TBusinessObject bo = this.MarkedForDeleteBusinessObjects[0];
                 bo.Restore();
             }
             while (this.CreatedBusinessObjects.Count > 0)
@@ -1269,6 +1237,15 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// Returns a list of the business objects that have been created via the
+        ///   collection but have not been persisted to the database.
+        /// </summary>
+        IList IBusinessObjectCollection.CreatedBusinessObjects
+        {
+            get { return _createdBusinessObjects; }
+        }
+        
+        /// <summary>
         /// The list of business objects that have been created via this collection (@see CreateBusinessObject) and have not
         /// yet been persisted.
         /// </summary>
@@ -1284,7 +1261,7 @@ namespace Habanero.BO
         ///    objects.
         /// Hack: This method was created to overcome the shortfall of using a Generic Collection.
         /// </summary>
-        public IList PersistedBOCol
+        IList IBusinessObjectCollection.PersistedBusinessObjects
         {
             get { return _persistedObjectsCollection; }
         }
@@ -1300,6 +1277,17 @@ namespace Habanero.BO
             get { return _persistedObjectsCollection; }
         }
 
+        /// <summary>
+        /// Returns a list of the business objects that are currently removed for the
+        ///   collection but have not yet been persisted to the database.
+        /// </summary>
+        /// Hack: This method was created returning a type IList to overcome problems with 
+        ///   BusinessObjectCollecion being a generic collection.
+        IList IBusinessObjectCollection.RemovedBusinessObjects
+        {
+            get { return this.RemovedBusinessObjects; }
+        }
+
         ///<summary>
         /// Returns a collection of business objects that have been removed from the collection
         /// but the collection has not yet been persisted.
@@ -1309,14 +1297,33 @@ namespace Habanero.BO
             get { return _removedBusinessObjects; }
         }
 
+
+        /// <summary>
+        /// Returns a list of the business objects that are currently marked for deletion for the
+        ///   collection but have not cessarily been persisted to the database.
+        /// </summary>
+        IList IBusinessObjectCollection.MarkedForDeleteBusinessObjects
+        {
+            get { return this.MarkedForDeleteBusinessObjects; }
+        }
+
         ///<summary>
         /// Returns a collection of business objects that have been marked for deletion from the collection
         /// but the collection has not yet been persisted.
         ///</summary>
         ///<exception cref="NotImplementedException"></exception>
-        public List<TBusinessObject> MarkForDeleteBusinessObjects
+        public List<TBusinessObject> MarkedForDeleteBusinessObjects
         {
-            get { return _markForDeleteBusinessObjects; }
+            get { return _markedForDeleteBusinessObjects; }
+        }
+
+        /// <summary>
+        /// Returns a list of the business objects that are currently added for the
+        ///   collection but have not cessarily been persisted to the database.
+        /// </summary>
+        IList IBusinessObjectCollection.AddedBusinessObjects
+        {
+            get { return this.AddedBusinessObjects; }
         }
 
         /// <summary>

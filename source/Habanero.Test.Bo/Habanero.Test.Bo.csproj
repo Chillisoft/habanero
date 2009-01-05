@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -132,6 +132,7 @@
     <Compile Include="BusinessObjectCollection\TestOrderCriteria.cs" />
     <Compile Include="BusinessObjectCollection\TestRelatedBoCol_Added.cs" />
     <Compile Include="BusinessObjectCollection\TestRelatedBOCol_Aggregation.cs" />
+    <Compile Include="BusinessObjectCollection\TestRelatedBOCol_Association.cs" />
     <Compile Include="BusinessObjectCollection\TestRelatedBOCol_Created.cs" />
     <Compile Include="BusinessObjectCollection\TestRelatedBoCol_Edits.cs" />
     <Compile Include="BusinessObjectCollection\TestRelatedBusinessObjectCollection.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
     <Compile Include="CriteriaManager\TestHabaneroStringBuilder.cs" />
     <Compile Include="Relationship\TestSingleRelationship_Aggregation.cs" />
+    <Compile Include="Relationship\TestSingleRelationship_Association.cs" />
     <Compile Include="Relationship\TestSingleRelationship_Composition.cs" />
     <Compile Include="Security\TestBOPropAuthorisation.cs" />
     <Compile Include="Security\TestBusinessObjectAuthorisation.cs" />

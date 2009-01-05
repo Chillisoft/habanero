@@ -79,7 +79,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(bo.MyBoID, relatedBo.MyBoID, "The foreign key should eb set");
             Assert.IsTrue(relatedBo.Status.IsNew);
             Assert.AreEqual(1, col.CreatedBusinessObjects.Count, "The created BOs should be added");
-            Assert.AreEqual(0, col.AddedBOCol.Count);
+            Assert.AreEqual(0, col.AddedBusinessObjects.Count);
             Assert.AreEqual(1, col.Count);
         }
 
@@ -106,7 +106,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(relatedBo.Status.IsNew);
             Assert.AreEqual(1, col.CreatedBusinessObjects.Count, "The created BOs should be added");
             Assert.AreEqual(1, col.Count);
-            Assert.AreEqual(0, col.AddedBOCol.Count);
+            Assert.AreEqual(0, col.AddedBusinessObjects.Count);
         }
         //TODO: Test add new business object adds to created collection and sets the foreign key fields composite .
 
@@ -171,7 +171,7 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, contactPersonTestBO.Addresses.CreatedBusinessObjects.Count);
             Assert.AreEqual(0, contactPersonTestBO.Addresses.Count);
-            Assert.AreEqual(0, contactPersonTestBO.Addresses.PersistedBOCol.Count);
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.PersistedBusinessObjects.Count);
 
             //---------------Execute Test ----------------------
             contactPersonTestBO.Addresses.Add(address);
@@ -180,7 +180,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, contactPersonTestBO.Addresses.CreatedBusinessObjects.Count);
             Assert.AreEqual(0, contactPersonTestBO.Addresses.AddedBusinessObjects.Count);
             Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
-            Assert.AreEqual(0, contactPersonTestBO.Addresses.PersistedBOCol.Count);
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.PersistedBusinessObjects.Count);
             Assert.AreEqual(contactPersonTestBO.ContactPersonID, address.ContactPersonID);
         }
 
@@ -202,7 +202,7 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, contactPersonTestBO.AddressTestBOs.CreatedBusinessObjects.Count);
             Assert.AreEqual(0, contactPersonTestBO.AddressTestBOs.Count);
-            Assert.AreEqual(0, contactPersonTestBO.AddressTestBOs.PersistedBOCol.Count);
+            Assert.AreEqual(0, contactPersonTestBO.AddressTestBOs.PersistedBusinessObjects.Count);
             Assert.IsNotNull(address.ContactPersonTestBO);
             Assert.IsNotNull(address.ContactPersonID);
 
@@ -214,7 +214,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(0, addressTestBOS.CreatedBusinessObjects.Count);
             Assert.AreEqual(1, addressTestBOS.AddedBusinessObjects.Count);
             Assert.AreEqual(1, addressTestBOS.Count);
-            Assert.AreEqual(0, addressTestBOS.PersistedBOCol.Count);
+            Assert.AreEqual(0, addressTestBOS.PersistedBusinessObjects.Count);
             Assert.AreEqual(contactPersonTestBO.ContactPersonID, address.ContactPersonID);
             Assert.AreSame(contactPersonTestBO, address.ContactPersonTestBO);
         }
@@ -232,7 +232,7 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, addressTestBOS.AddedBusinessObjects.Count);
             Assert.AreEqual(0, addressTestBOS.Count);
-            Assert.AreEqual(0, addressTestBOS.PersistedBOCol.Count);
+            Assert.AreEqual(0, addressTestBOS.PersistedBusinessObjects.Count);
 
             //---------------Execute Test ----------------------
             addressTestBOS = newContactPerson.AddressTestBOs;
@@ -242,7 +242,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, addressTestBOS.AddedBusinessObjects.Count);
             Assert.AreEqual(0, addressTestBOS.CreatedBusinessObjects.Count);
             Assert.AreEqual(1, addressTestBOS.Count);
-            Assert.AreEqual(0, addressTestBOS.PersistedBOCol.Count);
+            Assert.AreEqual(0, addressTestBOS.PersistedBusinessObjects.Count);
         }
         //TODO: With composite keys should set up foreign key again when parent bo is saved in case
         //  parent foreign key edited or child added before parent foreign key is set.
@@ -267,7 +267,7 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, addressTestBOS.AddedBusinessObjects.Count);
             Assert.AreEqual(1, addressTestBOS.Count);
-            Assert.AreEqual(0, addressTestBOS.PersistedBOCol.Count);
+            Assert.AreEqual(0, addressTestBOS.PersistedBusinessObjects.Count);
 
             //---------------Execute Test ----------------------
             addressTestBOS.Refresh();
@@ -275,7 +275,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(1, addressTestBOS.AddedBusinessObjects.Count);
             Assert.AreEqual(1, addressTestBOS.Count);
-            Assert.AreEqual(0, addressTestBOS.PersistedBOCol.Count);
+            Assert.AreEqual(0, addressTestBOS.PersistedBusinessObjects.Count);
         }
 
         //TODO: Do all these tests with composite foreign keys (i.e. add, create and remove related
@@ -307,7 +307,7 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, addressTestBOS.AddedBusinessObjects.Count);
             Assert.AreEqual(0, addressTestBOS.Count);
-            Assert.AreEqual(0, addressTestBOS.PersistedBOCol.Count);
+            Assert.AreEqual(0, addressTestBOS.PersistedBusinessObjects.Count);
 //            Assert.AreEqual(contactPersonTestBO.ContactPersonID, address.ContactPersonID);
             //Assert.AreSame(contactPersonTestBO, address.ContactPersonTestBO);
             Assert.IsFalse(address.Status.IsDirty);
@@ -319,7 +319,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(1, addressTestBOS.Count);
             Assert.AreEqual(1, addressTestBOS.AddedBusinessObjects.Count);
-            Assert.AreEqual(0, addressTestBOS.PersistedBOCol.Count);
+            Assert.AreEqual(0, addressTestBOS.PersistedBusinessObjects.Count);
             Assert.AreEqual(contactPersonTestBO.ContactPersonID, address.ContactPersonID);
             Assert.AreSame(contactPersonTestBO, address.ContactPersonTestBO);
         }
@@ -338,7 +338,7 @@ namespace Habanero.Test.BO
             //------Assert Preconditions
             Assert.AreEqual(0, addresses1.RemovedBusinessObjects.Count);
             Assert.AreEqual(1, addresses1.Count);
-            Assert.AreEqual(1, addresses1.PersistedBOCol.Count);
+            Assert.AreEqual(1, addresses1.PersistedBusinessObjects.Count);
 
             //-----Run tests----------------------------
             RelatedBusinessObjectCollection<AddressTestBO> addresses = addresses1;
@@ -347,7 +347,7 @@ namespace Habanero.Test.BO
             ////-----Test results-------------------------
             Assert.AreEqual(1, addresses1.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, addresses1.Count);
-            Assert.AreEqual(1, addresses1.PersistedBOCol.Count);
+            Assert.AreEqual(1, addresses1.PersistedBusinessObjects.Count);
             Assert.IsNull(address.ContactPersonTestBO);
             Assert.IsNull(address.ContactPersonID);
         }
@@ -365,7 +365,7 @@ namespace Habanero.Test.BO
             //------Assert Preconditions
             Assert.AreEqual(0, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
             Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
-            Assert.AreEqual(1, contactPersonTestBO.Addresses.PersistedBOCol.Count);
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.PersistedBusinessObjects.Count);
 
             //-----Run tests----------------------------
             RelatedBusinessObjectCollection<AddressTestBO> addresses = contactPersonTestBO.Addresses;
@@ -374,7 +374,7 @@ namespace Habanero.Test.BO
             ////-----Test results-------------------------
             Assert.AreEqual(1, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, contactPersonTestBO.Addresses.Count);
-            Assert.AreEqual(1, contactPersonTestBO.Addresses.PersistedBOCol.Count);
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.PersistedBusinessObjects.Count);
             Assert.IsNull(address.ContactPersonTestBO);
             Assert.IsNull(address.ContactPersonID);
         }
@@ -401,7 +401,7 @@ namespace Habanero.Test.BO
             Assert.IsNull(address.ContactPersonID);
             Assert.IsNull(address.ContactPersonTestBO);
 //            Assert.IsTrue(address.Status.IsDeleted);
-            Assert.AreEqual(1, addresses.PersistedBOCol.Count);
+            Assert.AreEqual(1, addresses.PersistedBusinessObjects.Count);
         }
 
 //        [Test]
@@ -451,7 +451,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(0, addresses.Count);
             Assert.IsTrue(address.Status.IsDeleted);
             Assert.IsTrue(address.Status.IsNew);
-            Assert.AreEqual(0, addresses.PersistedBOCol.Count);
+            Assert.AreEqual(0, addresses.PersistedBusinessObjects.Count);
         }
 
         [Test, Ignore("to be implemented")]
@@ -476,7 +476,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(0, contactPersonTestBO.Addresses.Count);
             Assert.IsTrue(address.Status.IsDeleted);
             Assert.IsTrue(address.Status.IsNew);
-            Assert.AreEqual(0, contactPersonTestBO.Addresses.PersistedBOCol.Count);
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.PersistedBusinessObjects.Count);
         }
 
         [Test, Ignore("to be implemented")]
@@ -500,7 +500,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(0, contactPersonTestBO.Addresses.Count);
             Assert.IsTrue(address.Status.IsDeleted);
             Assert.IsTrue(address.Status.IsNew);
-            Assert.AreEqual(0, contactPersonTestBO.Addresses.PersistedBOCol.Count);
+            Assert.AreEqual(0, contactPersonTestBO.Addresses.PersistedBusinessObjects.Count);
         }
         [Test, Ignore("Address.ContactPersonID cannot be null")]
         public void TestRemoveRelatedObject_PersistBOToDB()
@@ -524,7 +524,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(0, addresses.Count);
             Assert.IsTrue(address.Status.IsDeleted);
             Assert.IsTrue(address.Status.IsNew);
-            Assert.AreEqual(0, addresses.PersistedBOCol.Count);
+            Assert.AreEqual(0, addresses.PersistedBusinessObjects.Count);
         }
 
         [Test, Ignore("to be implemented")]
