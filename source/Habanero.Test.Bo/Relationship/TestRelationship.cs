@@ -25,7 +25,7 @@ using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.Relationship
 {
     [TestFixture]
     public class TestRelationship 

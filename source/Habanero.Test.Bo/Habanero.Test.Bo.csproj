@@ -145,6 +145,9 @@
     <Compile Include="CriteriaManager\TestCriteriaDB.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
     <Compile Include="CriteriaManager\TestHabaneroStringBuilder.cs" />
+    <Compile Include="Relationship\TestMultipleRelationship_Aggregation.cs" />
+    <Compile Include="Relationship\TestMultipleRelationship_Association.cs" />
+    <Compile Include="Relationship\TestMultipleRelationship_Composition.cs" />
     <Compile Include="Relationship\TestSingleRelationship_Aggregation.cs" />
     <Compile Include="Relationship\TestSingleRelationship_Association.cs" />
     <Compile Include="Relationship\TestSingleRelationship_Composition.cs" />

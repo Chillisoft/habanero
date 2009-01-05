@@ -108,7 +108,7 @@ namespace Habanero.BO
         {
             get
             {
-                return (_boCol.CreatedBusinessObjects.Count > 0) || (_boCol.MarkedForDeleteBusinessObjects.Count > 0) || (_boCol.RemovedBusinessObjects.Count > 0);
+                return (_boCol.CreatedBusinessObjects.Count > 0) || (_boCol.MarkedForDeleteBusinessObjects.Count > 0) || (_boCol.RemovedBusinessObjects.Count > 0) || (_boCol.AddedBusinessObjects.Count > 0);
             }
         }
 
@@ -239,6 +239,10 @@ namespace Habanero.BO
                     add(bo);
                 }
                 foreach (IBusinessObject bo in _boCol.RemovedBusinessObjects)
+                {
+                    add(bo);
+                }
+                foreach (IBusinessObject bo in _boCol.AddedBusinessObjects)
                 {
                     add(bo);
                 }

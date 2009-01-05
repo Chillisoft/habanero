@@ -1,12 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using Habanero.Base;
-using Habanero.Base.Exceptions;
+﻿using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO.RelatedBusinessObjectCollection;
-using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -230,137 +225,12 @@ namespace Habanero.Test.BO
             util.AssertRemovedEventFired();
         }
 
-        /// <summary>
-        /// A car is considered to be dirty only if it has added, created or removed dirty drivers. 
-        /// </summary>
-        [Test]
-        public void Test_ParentDirtyIfHasCreatedChildren()
-        {
-            //---------------Set up test pack-------------------
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
-
-            //---------------Assert Precondition----------------
-            Assert.IsFalse(organisationTestBO.Status.IsDirty);
-
-            //---------------Execute Test ----------------------
-            organisationTestBO.ContactPeople.CreateBusinessObject();
-
-            //---------------Test Result -----------------------
-            Assert.IsTrue(organisationTestBO.Status.IsDirty);
-        }
-
-        /// <summary>
-        /// A car is considered to be dirty only if it has added, created or removed dirty drivers. 
-        /// </summary>
-        [Test]
-        public void Test_ParentDirtyIfHasMarkForDeleteChildren()
-        {
-            //---------------Set up test pack-------------------
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
-            ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
-            myBO.Surname = TestUtil.CreateRandomString();
-            myBO.FirstName = TestUtil.CreateRandomString();
-            myBO.Save();
-
-            //---------------Assert Precondition----------------
-            Assert.IsFalse(organisationTestBO.Status.IsDirty);
-
-            //---------------Execute Test ----------------------
-            cpCol.MarkForDelete(myBO);
-
-            //---------------Test Result -----------------------
-            Assert.IsTrue(organisationTestBO.Status.IsDirty);
-        }
-
-        /// <summary>
-        /// A car is considered to be dirty only if it has added, created or removed dirty drivers. 
-        /// </summary>
-        [Test]
-        public void Test_ParentDirtyIfHasRemovedChildren()
-        {
-            //---------------Set up test pack-------------------
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
-            ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
-            myBO.Surname = TestUtil.CreateRandomString();
-            myBO.FirstName = TestUtil.CreateRandomString();
-            myBO.Save();
-
-            //---------------Assert Precondition----------------
-            Assert.IsFalse(organisationTestBO.Status.IsDirty);
-
-            //---------------Execute Test ----------------------
-            cpCol.Remove(myBO);
-
-            //---------------Test Result -----------------------
-            Assert.IsTrue(organisationTestBO.Status.IsDirty);
-        }
 
 
-        /// <summary>
-        /// A car is considered to be dirty only if it has added, created or removed dirty drivers. 
-        /// </summary>
-        [Test]
-        public void Test_ParentNotDirtyIfHasEditedChildren()
-        {
-            //---------------Set up test pack-------------------
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
-            ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
-            myBO.Surname = TestUtil.CreateRandomString();
-            myBO.FirstName = TestUtil.CreateRandomString();
-            myBO.Save();
-
-            //---------------Assert Precondition----------------
-            Assert.IsFalse(organisationTestBO.Status.IsDirty);
-
-            //---------------Execute Test ----------------------
-            myBO.FirstName = TestUtil.CreateRandomString();
-
-            //---------------Test Result -----------------------
-            Assert.IsFalse(organisationTestBO.Status.IsDirty);
-        }
 
 
-        /// <summary>
-        ///•	If a car is persisted then it will only persist its driver’s relationship and will not persist a 
-        /// related driver that is dirty.
-        /// </summary>
-        [Test]
-        public void Test_ParentDoesNotPersistDirtyChildren()
-        {
-            //---------------Set up test pack-------------------
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            RelationshipCol relationships = organisationTestBO.Relationships;
-            BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
 
-            ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
-            myBO.Surname = TestUtil.CreateRandomString();
-            myBO.FirstName = TestUtil.CreateRandomString();
-            myBO.Save();
-            myBO.FirstName = TestUtil.CreateRandomString();
-            organisationTestBO.Name = TestUtil.CreateRandomString();
 
-            //---------------Assert Precondition----------------
-            Assert.IsTrue(myBO.Status.IsDirty);
-            Assert.IsTrue(organisationTestBO.Status.IsDirty); 
-
-            //---------------Execute Test ----------------------
-            organisationTestBO.Save();
-
-            //---------------Test Result -----------------------
-            util.AssertOneObjectInCurrentPersistedCollection(cpCol);
-            Assert.IsFalse(organisationTestBO.Status.IsDirty); 
-            Assert.IsTrue(myBO.Status.IsDirty);
-
-        }
 
 
 

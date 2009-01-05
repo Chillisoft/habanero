@@ -7,7 +7,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.Relationship
 {
     [TestFixture]
     public class TestSingleRelationship_Association
