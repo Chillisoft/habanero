@@ -385,6 +385,26 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void Test_BuildPanel_3Columns_1Column_RowSpan2()
+        {
+            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            UIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabThreeColumnsOneColumnWithRowSpan();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(singleIntegerFieldTab).Panel;
+            IControlHabanero textBoxCol1 = panel.Controls[PanelBuilder.INPUT_CONTROL_COLUMN_NO];
+            IControlHabanero textBoxCol2 = panel.Controls[PanelBuilder.INPUT_CONTROL_COLUMN_NO + PanelBuilder.CONTROLS_PER_COLUMN];
+            IControlHabanero label2Col2 = panel.Controls[PanelBuilder.LABEL_CONTROL_COLUMN_NO + PanelBuilder.CONTROLS_PER_COLUMN*3];
+            //---------------Test Result -----------------------
+            Assert.AreEqual(textBoxCol2.Height * 2 + LayoutManager.DefaultGapSize, textBoxCol1.Height);
+            Assert.AreEqual(textBoxCol1.Right+PanelBuilder.ERROR_PROVIDER_WIDTH+GridLayoutManager.DefaultGapSize*2,label2Col2.Left);
+
+        }
+
+        [Test]
         public void Test_BuildPanel_RowSpan()
         {
             //---------------Set up test pack-------------------
