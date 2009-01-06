@@ -22,6 +22,11 @@ using Habanero.Base;
 
 namespace Habanero.DB
 {
+    ///<summary>
+    /// This class inherits from <see cref="SqlStatement"/> and is used for inserting 
+    ///   new objects into the database. It is used because it supports the updating of 
+    ///   an autoincrementing field.
+    ///</summary>
     public class InsertSqlStatement : SqlStatement
     {
         private string _tableName;

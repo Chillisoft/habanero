@@ -41,10 +41,24 @@ namespace Habanero.BO
     {
         private readonly int _timeout;
         private Type _boType;
-    	private string _assemblyName;
-    	private string _className;
+        private string _assemblyName;
+        private string _className;
         private string _criteria;
+
+        /// <summary>
+        /// Provides a key value pair where the persisted value can be returned for 
+        ///   any displayed value. E.g. the persisted value may be a GUID but the
+        ///   displayed value may be a related string.
+        /// </summary>
         private Dictionary<string, object> _displayValueDictionary;
+
+        /// <summary>
+        /// Provides a key value pair where the persisted value can be returned for 
+        ///   any displayed value. E.g. the persisted value may be a GUID but the
+        ///   displayed value may be a related string.
+        /// </summary>
+        private Dictionary<object, string> _keyValueDictionary = new Dictionary<object, string>();
+
         private DateTime _lastCallTime;
         private string _sort;
 
@@ -56,8 +70,7 @@ namespace Habanero.BO
         /// <param name="boType">The business object type</param>
         public BusinessObjectLookupList(Type boType) : this(boType, 10000)
         {
-            
-		}
+        }
 
         /// <summary>
         /// Constructor to initialise a new lookup-list
@@ -66,7 +79,6 @@ namespace Habanero.BO
         /// <param name="timeout">The period after which the cache expires</param>
         public BusinessObjectLookupList(Type boType, int timeout)
         {
-            
             MyBoType = boType;
             _timeout = timeout;
             _lastCallTime = DateTime.MinValue;
@@ -74,12 +86,12 @@ namespace Habanero.BO
 
         /// <summary>
         /// Constructor to initialise a new lookup-list
-    	/// </summary>
-    	/// <param name="assemblyName">The assembly containing the class</param>
-    	/// <param name="className">The class from which to load the values</param>
-		public BusinessObjectLookupList(string assemblyName, string className) : this(assemblyName, className, 10000)
-		{
-		}
+        /// </summary>
+        /// <param name="assemblyName">The assembly containing the class</param>
+        /// <param name="className">The class from which to load the values</param>
+        public BusinessObjectLookupList(string assemblyName, string className) : this(assemblyName, className, 10000)
+        {
+        }
 
         /// <summary>
         /// Constructor to initialise a new lookup-list
@@ -113,42 +125,42 @@ namespace Habanero.BO
             Sort = sort;
         }
 
-		#endregion Constructors
+        #endregion Constructors
 
-		#region Properties
+        #region Properties
 
         /// <summary>
         /// The assembly containing the class from which values are loaded
         /// </summary>
-		public string AssemblyName
-		{
-			get { return _assemblyName; }
-			protected set
-			{
-				if (_assemblyName != value)
-				{
-					_className = null;
-					_boType = null;
-				}
-				_assemblyName = value;
-			}
-		}
+        public string AssemblyName
+        {
+            get { return _assemblyName; }
+            protected set
+            {
+                if (_assemblyName != value)
+                {
+                    _className = null;
+                    _boType = null;
+                }
+                _assemblyName = value;
+            }
+        }
 
         /// <summary>
         /// The class from which values are loaded
         /// </summary>
-		public string ClassName
-		{
-			get { return _className; }
-			protected set
-			{
-				if (_className != value)
-				{
-					_boType = null;
-				}
-				_className = value;
-			}
-		}
+        public string ClassName
+        {
+            get { return _className; }
+            protected set
+            {
+                if (_className != value)
+                {
+                    _boType = null;
+                }
+                _className = value;
+            }
+        }
 
         /// <summary>
         /// Gets and sets the sql criteria used to limit which objects
@@ -175,9 +187,9 @@ namespace Habanero.BO
 
         #endregion Properties
 
-		#region ILookupList Implementation
+        #region ILookupList Implementation
 
-		/// <summary>
+        /// <summary>
         /// Returns a lookup-list for all the business objects stored under
         /// the class definition held in this instance
         /// </summary>
@@ -197,7 +209,12 @@ namespace Habanero.BO
         public Dictionary<string, object> GetLookupList(IDatabaseConnection connection)
         {
             return GetLookupList(false);
-		}
+        }
+
+        /// <summary>
+        /// Returns the Property definition that this lookup list is for.
+        /// </summary>
+        public IPropDef PropDef { get; set; }
 
         /// <summary>
         /// Returns a lookup-list for all the business objects stored under
@@ -217,6 +234,7 @@ namespace Habanero.BO
             }
             IBusinessObjectCollection col = GetBusinessObjectCollection();
             _displayValueDictionary = CreateDisplayValueDictionary(col, String.IsNullOrEmpty(Sort));
+            FillKeyValueDictionary();
             _lastCallTime = DateTime.Now;
             return _displayValueDictionary;
         }
@@ -226,10 +244,11 @@ namespace Habanero.BO
         /// This returns the same set of data as returned by the <see cref="GetLookupList()"/> method.
         ///</summary>
         ///<returns></returns>
-        public IBusinessObjectCollection GetBusinessObjectCollection()
+        public virtual IBusinessObjectCollection GetBusinessObjectCollection()
         {
             ClassDef classDef = LookupBoClassDef;
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, _criteria ?? "", _sort);
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (classDef, _criteria ?? "", _sort);
         }
 
         ///<summary>
@@ -241,14 +260,15 @@ namespace Habanero.BO
         }
 
         /// <summary>
-		/// Returns a collection of string Guid pairs from the business object
-		/// collection provided. Each pair consists of a string version of a
-		/// business object and the object's ID.
-		/// </summary>
-		/// <param name="col">The business object collection</param>
+        /// Returns a collection of string Guid pairs from the business object
+        /// collection provided. Each pair consists of a string version of a
+        /// business object and the object's ID.
+        /// </summary>
+        /// <param name="col">The business object collection</param>
         /// <param name="sortByDisplayValue">Must the collection be sorted by the display value or not</param>
         /// <returns>Returns a collection of display-value pairs</returns>
-        public static Dictionary<string, object> CreateDisplayValueDictionary(IBusinessObjectCollection col, bool sortByDisplayValue)
+        public static Dictionary<string, object> CreateDisplayValueDictionary
+            (IBusinessObjectCollection col, bool sortByDisplayValue)
         {
             if (col == null)
             {
@@ -266,7 +286,8 @@ namespace Habanero.BO
                 Dictionary<string, object> lookupList = new Dictionary<string, object>();
                 foreach (string key in sortedLookupList.Keys)
                 {
-                    lookupList.Add(key, sortedLookupList[key]);
+//                    lookupList.Add(key, sortedLookupList[key].ToString());
+                    AddBusinessObjectToLookupList(lookupList, (BusinessObject) sortedLookupList[key], key);
                 }
                 return lookupList;
             }
@@ -276,10 +297,15 @@ namespace Habanero.BO
                 foreach (BusinessObject bo in col)
                 {
                     string stringValue = GetAvailableDisplayValue(new ArrayList(lookupList.Keys), bo.ToString());
-                    lookupList.Add(stringValue, bo);
+                    AddBusinessObjectToLookupList(lookupList, bo, stringValue);
                 }
                 return lookupList;
             }
+        }
+
+        private static void AddBusinessObjectToLookupList(IDictionary<string, object> lookupList, IBusinessObject bo, string stringValue)
+        {
+            lookupList.Add(stringValue, bo.ID.GetAsValue());
         }
 
         ///<summary>
@@ -302,26 +328,25 @@ namespace Habanero.BO
 
         #endregion ILookupList Implementation
 
-		#region Type Initialisation
+        #region Type Initialisation
 
-		private Type MyBoType
-		{
-			get
-			{
-				TypeLoader.LoadClassType(ref _boType, _assemblyName, _className,
-					"property", "property definition");
-				return _boType;
-			}
-			set
-			{
-				_boType = value;
-				TypeLoader.ClassTypeInfo(_boType, out _assemblyName, out _className);
-			}
-		}
+        private Type MyBoType
+        {
+            get
+            {
+                TypeLoader.LoadClassType(ref _boType, _assemblyName, _className, "property", "property definition");
+                return _boType;
+            }
+            set
+            {
+                _boType = value;
+                TypeLoader.ClassTypeInfo(_boType, out _assemblyName, out _className);
+            }
+        }
 
-		#endregion Type Initialisation
+        #endregion Type Initialisation
 
-		/// <summary>
+        /// <summary>
         /// Returns a collection of all the business objects stored under
         /// the class definition held in this instance.  The collection contains
         /// a string version of each of the business objects.
@@ -329,8 +354,9 @@ namespace Habanero.BO
         /// <returns>Returns an ICollection object</returns>
         public ICollection GetValueCollection()
         {
-		    ClassDef classDef = LookupBoClassDef;
-		    IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, "", "");
+            ClassDef classDef = LookupBoClassDef;
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
+                (classDef, "", "");
             return CreateValueList(col);
         }
 
@@ -400,9 +426,10 @@ namespace Habanero.BO
                 }
                 if (!propertyNameExists)
                 {
-                    throw new InvalidXmlDefinitionException(String.Format(
-                        "In a 'sort' attribute on a 'businessLookupList' element, the " +
-                        "property name '{0}' does not exist.", propertyName));
+                    throw new InvalidXmlDefinitionException
+                        (String.Format
+                             ("In a 'sort' attribute on a 'businessLookupList' element, the "
+                              + "property name '{0}' does not exist.", propertyName));
                 }
 
                 if (sortAttribute.Contains(" "))
@@ -414,16 +441,40 @@ namespace Habanero.BO
                     }
                     else if (sortOrder.ToLower() != "asc" && sortOrder.ToLower() != "desc")
                     {
-                        throw new InvalidXmlDefinitionException(String.Format(
-                            "In a 'sort' attribute on a 'businessLookupList' element, the " +
-                            "attribute given as '{0}' was not valid.  The correct " +
-                            "definition has the form of 'property' or " +
-                            "'property asc' or 'property desc'.", sortAttribute));
+                        throw new InvalidXmlDefinitionException
+                            (String.Format
+                                 ("In a 'sort' attribute on a 'businessLookupList' element, the "
+                                  + "attribute given as '{0}' was not valid.  The correct "
+                                  + "definition has the form of 'property' or " + "'property asc' or 'property desc'.",
+                                  sortAttribute));
                     }
                 }
             }
-
             return modifiedString;
         }
-	}
+
+        /// <summary>
+        /// Returns the lookup list contents being held where the list is keyed on the list key 
+        ///  either a Guid, int or Business object i.e. the value being stored for the property.
+        /// The display value can be looked up.
+        /// </summary>
+        ///<returns>The Key Value Lookup List</returns>
+        public Dictionary<object, string> GetKeyLookupList()
+        {
+            GetLookupList(true);
+            return _keyValueDictionary;
+        }
+
+        private void FillKeyValueDictionary()
+        {
+            _keyValueDictionary = new Dictionary<object, string>();
+            foreach (KeyValuePair<string, object> pair in _displayValueDictionary)
+            {
+                if (!_keyValueDictionary.ContainsKey(pair.Value))
+                {
+                    _keyValueDictionary.Add(pair.Value, pair.Key);
+                }
+            }
+        }
+    }
 }

@@ -161,13 +161,5 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="propValue">The value to assign</param>
         void InitialiseProp(object propValue);
-
-        /// <summary>
-        /// Initialises the property with the specified value, and indicates
-        /// whether the object is new or not
-        /// </summary>
-        /// <param name="propValue">The value to assign</param>
-        /// <param name="isObjectNew">Whether the object is new or not</param>
-        void InitialiseProp(object propValue, bool isObjectNew);
     }
 }

@@ -646,8 +646,20 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             ClassDef originalClassDef = LoadClassDef();
             ClassDef newClassDef = originalClassDef.Clone(true);
+
             Assert.AreNotSame(newClassDef.PropDefcol, originalClassDef.PropDefcol);
+            Assert.IsFalse(originalClassDef.PropDefcol["MyRelatedTestProp"].Compulsory);
+            Assert.IsFalse(newClassDef.PropDefcol["MyRelatedTestProp"].Compulsory);
+
+            Assert.IsTrue(newClassDef.PropDefcol.Equals(originalClassDef.PropDefcol));
+            Assert.AreEqual(newClassDef.PropDefcol, originalClassDef.PropDefcol);
+
             originalClassDef.PropDefcol["MyRelatedTestProp"].Compulsory = true;
+
+            Assert.IsTrue(originalClassDef.PropDefcol["MyRelatedTestProp"].Compulsory);
+            Assert.IsFalse(newClassDef.PropDefcol["MyRelatedTestProp"].Compulsory);
+
+            Assert.IsFalse(newClassDef.PropDefcol.Equals(originalClassDef.PropDefcol));
             Assert.AreNotEqual(newClassDef.PropDefcol, originalClassDef.PropDefcol);
         }
 

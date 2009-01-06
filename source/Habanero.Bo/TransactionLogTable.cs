@@ -153,7 +153,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="busObj">The business object in question</param>
         /// <returns>Returns a string</returns>
-        private static string GetCrudAction(BusinessObject busObj)
+        private static string GetCrudAction(IBusinessObject busObj)
         {
             if (busObj.Status.IsNew)
             {
@@ -188,7 +188,8 @@ namespace Habanero.BO
             tranSql.Statement.Append(", ");
             tranSql.AddParameterToStatement(GetLogonUserName());
             tranSql.Statement.Append(", ");
-            tranSql.AddParameterToStatement(WindowsIdentity.GetCurrent().Name);
+            WindowsIdentity currentWindowsUser = WindowsIdentity.GetCurrent();
+            if (currentWindowsUser != null) tranSql.AddParameterToStatement(currentWindowsUser.Name);
             tranSql.Statement.Append(", ");
             tranSql.AddParameterToStatement(Environment.MachineName);
             tranSql.Statement.Append(", ");

@@ -55,114 +55,57 @@ namespace Habanero.DB
             }
             if (string.Compare(config.Vendor, DatabaseConfig.MySql, true) == 0)
             {
-                if (String.IsNullOrEmpty(assemblyName))
-                {
-                    return
-                        new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection",
-                                                    config.GetConnectionString());
-                }
-                else
-                {
-                    return
-                        new DatabaseConnectionMySql(assemblyName, fullClassName,
-                                                    config.GetConnectionString(assemblyName));
-                }
+                return String.IsNullOrEmpty(assemblyName) 
+                    ? new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection", config.GetConnectionString()) 
+                    : new DatabaseConnectionMySql(assemblyName, fullClassName,
+                                                                                                                                                    config.GetConnectionString(assemblyName));
             }
-            else if (string.Compare(config.Vendor, DatabaseConfig.SqlServer, true) == 0)
+            if (string.Compare(config.Vendor, DatabaseConfig.SqlServer, true) == 0)
             {
-                if (String.IsNullOrEmpty(assemblyName))
-                {
-                    return
-                        new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection",
-                                                        config.GetConnectionString());
-                }
-                else
-                {
-                    return new DatabaseConnectionSqlServer(assemblyName, fullClassName, config.GetConnectionString());
-                }
-            } else if (string.Compare(config.Vendor, DatabaseConfig.Oracle, true) == 0)
-			{
-				if (String.IsNullOrEmpty(assemblyName))
-				{
-					return
-						new DatabaseConnectionOracle("System.Data.OracleClient", "System.Data.OracleClient.OracleConnection",
-													 config.GetConnectionString());
-					//                        new DatabaseConnectionOracle("Oracle.DataAccess", "Oracle.DataAccess.Client.OracleConnection",
-					//                                                     config.GetConnectionString());
-				} else
-				{
-					return new DatabaseConnectionOracle(assemblyName, fullClassName, config.GetConnectionString());
-				}
-			} 
-			else if (string.Compare(config.Vendor, DatabaseConfig.Access, true) == 0)
-            {
-                if (String.IsNullOrEmpty(assemblyName))
-                {
-                    return
-                        new DatabaseConnectionAccess("System.Data", "System.Data.OleDb.OleDbConnection",
-                                                     config.GetConnectionString());
-                }
-                else
-                {
-                    return new DatabaseConnectionAccess(assemblyName, fullClassName, config.GetConnectionString());
-                }
+                return String.IsNullOrEmpty(assemblyName) 
+                    ? new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection", config.GetConnectionString()) 
+                    : new DatabaseConnectionSqlServer(assemblyName, fullClassName, config.GetConnectionString());
             }
-            else if (string.Compare(config.Vendor, DatabaseConfig.PostgreSql, true) == 0)
+            if (string.Compare(config.Vendor, DatabaseConfig.Oracle, true) == 0)
             {
-                if (String.IsNullOrEmpty(assemblyName))
-                {
-                    return
-                        new DatabaseConnectionPostgreSql("Npgsql", "Npgsql.NpgsqlConnection",
-                                                     config.GetConnectionString());
-                }
-                else
-                {
-                    return new DatabaseConnectionPostgreSql(assemblyName, fullClassName, config.GetConnectionString());
-                }
+                return String.IsNullOrEmpty(assemblyName) 
+                    ? new DatabaseConnectionOracle("System.Data.OracleClient", "System.Data.OracleClient.OracleConnection",
+                                                                                         config.GetConnectionString()) 
+                    : new DatabaseConnectionOracle(assemblyName, fullClassName, config.GetConnectionString());
             }
-            else if (string.Compare(config.Vendor, DatabaseConfig.SQLite, true) == 0)
+            if (string.Compare(config.Vendor, DatabaseConfig.Access, true) == 0)
             {
-                if (String.IsNullOrEmpty(assemblyName))
-                {
-                    return
-                        new DatabaseConnectionSQLite("System.Data.SQLite", "System.Data.SQLite.SQLiteConnection",
-                                                     config.GetConnectionString());
-                }
-                else
-                {
-                    return new DatabaseConnectionSQLite(assemblyName, fullClassName, config.GetConnectionString());
-                }
+                return String.IsNullOrEmpty(assemblyName) 
+                    ? new DatabaseConnectionAccess("System.Data", "System.Data.OleDb.OleDbConnection",config.GetConnectionString()) 
+                    : new DatabaseConnectionAccess(assemblyName, fullClassName, config.GetConnectionString());
             }
-            else if (string.Compare(config.Vendor, DatabaseConfig.Firebird, true) == 0)
+            if (string.Compare(config.Vendor, DatabaseConfig.PostgreSql, true) == 0)
             {
-                if (String.IsNullOrEmpty(assemblyName))
-                {
-                    return
-                        new DatabaseConnectionFirebird("FirebirdSql.Data.FirebirdClient", "FirebirdSql.Data.FirebirdClient.FbConnection",
-                                                     config.GetConnectionString());
-                }
-                else
-                {
-                    return new DatabaseConnectionFirebird(assemblyName, fullClassName, config.GetConnectionString());
-                }
-            }//todo check this actual implementation
-            else if (string.Compare(config.Vendor, DatabaseConfig.FirebirdEmbedded, true) == 0)
-            {
-                if (String.IsNullOrEmpty(assemblyName))
-                {
-                    return
-                        new DatabaseConnectionFirebird("FirebirdSql.Data.FirebirdClient", "FirebirdSql.Data.FirebirdClient.FbConnection",
-                                                     config.GetConnectionString());
-                }
-                else
-                {
-                    return new DatabaseConnectionFirebird(assemblyName, fullClassName, config.GetConnectionString());
-                }
+                return String.IsNullOrEmpty(assemblyName) 
+                    ? new DatabaseConnectionPostgreSql("Npgsql", "Npgsql.NpgsqlConnection", config.GetConnectionString()) 
+                    : new DatabaseConnectionPostgreSql(assemblyName, fullClassName, config.GetConnectionString());
             }
-            else
+            if (string.Compare(config.Vendor, DatabaseConfig.SQLite, true) == 0)
             {
-                return null;
+                return String.IsNullOrEmpty(assemblyName) 
+                    ? new DatabaseConnectionSQLite("System.Data.SQLite", "System.Data.SQLite.SQLiteConnection", config.GetConnectionString()) 
+                    : new DatabaseConnectionSQLite(assemblyName, fullClassName, config.GetConnectionString());
             }
+            if (string.Compare(config.Vendor, DatabaseConfig.Firebird, true) == 0)
+            {
+                return String.IsNullOrEmpty(assemblyName) 
+                    ? new DatabaseConnectionFirebird("FirebirdSql.Data.FirebirdClient", "FirebirdSql.Data.FirebirdClient.FbConnection",
+                                                                                           config.GetConnectionString()) 
+                    : new DatabaseConnectionFirebird(assemblyName, fullClassName, config.GetConnectionString());
+            } //todo check this actual implementation
+            if (string.Compare(config.Vendor, DatabaseConfig.FirebirdEmbedded, true) == 0)
+            {
+                return String.IsNullOrEmpty(assemblyName) 
+                    ? new DatabaseConnectionFirebird("FirebirdSql.Data.FirebirdClient", "FirebirdSql.Data.FirebirdClient.FbConnection",
+                                                                                           config.GetConnectionString()) 
+                    : new DatabaseConnectionFirebird(assemblyName, fullClassName, config.GetConnectionString());
+            }
+            return null;
         }
     }
 }

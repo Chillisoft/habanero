@@ -56,5 +56,21 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="id">The ID to set to</param>
         void SetObjectGuidID(Guid id);
+
+        /// <summary>
+        /// Returns true if the primary key is a propery the object's ID, that is,
+        /// the primary key is a single discrete property that is an immutable Guid and serves as the ID.
+        /// </summary>
+        bool IsGuidObjectID{ get;}
+
+        /// <summary>
+        /// Returns the ID as a Value. 
+        /// <li>"In cases where the <see cref="IBusinessObject"/>
+        ///   has an ID with a single property this will return the value of the property.</li>
+        // <li>"In cases where the <see cref="IBusinessObject"/>
+        ///   has an ccomposite ID (i.e. with more than one property) this will return a list with the values of the properties.</li>
+        /// </summary>
+        /// <returns>Returns an object</returns>
+        object GetAsValue();
     }
 }

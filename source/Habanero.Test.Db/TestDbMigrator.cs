@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.DB;
 using NMock;
 using NUnit.Framework;
@@ -115,7 +116,7 @@ namespace Habanero.Test.DB
         
 
 //        [Test, Ignore("This fails through the resharper tester."), ExpectedException(typeof(ArgumentNullException ))]
-        [Test, ExpectedException(typeof(ArgumentNullException ))]
+        [Test, ExpectedException(typeof(HabaneroArgumentException))]
         public void TestGetCurrentVersionFailure() {
             Assert.AreEqual(2, itsDbMigrator.CurrentVersion());
         }

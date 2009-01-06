@@ -370,7 +370,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             MyBO bo1 = new MyBO();
             col.Add(bo1);
             col.Add(new MyBO());
-            Assert.AreSame(bo1, col.FindByGuid(bo1.MyBoID));
+            Assert.AreSame(bo1, col.FindByGuid(bo1.MyBoID.Value));
         }
 
         [Test]

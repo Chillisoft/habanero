@@ -135,6 +135,7 @@ namespace Habanero.Test.BO.Security
             Assert.AreEqual("", message);
         }
 
+
         [Test]
         public void Test_WriteNotNew_NewObject_IsEditable_False()
         {

@@ -19,6 +19,7 @@
 
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.BO
 {
@@ -31,7 +32,18 @@ namespace Habanero.BO
     /// </summary>
     public class SimpleLookupList : ILookupList
     {
-        private Dictionary<string, object> _lookupList;
+        /// <summary>
+        /// Provides a key value pair where the persisted value can be returned for 
+        ///   any displayed value. E.g. the persisted value may be a GUID but the
+        ///   displayed value may be a related string.
+        /// </summary>
+        private readonly Dictionary<string, object> _displayValueDictionary;
+        /// <summary>
+        /// Provides a key value pair where the persisted value can be returned for 
+        ///   any displayed value. E.g. the persisted value may be a GUID but the
+        ///   displayed value may be a related string.
+        /// </summary>
+        private readonly Dictionary< object, string> _keyValueDictionary = new Dictionary< object, string>();
 
         /// <summary>
         /// Constructor to initialise the provider with a specified
@@ -40,7 +52,7 @@ namespace Habanero.BO
         /// <param name="collection">The string-Guid pair collection</param>
         public SimpleLookupList(Dictionary<string, object> collection)
         {
-            _lookupList = collection;
+            _displayValueDictionary = collection;
         }
 
         /// <summary>
@@ -49,18 +61,59 @@ namespace Habanero.BO
         /// <returns>Returns a collection of display-value pairs</returns>
         public Dictionary<string, object> GetLookupList()
         {
-            return _lookupList;
+            return _displayValueDictionary;
         }
 
         /// <summary>
-        /// Returns the lookup list contents being held
+        /// Returns the lookup list contents being held where the list is keyed on the display value and
+        ///   the key value can be looked up.
         /// </summary>
         /// <param name="connection">Ignored for this lookup list type.</param>
         /// <returns>Returns a collection of display-value pairs</returns>
         public Dictionary<string, object> GetLookupList(IDatabaseConnection connection)
         {
-            return _lookupList;
+            return _displayValueDictionary;
         }
 
+        ///<summary>
+        /// The property definition that this lookup list is for
+        ///</summary>
+        public IPropDef PropDef
+        {
+            get ;
+            set;
+        }
+
+        /// <summary>
+        /// Returns the lookup list contents being held where the list is keyed on the list key 
+        ///  either a Guid, int or Business object i.e. the value being stored for the property.
+        /// The display value can be looked up.
+        /// </summary>
+        ///<returns>The Key Value Lookup List</returns>
+        public Dictionary<object, string> GetKeyLookupList()
+        {
+            if (this.PropDef != null && _keyValueDictionary.Count != _displayValueDictionary.Count)
+            {
+                FillKeyValueDictionary();
+            }
+            return _keyValueDictionary;
+        }
+
+        private void FillKeyValueDictionary()
+        {
+            foreach (KeyValuePair<string, object> pair in _displayValueDictionary)
+            {
+                object parsedKey;
+                if (this.PropDef.TryParsePropValue(pair.Value, out parsedKey))
+                {
+                    _keyValueDictionary.Add(parsedKey, pair.Key);
+                }
+                else
+                {
+                    throw new HabaneroDeveloperException("There is an application setup error Please contact your system administrator"
+                        , "There is a class definition setup error the simple lookup list has lookup value items that are not of type " + this.PropDef.PropertyTypeName);
+                }
+            }
+        }
     }
 }

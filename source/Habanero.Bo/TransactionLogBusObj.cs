@@ -61,48 +61,72 @@ namespace Habanero.BO
             return classDef;
         }
 
+        ///<summary>
+        /// Create read update or delete action. I.e. the action that was carried out for this business object.
+        ///</summary>
         public string CrudAction
         {
             get { return GetPropertyValueString("CrudAction"); }
             set { SetPropertyValue("CrudAction", value); }
         }
 
+        ///<summary>
+        /// The dirty XML for the business object that this log record is for.
+        ///</summary>
         public string DirtyXMLLog
         {
             get { return GetPropertyValueString("DirtyXMLLog"); }
             set { SetPropertyValue("DirtyXMLLog", value); }
         }
 
+        ///<summary>
+        /// The business object type this business object is.
+        ///</summary>
         public string BusinessObjectTypeName
         {
             get { return GetPropertyValueString("BusinessObjectTypeName"); }
             set { SetPropertyValue("BusinessObjectTypeName", value); }
         }
 
+        ///<summary>
+        /// The logged in windows user that this log is for.
+        ///</summary>
         public string WindowsUser
         {
             get { return GetPropertyValueString("WindowsUser"); }
             set { SetPropertyValue("WindowsUser", value); }
         }
 
+        ///<summary>
+        /// The logon user in cases where non windows authentication is used.
+        ///</summary>
         public string LogonUser
         {
             get { return GetPropertyValueString("LogonUser"); }
             set { SetPropertyValue("LogonUser", value); }
         }
 
+        ///<summary>
+        /// The machine (actual PC name) that was used to make the update.
+        ///</summary>
         public string MachineUpdatedName
         {
             get { return GetPropertyValueString("MachineUpdatedName"); }
             set { SetPropertyValue("MachineUpdatedName", value); }
         }
 
+        ///<summary>
+        /// The datetime that the update to the business object was made.
+        ///</summary>
         public DateTime? DateTimeUpdated
         {
             get { return (DateTime?) GetPropertyValue("DateTimeUpdated"); }
             set { SetPropertyValue("DateTimeUpdated", value); }
         }
 
+        ///<summary>
+        /// The ToString value for the business object (usually set to be the alternate key).
+        ///</summary>
         public string BusinessObjectToString
         {
             get { return GetPropertyValueString("BusinessObjectToString"); }

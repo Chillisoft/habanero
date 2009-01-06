@@ -33,13 +33,13 @@ namespace Habanero.DB
     /// a settings operator.  The setting will need to be in existence before this
     /// operation will execute correctly.<br/>
     /// This class is commonly used inside an implementation of
-    /// IApplicationVersionUpgrader.  See the tutorials for usage examples.
+    /// <see cref="IApplicationVersionUpgrader"/> .  See the tutorials for usage examples.
     /// </summary>
     public class DBMigrator
     {
         public const string DatabaseVersionSetting = "DATABASE_VERSION";
         private readonly IDatabaseConnection _connection;
-        private SortedDictionary<int, SqlStatement> _migrations;
+        private readonly SortedDictionary<int, SqlStatement> _migrations;
         private ISettings _settings;
 
         /// <summary>
@@ -154,14 +154,16 @@ namespace Habanero.DB
         public int CurrentVersion() {
             if (this._settings == null && GlobalRegistry.Settings == null)
             {
-                throw new ArgumentNullException("SettingsStorer",
+                throw new HabaneroArgumentException("SettingsStorer",
                                                 "Please set the setting storer before using CurrentVersion as it uses the SettingsStorer to read the current version (VERSION setting)");
             }
-            try {
-                if (_settings == null) return Convert.ToInt32(GlobalRegistry.Settings.GetString(DatabaseVersionSetting));
-
-                return Convert.ToInt32(_settings.GetString(DatabaseVersionSetting));
-            } catch (UserException ) {
+            try
+            {
+                return _settings == null 
+                    ? Convert.ToInt32(GlobalRegistry.Settings.GetString(DatabaseVersionSetting)) 
+                    : Convert.ToInt32(_settings.GetString(DatabaseVersionSetting));
+            }
+            catch (UserException ) {
                 return 0;
             }
         }

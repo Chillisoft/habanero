@@ -41,7 +41,7 @@ namespace Habanero.Util
         ///</summary>
         ///<param name="value">The long text string data</param>
         public LongText(string value)
-            : this((object) value, false)
+            : this(value, false)
         {
         }
 

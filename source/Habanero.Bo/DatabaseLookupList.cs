@@ -207,13 +207,9 @@ namespace Habanero.BO
 		{
 			get
 			{
-				if (MyLookupObjectType == null)
-				{
-					return null;
-				} else
-				{
-					return ClassDef.ClassDefs[MyLookupObjectType];
-				}
+			    return MyLookupObjectType == null 
+                    ? null 
+                    : ClassDef.ClassDefs[MyLookupObjectType];
 			}
 		}
 
@@ -268,7 +264,14 @@ namespace Habanero.BO
             return _lookupList;
 		}
 
-		#endregion ILookupList Implementation
+        public IPropDef PropDef { get; set; }
+        public Dictionary<object, string> GetKeyLookupList()
+        {
+            //TODO: Fix this
+            return new Dictionary<object, string>();
+        }
+
+        #endregion ILookupList Implementation
 
 		#region Type Initialisation
 

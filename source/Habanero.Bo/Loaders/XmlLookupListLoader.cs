@@ -20,6 +20,7 @@
 using System;
 using System.Xml;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO.Loaders
@@ -95,11 +96,18 @@ namespace Habanero.BO.Loaders
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(sourceElement);
+            if (doc.DocumentElement == null)
+            {
+                throw new HabaneroDeveloperException
+                    ("There was a problem loading the class definitions pleaser refer to the system administrator",
+                     "The load lookup list property could not be loaded since the source element does not contain a document name");
+            }
             string loaderClassName = "Xml" + doc.DocumentElement.Name + "Loader";
-            Type loaderType =
-                Type.GetType(typeof (XmlLookupListLoader).Namespace + "." + loaderClassName, true, true);
+            Type loaderType = Type.GetType
+                (typeof (XmlLookupListLoader).Namespace + "." + loaderClassName, true, true);
             XmlLookupListLoader loader =
-				(XmlLookupListLoader)Activator.CreateInstance(loaderType, new object[] { dtdLoader, defClassFactory });
+                (XmlLookupListLoader)
+                Activator.CreateInstance(loaderType, new object[] {dtdLoader, defClassFactory});
             def.LookupList = loader.LoadLookupList(doc.DocumentElement);
         }
     }

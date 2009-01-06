@@ -425,19 +425,17 @@ namespace Habanero.DB
                 {
                     break;
                 }
-                int countQuotes;
-                countQuotes = StringUtilities.CountOccurrences(statement, _connection.LeftFieldDelimiter, 0, posToken);
+                int countQuotes = StringUtilities.CountOccurrences(statement, _connection.LeftFieldDelimiter, 0, posToken);
                 if (_connection.LeftFieldDelimiter != _connection.RightFieldDelimiter)
                 {
                     countQuotes += StringUtilities.CountOccurrences(statement, _connection.RightFieldDelimiter, 0, posToken);
                 }
+                if ((countQuotes % 2) != 0) continue;
+
+                countQuotes = StringUtilities.CountOccurrences(statement, '\'', 0, posToken);
                 if ((countQuotes % 2) == 0)
                 {
-                    countQuotes = StringUtilities.CountOccurrences(statement, '\'', 0, posToken);
-                    if ((countQuotes % 2) == 0)
-                    {
-                        found = true;
-                    }
+                    found = true;
                 }
             } while (!found);
             return posToken;

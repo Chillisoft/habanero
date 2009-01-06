@@ -30,7 +30,7 @@ namespace Habanero.BO
     public class RelationshipObjectInitialiser : IBusinessObjectInitialiser
     {
         private readonly string _correspondingRelationshipName;
-        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.RelationshipObjectInitialiser");
+//        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.RelationshipObjectInitialiser");
         private readonly RelationshipDef _relationship;
         private readonly IBusinessObject _parentObject;
 

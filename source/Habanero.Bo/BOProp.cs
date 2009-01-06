@@ -18,15 +18,12 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Drawing;
-using System.Globalization;
 using System.Security;
 using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
-using Habanero.Util;
 using log4net;
 
 namespace Habanero.BO
@@ -55,6 +52,7 @@ namespace Habanero.BO
         protected bool _isObjectNew;
         protected object _valueBeforeLastEdit;
         private IBOPropAuthorisation _boPropAuthorisation;
+
         /// <summary>
         /// Indicates that the value held by the property has been
         /// changed. This is fired any time that the current value of the property is set to a new value.
@@ -67,6 +65,7 @@ namespace Habanero.BO
         /// <param name="propDef">The property definition</param>
         public BOProp(IPropDef propDef)
         {
+            if (propDef == null) throw new ArgumentNullException("propDef");
             _propDef = (PropDef) propDef;
         }
 
@@ -77,9 +76,10 @@ namespace Habanero.BO
         /// <param name="propValue">The initial value</param>
         internal BOProp(IPropDef propDef, object propValue) : this(propDef)
         {
+            if (propDef == null) throw new ArgumentNullException("propDef");
             InitialiseProp(propValue, true);
         }
-        
+
         ///<summary>
         /// The property definition of the property that this BOProp represents.
         ///</summary>
@@ -119,107 +119,33 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="propValue">The value to assign</param>
         /// <param name="isObjectNew">Whether the object is new or not</param>
-        public void InitialiseProp(object propValue, bool isObjectNew)
+        protected virtual void InitialiseProp(object propValue, bool isObjectNew)
         {
-            if (propValue == DBNull.Value)
-            {
-                propValue = null;
-            }
-            
-            try
-            {
-                if (propValue != null)
-                {
-                    if (propValue.GetType().Name == "MySqlDateTime")
-                    {
-                        if (propValue.ToString().Trim().Length > 0)
-                        {
-                            propValue = DateTime.Parse(propValue.ToString());
-                        }
-                        else
-                        {
-                            propValue = null;
-                        }
-                    }
-                    else if (this.PropertyType == typeof (Guid))
-                    {
-                        if (!(propValue is Guid))
-                        {
-                            Guid guidValue;
-                            if (StringUtilities.GuidTryParse(propValue.ToString(), out guidValue))
-                            {
-                                propValue = guidValue;
-                            }
-                            else
-                            {
-                                propValue = null;
-                            }
-                        }
-                    }
-                    else if (this.PropertyType == typeof (Image))
-                    {
-                        propValue = SerialisationUtilities.ByteArrayToObject((byte[]) propValue);
-                    }
-                    else if (this.PropertyType.IsSubclassOf(typeof (CustomProperty)))
-                    {
-                        propValue = Activator.CreateInstance(this.PropertyType, new object[] {propValue, true});
-                    }
-                    else if (this.PropertyType == typeof (Object))
-                    {
-                        //propValue = propValue;
-                    }
-                    else if (this.PropertyType == typeof(TimeSpan) && propValue.GetType() == typeof(DateTime))
-                    {
-                        propValue = ((DateTime)propValue).TimeOfDay;
-                    }
-                    else if (this.PropertyType.IsEnum && propValue is string)
-                    {
-                        propValue = Enum.Parse(this.PropertyType, (string)propValue);
-                    }
-                    else if (this.PropertyType == typeof(string))
-                    {
-                        if (propValue is Guid)
-                        {
-                            propValue = ((Guid) propValue).ToString("B");
-                        }
-                        else
-                        {
-                            propValue = propValue.ToString();
-                        }
-                    }
-                    else
-                    {
-                        try
-                        {
-                            propValue = Convert.ChangeType(propValue, this.PropertyType);
-                        }
-                        catch (InvalidCastException)
-                        {
-                            log.Error(
-                                string.Format("Problem in InitialiseProp(): Can't convert value of type {0} to {1}",
-                                              propValue.GetType().FullName, this.PropertyType.FullName));
-                            log.Error(string.Format("Value: {0}, Property: {1}, Field: {2}, Table: {3}", propValue, this._propDef.PropertyName, this._propDef.DatabaseFieldName, this._propDef.ClassDef.GetTableName(_propDef)));
-                            throw;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidPropertyValueException(String.Format(
-                    "An error occurred while attempting to convert " +
-                    "the loaded property value of '{0}' to its specified " +
-                    "type of '{1}'. The property value is '{2}'. See log for details",
-                    PropertyName, PropertyType, propValue), ex);
-            }
-
+            object newValue;
+            ParsePropValue(propValue, out newValue);
             _invalidReason = "";
-            _isValid = _propDef.IsValueValid(propValue, ref _invalidReason);
+            _isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
 
-            _currentValue = propValue;
+            _currentValue = newValue;
             _isObjectNew = isObjectNew;
             //Set up origional properties s.t. property can be backed up and restored.
             BackupPropValue();
+        }
+        /// <summary>
+        /// This method provides a the functionality to convert any object to the appropriate
+        ///   type for the particular BOProp Type. e.g it will convert a valid guid string to 
+        ///   a valid Guid Object.
+        /// </summary>
+        /// <param name="valueToParse">The value to be converted</param>
+        /// <param name="returnValue"></param>
+        /// <returns>An object of the correct type.</returns>
+        protected virtual void ParsePropValue(object valueToParse, out object returnValue)
+        {
+            bool isParsed = this.PropDef.TryParsePropValue(valueToParse, out returnValue);
+            if (!isParsed)
+            {
+                RaiseIncorrectTypeException(valueToParse);
+            }
         }
 
         /// <summary>
@@ -252,7 +178,7 @@ namespace Habanero.BO
         /// <summary>
         /// Gets and sets the value for this property
         /// </summary>
-        public object Value
+        public virtual object Value
         {
             get
             {
@@ -265,27 +191,19 @@ namespace Habanero.BO
             }
             set
             {
-                if (value is Guid && Guid.Empty.Equals(value))
-                {
-                    value = null;
-                }
                 if ((_currentValue != null) && (_currentValue.Equals(value))) return;
-                object newValue = null;
-                PropDef propDef = (PropDef)this.PropDef;
-                if (value != null)
-                {
-                    newValue = propDef.GetNewValue(value);
-                }
+
+                object newValue;
+                ParsePropValue(value, out newValue);
 
                 if (!Equals(_persistedValue, newValue))
                 {
                     string message;
                     if (!IsEditable(out message))
                     {
-                        throw new BOPropWriteException(propDef, message);
+                        throw new BOPropWriteException(_propDef, message);
                     }
                 }
-
                 _invalidReason = "";
                 _isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
                 _valueBeforeLastEdit = _currentValue;
@@ -293,6 +211,13 @@ namespace Habanero.BO
                 FireBOPropValueUpdated();
                 _isDirty = true;
             }
+        }
+
+        private void RaiseIncorrectTypeException(object value)
+        {
+            throw new UserException(
+                string.Format("{0} cannot be set to {1}. It is not a type of {2}" 
+                              , this.PropertyName, value, this.PropDef.PropertyTypeName));
         }
 
         /// <summary>
@@ -319,72 +244,26 @@ namespace Habanero.BO
         /// Returns the persisted property value as a string (the value 
         /// assigned at the last backup or database committal)
         /// </summary>
-        public string PersistedPropertyValueString
+        public virtual string PersistedPropertyValueString
         {
-            get
-            {
-                if (PersistedPropertyValue == null)
-                {
-                    return "";
-                }
-                if (_propDef.PropType == typeof (DateTime))
-                {
-                    return (Value == DBNull.Value) 
-                        ? PersistedPropertyValue.ToString() 
-                        : ((DateTime) PersistedPropertyValue).ToString("dd MMM yyyy HH:mm:ss:fff");
-                    //Sql return ((DateTime)Value).ToString("dd MMM yyyy HH:mm:ss:fff");
-                }
-                if (_propDef.PropType == typeof (Guid))
-                {
-                    return ((Guid) PersistedPropertyValue).ToString("B").ToUpper(CultureInfo.InvariantCulture);
-                }
-                if ((_propDef.PropType == typeof (String)) && (PersistedPropertyValue is Guid))
-                {
-                    return ((Guid) PersistedPropertyValue).ToString("B").ToUpper(CultureInfo.InvariantCulture);
-                }
-                return PersistedPropertyValue.ToString();
-            }
+            get { return this.PropDef.ConvertValueToString(this.PersistedPropertyValue); }
         }
 
         /// <summary>
         /// Returns the property value as a string
         /// </summary>
-        public string PropertyValueString
+        public virtual string PropertyValueString
         {
             get
             {
                 try
                 {
-                    if (_currentValue == null)
-                    {
-                        return "";
-                    }
-                    if (_propDef.PropType == typeof (DateTime))
-                    {
-                        return (Value == DBNull.Value) 
-                            ? Value.ToString() 
-                            : ((DateTime) Value).ToString("dd MMM yyyy HH:mm:ss:fff");
-                    }
-                    if (_propDef.PropType == typeof (Guid))
-                    {
-                        if (_currentValue is Guid)
-                        {
-                            return ((Guid) Value).ToString("B").ToUpper(CultureInfo.InvariantCulture);
-                        }
-                        return
-                            (new Guid(Value.ToString())).ToString("B").ToUpper(CultureInfo.InvariantCulture);
-                    }
-                    if ((_propDef.PropType == typeof (String)) && (_currentValue is Guid))
-                    {
-                        return ((Guid) _currentValue).ToString("B").ToUpper(CultureInfo.InvariantCulture);
-                    }
-                    return _currentValue.ToString();
+                    return this.PropDef.ConvertValueToString(this.Value);
                 }
                 catch (Exception exc)
                 {
-                    throw new HabaneroApplicationException(
-                        exc.Message + "/nError occured for Property " + _propDef.PropertyName,
-                        exc);
+                    throw new HabaneroApplicationException
+                        (exc.Message + "/nError occured for Property " + _propDef.PropertyName, exc);
                 }
             }
         }
@@ -504,13 +383,13 @@ namespace Habanero.BO
         {
             get
             {
-                return "<" + PropertyName + "><PreviousValue>" + FormatForXML(PersistedPropertyValueString) +
-                       "</PreviousValue><NewValue>" + FormatForXML(PropertyValueString) + 
-                       "</NewValue></" + PropertyName + ">";
+                return "<" + PropertyName + "><PreviousValue>" + FormatForXML(PersistedPropertyValueString)
+                       + "</PreviousValue><NewValue>" + FormatForXML(PropertyValueString) + "</NewValue></"
+                       + PropertyName + ">";
             }
         }
 
-        private string FormatForXML(string text)
+        private static string FormatForXML(string text)
         {
             return SecurityElement.Escape(text);
         }
@@ -524,7 +403,20 @@ namespace Habanero.BO
         /// </summary>
         public string DisplayName
         {
-            get { return _propDef.DisplayName;}
+            get { return _propDef.DisplayName; }
+        }
+
+        /// <summary>
+        /// Returns the named property value that should be displayed
+        ///   on a user interface e.g. a textbox or on a report.
+        /// This is used primarily for Lookup lists where
+        ///    the value stored for the object may be a guid but the value
+        ///    to display may be a string.
+        /// </summary>
+        /// <returns>Returns the property value</returns>
+        protected internal virtual object PropertyValueToDisplay
+        {
+            get { return Value; }
         }
 
         /// <summary>
@@ -550,13 +442,15 @@ namespace Habanero.BO
             if (_boPropAuthorisation == null) return true;
             if (!_boPropAuthorisation.IsAuthorised(BOPropActions.CanUpdate))
             {
-                message = string.Format("The logged on user {0} is not authorised to update the {1} ", 
-                        Thread.CurrentPrincipal.Identity.Name, this.PropertyName);
+                message = string.Format
+                    ("The logged on user {0} is not authorised to update the {1} ",
+                     Thread.CurrentPrincipal.Identity.Name, this.PropertyName);
                 return false;
             }
 
             return true;
         }
+
         ///<summary>
         /// Returns whether the BOProperty is Readable or not. The BOProp may not be Readable
         ///  if the user may not have permissions to read the property Value.
@@ -569,14 +463,17 @@ namespace Habanero.BO
             if (_boPropAuthorisation == null) return true;
             if (!_boPropAuthorisation.IsAuthorised(BOPropActions.CanRead))
             {
-                message = string.Format("The logged on user {0} is not authorised to read the {1} ",
-                        Thread.CurrentPrincipal.Identity.Name, this.PropertyName);
+                message = string.Format
+                    ("The logged on user {0} is not authorised to read the {1} ", Thread.CurrentPrincipal.Identity.Name,
+                     this.PropertyName);
                 return false;
             }
             return true;
         }
+
         private bool AreReadWriteRulesEditable(out string message)
         {
+            //TODO Brett: This should be turned into a strategy pattern.
             switch (_propDef.ReadWriteRule)
             {
                 case PropReadWriteRule.ReadWrite:
@@ -586,21 +483,22 @@ namespace Habanero.BO
                     return false;
                 case PropReadWriteRule.WriteOnce:
                     if (_isObjectNew || _persistedValue == null) break;
-                    message = "The property '" + this.DisplayName + "' is not editable since it is set up as WriteOnce and the value has already been set";
+                    message = "The property '" + this.DisplayName
+                              + "' is not editable since it is set up as WriteOnce and the value has already been set";
                     return false;
                 case PropReadWriteRule.WriteNotNew:
                     if (_isObjectNew)
                     {
-                        message = "The property '" + this.DisplayName +
-                                  "' is not editable since it is set up as WriteNew and the object is new";
+                        message = "The property '" + this.DisplayName
+                                  + "' is not editable since it is set up as WriteNew and the object is new";
                         return false;
                     }
                     break;
                 case PropReadWriteRule.WriteNew:
                     if (!_isObjectNew)
                     {
-                        message = "The property '" + this.DisplayName + 
-                                  "' is not editable since it is set up as WriteNew and the object is not new";
+                        message = "The property '" + this.DisplayName
+                                  + "' is not editable since it is set up as WriteNew and the object is not new";
                         return false;
                     }
                     break;
@@ -611,5 +509,4 @@ namespace Habanero.BO
             return true;
         }
     }
-
 }

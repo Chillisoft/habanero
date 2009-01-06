@@ -124,8 +124,7 @@ namespace Habanero.Test.BO
             mProp = mBOPropCol["Prop3"];
             mProp.InitialiseProp("Prop3-new");
             Assert.IsFalse(mProp.IsDirty);
-            string dirtyXml =
-                "<Properties><Prop2><PreviousValue>Prop2-Orig</PreviousValue><NewValue>Prop2-New</NewValue></Prop2><PropName><PreviousValue>Propn-Orig</PreviousValue><NewValue>PropName-new</NewValue></PropName></Properties>";
+            const string dirtyXml = "<Properties><Prop2><PreviousValue>Prop2-Orig</PreviousValue><NewValue>Prop2-New</NewValue></Prop2><PropName><PreviousValue>Propn-Orig</PreviousValue><NewValue>PropName-new</NewValue></PropName></Properties>";
             Assert.AreEqual(dirtyXml, mBOPropCol.DirtyXml);
         }
 

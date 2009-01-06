@@ -27,16 +27,6 @@ namespace Habanero.DB
     public class ConnectionStringSQLiteFactory : ConnectionStringFactory
     {
         /// <summary>
-        /// Constructor to initialise a new factory
-        /// </summary>
-        public ConnectionStringSQLiteFactory()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-
-        /// <summary>
         /// Checks that each of the arguments provided are valid
         /// </summary>
         /// <param name="server">The database server</param>
@@ -67,15 +57,9 @@ namespace Habanero.DB
         protected override string CreateConnectionString(string server, string database, string userName,
                                                          string password, string port)
         {
-            if (password == "")
-            {
-                return String.Format("Data Source={0};BinaryGUID=False", database);
-            }
-            else
-            {
-                return
-                    String.Format("Data Source={0};Password={1};BinaryGUID=False", database, password);
-            }
+            return password == "" 
+                ? String.Format("Data Source={0};BinaryGUID=False", database) 
+                : String.Format("Data Source={0};Password={1};BinaryGUID=False", database, password);
         }
     }
 }

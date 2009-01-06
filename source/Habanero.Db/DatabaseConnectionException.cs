@@ -26,12 +26,12 @@ namespace Habanero.DB
     /// An exception thrown when an error occurred while attempting to
     /// connect to a database
     /// </summary>
-    [Serializable()]
+    [Serializable]
     class DatabaseConnectionException : Exception
     {
-        private string _sqlStatement;
-        private string _connectString;
-        private string _developerMessage;
+        private readonly string _sqlStatement;
+        private readonly string _connectString;
+        private readonly string _developerMessage;
 
         /// <summary>
         /// Constructor to initialise a new exception

@@ -193,5 +193,10 @@ namespace Habanero.Test
         }
 
         #endregion //ForTesting
+
+        public override string ToString()
+        {
+            return this.PK1Prop1 + this.PK1Prop2;
+        }
     }
 }

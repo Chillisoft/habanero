@@ -28,12 +28,12 @@ namespace Habanero.BO
     /// </summary>
     public class BOKeyCol 
     {
-        private Dictionary<string, BOKey> _boKeys;
+        private readonly Dictionary<string, BOKey> _boKeys;
 
         /// <summary>
         /// Constructor to initialise a new empty collection
         /// </summary>
-        internal BOKeyCol() : base()
+        internal BOKeyCol()
         {
             _boKeys = new Dictionary<string, BOKey>();
         }
@@ -62,7 +62,7 @@ namespace Habanero.BO
         {
             foreach (BOKey key in keyCol)
             {
-                this.Add((BOKey)(key));
+                this.Add(key);
             }
         }
 

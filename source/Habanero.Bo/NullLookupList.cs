@@ -46,5 +46,10 @@ namespace Habanero.BO
         {
             return new Dictionary<string, object>();
         }
+        public IPropDef PropDef { get; set; }
+        public Dictionary<object, string> GetKeyLookupList()
+        {
+            return new Dictionary<object, string>();
+        }
     }
 }

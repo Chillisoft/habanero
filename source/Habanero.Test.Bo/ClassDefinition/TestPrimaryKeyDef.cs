@@ -34,9 +34,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             PropDef propDef1 = new PropDef("prop1", typeof(String), PropReadWriteRule.ReadWrite, null);
             PropDef propDef2 = new PropDef("prop2", typeof(String), PropReadWriteRule.ReadWrite, null);
-            PrimaryKeyDef pkDef = new PrimaryKeyDef();
-            pkDef.Add(propDef1);
-            pkDef.Add(propDef2);
+            new PrimaryKeyDef {propDef1, propDef2};
         }
 
         [Test]
@@ -51,8 +49,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test, ExpectedException(typeof(InvalidKeyException))]
         public void TestSettingIgnoreIfNullTrueException()
         {
-            PrimaryKeyDef pkDef = new PrimaryKeyDef();
-            pkDef.IgnoreIfNull = true;
+            new PrimaryKeyDef {IgnoreIfNull = true};
         }
     }
 }

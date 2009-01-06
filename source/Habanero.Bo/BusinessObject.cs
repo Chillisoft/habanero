@@ -152,14 +152,9 @@ namespace Habanero.BO
             }
         }
 
-
         private void Initialise(ClassDef classDef)
         {
-            _boStatus = new BOStatus(this);
-            _boStatus.IsDeleted = false;
-            _boStatus.IsDirty = false;
-            _boStatus.IsEditing = false;
-            _boStatus.IsNew = true;
+            _boStatus = new BOStatus(this) {IsDeleted = false, IsDirty = false, IsEditing = false, IsNew = true};
             if (classDef == null)
             {
                 if (ClassDef.ClassDefs.Contains(GetType()))
@@ -204,21 +199,6 @@ namespace Habanero.BO
             _relationshipCol = _classDef.CreateRelationshipCol(_boPropCol, this);
         }
 
-        private void CheckClassDefNotNull()
-        {
-            if (_classDef == null)
-            {
-                throw new NullReferenceException(String.Format(
-                                                     "An error occurred while loading the class definitions (ClassDef.xml) for " +
-                                                     "'{0}'. Check that the class exists in that " +
-                                                     "namespace and assembly and that there are corresponding " +
-                                                     "class definitions for this class.\n" + 
-                                                     "Please check that the ClassDef.xml file is either an imbedded resource " + 
-                                                     "or is copied to the output directory via the appropriate postbuild command " + 
-                                                     "(for more help see FAQ)", GetType()));
-            }
-        }
-
         private void SetPrimaryKeyForInheritedClass()
         {
             ClassDef classDefToUseForPrimaryKey = GetClassDefToUseForPrimaryKey();
@@ -239,6 +219,10 @@ namespace Habanero.BO
                     _primaryKey = (BOPrimaryKey)
                                   classDefToUseForPrimaryKey.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_boPropCol);
                 }
+            }
+            if (_primaryKey == null)
+            {
+                SetupPrimaryKey();
             }
         }
 
@@ -328,31 +312,34 @@ namespace Habanero.BO
         {
             get
             {
-                if (_primaryKey == null)
-                {
-                    if (ClassDef == null)
-                    {
-                        throw new NullReferenceException(String.Format(
-                                                             "An error occurred while retrieving the class definitions for " +
-                                                             "'{0}'. Check that the class exists in that " +
-                                                             "namespace and assembly and that there are corresponding " +
-                                                             "class definitions for this class.", GetType()));
-                    }
-                    PrimaryKeyDef primaryKeyDef = ClassDef.GetPrimaryKeyDef();
-                    if (primaryKeyDef != null)
-                    {
-                        BOPrimaryKey parentPrimaryKey = new BOPrimaryKey(primaryKeyDef);
-                        foreach (PropDef propDef in parentPrimaryKey.KeyDef)
-                        {
-                            BOProp prop = new BOProp(propDef);
-                            prop.Value = Props[prop.PropertyName].Value;
-                            parentPrimaryKey.Add(prop);
-                        }
-                        return parentPrimaryKey;
-                    }
-                }
+//                if (_primaryKey == null)
+//                {
+//                    CheckClassDefNotNull();
+//                    SetupPrimaryKey();
+//                }
                 return _primaryKey;
             }
+        }
+
+        private void CheckClassDefNotNull()
+        {
+            if (_classDef == null)
+            {
+                throw new NullReferenceException(String.Format(
+                         "An error occurred while loading the class definitions (ClassDef.xml) for " +
+                         "'{0}'. Check that the class exists in that " +
+                         "namespace and assembly and that there are corresponding " +
+                         "class definitions for this class.\n" +
+                         "Please check that the ClassDef.xml file is either an imbedded resource " +
+                         "or is copied to the output directory via the appropriate postbuild command " +
+                         "(for more help see FAQ)", GetType()));
+            }
+        }
+        private void SetupPrimaryKey()
+        {
+            PrimaryKeyDef primaryKeyDef = ClassDef.GetPrimaryKeyDef();
+            if (primaryKeyDef == null) return;
+            _primaryKey = (BOPrimaryKey) primaryKeyDef.CreateBOKey(this.Props);
         }
 
         /// <summary>
@@ -638,20 +625,20 @@ namespace Habanero.BO
                         }
                     }
                 }
-                if (newPropValue != null && newPropValue.Equals(DBNull.Value) && prop.PropertyType == typeof (bool))
-                {
-                    newPropValue = false;
-                }
+//                if (newPropValue != null && newPropValue.Equals(DBNull.Value) && prop.PropertyType == typeof (bool))
+//                {
+//                    newPropValue = false;
+//                }
             }
-            if (DBNull.Value.Equals(newPropValue))
-            {
-                newPropValue = null;
-            }
+//            if (DBNull.Value.Equals(newPropValue))
+//            {
+//                newPropValue = null;
+//            }
             if (prop.PropertyType.IsSubclassOf(typeof (CustomProperty)))
             {
                 if (newPropValue != null && prop.PropertyType != newPropValue.GetType())
                 {
-                    newPropValue = Activator.CreateInstance(prop.PropertyType, new object[] {newPropValue, false});
+                    newPropValue = Activator.CreateInstance(prop.PropertyType, new[] {newPropValue, false});
                 }
             }
             if (prop.PropertyType.IsEnum && newPropValue is string)
@@ -679,22 +666,25 @@ namespace Habanero.BO
                     else newPropValue = ((BusinessObject) newPropValue).ID[0].Value.ToString();
                 }
             }
-            // If the property will be changed by this set then
-            // check if object is already editing (i.e. another property value has 
-            // been changed if it is not then check that this object is still fresh
-            // if the object is not fresh then throw appropriate exception.
-            object propValue;
+//            // If the property will be changed by this set then
+//            // check if object is already editing (i.e. another property value has 
+//            // been changed if it is not then check that this object is still fresh
+//            // if the object is not fresh then throw appropriate exception.
+//            object propValue;
+//            object newPropValue1;
+//            try
+//            {
+//                propValue = prop.Value == null ? prop.Value : Convert.ChangeType(prop.Value, prop.PropertyType);
+//                newPropValue1 = newPropValue == null ? newPropValue : Convert.ChangeType(newPropValue, prop.PropertyType);
+//            }
+//            catch (Exception)
+//            {
+//                propValue = prop.Value;
+//                newPropValue1 = newPropValue;
+//            }
+            object propValue = prop.Value;
             object newPropValue1;
-            try
-            {
-                propValue = prop.Value == null ? prop.Value : Convert.ChangeType(prop.Value, prop.PropertyType);
-                newPropValue1 = newPropValue == null ? newPropValue : Convert.ChangeType(newPropValue, prop.PropertyType);
-            }
-            catch (Exception)
-            {
-                propValue = prop.Value;
-                newPropValue1 = newPropValue;
-            }
+            ((BOProp)prop).PropDef.TryParsePropValue(newPropValue, out newPropValue1);
             if (PropValueHasChanged(propValue, newPropValue1))
             {
                 if (!Status.IsEditing)
@@ -811,8 +801,11 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Returns the named property value as long as it is a Guid and is
-        /// contained in the primary key
+        /// Returns the named property value that should be displayed
+        ///   on a user interface e.g. a textbox.
+        /// This is used primarily for Lookup lists where
+        ///    the value stored for the object may be a guid but the value
+        ///    to display may be a string.
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns the property value</returns>
@@ -955,13 +948,7 @@ namespace Habanero.BO
         /// </summary>
         public void Restore()
         {
-            _boPropCol.RestorePropertyValues();
-            _boStatus.IsDeleted = false;
-            _boStatus.IsEditing = false;
-            _boStatus.IsDirty = false;
-            ReleaseWriteLocks();
-            FireUpdatedEvent();
-            FireRestoredEvent();
+            CancelEdits();
         }
 
         /// <summary>

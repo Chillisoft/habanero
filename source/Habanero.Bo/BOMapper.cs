@@ -18,14 +18,12 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
-using Habanero.Util;
-using log4net;
+//using log4net;
 
 namespace Habanero.BO
 {
@@ -34,8 +32,8 @@ namespace Habanero.BO
     /// </summary>
     public class BOMapper
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BoMapper");
-        private IBusinessObject _businessObject;
+//        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BoMapper");
+        private readonly IBusinessObject _businessObject;
 
         /// <summary>
         /// Constructor to initialise a new mapper
@@ -61,10 +59,7 @@ namespace Habanero.BO
 //                return propDef.LookupList.GetLookupList(_businessObject.GetDatabaseConnection());
                 return propDef.LookupList.GetLookupList();
             }
-            else
-            {
-                return new Dictionary<string, object>();
-            }
+            return new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -108,7 +103,7 @@ namespace Habanero.BO
                 // else get the related object
                 if (relationshipName.IndexOf("|") != -1)
                 {
-                    string[] parts = relationshipName.Split(new char[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
+                    string[] parts = relationshipName.Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
                     List<string> relNames = new List<string>(parts);
                     //ArrayList relNames = new ArrayList();
                     //while (relationshipName.IndexOf("|") != -1)
@@ -135,7 +130,7 @@ namespace Habanero.BO
                     return null;
                     //throw new HabaneroApplicationException("Unable to retrieve property " + propertyName + " from a business object of type " + this._businessObject.GetType().Name);
                 }
-                BOMapper relatedBoMapper = new BOMapper((BusinessObject) relatedBo);
+                BOMapper relatedBoMapper = new BOMapper(relatedBo);
                 return relatedBoMapper.GetPropertyValueToDisplay(propertyName);
             }
             if (propertyName.IndexOf("-") != -1)
@@ -202,7 +197,7 @@ namespace Habanero.BO
                     DatabaseLookupList databaseLookupList = (DatabaseLookupList) propDef.LookupList;
                     return databaseLookupList.ClassDef;
                 }
-                else if (propDef.LookupList is BusinessObjectLookupList) 
+                if (propDef.LookupList is BusinessObjectLookupList) 
                 {
                     BusinessObjectLookupList businessObjectLookupList = (BusinessObjectLookupList) propDef.LookupList;
                     return businessObjectLookupList.LookupBoClassDef;

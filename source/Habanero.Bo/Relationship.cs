@@ -20,7 +20,6 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 
@@ -81,7 +80,7 @@ namespace Habanero.BO
         protected RelationshipDef _relDef;
         protected readonly IBusinessObject _owningBo;
         protected internal IRelKey _relKey;
-       private bool _initialised = false;
+       private bool _initialised;
 
         /// <summary>
         /// Constructor to initialise a new relationship
@@ -231,6 +230,9 @@ namespace Habanero.BO
         }
 
         protected abstract void DoInitialisation();
+        ///<summary>
+        /// Is the relationship initialised or not.
+        ///</summary>
         public bool Initialised { get { return _initialised; } }
     }
 }

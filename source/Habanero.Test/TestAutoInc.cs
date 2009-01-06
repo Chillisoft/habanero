@@ -40,6 +40,30 @@ namespace Habanero.Test
             {
                 return GetPropertyValueString("testfield");
             }
+            set { SetPropertyValue("testfield", value); }
+        }
+
+        public override string ToString()
+        {
+            return TestField;
+        }
+
+        public static ClassDef LoadClassDefWithIntID()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""TestAutoInc"" assembly=""Habanero.Test"" table=""testautoinc"" >
+					<property  name=""testautoincid"" type=""Int32"" />
+					<property  name=""testfield"" default=""testing"" />
+					<primaryKey isObjectID=""false"">
+						<prop name=""testautoincid"" />
+					</primaryKey>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
         }
 
         public static ClassDef LoadClassDefWithAutoIncrementingID()

@@ -17,17 +17,16 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.Util;
 
 namespace Habanero.BO
 {
-
-
+    /// <summary>
+    /// Manages a relationship where the relationship owner relates to several
+    /// other objects
+    /// </summary>
     public interface IMultipleRelationship : IRelationship
     {
         ///// <summary>
@@ -43,15 +42,12 @@ namespace Habanero.BO
         /// The criteria by which this relationship is ordered. I.e. by default all the
         /// related objects are loaded in this order.
         ///</summary>
-        OrderCriteria OrderCriteria
-        {
-            get;
-        }
+        OrderCriteria OrderCriteria { get; }
 
-        IBusinessObjectCollection BusinessObjectCollection
-        {
-            get;
-        }
+        ///<summary>
+        /// The collection of business objects that is managed by this relationship.
+        ///</summary>
+        IBusinessObjectCollection BusinessObjectCollection { get; }
     }
 
     /// <summary>
@@ -62,7 +58,7 @@ namespace Habanero.BO
         where TBusinessObject : class, IBusinessObject, new()
     {
         protected BusinessObjectCollection<TBusinessObject> _boCol;
-        
+
         /// <summary>
         /// Constructor to initialise a new relationship
         /// </summary>
@@ -74,7 +70,9 @@ namespace Habanero.BO
         public MultipleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {
-            _boCol = (RelatedBusinessObjectCollection<TBusinessObject>)RelationshipUtils.CreateNewRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
+            _boCol =
+                (RelatedBusinessObjectCollection<TBusinessObject>)
+                RelationshipUtils.CreateNewRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
         }
 
         ///<summary>
@@ -145,6 +143,9 @@ namespace Habanero.BO
             }
         }
 
+        ///<summary>
+        /// The collection of business objects that is managed by this relationship.
+        ///</summary>
         public BusinessObjectCollection<TBusinessObject> BusinessObjectCollection
         {
             get
@@ -201,6 +202,7 @@ namespace Habanero.BO
         //}
 
         private delegate void Add(IBusinessObject bo);
+
         private delegate bool Contains(IBusinessObject bo);
 
 
@@ -222,10 +224,12 @@ namespace Habanero.BO
         protected override IList<TBusinessObject> DoGetDirtyChildren_Typed()
         {
             IList<TBusinessObject> dirtyBusinessObjects = new List<TBusinessObject>();
-            PopulateDirtyBusinessObjects(bo => dirtyBusinessObjects.Add((TBusinessObject) bo), bo => dirtyBusinessObjects.Contains((TBusinessObject) bo));
+            PopulateDirtyBusinessObjects
+                (bo => dirtyBusinessObjects.Add((TBusinessObject) bo),
+                 bo => dirtyBusinessObjects.Contains((TBusinessObject) bo));
             return dirtyBusinessObjects;
         }
-        
+
         private void PopulateDirtyBusinessObjects(Add add, Contains contains)
         {
             if (HasDirtyEditingCollections)
@@ -305,6 +309,5 @@ namespace Habanero.BO
                 return _relDef.OrderCriteria;
             }
         }
-     
     }
 }

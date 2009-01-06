@@ -394,24 +394,24 @@ namespace Habanero.BO
             return col;
         }
 
-        /// <summary>
-        /// Creates a "where" clause from the properties held
-        /// </summary>
-        /// <param name="sql">The sql statement</param>
-        /// <returns>Returns a string</returns>
-        protected internal virtual string DatabaseWhereClause(SqlStatement sql)
-        {
-            StringBuilder whereClause = new StringBuilder(_props.Count*30);
-            foreach (BOProp prop in _props.Values)
-            {
-                if (whereClause.Length > 0)
-                {
-                    whereClause.Append(" AND ");
-                }
-                whereClause.Append(prop.DatabaseNameFieldNameValuePair(sql));
-            }
-            return whereClause.ToString();
-        }
+//        /// <summary>
+//        /// Creates a "where" clause from the properties held
+//        /// </summary>
+//        /// <param name="sql">The sql statement</param>
+//        /// <returns>Returns a string</returns>
+//        protected internal virtual string DatabaseWhereClause(SqlStatement sql)
+//        {
+//            StringBuilder whereClause = new StringBuilder(_props.Count*30);
+//            foreach (BOProp prop in _props.Values)
+//            {
+//                if (whereClause.Length > 0)
+//                {
+//                    whereClause.Append(" AND ");
+//                }
+//                whereClause.Append(prop.DatabaseNameFieldNameValuePair(sql));
+//            }
+//            return whereClause.ToString();
+//        }
 
         /// <summary>
         /// Indicates whether the two keys provided are equal in content

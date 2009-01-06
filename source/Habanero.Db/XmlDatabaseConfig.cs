@@ -27,15 +27,15 @@ namespace Habanero.DB
     /// </summary>
     public class XmlDatabaseConfig : DatabaseConfig
     {
-        private IXPathNavigable _node;
-        private XmlWrapper _xmlWrapper;
+        private readonly IXPathNavigable _node;
+        private readonly XmlWrapper _xmlWrapper;
 
         /// <summary>
         /// Constructor to initialise a new configuration
         /// </summary>
         /// <param name="node">The xml node</param>
         /// <param name="wrapper">The xml wrapper</param>
-        public XmlDatabaseConfig(IXPathNavigable node, XmlWrapper wrapper) : base()
+        public XmlDatabaseConfig(IXPathNavigable node, XmlWrapper wrapper)
         {
             _node = node;
             _xmlWrapper = wrapper;

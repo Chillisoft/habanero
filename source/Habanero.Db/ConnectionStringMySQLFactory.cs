@@ -26,15 +26,15 @@ namespace Habanero.DB
     /// </summary>
     public class ConnectionStringMySqlFactory : ConnectionStringFactory
     {
-        /// <summary>
-        /// Constructor to initialise a new factory
-        /// </summary>
-        public ConnectionStringMySqlFactory()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
+//        /// <summary>
+//        /// Constructor to initialise a new factory
+//        /// </summary>
+//        public ConnectionStringMySqlFactory()
+//        {
+//            //
+//            // TODO: Add constructor logic here
+//            //
+//        }
 
         /// <summary>
         /// Checks that each of the arguments provided are valid
@@ -67,21 +67,12 @@ namespace Habanero.DB
         protected override string CreateConnectionString(string server, string database, string userName,
                                                          string password, string port)
         {
-            if (port == "")
-            {
-                port = "3306";
-            }
-            if (password != "")
-            {
-                return
-                    String.Format("Username={2}; Host={0}; Port={4}; Database={1}; Password={3};", server, database,
-                                  userName, password, port);
-            }
-            else
-            {
-                return
-                    String.Format("Username={2}; Host={0}; Port={3}; Database={1};", server, database, userName, port);
-            }
+            if (port == "") port = "3306";
+
+            return password != "" 
+                ? String.Format("Username={2}; Host={0}; Port={4}; Database={1}; Password={3};", server, database,
+                                                  userName, password, port) 
+                : String.Format("Username={2}; Host={0}; Port={3}; Database={1};", server, database, userName, port);
         }
     }
 }

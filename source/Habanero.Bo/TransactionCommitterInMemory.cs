@@ -47,6 +47,10 @@ namespace Habanero.BO
     {
         private readonly DataStoreInMemory _dataStoreInMemory;
 
+        ///<summary>
+        /// Construct and transaction committer that works with the specified In memory data store.
+        ///</summary>
+        ///<param name="dataStoreInMemory">The datastore this transaction committer is working against.</param>
         public TransactionCommitterInMemory(DataStoreInMemory dataStoreInMemory)
         {
             _dataStoreInMemory = dataStoreInMemory;

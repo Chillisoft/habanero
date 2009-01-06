@@ -29,6 +29,10 @@ namespace Habanero.BO
     public class SupportsAutoIncrementingFieldBO : ISupportsAutoIncrementingField {
         private readonly BusinessObject _bo;
 
+        ///<summary>
+        /// Constructs the autoincremeing fieldBO object with the appropriate business object.
+        ///</summary>
+        ///<param name="bo"></param>
         public SupportsAutoIncrementingFieldBO(BusinessObject bo)
         {
             _bo = bo;

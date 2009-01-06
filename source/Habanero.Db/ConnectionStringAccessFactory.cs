@@ -28,16 +28,6 @@ namespace Habanero.DB
     public class ConnectionStringAccessFactory : ConnectionStringFactory
     {
         /// <summary>
-        /// Constructor to initialise a new factory
-        /// </summary>
-        public ConnectionStringAccessFactory()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-
-        /// <summary>
         /// Checks that each of the arguments provided are valid
         /// </summary>
         /// <param name="server">The database server</param>

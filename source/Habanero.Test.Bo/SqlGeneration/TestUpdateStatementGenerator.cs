@@ -55,13 +55,14 @@ namespace Habanero.Test.BO.SqlGeneration
         public void TestUpdateStatementExcludesNonPersistableProps()
         {
             ClassDef.ClassDefs.Clear();
-            string newPropName = "NewProp";
+            const string newPropName = "NewProp";
             MockBO bo = StatementGeneratorTestHelper.CreateMockBOWithExtraNonPersistableProp(newPropName);
             bo.SetPropertyValue(newPropName, "newvalue323");
-            bo.SetPropertyValue("MockBOProp1", "dfggjh");
+            bo.SetPropertyValue("MockBOProp2", "dfggjh");
 
             UpdateStatementGenerator gen = new UpdateStatementGenerator(bo, DatabaseConnection.CurrentConnection);
             ISqlStatementCollection statementCol = gen.Generate();
+            Assert.AreEqual(1, statementCol.Count);
             ISqlStatement statement = statementCol[0];
             Assert.IsFalse(statement.Statement.ToString().Contains(newPropName));
         }

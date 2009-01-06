@@ -321,11 +321,13 @@ namespace Habanero.Test.BO.ClassDefinition
             DateTimeNow dateTimeToday = new DateTimeNow();
 
             //---------------Execute Test ----------------------
-            object convertedDateTimeValue = propDef.ConvertValueToPropertyType(dateTimeToday);
+            object convertedDateTimeValue;
+            bool parsed = propDef.TryParsePropValue(dateTimeToday, out convertedDateTimeValue);
 
             //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
             Assert.IsInstanceOfType(typeof (DateTimeNow), convertedDateTimeValue);
-            Assert.AreEqual(dateTimeToday.ToString(), convertedDateTimeValue.ToString());
+            Assert.AreSame(dateTimeToday, convertedDateTimeValue);
         }
 
         [Test]
@@ -336,11 +338,13 @@ namespace Habanero.Test.BO.ClassDefinition
             DateTimeToday dateTimeToday = new DateTimeToday();
 
             //---------------Execute Test ----------------------
-            object convertedDateTimeValue = propDef.ConvertValueToPropertyType(dateTimeToday);
+            object convertedDateTimeValue;
+            bool parsed = propDef.TryParsePropValue(dateTimeToday, out convertedDateTimeValue);
 
             //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
             Assert.IsInstanceOfType(typeof (DateTimeToday), convertedDateTimeValue);
-            Assert.AreEqual(dateTimeToday, convertedDateTimeValue);
+            Assert.AreSame(dateTimeToday, convertedDateTimeValue);
         }
 
         [Test]
@@ -348,13 +352,16 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //-------------Setup Test Pack ------------------
             PropDef propDef = new PropDef("a", typeof (string), PropReadWriteRule.ReadWrite, null);
+            const int valueToParse = 100;
 
             //-------------Execute test ---------------------
-            object convertedIntValue = propDef.ConvertValueToPropertyType(100);
+            object convertedIntValue;
+            bool parsed = propDef.TryParsePropValue(valueToParse, out convertedIntValue);
 
-            //-------------Test Result ----------------------
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
             Assert.IsInstanceOfType(typeof (String), convertedIntValue);
-            Assert.AreEqual("100", convertedIntValue);
+            Assert.AreEqual(valueToParse.ToString(), convertedIntValue);
         }
 
         [Test]
@@ -366,9 +373,11 @@ namespace Habanero.Test.BO.ClassDefinition
             DateTime dateTime = DateTime.Parse(dateTimeString);
 
             //---------------Execute Test ----------------------
-            object convertedDateTimeValue = propDef.ConvertValueToPropertyType(dateTimeString);
+            object convertedDateTimeValue;
+            bool parsed = propDef.TryParsePropValue(dateTimeString, out convertedDateTimeValue);
 
             //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
             Assert.IsInstanceOfType(typeof (DateTime), convertedDateTimeValue);
             Assert.AreEqual(dateTime, convertedDateTimeValue);
         }
@@ -380,9 +389,11 @@ namespace Habanero.Test.BO.ClassDefinition
             PropDef propDef = new PropDef("a", typeof (Guid), PropReadWriteRule.ReadWrite, null);
             string guidString = Guid.NewGuid().ToString("B");
             //-------------Execute test ---------------------
-            object convertedGuid = propDef.ConvertValueToPropertyType(guidString);
+            object convertedGuid;
+            bool parsed = propDef.TryParsePropValue(guidString, out convertedGuid);
 
-            //-------------Test Result ----------------------
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
             Assert.IsInstanceOfType(typeof (Guid), convertedGuid);
             Assert.AreEqual(new Guid(guidString), convertedGuid);
         }
@@ -396,9 +407,11 @@ namespace Habanero.Test.BO.ClassDefinition
             DateTimeNow dateTimeToday = new DateTimeNow();
 
             //---------------Execute Test ----------------------
-            object convertedDateTimeValue = propDef.ConvertValueToPropertyType(dateTimeString);
+            object convertedDateTimeValue;
+            bool parsed = propDef.TryParsePropValue(dateTimeString, out convertedDateTimeValue);
 
             //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
             Assert.IsInstanceOfType(typeof (DateTimeNow), convertedDateTimeValue);
             Assert.AreEqual(dateTimeToday.ToString(), convertedDateTimeValue.ToString());
         }
@@ -408,14 +421,16 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("a", typeof (DateTime), PropReadWriteRule.ReadWrite, null);
-            const string dateTimeString = "Now";
+            const string dateTimeString = "NoW";
             DateTimeNow dateTimeToday = new DateTimeNow();
 
             //---------------Execute Test ----------------------
-            object convertedDateTimeValue = propDef.ConvertValueToPropertyType(dateTimeString);
+            object convertedDateTimeValue;
+            bool parsed = propDef.TryParsePropValue(dateTimeString, out convertedDateTimeValue);
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (DateTimeNow), convertedDateTimeValue);
+            Assert.IsTrue(parsed); 
+            Assert.IsInstanceOfType(typeof(DateTimeNow), convertedDateTimeValue);
             Assert.AreEqual(dateTimeToday.ToString(), convertedDateTimeValue.ToString());
         }
 
@@ -428,10 +443,12 @@ namespace Habanero.Test.BO.ClassDefinition
             DateTimeToday dateTimeToday = new DateTimeToday();
 
             //---------------Execute Test ----------------------
-            object convertedDateTimeValue = propDef.ConvertValueToPropertyType(dateTimeString);
+            object convertedDateTimeValue;
+            bool parsed = propDef.TryParsePropValue(dateTimeString, out convertedDateTimeValue);
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (DateTimeToday), convertedDateTimeValue);
+            Assert.IsTrue(parsed); 
+            Assert.IsInstanceOfType(typeof(DateTimeToday), convertedDateTimeValue);
             Assert.AreEqual(dateTimeToday, convertedDateTimeValue);
         }
 
@@ -444,10 +461,12 @@ namespace Habanero.Test.BO.ClassDefinition
             DateTimeToday dateTimeToday = new DateTimeToday();
 
             //---------------Execute Test ----------------------
-            object convertedDateTimeValue = propDef.ConvertValueToPropertyType(dateTimeString);
+            object convertedDateTimeValue;
+            bool parsed = propDef.TryParsePropValue(dateTimeString, out convertedDateTimeValue);
 
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (DateTimeToday), convertedDateTimeValue);
+            Assert.IsTrue(parsed);
+            Assert.IsInstanceOfType(typeof(DateTimeToday), convertedDateTimeValue);
             Assert.AreEqual(dateTimeToday, convertedDateTimeValue);
         }
 
@@ -537,7 +556,7 @@ namespace Habanero.Test.BO.ClassDefinition
                                           PropReadWriteRule.ReadWrite, "EnumProp", "Family", false, false);
             Assert.AreEqual(typeof (ContactPersonTestBO.ContactType), propDef.PropertyType);
             Assert.AreEqual("Habanero.Test.BO", propDef.PropertyTypeAssemblyName);
-            Assert.AreEqual("ContactPersonTestBO+ContactType", propDef.PropertyTypeName);
+            Assert.AreEqual("Habanero.Test.BO.ContactPersonTestBO+ContactType", propDef.PropertyTypeName);
             Assert.AreEqual("Family", propDef.DefaultValueString);
             Assert.AreEqual(ContactPersonTestBO.ContactType.Family, propDef.DefaultValue);
         }
@@ -644,30 +663,47 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Execute Test ----------------------
             IPropDef clonedPropDef = propDef.Clone();
             //-----Test PreCondition--------------------------
+            Assert.AreEqual(propDef.PropertyTypeAssemblyName, clonedPropDef.PropertyTypeAssemblyName);
+            Assert.AreEqual(propDef.PropertyType, clonedPropDef.PropertyType);
+            Assert.AreEqual(propDef.PropertyTypeName, clonedPropDef.PropertyTypeName);
             Assert.AreEqual(propDef.Compulsory, clonedPropDef.Compulsory);
             Assert.AreEqual(propDef.DefaultValueString, clonedPropDef.DefaultValueString);
             Assert.AreEqual(propDef.ReadWriteRule, clonedPropDef.ReadWriteRule);
+            Assert.IsTrue(propDef.Equals(clonedPropDef), "Cloned prop def should equal orig propdef");
+
             //-----------Execute------------------------------
             clonedPropDef.Compulsory = false;
             clonedPropDef.DefaultValueString = "ClonedString";
             clonedPropDef.ReadWriteRule = PropReadWriteRule.WriteOnce;
+
             //---------------Test Result -----------------------
             Assert.AreNotEqual(propDef.Compulsory,clonedPropDef.Compulsory);
             Assert.AreNotEqual(propDef.DefaultValueString,clonedPropDef.DefaultValueString);
             Assert.AreNotEqual(propDef.ReadWriteRule,clonedPropDef.ReadWriteRule);
-            //---------------Tear Down -------------------------
-
+            Assert.IsFalse(propDef.Equals(clonedPropDef));
         }
 
         [Test]
-        public void Test_Equals()
+        public void Test_Cloned_Equals_True()
         {
             //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("TestPropDef", "System", "String", PropReadWriteRule.ReadWrite, "TestPropDef", "TestString", true, false);
             IPropDef clonedPropDef = propDef.Clone();
 
             //-----Test PreCondition--------------------------
-            Assert.IsTrue(propDef.Equals(clonedPropDef));
+            //---------------Execute Test ----------------------
+            bool equals = propDef.Equals(clonedPropDef);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(equals, "Cloned def should be equal");
+        }
+        [Test]
+        public void Test_Equals_False()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("TestPropDef", "System", "String", PropReadWriteRule.ReadWrite, "TestPropDef", "TestString", true, false);
+            IPropDef clonedPropDef = propDef.Clone();
+
+            //-----Test PreCondition--------------------------
             //---------------Execute Test ----------------------
             clonedPropDef.Compulsory = false;
             clonedPropDef.DefaultValueString = "ClonedString";
@@ -675,8 +711,6 @@ namespace Habanero.Test.BO.ClassDefinition
             bool equals = clonedPropDef.Equals(propDef);
             //---------------Test Result -----------------------
             Assert.IsFalse(equals);
-            //---------------Tear Down -------------------------
-
         }
     }
 }

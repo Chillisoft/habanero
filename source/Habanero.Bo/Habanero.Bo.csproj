@@ -96,12 +96,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BOPropLookupList.cs" />
     <Compile Include="BORegistry.cs" />
     <Compile Include="BOStatus.cs" />
     <Compile Include="BusinessObjectLoaderBase.cs" />
     <Compile Include="BusinessObjectLoaderDB.cs" />
     <Compile Include="BusinessObjectLastUpdatePropertiesLog.cs" />
     <Compile Include="BusinessObjectLoaderInMemory.cs" />
+    <Compile Include="ClassDefinition\BOPropBoolDataMapper.cs" />
+    <Compile Include="ClassDefinition\BOPropDataMapper.cs" />
+    <Compile Include="ClassDefinition\BOPropDateTimeDataMapper.cs" />
+    <Compile Include="ClassDefinition\BOPropGeneralDataMapper.cs" />
+    <Compile Include="ClassDefinition\BOPropGuidDataMapper.cs" />
+    <Compile Include="ClassDefinition\BOPropIntDataMapper.cs" />
+    <Compile Include="ClassDefinition\BOPropStringDataMapper.cs" />
     <Compile Include="ClassDefinition\ClassDefHelper.cs" />
     <Compile Include="ClassDefinition\TriggerCol.cs" />
     <Compile Include="ClassDefinition\Trigger.cs" />

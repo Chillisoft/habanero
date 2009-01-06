@@ -437,7 +437,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             Criteria criteria = Criteria.FromPrimaryKey(primaryKey);
             //---------------Test Result -----------------------
-            StringAssert.AreEqualIgnoringCase("MyBOID = '" + myBO.MyBoID.ToString("B") + "'", criteria.ToString());
+            StringAssert.AreEqualIgnoringCase("MyBOID = '" + myBO.MyBoID.Value.ToString("B") + "'", criteria.ToString());
             //---------------Tear Down -------------------------          
         }
 

@@ -26,7 +26,7 @@ using NUnit.Framework;
 namespace Habanero.Test.BO
 {
     [TestFixture]
-    public class TestBoProp
+    public class TestBOProp
     {
         private PropDef _propDef;
         private IBOProp _prop;
@@ -43,6 +43,24 @@ namespace Habanero.Test.BO
         {
             _prop.Value = "Prop Value";
             Assert.AreEqual("Prop Value", _prop.Value);
+        }
+
+
+        [Test]
+        public void Test_ConstructBOPropWithValue()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("Name", typeof(string), PropReadWriteRule.WriteNotNew, "DD", "", false, false);
+            const string value = "value";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            BOProp prop1 = new BOProp(propDef, value);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(prop1.IsObjectNew);
+            Assert.AreEqual(value, prop1.Value);
+            Assert.AreEqual(value, prop1.PropertyValueToDisplay);
         }
 
         [Test]
@@ -132,6 +150,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = Guid.Empty;
+            Assert.IsNull(boProp.Value);
             Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
@@ -150,18 +169,25 @@ namespace Habanero.Test.BO
             boProp.Value = null;
             Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
+            StringAssert.Contains("compulsory field", boProp.InvalidReason);
 
             boProp.Value = DBNull.Value;
             Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
+            StringAssert.Contains("compulsory field", boProp.InvalidReason);
 
             boProp.Value = "";
             Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
+            StringAssert.Contains("compulsory field", boProp.InvalidReason);
 
-            boProp.Value = 0;
+            boProp.Value = 1;
+            Assert.AreEqual("", boProp.InvalidReason);
             Assert.IsTrue(boProp.IsValid);
-            Assert.IsFalse(boProp.InvalidReason.Length > 0);
+            
+            boProp.Value = 0;
+            Assert.AreEqual("", boProp.InvalidReason);
+            Assert.IsTrue(boProp.IsValid);
         }
 
         [Test]
@@ -768,6 +794,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual("Business", boProp.PropertyValueString);
         }
 
+        //TODO Brett: To do datamapper for enums
         [Test]
         public void TestBoPropWithEnumPersistValueFromString()
         {

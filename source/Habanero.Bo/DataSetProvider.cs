@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
@@ -41,7 +40,7 @@ namespace Habanero.BO
         /// object collection
         /// </summary>
         /// <param name="collection">The business object collection</param>
-        public DataSetProvider(IBusinessObjectCollection collection)
+        protected DataSetProvider(IBusinessObjectCollection collection)
         {
             this._collection = collection;
         }
@@ -76,8 +75,7 @@ namespace Habanero.BO
 
         private void AddColumn(UIGridColumn uiProperty, ClassDef classDef)
         {
-            DataColumn column;
-            column = _table.Columns.Add();
+            DataColumn column = _table.Columns.Add();
             if (_table.Columns.Contains(uiProperty.PropertyName))
             {
                 throw new DuplicateNameException(String.Format(
@@ -108,7 +106,7 @@ namespace Habanero.BO
             object[] values = new object[_uiGridProperties.Count + 1];
             values[0] = businessObject.ID.ToString();
             int i = 1;
-            BOMapper mapper = new BOMapper((BusinessObject) businessObject);
+            BOMapper mapper = new BOMapper(businessObject);
             foreach (UIGridColumn gridProperty in _uiGridProperties)
             {
                 object val = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);

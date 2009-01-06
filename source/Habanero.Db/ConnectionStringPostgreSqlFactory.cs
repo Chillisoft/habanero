@@ -26,15 +26,15 @@ namespace Habanero.DB
     /// </summary>
     public class ConnectionStringPostgreSqlFactory : ConnectionStringFactory
 	{
-		/// <summary>
-        /// Constructor to initialise a new factory
-        /// </summary>
-		public ConnectionStringPostgreSqlFactory()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
+//		/// <summary>
+//        /// Constructor to initialise a new factory
+//        /// </summary>
+//		public ConnectionStringPostgreSqlFactory()
+//        {
+//            //
+//            // TODO: Add constructor logic here
+//            //
+//        }
 
         /// <summary>
         /// Checks that each of the arguments provided are valid
@@ -67,21 +67,12 @@ namespace Habanero.DB
         protected override string CreateConnectionString(string server, string database, string userName,
                                                          string password, string port)
         {
-            if (port == "")
-            {
-				port = "5432";
-            }
-            if (password != "")
-            {
-                return
-                    String.Format("Server={0};Port={4};Database={1};Userid={2};Password={3};", server, database,
-                                  userName, password, port);
-            }
-            else
-            {
-                return
-					String.Format("Server={0};Port={3};Database={1};Userid={2};", server, database, userName, port);
-            }
+            if (port == "") port = "5432";
+
+            return password != "" 
+                ? String.Format("Server={0};Port={4};Database={1};Userid={2};Password={3};", server, database,
+                                                  userName, password, port) 
+                : String.Format("Server={0};Port={3};Database={1};Userid={2};", server, database, userName, port);
         }
 	}
 }

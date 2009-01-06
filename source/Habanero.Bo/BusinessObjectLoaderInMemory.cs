@@ -21,7 +21,6 @@ using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -205,7 +204,7 @@ namespace Habanero.BO
             QueryBuilder.PrepareCriteria(collection.ClassDef, criteria);
 
             BusinessObjectCollection<T> loadedBos = _dataStore.FindAll<T>(criteria);
-            loadedBos.Sort(delegate(T x, T y) { return orderCriteria.Compare(x, y); });
+            loadedBos.Sort(orderCriteria.Compare);
             if (selectQuery.Limit >= 0)
             {
                 while (loadedBos.Count > selectQuery.Limit)

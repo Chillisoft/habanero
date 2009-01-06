@@ -17,19 +17,20 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.CriteriaManager;
-using Habanero.Util;
 
 //using log4net;
 
 namespace Habanero.BO
 {
 
+    /// <summary>
+    /// Manages a relationship where the relationship owner relates to one
+    /// other object
+    /// </summary>
     public interface ISingleRelationship : IRelationship {
         /// <summary>
         /// Sets the related object to that provided
@@ -224,7 +225,7 @@ namespace Habanero.BO
 
                     if (reverseRelationship is ISingleRelationship)
                     {
-                        relationshipDef.CheckCanAddChild(this.OwningBO);
+                        if (relationshipDef != null) relationshipDef.CheckCanAddChild(this.OwningBO);
                         _relatedBo = relatedObject;
                         ((ISingleRelationship)reverseRelationship).SetRelatedObject(this.OwningBO);
                     }

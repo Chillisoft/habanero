@@ -138,6 +138,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(busControl, boColTabControl.BusinessObjectControl);
         }
 
+        //TODO Brett: BOColTabControlManager error near the //TODO Brett:  in this class.
         [Test]
         public void TestSetCollection()
         {
@@ -405,10 +406,8 @@ namespace Habanero.Test.UI.Base
         {
             IBusinessObjectControl busControl = GetBusinessObjectControlStub();
             boColTabControl.BusinessObjectControl = busControl;
-            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
-            myBoCol.Add(new MyBO());
-            myBoCol.Add(new MyBO());
-            myBoCol.Add(new MyBO());
+            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>
+                                                         {new MyBO(), new MyBO(), new MyBO()};
             return myBoCol;
         }
 

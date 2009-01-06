@@ -23,7 +23,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
 using Habanero.Util;
-using Habanero.Util;
+
 //using log4net;
 
 namespace Habanero.BO.ClassDefinition
@@ -65,11 +65,11 @@ namespace Habanero.BO.ClassDefinition
 
 
         private string _databaseFieldName; //This allows you to have a 
-                //database field name different from your property name. 
-                //We have customers whose standard for naming database 
-                //fields is DATABASE_FIELD_NAME. 
-                //This is also powerful for migrating systems 
-                //where the database has already been set up.
+        //database field name different from your property name. 
+        //We have customers whose standard for naming database 
+        //fields is DATABASE_FIELD_NAME. 
+        //This is also powerful for migrating systems 
+        //where the database has already been set up.
 
         private ILookupList _lookupList = new NullLookupList();
 
@@ -80,6 +80,7 @@ namespace Habanero.BO.ClassDefinition
         private bool _persistable = true;
         private ClassDef _classDef;
         private string _unitOfMeasure = "";
+        private BOPropDataMapper _propDataMapper;
 
         #region Constuctor and destructors
 
@@ -202,7 +203,6 @@ namespace Habanero.BO.ClassDefinition
         //        compulsory, autoIncrementing, length, displayName, description)
         //{
         //}
-
         /// <summary>
         /// This constructor is used to create a propdef using property type assembly and class name and other information. 
         /// The default value and the property type are loaded when they are needed.
@@ -322,19 +322,6 @@ namespace Habanero.BO.ClassDefinition
 
         #region Progressive Private Constructors
 
-        //private PropDef
-        //    (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus)
-        //    : this(propertyName, propType, assemblyName, typeName, propRWStatus, null)
-        //{
-        //}
-
-        //private PropDef
-        //    (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
-        //     string databaseFieldName)
-        //    : this(propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, null, null)
-        //{
-        //}
-
         private PropDef
             (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
              string databaseFieldName, object defaultValue, string defaultValueString)
@@ -386,6 +373,16 @@ namespace Habanero.BO.ClassDefinition
         private PropDef
             (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
              string databaseFieldName, object defaultValue, string defaultValueString, bool compulsory,
+             bool autoIncrementing, int length, string displayName, string description, bool keepValuePrivate)
+        {
+            SetupPropDef
+                (propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue,
+                 defaultValueString, compulsory, autoIncrementing, length, displayName, description, keepValuePrivate);
+        }
+
+        private PropDef
+            (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+             string databaseFieldName, object defaultValue, string defaultValueString, bool compulsory,
              bool autoIncrementing, int length, string displayName, string description)
             : this(
                 propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue,
@@ -395,16 +392,6 @@ namespace Habanero.BO.ClassDefinition
 
         #endregion //Progressive Private Constructors
 
-        private PropDef
-            (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
-             string databaseFieldName, object defaultValue, string defaultValueString, bool compulsory,
-             bool autoIncrementing, int length, string displayName, string description, bool keepValuePrivate)
-        {
-            SetupPropDef
-                (propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue,
-                 defaultValueString, compulsory, autoIncrementing, length, displayName, description, keepValuePrivate);
-        }
-
         private void SetupPropDef
             (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
              string databaseFieldName, object defaultValue, string defaultValueString, bool compulsory,
@@ -412,7 +399,7 @@ namespace Habanero.BO.ClassDefinition
         {
             ArgumentValidationHelper.CheckStringArgumentNotEmpty
                 (propertyName, "propertyName", "This field is compulsary for the PropDef class.");
-            if (propertyName.IndexOfAny(new char[] {'.', '-', '|'}) != -1)
+            if (propertyName.IndexOfAny(new[] {'.', '-', '|'}) != -1)
             {
                 throw new ArgumentException
                     ("A property name cannot contain any of the following characters: [.-|]  Invalid property name "
@@ -468,8 +455,7 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         public string DisplayName
         {
-            get { return _displayName; }
-//            set { _displayName = value; }
+            get { return _displayName; } //            set { _displayName = value; }
         }
 
         ///<summary>
@@ -522,15 +508,6 @@ namespace Habanero.BO.ClassDefinition
             get { return MyPropertyType; }
             set { MyPropertyType = value; }
         }
-
-//        /// <summary>
-//        /// Gets and sets the property rule relevant to this definition
-//        /// </summary>
-//        public virtual IPropRule PropRule
-//        {
-//            get { return _propRule; }
-//            set { _propRule = value; }
-//        }
 
         /// <summary>
         /// Returns a List of PropRules <see cref="IPropRule"/> for the Property Definition.
@@ -586,7 +563,6 @@ namespace Habanero.BO.ClassDefinition
             set { _compulsory = value; }
         }
 
-
         /// <summary>
         /// Provides access to read and write the ILookupList object
         /// in this definition
@@ -594,7 +570,11 @@ namespace Habanero.BO.ClassDefinition
         public virtual ILookupList LookupList
         {
             get { return _lookupList; }
-            set { _lookupList = value; }
+            set
+            {
+                _lookupList = value;
+                _lookupList.PropDef = this;
+            }
         }
 
         /// <summary>
@@ -704,12 +684,12 @@ namespace Habanero.BO.ClassDefinition
             foreach (IPropRule propRule in _propRules)
             {
                 string tmpErrMsg = "";
-                bool tmpValid = (propRule == null ||
-                                 propRule.IsPropValueValid(DisplayName, GetNewValue(propValue), ref tmpErrMsg));
+                bool tmpValid = (propRule == null
+                                 || propRule.IsPropValueValid(DisplayName, GetNewValue(propValue), ref tmpErrMsg));
                 valid = valid & tmpValid;
                 errorMessage = StringUtilities.AppendMessage(errorMessage, tmpErrMsg);
             }
-            return valid;//_propRule == null || _propRule.IsPropValueValid(displayName, GetNewValue(propValue), ref errorMessage);
+            return valid;
         }
 
         private bool IsItemInList(string displayName, object propValue, ref string errorMessage)
@@ -810,10 +790,6 @@ namespace Habanero.BO.ClassDefinition
             if (assignDefaultValue)
             {
                 object defaultValue = MyDefaultValue;
-                if (defaultValue != null)
-                {
-                    //log.Debug("Creating BoProp with default value " + _defaultValue );
-                }
                 return new BOProp(this, defaultValue);
             }
             return new BOProp(this);
@@ -853,31 +829,6 @@ namespace Habanero.BO.ClassDefinition
             IPropertyComparer<T> comparer =
                 (IPropertyComparer<T>) Activator.CreateInstance(comparerType, this.PropertyName);
             return comparer;
-            //if (this.PropertyType.Equals(typeof (string)))
-            //{
-            //    return new StringComparer<T>(this.PropertyName);
-            //}
-            //else if (this.PropertyType.Equals(typeof (int)))
-            //{
-            //    return new IntComparer<T>(this.PropertyName);
-            //}
-            //else if (this.PropertyType.Equals(typeof (Guid)))
-            //{
-            //    return new GuidComparer<T>(this.PropertyName);
-            //}
-            //else if (this.PropertyType.Equals(typeof (DateTime)))
-            //{
-            //    return new DateTimeComparer<T>(this.PropertyName);
-            //}
-            //else if (this.PropertyType.Equals(typeof (Single)))
-            //{
-            //    return new SingleComparer<T>(this.PropertyName);
-            //}
-            //else if (this.PropertyType.Equals(typeof (TimeSpan)))
-            //{
-            //    return new TimeSpanComparer<T>(this.PropertyName);
-            //}
-            //return null;
         }
 
         #endregion //PropertyComparer
@@ -888,8 +839,12 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
+                if (_propType != null) return _propType;
+
+                Type tempPropType = null;
                 TypeLoader.LoadClassType
-                    (ref _propType, _propTypeAssemblyName, _propTypeName, "property", "property definition");
+                    (ref tempPropType, _propTypeAssemblyName, _propTypeName, "property", "property definition");
+                MyPropertyType = tempPropType;
                 return _propType;
             }
             set
@@ -903,6 +858,7 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
+                //TODO Brett: Remove all this code move to mapper.
                 object defaultValue;
                 if (MyPropertyType == typeof (DateTime) && _defaultValueString != null)
                 {
@@ -994,7 +950,8 @@ namespace Habanero.BO.ClassDefinition
             get
             {
                 string displayName = this.DisplayName;
-                if (string.IsNullOrEmpty(displayName)) displayName = StringUtilities.DelimitPascalCase(_propertyName, " ");
+                if (string.IsNullOrEmpty(displayName))
+                    displayName = StringUtilities.DelimitPascalCase(_propertyName, " ");
                 if (!string.IsNullOrEmpty(this.UnitOfMeasure))
                 {
                     return displayName + " (" + this.UnitOfMeasure + ")";
@@ -1003,72 +960,25 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
-
         private void validateDefaultValue(object defaultValue)
         {
-            if (!_hasDefaultValueBeenValidated)
+            if (_hasDefaultValueBeenValidated) return;
+
+            if ((defaultValue == null) || MyPropertyType.IsInstanceOfType(defaultValue))
             {
-                if ((defaultValue == null) || MyPropertyType.IsInstanceOfType(defaultValue))
-                {
-                    _defaultValue = defaultValue;
-                    _hasDefaultValueBeenValidated = true;
-                }
-                else
-                {
-                    throw new ArgumentException
-                        (string.Format
-                             ("Default value {0} is invalid since it is " + "not of type {1}.", defaultValue,
-                              _propTypeName), "defaultValue");
-                }
+                _defaultValue = defaultValue;
+                _hasDefaultValueBeenValidated = true;
+            }
+            else
+            {
+                throw new ArgumentException
+                    (string.Format
+                         ("Default value {0} is invalid since it is " + "not of type {1}.", defaultValue,
+                          _propTypeName), "defaultValue");
             }
         }
 
         #endregion
-
-        ///<summary>
-        /// Converts the 'value to convert' to the appropriate type for the Property definition.
-        /// E.g. A string 'today' will be converted to a datetimetoday object.
-        ///</summary>
-        ///<param name="valueToConvert">The value requiring conversion.</param>
-        ///<returns>The converted property value</returns>
-        public object ConvertValueToPropertyType(object valueToConvert)
-        {
-            if (valueToConvert == null) return null;
-
-            if (this.PropertyType == typeof(Guid))
-            {
-                return new Guid(valueToConvert.ToString());
-            }
-            if (this.PropertyType == typeof(string) && valueToConvert is Guid)
-            {
-                return ((Guid)valueToConvert).ToString("B");
-            }
-            if (this.PropertyType == typeof (DateTime))
-            {
-                if (valueToConvert is String)
-                {
-                    string stringValueToConvert = (string) valueToConvert;
-                    if (stringValueToConvert.ToUpper() == "TODAY")
-                    {
-                        return new DateTimeToday();
-                    }
-                    if (stringValueToConvert.ToUpper() == "NOW")
-                    {
-                        return new DateTimeNow();
-                    }
-                }
-                else if (valueToConvert is DateTimeToday)
-                {
-                    return valueToConvert;
-                }
-                else if (valueToConvert is DateTimeNow)
-                {
-                    return valueToConvert;
-                }
-            }
-
-            return Convert.ChangeType(valueToConvert, this.PropertyType);
-        }
 
         ///<summary>
         /// Adds an <see cref="IPropRule"/> to the <see cref="PropRules"/> for the 
@@ -1077,18 +987,26 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="rule">The new rules to be added for the Property Definition.</param>
         public void AddPropRule(IPropRule rule)
         {
-            if (rule == null) throw new HabaneroApplicationException("You cannot add a null property rule to a property def");
+            if (rule == null)
+                throw new HabaneroApplicationException("You cannot add a null property rule to a property def");
             _propRules.Add(rule);
         }
 
+        ///<summary>
+        /// Makes a shallow clone of this property definition (i.e. the clone includes a list of all the
+        ///  property rules but the property rules have not been cloned
+        ///</summary>
+        ///<returns></returns>
         public IPropDef Clone()
         {
-            PropDef propDef = new PropDef(this.PropertyName, this.PropertyTypeAssemblyName, this.PropertyTypeName, this.ReadWriteRule,
-                this.DatabaseFieldName, this.DefaultValueString, this.Compulsory, this.AutoIncrementing, this.Length, 
-                this.DisplayName, this.Description, this.KeepValuePrivate);
+            PropDef propDef = new PropDef
+                (this.PropertyName, this.PropertyTypeAssemblyName, this.PropertyTypeName, this.ReadWriteRule,
+                 this.DatabaseFieldName, this.DefaultValueString, this.Compulsory, this.AutoIncrementing, this.Length,
+                 this.DisplayName, this.Description, this.KeepValuePrivate);
             propDef.LookupList = this.LookupList;
             propDef.Persistable = this.Persistable;
             propDef.DefaultValue = this.DefaultValue;
+            propDef.PropertyTypeAssemblyName = PropertyTypeAssemblyName;
             propDef.PropType = this.PropType;
             foreach (IPropRule rule in _propRules)
             {
@@ -1097,31 +1015,121 @@ namespace Habanero.BO.ClassDefinition
             return propDef;
         }
 
+        ///<summary>
+        ///Determines whether the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="obj">The <see cref="T:System.Object" /> to compare with the current <see cref="T:System.Object" />. </param>
+        ///<exception cref="T:System.NullReferenceException">The <paramref name="obj" /> parameter is null.</exception><filterpriority>2</filterpriority>
         public override bool Equals(object obj)
         {
-            PropDef propDef = obj as PropDef;
-            if (propDef == null) return false;
-            if (this.AutoIncrementing != propDef.AutoIncrementing) return false;
-            if (this.Compulsory != propDef.Compulsory) return false;
-            if (this.DatabaseFieldName != propDef.DatabaseFieldName) return false;
-            if (this.DefaultValue!= propDef.DefaultValue) return false;
-            if (this.DefaultValueString != propDef.DefaultValueString) return false;
-            if (this.Description != propDef.Description) return false;
-            if (this.DisplayName != propDef.DisplayName) return false;
-            if (this.KeepValuePrivate != propDef.KeepValuePrivate) return false;
-            if (this.Length != propDef.Length) return false;
-            if (this.Persistable != propDef.Persistable) return false;
-            if (this.PropertyName != propDef.PropertyName) return false;
-            if (this.ReadWriteRule != propDef.ReadWriteRule) return false;
-            if (this.PropType != propDef.PropType) return false;
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (PropDef)) return false;
+            return Equals((PropDef) obj);
+        }
 
-            if (this.UnitOfMeasure != propDef.UnitOfMeasure) return false;
-            if (this.LookupList != propDef.LookupList) return false;
-            if (_classDef != propDef.ClassDef) return false;
-            //if (this.PropertyTypeAssemblyName != propDef.PropertyTypeAssemblyName) return false;
-            //if (this.PropertyTypeName != propDef.PropertyTypeName) return false;
-//            if (this.PropRules != propDef.PropRules) return false;
-            return true;
+        ///<summary>
+        /// Returns true if the PropDef obj is equal to this propDef
+        ///</summary>
+        ///<param name="obj">The PropDef to be compared to</param>
+        ///<returns></returns>
+        public bool Equals(PropDef obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return Equals(obj._propertyName, _propertyName) && Equals(obj._description, _description)
+                   && Equals(obj._propType, _propType) && Equals(obj._propRWStatus, _propRWStatus)
+                   && Equals(obj._propTypeAssemblyName, _propTypeAssemblyName)
+                   && Equals(obj._defaultValue, _defaultValue) && Equals(obj._defaultValueString, _defaultValueString)
+                   && obj._compulsory.Equals(_compulsory) && Equals(obj._databaseFieldName, _databaseFieldName)
+                   && Equals(obj._lookupList, _lookupList) && obj._autoIncrementing.Equals(_autoIncrementing)
+                   && obj._length == _length && Equals(obj._displayName, _displayName)
+                   && obj._keepValuePrivate.Equals(_keepValuePrivate) && obj._persistable.Equals(_persistable)
+                   && Equals(obj._classDef, _classDef) && Equals(obj._unitOfMeasure, _unitOfMeasure);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int result = (_propertyName != null ? _propertyName.GetHashCode() : 0);
+                result = (result * 397) ^ (_description != null ? _description.GetHashCode() : 0);
+                result = (result * 397) ^ (_propType != null ? _propType.GetHashCode() : 0);
+                result = (result * 397) ^ _propRWStatus.GetHashCode();
+                result = (result * 397) ^ (_propTypeAssemblyName != null ? _propTypeAssemblyName.GetHashCode() : 0);
+                result = (result * 397) ^ (_defaultValue != null ? _defaultValue.GetHashCode() : 0);
+                result = (result * 397) ^ (_defaultValueString != null ? _defaultValueString.GetHashCode() : 0);
+                result = (result * 397) ^ _compulsory.GetHashCode();
+                result = (result * 397) ^ (_databaseFieldName != null ? _databaseFieldName.GetHashCode() : 0);
+                result = (result * 397) ^ (_lookupList != null ? _lookupList.GetHashCode() : 0);
+                result = (result * 397) ^ _autoIncrementing.GetHashCode();
+                result = (result * 397) ^ _length;
+                result = (result * 397) ^ (_displayName != null ? _displayName.GetHashCode() : 0);
+                result = (result * 397) ^ _keepValuePrivate.GetHashCode();
+                result = (result * 397) ^ _persistable.GetHashCode();
+                result = (result * 397) ^ (_classDef != null ? _classDef.GetHashCode() : 0);
+                result = (result * 397) ^ (_unitOfMeasure != null ? _unitOfMeasure.GetHashCode() : 0);
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// This method provides a the functionality to convert any object to the appropriate
+        ///   type for the particular BOProp Type. e.g it will convert a valid guid string to 
+        ///   a valid Guid Object.
+        /// </summary>
+        /// <param name="valueToParse">The value to be converted</param>
+        /// <param name="returnValue"></param>
+        /// <returns>An object of the correct type.</returns>
+        public bool TryParsePropValue(object valueToParse, out object returnValue)
+        {
+            _propDataMapper = CreateDataMapper();
+            return _propDataMapper.TryParsePropValue(valueToParse, out returnValue);
+        }
+
+        /// <summary>
+        /// Converts the value of a valid type for this property definition to a string relevant.
+        /// A null value will be oonverted to a zero length string.
+        /// </summary>
+        /// <param name="value">The value to be converted</param>
+        /// <returns>The converted string.</returns>
+        public string ConvertValueToString(object value)
+        {
+            CreateDataMapper();
+
+            return _propDataMapper == null ? value.ToString() : _propDataMapper.ConvertValueToString(value);
+        }
+
+        private BOPropDataMapper CreateDataMapper()
+        {
+            if (_propDataMapper != null) return _propDataMapper;
+
+            if (this.PropertyType == typeof(Guid))
+            {
+                _propDataMapper = new BOPropGuidDataMapper();
+            }
+            else if (this.PropertyType == typeof(DateTime))
+            {
+                _propDataMapper = new BOPropDateTimeDataMapper();
+            }
+            else if (this.PropertyType == typeof(string))
+            {
+                _propDataMapper = new BOPropStringDataMapper();
+            }
+            else if (this.PropertyType == typeof(bool))
+            {
+                _propDataMapper = new BOPropBoolDataMapper();
+            } else if (this.PropertyType == typeof(int))
+            {
+                _propDataMapper = new BOPropIntDataMapper();
+            }
+            if (_propDataMapper == null) _propDataMapper = new BOPropGeneralDataMapper(this);
+            return _propDataMapper;
         }
     }
 }

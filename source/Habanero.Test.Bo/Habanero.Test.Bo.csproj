@@ -142,9 +142,11 @@
     <Compile Include="BusinessObjectLoader\TestBusinessObjectLoader_GetBusinessObjectCollection.cs" />
     <Compile Include="BusinessObjectLoader\TestBusinessObjectLoader_RefreshCollection.cs" />
     <Compile Include="BusinessObjectCollection\TestRelatedBOCol_Composition.cs" />
+    <Compile Include="ClassDefinition\TestBOPrimaryKey.cs" />
     <Compile Include="CriteriaManager\TestCriteriaDB.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
     <Compile Include="CriteriaManager\TestHabaneroStringBuilder.cs" />
+    <Compile Include="DataMappers\TestDataMapper_Int.cs" />
     <Compile Include="Relationship\TestMultipleRelationship_Aggregation.cs" />
     <Compile Include="Relationship\TestMultipleRelationship_Association.cs" />
     <Compile Include="Relationship\TestMultipleRelationship_Composition.cs" />
@@ -154,6 +156,12 @@
     <Compile Include="Security\TestBOPropAuthorisation.cs" />
     <Compile Include="Security\TestBusinessObjectAuthorisation.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_Edits.cs" />
+    <Compile Include="TestBOPropDateTime.cs" />
+    <Compile Include="TestBOPropGuid.cs" />
+    <Compile Include="TestBOPropLookupList_BusinessObjectLookupList_IntID.cs" />
+    <Compile Include="TestBOPropLookupList_BusinessObjectLookupList_GuidID.cs" />
+    <Compile Include="TestBOPropLookupList_SimpleLookupList.cs" />
+    <Compile Include="TestBoPropString.cs" />
     <Compile Include="TestBusinessObjectSerialisation.cs" />
     <Compile Include="TestPack\AddressTestBO.cs" />
     <Compile Include="ClassDefinition\TestTriggerCol.cs" />
@@ -198,6 +206,10 @@
     <Compile Include="TestBusinessObjectLastUpdatePropertiesLog.cs" />
     <Compile Include="TestBusinessObjectUpdateLog.cs" />
     <Compile Include="TestNumberGenerator.cs" />
+    <Compile Include="DataMappers\TestDataMapper_Bool.cs" />
+    <Compile Include="DataMappers\TestDataMapper_DateTime.cs" />
+    <Compile Include="DataMappers\TestDataMapper_Guid.cs" />
+    <Compile Include="DataMappers\TestDataMapper_String.cs" />
     <Compile Include="TestPropertyComparer.cs" />
     <Compile Include="BusinessObjectLoader\TestQueryBuilder.cs" />
     <Compile Include="BusinessObjectLoader\TestSelectQuery.cs" />

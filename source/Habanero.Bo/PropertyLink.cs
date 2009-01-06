@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.Base;
 
 namespace Habanero.BO
@@ -12,7 +10,7 @@ namespace Habanero.BO
     /// 
     /// You can supply a transform that does some operation on the source value (such as converting to lower case, etc).
     /// 
-    /// Please note that this should not be used extensively in a class of which there are going to be a large number 
+    /// Please note_ that this should not be used extensively in a class of which there are going to be a large number 
     /// of instantiated objects because of the large number of objects and event handlers that will be created
     /// </summary>
     public class PropertyLink<TInput, TOutput>

@@ -35,7 +35,7 @@ namespace Habanero.BO
         /// <summary>
         /// Constructor to initialise the exception
         /// </summary>
-        public BusinessObjectException()
+        protected BusinessObjectException()
         {
         }
 
@@ -44,7 +44,7 @@ namespace Habanero.BO
         /// to display
         /// </summary>
         /// <param name="message">The error message</param>
-        public BusinessObjectException(string message)
+        protected BusinessObjectException(string message)
             : base(message)
         {
         }
@@ -55,7 +55,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="message">The error message</param>
         /// <param name="inner">The inner exception</param>
-        public BusinessObjectException(string message, Exception inner)
+        protected BusinessObjectException(string message, Exception inner)
             : base(message, inner)
         {
         }

@@ -42,7 +42,6 @@ namespace Habanero.DB
         public static string FormatDatabaseDateTime(DateTime date)
         {
             return date.ToString("yyyy-MM-dd hh:mm:ss");
-            //return dte.ToString("dd MMM yyyy HH:mm:ss");
         }
 
         /// <summary>
@@ -58,32 +57,26 @@ namespace Habanero.DB
                 {
                     return DBNull.Value;
                 }
-                else
-                {
-                    return ((Guid) objValue).ToString("B").ToUpper(CultureInfo.InvariantCulture);
-                }
+                return ((Guid) objValue).ToString("B").ToUpper(CultureInfo.InvariantCulture);
             }
-            else if (objValue is bool)
+            if (objValue is bool)
             {
                 return (bool) objValue ? 1 : 0;
             }
-            else if (objValue is Image)
+            if (objValue is Image)
             {
                 return SerialisationUtilities.ObjectToByteArray(objValue);
             }
-            else if (objValue is CustomProperty)
+            if (objValue is CustomProperty)
             {
                 return ((CustomProperty) objValue).GetPersistValue();
             }
-            else if (objValue is TimeSpan)
+            if (objValue is TimeSpan)
             {
                 TimeSpan time = (TimeSpan) objValue;
                 return new DateTime(1900, 1, 1, time.Hours, time.Minutes, time.Seconds, time.Milliseconds);
             }
-            else
-            {
-                return objValue;
-            }
+            return objValue;
         }
 
         /// <summary>
@@ -99,17 +92,17 @@ namespace Habanero.DB
             {
                 return "null";
             }
-            else if (preparedValue is DateTime)
+            if (preparedValue is DateTime)
             {
                 stringValue = FormatDatabaseDateTime((DateTime) preparedValue);
             }
             else if (preparedValue is String)
             {
-            	Decimal decimalValue;
-				if (Decimal.TryParse((string)preparedValue, out decimalValue))
-				{
-					stringValue = (string) preparedValue;
-				} else 
+                Decimal decimalValue;
+                if (Decimal.TryParse((string)preparedValue, out decimalValue))
+                {
+                    stringValue = (string) preparedValue;
+                } else 
                 {
                     stringValue = string.Format("'{0}'", preparedValue);
                 }
@@ -120,39 +113,5 @@ namespace Habanero.DB
             }
             return stringValue;
         }
-
-        ///// <summary>
-        ///// Returns the primary key of the table specified
-        ///// </summary>
-        ///// <param name="connection">The database connection</param>
-        ///// <param name="tableName">The table name</param>
-        ///// <param name="adapter">The adapter</param>
-        ///// <returns>Returns the primary key as a string</returns>
-        //public static String GetPrimaryKeyOfTable(IDbConnection connection, String tableName, IDbDataAdapter adapter)
-        //{
-        //    if (connection.State != ConnectionState.Open)
-        //    {
-        //        connection.Open();
-        //    }
-        //    try
-        //    {
-        //        IDbCommand command = connection.CreateCommand();
-        //        command.CommandText = "select * from " + tableName;
-        //        DataSet dst = new DataSet();
-        //        adapter.SelectCommand = command;
-        //        bool complete = false;
-        //       while (!complete)
-        //        {
-        //            adapter.FillSchema(dst, SchemaType.Source);
-        //            complete = true;
-
-        //        }
-        //        return dst.Tables["Table"].PrimaryKey[0].ColumnName;
-        //    }
-        //    finally
-        //    {
-        //        connection.Close();
-        //    }
-        //}
     }
 }

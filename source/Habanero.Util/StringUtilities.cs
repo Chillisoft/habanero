@@ -132,13 +132,56 @@ namespace Habanero.Util
                 result = new Guid(s);
                 return true;
             }
-            else
-            {
-                result = Guid.Empty;
-                return false;
-            }
+            result = Guid.Empty;
+            return false;
         }
 
+        ///<summary>
+        /// Converts a string representing a boolean in one of many formats.
+        ///</summary>
+        ///<param name="valueToParse">string to be parsed</param>
+        ///<param name="result">the resultant parsed value if parsing was a success</param>
+        ///<returns>true if string was parsed false otherwise</returns>
+        ///<exception cref="ArgumentNullException">
+        ///   Thrown if <pararef name="s"/> is <see langword="null"/>.
+        /// </exception>
+        public static bool BoolTryParse(object valueToParse, out bool result)
+        {
+            try
+            {
+                if (valueToParse is string)
+                {
+                    string stringValue = valueToParse as string;
+                    switch (stringValue.ToUpper())
+                    {
+                        case "TRUE":
+                        case "T":
+                        case "YES":
+                        case "Y":
+                        case "1":
+                        case "-1":
+                            result = true;
+                            return true;
+                        case "FALSE":
+                        case "F":
+                        case "NO":
+                        case "N":
+                        case "0":
+                            result = false;
+                            return true;
+                        default:
+                            result = Convert.ToBoolean(stringValue);
+                            return true;
+                    }
+                }
+                result = Convert.ToBoolean(valueToParse);
+            }
+            catch (Exception ex)
+            {
+                throw new HabaneroDeveloperException("There was an error parsing " + valueToParse + " to a boolean. Please contact your system administrator", "There was an error parsing " + valueToParse + " to a boolean",ex  );
+            }
+            return true;
+        }
         /// <summary>
         /// Indicates the number of times a given string appears in a larger string
         /// </summary>
@@ -324,5 +367,6 @@ namespace Habanero.Util
             }
             return nameValueCollection;
         }
+
     }
 }

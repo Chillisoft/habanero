@@ -26,7 +26,7 @@ namespace Habanero.DB
     /// An exception thrown when an error occurred while attempting to
     /// construct a SQL statement
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class SqlStatementException : Exception
     {
         /// <summary>

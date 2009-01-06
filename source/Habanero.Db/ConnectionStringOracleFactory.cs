@@ -26,15 +26,15 @@ namespace Habanero.DB
     /// </summary>
     public class ConnectionStringOracleFactory : ConnectionStringFactory
     {
-        /// <summary>
-        /// Constructor to initialise a new factory
-        /// </summary>
-        public ConnectionStringOracleFactory()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
+//        /// <summary>
+//        /// Constructor to initialise a new factory
+//        /// </summary>
+//        public ConnectionStringOracleFactory()
+//        {
+//            //
+//            // TODO: Add constructor logic here
+//            //
+//        }
 
         /// <summary>
         /// Checks that each of the arguments provided are valid
@@ -67,14 +67,9 @@ namespace Habanero.DB
         protected override string CreateConnectionString(string server, string database, string userName,
                                                          string password, string port)
         {
-            if (String.IsNullOrEmpty(password))
-            {
-                return String.Format("Data Source={0};user ID={1};", database, userName);
-            }
-            else
-            {
-                return String.Format("Data Source={0};user ID={1};Password={2};", database, userName, password);
-            }
+            return String.IsNullOrEmpty(password) 
+                ? String.Format("Data Source={0};user ID={1};", database, userName) 
+                : String.Format("Data Source={0};user ID={1};Password={2};", database, userName, password);
         }
     }
 }

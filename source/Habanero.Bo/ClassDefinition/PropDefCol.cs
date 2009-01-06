@@ -29,7 +29,7 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class PropDefCol : IPropDefCol
     {
-        private Dictionary<string, IPropDef> _propDefs;
+        private readonly Dictionary<string, IPropDef> _propDefs;
 
         /// <summary>
         /// A constructor to create a new empty collection
@@ -53,9 +53,10 @@ namespace Habanero.BO.ClassDefinition
             {
                 if (!Contains(propertyName.ToUpper()))
                 {
-                    throw new ArgumentException(String.Format(
-                        "The property name '{0}' does not exist in the " +
-                        "collection of property definitions.", propertyName));
+                    throw new ArgumentException
+                        (String.Format
+                             ("The property name '{0}' does not exist in the " + "collection of property definitions.",
+                              propertyName));
                 }
                 return (_propDefs[propertyName.ToUpper()]);
 
@@ -104,15 +105,12 @@ namespace Habanero.BO.ClassDefinition
         ///// of a new object will be set to</param>
         ///// <returns>Returns the new definition created, after it has
         ///// been added to the collection</returns>
-        internal PropDef Add(string propName,
-                           Type propType,
-                           PropReadWriteRule propRWStatus,
-                           string databaseFieldName,
-                           object defaultValue)
+        internal PropDef Add
+            (string propName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName,
+             object defaultValue)
         {
             CheckPropNotAlreadyAdded(propName);
-            PropDef lPropDef = new PropDef(propName, propType, propRWStatus,
-                                           databaseFieldName, defaultValue);
+            PropDef lPropDef = new PropDef(propName, propType, propRWStatus, databaseFieldName, defaultValue);
             _propDefs.Add(lPropDef.PropertyName.ToUpper(), lPropDef);
             return lPropDef;
         }
@@ -121,29 +119,25 @@ namespace Habanero.BO.ClassDefinition
         ///// Creates and adds a new property definition as before, but 
         ///// assumes the database field name is the same as the property name.
         ///// </summary>
-        internal PropDef Add(string propName,
-                           Type propType,
-                           PropReadWriteRule propRWStatus,
-                           object defaultValue)
+        internal PropDef Add(string propName, Type propType, PropReadWriteRule propRWStatus, object defaultValue)
         {
             CheckPropNotAlreadyAdded(propName);
-            PropDef lPropDef = new PropDef(propName, propType, propRWStatus,
-                                           defaultValue);
+            PropDef lPropDef = new PropDef(propName, propType, propRWStatus, defaultValue);
             _propDefs.Add(lPropDef.PropertyName.ToUpper(), lPropDef);
             return lPropDef;
         }
 
-		/// <summary>
-		/// Removes a property definition from the collection
-		/// </summary>
-		/// <param name="propDef">The Property definition to remove</param>
-		protected void Remove(PropDef propDef)
-		{
-			if (Contains(propDef))
-			{
-				_propDefs.Remove(propDef.PropertyName.ToUpper());
-			}
-		}
+        /// <summary>
+        /// Removes a property definition from the collection
+        /// </summary>
+        /// <param name="propDef">The Property definition to remove</param>
+        protected void Remove(PropDef propDef)
+        {
+            if (Contains(propDef))
+            {
+                _propDefs.Remove(propDef.PropertyName.ToUpper());
+            }
+        }
 
         /// <summary>
         /// Indicates if the specified property definition exists
@@ -157,15 +151,15 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
-		/// Indicates if a property definition with the given key exists
-		/// in the collection.
-		/// </summary>
+        /// Indicates if a property definition with the given key exists
+        /// in the collection.
+        /// </summary>
         /// <param name="propertyName">The propertyName to match</param>
-		/// <returns>Returns true if found, false if not</returns>
-		public bool Contains(string propertyName)
-		{
+        /// <returns>Returns true if found, false if not</returns>
+        public bool Contains(string propertyName)
+        {
             return (_propDefs.ContainsKey(propertyName.ToUpper()));
-		}
+        }
 
         /// <summary>
         /// Creates a business object property collection that mirrors
@@ -173,24 +167,24 @@ namespace Habanero.BO.ClassDefinition
         /// each PropDef object in this collection, with that BOProp object
         /// storing an instance of the PropDef object.
         /// </summary>
-        /// <param name="newObject">Whether the new BOProps in the
+        /// <param name="isNewObject">Whether the new BOProps in the
         /// collection will be new objects. See PropDef.CreateBOProp
         /// for more info.</param>
         /// <returns>Returns the new BOPropCol object</returns>
-        public BOPropCol CreateBOPropertyCol(bool newObject)
+        public BOPropCol CreateBOPropertyCol(bool isNewObject)
         {
             BOPropCol lBOPropertyCol = new BOPropCol();
             foreach (IPropDef lPropDef in this)
             {
-                lBOPropertyCol.Add(lPropDef.CreateBOProp(newObject));
+                lBOPropertyCol.Add(lPropDef.CreateBOProp(isNewObject));
             }
             return lBOPropertyCol;
         }
 
-		//public IEnumerator GetEnumerator()
-		//{
-		//    return _propDefs.Values.GetEnumerator();
-		//}
+        //public IEnumerator GetEnumerator()
+        //{
+        //    return _propDefs.Values.GetEnumerator();
+        //}
 
         /// <summary>
         /// Checks if a property definition with that name has already been added
@@ -201,9 +195,8 @@ namespace Habanero.BO.ClassDefinition
         {
             if (Contains(propName) || Contains(propName.ToUpper()))
             {
-                throw new ArgumentException(String.Format(
-                    "A property definition with the name '{0}' already " +
-                    "exists.", propName));
+                throw new ArgumentException
+                    (String.Format("A property definition with the name '{0}' already " + "exists.", propName));
             }
         }
 
@@ -212,13 +205,10 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public int Count
         {
-            get
-            {
-                return _propDefs.Count;
-            }
+            get { return _propDefs.Count; }
         }
 
-		#region IEnumerable<PropDef> Members
+        #region IEnumerable<PropDef> Members
 
         ///<summary>
         ///Returns an enumerator that iterates through the collection.
@@ -229,13 +219,13 @@ namespace Habanero.BO.ClassDefinition
         ///</returns>
         ///<filterpriority>1</filterpriority>
         IEnumerator<IPropDef> IEnumerable<IPropDef>.GetEnumerator()
-		{
-			return _propDefs.Values.GetEnumerator();
-		}
+        {
+            return _propDefs.Values.GetEnumerator();
+        }
 
-		#endregion
+        #endregion
 
-		#region IEnumerable Members
+        #region IEnumerable Members
 
         ///<summary>
         ///Returns an enumerator that iterates through a collection.
@@ -246,11 +236,11 @@ namespace Habanero.BO.ClassDefinition
         ///</returns>
         ///<filterpriority>2</filterpriority>
         IEnumerator IEnumerable.GetEnumerator()
-		{
-			return _propDefs.Values.GetEnumerator();
-		}
+        {
+            return _propDefs.Values.GetEnumerator();
+        }
 
-		#endregion
+        #endregion
 
         #region Equals
 
@@ -265,20 +255,44 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
         public override bool Equals(object obj)
         {
-            if (obj == null) return false;
-            if (obj.GetType() != typeof(PropDefCol)) return false;
-            PropDefCol otherPropDefCol = (PropDefCol)obj;
+            //       
+            // See the full list of guidelines at
+            //   http://go.microsoft.com/fwlink/?LinkID=85237  
+            // and also the guidance for operator== at
+            //   http://go.microsoft.com/fwlink/?LinkId=85238
+            //
+            if (obj == null || GetType() != obj.GetType()) return false;
+
+            return Equals((PropDefCol) obj);
+        }
+
+        ///<summary>
+        /// Returns true if the PropDefCol and all its PropDefs are equal.
+        ///</summary>
+        ///<param name="obj">the PropDefCol to compare to</param>
+        ///<returns></returns>
+        public bool Equals(PropDefCol obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (PropDefCol)) return false;
+            PropDefCol otherPropDefCol = (PropDefCol) obj;
             if (this.Count != otherPropDefCol.Count) return false;
             foreach (PropDef def in this)
             {
                 if (!otherPropDefCol.Contains(def.PropertyName)) return false;
-                return def.Equals(otherPropDefCol[def.PropertyName]);
+                bool equals = def.Equals(otherPropDefCol[def.PropertyName]);
+                if (!equals) return false;
             }
             return true;
         }
 
-        #endregion
+        public override int GetHashCode()
+        {
+            return (_propDefs != null ? _propDefs.GetHashCode() : 0);
+        }
 
+        #endregion
 
         ///<summary>
         /// Clones the propdefcol. NNB: The new propdefcol has the same propdefs in it (i.e. the propdefs are not copied).
@@ -295,10 +309,12 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
-        /// Clones the propdefcol. This method was created so that you could control the depth of the copy. The reason is so that you can limit the
+        /// Clones the propdefcol. This method was created so that you could control the depth of the copy. 
+        /// The reason is so that you can limit the
         ///   extra memory used in cases where the propdef does not need to be copied.
         /// </summary>
-        /// <param name="clonePropDefs">If true then makes a full copy of the propdefs else only makes a copy of the propdefcol.</param>
+        /// <param name="clonePropDefs">If true then makes a full copy of the propdefs else only 
+        /// makes a copy of the propdefcol.</param>
         /// <returns></returns>
         public IPropDefCol Clone(bool clonePropDefs)
         {
@@ -312,7 +328,7 @@ namespace Habanero.BO.ClassDefinition
                 else
                 {
                     newPropDefCol.Add(def);
-                } 
+                }
             }
             return newPropDefCol;
         }

@@ -27,10 +27,10 @@ namespace Habanero.DB
     /// </summary>
     public class ParameterNameGenerator : IParameterNameGenerator
     {
-        private IDbConnection _connection;
+        private readonly IDbConnection _connection;
         private int _number;
-        private string _parameterNameBase = "Param";
-        private string _prefixCharacter;
+        private const string _parameterNameBase = "Param";
+        private readonly string _prefixCharacter;
 
         /// <summary>
         /// Constructor to initialise a new generator
@@ -44,30 +44,23 @@ namespace Habanero.DB
                 return;
             }
             string connectionNamespace = _connection.GetType().Namespace;
-            if (connectionNamespace == "System.Data.OracleClient")
-//            if (connectionNamespace.Substring(0, 17) == "Oracle.DataAccess")
+            switch (connectionNamespace)
             {
-                _prefixCharacter = ":";
-            }
-            else if (connectionNamespace == "Npgsql")
-            {
-                _prefixCharacter = ":";
-            }
-            else if (connectionNamespace == "System.Data.SQLite")
-            {
-                _prefixCharacter = ":";
-            }
-            else if (connectionNamespace == "MySql.Data.MySqlClient")
-            {
-                _prefixCharacter = "?";
-            }
-            else if (connectionNamespace == "FirebirdSql.Data.FirebirdClient")
-            {
-                _prefixCharacter = "@";
-            }
-            else
-            {
-                _prefixCharacter = "@";
+                case "System.Data.OracleClient":
+                    _prefixCharacter = ":";
+                    break;
+                case "Npgsql":
+                    _prefixCharacter = ":";
+                    break;
+                case "System.Data.SQLite":
+                    _prefixCharacter = ":";
+                    break;
+                case "MySql.Data.MySqlClient":
+                    _prefixCharacter = "?";
+                    break;
+                default:
+                    _prefixCharacter = connectionNamespace == "FirebirdSql.Data.FirebirdClient" ? "@" : "@";
+                    break;
             }
         }
 

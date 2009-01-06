@@ -745,7 +745,12 @@ namespace Habanero.DB
         /// </exception>
         public DataTable LoadDataTable(ISqlStatement selectSql, string strSearchCriteria, string strOrderByCriteria)
         {
-            //TODO: This should be rewritten to use dataadaptor.
+            //It was chosen to use a datareader to fill the DataTable instead of using an
+            //  adapter because the data adapter approach requires creating a different adapter depending on the 
+            //  database type. This is understandable but for simple loading of a datatable without all the additional
+            //  schema data it is unneccessary.
+            //  It could however be easily achieved since there is a physical instance of a database connection object
+            //   per database type that inherit from this class e.g. DatabaseConnectionMySQL.
             if (selectSql == null) throw new ArgumentNullException("selectSql");
             IDbConnection con;
             try
@@ -754,7 +759,7 @@ namespace Habanero.DB
                 IDbCommand cmd = con.CreateCommand();
                 selectSql.SetupCommand(cmd);
                 IDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-                
+
                 DataTable dt = new DataTable();
                 dt.TableName = "TableName";
                 if (reader.Read())

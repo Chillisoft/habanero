@@ -30,8 +30,8 @@ namespace Habanero.BO.SqlGeneration
     /// </summary>
     public class DeleteStatementGenerator
     {
-        private BusinessObject _bo;
-        private IDatabaseConnection _connection;
+        private readonly BusinessObject _bo;
+        private readonly IDatabaseConnection _connection;
         
         /// <summary>
         /// Constructor to initialise the generator
@@ -51,17 +51,16 @@ namespace Habanero.BO.SqlGeneration
         /// <returns>Returns a sql statement collection</returns>
         public SqlStatementCollection Generate()
         {
-            SqlStatement deleteSql;
             SqlStatementCollection statementCollection = new SqlStatementCollection();
 
             //AddRelationshipDeleteStatements(statementCollection);
 
-            deleteSql = new SqlStatement(_connection);
+            SqlStatement deleteSql = new SqlStatement(_connection);
             deleteSql.Statement = new StringBuilder(
                 @"DELETE FROM " + SqlFormattingHelper.FormatTableName(_bo.TableName, _connection) +
                                                     " WHERE " + _bo.ID.PersistedDatabaseWhereClause(deleteSql));
             statementCollection.Add(deleteSql);
-            ClassDef currentClassDef = (ClassDef) _bo.ClassDef;
+            ClassDef currentClassDef = _bo.ClassDef;
             while (currentClassDef.IsUsingClassTableInheritance())
             {
                 while (currentClassDef.SuperClassClassDef.SuperClassDef != null &&

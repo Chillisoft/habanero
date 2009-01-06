@@ -177,6 +177,7 @@ namespace Habanero.Test.BO
                 Assert.IsFalse(loadedCircle.Status.IsDeleted);
                 Assert.IsFalse(loadedCircle.Status.IsEditing);
                 Assert.IsFalse(loadedCircle.Status.IsDirty);
+                Assert.AreEqual("", loadedCircle.Status.IsValidMessage);
                 Assert.IsTrue(loadedCircle.Status.IsValid());
             }
 

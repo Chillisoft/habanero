@@ -39,12 +39,11 @@ namespace Habanero.DB
         {
             if (statement == null) throw new ArgumentNullException("statement");
             if (connection == null) throw new ArgumentNullException("connection");
-            IDbCommand cmd;
             if (connection.State != ConnectionState.Open)
             {
                 connection.Open();
             }
-            cmd = connection.CreateCommand();
+            IDbCommand cmd = connection.CreateCommand();
             statement.SetupCommand(cmd);
             cmd.ExecuteNonQuery();
         }
@@ -59,12 +58,11 @@ namespace Habanero.DB
         /// <param name="connection">The database connection</param>
         public static void ExecuteRawSql(string sql, IDbConnection connection)
         {
-            IDbCommand cmd;
             if (connection.State != ConnectionState.Open)
             {
                 connection.Open();
             }
-            cmd = connection.CreateCommand();
+            IDbCommand cmd = connection.CreateCommand();
             cmd.CommandText = sql;
             cmd.ExecuteNonQuery();
         }

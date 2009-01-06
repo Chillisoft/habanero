@@ -162,7 +162,9 @@ namespace Habanero.BO
                     field.Source.ChildSourceLeaf.EntityName = propParentClassDef.GetTableName(propDef);
                     if (criteria.CanBeParametrised())
                     {
-                        criteria.FieldValue = propDef.ConvertValueToPropertyType(criteria.FieldValue);
+                        object returnedValue;
+                        propDef.TryParsePropValue(criteria.FieldValue, out returnedValue );
+                        criteria.FieldValue = returnedValue;
                     }
                 }
             }

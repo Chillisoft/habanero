@@ -26,7 +26,7 @@ namespace Habanero.BO
     /// </summary>
     public class ReadOnlyDataSetProvider : DataSetProvider
     {
-        private bool addPropertyUpdatedHandler = true;
+        private bool _addPropertyUpdatedHandler = true;
 
         /// <summary>
         /// Constructor to initialise a new provider with the business object
@@ -47,7 +47,7 @@ namespace Habanero.BO
             foreach (BusinessObject businessObject in _collection)
             {
                 //businessObject.Updated += UpdatedHandler;
-                if (addPropertyUpdatedHandler)
+                if (_addPropertyUpdatedHandler)
                 {
                     businessObject.PropertyUpdated += UpdatedHandler;
                 }
@@ -75,7 +75,7 @@ namespace Habanero.BO
             }
             //e.BusinessObject.Updated -= UpdatedHandler;
 
-            if (addPropertyUpdatedHandler)
+            if (_addPropertyUpdatedHandler)
             {
                 e.BusinessObject.PropertyUpdated -= UpdatedHandler;
             }
@@ -99,7 +99,7 @@ namespace Habanero.BO
             _table.LoadDataRow(values, true);
             //businessObject.Updated += UpdatedHandler;
 
-            if (addPropertyUpdatedHandler)
+            if (_addPropertyUpdatedHandler)
             {
                 businessObject.PropertyUpdated += UpdatedHandler;
             }
@@ -135,14 +135,13 @@ namespace Habanero.BO
         {
         }
 
+        ///<summary>
+        /// Gets and sets whether the property update handler shold be set or not.
+        ///</summary>
         public bool AddPropertyUpdatedHandler
         {
-            get { return addPropertyUpdatedHandler; }
-            set
-            {
-                addPropertyUpdatedHandler = value;
-                //AddHandlersForUpdates();
-            }
+            get { return _addPropertyUpdatedHandler; }
+            set{ _addPropertyUpdatedHandler = value;}
         }
 
     }

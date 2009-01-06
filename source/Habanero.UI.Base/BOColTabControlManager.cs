@@ -102,24 +102,12 @@ namespace Habanero.UI.Base
                 _tabControl.SelectedIndexChanged += TabChangedHandler;
                 return;
             }
-
-            Dictionary<string, object> list = GetBusinessObjectDisplayValueDictionary();
-            foreach (KeyValuePair<string, object> pair in list)
+            foreach (BusinessObject bo in _businessObjectCollection)
             {
-                BusinessObject businessObject = pair.Value as BusinessObject;
-                if (businessObject != null)
-                {
-                    ITabPage page = _controlFactory.CreateTabPage(pair.Key);
-                    //page.Text =  ;
-                    AddTabPage(page, businessObject);
-                }
+                ITabPage page = _controlFactory.CreateTabPage(bo.ToString());
+                //page.Text =  ;
+                AddTabPage(page, bo);
             }
-            //foreach (BusinessObject bo in businessObjectCollection)
-            //{
-            //    TabPage page = new TabPage(bo.ToString());
-            //    //page.Text =  ;
-            //    AddTabPage(page, bo);
-            //}
             if (_businessObjectCollection.Count > 0)
             {
                 _tabControl.SelectedIndex = 0;
@@ -158,10 +146,10 @@ namespace Habanero.UI.Base
             }
         }
 
-        protected virtual Dictionary<string, object> GetBusinessObjectDisplayValueDictionary()
-        {
-            return BusinessObjectLookupList.CreateDisplayValueDictionary(_businessObjectCollection, false);
-        }
+//        protected virtual Dictionary<string, object> GetBusinessObjectDisplayValueDictionary()
+//        {
+//            return BusinessObjectLookupList.CreateDisplayValueDictionary(_businessObjectCollection, false);
+//        }
 
         /// <summary>
         /// Returns the TabControl object

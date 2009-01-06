@@ -60,13 +60,13 @@ namespace Habanero.Test.BO
             BusinessObjectLastUpdatePropertiesLog log = new BusinessObjectLastUpdatePropertiesLog(userBoProp, dateBoProp);
             //-------------Test Pre-conditions --------------
             Assert.IsNull(GlobalRegistry.SecurityController);
+            Assert.IsNull(userBoProp.Value);
             //-------------Execute test ---------------------
             DateTime beforeUpdate = DateTime.Now;
             log.Update();
             DateTime afterUpdate = DateTime.Now;
             //-------------Test Result ----------------------
-            Assert.IsNotNull(userBoProp.Value);
-            Assert.AreEqual("", userBoProp.Value);
+            Assert.IsNull(userBoProp.Value);
             Assert.IsNotNull(dateBoProp.Value);
             Assert.IsTrue(beforeUpdate <= (DateTime)dateBoProp.Value);
             Assert.IsTrue(afterUpdate >= (DateTime)dateBoProp.Value);

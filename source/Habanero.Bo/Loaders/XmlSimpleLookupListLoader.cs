@@ -30,14 +30,11 @@ namespace Habanero.BO.Loaders
     /// </summary>
     public class XmlSimpleLookupListLoader : XmlLookupListLoader
     {
-        private Dictionary<string, object> _displayValueDictionary;
-
-        ///// <summary>
-        ///// Constructor to initialise a loader
-        ///// </summary>
-        //public XmlSimpleLookupListLoader() : this("", null)
-        //{
-        //}
+        /// <summary>
+        /// Provides a key value pair where the value can be returned for 
+        ///   any displayed value. 
+        /// </summary>
+        private readonly Dictionary<string, object> _displayValueDictionary;
 
         /// <summary>
         /// Constructor to initialise a loader with a dtd path
@@ -56,8 +53,8 @@ namespace Habanero.BO.Loaders
         protected override void LoadLookupListFromReader()
         {
             string options = _reader.GetAttribute("options");
-            if (options != null && options.Length > 0) {
-                string[] optionsArr = options.Split(new char[] {'|'});
+            if (!string.IsNullOrEmpty(options)) {
+                string[] optionsArr = options.Split(new[] {'|'});
                 foreach (string s in optionsArr) {
                     _displayValueDictionary.Add(s, s);
                 }
@@ -67,15 +64,16 @@ namespace Habanero.BO.Loaders
             {
                 string stringPart = _reader.GetAttribute("display");
                 string valuePart = _reader.GetAttribute("value");
-                if (stringPart == null || stringPart.Length == 0)
+                if (string.IsNullOrEmpty(stringPart))
                 {
                     throw new InvalidXmlDefinitionException("An 'item' " +
                         "is missing a 'display' attribute that specifies the " +
                         "string to show to the user in a display.");
                 }
-                if (valuePart == null || valuePart.Length == 0)
+                if (string.IsNullOrEmpty(valuePart))
                 {
                     throw new InvalidXmlDefinitionException("An 'item' " +
+     
                         "is missing a 'value' attribute that specifies the " +
                         "value to store for the given property.");
                 }

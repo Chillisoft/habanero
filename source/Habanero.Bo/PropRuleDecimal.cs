@@ -88,7 +88,7 @@ namespace Habanero.BO
 					}
                 }
             }
-            catch (InvalidXmlDefinitionException ex)
+            catch (InvalidXmlDefinitionException)
             {
                 throw;
             }

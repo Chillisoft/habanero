@@ -202,11 +202,7 @@ namespace Habanero.BO
         /// <returns>A list of the parameters that this rule uses</returns>
     	protected internal override List<string> AvailableParameters()
     	{
-			List<string> parameters = new List<string>();
-			parameters.Add("minLength");
-			parameters.Add("maxLength");
-            parameters.Add("patternMatch");
-            parameters.Add("patternMatchMessage");
+			List<string> parameters = new List<string> {"minLength", "maxLength", "patternMatch", "patternMatchMessage"};
             return parameters;
     	}
 

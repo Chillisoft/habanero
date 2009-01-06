@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Bo", "Habanero.Bo\Habanero.Bo.csproj", "{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Base", "Habanero.Base\Habanero.Base.csproj", "{D04BB138-C144-4406-9A41-17192E7D44BF}"

@@ -38,7 +38,7 @@ namespace Habanero.BO
         private Hashtable _rowIDs;
         private Hashtable _deletedRowIDs;
         private IDatabaseConnection _connection;
-        private bool _isBeingAdded = false;
+        private bool _isBeingAdded;
 
         /// <summary>
         /// An enumeration to specify the state of a row
@@ -131,7 +131,7 @@ namespace Habanero.BO
             }
             if (changedBo != null)
             {
-                changedBo.Delete();
+                changedBo.MarkForDelete();
                 _rowStates[e.Row] = RowState.Deleted;
                 _deletedRowIDs[e.Row] = changedBo.ID.ToString();
                 _rowIDs.Remove(e.Row);
@@ -277,8 +277,7 @@ namespace Habanero.BO
             {
                 //log.Debug("Row Added");
                 _isBeingAdded = true;
-                BusinessObject newBo;
-                newBo = (BusinessObject) _collection.CreateBusinessObject();
+                BusinessObject newBo = (BusinessObject) _collection.CreateBusinessObject();
 
                 //log.Debug("Initialising obj");
                 if (this._objectInitialiser != null)

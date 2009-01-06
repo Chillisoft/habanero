@@ -52,11 +52,11 @@ namespace Habanero.Test
                 this.SetPropertyValue("TestProp", value);
             }
         }
-        public Guid MyBoID
+        public Guid? MyBoID
         {
             get
             {
-                return (Guid)this.GetPropertyValue("MyBoID");
+                return (Guid?)this.GetPropertyValue("MyBoID");
             }
         }
 
@@ -92,7 +92,7 @@ namespace Habanero.Test
             }
         }
 
-        public static ClassDef GetLoadClassDefsNoUIDef()
+        public static ClassDef LoadClassDefsNoUIDef()
         {
                         XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef =
@@ -103,6 +103,24 @@ namespace Habanero.Test
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+        public static ClassDef LoadClassDefs_Integer_PrimaryKey()
+        {
+                        XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID""  type=""Int32"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
+					<primaryKey  isObjectID=""false"">
 						<prop name=""MyBoID"" />
 					</primaryKey>
 				</class>

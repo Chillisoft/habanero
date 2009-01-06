@@ -94,7 +94,7 @@ namespace Habanero.BO
         private readonly EventHandler<BOEventArgs> _restoredEventHandler;
         private readonly EventHandler<BOKeyEventArgs> _updateIDEventHandler;
         private readonly EventHandler<BOEventArgs> _markForDeleteEventHandler;
-        private bool _loading = false;
+        private bool _loading;
         /// <summary>
         /// Default constructor. 
         /// The classdef will be implied from TBusinessObject and the Current Database Connection will be used.

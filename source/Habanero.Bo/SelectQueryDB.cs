@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Util;
 
@@ -208,24 +207,24 @@ namespace Habanero.BO
 //            return joinString;
 //        }
 
-        private string GetJoinString(string currentJointString, string joinFromTableName, string joinFromFieldName,
-            string joinToTableName, string joinToFieldName)
-        {
-            string firstBit = "";
-            if (String.IsNullOrEmpty(currentJointString))
-            {
-                firstBit += " JOIN " + DelimitTable(joinToTableName) + " ON";
-            }
-            else
-            {
-                firstBit += " AND";
-            }
-            string joinString = String.Format("{0} {1} = {2}",
-                firstBit,
-                DelimitField(new Source(joinFromTableName), joinFromFieldName),
-                DelimitField(new Source(joinToTableName), joinToFieldName));
-            return joinString;
-        }
+//        private string GetJoinString(string currentJointString, string joinFromTableName, string joinFromFieldName,
+//            string joinToTableName, string joinToFieldName)
+//        {
+//            string firstBit = "";
+//            if (String.IsNullOrEmpty(currentJointString))
+//            {
+//                firstBit += " JOIN " + DelimitTable(joinToTableName) + " ON";
+//            }
+//            else
+//            {
+//                firstBit += " AND";
+//            }
+//            string joinString = String.Format("{0} {1} = {2}",
+//                firstBit,
+//                DelimitField(new Source(joinFromTableName), joinFromFieldName),
+//                DelimitField(new Source(joinToTableName), joinToFieldName));
+//            return joinString;
+//        }
 
         private void AppendFrom(StringBuilder builder)
         {

@@ -338,7 +338,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             AssertOneObjectInCurrentAndCreatedCollection(cpCol);
 
             //---------------Execute Test ----------------------
-            cpCol.RestoreAll();
+            cpCol.CancelEdits();
 
             //---------------Test Result -----------------------
             AssertAllCollectionsHaveNoItems(cpCol);

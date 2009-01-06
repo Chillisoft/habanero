@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -31,7 +32,6 @@ namespace Habanero.BO
     /// </summary>
     public class BOPrimaryKey : BOKey, IPrimaryKey
     {
-        //		BusinessObjectBase mBO;
         private Guid _newObjectID = Guid.Empty;
 
         /// <summary>
@@ -151,6 +151,41 @@ namespace Habanero.BO
             }
 
             return false;
+        }
+        
+        /// <summary>
+        /// Returns true if the primary key is a propery the object's ID, that is,
+        /// the primary key is a single discrete property that is an immutable Guid and serves as the ID.
+        /// </summary>
+        public bool IsGuidObjectID
+        {
+            get { return ((PrimaryKeyDef) this.KeyDef).IsGuidObjectID; }
+        }
+
+        /// <summary>
+        /// Returns the ID as a Value. 
+        /// <li>"In cases where the <see cref="IBusinessObject"/> has an ID with a single 
+        ///    property this will return the value of the property.
+        /// </li>
+        /// <li>"In cases where the <see cref="IBusinessObject"/>  has an ccomposite ID 
+        ///    (i.e. with more than one property) this will return a list with the values of the properties.
+        /// </li>
+        /// </summary>
+        /// <returns>Returns an object</returns>
+        public object GetAsValue()
+        {
+            List<string> list;
+            list = new List<string>();
+            BOPropCol boPropCol = this.GetBOPropCol();
+            foreach (BOProp  boProp in boPropCol)
+            {
+                if (boPropCol.Count == 1)
+                {
+                    return boProp.Value;
+                }
+                list.Add(boProp.PropertyName + "=" + boProp.Value);
+            }
+            return list;
         }
     }
 }

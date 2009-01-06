@@ -99,7 +99,8 @@ namespace Habanero.BO
             databaseConnection.ExecuteSql(sql, _dbTransaction);
             base.ExecuteTransactionToDataSource(transaction);
         }
-
+        //TODO: Refactor this the relationship should now have the knowledge to do all the 
+        // dereferencing.
         private void DereferenceRelatedChildren(TransactionalBusinessObject transaction)
         {
             foreach (IRelationship relationship in transaction.BusinessObject.Relationships)

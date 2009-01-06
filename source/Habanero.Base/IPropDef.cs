@@ -30,7 +30,7 @@ namespace Habanero.Base
         ///<summary>
         /// The display name for the property.
         ///</summary>
-        string DisplayName { get; }// set; }
+        string DisplayName { get; } // set; }
 
         ///<summary>
         /// The description of the property.
@@ -66,7 +66,7 @@ namespace Habanero.Base
         /// Property Definiton.
         ///</summary>
         ///<param name="rule">The new rules to be added for the Property Definition.</param>
-        void AddPropRule(IPropRule rule);        
+        void AddPropRule(IPropRule rule);
 
         /// <summary>
         /// The database field name - this allows you to have a 
@@ -149,26 +149,19 @@ namespace Habanero.Base
         /// <summary>
         /// The name of the property, e.g. surname
         /// </summary>
-        string PropertyName
-        {
-            get;
-            set;
-        }
+        string PropertyName { get; set; }
 
         ///<summary>
         /// Returns the class definition that this property definition is owned by.
         ///</summary>
-        IClassDef ClassDef { get;  }
+        IClassDef ClassDef { get; }
 
         ///<summary>
         /// Returns the full display name for a property definition.
         /// If there is a unit of measure then it is appended to the display name in brackets e.g. DisplayName (UOM).
         /// If there is no display name then it will return the PascalCase Delimited property Name i.e. Display Name.
         ///</summary>
-        string DisplayNameFull
-        {
-            get;
-        }
+        string DisplayNameFull { get; }
 
         /// <summary>
         /// Creates a new Business Object property (BOProp)
@@ -179,15 +172,30 @@ namespace Habanero.Base
         /// <returns>The newly created BO property</returns>
         IBOProp CreateBOProp(bool assignDefaultValue);
 
+
         ///<summary>
-        /// Converts the 'value to convert' to the appropriate type for the Property definition.
-        /// E.g. A string 'today' will be converted to a datetimetoday object.
+        /// returns true if obj is equal to this object
         ///</summary>
-        ///<param name="valueToConvert">The value requiring conversion.</param>
-        ///<returns>The converted property value</returns>
-        object ConvertValueToPropertyType(object valueToConvert);
-
-
+        ///<param name="obj"></param>
+        ///<returns></returns>
         bool Equals(object obj);
+
+        /// <summary>
+        /// This method provides a the functionality to convert any object to the appropriate
+        ///   type for the particular BOProp Type. e.g it will convert a valid guid string to 
+        ///   a valid Guid Object.
+        /// </summary>
+        /// <param name="valueToParse">The value to be converted</param>
+        /// <param name="returnValue"></param>
+        /// <returns>An object of the correct type.</returns>
+        bool TryParsePropValue(object valueToParse, out object returnValue);
+
+        /// <summary>
+        /// Converts the value of a valid type for this property definition to a string relevant.
+        /// A null value will be oonverted to a zero length string.
+        /// </summary>
+        /// <param name="value">The value to be converted</param>
+        /// <returns>The converted string.</returns>
+        string ConvertValueToString(object value);
     }
 }

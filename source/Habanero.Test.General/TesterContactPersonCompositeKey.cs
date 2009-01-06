@@ -165,7 +165,9 @@ namespace Habanero.Test.General
             //			System.Console.WriteLine("ID:" + id.GetObjectId());
             //			System.Console.WriteLine("Contact.ID:" + myContact.ID.GetObjectId());
             ContactPersonCompositeKey mySecondContactPerson = ContactPersonCompositeKey.GetContactPersonCompositeKey(id);
-            Assert.IsTrue(ReferenceEquals(myContact, mySecondContactPerson));
+            Assert.AreSame(myContact, mySecondContactPerson);
+
+//            Assert.IsTrue(ReferenceEquals(myContact, mySecondContactPerson));
             Assert.AreEqual(myContact.ID,
                             mySecondContactPerson.ID);
             Assert.AreEqual(myContact.GetPropertyValue("FirstName"), mySecondContactPerson.GetPropertyValue("FirstName"));

@@ -30,7 +30,7 @@ namespace Habanero.DB
     /// </summary>
     public class SqlStatementCollection : ISqlStatementCollection
     {
-        private List<ISqlStatement> _list;
+        private readonly List<ISqlStatement> _list;
 
         /// <summary>
         /// Constructor to initialise a new empty collection

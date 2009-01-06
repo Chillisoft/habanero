@@ -134,7 +134,7 @@ namespace Habanero.BO
         /// <returns>An object of type T if one was found, otherwise null</returns>
         public static T GetRelatedBusinessObject<T>(SingleRelationship<T> relationship) where T : class, IBusinessObject, new()
         {
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject<T>(relationship);
+            return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject(relationship);
         }
 
         /// <summary>

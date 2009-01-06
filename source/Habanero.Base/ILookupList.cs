@@ -39,5 +39,18 @@ namespace Habanero.Base
         /// <param name="connection">The database connection</param>
         /// <returns>Returns a collection of string-Guid pairs</returns>
         Dictionary<string, object> GetLookupList(IDatabaseConnection connection);
+
+        ///<summary>
+        /// The property definition that this lookup list is for
+        ///</summary>
+        IPropDef PropDef { get; set; }
+
+        /// <summary>
+        /// Returns the lookup list contents being held where the list is keyed on the list key 
+        ///  either a Guid, int or Business object i.e. the value being stored for the property.
+        /// The display value can be looked up.
+        /// </summary>
+        ///<returns>The Key Value Lookup List</returns>
+        Dictionary<object, string> GetKeyLookupList();
     }
 }
