@@ -23,6 +23,7 @@ using System.Data;
 using System.Threading;
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NMock;
 using NUnit.Framework;
@@ -79,9 +80,34 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_NoPropDefSet_ThrowsError()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseLookupList source = new DatabaseLookupList(Sql);
+            
+            //---------------Assert Precondition----------------
+            
+            //---------------Execute Test ----------------------
+            try
+            {
+                source.GetLookupList(conn);
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (Exception ex)
+            {
+                StringAssert.Contains("There is an application setup error. There is no propdef set for the database lookup list.", ex.Message);
+            }
+            //---------------Test Result -----------------------
+
+        }
+
+        [Test]
         public void TestGetLookupList()
         {
+            PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             DatabaseLookupList source = new DatabaseLookupList(Sql);
+            source.PropDef = propDef;
             Dictionary<string, object> col = source.GetLookupList(conn);
             Assert.AreEqual(3, col.Count);
             string str = "";
@@ -100,7 +126,9 @@ namespace Habanero.Test.BO
         [Test]
         public void TestCallingGetLookupListTwiceOnlyAccessesDbOnce()
         {
+            PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             DatabaseLookupList source = new DatabaseLookupList(Sql);
+            source.PropDef = propDef;
             Dictionary<string, object> col = source.GetLookupList(conn);
             Dictionary<string, object> col2 = source.GetLookupList(conn);
             Assert.AreSame(col2, col);
@@ -113,8 +141,9 @@ namespace Habanero.Test.BO
             dbConnMock.ExpectAndReturn("LoadDataTable", dt, new object[] {statement, "", ""});
             dbConnMock.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection(),
                                        new object[] {});
-
+            PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             DatabaseLookupList source = new DatabaseLookupList(Sql, 100);
+            source.PropDef = propDef;
             Dictionary<string, object> col = source.GetLookupList(conn);
             Thread.Sleep(250);
             Dictionary<string, object> col2 = source.GetLookupList(conn);

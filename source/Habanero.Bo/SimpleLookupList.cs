@@ -92,6 +92,13 @@ namespace Habanero.BO
         ///<returns>The Key Value Lookup List</returns>
         public Dictionary<object, string> GetKeyLookupList()
         {
+            if (this.PropDef == null)
+            {
+                throw new HabaneroDeveloperException
+                     ("There is an application setup error. There is no propdef set for the simple lookup list. Please contact your system administrator",
+                      "There is no propdef set for the simple lookup list.");
+
+            }
             if (this.PropDef != null && _keyValueDictionary.Count != _displayValueDictionary.Count)
             {
                 FillKeyValueDictionary();

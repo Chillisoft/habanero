@@ -279,14 +279,13 @@ namespace Habanero.BO
                 SortedDictionary<string, object> sortedLookupList = new SortedDictionary<string, object>();
                 foreach (BusinessObject bo in col)
                 {
-                    string stringValue = GetAvailableDisplayValue(new ArrayList(sortedLookupList.Keys), bo.ToString());
+                    string stringValue = GetAvailableDisplayValue(sortedLookupList, bo.ToString());
                     sortedLookupList.Add(stringValue, bo);
                 }
 
                 Dictionary<string, object> lookupList = new Dictionary<string, object>();
                 foreach (string key in sortedLookupList.Keys)
                 {
-//                    lookupList.Add(key, sortedLookupList[key].ToString());
                     AddBusinessObjectToLookupList(lookupList, (BusinessObject) sortedLookupList[key], key);
                 }
                 return lookupList;
@@ -296,7 +295,7 @@ namespace Habanero.BO
                 Dictionary<string, object> lookupList = new Dictionary<string, object>();
                 foreach (BusinessObject bo in col)
                 {
-                    string stringValue = GetAvailableDisplayValue(new ArrayList(lookupList.Keys), bo.ToString());
+                    string stringValue = GetAvailableDisplayValue(lookupList, bo.ToString());
                     AddBusinessObjectToLookupList(lookupList, bo, stringValue);
                 }
                 return lookupList;
@@ -311,14 +310,14 @@ namespace Habanero.BO
         ///<summary>
         /// Returns a unique display value for an item of the given name, so that it can be added to the list without the risk of having duplicate entries.
         ///</summary>
-        ///<param name="lookupList">The list of existing values</param>
+        ///<param name="sortedLookupList"></param>
         ///<param name="stringValue">The new value to determine a display value for</param>
         ///<returns>Returns a unique display value for an item of the given name.</returns>
-        public static string GetAvailableDisplayValue(ArrayList lookupList, string stringValue)
+        private static string GetAvailableDisplayValue(IDictionary<string, object> sortedLookupList,string stringValue)
         {
             string originalValue = null;
             int count = 1;
-            while (lookupList.Contains(stringValue))
+            while (sortedLookupList.ContainsKey(stringValue))
             {
                 if (originalValue == null) originalValue = stringValue;
                 stringValue = originalValue + "(" + ++count + ")";

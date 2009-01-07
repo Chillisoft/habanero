@@ -22,6 +22,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Util;
@@ -41,15 +42,16 @@ namespace Habanero.BO
     {
         private string _statement;
         private Type _lookupObjectType;
-		private string _assemblyName;
-		private string _className;
+        private string _assemblyName;
+        private string _className;
         private int _timeout;
-		private DateTime _lastCallTime;
+        private DateTime _lastCallTime;
         private Dictionary<string, object> _lookupList;
+        private Dictionary<object, string> _keyLookupList;
 
-		#region Constructors
+        #region Constructors
 
-		/// <summary>
+        /// <summary>
         /// Constructor that specifies the sql statement
         /// </summary>
         /// <param name="statement">The sql statement used to specify which
@@ -65,38 +67,37 @@ namespace Habanero.BO
         /// <param name="statement">The sql statement used to specify which
         /// objects to load for the lookup-list</param>
         /// <param name="lookupObjectType">The object type</param>
-        public DatabaseLookupList(string statement, Type lookupObjectType)
-            : this(statement, 10000, lookupObjectType)
+        public DatabaseLookupList(string statement, Type lookupObjectType) : this(statement, 10000, lookupObjectType)
         {
         }
 
-		/// <summary>
-		/// Constructor that specifies the sql statement and the type of 
-		/// object represented in the lookup-list
-		/// </summary>
-		/// <param name="statement">The sql statement used to specify which
-		/// objects to load for the lookup-list</param>
-		/// <param name="assemblyName">The class type assembly name.</param>
-		/// <param name="className">The class type name</param>
-		public DatabaseLookupList(string statement, string assemblyName, string className)
-			: this(statement, 10000, null, assemblyName, className)
-		{
-		}
+        /// <summary>
+        /// Constructor that specifies the sql statement and the type of 
+        /// object represented in the lookup-list
+        /// </summary>
+        /// <param name="statement">The sql statement used to specify which
+        /// objects to load for the lookup-list</param>
+        /// <param name="assemblyName">The class type assembly name.</param>
+        /// <param name="className">The class type name</param>
+        public DatabaseLookupList(string statement, string assemblyName, string className)
+            : this(statement, 10000, null, assemblyName, className)
+        {
+        }
 
-		/// <summary>
-		/// Constructor that specifies the sql statement and the type of 
-		/// object represented in the lookup-list
-		/// </summary>
-		/// <param name="statement">The sql statement used to specify which
-		/// objects to load for the lookup-list</param>
-		/// <param name="timeout">The time-out period in milliseconds after
-		/// which a fresh copy will be loaded</param>
-		/// <param name="assemblyName">The class type assembly name.</param>
-		/// <param name="className">The class type name</param>
-		public DatabaseLookupList(string statement, int timeout, string assemblyName, string className)
-			: this(statement, timeout, null, assemblyName, className)
-		{
-		}
+        /// <summary>
+        /// Constructor that specifies the sql statement and the type of 
+        /// object represented in the lookup-list
+        /// </summary>
+        /// <param name="statement">The sql statement used to specify which
+        /// objects to load for the lookup-list</param>
+        /// <param name="timeout">The time-out period in milliseconds after
+        /// which a fresh copy will be loaded</param>
+        /// <param name="assemblyName">The class type assembly name.</param>
+        /// <param name="className">The class type name</param>
+        public DatabaseLookupList(string statement, int timeout, string assemblyName, string className)
+            : this(statement, timeout, null, assemblyName, className)
+        {
+        }
 
         /// <summary>
         /// Constructor that specifies the sql statement and time-out period
@@ -109,115 +110,111 @@ namespace Habanero.BO
         {
         }
 
-    	/// <summary>
-    	/// Constructor that specifies the sql statement, time-out period and
-    	/// the type of object represented in the lookup-list
-    	/// </summary>
-    	/// <param name="statement">The sql statement used to specify which
-    	/// objects to load for the lookup-list</param>
-    	/// <param name="timeout">The time-out period in milliseconds after
-    	/// which a fresh copy will be loaded</param>
-    	/// <param name="lookupObjectType">The object type</param>
-    	public DatabaseLookupList(string statement, int timeout, Type lookupObjectType)
-    		: this(statement, timeout, lookupObjectType, null, null)
+        /// <summary>
+        /// Constructor that specifies the sql statement, time-out period and
+        /// the type of object represented in the lookup-list
+        /// </summary>
+        /// <param name="statement">The sql statement used to specify which
+        /// objects to load for the lookup-list</param>
+        /// <param name="timeout">The time-out period in milliseconds after
+        /// which a fresh copy will be loaded</param>
+        /// <param name="lookupObjectType">The object type</param>
+        public DatabaseLookupList(string statement, int timeout, Type lookupObjectType)
+            : this(statement, timeout, lookupObjectType, null, null)
         {
-		}
+        }
 
         /// <summary>
         /// Private constructor with all available parameters
         /// </summary>
-		private DatabaseLookupList(string statement, int timeout, 
-			Type lookupObjectType, string assemblyName, string className)
-		{
-			_statement = statement;
-			_timeout = timeout;
-			if (lookupObjectType != null)
-			{
-				MyLookupObjectType = lookupObjectType;
-			}else
-			{
-				_assemblyName = assemblyName;
-				_className = className;
-				_lookupObjectType = null;
-			}
-			_lastCallTime = DateTime.MinValue;
-		}
+        private DatabaseLookupList
+            (string statement, int timeout, Type lookupObjectType, string assemblyName, string className)
+        {
+            _statement = statement;
+            _timeout = timeout;
+            if (lookupObjectType != null)
+            {
+                MyLookupObjectType = lookupObjectType;
+            }
+            else
+            {
+                _assemblyName = assemblyName;
+                _className = className;
+                _lookupObjectType = null;
+            }
+            _lastCallTime = DateTime.MinValue;
+        }
 
-		#endregion Constructors
+        #endregion Constructors
 
-		#region Properties
+        #region Properties
 
         /// <summary>
         /// Gets and sets the assembly name for the class being sourced for data
         /// </summary>
-		public string AssemblyName
-		{
-			get { return _assemblyName; }
-			protected set
-			{
-				if (_assemblyName != value)
-				{
-					_className = null;
-					_lookupObjectType = null;
-				}
-				_assemblyName = value;
-			}
-		}
+        public string AssemblyName
+        {
+            get { return _assemblyName; }
+            protected set
+            {
+                if (_assemblyName != value)
+                {
+                    _className = null;
+                    _lookupObjectType = null;
+                }
+                _assemblyName = value;
+            }
+        }
 
         /// <summary>
         /// Gets and sets the class name being sourced for data
         /// </summary>
-		public string ClassName
-		{
-			get { return _className; }
-			protected set
-			{
-				if (_className != value)
-				{
-					_lookupObjectType = null;
-				}
-				_className = value;
-			}
-		}
+        public string ClassName
+        {
+            get { return _className; }
+            protected set
+            {
+                if (_className != value)
+                {
+                    _lookupObjectType = null;
+                }
+                _className = value;
+            }
+        }
 
-		/// <summary>
-		/// Gets the sql statement which is used to specify which
-		/// objects to load for the lookup-list
-		/// </summary>
-		public string SqlString
-		{
-			get { return _statement; }
-			set { _statement = value; }
-		}
+        /// <summary>
+        /// Gets the sql statement which is used to specify which
+        /// objects to load for the lookup-list
+        /// </summary>
+        public string SqlString
+        {
+            get { return _statement; }
+            set { _statement = value; }
+        }
 
-		/// <summary>
-		/// Gets and sets the time-out period in seconds after which a fresh
-		/// copy will be loaded
-		/// </summary>
-		public int TimeOut
-    	{
-			get { return _timeout; }
-    		set { _timeout = value; }
-    	}
+        /// <summary>
+        /// Gets and sets the time-out period in seconds after which a fresh
+        /// copy will be loaded
+        /// </summary>
+        public int TimeOut
+        {
+            get { return _timeout; }
+            set { _timeout = value; }
+        }
 
-		/// <summary>
-		/// Gets the class definition of the lookup type
-		/// </summary>
-		public ClassDef ClassDef
-		{
-			get
-			{
-			    return MyLookupObjectType == null 
-                    ? null 
-                    : ClassDef.ClassDefs[MyLookupObjectType];
-			}
-		}
+        /// <summary>
+        /// Gets the class definition of the lookup type
+        /// </summary>
+        public ClassDef ClassDef
+        {
+            get { return MyLookupObjectType == null ? null : ClassDef.ClassDefs[MyLookupObjectType]; }
+        }
 
-		#endregion Properties
+        #endregion Properties
 
-		#region ILookupList Implementation
+        #region ILookupList Implementation
 
-		/// <summary>
+        /// <summary>
         /// Returns a lookup-list loaded using the sql 
         /// statement stored in this instance. If the
         /// time-out period has not expired, then the currently held list
@@ -244,6 +241,7 @@ namespace Habanero.BO
                 return _lookupList;
             }
             _lookupList = new Dictionary<string, object>();
+            _keyLookupList = new Dictionary<object, string>();
             ISqlStatement statement = new SqlStatement(connection);
             statement.Statement.Append(_statement);
 
@@ -251,49 +249,85 @@ namespace Habanero.BO
             ArrayList list = new ArrayList(dt.Rows.Count);
             foreach (DataRow row in dt.Rows)
             {
-                string originalValue = null;
-                int count = 1;
-                string stringValue = DBNull.Value.Equals(row[1]) ? "" : (string)row[1];
-                while (_lookupList.ContainsKey(stringValue)) {
-                    if (originalValue == null) originalValue = stringValue;
-                    stringValue = originalValue + "(" + ++count + ")";
-                }
-                _lookupList.Add(stringValue, new Guid((string)row[0]));
+                string stringValue = DBNull.Value.Equals(row[1]) ? "" : Convert.ToString(row[1]);
+                stringValue = GetAvailableDisplayValue(stringValue);
+                AddValuesToLookupList(row, stringValue);
             }
             _lastCallTime = DateTime.Now;
             return _lookupList;
-		}
+        }
+
+        ///<summary>
+        /// Returns a unique display value for an item of the given name, so that it can be added to the list without the risk of having duplicate entries.
+        ///</summary>
+        ///<param name="stringValue">The new value to determine a display value for</param>
+        ///<returns>Returns a unique display value for an item of the given name.</returns>
+        private string GetAvailableDisplayValue(string stringValue)
+        {
+            string originalValue = null;
+            int count = 1;
+            while (_lookupList.ContainsKey(stringValue))
+            {
+                if (originalValue == null) originalValue = stringValue;
+                stringValue = originalValue + "(" + ++count + ")";
+            }
+            return stringValue;
+        }
+
+        private void AddValuesToLookupList(DataRow row, string stringValue)
+        {
+            object parsedKey;
+            if (this.PropDef == null)
+            {
+                throw new HabaneroDeveloperException
+                     ("There is an application setup error. There is no propdef set for the database lookup list. Please contact your system administrator",
+                      "There is no propdef set for the database lookup list.");
+
+            }
+            if (!this.PropDef.TryParsePropValue(row[0], out parsedKey))
+            {
+                throw new HabaneroDeveloperException
+                    ("There is an application setup error Please contact your system administrator",
+                     "There is a class definition setup error the database lookup list has lookup value items that are not of type "
+                     + this.PropDef.PropertyTypeName);
+            }
+
+            _lookupList.Add(stringValue, parsedKey);
+            _keyLookupList.Add(parsedKey, stringValue);
+        }
 
         public IPropDef PropDef { get; set; }
+
         public Dictionary<object, string> GetKeyLookupList()
         {
             //TODO: Fix this
-            return new Dictionary<object, string>();
+            //return new Dictionary<object, string>();
+            return _keyLookupList;
         }
 
         #endregion ILookupList Implementation
 
-		#region Type Initialisation
+        #region Type Initialisation
 
-		private Type MyLookupObjectType
-		{
-			get
-			{
-				TypeLoader.LoadClassType(ref _lookupObjectType,_assemblyName,_className,
-					"source class", "Database Lookup List Source Definition");
-				return _lookupObjectType;
-			}
-			set
-			{
-				_lookupObjectType = value;
-				TypeLoader.ClassTypeInfo(_lookupObjectType, out _assemblyName, out _className);
-			}
-		}
+        private Type MyLookupObjectType
+        {
+            get
+            {
+                TypeLoader.LoadClassType
+                    (ref _lookupObjectType, _assemblyName, _className, "source class",
+                     "Database Lookup List Source Definition");
+                return _lookupObjectType;
+            }
+            set
+            {
+                _lookupObjectType = value;
+                TypeLoader.ClassTypeInfo(_lookupObjectType, out _assemblyName, out _className);
+            }
+        }
 
-		#endregion Type Initialisation
+        #endregion Type Initialisation
 
-
-		/// <summary>
+        /// <summary>
         /// Returns a lookup-list loaded using the sql statement stored in 
         /// this instance. The database connection used is the
         /// one associated with the business object provided. If the
@@ -307,6 +341,5 @@ namespace Habanero.BO
         {
             return this.GetLookupList(DatabaseConnection.CurrentConnection);
         }
-		 
     }
 }

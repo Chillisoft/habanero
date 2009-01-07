@@ -54,19 +54,44 @@ namespace Habanero.Test.BO
             Assert.AreSame(propDef, simpleLookupList.PropDef);
 
         }
+
+        [Test]
+        public void Test_NoPropDefSet_ThrowsError()
+        {
+            //---------------Set up test pack-------------------
+            SimpleLookupList simpleLookupList = new SimpleLookupList(_collection);
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                simpleLookupList.GetKeyLookupList();
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (Exception ex)
+            {
+                StringAssert.Contains("There is an application setup error. There is no propdef set for the simple lookup list.", ex.Message);
+            }
+            //---------------Test Result -----------------------
+
+        }
+
         [Test]
         public void Test_SimpleLookup_Create_SetsUpKeyLookupList()
         {
             //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, _collection.Count);
             //---------------Execute Test ----------------------
             SimpleLookupList simpleLookupList = new SimpleLookupList(_collection);
-
+            simpleLookupList.PropDef = propDef;
             //---------------Assert Precondition----------------
             Assert.AreEqual(_collection.Count, simpleLookupList.GetLookupList().Count);
             Assert.IsNotNull(simpleLookupList.GetKeyLookupList());
-            Assert.AreEqual(0, simpleLookupList.GetKeyLookupList().Count);
+            Assert.AreEqual(2, simpleLookupList.GetKeyLookupList().Count);
         }
 
         [Test]

@@ -160,6 +160,8 @@
     <Compile Include="TestBOPropGuid.cs" />
     <Compile Include="TestBOPropLookupList_BusinessObjectLookupList_IntID.cs" />
     <Compile Include="TestBOPropLookupList_BusinessObjectLookupList_GuidID.cs" />
+    <Compile Include="TestBOPropLookupList_DatabaseLookupList_GuidID.cs" />
+    <Compile Include="TestBOPropLookupList_DatabaseLookupList_Int.cs" />
     <Compile Include="TestBOPropLookupList_SimpleLookupList.cs" />
     <Compile Include="TestBoPropString.cs" />
     <Compile Include="TestBusinessObjectSerialisation.cs" />
