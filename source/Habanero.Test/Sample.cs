@@ -558,6 +558,30 @@ namespace Habanero.Test
 						</form>");
             }
 
+            private UIForm GetSimpleUIFormDef_3Columns_1Column_2RowSpan()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                    loader.LoadUIFormDef(
+                        @"<form>
+								<columnLayout width=""450"">
+                                    <field label=""TextBoxRowSpan2"" property=""SampleText"">
+                                        <parameter name=""rowSpan"" value=""2"" />
+                                    </field>
+                                  </columnLayout>
+                                  <columnLayout width=""250"">
+									  <field label=""Col2TextBox1"" property=""SampleText2"" type=""TextBox"" >
+                                         <parameter name=""dateFormat"" value=""yyyy/MM/dd"" />
+                                       </field>
+                                    <field label=""Col2TextBox2"" property=""SampleText2"" type=""TextBox"" />
+                                </columnLayout>
+                                <columnLayout width=""250"">
+                                     <field label=""Col3TextBox1"" property=""SampleText2"" type=""TextBox"" />
+                                     <field label=""Col3TextBox2"" property=""SampleText2"" type=""TextBox"" />
+                                  </columnLayout>
+                            </form>");
+            }
+
             private UIForm GetSimpleUIFormDef_2Columns_2_1_ColSpan()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
@@ -854,6 +878,11 @@ namespace Habanero.Test
             public UIFormTab GetFormTabOneFieldNoColumnWidth()
             {
                 return GetSimpleUIFormDef_NoColumnWidth()[0];
+            }
+
+            public UIFormTab GetFormTabThreeColumnsOneColumnWithRowSpan()
+            {
+                return GetSimpleUIFormDef_3Columns_1Column_2RowSpan()[0];
             }
 
             public UIFormTab GetFormTabOneColumnThreeRowsWithRowSpan()

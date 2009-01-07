@@ -250,7 +250,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// A super-class for user interface elements that provide filter clauses
         /// </summary>
-        private abstract class FilterUI
+        public abstract class FilterUI
         {
             protected readonly IFilterClauseFactory _clauseFactory;
             protected readonly string _columnName;
