@@ -1,8 +1,10 @@
 using System;
+using Habanero.Base;
+using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
-    public static class TestUtils
+    public static class BOTestUtils
     {
         private static readonly Random rndm = new Random();
 
@@ -20,6 +22,12 @@ namespace Habanero.Test.BO
         {
             GC.Collect();
             GC.WaitForPendingFinalizers();
+        }
+
+        public static void AssertBOStateIsValidAfterDelete(IBusinessObject bo)
+        {
+            Assert.IsTrue(bo.Status.IsNew);
+            Assert.IsTrue(bo.Status.IsDeleted);
         }
     }
 }

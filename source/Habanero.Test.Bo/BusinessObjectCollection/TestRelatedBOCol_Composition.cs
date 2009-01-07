@@ -116,7 +116,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
-            ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
             contactPerson.Surname = TestUtil.CreateRandomString();
             contactPerson.FirstName = TestUtil.CreateRandomString();
             contactPerson.Save();
@@ -124,9 +124,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             OrganisationTestBO alternateOrganisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
 
             //---------------Assert Precondition----------------
-            util.AssertOneObjectInCurrentPersistedCollection(cpCol);
+            util.AssertAllCollectionsHaveNoItems(cpCol);
             Assert.IsFalse(contactPerson.Status.IsNew);
-            Assert.AreSame(contactPerson.Organisation, organisationTestBO);
 
             //---------------Execute Test ----------------------
             try

@@ -207,7 +207,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
-            ContactPersonTestBO cp = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtils.RandomString, TestUtils.RandomString);
+            ContactPersonTestBO cp = ContactPersonTestBO.CreateUnsavedContactPerson(BOTestUtils.RandomString, BOTestUtils.RandomString);
             
             cpCol.AddedBusinessObjects.Add(cp);
 
@@ -226,7 +226,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
-            ContactPersonTestBO cp = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtils.RandomString, TestUtils.RandomString);
+            ContactPersonTestBO cp = ContactPersonTestBO.CreateUnsavedContactPerson(BOTestUtils.RandomString, BOTestUtils.RandomString);
 
             cpCol.MarkedForDeleteBusinessObjects.Add(cp);
 
@@ -245,7 +245,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO.DeleteAllContactPeople();
             CreateTwoSavedContactPeople();
-            ContactPersonTestBO cp = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtils.RandomString, TestUtils.RandomString);
+            ContactPersonTestBO cp = ContactPersonTestBO.CreateUnsavedContactPerson(BOTestUtils.RandomString, BOTestUtils.RandomString);
             cpCol.LoadAll();
             cpCol.Remove(cp);
 
@@ -642,7 +642,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>("");
 
             ContactPersonTestBO createdCp = cpCol.CreateBusinessObject();
-            createdCp.Surname = TestUtils.RandomString;
+            createdCp.Surname = BOTestUtils.RandomString;
 
             //TODO: persisted, created, deleted, and removed BO's should be cloned. 
             BusinessObjectCollection<ContactPersonTestBO> clone = cpCol.Clone();

@@ -51,7 +51,7 @@ namespace Habanero.Test.BO
             
         }
 
-        protected override TransactionalBusinessObject CreateTransactionalBusinessObject(IBusinessObject businessObject)
+        protected internal override TransactionalBusinessObject CreateTransactionalBusinessObject(IBusinessObject businessObject)
         {
 
             return new TransactionalBusinessObject(businessObject);

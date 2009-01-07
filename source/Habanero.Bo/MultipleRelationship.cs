@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
@@ -39,13 +40,21 @@ namespace Habanero.BO
         /// The collection of business objects that is managed by this relationship.
         ///</summary>
         IBusinessObjectCollection BusinessObjectCollection { get; }
+
+    }
+
+    public abstract class MultipleRelationshipBase : Relationship
+    {
+        protected MultipleRelationshipBase(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol) : base(owningBo, lRelDef, lBOPropCol) {}
+
+        internal abstract IBusinessObjectCollection GetLoadedBOColInternal();
     }
 
     /// <summary>
     /// Manages a relationship where the relationship owner relates to several
     /// other objects
     /// </summary>
-    public class MultipleRelationship<TBusinessObject> : Relationship<TBusinessObject>, IMultipleRelationship
+    public class MultipleRelationship<TBusinessObject> : MultipleRelationshipBase, IMultipleRelationship
         where TBusinessObject : class, IBusinessObject, new()
     {
         protected BusinessObjectCollection<TBusinessObject> _boCol;
@@ -66,6 +75,15 @@ namespace Habanero.BO
                 RelationshipUtils.CreateNewRelatedBusinessObjectCollection(_relDef.RelatedObjectClassType, this);
         }
 
+        internal override void DereferenceChildren(TransactionCommitter committer) {
+            IBusinessObjectCollection col = BusinessObjectCollection;
+            for (int i = col.Count - 1; i >= 0; i--)
+            {
+                IBusinessObject bo = col[i];
+                DereferenceChild(committer, bo);
+            }
+        }
+
         ///<summary>
         /// Returns whether the relationship is dirty or not.
         /// A relationship is always dirty if it has Added, created, removed or deleted Related business objects.
@@ -76,8 +94,7 @@ namespace Habanero.BO
         {
             get
             {
-                bool dirtyCollections = HasDirtyEditingCollections;
-                if (dirtyCollections) return true;
+                if (HasDirtyEditingCollections) return true;
                 if (this.RelationshipDef.RelationshipType == RelationshipType.Aggregation ||
                     RelationshipDef.RelationshipType == RelationshipType.Composition)
                 {
@@ -109,6 +126,14 @@ namespace Habanero.BO
             }
         }
 
+        public IBusinessObjectCollection CurrentBusinessObjectCollection
+        {
+            get
+            {
+                return _boCol;
+            }
+        }
+
         /// <summary>
         /// Returns the collection for this relationship.  The collection is refreshed before
         /// it is returned.
@@ -121,79 +146,19 @@ namespace Habanero.BO
                 return _boCol;
             }
         }
-        
-        private delegate void Add(IBusinessObject bo);
-
-        private delegate bool Contains(IBusinessObject bo);
-        
-        ///<summary>
-        /// Returns a list of all the related objects that are dirty.
-        /// In the case of a composition or aggregation this will be a list of all 
-        ///   dirty related objects (child objects). 
-        /// In the case of association
-        ///   this will only be a list of related objects that are added, removed, marked4deletion or created
-        ///   as part of the relationship.
-        ///</summary>
-        protected override IList<IBusinessObject> DoGetDirtyChildren()
-        {
-            IList<IBusinessObject> dirtyBusinessObjects = new List<IBusinessObject>();
-            PopulateDirtyBusinessObjects(dirtyBusinessObjects.Add, dirtyBusinessObjects.Contains);
-            return dirtyBusinessObjects;
-        }
-
-        protected override IList<TBusinessObject> DoGetDirtyChildren_Typed()
-        {
-            IList<TBusinessObject> dirtyBusinessObjects = new List<TBusinessObject>();
-            PopulateDirtyBusinessObjects
-                (bo => dirtyBusinessObjects.Add((TBusinessObject) bo),
-                 bo => dirtyBusinessObjects.Contains((TBusinessObject) bo));
-            return dirtyBusinessObjects;
-        }
-
-        private void PopulateDirtyBusinessObjects(Add add, Contains contains)
-        {
-            if (HasDirtyEditingCollections)
-            {
-                foreach (IBusinessObject bo in _boCol.CreatedBusinessObjects)
-                {
-                    add(bo);
-                }
-                foreach (IBusinessObject bo in _boCol.MarkedForDeleteBusinessObjects)
-                {
-                    add(bo);
-                }
-                foreach (IBusinessObject bo in _boCol.RemovedBusinessObjects)
-                {
-                    add(bo);
-                }
-                foreach (IBusinessObject bo in _boCol.AddedBusinessObjects)
-                {
-                    add(bo);
-                }
-            }
-            if (this.RelationshipDef.RelationshipType == RelationshipType.Composition
-                || this.RelationshipDef.RelationshipType == RelationshipType.Aggregation)
-            {
-                foreach (IBusinessObject bo in _boCol.PersistedBusinessObjects)
-                {
-                    if (bo.Status.IsDirty && !contains(bo))
-                    {
-                        add(bo);
-                    }
-                }
-            }
-        }
 
         protected override void DoInitialisation()
         {
             RelationshipUtils.SetupCriteriaForRelationship(this, _boCol);
         }
 
+        internal override void UpdateRelationshipAsPersisted() {  }
+
         /// <summary>
         /// Returns the underlying collection without refreshing it.
         /// </summary>
         /// <returns></returns>
-        internal IBusinessObjectCollection GetLoadedBOColInternal()
+        internal override IBusinessObjectCollection GetLoadedBOColInternal()
         {
             return _boCol;
         }
@@ -208,6 +173,75 @@ namespace Habanero.BO
             {
                 if (_relDef.OrderCriteria == null) return new OrderCriteria();
                 return _relDef.OrderCriteria;
+            }
+        }
+
+        internal override void AddDirtyChildrenToTransactionCommitter(TransactionCommitter transactionCommitter)
+        {
+            foreach (TBusinessObject businessObject in GetDirtyChildren())
+            {
+                transactionCommitter.AddBusinessObject(businessObject);
+            }
+            if (this.RelationshipDef.RelationshipType == RelationshipType.Association)
+            {
+                foreach (TBusinessObject businessObject in _boCol.AddedBusinessObjects)
+                {
+                    ISingleRelationship reverseRelationship = GetReverseRelationship(businessObject) as ISingleRelationship;
+                    if (reverseRelationship != null)
+                    {
+                        transactionCommitter.AddTransaction(new TransactionalSingleRelationship_Added(reverseRelationship));
+                    }
+                }
+                foreach (TBusinessObject businessObject in _boCol.RemovedBusinessObjects)
+                {
+                    ISingleRelationship reverseRelationship = GetReverseRelationship(businessObject) as ISingleRelationship;
+                    if (reverseRelationship != null)
+                    {
+                        transactionCommitter.AddTransaction(new TransactionalSingleRelationship_Removed(reverseRelationship));
+                    }
+                }
+            }
+
+        }
+
+        internal IList<TBusinessObject> GetDirtyChildren()
+        {
+            IList<TBusinessObject> dirtyChildren = new List<TBusinessObject>();
+            foreach (TBusinessObject bo in _boCol.CreatedBusinessObjects)
+            {
+                dirtyChildren.Add(bo);
+            }
+            foreach (TBusinessObject bo in _boCol.MarkedForDeleteBusinessObjects)
+            {
+                dirtyChildren.Add(bo);
+            }
+            if (this.RelationshipDef.RelationshipType == RelationshipType.Composition
+                || this.RelationshipDef.RelationshipType == RelationshipType.Aggregation)
+            {
+                foreach (TBusinessObject bo in _boCol.RemovedBusinessObjects)
+                {
+                    dirtyChildren.Add(bo);
+                }
+                foreach (TBusinessObject bo in _boCol.AddedBusinessObjects)
+                {
+                    dirtyChildren.Add(bo);
+                }
+                foreach (TBusinessObject bo in _boCol.PersistedBusinessObjects)
+                {
+                    if (bo.Status.IsDirty && !dirtyChildren.Contains(bo))
+                    {
+                        dirtyChildren.Add(bo);
+                    }
+                }
+            }
+            return dirtyChildren;
+        }
+
+        internal override void DeleteChildren(TransactionCommitter committer) {
+            IBusinessObjectCollection col = BusinessObjectCollection;
+            for (int i = col.Count - 1; i >= 0; i--)
+            {
+                DeleteChild(committer, col[i]);
             }
         }
     }

@@ -264,7 +264,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
 
             ContactPersonTestBO createdCp = cpCol.CreateBusinessObject();
-            createdCp.Surname = TestUtils.RandomString;
+            createdCp.Surname = BOTestUtils.RandomString;
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, cpCol.Count);
@@ -291,7 +291,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
 
             ContactPersonTestBO createdCp = cpCol.CreateBusinessObject();
-            createdCp.Surname = TestUtils.RandomString;
+            createdCp.Surname = BOTestUtils.RandomString;
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, cpCol.Count);
@@ -316,7 +316,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
 
             ContactPersonTestBO createdCp = cpCol.CreateBusinessObject();
-            createdCp.Surname = TestUtils.RandomString;
+            createdCp.Surname = BOTestUtils.RandomString;
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, cpCol.Count);
@@ -340,7 +340,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
 
             ContactPersonTestBO createdCp = cpCol.CreateBusinessObject();
-            createdCp.Surname = TestUtils.RandomString;
+            createdCp.Surname = BOTestUtils.RandomString;
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, cpCol.Count);

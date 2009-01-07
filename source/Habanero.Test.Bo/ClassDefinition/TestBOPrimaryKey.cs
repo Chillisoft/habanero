@@ -110,7 +110,7 @@ namespace Habanero.BO
             ContactPersonTestBO.LoadClassDefWithCompositePrimaryKey();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             Guid contactPersonID = Guid.NewGuid();
-            string surname = TestUtils.RandomString;
+            string surname = BOTestUtils.RandomString;
             contactPersonTestBO.ContactPersonID = contactPersonID;
             contactPersonTestBO.Surname = surname;
             //---------------Assert Precondition----------------

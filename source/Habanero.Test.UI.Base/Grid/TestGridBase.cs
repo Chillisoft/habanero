@@ -597,7 +597,7 @@ namespace Habanero.Test.UI.Base
             for (int i = 0; i < 200; i++)
             {
                 MyBO newBO = new MyBO();
-                newBO.TestProp = TestUtils.RandomString;
+                newBO.TestProp = BOTestUtils.RandomString;
                 col.Add(newBO);
             }
             AddControlToForm(gridBase);

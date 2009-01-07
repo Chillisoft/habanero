@@ -280,7 +280,7 @@ namespace Habanero.Test.BO
         public void Test_DataMapper_ParsePropValue_ValidInt()
         {
             //---------------Set up test pack-------------------
-            int expectedInt = TestUtils.RandomInt;
+            int expectedInt = BOTestUtils.RandomInt;
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             object parsedValue;
@@ -295,7 +295,7 @@ namespace Habanero.Test.BO
         public void Test_DataMapper_ParsePropValue_ValidInt_string()
         {
             //---------------Set up test pack-------------------
-            int expectedInt = TestUtils.RandomInt;
+            int expectedInt = BOTestUtils.RandomInt;
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             object parsedValue;

@@ -67,13 +67,19 @@ namespace Habanero.Base
         DeleteParentAction DeleteParentAction { get; }
 
         ///<summary>
-        /// Returns a list of all the related objects that are dirty.
-        /// In the case of a composition or aggregation this will be a list of all 
-        ///   dirty related objects (child objects). 
-        /// In the case of association
-        ///   this will only be a list of related objects that are added, removed, marked4deletion or created
-        ///   as part of the relationship.
+        /// Returns the business object that owns this relationship e.g. Invoice has many lines
+        /// the owning BO would be invoice.
         ///</summary>
-        IList<IBusinessObject> GetDirtyChildren();
+        IBusinessObject OwningBO { get; }
+
+        /////<summary>
+        ///// Returns a list of all the related objects that are dirty.
+        ///// In the case of a composition or aggregation this will be a list of all 
+        /////   dirty related objects (child objects). 
+        ///// In the case of association
+        /////   this will only be a list of related objects that are added, removed, marked4deletion or created
+        /////   as part of the relationship.
+        /////</summary>
+        //IList<IBusinessObject> GetDirtyChildren();
     }
 }

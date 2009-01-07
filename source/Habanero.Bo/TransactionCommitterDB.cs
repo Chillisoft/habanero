@@ -81,7 +81,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="businessObject">The business object to decorate in a TransactionalBusinessObjectDB</param>
         /// <returns>The decorated TransactionalBusinessObjectDB</returns>
-        protected override TransactionalBusinessObject CreateTransactionalBusinessObject(
+        protected internal override TransactionalBusinessObject CreateTransactionalBusinessObject(
             IBusinessObject businessObject)
         {
             return new TransactionalBusinessObjectDB(businessObject);
@@ -91,7 +91,7 @@ namespace Habanero.BO
         /// Tries to execute an individual transaction against the datasource.
         /// 1'st phase of a 2 phase database commit.
         /// </summary>
-        protected override void ExecuteTransactionToDataSource(ITransactional transaction)
+        protected internal override void ExecuteTransactionToDataSource(ITransactional transaction)
         {
             ITransactionalDB transactionDB = (ITransactionalDB)transaction;
 

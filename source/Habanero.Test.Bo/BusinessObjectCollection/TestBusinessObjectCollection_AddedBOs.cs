@@ -77,7 +77,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO newCP = ContactPersonTestBO.CreateUnsavedContactPerson
-                (TestUtils.RandomString, TestUtils.RandomString);
+                (BOTestUtils.RandomString, BOTestUtils.RandomString);
             RegisterForAddedEvent(cpCol);
 
             //---------------Assert Precondition----------------

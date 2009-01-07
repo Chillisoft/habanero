@@ -355,6 +355,25 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
+        public void TestRemoveRelatedObject_SetsRemovedBO()
+        {
+            //-----Create Test pack---------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
+            RelatedBusinessObjectCollection<AddressTestBO> addresses1 = contactPersonTestBO.Addresses;
+            AddressTestBO address = addresses1.CreateBusinessObject();
+            address.Save();
+
+            //-----Run tests----------------------------
+            RelatedBusinessObjectCollection<AddressTestBO> addresses = addresses1;
+            addresses.Remove(address);
+
+            ////-----Test results-------------------------
+            Assert.AreSame(contactPersonTestBO, address.Relationships.GetSingle<ContactPersonTestBO>("ContactPersonTestBO").RemovedBO);
+        }
+
+        [Test]
         public void TestRemoveRelatedObject_usingRelationship()
         {
             //-----Create Test pack---------------------

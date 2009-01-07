@@ -63,6 +63,31 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreSame(contactPerson.Organisation, associationRelationship.OwningBO);
         }
 
+        [Test]
+        public void Test_AddMethod_AddPersistedChildAndSave()
+        {
+            //An already persisted driver can be added to a car
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
+            util.RegisterForAddedAndRemovedEvents(cpCol);
+
+            //---------------Assert Precondition----------------
+            util.AssertAllCollectionsHaveNoItems(cpCol);
+
+            //---------------Execute Test ----------------------
+            cpCol.Add(contactPerson);
+            contactPerson.Save();
+
+            //---------------Test Result -----------------------
+            util.AssertAddedEventFired();
+            util.AssertOneObjectInCurrentPersistedCollection(cpCol);
+            Assert.AreSame(contactPerson.Organisation, associationRelationship.OwningBO);
+        }
+
+
         private MultipleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
             MultipleRelationship<ContactPersonTestBO> associationRelationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");

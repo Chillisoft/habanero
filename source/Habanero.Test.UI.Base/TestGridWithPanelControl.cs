@@ -63,7 +63,7 @@ namespace Habanero.Test.UI.Base
 
                 MyBO currentBO = gridWithPanelControl.CurrentBusinessObject;
                 string originalValue = currentBO.TestProp;
-                string newValue = TestUtils.RandomString;
+                string newValue = BOTestUtils.RandomString;
                 currentBO.TestProp = newValue;
                 //---------------Assert Precondition----------------
                 Assert.AreNotEqual(originalValue, newValue);
@@ -109,7 +109,7 @@ namespace Habanero.Test.UI.Base
 
                 MyBO currentBO = gridWithPanelControl.CurrentBusinessObject;
                 string originalValue = currentBO.TestProp;
-                string newValue = TestUtils.RandomString;
+                string newValue = BOTestUtils.RandomString;
                 currentBO.TestProp = newValue;
                 //---------------Assert Precondition----------------
                 Assert.AreNotEqual(originalValue, newValue);
@@ -242,7 +242,7 @@ namespace Habanero.Test.UI.Base
 
                 MyBO currentBO = gridWithPanelControl.CurrentBusinessObject;
                 string originalValue = currentBO.TestProp;
-                string newValue = TestUtils.RandomString;
+                string newValue = BOTestUtils.RandomString;
                 PanelInfo.FieldInfo testPropFieldInfo = ((IBusinessObjectPanel) gridWithPanelControl.BusinessObjectControl).PanelInfo.FieldInfos["TestProp"];
                 testPropFieldInfo.ControlMapper.Control.Text = newValue;
                
@@ -299,7 +299,7 @@ namespace Habanero.Test.UI.Base
                 IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
                 MyBO firstBO = myBOs[0];
                 string originalValue = firstBO.TestProp;
-                string newValue = TestUtils.RandomString;
+                string newValue = BOTestUtils.RandomString;
 
                 PanelInfo.FieldInfo testPropFieldInfo = ((IBusinessObjectPanel)gridWithPanelControl.BusinessObjectControl).PanelInfo.FieldInfos["TestProp"];
                 testPropFieldInfo.ControlMapper.Control.Text = newValue;
@@ -716,7 +716,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(gridWithPanelControl.CurrentBusinessObject.Status.IsDirty);
             Assert.IsTrue(newButton.Enabled);
             //---------------Execute Test ----------------------
-            gridWithPanelControl.CurrentBusinessObject.TestProp = TestUtils.RandomString;
+            gridWithPanelControl.CurrentBusinessObject.TestProp = BOTestUtils.RandomString;
             //---------------Test Result -----------------------
             Assert.IsTrue(gridWithPanelControl.CurrentBusinessObject.Status.IsDirty);
             Assert.IsFalse(newButton.Enabled);
@@ -864,7 +864,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(2, gridWithPanelControl.ReadOnlyGridControl.Grid.Rows.Count);
             //---------------Execute Test ----------------------
             newButton.PerformClick();
-            gridWithPanelControl.CurrentBusinessObject.TestProp = TestUtils.RandomString;
+            gridWithPanelControl.CurrentBusinessObject.TestProp = BOTestUtils.RandomString;
             cancelButton.PerformClick();
             deleteButton.PerformClick();
             //---------------Test Result -----------------------
@@ -883,7 +883,7 @@ namespace Habanero.Test.UI.Base
             MyBO firstBO = myBOs[0];
             MyBO secondBO = myBOs[1];
             gridWithPanelControl.ReadOnlyGridControl.SelectedBusinessObject = secondBO;
-            string newValue = TestUtils.RandomString;
+            string newValue = BOTestUtils.RandomString;
             secondBO.TestProp = newValue;
             //---------------Assert Precondition----------------
             Assert.AreSame(secondBO, gridWithPanelControl.CurrentBusinessObject);
@@ -924,7 +924,7 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
             Assert.IsFalse(currentBO.Status.IsDirty);
             //---------------Execute Test ----------------------
-            currentBO.TestProp = TestUtils.RandomString;
+            currentBO.TestProp = BOTestUtils.RandomString;
             //---------------Test Result -----------------------
             Assert.IsTrue(currentBO.Status.IsDirty);
             Assert.IsTrue(cancelButton.Enabled);
@@ -941,7 +941,7 @@ namespace Habanero.Test.UI.Base
 
             MyBO currentBO = myBOs[0];
             string originalValue = currentBO.TestProp;
-            currentBO.TestProp = TestUtils.RandomString;
+            currentBO.TestProp = BOTestUtils.RandomString;
             //---------------Assert Precondition----------------
             Assert.IsTrue(currentBO.Status.IsDirty);
             Assert.AreNotEqual(originalValue, currentBO.TestProp);
@@ -1027,7 +1027,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(currentBO.Status.IsDirty);
             Assert.IsFalse(saveButton.Enabled);
             //---------------Execute Test ----------------------
-            currentBO.TestProp = TestUtils.RandomString;
+            currentBO.TestProp = BOTestUtils.RandomString;
             //---------------Test Result -----------------------
             Assert.IsTrue(currentBO.Status.IsDirty);
             Assert.IsTrue(saveButton.Enabled);
@@ -1044,7 +1044,7 @@ namespace Habanero.Test.UI.Base
             IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
             newButton.PerformClick();
             MyBO currentBO = (MyBO)gridWithPanelControl.BusinessObjectControl.BusinessObject;
-            currentBO.TestProp = TestUtils.RandomString;
+            currentBO.TestProp = BOTestUtils.RandomString;
             //---------------Assert Precondition----------------
             Assert.IsTrue(currentBO.Status.IsDirty);
             Assert.IsTrue(currentBO.Status.IsNew);
@@ -1125,7 +1125,7 @@ namespace Habanero.Test.UI.Base
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
             MyBO firstBO = gridWithPanelControl.CurrentBusinessObject;
-            firstBO.TestProp = TestUtils.RandomString;
+            firstBO.TestProp = BOTestUtils.RandomString;
             MyBO secondBO = myBOs[1];
 
             bool confirmSaveCalled = false;
@@ -1155,7 +1155,7 @@ namespace Habanero.Test.UI.Base
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
             MyBO firstBO = gridWithPanelControl.CurrentBusinessObject;
-            string newValue = TestUtils.RandomString;
+            string newValue = BOTestUtils.RandomString;
             firstBO.TestProp = newValue;
             MyBO secondBO = myBOs[1];
 
@@ -1188,7 +1188,7 @@ namespace Habanero.Test.UI.Base
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
             MyBO firstBO = gridWithPanelControl.CurrentBusinessObject;
             string originalValue = firstBO.TestProp;
-            string newValue = TestUtils.RandomString;
+            string newValue = BOTestUtils.RandomString;
             firstBO.TestProp = newValue;
             MyBO secondBO = myBOs[1];
 
@@ -1220,7 +1220,7 @@ namespace Habanero.Test.UI.Base
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
             MyBO firstBO = gridWithPanelControl.CurrentBusinessObject;
-            firstBO.TestProp = TestUtils.RandomString;
+            firstBO.TestProp = BOTestUtils.RandomString;
             MyBO secondBO = myBOs[1];
 
             IButton saveButton = gridWithPanelControl.Buttons["Save"];
@@ -1256,7 +1256,7 @@ namespace Habanero.Test.UI.Base
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
             MyBO firstBO = gridWithPanelControl.CurrentBusinessObject;
-            firstBO.TestProp = TestUtils.RandomString;
+            firstBO.TestProp = BOTestUtils.RandomString;
 
             IButton saveButton = gridWithPanelControl.Buttons["Save"];
             IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
@@ -1284,7 +1284,7 @@ namespace Habanero.Test.UI.Base
             IGridWithPanelControl<MyBO> gridWithPanelControl = CreateGridAndBOEditorControl_NoStrategy();
             gridWithPanelControl.SetBusinessObjectCollection(myBOs);
             MyBO firstBO = gridWithPanelControl.CurrentBusinessObject;
-            firstBO.TestProp = TestUtils.RandomString;
+            firstBO.TestProp = BOTestUtils.RandomString;
             IButton saveButton = gridWithPanelControl.Buttons["Save"];
             IButton cancelButton = gridWithPanelControl.Buttons["Cancel"];
             //---------------Assert Precondition----------------
@@ -1331,7 +1331,7 @@ namespace Habanero.Test.UI.Base
         private MyBO CreateSavedMyBo()
         {
             MyBO myBO = new MyBO();
-            myBO.TestProp = TestUtils.RandomString;
+            myBO.TestProp = BOTestUtils.RandomString;
             myBO.Save();
             return myBO;
         }

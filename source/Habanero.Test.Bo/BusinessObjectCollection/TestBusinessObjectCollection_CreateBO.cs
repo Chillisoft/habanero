@@ -142,7 +142,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
 
             ContactPersonTestBO createdCp = cpCol.CreateBusinessObject();
-            createdCp.Surname = TestUtils.RandomString;
+            createdCp.Surname = BOTestUtils.RandomString;
             RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
@@ -191,7 +191,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             ContactPersonTestBO createdCp = cpCol.CreateBusinessObject();
-            createdCp.Surname = TestUtils.RandomString;
+            createdCp.Surname = BOTestUtils.RandomString;
             RegisterForAddedAndRemovedEvents(cpCol);
             //---------------Assert Precondition----------------
             Assert.IsTrue(cpCol.Contains(createdCp));
@@ -214,7 +214,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO createdCp = cpCol.CreateBusinessObject();
-            createdCp.Surname = TestUtils.RandomString;
+            createdCp.Surname = BOTestUtils.RandomString;
 
             //---------------Assert Precondition----------------
             AssertTwoCurrentObjects_OnePsersisted_OneCreated(cpCol);
@@ -393,7 +393,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO createdCp = cpCol.CreateBusinessObject();
-            createdCp.Surname = TestUtils.RandomString;
+            createdCp.Surname = BOTestUtils.RandomString;
             cpCol.Remove(createdCp);
             RegisterForAddedAndRemovedEvents(cpCol);
             //---------------Assert Precondition----------------

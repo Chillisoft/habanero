@@ -23,6 +23,7 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
+using Habanero.Util;
 using NMock;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -786,6 +787,29 @@ namespace Habanero.Test.BO
             StringAssert.Contains(
                 "for property 'Contact Type' is not valid. It is not a type of ContactPersonTestBO+ContactType.",
                 prop.InvalidReason);
+        }
+
+        [Test]
+        public void Test_UpdateDirtyStatusFromProperties()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
+            BOStatus status = (BOStatus) contactPerson.Status;
+            status.SetBOFlagValue(BOStatus.Statuses.isDirty, true);
+
+            //-------------Assert Preconditions -------------
+            Assert.IsTrue(contactPerson.Status.IsDirty);
+
+            //---------------Execute Test ----------------------
+ 
+            contactPerson.UpdateDirtyStatusFromProperties();
+            //---------------Test Result -----------------------
+
+            Assert.IsFalse(contactPerson.Status.IsDirty);
+            //---------------Tear Down -------------------------          
+
         }
     }
 }

@@ -67,87 +67,22 @@ namespace Habanero.BO
             collection.SelectQuery.Criteria = relationshipCriteria;
             collection.SelectQuery.OrderCriteria = preparedOrderCriteria;
         }
-
     }
 
-    /// <summary>
-    /// Provides a super-class for relationships between business objects
-    /// </summary>
-    public abstract class Relationship<TBusinessObject> : IRelationship
-        where TBusinessObject : class, IBusinessObject, new() 
-
+    public abstract class RelationshipBase : IRelationship
     {
-        protected RelationshipDef _relDef;
-        protected readonly IBusinessObject _owningBo;
-        protected internal IRelKey _relKey;
-       private bool _initialised;
+        protected IRelKey _relKey;
 
-        /// <summary>
-        /// Constructor to initialise a new relationship
-        /// </summary>
-        /// <param name="owningBo">The business object from where the 
-        /// relationship originates</param>
-        /// <param name="lRelDef">The relationship definition</param>
-        /// <param name="lBOPropCol">The set of properties used to
-        /// initialise the RelKey object</param>
-        protected Relationship(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
-        {
-            _relDef = lRelDef;
-            _owningBo = owningBo;
-            _relKey = _relDef.RelKeyDef.CreateRelKey(lBOPropCol);
-        }
-
-        /// <summary>
-        /// Returns the relationship name
-        /// </summary>
-        public string RelationshipName
-        {
-            get { return _relDef.RelationshipName; }
-        }
-
-        /// <summary>
-        /// Returns the relationship definition
-        /// </summary>
-        public IRelationshipDef RelationshipDef
-        {
-            get { return _relDef; }
-        }
-
-        ///<summary>
-        /// Returns the appropriate delete action when the parent is deleted.
-        /// i.e. delete related objects, dereference related objects, prevent deletion.
-        ///</summary>
-        public DeleteParentAction DeleteParentAction
-        {
-            get { return _relDef.DeleteParentAction; }
-        }
-
-
-        ///<summary>
-        /// Returns the business object that owns this relationship e.g. Invoice has many lines
-        /// the owning BO would be invoice.
-        ///</summary>
-        public IBusinessObject OwningBO
-        {
-            get { return _owningBo; }
-        }
-        
         ///<summary>
         /// The key that identifies this relationship i.e. the properties in the 
         /// source object and how they are related to properties in the related object.
         ///</summary>
-        public IRelKey RelKey
-        {
-            get { return _relKey; }
-        }
+        public abstract IRelKey RelKey { get; }
 
         /// <summary>
         /// The class Definition for the related object.
         /// </summary>
-        public IClassDef RelatedObjectClassDef
-        {
-            get { return _relDef.RelatedObjectClassDef; }
-        }
+        public abstract IClassDef RelatedObjectClassDef { get; }
 
         ///<summary>
         /// Returns whether the relationship is dirty or not.
@@ -157,38 +92,31 @@ namespace Habanero.BO
         ///</summary>
         public abstract bool IsDirty { get; }
 
+        /// <summary>
+        /// Returns the relationship definition
+        /// </summary>
+        public abstract IRelationshipDef RelationshipDef { get; }
+        /// <summary>
+        /// Returns the relationship name
+        /// </summary>
+        public abstract string RelationshipName { get; }
+        public abstract bool Initialised { get; }
+        ///<summary>
+        /// Returns the appropriate delete action when the parent is deleted.
+        /// i.e. delete related objects, dereference related objects, prevent deletion.
+        ///</summary>
+        public abstract DeleteParentAction DeleteParentAction { get; }
 
         ///<summary>
-        /// Returns a list of all the related objects that are dirty.
-        /// In the case of a composition or aggregation this will be a list of all 
-        ///   dirty related objects (child objects). 
-        /// In the case of association
-        ///   this will only be a list of related objects that are added, removed, marked4deletion or created
-        ///   as part of the relationship.
+        /// Returns the business object that owns this relationship e.g. Invoice has many lines
+        /// the owning BO would be invoice.
         ///</summary>
-        IList<IBusinessObject> IRelationship.GetDirtyChildren()
-        {
-            return DoGetDirtyChildren();
-        }
+        public abstract IBusinessObject OwningBO { get; }
 
-        ///<summary>
-        /// Returns a list of all the related objects that are dirty.
-        /// In the case of a composition or aggregation this will be a list of all 
-        ///   dirty related objects (child objects). 
-        /// In the case of association
-        ///   this will only be a list of related objects that are added, removed, marked4deletion or created
-        ///   as part of the relationship.
-        ///</summary>
-        public IList<TBusinessObject> GetDirtyChildren()
-        {
-            return DoGetDirtyChildren_Typed();
-        }
+        internal abstract void AddDirtyChildrenToTransactionCommitter(TransactionCommitter committer);
+        internal abstract void DereferenceChildren(TransactionCommitter committer);
+        internal abstract void DeleteChildren(TransactionCommitter committer);
 
-        protected abstract IList<IBusinessObject> DoGetDirtyChildren();
-        protected abstract IList<TBusinessObject> DoGetDirtyChildren_Typed();
-
-
-        //TODO: This should be temporary code and will b removed when define reverse relationships in Firestarter and classdefs.
         /// <summary>
         /// Returns the reverse relationship for this relationship i.e. If invoice has invoice lines and you 
         /// can navigate from invoice lines to invoices then the invoicelines to invoice relationship is the
@@ -221,6 +149,85 @@ namespace Habanero.BO
                 ReflectionUtilities.ExecutePrivateMethod(reverseRelationship, "Initialise");
             return reverseRelationship;
         }
+    }
+    
+    /// <summary>
+    /// Provides a super-class for relationships between business objects
+    /// </summary>
+    public abstract class Relationship : RelationshipBase, IRelationship
+    {
+        protected RelationshipDef _relDef;
+        protected readonly IBusinessObject _owningBo;
+        private bool _initialised;
+
+        /// <summary>
+        /// Constructor to initialise a new relationship
+        /// </summary>
+        /// <param name="owningBo">The business object from where the 
+        /// relationship originates</param>
+        /// <param name="lRelDef">The relationship definition</param>
+        /// <param name="lBOPropCol">The set of properties used to
+        /// initialise the RelKey object</param>
+        protected Relationship(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
+        {
+            _relDef = lRelDef;
+            _owningBo = owningBo;
+            _relKey = _relDef.RelKeyDef.CreateRelKey(lBOPropCol);
+        }
+
+        /// <summary>
+        /// Returns the relationship name
+        /// </summary>
+        public override string RelationshipName
+        {
+            get { return _relDef.RelationshipName; }
+        }
+
+        /// <summary>
+        /// Returns the relationship definition
+        /// </summary>
+        public override IRelationshipDef RelationshipDef
+        {
+            get { return _relDef; }
+        }
+
+        ///<summary>
+        /// Returns the appropriate delete action when the parent is deleted.
+        /// i.e. delete related objects, dereference related objects, prevent deletion.
+        ///</summary>
+        public override DeleteParentAction DeleteParentAction
+        {
+            get { return _relDef.DeleteParentAction; }
+        }
+
+
+        ///<summary>
+        /// Returns the business object that owns this relationship e.g. Invoice has many lines
+        /// the owning BO would be invoice.
+        ///</summary>
+        public override IBusinessObject OwningBO
+        {
+            get { return _owningBo; }
+        }
+        
+        ///<summary>
+        /// The key that identifies this relationship i.e. the properties in the 
+        /// source object and how they are related to properties in the related object.
+        ///</summary>
+        public override IRelKey RelKey
+        {
+            get { return _relKey; }
+        }
+
+        /// <summary>
+        /// The class Definition for the related object.
+        /// </summary>
+        public override IClassDef RelatedObjectClassDef
+        {
+            get { return _relDef.RelatedObjectClassDef; }
+        }
+
+        //TODO: This should be temporary code and will b removed when define reverse relationships in Firestarter and classdefs.
 
         internal void Initialise()
         {
@@ -233,6 +240,26 @@ namespace Habanero.BO
         ///<summary>
         /// Is the relationship initialised or not.
         ///</summary>
-        public bool Initialised { get { return _initialised; } }
+        public override bool Initialised { get { return _initialised; } }
+
+        protected void DereferenceChild(TransactionCommitter committer, IBusinessObject bo)
+        {
+            foreach (RelPropDef relPropDef in RelationshipDef.RelKeyDef)
+            {
+                bo.SetPropertyValue(relPropDef.RelatedClassPropName, null);
+            }
+            committer.ExecuteTransactionToDataSource(committer.CreateTransactionalBusinessObject(bo));
+        }
+        
+        protected void DeleteChild(TransactionCommitter committer, IBusinessObject bo)
+        {
+            if (bo == null) return;
+            bo.Delete();
+            committer.ExecuteTransactionToDataSource(committer.CreateTransactionalBusinessObject(bo));
+        }
+
+        internal abstract void UpdateRelationshipAsPersisted();
     }
+
+    
 }

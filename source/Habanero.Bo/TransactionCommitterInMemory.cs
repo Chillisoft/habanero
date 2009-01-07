@@ -71,12 +71,12 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="businessObject">The business object to decorate</param>
         /// <returns>A decorated Business object (TransactionalBusinessObject)</returns>
-        protected override TransactionalBusinessObject CreateTransactionalBusinessObject(IBusinessObject businessObject)
+        protected internal override TransactionalBusinessObject CreateTransactionalBusinessObject(IBusinessObject businessObject)
         {
            return new TransactionalBusinessObjectInMemory(businessObject);
         }
 
-        protected override void ExecuteTransactionToDataSource(ITransactional transaction)
+        protected internal override void ExecuteTransactionToDataSource(ITransactional transaction)
         {
             if (transaction is TransactionalBusinessObject)
             {

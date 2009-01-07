@@ -302,7 +302,7 @@ namespace Habanero.Test.BO.TransactionCommitters
     {
 
 
-        protected override void ExecuteTransactionToDataSource(ITransactional transaction)
+        protected internal override void ExecuteTransactionToDataSource(ITransactional transaction)
         {
             TransactionalBusinessObjectDB transactionDB = (TransactionalBusinessObjectDB)transaction;
             transactionDB.GetPersistSql();

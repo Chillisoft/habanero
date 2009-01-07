@@ -101,12 +101,6 @@ namespace Habanero.Test.BO.TransactionCommitters
         }
 
 
-        private static void AssertBOStateIsValidAfterDelete(IBusinessObject bo)
-        {
-            Assert.IsTrue(bo.Status.IsNew);
-            Assert.IsTrue(bo.Status.IsDeleted);
-        }
-
         private static void AssertBusinessObjectNotInDatabase(IBusinessObject bo)
         {
 //            Criteria criteria = new Criteria(bo.ID[0], );
@@ -232,9 +226,9 @@ namespace Habanero.Test.BO.TransactionCommitters
             AssertBusinessObjectNotInDatabase(contactPersonTestBO);
             AssertBusinessObjectNotInDatabase(address);
 
-            AssertBOStateIsValidAfterDelete(org);
-            AssertBOStateIsValidAfterDelete(contactPersonTestBO);
-            AssertBOStateIsValidAfterDelete(address);
+            BOTestUtils.AssertBOStateIsValidAfterDelete(org);
+            BOTestUtils.AssertBOStateIsValidAfterDelete(contactPersonTestBO);
+            BOTestUtils.AssertBOStateIsValidAfterDelete(address);
         }
 
         [Test]
@@ -260,9 +254,9 @@ namespace Habanero.Test.BO.TransactionCommitters
 
             committer.CommitTransaction();
             //---------------Test Result -----------------------
-            AssertBOStateIsValidAfterDelete(org);
-            AssertBOStateIsValidAfterDelete(contactPersonTestBO);
-            AssertBOStateIsValidAfterDelete(address);
+            BOTestUtils.AssertBOStateIsValidAfterDelete(org);
+            BOTestUtils.AssertBOStateIsValidAfterDelete(contactPersonTestBO);
+            BOTestUtils.AssertBOStateIsValidAfterDelete(address);
 
             AssertBusinessObjectNotInDatabase(org);
             AssertBusinessObjectNotInDatabase(contactPersonTestBO);
@@ -423,8 +417,8 @@ namespace Habanero.Test.BO.TransactionCommitters
             committerDB.CommitTransaction();
 
             //---------------Test Result -----------------------
-            AssertBOStateIsValidAfterDelete(contactPersonTestBO);
-            AssertBOStateIsValidAfterDelete(address);
+            BOTestUtils.AssertBOStateIsValidAfterDelete(contactPersonTestBO);
+            BOTestUtils.AssertBOStateIsValidAfterDelete(address);
 
             AssertBusinessObjectNotInDatabase(contactPersonTestBO);
             AssertBusinessObjectNotInDatabase(address);
@@ -581,7 +575,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             committerDB.CommitTransaction();
 
             //---------------Test Result -----------------------
-            AssertBOStateIsValidAfterDelete(mockBo);
+            BOTestUtils.AssertBOStateIsValidAfterDelete(mockBo);
             AssertMockBONotInDatabase(mockBo.MockBOID);
         }
 
@@ -600,7 +594,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             committerDB.CommitTransaction();
 
             //---------------Test Result -----------------------
-            AssertBOStateIsValidAfterDelete(contactPersonTestBO);
+            BOTestUtils.AssertBOStateIsValidAfterDelete(contactPersonTestBO);
         }
 
         [Test]
@@ -659,7 +653,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             committerDB.CommitTransaction();
 
             //---------------Test Result -----------------------
-            AssertBOStateIsValidAfterDelete(mockBo);
+            BOTestUtils.AssertBOStateIsValidAfterDelete(mockBo);
             AssertMockBONotInDatabase(mockBo.MockBOID);
         }
 
@@ -815,8 +809,8 @@ namespace Habanero.Test.BO.TransactionCommitters
             committer.CommitTransaction();
             //---------------Test Result -----------------------
 
-            AssertBOStateIsValidAfterDelete(address);
-            AssertBOStateIsValidAfterDelete(contactPersonTestBO);
+            BOTestUtils.AssertBOStateIsValidAfterDelete(address);
+            BOTestUtils.AssertBOStateIsValidAfterDelete(contactPersonTestBO);
             //---------------Tear Down -------------------------          
         }
 

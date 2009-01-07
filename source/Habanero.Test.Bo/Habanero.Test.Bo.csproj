@@ -153,6 +153,7 @@
     <Compile Include="Relationship\TestSingleRelationship_Aggregation.cs" />
     <Compile Include="Relationship\TestSingleRelationship_Association.cs" />
     <Compile Include="Relationship\TestSingleRelationship_Composition.cs" />
+    <Compile Include="Relationship\TestTransactionalSingleRelationship.cs" />
     <Compile Include="Security\TestBOPropAuthorisation.cs" />
     <Compile Include="Security\TestBusinessObjectAuthorisation.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_Edits.cs" />
@@ -286,7 +287,7 @@
     <Compile Include="TransactionCommitters\TestTransactionCommitterInMemory.cs" />
     <Compile Include="TestTransactionLogger.cs" />
     <Compile Include="Relationship\TestMultipleRelationshipDef.cs" />
-    <Compile Include="TestUtils.cs" />
+    <Compile Include="BOTestUtils.cs" />
     <Compile Include="TransactionCommitterStub.cs" />
   </ItemGroup>
   <ItemGroup>

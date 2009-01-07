@@ -392,7 +392,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         [Test]
-        public void Test_GetDirtyChildren()
+        public void Test_AddDirtyChildrenToTransactionCommitter()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
@@ -404,16 +404,16 @@ namespace Habanero.Test.BO.Relationship
             MultipleRelationship<AddressTestBO> addressRelationship = organisationTestBO.Relationships.GetMultiple<AddressTestBO>("Addresses");
             BusinessObjectCollection<AddressTestBO> addressCol = addressRelationship.BusinessObjectCollection;
 
-            ContactPersonTestBO contactPersonTestBO = contactPersonCol.CreateBusinessObject();
-            AddressTestBO addressTestBO = addressCol.CreateBusinessObject();
+            contactPersonCol.CreateBusinessObject();
+            addressCol.CreateBusinessObject();
 
             //---------------Execute Test ----------------------
-            IList<IBusinessObject> dirtyChildren = relationships.GetDirtyChildren();
+            TransactionCommitterInMemory tc = new TransactionCommitterInMemory(new DataStoreInMemory());
+
+             relationships.AddDirtyChildrenToTransactionCommitter(tc);
 
             //---------------Test Result -----------------------
-            Assert.Contains(contactPersonTestBO, (ICollection) dirtyChildren);
-            Assert.Contains(addressTestBO, (ICollection)dirtyChildren);
-            Assert.AreEqual(2, dirtyChildren.Count);
+             Assert.AreEqual(2, tc.OriginalTransactions.Count);
         }
     }
 }

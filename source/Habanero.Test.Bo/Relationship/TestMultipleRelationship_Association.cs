@@ -246,8 +246,10 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreEqual(0, dirtyChildren.Count);
         }
 
-
-
+        /// <summary>
+        ///  Created child (ie a new object in the association relationship): saved when the parent is saved.
+        /// Hence it should be in the GetDirtyChildren collection
+        /// </summary>
         [Test]
         public void Test_GetDirtyChildren_Created()
         {
@@ -268,27 +270,11 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsTrue(dirtyChildren.Contains(contactPerson));
         }
 
-        [Test]
-        public void Test_GetDirtyChildren_Added()
-        {
-            //---------------Set up test pack-------------------
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
 
-            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
-            cpCol.Add(contactPerson);
-            //---------------Execute Test ----------------------
-            IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, dirtyChildren.Count);
-            Assert.IsTrue(dirtyChildren.Contains(contactPerson));
-        }
-
-
-
-
+        /// <summary>
+        /// Marked for Delete child (ie an object in the association relationship that is marked for delete): deleted when the parent is saved
+        /// Hence it should be in the GetDirtyChildren collection
+        /// </summary>
         [Test]
         public void Test_GetDirtyChildren_MarkedForDelete()
         {
@@ -311,6 +297,33 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsTrue(dirtyChildren.Contains(contactPerson));
         }
 
+        /// <summary>
+        /// Added child (ie an already persisted object that has been added to the relationship): 
+        ///     the related properties (ie those in the relkey) are persisted, and the status of the child is updated.
+        /// Hence it will not be in the GetDirtyChildren collection
+        /// </summary>
+        [Test]
+        public void Test_GetDirtyChildren_Added()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
+            cpCol.Add(contactPerson);
+            //---------------Execute Test ----------------------
+            IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, dirtyChildren.Count);
+        }
+
+        /// <summary>
+        /// Removed child (ie an already persisted object that has been removed from the relationship): 
+        ///     the related properties (ie those in the relkey) are persisted, and the status of the child is updated.
+        /// Hence it will not be in the GetDirtyChildren collection
+        /// </summary>
         [Test]
         public void Test_GetDirtyChildren_Removed()
         {
@@ -323,14 +336,13 @@ namespace Habanero.Test.BO.Relationship
             contactPerson.Surname = TestUtil.CreateRandomString();
             contactPerson.FirstName = TestUtil.CreateRandomString();
             contactPerson.Save();
-            cpCol.MarkForDelete(contactPerson);
+            cpCol.Remove(contactPerson);
 
             //---------------Execute Test ----------------------
             IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, dirtyChildren.Count);
-            Assert.IsTrue(dirtyChildren.Contains(contactPerson));
+            Assert.AreEqual(0, dirtyChildren.Count);
         }
 
         /// <summary>
@@ -365,8 +377,56 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsTrue(myBO.Status.IsDirty);
         }
 
-        [Test, Ignore("PETER_WORKING - working on this")]
-        public void Test_AddObjectUpdatesRelatedPropertiesOnly()
+        /// <summary>
+        /// Created child (ie a new object in the association relationship): saved when the parent is saved.
+        /// </summary>
+        [Test]
+        public void Test_CreatedChild_SavesWhenParentSaves()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = organisationTestBO.ContactPeople.CreateBusinessObject();
+            RelationshipDef relationshipDef = (RelationshipDef)organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Association;
+            contactPerson.Surname = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.CreateRandomString();
+
+            //---------------Execute Test ----------------------
+            organisationTestBO.Save();
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(contactPerson.Status.IsDirty);
+        }
+
+        /// <summary>
+        /// Marked for Delete child (ie an object in the association relationship that is marked for delete): deleted when the parent is saved
+        /// </summary>
+        [Test]
+        public void Test_MarkedForDeleteChild_SavesWhenParentSaves()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = organisationTestBO.ContactPeople.CreateBusinessObject();
+            RelationshipDef relationshipDef = (RelationshipDef)organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Association;
+            contactPerson.Surname = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Save();
+            contactPerson.MarkForDelete();
+
+            //---------------Execute Test ----------------------
+            organisationTestBO.Save();
+
+            //---------------Test Result -----------------------
+            BOTestUtils.AssertBOStateIsValidAfterDelete(contactPerson);
+        }
+
+        /// <summary>
+        /// Added child (ie an already persisted object that has been added to the relationship): 
+        ///     the related properties (ie those in the relkey) are persisted, and the status of the child is updated.
+        /// </summary>
+        [Test]
+        public void Test_AddedChild_UpdatesRelatedPropertiesOnlyWhenParentSaves()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
@@ -392,6 +452,98 @@ namespace Habanero.Test.BO.Relationship
             //---------------Tear Down -------------------------          
         }
 
+        [Test]
+        public void Test_AddedChild_UpdatesRelatedPropertiesOnlyWhenParentSaves_OnlyIDChanged()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
+            RelationshipDef relationshipDef = (RelationshipDef)organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Association;
+            organisationTestBO.ContactPeople.Add(contactPerson);
+
+            //---------------Assert PreConditions---------------            
+            Assert.IsTrue(contactPerson.Status.IsDirty);
+            Assert.IsTrue(contactPerson.Props["OrganisationID"].IsDirty);
+            Assert.IsTrue(organisationTestBO.Status.IsDirty);
+
+            //---------------Execute Test ----------------------
+            organisationTestBO.Save();
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(contactPerson.Status.IsDirty);
+            Assert.IsFalse(contactPerson.Props["OrganisationID"].IsDirty);
+            Assert.IsFalse(organisationTestBO.Status.IsDirty);
+
+            //---------------Tear Down -------------------------          
+        }
+
+        /// <summary>
+        /// Removed child (ie an already persisted object that has been removed from the relationship): 
+        ///     the related properties (ie those in the relkey) are persisted, and the status of the child is updated.
+        /// </summary>
+        [Test]
+        public void Test_RemovedChild_UpdatesRelatedPropertiesOnlyWhenParentSaves()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            RelationshipDef relationshipDef = (RelationshipDef)organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Association;
+            ContactPersonTestBO contactPerson = organisationTestBO.ContactPeople.CreateBusinessObject();
+            contactPerson.Surname = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Save();
+
+            contactPerson.Surname = TestUtil.CreateRandomString();
+            organisationTestBO.ContactPeople.Remove(contactPerson);
+
+            //---------------Assert PreConditions---------------            
+            Assert.IsTrue(contactPerson.Status.IsDirty);
+            Assert.IsTrue(contactPerson.Props["OrganisationID"].IsDirty);
+            Assert.IsNull(contactPerson.Props["OrganisationID"].Value);
+            Assert.IsTrue(organisationTestBO.Status.IsDirty);
+
+            //---------------Execute Test ----------------------
+            organisationTestBO.Save();
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(contactPerson.Status.IsDirty);
+            Assert.IsFalse(contactPerson.Props["OrganisationID"].IsDirty);
+            Assert.IsNull(contactPerson.Props["OrganisationID"].Value);
+            Assert.IsFalse(organisationTestBO.Status.IsDirty);
+        }
+
+        [Test]
+        public void Test_AddDirtyChildrenToTransactionCommitter_AddedChild()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            MultipleRelationship<ContactPersonTestBO> relationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            RelationshipDef relationshipDef = (RelationshipDef)relationship.RelationshipDef;
+            relationshipDef.RelationshipType = RelationshipType.Association;
+
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
+            relationship.BusinessObjectCollection.Add(contactPerson);
+            SingleRelationship<OrganisationTestBO> reverseRelationship = contactPerson.Relationships.GetSingle<OrganisationTestBO>("Organisation");
+
+            
+            TransactionCommitterStub tc = new TransactionCommitterStub();
+
+            //---------------Assert PreConditions---------------            
+            Assert.AreEqual(0, tc.OriginalTransactions.Count);
+            Assert.IsNotNull(reverseRelationship);
+
+            //---------------Execute Test ----------------------
+            relationship.AddDirtyChildrenToTransactionCommitter(tc);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, tc.OriginalTransactions.Count);
+
+            Assert.IsInstanceOfType(typeof(TransactionalSingleRelationship_Added), tc.OriginalTransactions[0]);
+            Assert.AreSame(reverseRelationship, ((TransactionalSingleRelationship_Added)tc.OriginalTransactions[0]).Relationship);
+
+            //---------------Tear Down -------------------------          
+        }
 
         private MultipleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {

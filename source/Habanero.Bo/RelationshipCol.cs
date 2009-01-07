@@ -22,6 +22,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 
 namespace Habanero.BO
@@ -69,19 +70,6 @@ namespace Habanero.BO
             }
         }
 
-        internal IList<IBusinessObject> GetDirtyChildren()
-        {
-            IList<IBusinessObject> dirtyBusinessObjects = new List<IBusinessObject>();
-            foreach (KeyValuePair<string, IRelationship> pair in _relationships)
-            {
-                    foreach (IBusinessObject bo in pair.Value.GetDirtyChildren())
-                    {
-                        dirtyBusinessObjects.Add(bo);
-                    }
-                
-            }
-            return dirtyBusinessObjects;
-        }
 
         /// <summary>
         /// Adds a relationship to the business object
@@ -317,6 +305,29 @@ namespace Habanero.BO
 
     	#endregion
 
- 
+        internal void AddDirtyChildrenToTransactionCommitter(TransactionCommitter transactionCommitter)
+        {
+            foreach (RelationshipBase relationship in this)
+            {
+                relationship.AddDirtyChildrenToTransactionCommitter(transactionCommitter);
+            }
+        }
+
+        internal void DereferenceChildren(TransactionCommitter committer) {
+            foreach (RelationshipBase relationship in this)
+            {
+                if (relationship.DeleteParentAction != DeleteParentAction.DereferenceRelated) continue;
+                relationship.DereferenceChildren(committer);
+            }
+        }
+        
+        internal void DeleteChildren(TransactionCommitter committer) {
+            foreach (RelationshipBase relationship in this)
+            {
+                if (relationship.DeleteParentAction != DeleteParentAction.DeleteRelated) continue;
+                relationship.DeleteChildren(committer);
+            }
+        }
+
     }
 }

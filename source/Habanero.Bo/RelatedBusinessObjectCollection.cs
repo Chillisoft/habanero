@@ -32,7 +32,7 @@ namespace Habanero.BO
     public class RelatedBusinessObjectCollection<TBusinessObject> : BusinessObjectCollection<TBusinessObject>
         where TBusinessObject : class, IBusinessObject, new()
     {
-        private readonly Relationship<TBusinessObject> _relationship;
+        private readonly Relationship _relationship;
 
         ///<summary>
         /// The related business object is constructed with the parent Business object of this 
@@ -41,7 +41,7 @@ namespace Habanero.BO
         ///<param name="relationship"></param>
         public RelatedBusinessObjectCollection(IRelationship relationship)
         {
-            _relationship = (Relationship<TBusinessObject>) relationship;
+            _relationship = (Relationship) relationship;
         }
 
         //Relationship 
@@ -83,8 +83,11 @@ namespace Habanero.BO
                                  " relationship is set up as a composition relationship (RemoveChildAction.Prevent)";
                 throw new HabaneroDeveloperException(message, message);
             }
+            if (!base.Remove(bo)) return false;
+            if (this.Loading) return true;
             DereferenceBO(bo);
-            return base.Remove(bo);
+            RemoveRelatedObject(bo);
+            return true;
         }
 
         private void DereferenceBO(TBusinessObject bo)
@@ -92,6 +95,15 @@ namespace Habanero.BO
             foreach (RelPropDef relPropDef in _relationship.RelationshipDef.RelKeyDef)
             {
                 bo.SetPropertyValue(relPropDef.RelatedClassPropName, null);
+            }
+        }
+
+        private void RemoveRelatedObject(TBusinessObject bo)
+        {
+            ISingleRelationship reverseRelationship = GetReverseRelationship(bo) as ISingleRelationship;
+            if (reverseRelationship != null)
+            {
+                reverseRelationship.SetRelatedObject(null);
             }
         }
 
@@ -177,6 +189,7 @@ namespace Habanero.BO
             bool removedListContains = this.RemovedBusinessObjects.Contains(bo);
             base.SavedEventHandler(sender,e);
             if (removedListContains) RemoveFromPersistedCollection(bo);
+            if (this.AddedBusinessObjects.Contains(bo)) this.AddedBusinessObjects.Remove(bo);
         }
 
         private void RemoveFromPersistedCollection(TBusinessObject bo)

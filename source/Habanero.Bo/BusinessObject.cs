@@ -1076,10 +1076,8 @@ namespace Habanero.BO
             //{
             //    transactionCommitter.AddTransaction(_transactionLog);
             //}
-            foreach (IBusinessObject dirtyChild in this.Relationships.GetDirtyChildren())
-            {
-                transactionCommitter.AddBusinessObject(dirtyChild);
-            }
+            this.Relationships.AddDirtyChildrenToTransactionCommitter((TransactionCommitter) transactionCommitter);
+
             if (_businessObjectUpdateLog != null && (Status.IsNew || (Status.IsDirty && !Status.IsDeleted)))
             {
                 _businessObjectUpdateLog.Update();
@@ -1285,6 +1283,16 @@ namespace Habanero.BO
             return !this.Status.IsDirty || this.IsEditable(out errMsg);
         }
 
+        internal void UpdateDirtyStatusFromProperties()
+        {
+            bool hasDirtyProps = false;
+            foreach (BOProp prop in _boPropCol)
+            {
+                if (prop.IsDirty) hasDirtyProps = true;
+            }
+
+            _boStatus.SetBOFlagValue(BOStatus.Statuses.isDirty, hasDirtyProps);
+        }
  
     }
 }

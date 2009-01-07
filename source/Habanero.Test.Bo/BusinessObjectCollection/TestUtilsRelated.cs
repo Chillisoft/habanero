@@ -28,6 +28,16 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
         }
 
+        public void AssertOneObjectInCurrentPersistedCollection(IBusinessObjectCollection cpCol)
+        {
+            Assert.AreEqual(1, cpCol.Count, "One object should be in the cpCollection");
+            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count, "No objects should be in the added collection");
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count, "One object should be in the persisted items");
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+        }
+
         public void AssertOneObjectInCurrentAndCreatedCollection(IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(1, cpCol.Count, "One object should be in the cpCollection");
@@ -73,16 +83,6 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         {
             Assert.AreEqual(1, cpCol.Count);
             Assert.AreEqual(1, cpCol.AddedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
-            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
-            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
-        }
-
-        public void AssertOneObjectInCurrentPersistedCollection (IBusinessObjectCollection cpCol)
-        {
-            Assert.AreEqual(1, cpCol.Count);
-            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);

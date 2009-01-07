@@ -102,7 +102,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             BOProp boProp = new BOProp(_propDef);
-            int expectedInt = TestUtils.RandomInt;
+            int expectedInt = BOTestUtils.RandomInt;
             //---------------Assert Precondition----------------
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
@@ -215,7 +215,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             BOProp boProp = new BOProp(_propDef);
-            int expectedInt = TestUtils.RandomInt;
+            int expectedInt = BOTestUtils.RandomInt;
             //---------------Assert Precondition----------------
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
@@ -304,7 +304,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             BOProp boProp = new BOProp(_propDef);
-            int expectedInt = TestUtils.RandomInt;
+            int expectedInt = BOTestUtils.RandomInt;
             boProp.Value = expectedInt;
             boProp.BackupPropValue();
             boProp.Value = "new value";
@@ -391,7 +391,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             BOProp boProp = new BOProp(_propDef);
-            int expectedInt = TestUtils.RandomInt;
+            int expectedInt = BOTestUtils.RandomInt;
             boProp.Value = expectedInt;
             //---------------Assert Precondition----------------
             Assert.IsNotNull(boProp.Value);

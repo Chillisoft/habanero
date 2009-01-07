@@ -124,7 +124,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
                 new RelatedBusinessObjectCollection<ContactPersonTestBO>(GetContactPersonRelationship());
             ContactPersonTestBO newCP = ContactPersonTestBO.CreateUnsavedContactPerson
-                (TestUtils.RandomString, TestUtils.RandomString);
+                (BOTestUtils.RandomString, BOTestUtils.RandomString);
             util.RegisterForAddedEvent(cpCol);
 
             //---------------Assert Precondition----------------
@@ -149,7 +149,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
                 new RelatedBusinessObjectCollection<ContactPersonTestBO>(GetContactPersonRelationship());
             ContactPersonTestBO newCP = ContactPersonTestBO.CreateUnsavedContactPerson
-                (TestUtils.RandomString, TestUtils.RandomString);
+                (BOTestUtils.RandomString, BOTestUtils.RandomString);
             newCP.Save();
             util.RegisterForAddedEvent(cpCol);
 
@@ -387,7 +387,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             myBO.Save();
 
             //---------------Test Result -----------------------
-            util.AssertOneObjectInCurrentPersistedAndAddedCollection(cpCol);
+            util.AssertOneObjectInCurrentPersistedCollection(cpCol);
             Assert.IsFalse(util.AddedEventFired);
         }
 
@@ -410,7 +410,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             cpCol.SaveAll();
 
             //---------------Test Result -----------------------
-            util.AssertOneObjectInCurrentPersistedAndAddedCollection(cpCol);
+            util.AssertOneObjectInCurrentPersistedCollection(cpCol);
             Assert.IsFalse(myBO.Status.IsDirty);
             Assert.IsFalse(util.AddedEventFired);
         }
