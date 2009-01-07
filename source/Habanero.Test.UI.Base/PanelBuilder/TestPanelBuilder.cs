@@ -395,13 +395,20 @@ namespace Habanero.Test.UI.Base
 
             //---------------Execute Test ----------------------
             IPanel panel = panelBuilder.BuildPanelForTab(singleIntegerFieldTab).Panel;
-            IControlHabanero textBoxCol1 = panel.Controls[PanelBuilder.INPUT_CONTROL_COLUMN_NO];
-            IControlHabanero textBoxCol2 = panel.Controls[PanelBuilder.INPUT_CONTROL_COLUMN_NO + PanelBuilder.CONTROLS_PER_COLUMN];
-            IControlHabanero label2Col2 = panel.Controls[PanelBuilder.LABEL_CONTROL_COLUMN_NO + PanelBuilder.CONTROLS_PER_COLUMN*3];
             //---------------Test Result -----------------------
+            IControlHabanero textBoxCol1 = panel.Controls[PanelBuilder.INPUT_CONTROL_COLUMN_NO];
+            IControlHabanero col1Text1RowSpan2Label = panel.Controls[PanelBuilder.LABEL_CONTROL_COLUMN_NO];
+            IControlHabanero textBoxCol2 = panel.Controls[PanelBuilder.INPUT_CONTROL_COLUMN_NO + PanelBuilder.CONTROLS_PER_COLUMN];
+            IControlHabanero nullControl = panel.Controls[PanelBuilder.LABEL_CONTROL_COLUMN_NO + PanelBuilder.CONTROLS_PER_COLUMN * 3];
+            ILabel col2TextBox2Label = (ILabel)panel.Controls[PanelBuilder.LABEL_CONTROL_COLUMN_NO + PanelBuilder.CONTROLS_PER_COLUMN * 4];
+            
+            Assert.IsNotInstanceOfType(typeof(ILabel),nullControl);
             Assert.AreEqual(textBoxCol2.Height * 2 + LayoutManager.DefaultGapSize, textBoxCol1.Height);
-            Assert.AreEqual(textBoxCol1.Right+PanelBuilder.ERROR_PROVIDER_WIDTH+GridLayoutManager.DefaultGapSize*2,label2Col2.Left);
+            Assert.AreEqual(col1Text1RowSpan2Label.Left, nullControl.Left);
 
+            Assert.IsInstanceOfType(typeof(LabelWin), col2TextBox2Label);
+            Assert.AreEqual("Col2TextBox2",col2TextBox2Label.Text);
+            Assert.AreEqual(textBoxCol1.Right+PanelBuilder.ERROR_PROVIDER_WIDTH+GridLayoutManager.DefaultGapSize*2,col2TextBox2Label.Left);
         }
 
         [Test]

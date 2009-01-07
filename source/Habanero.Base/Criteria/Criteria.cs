@@ -241,6 +241,8 @@ namespace Habanero.Base
                         return _leftCriteria.IsMatch(businessObject) && _rightCriteria.IsMatch(businessObject);
                     case LogicalOp.Or:
                         return _leftCriteria.IsMatch(businessObject) || _rightCriteria.IsMatch(businessObject);
+                    case LogicalOp.Not:
+                        return !_rightCriteria.IsMatch(businessObject);
                 }
             }
 

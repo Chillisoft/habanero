@@ -135,5 +135,98 @@ namespace Habanero.Test.BO
             committer.CommitTransaction();
             //---------------Test Result -----------------------
         }
+
+        [Test]
+        public void TestCheckForDuplicate()
+        {
+
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            BORegistry.DataAccessor = new DataAccessorInMemory(dataStore);
+            ContactPersonTestBO.LoadClassDefWithCompositeAlternateKey();
+            ContactPersonTestBO contactPerson = GetSavedContactPerson(dataStore);
+            ContactPersonTestBO duplicateContactPerson = new ContactPersonTestBO();
+            duplicateContactPerson.Surname = contactPerson.Surname;
+            duplicateContactPerson.FirstName = contactPerson.FirstName;
+            TransactionCommitterInMemory committer = new TransactionCommitterInMemory(dataStore);
+            committer.AddBusinessObject(duplicateContactPerson);
+            //---------------Execute Test ----------------------
+            try
+            {
+                committer.CommitTransaction();
+                Assert.Fail("Commit should have failed due to duplicate key violation");
+            }
+            //---------------Test Result -----------------------
+            catch (BusObjDuplicateConcurrencyControlException ex)
+            {
+                StringAssert.Contains("Surname", ex.Message);
+                StringAssert.Contains("FirstName", ex.Message);
+            }
+           
+        }
+
+        [Test]
+        public void TestDeleteRelated()
+        {
+            //---------------Set up test pack-------------------
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            BORegistry.DataAccessor = new DataAccessorInMemory(dataStore);
+            Address address;
+            ContactPersonTestBO contactPersonTestBO =
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            contactPersonTestBO.Delete();
+            TransactionCommitterInMemory committer = new TransactionCommitterInMemory(dataStore);
+            committer.AddBusinessObject(contactPersonTestBO);
+
+            //---------------Execute Test ----------------------
+            committer.CommitTransaction();
+
+            //---------------Test Result -----------------------
+            AssertBOStateIsValidAfterDelete(contactPersonTestBO);
+            AssertBOStateIsValidAfterDelete(address);
+
+            AssertBusinessObjectNotInDataStore(contactPersonTestBO);
+            AssertBusinessObjectNotInDataStore( address);
+        }
+
+
+        private static ContactPersonTestBO GetSavedContactPerson(DataStoreInMemory dataStore)
+        {
+            ContactPersonTestBO contactPersonCompositeKey = GetUnsavedContactPerson();
+            TransactionCommitterInMemory committer = new TransactionCommitterInMemory(dataStore);
+            committer.AddBusinessObject(contactPersonCompositeKey);
+            committer.CommitTransaction();
+            return contactPersonCompositeKey;
+        }
+
+        private static ContactPersonTestBO GetUnsavedContactPerson()
+        {
+            ContactPersonTestBO contactPersonCompositeKey = new ContactPersonTestBO();
+            contactPersonCompositeKey.Surname = "Somebody";
+            contactPersonCompositeKey.FirstName = "Else";
+            return contactPersonCompositeKey;
+        }
+
+        private static void AssertBusinessObjectNotInDataStore(IBusinessObject bo)
+        {
+            try
+            {
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(bo.ClassDef, bo.ID);
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (BusObjDeleteConcurrencyControlException ex)
+            {
+                StringAssert.Contains("A Error has occured since the object you are trying to refresh has been ", ex.Message);
+            }
+        }
+
+        private static void AssertBOStateIsValidAfterDelete(IBusinessObject bo)
+        {
+            Assert.IsTrue(bo.Status.IsNew);
+            Assert.IsTrue(bo.Status.IsDeleted);
+        }
+
+
+
     }
 }

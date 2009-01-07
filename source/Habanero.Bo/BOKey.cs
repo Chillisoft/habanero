@@ -507,5 +507,23 @@ namespace Habanero.BO
         {
             return _props.Values.GetEnumerator();
         }
+
+        public Criteria GetKeyCriteria()
+        {
+            if (this.Count == 1)
+            {
+                return new Criteria(this[0].PropertyName, Criteria.ComparisonOp.Equals, this[0].Value);
+            }
+            Criteria lastCriteria = null;
+            foreach (IBOProp prop in this)
+            {
+                Criteria propCriteria = new Criteria(prop.PropertyName, Criteria.ComparisonOp.Equals, prop.Value);
+                lastCriteria = lastCriteria == null
+                                   ? propCriteria
+                                   : new Criteria(lastCriteria, Criteria.LogicalOp.And, propCriteria);
+            }
+            return lastCriteria;
+        }
+        
     }
 }

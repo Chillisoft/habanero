@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
+using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
 {
@@ -86,7 +87,7 @@ namespace Habanero.BO
         /// <returns>A decorated Business object (TransactionalBusinessObject)</returns>
         protected override TransactionalBusinessObject CreateTransactionalBusinessObject(IBusinessObject businessObject)
         {
-           return new TransactionalBusinessObject(businessObject);
+           return new TransactionalBusinessObjectInMemory(businessObject);
         }
 
         protected override void ExecuteTransactionToDataSource(ITransactional transaction)
@@ -98,9 +99,37 @@ namespace Habanero.BO
                 {
                     _dataStoreInMemory.Add(businessObject);
                 }
-                else if (businessObject.Status.IsDeleted) _dataStoreInMemory.Remove(businessObject);
+                else if (businessObject.Status.IsDeleted)
+                {
+                    DeleteRelatedChildren(businessObject);
+                    //DereferenceRelatedChildren(transactionBusObjDB);
+                    _dataStoreInMemory.Remove(businessObject);
+                    
+                }
             }
             base.ExecuteTransactionToDataSource(transaction);
+        }
+
+        private void DeleteRelatedChildren(IBusinessObject businessObject)
+        {
+            foreach (Relationship relationship in businessObject.Relationships)
+            {
+                if (MustDeleteRelatedObjects(relationship))
+                {
+                    IBusinessObjectCollection col = relationship.GetRelatedBusinessObjectCol();
+                    for (int i = col.Count - 1; i >= 0; i--)
+                    {
+                        BusinessObject bo = (BusinessObject)col[i];
+                        bo.Delete();
+                        ExecuteTransactionToDataSource(new TransactionalBusinessObjectDB(bo));
+                    }
+                }
+            }
+        }
+
+        private static bool MustDeleteRelatedObjects(Relationship relationship)
+        {
+            return relationship.DeleteParentAction == DeleteParentAction.DeleteRelated;
         }
     }
 }

@@ -133,7 +133,7 @@ namespace Habanero.UI.Base
         {
             ILabel label = CreateAndAddLabel(panelInfo, formField);
             IControlMapper controlMapper = CreateAndAddInputControl(panelInfo, formField);
-            CreateAndAddErrorProviderPanel(panelInfo);
+            CreateAndAddErrorProviderPanel(panelInfo, formField);
 
             panelInfo.FieldInfos.Add(new PanelInfo.FieldInfo(formField.PropertyName, label, controlMapper));
         }
@@ -144,10 +144,10 @@ namespace Habanero.UI.Base
                 panelInfo.LayoutManager.AddControl(null);
         }
 
-        private void CreateAndAddErrorProviderPanel(IPanelInfo panelInfo)
+        private void CreateAndAddErrorProviderPanel(IPanelInfo panelInfo, UIFormField formField)
         {
             IPanel panel = Factory.CreatePanel();
-            panelInfo.LayoutManager.AddControl(panel);
+            panelInfo.LayoutManager.AddControl(panel, formField.RowSpan, 1);
         }
 
         private IControlMapper CreateAndAddInputControl(IPanelInfo panelInfo, UIFormField formField)
@@ -175,7 +175,7 @@ namespace Habanero.UI.Base
             ILabel labelControl = Factory.CreateLabel(formField.GetLabel(), formField.IsCompulsory);
             labelControl.Name = formField.PropertyName;
             SetToolTip(formField, labelControl);
-            panelInfo.LayoutManager.AddControl(labelControl);
+            panelInfo.LayoutManager.AddControl(labelControl, formField.RowSpan, 1);
             return labelControl;
         }
 

@@ -625,6 +625,7 @@ namespace Habanero.BO.ClassDefinition
         public bool AutoIncrementing
         {
             get { return _autoIncrementing; }
+            set { _autoIncrementing = value; }
         }
 
         /// <summary>

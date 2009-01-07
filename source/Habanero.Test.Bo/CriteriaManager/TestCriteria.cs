@@ -402,6 +402,47 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
+        [Test]
+        public void TestCriteria_IsMatch_TwoProps_And()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            DateTime dob = DateTime.Now;
+            cp.DateOfBirth = dob;
+            string surname = Guid.NewGuid().ToString("N");
+            cp.Surname = surname;
+
+            Criteria dobCriteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, dob);
+            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
+
+            //---------------Execute Test ----------------------
+            Criteria twoPropCriteria = new Criteria(dobCriteria, Criteria.LogicalOp.And, nameCriteria);
+            bool isMatch = twoPropCriteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestCriteria_IsMatch_TwoProps_Not()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithBoolean();
+            MyBO bo = new MyBO();
+
+            bo.TestBoolean = false;
+
+            Criteria notCriteria = new Criteria(null, Criteria.LogicalOp.Not, new Criteria("TestBoolean", Criteria.ComparisonOp.Equals, true));
+
+            //---------------Execute Test ----------------------
+            bool isMatch = notCriteria.IsMatch(bo);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+        }
+
 
         [Test]
         public void TestToString_Guid()
@@ -506,30 +547,7 @@ namespace Habanero.Test.BO
 
         #endregion
 
-        #region And
 
-        [Test]
-        public void TestCriteria_IsMatch_TwoProps_And()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO cp = new ContactPersonTestBO();
-            DateTime dob = DateTime.Now;
-            cp.DateOfBirth = dob;
-            string surname = Guid.NewGuid().ToString("N");
-            cp.Surname = surname;
-
-            Criteria dobCriteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, dob);
-            Criteria nameCriteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
-
-            //---------------Execute Test ----------------------
-            Criteria twoPropCriteria = new Criteria(dobCriteria, Criteria.LogicalOp.And, nameCriteria);
-            bool isMatch = twoPropCriteria.IsMatch(cp);
-            //---------------Test Result -----------------------
-            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
-            //---------------Tear Down -------------------------
-        }
 
         [Test]
         public void TestToString_And()
@@ -599,8 +617,6 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
 
         }
-
-        #endregion
 
         #region Test Comparison operators
 

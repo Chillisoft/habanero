@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 
 namespace Habanero.BO
@@ -159,10 +160,52 @@ namespace Habanero.BO
         ///</summary>
         ///<param name="errMsg"></param>
         ///<returns></returns>
+        /// TODO: This uses the BORegistry.DataAccessor that is set up.  It should possibly use the same DataAccessor as the
+        /// transactioncommitter that is controlling it so that it can be added to the same transaction.
         protected internal virtual bool HasDuplicateIdentifier(out string errMsg)
         {
             errMsg = "";
-            return false;
+            if (this.BusinessObject.GetBOKeyCol() == null) return false;
+            if (this.BusinessObject.Status.IsDeleted) return false;
+
+            List<IBOKey> allKeys = new List<IBOKey>();
+            if (this.BusinessObject.ID != null) allKeys.Add(this.BusinessObject.ID);
+            foreach (BOKey key in this.BusinessObject.GetBOKeyCol())
+            {
+                allKeys.Add(key);
+            }
+            Criteria primaryKeyCriteria = null;
+            foreach (BOKey boKey in allKeys)
+            {
+                if (boKey is BOPrimaryKey)
+                {
+                    primaryKeyCriteria = Criteria.FromPrimaryKey(boKey as IPrimaryKey);
+                }
+
+                if (!boKey.IsDirtyOrNew()) continue;
+
+                if (boKey is BOPrimaryKey)
+                {
+
+                    if (this.BusinessObject.ClassDef.HasObjectID) continue;
+
+                    if (BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(this.BusinessObject.ClassDef, primaryKeyCriteria).
+                       Count > 0)
+                    {
+                        errMsg += GetDuplicateObjectErrMsg(boKey, this.BusinessObject.ClassDef.DisplayName) + Environment.NewLine;
+                    }
+                    continue;
+                }
+
+                Criteria keyCriteria = boKey.GetKeyCriteria();
+                if (primaryKeyCriteria != null)
+                    keyCriteria = new Criteria(keyCriteria, Criteria.LogicalOp.And, new Criteria(Criteria.LogicalOp.Not, primaryKeyCriteria));
+
+                if (BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(this.BusinessObject.ClassDef, keyCriteria).Count > 0)
+                    errMsg += GetDuplicateObjectErrMsg(boKey, this.BusinessObject.ClassDef.DisplayName) + Environment.NewLine;
+            }
+
+            return !String.IsNullOrEmpty(errMsg);
         }
 
         ///<summary>
