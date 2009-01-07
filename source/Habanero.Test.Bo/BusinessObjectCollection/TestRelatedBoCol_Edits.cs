@@ -5,7 +5,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.RelatedBusinessObjectCollection
+namespace Habanero.Test.BO.BusinessObjectCollection
 {
     [TestFixture]
     public class TestRelatedBoCol_Edits

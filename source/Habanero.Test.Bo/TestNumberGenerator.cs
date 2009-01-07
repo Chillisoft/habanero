@@ -23,6 +23,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB;
+using Habanero.Test.BO.TransactionCommitters;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO

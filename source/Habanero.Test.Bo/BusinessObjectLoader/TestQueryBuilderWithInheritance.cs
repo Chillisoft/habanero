@@ -25,7 +25,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.Test.Structure;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.BusinessObjectLoader
 {
     [TestFixture]
     public class TestQueryBuilderWithInheritance
@@ -56,9 +56,9 @@ namespace Habanero.Test.BO
             {
                 string joinToSourceName = expectedJoin.ToSource.Name;
                 Source.Join actualJoin = actual.Find(delegate(Source.Join join1)
-                {
-                    return join1.ToSource.Name == joinToSourceName;
-                });
+                                                     {
+                                                         return join1.ToSource.Name == joinToSourceName;
+                                                     });
                 Assert.IsNotNull(actualJoin, string.Format("{0}: Could not find a join from {1} to {2}", context, expected.FromSource.Name, joinToSourceName));
                 AssertJoinsEqual(expectedJoin, actualJoin, context + string.Format("(Join to '{0}')", joinToSourceName));
             }
@@ -80,10 +80,10 @@ namespace Habanero.Test.BO
                 string expectedJoinToPropertyName = expectedJoinField.ToField.PropertyName;
                 string expectedJoinFromPropertyName = expectedJoinField.FromField.PropertyName;
                 Source.Join.JoinField actualJoinField = actualJoinFields.Find(delegate(Source.Join.JoinField joinField)
-                {
-                    return joinField.FromField.PropertyName == expectedJoinFromPropertyName
-                           && joinField.ToField.PropertyName == expectedJoinToPropertyName;
-                });
+                                                                              {
+                                                                                  return joinField.FromField.PropertyName == expectedJoinFromPropertyName
+                                                                                         && joinField.ToField.PropertyName == expectedJoinToPropertyName;
+                                                                              });
                 string expectedJoinFieldDesc = String.Format("from {0}.{1} to {2}.{3}",
                                                              expectedJoinField.FromField.Source.Name,
                                                              expectedJoinFromPropertyName,

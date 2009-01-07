@@ -445,7 +445,7 @@ namespace Habanero.BO
         }
 
 
-        protected void LoadBOCollection(IBusinessObjectCollection collection, IBusinessObjectCollection loadedBos)
+        protected void LoadBOCollection(IBusinessObjectCollection collection, ICollection loadedBos)
         {
             ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
 

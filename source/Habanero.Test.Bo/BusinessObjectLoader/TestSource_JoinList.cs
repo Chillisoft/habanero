@@ -23,7 +23,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.BusinessObjectLoader
 {
     [TestFixture]
     public class TestSource_JoinList

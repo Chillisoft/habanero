@@ -217,7 +217,7 @@
     <Compile Include="BusinessObjectLoader\TestSource.cs" />
     <Compile Include="BusinessObjectLoader\TestSourceDB.cs" />
     <Compile Include="TestPropertyLink.cs" />
-    <Compile Include="TestTransactionCommitter.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionCommitter.cs" />
     <Compile Include="Relationship\TestMultipleRelationship.cs" />
     <Compile Include="Loaders\TestXmlTriggerLoader.cs" />
     <Compile Include="SqlGeneration\TestDeleteStatementGenerator.cs" />
@@ -278,10 +278,10 @@
     <Compile Include="Relationship\TestSingleRelationship.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestTransactionCommitterDB.cs" />
-    <Compile Include="TestTransactionCommitterFactory.cs" />
-    <Compile Include="TestTransactionCommitterHelper.cs" />
-    <Compile Include="TestTransactionCommitterInMemory.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionCommitterDB.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionCommitterFactory.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionCommitterHelper.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionCommitterInMemory.cs" />
     <Compile Include="TestTransactionLogger.cs" />
     <Compile Include="Relationship\TestMultipleRelationshipDef.cs" />
     <Compile Include="TestUtils.cs" />

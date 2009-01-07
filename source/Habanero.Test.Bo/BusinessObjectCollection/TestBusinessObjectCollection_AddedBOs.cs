@@ -5,7 +5,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.TestBusinessObjectCollection
+namespace Habanero.Test.BO.BusinessObjectCollection
 {
     [TestFixture]
     public class TestBusinessObjectCollection_AddedBOs //:TestBase
@@ -493,8 +493,9 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         public void Test_Mark4Delete_Added_RefreshAll()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+            cpCol.Load(new Criteria("Surname", Criteria.ComparisonOp.Equals, TestUtil.CreateRandomString()), "" );
             cpCol.Add(myBO);
             myBO.MarkForDelete();
             RegisterForAddedAndRemovedEvents(cpCol);

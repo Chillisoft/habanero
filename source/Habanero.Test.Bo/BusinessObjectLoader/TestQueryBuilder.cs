@@ -24,7 +24,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.BusinessObjectLoader
 {
     [TestFixture]
     public class TestQueryBuilder
@@ -326,7 +326,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestPrepareCriteria_ThroughRelationship()
         {
-             //---------------Set up test pack-------------------
+            //---------------Set up test pack-------------------
             ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             const string carRegNoValue = "1234";
             Criteria criteria = new Criteria("Car.CarRegNo", Criteria.ComparisonOp.Equals, carRegNoValue);
@@ -344,7 +344,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestPrepareCriteria_ThroughRelationship_TwoLevels()
         {
-             //---------------Set up test pack-------------------
+            //---------------Set up test pack-------------------
             ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             string surname = TestUtil.CreateRandomString();
             Criteria criteria = new Criteria("Car.Owner.Surname", Criteria.ComparisonOp.Equals, surname);
@@ -734,5 +734,4 @@ namespace Habanero.Test.BO
 
 
     }
-
 }

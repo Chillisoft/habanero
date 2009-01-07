@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -203,7 +204,7 @@ namespace Habanero.BO
 
             QueryBuilder.PrepareCriteria(collection.ClassDef, criteria);
 
-            BusinessObjectCollection<T> loadedBos = _dataStore.FindAll<T>(criteria);
+            List<T> loadedBos = _dataStore.FindAllInternal<T>(criteria);
             loadedBos.Sort(orderCriteria.Compare);
             if (selectQuery.Limit >= 0)
             {

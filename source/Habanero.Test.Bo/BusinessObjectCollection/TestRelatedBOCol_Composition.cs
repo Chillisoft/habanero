@@ -5,31 +5,12 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Test.BO.RelatedBusinessObjectCollection;
 using Habanero.Util;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.RelatedBusinessObjectCollection
+namespace Habanero.Test.BO.BusinessObjectCollection
 {
-    //Composition (strong part of) Relationships in Habanero: 
-    //  A strong form of aggregation in which the "whole" is completely responsible for its parts and each "part" object 
-    //      is only associated to one "whole" object. E.g  Invoice and Invoice lines. 
-    //      The invoices lines only make sense in terms of the invoice. The invoice lines cannot be created, retrieved, 
-    //      deleted or persisted independently of the invoice. The invoice lines can never be moved to another invoice.
-
-    //The composition relationship can be either a 1:M or a 1:1. By definition a M:1 and a M:M cannot be a composition relationship. 
-    //•	A typical example of a composition relationship is an Invoice and its Invoice lines. An invoice is made up of its invoice lines. 
-    //An Invoice Line is part of an Invoice. An invoice Line cannot exist independently of its invoice and an invoice 
-    //line can only belong to a single invoice.
-    //•	An invoice that has invoice lines cannot be deleted without it deleting its invoice lines. 
-    //The invoice’s InvoiceLines relationship would be marked as either prevent delete, delete invoice lines or do nothing.
-    //•	An already persisted invoice line cannot be added to an Invoice (In Habanero a new invoice line can be added to an invoice). 
-    //•	An Invoice line cannot be removed from its invoice.
-    //•	An invoice can create a new invoice line via its InvoiceLines Relationship.
-    //•	An invoice is considered to be dirty if it has any dirty invoice line. 
-    //A dirty invoice line would be any invoice line that is dirty (edited) and would include a newly created invoice line and an 
-    //invoice line that has been marked for deletion.
-    //•	If an invoice is persisted then it must persist all its invoice lines.
-
     [TestFixture]
     public class TestRelatedBOCol_Composition
     {
@@ -76,7 +57,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
                 cpCol.Add(contactPerson);
                 Assert.Fail("expected Err");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
             {
                 AssertMessageIsCorrect(ex, compositionRelationship.RelationshipDef.RelatedObjectClassName, "added", compositionRelationship.RelationshipName);
@@ -153,7 +134,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
                 contactPerson.Organisation = alternateOrganisationTestBO;
                 Assert.Fail("expected Err");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
             {
                 StringAssert.Contains("The " + compositionRelationship.RelationshipDef.RelatedObjectClassName, ex.Message);
@@ -189,7 +170,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
                 contactPerson.Organisation = null;
                 Assert.Fail("expected Err");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
             {
                 StringAssert.Contains("The " + compositionRelationship.RelationshipDef.RelatedObjectClassName, ex.Message);
@@ -274,7 +255,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
                 cpCol.Remove(contactPerson);
                 Assert.Fail("expected Err");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
             {
                 StringAssert.Contains("The " + compositionRelationship.RelationshipDef.RelatedObjectClassName, ex.Message);
@@ -314,7 +295,7 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
                 contactPerson.Organisation = null;
                 Assert.Fail("expected Err");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
             {
                 StringAssert.Contains("The " + compositionRelationship.RelationshipDef.RelatedObjectClassName, ex.Message);

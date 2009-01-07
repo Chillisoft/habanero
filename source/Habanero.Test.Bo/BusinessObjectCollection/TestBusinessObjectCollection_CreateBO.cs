@@ -4,7 +4,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.TestBusinessObjectCollection
+namespace Habanero.Test.BO.BusinessObjectCollection
 {
     [TestFixture]
     public class TestBusinessObjectCollection_CreateBO //:TestBase
@@ -371,7 +371,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             cpCol.CreateBusinessObject();
-                        RegisterForAddedAndRemovedEvents(cpCol);
+            RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
             AssertOneObjectInCurrentAndCreatedCollection(cpCol);

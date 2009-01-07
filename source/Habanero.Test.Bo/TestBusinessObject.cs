@@ -23,8 +23,10 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
+using NMock;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Rhino.Mocks.Constraints;
 
 namespace Habanero.Test.BO
 {
@@ -220,6 +222,20 @@ namespace Habanero.Test.BO
             Assert.AreNotEqual(0, bo.TestAutoIncID);
             Assert.IsFalse(bo.Status.IsDirty);
         }
+
+        [Test]
+        public void TestMethod()
+        {
+            
+            
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            //---------------Test Result -----------------------
+            //---------------Tear Down -------------------------          
+        }
+
+
+
 
         [Test]
         public void TestSaveWithBeforeSaveImplemented()

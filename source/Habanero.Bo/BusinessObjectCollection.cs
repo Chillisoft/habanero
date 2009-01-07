@@ -606,6 +606,10 @@ namespace Habanero.BO
 // ReSharper disable UnusedPrivateMember
         internal void ClearCurrentCollection()
         {
+            foreach (TBusinessObject businessObject in this)
+            {
+                DeRegisterForBOEvents(businessObject);
+            }
             base.Clear();
             KeyObjectHashTable.Clear();
         }

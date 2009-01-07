@@ -5,7 +5,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.TestBusinessObjectCollection
+namespace Habanero.Test.BO.BusinessObjectCollection
 {
     [TestFixture]
     public class TestBusinessObjectCollection_Edits
@@ -93,7 +93,7 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         {
             //runs every time any testmethod is complete
 //            ClassDef.ClassDefs.Clear();
-          //  _dataStore.ClearAllBusinessObjects();
+            //  _dataStore.ClearAllBusinessObjects();
             TestUtil.WaitForGC();
         }
 

@@ -4,10 +4,8 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.RelatedBusinessObjectCollection
+namespace Habanero.Test.BO.BusinessObjectCollection
 {
-    //TODO: Verify this but i think should not remove event registering
-    //DeRegisterForBOEvents(businessObject);
     [TestFixture]
     public class TestRelatedBOCol_Created //:TestBase
     {

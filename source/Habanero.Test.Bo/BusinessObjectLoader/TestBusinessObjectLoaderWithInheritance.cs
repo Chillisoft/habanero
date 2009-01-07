@@ -23,7 +23,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.Test.Structure;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.BusinessObjectLoader
 {
     public abstract class TestBusinessObjectLoaderWithInheritance
     {

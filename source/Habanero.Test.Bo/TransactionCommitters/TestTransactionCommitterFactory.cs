@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.TransactionCommitters
 {
     class TestTransactionCommitterFactory
     {

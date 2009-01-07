@@ -24,7 +24,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.TransactionCommitters
 {
     [TestFixture]
     public class TestTransactionCommitter : TestUsingDatabase

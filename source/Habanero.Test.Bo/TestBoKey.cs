@@ -243,5 +243,79 @@ namespace Habanero.Test.BO
         {
             _updatedEventHandled = true;
         }
+
+        [Test]
+        public void TestHasAutoIncrementingProperty_False()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef1 = new PropDef("PropName1", typeof(string), PropReadWriteRule.ReadWrite, null);
+            propDef1.AutoIncrementing = false;
+            BOPropCol propCol = new BOPropCol();
+            propCol.Add(propDef1.CreateBOProp(false));
+            KeyDef keyDef = new KeyDef();
+            keyDef.Add(propDef1);
+            BOKey boKey = keyDef.CreateBOKey(propCol);
+
+            //---------------Assert PreConditions---------------            
+            
+            //---------------Execute Test ----------------------
+            bool hasAutoIncrementingProperty = boKey.HasAutoIncrementingProperty;
+            //---------------Test Result -----------------------
+
+            Assert.IsFalse(hasAutoIncrementingProperty);
+            //---------------Tear Down -------------------------          
+        }
+
+
+        [Test]
+        public void TestHasAutoIncrementingProperty_True()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef1 = new PropDef("PropName1", typeof(string), PropReadWriteRule.ReadWrite, null);
+            propDef1.AutoIncrementing = true;
+            BOPropCol propCol = new BOPropCol();
+            propCol.Add(propDef1.CreateBOProp(false));
+            KeyDef keyDef = new KeyDef();
+            keyDef.Add(propDef1);
+            BOKey boKey = keyDef.CreateBOKey(propCol);
+
+            //---------------Assert PreConditions---------------            
+
+            //---------------Execute Test ----------------------
+            bool hasAutoIncrementingProperty = boKey.HasAutoIncrementingProperty;
+            //---------------Test Result -----------------------
+
+            Assert.IsTrue(hasAutoIncrementingProperty);
+            //---------------Tear Down -------------------------          
+        }
+
+
+        [Test]
+        public void TestHasAutoIncrementingProperty_TwoProps_True()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef1 = new PropDef("PropName1", typeof(string), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef2 = new PropDef("PropName2", typeof(string), PropReadWriteRule.ReadWrite, null);
+            propDef2.AutoIncrementing = true;
+            BOPropCol propCol = new BOPropCol();
+            propCol.Add(propDef1.CreateBOProp(false));
+            propCol.Add(propDef2.CreateBOProp(false));
+            KeyDef keyDef = new KeyDef();
+            keyDef.Add(propDef1);
+            keyDef.Add(propDef2);
+            BOKey boKey = keyDef.CreateBOKey(propCol);
+
+            //---------------Assert PreConditions---------------            
+
+            //---------------Execute Test ----------------------
+            bool hasAutoIncrementingProperty = boKey.HasAutoIncrementingProperty;
+            //---------------Test Result -----------------------
+
+            Assert.IsTrue(hasAutoIncrementingProperty);
+            //---------------Tear Down -------------------------          
+        }
+
+
+   
     }
 }

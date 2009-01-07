@@ -602,10 +602,7 @@ namespace Habanero.BO.ClassDefinition
         /// In this case when the BusinessObject is inserted the field will be filled
         /// from the database field.
         /// </summary>
-        public bool AutoIncrementing
-        {
-            get { return _autoIncrementing; }
-        }
+        public bool AutoIncrementing { get { return _autoIncrementing; } set { _autoIncrementing = value; } }
 
         /// <summary>
         /// Returns the maximum length for a string property

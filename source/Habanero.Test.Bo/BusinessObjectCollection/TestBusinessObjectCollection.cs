@@ -29,7 +29,7 @@ using Habanero.DB;
 using Habanero.Util;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.TestBusinessObjectCollection
+namespace Habanero.Test.BO.BusinessObjectCollection
 {
     /// <summary>
     /// Summary description for TestBusinessObjectCollection.
@@ -92,9 +92,9 @@ namespace Habanero.Test.BO.TestBusinessObjectCollection
         private static void AssertNotContains(ContactPersonTestBO cp1, List<ContactPersonTestBO> col)
         {
             col.ForEach(delegate(ContactPersonTestBO bo)
-                    {
-                        if (ReferenceEquals(bo, cp1)) Assert.Fail("Should not contain object");
-                    });
+                        {
+                            if (ReferenceEquals(bo, cp1)) Assert.Fail("Should not contain object");
+                        });
         }
 
         //Load a collection from the database.

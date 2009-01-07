@@ -24,8 +24,9 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
+using Rhino.Mocks;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.TransactionCommitters
 {
     [TestFixture]
     public class TestTransactionCommitterDB : TestUsingDatabase
@@ -126,17 +127,17 @@ namespace Habanero.Test.BO
 //            IBusinessObject loadedBO =
 //                BOLoader.Instance.GetBusinessObject(bo.GetType(), bo.ID.ToString());
             IBusinessObject loadedBO =
-                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(bo.ClassDef, bo.ID);
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(bo.ClassDef, bo.ID);
             Assert.IsNotNull(loadedBO);
         }
 
         private static void AssertMockBONotInDatabase(Guid mockBOID)
         {
-        //    MockBO savedMockBO =
-        //        BOLoader.Instance.GetBusinessObject<MockBO>("MockBOID = '" + mockBOID.ToString("B") + "'");
+            //    MockBO savedMockBO =
+            //        BOLoader.Instance.GetBusinessObject<MockBO>("MockBOID = '" + mockBOID.ToString("B") + "'");
             Criteria criteria = new Criteria("MockBOID", Criteria.ComparisonOp.Equals, mockBOID);
             IBusinessObject savedMockBO =
-                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MockBO>((criteria));
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MockBO>((criteria));
             Assert.IsNull(savedMockBO);
         }
 
@@ -835,6 +836,52 @@ namespace Habanero.Test.BO
             committer.CommitTransaction();
             //---------------Test Result -----------------------
             Assert.AreEqual(cp.Surname, cp.Props["Surname"].PersistedPropertyValueString);
+        }
+
+
+        /// <summary>
+        /// the <see cref="TransactionCommitterDB"/>shouldn't check for duplicates on the primary key as the object is new
+        /// and has an autoincrementing id field.
+        /// </summary>
+        [Test]
+        public void TestAutoIncrementingFieldInNewPrimaryKeyDoesntCheckDuplicates()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            TestAutoInc.LoadClassDefWithAutoIncrementingID();
+
+            TestAutoInc bo = new TestAutoInc();
+            bo.SetPropertyValue("testfield", "testing 123");
+
+            MockRepository mockRepos = new MockRepository();
+            IBusinessObjectLoader mockBusinessObjectLoader = mockRepos.DynamicMock<IBusinessObjectLoader>();
+
+            Expect.Call(
+                mockBusinessObjectLoader.GetBusinessObjectCollection(null, new Criteria("", Criteria.ComparisonOp.Equals, "")))
+                .IgnoreArguments()
+                .Repeat.Never();
+
+            DataAccessorStub dataAccessor = new DataAccessorStub();
+            dataAccessor.BusinessObjectLoader = mockBusinessObjectLoader;
+
+            BORegistry.DataAccessor = dataAccessor;
+            mockRepos.ReplayAll();
+            TransactionCommitterDB transactionCommitterDB = new TransactionCommitterDB();
+            transactionCommitterDB.AddBusinessObject(bo);
+
+            //---------------Execute Test ----------------------
+            transactionCommitterDB.CommitTransaction();
+
+            //---------------Test Result -----------------------
+            mockRepos.VerifyAll();
+
+        }
+        private class DataAccessorStub : IDataAccessor
+        {
+            private IBusinessObjectLoader _businessObjectLoader;
+            public IBusinessObjectLoader BusinessObjectLoader { get { return _businessObjectLoader; } set { _businessObjectLoader = value; } }
+
+            public ITransactionCommitter CreateTransactionCommitter() { return null; }
         }
     }
 }

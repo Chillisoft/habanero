@@ -157,7 +157,7 @@ namespace Habanero.BO
                 {
                     
                     if (this.BusinessObject.ClassDef.HasObjectID) continue;
-                  
+                    if (this.BusinessObject.Status.IsNew && boKey.HasAutoIncrementingProperty) continue;
                     if (BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(this.BusinessObject.ClassDef, primaryKeyCriteria).
                        Count > 0)
                     {

@@ -25,7 +25,7 @@ using Habanero.DB;
 using Habanero.Test.Structure;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.BusinessObjectLoader
 {
     [TestFixture]
     public class TestSelectQueryDB 
@@ -166,7 +166,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
             object value = statement.Parameters[0].Value;
             Assert.IsInstanceOfType(typeof(DateTime), value);
-                DateTime dateTimeValue = (DateTime)value;
+            DateTime dateTimeValue = (DateTime)value;
             Assert.GreaterOrEqual(dateTimeValue, dateTimeBefore);
             Assert.LessOrEqual(dateTimeValue, dateTimeAfter);
         }
@@ -186,7 +186,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             StringAssert.Contains(
                 "[MyBO] LEFT JOIN [MyRelatedBo] ON [MyBO].[RelatedID] = [MyRelatedBo].[MyRelatedBoID]", 
-                    statement.Statement.ToString());
+                statement.Statement.ToString());
             //---------------Tear Down -------------------------
         }
             
@@ -485,7 +485,7 @@ namespace Habanero.Test.BO
             ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
             //---------------Test Result -----------------------
             StringAssert.Contains("(([FilledCircle_table] JOIN [circle_table] ON [FilledCircle_table].[FilledCircleID_field] = [circle_table].[CircleID_field])" +
-                " JOIN [Shape_table] ON [circle_table].[CircleID_field] = [Shape_table].[ShapeID_field])", statement.Statement.ToString());
+                                  " JOIN [Shape_table] ON [circle_table].[CircleID_field] = [Shape_table].[ShapeID_field])", statement.Statement.ToString());
         }
 
         [Test]

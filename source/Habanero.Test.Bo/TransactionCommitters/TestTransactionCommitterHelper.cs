@@ -24,7 +24,7 @@ using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.TransactionCommitters
 {
     internal class TransactionCommitterTestHelper
     {
@@ -40,6 +40,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual("", message);
         }
     }
+
     internal class StubDatabaseFailureTransaction : TransactionalBusinessObjectDB
     {
         private bool _committed;
@@ -88,8 +89,6 @@ namespace Habanero.Test.BO
             get { return false; }
         }
     }
-
-
 
     internal class StubDatabaseTransactionMultiple : TransactionalBusinessObjectDB
     {
@@ -298,7 +297,6 @@ namespace Habanero.Test.BO
         }
 
     }
-
 
     internal class TransactionCommitterStubDB : TransactionCommitterDB
     {

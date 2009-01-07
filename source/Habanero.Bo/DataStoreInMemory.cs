@@ -141,6 +141,24 @@ namespace Habanero.BO
         }
 
         ///<summary>
+        /// Find all object that match the criteria.
+        ///</summary>
+        ///<param name="criteria"></param>
+        ///<typeparam name="T"></typeparam>
+        ///<returns></returns>
+        internal List<T> FindAllInternal<T>(Criteria criteria) where T : class, IBusinessObject, new()
+        {
+            List <T> col = new List<T>();
+            foreach (IBusinessObject bo in _objects.Values)
+            {
+                T boAsT = bo as T;
+                if (boAsT == null) continue;
+                if (criteria == null || criteria.IsMatch(boAsT)) col.Add(boAsT);
+            }
+            return col;
+        }
+
+        ///<summary>
         /// find all objects of type boType that match the criteria.
         ///</summary>
         ///<param name="BOType"></param>

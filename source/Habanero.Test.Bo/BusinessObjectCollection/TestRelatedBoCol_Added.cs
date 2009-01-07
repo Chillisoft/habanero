@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Test.BO.RelatedBusinessObjectCollection;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO.RelatedBusinessObjectCollection
+namespace Habanero.Test.BO.BusinessObjectCollection
 {
     [TestFixture]
     public class TestRelatedBoCol_AddedBOs //:TestBase
@@ -579,8 +580,11 @@ namespace Habanero.Test.BO.RelatedBusinessObjectCollection
         public void Test_Mark4Delete_Added_RefreshAll()
         {
             //---------------Set up test pack-------------------
-            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
-                new RelatedBusinessObjectCollection<ContactPersonTestBO>(GetContactPersonRelationship());
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            MultipleRelationship<ContactPersonTestBO> relationship = GetContactPersonRelationship();
+            relationship.Initialise();
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = (RelatedBusinessObjectCollection<ContactPersonTestBO>) relationship.BusinessObjectCollection;
+            
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
             cpCol.Add(myBO);
             myBO.MarkForDelete();

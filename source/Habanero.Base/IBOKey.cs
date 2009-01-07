@@ -62,6 +62,11 @@ namespace Habanero.Base
         }
 
         /// <summary>
+        /// Indicates whether any of the properties of this key are auto incrementing.
+        /// </summary>
+        bool HasAutoIncrementingProperty { get; }
+
+        /// <summary>
         /// Returns a string containing all the properties and their values,
         /// but using the values at last persistence rather than any dirty values
         /// </summary>

@@ -22,13 +22,13 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.BusinessObjectCollection
 {
     /// <summary>
     /// Tests loading, refreshing and editing a collection of related business objects.
     /// </summary>
-    [TestFixture, Ignore("Review when finished composition etc")]
-    public class TestRelatedBusinessObjectCollection : TestUsingDatabase
+    [TestFixture]
+    public class TestRelatedBusinessObjectCollection //: TestUsingDatabase
     {
 
         #region SetupTeardown
@@ -37,13 +37,14 @@ namespace Habanero.Test.BO
         public void TestSetup()
         {
             //Code that is run before every single test
+            BORegistry.DataAccessor = new DataAccessorInMemory();
 
         }
-        [TestFixtureSetUp]
-        public void TestFixtureSetup()
-        {
-            SetupDBConnection();
-        }
+        //[TestFixtureSetUp]
+        //public void TestFixtureSetup()
+        //{
+        //    SetupDBConnection();
+        //}
         [TearDown]
         public void TestTearDown()
         {
@@ -249,7 +250,7 @@ namespace Habanero.Test.BO
         // other option which is probably better is that the foreign key props reference the actual
         //  props of the parents.
 
-        [Test, Ignore("to be implemented")]
+        [Test]
         public void Test_AddPersistedObject_AddsObjectToCollection_SurvivesRefresh()
         {
             //---------------Set up test pack-------------------
@@ -257,6 +258,7 @@ namespace Habanero.Test.BO
             // equal to the contactPerson.ContactPersonID
             //Test that using relationship from contact person so that overcome issues 
             //   with reloading all the time.
+            ClassDef.ClassDefs.Clear();
             AddressTestBO address;
             ContactPersonTestBO.CreateContactPersonWithOneAddressTestBO(out address);
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
@@ -352,10 +354,11 @@ namespace Habanero.Test.BO
             Assert.IsNull(address.ContactPersonID);
         }
 
-        [Test, Ignore("to be implemented")]
+        [Test]
         public void TestRemoveRelatedObject_usingRelationship()
         {
             //-----Create Test pack---------------------
+            ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             AddressTestBO address = contactPersonTestBO.Addresses.CreateBusinessObject();
@@ -428,11 +431,12 @@ namespace Habanero.Test.BO
         //            Assert.AreEqual(1, contactPersonTestBO.Addresses.PersistedBOCol.Count);
 //        }
 
-        [Test, Ignore("ContactPersonID compulsory for address need another test for this.")]
-        public void TestRemoveRelatedObject_PersistColToDB()
+        [Test]
+        public void TestRemoveRelatedObject_PersistColToDataStore()
         {
             //-----Create Test pack---------------------
             ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
             
@@ -446,19 +450,19 @@ namespace Habanero.Test.BO
             addresses.Remove(address);
             addresses.SaveAll();
 
-            ////-----Test results-------------------------
+            //-----Test results-------------------------
             Assert.AreEqual(0, addresses.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, addresses.Count);
-            Assert.IsTrue(address.Status.IsDeleted);
-            Assert.IsTrue(address.Status.IsNew);
             Assert.AreEqual(0, addresses.PersistedBusinessObjects.Count);
         }
 
-        [Test, Ignore("to be implemented")]
-        public void TestRemoveRelatedObject_PersistColToDB_usingRelationshipRefreshing()
+        [Test]
+        public void TestRemoveRelatedObject_PersistColToDataStore_usingRelationshipRefreshing()
         {
             //-----Create Test pack---------------------
+            ClassDef.ClassDefs.Clear();
             AddressTestBO address;
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
 
             //-----Assert Precondition------------------
@@ -472,17 +476,19 @@ namespace Habanero.Test.BO
             addresses.SaveAll();
 
             ////-----Test results-------------------------
+            Assert.IsFalse(address.Status.IsDirty);
             Assert.AreEqual(0, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
+
             Assert.AreEqual(0, contactPersonTestBO.Addresses.Count);
-            Assert.IsTrue(address.Status.IsDeleted);
-            Assert.IsTrue(address.Status.IsNew);
             Assert.AreEqual(0, contactPersonTestBO.Addresses.PersistedBusinessObjects.Count);
         }
 
-        [Test, Ignore("to be implemented")]
-        public void TestRemoveRelatedObject_PersistBOToDB_usngRelationshipRefreshing()
+        [Test]
+        public void TestRemoveRelatedObject_PersistBOToDataStore_usngRelationshipRefreshing()
         {
             //-----Create Test pack---------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
 
@@ -498,15 +504,16 @@ namespace Habanero.Test.BO
             ////-----Test results-------------------------
             Assert.AreEqual(0, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, contactPersonTestBO.Addresses.Count);
-            Assert.IsTrue(address.Status.IsDeleted);
-            Assert.IsTrue(address.Status.IsNew);
             Assert.AreEqual(0, contactPersonTestBO.Addresses.PersistedBusinessObjects.Count);
         }
-        [Test, Ignore("Address.ContactPersonID cannot be null")]
-        public void TestRemoveRelatedObject_PersistBOToDB()
+
+
+        [Test]
+        public void TestRemoveRelatedObject_PersistBOToDataStore()
         {
             //-----Create Test pack---------------------
             ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
 
@@ -522,15 +529,14 @@ namespace Habanero.Test.BO
             ////-----Test results-------------------------
             Assert.AreEqual(0, addresses.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, addresses.Count);
-            Assert.IsTrue(address.Status.IsDeleted);
-            Assert.IsTrue(address.Status.IsNew);
             Assert.AreEqual(0, addresses.PersistedBusinessObjects.Count);
         }
 
-        [Test, Ignore("to be implemented")]
+        [Test]
         public void TestRemoveAddress_AlreadyInRemoveCollection_usingRelationship()
         {
             //-----Create Test pack---------------------
+            ClassDef.ClassDefs.Clear();
             AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
 

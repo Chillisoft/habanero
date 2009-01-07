@@ -24,7 +24,7 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.BusinessObjectLoader
 {
     [TestFixture]
     public class TestSourceDB
@@ -103,7 +103,7 @@ namespace Habanero.Test.BO
             //-------------Test Result ----------------------
             Source.Join.JoinField joinField = join.JoinFields[0];
             string expectedSql = string.Format("{0} JOIN {1} ON {0}.{2} = {1}.{3}", source.EntityName, joinSource.EntityName,
-                joinField.FromField.FieldName, joinField.ToField.FieldName);
+                                               joinField.FromField.FieldName, joinField.ToField.FieldName);
             Assert.AreEqual(expectedSql, sql);
         }
 
@@ -163,9 +163,9 @@ namespace Habanero.Test.BO
             //-------------Test Result ----------------------
 
             string expectedSql = string.Format("{0} JOIN {1} ON {0}.{2} = {1}.{3} AND {0}.{4} = {1}.{5}", 
-                source.EntityName, joinSource.EntityName, 
-                joinField1.FromField.FieldName, joinField1.ToField.FieldName,
-                joinField2.FromField.FieldName, joinField2.ToField.FieldName);
+                                               source.EntityName, joinSource.EntityName, 
+                                               joinField1.FromField.FieldName, joinField1.ToField.FieldName,
+                                               joinField2.FromField.FieldName, joinField2.ToField.FieldName);
             Assert.AreEqual(expectedSql, sql);
         }
 
@@ -187,7 +187,7 @@ namespace Habanero.Test.BO
             //-------------Test Result ----------------------
             Source.Join.JoinField joinField = join.JoinFields[0];
             string expectedSql = string.Format("[{0}] JOIN [{1}] ON [{0}].[{2}] = [{1}].[{3}]", source.EntityName, joinSource.EntityName,
-                joinField.FromField.FieldName, joinField.ToField.FieldName);
+                                               joinField.FromField.FieldName, joinField.ToField.FieldName);
             Assert.AreEqual(expectedSql, sql);
         }
         
@@ -218,7 +218,7 @@ namespace Habanero.Test.BO
             Assert.IsNotNull(exception, "An error was expected when creating SQL with joins that have no fields");
             Assert.IsInstanceOfType(typeof(HabaneroDeveloperException), exception);
             string expectedMessage = string.Format("SQL cannot be created for the source '{0}' because it has a join to '{1}' without join fields", 
-                sourceDB.Name, join.ToSource.Name);
+                                                   sourceDB.Name, join.ToSource.Name);
             StringAssert.Contains(expectedMessage, exception.Message);
         }
 
@@ -241,9 +241,9 @@ namespace Habanero.Test.BO
             Source.Join.JoinField joinField = join.JoinFields[0];
             Source.Join.JoinField joinField2 = join2.JoinFields[0];
             string expectedSql = string.Format("{0} JOIN {1} ON {0}.{2} = {1}.{3} JOIN {4} ON {1}.{5} = {4}.{6}",
-                sourceDB.EntityName,
-                joinSource.EntityName, joinField.FromField.FieldName, joinField.ToField.FieldName,
-                joinSource2.EntityName, joinField2.FromField.FieldName, joinField2.ToField.FieldName);
+                                               sourceDB.EntityName,
+                                               joinSource.EntityName, joinField.FromField.FieldName, joinField.ToField.FieldName,
+                                               joinSource2.EntityName, joinField2.FromField.FieldName, joinField2.ToField.FieldName);
             Assert.AreEqual(expectedSql, sql);
         }
 
@@ -266,9 +266,9 @@ namespace Habanero.Test.BO
             Source.Join.JoinField joinField = source.Joins[0].JoinFields[0];
             Source.Join.JoinField joinField2 = source.Joins[1].JoinFields[0];
             string expectedSql = string.Format("{0} JOIN {1} ON {0}.{2} = {1}.{3} JOIN {4} ON {0}.{5} = {4}.{6}",
-                sourceDB.EntityName,
-                joinSource.EntityName, joinField.FromField.FieldName, joinField.ToField.FieldName,
-                joinSource2.EntityName, joinField2.FromField.FieldName, joinField2.ToField.FieldName);
+                                               sourceDB.EntityName,
+                                               joinSource.EntityName, joinField.FromField.FieldName, joinField.ToField.FieldName,
+                                               joinSource2.EntityName, joinField2.FromField.FieldName, joinField2.ToField.FieldName);
             Assert.AreEqual(expectedSql, sql);
         }
 
@@ -294,10 +294,10 @@ namespace Habanero.Test.BO
             Source.Join.JoinField joinFieldBranch1 = branchJoin1.JoinFields[0];
             Source.Join.JoinField joinFieldBranch2 = branchJoin2.JoinFields[0];
             string expectedSql = string.Format("{0} JOIN {1} ON {0}.{4} = {1}.{5} JOIN {2} ON {1}.{6} = {2}.{7} JOIN {3} ON {1}.{8} = {3}.{9}",
-                sourceDB.EntityName, joinSource.EntityName, branch1.EntityName, branch2.EntityName,
-                joinField.FromField.FieldName, joinField.ToField.FieldName,
-                joinFieldBranch1.FromField.FieldName, joinFieldBranch1.ToField.FieldName, 
-                joinFieldBranch2.FromField.FieldName, joinFieldBranch2.ToField.FieldName);
+                                               sourceDB.EntityName, joinSource.EntityName, branch1.EntityName, branch2.EntityName,
+                                               joinField.FromField.FieldName, joinField.ToField.FieldName,
+                                               joinFieldBranch1.FromField.FieldName, joinFieldBranch1.ToField.FieldName, 
+                                               joinFieldBranch2.FromField.FieldName, joinFieldBranch2.ToField.FieldName);
             Assert.AreEqual(expectedSql, sql);
         }
 
@@ -317,7 +317,7 @@ namespace Habanero.Test.BO
             //-------------Test Result ----------------------
             Source.Join.JoinField joinField = join.JoinFields[0];
             string expectedSql = string.Format("({0} JOIN {1} ON {0}.{2} = {1}.{3})", source.EntityName, joinSource.EntityName,
-                joinField.FromField.FieldName, joinField.ToField.FieldName);
+                                               joinField.FromField.FieldName, joinField.ToField.FieldName);
             Assert.AreEqual(expectedSql, sql);
         }
 
@@ -340,9 +340,9 @@ namespace Habanero.Test.BO
             Source.Join.JoinField joinField = join.JoinFields[0];
             Source.Join.JoinField joinField2 = join2.JoinFields[0];
             string expectedSql = string.Format("(({0} JOIN {1} ON {0}.{2} = {1}.{3}) JOIN {4} ON {1}.{5} = {4}.{6})",
-                sourceDB.EntityName,
-                joinSource.EntityName, joinField.FromField.FieldName, joinField.ToField.FieldName,
-                joinSource2.EntityName, joinField2.FromField.FieldName, joinField2.ToField.FieldName);
+                                               sourceDB.EntityName,
+                                               joinSource.EntityName, joinField.FromField.FieldName, joinField.ToField.FieldName,
+                                               joinSource2.EntityName, joinField2.FromField.FieldName, joinField2.ToField.FieldName);
             Assert.AreEqual(expectedSql, sql);
         }
 

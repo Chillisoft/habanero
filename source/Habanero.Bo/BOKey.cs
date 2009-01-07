@@ -298,6 +298,21 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// Indicates whether any of the properties of this key are auto incrementing.
+        /// </summary>
+        public bool HasAutoIncrementingProperty
+        {
+            get
+            {
+                foreach (IPropDef propDef in _keyDef)
+                {
+                    if (propDef.AutoIncrementing) return true;
+                }
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Returns a string containing all the properties and their values
         /// </summary>
         /// <returns>Returns a string</returns>

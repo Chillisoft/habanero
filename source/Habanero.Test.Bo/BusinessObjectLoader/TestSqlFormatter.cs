@@ -22,7 +22,7 @@ using System.Text;
 using Habanero.Base;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.BusinessObjectLoader
 {
     [TestFixture]
     public class TestSqlFormatter

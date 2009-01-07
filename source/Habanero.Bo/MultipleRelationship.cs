@@ -29,15 +29,6 @@ namespace Habanero.BO
     /// </summary>
     public interface IMultipleRelationship : IRelationship
     {
-        ///// <summary>
-        ///// Returns the set of business objects that relate to this one
-        ///// through the specific relationship
-        ///// </summary>
-        ///// <returns>Returns a collection of business objects. If this is a single relationship then
-        ///// returns a single object in the collection.</returns>
-        //IBusinessObjectCollection GetRelatedBusinessObjectCol();
-
-
         ///<summary>
         /// The criteria by which this relationship is ordered. I.e. by default all the
         /// related objects are loaded in this order.
@@ -110,42 +101,18 @@ namespace Habanero.BO
             }
         }
 
-        //protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
-        //{
-        //    //TODO: Need a strategy for what should be happening here when the collection is previously loaded.
-        //    //I would suggest option 1
-        //    //1) The collection is reloaded from the database as is currently being done.
-        //    //2) The collection is is returned
-        //    if (_boCol != null)
-        //    {
-        //        BORegistry.DataAccessor.BusinessObjectLoader.Refresh((BusinessObjectCollection<TBusinessObject>) _boCol);
-        //        return _boCol;
-        //    }
-
-        //    Type relatedBusinessObjectType = _relDef.RelatedObjectClassType;
-        //    Type genericType = typeof (TBusinessObject);
-
-        //    CheckTypeCanBeCreated(relatedBusinessObjectType);
-
-        //    CheckTypeIsASubClassOfGenericType<TBusinessObject>(relatedBusinessObjectType, genericType);
-
-        //    _boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
-
-        //    return _boCol;
-        //}
-
         IBusinessObjectCollection IMultipleRelationship.BusinessObjectCollection
         {
             get
             {
-                BORegistry.DataAccessor.BusinessObjectLoader.Refresh(_boCol);
-                return _boCol;
+                return this.BusinessObjectCollection;
             }
         }
 
-        ///<summary>
-        /// The collection of business objects that is managed by this relationship.
-        ///</summary>
+        /// <summary>
+        /// Returns the collection for this relationship.  The collection is refreshed before
+        /// it is returned.
+        /// </summary>
         public BusinessObjectCollection<TBusinessObject> BusinessObjectCollection
         {
             get
@@ -154,58 +121,11 @@ namespace Habanero.BO
                 return _boCol;
             }
         }
-
-        //protected BusinessObjectCollection<TBusinessObject> GetRelatedBusinessObjectColInternal()
-        //{
-
-
-        //    if (_boCol != null)
-        //    {
-        //        BORegistry.DataAccessor.BusinessObjectLoader.Refresh(_boCol);
-        //        return _boCol;
-        //    }
-        //    //Type type = _relDef.RelatedObjectClassType;
-        //    //CheckTypeCanBeCreated(type);
-        //    _boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
-        //    return _boCol;
-        //}
-
-        //private static void CheckTypeIsASubClassOfGenericType<TBusinessObject>(Type type, Type collectionItemType)
-        //{
-        //    if (!(type == collectionItemType || type.IsSubclassOf(collectionItemType)))
-        //    {
-        //        throw new HabaneroArgumentException
-        //            (String.Format
-        //                 ("An error occurred while attempting to load a related "
-        //                  + "business object collection of type '{0}' into a "
-        //                  + "collection of the specified generic type('{1}').", type, typeof (TBusinessObject)));
-        //    }
-        //}
-
-        //private static void CheckTypeCanBeCreated(Type type)
-        //{
-        //    //Check that the type can be created and raise appropriate error 
-        //    try
-        //    {
-        //        Activator.CreateInstance(type, true);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new UnknownTypeNameException
-        //            (String.Format
-        //                 ("An error occurred while attempting to load a related "
-        //                  + "business object collection, with the type given as '{0}'. "
-        //                  + "Check that the given type exists and has been correctly "
-        //                  + "defined in the relationship and class definitions for the classes " + "involved.", type),
-        //             ex);
-        //    }
-        //}
-
+        
         private delegate void Add(IBusinessObject bo);
 
         private delegate bool Contains(IBusinessObject bo);
-
-
+        
         ///<summary>
         /// Returns a list of all the related objects that are dirty.
         /// In the case of a composition or aggregation this will be a list of all 
@@ -269,37 +189,18 @@ namespace Habanero.BO
             RelationshipUtils.SetupCriteriaForRelationship(this, _boCol);
         }
 
+        /// <summary>
+        /// Returns the underlying collection without refreshing it.
+        /// </summary>
+        /// <returns></returns>
         internal IBusinessObjectCollection GetLoadedBOColInternal()
         {
             return _boCol;
         }
 
-
-        ///// <summary>
-        ///// Returns the set of business objects that relate to this one
-        ///// through the specific relationship
-        ///// </summary>
-        ///// <returns>Returns a collection of business objects</returns>
-        //public virtual IBusinessObjectCollection GetRelatedBusinessObjectCol()
-        //{
-        //    return GetRelatedBusinessObjectColInternal();
-        //}
-
-        ///// <summary>
-        ///// Returns the set of business objects that relate to this one
-        ///// through the specific relationship
-        ///// </summary>
-        ///// <returns>Returns a collection of business objects</returns>
-        //public virtual BusinessObjectCollection<TBusinessObject> GetRelatedBusinessObjectCollection()
-        //{
-        //    return GetRelatedBusinessObjectColInternal();
-        //}
-
-        //protected abstract BusinessObjectCollection<TBusinessObject> GetRelatedBusinessObjectColInternal();
-
-
         ///<summary>
-        /// 
+        /// Returns the <see cref="OrderCriteria"/> for this relationship (which determines how the 
+        /// objects in the collection are ordered.
         ///</summary>
         public OrderCriteria OrderCriteria
         {

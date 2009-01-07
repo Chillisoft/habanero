@@ -23,7 +23,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.BusinessObjectLoader
 {
     [TestFixture]
     public class TestSelectQuery
@@ -67,7 +67,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestSetCriteria_AddsJoins()
         {
-          //---------------Set up test pack-------------------
+            //---------------Set up test pack-------------------
             SelectQuery selectQuery = new SelectQuery();
             const string sourceName = "mysource";
             selectQuery.Source = new Source(sourceName);
