@@ -345,6 +345,7 @@
     <Compile Include="SupportsAutoIncrementingFieldBO.cs" />
     <Compile Include="TransactionalBusinessObject.cs" />
     <Compile Include="TransactionalBusinessObjectDB.cs" />
+    <Compile Include="TransactionalBusinessObjectInMemory.cs" />
     <Compile Include="TransactionCommitterDB.cs" />
     <Compile Include="TransactionCommitter.cs" />
     <Compile Include="TransactionCommitterInMemory.cs" />

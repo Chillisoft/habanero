@@ -76,6 +76,18 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// Decorates the business object with a TransactionalBusinessObjectDB.
+        /// See <see cref="TransactionCommitter.CreateTransactionalBusinessObject" />
+        /// </summary>
+        /// <param name="businessObject">The business object to decorate in a TransactionalBusinessObjectDB</param>
+        /// <returns>The decorated TransactionalBusinessObjectDB</returns>
+        protected override TransactionalBusinessObject CreateTransactionalBusinessObject(
+            IBusinessObject businessObject)
+        {
+            return new TransactionalBusinessObjectDB(businessObject);
+        }
+
+        /// <summary>
         /// Tries to execute an individual transaction against the datasource.
         /// 1'st phase of a 2 phase database commit.
         /// </summary>
@@ -85,11 +97,11 @@ namespace Habanero.BO
 
             if (transaction is TransactionalBusinessObjectDB)
             {
-                TransactionalBusinessObjectDB transactionBusObjDB = (TransactionalBusinessObjectDB) transaction;
-                if (transactionBusObjDB.IsDeleted)
+                IBusinessObject businessObject = ((TransactionalBusinessObjectDB) transaction).BusinessObject;
+                if (businessObject.Status.IsDeleted)
                 {
-                    DeleteRelatedChildren(transactionBusObjDB);
-                    DereferenceRelatedChildren(transactionBusObjDB);
+                    DeleteRelatedChildren(businessObject);
+                    DereferenceRelatedChildren(businessObject);
                 }
             }
 
@@ -99,80 +111,6 @@ namespace Habanero.BO
             databaseConnection.ExecuteSql(sql, _dbTransaction);
             base.ExecuteTransactionToDataSource(transaction);
         }
-        //TODO: Refactor this the relationship should now have the knowledge to do all the 
-        // dereferencing.
-        private void DereferenceRelatedChildren(TransactionalBusinessObject transaction)
-        {
-            foreach (IRelationship relationship in transaction.BusinessObject.Relationships)
-            {
-                if (!MustDereferenceRelatedObjects(relationship)) continue;
-                if (relationship is IMultipleRelationship)
-                {
-                    IMultipleRelationship multipleRelationship = (IMultipleRelationship) relationship;
-                    IBusinessObjectCollection col = multipleRelationship.BusinessObjectCollection;
-                    for (int i = col.Count - 1; i >= 0; i--)
-                    {
-                        DereferenceChild(multipleRelationship, col[i]);
-                    }
-                } else if (relationship is ISingleRelationship)
-                {
-                    ISingleRelationship singleRelationship = (ISingleRelationship)relationship;
-                    DereferenceChild(singleRelationship, singleRelationship.GetRelatedObject());
-                }
-            }
-        }
-
-        private void DereferenceChild(IRelationship relationship, IBusinessObject bo) {
-            foreach (RelPropDef relPropDef in relationship.RelationshipDef.RelKeyDef)
-            {
-                bo.SetPropertyValue(relPropDef.RelatedClassPropName, null);
-            }
-            ExecuteTransactionToDataSource(new TransactionalBusinessObjectDB(bo));
-        }
-
-        private static bool MustDereferenceRelatedObjects(IRelationship relationship)
-        {
-            return relationship.DeleteParentAction == DeleteParentAction.DereferenceRelated;
-        }
-
-        private void DeleteRelatedChildren(TransactionalBusinessObject transaction)
-        {
-            foreach (IRelationship relationship in transaction.BusinessObject.Relationships)
-            {
-                if (MustDeleteRelatedObjects(relationship))
-                {
-                    if (relationship is IMultipleRelationship)
-                    {
-                        IMultipleRelationship multipleRelationship = (IMultipleRelationship) relationship;
-                        IBusinessObjectCollection col = multipleRelationship.BusinessObjectCollection;
-                        for (int i = col.Count - 1; i >= 0; i--)
-                        {
-                            DeleteChild(col[i]);
-                        }
-                    }
-                    else if (relationship is ISingleRelationship)
-                    {
-                        ISingleRelationship singleRelationship = (ISingleRelationship) relationship;
-                        //if (singleRelationship.HasRelatedObject()) 
-                        DeleteChild(singleRelationship.GetRelatedObject());
-                    }
-                }
-
-
-            }
-        }
-
-        private void DeleteChild(IBusinessObject bo) {
-            if (bo == null) return;
-            bo.Delete();
-            ExecuteTransactionToDataSource(new TransactionalBusinessObjectDB(bo));
-        }
-
-        private static bool MustDeleteRelatedObjects(IRelationship relationship)
-        {
-            return relationship.DeleteParentAction == DeleteParentAction.DeleteRelated;
-        }
-
 
         /// <summary>
         /// Commits all the successfully executed statements to the datasource.
@@ -227,16 +165,6 @@ namespace Habanero.BO
             }
         }
 
-        /// <summary>
-        /// Decorates the business object with a TransactionalBusinessObjectDB.
-        /// See <see cref="TransactionCommitter.CreateTransactionalBusinessObject" />
-        /// </summary>
-        /// <param name="businessObject">The business object to decorate in a TransactionalBusinessObjectDB</param>
-        /// <returns>The decorated TransactionalBusinessObjectDB</returns>
-        protected override TransactionalBusinessObject CreateTransactionalBusinessObject(
-            IBusinessObject businessObject)
-        {
-            return new TransactionalBusinessObjectDB(businessObject);
-        }
+
     }
 }
