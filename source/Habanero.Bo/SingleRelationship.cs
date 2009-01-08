@@ -103,15 +103,39 @@ namespace Habanero.BO
                 }
                 if (_relatedBo == null)
                 {
-                    if (_isRemoved) return true;
+                    if (_isRemoved && (this.RelationshipDef.RelationshipType == RelationshipType.Composition
+                    || this.RelationshipDef.RelationshipType == RelationshipType.Aggregation)) return true;
                 }
+                if (IsRelatedBOPropsDirty() || IsRemovedBOPropsDirty()) return true;
                 
                 if (this.RelationshipDef.RelationshipType == RelationshipType.Composition
                     || this.RelationshipDef.RelationshipType == RelationshipType.Aggregation)
                     return IsRelatedBODirty();
-                else
-                    return false;
+                //else if (this.RelationshipDef.RelationshipType == RelationshipType.Association)
+                //{
+                //    return IsRelatedBOPropsDirty();
+                //}
+                return false;
             }
+        }
+
+        private bool IsRemovedBOPropsDirty()
+        {
+            return IsRelatedPropsDirty(_removedBO);
+        }
+
+        private bool IsRelatedBOPropsDirty()
+        {
+            return IsRelatedPropsDirty(_relatedBo);
+        }
+
+        private bool IsRelatedPropsDirty(IBusinessObject bo) {
+            if (bo == null) return false;
+            foreach (IRelPropDef relPropDef in this.RelationshipDef.RelKeyDef)
+            {
+                if (bo.Props[relPropDef.RelatedClassPropName].IsDirty) return true;
+            }
+            return false;
         }
 
         internal bool IsRemoved
@@ -325,7 +349,8 @@ namespace Habanero.BO
                    || _relatedBo.Status.IsDeleted);
         }
 
-        private bool MustAddRemovedBOToDirtyBusinessObjects() { return _isRemoved; }
+        private bool MustAddRemovedBOToDirtyBusinessObjects() { return _isRemoved && (this.RelationshipDef.RelationshipType == RelationshipType.Aggregation
+                    || this.RelationshipDef.RelationshipType == RelationshipType.Composition); }
 
         protected override void DoInitialisation()
         {
@@ -350,6 +375,24 @@ namespace Habanero.BO
             foreach (TBusinessObject businessObject in GetDirtyChildren())
             {
                 transactionCommitter.AddBusinessObject(businessObject);
+            }
+            if (this.RelationshipDef.RelationshipType == RelationshipType.Association)
+            {
+                if (IsRelatedBOPropsDirty())
+                {
+                    ISingleRelationship reverseRelationship = GetReverseRelationship(_relatedBo) as ISingleRelationship;
+                    if (reverseRelationship != null)
+                    {
+                        transactionCommitter.AddTransaction(new TransactionalSingleRelationship_Added(reverseRelationship));
+                    }
+                } else if (IsRemoved)
+                {
+                    ISingleRelationship reverseRelationship = GetReverseRelationship(_removedBO) as ISingleRelationship;
+                    if (reverseRelationship != null)
+                    {
+                        transactionCommitter.AddTransaction(new TransactionalSingleRelationship_Removed(reverseRelationship));
+                    }
+                }
             }
         }
 

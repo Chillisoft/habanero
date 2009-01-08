@@ -149,5 +149,24 @@ namespace Habanero.BO.SqlGeneration
 
             return propsToInclude;
         }
+
+        public ISqlStatementCollection GenerateForRelationship(ISingleRelationship relationship)
+        {
+            _statementCollection = new SqlStatementCollection();
+            BOPropCol propsToInclude = new BOPropCol();
+            IBOProp oneProp = null;
+            foreach (IRelPropDef propDef in relationship.RelationshipDef.RelKeyDef)
+            {
+                oneProp = relationship.OwningBO.Props[propDef.OwnerPropertyName];
+                propsToInclude.Add(oneProp);
+            }
+
+            if (oneProp == null) return _statementCollection;
+            IClassDef classDef= relationship.OwningBO.ClassDef;
+            string tableName = classDef.GetTableName(oneProp.PropDef);
+            GenerateSingleUpdateStatement(tableName, propsToInclude, false, (ClassDef) classDef);
+
+            return _statementCollection;
+        }
     }
 }

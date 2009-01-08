@@ -1,9 +1,11 @@
 using System;
 using Habanero.Base;
+using Habanero.BO.SqlGeneration;
+using Habanero.DB;
 
 namespace Habanero.BO
 {
-    internal abstract class TransactionalSingleRelationship : ITransactional
+    internal abstract class TransactionalSingleRelationship : ITransactionalDB
     {
         private ISingleRelationship _singleRelationship;
         private string _transactionID;
@@ -37,6 +39,12 @@ namespace Habanero.BO
         protected abstract void UpdateCollections();
 
         public void UpdateAsRolledBack() { }
+
+        public virtual ISqlStatementCollection GetPersistSql()
+        {
+            UpdateStatementGenerator gen = new UpdateStatementGenerator(Relationship.OwningBO, DatabaseConnection.CurrentConnection);
+            return gen.GenerateForRelationship(Relationship);
+        }
     }
 
     internal class TransactionalSingleRelationship_Added : TransactionalSingleRelationship
@@ -47,10 +55,13 @@ namespace Habanero.BO
         protected override void UpdateCollections()
         {
             RelationshipBase relationshipBase = (RelationshipBase)Relationship;
-            IMultipleRelationship reverseRelationship = (IMultipleRelationship)relationshipBase.GetReverseRelationship(Relationship.GetRelatedObject());
-            reverseRelationship.BusinessObjectCollection.AddedBusinessObjects.Remove(Relationship.OwningBO);
-        
+            IMultipleRelationship reverseRelationship = relationshipBase.GetReverseRelationship(Relationship.GetRelatedObject()) as IMultipleRelationship;
+            if (reverseRelationship != null)
+            {
+                reverseRelationship.BusinessObjectCollection.AddedBusinessObjects.Remove(Relationship.OwningBO);
+            }
         }
+
     }
 
     internal class TransactionalSingleRelationship_Removed : TransactionalSingleRelationship
@@ -62,10 +73,13 @@ namespace Habanero.BO
         protected override void UpdateCollections()
         {
             SingleRelationshipBase relationshipBase = (SingleRelationshipBase)Relationship;
-            IMultipleRelationship reverseRelationship = (IMultipleRelationship)relationshipBase.GetReverseRelationship(relationshipBase.RemovedBOInternal);
-            IBusinessObjectCollection businessObjectCollection = reverseRelationship.BusinessObjectCollection;
-            businessObjectCollection.RemovedBusinessObjects.Remove(Relationship.OwningBO);
-            businessObjectCollection.PersistedBusinessObjects.Remove(Relationship.OwningBO);
+            IMultipleRelationship reverseRelationship = relationshipBase.GetReverseRelationship(relationshipBase.RemovedBOInternal) as IMultipleRelationship;
+            if (reverseRelationship != null)
+            {
+                IBusinessObjectCollection businessObjectCollection = reverseRelationship.BusinessObjectCollection;
+                businessObjectCollection.RemovedBusinessObjects.Remove(Relationship.OwningBO);
+                businessObjectCollection.PersistedBusinessObjects.Remove(Relationship.OwningBO);
+            }
         }
     }
 }

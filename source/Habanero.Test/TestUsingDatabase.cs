@@ -31,8 +31,13 @@ namespace Habanero.Test
 
         public void SetupDBConnection()
         {
+            SetupDBDataAccessor();
+        }
+
+        public static void SetupDBDataAccessor()
+        {
             if (DatabaseConnection.CurrentConnection != null &&
-                DatabaseConnection.CurrentConnection.GetType() == typeof (DatabaseConnectionMySql))
+    DatabaseConnection.CurrentConnection.GetType() == typeof(DatabaseConnectionMySql))
             {
                 return;
             }

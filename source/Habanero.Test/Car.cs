@@ -160,7 +160,16 @@ namespace Habanero.Test
             get { return (Guid)GetPropertyValue("OwnerId"); }
             set { SetPropertyValue("OwnerId", value); }
         }
-
+        public string DriverFK1
+        {
+            get { return (string)GetPropertyValue("DriverFK1"); }
+            set { SetPropertyValue("DriverFK1", value); }
+        }       
+        public string DriverFK2
+        {
+            get { return (string)GetPropertyValue("DriverFK2"); }
+            set { SetPropertyValue("DriverFK2", value); }
+        }
         #endregion //Properties
 
         #region Relationships
