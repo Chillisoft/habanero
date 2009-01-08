@@ -79,7 +79,7 @@ namespace Habanero.BO
         /// <param name="timeout">The period after which the cache expires</param>
         public BusinessObjectLookupList(Type boType, int timeout)
         {
-            MyBoType = boType;
+            BoType = boType;
             _timeout = timeout;
             _lastCallTime = DateTime.MinValue;
         }
@@ -263,7 +263,7 @@ namespace Habanero.BO
         ///</summary>
         public ClassDef LookupBoClassDef
         {
-            get { return ClassDef.ClassDefs[MyBoType]; }
+            get { return ClassDef.ClassDefs[BoType]; }
         }
 
         /// <summary>
@@ -346,14 +346,17 @@ namespace Habanero.BO
 
         #region Type Initialisation
 
-        private Type MyBoType
+        ///<summary>
+        /// Returns the BOType for this Business Object.
+        ///</summary>
+        public Type BoType
         {
             get
             {
                 TypeLoader.LoadClassType(ref _boType, _assemblyName, _className, "property", "property definition");
                 return _boType;
             }
-            set
+            private set
             {
                 _boType = value;
                 TypeLoader.ClassTypeInfo(_boType, out _assemblyName, out _className);

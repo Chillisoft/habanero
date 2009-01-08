@@ -71,6 +71,21 @@ namespace Habanero.BO
             //    use this as the value and return
 
             CheckPropDefHasLookupList(_propDef);
+            
+            if (_propDef.LookupList is BusinessObjectLookupList 
+                    &&  valueToParse is IBusinessObject)
+            {
+                Type expectedBOType = ((BusinessObjectLookupList)_propDef.LookupList).BoType;
+                if (!expectedBOType.IsInstanceOfType(valueToParse))
+                {
+                    string message = string.Format("'{0}' cannot be set to a business object of type '{1}' since the lookup list is defined for type '{2}'"
+                              , this.PropertyName, valueToParse.GetType(), expectedBOType);
+                    throw new HabaneroDeveloperException(
+                        message, message);
+                }
+                returnValue = ((IBusinessObject) valueToParse).ID.GetAsValue();
+                return;
+            }
             Dictionary<string, string> keyLookupList = _propDef.LookupList.GetIDValueLookupList();
             if (this.PropertyType.IsInstanceOfType(valueToParse)
                 && keyLookupList.ContainsKey(Convert.ToString(valueToParse)))

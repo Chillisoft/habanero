@@ -446,6 +446,7 @@ namespace Habanero.Test.BO
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(expctedID, boProp.Value);
             Assert.AreEqual(expectedPropValueToDisplay, boProp.PropertyValueToDisplay);
+            //TODO Brett : Peter this is a problem with the memory database
         }
 
         [Test]
@@ -468,6 +469,7 @@ namespace Habanero.Test.BO
             IBusinessObject objectForProp = boProp.GetBusinessObjectForProp(autoIncClassDef);
             //---------------Test Result -----------------------
             Assert.IsNotNull(objectForProp);
+            //TODO Brett : Peter this is a problem with the memory database
         }
 
         [Test]

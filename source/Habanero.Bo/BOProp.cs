@@ -212,7 +212,7 @@ namespace Habanero.BO
             }
         }
 
-        private void RaiseIncorrectTypeException(object value)
+        protected void RaiseIncorrectTypeException(object value)
         {
             string message = string.Format("{0} cannot be set to {1}. It is not a type of {2}" 
                                           , this.PropertyName, value, this.PropDef.PropertyTypeName);

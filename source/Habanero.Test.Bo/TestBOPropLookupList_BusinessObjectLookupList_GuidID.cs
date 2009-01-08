@@ -279,7 +279,6 @@ namespace Habanero.Test.BO
             Assert.IsNull(returnedKey);
         }
 
-
         [Test]
         public void Test_BusinessObjectLookupList_GetValue_Exists()
         {
@@ -295,7 +294,6 @@ namespace Habanero.Test.BO
             Assert.AreSame(propDef, businessObjectLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
-            //bool keyReturned = list.TryGetValue(_validBusinessObject.ID.GetAsGuid().ToString(), out returnedValue);
             bool keyReturned = list.TryGetValue( GuidToUpper(_validBusinessObject.ID.GetAsGuid()), out returnedValue);
             //---------------Test Result -----------------------
             Assert.IsTrue(keyReturned);
@@ -423,15 +421,12 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOPropLookupList(GetPropDef_Guid_WithLookupList());
             Guid guidNotInLookupList = Guid.NewGuid();
             boProp.InitialiseProp(guidNotInLookupList);
-
             //---------------Assert Precondition----------------
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(guidNotInLookupList, boProp.Value);
             Assert.IsTrue(boProp.IsValid);
-
             //---------------Execute Test ----------------------
             object propertyValueToDisplay = boProp.PropertyValueToDisplay;
-
             //---------------Test Result -----------------------
             Assert.IsNull(propertyValueToDisplay);
         }
@@ -469,8 +464,9 @@ namespace Habanero.Test.BO
             Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         }
 
+
         [Test, Ignore("This test was removed due to performance of parsing each value while filling the list")]
-        public void Test_GetLookupList_LookupListIncorrectType()
+        public void Test_GetLookupList_LookupList_IncorrectIdentifierType()
         {
             //---------------Set up test pack------------------
             MyBO.LoadDefaultClassDef();
@@ -665,6 +661,62 @@ namespace Habanero.Test.BO
             }
         }
 
+        //If an invalid Business Object types is set to the property 
+        //  E.g. The Lookup is defined for MyBo and the business Object being set is ContactPerson
+        //  Then an error is raised. Stating the error reason.
+        //  The property value will be set to the previous property value.
+        //  The property is not changed to be in an invalid state. The prop invalid reason is not set.
+        [Test]
+        public void Test_SetValue_InvalidBusinessObjectType()
+        {
+            MyBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            BOProp boProp = new BOPropLookupList(_propDef_guid);
+            ContactPersonTestBO invalidBOType = new ContactPersonTestBO {Surname = "Temp"};
+            object originalPropValue = Guid.NewGuid();
+            boProp.Value = originalPropValue;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
+            Assert.IsNotNull(boProp.Value);
+            //---------------Execute Test ----------------------
+            try
+            {
+                boProp.Value = invalidBOType;
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                //You are trying to set the value for a lookup property PropName to 'Invalid' this value does not exist in the lookup list
+                StringAssert.Contains("'PropName' cannot be set to a business object of type 'Habanero.Test.BO.ContactPersonTestBO' since the lookup list is defined for type 'Habanero.Test.MyBO'", ex.Message);
+                Assert.AreEqual(originalPropValue, boProp.Value);
+                Assert.IsTrue(boProp.IsValid);
+            }
+        }
+
+        [Test]
+        public void Test_SetValue_BusinessObject_ToStringNull_BONotInList()
+        {
+            ContactPersonTestBO.LoadDefaultClassDef();
+            PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null)
+                                  {LookupList = new BusinessObjectLookupList(typeof (ContactPersonTestBO))};
+            BOProp boProp = new BOPropLookupList(propDef);
+            ContactPersonTestBO boWithNullToString = new ContactPersonTestBO();
+            object originalPropValue = Guid.NewGuid();
+            boProp.Value = originalPropValue;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
+            Assert.IsNotNull(boProp.Value);
+
+            //---------------Execute Test ----------------------
+            boProp.Value = boWithNullToString;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(boWithNullToString.ContactPersonID, boProp.Value);
+        }
+
+        //TODO Brett 08 Jan 2009: 
+        //TODO: If business objects tostring is null then get error from lookup list.
+        //TODO Brett 08 Jan 2009: If Set inherited child to a list defined for the lookup for parent then no error.
         [Test]
         public void Test_SetValue_ValidDisplayValueString()
         {
