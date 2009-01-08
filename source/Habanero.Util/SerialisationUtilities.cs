@@ -56,7 +56,7 @@ namespace Habanero.Util
             memStream.Write(arrBytes, 0, arrBytes.Length);
             memStream.Seek(0, SeekOrigin.Begin);
 
-            Object obj = (Object) binForm.Deserialize(memStream);
+            Object obj = binForm.Deserialize(memStream);
 
             return obj;
         }

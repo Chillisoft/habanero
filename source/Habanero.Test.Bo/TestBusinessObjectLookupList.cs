@@ -309,8 +309,8 @@ namespace Habanero.Test.BO
         //        "InvalidClass", "", "surname");
         //    source.Sort = "surname desc";
         //}
-        [Test, Ignore("We are now storing the object and not the GUid so sorting tests need to be reworked")]
-//        [Test]
+        //[Test, Ignore("We are now storing the object and not the GUid so sorting tests need to be reworked")]
+        [Test]
         public void TestSortingByDefault()
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO", "ContactPersonTestBO");
@@ -319,13 +319,20 @@ namespace Habanero.Test.BO
             ArrayList items = new ArrayList(col.Values);
 
             Assert.AreEqual(3, col.Count);
-            Assert.AreEqual("abc", items[0].ToString());
-            Assert.AreEqual("abcd", items[1].ToString());
-            Assert.AreEqual("zzz", items[2].ToString());
+            AssertCorrectlySortedBusinessObjectInList(items, 0, "abc");
+            AssertCorrectlySortedBusinessObjectInList(items, 1, "abcd");
+            AssertCorrectlySortedBusinessObjectInList(items, 2, "zzz");
         }
 
-        [Test, Ignore("We are now storing the object and not the GUid so sorting tests need to be reworked")]
-//        [Test]
+        private static void AssertCorrectlySortedBusinessObjectInList(ArrayList items, int index, string expected)
+        {
+            object item = items[index];
+            IBusinessObject businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue(typeof(ContactPersonTestBO), item);
+            Assert.AreEqual(expected, businessObject.ToString());
+        }
+
+//        [Test, Ignore("We are now storing the object and not the GUid so sorting tests need to be reworked")]
+        [Test]
         public void TestSortingCollection()
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
@@ -336,39 +343,47 @@ namespace Habanero.Test.BO
             ArrayList items = new ArrayList(col.Values);
             
             Assert.AreEqual(3, col.Count);
-            Assert.AreEqual("abc", items[0].ToString());
-            Assert.AreEqual("abcd", items[1].ToString());
-            Assert.AreEqual("zzz", items[2].ToString());
+            object item = items[0];
+            IBusinessObject businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue(typeof(ContactPersonTestBO), item);
+            Assert.AreEqual("abc", businessObject.ToString());
+
+            AssertCorrectlySortedBusinessObjectInList(items, 0, "abc");
+            AssertCorrectlySortedBusinessObjectInList(items, 1, "abcd");
+            AssertCorrectlySortedBusinessObjectInList(items, 2, "zzz");
 
             source = new BusinessObjectLookupList("Habanero.Test.BO",
                 "ContactPersonTestBO", "", "surname asc");
+            new PropDef("N", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = source };
             col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             items = new ArrayList(col.Values);
 
             Assert.AreEqual(3, col.Count);
-            Assert.AreEqual("abc", items[0].ToString());
-            Assert.AreEqual("abcd", items[1].ToString());
-            Assert.AreEqual("zzz", items[2].ToString());
+            AssertCorrectlySortedBusinessObjectInList(items, 0, "abc");
+            AssertCorrectlySortedBusinessObjectInList(items, 1, "abcd");
+            AssertCorrectlySortedBusinessObjectInList(items, 2, "zzz");
 
             source = new BusinessObjectLookupList("Habanero.Test.BO",
                 "ContactPersonTestBO", "", "surname desc");
+            new PropDef("N", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = source };
             col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             items = new ArrayList(col.Values);
 
             Assert.AreEqual(3, col.Count);
-            Assert.AreEqual("zzz", items[0].ToString());
-            Assert.AreEqual("abcd", items[1].ToString());
-            Assert.AreEqual("abc", items[2].ToString());
+            AssertCorrectlySortedBusinessObjectInList(items, 0, "zzz");
+            AssertCorrectlySortedBusinessObjectInList(items, 1, "abcd");
+            AssertCorrectlySortedBusinessObjectInList(items, 2, "abc");
 
             source = new BusinessObjectLookupList("Habanero.Test.BO",
                 "ContactPersonTestBO", "", "surname des");
+            new PropDef("N", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = source };
+
             col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             items = new ArrayList(col.Values);
 
             Assert.AreEqual(3, col.Count);
-            Assert.AreEqual("zzz", items[0].ToString());
-            Assert.AreEqual("abcd", items[1].ToString());
-            Assert.AreEqual("abc", items[2].ToString());
+            AssertCorrectlySortedBusinessObjectInList(items, 0, "zzz");
+            AssertCorrectlySortedBusinessObjectInList(items, 1, "abcd");
+            AssertCorrectlySortedBusinessObjectInList(items, 2, "abc");
         }
     }
 }

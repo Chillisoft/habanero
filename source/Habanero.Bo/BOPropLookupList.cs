@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
@@ -73,7 +72,8 @@ namespace Habanero.BO
 
             CheckPropDefHasLookupList(_propDef);
             Dictionary<string, string> keyLookupList = _propDef.LookupList.GetIDValueLookupList();
-            if (this.PropertyType.IsInstanceOfType(valueToParse) && keyLookupList.ContainsKey(Convert.ToString(valueToParse)))
+            if (this.PropertyType.IsInstanceOfType(valueToParse)
+                && keyLookupList.ContainsKey(Convert.ToString(valueToParse)))
             {
                 returnValue = valueToParse;
                 return;
@@ -119,7 +119,7 @@ namespace Habanero.BO
                     BusinessObjectLookupList businessObjectLookupList = _propDef.LookupList as BusinessObjectLookupList;
                     ClassDef classDef = businessObjectLookupList.LookupBoClassDef;
                     IBusinessObject businessObject = GetBusinessObjectForProp(classDef);
-                    return businessObject == null? null: businessObject.ToString();
+                    return businessObject == null ? null : businessObject.ToString();
                 }
                 return null;
             }
@@ -127,12 +127,11 @@ namespace Habanero.BO
 
         internal IBusinessObject GetBusinessObjectForProp(ClassDef classDef)
         {
-            IBusinessObject businessObject = null;
-            BOPrimaryKey boPrimaryKey = GetRelatedBOPrimaryKeyForProp(classDef);
+            IBusinessObject businessObject;
+//            BOPrimaryKey boPrimaryKey = GetRelatedBOPrimaryKeyForProp(classDef);
             try
             {
-                businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
-                    (classDef, boPrimaryKey);
+                businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue(classDef, this.Value);
             }
             catch (BusObjDeleteConcurrencyControlException ex)
             {
@@ -142,18 +141,18 @@ namespace Habanero.BO
             return businessObject;
         }
 
-        internal BOPrimaryKey GetRelatedBOPrimaryKeyForProp(ClassDef classDef)
-        {
-            PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
-            if (primaryKeyDef.IsCompositeKey) return null;
-
-            BOPropCol boPropCol = classDef.createBOPropertyCol(true);
-            BOPrimaryKey boPrimaryKey = primaryKeyDef.CreateBOKey(boPropCol) as BOPrimaryKey;
-            if (boPrimaryKey != null)
-            {
-                boPrimaryKey[0].Value = Value;
-            }
-            return boPrimaryKey;
-        }
+//        internal BOPrimaryKey GetRelatedBOPrimaryKeyForProp(ClassDef classDef)
+//        {
+//            PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
+//            if (primaryKeyDef.IsCompositeKey) return null;
+//
+//            BOPropCol boPropCol = classDef.createBOPropertyCol(true);
+//            BOPrimaryKey boPrimaryKey = primaryKeyDef.CreateBOKey(boPropCol) as BOPrimaryKey;
+//            if (boPrimaryKey != null)
+//            {
+//                boPrimaryKey[0].Value = Value;
+//            }
+//            return boPrimaryKey;
+//        }
     }
 }

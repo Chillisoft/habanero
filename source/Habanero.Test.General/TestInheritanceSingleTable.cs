@@ -277,8 +277,7 @@ namespace Habanero.Test.General
             //---------------Set up test pack-------------------
             DatabaseConnection.CurrentConnection.ExecuteRawSql(
                 "delete from filledcircle_table; delete from circle_table; delete from shape_table");
-            Shape shape = new Shape();
-            shape.ShapeName = "MyShape";
+            Shape shape = new Shape {ShapeName = "MyShape"};
             shape.Save();
             CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
             circle.Radius = 5;

@@ -114,7 +114,8 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, numDeleted, "BO should be marked as deleted.");
         }
 
-        [Test, Ignore("Changes have been made recently (Brett?) that are now breaking editable grids.")]
+        [Test, Ignore("//TODO Brett: Changes have been made recently (Brett?) that are now breaking editable grids.")]
+//        [Test]
         public void TestRejectChangesRemovesNewRow()
         {
             //---------------Set up test pack-------------------
@@ -152,6 +153,7 @@ namespace Habanero.Test.BO
             itsTable.AcceptChanges();
         }
 
+        //TODO Brett : Jan 2009
         [Test,
          Ignore(
              "Brett - to consult with peter by fundamentally changing the way BO's respond to edits we are fundamentally altering the way these data providers work"

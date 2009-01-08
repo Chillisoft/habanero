@@ -40,7 +40,10 @@ namespace Habanero.Util
             return !testNull.IsAlive;
         }
 
-
+        ///<summary>
+        ///</summary>
+        ///<param name="type"></param>
+        ///<exception cref="UnknownTypeNameException"></exception>
         public static void CheckTypeCanBeCreated(Type type)
         {
             //Check that the type can be created and raise appropriate error 

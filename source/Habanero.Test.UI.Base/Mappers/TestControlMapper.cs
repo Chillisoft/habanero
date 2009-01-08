@@ -438,8 +438,8 @@ namespace Habanero.Test.UI.Base
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefWithIntegerRule();
             MyBO testBo = new MyBO();
-            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
-            mapperStub.BusinessObject = testBo;
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory())
+                                               {BusinessObject = testBo};
             //---------------Execute Test ----------------------
             mapperStub.TestSetPropertyValue("a");
             //---------------Test Result -----------------------

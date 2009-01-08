@@ -796,7 +796,6 @@ namespace Habanero.Test.BO
             IBusinessObject businessObject = GetBusinessObjectStub();
             BOProp boProp = (BOProp)businessObject.Props[_propDef_guid.PropertyName];
             MyBO bo1 = new MyBO { TestProp = "PropValue" };
-            string expectedPropValueToDisplay = bo1.ToString();
             object expctedID = bo1.MyBoID;
             //---------------Assert Precondition----------------
             Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);

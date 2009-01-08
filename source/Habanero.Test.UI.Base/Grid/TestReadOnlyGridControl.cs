@@ -502,6 +502,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
+        //TODO Brett : Jan 2009
         [Test, Ignore("TODO: fix this")]
         public void TestAcceptance_SearchGridSearchesTheGrid()
         {

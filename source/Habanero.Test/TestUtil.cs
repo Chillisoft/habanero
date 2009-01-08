@@ -17,10 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 
 namespace Habanero.Test
 {
@@ -29,7 +27,6 @@ namespace Habanero.Test
         public static string CreateRandomString()
         {
             return Guid.NewGuid().ToString("N");
-
         }
 
         public static void WaitForGC()
@@ -59,18 +56,19 @@ namespace Habanero.Test
 
             do
             {
-                FieldInfo[] fields = targetType.GetFields(
-                     BindingFlags.Static |
-                     BindingFlags.Instance |
-                     BindingFlags.NonPublic);
+                FieldInfo[] fields = targetType.GetFields
+                    (BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic);
 
                 foreach (FieldInfo field in fields)
                 {
                     if (field.Name == name || field.Name == eventName)
                     {
-                        EventHandlerList eventHandlers = ((EventHandlerList)(eventSource.GetType().GetProperty("Events",
-                            (BindingFlags.FlattenHierarchy |
-                            (BindingFlags.NonPublic | BindingFlags.Instance))).GetValue(eventSource, null)));
+                        EventHandlerList eventHandlers =
+                            ((EventHandlerList)
+                             (eventSource.GetType().GetProperty
+                                 ("Events",
+                                  (BindingFlags.FlattenHierarchy | (BindingFlags.NonPublic | BindingFlags.Instance))).
+                                 GetValue(eventSource, null)));
 
                         Delegate d = eventHandlers[field.GetValue(eventSource)];
 
@@ -89,7 +87,6 @@ namespace Habanero.Test
                 }
 
                 targetType = targetType.BaseType;
-
             } while (targetType != null);
 
             return n;
@@ -112,18 +109,19 @@ namespace Habanero.Test
 
             do
             {
-                FieldInfo[] fields = targetType.GetFields(
-                     BindingFlags.Static |
-                     BindingFlags.Instance |
-                     BindingFlags.NonPublic);
+                FieldInfo[] fields = targetType.GetFields
+                    (BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic);
 
                 foreach (FieldInfo field in fields)
                 {
                     if (field.Name == name || field.Name == eventName)
                     {
-                        EventHandlerList eventHandlers = ((EventHandlerList)(eventSource.GetType().GetProperty("Events",
-                            (BindingFlags.FlattenHierarchy |
-                            (BindingFlags.NonPublic | BindingFlags.Instance))).GetValue(eventSource, null)));
+                        EventHandlerList eventHandlers =
+                            ((EventHandlerList)
+                             (eventSource.GetType().GetProperty
+                                 ("Events",
+                                  (BindingFlags.FlattenHierarchy | (BindingFlags.NonPublic | BindingFlags.Instance))).
+                                 GetValue(eventSource, null)));
 
                         Delegate d = eventHandlers[field.GetValue(eventSource)];
 
@@ -142,7 +140,6 @@ namespace Habanero.Test
                 }
 
                 targetType = targetType.BaseType;
-
             } while (targetType != null);
 
             return false;

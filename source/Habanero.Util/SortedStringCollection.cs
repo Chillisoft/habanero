@@ -27,7 +27,7 @@ namespace Habanero.Util
     /// </summary>
     public class SortedStringCollection : ICollection
     {
-        private IList _list;
+        private readonly IList _list;
 
         /// <summary>
         /// Constructor to initialise a new empty collection

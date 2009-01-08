@@ -279,7 +279,56 @@ namespace Habanero.BO
         /// <returns>The loaded RelatedBusinessObjectCollection</returns>
         IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IMultipleRelationship relationship);
 
+        ///<summary>
+        /// For a given value e.g. a Guid Identifier '{......}' this will 
+        /// load the business object from the Data store.
+        /// This can only be used for business objects that have a single property for the primary key
+        /// (i.e. non composite primary keys)
+        ///</summary>
+        ///<param name="classDef">The Class definition of the Business Object to load</param>
+        ///<param name="idValue">The value of the primary key of the business object</param>
+        ///<returns>the Business Object that matches the value of the id. If the primary key cannot be constructed
+        /// e.g. the primary key is composite then returns null. If the Business Object cannot be loaded then returns
+        /// <see cref="BusObjDeleteConcurrencyControlException"/>
+        ///  </returns>
+        /// <exception cref="BusObjDeleteConcurrencyControlException"/>
+        IBusinessObject GetBusinessObjectByValue(ClassDef classDef, object idValue);
 
+        ///<summary>
+        /// For a given value e.g. a Guid Identifier '{......}' this will build up a primary key object that can be used to
+        /// load the business object from the Data store <see cref="GetBusinessObjectByValue(ClassDef,object)"/>
+        /// This can only be used for business objects that have a single property for the primary key
+        /// (i.e. non composite primary keys)
+        ///</summary>
+        ///<param name="classDef">The Class definition of the Business Object to load</param>
+        ///<param name="idValue">The value of the primary key of the business object</param>
+        ///<returns>the BOPrimaryKey if this can be constructed else returns null</returns>
+        BOPrimaryKey GetBOPrimaryKeyByValue(ClassDef classDef, object idValue);
 
+        ///<summary>
+        /// For a given value e.g. a Guid Identifier '{......}' this will 
+        /// load the business object from the Data store.
+        /// This can only be used for business objects that have a single property for the primary key
+        /// (i.e. non composite primary keys)
+        ///</summary>
+        ///<param name="type">The type of business object to be loaded</param>
+        ///<param name="idValue">The value of the primary key of the business object</param>
+        ///<returns>the Business Object that matches the value of the id. If the primary key cannot be constructed
+        /// e.g. the primary key is composite then returns null. If the Business Object cannot be loaded then returns
+        /// <see cref="BusObjDeleteConcurrencyControlException"/>
+        ///  </returns>
+        /// <exception cref="BusObjDeleteConcurrencyControlException"/>
+        IBusinessObject GetBusinessObjectByValue(Type type, object idValue);
+
+        ///<summary>
+        /// For a given value e.g. a Guid Identifier '{......}' this will build up a primary key object that can be used to
+        /// load the business object from the Data store <see cref="GetBusinessObjectByValue(Type,object)"/>
+        /// This can only be used for business objects that have a single property for the primary key
+        /// (i.e. non composite primary keys)
+        ///</summary>
+        ///<param name="type">The type of business object to be loaded</param>
+        ///<param name="idValue">The value of the primary key of the business object</param>
+        ///<returns>the BOPrimaryKey if this can be constructed else returns null</returns>
+        BOPrimaryKey GetBOPrimaryKeyByValue(Type type, object idValue);
     }
 }

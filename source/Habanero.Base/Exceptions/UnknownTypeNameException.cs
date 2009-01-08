@@ -26,7 +26,7 @@ namespace Habanero.Base.Exceptions
     /// Provides an exception to throw when a method receives the name of a class
     /// as a string to instantiate, but cannot find the type for that class name
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class UnknownTypeNameException : HabaneroDeveloperException
     {
         /// <summary>

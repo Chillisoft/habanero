@@ -425,7 +425,7 @@ namespace Habanero.Test.BO
             return businessObjectStub;
         }
 
-        [Test, Ignore("Pete to fix DatabaseInMemory")]
+        [Test]
         public void TestPropertyValueToDisplay_BusinessObjectLookupList_NotInList()
         {
             IBusinessObject businessObject = GetBusinessObjectStub();
@@ -448,7 +448,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(expectedPropValueToDisplay, boProp.PropertyValueToDisplay);
         }
 
-        [Test, Ignore("Pete to fix DatabaseInMemory")]
+        [Test]
         public void Test_GetBusinessObjectForProp()
         {
             ClassDef.ClassDefs.Clear();
@@ -470,29 +470,6 @@ namespace Habanero.Test.BO
             Assert.IsNotNull(objectForProp);
         }
 
-        [Test]
-        public void Test_GetRelatedBOPrimaryKeyForProp()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
-            IBusinessObject businessObject = GetBusinessObjectStub();
-            BOPropLookupList boProp = (BOPropLookupList)businessObject.Props[_propDef_int.PropertyName];
-            BOWithIntID bo1 = new BOWithIntID { TestField = "PropValue", IntID = 55 };
-            object expectedID = bo1.IntID;
-            bo1.Save();
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
-            Assert.IsNull(boProp.Value);
-            Assert.IsFalse(bo1.Status.IsNew);
-            Assert.IsNotNull(bo1.IntID);
-            //---------------Execute Test ----------------------
-            boProp.Value = expectedID;
-            BOPrimaryKey keyForProp = boProp.GetRelatedBOPrimaryKeyForProp(autoIncClassDef);
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(keyForProp);
-            Assert.AreEqual("IntID=55", keyForProp.ToString());
-        }
         [Test]
         public void Test_GetBusinessObjectForProp_ID_WithDatabase()
         {
@@ -538,58 +515,44 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsNotNull(returnedBO);
         }
-        [Test, Ignore("Problem with In Memory Database")]
-        public void Test_Memory_LoadWithIntID_ManualCreatePrimaryKey()
-        {
-            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
-            BOWithIntID bo1 = new BOWithIntID { TestField = "PropValue", IntID = 55 };
-            bo1.Save();
-            IPrimaryKey id = GetRelatedBOPrimaryKeyForProp(autoIncClassDef, 55);
-            //---------------Assert Precondition----------------
-            Assert.IsFalse(bo1.Status.IsNew);
-            Assert.IsNotNull(bo1.IntID);
-            //---------------Execute Test ----------------------
-            BOWithIntID returnedBO = (BOWithIntID)BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
-                                                       (autoIncClassDef, id);
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(returnedBO);
-        }
-        [Test]
-        public void Test_DB_LoadWithIntID_ManualCreatePrimaryKey()
-        {
-            ClassDef.ClassDefs.Clear();
-            DatabaseConnection.CurrentConnection = new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
-            DatabaseConnection.CurrentConnection.ConnectionString = MyDBConnection.GetDatabaseConfig().GetConnectionString();
-            DatabaseConnection.CurrentConnection.GetConnection();
-            BORegistry.DataAccessor = new DataAccessorDB();
-            BOWithIntID.DeleteAllBOWithIntID();
-            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
-            BOWithIntID bo1 = new BOWithIntID { TestField = "PropValue", IntID = 55 };
-            bo1.Save();
-            IPrimaryKey id = GetRelatedBOPrimaryKeyForProp(autoIncClassDef, 55);
-            //---------------Assert Precondition----------------
-            Assert.IsFalse(bo1.Status.IsNew);
-            Assert.IsNotNull(bo1.IntID);
-            //---------------Execute Test ----------------------
-            BOWithIntID returnedBO = (BOWithIntID)BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
-                                                       (autoIncClassDef, id);
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(returnedBO);
-        }
-
-        internal static BOPrimaryKey GetRelatedBOPrimaryKeyForProp(ClassDef classDef, int Value)
-        {
-            PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
-            if (primaryKeyDef.IsCompositeKey) return null;
-
-            BOPropCol boPropCol = classDef.createBOPropertyCol(true);
-            BOPrimaryKey boPrimaryKey = primaryKeyDef.CreateBOKey(boPropCol) as BOPrimaryKey;
-            if (boPrimaryKey != null)
-            {
-                boPrimaryKey[0].Value = Value;
-            }
-            return boPrimaryKey;
-        }
+//        [Test, Ignore("Problem with In Memory Database")]
+//        public void Test_Memory_LoadWithIntID_ManualCreatePrimaryKey()
+//        {
+//            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
+//            BOWithIntID bo1 = new BOWithIntID { TestField = "PropValue", IntID = 55 };
+//            bo1.Save();
+//            IPrimaryKey id = BusinessObjectLoaderBase.GetRelatedBOPrimaryKeyByValue(autoIncClassDef, bo1.IntID);
+//            //---------------Assert Precondition----------------
+//            Assert.IsFalse(bo1.Status.IsNew);
+//            Assert.IsNotNull(bo1.IntID);
+//            //---------------Execute Test ----------------------
+//            BOWithIntID returnedBO = (BOWithIntID)BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
+//                                                       (autoIncClassDef, id);
+//            //---------------Test Result -----------------------
+//            Assert.IsNotNull(returnedBO);
+//        }
+//        [Test]
+//        public void Test_DB_LoadWithIntID_ManualCreatePrimaryKey()
+//        {
+//            ClassDef.ClassDefs.Clear();
+//            DatabaseConnection.CurrentConnection = new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
+//            DatabaseConnection.CurrentConnection.ConnectionString = MyDBConnection.GetDatabaseConfig().GetConnectionString();
+//            DatabaseConnection.CurrentConnection.GetConnection();
+//            BORegistry.DataAccessor = new DataAccessorDB();
+//            BOWithIntID.DeleteAllBOWithIntID();
+//            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
+//            BOWithIntID bo1 = new BOWithIntID { TestField = "PropValue", IntID = 55 };
+//            bo1.Save();
+//            IPrimaryKey id = BusinessObjectLoaderBase.GetRelatedBOPrimaryKeyByValue(autoIncClassDef, bo1.IntID);
+//            //---------------Assert Precondition----------------
+//            Assert.IsFalse(bo1.Status.IsNew);
+//            Assert.IsNotNull(bo1.IntID);
+//            //---------------Execute Test ----------------------
+//            BOWithIntID returnedBO = (BOWithIntID)BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject
+//                                                       (autoIncClassDef, id);
+//            //---------------Test Result -----------------------
+//            Assert.IsNotNull(returnedBO);
+//        }
     }
 
     internal class BusinessObjectLookupListStub : BusinessObjectLookupList
