@@ -40,6 +40,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             SetupDataAccessor();
             BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
+            new Address();
         }
 
         [TearDown]

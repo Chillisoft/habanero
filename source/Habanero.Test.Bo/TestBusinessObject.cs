@@ -55,6 +55,7 @@ namespace Habanero.Test.BO
             SetupDBConnection();
             BORegistry.DataAccessor = new DataAccessorDB();
             ClassDef.ClassDefs.Clear();
+            new Address();
         }
 
         [Test]

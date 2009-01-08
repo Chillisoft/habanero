@@ -43,6 +43,7 @@ namespace Habanero.Test.General
 		public void SetupTest()
 		{
 			ClassDef.ClassDefs.Clear();
+		    new Address();
             new Engine();
 		    new Car();
             ContactPerson.DeleteAllContactPeople();

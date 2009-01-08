@@ -27,6 +27,8 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class SingleRelationshipDef : RelationshipDef
     {
+        private bool _owningBOHasForeignKey = true;
+
         #region Constructors
 
         /// <summary>
@@ -81,6 +83,13 @@ namespace Habanero.BO.ClassDefinition
         }
 
         #endregion Constructors
+
+        public override bool OwningBOHasForeignKey {
+            get {  return _owningBOHasForeignKey; }
+            set {
+                _owningBOHasForeignKey = value;
+        }} 
+        
 
         /// <summary>
         /// Overrides abstract method of RelationshipDef to create a new

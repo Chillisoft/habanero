@@ -37,6 +37,7 @@ namespace Habanero.Test.BO
             //base.SetupTest();
             ClassDef.ClassDefs.Clear();
             BusinessObjectManager.Instance.ClearLoadedObjects();
+            new Address();
         }
 
         [TearDown]
@@ -731,6 +732,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithAddressTestBOsRelationship();
+            new AddressTestBO();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();
@@ -779,6 +781,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithAddressTestBOsRelationship();
+            new AddressTestBO();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();
@@ -823,6 +826,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithAddressTestBOsRelationship();
+            new AddressTestBO();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             AddressTestBO address;
@@ -870,6 +874,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithAddressTestBOsRelationship();
+            new AddressTestBO();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
             ContactPersonTestBO originalContactPerson = CreateSavedCP();
             IPrimaryKey id = originalContactPerson.ID;

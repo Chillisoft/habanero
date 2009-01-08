@@ -37,7 +37,7 @@ namespace Habanero.Test.BO
         public  void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-           
+            new Address();
         }
 
 
@@ -336,6 +336,7 @@ namespace Habanero.Test.BO
         public void TestField_Compare_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
+            new Car();
             ContactPerson contactPerson1 = ContactPerson.CreateSavedContactPerson("ZZZZ");
             ContactPerson contactPerson2 = ContactPerson.CreateSavedContactPerson("AAAA");
             Car car1 = Car.CreateSavedCar("2", contactPerson1);

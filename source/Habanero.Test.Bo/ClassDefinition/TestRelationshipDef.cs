@@ -131,11 +131,60 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsFalse(relDef.KeepReferenceToRelatedObject);
         }
 
+        [Test]
+        public void TestOwningBOHasForeignKey_Single_Default()
+        {
+            //---------------Execute Test ----------------------
+            SingleRelationshipDef relDef = new SingleRelationshipDef("rel", typeof(MyRelatedBo), new RelKeyDef(), true, DeleteParentAction.Prevent);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(relDef.OwningBOHasForeignKey);
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestOwningBOHasForeignKey_Single()
+        {
+            //---------------Set up test pack-------------------
+            SingleRelationshipDef relDef = new SingleRelationshipDef("rel", typeof(MyRelatedBo), new RelKeyDef(), true, DeleteParentAction.Prevent);
+
+            //---------------Execute Test ----------------------
+            relDef.OwningBOHasForeignKey = false;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(relDef.OwningBOHasForeignKey);
+            //---------------Tear Down -------------------------          
+        }   
+        
+        [Test]
+        public void TestOwningBOHasForeignKey_Multiple_Default()
+        {
+            //---------------Execute Test ----------------------
+            MultipleRelationshipDef relDef = new MultipleRelationshipDef("rel", typeof(MyRelatedBo), new RelKeyDef(), true, "", DeleteParentAction.Prevent);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(relDef.OwningBOHasForeignKey);
+            //---------------Tear Down -------------------------          
+        }       
+ 
+        [Test]
+        public void TestOwningBOHasForeignKey_Multiple()
+        {
+            //---------------Set up test pack-------------------
+            MultipleRelationshipDef relDef = new MultipleRelationshipDef("rel", typeof(MyRelatedBo), new RelKeyDef(), true, "", DeleteParentAction.Prevent);
+
+            //---------------Execute Test ----------------------
+            relDef.OwningBOHasForeignKey = true;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(relDef.OwningBOHasForeignKey);
+            //---------------Tear Down -------------------------          
+        }
+
         private class RelationshipDefInheritor : RelationshipDef
         {
             public RelationshipDefInheritor()
                 : base("rel", typeof(MyRelatedBo), new RelKeyDef(), true, DeleteParentAction.Prevent)
             {}
+
+            public override bool OwningBOHasForeignKey { get { return true; } set {  } }
 
             public override IRelationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol)
             {

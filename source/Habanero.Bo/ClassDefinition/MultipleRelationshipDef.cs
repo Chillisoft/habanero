@@ -153,6 +153,10 @@ namespace Habanero.BO.ClassDefinition
 
         #endregion Properties
 
+        public override bool OwningBOHasForeignKey { get {
+            return false;
+        } set {  } }
+
         /// <summary>
 		/// Overrides abstract method of parent to facilitate creation of 
 		/// a new Multiple Relationship

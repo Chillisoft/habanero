@@ -33,6 +33,7 @@ namespace Habanero.Test.BO
         public void Setup()
         {
             ClassDef.ClassDefs.Clear();
+            new Address();
         }
 
         [Test]
@@ -250,6 +251,7 @@ namespace Habanero.Test.BO
             DataStoreInMemory dataStore = new DataStoreInMemory();
             DataStoreInMemory otherDataStore = new DataStoreInMemory();
             BORegistry.DataAccessor = new DataAccessorInMemory(otherDataStore);
+            new Car();
             ContactPersonCompositeKey contactPerson = new ContactPersonCompositeKey();
             //---------------Assert Precondition----------------
 

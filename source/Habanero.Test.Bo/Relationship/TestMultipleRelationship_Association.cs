@@ -12,7 +12,7 @@ namespace Habanero.Test.BO.Relationship
     public class TestMultipleRelationship_Association
     {
         [SetUp]
-        public void SetupTest()
+        public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
@@ -457,33 +457,6 @@ namespace Habanero.Test.BO.Relationship
         ///     the related properties (ie those in the relkey) are persisted, and the status of the child is updated.
         /// </summary>
         [Test]
-        public void Test_AddedChild_UpdatesRelatedPropertiesOnlyWhenParentSaves_DB()
-        {
-            //---------------Set up test pack-------------------
-            TestUsingDatabase.SetupDBDataAccessor();
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
-            RelationshipDef relationshipDef = (RelationshipDef)organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
-            relationshipDef.RelationshipType = RelationshipType.Association;
-            organisationTestBO.ContactPeople.Add(contactPerson);
-            contactPerson.Surname = TestUtil.CreateRandomString();
-
-            //---------------Execute Test ----------------------
-            organisationTestBO.Save();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            ContactPersonTestBO loadedContactPerson = Broker.GetBusinessObject<ContactPersonTestBO>(contactPerson.ID);
-            
-            //---------------Test Result -----------------------
-            Assert.AreEqual(contactPerson.OrganisationID, loadedContactPerson.OrganisationID);
-       
-        }
-
-
-        /// <summary>
-        /// Added child (ie an already persisted object that has been added to the relationship): 
-        ///     the related properties (ie those in the relkey) are persisted, and the status of the child is updated.
-        /// </summary>
-        [Test]
         public void Test_AddedChild_UpdatesRelatedPropertiesOnlyWhenParentSaves_DB_CompositeKey()
         {
             //---------------Set up test pack-------------------
@@ -512,8 +485,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreEqual(contactPerson.PK1Prop2, loadedCar.DriverFK2);
 
         }
-
-
+        
         [Test]
         public void Test_AddedChild_UpdatesRelatedPropertiesOnlyWhenParentSaves_OnlyIDChanged()
         {
@@ -575,36 +547,6 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsFalse(organisationTestBO.Status.IsDirty);
         }
 
-        /// <summary>
-        /// Removed child (ie an already persisted object that has been removed from the relationship): 
-        ///     the related properties (ie those in the relkey) are persisted, and the status of the child is updated.
-        /// </summary>
-        [Test]
-        public void Test_RemovedChild_UpdatesRelatedPropertiesOnlyWhenParentSaves_DB()
-        {
-            //---------------Set up test pack-------------------
-            TestUsingDatabase.SetupDBDataAccessor();
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            RelationshipDef relationshipDef = (RelationshipDef)organisationTestBO.Relationships["ContactPeople"].RelationshipDef;
-            relationshipDef.RelationshipType = RelationshipType.Association;
-            ContactPersonTestBO contactPerson = organisationTestBO.ContactPeople.CreateBusinessObject();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
-            contactPerson.Save();
-
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            organisationTestBO.ContactPeople.Remove(contactPerson);
-
-            //---------------Execute Test ----------------------
-            organisationTestBO.Save();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            ContactPersonTestBO loadedContactPerson = Broker.GetBusinessObject<ContactPersonTestBO>(contactPerson.ID);
-
-            //---------------Test Result -----------------------
-            Assert.IsNull(loadedContactPerson.OrganisationID);
-
-        }
-
         [Test]
         public void Test_AddDirtyChildrenToTransactionCommitter_AddedChild()
         {
@@ -648,4 +590,16 @@ namespace Habanero.Test.BO.Relationship
             return relationship;
         }
     }
+
+    [TestFixture]
+    public class TestMultipleRelationship_Association_DB : TestMultipleRelationship_Association
+    {
+        [SetUp]
+        public override void SetupTest()
+        {
+            base.SetupTest();
+            TestUsingDatabase.SetupDBDataAccessor();
+        }
+    }
+
 }

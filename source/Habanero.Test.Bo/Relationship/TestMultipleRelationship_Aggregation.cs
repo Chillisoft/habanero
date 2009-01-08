@@ -12,13 +12,15 @@ namespace Habanero.Test.BO.Relationship
     public class TestMultipleRelationship_Aggregation
     {
         [SetUp]
-        public void SetupTest()
+        public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             OrganisationTestBO.LoadDefaultClassDef_PreventAddChild();
         }
+
+
 
         [Test]
         public void Test_DirtyIfHasCreatedChildren()
@@ -384,6 +386,17 @@ namespace Habanero.Test.BO.Relationship
             relationshipDef.RelationshipType = relationshipType;
             cpCol = relationship.BusinessObjectCollection;
             return relationship;
+        }
+    }
+
+    [TestFixture]
+    public class TestMultipleRelationship_Aggregation_DB : TestMultipleRelationship_Aggregation
+    {
+        [SetUp]
+        public override void SetupTest()
+        {
+            base.SetupTest();
+            TestUsingDatabase.SetupDBDataAccessor();
         }
     }
 }

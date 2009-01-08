@@ -8,11 +8,12 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO.Relationship
 {
+
     [TestFixture]
     public class TestSingleRelationship_Aggregation
     {
         [SetUp]
-        public void SetupTest()
+        public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
@@ -20,15 +21,7 @@ namespace Habanero.Test.BO.Relationship
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
         }
 
-        [TestFixtureSetUp]
-        public void TestFixtureSetup()
-        {
-        }
-
-        [TearDown]
-        public void TearDownTest()
-        {
-        }
+        
 
         [Test]
         public void Test_SetChild_PersistedChild()
@@ -384,4 +377,16 @@ namespace Habanero.Test.BO.Relationship
             return compositionRelationship;
         }
     }
+
+    [TestFixture]
+    public class TestSingleRelationship_Aggregation_DB : TestSingleRelationship_Aggregation
+    {
+        [SetUp]
+        public override void SetupTest()
+        {
+            base.SetupTest();
+            TestUsingDatabase.SetupDBDataAccessor();
+        }
+    }
+
 }

@@ -40,7 +40,7 @@ namespace Habanero.Test.BO.Relationship
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-
+            new Address();
 
         }
 

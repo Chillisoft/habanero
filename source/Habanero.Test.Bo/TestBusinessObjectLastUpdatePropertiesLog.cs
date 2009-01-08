@@ -36,6 +36,7 @@ namespace Habanero.Test.BO
         {
             //Runs every time that any testmethod is executed
             GlobalRegistry.SecurityController = null;
+            new Address();
         }
 
         [TestFixtureSetUp]

@@ -88,20 +88,20 @@ namespace Habanero.Test.BO.Relationship
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             relationship.OwningBOHasForeignKey = false;
-            ContactPersonTestBO myBO = new ContactPersonTestBO();
-            myBO.Surname = TestUtil.CreateRandomString();
-            myBO.FirstName = TestUtil.CreateRandomString();
-            myBO.Organisation = organisationTestBO;
-            myBO.Save();
+            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
+            contactPerson.Surname = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Organisation = organisationTestBO;
+            contactPerson.Save();
             organisationTestBO.ContactPerson = null;
 
             //---------------Assert Precondition----------------
             Assert.IsTrue(relationship.IsRemoved);
-            Assert.AreSame(myBO, relationship.RemovedBO);
+            Assert.AreSame(contactPerson, relationship.RemovedBO);
 
             //---------------Execute Test ----------------------
 
-            organisationTestBO.ContactPerson = myBO;
+            organisationTestBO.ContactPerson = contactPerson;
 
             //---------------Test Result -----------------------
             Assert.IsFalse(relationship.IsRemoved);
@@ -134,8 +134,6 @@ namespace Habanero.Test.BO.Relationship
                 StringAssert.Contains("cannot both be configured as having the foreign key", ex.Message);
             }
         }
-
-
 
         private SingleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO)
         {

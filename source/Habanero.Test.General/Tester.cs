@@ -44,6 +44,7 @@ namespace Habanero.Test.General
         public void CreateTestPack()
         {
             SetupDBConnection();
+            new Address();
             ContactPerson.DeleteAllContactPeople();
 
             createUpdatedContactPersonTestPack();

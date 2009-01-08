@@ -31,7 +31,8 @@ namespace Habanero.Test.General
         public void SetupTest()
         {
             //Runs every time that any testmethod is executed
-            
+            ClassDef.ClassDefs.Clear();
+            new Address();
         }
         [TestFixtureSetUp]
         public void TestFixtureSetup()
@@ -51,6 +52,7 @@ namespace Habanero.Test.General
         public void TestNonPersistablePropDef()
         {
             //Create Contact person
+            new Car();
             ContactPerson person = new ContactPerson();
             ClassDef contactPersonClassdef = person.ClassDef;
             ClassDef clonedClassDef = contactPersonClassdef.Clone();

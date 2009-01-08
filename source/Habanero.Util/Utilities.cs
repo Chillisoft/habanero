@@ -40,6 +40,7 @@ namespace Habanero.Util
             return !testNull.IsAlive;
         }
 
+
         public static void CheckTypeCanBeCreated(Type type)
         {
             //Check that the type can be created and raise appropriate error 

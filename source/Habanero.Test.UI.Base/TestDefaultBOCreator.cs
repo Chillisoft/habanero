@@ -39,6 +39,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
+            new Address();
             new Engine();
             new Car(); new ContactPerson();
             BusinessObjectCollection<ContactPerson> col = new BusinessObjectCollection<ContactPerson>();

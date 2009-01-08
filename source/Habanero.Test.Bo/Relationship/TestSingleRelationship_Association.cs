@@ -14,7 +14,7 @@ namespace Habanero.Test.BO.Relationship
     public class TestSingleRelationship_Association
     {
         [SetUp]
-        public void SetupTest()
+        public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
@@ -688,7 +688,20 @@ namespace Habanero.Test.BO.Relationship
                 organisationTestBO.Relationships.GetSingle<ContactPersonTestBO>("ContactPerson");
             RelationshipDef relationshipDef = (RelationshipDef)compositionRelationship.RelationshipDef;
             relationshipDef.RelationshipType = relationshipType;
+            relationshipDef.OwningBOHasForeignKey = false;
             return compositionRelationship;
+        }
+    }
+
+
+    [TestFixture]
+    public class TestSingleRelationship_Association_DB : TestSingleRelationship_Association
+    {
+        [SetUp]
+        public override void SetupTest()
+        {
+            base.SetupTest();
+            TestUsingDatabase.SetupDBDataAccessor();
         }
     }
 }

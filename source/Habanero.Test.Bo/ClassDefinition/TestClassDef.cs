@@ -33,6 +33,12 @@ namespace Habanero.Test.BO.ClassDefinition
     {
         private ClassDef itsClassDef;
 
+        [SetUp]
+        public void Setup()
+        {
+            ClassDef.ClassDefs.Clear();
+            new Address();
+        }
         [Test]
         public void TestConstructors()
         {
@@ -888,7 +894,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestGetPropDef_WithSource()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
+
             ClassDef myRelatedClassDef = MyRelatedBo.LoadClassDef();
             ClassDef myBoClassDef = MyBO.LoadClassDefWithRelationship();
             Source source = new Source("MyRelationship");
@@ -904,7 +910,6 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestGetPropDef_WithSource_TwoLevels()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
 
             ClassDef engineClassDef = Engine.LoadClassDef_IncludingCarAndOwner();
             ClassDef contactPersonClassDef = new ContactPerson().ClassDef;

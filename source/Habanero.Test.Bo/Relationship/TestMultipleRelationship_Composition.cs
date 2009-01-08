@@ -12,13 +12,14 @@ namespace Habanero.Test.BO.Relationship
     public class TestMultipleRelationship_Composition
     {
         [SetUp]
-        public void SetupTest()
+        public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             OrganisationTestBO.LoadDefaultClassDef_PreventAddChild();
         }
+
 
         [Test]
         public void Test_DirtyIfHasCreatedChildren()
@@ -294,4 +295,18 @@ namespace Habanero.Test.BO.Relationship
             return relationship;
         }
     }
+
+
+
+    [TestFixture]
+    public class TestMultipleRelationship_Composition_DB : TestMultipleRelationship_Composition
+    {
+        [SetUp]
+        public override void SetupTest()
+        {
+            base.SetupTest();
+            TestUsingDatabase.SetupDBDataAccessor();
+        }
+    }
+
 }

@@ -51,6 +51,7 @@ namespace Habanero.Test
 
         public static void LoadClassDefs()
         {
+            new Car();
             CreateClassDef();
         }
 

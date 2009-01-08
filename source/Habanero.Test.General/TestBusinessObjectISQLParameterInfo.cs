@@ -40,7 +40,7 @@ namespace Habanero.Test.General
         [Test]
         public void TestSqlParameterInfo()
         {
-            new Engine(); new Car();
+            new Address(); new Engine(); new Car();
             IExpression exp = Expression.CreateExpression("PK3Prop = 'test'");
             ContactPerson cp = new ContactPerson();
             SqlCriteriaCreator creator = new SqlCriteriaCreator(exp, cp);

@@ -19,6 +19,7 @@
 
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
 namespace Habanero.Test.General
@@ -34,6 +35,13 @@ namespace Habanero.Test.General
         public void SetupTestFixture()
         {
             SetupDBConnection();
+        }
+
+        [SetUp]
+        public void Setup()
+        {
+            ClassDef.ClassDefs.Clear();
+            new Address();
         }
 
         public static void RunTest()

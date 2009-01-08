@@ -12,7 +12,7 @@ namespace Habanero.Test.BO.Relationship
     public class TestSingleRelationship_Composition
     {
         [SetUp]
-        public void SetupTest()
+        public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
@@ -399,6 +399,17 @@ namespace Habanero.Test.BO.Relationship
             RelationshipDef relationshipDef = (RelationshipDef)compositionRelationship.RelationshipDef;
             relationshipDef.RelationshipType = relationshipType;
             return compositionRelationship;
+        }
+    }
+
+    [TestFixture]
+    public class TestSingleRelationship_Composition_DB : TestSingleRelationship_Composition
+    {
+        [SetUp]
+        public override void SetupTest()
+        {
+            base.SetupTest();
+            TestUsingDatabase.SetupDBDataAccessor();
         }
     }
 }

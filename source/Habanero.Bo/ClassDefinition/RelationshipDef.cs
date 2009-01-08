@@ -61,7 +61,7 @@ namespace Habanero.BO.ClassDefinition
 
         protected OrderCriteria _orderCriteria;
 
-		#region Constructors
+        #region Constructors
 
         /// <summary>
         /// Constructor to create a new relationship definition
@@ -256,6 +256,9 @@ namespace Habanero.BO.ClassDefinition
             internal set { _relationshipType = value; }
         }
 
+        public abstract  bool OwningBOHasForeignKey { 
+            get; set;
+        }
 
         #endregion Type Initialisation
 
@@ -270,6 +273,7 @@ namespace Habanero.BO.ClassDefinition
 
         public void CheckCanAddChild(IBusinessObject bo)
         {
+
             if (!bo.Status.IsNew && (this.RelationshipType == RelationshipType.Composition))
             {
                 string message = "The " + this.RelatedObjectClassName + " could not be added since the "

@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 
@@ -49,7 +50,8 @@ namespace Habanero.BO
         /// <returns>The instantiated <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/></returns>
         internal static IBusinessObjectCollection CreateNewRelatedBusinessObjectCollection(Type boType, IRelationship relationship)
         {
-            Utilities.CheckTypeCanBeCreated(boType);
+            //TODO: put this type check back in - for now it is causing infinite recursion.
+            //Utilities.CheckTypeCanBeCreated(boType);
             Type relatedCollectionType = typeof(RelatedBusinessObjectCollection<>);
             relatedCollectionType = relatedCollectionType.MakeGenericType(boType);
             IBusinessObjectCollection collection = (IBusinessObjectCollection)Activator.CreateInstance(relatedCollectionType, relationship);
@@ -66,6 +68,22 @@ namespace Habanero.BO
             //QueryBuilder.PrepareCriteria(relationship.RelatedObjectClassDef, relationshipCriteria);
             collection.SelectQuery.Criteria = relationshipCriteria;
             collection.SelectQuery.OrderCriteria = preparedOrderCriteria;
+        }
+
+        internal static void CheckCorrespondingSingleRelationshipsAreValid(ISingleRelationship singleRelationship, ISingleRelationship singleReverseRelationship)
+        {
+            if (singleRelationship.RelationshipDef.RelationshipType == RelationshipType.Association &&
+                singleReverseRelationship.RelationshipDef.RelationshipType == RelationshipType.Association
+                && singleRelationship.OwningBOHasForeignKey && singleReverseRelationship.OwningBOHasForeignKey)
+            {
+                string message = String.Format("The corresponding single (one to one) relationships " +
+                                               "{0} (on {1}) and {2} (on {3}) cannot both be configured as having the foreign key " +
+                                               "(OwningBOHasForeignKey). Please set this property to false on one of these relationships.",
+                                               singleRelationship.RelationshipName, singleRelationship.OwningBO.GetType().Name,
+                                               singleReverseRelationship.RelationshipName,
+                                               singleRelationship.RelatedObjectClassDef.ClassName);
+                throw new HabaneroDeveloperException(message, "");
+            }
         }
     }
 

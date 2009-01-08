@@ -43,6 +43,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             _sqlFormatter = new SqlFormatter("[", "]");
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
             ClassDef.ClassDefs.Clear();
+            new Address();
         }
 
         public class DatabaseConnectionStub : DatabaseConnection
@@ -296,6 +297,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestCreateSqlStatement_WithOrder_ThroughRelationship()
         {
             //---------------Set up test pack-------------------
+            new Car();
             new ContactPerson();
 
             ClassDef addressClassDef = new Address().ClassDef;
@@ -315,9 +317,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestCreateSqlStatement_WithOrder_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
-
-            new ContactPerson();
             new Car();
+            new ContactPerson();
+            
             ClassDef engineClassDef = new Engine().ClassDef;
 
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(engineClassDef);

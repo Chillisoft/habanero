@@ -44,6 +44,7 @@ namespace Habanero.Test.BO.Relationship
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
+            new Address();
         }
 
         [Test, ExpectedException(typeof (RelationshipNotFoundException),
@@ -395,6 +396,7 @@ namespace Habanero.Test.BO.Relationship
         public void Test_AddDirtyChildrenToTransactionCommitter()
         {
             //---------------Set up test pack-------------------
+            new AddressTestBO();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             OrganisationTestBO.LoadDefaultClassDef_WithRelationShipToAddress();
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
