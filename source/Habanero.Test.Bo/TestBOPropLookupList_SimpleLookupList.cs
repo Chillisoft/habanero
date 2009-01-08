@@ -4,6 +4,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -14,8 +15,9 @@ namespace Habanero.Test.BO
 //        private PropDef _propDef_int;
         private PropDef _propDef_guid;
         private readonly Guid _validGuid = Guid.NewGuid();
-        private Dictionary<string, object> _collection;
-        private Dictionary<string, object> _collection_GuidString;
+        private Dictionary<string, string> _collection;
+        private Dictionary<string, string> _collection_GuidString;
+        private string __validGuid_AsStdString;
         private const string _validLookupValue = "ValidValue";
 
         [TestFixtureSetUp]
@@ -25,19 +27,33 @@ namespace Habanero.Test.BO
             // are executed then it will still only be called once.
 //            _propDef_int = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
             _propDef_guid = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
-            _collection = new Dictionary<string, object>
+            __validGuid_AsStdString = GuidToUpperInvariant(_validGuid);
+            _collection = new Dictionary<string, string>
                               {
-                                  {_validLookupValue, _validGuid},
-                                  {"Another Value", Guid.NewGuid()}
+                                  {_validLookupValue, __validGuid_AsStdString},
+                                  {"Another Value", NewGuidAsStdString()}
                               };
-            _collection_GuidString = new Dictionary<string, object>
+            _collection_GuidString = new Dictionary<string, string>
                               {
                                   {_validLookupValue, _validGuid.ToString()},
-                                  {"Another Value", Guid.NewGuid()}
+                                  {"Another Value", NewGuidAsStdString()}
                               };
             _propDef_guid.LookupList = new SimpleLookupList(_collection);
         }
 
+        private string NewGuidAsStdString()
+        {
+            return GuidToUpperInvariant(NewGuid());
+        }
+
+        private static Guid NewGuid()
+        {
+            return Guid.NewGuid();
+        }
+        private static string GuidToUpperInvariant(Guid guid)
+        {
+            return guid.ToString("B").ToUpperInvariant();
+        }
         [Test]
         public void Test_SetLookupListForPropDef()
         {
@@ -66,7 +82,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             try
             {
-                simpleLookupList.GetKeyLookupList();
+                simpleLookupList.GetIDValueLookupList();
                 Assert.Fail("expected Err");
             }
             //---------------Test Result -----------------------
@@ -90,8 +106,8 @@ namespace Habanero.Test.BO
             simpleLookupList.PropDef = propDef;
             //---------------Assert Precondition----------------
             Assert.AreEqual(_collection.Count, simpleLookupList.GetLookupList().Count);
-            Assert.IsNotNull(simpleLookupList.GetKeyLookupList());
-            Assert.AreEqual(2, simpleLookupList.GetKeyLookupList().Count);
+            Assert.IsNotNull(simpleLookupList.GetIDValueLookupList());
+            Assert.AreEqual(2, simpleLookupList.GetIDValueLookupList().Count);
         }
 
         [Test]
@@ -109,7 +125,7 @@ namespace Habanero.Test.BO
             Assert.IsInstanceOfType(typeof(SimpleLookupList), propDef.LookupList);
             Assert.AreSame(propDef, simpleLookupList.PropDef);
             Assert.AreEqual(_collection.Count, simpleLookupList.GetLookupList().Count);
-            Assert.AreEqual(_collection.Count, simpleLookupList.GetKeyLookupList().Count);
+            Assert.AreEqual(_collection.Count, simpleLookupList.GetIDValueLookupList().Count);
         }
         [Test]
         public void Test_SimpleLookupList_GetKey_Exists()
@@ -118,17 +134,24 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             SimpleLookupList simpleLookupList = new SimpleLookupList(_collection);
             propDef.LookupList = simpleLookupList;
-            Dictionary<string, object> list = simpleLookupList.GetLookupList();
+            Dictionary<string, string> list = simpleLookupList.GetLookupList();
             //---------------Assert Precondition----------------
             Assert.IsInstanceOfType(typeof(SimpleLookupList), propDef.LookupList);
             Assert.AreSame(propDef, simpleLookupList.PropDef);
             //---------------Execute Test ----------------------
-            object returnedKey;
+            string returnedKey;
             bool keyReturned = list.TryGetValue(_validLookupValue, out returnedKey);
             //---------------Test Result -----------------------
             Assert.IsTrue(keyReturned);
-            Assert.AreEqual(_validGuid, returnedKey);
+            Assert.AreEqual(GuidToUpper(_validGuid), returnedKey);
         }
+
+
+        private static string GuidToUpper(Guid guid)
+        {
+            return StringUtilities.GuidToUpper(guid);
+        }
+
         [Test]
         public void Test_SimpleLookupList_GetKey_NotExists()
         {
@@ -136,12 +159,12 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             SimpleLookupList simpleLookupList = new SimpleLookupList(_collection);
             propDef.LookupList = simpleLookupList;
-            Dictionary<string, object> list = simpleLookupList.GetLookupList();
+            Dictionary<string, string> list = simpleLookupList.GetLookupList();
             //---------------Assert Precondition----------------
             Assert.IsInstanceOfType(typeof(SimpleLookupList), propDef.LookupList);
             Assert.AreSame(propDef, simpleLookupList.PropDef);
             //---------------Execute Test ----------------------
-            object returnedKey;
+            string returnedKey;
             bool keyReturned = list.TryGetValue("InvalidValue", out returnedKey);
             //---------------Test Result -----------------------
             Assert.IsFalse(keyReturned);
@@ -155,13 +178,13 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             SimpleLookupList simpleLookupList = new SimpleLookupList(_collection);
             propDef.LookupList = simpleLookupList;
-            Dictionary< object, string> list = simpleLookupList.GetKeyLookupList();
+            Dictionary<string, string> list = simpleLookupList.GetIDValueLookupList();
             //---------------Assert Precondition----------------
             Assert.IsInstanceOfType(typeof(SimpleLookupList), propDef.LookupList);
             Assert.AreSame(propDef, simpleLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
-            bool keyReturned = list.TryGetValue(_validGuid, out returnedValue);
+            bool keyReturned = list.TryGetValue(GuidToUpperInvariant(_validGuid), out returnedValue);
             //---------------Test Result -----------------------
             Assert.IsTrue(keyReturned);
             Assert.AreEqual(_validLookupValue, returnedValue);
@@ -173,13 +196,13 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             SimpleLookupList simpleLookupList = new SimpleLookupList(_collection);
             propDef.LookupList = simpleLookupList;
-            Dictionary<object, string> list = simpleLookupList.GetKeyLookupList();
+            Dictionary<string, string> list = simpleLookupList.GetIDValueLookupList();
             //---------------Assert Precondition----------------
             Assert.IsInstanceOfType(typeof(SimpleLookupList), propDef.LookupList);
             Assert.AreSame(propDef, simpleLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
-            bool keyReturned = list.TryGetValue(Guid.NewGuid(), out returnedValue);
+            bool keyReturned = list.TryGetValue(NewGuidAsStdString(), out returnedValue);
             //---------------Test Result -----------------------
             Assert.IsFalse(keyReturned);
             Assert.IsNull(returnedValue);
@@ -214,7 +237,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             try
             {
-                new BOPropLookupList(def, Guid.NewGuid());
+                new BOPropLookupList(def, NewGuidAsStdString());
                 Assert.Fail("expected Err");
             }
             //---------------Test Result -----------------------
@@ -254,7 +277,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             try
             {
-                new BOPropLookupList(def, Guid.NewGuid());
+                new BOPropLookupList(def, NewGuidAsStdString());
                 Assert.Fail("expected Err");
             }
             //---------------Test Result -----------------------
@@ -368,17 +391,17 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
             const int validInt = 1;
-            Dictionary<string, object> collection_int = new Dictionary<string, object>
+            Dictionary<string, string> collection_int = new Dictionary<string, string>
                                                             {{_validLookupValue, validInt.ToString()}};
 
             SimpleLookupList simpleLookupList = new SimpleLookupList(collection_int);
             propDef.LookupList = simpleLookupList;
-            Dictionary<string, object> list = simpleLookupList.GetLookupList();
+            Dictionary<string, string> list = simpleLookupList.GetLookupList();
             //---------------Assert Precondition----------------
             Assert.IsInstanceOfType(typeof(SimpleLookupList), propDef.LookupList);
             Assert.AreSame(propDef, simpleLookupList.PropDef);
             //---------------Execute Test ----------------------
-            object returnedKey;
+            string returnedKey;
             bool keyReturned = list.TryGetValue(_validLookupValue, out returnedKey);
             //---------------Test Result -----------------------
             Assert.IsTrue(keyReturned);
@@ -389,21 +412,28 @@ namespace Habanero.Test.BO
         public void Test_SimpleLookupList_Int_GetValue_Exists()
         {
             //---------------Set up test pack-------------------
-            PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
             const int validInt = 1;
-            Dictionary<string, object> collection_int = new Dictionary<string, object> { { _validLookupValue, validInt.ToString() } };
-            SimpleLookupList simpleLookupList = new SimpleLookupList(collection_int);
-            propDef.LookupList = simpleLookupList;
-            Dictionary<object, string> list = simpleLookupList.GetKeyLookupList();
+            SimpleLookupList simpleLookupList;
+            PropDef propDef = GetPropDef_Int(validInt, out simpleLookupList);
+            Dictionary<string, string> list = simpleLookupList.GetIDValueLookupList();
             //---------------Assert Precondition----------------
             Assert.IsInstanceOfType(typeof(SimpleLookupList), propDef.LookupList);
             Assert.AreSame(propDef, simpleLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
-            bool keyReturned = list.TryGetValue(validInt, out returnedValue);
+            bool keyReturned = list.TryGetValue(validInt.ToString(), out returnedValue);
             //---------------Test Result -----------------------
             Assert.IsTrue(keyReturned);
             Assert.AreEqual(_validLookupValue, returnedValue);
+        }
+
+        private static PropDef GetPropDef_Int(int validInt, out SimpleLookupList simpleLookupList)
+        {
+            PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
+            Dictionary<string, string> collection_int = new Dictionary<string, string> { { _validLookupValue, validInt.ToString() } };
+            simpleLookupList = new SimpleLookupList(collection_int);
+            propDef.LookupList = simpleLookupList;
+            return propDef;
         }
 
         [Test]
@@ -412,7 +442,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             const int validInt = 1;
-            Dictionary<string, object> collection_int = new Dictionary<string, object> { { _validLookupValue, validInt.ToString() } };
+            Dictionary<string, string> collection_int = new Dictionary<string, string> { { _validLookupValue, validInt.ToString() } };
             SimpleLookupList simpleLookupList = new SimpleLookupList(collection_int);
             propDef.LookupList = simpleLookupList;
             
@@ -421,7 +451,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             try
             {
-                simpleLookupList.GetKeyLookupList();
+                simpleLookupList.GetIDValueLookupList();
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------
@@ -439,15 +469,15 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
             const int validInt = 1;
-            Dictionary<string, object> collection_int = new Dictionary<string, object> { { _validLookupValue, validInt.ToString() } };
+            Dictionary<string, string> collection_int = new Dictionary<string, string> { { _validLookupValue, validInt.ToString() } };
             SimpleLookupList simpleLookupList = new SimpleLookupList(collection_int);
             propDef.LookupList = simpleLookupList;
-            Dictionary<object, string> list = simpleLookupList.GetKeyLookupList();
+            Dictionary<string, string> list = simpleLookupList.GetIDValueLookupList();
             //---------------Assert Precondition----------------
             Assert.AreSame(propDef, simpleLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
-            bool keyReturned = list.TryGetValue(3, out returnedValue);
+            bool keyReturned = list.TryGetValue("3", out returnedValue);
             //---------------Test Result -----------------------
             Assert.IsFalse(keyReturned);
             Assert.IsNull(returnedValue);
@@ -459,12 +489,12 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
             const int validInt = 1;
-            Dictionary<string, object> collection_int = new Dictionary<string, object> { { _validLookupValue, validInt.ToString() } };
+            Dictionary<string, string> collection_int = new Dictionary<string, string> { { _validLookupValue, validInt.ToString() } };
             SimpleLookupList simpleLookupList = new SimpleLookupList(collection_int);
             propDef.LookupList = simpleLookupList;
 
             BOProp boProp = new BOPropLookupList(propDef);
-            boProp.InitialiseProp(validInt);
+            boProp.InitialiseProp(validInt.ToString());
             //---------------Assert Precondition----------------
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(validInt, boProp.Value);
@@ -482,7 +512,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
             const int validInt = 1;
-            Dictionary<string, object> collection_int = new Dictionary<string, object> { { _validLookupValue, validInt.ToString() } };
+            Dictionary<string, string> collection_int = new Dictionary<string, string> { { _validLookupValue, validInt.ToString() } };
             SimpleLookupList simpleLookupList = new SimpleLookupList(collection_int);
             propDef.LookupList = simpleLookupList;
 
@@ -606,8 +636,8 @@ namespace Habanero.Test.BO
         {
             BOProp boProp = new BOPropLookupList(_propDef_guid);
             const string invalid = "Invalid";
-            object origionalPropValue = Guid.NewGuid();
-            boProp.Value = origionalPropValue;
+            object originalPropValue = Guid.NewGuid();
+            boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
             Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
@@ -623,7 +653,7 @@ namespace Habanero.Test.BO
                 //You are trying to set the value for a lookup property PropName to 'Invalid' this value does not exist in the lookup list
                 StringAssert.Contains(boProp.PropertyName + " cannot be set to '" + invalid + "'", ex.Message);
                 StringAssert.Contains("this value does not exist in the lookup list", ex.Message);
-                Assert.AreEqual(origionalPropValue, boProp.Value);
+                Assert.AreEqual(originalPropValue, boProp.Value);
                 Assert.IsTrue(boProp.IsValid);
             }
         }
@@ -631,8 +661,8 @@ namespace Habanero.Test.BO
         public void Test_SetValue_ValidGuidString()
         {
             BOProp boProp = new BOPropLookupList(_propDef_guid);
-            object origionalPropValue = Guid.NewGuid();
-            boProp.Value = origionalPropValue;
+            object originalPropValue = Guid.NewGuid();
+            boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
             Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
@@ -647,8 +677,8 @@ namespace Habanero.Test.BO
         public void Test_SetValue_ValidDisplayValueString()
         {
             BOProp boProp = new BOPropLookupList(_propDef_guid);
-            object origionalPropValue = Guid.NewGuid();
-            boProp.Value = origionalPropValue;
+            object originalPropValue = Guid.NewGuid();
+            boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
             Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
@@ -672,23 +702,154 @@ namespace Habanero.Test.BO
             Assert.IsNull(boProp.PropertyValueToDisplay);
         }
 
+        [Test]
+        public void Test_SetValue_ValidIntID()
+        {
+            //---------------Set up test pack-------------------
+            SimpleLookupList simpleLookupList;
+            const int validInt = 5;
+            PropDef propDef = GetPropDef_Int(validInt, out simpleLookupList);
+            BOProp boProp = new BOPropLookupList(propDef);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(simpleLookupList.GetIDValueLookupList().ContainsKey(validInt.ToString()));
+            //---------------Execute Test ----------------------
+            boProp.Value = validInt;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(validInt, boProp.Value);
+            object propertyValueToDisplay = boProp.PropertyValueToDisplay;
+            Assert.AreEqual(_validLookupValue, propertyValueToDisplay);
+        }
+
+        [Test]
+        public void Test_SetValue_SetValue_LookupStringCanBeParsedToInt()
+        {
+            //---------------Set up test pack-------------------
+            const int validInt = 5;
+            PropDef propDef1 = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
+            const string validLookupValue_ThatIsAnInt = "555";
+            Dictionary<string, string> collection_int = new Dictionary<string, string> { { validLookupValue_ThatIsAnInt, validInt.ToString() } };
+            SimpleLookupList simpleLookupList = new SimpleLookupList(collection_int);
+            propDef1.LookupList = simpleLookupList;
+            PropDef propDef = propDef1;
+            BOProp boProp = new BOPropLookupList(propDef);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(simpleLookupList.GetIDValueLookupList().ContainsKey(validInt.ToString()));
+            Assert.IsTrue(simpleLookupList.GetIDValueLookupList().ContainsValue(validLookupValue_ThatIsAnInt));
+            //---------------Execute Test ----------------------
+            boProp.Value = validInt;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(validInt, boProp.Value);
+            object propertyValueToDisplay = boProp.PropertyValueToDisplay;
+            Assert.AreEqual(validLookupValue_ThatIsAnInt, propertyValueToDisplay);
+        }
+
+        [Test]
+        public void Test_SetValue_SetLookupValue_WhereIsAStringThatCanBeParsedToInt()
+        {
+            //This test is a compromise we cannot get this test and
+            //Test_SetValue_SetLookupValue_WhereIsAStringThatCanBeParsedToInt_ExistsAsAnotherValueInList working
+            // as well as the string property working since they have mutually exclusive logic.
+            // We have compromised by allowing this test to not set the lookup value correctly and to return a null
+            // The most common use of lookups in guids and strings and it works reliably for these scenarious.
+            //   The final result is that if a developer has a lookup list where the display values are integers
+            //   the lookup will not work reliably.
+            //---------------Set up test pack-------------------
+            const int validInt = 5;
+            PropDef propDef1 = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
+            const int validLookupValue_ThatIsAnInt = 555;
+            Dictionary<string, string> collection_int = new Dictionary<string, string> { { validLookupValue_ThatIsAnInt.ToString(), validInt.ToString() } };
+            SimpleLookupList simpleLookupList = new SimpleLookupList(collection_int);
+            propDef1.LookupList = simpleLookupList;
+            PropDef propDef = propDef1;
+            BOProp boProp = new BOPropLookupList(propDef);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(simpleLookupList.GetIDValueLookupList().ContainsKey(validInt.ToString()));
+            Assert.IsTrue(simpleLookupList.GetIDValueLookupList().ContainsValue(validLookupValue_ThatIsAnInt.ToString()));
+            //---------------Execute Test ----------------------
+            boProp.Value = validLookupValue_ThatIsAnInt;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(validInt, boProp.Value);
+            object propertyValueToDisplay = boProp.PropertyValueToDisplay;
+            Assert.AreEqual(validLookupValue_ThatIsAnInt.ToString(), propertyValueToDisplay);
+            Assert.IsTrue(boProp.IsValid);
+            //            object validInt = boProp.PropertyValueToDisplay;
+//            Assert.AreEqual(null, propertyValueToDisplay);
+//            Assert.IsFalse(boProp.IsValid);
+        }
+
+        [Test]
+        public void Test_SetValue_SetLookupValue_WhereIsAStringThatCanBeParsedToInt_AsString()
+        {
+            //---------------Set up test pack-------------------
+            const int validInt = 5;
+            PropDef propDef1 = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
+            const string validLookupValue_ThatIsAnIntString = "555";
+            Dictionary<string, string> collection_int = new Dictionary<string, string> { { validLookupValue_ThatIsAnIntString, validInt.ToString() } };
+            SimpleLookupList simpleLookupList = new SimpleLookupList(collection_int);
+            propDef1.LookupList = simpleLookupList;
+            PropDef propDef = propDef1;
+            BOProp boProp = new BOPropLookupList(propDef);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(simpleLookupList.GetIDValueLookupList().ContainsKey(validInt.ToString()));
+            Assert.IsTrue(simpleLookupList.GetIDValueLookupList().ContainsValue(validLookupValue_ThatIsAnIntString));
+            //---------------Execute Test ----------------------
+            boProp.Value = validLookupValue_ThatIsAnIntString;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(validInt, boProp.Value);
+            object propertyValueToDisplay = boProp.PropertyValueToDisplay;
+            Assert.AreEqual(validLookupValue_ThatIsAnIntString, propertyValueToDisplay);
+        }
+
+        [Test]
+        public void Test_SetValue_SetLookupValue_WhereIsAStringThatCanBeParsedToInt_ExistsAsAnotherValueInList()
+        {
+            //---------------Set up test pack-------------------
+            const int validInt = 5;
+            PropDef propDef1 = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
+            const int validLookupValue_ThatIsAnInt = 555;
+            Dictionary<string, string> collection_int = new Dictionary<string, string>
+                    {
+                        { validLookupValue_ThatIsAnInt.ToString(), validInt.ToString() },
+                        { validInt.ToString(), "999"}
+                    };
+            SimpleLookupList simpleLookupList = new SimpleLookupList(collection_int);
+            propDef1.LookupList = simpleLookupList;
+            PropDef propDef = propDef1;
+            BOProp boProp = new BOPropLookupList(propDef);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(boProp.Value);
+            Assert.IsTrue(simpleLookupList.GetIDValueLookupList().ContainsKey(validInt.ToString()));
+            Assert.IsTrue(simpleLookupList.GetIDValueLookupList().ContainsValue(validLookupValue_ThatIsAnInt.ToString()));
+            //---------------Execute Test ----------------------
+            boProp.Value = validInt;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(validInt, boProp.Value);
+            object propertyValueToDisplay = boProp.PropertyValueToDisplay;
+            Assert.AreEqual(validLookupValue_ThatIsAnInt.ToString(), propertyValueToDisplay);
+        }
+
+
         //If an invalid property types is set to the property then
         //  An error is raised. Stating the error reason.
         //  The property value will be set to the previous property value.
         //  The property is not changed to be in an invalid state. The prop invalid reason is not set.
-        [Test, Ignore("//TODO Brett: This will work when remove legacy code from setproperty value")]
+        [Test]
         public void Test_BOSetPropertyValue_InvalidString()
         {
             IBusinessObject businessObject = GetBusinessObjectStub();
             BOProp boProp = (BOProp) businessObject.Props[_propDef_guid.PropertyName];
             const string invalid = "Invalid";
-            object origionalPropValue = Guid.NewGuid();
-            businessObject.SetPropertyValue(_propDef_guid.PropertyName, origionalPropValue);
+            object originalPropValue = Guid.NewGuid();
+            businessObject.SetPropertyValue(_propDef_guid.PropertyName, originalPropValue);
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
-            Assert.AreEqual(origionalPropValue, boProp.Value);
+            Assert.AreEqual(originalPropValue, boProp.Value);
             Assert.IsInstanceOfType(typeof(BOPropLookupList), boProp);
             //---------------Execute Test ----------------------
             try
@@ -703,7 +864,7 @@ namespace Habanero.Test.BO
                 //TODO Brett: Waiting for removing This functionality from BusinessObject.
                 StringAssert.Contains(boProp.PropertyName + " cannot be set to '" + invalid + "'", ex.Message);
                 StringAssert.Contains("this value does not exist in the lookup list", ex.Message);
-                Assert.AreEqual(origionalPropValue, boProp.Value);
+                Assert.AreEqual(originalPropValue, boProp.Value);
                 Assert.IsTrue(boProp.IsValid);
             }
         }
@@ -713,8 +874,8 @@ namespace Habanero.Test.BO
         {
             IBusinessObject businessObject = GetBusinessObjectStub();
             BOProp boProp = (BOProp)businessObject.Props[_propDef_guid.PropertyName];
-            object origionalPropValue = Guid.NewGuid();
-            boProp.Value = origionalPropValue;
+            object originalPropValue = Guid.NewGuid();
+            boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
             Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
@@ -730,8 +891,8 @@ namespace Habanero.Test.BO
         {
             IBusinessObject businessObject = GetBusinessObjectStub();
             BOProp boProp = (BOProp)businessObject.Props[_propDef_guid.PropertyName];
-            object origionalPropValue = Guid.NewGuid();
-            boProp.Value = origionalPropValue;
+            object originalPropValue = Guid.NewGuid();
+            boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
             Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
             Assert.IsNotNull(boProp.Value);

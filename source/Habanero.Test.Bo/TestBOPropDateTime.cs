@@ -80,11 +80,11 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             try
             {
-                boProp.InitialiseProp(invalid); ;
+                boProp.InitialiseProp(invalid);
                 Assert.Fail("expected Err");
             }
             //---------------Test Result -----------------------
-            catch (UserException ex)
+            catch (HabaneroDeveloperException ex)
             {
                 StringAssert.Contains(boProp.PropertyName + " cannot be set to " + invalid, ex.Message);
                 StringAssert.Contains("It is not a type of ", ex.Message);
@@ -111,7 +111,7 @@ namespace Habanero.Test.BO
                 Assert.Fail("expected Err");
             }
             //---------------Test Result -----------------------
-            catch (UserException ex)
+            catch (HabaneroDeveloperException ex)
             {
                 StringAssert.Contains(" cannot be set to " + invalid, ex.Message);
                 StringAssert.Contains("It is not a type of ", ex.Message);
@@ -194,8 +194,8 @@ namespace Habanero.Test.BO
         {
             BOProp boProp = new BOProp(_propDef);
             const string invalid = "Invalid";
-            object origionalPropValue = DateTime.MinValue.AddDays(1);
-            boProp.Value = origionalPropValue;
+            object originalPropValue = DateTime.MinValue.AddDays(1);
+            boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
             Assert.AreEqual(typeof(DateTime), boProp.PropDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
@@ -206,12 +206,12 @@ namespace Habanero.Test.BO
                 Assert.Fail("expected Err");
             }
             //---------------Test Result -----------------------
-            catch (UserException ex)
+            catch (HabaneroDeveloperException ex)
             {
                 StringAssert.Contains(boProp.PropertyName + " cannot be set to " + invalid, ex.Message);
                 StringAssert.Contains("It is not a type of ", ex.Message);
                 StringAssert.Contains("DateTime", ex.Message);
-                Assert.AreEqual(origionalPropValue, boProp.Value);
+                Assert.AreEqual(originalPropValue, boProp.Value);
                 Assert.IsTrue(boProp.IsValid);
             }
         }

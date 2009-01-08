@@ -38,7 +38,7 @@ namespace Habanero.BO
     ///</summary>
     public class BOProp : IBOProp
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOProp");
+        protected static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOProp");
         protected object _currentValue;
         protected bool _isDirty;
         protected bool _isValid = true;
@@ -137,9 +137,8 @@ namespace Habanero.BO
         ///   a valid Guid Object.
         /// </summary>
         /// <param name="valueToParse">The value to be converted</param>
-        /// <param name="returnValue"></param>
-        /// <returns>An object of the correct type.</returns>
-        protected virtual void ParsePropValue(object valueToParse, out object returnValue)
+        /// <param name="returnValue">The value that has been parsed</param>
+        public virtual void ParsePropValue(object valueToParse, out object returnValue)
         {
             bool isParsed = this.PropDef.TryParsePropValue(valueToParse, out returnValue);
             if (!isParsed)
@@ -215,9 +214,10 @@ namespace Habanero.BO
 
         private void RaiseIncorrectTypeException(object value)
         {
-            throw new UserException(
-                string.Format("{0} cannot be set to {1}. It is not a type of {2}" 
-                              , this.PropertyName, value, this.PropDef.PropertyTypeName));
+            string message = string.Format("{0} cannot be set to {1}. It is not a type of {2}" 
+                                          , this.PropertyName, value, this.PropDef.PropertyTypeName);
+            throw new HabaneroDeveloperException(
+                message, message);
         }
 
         /// <summary>
@@ -414,7 +414,7 @@ namespace Habanero.BO
         ///    to display may be a string.
         /// </summary>
         /// <returns>Returns the property value</returns>
-        protected internal virtual object PropertyValueToDisplay
+        public virtual object PropertyValueToDisplay
         {
             get { return Value; }
         }

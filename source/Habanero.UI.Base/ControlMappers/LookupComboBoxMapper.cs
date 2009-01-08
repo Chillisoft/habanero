@@ -71,7 +71,7 @@ namespace Habanero.UI.Base
         /// ComboBox.  This method is typically called by SetupLookupList().
         /// </summary>
         /// <param name="value">The items used to populate the list</param>
-        public override Dictionary<string, object> LookupList
+        public override Dictionary<string, string> LookupList
         {
             get { return _collection; }
             set
@@ -83,7 +83,7 @@ namespace Habanero.UI.Base
 
                 _comboBox.Items.Clear();
                 _comboBox.Items.Add(new ComboPair("", null));
-                foreach (KeyValuePair<string, object> pair in LookupList)
+                foreach (KeyValuePair<string, string> pair in LookupList)
                 {
                     _comboBox.Items.Add(new ComboPair(pair.Key, pair.Value));
                 }
@@ -167,32 +167,33 @@ namespace Habanero.UI.Base
             try
             {
                 object boPropertyValue = GetPropertyValue();
-                foreach (KeyValuePair<string, object> pair in _collection)
+                foreach (KeyValuePair<string, string> pair in _collection)
                 {
                     if (pair.Value == null) continue;
-                    if (pair.Value is IBusinessObject)
-                    {
-                        BusinessObject pairValueBo = (BusinessObject) pair.Value;
-                        if (pairValueBo.ClassDef.PrimaryKeyDef.IsGuidObjectID
-                            && pairValueBo.ID.GetAsGuid().Equals(boPropertyValue))
-                        {
-                            _comboBox.SelectedItem = pair.Key;
-                            break;
-                        }
-                        if (boPropertyValue != null &&
-                            String.Compare(pairValueBo.ID.ToString(), boPropertyValue.ToString()) == 0)
-                        {
-                            _comboBox.SelectedItem = pair.Key;
-                            break;
-                        }
-                        if (boPropertyValue != null &&
-                            pairValueBo.ID[0].Value != null &&
-                            String.Compare(pairValueBo.ID[0].Value.ToString(), boPropertyValue.ToString()) == 0)
-                        {
-                            _comboBox.SelectedItem = pair.Key;
-                            break;
-                        }
-                    }
+                    //TODO Brett: 
+//                    if (pair.Value is IBusinessObject)
+//                    {
+//                        BusinessObject pairValueBo = (BusinessObject) pair.Value;
+//                        if (pairValueBo.ClassDef.PrimaryKeyDef.IsGuidObjectID
+//                            && pairValueBo.ID.GetAsGuid().Equals(boPropertyValue))
+//                        {
+//                            _comboBox.SelectedItem = pair.Key;
+//                            break;
+//                        }
+//                        if (boPropertyValue != null &&
+//                            String.Compare(pairValueBo.ID.ToString(), boPropertyValue.ToString()) == 0)
+//                        {
+//                            _comboBox.SelectedItem = pair.Key;
+//                            break;
+//                        }
+//                        if (boPropertyValue != null &&
+//                            pairValueBo.ID[0].Value != null &&
+//                            String.Compare(pairValueBo.ID[0].Value.ToString(), boPropertyValue.ToString()) == 0)
+//                        {
+//                            _comboBox.SelectedItem = pair.Key;
+//                            break;
+//                        }
+//                    }
 
                     bool found = false;
                     if (pair.Value != null)
@@ -240,11 +241,11 @@ namespace Habanero.UI.Base
         {
             if (_businessObject == null)
             {
-                Dictionary<string, object> emptyList = new Dictionary<string, object>();
+                Dictionary<string, string> emptyList = new Dictionary<string, string>();
                 LookupList = emptyList;
             }
             BOMapper mapper = new BOMapper(_businessObject);
-            Dictionary<string, object> col = mapper.GetLookupList(_propertyName);
+            Dictionary<string, string> col = mapper.GetLookupList(_propertyName);
             //if (!_isRightClickInitialised)
             //{
             //    //SetupRightClickBehaviour();
@@ -280,7 +281,7 @@ namespace Habanero.UI.Base
         /// Do customisation of the Lookup list by overriding this method in an inheritor.
         /// </summary>
         /// <param name="col">The look up list retrieved from the businessobject that will be customised</param>
-        protected virtual void CustomiseLookupList(Dictionary<string, object> col)
+        protected virtual void CustomiseLookupList(Dictionary<string, string> col)
         {
             
         }

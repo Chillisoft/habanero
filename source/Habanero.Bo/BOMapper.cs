@@ -50,7 +50,7 @@ namespace Habanero.BO
         /// <param name="propertyName">The property name</param>
         /// <returns>Returns the lookup list or an empty collection if
         /// not available</returns>
-        public Dictionary<string, object> GetLookupList(string propertyName)
+        public Dictionary<string, string> GetLookupList(string propertyName)
         {
             IPropDef propDef = _businessObject.ClassDef.GetPropDef(propertyName, false);
             //return def.GetLookupList(_businessObject.GetDatabaseConnection());
@@ -59,7 +59,7 @@ namespace Habanero.BO
 //                return propDef.LookupList.GetLookupList(_businessObject.GetDatabaseConnection());
                 return propDef.LookupList.GetLookupList();
             }
-            return new Dictionary<string, object>();
+            return new Dictionary<string, string>();
         }
 
         /// <summary>

@@ -50,14 +50,14 @@ namespace Habanero.BO
         ///   any displayed value. E.g. the persisted value may be a GUID but the
         ///   displayed value may be a related string.
         /// </summary>
-        private Dictionary<string, object> _displayValueDictionary;
+        private Dictionary<string, string> _displayValueDictionary;
 
         /// <summary>
         /// Provides a key value pair where the persisted value can be returned for 
         ///   any displayed value. E.g. the persisted value may be a GUID but the
         ///   displayed value may be a related string.
         /// </summary>
-        private Dictionary<object, string> _keyValueDictionary = new Dictionary<object, string>();
+        private Dictionary<string, string> _keyValueDictionary = new Dictionary<string, string>();
 
         private DateTime _lastCallTime;
         private string _sort;
@@ -194,7 +194,7 @@ namespace Habanero.BO
         /// the class definition held in this instance
         /// </summary>
         /// <returns>Returns a collection of string-value pairs</returns>
-        public Dictionary<string, object> GetLookupList()
+        public Dictionary<string, string> GetLookupList()
         {
             return GetLookupList(null);
         }
@@ -206,7 +206,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="connection">The database connection</param>
         /// <returns>Returns a collection of string-value pairs</returns>
-        public Dictionary<string, object> GetLookupList(IDatabaseConnection connection)
+        public Dictionary<string, string> GetLookupList(IDatabaseConnection connection)
         {
             return GetLookupList(false);
         }
@@ -225,13 +225,20 @@ namespace Habanero.BO
         /// <param name="ignoreTimeout">Whether to ignore the timeout and reload
         /// from the database regardless of when the lookup list was last loaded.</param>
         /// <returns>Returns a collection of string-value pairs</returns>
-        public Dictionary<string, object> GetLookupList(bool ignoreTimeout)
+        public Dictionary<string, string> GetLookupList(bool ignoreTimeout)
         {
             if (!ignoreTimeout && DateTime.Now.Subtract(_lastCallTime).TotalMilliseconds < _timeout)
             {
                 _lastCallTime = DateTime.Now;
                 return _displayValueDictionary;
             }
+            ClassDef classDef = LookupBoClassDef;
+            if (classDef.PrimaryKeyDef.Count > 1)
+            {
+                throw new HabaneroDeveloperException("There is an application setup error. Please contact your system administrator",
+                        "The lookup list cannot contain business objects '" + classDef.ClassNameFull + "' with a composite primary key.");
+            }
+
             IBusinessObjectCollection col = GetBusinessObjectCollection();
             _displayValueDictionary = CreateDisplayValueDictionary(col, String.IsNullOrEmpty(Sort));
             FillKeyValueDictionary();
@@ -267,44 +274,54 @@ namespace Habanero.BO
         /// <param name="col">The business object collection</param>
         /// <param name="sortByDisplayValue">Must the collection be sorted by the display value or not</param>
         /// <returns>Returns a collection of display-value pairs</returns>
-        public static Dictionary<string, object> CreateDisplayValueDictionary
+        public Dictionary<string, string> CreateDisplayValueDictionary
             (IBusinessObjectCollection col, bool sortByDisplayValue)
         {
             if (col == null)
             {
-                return new Dictionary<string, object>();
+                return new Dictionary<string, string>();
             }
+            if (this.PropDef == null)
+            {
+                throw new HabaneroDeveloperException
+                    ("There is an application setup error. There is no propdef set for the business object lookup list. Please contact your system administrator",
+                     "There is no propdef set for the business object lookup list.");
+            }
+
             if (sortByDisplayValue)
             {
-                SortedDictionary<string, object> sortedLookupList = new SortedDictionary<string, object>();
+                SortedDictionary<string, string> sortedLookupList = new SortedDictionary<string, string>();
                 foreach (BusinessObject bo in col)
                 {
                     string stringValue = GetAvailableDisplayValue(sortedLookupList, bo.ToString());
-                    sortedLookupList.Add(stringValue, bo);
+                    sortedLookupList.Add(stringValue, this.PropDef.ConvertValueToString(bo.ID.GetAsValue()));
                 }
 
-                Dictionary<string, object> lookupList = new Dictionary<string, object>();
+                Dictionary<string, string> lookupList = new Dictionary<string, string>();
                 foreach (string key in sortedLookupList.Keys)
                 {
-                    AddBusinessObjectToLookupList(lookupList, (BusinessObject) sortedLookupList[key], key);
+                    AddBusinessObjectToLookupList(lookupList, sortedLookupList[key], key);
                 }
                 return lookupList;
             }
             else
             {
-                Dictionary<string, object> lookupList = new Dictionary<string, object>();
+                Dictionary<string, string> lookupList = new Dictionary<string, string>();
                 foreach (BusinessObject bo in col)
                 {
                     string stringValue = GetAvailableDisplayValue(lookupList, bo.ToString());
-                    AddBusinessObjectToLookupList(lookupList, bo, stringValue);
+                    //string objectID = Convert.ToString(bo.ID.GetAsValue());
+                    string objectID = this.PropDef.ConvertValueToString(bo.ID.GetAsValue());
+                    AddBusinessObjectToLookupList(lookupList, objectID, stringValue);
                 }
                 return lookupList;
             }
         }
 
-        private static void AddBusinessObjectToLookupList(IDictionary<string, object> lookupList, IBusinessObject bo, string stringValue)
+        private static void AddBusinessObjectToLookupList
+            (IDictionary<string, string> lookupList, string objectID, string stringValue)
         {
-            lookupList.Add(stringValue, bo.ID.GetAsValue());
+            lookupList.Add(stringValue, objectID);
         }
 
         ///<summary>
@@ -313,7 +330,7 @@ namespace Habanero.BO
         ///<param name="sortedLookupList"></param>
         ///<param name="stringValue">The new value to determine a display value for</param>
         ///<returns>Returns a unique display value for an item of the given name.</returns>
-        private static string GetAvailableDisplayValue(IDictionary<string, object> sortedLookupList,string stringValue)
+        private static string GetAvailableDisplayValue(IDictionary<string, string> sortedLookupList, string stringValue)
         {
             string originalValue = null;
             int count = 1;
@@ -458,7 +475,7 @@ namespace Habanero.BO
         /// The display value can be looked up.
         /// </summary>
         ///<returns>The Key Value Lookup List</returns>
-        public Dictionary<object, string> GetKeyLookupList()
+        public Dictionary<string, string> GetIDValueLookupList()
         {
             GetLookupList(true);
             return _keyValueDictionary;
@@ -466,13 +483,33 @@ namespace Habanero.BO
 
         private void FillKeyValueDictionary()
         {
-            _keyValueDictionary = new Dictionary<object, string>();
-            foreach (KeyValuePair<string, object> pair in _displayValueDictionary)
+            if (this.PropDef == null)
             {
-                if (!_keyValueDictionary.ContainsKey(pair.Value))
+                throw new HabaneroDeveloperException
+                    ("There is an application setup error. There is no propdef set for the business object lookup list. Please contact your system administrator",
+                     "There is no propdef set for the business object lookup list.");
+            }
+            _keyValueDictionary = new Dictionary<string, string>();
+            foreach (KeyValuePair<string, string> pair in _displayValueDictionary)
+            {
+                if (string.IsNullOrEmpty(Convert.ToString(pair.Value)))
                 {
-                    _keyValueDictionary.Add(pair.Value, pair.Key);
+                    string developerMessage = string.Format("A business object of '{0}' is being added to a lookup list for {1} it does not have a value for its primary key set", this.PropDef.PropertyTypeName, this.PropDef.PropertyName);
+                    throw new HabaneroDeveloperException
+                        (developerMessage,
+                         developerMessage);
                 }
+                if (_keyValueDictionary.ContainsKey(pair.Value)) continue;
+//                object parsedKey;
+
+//                if (!this.PropDef.TryParsePropValue(pair.Value, out parsedKey))
+//                {
+//                    throw new HabaneroDeveloperException
+//                        ("There is an application setup error Please contact your system administrator",
+//                         "There is a class definition setup error the business object lookup list has lookup value items that are not of type "
+//                         + this.PropDef.PropertyTypeName);
+//                }
+                _keyValueDictionary.Add(pair.Value, pair.Key);
             }
         }
     }

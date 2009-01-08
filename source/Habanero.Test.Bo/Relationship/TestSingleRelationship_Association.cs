@@ -5,6 +5,7 @@ using System.Text;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Relationship
@@ -54,17 +55,72 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreSame(contactPerson, relationship.GetRelatedObject());
         }
 
+//        public void SetupDBConnection()
+//        {
+//            if (DatabaseConnection.CurrentConnection != null &&
+//                DatabaseConnection.CurrentConnection.GetType() == typeof(DatabaseConnectionMySql))
+//            {
+//                return;
+//            }
+//            DatabaseConnection.CurrentConnection =
+//                new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
+//            DatabaseConnection.CurrentConnection.ConnectionString =
+//                MyDBConnection.GetDatabaseConfig().GetConnectionString();
+//            DatabaseConnection.CurrentConnection.GetConnection();
+//
+//            BORegistry.DataAccessor = new DataAccessorDB();
+//        }
+//
+//        public void SetupDBOracleConnection()
+//        {
+//            if (DatabaseConnection.CurrentConnection != null &&
+//                DatabaseConnection.CurrentConnection.GetType() == typeof(DatabaseConnectionOracle))
+//            {
+//                return;
+//            }
+//            DatabaseConnection.CurrentConnection =
+//                new DatabaseConnectionOracle("System.Data.OracleClient", "System.Data.OracleClient.OracleConnection");
+//            ConnectionStringOracleFactory oracleConnectionString = new ConnectionStringOracleFactory();
+//            string connStr = oracleConnectionString.GetConnectionString("core1", "XE", "system", "system", "1521");
+//            DatabaseConnection.CurrentConnection.ConnectionString = connStr;
+//            DatabaseConnection.CurrentConnection.GetConnection();
+//            BORegistry.DataAccessor = new DataAccessorDB();
+//        }
+        //TODO Brett: to remove this test
+        [Test]
+        public void Test_SetParent_PersistedChild_FindLoadLookupListError()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConnection.CurrentConnection =
+                                new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
+            DatabaseConnection.CurrentConnection.ConnectionString = MyDBConnection.GetDatabaseConfig().GetConnectionString();
+            DatabaseConnection.CurrentConnection.GetConnection();
+            BORegistry.DataAccessor = new DataAccessorDB();
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation(); 
+            GetAssociationRelationship(organisation);
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
+            //---------------Assert Precondition -----------------------
+            Assert.IsNotNull(organisation.OrganisationID);
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = organisation;
+            //---------------Test Result -----------------------
+            Assert.AreSame(contactPerson, organisation.ContactPerson);
+            Assert.AreSame(organisation, contactPerson.Organisation);
+        }
+
         [Test]
         public void Test_SetParent_PersistedChild()
         {
             //---------------Set up test pack-------------------
-            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation(); 
+            GetAssociationRelationship(organisation);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
-
+            IBusinessObjectCollection collection = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(organisation.ClassDef, null, "");
+            //---------------Assert Precondition -----------------------
+            Assert.IsNotNull(organisation.OrganisationID);
+            Assert.AreEqual(1, collection.Count); ;
             //---------------Execute Test ----------------------
             contactPerson.Organisation = organisation;
-
             //---------------Test Result -----------------------
             Assert.AreSame(contactPerson, organisation.ContactPerson);
             Assert.AreSame(organisation, contactPerson.Organisation);
@@ -75,7 +131,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
+            GetAssociationRelationship(organisation);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
 
             //---------------Execute Test ----------------------

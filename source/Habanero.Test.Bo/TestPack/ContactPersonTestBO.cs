@@ -572,6 +572,7 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
+
         public static ClassDef LoadClassDefOrganisationRelationship()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -631,8 +632,6 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
-
-
         public override string ToString()
         {
             return Surname;
@@ -658,9 +657,7 @@ namespace Habanero.Test.BO
             {
                 Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surnames[i]);
                 if (BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria) != null) continue;
-                ContactPersonTestBO contact = new ContactPersonTestBO();
-                contact.Surname = surnames[i];
-                contact.FirstName = firstNames[i];
+                ContactPersonTestBO contact = new ContactPersonTestBO {Surname = surnames[i], FirstName = firstNames[i]};
                 contact.Save();
             }
             ClassDef.ClassDefs.Clear();

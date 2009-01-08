@@ -25,6 +25,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
+using Habanero.Util;
 using NMock;
 using NUnit.Framework;
 
@@ -37,9 +38,9 @@ namespace Habanero.Test.BO
     public class TestDatabaseLookupList : TestUsingDatabase
     {
         private readonly string Sql = "select MyBoID, TestProp from tbMyBo";
-        readonly Guid g1 = Guid.NewGuid();
-        readonly Guid g2 = Guid.NewGuid();
-        readonly Guid g3 = Guid.NewGuid();
+        readonly Guid _guid1 = Guid.NewGuid();
+        readonly Guid _guid2 = Guid.NewGuid();
+        readonly Guid _guid3 = Guid.NewGuid();
         DataTable dt;
         Mock dbConnMock;
         IDatabaseConnection conn;
@@ -55,15 +56,15 @@ namespace Habanero.Test.BO
             dt.Columns.Add();
             DataRow row = dt.NewRow();
             row[1] = "Test1";
-            row[0] = g1;
+            row[0] = _guid1;
             dt.Rows.Add(row);
             row = dt.NewRow();
             row[1] = "Test2";
-            row[0] = g2;
+            row[0] = _guid2;
             dt.Rows.Add(row);
             row = dt.NewRow();
             row[1] = "Test3";
-            row[0] = g3;
+            row[0] = _guid3;
             dt.Rows.Add(row);
         }
 
@@ -106,20 +107,24 @@ namespace Habanero.Test.BO
         public void TestGetLookupList()
         {
             PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
-            DatabaseLookupList source = new DatabaseLookupList(Sql);
-            source.PropDef = propDef;
-            Dictionary<string, object> col = source.GetLookupList(conn);
+            DatabaseLookupList source = new DatabaseLookupList(Sql) {PropDef = propDef};
+            Dictionary<string, string> col = source.GetLookupList(conn);
             Assert.AreEqual(3, col.Count);
             string str = "";
-            foreach (KeyValuePair<string, object> pair in col)
+            foreach (KeyValuePair<string, string> pair in col)
             {
-                if (pair.Value != null && pair.Value.Equals(g1))
+                if (pair.Value != null && pair.Value.Equals(GuidToUpper(_guid1)))
                 {
                     str = pair.Key;
                 }
             }
             Assert.AreEqual("Test1", str);
             dbConnMock.Verify();
+        }
+
+        private static string GuidToUpper(Guid guid)
+        {
+            return StringUtilities.GuidToUpper(guid);
         }
 
 
@@ -129,8 +134,8 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             DatabaseLookupList source = new DatabaseLookupList(Sql);
             source.PropDef = propDef;
-            Dictionary<string, object> col = source.GetLookupList(conn);
-            Dictionary<string, object> col2 = source.GetLookupList(conn);
+            Dictionary<string, string> col = source.GetLookupList(conn);
+            Dictionary<string, string> col2 = source.GetLookupList(conn);
             Assert.AreSame(col2, col);
             dbConnMock.Verify();
         }
@@ -144,9 +149,9 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             DatabaseLookupList source = new DatabaseLookupList(Sql, 100);
             source.PropDef = propDef;
-            Dictionary<string, object> col = source.GetLookupList(conn);
+            Dictionary<string, string> col = source.GetLookupList(conn);
             Thread.Sleep(250);
-            Dictionary<string, object> col2 = source.GetLookupList(conn);
+            Dictionary<string, string> col2 = source.GetLookupList(conn);
             Assert.AreNotSame(col2, col);
             dbConnMock.Verify();
         }

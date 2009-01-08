@@ -122,5 +122,47 @@ namespace Habanero.BO
             Assert.Contains("ContactPersonID=" + contactPersonID, list);
             Assert.Contains("Surname=" + surname, list);
         }
+
+        [Test]
+        public void Test_CreatePrimaryKey_TwoPropDefs()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef1 = new PropDef("prop1", typeof(String), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef2 = new PropDef("prop2", typeof(String), PropReadWriteRule.ReadWrite, null);
+            PrimaryKeyDef keyDef = new PrimaryKeyDef { IsGuidObjectID = false };
+            keyDef.Add(propDef2);
+            keyDef.Add(propDef1);
+
+            BOPropCol boPropCol = new BOPropCol();
+            boPropCol.Add(propDef1.CreateBOProp(false));
+            boPropCol.Add(propDef2.CreateBOProp(false));
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, keyDef.Count);
+            //---------------Execute Test ----------------------
+            BOPrimaryKey boPrimaryKey = (BOPrimaryKey)keyDef.CreateBOKey(boPropCol);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(keyDef.Count, boPrimaryKey.Count);
+            Assert.IsTrue(boPrimaryKey.IsCompositeKey);
+        }
+        [Test]
+        public void Test_CreatePrimaryKey_OnePropDefs()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef1 = new PropDef("prop1", typeof(String), PropReadWriteRule.ReadWrite, null);
+            PrimaryKeyDef keyDef = new PrimaryKeyDef { IsGuidObjectID = false };
+            keyDef.Add(propDef1);
+
+            BOPropCol boPropCol = new BOPropCol();
+            boPropCol.Add(propDef1.CreateBOProp(false));
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, keyDef.Count);
+            //---------------Execute Test ----------------------
+            BOPrimaryKey boPrimaryKey = (BOPrimaryKey)keyDef.CreateBOKey(boPropCol);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(keyDef.Count, boPrimaryKey.Count);
+            Assert.IsFalse(boPrimaryKey.IsCompositeKey);
+        }
     }
 }

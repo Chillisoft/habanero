@@ -104,7 +104,7 @@ namespace Habanero.BO.ClassDefinition
 				                            deleteParentAction);
 		}
 
-        public SimpleLookupList CreateSimpleLookupList(Dictionary<string, object> displayValueDictionary)
+        public SimpleLookupList CreateSimpleLookupList(Dictionary<string, string> displayValueDictionary)
 		{
 			return new SimpleLookupList(displayValueDictionary);
 		}

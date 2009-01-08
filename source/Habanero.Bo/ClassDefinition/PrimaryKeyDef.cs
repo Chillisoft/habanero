@@ -117,5 +117,13 @@ namespace Habanero.BO.ClassDefinition
             }
             return lBOKey;
         }
+
+        ///<summary>
+        /// Returns true if the primary key is a composite Key (i.e. if it consists of more than one property)
+        ///</summary>
+        public bool IsCompositeKey
+        {
+            get { return this.Count > 1; }
+        }
     }
 }

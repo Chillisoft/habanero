@@ -299,8 +299,6 @@ namespace Habanero.Test.UI.Base
             AssertIsComboBoxColumnType(dataGridViewColumn);
         }
 
-        //TODO: Working on this - seems there is a problem with the Gizmox version
-        //[Test, Ignore("Having trouble assigning datatable in grid initialiser - will return to this when Win version is done")]
         [Test]
         public void TestSetupComboBoxFromClassDef_SetsItemsInComboBox()
         {

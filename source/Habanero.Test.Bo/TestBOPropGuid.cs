@@ -170,7 +170,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual(bo.MyBoID, boProp.Value);
         }
 
-
         [Test]
         public void Test_InialiseProp_DBNUll()
         {
@@ -219,7 +218,7 @@ namespace Habanero.Test.BO
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------
-            catch (UserException ex)
+            catch (HabaneroDeveloperException ex)
             {
                 StringAssert.Contains(boProp.PropertyName + " cannot be set to " + bo.ToString(), ex.Message);
                 StringAssert.Contains("It is not a type of ", ex.Message);
@@ -248,7 +247,7 @@ namespace Habanero.Test.BO
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------
-            catch (UserException ex)
+            catch (HabaneroDeveloperException ex)
             {
                 StringAssert.Contains(boProp.PropertyName + " cannot be set to " + invalid, ex.Message);
                 StringAssert.Contains("It is not a type of ", ex.Message);
@@ -276,7 +275,7 @@ namespace Habanero.Test.BO
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------
-            catch (UserException ex)
+            catch (HabaneroDeveloperException ex)
             {
                 StringAssert.Contains(" cannot be set to " + invalid, ex.Message);
                 StringAssert.Contains("It is not a type of ", ex.Message);
@@ -368,8 +367,8 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BOProp boProp = new BOProp(_propDef);
             const string invalid = "Invalid";
-            object origionalPropValue = Guid.NewGuid();
-            boProp.Value = origionalPropValue;
+            object originalPropValue = Guid.NewGuid();
+            boProp.Value = originalPropValue;
             //---------------Assert Precondition ---------------
             Assert.AreEqual(typeof (Guid), _propDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
@@ -380,12 +379,12 @@ namespace Habanero.Test.BO
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------
-            catch (UserException ex)
+            catch (HabaneroDeveloperException ex)
             {
                 StringAssert.Contains(boProp.PropertyName + " cannot be set to " + invalid, ex.Message);
                 StringAssert.Contains("It is not a type of ", ex.Message);
                 StringAssert.Contains("Guid", ex.Message);
-                Assert.AreEqual(origionalPropValue, boProp.Value);
+                Assert.AreEqual(originalPropValue, boProp.Value);
                 Assert.IsTrue(boProp.IsValid);
             }
         }

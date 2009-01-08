@@ -118,7 +118,7 @@ namespace Habanero.Test.BO
 
 //TODO Brett: This method will only work when the Business object is changed to create the 
         //appropriate BOProp Type for a lookup
-        [Test, Ignore("TODO Brett: This method will only work when the Business object is changed to create boproplookup")]
+        [Test]
         public void TestBOLookupListWithString()
         {
             ContactPersonTestBO.CreateSampleData();
@@ -715,24 +715,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual(newDateTime, value);
         }
 
-        [Test, Ignore("Peter we need to agree on what to do in these scenarious")]
-        public void Test_SetPropertyValue_WithDateTimeString_Invalid_old()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-            const string newDateTime = "31/11/2008";
-            //-------------Assert Preconditions -------------
-            //---------------Execute Test ----------------------
-            contactPersonTestBO.SetPropertyValue("DateOfBirth", newDateTime);
-            //---------------Test Result -----------------------
-            object value = contactPersonTestBO.GetPropertyValue("DateOfBirth");
-            Assert.IsInstanceOfType(typeof(string), value);
-            Assert.AreEqual(newDateTime, value);
-            IBOProp prop = contactPersonTestBO.Props["DateOfBirth"];
-            Assert.IsFalse(prop.IsValid);
-            StringAssert.Contains("for property 'Date Of Birth' is not valid. It is not a type of DateTime.", prop.InvalidReason);
-        }
 
         [Test]
         public void Test_SetPropertyValue_WithDateTimeString_Invalid()
@@ -740,15 +722,28 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-            const string invalidDateTime = "31/11/2008";
-            //-------------Assert Preconditions -------------
-            //---------------Execute Test ----------------------
-            contactPersonTestBO.SetPropertyValue("DateOfBirth", invalidDateTime);
-            //---------------Test Result -----------------------
-            object value = contactPersonTestBO.GetPropertyValue("DateOfBirth");
-            Assert.IsNull(value);
+            const string newDateTime = "31/11/2008";
             IBOProp prop = contactPersonTestBO.Props["DateOfBirth"];
+            //-------------Assert Preconditions -------------
+            Assert.IsNull(prop.Value);
             Assert.IsTrue(prop.IsValid);
+            //---------------Execute Test ----------------------
+            try
+            {
+                contactPersonTestBO.SetPropertyValue("DateOfBirth", newDateTime);
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                string message = string.Format("{0} cannot be set to {1}. It is not a type of"
+                              , "DateOfBirth", newDateTime);
+                StringAssert.Contains(message, ex.Message);
+                StringAssert.Contains("DateTime", ex.Message);
+                object value = contactPersonTestBO.GetPropertyValue("DateOfBirth");
+                Assert.IsNull(value);
+                Assert.IsTrue(prop.IsValid);
+            }
         }
 
         [Test]

@@ -28,7 +28,7 @@ namespace Habanero.UI.Base
     public abstract class ComboBoxMapper : ControlMapper
     {
         protected IComboBox _comboBox;
-        protected Dictionary<string, object> _collection;
+        protected Dictionary<string, string> _collection;
         protected bool _rightClickEnabled;
         protected ClassDef _lookupTypeClassDef;
         //protected ComboBoxRightClickController _comboBoxRightClickController;
@@ -151,7 +151,7 @@ namespace Habanero.UI.Base
         /// ComboBox.  This method is typically called by SetupLookupList().
         /// </summary>
         /// <param name="value">The items used to populate the list</param>
-        public abstract Dictionary<string, object> LookupList { set; get;}
+        public abstract Dictionary<string, string> LookupList { set; get;}
 
     }
 }

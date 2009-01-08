@@ -69,7 +69,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             OrganisationTestBO.LoadDefaultClassDef();
-            ClassDef contactPersonClassDef = ContactPersonTestBO.LoadClassDefOrganisationRelationship();
+            ClassDef contactPersonClassDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             RelKeyDef keyDef = new RelKeyDef();
             keyDef.Add(new RelPropDef(contactPersonClassDef.PropDefcol["OrganisationID"], "OrganisationID"));
             MultipleRelationshipDef def = new MultipleRelationshipDef

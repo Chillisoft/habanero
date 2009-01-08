@@ -31,9 +31,9 @@ namespace Habanero.BO
         /// Returns a new empty lookup-list
         /// </summary>
         /// <returns>Returns an empty lookup-list</returns>
-        public Dictionary<string, object> GetLookupList()
+        public Dictionary<string, string> GetLookupList()
         {
-            return new Dictionary<string, object>();
+            return new Dictionary<string, string>();
         }
 
         /// <summary>
@@ -42,14 +42,14 @@ namespace Habanero.BO
         /// <param name="connection">A parameter preserved for polymorphism.
         /// This can be set to null.</param>
         /// <returns>Returns an empty lookup-list</returns>
-        public Dictionary<string, object> GetLookupList(IDatabaseConnection connection)
+        public Dictionary<string, string> GetLookupList(IDatabaseConnection connection)
         {
-            return new Dictionary<string, object>();
+            return new Dictionary<string, string>();
         }
         public IPropDef PropDef { get; set; }
-        public Dictionary<object, string> GetKeyLookupList()
+        public Dictionary<string, string> GetIDValueLookupList()
         {
-            return new Dictionary<object, string>();
+            return new Dictionary<string, string>();
         }
     }
 }

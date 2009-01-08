@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -37,20 +38,20 @@ namespace Habanero.BO
         ///   any displayed value. E.g. the persisted value may be a GUID but the
         ///   displayed value may be a related string.
         /// </summary>
-        private readonly Dictionary<string, object> _displayValueDictionary;
+        private readonly Dictionary<string, string> _displayValueDictionary;
         /// <summary>
         /// Provides a key value pair where the persisted value can be returned for 
         ///   any displayed value. E.g. the persisted value may be a GUID but the
         ///   displayed value may be a related string.
         /// </summary>
-        private readonly Dictionary< object, string> _keyValueDictionary = new Dictionary< object, string>();
+        private readonly Dictionary<string, string> _keyValueDictionary = new Dictionary<string, string>();
 
         /// <summary>
         /// Constructor to initialise the provider with a specified
         /// collection of string-Guid pairs
         /// </summary>
         /// <param name="collection">The string-Guid pair collection</param>
-        public SimpleLookupList(Dictionary<string, object> collection)
+        public SimpleLookupList(Dictionary<string, string> collection)
         {
             _displayValueDictionary = collection;
         }
@@ -59,7 +60,7 @@ namespace Habanero.BO
         /// Returns the lookup list contents being held
         /// </summary>
         /// <returns>Returns a collection of display-value pairs</returns>
-        public Dictionary<string, object> GetLookupList()
+        public Dictionary<string, string> GetLookupList()
         {
             return _displayValueDictionary;
         }
@@ -70,7 +71,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="connection">Ignored for this lookup list type.</param>
         /// <returns>Returns a collection of display-value pairs</returns>
-        public Dictionary<string, object> GetLookupList(IDatabaseConnection connection)
+        public Dictionary<string, string> GetLookupList(IDatabaseConnection connection)
         {
             return _displayValueDictionary;
         }
@@ -90,7 +91,7 @@ namespace Habanero.BO
         /// The display value can be looked up.
         /// </summary>
         ///<returns>The Key Value Lookup List</returns>
-        public Dictionary<object, string> GetKeyLookupList()
+        public Dictionary<string, string> GetIDValueLookupList()
         {
             if (this.PropDef == null)
             {
@@ -108,18 +109,18 @@ namespace Habanero.BO
 
         private void FillKeyValueDictionary()
         {
-            foreach (KeyValuePair<string, object> pair in _displayValueDictionary)
+            foreach (KeyValuePair<string, string> pair in _displayValueDictionary)
             {
                 object parsedKey;
-                if (this.PropDef.TryParsePropValue(pair.Value, out parsedKey))
+                if (!this.PropDef.TryParsePropValue(pair.Value, out parsedKey))
                 {
-                    _keyValueDictionary.Add(parsedKey, pair.Key);
+                    throw new HabaneroDeveloperException
+                        ("There is an application setup error Please contact your system administrator",
+                         "There is a class definition setup error the simple lookup list has lookup value items that are not of type "
+                         + this.PropDef.PropertyTypeName);
                 }
-                else
-                {
-                    throw new HabaneroDeveloperException("There is an application setup error Please contact your system administrator"
-                        , "There is a class definition setup error the simple lookup list has lookup value items that are not of type " + this.PropDef.PropertyTypeName);
-                }
+                string keyAsString = this.PropDef.ConvertValueToString(parsedKey);
+                _keyValueDictionary.Add(keyAsString, pair.Key);
             }
         }
     }

@@ -25,6 +25,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
+using Habanero.Util;
 
 namespace Habanero.Test
 {
@@ -33,8 +34,8 @@ namespace Habanero.Test
     /// </summary>
     public class Sample : BusinessObject
     {
-        private static Dictionary<string, object> itsLookupCollection;
-        private static Dictionary<string, object> itsBOLookupCollection;
+        private static Dictionary<string, string> itsLookupCollection;
+        private static Dictionary<string, string> itsBOLookupCollection;
 
         public Sample()
         {
@@ -51,10 +52,7 @@ namespace Habanero.Test
             {
                 return CreateClassDefWin();
             }
-            else
-            {
-                return ClassDef.ClassDefs[typeof (Sample)];
-            }
+            return ClassDef.ClassDefs[typeof (Sample)];
         }
 
         protected override ClassDef ConstructClassDef()
@@ -175,7 +173,6 @@ namespace Habanero.Test
 
         private static ClassDef CreateClassDef()
         {
-            PropDef propDef;
             PropDefCol lPropDefCol = new PropDefCol();
             lPropDefCol.Add(
                 new PropDef("SampleText", typeof (String), PropReadWriteRule.ReadWrite, "SampleText",  null));
@@ -199,11 +196,11 @@ namespace Habanero.Test
                 new PropDef("SampleInt", typeof (int), PropReadWriteRule.ReadWrite, "SampleInt", 0));
             lPropDefCol.Add(
                 new PropDef("SampleMoney", typeof (Decimal), PropReadWriteRule.ReadWrite, "SampleInt", new Decimal(0)));
-            propDef = new PropDef("SampleLookup2ID", typeof (Guid), PropReadWriteRule.ReadWrite, "SampleLookup2ID", null);
-            itsLookupCollection = new Dictionary<string, object>();
-            itsLookupCollection.Add("Test1", new Guid("{6E8B3DDB-1B13-4566-868D-57478C1F4BEE}"));
-            itsLookupCollection.Add("Test2", new Guid("{7209B956-96A0-4720-8E49-DE154FA0E096}"));
-            itsLookupCollection.Add("Test3", new Guid("{F45DE850-C693-44d8-AC39-8CEE5435B21A}"));
+            PropDef propDef = new PropDef("SampleLookup2ID", typeof (Guid), PropReadWriteRule.ReadWrite, "SampleLookup2ID", null);
+            itsLookupCollection = new Dictionary<string, string>();
+            itsLookupCollection.Add("Test1",StringUtilities.GuidToUpper( new Guid("{6E8B3DDB-1B13-4566-868D-57478C1F4BEE}")));
+            itsLookupCollection.Add("Test2", StringUtilities.GuidToUpper(new Guid("{7209B956-96A0-4720-8E49-DE154FA0E096}")));
+            itsLookupCollection.Add("Test3", StringUtilities.GuidToUpper(new Guid("{F45DE850-C693-44d8-AC39-8CEE5435B21A}")));
             propDef.LookupList = new SimpleLookupList(itsLookupCollection);
             lPropDefCol.Add(propDef);
             lPropDefCol.Add(new PropDef("SampleLookup3ID", typeof (String), PropReadWriteRule.ReadWrite, "SampleLookup3ID",
@@ -227,21 +224,21 @@ namespace Habanero.Test
             return lClassDef;
         }
 
-        public static Dictionary<string, object> LookupCollection
+        public static Dictionary<string, string> LookupCollection
         {
             get { return itsLookupCollection; }
         }
 
-        public static Dictionary<string, object> BOLookupCollection
+        public static Dictionary<string, string> BOLookupCollection
         {
             get
             {
                 if (itsBOLookupCollection == null) {
 
-                    itsBOLookupCollection = new Dictionary<string, object>();
-                    itsBOLookupCollection.Add("Test1", new Sample());
-                    itsBOLookupCollection.Add("Test2", new Sample());
-                    itsBOLookupCollection.Add("Test3", new Sample());
+                    itsBOLookupCollection = new Dictionary<string, string>();
+                    itsBOLookupCollection.Add("Test1", StringUtilities.GuidToUpper(new Sample().ID.GetAsGuid()));
+                    itsBOLookupCollection.Add("Test2", StringUtilities.GuidToUpper(new Sample().ID.GetAsGuid()));
+                    itsBOLookupCollection.Add("Test3", StringUtilities.GuidToUpper(new Sample().ID.GetAsGuid()));
                 }
                 return itsBOLookupCollection;
             }

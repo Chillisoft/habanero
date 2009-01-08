@@ -34,7 +34,7 @@ namespace Habanero.BO.Loaders
         /// Provides a key value pair where the value can be returned for 
         ///   any displayed value. 
         /// </summary>
-        private readonly Dictionary<string, object> _displayValueDictionary;
+        private readonly Dictionary<string, string> _displayValueDictionary;
 
         /// <summary>
         /// Constructor to initialise a loader with a dtd path
@@ -44,7 +44,7 @@ namespace Habanero.BO.Loaders
         public XmlSimpleLookupListLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
 			: base(dtdLoader, defClassFactory)
         {
-            _displayValueDictionary = new Dictionary<string, object>();
+            _displayValueDictionary = new Dictionary<string, string>();
         }
 
         /// <summary>
@@ -77,11 +77,11 @@ namespace Habanero.BO.Loaders
                         "is missing a 'value' attribute that specifies the " +
                         "value to store for the given property.");
                 }
-            	
-				Guid newGuid;
+                BOPropGuidDataMapper guidDataMapper = new BOPropGuidDataMapper();
+                Guid newGuid;
             	if (StringUtilities.GuidTryParse(valuePart, out newGuid))
             	{
-					_displayValueDictionary.Add(stringPart, newGuid);
+					_displayValueDictionary.Add(stringPart, guidDataMapper.ConvertValueToString(newGuid));
             	} else
             	{
 					_displayValueDictionary.Add(stringPart, valuePart);

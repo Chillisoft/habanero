@@ -588,48 +588,48 @@ namespace Habanero.BO
             if (prop == null)
             {
                 throw new InvalidPropertyNameException(String.Format(
-                                                           "The given property name '{0}' does not exist in the " +
-                                                           "collection of properties for the class '{1}'.",
-                                                           propName, ClassName));
+                               "The given property name '{0}' does not exist in the " +
+                               "collection of properties for the class '{1}'.",
+                               propName, ClassName));
             }
 
-            if (!(newPropValue is Guid))
-            {
-                if (newPropValue is string && prop.PropertyType == typeof (Guid))
-                {
-                    Guid guidValue;
-                    if (StringUtilities.GuidTryParse((string) newPropValue, out guidValue))
-                    {
-                        newPropValue = guidValue;
-                    }
-                    else
-                    {
-                        if (ClassDef.GetPropDef(propName).HasLookupList())
-                        {
-                            Dictionary<string, object> lookupList =
-                                ClassDef.GetPropDef(propName).LookupList.GetLookupList();
-                            try
-                            {
-                                newPropValue = lookupList[(string) newPropValue];
-                            }
-                            catch (KeyNotFoundException ex)
-                            {
-                                throw new HabaneroApplicationException(
-                                    "You are trying to set the value for a lookup property " + propName + " to '" +
-                                    newPropValue + "' this value does not exist in the lookup list", ex);
-                            }
-                            if (newPropValue is IBusinessObject)
-                            {
-                                newPropValue = ((BusinessObject) (newPropValue))._primaryKey.GetAsGuid();
-                            }
-                        }
-                    }
-                }
-//                if (newPropValue != null && newPropValue.Equals(DBNull.Value) && prop.PropertyType == typeof (bool))
-//                {
-//                    newPropValue = false;
+////            if (!(newPropValue is Guid))
+////            {
+////                if (newPropValue is string && prop.PropertyType == typeof (Guid))
+////                {
+////                    Guid guidValue;
+////                    if (StringUtilities.GuidTryParse((string) newPropValue, out guidValue))
+////                    {
+////                        newPropValue = guidValue;
+////                    }
+////                    else
+////                    {
+////                        if (ClassDef.GetPropDef(propName).HasLookupList())
+////                        {
+////                            Dictionary<string, object> lookupList =
+////                                ClassDef.GetPropDef(propName).LookupList.GetLookupList();
+////                            try
+////                            {
+////                                newPropValue = lookupList[(string) newPropValue];
+////                            }
+////                            catch (KeyNotFoundException ex)
+////                            {
+////                                throw new HabaneroApplicationException(
+////                                    "You are trying to set the value for a lookup property " + propName + " to '" +
+////                                    newPropValue + "' this value does not exist in the lookup list", ex);
+////                            }
+////                            if (newPropValue is IBusinessObject)
+////                            {
+////                                newPropValue = ((BusinessObject) (newPropValue))._primaryKey.GetAsGuid();
+////                            }
+////                        }
+////                    }
 //                }
-            }
+////                if (newPropValue != null && newPropValue.Equals(DBNull.Value) && prop.PropertyType == typeof (bool))
+////                {
+////                    newPropValue = false;
+////                }
+//            }
 //            if (DBNull.Value.Equals(newPropValue))
 //            {
 //                newPropValue = null;
@@ -648,24 +648,24 @@ namespace Habanero.BO
                     newPropValue = Enum.Parse(prop.PropertyType, (string)newPropValue);
                 }
             }
-            if (newPropValue is IBusinessObject)
-            {
-                if (prop.PropertyType == typeof (Guid))
-                    newPropValue = ((BusinessObject) newPropValue)._primaryKey.GetAsGuid();
-                else newPropValue = ((BusinessObject) newPropValue).ID[0].Value.ToString();
-            }
-            else if (newPropValue is string && ClassDef.GetPropDef(propName).HasLookupList())
-            {
-                Dictionary<string, object> lookupList = ClassDef.GetPropDef(propName).LookupList.GetLookupList();
-                if (lookupList.ContainsKey((string) newPropValue))
-                    newPropValue = lookupList[(string) newPropValue];
-                if (newPropValue is IBusinessObject)
-                {
-                    if (prop.PropertyType == typeof (Guid))
-                        newPropValue = ((BusinessObject) newPropValue)._primaryKey.GetAsGuid();
-                    else newPropValue = ((BusinessObject) newPropValue).ID[0].Value.ToString();
-                }
-            }
+//            if (newPropValue is IBusinessObject)
+//            {
+//                if (prop.PropertyType == typeof (Guid))
+//                    newPropValue = ((BusinessObject) newPropValue)._primaryKey.GetAsGuid();
+//                else newPropValue = ((BusinessObject) newPropValue).ID[0].Value.ToString();
+//            }
+//            else if (newPropValue is string && ClassDef.GetPropDef(propName).HasLookupList())
+//            {
+//                Dictionary<string, object> lookupList = ClassDef.GetPropDef(propName).LookupList.GetLookupList();
+//                if (lookupList.ContainsKey((string) newPropValue))
+//                    newPropValue = lookupList[(string) newPropValue];
+//                if (newPropValue is IBusinessObject)
+//                {
+//                    if (prop.PropertyType == typeof (Guid))
+//                        newPropValue = ((BusinessObject) newPropValue)._primaryKey.GetAsGuid();
+//                    else newPropValue = ((BusinessObject) newPropValue).ID[0].Value.ToString();
+//                }
+//            }
 //            // If the property will be changed by this set then
 //            // check if object is already editing (i.e. another property value has 
 //            // been changed if it is not then check that this object is still fresh
@@ -682,9 +682,22 @@ namespace Habanero.BO
 //                propValue = prop.Value;
 //                newPropValue1 = newPropValue;
 //            }
+
+            //if (newPropValue is string && ClassDef.GetPropDef(propName).HasLookupList())
+            //{
+            //    Dictionary<string, object> lookupList = ClassDef.GetPropDef(propName).LookupList.GetLookupList();
+            //    if (lookupList.ContainsKey((string) newPropValue))
+            //        newPropValue = lookupList[(string) newPropValue];
+            //    if (newPropValue is IBusinessObject)
+            //    {
+            //        if (prop.PropertyType == typeof (Guid))
+            //            newPropValue = ((BusinessObject) newPropValue)._primaryKey.GetAsGuid();
+            //        else newPropValue = ((BusinessObject) newPropValue).ID[0].Value.ToString();
+            //    }
+            //}
             object propValue = prop.Value;
             object newPropValue1;
-            ((BOProp)prop).PropDef.TryParsePropValue(newPropValue, out newPropValue1);
+            ((BOProp)prop).ParsePropValue(newPropValue, out newPropValue1);
             if (PropValueHasChanged(propValue, newPropValue1))
             {
                 if (!Status.IsEditing)
@@ -692,7 +705,7 @@ namespace Habanero.BO
                     BeginEdit();
                 }
                 _boStatus.IsDirty = true;
-                prop.Value = newPropValue;
+                prop.Value = newPropValue1;
                 if (prop.IsValid)
                 {
                     //FireUpdatedEvent();
@@ -811,84 +824,86 @@ namespace Habanero.BO
         /// <returns>Returns the property value</returns>
         internal object GetPropertyValueToDisplay(string propName)
         {
-            object propertyValue = GetPropertyValue(propName);
+//            object propertyValue = GetPropertyValue(propName);
+//
+//            if (Props[propName].PropertyType == typeof (Guid) && GetPropertyValue(propName) != null &&
+//                !ID.Contains(propName))
+//            {
+//                Guid myGuid = (Guid) propertyValue;
+//                ILookupList lookupList = ClassDef.GetLookupList(propName);
+//                Dictionary<string, object> list = lookupList.GetLookupList();
+//
+//                foreach (KeyValuePair<string, object> pair in list)
+//                {
+//                    if (pair.Value == null) continue;
+//                    if (pair.Value is IBusinessObject)
+//                    {
+//                        BusinessObject bo = (BusinessObject) pair.Value;
+//                        if (bo._primaryKey.GetAsGuid().Equals(myGuid))
+//                        {
+//                            return pair.Key;
+//                        }
+//                    }
+//                    else
+//                    {
+//                        if (pair.Value.Equals(myGuid))
+//                        {
+//                            return pair.Key;
+//                        }
+//                    }
+//                }
+//                //Item was not found in the list, so try some alternate methods
+//                if (lookupList is BusinessObjectLookupList)
+//                {
+//                    BusinessObjectLookupList businessObjectLookupList = lookupList as BusinessObjectLookupList;
+//                    ClassDef classDef = businessObjectLookupList.LookupBoClassDef;
+//                    IBusinessObject businessObject = null;
+//                    PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
+//                    if (primaryKeyDef.IsGuidObjectID)
+//                    {
+//                        BOPropCol boPropCol = classDef.createBOPropertyCol(true);
+//                        BOPrimaryKey boPrimaryKey = primaryKeyDef.CreateBOKey(boPropCol) as BOPrimaryKey;
+//                        if (boPrimaryKey != null)
+//                        {
+//                            boPrimaryKey[0].Value = myGuid;
+//                            businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, boPrimaryKey);
+//                        }
+//                        if (businessObject != null) return businessObject;
+//                    }
+//                }
+//
+//                return myGuid;
+//            }
+//            if (ClassDef.GetPropDef(propName).HasLookupList())
+//            {
+//                Dictionary<string, object> lookupList = ClassDef.GetLookupList(propName).GetLookupList();
+//                foreach (KeyValuePair<string, object> pair in lookupList)
+//                {
+//                    if (pair.Value == null) continue;
+//                    if (pair.Value is string && pair.Value.Equals(Convert.ToString(propertyValue)))
+//                    {
+//                        return pair.Key;
+//                    }
+//                    if (pair.Value.Equals(propertyValue)) return pair.Key;
+//
+//                    if (!(pair.Value is IBusinessObject)) continue;
+//
+//                    BusinessObject bo = (BusinessObject) pair.Value;
+//                    if (String.Compare(bo.ID.ToString(), GetPropertyValueString(propName)) == 0)
+//                    {
+//                        return pair.Value.ToString();
+//                    }
+//                    if (bo.ID[0].Value != null &&
+//                        String.Compare(bo.ID[0].Value.ToString(), GetPropertyValueString(propName)) == 0)
+//                    {
+//                        return pair.Value.ToString();
+//                    }
+//                }
+//                return propertyValue;
+//            }
+            IBOProp prop = Props[propName];
 
-            if (Props[propName].PropertyType == typeof (Guid) && GetPropertyValue(propName) != null &&
-                !ID.Contains(propName))
-            {
-                Guid myGuid = (Guid) propertyValue;
-                ILookupList lookupList = ClassDef.GetLookupList(propName);
-                Dictionary<string, object> list = lookupList.GetLookupList();
-
-                foreach (KeyValuePair<string, object> pair in list)
-                {
-                    if (pair.Value == null) continue;
-                    if (pair.Value is IBusinessObject)
-                    {
-                        BusinessObject bo = (BusinessObject) pair.Value;
-                        if (bo._primaryKey.GetAsGuid().Equals(myGuid))
-                        {
-                            return pair.Key;
-                        }
-                    }
-                    else
-                    {
-                        if (pair.Value.Equals(myGuid))
-                        {
-                            return pair.Key;
-                        }
-                    }
-                }
-                //Item was not found in the list, so try some alternate methods
-                if (lookupList is BusinessObjectLookupList)
-                {
-                    BusinessObjectLookupList businessObjectLookupList = lookupList as BusinessObjectLookupList;
-                    ClassDef classDef = businessObjectLookupList.LookupBoClassDef;
-                    IBusinessObject businessObject = null;
-                    PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
-                    if (primaryKeyDef.IsGuidObjectID)
-                    {
-                        BOPropCol boPropCol = classDef.createBOPropertyCol(true);
-                        BOPrimaryKey boPrimaryKey = primaryKeyDef.CreateBOKey(boPropCol) as BOPrimaryKey;
-                        if (boPrimaryKey != null)
-                        {
-                            boPrimaryKey[0].Value = myGuid;
-                            businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, boPrimaryKey);
-                        }
-                        if (businessObject != null) return businessObject;
-                    }
-                }
-
-                return myGuid;
-            }
-            if (ClassDef.GetPropDef(propName).HasLookupList())
-            {
-                Dictionary<string, object> lookupList = ClassDef.GetLookupList(propName).GetLookupList();
-                foreach (KeyValuePair<string, object> pair in lookupList)
-                {
-                    if (pair.Value == null) continue;
-                    if (pair.Value is string && pair.Value.Equals(Convert.ToString(propertyValue)))
-                    {
-                        return pair.Key;
-                    }
-                    if (pair.Value.Equals(propertyValue)) return pair.Key;
-
-                    if (!(pair.Value is IBusinessObject)) continue;
-
-                    BusinessObject bo = (BusinessObject) pair.Value;
-                    if (String.Compare(bo.ID.ToString(), GetPropertyValueString(propName)) == 0)
-                    {
-                        return pair.Value.ToString();
-                    }
-                    if (bo.ID[0].Value != null &&
-                        String.Compare(bo.ID[0].Value.ToString(), GetPropertyValueString(propName)) == 0)
-                    {
-                        return pair.Value.ToString();
-                    }
-                }
-                return propertyValue;
-            }
-            return propertyValue;
+            return prop.PropertyValueToDisplay;
         }
 
         /// <summary>

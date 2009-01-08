@@ -30,7 +30,7 @@ namespace Habanero.Base
         /// Returns the contents of a lookup-list
         /// </summary>
         /// <returns>Returns a collection of string-Guid pairs</returns>
-        Dictionary<string, object> GetLookupList();
+        Dictionary<string, string> GetLookupList();
 
         /// <summary>
         /// Returns the contents of a lookup-list using the database 
@@ -38,7 +38,7 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="connection">The database connection</param>
         /// <returns>Returns a collection of string-Guid pairs</returns>
-        Dictionary<string, object> GetLookupList(IDatabaseConnection connection);
+        Dictionary<string, string> GetLookupList(IDatabaseConnection connection);
 
         ///<summary>
         /// The property definition that this lookup list is for
@@ -51,6 +51,6 @@ namespace Habanero.Base
         /// The display value can be looked up.
         /// </summary>
         ///<returns>The Key Value Lookup List</returns>
-        Dictionary<object, string> GetKeyLookupList();
+        Dictionary<string, string> GetIDValueLookupList();
     }
 }

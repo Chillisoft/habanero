@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
 {
@@ -36,8 +35,13 @@ namespace Habanero.UI.Base
     {
         private readonly IGridControl _gridControl;
         private readonly IControlFactory _controlFactory;
-        private bool _isInitialised = false;
+        private bool _isInitialised;
 
+        ///<summary>
+        /// Initialise the grid with the appropriate control factory.
+        ///</summary>
+        ///<param name="gridControl"></param>
+        ///<param name="controlFactory"></param>
         public GridInitialiser(IGridControl gridControl, IControlFactory controlFactory)
         {
             _gridControl = gridControl;
@@ -58,19 +62,23 @@ namespace Habanero.UI.Base
         public void InitialiseGrid()
         {
             if (_isInitialised) throw new GridBaseSetUpException("You cannot initialise the grid more than once");
-            if (_gridControl.Grid.Columns.Count == 0) throw new GridBaseInitialiseException("You cannot call initialise with no classdef since the ID column has not been added to the grid");
+            if (_gridControl.Grid.Columns.Count == 0)
+                throw new GridBaseInitialiseException
+                    ("You cannot call initialise with no classdef since the ID column has not been added to the grid");
             try
             {
                 //Try to get the id column from the grid. If there is no id column or if the id column
                 // is not set up with a header then an error should be thrown. This looks like checking if 
                 // column is null and throwing the error would achieve this objective.
                 IDataGridViewColumn column = _gridControl.Grid.Columns["ID"];
+#pragma warning disable 168
                 string text = column.HeaderText;
+#pragma warning restore 168
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
-                throw new GridBaseInitialiseException(
-                    "You cannot call initialise with no classdef since the ID column has not been added to the grid");
+                throw new GridBaseInitialiseException
+                    ("You cannot call initialise with no classdef since the ID column has not been added to the grid");
             }
             _isInitialised = true;
         }
@@ -101,7 +109,6 @@ namespace Habanero.UI.Base
             _gridControl.ClassDef = classDef;
 
             _isInitialised = true;
-           
         }
 
         /// <summary>
@@ -125,18 +132,18 @@ namespace Habanero.UI.Base
             UIDef uiDef = classDef.GetUIDef(uiDefName);
             if (uiDef == null)
             {
-                throw new ArgumentException(
-                    String.Format(
-                        "You cannot initialise {0} because it does not contain a definition for UIDef {1} for the class def {2}",
-                        this._gridControl.Grid.Name, uiDefName, classDef.ClassName));
+                throw new ArgumentException
+                    (String.Format
+                         ("You cannot initialise {0} because it does not contain a definition for UIDef {1} for the class def {2}",
+                          this._gridControl.Grid.Name, uiDefName, classDef.ClassName));
             }
             UIGrid gridDef = uiDef.UIGrid;
             if (gridDef == null)
             {
-                throw new ArgumentException(
-                    String.Format(
-                        "You cannot initialise {0} does not contain a grid definition for UIDef {1} for the class def {2}",
-                        this._gridControl.Grid.Name, uiDefName, classDef.ClassName));
+                throw new ArgumentException
+                    (String.Format
+                         ("You cannot initialise {0} does not contain a grid definition for UIDef {1} for the class def {2}",
+                          this._gridControl.Grid.Name, uiDefName, classDef.ClassName));
             }
             return gridDef;
         }
@@ -155,7 +162,7 @@ namespace Habanero.UI.Base
             col.Visible = false;
             col.ReadOnly = true;
             col.DataPropertyName = "ID";
-            col.ValueType = typeof(string);
+            col.ValueType = typeof (string);
         }
 
         private IDataGridViewColumn CreateStandardColumn(string columnName, string columnHeader)
@@ -174,14 +181,15 @@ namespace Habanero.UI.Base
             }
             else
             {
-                newColumn = _controlFactory.CreateDataGridViewColumn(columnDef.GridControlTypeName, columnDef.GridControlAssemblyName);
+                newColumn = _controlFactory.CreateDataGridViewColumn
+                    (columnDef.GridControlTypeName, columnDef.GridControlAssemblyName);
             }
 
             _gridControl.Grid.Columns.Add(newColumn);
             return newColumn;
         }
 
-        private void CreateColumnForUIDef(ClassDef classDef, UIGrid gridDef)
+        private void CreateColumnForUIDef(IClassDef classDef, UIGrid gridDef)
         {
             //foreach (UIGridColumn gridColDef in gridDef)
             //{
@@ -215,7 +223,7 @@ namespace Habanero.UI.Base
                         table.Columns.Add("str");
 
                         table.LoadDataRow(new object[] {"", ""}, true);
-                        foreach (KeyValuePair<string, object> pair in source.GetLookupList())
+                        foreach (KeyValuePair<string, string> pair in source.GetLookupList())
                         {
                             table.LoadDataRow(new object[] {pair.Value, pair.Key}, true);
                         }
@@ -255,7 +263,7 @@ namespace Habanero.UI.Base
                 //IPropDef propDef = GetPropDef(classDef, gridColDef);
                 //if (propDef != null) col.ValueType = propDef.PropertyType;
                 Type propertyType = classDef.GetPropertyType(gridColDef.PropertyName);
-                if (propertyType != typeof(object))
+                if (propertyType != typeof (object))
                 {
                     col.ValueType = propertyType;
                 }
@@ -273,7 +281,7 @@ namespace Habanero.UI.Base
             }
         }
 
-        private IPropDef GetPropDef(ClassDef classDef, UIGridColumn gridColumn)
+        private static IPropDef GetPropDef(IClassDef classDef, UIGridColumn gridColumn)
         {
             IPropDef propDef = null;
             if (classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))

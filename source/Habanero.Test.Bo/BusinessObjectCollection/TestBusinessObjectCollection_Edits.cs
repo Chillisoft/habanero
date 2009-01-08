@@ -32,7 +32,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         //If the created Business Object is saved independently it will be removed from the created 
         //list and added to the Persisted list
         //If the collection is restored (all edits cancelled. Customers.RestoreAll) then the collection 
-        //will be reverted to its origional state i.e. the created Business Objects will be 
+        //will be reverted to its original state i.e. the created Business Objects will be 
         //cleared and the main collection will be restored from the PersistedBusinessObjects.
         //Add a business object
         //The developer can add an existing business object to a business object collection. 

@@ -368,5 +368,15 @@ namespace Habanero.Util
             return nameValueCollection;
         }
 
+        ///<summary>
+        /// Returns the guid as a string with a standard format of "B" and with all the characters
+        ///   changed to upper.
+        ///</summary>
+        ///<param name="guid"></param>
+        ///<returns></returns>
+        public static string GuidToUpper(Guid guid)
+        {
+            return guid.ToString("B").ToUpperInvariant();
+        }
     }
 }

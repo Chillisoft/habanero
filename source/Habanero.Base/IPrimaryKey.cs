@@ -72,5 +72,10 @@ namespace Habanero.Base
         /// </summary>
         /// <returns>Returns an object</returns>
         object GetAsValue();
+
+        ///<summary>
+        /// Returns true if the primary key is a composite Key (i.e. if it consists of more than one property)
+        ///</summary>
+        bool IsCompositeKey { get; }
     }
 }

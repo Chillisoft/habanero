@@ -126,6 +126,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestPack\BOWithIntID.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_AddedBOs.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_CreateBO.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="BusinessObjectLoader\TestBusinessObjectLoader_RefreshCollection.cs" />
     <Compile Include="BusinessObjectCollection\TestRelatedBOCol_Composition.cs" />
     <Compile Include="ClassDefinition\TestBOPrimaryKey.cs" />
+    <Compile Include="ClassDefinition\TestPrimaryKeyDef.cs" />
     <Compile Include="CriteriaManager\TestCriteriaDB.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
     <Compile Include="CriteriaManager\TestHabaneroStringBuilder.cs" />
@@ -181,7 +183,6 @@
     <Compile Include="ClassDefinition\TestSuperClassDef.cs" />
     <Compile Include="ClassDefinition\TestRelationshipDefCol.cs" />
     <Compile Include="ClassDefinition\TestPropDefCol.cs" />
-    <Compile Include="ClassDefinition\TestPrimaryKeyDef.cs" />
     <Compile Include="ClassDefinition\TestMultipleRelationshipDef.cs" />
     <Compile Include="ClassDefinition\TestClassDef.cs" />
     <Compile Include="ClassDefinition\TestClassDefCol.cs" />
@@ -194,7 +195,7 @@
     <Compile Include="Comparer\TestReflectedPropertyComparer.cs" />
     <Compile Include="Comparer\TestComparers.cs" />
     <Compile Include="TestPack\ContactPersonTestBO.cs" />
-    <Compile Include="OrganisationTestBO.cs" />
+    <Compile Include="TestPack\OrganisationTestBO.cs" />
     <Compile Include="SqlGeneration\StatementGeneratorTestHelper.cs" />
     <Compile Include="ConcurrencyControl\TestConcurrencyControl_OptimisticLockingVersionNumberDB.cs" />
     <Compile Include="ConcurrencyControl\TestConcurrencyControl_PessimisticLockingDB.cs" />

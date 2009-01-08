@@ -20,11 +20,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -64,7 +67,10 @@ namespace Habanero.Test.BO
                 BORegistry.DataAccessor = new DataAccessorInMemory(_dataStore);
             }
         }
-
+        protected static string GuidToUpperInvariant(Guid guid)
+        {
+            return guid.ToString("B").ToUpperInvariant();
+        }
         [TestFixtureSetUp]
         public void SetupTestFixture()
         {
@@ -96,11 +102,13 @@ namespace Habanero.Test.BO
         public void TestGetLookupList() 
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList(typeof (ContactPersonTestBO));
-
-            Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
+            source.PropDef = new PropDef("name", typeof (string), PropReadWriteRule.ReadWrite, null);
+            Dictionary<string, string> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(3, col.Count);
-            foreach (object o in col.Values) {
-                Assert.AreSame(typeof(Guid), o.GetType());
+            foreach (string o in col.Values) {
+                Assert.AreSame(typeof(string), o.GetType());
+                Guid parsedGuid;
+                Assert.IsTrue(StringUtilities.GuidTryParse(o, out parsedGuid));
             }
         }
 
@@ -108,8 +116,9 @@ namespace Habanero.Test.BO
         public void TestCallingGetLookupListTwiceOnlyAccessesDbOnce()
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPersonTestBO));
-            Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
-            Dictionary<string, object> col2 = source.GetLookupList(DatabaseConnection.CurrentConnection);
+            source.PropDef = new PropDef("name", typeof(string), PropReadWriteRule.ReadWrite, null);
+            Dictionary<string, string> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
+            Dictionary<string, string> col2 = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreSame(col2, col);
         }
 
@@ -117,9 +126,10 @@ namespace Habanero.Test.BO
         public void TestTimeout()
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPersonTestBO), 100);
-            Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
+            source.PropDef = new PropDef("name", typeof(string), PropReadWriteRule.ReadWrite, null);
+            Dictionary<string, string> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Thread.Sleep(250);
-            Dictionary<string, object> col2 = source.GetLookupList(DatabaseConnection.CurrentConnection);
+            Dictionary<string, string> col2 = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreNotSame(col2, col);
         }
 
@@ -128,7 +138,8 @@ namespace Habanero.Test.BO
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
                 "ContactPersonTestBO", "Surname='zzz'", "");
-            Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
+            source.PropDef = new PropDef("name", typeof(string), PropReadWriteRule.ReadWrite, null);
+            Dictionary<string, string> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(1, col.Count);
         }
 
@@ -141,21 +152,21 @@ namespace Habanero.Test.BO
             myCol.LoadAll();
             DateTime today = DateTime.Today;
             ContactPersonTestBO contactPerson1 = ContactPersonTestBO.CreateSavedContactPerson(today.AddDays(-1), "aaa");
-            ContactPersonTestBO contactPerson2 = ContactPersonTestBO.CreateSavedContactPerson(today, "bbb");
-            ContactPersonTestBO contactPerson3 = ContactPersonTestBO.CreateSavedContactPerson(today.AddDays(1), "ccc");
+            ContactPersonTestBO.CreateSavedContactPerson(today, "bbb");
+            ContactPersonTestBO.CreateSavedContactPerson(today.AddDays(1), "ccc");
             //ContactPersonTestBO.ClearObjectManager();
             BusinessObjectLookupList businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
                                     "ContactPersonTestBO", "DateOfBirth < 'Today'", "");
-
+            businessObjectLookupList.PropDef = new PropDef("name", typeof(string), PropReadWriteRule.ReadWrite, null);
             //-------------Test Pre-conditions --------------
             Assert.AreEqual(0, myCol.Count);
 
             //-------------Execute test ---------------------
-            Dictionary<string, object> col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
+            Dictionary<string, string> col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
 
             //-------------Test Result ----------------------
             Assert.AreEqual(1, col.Count);
-            Assert.IsTrue(col.ContainsValue(contactPerson1.ID.GetAsGuid()));
+            Assert.IsTrue(col.ContainsValue(GuidToUpperInvariant(contactPerson1.ID.GetAsGuid())));
         }
 
 
@@ -167,22 +178,22 @@ namespace Habanero.Test.BO
             BusinessObjectCollection<ContactPersonTestBO> myCol = new BusinessObjectCollection<ContactPersonTestBO>();
             myCol.LoadAll();
             DateTime today = DateTime.Today;
-            ContactPersonTestBO contactPerson1 = ContactPersonTestBO.CreateSavedContactPerson(today.AddDays(-1), "aaa");
+            ContactPersonTestBO.CreateSavedContactPerson(today.AddDays(-1), "aaa");
             ContactPersonTestBO contactPerson2 = ContactPersonTestBO.CreateSavedContactPerson(today, "bbb");
-            ContactPersonTestBO contactPerson3 = ContactPersonTestBO.CreateSavedContactPerson(today.AddDays(1), "ccc");
-            //ContactPersonTestBO.ClearObjectManager();
+            ContactPersonTestBO.CreateSavedContactPerson(today.AddDays(1), "ccc");
             BusinessObjectLookupList businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
                                     "ContactPersonTestBO", "DateOfBirth = 'today'", "");
+            businessObjectLookupList.PropDef = new PropDef("name", typeof(string), PropReadWriteRule.ReadWrite, null);
 
             //-------------Test Pre-conditions --------------
             Assert.AreEqual(0, myCol.Count);
 
             //-------------Execute test ---------------------
-            Dictionary<string, object> col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
+            Dictionary<string, string> col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
 
             //-------------Test Result ----------------------
             Assert.AreEqual(1, col.Count);
-            Assert.IsTrue(col.ContainsValue(contactPerson2.ID.GetAsGuid()));
+            Assert.IsTrue(col.ContainsValue(GuidToUpperInvariant(contactPerson2.ID.GetAsGuid())));
         }
 
         [Test]
@@ -193,22 +204,23 @@ namespace Habanero.Test.BO
             BusinessObjectCollection<ContactPersonTestBO> myCol = new BusinessObjectCollection<ContactPersonTestBO>();
             myCol.LoadAll();
             DateTime today = DateTime.Today;
-            ContactPersonTestBO contactPerson1 = ContactPersonTestBO.CreateSavedContactPerson(today.AddDays(-1), "aaa");
-            ContactPersonTestBO contactPerson2 = ContactPersonTestBO.CreateSavedContactPerson(today, "bbb");
+            ContactPersonTestBO.CreateSavedContactPerson(today.AddDays(-1), "aaa");
+            ContactPersonTestBO.CreateSavedContactPerson(today, "bbb");
             ContactPersonTestBO contactPerson3 = ContactPersonTestBO.CreateSavedContactPerson(today.AddDays(1), "ccc");
             //ContactPersonTestBO.ClearObjectManager();
             BusinessObjectLookupList businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
                                     "ContactPersonTestBO", "DateOfBirth > 'TODAY'", "");
+            businessObjectLookupList.PropDef = new PropDef("name", typeof(string), PropReadWriteRule.ReadWrite, null);
 
             //-------------Test Pre-conditions --------------
             Assert.AreEqual(0, myCol.Count);
 
             //-------------Execute test ---------------------
-            Dictionary<string, object> col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
+            Dictionary<string, string> col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
 
             //-------------Test Result ----------------------
             Assert.AreEqual(1, col.Count);
-            Assert.IsTrue(col.ContainsValue(contactPerson3.ID.GetAsGuid()));
+            Assert.IsTrue(col.ContainsValue(GuidToUpperInvariant(contactPerson3.ID.GetAsGuid())));
         }
 
         [Test]
@@ -231,19 +243,20 @@ namespace Habanero.Test.BO
             contactPerson3.DateOfBirth = DateTime.Now.AddMinutes(-1);
             contactPerson3.Save();
 
-            BusinessObjectLookupList businessObjectLookupList;
-            Dictionary<string, object> col;
-
             //ContactPersonTestBO.ClearObjectManager();
-            businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPersonTestBO", "DateOfBirth < 'Now'", "");
-            col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
+            BusinessObjectLookupList businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
+                                                                                             "ContactPersonTestBO", "DateOfBirth < 'Now'", "");
+            businessObjectLookupList.PropDef = new PropDef("name", typeof(string), PropReadWriteRule.ReadWrite, null);
+            Dictionary<string, string> col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(3, col.Count);
-            Assert.IsTrue(col.ContainsValue(contactPerson1.ID.GetAsGuid()));
-            Assert.IsTrue(col.ContainsValue(contactPerson2.ID.GetAsGuid()));
-            Assert.IsTrue(col.ContainsValue(contactPerson3.ID.GetAsGuid()));
+            Assert.IsTrue(col.ContainsValue(GuidToUpperInvariant(contactPerson1.ID.GetAsGuid())));
+            Assert.IsTrue(col.ContainsValue(GuidToUpperInvariant(contactPerson2.ID.GetAsGuid())));
+            Assert.IsTrue(col.ContainsValue(GuidToUpperInvariant(contactPerson3.ID.GetAsGuid())));
             businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPersonTestBO", "DateOfBirth > 'now'", "");
+                "ContactPersonTestBO", "DateOfBirth > 'now'", "")
+                   {
+                       PropDef = new PropDef ("name", typeof (string), PropReadWriteRule.ReadWrite, null)
+                   };
             col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(0, col.Count);
             ContactPersonTestBO contactPerson4 = new ContactPersonTestBO();
@@ -252,9 +265,11 @@ namespace Habanero.Test.BO
             contactPerson4.Save();
             businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
                 "ContactPersonTestBO", "DateOfBirth > NOW", "");
+            businessObjectLookupList.PropDef = new PropDef("name", typeof(string), PropReadWriteRule.ReadWrite, null);
+
             col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(1, col.Count);
-            Assert.IsTrue(col.ContainsValue(contactPerson4.ID.GetAsGuid()));
+            Assert.IsTrue(col.ContainsValue(GuidToUpperInvariant(contactPerson4.ID.GetAsGuid())));
         }
 
         [Test]
@@ -294,13 +309,13 @@ namespace Habanero.Test.BO
         //        "InvalidClass", "", "surname");
         //    source.Sort = "surname desc";
         //}
-
-        [Test, Ignore("Need to redo this test we are now storing the Guid and not the object")]
+        [Test, Ignore("We are now storing the object and not the GUid so sorting tests need to be reworked")]
+//        [Test]
         public void TestSortingByDefault()
         {
-            BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPersonTestBO");
-            Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
+            BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO", "ContactPersonTestBO");
+            new PropDef("N", typeof(Guid), PropReadWriteRule.ReadWrite, null) {LookupList = source};
+            Dictionary<string, string> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             ArrayList items = new ArrayList(col.Values);
 
             Assert.AreEqual(3, col.Count);
@@ -310,11 +325,14 @@ namespace Habanero.Test.BO
         }
 
         [Test, Ignore("We are now storing the object and not the GUid so sorting tests need to be reworked")]
+//        [Test]
         public void TestSortingCollection()
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
                 "ContactPersonTestBO", "", "surname");
-            Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
+            new PropDef("N", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = source };
+
+            Dictionary<string, string> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             ArrayList items = new ArrayList(col.Values);
             
             Assert.AreEqual(3, col.Count);

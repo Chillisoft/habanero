@@ -174,8 +174,7 @@ namespace Habanero.BO
         /// <returns>Returns an object</returns>
         public object GetAsValue()
         {
-            List<string> list;
-            list = new List<string>();
+            List<string> list = new List<string>();
             BOPropCol boPropCol = this.GetBOPropCol();
             foreach (BOProp  boProp in boPropCol)
             {
@@ -186,6 +185,14 @@ namespace Habanero.BO
                 list.Add(boProp.PropertyName + "=" + boProp.Value);
             }
             return list;
+        }
+
+        ///<summary>
+        /// Returns true if the primary key is a composite Key (i.e. if it consists of more than one property)
+        ///</summary>
+        public bool IsCompositeKey
+        {
+            get { return this.Count > 1; }
         }
     }
 }

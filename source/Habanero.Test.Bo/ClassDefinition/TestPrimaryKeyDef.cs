@@ -51,5 +51,38 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             new PrimaryKeyDef {IgnoreIfNull = true};
         }
+
+
+        public void Test_CreatePrimaryKey_TwoPropDefs()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef1 = new PropDef("prop1", typeof(String), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef2 = new PropDef("prop2", typeof(String), PropReadWriteRule.ReadWrite, null);
+            PrimaryKeyDef keyDef = new PrimaryKeyDef { IsGuidObjectID = false };
+            keyDef.Add(propDef2);
+            keyDef.Add(propDef1);
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, keyDef.Count);
+            //---------------Execute Test ----------------------
+            bool isCompositeKey = keyDef.IsCompositeKey;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isCompositeKey);
+        }
+        [Test]
+        public void Test_CreatePrimaryKey_OnePropDefs()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef1 = new PropDef("prop1", typeof(String), PropReadWriteRule.ReadWrite, null);
+            PrimaryKeyDef keyDef = new PrimaryKeyDef { IsGuidObjectID = false };
+            keyDef.Add(propDef1);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, keyDef.Count);
+            //---------------Execute Test ----------------------
+            bool isCompositeKey = keyDef.IsCompositeKey;
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isCompositeKey);
+
+        }
     }
 }

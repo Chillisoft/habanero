@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
@@ -46,8 +45,8 @@ namespace Habanero.BO
         private string _className;
         private int _timeout;
         private DateTime _lastCallTime;
-        private Dictionary<string, object> _lookupList;
-        private Dictionary<object, string> _keyLookupList;
+        private Dictionary<string, string> _lookupList;
+        private Dictionary<string, string> _keyLookupList;
 
         #region Constructors
 
@@ -221,7 +220,7 @@ namespace Habanero.BO
         /// will be returned, otherwise a fresh one will be loaded.
         /// </summary>
         /// <returns>Returns a collection of string-Guid pairs</returns>
-        public Dictionary<string, object> GetLookupList()
+        public Dictionary<string, string> GetLookupList()
         {
             return this.GetLookupList(DatabaseConnection.CurrentConnection);
         }
@@ -234,19 +233,18 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="connection">The database connection</param>
         /// <returns>Returns a collection of string-Guid pairs</returns>
-        public Dictionary<string, object> GetLookupList(IDatabaseConnection connection)
+        public Dictionary<string, string> GetLookupList(IDatabaseConnection connection)
         {
             if (DateTime.Now.Subtract(_lastCallTime).TotalMilliseconds < _timeout)
             {
                 return _lookupList;
             }
-            _lookupList = new Dictionary<string, object>();
-            _keyLookupList = new Dictionary<object, string>();
+            _lookupList = new Dictionary<string, string>();
+            _keyLookupList = new Dictionary<string, string>();
             ISqlStatement statement = new SqlStatement(connection);
             statement.Statement.Append(_statement);
 
             DataTable dt = connection.LoadDataTable(statement, "", "");
-            ArrayList list = new ArrayList(dt.Rows.Count);
             foreach (DataRow row in dt.Rows)
             {
                 string stringValue = DBNull.Value.Equals(row[1]) ? "" : Convert.ToString(row[1]);
@@ -292,16 +290,16 @@ namespace Habanero.BO
                      + this.PropDef.PropertyTypeName);
             }
 
-            _lookupList.Add(stringValue, parsedKey);
-            _keyLookupList.Add(parsedKey, stringValue);
+            string keyAsString = this.PropDef.ConvertValueToString(parsedKey);
+            _lookupList.Add(stringValue, keyAsString);
+            _keyLookupList.Add(keyAsString, stringValue);
         }
 
         public IPropDef PropDef { get; set; }
 
-        public Dictionary<object, string> GetKeyLookupList()
+        public Dictionary<string, string> GetIDValueLookupList()
         {
-            //TODO: Fix this
-            //return new Dictionary<object, string>();
+            if (_keyLookupList == null) GetLookupList();
             return _keyLookupList;
         }
 
@@ -337,7 +335,7 @@ namespace Habanero.BO
         /// <param name="bo">A business object with attached database
         /// connection</param>
         /// <returns>Returns a collection of string-Guid pairs</returns>
-        public Dictionary<string, object> GetLookupList(BusinessObject bo)
+        public Dictionary<string, string> GetLookupList(BusinessObject bo)
         {
             return this.GetLookupList(DatabaseConnection.CurrentConnection);
         }

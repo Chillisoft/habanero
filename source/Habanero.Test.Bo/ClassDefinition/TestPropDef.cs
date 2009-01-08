@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -299,7 +300,7 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
-        public void Test_SetDispayName()
+        public void Test_SetDisplayName()
         {
             //---------------Set up test pack-------------------
             IPropDef propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
@@ -711,6 +712,80 @@ namespace Habanero.Test.BO.ClassDefinition
             bool equals = clonedPropDef.Equals(propDef);
             //---------------Test Result -----------------------
             Assert.IsFalse(equals);
+        }
+
+        [Test]
+        public void TestCreateBOProp_CorrectPropCreated()
+        {            
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
+
+            //-----Test PreCondition--------------------------
+            Assert.IsFalse(propDef.HasLookupList());
+
+            //---------------Execute Test ----------------------
+
+            IBOProp prop = propDef.CreateBOProp(false);
+            //---------------Test Result -----------------------
+
+            Assert.IsInstanceOfType(typeof(BOProp), prop);
+
+        }
+
+
+        [Test]
+        public void TestCreateBOPropWithLookupList_CorrectPropCreated()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
+            Dictionary<string, string> collection = new Dictionary<string, string>();
+            SimpleLookupList simpleLookupList = new SimpleLookupList(collection);
+            propDef.LookupList = simpleLookupList;
+            //-----Test PreCondition--------------------------
+            Assert.IsTrue(propDef.HasLookupList());
+            //---------------Execute Test ----------------------
+
+            IBOProp prop = propDef.CreateBOProp(false);
+            //---------------Test Result -----------------------
+
+            Assert.IsInstanceOfType(typeof(BOPropLookupList), prop);
+
+        }  
+        [Test]
+        public void TestCreateBOProp_CorrectPropCreated_WithDefaultValue()
+        {            
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null,99);
+
+            //-----Test PreCondition--------------------------
+            Assert.IsFalse(propDef.HasLookupList());
+
+            //---------------Execute Test ----------------------
+
+            IBOProp prop = propDef.CreateBOProp(true);
+            //---------------Test Result -----------------------
+
+            Assert.IsInstanceOfType(typeof(BOProp), prop);
+        }
+
+
+        [Test]
+        public void TestCreateBOPropWithLookupList_CorrectPropCreated_WithDefaultValue()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null,99);
+            Dictionary<string, string> collection = new Dictionary<string, string>();
+            SimpleLookupList simpleLookupList = new SimpleLookupList(collection);
+            propDef.LookupList = simpleLookupList;
+            //-----Test PreCondition--------------------------
+            Assert.IsTrue(propDef.HasLookupList());
+            //---------------Execute Test ----------------------
+
+            IBOProp prop = propDef.CreateBOProp(true);
+            //---------------Test Result -----------------------
+
+            Assert.IsInstanceOfType(typeof(BOPropLookupList), prop);
+
         }
     }
 }

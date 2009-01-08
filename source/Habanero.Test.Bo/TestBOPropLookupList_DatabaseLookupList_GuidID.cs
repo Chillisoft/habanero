@@ -4,6 +4,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -32,12 +33,66 @@ namespace Habanero.Test.BO
 
             BORegistry.DataAccessor = new DataAccessorDB();
             _propDef_guid = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
-            DatabaseLookupList databaseLookupList = new DatabaseLookupList(_sql);
-            databaseLookupList.PropDef = _propDef_guid;
+            DatabaseLookupList databaseLookupList = new DatabaseLookupList(_sql) {PropDef = _propDef_guid};
             databaseLookupList.GetLookupList();
             _propDef_guid.LookupList = databaseLookupList;
         }
 
+        [Test]
+        public void Test_GetKey_FromLookupList()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
+            DatabaseLookupList databaseLookupList = new DatabaseLookupList(_sql);
+            propDef.LookupList = databaseLookupList;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            Dictionary<string, string> lookupList = databaseLookupList.GetLookupList();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, lookupList.Count, "There should be two item in the lookup list");
+            Assert.IsTrue(lookupList.ContainsKey(_validLookupValue));
+            string objectIDAsString = lookupList[_validLookupValue];
+            Assert.AreEqual(GuidToUpper(_validID), objectIDAsString);
+        }
+
+        private static string GuidToUpper(Guid guid)
+        {
+            return StringUtilities.GuidToUpper(guid);
+        }
+
+        [Test]
+        public void Test_GetIDValueLookupList()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
+            DatabaseLookupList databaseLookupList = new DatabaseLookupList(_sql);
+            propDef.LookupList = databaseLookupList;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            Dictionary<string, string> idValueLookupList = databaseLookupList.GetIDValueLookupList();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(idValueLookupList);
+        }
+
+        [Test]
+        public void Test_GetValue_FromKeyValueList()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
+            DatabaseLookupList databaseLookupList = new DatabaseLookupList(_sql);
+            propDef.LookupList = databaseLookupList;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            Dictionary<string, string> idValueLookupList = databaseLookupList.GetIDValueLookupList();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, idValueLookupList.Count, "There should be two item in the lookup list");
+            string guidToUpper = GuidToUpper(_validID);
+            Assert.IsTrue(idValueLookupList.ContainsKey(guidToUpper));
+            string returnedValue = idValueLookupList[guidToUpper];
+            Assert.AreEqual(_validLookupValue, returnedValue);
+        }
 
         //TODO :: If prop.value is set to a value of the appropriate type but is not in the list then the
         //   property must be set to be in an invalid state with the appropriate reason.
@@ -69,8 +124,8 @@ namespace Habanero.Test.BO
             DatabaseLookupList databaseLookupList = GetDatabaseLookupList();
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, databaseLookupList.GetLookupList().Count);
-            Assert.IsNotNull(databaseLookupList.GetKeyLookupList());
-            Assert.AreEqual(2, databaseLookupList.GetKeyLookupList().Count);
+            Assert.IsNotNull(databaseLookupList.GetIDValueLookupList());
+            Assert.AreEqual(2, databaseLookupList.GetIDValueLookupList().Count);
         }
 
         private DatabaseLookupList GetDatabaseLookupList()
@@ -95,10 +150,8 @@ namespace Habanero.Test.BO
             Assert.IsInstanceOfType(typeof(DatabaseLookupList), propDef.LookupList);
             Assert.AreSame(propDef, databaseLookupList.PropDef);
             Assert.AreEqual(2, databaseLookupList.GetLookupList().Count);
-            Assert.AreEqual(2, databaseLookupList.GetKeyLookupList().Count);
+            Assert.AreEqual(2, databaseLookupList.GetIDValueLookupList().Count);
         }
-
-        //#region LookupListGuid
 
         [Test]
         public void Test_BusinessObjectLookupList_GetKey_Exists()
@@ -107,16 +160,16 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             DatabaseLookupList databaseLookupList = new DatabaseLookupList(_sql);
             propDef.LookupList = databaseLookupList;
-            Dictionary<string, object> list = databaseLookupList.GetLookupList();
+            Dictionary<string, string> list = databaseLookupList.GetLookupList();
             //---------------Assert Precondition----------------
             Assert.IsInstanceOfType(typeof(DatabaseLookupList), propDef.LookupList);
             Assert.AreSame(propDef, databaseLookupList.PropDef);
             //---------------Execute Test ----------------------
-            object returnedKey;
+            string returnedKey;
             bool keyReturned = list.TryGetValue(_validLookupValue, out returnedKey);
             //---------------Test Result -----------------------
             Assert.IsTrue(keyReturned);
-            Assert.AreEqual(_validID, returnedKey);
+            Assert.AreEqual(GuidToUpper(_validID), returnedKey);
         }
 
         [Test]
@@ -126,12 +179,12 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             DatabaseLookupList databaseLookupList = new DatabaseLookupList(_sql);
             propDef.LookupList = databaseLookupList;
-            Dictionary<string, object> list = databaseLookupList.GetLookupList();
+            Dictionary<string, string> list = databaseLookupList.GetLookupList();
             //---------------Assert Precondition----------------
             Assert.IsInstanceOfType(typeof(DatabaseLookupList), propDef.LookupList);
             Assert.AreSame(propDef, databaseLookupList.PropDef);
             //---------------Execute Test ----------------------
-            object returnedKey;
+            string returnedKey;
             bool keyReturned = list.TryGetValue("InvalidValue", out returnedKey);
             //---------------Test Result -----------------------
             Assert.IsFalse(keyReturned);
@@ -146,13 +199,13 @@ namespace Habanero.Test.BO
             DatabaseLookupList databaseLookupList = new DatabaseLookupList(_sql);
             propDef.LookupList = databaseLookupList;
             databaseLookupList.GetLookupList();
-            Dictionary<object, string> list = databaseLookupList.GetKeyLookupList();
+            Dictionary<string, string> list = databaseLookupList.GetIDValueLookupList();
             //---------------Assert Precondition----------------
             Assert.IsInstanceOfType(typeof(DatabaseLookupList), propDef.LookupList);
             Assert.AreSame(propDef, databaseLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
-            bool keyReturned = list.TryGetValue(_validID, out returnedValue);
+            bool keyReturned = list.TryGetValue(GuidToUpper(_validID), out returnedValue);
             //---------------Test Result -----------------------
             Assert.IsTrue(keyReturned);
             Assert.AreEqual(_validLookupValue, returnedValue);
@@ -166,13 +219,13 @@ namespace Habanero.Test.BO
             DatabaseLookupList databaseLookupList = new DatabaseLookupList(_sql);
             propDef.LookupList = databaseLookupList;
             databaseLookupList.GetLookupList();
-            Dictionary<object, string> list = databaseLookupList.GetKeyLookupList();
+            Dictionary<string, string> list = databaseLookupList.GetIDValueLookupList();
             //---------------Assert Precondition----------------
             Assert.IsInstanceOfType(typeof(DatabaseLookupList), propDef.LookupList);
             Assert.AreSame(propDef, databaseLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
-            bool keyReturned = list.TryGetValue(Guid.NewGuid(), out returnedValue);
+            bool keyReturned = list.TryGetValue(Guid.NewGuid().ToString("N").ToUpperInvariant(), out returnedValue);
             //---------------Test Result -----------------------
             Assert.IsFalse(keyReturned);
             Assert.IsNull(returnedValue);
@@ -210,7 +263,7 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             propDef.LookupList = new DatabaseLookupList(_sql);
             propDef.LookupList.GetLookupList();
-            propDef.LookupList.GetKeyLookupList();
+            propDef.LookupList.GetIDValueLookupList();
             return propDef;
         }
 
@@ -490,9 +543,10 @@ namespace Habanero.Test.BO
             catch (HabaneroApplicationException ex)
             {
                 //You are trying to set the value for a lookup property PropName to 'Invalid' this value does not exist in the lookup list
-                StringAssert.Contains
-                    ("You are trying to set the value for a lookup property " + boProp.PropertyName + " to '" + invalid + "'", ex.Message);
-                StringAssert.Contains("this value does not exist in the lookup list", ex.Message);
+                //StringAssert.Contains
+                //    ("You are trying to set the value for a lookup property " + boProp.PropertyName + " to '" + invalid + "'", ex.Message);
+                //StringAssert.Contains("this value does not exist in the lookup list", ex.Message);
+                StringAssert.Contains(boProp.PropertyName + " cannot be set to '" + invalid + "' this value does not exist in the lookup list", ex.Message);
                 Assert.AreEqual(originalPropValue, boProp.Value);
                 Assert.IsTrue(boProp.IsValid);
             }

@@ -144,6 +144,16 @@ namespace Habanero.Base
         }
 
         /// <summary>
+        /// Returns the named property value that should be displayed
+        ///   on a user interface e.g. a textbox or on a report.
+        /// This is used primarily for Lookup lists where
+        ///    the value stored for the object may be a guid but the value
+        ///    to display may be a string.
+        /// </summary>
+        /// <returns>Returns the property value</returns>
+        object PropertyValueToDisplay { get; }
+
+        /// <summary>
         /// Restores the property's original value as defined in PersistedValue.
         /// This is typically called when the edits to a <see cref="IBusinessObject"/> are cancelled.
         /// </summary>
