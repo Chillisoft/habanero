@@ -662,16 +662,19 @@ namespace Habanero.BO.ClassDefinition
                 }
             }
             //Validate Type
-            if (!IsValueValidType(DisplayName, propValue, ref errorMessage))
+            if (!IsValueValidType(propValue, ref errorMessage))
             {
                 return false;
             }
             //Valid Item in list
-            if (!IsItemInList(DisplayName, propValue, ref errorMessage))
+            if (!IsItemInList(propValue, ref errorMessage))
             {
                 return false;
             }
-
+            //Validate string lengths are less than the maximum length allowable for this propdef.
+            //TODO Brett 09 Jan 2009: I think this should be removed since it is one of the rules. I agree with the capability
+            //   in firestarter to be able to easily set up a property rule that has a maximum length but it should not be a seperate
+            //   property on prop def.
             if (propValue is string && _length != Int32.MaxValue)
             {
                 if (((string) propValue).Length > _length)
@@ -693,20 +696,16 @@ namespace Habanero.BO.ClassDefinition
             return valid;
         }
 
-        private bool IsItemInList(string displayName, object propValue, ref string errorMessage)
+        private bool IsItemInList(object propValue, ref string errorMessage)
         {
             if (!this.HasLookupList()) return true;
             if (propValue == null || string.IsNullOrEmpty(Convert.ToString(propValue))) return true;
-            //TODO: This needs to be fixed. Philosophy for lookup lists needs to be clarified and implemented.
-            //Dictionary<string, object> lookupList = this.LookupList.GetLookupList();
-            //bool hasItemInList = lookupList.ContainsKey(Convert.ToString(propValue))
-            //        || lookupList.ContainsValue(Convert.ToString(propValue))
-            //        || lookupList.ContainsValue(propValue);
-            //if (!hasItemInList)
-            //{
-            //    errorMessage += String.Format("'{0}' invalid since '{1}' is not in list.", displayName, propValue);
-            //    return false;
-            //}
+            Dictionary<string, string> idValueLookupList = this.LookupList.GetIDValueLookupList();
+            if (!idValueLookupList.ContainsKey(ConvertValueToString((propValue))))
+            {
+                errorMessage += String.Format("'{0}' invalid since '{1}' is not in the lookup list of available values.", DisplayName, propValue);
+                return false;
+            }
             return true;
         }
 
@@ -742,7 +741,7 @@ namespace Habanero.BO.ClassDefinition
             return newValue;
         }
 
-        private bool IsValueValidType(string displayName, Object propValue, ref string errorMessage)
+        private bool IsValueValidType(object propValue, ref string errorMessage)
         {
             if (propValue == null) return true;
             if (propValue is string && string.IsNullOrEmpty((string) propValue)) return true;
@@ -756,12 +755,12 @@ namespace Habanero.BO.ClassDefinition
             {
                 if (!(propValue is Guid && this.PropertyType == typeof (string)))
                 {
-                    errorMessage = GetErrorMessage(propValue, displayName);
+                    errorMessage = GetErrorMessage(propValue,this.DisplayName);
                 }
             }
             catch (FormatException)
             {
-                errorMessage = GetErrorMessage(propValue, displayName);
+                errorMessage = GetErrorMessage(propValue, this.DisplayName);
             }
             return string.IsNullOrEmpty(errorMessage);
         }

@@ -288,6 +288,15 @@ namespace Habanero.BO
         /// Returns a string which indicates why the property value may
         /// be invalid
         /// </summary>
+        public string IsValidMessage
+        {
+            get { return _invalidReason; }
+        }
+
+        /// <summary>
+        /// Returns a string which indicates why the property value may
+        /// be invalid
+        /// </summary>
         public string InvalidReason
         {
             get { return _invalidReason; }

@@ -222,7 +222,7 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(intNotInLookupList, boProp.Value);
-            Assert.IsTrue(boProp.IsValid);
+            Assert.IsFalse(boProp.IsValid);
             //---------------Execute Test ----------------------
             object propertyValueToDisplay = boProp.PropertyValueToDisplay;
 
@@ -351,13 +351,14 @@ namespace Habanero.Test.BO
             IBusinessObject businessObject = GetBusinessObjectStub();
             BOProp boProp = (BOProp) businessObject.Props[_propDef_int.PropertyName];
             const string invalid = "Invalid";
-            const int originalPropValue = 99;
+            int originalPropValue = _validIntID;
             businessObject.SetPropertyValue(_propDef_int.PropertyName, originalPropValue);
             //---------------Assert Precondition----------------
             Assert.AreEqual(typeof (int), boProp.PropDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(originalPropValue, boProp.Value);
             Assert.IsInstanceOfType(typeof (BOPropLookupList), boProp);
+            Assert.IsTrue(boProp.IsValid);
             //---------------Execute Test ----------------------
             try
             {

@@ -636,11 +636,12 @@ namespace Habanero.Test.BO
         {
             BOProp boProp = new BOPropLookupList(_propDef_guid);
             const string invalid = "Invalid";
-            object originalPropValue = Guid.NewGuid();
+            object originalPropValue = _validGuid;
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
             Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
+            Assert.IsTrue(boProp.IsValid);
             //---------------Execute Test ----------------------
             try
             {
@@ -843,7 +844,7 @@ namespace Habanero.Test.BO
             IBusinessObject businessObject = GetBusinessObjectStub();
             BOProp boProp = (BOProp) businessObject.Props[_propDef_guid.PropertyName];
             const string invalid = "Invalid";
-            object originalPropValue = Guid.NewGuid();
+            object originalPropValue = _validGuid;
             businessObject.SetPropertyValue(_propDef_guid.PropertyName, originalPropValue);
 
             //---------------Assert Precondition----------------
@@ -851,6 +852,7 @@ namespace Habanero.Test.BO
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(originalPropValue, boProp.Value);
             Assert.IsInstanceOfType(typeof(BOPropLookupList), boProp);
+            Assert.IsTrue(boProp.IsValid);
             //---------------Execute Test ----------------------
             try
             {

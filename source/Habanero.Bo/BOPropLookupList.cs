@@ -71,7 +71,6 @@ namespace Habanero.BO
             //    use this as the value and return
 
             CheckPropDefHasLookupList(_propDef);
-            
             if (_propDef.LookupList is BusinessObjectLookupList 
                     &&  valueToParse is IBusinessObject)
             {
@@ -103,13 +102,13 @@ namespace Habanero.BO
                 this.PropDef.TryParsePropValue(returnValue, out returnValue);
                 return;
             }
-
             if (!this.PropDef.TryParsePropValue(valueToParse, out returnValue))
             {
                 throw new HabaneroApplicationException
                     (this.PropertyName + " cannot be set to '" + valueToParse
                      + "' this value does not exist in the lookup list");
             }
+
         }
 
         /// <summary>

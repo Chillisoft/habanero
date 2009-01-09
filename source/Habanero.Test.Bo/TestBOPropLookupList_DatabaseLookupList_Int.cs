@@ -324,7 +324,7 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(_intKeyDoesNotExistInList, boProp.Value);
-            Assert.IsTrue(boProp.IsValid);
+            Assert.IsFalse(boProp.IsValid);
 
             //---------------Execute Test ----------------------
             object propertyValueToDisplay = boProp.PropertyValueToDisplay;
@@ -445,6 +445,7 @@ namespace Habanero.Test.BO
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(originalPropValue, boProp.Value);
             Assert.IsInstanceOfType(typeof(BOPropLookupList), boProp);
+            Assert.IsFalse(boProp.IsValid);
             //---------------Execute Test ----------------------
             try
             {
@@ -458,7 +459,7 @@ namespace Habanero.Test.BO
                 StringAssert.Contains(boProp.PropertyName + " cannot be set to '" + invalid + "'", ex.Message);
                 StringAssert.Contains("this value does not exist in the lookup list", ex.Message);
                 Assert.AreEqual(originalPropValue, boProp.Value);
-                Assert.IsTrue(boProp.IsValid);
+                Assert.IsFalse(boProp.IsValid);
             }
         }
 

@@ -158,6 +158,94 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void Test_IsValueValid_ValueInLookupList_Guid()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            MyBO.LoadDefaultClassDef();
+            PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null) ;
+            MyBO validBusinessObject = new MyBO {TestProp = "ValidValue"};
+            validBusinessObject.Save();
+            propDef.LookupList = new BusinessObjectLookupList(typeof(MyBO));
+            //---------------Assert Precondition----------------
+            
+            //---------------Execute Test ----------------------
+            string errMsg = "";
+            bool valid = propDef.IsValueValid(validBusinessObject.ID.GetAsGuid(), ref errMsg);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("", errMsg);
+            Assert.IsTrue(valid);
+        }
+
+        [Test]
+        public void Test_IsValueValid_ValueNotInLookupList_Guid()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            MyBO.LoadDefaultClassDef();
+            PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = new BusinessObjectLookupList(typeof(MyBO)) };
+            Guid invalidValue = Guid.NewGuid();
+            //---------------Assert Precondition----------------
+            
+            //---------------Execute Test ----------------------
+            string errMsg = "";
+            
+            bool valid = propDef.IsValueValid(invalidValue, ref errMsg);
+
+            //---------------Test Result -----------------------
+            string expectedErrorMessage = "'Prop Name' invalid since '" + invalidValue + "' is not in the lookup list of available values.";
+            Assert.AreEqual(expectedErrorMessage, errMsg);
+            Assert.IsFalse(valid);
+        }
+
+        [Test]
+        public void Test_IsValueValid_ValueInLookupList_Int()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            BOWithIntID.LoadClassDefWithIntID();
+            PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null) ;
+            BOWithIntID validBusinessObject = new BOWithIntID { IntID = 3, TestField = "ValidValue" };
+            validBusinessObject.Save();
+            propDef.LookupList = new BusinessObjectLookupList(typeof(BOWithIntID));
+            //---------------Assert Precondition----------------
+            
+            //---------------Execute Test ----------------------
+            string errMsg = "";
+            bool valid = propDef.IsValueValid(validBusinessObject.IntID, ref errMsg);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("", errMsg);
+            Assert.IsTrue(valid);
+        }
+
+        [Test]
+        public void Test_IsValueValid_ValueNotInLookupList_Int()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            BOWithIntID.LoadClassDefWithIntID();
+            PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null) { LookupList = new BusinessObjectLookupList(typeof(BOWithIntID)) };
+            const int invalidValue = 4555;
+            //---------------Assert Precondition----------------
+            
+            //---------------Execute Test ----------------------
+            string errMsg = "";
+            
+            bool valid = propDef.IsValueValid(invalidValue, ref errMsg);
+
+            //---------------Test Result -----------------------
+            string expectedErrorMessage = "'Prop Name' invalid since '" + invalidValue + "' is not in the lookup list of available values.";
+            Assert.AreEqual(expectedErrorMessage, errMsg);
+            Assert.IsFalse(valid);
+        }
+
+        [Test]
         public void Test_IsValueValid_OnePropRule_ValidValue()
         {
             //---------------Set up test pack-------------------
@@ -175,6 +263,9 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsTrue(valid);
             Assert.AreEqual("", errMsg);
         }
+
+
+
         [Test]
         public void Test_IsValueValid_OnePropRule_InValidValue()
         {
