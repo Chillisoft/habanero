@@ -33,18 +33,17 @@ namespace Habanero.Test.Util
     /// <summary>
     /// This Test Class tests the functionality of the LongText custom property class.
     /// </summary>
-    [TestFixture, Ignore("Need to make these work again with the new property Get and Set Brett")]
+    [TestFixture]
     public class TestLongText : TestUsingDatabase
     {
-        private ClassDef itsClassDef;
+        private readonly ClassDef itsClassDef;
 
         public TestLongText()
         {
             ClassDef.ClassDefs.Clear();
             XmlClassLoader loader = new XmlClassLoader();
-            itsClassDef =
-                loader.LoadClass(
-                    @"
+            itsClassDef = loader.LoadClass
+                (@"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" type=""Guid"" />
 					<property  name=""TestProp"" type=""LongText"" assembly=""Habanero.Util"" />
@@ -91,7 +90,7 @@ namespace Habanero.Test.Util
         public void TestHashCode()
         {
             LongText longText = new LongText("test");
-            
+
             if (Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE") == "x86")
             {
                 Assert.AreEqual(-354185609, longText.GetHashCode());
@@ -116,11 +115,103 @@ namespace Habanero.Test.Util
         }
 
         [Test]
+        public void Test_BOPropGeneralDataMapper_TryParseCustomProperty()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("Name", typeof (LongText), PropReadWriteRule.ReadWrite, null);
+            LongText longText = new LongText("test");
+            BOPropGeneralDataMapper generalDataMapper = new BOPropGeneralDataMapper(propDef);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            object returnValue;
+            generalDataMapper.TryParsePropValue(longText, out returnValue);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(returnValue);
+            Assert.AreSame(longText, returnValue);
+        }
+
+        [Test]
+        public void Test_BOPropGeneralDataMapper_TryParseCustomProperty_InheritedCustomProperty()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("Name", typeof(CustomProperty), PropReadWriteRule.ReadWrite, null);
+            LongText longText = new LongText("test");
+            BOPropGeneralDataMapper generalDataMapper = new BOPropGeneralDataMapper(propDef);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            object returnValue;
+            generalDataMapper.TryParsePropValue(longText, out returnValue);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(returnValue);
+            Assert.AreSame(longText, returnValue);
+        }
+
+        [Test]
+        public void Test_BOPropGeneralDataMapper_TryParseCustomProperty_InheritedLongText()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("Name", typeof(LongText), PropReadWriteRule.ReadWrite, null);
+            LongText longText = new ExtendedLongText("test");
+            BOPropGeneralDataMapper generalDataMapper = new BOPropGeneralDataMapper(propDef);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            object returnValue;
+            generalDataMapper.TryParsePropValue(longText, out returnValue);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(returnValue);
+            Assert.AreSame(longText, returnValue);
+        }
+
+        internal class ExtendedLongText : LongText
+        {
+            public ExtendedLongText(string text) : base(text)
+            {
+                
+            }
+
+            public ExtendedLongText(object value, bool isLoading) : base(value, isLoading)
+            {
+            }
+        }
+
+        [Test]
+        public void Test_BOPropGeneralDataMapper_TryParseCustomProperty_StringValue()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("Name", typeof (LongText), PropReadWriteRule.ReadWrite, null);
+            string test = "test";
+            BOPropGeneralDataMapper generalDataMapper = new BOPropGeneralDataMapper(propDef);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            object returnValue;
+            generalDataMapper.TryParsePropValue(test, out returnValue);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(returnValue);
+            Assert.IsInstanceOfType(typeof(LongText), returnValue);
+            LongText longText = (LongText) returnValue;
+            Assert.AreSame(test, longText.Value);
+        }
+
+        [Test]
         public void TestPropertyValue()
         {
+            //---------------Set up test pack-------------------
             IBusinessObject bo = itsClassDef.CreateNewBusinessObject();
-            bo.SetPropertyValue("TestProp", new LongText("test"));
-            Assert.AreSame(typeof (LongText), bo.GetPropertyValue("TestProp").GetType());
+            LongText longText = new LongText("test");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            bo.SetPropertyValue("TestProp", longText);
+            object actualValue = bo.GetPropertyValue("TestProp");
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(actualValue);
+            Assert.IsInstanceOfType(typeof (LongText), actualValue);
+            Assert.AreSame(longText, actualValue);
         }
 
         [Test]
@@ -149,4 +240,6 @@ namespace Habanero.Test.Util
             Assert.IsTrue(oracleTypeEnumString == "Clob");
         }
     }
+
+    
 }

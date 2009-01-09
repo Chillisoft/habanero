@@ -763,7 +763,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(ContactPersonTestBO.ContactType.Business, value);
         }
 
-        [Test, Ignore("//TODO Brett: This will only work when finish change to BOProp.Value")]
+        [Test]
         public void Test_SetPropertyValue_WithEnumString_Invalid()
         {
             //---------------Set up test pack-------------------
@@ -773,16 +773,28 @@ namespace Habanero.Test.BO
             //-------------Assert Preconditions -------------
 
             //---------------Execute Test ----------------------
-            contactPersonTestBO.SetPropertyValue("ContactType", newValue);
+            InvalidPropertyValueException exception = null;
+            try
+            {
+                contactPersonTestBO.SetPropertyValue("ContactType", newValue);
+            } catch(InvalidPropertyValueException ex)
+            {
+                exception = ex;
+            }
             //---------------Test Result -----------------------
-            object value = contactPersonTestBO.GetPropertyValue("ContactType");
-            Assert.IsInstanceOfType(typeof (string), value);
-            Assert.AreEqual(newValue, value);
-            IBOProp prop = contactPersonTestBO.Props["ContactType"];
-            Assert.IsFalse(prop.IsValid);
-            StringAssert.Contains(
-                "for property 'Contact Type' is not valid. It is not a type of ContactPersonTestBO+ContactType.",
-                prop.InvalidReason);
+            Assert.IsNotNull(exception, "Expected exception of type InvalidPropertyValueException");
+            StringAssert.Contains("An error occurred while attempting to convert the loaded property value of 'ContactType' to its specified type of 'Habanero.Test.BO.ContactPersonTestBO+ContactType'. The property value is 'InvalidOption'. See log for details", exception.Message);
+
+//            object value = contactPersonTestBO.GetPropertyValue("ContactType");
+//            Assert.IsInstanceOfType(typeof (string), value);
+//            Assert.AreEqual(newValue, value);
+//            IBOProp prop = contactPersonTestBO.Props["ContactType"];
+//            Assert.IsFalse(prop.IsValid);
+//            StringAssert.Contains(
+//                "for property 'Contact Type' is not valid. It is not a type of ContactPersonTestBO+ContactType.",
+//                prop.InvalidReason);
+
+            //Habanero.BO.InvalidPropertyValueException: An error occurred while attempting to convert the loaded property value of 'ContactType' to its specified type of 'Habanero.Test.BO.ContactPersonTestBO+ContactType'. The property value is 'InvalidOption'. See log for details
         }
 
         [Test]

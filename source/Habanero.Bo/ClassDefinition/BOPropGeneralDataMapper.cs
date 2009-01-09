@@ -10,7 +10,7 @@ namespace Habanero.BO.ClassDefinition
     /// Implements a data mapper for a Guid Property
     /// The property data mapper conforms to the GOF strategy pattern <seealso cref="BOPropDataMapper"/>.
     ///</summary>
-    public  class BOPropGeneralDataMapper : BOPropDataMapper
+    public class BOPropGeneralDataMapper : BOPropDataMapper
     {
         private readonly IPropDef _propDef;
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOPropGeneralDataMapper");
@@ -48,13 +48,15 @@ namespace Habanero.BO.ClassDefinition
                     returnValue = null;
                     return false;
                 }
-                if (_propDef.PropertyType == typeof(Image))
+                if (_propDef.PropertyType == typeof (Image))
                 {
-                    returnValue = SerialisationUtilities.ByteArrayToObject((byte[])valueToParse);
+                    returnValue = SerialisationUtilities.ByteArrayToObject((byte[]) valueToParse);
                 }
                 else if (_propDef.PropertyType.IsSubclassOf(typeof (CustomProperty)))
                 {
-                    returnValue = Activator.CreateInstance(_propDef.PropertyType, new[] { valueToParse, true });
+                    returnValue = _propDef.PropertyType.IsInstanceOfType(valueToParse) 
+                        ? valueToParse 
+                        : Activator.CreateInstance(_propDef.PropertyType, new[] {valueToParse, false});
                 }
                 else if (_propDef.PropertyType == typeof (Object))
                 {
@@ -62,11 +64,11 @@ namespace Habanero.BO.ClassDefinition
                 }
                 else if (_propDef.PropertyType == typeof (TimeSpan) && valueToParse.GetType() == typeof (DateTime))
                 {
-                    returnValue = ((DateTime)valueToParse).TimeOfDay;
+                    returnValue = ((DateTime) valueToParse).TimeOfDay;
                 }
                 else if (_propDef.PropertyType.IsEnum && valueToParse is string)
                 {
-                    returnValue = Enum.Parse(_propDef.PropertyType, (string)valueToParse);
+                    returnValue = Enum.Parse(_propDef.PropertyType, (string) valueToParse);
                 }
                 else
                 {

@@ -482,7 +482,7 @@ namespace Habanero.BO
 
         private bool AreReadWriteRulesEditable(out string message)
         {
-            //TODO Brett: This should be turned into a strategy pattern.
+            //TODO Brett Jan 2009: This should be turned into a strategy pattern.
             switch (_propDef.ReadWriteRule)
             {
                 case PropReadWriteRule.ReadWrite:

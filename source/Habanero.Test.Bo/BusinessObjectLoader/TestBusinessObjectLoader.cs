@@ -152,7 +152,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Test Result -----------------------
             Assert.IsNotNull(returnedBO);
         }
-
+#pragma warning disable 168
         [Test]
         public void Test_GetBusinessObjectByValue_ByType_DoesNotExist()
         {
@@ -167,10 +167,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Execute Test ----------------------
             try
             {
-#pragma warning disable 168
                 IBusinessObject returnedBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue
                     (typeof (BOWithIntID), idDoesNotExist);
-#pragma warning restore 168
+
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------
@@ -181,7 +180,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                      ex.Message);
             }
         }
-
+#pragma warning restore 168
         [Test]
         public void Test_GetBusinessObjectByValue_Generic()
         {
