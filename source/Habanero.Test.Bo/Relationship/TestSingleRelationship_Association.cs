@@ -86,7 +86,6 @@ namespace Habanero.Test.BO.Relationship
 //            DatabaseConnection.CurrentConnection.GetConnection();
 //            BORegistry.DataAccessor = new DataAccessorDB();
 //        }
-        //TODO Brett: to remove this test
         [Test]
         public void Test_SetParent_PersistedChild_FindLoadLookupListError()
         {

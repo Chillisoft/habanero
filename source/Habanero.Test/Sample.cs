@@ -233,12 +233,20 @@ namespace Habanero.Test
         {
             get
             {
-                if (itsBOLookupCollection == null) {
-
-                    itsBOLookupCollection = new Dictionary<string, string>();
-                    itsBOLookupCollection.Add("Test1", StringUtilities.GuidToUpper(new Sample().ID.GetAsGuid()));
-                    itsBOLookupCollection.Add("Test2", StringUtilities.GuidToUpper(new Sample().ID.GetAsGuid()));
-                    itsBOLookupCollection.Add("Test3", StringUtilities.GuidToUpper(new Sample().ID.GetAsGuid()));
+                if (itsBOLookupCollection == null)
+                {
+                    Sample sample1 = new Sample();
+                    sample1.Save();
+                    Sample sample2 = new Sample();
+                    sample1.Save();
+                    Sample sample3 = new Sample();
+                    sample1.Save();
+                    itsBOLookupCollection = new Dictionary<string, string>
+                                {
+                                    {"Test3", StringUtilities.GuidToUpper(sample3.ID.GetAsGuid())},
+                                    {"Test2", StringUtilities.GuidToUpper(sample2.ID.GetAsGuid())},
+                                    {"Test1", StringUtilities.GuidToUpper(sample1.ID.GetAsGuid())}
+                                };
                 }
                 return itsBOLookupCollection;
             }

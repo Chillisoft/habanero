@@ -705,7 +705,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns a string</returns>
-        internal string GetPropertyValueString(string propName)
+        public string GetPropertyValueString(string propName)
         {
             return Props[propName].PropertyValueString;
         }

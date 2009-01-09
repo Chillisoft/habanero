@@ -158,6 +158,7 @@ namespace Habanero.Test.BO
          Ignore(
              "Brett - to consult with peter by fundamentally changing the way BO's respond to edits we are fundamentally altering the way these data providers work"
              )]
+//        [Test]
         public void TestRevertChangesRevertsBoValues()
         {
             SetupTestData();

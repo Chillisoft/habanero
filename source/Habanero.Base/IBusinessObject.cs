@@ -174,5 +174,16 @@ namespace Habanero.Base
         /// <param name="propName">The property name</param>
         /// <returns>Returns the value if found</returns>
         object GetPersistedPropertyValue(Source source, string propName);
+
+        /// <summary>
+        /// Returns the named property value that should be displayed
+        ///   on a user interface e.g. a textbox.
+        /// This is used particularly for dates and guids where there is a
+        /// particular format for the GUID/Date as a string.
+        /// This is used for Database lookups lookup lists etc
+        /// </summary>
+        /// <param name="propName">The property name</param>
+        /// <returns>Returns the property value as a string</returns>
+        string GetPropertyValueString(string propName);
     }
 }

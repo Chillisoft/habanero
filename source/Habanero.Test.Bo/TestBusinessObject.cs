@@ -117,8 +117,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
         }
 
-//TODO Brett: This method will only work when the Business object is changed to create the 
-        //appropriate BOProp Type for a lookup
+
         [Test]
         public void TestBOLookupListWithString()
         {

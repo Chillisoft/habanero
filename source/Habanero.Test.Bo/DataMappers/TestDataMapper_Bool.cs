@@ -20,7 +20,6 @@ namespace Habanero.Test.BO
             _dataMapper = new BOPropBoolDataMapper();
         }
 
-        //TODO Brett: Peter what we should do?
         [Test]
         public void Test_PropDef_ConvertValueToString_FromInValidSring()
         {
@@ -406,7 +405,6 @@ namespace Habanero.Test.BO
             Assert.IsFalse(parsedOK);
         }
 
-        //TODO Brett: Discuss with peter I think should raise error
         [Test]
         public void Test_DataMapper_ParsePropValue_FromInvalidSring()
         {
@@ -498,7 +496,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual("True", parsedValue);
         }
 
-        //TODO Brett: Discuss with peter I think should raise error
         [Test]
         public void Test_DataMapper_ConvertValueToString_FromInValidSring()
         {

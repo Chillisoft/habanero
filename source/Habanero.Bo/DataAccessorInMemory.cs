@@ -36,7 +36,7 @@ namespace Habanero.BO
         {
         }
 
-        internal DataAccessorInMemory(DataStoreInMemory dataStore)
+        public DataAccessorInMemory(DataStoreInMemory dataStore)
         {
             _dataStore = dataStore;
             _businessObjectLoader = new BusinessObjectLoaderInMemory(_dataStore);

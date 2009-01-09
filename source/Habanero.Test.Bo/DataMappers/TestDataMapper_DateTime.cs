@@ -86,7 +86,6 @@ namespace Habanero.Test.BO
             Assert.IsTrue(parseSucceed);
         }
 
-        //TODO Brett: Discuss with peter I think should raise error
         [Test]
         public void Test_PropDef_ParsePropValue_FromInvalidSring()
         {
@@ -165,7 +164,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual(expectedDateTime.ToString(_standardDateTimeFormat), parsedValue);
         }
 
-        //TODO Brett: Discuss with peter I think should raise error
         [Test]
         public void Test_PropDef_ConvertValueToString_FromInValidSring()
         {
@@ -245,7 +243,6 @@ namespace Habanero.Test.BO
             Assert.IsTrue(parseSucceed);
         }
 
-        //TODO Brett: Discuss with peter I think should raise error
         [Test]
         public void Test_DataMapper_ParsePropValue_FromInvalidSring()
         {
@@ -324,7 +321,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual(expectedDateTime.ToString(_standardDateTimeFormat), parsedValue);
         }
 
-        //TODO Brett: Discuss with peter I think should raise error
         [Test]
         public void Test_DataMapper_ConvertValueToString_FromInValidSring()
         {

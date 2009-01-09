@@ -504,6 +504,7 @@ namespace Habanero.Test.UI.Base
 
         //TODO Brett : Jan 2009
         [Test, Ignore("TODO: fix this")]
+//        [Test]
         public void TestAcceptance_SearchGridSearchesTheGrid()
         {
             //---------------Set up test pack-------------------

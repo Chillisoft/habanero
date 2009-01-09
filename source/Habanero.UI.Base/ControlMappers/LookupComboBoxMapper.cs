@@ -66,6 +66,8 @@ namespace Habanero.UI.Base
             //                          };
         }
 
+        //TODO Brett 09 Jan 2009: Fix this with new Lookup list that has an ID Value as well as a Value ID
+        //   Dictionary.
         /// <summary>
         /// Gets and sets the lookup list used to populate the items in the
         /// ComboBox.  This method is typically called by SetupLookupList().
@@ -198,14 +200,16 @@ namespace Habanero.UI.Base
                     bool found = false;
                     if (pair.Value != null)
                     {
-                        if (pair.Value is string)
-                        {
-                            found = pair.Value.Equals(Convert.ToString(boPropertyValue));
-                        }
-                        else
-                        {
-                            found = pair.Value.Equals(boPropertyValue);
-                        }
+                        found = pair.Value.Equals(Convert.ToString(boPropertyValue));
+//                        //TODO Brett 09 Jan 2009: Removed with new lookup list need to test if still works reliably.
+//                        if (pair.Value is string)
+//                        {
+//                            found = pair.Value.Equals(Convert.ToString(boPropertyValue));
+//                        }
+//                        else
+//                        {
+//                            found = pair.Value.Equals(boPropertyValue);
+//                        }
                     }
                     if (!found) continue;
                     _comboBox.SelectedItem = pair.Key;
@@ -298,7 +302,7 @@ namespace Habanero.UI.Base
             }
             return _businessObject == null 
                 ? null
-                : _businessObject.GetPropertyValue(_propertyName);
+                : _businessObject.GetPropertyValueString(_propertyName);
         }
 
         /// <summary>

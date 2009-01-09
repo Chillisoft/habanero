@@ -794,7 +794,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual("Business", boProp.PropertyValueString);
         }
 
-        //TODO Brett: To do datamapper for enums
         [Test]
         public void TestBoPropWithEnumPersistValueFromString()
         {

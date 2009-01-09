@@ -522,13 +522,12 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(3, boProp.Value);
-
+            Assert.IsFalse(boProp.IsDirty);
             //---------------Execute Test ----------------------
             object propertyValueToDisplay = boProp.PropertyValueToDisplay;
 
             //---------------Test Result -----------------------
             Assert.IsNull(propertyValueToDisplay);
-            //TODO Brett: Should we return the invalid value or maybe a string saying invalid value or something
         }
         #endregion
 
@@ -862,8 +861,6 @@ namespace Habanero.Test.BO
                 //---------------Test Result -----------------------
             catch (HabaneroApplicationException ex)
             {
-                //You are trying to set the value for a lookup property PropName to 'Invalid' this value does not exist in the lookup list
-                //TODO Brett: Waiting for removing This functionality from BusinessObject.
                 StringAssert.Contains(boProp.PropertyName + " cannot be set to '" + invalid + "'", ex.Message);
                 StringAssert.Contains("this value does not exist in the lookup list", ex.Message);
                 Assert.AreEqual(originalPropValue, boProp.Value);

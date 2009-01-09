@@ -417,6 +417,7 @@ namespace Habanero.Test.UI.Base
         #region TestIntRules
 
         [Test, Ignore("//TODO Brett: This needs to be fixed for new boprop.set")]
+//        [Test]
         public void Test_ErrorProvider_HasCorrectMessage_ForIntegerDataType_NoRule()
         {
             //---------------Set up test pack-------------------
@@ -432,6 +433,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test, Ignore("//TODO Brett: This needs to be fixed for new boprop.set")]
+//        [Test]
         public void Test_ErrorProvider_HasCorrectMessage_ForIntegerDataType()
         {
             //---------------Set up test pack-------------------
@@ -643,6 +645,7 @@ namespace Habanero.Test.UI.Base
         #region TestDateTimeRules
 
         [Test, Ignore("//TODO Brett: This needs to be fixed for new boprop.set")]
+//        [Test]
         public void Test_ErrorProvider_HasCorrectMessage_ForDateTimeDataType_SetToString_NoRule()
         {
             //---------------Set up test pack-------------------
@@ -658,6 +661,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test, Ignore("//TODO Brett: This needs to be fixed for new boprop.set")]
+//        [Test]
         public void Test_ErrorProvider_HasCorrectMessage_ForDateTimeDataType_SetToInt_NoRule()
         {
             //---------------Set up test pack-------------------
