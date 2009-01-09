@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test;
 using Habanero.Test.BO;
 using NUnit.Framework;
 
-namespace Habanero.BO
+namespace Habanero.Test.BO
 {
     [TestFixture]
     public class TestBOPrimaryKey 
@@ -118,9 +119,9 @@ namespace Habanero.BO
             //---------------Execute Test ----------------------
             object value = contactPersonTestBO.ID.GetAsValue();
             //---------------Test Result -----------------------
-            List<string> list = (List<string>) value;
-            Assert.Contains("ContactPersonID=" + contactPersonID, list);
-            Assert.Contains("Surname=" + surname, list);
+            string valueString = (string) value;
+            StringAssert.Contains("ContactPersonID=" + contactPersonID, valueString);
+            StringAssert.Contains("Surname=" + surname, valueString);
         }
 
         [Test]
@@ -163,6 +164,79 @@ namespace Habanero.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(keyDef.Count, boPrimaryKey.Count);
             Assert.IsFalse(boPrimaryKey.IsCompositeKey);
+        }
+
+        [Test]
+        public void Test_CreateWithValue_ClassDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            int value = TestUtil.GetRandomInt();
+            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID bo = new BOWithIntID { TestField = "PropValue", IntID = value };
+            object expectedID = bo.ID;
+            
+            //---------------Execute Test ----------------------
+            BOPrimaryKey key = BOPrimaryKey.CreateWithValue(autoIncClassDef, value);
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(expectedID, key);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void Test_CreateWithValue_Type()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            int value = TestUtil.GetRandomInt();
+            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID bo = new BOWithIntID { TestField = "PropValue", IntID = value };
+            object expectedID = bo.ID;
+            
+            //---------------Execute Test ----------------------
+            BOPrimaryKey key = BOPrimaryKey.CreateWithValue(typeof(BOWithIntID), value);
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(expectedID, key);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void Test_HashCode()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            int value = TestUtil.GetRandomInt();
+            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID bo = new BOWithIntID { TestField = "PropValue", IntID = value };
+            BOPrimaryKey key = BOPrimaryKey.CreateWithValue(typeof(BOWithIntID), value);
+            //---------------Assert PreConditions---------------       
+            Assert.AreEqual(bo.ID, key);
+            //---------------Execute Test ----------------------
+            object expectedHashCode = bo.ID.GetHashCode();
+            object keyHashCode = key.GetHashCode();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedHashCode, keyHashCode);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void Test_HashCode_CompositeKey()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            new Car();
+            ContactPersonCompositeKey contactPerson = new ContactPersonCompositeKey();
+            object originalHashCode = contactPerson.ID.GetHashCode();
+            contactPerson.Save();
+
+            //---------------Execute Test ----------------------
+            object hashCodeAfterSaving = contactPerson.ID.GetHashCode();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(originalHashCode, hashCodeAfterSaving);
+
         }
     }
 }

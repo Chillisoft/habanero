@@ -144,5 +144,7 @@ namespace Habanero.Test
 
             return false;
         }
+
+        public static int GetRandomInt() { return new Random().Next(); }
     }
 }

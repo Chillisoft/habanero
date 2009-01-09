@@ -58,8 +58,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
             BOWithIntID bo1 = new BOWithIntID {TestField = "PropValue", IntID = 55};
             bo1.Save();
-            IPrimaryKey id = BORegistry.DataAccessor.BusinessObjectLoader.GetBOPrimaryKeyByValue
-                (autoIncClassDef, bo1.IntID);
+            IPrimaryKey id = BOPrimaryKey.CreateWithValue(autoIncClassDef, bo1.IntID);
             //---------------Assert Precondition----------------
             Assert.IsFalse(bo1.Status.IsNew);
             Assert.IsNotNull(bo1.IntID);
@@ -125,8 +124,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
             BOWithIntID bo1 = new BOWithIntID {TestField = "PropValue", IntID = 55};
             bo1.Save();
-            IPrimaryKey id = BORegistry.DataAccessor.BusinessObjectLoader.GetBOPrimaryKeyByValue
-                (typeof (BOWithIntID), bo1.IntID);
+            IPrimaryKey id = BOPrimaryKey.CreateWithValue(typeof (BOWithIntID), bo1.IntID);
             //---------------Assert Precondition----------------
             Assert.IsFalse(bo1.Status.IsNew);
             Assert.IsNotNull(bo1.IntID);

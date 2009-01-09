@@ -501,32 +501,9 @@ namespace Habanero.BO
         /// <exception cref="BusObjDeleteConcurrencyControlException"/>
         public IBusinessObject GetBusinessObjectByValue(ClassDef classDef, object idValue)
         {
-            BOPrimaryKey boPrimaryKey = GetBOPrimaryKeyByValue(classDef, idValue);
+            BOPrimaryKey boPrimaryKey = BOPrimaryKey.CreateWithValue(classDef, idValue);
 
             return boPrimaryKey == null ? null : BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, boPrimaryKey);
-        }
-
-        ///<summary>
-        /// For a given value e.g. a Guid Identifier '{......}' this will build up a primary key object that can be used to
-        /// load the business object from the Data store <see cref="GetBusinessObjectByValue"/>
-        /// This can only be used for business objects that have a single property for the primary key
-        /// (i.e. non composite primary keys)
-        ///</summary>
-        ///<param name="classDef">The Class definition of the Business Object to load</param>
-        ///<param name="idValue">The value of the primary key of the business object</param>
-        ///<returns>the BOPrimaryKey if this can be constructed else returns null</returns>
-        public BOPrimaryKey GetBOPrimaryKeyByValue(ClassDef classDef, object idValue)
-        {
-            PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
-            if (primaryKeyDef.IsCompositeKey) return null;
-
-            BOPropCol boPropCol = classDef.createBOPropertyCol(true);
-            BOPrimaryKey boPrimaryKey = primaryKeyDef.CreateBOKey(boPropCol) as BOPrimaryKey;
-            if (boPrimaryKey != null)
-            {
-                boPrimaryKey[0].Value = idValue;
-            }
-            return boPrimaryKey;
         }
 
         ///<summary>
@@ -547,22 +524,6 @@ namespace Habanero.BO
             ClassDef classDef = ClassDef.ClassDefs[type];
             return GetBusinessObjectByValue(classDef, idValue);
         }
-
-        ///<summary>
-        /// For a given value e.g. a Guid Identifier '{......}' this will build up a primary key object that can be used to
-        /// load the business object from the Data store <see cref="GetBusinessObjectByValue(Type,object)"/>
-        /// This can only be used for business objects that have a single property for the primary key
-        /// (i.e. non composite primary keys)
-        ///</summary>
-        ///<param name="type">The type of business object to be loaded</param>
-        ///<param name="idValue">The value of the primary key of the business object</param>
-        ///<returns>the BOPrimaryKey if this can be constructed else returns null</returns>
-        public BOPrimaryKey GetBOPrimaryKeyByValue(Type type, object idValue)
-        {
-            ClassDef classDef = ClassDef.ClassDefs[type];
-            return GetBOPrimaryKeyByValue(classDef, idValue);
-        }
-
         ///<summary>
         /// For a given value e.g. a Guid Identifier '{......}' this will 
         /// load the business object from the Data store.

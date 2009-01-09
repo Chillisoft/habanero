@@ -295,17 +295,6 @@ namespace Habanero.BO
         IBusinessObject GetBusinessObjectByValue(ClassDef classDef, object idValue);
 
         ///<summary>
-        /// For a given value e.g. a Guid Identifier '{......}' this will build up a primary key object that can be used to
-        /// load the business object from the Data store <see cref="GetBusinessObjectByValue(ClassDef,object)"/>
-        /// This can only be used for business objects that have a single property for the primary key
-        /// (i.e. non composite primary keys)
-        ///</summary>
-        ///<param name="classDef">The Class definition of the Business Object to load</param>
-        ///<param name="idValue">The value of the primary key of the business object</param>
-        ///<returns>the BOPrimaryKey if this can be constructed else returns null</returns>
-        BOPrimaryKey GetBOPrimaryKeyByValue(ClassDef classDef, object idValue);
-
-        ///<summary>
         /// For a given value e.g. a Guid Identifier '{......}' this will 
         /// load the business object from the Data store.
         /// This can only be used for business objects that have a single property for the primary key
@@ -333,16 +322,5 @@ namespace Habanero.BO
         ///  </returns>
         /// <exception cref="BusObjDeleteConcurrencyControlException"/>
         IBusinessObject GetBusinessObjectByValue<T>(object idValue) where T : class, IBusinessObject, new();
-
-        ///<summary>
-        /// For a given value e.g. a Guid Identifier '{......}' this will build up a primary key object that can be used to
-        /// load the business object from the Data store <see cref="GetBusinessObjectByValue(ClassDef,object)"/>
-        /// This can only be used for business objects that have a single property for the primary key
-        /// (i.e. non composite primary keys)
-        ///</summary>
-        ///<param name="type">The Class definition of the Business Object to load</param>
-        ///<param name="idValue">The value of the primary key of the business object</param>
-        ///<returns>the BOPrimaryKey if this can be constructed else returns null</returns>
-        BOPrimaryKey GetBOPrimaryKeyByValue(Type type, object idValue);
     }
 }
