@@ -330,7 +330,6 @@ namespace Habanero.BO
 
             ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
 
-
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
             {
                 while (dr.Read())

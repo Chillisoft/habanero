@@ -563,5 +563,24 @@ namespace Habanero.BO
             return GetBOPrimaryKeyByValue(classDef, idValue);
         }
 
+        ///<summary>
+        /// For a given value e.g. a Guid Identifier '{......}' this will 
+        /// load the business object from the Data store.
+        /// This can only be used for business objects that have a single property for the primary key
+        /// (i.e. non composite primary keys)
+        ///</summary>
+        ///<param name="idValue">The value of the primary key of the business object</param>
+        ///<returns>the Business Object that matches the value of the id. If the primary key cannot be constructed
+        /// e.g. the primary key is composite then returns null. If the Business Object cannot be loaded then returns
+        /// <see cref="BusObjDeleteConcurrencyControlException"/>
+        ///  </returns>
+        /// <exception cref="BusObjDeleteConcurrencyControlException"/>
+        public IBusinessObject GetBusinessObjectByValue<T>( object idValue)
+                        where T : class, IBusinessObject, new()
+        {
+            CheckNotTypedAsBusinessObject<T>();
+            ClassDef classDef = ClassDef.ClassDefs[typeof(T)];
+            return GetBusinessObjectByValue(classDef, idValue);
+        }
     }
 }

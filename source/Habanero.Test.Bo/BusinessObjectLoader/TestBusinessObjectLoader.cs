@@ -155,7 +155,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.IsNotNull(returnedBO);
         }
 
-
         [Test]
         public void Test_GetBusinessObjectByValue_ByType_DoesNotExist()
         {
@@ -184,6 +183,53 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                      ex.Message);
             }
         }
+
+        [Test]
+        public void Test_GetBusinessObjectByValue_Generic()
+        {
+            ClassDef.ClassDefs.Clear();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID bo = new BOWithIntID { TestField = "PropValue", IntID = 55 };
+            object expectedID = bo.IntID;
+            bo.Save();
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(bo.Status.IsNew);
+            Assert.IsNotNull(bo.IntID);
+            //---------------Execute Test ----------------------
+            IBusinessObject returnedBO =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue<BOWithIntID>( expectedID);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(returnedBO);
+        }
+
+#pragma warning disable 168
+        [Test]
+        public void Test_GetBusinessObjectByValue_Generic_DoesNotExist()
+        {
+            ClassDef.ClassDefs.Clear();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID bo = new BOWithIntID { TestField = "PropValue", IntID = 55 };
+            bo.Save();
+            const int idDoesNotExist = 5425;
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(bo.Status.IsNew);
+            Assert.IsNotNull(bo.IntID);
+            //---------------Execute Test ----------------------
+            try
+            {
+                IBusinessObject returnedBO = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue
+                    <BOWithIntID>(idDoesNotExist);
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (BusObjDeleteConcurrencyControlException ex)
+            {
+                StringAssert.Contains
+                    ("A Error has occured since the object you are trying to refresh has been deleted by another user. There are no records in the database for the Class: BOWithIntID identified by IntID=5425",
+                     ex.Message);
+            }
+        }
+#pragma warning restore 168
 
         [Test]
         public void TestGetBusinessObjectWhenNotExists_NotLoadedViaKey()
