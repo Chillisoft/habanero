@@ -144,28 +144,57 @@ namespace Habanero.BO
         /// <returns>The reverse relationship or null if no reverse relationship is set up.</returns>
         internal IRelationship GetReverseRelationship(IBusinessObject bo)
         {
-            //This is a horrrible Hack but I do not want to do the reverse relationship 
+            if (!String.IsNullOrEmpty(this.RelationshipDef.ReverseRelationshipName))
+            {
+                foreach (IRelationship relationship in bo.Relationships)
+                {
+                    if (relationship.RelationshipName == this.RelationshipDef.ReverseRelationshipName)
+                        return relationship;
+                }
+                throw new HabaneroDeveloperException(
+                    String.Format(
+                        "The relationship '{0}' on class '{1}' has a reverse relationship defined ('{2}'), but this " +
+                        "relationship was not found on the related object. " +
+                        "Please check that the reverse relationship is defined correctly " +
+                        "and that it exists on the related class '{3}'",
+                        this.RelationshipName, this.OwningBO.ClassDef.ClassName,
+                        this.RelationshipDef.ReverseRelationshipName,
+                        this.RelatedObjectClassDef.ClassName), "");
+            }
+
+            return FindRelationshipByRelationshipKey(bo);
+        }
+
+        private IRelationship FindRelationshipByRelationshipKey(IBusinessObject bo) {
             IRelationship reverseRelationship = null;
             foreach (IRelationship relationship in bo.Relationships)
             {
-                if (relationship.RelationshipDef.RelatedObjectClassType != this.OwningBO.GetType()) continue;
-                bool reverseRelatedPropFound = false;
-                foreach (IRelProp prop in this._relKey)
+                if (!IsPossibleReverseRelationship(relationship)) continue;
+
+                if (reverseRelationship != null)
                 {
-                    foreach (IRelProp relProp in relationship.RelKey)
-                    {
-                        if (prop.RelatedClassPropName != relProp.OwnerPropertyName) continue;
-                        reverseRelatedPropFound = true;
-                        break;
-                    }
+                    throw new HabaneroDeveloperException(
+                        String.Format(
+                            "When searching for the reverse relationship of '{0}' " +
+                            "on an object of type '{1}', more than one match was found.  " +
+                            "Please specify which relationship should be used as the reverse relationship.",
+                            this.RelationshipName, this.OwningBO.ClassDef.ClassName), "");
                 }
-                if (!reverseRelatedPropFound) continue;
                 reverseRelationship = relationship;
-                break;
             }
             if (reverseRelationship != null && !reverseRelationship.Initialised)
                 ReflectionUtilities.ExecutePrivateMethod(reverseRelationship, "Initialise");
             return reverseRelationship;
+        }
+
+        private bool IsPossibleReverseRelationship(IRelationship relationship) {
+            if (relationship.RelationshipDef.RelatedObjectClassType != this.OwningBO.GetType()) return false;
+            int foundMatches = 0;
+            foreach (IRelProp prop in this._relKey)
+            {
+                if (relationship.RelKey.Contains(prop.RelatedClassPropName)) foundMatches++;
+            }
+            return (foundMatches == relationship.RelKey.Count);
         }
     }
     

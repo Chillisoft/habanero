@@ -187,7 +187,7 @@ namespace Habanero.BO.Loaders
             //_relationshipDefCol = new RelationshipDefCol();
             foreach (string relDefXml in xmlDefs)
             {
-                XmlRelationshipLoader relationshipLoader = new XmlRelationshipLoader(DtdLoader, _defClassFactory);
+                XmlRelationshipLoader relationshipLoader = new XmlRelationshipLoader(DtdLoader, _defClassFactory, _className);
                 _relationshipDefCol.Add(relationshipLoader.LoadRelationship(relDefXml, _propDefCol));
             }
         }

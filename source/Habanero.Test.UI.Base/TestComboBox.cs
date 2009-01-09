@@ -51,7 +51,6 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the ComboBox class.
     /// </summary>
-    [TestFixture]
     public abstract class TestComboBox
     {
         

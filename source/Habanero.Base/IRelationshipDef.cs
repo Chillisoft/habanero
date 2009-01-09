@@ -143,6 +143,8 @@ namespace Habanero.Base
         ///</summary>
         RelationshipType RelationshipType { get; }
 
+        string ReverseRelationshipName { get; set; }
+
         /// <summary>
         /// Create and return a new Relationship based on the relationship definition.
         /// </summary>

@@ -29,7 +29,6 @@ using DockStyle=Habanero.UI.Base.DockStyle;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
     public abstract class TestBaseMethods
     {
         protected abstract IControlHabanero CreateControl();

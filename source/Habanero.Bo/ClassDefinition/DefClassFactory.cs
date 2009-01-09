@@ -84,24 +84,25 @@ namespace Habanero.BO.ClassDefinition
 			return new PropRuleString(name, message, null);
 		}
 
-		public SingleRelationshipDef CreateSingleRelationshipDef(string relationshipName, string relatedAssemblyName,
-		                                                         string relatedClassName, RelKeyDef relKeyDef,
-                                                                 bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction)
+		public SingleRelationshipDef CreateSingleRelationshipDef
+            (string relationshipName, string relatedAssemblyName, string relatedClassName, 
+            RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, 
+            DeleteParentAction deleteParentAction, RelationshipType relationshipType)
 		{
 			return
 				new SingleRelationshipDef(relationshipName, relatedAssemblyName, relatedClassName, relKeyDef,
-				                          keepReferenceToRelatedObject, deleteParentAction);
+                                          keepReferenceToRelatedObject, deleteParentAction, relationshipType);
 		}
 
-		public MultipleRelationshipDef CreateMultipleRelationshipDef(string relationshipName, string relatedAssemblyName,
-		                                                             string relatedClassName, RelKeyDef relKeyDef,
-		                                                             bool keepReferenceToRelatedObject, string orderBy,
-		                                                             DeleteParentAction deleteParentAction)
+		public MultipleRelationshipDef CreateMultipleRelationshipDef
+            (string relationshipName, string relatedAssemblyName, string relatedClassName, 
+            RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, string orderBy,
+            DeleteParentAction deleteParentAction, RelationshipType relationshipType)
 		{
 			return
 				new MultipleRelationshipDef(relationshipName, relatedAssemblyName, relatedClassName, relKeyDef,
-				                            keepReferenceToRelatedObject, orderBy, 
-				                            deleteParentAction);
+				                            keepReferenceToRelatedObject, orderBy,
+                                            deleteParentAction, relationshipType);
 		}
 
         public SimpleLookupList CreateSimpleLookupList(Dictionary<string, string> displayValueDictionary)

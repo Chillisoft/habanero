@@ -62,7 +62,7 @@ namespace Habanero.Test.BO.Loaders
         [SetUp]
         public void SetupTest()
         {
-            itsLoader = new XmlRelationshipLoader();
+            itsLoader = new XmlRelationshipLoader("TestClass");
             itsPropDefs = new PropDefCol();
             itsPropDefs.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadWrite, null));
         }
@@ -181,6 +181,177 @@ namespace Habanero.Test.BO.Loaders
 
             //---------------Test Result -----------------------
             Assert.AreEqual(DeleteParentAction.Prevent, relDef.DeleteParentAction);
+        }
+
+        [Test]
+        public void TestRelationshipType_Default() 
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipString, itsPropDefs);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(RelationshipType.Association, relDef.RelationshipType);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestRelationshipType_Composition() 
+        {
+            //---------------Set up test pack-------------------
+            const string singleRelationshipStringComposition = @"
+					<relationship 
+						name=""TestRelationship"" 
+						type=""single"" 
+                        relationshipType=""Composition""
+                        relatedClass=""Habanero.Test.BO.Loaders.TestRelatedClass"" 
+						relatedAssembly=""Habanero.Test.BO""
+                    >
+						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+					</relationship>";
+            //---------------Execute Test ----------------------
+            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(RelationshipType.Composition, relDef.RelationshipType);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestRelationshipType_Multiple_Composition() 
+        {
+            //---------------Set up test pack-------------------
+            const string singleRelationshipStringComposition = @"
+					<relationship 
+						name=""TestRelationship"" 
+						type=""multiple"" 
+                        relationshipType=""Composition""
+                        relatedClass=""Habanero.Test.BO.Loaders.TestRelatedClass"" 
+						relatedAssembly=""Habanero.Test.BO""
+                    >
+						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+					</relationship>";
+            //---------------Execute Test ----------------------
+            MultipleRelationshipDef relDef = (MultipleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(RelationshipType.Composition, relDef.RelationshipType);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestRelationshipType_Invalid() 
+        {
+            //---------------Set up test pack-------------------
+            string className = TestUtil.CreateRandomString();
+            XmlRelationshipLoader loader = new XmlRelationshipLoader(className);
+            const string singleRelationshipStringComposition = @"
+					<relationship 
+						name=""TestRelationship"" 
+						type=""single"" 
+                        relationshipType=""Bob""
+                        relatedClass=""Habanero.Test.BO.Loaders.TestRelatedClass"" 
+						relatedAssembly=""Habanero.Test.BO""
+                    >
+						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+					</relationship>";
+            //---------------Execute Test ----------------------
+            try
+            {
+                SingleRelationshipDef relDef =
+                    (SingleRelationshipDef) loader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+                Assert.Fail("An error should have been raised as there is no relationship type of Bob");
+            //---------------Test Result -----------------------
+            } catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains(string.Format("'TestRelationship' on class '{0}'", className), ex.Message);
+                StringAssert.Contains("invalid value ('Bob')", ex.Message);
+            } 
+
+        }
+
+        [Test]
+        public void Test_OwningBOHasForeignKey_Default_Single()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipString, itsPropDefs);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(relDef.OwningBOHasForeignKey);
+            //---------------Tear Down -------------------------                  
+        }
+
+        [Test]
+        public void Test_OwningBOHasForeignKey_Default_Multiple()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            MultipleRelationshipDef relDef = (MultipleRelationshipDef)itsLoader.LoadRelationship(multipleRelationshipString, itsPropDefs);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(relDef.OwningBOHasForeignKey);
+            //---------------Tear Down -------------------------                  
+        }
+
+        [Test]
+        public void Test_OwningBOHasForeignKey()
+        {
+            //---------------Set up test pack-------------------
+            const string singleRelationshipStringComposition = @"
+					<relationship 
+						name=""TestRelationship"" 
+						type=""single"" 
+                        relatedClass=""Habanero.Test.BO.Loaders.TestRelatedClass"" 
+						relatedAssembly=""Habanero.Test.BO""
+                        owningBOHasForeignKey=""false""
+                    >
+						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+					</relationship>";
+            //---------------Execute Test ----------------------
+            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(relDef.OwningBOHasForeignKey);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void Test_ReverseRelationshipDefault()
+        {
+            //---------------Execute Test ----------------------
+            MultipleRelationshipDef relDef = (MultipleRelationshipDef)itsLoader.LoadRelationship(multipleRelationshipString, itsPropDefs);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(string.IsNullOrEmpty(relDef.ReverseRelationshipName));
+        }
+
+        [Test]
+        public void Test_ReverseRelationship()
+        {
+            //---------------Set up test pack-------------------
+            const string singleRelationshipStringComposition = @"
+					<relationship 
+						name=""TestRelationship"" 
+						type=""single"" 
+                        relatedClass=""Habanero.Test.BO.Loaders.TestRelatedClass"" 
+						relatedAssembly=""Habanero.Test.BO""
+                        owningBOHasForeignKey=""false""
+                        reverseRelationship=""MyReverseRelationship""
+                    >
+						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+					</relationship>";
+            //---------------Execute Test ----------------------
+            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipStringComposition, itsPropDefs);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("MyReverseRelationship", relDef.ReverseRelationshipName);
         }
 
     }

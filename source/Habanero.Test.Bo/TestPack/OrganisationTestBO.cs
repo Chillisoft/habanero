@@ -48,6 +48,30 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
+        public static ClassDef LoadDefaultClassDef_WithTwoRelationshipsToContactPerson()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
+					<property  name=""OrganisationID"" type=""Guid"" />
+                    <property name=""Name"" />
+					<primaryKey>
+						<prop name=""OrganisationID"" />
+					</primaryKey>
+					<relationship name=""ContactPeople"" type=""multiple"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"">
+						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
+					</relationship>
+					<relationship name=""OtherContactPeople"" type=""multiple"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"">
+						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
+					</relationship>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
 
         public static ClassDef LoadDefaultClassDef_WithSingleRelationship()
         {
@@ -158,10 +182,13 @@ namespace Habanero.Test.BO
 
         public static OrganisationTestBO CreateSavedOrganisation()
         {
-            OrganisationTestBO bo = new OrganisationTestBO();
+            OrganisationTestBO bo = CreateUnsavedOrganisation();
             bo.Save();
             return bo;
         }
 
+        private static OrganisationTestBO CreateUnsavedOrganisation() {
+            return new OrganisationTestBO();
+        }
     }
 }

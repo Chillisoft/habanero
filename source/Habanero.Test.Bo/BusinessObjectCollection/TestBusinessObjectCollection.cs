@@ -54,7 +54,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         {
             SetupDBConnection();
         }
-        [Test]
 
         private static ContactPersonTestBO CreateContactPersonTestBO()
         {

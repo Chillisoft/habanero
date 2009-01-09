@@ -60,6 +60,7 @@ namespace Habanero.BO.ClassDefinition
         private RelationshipType _relationshipType;
 
         protected OrderCriteria _orderCriteria;
+        private string _reverseRelationshipName;
 
         #region Constructors
 
@@ -259,6 +260,8 @@ namespace Habanero.BO.ClassDefinition
         public abstract  bool OwningBOHasForeignKey { 
             get; set;
         }
+
+        public string ReverseRelationshipName { get { return _reverseRelationshipName; } set { _reverseRelationshipName = value; } }
 
         #endregion Type Initialisation
 

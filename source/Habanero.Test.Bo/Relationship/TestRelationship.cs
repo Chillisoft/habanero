@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -304,7 +305,57 @@ namespace Habanero.Test.BO.Relationship
         }
 
         [Test]
-        public void TestGetReverseRelationship_Addresses()
+        public void TestGetReverseRelationship()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef orgClassDef = OrganisationTestBO.LoadDefaultClassDef_WithTwoRelationshipsToContactPerson();
+            ClassDef cpClassDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+
+            cpClassDef.RelationshipDefCol["Organisation"].ReverseRelationshipName = "OtherContactPeople";
+
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            
+            SingleRelationship<OrganisationTestBO> organisationRel = contactPerson.Relationships.GetSingle<OrganisationTestBO>("Organisation");
+            MultipleRelationship<ContactPersonTestBO> contactPeopleRel = organisation.Relationships.GetMultiple<ContactPersonTestBO>("OtherContactPeople");
+
+            //---------------Execute Test ----------------------
+            IRelationship reverseRelationship = organisationRel.GetReverseRelationship(organisation);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(contactPeopleRel, reverseRelationship);
+        }
+
+        [Test]
+        public void TestGetReverseRelationship_ReverseRelationshipSpecifiedButNotFound()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef orgClassDef = OrganisationTestBO.LoadDefaultClassDef();
+            ClassDef cpClassDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+
+            string reverseRelationshipName = TestUtil.CreateRandomString();
+            cpClassDef.RelationshipDefCol["Organisation"].ReverseRelationshipName = reverseRelationshipName;
+
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+
+            SingleRelationship<OrganisationTestBO> organisationRel = contactPerson.Relationships.GetSingle<OrganisationTestBO>("Organisation");
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                organisationRel.GetReverseRelationship(organisation);
+                Assert.Fail("Should have failed since a reverse relationship was specified that didn't exist.");
+            } catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains(string.Format("The relationship 'Organisation' on class 'ContactPersonTestBO' has a reverse relationship defined ('{0}')", reverseRelationshipName), ex.Message);
+
+            }
+        }
+
+
+        [Test]
+        public void TestGetReverseRelationship_NotSpecified_SearchByKeys_Addresses()
         {
             //---------------Set up test pack-------------------
             new Engine();
@@ -322,7 +373,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         [Test]
-        public void TestGetReverseRelationship_Cars()
+        public void TestGetReverseRelationship_NotSpecified_SearchByKeys_Cars()
         {
             //---------------Set up test pack-------------------
             new Engine();
@@ -337,6 +388,32 @@ namespace Habanero.Test.BO.Relationship
 
             //---------------Test Result -----------------------
             Assert.AreSame(expectedRelationship, reverseRelationship);
+        }
+
+
+        [Test]
+        public void TestGetReverseRelationship_NotSpecified_MultipleMatches()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO.LoadDefaultClassDef_WithTwoRelationshipsToContactPerson();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            
+            SingleRelationship<OrganisationTestBO> organisationRel = contactPerson.Relationships.GetSingle<OrganisationTestBO>("Organisation");
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                organisationRel.GetReverseRelationship(organisation);
+                Assert.Fail("Should have failed when more than one reverse relationship match was found");
+                
+            //---------------Test Result -----------------------
+            } catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("'Organisation' on an object of type 'ContactPersonTestBO', more than one match was found", ex.Message);
+            }
         }
 
     }
