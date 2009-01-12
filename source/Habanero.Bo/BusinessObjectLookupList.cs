@@ -421,7 +421,11 @@ namespace Habanero.BO
                     propertyName = StringUtilities.GetLeftSection(sortAttribute, " ");
                 }
 
-                ClassDef classDef = ClassDef.ClassDefs[_assemblyName, _className];
+                ClassDef classDef = null;
+                if (ClassDef.ClassDefs.Contains(_assemblyName, _className))
+                {
+                    classDef = ClassDef.ClassDefs[_assemblyName, _className];
+                }
                 if (classDef == null)
                 {
                     return sortAttribute;
@@ -480,7 +484,7 @@ namespace Habanero.BO
         ///<returns>The Key Value Lookup List</returns>
         public Dictionary<string, string> GetIDValueLookupList()
         {
-            GetLookupList(true);
+            GetLookupList(false);
             return _keyValueDictionary;
         }
 
@@ -515,5 +519,6 @@ namespace Habanero.BO
                 _keyValueDictionary.Add(pair.Value, pair.Key);
             }
         }
+
     }
 }

@@ -75,11 +75,11 @@ namespace Habanero.UI.Base
         [DefaultValue(""), EditorBrowsable(EditorBrowsableState.Advanced)]
         string Format { get; set; }
 
-        ///// <summary>Gets or sets the object used to provide culture-specific formatting of <see cref="IDataGridView"></see> cell values.</summary>
-        ///// <returns>An <see cref="T:System.IFormatProvider"></see> used for cell formatting. The default is <see cref="P:System.Globalization.CultureInfo.CurrentUICulture"></see>.</returns>
-        ///// <filterpriority>1</filterpriority>
-        //[EditorBrowsable(EditorBrowsableState.Advanced), Browsable(false)]
-        //IFormatProvider FormatProvider { get; set; }
+        /// <summary>Gets or sets the object used to provide culture-specific formatting of <see cref="IDataGridView"></see> cell values.</summary>
+        /// <returns>An <see cref="T:System.IFormatProvider"></see> used for cell formatting. The default is <see cref="P:System.Globalization.CultureInfo.CurrentUICulture"></see>.</returns>
+        /// <filterpriority>1</filterpriority>
+        [EditorBrowsable(EditorBrowsableState.Advanced), Browsable(false)]
+        IFormatProvider FormatProvider { get; set; }
 
         ///// <summary>Gets a value indicating whether the <see cref="IDataGridViewCellStyle.DataSourceNullValue"></see> property has been set.</summary>
         ///// <returns>true if the value of the <see cref="IDataGridViewCellStyle.DataSourceNullValue"></see> property is the default value; otherwise, false.</returns>

@@ -803,6 +803,12 @@ namespace Habanero.UI.Win
             get { return _dataGridViewCellStyle.Format; }
             set { _dataGridViewCellStyle.Format = value; }
         }
+
+        public IFormatProvider FormatProvider
+        {
+            get { return _dataGridViewCellStyle.FormatProvider; }
+            set { _dataGridViewCellStyle.FormatProvider = value; }
+        }
     }
 
     /// <summary>

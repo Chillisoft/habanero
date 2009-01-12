@@ -4,6 +4,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -1059,5 +1060,40 @@ namespace Habanero.Test.BO
             Assert.AreEqual(null, boProp.PropertyValueToDisplay);
         }
         #endregion
+
+//        [Test]
+//        public void Test_Loading()
+//        {
+//            //--------------- Set up test pack ------------------
+//            XmlClassLoader itsLoader = new XmlClassLoader();
+//            ClassDef itsClassDef =
+//                itsLoader.LoadClass(
+//                    @"
+//				<class name=""MyBO"" assembly=""Habanero.Test"">
+//					<property  name=""MyBoID""  type=""Guid""/>
+//					<property  name=""TestProp"" />
+//					<property  name=""TestProp3"" type=""Guid"" >
+//                      <businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" />
+//                    </property>
+//					<primaryKey>
+//						<prop name=""MyBoID"" />
+//					</primaryKey>
+//				</class>
+//
+//			");
+//            ClassDef.ClassDefs.Add(itsClassDef);
+//            MyBO myBO = new MyBO();
+//            myBO.Save();
+//            MyBO myBO2 = new MyBO();
+//            myBO2.TestProp3 = myBO.MyBoID.Value;
+//            myBO2.Save();
+
+//            //--------------- Test Preconditions ----------------
+
+//            //--------------- Execute Test ----------------------
+//            MyBO loadedMyBo = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(myBO2.ID);
+//            //--------------- Test Result -----------------------
+//            Assert.IsNotNull(loadedMyBo);
+//        }
     }
 }
