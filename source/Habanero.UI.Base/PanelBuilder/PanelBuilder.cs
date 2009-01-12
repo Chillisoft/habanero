@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
@@ -154,6 +155,9 @@ namespace Habanero.UI.Base
             IControlMapper controlMapper = ControlMapper.Create(formField.MapperTypeName,
                                                                 formField.MapperAssembly, inputControl,
                                                                 formField.PropertyName, !formField.Editable, _factory);
+
+            SetInputControlAlignment(formField, inputControl);
+
             if (formField.RowSpan > 1)
             {
                 if (inputControl is ITextBox) ((ITextBox)inputControl).Multiline = true;
@@ -165,6 +169,20 @@ namespace Habanero.UI.Base
             SetToolTip(formField, inputControl);
             panelInfo.LayoutManager.AddControl(inputControlInfo);
             return controlMapper;
+        }
+
+        private void SetInputControlAlignment(UIFormField formField, IControlHabanero inputControl)
+        {
+            if (!String.IsNullOrEmpty(formField.Alignment))
+            {
+                // Some controls have TextAlign and others don't. This code uses reflection to apply it if appropriate.
+                PropertyInfo propertyInfo = inputControl.GetType().GetProperty("TextAlign");
+                if (propertyInfo != null &&
+                    propertyInfo.PropertyType.Name == "HorizontalAlignment") //caters for the possibility of a custom control that implements textalign but doesn't have HorizontalAlignment as its type
+                {
+                    propertyInfo.SetValue(inputControl,HorizontalAlignment.Right, new object[0]);
+                }
+            }
         }
 
         private ILabel CreateAndAddLabel(IPanelInfo panelInfo, UIFormField formField)

@@ -386,6 +386,8 @@ namespace Habanero.BO.ClassDefinition
             return HasParameterValue(parameterName) ? this._parameters[parameterName] : null;
         }
 
+
+     
         public bool HasParameterValue(string parameterName)
         {
             return (this._parameters.ContainsKey(parameterName));
@@ -438,6 +440,14 @@ namespace Habanero.BO.ClassDefinition
         {
             get { return _uiFormColumn; }
             internal set { _uiFormColumn = value; }
+        }
+
+        ///<summary>
+        /// Returns the alignment property of the form field or null if none is provided
+        ///</summary>
+        public string Alignment
+        {
+            get { return HasParameterValue("alignment") ? Convert.ToString(GetParameterValue("alignment")) : null; }
         }
 
         private ClassDef GetClassDef()

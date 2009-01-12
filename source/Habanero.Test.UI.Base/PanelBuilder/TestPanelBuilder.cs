@@ -412,7 +412,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_RowSpan()
+        public void Test_BuildPanel_Parameter_RowSpan()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
@@ -435,7 +435,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_ColumnSpan()
+        public void Test_BuildPanel_Parameter_ColumnSpan()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
@@ -466,6 +466,48 @@ namespace Habanero.Test.UI.Base
             // check that the first control in the second column is moved down to accommodate the col spanning control
             Assert.AreEqual(row2Col1InputControl.Top, row2Col2InputControl.Top);
         }
+
+        [Test]
+        public void Test_BuildPanel_Parameter_DefaultAlignment_Left()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithNoAlignment();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.IsNull(singleFieldTab[0][0].Alignment);
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+            //---------------Test Result -----------------------
+           
+            Assert.IsInstanceOfType(typeof(ITextBox), panel.Controls[1]);
+            ITextBox control = (ITextBox) panel.Controls[1];
+            Assert.AreEqual(HorizontalAlignment.Left, control.TextAlign);
+        }
+
+        [Test]
+        public void Test_BuildPanel_Parameter_SetAlignment_Right()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithRightAlignment();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual("right", singleFieldTab[0][0].Alignment);
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+            //---------------Test Result -----------------------
+
+            Assert.IsInstanceOfType(typeof(ITextBox), panel.Controls[1]);
+            ITextBox control = (ITextBox)panel.Controls[1];
+            Assert.AreEqual(HorizontalAlignment.Right, control.TextAlign);
+        }
+
+        // TODO:
+        //   - build test subclass to test VWG
+        //   - extract method that converts parameter alignment strings into HorizontalAlignment and write tests for all cases (left/right/centre/center/upper-lower)
+        //   - test that alignment gets converted correctly for vwg controls
+        //   - add tests in places like TestTextBoxVWG to prove that TextAlign gets converted correctly (look at all controls that have TextAlign)
 
         [Test]
         public void Test_BuildPanel_CompulsoryFieldsAreBoldAndStarred()

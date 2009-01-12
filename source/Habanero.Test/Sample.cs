@@ -920,6 +920,45 @@ namespace Habanero.Test
             }
 
 
+            public UIFormTab GetFormTabOneFieldWithNoAlignment()
+            {
+                return GetSimpleUIFormDef_NoAlignment()[0];
+            }
+
+            private UIForm GetSimpleUIFormDef_NoAlignment()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""150"">
+									<field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public UIFormTab GetFormTabOneFieldWithRightAlignment()
+            {
+                return GetSimpleUIFormDef_RightAlignment()[0];
+            }
+
+            private UIForm GetSimpleUIFormDef_RightAlignment()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""150"">
+									<field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" >
+                                        <parameter name=""alignment"" value=""right""/>
+                                    </field>
+								</columnLayout>
+							</tab>
+						</form>");
+            }
         }
 
 
