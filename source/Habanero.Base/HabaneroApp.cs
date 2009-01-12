@@ -22,7 +22,7 @@ using System.Xml;
 using Habanero.Base.Exceptions;
 using log4net;
 using log4net.Config;
-using log4net.spi;
+using log4net.Core;
 
 namespace Habanero.Base
 {
@@ -95,12 +95,14 @@ namespace Habanero.Base
             }
             catch (Exception ex) {
                 string errorMessage = "There was a problem starting the application.";
-                if (log != null && log.Logger.IsEnabledFor(Level.ERROR)) {
+                if (log != null && log.Logger.IsEnabledFor(Level.Error))
+                {
                     log.Error("---------------------------------------------" +
                               Environment.NewLine + ExceptionUtilities.GetExceptionString(ex, 0, true));
                     errorMessage += " Please look at the log file for details of the problem.";
                 }
-                if (GlobalRegistry.UIExceptionNotifier != null) {
+                if (GlobalRegistry.UIExceptionNotifier != null)
+                {
                     GlobalRegistry.UIExceptionNotifier.Notify(
                         new UserException(errorMessage, ex),
                         "Problem in Startup:", "Problem in Startup");
@@ -113,7 +115,8 @@ namespace Habanero.Base
         private static void SetupLogging()
         {
             try {
-                DOMConfigurator.Configure();
+                XmlConfigurator.Configure();
+               
             }
             catch (Exception ex) {
                 throw new XmlException("There was an error reading the XML configuration file. " +
