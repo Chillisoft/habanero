@@ -359,27 +359,25 @@ namespace Habanero.Test.BO
         }
 
 
-        private BOPrimaryKey CreateBOPrimaryKeyString()
+        private static BOPrimaryKey CreateBOPrimaryKeyString()
         {
             PropDef propDef1 = new PropDef("PropName1", typeof(String), PropReadWriteRule.ReadWrite, null);
             BOPropCol propCol = new BOPropCol();
             
-            propCol.Add(propDef1.CreateBOProp(false));
-            PrimaryKeyDef keyDef = new PrimaryKeyDef();
-            keyDef.IsGuidObjectID = false;
+            propCol.Add(propDef1.CreateBOProp(true));
+            PrimaryKeyDef keyDef = new PrimaryKeyDef {IsGuidObjectID = false};
             keyDef.Add(propDef1);
             return (BOPrimaryKey) keyDef.CreateBOKey(propCol);
         }
 
-        private BOPrimaryKey CreatePrimaryBOKeyGuidAndString()
+        private static BOPrimaryKey CreatePrimaryBOKeyGuidAndString()
         {
             PropDef propDef1 = new PropDef("PropName1", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             PropDef propDef2 = new PropDef("PropName2", typeof(string), PropReadWriteRule.ReadWrite, null);
             BOPropCol propCol = new BOPropCol();
-            propCol.Add(propDef1.CreateBOProp(false));
-            propCol.Add(propDef2.CreateBOProp(false));
-            PrimaryKeyDef keyDef = new PrimaryKeyDef();
-            keyDef.IsGuidObjectID = false;
+            propCol.Add(propDef1.CreateBOProp(true));
+            propCol.Add(propDef2.CreateBOProp(true));
+            PrimaryKeyDef keyDef = new PrimaryKeyDef {IsGuidObjectID = false};
             keyDef.Add(propDef1);
             keyDef.Add(propDef2);
             return (BOPrimaryKey)keyDef.CreateBOKey(propCol);

@@ -20,13 +20,11 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.Util;
 using log4net;
 
 namespace Habanero.BO
@@ -67,6 +65,7 @@ namespace Habanero.BO
         protected IRelationshipCol _relationshipCol;
         private ITransactionLog _transactionLog;
         private IBusinessObjectAuthorisation _authorisationRules;
+
         #endregion //Fields
 
         #region Constructors
@@ -78,7 +77,7 @@ namespace Habanero.BO
         {
         }
 
-        protected BusinessObject(SerializationInfo info, StreamingContext context) 
+        protected BusinessObject(SerializationInfo info, StreamingContext context)
         {
             Initialise(ClassDef.ClassDefs[this.GetType()]);
             foreach (IBOProp prop in _boPropCol)
@@ -95,7 +94,7 @@ namespace Habanero.BO
             {
                 info.AddValue(prop.PropertyName, prop.Value);
             }
-            info.AddValue("Status",this.Status);
+            info.AddValue("Status", this.Status);
         }
 
         /// <summary>
@@ -114,8 +113,8 @@ namespace Habanero.BO
             if (currentClassDef == null) return;
             while (currentClassDef.IsUsingClassTableInheritance())
             {
-                while (currentClassDef.SuperClassClassDef != null &&
-                       currentClassDef.SuperClassClassDef.PrimaryKeyDef == null)
+                while (currentClassDef.SuperClassClassDef != null
+                       && currentClassDef.SuperClassClassDef.PrimaryKeyDef == null)
                 {
                     currentClassDef = currentClassDef.SuperClassClassDef;
                 }
@@ -160,7 +159,8 @@ namespace Habanero.BO
             {
                 if (ClassDef.ClassDefs.Contains(GetType()))
                     _classDef = ClassDef.ClassDefs[GetType()];
-            } else _classDef = classDef;
+            }
+            else _classDef = classDef;
             ConstructFromClassDef(true);
             Guid myID = Guid.NewGuid();
             if (_primaryKey != null)
@@ -171,17 +171,18 @@ namespace Habanero.BO
 
             if (_classDef == null)
             {
-                throw new HabaneroDeveloperException(
-                    "There is an error constructing a business object. Please refer to the system administrator",
-                    "The Class could not be constructed since no classdef could be loaded");
+                throw new HabaneroDeveloperException
+                    ("There is an error constructing a business object. Please refer to the system administrator",
+                     "The Class could not be constructed since no classdef could be loaded");
             }
             if (ID == null)
             {
-                throw new HabaneroDeveloperException(
-                    "There is an error constructing a business object. Please refer to the system administrator",
-                    "The Class could not be constructed since no _primaryKey has been created");
+                throw new HabaneroDeveloperException
+                    ("There is an error constructing a business object. Please refer to the system administrator",
+                     "The Class could not be constructed since no _primaryKey has been created");
             }
         }
+
         /// <summary>
         /// Constructs the class
         /// </summary>
@@ -204,9 +205,9 @@ namespace Habanero.BO
         {
             ClassDef classDefToUseForPrimaryKey = GetClassDefToUseForPrimaryKey();
 
-            if ((classDefToUseForPrimaryKey.SuperClassDef == null) ||
-                (classDefToUseForPrimaryKey.IsUsingConcreteTableInheritance()) ||
-                (_classDef.IsUsingClassTableInheritance()))
+            if ((classDefToUseForPrimaryKey.SuperClassDef == null)
+                || (classDefToUseForPrimaryKey.IsUsingConcreteTableInheritance())
+                || (_classDef.IsUsingClassTableInheritance()))
             {
                 if (classDefToUseForPrimaryKey.PrimaryKeyDef != null)
                 {
@@ -217,8 +218,9 @@ namespace Habanero.BO
             {
                 if (classDefToUseForPrimaryKey.PrimaryKeyDef != null)
                 {
-                    _primaryKey = (BOPrimaryKey)
-                                  classDefToUseForPrimaryKey.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_boPropCol);
+                    _primaryKey =
+                        (BOPrimaryKey)
+                        classDefToUseForPrimaryKey.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_boPropCol);
                 }
             }
             if (_primaryKey == null)
@@ -236,6 +238,7 @@ namespace Habanero.BO
             }
             return classDefToUseForPrimaryKey;
         }
+
         /// <summary>
         /// Constructs a class definition
         /// </summary>
@@ -255,11 +258,7 @@ namespace Habanero.BO
         /// </summary>
         internal string DirtyXML
         {
-            get
-            {
-                return "<" + ClassName + " ID='" + ID + "'>" +
-                       _boPropCol.DirtyXml + "</" + ClassName + ">";
-            }
+            get { return "<" + ClassName + " ID='" + ID + "'>" + _boPropCol.DirtyXml + "</" + ClassName + ">"; }
         }
 
         /// <summary>
@@ -297,9 +296,9 @@ namespace Habanero.BO
             get
             {
                 ClassDef classDefToUseForPrimaryKey = GetClassDefToUseForPrimaryKey();
-                return (classDefToUseForPrimaryKey.IsUsingSingleTableInheritance()) 
-                        ? classDefToUseForPrimaryKey.SuperClassClassDef.TableName 
-                        : classDefToUseForPrimaryKey.TableName;
+                return (classDefToUseForPrimaryKey.IsUsingSingleTableInheritance())
+                           ? classDefToUseForPrimaryKey.SuperClassClassDef.TableName
+                           : classDefToUseForPrimaryKey.TableName;
             }
         }
 
@@ -326,16 +325,18 @@ namespace Habanero.BO
         {
             if (_classDef == null)
             {
-                throw new NullReferenceException(String.Format(
-                         "An error occurred while loading the class definitions (ClassDef.xml) for " +
-                         "'{0}'. Check that the class exists in that " +
-                         "namespace and assembly and that there are corresponding " +
-                         "class definitions for this class.\n" +
-                         "Please check that the ClassDef.xml file is either an imbedded resource " +
-                         "or is copied to the output directory via the appropriate postbuild command " +
-                         "(for more help see FAQ)", GetType()));
+                throw new NullReferenceException
+                    (String.Format
+                         ("An error occurred while loading the class definitions (ClassDef.xml) for "
+                          + "'{0}'. Check that the class exists in that "
+                          + "namespace and assembly and that there are corresponding "
+                          + "class definitions for this class.\n"
+                          + "Please check that the ClassDef.xml file is either an imbedded resource "
+                          + "or is copied to the output directory via the appropriate postbuild command "
+                          + "(for more help see FAQ)", GetType()));
             }
         }
+
         private void SetupPrimaryKey()
         {
             PrimaryKeyDef primaryKeyDef = ClassDef.GetPrimaryKeyDef();
@@ -379,6 +380,7 @@ namespace Habanero.BO
         {
             _transactionLog = transactionLog;
         }
+
         /// <summary>
         /// Sets the IBusinessObjectAuthorisation to that specified
         /// </summary>
@@ -387,6 +389,7 @@ namespace Habanero.BO
         {
             _authorisationRules = authorisationRules;
         }
+
         /// <summary>
         /// Sets the business object update log to the one specified
         /// </summary>
@@ -444,8 +447,9 @@ namespace Habanero.BO
             message = "";
             if (_authorisationRules == null) return true;
             if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanCreate)) return true;
-            message = string.Format("The logged on user {0} is not authorised to create a {1}",
-                    Thread.CurrentPrincipal.Identity.Name, this.ClassName);
+            message = string.Format
+                ("The logged on user {0} is not authorised to create a {1}", Thread.CurrentPrincipal.Identity.Name,
+                 this.ClassName);
             return false;
         }
 
@@ -460,8 +464,9 @@ namespace Habanero.BO
             message = "";
             if (_authorisationRules == null) return true;
             if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanRead)) return true;
-            message = string.Format("The logged on user {0} is not authorised to read a {1}",
-                    Thread.CurrentPrincipal.Identity.Name, this.ClassName);
+            message = string.Format
+                ("The logged on user {0} is not authorised to read a {1}", Thread.CurrentPrincipal.Identity.Name,
+                 this.ClassName);
             return false;
         }
 
@@ -481,8 +486,9 @@ namespace Habanero.BO
             message = "";
             if (_authorisationRules == null) return true;
             if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanUpdate)) return true;
-            message = string.Format("The logged on user {0} is not authorised to update {1} Identified By {2}",
-                    Thread.CurrentPrincipal.Identity.Name, this.ClassName, this.ID.AsString_CurrentValue());
+            message = string.Format
+                ("The logged on user {0} is not authorised to update {1} Identified By {2}",
+                 Thread.CurrentPrincipal.Identity.Name, this.ClassName, this.ID.AsString_CurrentValue());
             return false;
         }
 
@@ -500,9 +506,10 @@ namespace Habanero.BO
         {
             message = "";
             if (_authorisationRules == null) return true;
-            if(_authorisationRules.IsAuthorised(BusinessObjectActions.CanDelete)) return true;
-            message = string.Format("The logged on user {0} is not authorised to delete {1} Identified By {2}", 
-                    Thread.CurrentPrincipal.Identity.Name, this.ClassName, this.ID.AsString_CurrentValue());
+            if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanDelete)) return true;
+            message = string.Format
+                ("The logged on user {0} is not authorised to delete {1} Identified By {2}",
+                 Thread.CurrentPrincipal.Identity.Name, this.ClassName, this.ID.AsString_CurrentValue());
             return false;
         }
 
@@ -514,7 +521,7 @@ namespace Habanero.BO
         ///<returns>Returns the value if found</returns>
         public T GetPropertyValue<T>(string propName)
         {
-            return (T)GetPropertyValue(propName);
+            return (T) GetPropertyValue(propName);
         }
 
         /// <summary>
@@ -530,9 +537,8 @@ namespace Habanero.BO
 
             if (Props.Contains(propName))
                 return Props[propName].Value;
-            throw new InvalidPropertyNameException("Property '" + propName +
-                                                   "' does not exist on a business object of type '" +
-                                                   GetType().Name + "'");
+            throw new InvalidPropertyNameException
+                ("Property '" + propName + "' does not exist on a business object of type '" + GetType().Name + "'");
         }
 
         /// <summary>
@@ -549,7 +555,7 @@ namespace Habanero.BO
             if (source.Joins.Count > 0)
             {
                 return businessObject.GetPropertyValue(source.Joins[0].ToSource, propName);
-            } 
+            }
             return businessObject.GetPropertyValue(propName);
         }
 
@@ -588,14 +594,14 @@ namespace Habanero.BO
             IBOProp prop = Props[propName];
             if (prop == null)
             {
-                throw new InvalidPropertyNameException(String.Format(
-                               "The given property name '{0}' does not exist in the " +
-                               "collection of properties for the class '{1}'.",
-                               propName, ClassName));
+                throw new InvalidPropertyNameException
+                    (String.Format
+                         ("The given property name '{0}' does not exist in the "
+                          + "collection of properties for the class '{1}'.", propName, ClassName));
             }
             object propValue = prop.Value;
             object newPropValue1;
-            ((BOProp)prop).ParsePropValue(newPropValue, out newPropValue1);
+            ((BOProp) prop).ParsePropValue(newPropValue, out newPropValue1);
             if (PropValueHasChanged(propValue, newPropValue1))
             {
                 if (!Status.IsEditing)
@@ -848,8 +854,7 @@ namespace Habanero.BO
         /// </summary>
         public virtual void Save()
         {
-            ITransactionCommitter committer =
-                BORegistry.DataAccessor.CreateTransactionCommitter();
+            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
             committer.AddBusinessObject(this);
             committer.CommitTransaction();
         }
@@ -878,6 +883,7 @@ namespace Habanero.BO
             FireUpdatedEvent();
             FireRestoredEvent();
         }
+
         /// <summary>
         /// Marks the business object for deleting.  Calling Save() or saving the transaction will
         /// then carry out the deletion from the database.
@@ -887,12 +893,12 @@ namespace Habanero.BO
             CheckIsDeletable();
             if (Status.IsNew)
             {
-                throw new HabaneroDeveloperException(
-                    String.Format("This '{0}' cannot be deleted as it has never existed in the database.",
-                                  ClassDef.DisplayName),
-                    String.Format("A '{0}' cannot be deleted when its status is new and does not exist in the database.",
-                                  ClassDef.ClassName));
-
+                throw new HabaneroDeveloperException
+                    (String.Format
+                         ("This '{0}' cannot be deleted as it has never existed in the database.", ClassDef.DisplayName),
+                     String.Format
+                         ("A '{0}' cannot be deleted when its status is new and does not exist in the database.",
+                          ClassDef.ClassName));
             }
             if (!Status.IsEditing)
             {
@@ -908,7 +914,9 @@ namespace Habanero.BO
         /// Marks the business object for deleting.  Calling Save() will
         /// then carry out the deletion from the database.
         /// </summary>
-        [Obsolete("This method has been replaced with MarkForDelete() since it is far more explicit that this does not instantly delete the business object.")]
+        [Obsolete(
+            "This method has been replaced with MarkForDelete() since it is far more explicit that this does not instantly delete the business object."
+            )]
         public void Delete()
         {
             MarkForDelete();
@@ -936,12 +944,21 @@ namespace Habanero.BO
             }
             else
             {
-                BusinessObjectManager.Instance.Remove(this._primaryKey.AsString_PreviousValue());
+
+                if (BusinessObjectManager.Instance.Contains(this))
+                {
+                    BusinessObjectManager.Instance.Remove(this.ID.AsString_LastPersistedValue());
+                    BusinessObjectManager.Instance.Remove(this.ID.AsString_PreviousValue());
+                    BusinessObjectManager.Instance.Remove(this.ID.AsString_CurrentValue());
+                }
                 StorePersistedPropertyValues();
                 SetStateAsUpdated();
-                if (!BusinessObjectManager.Instance.Contains(ID))
+                if (!BusinessObjectManager.Instance.Contains(this))
                 {
-                    BusinessObjectManager.Instance.Add(this);
+                    if (!BusinessObjectManager.Instance.Contains(this.ID.AsString_CurrentValue()))
+                    {
+                        BusinessObjectManager.Instance.Add(this);
+                    }
                 }
                 FireSaved();
             }
@@ -958,10 +975,6 @@ namespace Habanero.BO
         private void SetStateAsUpdated()
         {
             _boStatus.IsNew = false;
-            if (!(_boPropCol == null))
-            {
-                _boPropCol.SetIsObjectNew(false);
-            }
             _boStatus.IsDeleted = false;
             _boStatus.IsDirty = false;
             _boStatus.IsEditing = false;
@@ -1134,6 +1147,7 @@ namespace Habanero.BO
 //                _concurrencyControl.ReleaseReadLocks();
 //            }
 //        }
+
         #endregion //Concurrency
 
         ///<summary>
@@ -1166,6 +1180,7 @@ namespace Habanero.BO
         {
             _boStatus.SetBOFlagValue(status, value);
         }
+
         /// <summary>
         /// Checks if the object can be persisted. This
         /// Checks the basic rules e.g. If you are deleting then
@@ -1183,7 +1198,7 @@ namespace Habanero.BO
                 errMsg = "The object has already been deleted from the dataBase and cannot be persisted again";
                 return false;
             }
-            if (this.Status.IsDeleted && !this.Status.IsNew )
+            if (this.Status.IsDeleted && !this.Status.IsNew)
             {
                 return this.IsDeletable(out errMsg);
             }
@@ -1192,7 +1207,7 @@ namespace Habanero.BO
             {
                 return this.IsCreatable(out errMsg);
             }
-            
+
             return !this.Status.IsDirty || this.IsEditable(out errMsg);
         }
 
@@ -1211,6 +1226,5 @@ namespace Habanero.BO
         {
             return false;
         }
- 
     }
 }

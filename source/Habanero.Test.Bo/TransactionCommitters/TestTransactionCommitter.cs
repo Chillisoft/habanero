@@ -43,11 +43,6 @@ namespace Habanero.Test.BO.TransactionCommitters
         {
             //runs every time any testmethod is complete
         }
-
-        #endregion
-
-        private const string _customRuleErrorMessage = "Broken Rule";
-
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
@@ -55,6 +50,11 @@ namespace Habanero.Test.BO.TransactionCommitters
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
         }
+        #endregion
+
+        private const string _customRuleErrorMessage = "Broken Rule";
+
+
 
         private static MockBO CreateSavedMockBO()
         {

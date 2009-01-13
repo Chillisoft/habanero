@@ -59,7 +59,7 @@ namespace Habanero.BO
         private Dictionary<string, string> _keyValueDictionary = new Dictionary<string, string>();
 
         private DateTime _lastCallTime;
-        private OrderCriteria _sort;
+        private OrderCriteria _orderCriteria;
         private readonly string _criteriaString;
         private readonly string _sortString;
 
@@ -214,14 +214,14 @@ namespace Habanero.BO
         /// The possible formats are: "property", "property asc",
         /// "property desc" and "property des".
         /// </summary>
-        public OrderCriteria Sort
+        public OrderCriteria OrderCriteria
         {
-            get { if(_sort == null && !string.IsNullOrEmpty(_sortString))
+            get { if(_orderCriteria == null && !string.IsNullOrEmpty(_sortString))
             {
                 ClassDef classDef = this.LookupBoClassDef;
-                _sort = QueryBuilder.CreateOrderCriteria(classDef, _sortString);
+                _orderCriteria = QueryBuilder.CreateOrderCriteria(classDef, _sortString);
             }
-                return _sort;
+                return _orderCriteria;
             }
             //set { _sort = FormatSortAttribute(value); }
         }
@@ -283,7 +283,7 @@ namespace Habanero.BO
             }
 
             IBusinessObjectCollection col = GetBusinessObjectCollection();
-            _displayValueDictionary = CreateDisplayValueDictionary(col, Sort == null);
+            _displayValueDictionary = CreateDisplayValueDictionary(col, OrderCriteria == null);
             FillKeyValueDictionary();
             _lastCallTime = DateTime.Now;
             return _displayValueDictionary;
@@ -298,7 +298,7 @@ namespace Habanero.BO
         {
             ClassDef classDef = LookupBoClassDef;
             return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
-                (classDef, this.Criteria, this.Sort);
+                (classDef, this.Criteria, this.OrderCriteria);
         }
 
         ///<summary>
@@ -429,7 +429,7 @@ namespace Habanero.BO
         /// <returns>Returns an ICollection object</returns>
         private ICollection CreateValueList(IBusinessObjectCollection col)
         {
-            if (this.Sort == null)
+            if (this.OrderCriteria == null)
             {
                 SortedStringCollection valueList = new SortedStringCollection();
                 foreach (IBusinessObject bo in col)

@@ -222,6 +222,7 @@
     <Compile Include="BusinessObjectLoader\TestSource.cs" />
     <Compile Include="BusinessObjectLoader\TestSourceDB.cs" />
     <Compile Include="TestPropertyLink.cs" />
+    <Compile Include="TransactionCommitters\TestTransactionalBusinessObject.cs" />
     <Compile Include="TransactionCommitters\TestTransactionCommitter.cs" />
     <Compile Include="Relationship\TestMultipleRelationship.cs" />
     <Compile Include="Loaders\TestXmlTriggerLoader.cs" />

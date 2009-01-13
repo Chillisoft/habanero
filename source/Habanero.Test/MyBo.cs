@@ -200,7 +200,7 @@ namespace Habanero.Test
         }
 
 
-        public static ClassDef LoadDefaultClassDef_CompulsoryField()
+        public static ClassDef LoadDefaultClassDef_CompulsoryField_TestProp()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef =

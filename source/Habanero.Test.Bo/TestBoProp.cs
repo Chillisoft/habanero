@@ -644,7 +644,7 @@ namespace Habanero.Test.BO
         [Test, ExpectedException(typeof(BOPropWriteException))]
         public void TestUpdateProp_WriteOnce_NewPersisted_WriteAgain()
         {
-            IBOProp boProp = CreateWriteOnceBoProp(true);
+            BOProp boProp = (BOProp) CreateWriteOnceBoProp(true);
             boProp.BackupPropValue();
             boProp.IsObjectNew = false;
             boProp.Value = "NewValue";
@@ -653,7 +653,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestUpdateProp_WriteOnce_NewPersisted_WriteAgain_SameValue()
         {
-            IBOProp boProp = CreateWriteOnceBoProp(true);
+            BOProp boProp = (BOProp) CreateWriteOnceBoProp(true);
             boProp.BackupPropValue();
             boProp.IsObjectNew = false;
             boProp.Value = "TestValue4";
@@ -665,12 +665,40 @@ namespace Habanero.Test.BO
             CreateWriteOnceBoProp(false);
         }
 
-        [Test, ExpectedException(typeof(BOPropWriteException))]
+        [Test]
+        public void Test_BackUpProp_SetsIsObjectNewFalse()
+        {
+            //---------------Set up test pack-------------------
+            BOProp boProp = (BOProp)CreateWriteOnceBoProp(false);
+            boProp.IsObjectNew = true;
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(boProp.IsObjectNew);
+            //---------------Execute Test ----------------------
+            boProp.BackupPropValue();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(boProp.IsObjectNew);
+        }
+
+        [Test]
         public void TestUpdateProp_WriteOnce_Existing_WriteAgain()
         {
-            IBOProp boProp = CreateWriteOnceBoProp(false);
+            BOProp boProp = (BOProp) CreateWriteOnceBoProp(false);
             boProp.BackupPropValue();
-            boProp.Value = "NewValue";
+            //-------------------Assert Precondition ----------------
+            string message;
+            Assert.IsFalse(boProp.IsEditable(out message));
+            StringAssert.Contains("The property 'Test Prop' is not editable since it is set up as WriteOnce", message);
+            //-------------------Execute Test -----------------------
+            try
+            {
+                boProp.Value = "NewValue";
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (BOPropWriteException ex)
+            {
+                StringAssert.Contains("The property 'Test Prop' is not editable since it is set up as WriteOnce", ex.Message);
+            }
         }
 
         [Test]
@@ -712,7 +740,7 @@ namespace Habanero.Test.BO
         [Test, ExpectedException(typeof(BOPropWriteException))]
         public void TestUpdateProp_WriteNew_NewPersisted_WriteAgain()
         {
-            IBOProp boProp = CreateWriteNewBoProp(true);
+            BOProp boProp = (BOProp) CreateWriteNewBoProp(true);
             boProp.BackupPropValue();
             boProp.IsObjectNew = false;
             boProp.Value = "NewValue";
@@ -754,7 +782,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestUpdateProp_WriteNotNew_NewPersisted_WriteAgain()
         {
-            IBOProp boProp = CreateWriteNotNewBoProp(true);
+            BOProp boProp = (BOProp) CreateWriteNotNewBoProp(true);
             boProp.BackupPropValue();
             boProp.IsObjectNew = false;
             WriteTestValues(boProp);

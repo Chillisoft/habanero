@@ -161,7 +161,6 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsNotNull(panelInfo.PanelInfos);
             Assert.AreEqual(0, panelInfo.PanelInfos.Count);
-
         }
 
         [Test]
@@ -172,13 +171,14 @@ namespace Habanero.Test.UI.Base
             PanelBuilder panelBuilder = new PanelBuilder(_controlFactory);
             IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(classDef.UIDefCol["default"].UIForm[0]);
             Sample businessObject = new Sample();
+            
             panelInfo.BusinessObject = businessObject;
 
             //businessObject.SetPropertyValue("SampleText2", "sdlkfj");
             PanelInfo.FieldInfo fieldInfo = panelInfo.FieldInfos["SampleText2"];
             panelInfo.ApplyChangesToBusinessObject();
             IErrorProvider errorProvider = fieldInfo.ControlMapper.ErrorProvider;
-
+            
             //---------------Assert Precondition----------------
             Assert.IsTrue(errorProvider.GetError(fieldInfo.InputControl).Length > 0);
             //---------------Execute Test ----------------------

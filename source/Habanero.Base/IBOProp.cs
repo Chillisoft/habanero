@@ -59,6 +59,9 @@ namespace Habanero.Base
         /// <summary>
         /// Indicates whether the property value is valid. The property will be valid if the current value, See <see cref="Value"/>.
         /// conforms to all the Property Rules for the property See <see cref="IPropRule"/>.
+        /// NNB For performance reasons it was decided to not run the validation code 
+        /// every time Isvalid is called on the boProp instead the boProp has a <see cref="Validate"/>
+        /// which runs the validation code and sets the valid message and status on the BOProp.
         /// </summary>
         bool IsValid { get; }
 
@@ -131,7 +134,6 @@ namespace Habanero.Base
         bool IsObjectNew
         {
             get;
-            set;
         }
 
         /// <summary>
@@ -174,8 +176,11 @@ namespace Habanero.Base
 
         /// <summary>
         /// Validates whether the property values set for the BOProp are valid
-        /// as compared to the BOProp rules. This is used by the Business Object 
-        /// Validate Method.
+        /// as compared to the BOProp rules.
+        /// NNB For performance reasons it was decided to not run the validation code 
+        /// every time Isvalid is called on the boProp instead the boProp has a <see cref="Validate"/>
+        /// which runs the validation code and sets the valid message and status on the BOProp.
+        /// This is used by the <see cref="BOPropCol"/> when  IsValid is called on the <see cref="BOPropCol"/>.
         /// </summary>
         void Validate();
     }

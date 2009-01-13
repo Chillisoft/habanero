@@ -207,11 +207,9 @@ namespace Habanero.Test.BO.Security
         {
             //---------------Set up test pack-------------------
             PropDef propDef = new PropDef("Name", typeof(string), PropReadWriteRule.WriteOnce, "DD", "", false, false);
-            BOProp prop1 = new BOProp(propDef);
-            prop1.Value = "new Value";
-            prop1.IsObjectNew = true;
+            BOProp prop1 = new BOProp(propDef) {Value = "new Value"};
             prop1.BackupPropValue();
-
+            prop1.IsObjectNew = true;
             //---------------Assert Precondition----------------
             Assert.AreEqual(PropReadWriteRule.WriteOnce, prop1.PropDef.ReadWriteRule);
             Assert.IsNotNull(prop1.PersistedPropertyValue);

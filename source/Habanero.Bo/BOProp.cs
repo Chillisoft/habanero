@@ -49,7 +49,7 @@ namespace Habanero.BO
         protected object _persistedValue;
         protected bool _origValueIsValid = true;
         protected string _origInvalidReason = "";
-        protected bool _isObjectNew = true;
+        protected bool _isObjectNew;
         protected object _valueBeforeLastEdit;
         private IBOPropAuthorisation _boPropAuthorisation;
 
@@ -139,9 +139,9 @@ namespace Habanero.BO
 //            _isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
 
             _currentValue = newValue;
-            _isObjectNew = isObjectNew;
             //Set up origional properties s.t. property can be backed up and restored.
             BackupPropValue();
+            this.IsObjectNew = isObjectNew;
         }
         /// <summary>
         /// This method provides a the functionality to convert any object to the appropriate
@@ -184,6 +184,7 @@ namespace Habanero.BO
             _valueBeforeLastEdit = _currentValue;
             _origInvalidReason = _invalidReason;
             _origValueIsValid = _isValid;
+            _isObjectNew = false;
             _isDirty = false;
         }
 
@@ -330,7 +331,7 @@ namespace Habanero.BO
         public bool IsObjectNew
         {
             get { return _isObjectNew; }
-            set { _isObjectNew = value; }
+            internal set { _isObjectNew = value; }
         }
 
         /// <summary>

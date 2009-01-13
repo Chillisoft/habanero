@@ -76,8 +76,8 @@ namespace Habanero.Test.BO
             //Create object in DB
 
             ContactPersonOptimisticLockingVersionNumberDB.LoadDefaultClassDef();
-            ContactPersonOptimisticLockingVersionNumberDB contactPerson = new ContactPersonOptimisticLockingVersionNumberDB();
-            contactPerson.Surname = Guid.NewGuid().ToString();
+            ContactPersonOptimisticLockingVersionNumberDB contactPerson = new ContactPersonOptimisticLockingVersionNumberDB
+                     {Surname = Guid.NewGuid().ToString()};
             AddObjectToDelete(contactPerson);
             contactPerson.Save();
             //Clear object manager
@@ -95,7 +95,7 @@ namespace Habanero.Test.BO
             try
             {
                 duplicateContactPerson.FirstName = Guid.NewGuid().ToString();
-                Assert.Fail();
+                Assert.Fail("Should throw error");
             }    
                 //---------------Test Result -----------------------
                 //Raise Exception that the object has been edited since 

@@ -171,6 +171,7 @@ namespace Habanero.Base
             StringBuilder reason = new StringBuilder();
             foreach (IBOProp prop in this)
             {
+                prop.Validate();
                 if (!prop.IsValid)
                 {
                     reason.Append(prop.InvalidReason + Environment.NewLine);
@@ -179,18 +180,6 @@ namespace Habanero.Base
             }
             invalidReason = reason.ToString();
             return propsValid;
-        }
-
-        /// <summary>
-        /// Sets the IsObjectNew setting in each property to that specified
-        /// </summary>
-        /// <param name="bValue">Whether the object is set as new</param>
-        public void SetIsObjectNew(bool bValue)
-        {
-            foreach (IBOProp prop in this)
-            {
-                prop.IsObjectNew = bValue;
-            }
         }
 
         /// <summary>

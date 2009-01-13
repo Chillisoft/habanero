@@ -308,17 +308,18 @@ namespace Habanero.Test.BO.TransactionCommitters
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
-            ContactPersonTestBO contactPersonCompositeKey = GetUnsavedContactPersonCompositeKey();
+            ContactPersonTestBO contactPersonCompositeKey = new ContactPersonTestBO();
             string oldID = contactPersonCompositeKey.ID.AsString_CurrentValue();
+            contactPersonCompositeKey.ContactPersonID = Guid.NewGuid();
+            contactPersonCompositeKey.Surname = "Somebody";
+            contactPersonCompositeKey.FirstName = "Else";
             TransactionCommitterDB committer = new TransactionCommitterDB();
             committer.AddBusinessObject(contactPersonCompositeKey);
             //---------------Execute Test ----------------------
             committer.CommitTransaction();
             //---------------Test Result -----------------------
             IPrimaryKey objectID = contactPersonCompositeKey.ID;
-//            Assert.AreEqual(objectID.GetOrigObjectID(), objectID.GetObjectId());
-//            Assert.IsNotNull(BusinessObjectManager.Instance[objectID.GetOrigObjectID()]);
-            Assert.AreNotEqual(oldID, objectID);
+            Assert.AreNotEqual(oldID, objectID.AsString_CurrentValue());
             Assert.IsFalse(BusinessObjectManager.Instance.Contains(oldID));
         }
 

@@ -413,7 +413,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestIsCompulsory_True()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField();
+            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             UIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
             //---------------Assert Precondition----------------
 
@@ -441,7 +441,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestLabelTextHasStarIfCompulsory()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField();
+            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             UIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
             //---------------Assert Precondition----------------
 
@@ -456,7 +456,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestLabelTextHasStarIfCompulsory_Generated()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField();
+            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             UIFormField field = classDef.UIDefCol["default"].GetFormField("TestProp");
             field.Label = "";
             //---------------Assert Precondition----------------

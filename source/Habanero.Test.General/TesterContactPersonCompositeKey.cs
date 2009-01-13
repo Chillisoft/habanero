@@ -20,6 +20,7 @@
 using System;
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -62,12 +63,14 @@ namespace Habanero.Test.General
         {
             SetupDBConnection();
             DeleteAllContactPersons();
+            ClassDef.ClassDefs.Clear();
+            new Car();
             CreateUpdatedContactPersonTestPack();
             CreateSaveContactPersonTestPack();
             CreateDeletedPersonTestPack();
         }
 
-        private void DeleteAllContactPersons()
+        private static void DeleteAllContactPersons()
         {
             //string connectstring = @"data source=Core;database=WorkShopManagement;uid=sa;pwd=;";
 

@@ -86,7 +86,122 @@ namespace Habanero.Test.BO
             Assert.AreEqual(new Guid("{E6E8DC44-59EA-4e24-8D53-4A43DC2F25E7}"), bo.GetPropertyValue("TestProp2"));
         }
 
+//        [Test]
+//        public void Test_BusinessObject_WithBrokenRules_ValidUntilValidateCalled()
+//        {
+//            //---------------Set up test pack-------------------
+//            ClassDef.ClassDefs.Clear();
+//            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+//            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
+//            IBOProp boProp = bo.Props["TestProp"];
+//            //---------------Assert Precondition----------------
+//            Assert.IsTrue(boProp.IsValid);
+//            //---------------Execute Test ----------------------
+//            bo.Validate();
+//            //---------------Test Result -----------------------
+//            StringAssert.Contains("Test Prop' is a compulsory field and has no value", boProp.InvalidReason);
+//            Assert.IsFalse(boProp.IsValid);
+//            StringAssert.Contains("Test Prop' is a compulsory field and has no value", bo.Status.IsValidMessage);
+//            Assert.IsFalse(bo.IsValid());
+//        }
+        //bool valid = Props.IsValid(out invalidReason);
+        [Test]
+        public void Test_BusinessObject_WithBrokenRules_ValidUntil_PropsIsValidCalled()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
+            IBOProp boProp = bo.Props["TestProp"];
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(boProp.IsValid);
+            //---------------Execute Test ----------------------
+            string invalidReason;
+            bo.Props.IsValid(out invalidReason);
+            //---------------Test Result -----------------------
+            StringAssert.Contains("Test Prop' is a compulsory field and has no value", boProp.InvalidReason);
+            Assert.IsFalse(boProp.IsValid);
+            StringAssert.Contains("Test Prop' is a compulsory field and has no value", invalidReason);
+        }
 
+        [Test]
+        public void Test_BusinessObject_WithBrokenRules_ValidUntil_AfterBOProp_IsValidCalled()
+        {
+            //For performance reasons it was decided to not run the validation code 
+            // every time Isvalid is called on the boProp instead the boProp has a validate method
+            // which runs the validation code and sets the valid message and status on the BOProp.
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
+            IBOProp boProp = bo.Props["TestProp"];
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(boProp.IsValid);
+            //---------------Execute Test ----------------------
+            bool valid = boProp.IsValid;
+            //---------------Test Result -----------------------
+            Assert.AreEqual("", boProp.InvalidReason);
+            Assert.IsTrue(valid);
+        }
+        [Test]
+        public void Test_BusinessObject_WithBrokenRules_ValidUntilIsValidCalled()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
+            IBOProp boProp = bo.Props["TestProp"];
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(boProp.IsValid);
+            //---------------Execute Test ----------------------
+            bo.IsValid();
+            //---------------Test Result -----------------------
+            StringAssert.Contains("Test Prop' is a compulsory field and has no value", boProp.InvalidReason);
+            Assert.IsFalse(boProp.IsValid);
+            StringAssert.Contains("Test Prop' is a compulsory field and has no value", bo.Status.IsValidMessage);
+            Assert.IsFalse(bo.IsValid());
+        }
+//        [Test]
+//        public void Test_BusinessObject_WithNoBrokenRules_Isvalid_AfterValidateCalled()
+//        {
+//            //---------------Set up test pack-------------------
+//            ClassDef.ClassDefs.Clear();
+//            ClassDef classDef = MyBO.LoadClassDefsNoUIDef();
+//            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
+//            IBOProp boProp = bo.Props["TestProp"];
+//            //---------------Assert Precondition----------------
+//            Assert.IsTrue(boProp.IsValid);
+//            //---------------Execute Test ----------------------
+//            bo.Validate();
+//            //---------------Test Result -----------------------
+//            Assert.AreEqual("", boProp.InvalidReason);
+//            Assert.IsTrue(boProp.IsValid);
+//            Assert.AreEqual("", bo.Status.IsValidMessage);
+//            Assert.IsTrue(bo.IsValid());
+//        }
+
+        [Test]
+        public void Test_BusinessObject_TrySaveThrowsUserError_IfWithBrokenRules()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
+            IBOProp boProp = bo.Props["TestProp"];
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(boProp.IsValid);
+            //---------------Execute Test ----------------------
+            try
+            {
+                bo.Save();
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (BusObjectInAnInvalidStateException ex)
+            {
+                StringAssert.Contains("Test Prop' is a compulsory field and has no value", ex.Message);
+            }
+        }
         [Test]
         public void TestGetPropertyValueToDisplay()
         {

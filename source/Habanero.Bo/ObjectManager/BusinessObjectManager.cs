@@ -50,14 +50,14 @@ namespace Habanero.BO
     ///</summary>
     public class BusinessObjectManager
     {
-        private static readonly BusinessObjectManager _businessObjectManager = new BusinessObjectManager();
+        protected static BusinessObjectManager _businessObjectManager = new BusinessObjectManager();
 
-        private readonly Dictionary<string, WeakReference> _loadedBusinessObjects =
+        protected readonly Dictionary<string, WeakReference> _loadedBusinessObjects =
             new Dictionary<string, WeakReference>();
 
         private readonly EventHandler<BOKeyEventArgs> _updateIDEventHandler;
 
-        private BusinessObjectManager()
+        protected BusinessObjectManager()
         {
             _updateIDEventHandler = ID_OnUpdated;
         }
@@ -102,7 +102,7 @@ namespace Habanero.BO
             //If object is new and does not have IsObjectID then add with the Guid.?
             //Else add as below
             _loadedBusinessObjects.Add(businessObject.ID.AsString_CurrentValue(), new WeakReference(businessObject));
-            businessObject.ID.Updated += _updateIDEventHandler; //TODO Brett 13 Jan 2009: My concerns are that this will cause the a memory leak
+//            businessObject.ID.Updated += _updateIDEventHandler; //TODO Brett 13 Jan 2009: My concerns are that this will cause the a memory leak
             // to investigate with tests.
         }
 
@@ -140,11 +140,22 @@ namespace Habanero.BO
         {
              if (Contains(businessObject.ID))
              {
-                 return (businessObject ==  this[businessObject.ID]);
+                 //if business object references are the same return true
+                 if (ReferenceEquals(businessObject, this[businessObject.ID])) return true;
+             }
+             //if contains by previous value and refrences are equal return true  --- this._primaryKey.AsString_PreviousValue()
+             if(Contains(businessObject.ID.AsString_PreviousValue()))
+             {
+                 if (ReferenceEquals(businessObject, this[businessObject.ID.AsString_PreviousValue()])) return true;
+             }
+             //if contans by last persisted value and references are equal return true. --- this._primaryKey.AsString_LastPersistedValue()
+             if (Contains(businessObject.ID.AsString_LastPersistedValue()))
+             {
+                 if (ReferenceEquals(businessObject, this[businessObject.ID.AsString_LastPersistedValue()])) return true;
              }
             return false;
         }
-
+        
         /// <summary>
         /// Checks whether the business object is currently loaded.
         /// </summary>
@@ -173,7 +184,7 @@ namespace Habanero.BO
                 }
                 return true;
             }
-            return containsKey;
+            return false;
         }
 
         private bool BusinessObjectWeakReferenceIsAlive(string objectID)
@@ -208,10 +219,21 @@ namespace Habanero.BO
         /// Removes the business object Business object manager. NB: if a seperate instance of the object 
         /// is loaded in the object manager it will be removed. When possible user <see cref="Remove(IBusinessObject)"/>
         /// </summary>
-        /// <param name="id">The string ID of the business object to be removed.</param>
-        internal void Remove(string id)
+        /// <param name="objectID">The string ID of the business object to be removed.</param>
+        internal void Remove(string objectID)
         {
-            _loadedBusinessObjects.Remove(id);
+//                if (Contains(objectID))
+//                {
+//                    IBusinessObject businessObject = this[objectID];
+//                    RemoveObjectIDEventRegistration(businessObject);
+//                }
+            _loadedBusinessObjects.Remove(objectID);
+
+        }
+
+        protected void DeregisterForIDUpdatedEvent(IBusinessObject businessObject)
+        {
+            businessObject.ID.Updated -= _updateIDEventHandler;
         }
 
         /// <summary>
@@ -255,4 +277,6 @@ namespace Habanero.BO
 
         #endregion
     }
+
+
 }

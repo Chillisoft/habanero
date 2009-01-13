@@ -275,11 +275,11 @@ namespace Habanero.Test.BO
         public void TestSortAttribute()
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPersonTestBO));
-            Assert.IsNull(source.Sort);
+            Assert.IsNull(source.OrderCriteria);
 
             source = new BusinessObjectLookupList("Habanero.Test.BO",
                 "ContactPersonTestBO", "", "surname");
-            Assert.AreEqual("surname", source.Sort);
+            Assert.AreEqual("surname", source.OrderCriteria);
 
 //            source.Sort = "surname asc";
 //            Assert.AreEqual("surname asc", source.Sort);
