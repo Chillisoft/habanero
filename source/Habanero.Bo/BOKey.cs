@@ -317,24 +317,30 @@ namespace Habanero.BO
         /// <returns>Returns a string</returns>
         public override string ToString()
         {
-            StringBuilder propString = new StringBuilder(_props.Count*30);
-            foreach (BOProp prop in _props.Values)
-            {
-                if (propString.Length > 0)
-                {
-                    propString.Append(" AND ");
-                }
-                propString.Append(prop.PropertyName + "=" + (prop.Value is Guid ? ((Guid)prop.Value).ToString("B") : prop.Value));
-            }
-            return propString.ToString();
+            return AsString_CurrentValue();
         }
 
+        /// <summary>
+        /// Returns a string containing all the properties and their values
+        /// </summary>
+        /// <returns>Returns a string</returns>
+        public virtual string AsString_CurrentValue()
+        {
+            string[] propsAsStrings = new string[_props.Count];
+            int i = 0;
+            foreach (BOProp prop in _props.Values)
+            {
+                propsAsStrings[i++] = prop.PropertyName + "=" + prop.Value;
+            }
+            return String.Join(";", propsAsStrings);
+        }
+        
         /// <summary>
         /// Returns a string containing all the properties and their values,
         /// but using the values at last persistence rather than any dirty values
         /// </summary>
         /// <returns>Returns a string</returns>
-        public string PersistedValueString()
+        public virtual string AsString_LastPersistedValue()
         {
             StringBuilder propString = new StringBuilder(_props.Count * 30);
             foreach (BOProp prop in _props.Values)
@@ -351,21 +357,18 @@ namespace Habanero.BO
         /// <summary>
         /// Returns a string containing all the properties and their values,
         /// but using the values held before the last time they were edited.  This
-        /// method differs from PersistedValueString in that the properties may have
+        /// method differs from AsString_LastPersistedValue in that the properties may have
         /// been edited several times since their last persistence.
         /// </summary>
-        public string PropertyValueStringBeforeLastEdit()
+        public virtual string AsString_PreviousValue()
         {
-            StringBuilder propString = new StringBuilder(_props.Count * 30);
+            string[] propsAsStrings = new string[_props.Count];
+            int i = 0;
             foreach (BOProp prop in _props.Values)
             {
-                if (propString.Length > 0)
-                {
-                    propString.Append(" AND ");
-                }
-                propString.Append(prop.PropertyName + "=" + prop.ValueBeforeLastEdit);
+                propsAsStrings[i++] = prop.PropertyName + "=" + prop.ValueBeforeLastEdit;
             }
-            return propString.ToString();
+            return String.Join(";", propsAsStrings);
         }
 
         /// <summary>
@@ -380,7 +383,7 @@ namespace Habanero.BO
             foreach (BOProp prop in SortedValues) {
                 if (whereClause.Length > 0)
                 {
-                    whereClause.Append(" AND ");
+                    whereClause.Append(" AND "); 
                 }
                 if (prop.PersistedPropertyValue == null)
                 {

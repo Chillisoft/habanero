@@ -137,6 +137,27 @@ namespace Habanero.BO
             return (Guid)ObjectIDProp.Value;
         }
 
+        public override string AsString_CurrentValue()
+        {
+            if (IsObjectNew && (_newObjectID != Guid.Empty))
+            {
+                return _newObjectID.ToString();
+            }
+            return Convert.ToString(ObjectIDProp.Value);
+        }
+
+        public override string AsString_PreviousValue()
+        {
+            if (IsObjectNew && (_newObjectID != Guid.Empty))
+            {
+                return _newObjectID.ToString();
+            }
+            if (ObjectIDProp == null) return "";
+            if (ObjectIDProp.ValueBeforeLastEdit == null) return Convert.ToString(ObjectIDProp.Value);
+            return ObjectIDProp.ValueBeforeLastEdit.ToString();
+        }
+
+
         #region Operator == Overloads
 
         /// <summary>
@@ -169,6 +190,8 @@ namespace Habanero.BO
         /// <returns>Returns true if the ObjectID's are equal</returns>
         public static bool operator ==(BOObjectID lhs, BOObjectID rhs)
         {
+            if (((object)lhs) == null && ((object)rhs) == null) return true;
+            if (((object )lhs) == null) return false; 
             return lhs.Equals(rhs);
         }
 

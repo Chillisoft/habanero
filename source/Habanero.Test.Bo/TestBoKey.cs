@@ -190,33 +190,159 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestPropertyValueStringBeforeLastEdit()
+        public void Test_AsString_CurrentValue_New()
         {
-            PropDef propDef1 = new PropDef("PropName1", typeof(string), PropReadWriteRule.ReadWrite, null);
-            PropDef propDef2 = new PropDef("PropName2", typeof(string), PropReadWriteRule.ReadWrite, null);
+            //--------------- Set up test pack ------------------
+            BOKey boKey = CreateBOKeyGuid();
+            //--------------- Test Preconditions ----------------
 
+            //--------------- Execute Test ----------------------
+            string keyAsString = boKey.AsString_CurrentValue();
+            //--------------- Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("PropName1=", keyAsString);
+        }
+
+        [Test]
+        public void Test_AsString_CurrentValue()
+        {
+            //--------------- Set up test pack ------------------
+            BOKey boKey = CreateBOKeyGuid();
+            Guid guid = Guid.NewGuid();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            boKey[0].Value = guid;
+            string keyAsString = boKey.AsString_CurrentValue();
+            //--------------- Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("PropName1=" + guid.ToString(), keyAsString);
+        }
+
+        [Test]
+        public void Test_AsString_CurrentValue_TwoProps()
+        {
+            //--------------- Set up test pack ------------------
+            BOKey boKey = CreateBOKeyGuidAndString();
+            Guid guid = Guid.NewGuid();
+            string str = TestUtil.CreateRandomString();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            boKey[0].Value = guid;
+            boKey[1].Value = str;
+            string keyAsString = boKey.AsString_CurrentValue();
+            //--------------- Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("PropName1=" + guid.ToString() + ";PropName2=" + str, keyAsString);
+        }
+
+        [Test]
+        public void Test_AsString_PreviousValue_New()
+        {
+            //--------------- Set up test pack ------------------
+            BOKey boKey = CreateBOKeyGuid();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            string keyAsString = boKey.AsString_PreviousValue();
+            //--------------- Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase(boKey.AsString_CurrentValue(), keyAsString);
+        }
+
+        [Test]
+        public void Test_AsString_PreviousValue_FirstChange()
+        {
+            //--------------- Set up test pack ------------------
+            BOKey boKey = CreateBOKeyGuid();
+            string expectedPreviousValue = boKey.AsString_CurrentValue();
+            Guid guid = Guid.NewGuid();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            boKey[0].Value = guid;
+            string keyAsString = boKey.AsString_PreviousValue();
+            //--------------- Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase(expectedPreviousValue, keyAsString);
+        }
+
+        [Test]
+        public void Test_AsString_PreviousValue_SecondChange()
+        {
+            //--------------- Set up test pack ------------------
+            BOKey boKey = CreateBOKeyGuid();
+            boKey[0].Value = Guid.NewGuid();
+            string expectedPreviousValue = boKey.AsString_CurrentValue();
+            Guid guid = Guid.NewGuid();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            boKey[0].Value = guid;
+            string keyAsString = boKey.AsString_PreviousValue();
+            //--------------- Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase(expectedPreviousValue, keyAsString);
+        }
+
+
+        [Test]
+        public void Test_AsString_PreviousValue_TwoPropKey()
+        {
+            //--------------- Set up test pack ------------------
+            BOKey boKey = CreateBOKeyGuidAndString();
+            string expectedPreviousValue = boKey.AsString_CurrentValue();
+            Guid guid = Guid.NewGuid();
+            string str = TestUtil.CreateRandomString();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            boKey[0].Value = guid;
+            boKey[1].Value = str;
+            string keyAsString = boKey.AsString_PreviousValue();
+            //--------------- Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase(expectedPreviousValue, keyAsString);
+        }
+
+
+        [Test]
+        public void Test_AsString_PreviousValue_SecondChange_TwoPropKey()
+        {
+            //--------------- Set up test pack ------------------
+            BOKey boKey = CreateBOKeyGuidAndString();
+            boKey[0].Value = Guid.NewGuid();
+            boKey[1].Value = TestUtil.CreateRandomString();
+            string expectedPreviousValue = boKey.AsString_CurrentValue();
+            Guid guid = Guid.NewGuid();
+            string str = TestUtil.CreateRandomString();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            boKey[0].Value = guid;
+            boKey[1].Value = str;
+            string keyAsString = boKey.AsString_PreviousValue();
+            //--------------- Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase(expectedPreviousValue, keyAsString);
+        }
+
+
+
+        private BOKey CreateBOKeyGuid()
+        {
+            PropDef propDef1 = new PropDef("PropName1", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             BOPropCol propCol = new BOPropCol();
             propCol.Add(propDef1.CreateBOProp(false));
-            propCol.Add(propDef2.CreateBOProp(false));
+            KeyDef keyDef = new KeyDef();
+            keyDef.Add(propDef1);
+            return keyDef.CreateBOKey(propCol);
+        }
 
+        private BOKey CreateBOKeyGuidAndString()
+        {
+            PropDef propDef1 = new PropDef("PropName1", typeof(Guid), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef2 = new PropDef("PropName2", typeof(string), PropReadWriteRule.ReadWrite, null);
+            BOPropCol propCol = new BOPropCol();
+            propCol.Add( propDef1.CreateBOProp(false));
+            propCol.Add(propDef2.CreateBOProp(false));
             KeyDef keyDef = new KeyDef();
             keyDef.Add(propDef1);
             keyDef.Add(propDef2);
-            BOKey boKey = keyDef.CreateBOKey(propCol);
-
-            Assert.AreEqual("PropName1= AND PropName2=", boKey.PropertyValueStringBeforeLastEdit());
-
-            propCol["PropName1"].Value = "one";
-            Assert.AreEqual("PropName1= AND PropName2=", boKey.PropertyValueStringBeforeLastEdit());
-
-            propCol["PropName1"].Value = "two";
-            Assert.AreEqual("PropName1=one AND PropName2=", boKey.PropertyValueStringBeforeLastEdit());
-
-            propCol["PropName2"].Value = "one";
-            Assert.AreEqual("PropName1=one AND PropName2=", boKey.PropertyValueStringBeforeLastEdit());
-
-            propCol["PropName2"].Value = "two";
-            Assert.AreEqual("PropName1=one AND PropName2=one", boKey.PropertyValueStringBeforeLastEdit());
+            return keyDef.CreateBOKey(propCol);
         }
 
         [Test]

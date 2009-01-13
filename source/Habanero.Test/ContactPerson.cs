@@ -41,7 +41,7 @@ namespace Habanero.Test
 
         public ContactPerson()
         {
-            SetPropertyValue("PK3Prop", this.ID.GetObjectId());
+            SetPropertyValue("PK3Prop", this.ID.AsString_CurrentValue());
         }
 
         public ContactPerson(ClassDef classDef) : base(classDef)

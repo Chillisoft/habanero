@@ -1,5 +1,6 @@
 using System;
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
@@ -15,6 +16,7 @@ namespace Habanero.Test.BO
         public void Setup()
         {
             ClassDef.ClassDefs.Clear();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
         }
 
         [TestFixtureSetUp]

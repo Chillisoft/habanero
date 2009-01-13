@@ -377,7 +377,7 @@ namespace Habanero.BO
             {
                 throw new HabaneroDeveloperException("A Error has occured since the object being refreshed is being edited.",
                                                      "A Error has occured since the object being refreshed is being edited. ID :- " +
-                                                     businessObject.ID.GetObjectId() + " - Class : " + businessObject.ClassDef.ClassNameFull);
+                                                     businessObject.ID.AsString_CurrentValue() + " - Class : " + businessObject.ClassDef.ClassNameFull);
             }
             businessObject = GetBusinessObject(businessObject.ClassDef, businessObject.ID);
             return businessObject;
@@ -490,6 +490,7 @@ namespace Habanero.BO
             where T : class, IBusinessObject, new()
         {
             T bo = new T();
+            BusinessObjectManager.Instance.Remove(bo);
 
             return (T) GetLoadedBusinessObject(bo, dataReader, selectQuery);
         }
@@ -497,6 +498,7 @@ namespace Habanero.BO
         private static IBusinessObject LoadBOFromReader(IClassDef classDef, IDataRecord dataReader, ISelectQuery selectQuery)
         {
             IBusinessObject bo = classDef.CreateNewBusinessObject();
+            BusinessObjectManager.Instance.Remove(bo);
 
             return GetLoadedBusinessObject(bo, dataReader, selectQuery);
         }

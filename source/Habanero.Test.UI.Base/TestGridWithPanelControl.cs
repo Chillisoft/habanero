@@ -1078,6 +1078,7 @@ namespace Habanero.Test.UI.Base
             IButton newButton = gridWithPanelControl.Buttons["New"];
             newButton.PerformClick();
             MyBO currentBO = (MyBO)gridWithPanelControl.BusinessObjectControl.BusinessObject;
+            
             //---------------Assert Precondition----------------
             Assert.IsFalse(currentBO.IsValid());
             //Assert.IsFalse(boControl.DisplayErrorsCalled); //TODO

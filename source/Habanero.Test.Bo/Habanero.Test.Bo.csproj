@@ -126,6 +126,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestBOObjectID.cs" />
     <Compile Include="TestPack\BOWithIntID.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_AddedBOs.cs" />
@@ -143,7 +144,7 @@
     <Compile Include="BusinessObjectLoader\TestBusinessObjectLoader_GetBusinessObjectCollection.cs" />
     <Compile Include="BusinessObjectLoader\TestBusinessObjectLoader_RefreshCollection.cs" />
     <Compile Include="BusinessObjectCollection\TestRelatedBOCol_Composition.cs" />
-    <Compile Include="ClassDefinition\TestBOPrimaryKey.cs" />
+    <Compile Include="TestBOPrimaryKey.cs" />
     <Compile Include="ClassDefinition\TestPrimaryKeyDef.cs" />
     <Compile Include="CriteriaManager\TestCriteriaDB.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />

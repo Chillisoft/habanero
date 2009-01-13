@@ -86,6 +86,7 @@ namespace Habanero.BO
                 prop.InitialiseProp(info.GetValue(prop.PropertyName, prop.PropertyType));
             }
             _boStatus = (BOStatus) info.GetValue("Status", typeof (BOStatus));
+            BusinessObjectManager.Instance.Add(this);
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -104,7 +105,7 @@ namespace Habanero.BO
         protected internal BusinessObject(ClassDef def)
         {
             Initialise(def);
-            //BusinessObjectManager.Instance.Add(this);
+            BusinessObjectManager.Instance.Add(this);
         }
 
         private void InitialisePrimaryKeyPropertiesBasedOnParentClass(Guid myID)
@@ -481,7 +482,7 @@ namespace Habanero.BO
             if (_authorisationRules == null) return true;
             if (_authorisationRules.IsAuthorised(BusinessObjectActions.CanUpdate)) return true;
             message = string.Format("The logged on user {0} is not authorised to update {1} Identified By {2}",
-                    Thread.CurrentPrincipal.Identity.Name, this.ClassName, this.ID.GetObjectId());
+                    Thread.CurrentPrincipal.Identity.Name, this.ClassName, this.ID.AsString_CurrentValue());
             return false;
         }
 
@@ -501,7 +502,7 @@ namespace Habanero.BO
             if (_authorisationRules == null) return true;
             if(_authorisationRules.IsAuthorised(BusinessObjectActions.CanDelete)) return true;
             message = string.Format("The logged on user {0} is not authorised to delete {1} Identified By {2}", 
-                    Thread.CurrentPrincipal.Identity.Name, this.ClassName, this.ID.GetObjectId());
+                    Thread.CurrentPrincipal.Identity.Name, this.ClassName, this.ID.AsString_CurrentValue());
             return false;
         }
 
@@ -935,7 +936,7 @@ namespace Habanero.BO
             }
             else
             {
-                BusinessObjectManager.Instance.Remove(this);
+                BusinessObjectManager.Instance.Remove(this._primaryKey.AsString_PreviousValue());
                 StorePersistedPropertyValues();
                 SetStateAsUpdated();
                 if (!BusinessObjectManager.Instance.Contains(ID))

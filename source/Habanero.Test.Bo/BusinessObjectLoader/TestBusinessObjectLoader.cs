@@ -779,7 +779,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 Assert.IsTrue
                     (ex.DeveloperMessage.Contains
                          ("A Error has occured since the object being refreshed is being edited."));
-                Assert.IsTrue(ex.DeveloperMessage.Contains(cpLoaded.ID.GetObjectId()));
+                Assert.IsTrue(ex.DeveloperMessage.Contains(cpLoaded.ID.AsString_CurrentValue()));
                 Assert.IsTrue(ex.DeveloperMessage.Contains(cpLoaded.ClassDef.ClassName));
             }
         }
@@ -1284,7 +1284,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 Assert.AreNotSame(originalContactPerson, myContact2);
                 IPrimaryKey id = myContact2.ID;
                 Assert.IsTrue(BusinessObjectManager.Instance.Contains(id));
-                IBusinessObject boFromAllLoadedObjects = BusinessObjectManager.Instance[id.GetObjectId()];
+                IBusinessObject boFromAllLoadedObjects = BusinessObjectManager.Instance[id];
                 Assert.AreSame(boFromAllLoadedObjects, myContact2);
                 Assert.IsFalse(myContact2.Status.IsEditing);
 

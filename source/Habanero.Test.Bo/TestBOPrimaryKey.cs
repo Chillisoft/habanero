@@ -238,5 +238,151 @@ namespace Habanero.Test.BO
             Assert.AreEqual(originalHashCode, hashCodeAfterSaving);
 
         }
+
+        [Test]
+        public void Test_AsString_CurrentValue()
+        {
+            //--------------- Set up test pack ------------------
+            BOPrimaryKey primaryKey = CreateBOPrimaryKeyString();
+            Guid guid = Guid.NewGuid();
+
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            primaryKey.SetObjectGuidID(guid);
+            string keyAsString = primaryKey.AsString_CurrentValue();
+            //--------------- Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase(guid.ToString(), keyAsString);
+        }
+
+        [Test]
+        public void Test_AsString_CurrentValue_SetValue()
+        {
+            //--------------- Set up test pack ------------------
+            BOPrimaryKey primaryKey = CreateBOPrimaryKeyString();
+            Guid guid = Guid.NewGuid();
+            string str = TestUtil.CreateRandomString();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            primaryKey.SetObjectGuidID(guid);
+            primaryKey[0].Value = str;
+            string keyAsString = primaryKey.AsString_CurrentValue();
+            //--------------- Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("PropName1=" + str, keyAsString);
+        }
+
+        [Test]
+        public void Test_AsString_PreviousValue()
+        {
+            //--------------- Set up test pack ------------------
+            BOPrimaryKey primaryKey = CreateBOPrimaryKeyString();
+            Guid guid = Guid.NewGuid();
+
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            primaryKey.SetObjectGuidID(guid);
+            string keyAsString = primaryKey.AsString_PreviousValue();
+            //--------------- Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase(guid.ToString(), keyAsString);
+        }
+        
+        [Test]
+        public void Test_AsString_PreviousValue_SetValue()
+        {
+            //--------------- Set up test pack ------------------
+            BOPrimaryKey primaryKey = CreateBOPrimaryKeyString();
+            Guid guid = Guid.NewGuid();
+            string str = TestUtil.CreateRandomString();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            primaryKey.SetObjectGuidID(guid);
+            primaryKey[0].Value = str;
+            string keyAsString = primaryKey.AsString_PreviousValue();
+            //--------------- Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase(guid.ToString(), keyAsString);
+        }
+                
+        [Test]
+        public void Test_AsString_PreviousValue_SetValueTwice()
+        {
+            //--------------- Set up test pack ------------------
+            BOPrimaryKey primaryKey = CreateBOPrimaryKeyString();
+            Guid guid = Guid.NewGuid();
+            primaryKey.SetObjectGuidID(guid);
+            string str1 = TestUtil.CreateRandomString();
+            primaryKey[0].Value = str1;
+            string str2 = TestUtil.CreateRandomString();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            
+            primaryKey[0].Value = str2;
+            string keyAsString = primaryKey.AsString_PreviousValue();
+            //--------------- Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("PropName1=" + str1, keyAsString);
+        }
+        
+        [Test]
+        public void Test_AsString_CurrentValue_TwoPropKey()
+        {
+            //--------------- Set up test pack ------------------
+            BOPrimaryKey primaryKey = CreatePrimaryBOKeyGuidAndString();
+            Guid guid = Guid.NewGuid();
+
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            primaryKey.SetObjectGuidID(guid);
+            string keyAsString = primaryKey.AsString_CurrentValue();
+            //--------------- Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase(guid.ToString(), keyAsString);
+        }
+       
+        [Test]
+        public void Test_AsString_CurrentValue_TwoPropKey_SetOneProp()
+        {
+            //--------------- Set up test pack ------------------
+            BOPrimaryKey primaryKey = CreatePrimaryBOKeyGuidAndString();
+            Guid guid = Guid.NewGuid();
+
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            primaryKey.SetObjectGuidID(guid);
+            primaryKey[0].Value = Guid.NewGuid();
+            string keyAsString = primaryKey.AsString_CurrentValue();
+            //--------------- Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase(guid.ToString(), keyAsString);
+        }
+
+
+        private BOPrimaryKey CreateBOPrimaryKeyString()
+        {
+            PropDef propDef1 = new PropDef("PropName1", typeof(String), PropReadWriteRule.ReadWrite, null);
+            BOPropCol propCol = new BOPropCol();
+            
+            propCol.Add(propDef1.CreateBOProp(false));
+            PrimaryKeyDef keyDef = new PrimaryKeyDef();
+            keyDef.IsGuidObjectID = false;
+            keyDef.Add(propDef1);
+            return (BOPrimaryKey) keyDef.CreateBOKey(propCol);
+        }
+
+        private BOPrimaryKey CreatePrimaryBOKeyGuidAndString()
+        {
+            PropDef propDef1 = new PropDef("PropName1", typeof(Guid), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef2 = new PropDef("PropName2", typeof(string), PropReadWriteRule.ReadWrite, null);
+            BOPropCol propCol = new BOPropCol();
+            propCol.Add(propDef1.CreateBOProp(false));
+            propCol.Add(propDef2.CreateBOProp(false));
+            PrimaryKeyDef keyDef = new PrimaryKeyDef();
+            keyDef.IsGuidObjectID = false;
+            keyDef.Add(propDef1);
+            keyDef.Add(propDef2);
+            return (BOPrimaryKey)keyDef.CreateBOKey(propCol);
+        }
     }
 }

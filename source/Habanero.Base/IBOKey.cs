@@ -71,15 +71,21 @@ namespace Habanero.Base
         /// but using the values at last persistence rather than any dirty values
         /// </summary>
         /// <returns>Returns a string</returns>
-        string PersistedValueString();
+        string AsString_LastPersistedValue();
 
         /// <summary>
         /// Returns a string containing all the properties and their values,
         /// but using the values held before the last time they were edited.  This
-        /// method differs from PersistedValueString in that the properties may have
+        /// method differs from AsString_LastPersistedValue in that the properties may have
         /// been edited several times since their last persistence.
         /// </summary>
-        string PropertyValueStringBeforeLastEdit();
+        string AsString_PreviousValue();
+
+        /// <summary>
+        /// Returns a string containing all the properties and their values, using the current
+        /// values of the properties.
+        /// </summary>
+        string AsString_CurrentValue();
 
         /// <summary>
         /// Provides an indexing facility so the properties can be accessed

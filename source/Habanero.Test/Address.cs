@@ -202,7 +202,7 @@ namespace Habanero.Test
 
         public override string ToString()
         {
-            return ID.GetObjectId();
+            return ID.AsString_CurrentValue();
         }
 
         public static Address CreateSavedAddress(ContactPerson contactPerson, string firstLine)

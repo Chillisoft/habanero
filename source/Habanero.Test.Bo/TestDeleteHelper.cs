@@ -44,6 +44,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(CreateClassDef(5, true, true, false));
             ClassDef.ClassDefs.Add(CreateClassDef(6, true, true, true));
             ClassDef.ClassDefs.Add(CreateClassDef(7, true, false, false));
+            BusinessObjectManager.Instance.ClearLoadedObjects();
         }
 
         [Test]

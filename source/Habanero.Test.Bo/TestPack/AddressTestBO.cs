@@ -225,7 +225,7 @@ namespace Habanero.Test.BO
 
         public override string ToString()
         {
-            return ID.GetObjectId();
+            return ID.AsString_CurrentValue();
         }
 
 

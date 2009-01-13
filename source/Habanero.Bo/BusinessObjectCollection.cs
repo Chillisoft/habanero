@@ -266,7 +266,7 @@ namespace Habanero.BO
             if (bo == null) throw new ArgumentNullException("bo");
 
             base.Add(bo);
-            if (bo.ID != null) KeyObjectHashTable.Add(bo.ID.ToString(), bo);
+            if (bo.ID != null) KeyObjectHashTable.Add(bo.ID.AsString_CurrentValue(), bo);
             RegisterForBOEvents(bo);
         }
 
@@ -296,7 +296,7 @@ namespace Habanero.BO
         /// </summary>
         private void UpdateHashTable(object sender, BOKeyEventArgs e)
         {
-            string oldID = e.BOKey.PropertyValueStringBeforeLastEdit();
+            string oldID = e.BOKey.AsString_PreviousValue();
             if (KeyObjectHashTable.Contains(oldID))
             {
                 BusinessObject bo = (BusinessObject) KeyObjectHashTable[oldID];
@@ -780,9 +780,7 @@ namespace Habanero.BO
         /// found</returns>
         public TBusinessObject FindByGuid(Guid searchTerm)
         {
-            string formattedSearchItem = string.Format
-                ("{0}={1}", ((ClassDef) _boClassDef).GetPrimaryKeyDef().KeyName, searchTerm.ToString("B"));
-
+            string formattedSearchItem = searchTerm.ToString();
             if (KeyObjectHashTable.ContainsKey(formattedSearchItem))
             {
                 return (TBusinessObject) KeyObjectHashTable[formattedSearchItem];

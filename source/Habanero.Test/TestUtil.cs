@@ -24,6 +24,8 @@ namespace Habanero.Test
 {
     public class TestUtil
     {
+        private static readonly Random rnd = new Random();
+
         public static string CreateRandomString()
         {
             return Guid.NewGuid().ToString("N");
@@ -145,6 +147,9 @@ namespace Habanero.Test
             return false;
         }
 
-        public static int GetRandomInt() { return new Random().Next(); }
+        public static int GetRandomInt()
+        {
+            return rnd.Next();
+        }
     }
 }

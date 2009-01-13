@@ -527,7 +527,7 @@ namespace Habanero.BO
         ///<returns>The Key Value Lookup List</returns>
         public Dictionary<string, string> GetIDValueLookupList()
         {
-            GetLookupList(false);
+            GetLookupList(true);
             return _keyValueDictionary;
         }
 

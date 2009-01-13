@@ -45,7 +45,7 @@ namespace Habanero.Test.BO
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
-
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             //---------------Execute Test ----------------------
             formatter.Serialize(memoryStream, originalPerson);
             memoryStream.Seek(0, SeekOrigin.Begin);
@@ -67,6 +67,7 @@ namespace Habanero.Test.BO
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
 
             //---------------Execute Test ----------------------
             formatter.Serialize(memoryStream, originalPerson);
@@ -89,6 +90,7 @@ namespace Habanero.Test.BO
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
 
             //---------------Execute Test ----------------------
             formatter.Serialize(memoryStream, originalPerson);
@@ -120,6 +122,7 @@ namespace Habanero.Test.BO
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
 
             //---------------Execute Test ----------------------
             formatter.Serialize(memoryStream, originalPerson);
@@ -149,6 +152,7 @@ namespace Habanero.Test.BO
             
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
 
             //---------------Execute Test ----------------------
             formatter.Serialize(memoryStream, originalPeople);
@@ -179,6 +183,7 @@ namespace Habanero.Test.BO
 
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
 
             //---------------Execute Test ----------------------
             formatter.Serialize(memoryStream, originalPeople);

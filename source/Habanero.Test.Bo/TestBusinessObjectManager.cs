@@ -36,8 +36,9 @@ namespace Habanero.Test.BO
             //Runs every time that any testmethod is executed
             //base.SetupTest();
             ClassDef.ClassDefs.Clear();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
             new Address();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            
         }
 
         [TearDown]
@@ -86,7 +87,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = new ContactPersonTestBO();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(0, boMan.Count);
+            Assert.AreEqual(1, boMan.Count);
 
             //---------------Execute Test ----------------------
             cp.Surname = TestUtil.CreateRandomString();
@@ -97,8 +98,8 @@ namespace Habanero.Test.BO
 
             Assert.IsTrue(boMan.Contains(cp));
             Assert.IsTrue(boMan.Contains(cp.ID));
-            Assert.IsTrue(boMan.Contains(cp.ID.GetObjectId()));
-            Assert.AreSame(cp, boMan[cp.ID.GetObjectId()]);
+            Assert.IsTrue(boMan.Contains(cp.ID.AsString_CurrentValue()));
+            Assert.AreSame(cp, boMan[cp.ID.AsString_CurrentValue()]);
             Assert.AreSame(cp, boMan[cp.ID]);
         }
 
@@ -125,22 +126,22 @@ namespace Habanero.Test.BO
         }
 
 
-        [Test]
-        public void Test_NewObjectNotAddedToObjectManager()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectManager boMan = BusinessObjectManager.Instance;
+        //[Test]
+        //public void Test_NewObjectNotAddedToObjectManager()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    ContactPersonTestBO.LoadDefaultClassDef();
+        //    BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(0, boMan.Count);
+        //    //---------------Assert Precondition----------------
+        //    Assert.AreEqual(0, boMan.Count);
 
-            //---------------Execute Test ----------------------
-            new ContactPersonTestBO();
+        //    //---------------Execute Test ----------------------
+        //    new ContactPersonTestBO();
 
-            //---------------Test Result -----------------------
-            Assert.AreEqual(0, boMan.Count);
-        }
+        //    //---------------Test Result -----------------------
+        //    Assert.AreEqual(0, boMan.Count);
+        //}
 
         [Test]
         public void Test_RemoveFromObjectManager()
@@ -178,7 +179,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, boMan.Count);
 
             //---------------Execute Test ----------------------
-            IBusinessObject boFromObjMan_StringID = boMan[cp.ID.GetObjectId()];
+            IBusinessObject boFromObjMan_StringID = boMan[cp.ID.AsString_CurrentValue()];
             
             IBusinessObject boFromMan_ObjectID = boMan[cp.ID];
            
@@ -196,8 +197,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
-            ContactPersonTestBO cp = new ContactPersonTestBO();
-
+            //ContactPersonTestBO cp = new ContactPersonTestBO();
+            Guid guid = Guid.NewGuid();
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
 
@@ -205,7 +206,8 @@ namespace Habanero.Test.BO
             try
             {
 
-                IBusinessObject bo = boMan[cp.ID.GetObjectId()];
+                //IBusinessObject bo = boMan[cp.ID.AsString_CurrentValue()];
+                IBusinessObject bo = boMan[guid.ToString()];
                 Assert.Fail("expected Err");
             }
             //---------------Test Result -----------------------
@@ -222,8 +224,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
-            ContactPersonTestBO cp = new ContactPersonTestBO();
-
+            //ContactPersonTestBO cp = new ContactPersonTestBO();
+            BOPrimaryKey boPrimaryKey = new BOPrimaryKey(new PrimaryKeyDef());
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
 
@@ -231,7 +233,8 @@ namespace Habanero.Test.BO
             try
             {
 
-                IBusinessObject bo = boMan[cp.ID];
+                //IBusinessObject bo = boMan[cp.ID];
+                IBusinessObject bo = boMan[boPrimaryKey];
                 Assert.Fail("expected Err");
             }
             //---------------Test Result -----------------------
@@ -275,8 +278,8 @@ namespace Habanero.Test.BO
             cp.Surname = TestUtil.CreateRandomString();
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(0, boMan.Count);
-            Assert.IsFalse(boMan.Contains(cp));
+            Assert.AreEqual(1, boMan.Count);
+            Assert.IsTrue(boMan.Contains(cp));
 
             //---------------Execute Test ----------------------
             cp.Save();
@@ -285,8 +288,8 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, boMan.Count);
             Assert.IsTrue(boMan.Contains(cp));
             Assert.IsTrue(boMan.Contains(cp.ID));
-            Assert.IsTrue(boMan.Contains(cp.ID.GetObjectId()));
-            Assert.AreSame(cp, boMan[cp.ID.GetObjectId()]);
+            Assert.IsTrue(boMan.Contains(cp.ID.AsString_CurrentValue()));
+            Assert.AreSame(cp, boMan[cp.ID.AsString_CurrentValue()]);
             Assert.AreSame(cp, boMan[cp.ID]);
         }
 
@@ -313,8 +316,8 @@ namespace Habanero.Test.BO
 
             Assert.IsTrue(boMan.Contains(cp));
             Assert.IsTrue(boMan.Contains(cp.ID));
-            Assert.IsTrue(boMan.Contains(cp.ID.GetObjectId()));
-            Assert.AreSame(cp, boMan[cp.ID.GetObjectId()]);
+            Assert.IsTrue(boMan.Contains(cp.ID.AsString_CurrentValue()));
+            Assert.AreSame(cp, boMan[cp.ID.AsString_CurrentValue()]);
             Assert.AreSame(cp, boMan[cp.ID]);
         }
 
@@ -328,17 +331,16 @@ namespace Habanero.Test.BO
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
-            boMan.Add(cp);
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boMan.Count);
 
             //---------------Execute Test ----------------------
             ContactPersonTestBO cp2 = new ContactPersonTestBO();
-            cp2.ContactPersonID = cp.ContactPersonID;
+            
             try
             {
-                boMan.Add(cp2);
+                cp2.ContactPersonID = cp.ContactPersonID;
                 Assert.Fail("expected Err");
             }
             //---------------Test Result -----------------------
@@ -372,8 +374,8 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, boMan.Count);
             Assert.IsTrue(boMan.Contains(cp));
             Assert.IsTrue(boMan.Contains(cp.ID));
-            Assert.IsTrue(boMan.Contains(cp.ID.GetObjectId()));
-            Assert.AreSame(cp, boMan[cp.ID.GetObjectId()]);
+            Assert.IsTrue(boMan.Contains(cp.ID.AsString_CurrentValue()));
+            Assert.AreSame(cp, boMan[cp.ID.AsString_CurrentValue()]);
             Assert.AreSame(cp, boMan[cp.ID]);
         }
 
@@ -387,10 +389,10 @@ namespace Habanero.Test.BO
             ContactPersonTestBO originalContactPerson = new ContactPersonTestBO();
             ContactPersonTestBO copyContactPerson = new ContactPersonTestBO();
             copyContactPerson.ContactPersonID = originalContactPerson.ContactPersonID;
-            BusinessObjectManager.Instance.Add(copyContactPerson);
+            //BusinessObjectManager.Instance.Add(copyContactPerson);
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(1, boMan.Count);
+            Assert.AreEqual(2, boMan.Count);
             Assert.IsTrue(boMan.Contains(copyContactPerson));
 
             //---------------Execute Test ----------------------
@@ -417,7 +419,7 @@ namespace Habanero.Test.BO
 
             //---------------Assert Precondition----------------
             Assert.AreNotSame(originalContactPerson, copyContactPerson);
-            Assert.AreEqual(originalContactPerson.ID.GetObjectId(), copyContactPerson.ID.GetObjectId());
+            Assert.AreEqual(originalContactPerson.ID.AsString_CurrentValue(), copyContactPerson.ID.AsString_CurrentValue());
             Assert.AreEqual(1, boMan.Count);
             Assert.IsTrue(boMan.Contains(copyContactPerson));
             Assert.IsFalse(boMan.Contains(originalContactPerson));
@@ -501,13 +503,14 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonCompositeKey.LoadClassDefs();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
+            boMan.ClearLoadedObjects();
 
             ContactPersonCompositeKey cp = new ContactPersonCompositeKey();
             cp.PK1Prop1 = TestUtil.CreateRandomString();
             cp.PK1Prop2 = TestUtil.CreateRandomString();
             
             //---------------Assert Precondition----------------
-            Assert.AreEqual(0, boMan.Count);
+            Assert.AreEqual(1, boMan.Count);
 
             //---------------Execute Test ----------------------
             cp.Save();
@@ -516,8 +519,8 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, boMan.Count);
             Assert.IsTrue(boMan.Contains(cp));
             Assert.IsTrue(boMan.Contains(cp.ID));
-            Assert.IsTrue(boMan.Contains(cp.ID.GetObjectId()));
-            Assert.AreSame(cp, boMan[cp.ID.GetObjectId()]);
+            Assert.IsTrue(boMan.Contains(cp.ID.AsString_CurrentValue()));
+            Assert.AreSame(cp, boMan[cp.ID.AsString_CurrentValue()]);
             Assert.AreSame(cp, boMan[cp.ID]);
 
         }
@@ -547,8 +550,8 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, boMan.Count);
             Assert.IsTrue(boMan.Contains(cp));
             Assert.IsTrue(boMan.Contains(cp.ID));
-            Assert.IsTrue(boMan.Contains(cp.ID.GetObjectId()));
-            Assert.AreSame(cp, boMan[cp.ID.GetObjectId()]);
+            Assert.IsTrue(boMan.Contains(cp.ID.AsString_CurrentValue()));
+            Assert.AreSame(cp, boMan[cp.ID.AsString_CurrentValue()]);
             Assert.AreSame(cp, boMan[cp.ID]);
         }
         // ReSharper disable RedundantAssignment
@@ -604,8 +607,8 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, boMan.Count);
             Assert.IsTrue(boMan.Contains(contactPersonTestBO));
             Assert.IsTrue(boMan.Contains(contactPersonTestBO.ID));
-            Assert.IsTrue(boMan.Contains(contactPersonTestBO.ID.GetObjectId()));
-            Assert.AreSame(contactPersonTestBO, boMan[contactPersonTestBO.ID.GetObjectId()]);
+            Assert.IsTrue(boMan.Contains(contactPersonTestBO.ID.AsString_CurrentValue()));
+            Assert.AreSame(contactPersonTestBO, boMan[contactPersonTestBO.ID.AsString_CurrentValue()]);
             Assert.AreSame(contactPersonTestBO, boMan[contactPersonTestBO.ID]);
         }
         // ReSharper restore RedundantAssignment
@@ -639,8 +642,8 @@ namespace Habanero.Test.BO
             Assert.IsTrue(boMan.Contains(contactPersonTestBO));
 
             Assert.IsTrue(boMan.Contains(id));
-            Assert.IsTrue(boMan.Contains(id.GetObjectId()));
-            Assert.AreSame(contactPersonTestBO, boMan[id.GetObjectId()]);
+            Assert.IsTrue(boMan.Contains(id.AsString_CurrentValue()));
+            Assert.AreSame(contactPersonTestBO, boMan[id.AsString_CurrentValue()]);
             Assert.AreSame(contactPersonTestBO, boMan[id]);
         }
         // ReSharper restore RedundantAssignment
@@ -678,9 +681,9 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, boMan.Count);
             Assert.IsTrue(boMan.Contains(loadedCP));
             Assert.IsTrue(boMan.Contains(id));
-            Assert.IsTrue(boMan.Contains(id.GetObjectId()));
+            Assert.IsTrue(boMan.Contains(id.AsString_CurrentValue()));
             Assert.AreSame(loadedCP, boMan[id]);
-            Assert.AreSame(loadedCP, boMan[id.GetObjectId()]);
+            Assert.AreSame(loadedCP, boMan[id.AsString_CurrentValue()]);
         }
         // ReSharper restore RedundantAssignment
 
@@ -719,9 +722,9 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, boMan.Count);
             Assert.IsTrue(boMan.Contains(loadedCP));
             Assert.IsTrue(boMan.Contains(id));
-            Assert.IsTrue(boMan.Contains(id.GetObjectId()));
+            Assert.IsTrue(boMan.Contains(id.AsString_CurrentValue()));
             Assert.AreSame(loadedCP, boMan[id]);
-            Assert.AreSame(loadedCP, boMan[id.GetObjectId()]);
+            Assert.AreSame(loadedCP, boMan[id.AsString_CurrentValue()]);
         }
         // ReSharper restore RedundantAssignment
 
@@ -766,9 +769,9 @@ namespace Habanero.Test.BO
 
             Assert.IsTrue(boMan.Contains(loadedAddress));
             Assert.IsTrue(boMan.Contains(addresssID));
-            Assert.IsTrue(boMan.Contains(addresssID.GetObjectId()));
+            Assert.IsTrue(boMan.Contains(addresssID.AsString_CurrentValue()));
             Assert.AreSame(loadedAddress, boMan[addresssID]);
-            Assert.AreSame(loadedAddress, boMan[addresssID.GetObjectId()]);
+            Assert.AreSame(loadedAddress, boMan[addresssID.AsString_CurrentValue()]);
         }
         // ReSharper restore RedundantAssignment
 
@@ -813,9 +816,9 @@ namespace Habanero.Test.BO
 
             Assert.IsTrue(boMan.Contains(loadedAddress));
             Assert.IsTrue(boMan.Contains(addresssID));
-            Assert.IsTrue(boMan.Contains(addresssID.GetObjectId()));
+            Assert.IsTrue(boMan.Contains(addresssID.AsString_CurrentValue()));
             Assert.AreSame(loadedAddress, boMan[addresssID]);
-            Assert.AreSame(loadedAddress, boMan[addresssID.GetObjectId()]);
+            Assert.AreSame(loadedAddress, boMan[addresssID.AsString_CurrentValue()]);
         }
         // ReSharper restore RedundantAssignment
 
@@ -865,9 +868,9 @@ namespace Habanero.Test.BO
 
             Assert.IsTrue(boMan.Contains(loadedAddress));
             Assert.IsTrue(boMan.Contains(addresssID));
-            Assert.IsTrue(boMan.Contains(addresssID.GetObjectId()));
+            Assert.IsTrue(boMan.Contains(addresssID.AsString_CurrentValue()));
             Assert.AreSame(loadedAddress, boMan[addresssID]);
-            Assert.AreSame(loadedAddress, boMan[addresssID.GetObjectId()]);
+            Assert.AreSame(loadedAddress, boMan[addresssID.AsString_CurrentValue()]);
         }
         [Test]
         public void Test_ReturnSameObjectFromBusinessObjectLoader()
@@ -945,36 +948,228 @@ namespace Habanero.Test.BO
             Assert.AreSame(address, loadedAdddress);
         }
 
-        //[Test]
-        //public void Test_NewObjectInObjectManager()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    BusinessObjectManager.Instance.ClearLoadedObjects();
-        //    ContactPersonTestBO.LoadDefaultClassDef();
-        //    //---------------Assert Precondition----------------
+        [Test]
+        public void Test_NewObjectInObjectManager()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, BusinessObjectManager.Instance.Count);
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(contactPersonTestBO.Status.IsNew);
+            Assert.IsNotNull(contactPersonTestBO.ContactPersonID);
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO.ID.AsString_CurrentValue()));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO.ID));
+            Assert.IsFalse(BusinessObjectManager.Instance.Contains(contactPersonTestBO.ContactPersonID.ToString("B")));
+        }
+
+        [Test]
+        public void Test_SavedObjectInObjectManager()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             
-        //    //---------------Execute Test ----------------------
-        //    ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-        //    //---------------Test Result -----------------------
-        //    Assert.IsTrue(contactPersonTestBO.Status.IsNew);
-        //    Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
-        //    Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO));
-        //    BusinessObjectManager.Instance.Contains(contactPersonTestBO.)
-        //}
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(contactPersonTestBO.Status.IsNew);
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO));
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.Save();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(contactPersonTestBO.Status.IsNew);
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO.ID));
+        }
 
-        //[Test]
-        //public void Test_SavedObjectInObjectManager()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    BusinessObjectManager.Instance.ClearLoadedObjects();
-        //    ContactPersonTestBO.LoadDefaultClassDef();
-        //    //---------------Assert Precondition----------------
+        [Test]
+        public void Test_ObjectRemovedFromObjectManager()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO));
+            //--------------- Execute Test ----------------------
+            contactPersonTestBO = null;
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(0, BusinessObjectManager.Instance.Count);
+        }
 
-        //    //---------------Execute Test ----------------------
-        //    ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
-        //}
+        [Test]
+        public void Test_NewObject_ObjectManagerUpdated_WhenIdChangedOnce_Guid()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            Guid firstCpID = Guid.NewGuid();
+            Guid secondCpId = Guid.NewGuid();
+            contactPersonTestBO.ContactPersonID = firstCpID;
+
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(contactPersonTestBO.Status.IsNew);
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.AreNotEqual(firstCpID, secondCpId);
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO.ID.AsString_CurrentValue()));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO.ID));
+            //---------------Execute Test ----------------------
+
+            contactPersonTestBO.ContactPersonID = secondCpId;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(contactPersonTestBO.Status.IsNew);
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO.ID.AsString_CurrentValue()));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO.ID));
+        }
+
+        [Test]
+        public void Test_NewObjectInObjectManager_Int()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BOWithIntID.LoadClassDefWithIntID();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, BusinessObjectManager.Instance.Count);
+            //---------------Execute Test ----------------------
+            BOWithIntID boWithIntID = new BOWithIntID();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(boWithIntID.Status.IsNew);
+            Assert.IsNull(boWithIntID.IntID);
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID.AsString_CurrentValue()));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID));
+        }
+
+        [Test]
+        public void Test_ChangeKey()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID boWithIntID = new BOWithIntID();
+            //--------------- Test Preconditions ----------------
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID));
+            //--------------- Execute Test ----------------------
+            boWithIntID.IntID = TestUtil.GetRandomInt();
+            //--------------- Test Result -----------------------
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID));
+
+        }
+        [Test]
+        public void Test_SavedObjectInObjectManager_Int()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID boWithIntID = new BOWithIntID();
+            boWithIntID.IntID = TestUtil.GetRandomInt();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(boWithIntID.Status.IsNew);
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID));
+            //---------------Execute Test ----------------------
+            boWithIntID.Save();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(boWithIntID.Status.IsNew);
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID));
+        }
+
+        [Test]
+        public void Test_ObjectRemovedFromObjectManager_Int()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID boWithIntID = new BOWithIntID();
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID));
+            //--------------- Execute Test ----------------------
+            boWithIntID = null;
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(0, BusinessObjectManager.Instance.Count);
+        }
+
+        [Test]
+        public void Test_NewObject_ObjectManagerUpdated_WhenIdChangedOnce()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID boWithIntID = new BOWithIntID();
+            int firstIntID = TestUtil.GetRandomInt();
+            int secondIntID = TestUtil.GetRandomInt();
+            boWithIntID.IntID = firstIntID;
+            
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(boWithIntID.Status.IsNew);
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.AreNotEqual(firstIntID, secondIntID);
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID.AsString_CurrentValue()));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID));
+            //---------------Execute Test ----------------------
+            
+            boWithIntID.IntID = secondIntID;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(boWithIntID.Status.IsNew);
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID.AsString_CurrentValue()));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID));
+        }
+
+
+        [Test]
+        public void Test_NewObject_ObjectManagerUpdated_WhenIdChangedTwice()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID boWithIntID = new BOWithIntID();
+            int firstIntID = TestUtil.GetRandomInt();
+            int secondIntID = TestUtil.GetRandomInt();
+            int thirdIntID = TestUtil.GetRandomInt();
+            boWithIntID.IntID = firstIntID;
+            boWithIntID.IntID = secondIntID;
+
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(boWithIntID.Status.IsNew);
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.AreNotEqual(firstIntID, secondIntID);
+            Assert.AreNotEqual(secondIntID, thirdIntID);
+            Assert.AreNotEqual(firstIntID, thirdIntID);
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID.AsString_CurrentValue()));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID));
+            //---------------Execute Test ----------------------
+            boWithIntID.IntID = thirdIntID;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(boWithIntID.Status.IsNew);
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID.AsString_CurrentValue()));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID));
+        }
 
         //Test if ccreate a new object with object id then must be in object manager.
         //Test that persist this object hten in object manager

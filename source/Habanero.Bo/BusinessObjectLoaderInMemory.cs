@@ -174,7 +174,7 @@ namespace Habanero.BO
             {
                 throw new HabaneroDeveloperException("A Error has occured since the object being refreshed is being edited.",
                     "A Error has occured since the object being refreshed is being edited. ID :- " +
-                    businessObject.ID.GetObjectId() + " Class : " + businessObject.ClassDef.ClassNameFull);
+                    businessObject.ID.AsString_CurrentValue() + " Class : " + businessObject.ClassDef.ClassNameFull);
             }
             return businessObject;
         }

@@ -49,7 +49,7 @@ namespace Habanero.BO
         protected object _persistedValue;
         protected bool _origValueIsValid = true;
         protected string _origInvalidReason = "";
-        protected bool _isObjectNew;
+        protected bool _isObjectNew = true;
         protected object _valueBeforeLastEdit;
         private IBOPropAuthorisation _boPropAuthorisation;
 

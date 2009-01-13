@@ -35,7 +35,7 @@ namespace Habanero.Test.BO
     /// Summary description for TestBusinessObject.
     /// </summary>
     [TestFixture]
-    public class TestBusinessObject : TestUsingDatabase
+    public class  TestBusinessObject : TestUsingDatabase
     {
         [TestFixtureSetUp]
         public void TestFixtureSetup()

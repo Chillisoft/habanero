@@ -371,7 +371,7 @@ namespace Habanero.Test.BO.Loaders
 						<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" criteria=""TestProp=Test"" />
 					</property>");
             BusinessObjectLookupList source = (BusinessObjectLookupList)def.LookupList;
-            Assert.AreEqual("Test", source.Criteria);
+            Assert.AreEqual("TestProp = 'Test'", source.Criteria);
         }
 
         [Test]
@@ -385,7 +385,7 @@ namespace Habanero.Test.BO.Loaders
 						<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" sort=""TestProp asc"" />
 					</property>");
             BusinessObjectLookupList source = (BusinessObjectLookupList)def.LookupList;
-            Assert.AreEqual("TestProp asc", source.Sort);
+            Assert.AreEqual("MyBO.TestProp ASC", source.Sort);
         }
 
         [Test]

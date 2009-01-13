@@ -41,6 +41,8 @@ namespace Habanero.Test.BO.TransactionCommitters
             CleanStubDatabaseTransactionTable();
             ContactPersonTestBO.DeleteAllContactPeople();
             BORegistry.DataAccessor = new DataAccessorDB();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            
         }
 
         [TearDown]
@@ -269,7 +271,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
             ContactPersonTestBO contactPersonCompositeKey = GetSavedContactPersonCompositeKey();
-            string oldID = contactPersonCompositeKey.ID.GetObjectId();
+            string oldID = contactPersonCompositeKey.ID.AsString_CurrentValue();
             Assert.IsNotNull(BusinessObjectManager.Instance[oldID]);
             TransactionCommitterDB committer = new TransactionCommitterDB();
             committer.AddBusinessObject(contactPersonCompositeKey);
@@ -279,7 +281,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             //---------------Test Result -----------------------
             TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(contactPersonCompositeKey);
             Assert.IsFalse(BusinessObjectManager.Instance.Contains(oldID));
-            Assert.IsNotNull(BusinessObjectManager.Instance[contactPersonCompositeKey.ID.GetObjectId()]);
+            Assert.IsNotNull(BusinessObjectManager.Instance[contactPersonCompositeKey.ID.AsString_CurrentValue()]);
             //---------------Tear Down--------------------------
             contactPersonCompositeKey.MarkForDelete();
             contactPersonCompositeKey.Save();
@@ -307,7 +309,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
             ContactPersonTestBO contactPersonCompositeKey = GetUnsavedContactPersonCompositeKey();
-            string oldID = contactPersonCompositeKey.ID.GetObjectId();
+            string oldID = contactPersonCompositeKey.ID.AsString_CurrentValue();
             TransactionCommitterDB committer = new TransactionCommitterDB();
             committer.AddBusinessObject(contactPersonCompositeKey);
             //---------------Execute Test ----------------------

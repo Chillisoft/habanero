@@ -32,7 +32,7 @@ namespace Habanero.BO
     /// </summary>
     public class BOPrimaryKey : BOKey, IPrimaryKey
     {
-        private Guid _newObjectID = Guid.Empty;
+        protected Guid _newObjectID = Guid.Empty;
 
         /// <summary>
         /// Constructor to initialise a new primary key
@@ -62,6 +62,7 @@ namespace Habanero.BO
             {
                 throw new InvalidObjectIdException("The ObjectGuidID has already been set for this object.");
             }
+
         }
 
         /// <summary>
@@ -72,7 +73,7 @@ namespace Habanero.BO
         {
             if (IsObjectNew && (_newObjectID != Guid.Empty))
             {
-                return NewObjectID();
+                return _newObjectID.ToString();
             }
             return IsObjectNew ? "" : PersistedDatabaseWhereClause(null);
         }
@@ -88,10 +89,10 @@ namespace Habanero.BO
             //return GetObjectId().GetHashCode();
         }
 
-        private string NewObjectID()
-        {
-            return "ID=" + _newObjectID;
-        }
+        //internal string NewObjectID()
+        //{
+        //    return  _newObjectID.ToString();
+        //}
 
         /// <summary>
         /// Indicates whether to check for duplicates.  This is true when the
@@ -232,6 +233,49 @@ namespace Habanero.BO
         {
             ClassDef classDef = ClassDef.ClassDefs[type];
             return CreateWithValue(classDef, idValue);
+        }
+
+        public override string AsString_CurrentValue()
+        {
+            if (AllPropValuesAreNonNull()) return base.AsString_CurrentValue();
+            if (IsObjectNew && (_newObjectID != Guid.Empty))
+            {
+                return _newObjectID.ToString();
+            } 
+            return base.AsString_CurrentValue();
+        }
+
+        public override string AsString_PreviousValue()
+        {
+            if (AllPropPreviousValuesAreNonNull()) return base.AsString_PreviousValue();
+            if (IsObjectNew && (_newObjectID != Guid.Empty))
+            {
+                return _newObjectID.ToString();
+            }
+            return base.AsString_PreviousValue();
+        }
+
+        private bool AllPropValuesAreNonNull()
+        {
+            foreach (IBOProp prop in this)
+            {
+                if (prop.Value == null) return false;
+            }
+            return true;
+        }
+
+        private bool AllPropPreviousValuesAreNonNull()
+        {
+            foreach (IBOProp prop in this)
+            {
+                if (prop.ValueBeforeLastEdit == null) return false;
+            }
+            return true;
+        }
+
+        public string GetPreviousObjectID()
+        {
+            return "";
         }
     }
 }

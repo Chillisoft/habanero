@@ -87,7 +87,7 @@ namespace Habanero.BO
         /// <param name="businessObject"></param>
         internal void Add(IBusinessObject businessObject)
         {
-            if (_loadedBusinessObjects.ContainsKey(businessObject.ID.GetObjectId()))
+            if (_loadedBusinessObjects.ContainsKey(businessObject.ID.AsString_CurrentValue()))
             {
                 IBusinessObject loadedBusinessObject = this[businessObject.ID];
                 if (ReferenceEquals(loadedBusinessObject, businessObject)) return;
@@ -96,24 +96,39 @@ namespace Habanero.BO
                     "There was a serious developer exception. Two copies of the business object '"
                     + businessObject.ClassDef.ClassNameFull + "' were added to the object manager",
                     "Two copies of the business object '"
-                    + businessObject.ClassDef.ClassNameFull + "' identified by '" + businessObject.ID.GetObjectId() +
+                    + businessObject.ClassDef.ClassNameFull + "' identified by '" + businessObject.ID.AsString_CurrentValue() +
                     "' were added to the object manager");
             }
             //If object is new and does not have IsObjectID then add with the Guid.?
             //Else add as below
-            _loadedBusinessObjects.Add(businessObject.ID.GetObjectId(), new WeakReference(businessObject));
+            _loadedBusinessObjects.Add(businessObject.ID.AsString_CurrentValue(), new WeakReference(businessObject));
             businessObject.ID.Updated += _updateIDEventHandler; //TODO Brett 13 Jan 2009: My concerns are that this will cause the a memory leak
             // to investigate with tests.
         }
 
         private void ID_OnUpdated(object sender, BOKeyEventArgs e)
         {
-          //RemoveUnderThisID   ((BOPrimaryKey)e.BOKey).GetObjectId()
+            //RemoveUnderThisID   ((BOPrimaryKey)e.BOKey).GetObjectId()
             //Add with 
 //            ((BOPrimaryKey)e.BOKey).PersistedDatabaseWhereClause()
             //Remove with old ID and add with new id.
             //If object is new and does not have objectId then remove with Guid?
             //Else remove with Previous Value.
+            //BOObjectID boPrimaryKey = e.BOKey as BOObjectID;
+            BOPrimaryKey boPrimaryKey = e.BOKey as BOPrimaryKey;
+            if (boPrimaryKey == null) return;
+            string previousObjectID = boPrimaryKey.AsString_PreviousValue();
+            if (this.Contains(previousObjectID))
+            {
+                IBusinessObject businessObject = this[previousObjectID];
+
+                if ((businessObject.Status.IsNew))
+                {
+                    this.Remove(previousObjectID);
+                    this.Add(businessObject);
+                }
+            }
+
         }
 
         /// <summary>
@@ -137,7 +152,7 @@ namespace Habanero.BO
         /// <returns> Whether the busienss object is loadd or not</returns>
         internal bool Contains(IPrimaryKey id)
         {
-            return Contains(id.GetObjectId());
+            return Contains(id.AsString_CurrentValue());
             
         }
 
@@ -187,7 +202,7 @@ namespace Habanero.BO
         /// <param name="id">ID of the business object to be removed.</param>
         internal void Remove(IPrimaryKey id)
         {
-            Remove(id.GetObjectId());
+            Remove(id.AsString_CurrentValue());
         }
         /// <summary>
         /// Removes the business object Business object manager. NB: if a seperate instance of the object 
@@ -224,7 +239,7 @@ namespace Habanero.BO
         /// <returns>The business object from the object manger.</returns>
         internal IBusinessObject this[IPrimaryKey objectID]
         {
-            get { return this[objectID.GetObjectId()]; }
+            get { return this[objectID.AsString_CurrentValue()]; }
         }
 
 

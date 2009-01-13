@@ -700,14 +700,22 @@ namespace Habanero.BO.ClassDefinition
         {
             if (!this.HasLookupList()) return true;
             if (propValue == null || string.IsNullOrEmpty(Convert.ToString(propValue))) return true;
-            if(this.LookupList is BusinessObjectLookupList)
-            {
-                BusinessObjectLookupList list = ((BusinessObjectLookupList) this.LookupList);
-                if(list.Criteria == null) return true;//If there are no criteria then the business object will
-                // definitely be in the list since the business object is the right type.
-                IBusinessObject businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue(list.BoType, propValue);
-                return businessObject == null? true: list.Criteria.IsMatch(businessObject);
-            }
+            
+//            if(this.LookupList is BusinessObjectLookupList)
+//            {
+//                BusinessObjectLookupList list = ((BusinessObjectLookupList) this.LookupList);
+//                if(list.Criteria == null) return true;//If there are no criteria then the business object will
+//                // definitely be in the list since the business object is the right type.
+//                IBusinessObject businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue(list.BoType, propValue);
+//                if (businessObject == null)
+//                {
+//                    //foreach(IBusinessObject businessObject in BusinessObjectManager.Instance)
+//                    //{
+//
+//                    //}
+//                }
+//                return businessObject == null? true: list.Criteria.IsMatch(businessObject);
+//            }
             Dictionary<string, string> idValueLookupList = this.LookupList.GetIDValueLookupList();
             if (!idValueLookupList.ContainsKey(ConvertValueToString((propValue))))
             {
