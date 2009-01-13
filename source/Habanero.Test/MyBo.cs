@@ -97,18 +97,6 @@ namespace Habanero.Test
             }
         }
 
-        public Guid? TestProp3
-        {
-            get
-            {
-                return (Guid?) this.GetPropertyValue("TestProp3");
-            }
-            set
-            {
-                this.SetPropertyValue("TestProp3", value);
-            }
-        }
-
         public static ClassDef LoadClassDefsNoUIDef()
         {
                         XmlClassLoader itsLoader = new XmlClassLoader();

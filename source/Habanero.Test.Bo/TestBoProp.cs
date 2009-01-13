@@ -64,6 +64,25 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_ValidateProp_IsValid()
+        {
+            //---------------Set up test pack-------------------
+            //Test compulsory with no default set
+            PropDef lPropDefWithRules = new PropDef("PropNameWithRules", "System", "String",
+                                                    PropReadWriteRule.ReadWrite, null, null, true, false);
+            lPropDefWithRules.AddPropRule(new PropRuleString(lPropDefWithRules.PropertyName, "", -1, -1, null));
+            IBOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(lBOProp.IsValid);
+            Assert.AreEqual("", lBOProp.InvalidReason);
+            //---------------Execute Test ----------------------
+            lBOProp.Validate();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(lBOProp.IsValid);
+            StringAssert.Contains("'Prop Name With Rules' is a compulsory field and has no value.", lBOProp.InvalidReason);
+        }
+
+        [Test]
         public void TestRestorePropValue()
         {
             _prop.InitialiseProp("OriginalValue");
@@ -89,19 +108,44 @@ namespace Habanero.Test.BO
         #region Tests for Compulsory Attribute
 
         [Test]
-        public void TestPropCompulsoryRestore()
+        public void Test_SetInvalidPropToValidValue()
         {
+            //---------------Set up test pack-------------------
             //Test compulsory with no default set
             PropDef lPropDefWithRules = new PropDef("PropNameWithRules", "System", "String",
                                                     PropReadWriteRule.ReadWrite, null, null, true, false);
             lPropDefWithRules.AddPropRule(new PropRuleString(lPropDefWithRules.PropertyName, "", -1, -1, null));
             IBOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
+            //Do validate
+            lBOProp.Validate();
+            //---------------Assert Precondition----------------
             Assert.IsFalse(lBOProp.IsValid);
             Assert.IsTrue(lBOProp.InvalidReason.Length > 0);
+            //---------------Execute Test ----------------------
             lBOProp.Value = "New Value";
+            //---------------Test Result -----------------------
             Assert.IsTrue(lBOProp.IsValid);
             Assert.IsFalse(lBOProp.InvalidReason.Length > 0);
+        }
+
+        [Test]
+        public void Test_RestoreValidPropToInvalidState()
+        {
+            //---------------Set up test pack-------------------
+                        //Test compulsory with no default set
+            PropDef lPropDefWithRules = new PropDef("PropNameWithRules", "System", "String",
+                                                    PropReadWriteRule.ReadWrite, null, null, true, false);
+            lPropDefWithRules.AddPropRule(new PropRuleString(lPropDefWithRules.PropertyName, "", -1, -1, null));
+            IBOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
+            //Do validate
+            lBOProp.Validate(); 
+            lBOProp.Value = "New Value";
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(lBOProp.IsValid);
+            Assert.IsFalse(lBOProp.InvalidReason.Length > 0);
+            //---------------Execute Test ----------------------
             lBOProp.RestorePropValue();
+            //---------------Test Result -----------------------
             Assert.IsFalse(lBOProp.IsValid);
             Assert.IsTrue(lBOProp.InvalidReason.Length > 0);
         }
@@ -476,15 +520,12 @@ namespace Habanero.Test.BO
             PropDef propDef = new PropDef("TestProp", "System", "String",
                                   PropReadWriteRule.ReadWrite, null, null, true, false);
             IBOProp boProp = propDef.CreateBOProp(true);
-
+            boProp.Validate();
             Assert.IsFalse(boProp.InvalidReason.Contains("'TestProp'"));
             Assert.IsTrue(boProp.InvalidReason.Contains("'Test Prop'"));
             Assert.IsFalse(boProp.InvalidReason.Contains("'Test Property'"));
 
-//            boProp.DisplayName = "Test Property";
             Assert.IsFalse(boProp.InvalidReason.Contains("'TestProp'"));
-//            Assert.IsFalse(boProp.InvalidReason.Contains("'Test Prop'"));
-//            Assert.IsTrue(boProp.InvalidReason.Contains("'Test Property'"));
         }
 
         #region Tests for Read Write Rules

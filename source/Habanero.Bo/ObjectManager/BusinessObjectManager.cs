@@ -55,7 +55,12 @@ namespace Habanero.BO
         private readonly Dictionary<string, WeakReference> _loadedBusinessObjects =
             new Dictionary<string, WeakReference>();
 
-        private BusinessObjectManager() {}
+        private readonly EventHandler<BOKeyEventArgs> _updateIDEventHandler;
+
+        private BusinessObjectManager()
+        {
+            _updateIDEventHandler = ID_OnUpdated;
+        }
 
         ///<summary>
         /// Returns the particular instance of the Business Object manager being used. 
@@ -85,18 +90,30 @@ namespace Habanero.BO
             if (_loadedBusinessObjects.ContainsKey(businessObject.ID.GetObjectId()))
             {
                 IBusinessObject loadedBusinessObject = this[businessObject.ID];
-                if (!ReferenceEquals(loadedBusinessObject, businessObject))
-                {
-                    throw new HabaneroDeveloperException(
-                        "There was a serious developer exception. Two copies of the business object '"
-                        + businessObject.ClassDef.ClassNameFull + "' were added to the object manager",
-                        "Two copies of the business object '"
-                        + businessObject.ClassDef.ClassNameFull + "' identified by '" + businessObject.ID.GetObjectId() +
-                        "' were added to the object manager");
-                }
-                return;
+                if (ReferenceEquals(loadedBusinessObject, businessObject)) return;
+
+                throw new HabaneroDeveloperException(
+                    "There was a serious developer exception. Two copies of the business object '"
+                    + businessObject.ClassDef.ClassNameFull + "' were added to the object manager",
+                    "Two copies of the business object '"
+                    + businessObject.ClassDef.ClassNameFull + "' identified by '" + businessObject.ID.GetObjectId() +
+                    "' were added to the object manager");
             }
+            //If object is new and does not have IsObjectID then add with the Guid.?
+            //Else add as below
             _loadedBusinessObjects.Add(businessObject.ID.GetObjectId(), new WeakReference(businessObject));
+            businessObject.ID.Updated += _updateIDEventHandler; //TODO Brett 13 Jan 2009: My concerns are that this will cause the a memory leak
+            // to investigate with tests.
+        }
+
+        private void ID_OnUpdated(object sender, BOKeyEventArgs e)
+        {
+          //RemoveUnderThisID   ((BOPrimaryKey)e.BOKey).GetObjectId()
+            //Add with 
+//            ((BOPrimaryKey)e.BOKey).PersistedDatabaseWhereClause()
+            //Remove with old ID and add with new id.
+            //If object is new and does not have objectId then remove with Guid?
+            //Else remove with Previous Value.
         }
 
         /// <summary>

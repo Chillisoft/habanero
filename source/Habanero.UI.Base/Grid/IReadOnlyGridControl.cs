@@ -58,6 +58,9 @@ namespace Habanero.UI.Base
     /// </summary>
     public interface IReadOnlyGridControl : IGridControl 
     {
+        ///<summary>
+        /// R
+        ///</summary>
         IBusinessObject SelectedBusinessObject { get; set; }
 
         /// <summary>

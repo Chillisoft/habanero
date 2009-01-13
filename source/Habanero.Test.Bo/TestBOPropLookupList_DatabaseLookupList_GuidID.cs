@@ -354,7 +354,7 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOPropLookupList(GetPropDef_Guid_WithLookupList());
             Guid guidNotInLookupList = Guid.NewGuid();
             boProp.InitialiseProp(guidNotInLookupList);
-
+            boProp.Validate();
             //---------------Assert Precondition----------------
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(guidNotInLookupList, boProp.Value);

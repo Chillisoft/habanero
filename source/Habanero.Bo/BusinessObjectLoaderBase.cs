@@ -204,6 +204,7 @@ namespace Habanero.BO
             (IClassDef classDef, Criteria criteria, OrderCriteria orderCriteria)
         {
             IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
+            if (orderCriteria == null) orderCriteria = new OrderCriteria();
             col.ClassDef = classDef;
             QueryBuilder.PrepareCriteria(classDef, criteria);
             col.SelectQuery.Criteria = criteria;

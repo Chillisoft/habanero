@@ -198,7 +198,7 @@ namespace Habanero.BO
 
         ///<summary>
         /// For a given value e.g. a Guid Identifier '{......}' this will build up a primary key object that can be used to
-        /// load the business object from the Data store <see cref="GetBusinessObjectByValue"/>
+        /// load the business object from the Data store (see Business Object loader GetBusinessObjectByValue)
         /// This can only be used for business objects that have a single property for the primary key
         /// (i.e. non composite primary keys)
         ///</summary>
@@ -210,7 +210,7 @@ namespace Habanero.BO
             PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
             if (primaryKeyDef.IsCompositeKey) return null;
 
-            BOPropCol boPropCol = classDef.createBOPropertyCol(true);
+            BOPropCol boPropCol = classDef.createBOPropertyCol(false);
             BOPrimaryKey boPrimaryKey = primaryKeyDef.CreateBOKey(boPropCol) as BOPrimaryKey;
             if (boPrimaryKey != null)
             {

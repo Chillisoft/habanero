@@ -44,7 +44,6 @@ namespace Habanero.BO
     {
         private readonly Dictionary<string, IBOProp> _props;
         private readonly KeyDef _keyDef;
-
         /// <summary>
         /// Indicates that the value held by one or more of the properties in the
         /// key has been changed. This is especially critical for a primary key
@@ -455,25 +454,14 @@ namespace Habanero.BO
             }
             foreach (BOProp prop in lhs._props.Values)
             {
-                if (rhs.Contains(prop.PropertyName))
-                {
-                    IBOProp rhsProp = rhs[prop.PropertyName];
-                    if (prop.Value != rhsProp.Value)
-                    {
-                        if (prop.Value != null && rhsProp.Value != null)
-                        {
-                            if (!prop.Value.Equals(rhsProp.Value)) return false;
-                        } 
-                        else 
-                        {
-                            return false;
-                        }
-                    }
-                }
-                else
-                {
-                    return false;
-                }
+                if (!rhs.Contains(prop.PropertyName)) return false;
+                IBOProp rhsProp = rhs[prop.PropertyName];
+
+                if (prop.Value == rhsProp.Value) continue;
+
+                if (prop.Value == null || rhsProp.Value == null) return false;
+
+                if (!prop.Value.Equals(rhsProp.Value)) return false;
             }
             return true;
         }

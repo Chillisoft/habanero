@@ -218,7 +218,7 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOPropLookupList(GetPropDef_Int_WithLookupList());
             int intNotInLookupList = _validIntID + 22;
             boProp.InitialiseProp(intNotInLookupList);
-
+            boProp.Validate();
             //---------------Assert Precondition----------------
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(intNotInLookupList, boProp.Value);
@@ -339,8 +339,55 @@ namespace Habanero.Test.BO
             Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
             Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         }
-
-
+        [Test]
+        public void Test_SetValue_PersistedBusinessObject_InList()
+        {
+            Assert.Fail("Not yet implemented");
+            BOProp boProp = new BOPropLookupList(_propDef_int);
+            const int originalPropValue = 99;
+            boProp.Value = originalPropValue;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
+            Assert.IsNotNull(boProp.Value);
+            //---------------Execute Test ----------------------
+            boProp.Value = _validLookupValue;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
+            Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
+        }
+        [Test]
+        public void Test_SetValue_PersistedBusinessObject_NotInList()
+        {
+            Assert.Fail("Not yet implemented");
+            BOProp boProp = new BOPropLookupList(_propDef_int);
+            const int originalPropValue = 99;
+            boProp.Value = originalPropValue;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
+            Assert.IsNotNull(boProp.Value);
+            //---------------Execute Test ----------------------
+            boProp.Value = _validLookupValue;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
+            Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
+        }
+        [Test]
+        public void Test_SetValue_NewBusinessObject_NotInList()
+        {
+            Assert.Fail("Not yet implemented");
+            //Check Validation of lookup list does not make invalid
+            BOProp boProp = new BOPropLookupList(_propDef_int);
+            const int originalPropValue = 99;
+            boProp.Value = originalPropValue;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
+            Assert.IsNotNull(boProp.Value);
+            //---------------Execute Test ----------------------
+            boProp.Value = _validLookupValue;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
+            Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
+        }
         //If an invalid property types is set to the property then
         //  An error is raised. Stating the error reason.
         //  The property value will be set to the previous property value.
@@ -560,7 +607,14 @@ namespace Habanero.Test.BO
     {
         private readonly IBusinessObjectCollection _boCollection;
 
-        public BusinessObjectLookupListStub(Type boType, IBusinessObjectCollection boCollection) : base(boType)
+        public BusinessObjectLookupListStub(Type boType, IBusinessObjectCollection boCollection, string sort)
+            : base(boType, "", sort)
+        {
+            _boCollection = boCollection;
+        }
+
+        public BusinessObjectLookupListStub(Type type, IBusinessObjectCollection boCollection)
+            : base(type)
         {
             _boCollection = boCollection;
         }

@@ -945,6 +945,44 @@ namespace Habanero.Test.BO
             Assert.AreSame(address, loadedAdddress);
         }
 
+        //[Test]
+        //public void Test_NewObjectInObjectManager()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    BusinessObjectManager.Instance.ClearLoadedObjects();
+        //    ContactPersonTestBO.LoadDefaultClassDef();
+        //    //---------------Assert Precondition----------------
+            
+        //    //---------------Execute Test ----------------------
+        //    ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+        //    //---------------Test Result -----------------------
+        //    Assert.IsTrue(contactPersonTestBO.Status.IsNew);
+        //    Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+        //    Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonTestBO));
+        //    BusinessObjectManager.Instance.Contains(contactPersonTestBO.)
+        //}
+
+        //[Test]
+        //public void Test_SavedObjectInObjectManager()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    BusinessObjectManager.Instance.ClearLoadedObjects();
+        //    ContactPersonTestBO.LoadDefaultClassDef();
+        //    //---------------Assert Precondition----------------
+
+        //    //---------------Execute Test ----------------------
+        //    ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+        //    //---------------Test Result -----------------------
+        //    Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+        //}
+
+        //Test if ccreate a new object with object id then must be in object manager.
+        //Test that persist this object hten in object manager
+        //test that remove revf to this object then call gccolllectt then removed from object mamnager
+        //Test for IntID object as above.
+        //Test int id change ID ensure in object manger with new id removed with old id
+        //test int id change id change id still in object manger with new id removed with intermediate id.
+        // test serialization constructor
         private static ContactPersonTestBO CreateSavedCP()
         {
             ContactPersonTestBO cp = new ContactPersonTestBO();

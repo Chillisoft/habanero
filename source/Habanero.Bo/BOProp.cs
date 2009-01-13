@@ -114,6 +114,16 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// Validates whether the property values set for the BOProp are valid
+        /// as compared to the BOProp rules. This is used by the Business Object 
+        /// Validate Method.
+        /// </summary>
+        public void Validate()
+        {
+            _isValid = _propDef.IsValueValid(this.Value, ref _invalidReason);
+        }
+
+        /// <summary>
         /// Initialises the property with the specified value, and indicates
         /// whether the object is new or not
         /// </summary>
@@ -124,7 +134,9 @@ namespace Habanero.BO
             object newValue;
             ParsePropValue(propValue, out newValue);
             _invalidReason = "";
-            _isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
+            //Brett 12 Jan 2009: Removed due to performance improvement during loading.
+            // No bo loaded from the database will ever be placed in an invalid state
+//            _isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
 
             _currentValue = newValue;
             _isObjectNew = isObjectNew;
@@ -152,10 +164,11 @@ namespace Habanero.BO
         /// </summary>
         public void RestorePropValue()
         {
-            _isValid = _origValueIsValid;
-            _invalidReason = _origInvalidReason;
+//            _isValid = _origValueIsValid;
+//            _invalidReason = _origInvalidReason;
             _currentValue = _persistedValue;
             _valueBeforeLastEdit = _persistedValue;
+            Validate();
             _isDirty = false;
             FireBOPropValueUpdated();
         }

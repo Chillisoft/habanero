@@ -10,8 +10,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
     [TestFixture]
     public class TestRelatedBoCol_AddedBOs //:TestBase
     {
-        private DataAccessorInMemory _dataAccessor;
-        private DataStoreInMemory _dataStore;
         private static OrganisationTestBO _organisationTestBO;
         private readonly TestUtilsRelated util = new TestUtilsRelated();
 
@@ -23,9 +21,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
             ClassDef.ClassDefs.Clear();
-            _dataStore = new DataStoreInMemory();
-            _dataAccessor = new DataAccessorInMemory(_dataStore);
-            BORegistry.DataAccessor = _dataAccessor;
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
             OrganisationTestBO.LoadDefaultClassDef();
         }
@@ -33,15 +28,17 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         [SetUp]
         public void SetupTest()
         {
-            //Runs every time that any testmethod is executed
+            //Runs every time that any testmethod is executed            
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            OrganisationTestBO.LoadDefaultClassDef();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             _organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
         }
-
         [TearDown]
         public void TearDownTest()
         {
-            //runs every time any testmethod is complete
-            _dataStore.ClearAllBusinessObjects();
+            //runs every time any testmethod is completeBORegistry.DataAccessor
             TestUtil.WaitForGC();
         }
 
@@ -78,8 +75,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         private static ContactPersonTestBO CreateSavedContactPerson()
         {
             MultipleRelationship<ContactPersonTestBO> relationship = GetContactPersonRelationship();
-            ContactPersonTestBO cp =
-                (ContactPersonTestBO) relationship.BusinessObjectCollection.CreateBusinessObject();
+            ContactPersonTestBO cp = relationship.BusinessObjectCollection.CreateBusinessObject();
             cp.Surname = TestUtil.CreateRandomString();
             cp.FirstName = TestUtil.CreateRandomString();
             cp.Save();
@@ -89,11 +85,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         #endregion
 
         #region Added Business object in current cpCollection
-        //TODO Add object to this relationship it already exists 
-        // in another relationshp what to do.
-        //TODO: what must we do if you add a business object to a relationship but the foreign key does not match?
-        // Possibly this is a strategy must look at this so that extendable
-        // (see similar issue for remove below)
         [Test]
         public void Test_AddMethod()
         {

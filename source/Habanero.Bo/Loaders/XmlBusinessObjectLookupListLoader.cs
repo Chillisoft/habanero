@@ -69,8 +69,6 @@ namespace Habanero.BO.Loaders
         protected override object Create()
         {
 			return _defClassFactory.CreateBusinessObjectLookupList(_assemblyName, _className, _criteria, _sort);
-			//return new BusinessObjectLookupList(_assemblyName, _className);
-			//return new BusinessObjectLookupList(_type);
 		}
     }
 }

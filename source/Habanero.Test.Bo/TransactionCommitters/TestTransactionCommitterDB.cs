@@ -630,7 +630,7 @@ namespace Habanero.Test.BO.TransactionCommitters
 
             //---------------Execute Test ----------------------
             committerDB.CommitTransaction();
-
+            //TODO Brett 12 Jan 2009: Validate on save 
             //---------------Test Result -----------------------
             //AssertBOStateIsValidAfterInsert_Updated(contactPersonTestBO);
             //BOLoader.Instance.Refresh(contactPersonTestBO);

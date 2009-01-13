@@ -296,21 +296,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual(_validID.ToString(), boProp.Value);
             Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         }
-        //[Test]
-        //public void Test_BOPropLookupList_PropValueToDisplay_Validint()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    BOProp boProp = new BOPropLookupList(GetPropDef_int_WithLookupList());
-        //    boProp.InitialiseProp(_validBusinessObject.MyBoID);
-        //    //---------------Assert Precondition----------------
-        //    Assert.IsNotNull(boProp.Value);
-        //    Assert.AreEqual(_validBusinessObject.MyBoID, boProp.Value);
-        //    //---------------Execute Test ----------------------
-        //    object propertyValueToDisplay = boProp.PropertyValueToDisplay;
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual(_validBusinessObject.MyBoID, boProp.Value);
-        //    Assert.AreEqual(_validLookupValue, propertyValueToDisplay);
-        //}
 
         [Test]
         public void Test_BOPropLookupList_PropValueToDisplay_Invalidint()
@@ -320,7 +305,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BOProp boProp = new BOPropLookupList(GetPropDef_int_WithLookupList());
             boProp.InitialiseProp(_intKeyDoesNotExistInList);
-
+            boProp.Validate();
             //---------------Assert Precondition----------------
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(_intKeyDoesNotExistInList, boProp.Value);

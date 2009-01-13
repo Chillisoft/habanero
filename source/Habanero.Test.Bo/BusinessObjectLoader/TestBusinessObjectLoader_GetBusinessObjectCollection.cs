@@ -1220,7 +1220,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
-            //            DateTime now = DateTime.Now;
             const string surname = "TestSurname";
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(surname);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();

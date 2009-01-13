@@ -196,8 +196,9 @@ namespace Habanero.Test.BO.ClassDefinition
             bool valid = propDef.IsValueValid(invalidValue, ref errMsg);
 
             //---------------Test Result -----------------------
-            string expectedErrorMessage = "'Prop Name' invalid since '" + invalidValue + "' is not in the lookup list of available values.";
-            Assert.AreEqual(expectedErrorMessage, errMsg);
+            string expectedErrorMessage = "Prop Name' invalid since '" + invalidValue + "' is not in the lookup list of available values.";
+            StringAssert.Contains(expectedErrorMessage, errMsg);
+//            Assert.AreEqual(expectedErrorMessage, errMsg);
             Assert.IsFalse(valid);
         }
 
@@ -240,8 +241,8 @@ namespace Habanero.Test.BO.ClassDefinition
             bool valid = propDef.IsValueValid(invalidValue, ref errMsg);
 
             //---------------Test Result -----------------------
-            string expectedErrorMessage = "'Prop Name' invalid since '" + invalidValue + "' is not in the lookup list of available values.";
-            Assert.AreEqual(expectedErrorMessage, errMsg);
+            string expectedErrorMessage = "Prop Name' invalid since '" + invalidValue + "' is not in the lookup list of available values.";
+            StringAssert.Contains(expectedErrorMessage, errMsg);
             Assert.IsFalse(valid);
         }
 

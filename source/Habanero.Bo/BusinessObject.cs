@@ -48,8 +48,6 @@ namespace Habanero.BO
         public event EventHandler<BOEventArgs> Deleted;
         public event EventHandler<BOEventArgs> Restored;
         public event EventHandler<BOEventArgs> MarkedForDelete;
-
-
         public event EventHandler<BOEventArgs> PropertyUpdated;
 
         #endregion
@@ -80,7 +78,8 @@ namespace Habanero.BO
         {
         }
 
-        protected BusinessObject(SerializationInfo info, StreamingContext context) {
+        protected BusinessObject(SerializationInfo info, StreamingContext context) 
+        {
             Initialise(ClassDef.ClassDefs[this.GetType()]);
             foreach (IBOProp prop in _boPropCol)
             {
@@ -105,6 +104,7 @@ namespace Habanero.BO
         protected internal BusinessObject(ClassDef def)
         {
             Initialise(def);
+            //BusinessObjectManager.Instance.Add(this);
         }
 
         private void InitialisePrimaryKeyPropertiesBasedOnParentClass(Guid myID)

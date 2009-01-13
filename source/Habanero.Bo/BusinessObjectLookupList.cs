@@ -43,7 +43,6 @@ namespace Habanero.BO
         private Type _boType;
         private string _assemblyName;
         private string _className;
-        private string _criteria;
 
         /// <summary>
         /// Provides a key value pair where the persisted value can be returned for 
@@ -60,7 +59,9 @@ namespace Habanero.BO
         private Dictionary<string, string> _keyValueDictionary = new Dictionary<string, string>();
 
         private DateTime _lastCallTime;
-        private string _sort;
+        private OrderCriteria _sort;
+        private readonly string _criteriaString;
+        private readonly string _sortString;
 
         #region Constructors
 
@@ -121,10 +122,24 @@ namespace Habanero.BO
         public BusinessObjectLookupList(string assemblyName, string className, string criteria, string sort)
             : this(assemblyName, className)
         {
-            _criteria = criteria;
-            Sort = sort;
+            _criteriaString = criteria;
+            _sortString = sort;
         }
 
+        /// <summary>
+        /// Constructor to initialise a new lookup-list
+        /// </summary>
+        /// <param name="type">The type of business object that the lookup list is being loaded for</param>
+        /// <param name="criteria">Sql criteria to apply on loading of the 
+        /// collection</param>
+        /// <param name="sort">The property to sort on.
+        /// The possible formats are: "property", "property asc",
+        /// "property desc" and "property des".</param>
+        public BusinessObjectLookupList(Type type, string criteria, string sort):this(type)
+        {
+            _criteriaString = criteria;
+            _sortString = sort;
+        }
         #endregion Constructors
 
         #region Properties
@@ -162,14 +177,34 @@ namespace Habanero.BO
             }
         }
 
+//        /// <summary>
+//        /// Gets and sets the sql criteria used to limit which objects
+//        /// are loaded in the BO collection
+//        /// </summary>
+//        public string Criteria
+//        {
+//            get { return _criteria; }
+//            private set { _criteria = value;
+//            Criteria criteria = BusinessObjectLoaderBase.GetCriteriaObject(classDef, criteriaString);
+//            }
+//        }
+        private Criteria _criteria;
+
+
         /// <summary>
         /// Gets and sets the sql criteria used to limit which objects
         /// are loaded in the BO collection
         /// </summary>
-        public string Criteria
+        public Criteria Criteria
         {
-            get { return _criteria; }
-            set { _criteria = value; }
+            get
+            {
+                if (_criteria == null && !string.IsNullOrEmpty(_criteriaString))
+                {
+                    _criteria = CriteriaParser.CreateCriteria(_criteriaString);
+                }
+                return _criteria;
+            } //            private set { _criteria = value; }
         }
 
         /// <summary>
@@ -179,10 +214,16 @@ namespace Habanero.BO
         /// The possible formats are: "property", "property asc",
         /// "property desc" and "property des".
         /// </summary>
-        public string Sort
+        public OrderCriteria Sort
         {
-            get { return _sort; }
-            set { _sort = FormatSortAttribute(value); }
+            get { if(_sort == null && !string.IsNullOrEmpty(_sortString))
+            {
+                ClassDef classDef = this.LookupBoClassDef;
+                _sort = QueryBuilder.CreateOrderCriteria(classDef, _sortString);
+            }
+                return _sort;
+            }
+            //set { _sort = FormatSortAttribute(value); }
         }
 
         #endregion Properties
@@ -235,12 +276,14 @@ namespace Habanero.BO
             ClassDef classDef = LookupBoClassDef;
             if (classDef.PrimaryKeyDef.Count > 1)
             {
-                throw new HabaneroDeveloperException("There is an application setup error. Please contact your system administrator",
-                        "The lookup list cannot contain business objects '" + classDef.ClassNameFull + "' with a composite primary key.");
+                throw new HabaneroDeveloperException
+                    ("There is an application setup error. Please contact your system administrator",
+                     "The lookup list cannot contain business objects '" + classDef.ClassNameFull
+                     + "' with a composite primary key.");
             }
 
             IBusinessObjectCollection col = GetBusinessObjectCollection();
-            _displayValueDictionary = CreateDisplayValueDictionary(col, String.IsNullOrEmpty(Sort));
+            _displayValueDictionary = CreateDisplayValueDictionary(col, Sort == null);
             FillKeyValueDictionary();
             _lastCallTime = DateTime.Now;
             return _displayValueDictionary;
@@ -255,7 +298,7 @@ namespace Habanero.BO
         {
             ClassDef classDef = LookupBoClassDef;
             return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
-                (classDef, _criteria ?? "", _sort);
+                (classDef, this.Criteria, this.Sort);
         }
 
         ///<summary>
@@ -310,7 +353,6 @@ namespace Habanero.BO
                 foreach (BusinessObject bo in col)
                 {
                     string stringValue = GetAvailableDisplayValue(lookupList, bo.ToString());
-                    //string objectID = Convert.ToString(bo.ID.GetAsValue());
                     string objectID = this.PropDef.ConvertValueToString(bo.ID.GetAsValue());
                     AddBusinessObjectToLookupList(lookupList, objectID, stringValue);
                 }
@@ -387,7 +429,7 @@ namespace Habanero.BO
         /// <returns>Returns an ICollection object</returns>
         private ICollection CreateValueList(IBusinessObjectCollection col)
         {
-            if (String.IsNullOrEmpty(_sort))
+            if (this.Sort == null)
             {
                 SortedStringCollection valueList = new SortedStringCollection();
                 foreach (IBusinessObject bo in col)
@@ -406,75 +448,76 @@ namespace Habanero.BO
                 return valueList;
             }
         }
-
-        /// <summary>
-        /// Indicates whether the given sort attribute is valid
-        /// </summary>
-        private string FormatSortAttribute(string sortAttribute)
-        {
-            string modifiedString = sortAttribute;
-            if (!String.IsNullOrEmpty(sortAttribute))
-            {
-                string propertyName = sortAttribute;
-                if (sortAttribute.Contains(" "))
-                {
-                    propertyName = StringUtilities.GetLeftSection(sortAttribute, " ");
-                }
-
-                ClassDef classDef = null;
-                if (ClassDef.ClassDefs.Contains(_assemblyName, _className))
-                {
-                    classDef = ClassDef.ClassDefs[_assemblyName, _className];
-                }
-                if (classDef == null)
-                {
-                    return sortAttribute;
-                    // Throwing this error is problematic during loading of classDefs when not
-                    //    all the defs have loaded yet.  Rather let the missing column be
-                    //    exposed by a database error.
-                    //throw new InvalidXmlDefinitionException(String.Format(
-                    //    "In a 'businessLookupList' element, " +
-                    //    "the class definitions for class '{0}' and assembly '{1}' could " +
-                    //    "not be found.  Check that the class definitions for that type have " +
-                    //    "been loaded.", _className, _assemblyName));
-                }
-
-                bool propertyNameExists = false;
-                foreach (PropDef propDef in classDef.PropDefColIncludingInheritance)
-                {
-                    if (propDef.PropertyName.ToLower() == propertyName.ToLower())
-                    {
-                        propertyNameExists = true;
-                    }
-                }
-                if (!propertyNameExists)
-                {
-                    throw new InvalidXmlDefinitionException
-                        (String.Format
-                             ("In a 'sort' attribute on a 'businessLookupList' element, the "
-                              + "property name '{0}' does not exist.", propertyName));
-                }
-
-                if (sortAttribute.Contains(" "))
-                {
-                    string sortOrder = StringUtilities.GetRightSection(sortAttribute, propertyName + " ");
-                    if (sortOrder.ToLower() == "des")
-                    {
-                        modifiedString = propertyName + " desc";
-                    }
-                    else if (sortOrder.ToLower() != "asc" && sortOrder.ToLower() != "desc")
-                    {
-                        throw new InvalidXmlDefinitionException
-                            (String.Format
-                                 ("In a 'sort' attribute on a 'businessLookupList' element, the "
-                                  + "attribute given as '{0}' was not valid.  The correct "
-                                  + "definition has the form of 'property' or " + "'property asc' or 'property desc'.",
-                                  sortAttribute));
-                    }
-                }
-            }
-            return modifiedString;
-        }
+//
+//        /// <summary>
+//        /// Indicates whether the given sort attribute is valid
+//        /// </summary>
+//        private string FormatSortAttribute(string sortAttribute)
+//        {
+//            string modifiedString = sortAttribute;
+//            if (!String.IsNullOrEmpty(sortAttribute))
+//            {
+//                string propertyName = sortAttribute;
+//                if (sortAttribute.Contains(" "))
+//                {
+//                    propertyName = StringUtilities.GetLeftSection(sortAttribute, " ");
+//                }
+//
+//                ClassDef classDef = null;
+//                if (ClassDef.ClassDefs.Contains(_assemblyName, _className))
+//                {
+//                    classDef = LookupBoClassDef;
+////                    classDef = ClassDef.ClassDefs[_assemblyName, _className];
+//                }
+//                if (classDef == null)
+//                {
+//                    return sortAttribute;
+//                    // Throwing this error is problematic during loading of classDefs when not
+//                    //    all the defs have loaded yet.  Rather let the missing column be
+//                    //    exposed by a database error.
+////                    throw new InvalidXmlDefinitionException(String.Format(
+////                        "In a 'businessLookupList' element, " +
+////                        "the class definitions for class '{0}' and assembly '{1}' could " +
+////                        "not be found.  Check that the class definitions for that type have " +
+////                        "been loaded.", _className, _assemblyName));
+//                }
+//
+//                bool propertyNameExists = false;
+//                foreach (PropDef propDef in classDef.PropDefColIncludingInheritance)
+//                {
+//                    if (propDef.PropertyName.ToLower() == propertyName.ToLower())
+//                    {
+//                        propertyNameExists = true;
+//                    }
+//                }
+//                if (!propertyNameExists)
+//                {
+//                    throw new InvalidXmlDefinitionException
+//                        (String.Format
+//                             ("In a 'sort' attribute on a 'businessLookupList' element, the "
+//                              + "property name '{0}' does not exist.", propertyName));
+//                }
+//
+//                if (sortAttribute.Contains(" "))
+//                {
+//                    string sortOrder = StringUtilities.GetRightSection(sortAttribute, propertyName + " ");
+//                    if (sortOrder.ToLower() == "des")
+//                    {
+//                        modifiedString = propertyName + " desc";
+//                    }
+//                    else if (sortOrder.ToLower() != "asc" && sortOrder.ToLower() != "desc")
+//                    {
+//                        throw new InvalidXmlDefinitionException
+//                            (String.Format
+//                                 ("In a 'sort' attribute on a 'businessLookupList' element, the "
+//                                  + "attribute given as '{0}' was not valid.  The correct "
+//                                  + "definition has the form of 'property' or " + "'property asc' or 'property desc'.",
+//                                  sortAttribute));
+//                    }
+//                }
+//            }
+//            return modifiedString;
+//        }
 
         /// <summary>
         /// Returns the lookup list contents being held where the list is keyed on the list key 
@@ -501,10 +544,10 @@ namespace Habanero.BO
             {
                 if (string.IsNullOrEmpty(Convert.ToString(pair.Value)))
                 {
-                    string developerMessage = string.Format("A business object of '{0}' is being added to a lookup list for {1} it does not have a value for its primary key set", this.PropDef.PropertyTypeName, this.PropDef.PropertyName);
-                    throw new HabaneroDeveloperException
-                        (developerMessage,
-                         developerMessage);
+                    string developerMessage = string.Format
+                        ("A business object of '{0}' is being added to a lookup list for {1} it does not have a value for its primary key set",
+                         this.PropDef.PropertyTypeName, this.PropDef.PropertyName);
+                    throw new HabaneroDeveloperException(developerMessage, developerMessage);
                 }
                 if (_keyValueDictionary.ContainsKey(pair.Value)) continue;
 //                object parsedKey;
@@ -519,6 +562,5 @@ namespace Habanero.BO
                 _keyValueDictionary.Add(pair.Value, pair.Key);
             }
         }
-
     }
 }

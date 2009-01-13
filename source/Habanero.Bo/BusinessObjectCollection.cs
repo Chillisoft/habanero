@@ -69,6 +69,7 @@ namespace Habanero.BO
 
             public StronglyTypedComperer(IComparer comparer)
             {
+                if (comparer == null) throw new ArgumentNullException("comparer");
                 _comparer = comparer;
             }
 
@@ -952,6 +953,7 @@ namespace Habanero.BO
 
         void IBusinessObjectCollection.Sort(IComparer comparer)
         {
+            if (comparer == null) throw new ArgumentNullException("comparer");
             this.Sort(new StronglyTypedComperer<TBusinessObject>(comparer));
         }
 

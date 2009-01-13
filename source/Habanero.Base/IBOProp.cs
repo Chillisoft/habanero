@@ -171,5 +171,12 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="propValue">The value to assign</param>
         void InitialiseProp(object propValue);
+
+        /// <summary>
+        /// Validates whether the property values set for the BOProp are valid
+        /// as compared to the BOProp rules. This is used by the Business Object 
+        /// Validate Method.
+        /// </summary>
+        void Validate();
     }
 }

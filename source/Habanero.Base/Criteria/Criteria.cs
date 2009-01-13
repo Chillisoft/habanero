@@ -233,6 +233,8 @@ namespace Habanero.Base
         /// <returns>True if the businessobject matches the criteria, false if it does not</returns>
         public bool IsMatch<T>(T businessObject) where T : IBusinessObject
         {
+            if (businessObject == null) throw new ArgumentNullException("businessObject", "The IsMatch cannot be called for null object");
+
             if (IsComposite())
             {
                 switch (_logicalOp)

@@ -368,7 +368,7 @@ namespace Habanero.Test.BO.Loaders
         {
             PropDef def = itsLoader.LoadProperty(
                     @"<property  name=""TestProp"">
-						<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" criteria=""Test"" />
+						<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" criteria=""TestProp=Test"" />
 					</property>");
             BusinessObjectLookupList source = (BusinessObjectLookupList)def.LookupList;
             Assert.AreEqual("Test", source.Criteria);
