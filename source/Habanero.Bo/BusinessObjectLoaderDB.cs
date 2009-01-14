@@ -227,7 +227,7 @@ namespace Habanero.BO
             }
             if (correctSubClassDef != null)
             {
-                BusinessObjectManager.Instance.Remove(loadedBo.ID);
+                BusinessObjectManager.Instance.Remove(loadedBo);
                 IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = subClassBusinessObject;
             }
@@ -353,7 +353,7 @@ namespace Habanero.BO
         {
             if (correctSubClassDef != null)
             {
-                BusinessObjectManager.Instance.Remove(loadedBo.ID);
+                BusinessObjectManager.Instance.Remove(loadedBo);
                 IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = (T)subClassBusinessObject;
             }

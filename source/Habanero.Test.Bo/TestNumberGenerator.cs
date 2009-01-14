@@ -206,6 +206,7 @@ namespace Habanero.Test.BO
             // set the datetime locked to > 15 minutes ago.
             UpdateDatabaseLockAsExpired(15);
             BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
             //---------------Execute Test ----------------------
             //Create a seperate instance of the number generator.
             //try Get  number

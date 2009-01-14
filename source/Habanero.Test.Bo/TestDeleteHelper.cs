@@ -164,9 +164,10 @@ namespace Habanero.Test.BO
             IBusinessObjectCollection children = testBO.Relationships.GetRelatedCollection(relationshipName);
             for (int count = 1; count <= numberOfBos; count++)
             {
+                
                 T testBO2 = new T();
                 testBO2.SetStatus(BOStatus.Statuses.isNew, isNew);
-                testBO2.MyBoID = "2." + count;
+                testBO2.MyBoID = "2." + TestUtil.CreateRandomString();
                 testBO2.MyParentBoID = testBO.MyParentBoID;
                 children.Add(testBO2);
             }

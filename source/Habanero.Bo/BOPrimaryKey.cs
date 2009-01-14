@@ -33,6 +33,8 @@ namespace Habanero.BO
     public class BOPrimaryKey : BOKey, IPrimaryKey
     {
         protected Guid _newObjectID = Guid.Empty;
+        private string _currentValue;
+        private string _previousValue;
 
         /// <summary>
         /// Constructor to initialise a new primary key
@@ -88,7 +90,12 @@ namespace Habanero.BO
             //if (_newObjectID != Guid.Empty) return NewObjectID().GetHashCode();
             //return GetObjectId().GetHashCode();
         }
-
+        protected override void BOPropUpdated_Handler(object sender, BOPropEventArgs e)
+        {
+            _previousValue = _currentValue;
+            _currentValue = AsString_CurrentValue();
+            FireValueUpdated();
+        }
         //internal string NewObjectID()
         //{
         //    return  _newObjectID.ToString();
@@ -247,12 +254,16 @@ namespace Habanero.BO
 
         public override string AsString_PreviousValue()
         {
-            if (AllPropPreviousValuesAreNonNull()) return base.AsString_PreviousValue();
-            if (IsObjectNew && (_newObjectID != Guid.Empty))
+            if (string.IsNullOrEmpty(_previousValue))
             {
-                return _newObjectID.ToString();
+                if (AllPropPreviousValuesAreNonNull()) return base.AsString_PreviousValue();
+                if (IsObjectNew && (_newObjectID != Guid.Empty))
+                {
+                    return _newObjectID.ToString();
+                }
+                return base.AsString_PreviousValue();
             }
-            return base.AsString_PreviousValue();
+            return _previousValue;
         }
 
         private bool AllPropValuesAreNonNull()

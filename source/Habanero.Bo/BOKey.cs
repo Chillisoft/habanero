@@ -143,13 +143,18 @@ namespace Habanero.BO
                     "exists in the key collection.", boProp.PropertyName));
             }
             _props.Add(boProp.PropertyName, boProp);
-            boProp.Updated += delegate { FireValueUpdated(); };
+            boProp.Updated += BOPropUpdated_Handler ;
+        }
+
+        protected virtual void BOPropUpdated_Handler(object sender, BOPropEventArgs e)
+        {
+            FireValueUpdated();
         }
 
         /// <summary>
         /// Fires an Updated event
         /// </summary>
-        private void FireValueUpdated()
+        protected void FireValueUpdated()
         {
             if (this.Updated != null)
             {

@@ -47,7 +47,7 @@ namespace Habanero.BO
         public event EventHandler<BOEventArgs> Restored;
         public event EventHandler<BOEventArgs> MarkedForDelete;
         public event EventHandler<BOEventArgs> PropertyUpdated;
-
+        public event EventHandler<BOEventArgs> IDUpdated;
         #endregion
 
         #region Fields
@@ -65,7 +65,6 @@ namespace Habanero.BO
         protected IRelationshipCol _relationshipCol;
         private ITransactionLog _transactionLog;
         private IBusinessObjectAuthorisation _authorisationRules;
-
         #endregion //Fields
 
         #region Constructors
@@ -85,7 +84,7 @@ namespace Habanero.BO
                 prop.InitialiseProp(info.GetValue(prop.PropertyName, prop.PropertyType));
             }
             _boStatus = (BOStatus) info.GetValue("Status", typeof (BOStatus));
-            BusinessObjectManager.Instance.Add(this);
+            AddToObjectManager();
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -104,7 +103,13 @@ namespace Habanero.BO
         protected internal BusinessObject(ClassDef def)
         {
             Initialise(def);
+            AddToObjectManager();
+        }
+
+        private void AddToObjectManager()
+        {
             BusinessObjectManager.Instance.Add(this);
+            this.ID.Updated += ((sender, e) => FireIDUpdatedEvent());
         }
 
         private void InitialisePrimaryKeyPropertiesBasedOnParentClass(Guid myID)
@@ -944,13 +949,7 @@ namespace Habanero.BO
             }
             else
             {
-
-                if (BusinessObjectManager.Instance.Contains(this))
-                {
-                    BusinessObjectManager.Instance.Remove(this.ID.AsString_LastPersistedValue());
-                    BusinessObjectManager.Instance.Remove(this.ID.AsString_PreviousValue());
-                    BusinessObjectManager.Instance.Remove(this.ID.AsString_CurrentValue());
-                }
+                BusinessObjectManager.Instance.Remove(this);
                 StorePersistedPropertyValues();
                 SetStateAsUpdated();
                 if (!BusinessObjectManager.Instance.Contains(this))
@@ -1049,6 +1048,13 @@ namespace Habanero.BO
             if (PropertyUpdated != null)
             {
                 PropertyUpdated(this, new BOEventArgs(this));
+            }
+        }
+        protected void FireIDUpdatedEvent()
+        {
+            if (IDUpdated != null)
+            {
+                IDUpdated(this, new BOEventArgs(this));
             }
         }
 

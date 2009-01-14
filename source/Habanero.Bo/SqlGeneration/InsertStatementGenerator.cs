@@ -242,12 +242,11 @@ namespace Habanero.BO.SqlGeneration
             {
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
-            if (currentClassDef.SuperClassClassDef.PrimaryKeyDef == null) return;
+            if (currentClassDef.SuperClassClassDef ==  null ||currentClassDef.SuperClassClassDef.PrimaryKeyDef == null) return;
 
             string parentIDCopyFieldName = currentClassDef.SuperClassDef.ID;
             PrimaryKeyDef parentID = currentClassDef.SuperClassClassDef.PrimaryKeyDef;
-            if (parentIDCopyFieldName == null ||
-                parentIDCopyFieldName == "" ||
+            if (string.IsNullOrEmpty(parentIDCopyFieldName) ||
                 parentID.KeyName == parentIDCopyFieldName)
             {
                 propsToInclude.Add(
@@ -265,8 +264,7 @@ namespace Habanero.BO.SqlGeneration
                 }
                 IBOProp parentProp = parentID.CreateBOKey(_bo.Props).GetBOPropCol()[parentID.KeyName];
                 PropDef profDef = new PropDef(parentIDCopyFieldName, parentProp.PropertyType, PropReadWriteRule.ReadWrite, null);
-                BOProp newProp = new BOProp(profDef);
-                newProp.Value = parentProp.Value;
+                BOProp newProp = new BOProp(profDef) {Value = parentProp.Value};
                 propsToInclude.Add(newProp);
             }
         }

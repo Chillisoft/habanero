@@ -86,25 +86,23 @@ namespace Habanero.Test.BO
             Assert.AreEqual(new Guid("{E6E8DC44-59EA-4e24-8D53-4A43DC2F25E7}"), bo.GetPropertyValue("TestProp2"));
         }
 
-//        [Test]
-//        public void Test_BusinessObject_WithBrokenRules_ValidUntilValidateCalled()
-//        {
-//            //---------------Set up test pack-------------------
-//            ClassDef.ClassDefs.Clear();
-//            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
-//            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
-//            IBOProp boProp = bo.Props["TestProp"];
-//            //---------------Assert Precondition----------------
-//            Assert.IsTrue(boProp.IsValid);
-//            //---------------Execute Test ----------------------
-//            bo.Validate();
-//            //---------------Test Result -----------------------
-//            StringAssert.Contains("Test Prop' is a compulsory field and has no value", boProp.InvalidReason);
-//            Assert.IsFalse(boProp.IsValid);
-//            StringAssert.Contains("Test Prop' is a compulsory field and has no value", bo.Status.IsValidMessage);
-//            Assert.IsFalse(bo.IsValid());
-//        }
-        //bool valid = Props.IsValid(out invalidReason);
+
+        [Test]
+        public void Test_ChangeObjectID_FiresIDUpdatedEvent()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO bo = ContactPersonTestBO.CreateUnsavedContactPerson();
+            bool updatedEventFired = false;
+            bo.IDUpdated += ((sender, e) => updatedEventFired = true);
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(updatedEventFired);
+            //---------------Execute Test ----------------------
+            bo.ContactPersonID = Guid.NewGuid();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(updatedEventFired);
+        }
         [Test]
         public void Test_BusinessObject_WithBrokenRules_ValidUntil_PropsIsValidCalled()
         {

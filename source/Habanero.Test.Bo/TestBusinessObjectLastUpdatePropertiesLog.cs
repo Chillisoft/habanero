@@ -35,6 +35,7 @@ namespace Habanero.Test.BO
         public void SetupTest()
         {
             //Runs every time that any testmethod is executed
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             GlobalRegistry.SecurityController = null;
             new Address();
         }
@@ -149,11 +150,12 @@ namespace Habanero.Test.BO
         public void TestUpdatesProperties_GivenBo_UserNameAndDate_AndSecurityController()
         {
             //-------------Setup Test Pack ------------------
+            
             new Engine(); new Car();
             ContactPerson contactPerson = new ContactPerson();
             IBOProp dateBoProp = contactPerson.Props["DateLastUpdated"];
             IBOProp userBoProp = contactPerson.Props["UserLastUpdated"];
-            contactPerson.Restore();
+            contactPerson.CancelEdits();
             ISecurityController securityController = new MySecurityController();
             BusinessObjectLastUpdatePropertiesLog log = new BusinessObjectLastUpdatePropertiesLog(contactPerson, securityController);
             //-------------Test Pre-conditions --------------

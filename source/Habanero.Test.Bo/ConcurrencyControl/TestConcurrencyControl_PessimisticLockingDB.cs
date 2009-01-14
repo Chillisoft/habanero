@@ -347,21 +347,22 @@ namespace Habanero.Test.BO
         public void Test_WhenCleansUpObjectClearsItsLock()
         {
             //---------------Set up test pack-------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-            IPrimaryKey id = cp.ID;
+            object value = cp.ID.GetAsValue();
             //---------------Execute Test ----------------------
 
             cp.Surname = Guid.NewGuid().ToString();
 #pragma warning disable RedundantAssignment
             cp = null; //so that garbage collector can work
 #pragma warning restore RedundantAssignment
-            GC.Collect(); //Force the GC to collect
-            GC.WaitForPendingFinalizers();
-            //WaitForDB();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
             //---------------Test Result -----------------------
             BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
             ContactPersonPessimisticLockingDB cp2 =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonPessimisticLockingDB>(id);
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue<ContactPersonPessimisticLockingDB>(value);
             AssertIsNotLocked(cp2);
         }
 

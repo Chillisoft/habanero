@@ -236,7 +236,7 @@ namespace Habanero.Test.General
             myContact.SetPropertyValue("PK1Prop2", Guid.NewGuid());
             IPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             myContact.Save(); //save the object to the DB
-
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             //			BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
 

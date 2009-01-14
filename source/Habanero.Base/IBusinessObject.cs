@@ -141,7 +141,10 @@ namespace Habanero.Base
         /// Fired when the object is restored.
         /// </summary>
         event EventHandler<BOEventArgs> Restored;
-
+        /// <summary>
+        /// The event is fired when the business object is updated
+        /// </summary>
+        event EventHandler<BOEventArgs> IDUpdated;
         /// <summary>
         /// Indicates whether all of the property values are valid
         /// </summary>

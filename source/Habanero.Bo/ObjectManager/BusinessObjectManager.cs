@@ -55,11 +55,11 @@ namespace Habanero.BO
         protected readonly Dictionary<string, WeakReference> _loadedBusinessObjects =
             new Dictionary<string, WeakReference>();
 
-        private readonly EventHandler<BOKeyEventArgs> _updateIDEventHandler;
+        private readonly EventHandler<BOEventArgs> _updateIDEventHandler;
 
         protected BusinessObjectManager()
         {
-            _updateIDEventHandler = ID_OnUpdated;
+            _updateIDEventHandler = ObjectID_Updated_Handler;
         }
 
         ///<summary>
@@ -102,33 +102,14 @@ namespace Habanero.BO
             //If object is new and does not have IsObjectID then add with the Guid.?
             //Else add as below
             _loadedBusinessObjects.Add(businessObject.ID.AsString_CurrentValue(), new WeakReference(businessObject));
-//            businessObject.ID.Updated += _updateIDEventHandler; //TODO Brett 13 Jan 2009: My concerns are that this will cause the a memory leak
+            businessObject.IDUpdated += _updateIDEventHandler;
             // to investigate with tests.
         }
 
-        private void ID_OnUpdated(object sender, BOKeyEventArgs e)
+        protected virtual void ObjectID_Updated_Handler(object sender, BOEventArgs e)
         {
-            //RemoveUnderThisID   ((BOPrimaryKey)e.BOKey).GetObjectId()
-            //Add with 
-//            ((BOPrimaryKey)e.BOKey).PersistedDatabaseWhereClause()
-            //Remove with old ID and add with new id.
-            //If object is new and does not have objectId then remove with Guid?
-            //Else remove with Previous Value.
-            //BOObjectID boPrimaryKey = e.BOKey as BOObjectID;
-            BOPrimaryKey boPrimaryKey = e.BOKey as BOPrimaryKey;
-            if (boPrimaryKey == null) return;
-            string previousObjectID = boPrimaryKey.AsString_PreviousValue();
-            if (this.Contains(previousObjectID))
-            {
-                IBusinessObject businessObject = this[previousObjectID];
-
-                if ((businessObject.Status.IsNew))
-                {
-                    this.Remove(previousObjectID);
-                    this.Add(businessObject);
-                }
-            }
-
+            this.Remove(e.BusinessObject);
+            this.Add(e.BusinessObject);
         }
 
         /// <summary>
@@ -144,14 +125,16 @@ namespace Habanero.BO
                  if (ReferenceEquals(businessObject, this[businessObject.ID])) return true;
              }
              //if contains by previous value and refrences are equal return true  --- this._primaryKey.AsString_PreviousValue()
-             if(Contains(businessObject.ID.AsString_PreviousValue()))
+             string objectID = businessObject.ID.AsString_PreviousValue();
+             if (Contains(objectID))
              {
-                 if (ReferenceEquals(businessObject, this[businessObject.ID.AsString_PreviousValue()])) return true;
+                 if (ReferenceEquals(businessObject, this[objectID])) return true;
              }
              //if contans by last persisted value and references are equal return true. --- this._primaryKey.AsString_LastPersistedValue()
-             if (Contains(businessObject.ID.AsString_LastPersistedValue()))
+             objectID = businessObject.ID.AsString_LastPersistedValue();
+             if (Contains(objectID))
              {
-                 if (ReferenceEquals(businessObject, this[businessObject.ID.AsString_LastPersistedValue()])) return true;
+                 if (ReferenceEquals(businessObject, this[objectID])) return true;
              }
             return false;
         }
@@ -200,9 +183,22 @@ namespace Habanero.BO
         /// <param name="businessObject">business object to be removed.</param>
         internal void Remove(IBusinessObject businessObject)
         {
-            if (Contains(businessObject))
+            if (!Contains(businessObject)) return;
+
+            string objectID = businessObject.ID.AsString_CurrentValue();
+            if (Contains(objectID) )
             {
-                Remove(businessObject.ID);
+                Remove(objectID, businessObject);
+            }
+            objectID = businessObject.ID.AsString_PreviousValue();
+            if (Contains(objectID))
+            {
+                Remove(objectID, businessObject);
+            }
+            objectID = businessObject.ID.AsString_LastPersistedValue();
+            if (Contains(objectID))
+            {
+                Remove(objectID, businessObject);
             }
         }
 
@@ -210,30 +206,20 @@ namespace Habanero.BO
         /// Removes the business object Business object manager. NB: if a seperate instance of the object 
         /// is loaded in the object manager it will be removed. When possible user <see cref="Remove(IBusinessObject)"/>
         /// </summary>
-        /// <param name="id">ID of the business object to be removed.</param>
-        internal void Remove(IPrimaryKey id)
-        {
-            Remove(id.AsString_CurrentValue());
-        }
-        /// <summary>
-        /// Removes the business object Business object manager. NB: if a seperate instance of the object 
-        /// is loaded in the object manager it will be removed. When possible user <see cref="Remove(IBusinessObject)"/>
-        /// </summary>
         /// <param name="objectID">The string ID of the business object to be removed.</param>
-        internal void Remove(string objectID)
+        /// <param name="businessObject">The business object being removed at this position.</param>
+        protected void Remove(string objectID, IBusinessObject businessObject)
         {
-//                if (Contains(objectID))
-//                {
-//                    IBusinessObject businessObject = this[objectID];
-//                    RemoveObjectIDEventRegistration(businessObject);
-//                }
-            _loadedBusinessObjects.Remove(objectID);
-
+            if (Contains(objectID) && ReferenceEquals(businessObject , this[objectID]))
+            {
+                _loadedBusinessObjects.Remove(objectID);
+                DeregisterForIDUpdatedEvent(businessObject);
+            }
         }
 
         protected void DeregisterForIDUpdatedEvent(IBusinessObject businessObject)
         {
-            businessObject.ID.Updated -= _updateIDEventHandler;
+            businessObject.IDUpdated -= _updateIDEventHandler;
         }
 
         /// <summary>
@@ -248,9 +234,11 @@ namespace Habanero.BO
                 {
                     return (IBusinessObject) _loadedBusinessObjects[objectID].Target; 
                 }
-                throw new HabaneroDeveloperException("There is an application error please contact your system administrator.", 
-                        "There was an attempt to retrieve the object identified by '" 
-                        + objectID + "' from the object manager but it is not currently loaded.");
+                string message = "There was an attempt to retrieve the object identified by '" 
+                                 + objectID + "' from the object manager but it is not currently loaded.";
+                throw new HabaneroDeveloperException("There is an application error please contact your system administrator." 
+                        + Environment.NewLine + message
+                        , message);
             }
         }
 
@@ -264,17 +252,23 @@ namespace Habanero.BO
             get { return this[objectID.AsString_CurrentValue()]; }
         }
 
-
         /// <summary>
         /// Clears all the currently loaded business objects from the object manager. This is only used in testing and debugging.
         /// NNB: this method should only ever be used for testing. E.g. where the tester wants to test concurrency control or 
         /// to ensure that saving or loading from the data base is correct.
         /// </summary>
-        public void ClearLoadedObjects()
+        internal void ClearLoadedObjects()
         {
-            _loadedBusinessObjects.Clear();
+            string[] keysArray = new string[_loadedBusinessObjects.Count];
+            _loadedBusinessObjects.Keys.CopyTo(keysArray, 0);
+            foreach (string key in keysArray)
+            {
+                if (!Contains(key)) continue;
+                IBusinessObject businessObject = this[key];
+                this.Remove(key, businessObject);
+            }
         }
-
+         
         #endregion
     }
 

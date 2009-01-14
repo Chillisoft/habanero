@@ -64,10 +64,13 @@ namespace Habanero.Test.BO.TransactionCommitters
         private static void DoTestCheckForDuplicateObjects()
         {
             ContactPersonTestBO contactPersonCompositeKey = GetSavedContactPersonCompositeKey();
-            ContactPersonTestBO duplicateContactPerson = new ContactPersonTestBO();
-            duplicateContactPerson.ContactPersonID = Guid.NewGuid();
-            duplicateContactPerson.Surname = contactPersonCompositeKey.Surname;
-            duplicateContactPerson.FirstName = contactPersonCompositeKey.FirstName;
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonTestBO duplicateContactPerson = new ContactPersonTestBO
+                 {
+                     ContactPersonID = Guid.NewGuid(),
+                     Surname = contactPersonCompositeKey.Surname,
+                     FirstName = contactPersonCompositeKey.FirstName
+                 };
             TransactionCommitterDB committer = new TransactionCommitterDB();
             committer.AddBusinessObject(duplicateContactPerson);
             //---------------Execute Test ----------------------

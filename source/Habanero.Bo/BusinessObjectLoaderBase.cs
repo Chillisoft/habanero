@@ -537,12 +537,12 @@ namespace Habanero.BO
         /// <see cref="BusObjDeleteConcurrencyControlException"/>
         ///  </returns>
         /// <exception cref="BusObjDeleteConcurrencyControlException"/>
-        public IBusinessObject GetBusinessObjectByValue<T>( object idValue)
+        public T GetBusinessObjectByValue<T>(object idValue)
                         where T : class, IBusinessObject, new()
         {
             CheckNotTypedAsBusinessObject<T>();
             ClassDef classDef = ClassDef.ClassDefs[typeof(T)];
-            return GetBusinessObjectByValue(classDef, idValue);
+            return (T) GetBusinessObjectByValue(classDef, idValue);
         }
     }
 }

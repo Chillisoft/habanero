@@ -25,6 +25,7 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             BOWithIntID.LoadClassDefWithIntID();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 

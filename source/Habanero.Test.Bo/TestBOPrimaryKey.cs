@@ -318,7 +318,6 @@ namespace Habanero.Test.BO
             //--------------- Test Preconditions ----------------
 
             //--------------- Execute Test ----------------------
-            
             primaryKey[0].Value = str2;
             string keyAsString = primaryKey.AsString_PreviousValue();
             //--------------- Test Result -----------------------
@@ -358,6 +357,66 @@ namespace Habanero.Test.BO
             StringAssert.AreEqualIgnoringCase(guid.ToString(), keyAsString);
         }
 
+        [Test]
+        public void Test_AsString_CurrentValue_TwoPropKey_SetTwoProp()
+        {
+            //--------------- Set up test pack ------------------
+            BOPrimaryKey primaryKey = CreatePrimaryBOKeyGuidAndString();
+            Guid guid = Guid.NewGuid();
+            primaryKey.SetObjectGuidID(guid);
+            primaryKey[0].Value = Guid.NewGuid();
+            primaryKey[1].Value = TestUtil.CreateRandomString();
+            //--------------- Test Preconditions ----------------
+            
+            //--------------- Execute Test ----------------------
+            string keyAsString = primaryKey.AsString_CurrentValue();
+            //--------------- Test Result -----------------------
+            Assert.AreNotEqual(guid.ToString(), keyAsString);
+            Assert.AreEqual("PropName1=" + primaryKey[0].Value + ";PropName2=" + primaryKey[1].Value , keyAsString);
+
+        }    
+        
+        [Test]
+        public void Test_AsString_CurrentValue_TwoPropKey_ResetOneProp()
+        {
+            //--------------- Set up test pack ------------------
+            BOPrimaryKey primaryKey = CreatePrimaryBOKeyGuidAndString();
+            Guid guid = Guid.NewGuid();
+            primaryKey.SetObjectGuidID(guid);
+            primaryKey[0].Value = Guid.NewGuid();
+            primaryKey[1].Value = TestUtil.CreateRandomString();
+            //--------------- Test Preconditions ----------------
+            
+            //--------------- Execute Test ----------------------
+            primaryKey[1].Value = TestUtil.CreateRandomString();
+            string keyAsString = primaryKey.AsString_CurrentValue();
+            //--------------- Test Result -----------------------
+            Assert.AreNotEqual(guid.ToString(), keyAsString);
+            Assert.AreEqual("PropName1=" + primaryKey[0].Value + ";PropName2=" + primaryKey[1].Value , keyAsString);
+
+        }        
+
+        [Test]
+        public void Test_AsString_PreviousValue_TwoPropKey_ResetOneProp()
+        {
+            //--------------- Set up test pack ------------------
+            BOPrimaryKey primaryKey = CreatePrimaryBOKeyGuidAndString();
+            Guid guid = Guid.NewGuid();
+            primaryKey.SetObjectGuidID(guid);
+            primaryKey[0].Value = Guid.NewGuid();
+            primaryKey[1].Value = TestUtil.CreateRandomString();
+            string origKeyAsString = primaryKey.AsString_CurrentValue();
+            //--------------- Test Preconditions ----------------
+            
+            //--------------- Execute Test ----------------------
+            primaryKey[1].Value = TestUtil.CreateRandomString();
+            string keyAsString = primaryKey.AsString_PreviousValue();
+            //--------------- Test Result -----------------------
+            Assert.AreNotEqual(guid.ToString(), keyAsString);
+            Assert.AreEqual(origKeyAsString, keyAsString);
+        }
+
+        //TODO Brett 14 Jan 2009: Do composite for previous and last persisted 
 
         private static BOPrimaryKey CreateBOPrimaryKeyString()
         {

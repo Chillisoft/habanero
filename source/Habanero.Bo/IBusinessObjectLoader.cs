@@ -321,6 +321,6 @@ namespace Habanero.BO
         /// <see cref="BusObjDeleteConcurrencyControlException"/>
         ///  </returns>
         /// <exception cref="BusObjDeleteConcurrencyControlException"/>
-        IBusinessObject GetBusinessObjectByValue<T>(object idValue) where T : class, IBusinessObject, new();
+        T GetBusinessObjectByValue<T>(object idValue) where T : class, IBusinessObject, new();
     }
 }
