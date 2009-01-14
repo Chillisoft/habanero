@@ -483,9 +483,9 @@ namespace Habanero.Test.BO
 
             ContactPersonTestBO originalContactPerson = new ContactPersonTestBO();
             boMan.ClearLoadedObjects();
-            boMan.ManuallyDerigesterForIDUpdatedEvent(originalContactPerson);
+            boMan.ManuallyDeregisterForIDUpdatedEvent(originalContactPerson);
             ContactPersonTestBO copyContactPerson = new ContactPersonTestBO();
-            boMan.ManuallyDerigesterForIDUpdatedEvent(copyContactPerson);
+            boMan.ManuallyDeregisterForIDUpdatedEvent(copyContactPerson);
             boMan.ClearLoadedObjects();
             copyContactPerson.ContactPersonID = originalContactPerson.ContactPersonID;
             boMan.Add(copyContactPerson);
@@ -549,7 +549,7 @@ namespace Habanero.Test.BO
             BusinessObjectManagerStub boMan = (BusinessObjectManagerStub) BusinessObjectManagerStub.Instance;
 
             ContactPersonTestBO originalContactPerson = new ContactPersonTestBO();
-            boMan.ManuallyDerigesterForIDUpdatedEvent(originalContactPerson);
+            boMan.ManuallyDeregisterForIDUpdatedEvent(originalContactPerson);
             originalContactPerson.ContactPersonID = Guid.NewGuid();
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boMan.Count);
@@ -570,7 +570,7 @@ namespace Habanero.Test.BO
             BusinessObjectManagerStub boMan = (BusinessObjectManagerStub)BusinessObjectManagerStub.Instance;
 
             ContactPersonTestBO originalContactPerson = new ContactPersonTestBO();
-            boMan.ManuallyDerigesterForIDUpdatedEvent(originalContactPerson);
+            boMan.ManuallyDeregisterForIDUpdatedEvent(originalContactPerson);
             originalContactPerson.Props.BackupPropertyValues();
             boMan.ClearLoadedObjects();
             boMan.AddBusinessObject(originalContactPerson, originalContactPerson.ID.AsString_LastPersistedValue());
@@ -591,7 +591,7 @@ namespace Habanero.Test.BO
             BusinessObjectManagerStub boMan = (BusinessObjectManagerStub)BusinessObjectManagerStub.Instance;
 
             ContactPersonTestBO originalContactPerson = new ContactPersonTestBO();
-            boMan.ManuallyDerigesterForIDUpdatedEvent(originalContactPerson);
+            boMan.ManuallyDeregisterForIDUpdatedEvent(originalContactPerson);
             originalContactPerson.Props.BackupPropertyValues();
             ContactPersonTestBO copyContactPerson = new ContactPersonTestBO();
             boMan.ClearLoadedObjects();
@@ -616,7 +616,7 @@ namespace Habanero.Test.BO
             
             ContactPersonTestBO copyContactPerson = new ContactPersonTestBO();
             boMan.ClearLoadedObjects();
-            boMan.ManuallyDerigesterForIDUpdatedEvent(originalContactPerson);
+            boMan.ManuallyDeregisterForIDUpdatedEvent(originalContactPerson);
             copyContactPerson.ContactPersonID = originalContactPerson.ContactPersonID;
             copyContactPerson.Props.BackupPropertyValues();
             boMan.Add(copyContactPerson);
@@ -1005,7 +1005,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_CleasBOManager()
+        public void Test_ClearsBOManager()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -1974,7 +1974,7 @@ namespace Habanero.Test.BO
                 ((BusinessObjectManagerStub)_businessObjectManager).UpdatedEventCalled = false;
             }
 
-            public void ManuallyDerigesterForIDUpdatedEvent(ContactPersonTestBO person)
+            public void ManuallyDeregisterForIDUpdatedEvent(ContactPersonTestBO person)
             {
                 DeregisterForIDUpdatedEvent(person);
                 ((BusinessObjectManagerStub)_businessObjectManager).UpdatedEventCalled = false;

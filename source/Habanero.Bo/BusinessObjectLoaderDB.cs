@@ -515,7 +515,12 @@ namespace Habanero.BO
                 BusinessObjectManager.Instance.Add(bo);
                 return bo;
             }
-
+            // if the object is new it means there is an object in the BusinessObjectManager that has the same primary
+            // key as the one being loaded.  We want to return the one that was loaded without putting it into the 
+            // BusinessObjectManager (as that would cause an error).  This is only used to check for duplicates or in 
+            // similar scenarios.
+ 
+            if (boFromObjectManager.Status.IsNew) boFromObjectManager = bo; 
             if (boFromObjectManager.Status.IsEditing) return boFromObjectManager;
 
             PopulateBOFromReader(boFromObjectManager, dataReader, selectQuery);

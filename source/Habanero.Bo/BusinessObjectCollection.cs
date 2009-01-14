@@ -266,7 +266,12 @@ namespace Habanero.BO
             if (bo == null) throw new ArgumentNullException("bo");
 
             base.Add(bo);
-            if (bo.ID != null) KeyObjectHashTable.Add(bo.ID.AsString_CurrentValue(), bo);
+            if (bo.ID != null)
+            {
+// if (KeyObjectHashTable.ContainsKey(bo.ID.AsString_CurrentValue())) throw new 
+                KeyObjectHashTable.Add(bo.ID.AsString_CurrentValue(), bo);
+            }
+
             RegisterForBOEvents(bo);
         }
 
