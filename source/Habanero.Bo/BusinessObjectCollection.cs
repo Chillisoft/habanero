@@ -309,10 +309,7 @@ namespace Habanero.BO
                 KeyObjectHashTable.Add(bo.ID.ToString(), bo);
             }
         }
-        /// <summary>
-        /// Updates the lookup table when a primary key property has
-        /// changed
-        /// </summary>
+
         private void MarkForDeleteEventHandler(object sender, BOEventArgs e)
         {
             TBusinessObject bo = e.BusinessObject as TBusinessObject;

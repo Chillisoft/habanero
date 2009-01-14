@@ -157,7 +157,7 @@ namespace Habanero.Test.Base
             DateTime dteParsedDateTime;
             Assert.IsTrue(DateTime.TryParse(toString, out dteParsedDateTime));
 //            Assert.IsTrue(dteNow == dteParsedDateTime);
-            Assert.AreEqual(dteNow.ToString(), dteParsedDateTime.ToString());
+            Assert.AreEqual(toString, dteParsedDateTime.ToString());
         }
     }
 }
