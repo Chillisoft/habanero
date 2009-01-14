@@ -78,8 +78,15 @@ namespace Habanero.UI.Base
             if (_attributes.Contains("dateFormat"))
             {
                 String dateFormat = Convert.ToString(_attributes["dateFormat"]);
-                _picker.Format = DateTimePickerFormat.Custom;
-                _picker.CustomFormat = dateFormat;
+                if (dateFormat.ToLower()=="d")
+                {
+                    _picker.Format = DateTimePickerFormat.Short;
+                }
+                else
+                {
+                    _picker.Format = DateTimePickerFormat.Custom;
+                    _picker.CustomFormat = dateFormat;
+                }
                 //DateTimePickerUtil.SetCustomFormat(_dateTimePicker, dateFormat);
             }
             if (_attributes.Contains("showUpDown"))

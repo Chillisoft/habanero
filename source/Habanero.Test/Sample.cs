@@ -1132,10 +1132,58 @@ namespace Habanero.Test
                          @"<form>
 							<tab name=""Tab1"">
 								<columnLayout width=""150"">
-									<field label=""Integer:"" property=""SampleInt"" type=""ComboBox"" mapperType=""ListComboBoxMapper"" >
+									<field label=""Text:"" property=""SampleText"" type=""ComboBox"" mapperType=""ListComboBoxMapper"" >
                                         <parameter name=""options"" value=""M|F""/>
                                     </field>
 								</columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public UIFormTab GetFormTabOneFieldWithIsEmailParameter()
+            {
+                return GetSimpleUIFormDef_WithIsEmailParameter()[0];
+            }
+
+            private UIForm GetSimpleUIFormDef_WithIsEmailParameter()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""150"">
+									<field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" >
+                                        <parameter name=""isEmail"" value=""true""/>
+                                    </field>
+                                    <field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" >
+                                        <parameter name=""isEmail"" value=""false""/>
+                                    </field>
+   								</columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public UIFormTab GetFormTabOneFieldWithDateFormatParameter()
+            {
+                return GetSimpleUIFormDef_WithDateFormatParameter()[0];
+            }
+
+            private UIForm GetSimpleUIFormDef_WithDateFormatParameter()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""150"">
+									<field label=""DateTime:"" property=""SampleDateTime"" type=""DateTimePicker"" mapperType=""DateTimePickerMapper"" >
+                                        <parameter name=""dateFormat"" value=""d""/>
+                                    </field>
+                                    <field label=""DateTime:"" property=""SampleDateTime"" type=""DateTimePicker"" mapperType=""DateTimePickerMapper"" >
+                                        <parameter name=""dateFormat"" value=""dd MM yy""/>
+                                    </field>
+   								</columnLayout>
 							</tab>
 						</form>");
             }

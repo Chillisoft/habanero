@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -178,15 +179,30 @@ namespace Habanero.UI.Base
                 if (inputControl is IComboBox && formField.MapperTypeName.ToLower() == "listcomboboxmapper")
                 {
                     string[] items = formField.Options.Split('|');
+                    IComboBox comboBox = ((IComboBox)inputControl);
+                    comboBox.Items.Add(""); // This creates the blank item for the ComboBox 
                     foreach (string item in items)
                     {
-                        ((IComboBox)inputControl).Items.Add(item);
+                        
+                        comboBox.Items.Add(item);
                     }
                 }
             }
 
+            if (!String.IsNullOrEmpty(formField.IsEmail))
+            {
+                if (inputControl is ITextBox && Convert.ToBoolean(formField.IsEmail))
+                {
+                    ITextBox textBox = (ITextBox)inputControl;
+                    textBox.DoubleClick += EmailTextBoxDoubleClickedHandler;
+                }
+            }
 
-
+            if (formField.MapperTypeName=="DateTimePickerMapper")
+            {
+                DateTimePickerMapper dateTimePickerMapper = new DateTimePickerMapper((IDateTimePicker) inputControl, formField.PropertyName,formField.Editable,_factory);
+                dateTimePickerMapper.SetPropertyAttributes(formField.Parameters);
+            }
 
             if (formField.RowSpan > 1)
             {
@@ -199,6 +215,21 @@ namespace Habanero.UI.Base
             SetToolTip(formField, inputControl);
             panelInfo.LayoutManager.AddControl(inputControlInfo);
             return controlMapper;
+        }
+
+        /// A handler to deal with a double-click on an email textbox, which
+        /// causes the default mail client on the user system to be opened
+        /// </summary>
+        /// <param name="sender">The object that notified of the event</param>
+        /// <param name="e">Attached arguments regarding the event</param>
+        private static void EmailTextBoxDoubleClickedHandler(object sender, EventArgs e)
+        {
+            ITextBox tb = (ITextBox)sender;
+            if (tb.Text.IndexOf("@") != -1)
+            {
+                string comm = "mailto:" + tb.Text;
+                Process.Start(comm);
+            }
         }
 
         private void SetInputControlNumLines(UIFormField formField, IControlHabanero inputControl)

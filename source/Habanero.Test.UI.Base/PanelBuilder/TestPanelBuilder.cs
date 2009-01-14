@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -559,8 +560,8 @@ namespace Habanero.Test.UI.Base
             UIFormTab singleFieldTab = interfaceMapper.GetFormTabTwoFieldsWithNoAlignment();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
-            Assert.IsNull(singleFieldTab[0][0].Alignment);
-            Assert.IsNull(singleFieldTab[0][1].Alignment);
+            Assert.IsTrue(String.IsNullOrEmpty(singleFieldTab[0][0].Alignment));
+          
             //---------------Execute Test ----------------------
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
@@ -577,7 +578,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_Parameter_SetAlignment_Right()
+        public void Test_BuildPanel_Parameter_Alignment_Right()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -597,7 +598,7 @@ namespace Habanero.Test.UI.Base
 
         
         [Test]
-        public void Test_BuildPanel_Parameter_SetAlignment_Center()
+        public void Test_BuildPanel_Parameter_Alignment_Center()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -616,7 +617,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_Parameter_SetAlignment_InvalidAlignment()
+        public void Test_BuildPanel_Parameter_Alignment_InvalidAlignment()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -645,15 +646,14 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_Parameter_SetMultiLine()
+        public void Test_BuildPanel_Parameter_MultiLine()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithMultiLineParameter();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
-            Assert.IsNotNull(singleFieldTab[0][0].NumLines);
-            Assert.IsNotEmpty(singleFieldTab[0][0].NumLines);
+            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][0].NumLines));
             Assert.AreEqual("3", singleFieldTab[0][0].NumLines);
             Assert.Greater(Convert.ToInt32(singleFieldTab[0][0].NumLines), 1);
             //---------------Execute Test ----------------------
@@ -669,7 +669,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_Parameter_SetInvalidMultiLineValue()
+        public void Test_BuildPanel_Parameter_InvalidMultiLineValue()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -678,8 +678,8 @@ namespace Habanero.Test.UI.Base
             bool errorThrown = false;
             string errMessage = "";
             //---------------Assert Precondition----------------
-            Assert.IsNotNull(singleFieldTab[0][0].NumLines);
-            Assert.IsNotEmpty(singleFieldTab[0][0].NumLines);
+            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][0].NumLines));
+           
             //---------------Execute Test ----------------------
             try
             {
@@ -696,7 +696,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_Parameter_SetDecimalPlaces_NumericUpDownMoneyMapper()
+        public void Test_BuildPanel_Parameter_DecimalPlaces_NumericUpDownMoneyMapper()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -717,7 +717,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_Parameter_SetOptions()
+        public void Test_BuildPanel_Parameter_Options()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -734,9 +734,57 @@ namespace Habanero.Test.UI.Base
 
             Assert.IsInstanceOfType(typeof(IComboBox), panel.Controls[1]);
             IComboBox control = (IComboBox)panel.Controls[1];
-            Assert.AreEqual(2, control.Items.Count);
-            Assert.AreEqual("M",control.Items[0].ToString());
-            Assert.AreEqual("F",control.Items[1].ToString());
+            Assert.AreEqual(3, control.Items.Count);
+            Assert.AreEqual("",control.Items[0].ToString());
+            Assert.AreEqual("M",control.Items[1].ToString());
+            Assert.AreEqual("F",control.Items[2].ToString());
+        }
+
+        [Test,Ignore("Can not test the event on the TextBox")]
+        public void Test_BuildPanel_Parameter_isEmal()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithIsEmailParameter();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][0].IsEmail));
+            Assert.IsTrue(Convert.ToBoolean(singleFieldTab[0][0].IsEmail));
+
+            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][1].IsEmail));
+            Assert.IsFalse(Convert.ToBoolean(singleFieldTab[0][1].IsEmail));
+            
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+            //---------------Test Result -----------------------
+
+            Assert.IsInstanceOfType(typeof(ITextBox), panel.Controls[1]);
+            ITextBox control = (ITextBox)panel.Controls[1];
+        }
+
+        [Test]
+        public void Test_BuildPanel_Parameter_DateFormat()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithDateFormatParameter();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][0].DateFormat));
+            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][1].DateFormat));
+
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+            //---------------Test Result -----------------------
+
+            Assert.IsInstanceOfType(typeof(IDateTimePicker), panel.Controls[1]);
+            IDateTimePicker control1 = (IDateTimePicker)panel.Controls[1];
+            Assert.AreEqual(DateTimePickerFormat.Short, control1.Format);
+            
+            Assert.IsInstanceOfType(typeof(IDateTimePicker), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN+1]);
+            IDateTimePicker control2 = (IDateTimePicker)panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1];
+            Assert.AreEqual(DateTimePickerFormat.Custom, control2.Format);
+            Assert.AreEqual(singleFieldTab[0][1].DateFormat, control2.CustomFormat);
         }
 
         [Test]

@@ -466,9 +466,28 @@ namespace Habanero.BO.ClassDefinition
             get { return HasParameterValue("decimalPlaces") ? Convert.ToString(GetParameterValue("decimalPlaces")) : null; }
         }
 
+        ///<summary>
+        /// Returns the Options property from the form field or null if none is provided
+        ///</summary>
         public string Options
         {
             get { return HasParameterValue("options") ? Convert.ToString(GetParameterValue("options")) : null; }
+        }
+
+        ///<summary>
+        /// Returns the IsEmail property from the form field or null if none is provided
+        ///</summary>
+        public string IsEmail
+        {
+            get { return HasParameterValue("isEmail") ? Convert.ToString(GetParameterValue("isEmail")) : null; }
+        }
+
+        ///<summary>
+        /// Returns the DateFormat property from the form field or null if none is provided
+        ///</summary>
+        public string DateFormat
+        {
+            get { return HasParameterValue("dateFormat") ? Convert.ToString(GetParameterValue("dateFormat")) : null; }
         }
 
         private ClassDef GetClassDef()
