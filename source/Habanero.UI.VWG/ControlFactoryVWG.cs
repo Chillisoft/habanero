@@ -683,6 +683,17 @@ namespace Habanero.UI.VWG
         }
 
         /// <summary>
+        /// Creates a new GroupBox with the specified text as the title.
+        /// </summary>
+        public IGroupBox CreateGroupBox(string text)
+        {
+            IGroupBox groupBox = CreateGroupBox();
+            groupBox.Text = text;
+            groupBox.Name = text;
+            return groupBox;
+        }
+
+        /// <summary>
         /// Creates a form in which a business object can be edited
         /// </summary>
         /// <param name="bo">The business object to edit</param>
@@ -782,6 +793,14 @@ namespace Habanero.UI.VWG
         public virtual ITextBoxMapperStrategy CreateTextBoxMapperStrategy()
         {
             return new TextBoxMapperStrategyVWG();
+        }
+
+        ///<summary>
+        /// Creates a DataGridView
+        ///</summary>
+        public IDataGridView CreateDataGridView()
+        {
+            return new DataGridViewVWG();
         }
 
         /// <summary>

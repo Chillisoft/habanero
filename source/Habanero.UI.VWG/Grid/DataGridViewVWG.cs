@@ -35,7 +35,7 @@ namespace Habanero.UI.VWG
     {
         private readonly DataGridViewManager _manager;
 
-        protected DataGridViewVWG()
+        public DataGridViewVWG()
         {
             _manager = new DataGridViewManager(this);
         }

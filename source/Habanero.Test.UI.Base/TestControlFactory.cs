@@ -489,7 +489,6 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------   
         }
 
-
         [Test]
         public void TestCreateButton()
         {
@@ -508,6 +507,55 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(buttonText, button.Name);
             Assert.AreEqual(expectedButtonWidth, button.Width);
             //To_Test: btn.FlatStyle = FlatStyle.System;
+            //---------------Tear Down -------------------------   
+        }
+
+        [Test]
+        public void TestCreateGroupBox()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Verify test pack-------------------
+            //---------------Execute Test ----------------------
+            IGroupBox groupBox = _factory.CreateGroupBox();
+            //---------------Verify Result -----------------------
+            Assert.IsNotNull(groupBox);
+            Assert.AreEqual("", groupBox.Text);
+            Assert.AreEqual("", groupBox.Name);
+            int expectedWidth = 200;
+            Assert.AreEqual(expectedWidth, groupBox.Width);
+            //---------------Tear Down -------------------------   
+        }
+
+        [Test]
+        public void TestCreateGroupBox_WithText()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Verify test pack-------------------
+            string groupBoxText = "test label";
+            //---------------Execute Test ----------------------
+
+            IGroupBox groupBox = _factory.CreateGroupBox(groupBoxText);
+            //---------------Verify Result -----------------------
+            Assert.IsNotNull(groupBox);
+            Assert.AreEqual(groupBoxText, groupBox.Text);
+            Assert.AreEqual(groupBoxText, groupBox.Name);
+            int expectedWidth = 200;
+            Assert.AreEqual(groupBoxText, groupBox.Name);
+            Assert.AreEqual(expectedWidth, groupBox.Width);
+            //---------------Tear Down -------------------------   
+        }
+
+        [Test]
+        public void TestCreateDataGridView()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Verify test pack-------------------
+            
+            //---------------Execute Test ----------------------
+
+            IDataGridView dataGridView = _factory.CreateDataGridView();
+            //---------------Verify Result -----------------------
+            Assert.IsNotNull(dataGridView);
             //---------------Tear Down -------------------------   
         }
 

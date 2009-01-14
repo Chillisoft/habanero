@@ -262,7 +262,16 @@ namespace Habanero.UI.Win
             return new GroupBoxWin();
         }
 
-        
+        /// <summary>
+        /// Creates a new GroupBox with the specified text as the title.
+        /// </summary>
+        public IGroupBox CreateGroupBox(string text)
+        {
+            IGroupBox groupBox = CreateGroupBox();
+            groupBox.Text = text;
+            groupBox.Name = text;
+            return groupBox;
+        }
 
         /// <summary>
         /// Creates a TabControl
@@ -406,6 +415,14 @@ namespace Habanero.UI.Win
         public ITextBoxMapperStrategy CreateTextBoxMapperStrategy()
         {
             return new TextBoxMapperStrategyWin();
+        }
+
+        ///<summary>
+        /// Creates a DataGridView
+        ///</summary>
+        public IDataGridView CreateDataGridView()
+        {
+            return new DataGridViewWin();
         }
 
         /// <summary>

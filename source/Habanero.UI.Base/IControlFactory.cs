@@ -303,6 +303,11 @@ namespace Habanero.UI.Base
         IGroupBox CreateGroupBox();
 
         /// <summary>
+        /// Creates a new GroupBox with the specified text as the title.
+        /// </summary>
+        IGroupBox CreateGroupBox(string text);
+
+        /// <summary>
         /// Creates a TabControl
         /// </summary>
         ITabControl CreateTabControl();
@@ -389,7 +394,12 @@ namespace Habanero.UI.Base
         /// This control is suitable for a business object collection with a limited
         /// number of objects.
         /// </summary>
-        IBOColTabControl CreateBOColTabControl();
+        IBOColTabControl CreateBOColTabControl(); 
+        
+        ///<summary>
+        /// Creates a DataGridView
+        ///</summary>
+        IDataGridView CreateDataGridView();
 
         /// <summary>
         /// Creates a DataGridViewImageColumn
@@ -506,6 +516,7 @@ namespace Habanero.UI.Base
         ///<param name="message">The text to display in the message box.</param>
         ///<returns>The message box result.</returns>
         Base.DialogResult ShowMessageBox(string message);
+
 
         
     }
