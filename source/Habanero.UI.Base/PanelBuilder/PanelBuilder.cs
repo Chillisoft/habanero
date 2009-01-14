@@ -1,9 +1,11 @@
 using System;
 using System.Reflection;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
+
     public class PanelBuilder
     {
         private IControlFactory _factory;
@@ -34,7 +36,6 @@ namespace Habanero.UI.Base
             SetupInputControlColumnWidth(panelInfo, formTab);
 
             panel.Width = layoutManager.GetFixedWidthIncludingGaps();
-
             panelInfo.Panel = panel;
             return panelInfo;
         }
@@ -156,7 +157,36 @@ namespace Habanero.UI.Base
                                                                 formField.MapperAssembly, inputControl,
                                                                 formField.PropertyName, !formField.Editable, _factory);
 
-            SetInputControlAlignment(formField, inputControl);
+
+            if (!String.IsNullOrEmpty(formField.Alignment)) SetInputControlAlignment(formField, inputControl);
+            if (!String.IsNullOrEmpty(formField.NumLines))  SetInputControlNumLines(formField, inputControl);
+            
+            if (!String.IsNullOrEmpty(formField.DecimalPlaces))
+            {
+                if (inputControl is INumericUpDown && formField.MapperTypeName.ToLower() == "numericupdowncurrencymapper")
+                {
+                    int decimalPlaces = Convert.ToInt32(formField.DecimalPlaces);
+                    if (decimalPlaces>=0)
+                    {
+                        ((INumericUpDown)inputControl).DecimalPlaces = decimalPlaces;
+                    }
+                }
+            }
+
+            if (!String.IsNullOrEmpty(formField.Options))
+            {
+                if (inputControl is IComboBox && formField.MapperTypeName.ToLower() == "listcomboboxmapper")
+                {
+                    string[] items = formField.Options.Split('|');
+                    foreach (string item in items)
+                    {
+                        ((IComboBox)inputControl).Items.Add(item);
+                    }
+                }
+            }
+
+
+
 
             if (formField.RowSpan > 1)
             {
@@ -171,18 +201,54 @@ namespace Habanero.UI.Base
             return controlMapper;
         }
 
+        private void SetInputControlNumLines(UIFormField formField, IControlHabanero inputControl)
+        {
+           if (inputControl is ITextBox)
+           {
+               int numLines;
+               try
+               {
+                   numLines = Convert.ToInt32(formField.NumLines);
+               }
+               catch (Exception)
+               {
+                   throw new InvalidXmlDefinitionException
+                       ("An error " + "occurred while reading the 'numLines' parameter "
+                        + "from the class definitions.  The 'value' "
+                        + "attribute must be a valid integer.");
+               }
+
+               ITextBox textBox = ((ITextBox)inputControl);
+               textBox.Multiline = true;
+               textBox.AcceptsReturn = true;
+               textBox.ScrollBars = ScrollBars.Vertical;
+               textBox.Height = inputControl.Height * numLines;
+           }
+            
+        }
+
         private void SetInputControlAlignment(UIFormField formField, IControlHabanero inputControl)
         {
-            if (!String.IsNullOrEmpty(formField.Alignment))
+           
+            // Some controls have TextAlign and others don't. This code uses reflection to apply it if appropriate.
+            // This did not work because the propertyInfo.SetValue method was not calling the TestBoxVWG TextAlign Set property method.
+            // PropertyInfo propertyInfo = inputControl.GetType().GetProperty("TextAlign");
+            //if (propertyInfo != null &&
+            //    propertyInfo.PropertyType.Name == "HorizontalAlignment") //caters for the possibility of a custom control that implements textalign but doesn't have HorizontalAlignment as its type
+            //{
+
+            //    propertyInfo.SetValue(inputControl, GetAlignmentValue(formField.Alignment), new object[0]);
+            //}
+            if (inputControl is ITextBox)
             {
-                // Some controls have TextAlign and others don't. This code uses reflection to apply it if appropriate.
-                PropertyInfo propertyInfo = inputControl.GetType().GetProperty("TextAlign");
-                if (propertyInfo != null &&
-                    propertyInfo.PropertyType.Name == "HorizontalAlignment") //caters for the possibility of a custom control that implements textalign but doesn't have HorizontalAlignment as its type
-                {
-                    propertyInfo.SetValue(inputControl,HorizontalAlignment.Right, new object[0]);
-                }
+                ((ITextBox) inputControl).TextAlign = GetAlignmentValue(formField.Alignment);
             }
+            if (inputControl is INumericUpDown)
+            {
+                ((INumericUpDown)inputControl).TextAlign = GetAlignmentValue(formField.Alignment);
+            }
+
+            
         }
 
         private ILabel CreateAndAddLabel(IPanelInfo panelInfo, UIFormField formField)
@@ -229,5 +295,29 @@ namespace Habanero.UI.Base
             }
         }
 
+        ///<summary>
+        /// Checks if the alignment value is valid
+        ///</summary>
+        ///<param name="alignmentValue">The alignment value from the FieldInfo</param>
+        ///<returns>The valid Habanero.UI.Base Horizontal Alignment</returns>
+        ///<exception cref="HabaneroDeveloperException">Throws a HabaneroDeveloperException if the alignment value is invalid</exception>
+        public static HorizontalAlignment GetAlignmentValue(string alignmentValue)
+        {
+            HorizontalAlignment horizontalAlignment = HorizontalAlignment.Left;
+            if (!(alignmentValue.ToLower() == "left" || alignmentValue.ToLower() == "right" || alignmentValue.ToLower() == "center" || alignmentValue.ToLower() == "centre"))
+            {
+                string errMessage = "Invalid alignment property value '" + alignmentValue + "' in the class definitions.";
+                throw new HabaneroDeveloperException(errMessage, errMessage);
+            }
+
+
+            if (alignmentValue.ToLower() == "left") horizontalAlignment = HorizontalAlignment.Left;
+            if (alignmentValue.ToLower()=="right") horizontalAlignment=HorizontalAlignment.Right;
+            if (alignmentValue.ToLower() == "center" || alignmentValue.ToLower() == "centre") horizontalAlignment = HorizontalAlignment.Center;
+
+            return horizontalAlignment;
+        }
+
+       
     }
 }

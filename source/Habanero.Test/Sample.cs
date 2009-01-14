@@ -920,7 +920,7 @@ namespace Habanero.Test
             }
 
 
-            public UIFormTab GetFormTabOneFieldWithNoAlignment()
+            public UIFormTab GetFormTabTwoFieldsWithNoAlignment()
             {
                 return GetSimpleUIFormDef_NoAlignment()[0];
             }
@@ -934,6 +934,7 @@ namespace Habanero.Test
 							<tab name=""Tab1"">
 								<columnLayout width=""150"">
 									<field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+                                    <field label=""Integer:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" />
 								</columnLayout>
 							</tab>
 						</form>");
@@ -954,6 +955,185 @@ namespace Habanero.Test
 								<columnLayout width=""150"">
 									<field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" >
                                         <parameter name=""alignment"" value=""right""/>
+                                    </field>
+								</columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public UIFormTab GetFormTabOneFieldWithCenterAlignment()
+            {
+                return GetSimpleUIFormDef_CenterAlignment()[0];
+            }
+
+            private UIForm GetSimpleUIFormDef_CenterAlignment()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""150"">
+									<field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" >
+                                        <parameter name=""alignment"" value=""center""/>
+                                    </field>
+								</columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public UIFormTab GetFormTabOneFieldWithInvalidAlignment()
+            {
+                return GetSimpleUIFormDef_InvalidAlignment()[0];
+            }
+
+            private UIForm GetSimpleUIFormDef_InvalidAlignment()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""150"">
+									<field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" >
+                                        <parameter name=""alignment"" value=""Top""/>
+                                    </field>
+								</columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public UIFormTab GetFormTabOneFieldsWithAlignment_NumericUpDown()
+            {
+                return GetSimpleUIFormDef_WithAlignmentAndNumericUpdown()[0];
+            }
+
+            private UIForm GetSimpleUIFormDef_WithAlignmentAndNumericUpdown()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""150"">
+                                    <field label=""Integer:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" >
+                                        <parameter name=""alignment"" value=""left""/>
+                                    </field>
+                                    <field label=""Integer:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" >
+                                        <parameter name=""alignment"" value=""right""/>
+                                    </field>
+                                    <field label=""Integer:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" >
+                                        <parameter name=""alignment"" value=""center""/>
+                                    </field>
+                                    <field label=""Integer:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" >
+                                        <parameter name=""alignment"" value=""centre""/>
+                                    </field>
+								</columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public UIFormTab GetFormTabOneFieldsWithNumericUpDown()
+            {
+                return GetSimpleUIFormDef_WithNumericUpDown()[0];
+            }
+
+            private UIForm GetSimpleUIFormDef_WithNumericUpDown()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""150"">
+                                    <field label=""Integer:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" >
+                                        <parameter name=""alignment"" value=""right""/>
+                                    </field>
+                                </columnLayout>
+							</tab>
+						</form>");
+            }
+
+
+            public UIFormTab GetFormTabOneFieldWithMultiLineParameter()
+            {
+                return GetSimpleUIFormDef_WithMultiLineParameter()[0];
+            }
+
+            private UIForm GetSimpleUIFormDef_WithMultiLineParameter()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""150"">
+									<field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" >
+                                        <parameter name=""numLines"" value=""3""/>
+                                    </field>
+								</columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public UIFormTab GetFormTabOneFieldWithInvalidMultiLineParameter()
+            {
+                return GetSimpleUIFormDef_WithInvalidMultiLineParameter()[0];
+            }
+
+            private UIForm GetSimpleUIFormDef_WithInvalidMultiLineParameter()
+            {
+               
+                   XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""150"">
+									<field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" >
+                                        <parameter name=""numLines"" value=""Invalid""/>
+                                    </field>
+								</columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public UIFormTab GetFormTabOneFieldWithDecimalPlacesParameter()
+            {
+                return GetSimpleUIFormDef_WithDecimalPlacesParameter()[0];
+            }
+
+            private UIForm GetSimpleUIFormDef_WithDecimalPlacesParameter()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""150"">
+									<field label=""Integer:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownCurrencyMapper"" >
+                                        <parameter name=""decimalPlaces"" value=""3""/>
+                                    </field>
+								</columnLayout>
+							</tab>
+						</form>");
+            }
+
+            public UIFormTab GetFormTabOneFieldWithOptionsParameter()
+            {
+                return GetSimpleUIFormDef_WithOptionsParameter()[0];
+            }
+
+            private UIForm GetSimpleUIFormDef_WithOptionsParameter()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout width=""150"">
+									<field label=""Integer:"" property=""SampleInt"" type=""ComboBox"" mapperType=""ListComboBoxMapper"" >
+                                        <parameter name=""options"" value=""M|F""/>
                                     </field>
 								</columnLayout>
 							</tab>

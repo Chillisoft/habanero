@@ -450,6 +450,27 @@ namespace Habanero.BO.ClassDefinition
             get { return HasParameterValue("alignment") ? Convert.ToString(GetParameterValue("alignment")) : null; }
         }
 
+        ///<summary>
+        /// Returns the numlines property from the form field or null if none is provided 
+        ///</summary>
+        public string NumLines
+        {
+            get { return HasParameterValue("numLines") ? Convert.ToString(GetParameterValue("numLines")) : null; }
+        }
+
+        ///<summary>
+        /// Returns the decimalPlaces property from the form field or null if none is provided
+        ///</summary>
+        public string DecimalPlaces
+        {
+            get { return HasParameterValue("decimalPlaces") ? Convert.ToString(GetParameterValue("decimalPlaces")) : null; }
+        }
+
+        public string Options
+        {
+            get { return HasParameterValue("options") ? Convert.ToString(GetParameterValue("options")) : null; }
+        }
+
         private ClassDef GetClassDef()
         {
             UIFormColumn column = this.UIFormColumn;

@@ -75,8 +75,14 @@ namespace Habanero.UI.VWG
         /// </summary>
         HorizontalAlignment ITextBox.TextAlign
         {
-            get { return (HorizontalAlignment) TextAlign; }
-            set { TextAlign = (Gizmox.WebGUI.Forms.HorizontalAlignment) value; }
+            get
+            {
+                return EnumerationConverter.HorizontalAlignmentToHabanero(TextAlign);
+            }
+            set
+            {
+                TextAlign=EnumerationConverter.HorizontalAlignmentToVWG(value);
+            }
         }
     }
 

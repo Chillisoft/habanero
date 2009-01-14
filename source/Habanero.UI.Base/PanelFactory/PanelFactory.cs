@@ -334,6 +334,7 @@ namespace Habanero.UI.Base
                     //    INumericUpDown upDown = (INumericUpDown) ctl;
                     //    upDown.Enter += UpDownEnterHandler;
                     //}
+                    
 
 
                     CheckGeneralParameters(field, ctl);

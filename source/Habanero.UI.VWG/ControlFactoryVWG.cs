@@ -29,6 +29,7 @@ using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.Util;
 using DateTimePickerFormat=Habanero.UI.Base.DateTimePickerFormat;
+using HorizontalAlignment=Gizmox.WebGUI.Forms.HorizontalAlignment;
 using ScrollBars=Gizmox.WebGUI.Forms.ScrollBars;
 
 namespace Habanero.UI.VWG
@@ -61,6 +62,7 @@ namespace Habanero.UI.VWG
         {
             TextBoxVWG tb = new TextBoxVWG();
             tb.Height = TEXTBOX_HEIGHT;
+            tb.TextAlign = HorizontalAlignment.Left;
             return tb;
         }
 
@@ -268,7 +270,7 @@ namespace Habanero.UI.VWG
             if (isBold)
             {
                 lbl.Font = new Font(lbl.Font, FontStyle.Bold);
-                lbl.Text = labelText + " *";
+                //lbl.Text = labelText + " *";
             }
             lbl.Width = lbl.PreferredWidth;
             if (isBold)

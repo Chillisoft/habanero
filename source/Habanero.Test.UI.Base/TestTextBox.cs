@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
@@ -168,6 +169,53 @@ namespace Habanero.Test.UI.Base
                 //---------------Tear Down -------------------------
             }
 
+            [Test]
+            public void Test_defaultTextAlignment()
+            {
+                //---------------Set up test pack-------------------
+               
+                //---------------Execute Test ----------------------
+                ITextBox textBox = GetControlFactory().CreateTextBox();
+                //---------------Test Result -----------------------
+                Assert.AreEqual(HorizontalAlignment.Left, textBox.TextAlign);
+                //---------------Tear Down -------------------------
+            }
+
+            [Test]
+            public void Test_setTextAlignment_Left()
+            {
+                //---------------Set up test pack-------------------
+                ITextBox textBox = GetControlFactory().CreateTextBox();
+                //---------------Execute Test ----------------------
+                textBox.TextAlign = HorizontalAlignment.Left;
+                //---------------Test Result -----------------------
+                Assert.AreEqual(HorizontalAlignment.Left, textBox.TextAlign);
+                //---------------Tear Down -------------------------
+            }
+
+            [Test]
+            public void Test_setTextAlignment_Center()
+            {
+                //---------------Set up test pack-------------------
+                ITextBox textBox = GetControlFactory().CreateTextBox();
+                //---------------Execute Test ----------------------
+                textBox.TextAlign = HorizontalAlignment.Center;
+                //---------------Test Result -----------------------
+                Assert.AreEqual(HorizontalAlignment.Center, textBox.TextAlign);
+                //---------------Tear Down -------------------------
+            }
+
+            [Test]
+            public void Test_setTextAlignment_Right()
+            {
+                //---------------Set up test pack-------------------
+                ITextBox textBox = GetControlFactory().CreateTextBox();
+                //---------------Execute Test ----------------------
+                textBox.TextAlign = HorizontalAlignment.Right;
+                //---------------Test Result -----------------------
+                Assert.AreEqual(HorizontalAlignment.Right,textBox.TextAlign);
+                //---------------Tear Down -------------------------
+            }
         }
 
    

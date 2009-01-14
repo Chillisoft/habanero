@@ -20,6 +20,7 @@
 using System;
 using System.Windows.Forms;
 using Habanero.UI.Base;
+using HorizontalAlignment=Habanero.UI.Base.HorizontalAlignment;
 
 namespace Habanero.UI.Win
 {
@@ -54,6 +55,15 @@ namespace Habanero.UI.Win
         {
             get { return DockStyleWin.GetDockStyle(base.Dock); }
             set { base.Dock = DockStyleWin.GetDockStyle(value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the alignment of text in the up-down control
+        /// </summary>
+        HorizontalAlignment INumericUpDown.TextAlign
+        {
+            get { return (HorizontalAlignment) TextAlign; }
+            set { TextAlign = (System.Windows.Forms.HorizontalAlignment) value; }
         }
     }
 

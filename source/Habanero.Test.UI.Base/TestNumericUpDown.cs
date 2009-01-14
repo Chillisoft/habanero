@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.UI.Base;
 using NUnit.Framework;
 
@@ -25,22 +26,101 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the base inherited methods of the NumericUpDown class.
     /// </summary>
+    [TestFixture]
     public class TestBaseMethodsWin_NumericUpDown : TestBaseMethods.TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
         {
             return GetControlFactory().CreateNumericUpDown();
         }
+
+
+
+        [Test]
+        public void Test_setTextAlignment_Left()
+        {
+            //---------------Set up test pack-------------------
+            INumericUpDown textBox = GetControlFactory().CreateNumericUpDown();
+            //---------------Execute Test ----------------------
+            textBox.TextAlign = HorizontalAlignment.Left;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(HorizontalAlignment.Left, textBox.TextAlign);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void Test_setTextAlignment_Center()
+        {
+            //---------------Set up test pack-------------------
+            INumericUpDown textBox = GetControlFactory().CreateNumericUpDown();
+            //---------------Execute Test ----------------------
+            textBox.TextAlign = HorizontalAlignment.Center;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(HorizontalAlignment.Center, textBox.TextAlign);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void Test_setTextAlignment_Right()
+        {
+            //---------------Set up test pack-------------------
+            INumericUpDown textBox = GetControlFactory().CreateNumericUpDown();
+            //---------------Execute Test ----------------------
+            textBox.TextAlign = HorizontalAlignment.Right;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(HorizontalAlignment.Right, textBox.TextAlign);
+            //---------------Tear Down -------------------------
+        }
     }
 
     /// <summary>
     /// This test class tests the base inherited methods of the NumericUpDown class.
     /// </summary>
+    [TestFixture]
     public class TestBaseMethodsVWG_NumericUpDown : TestBaseMethods.TestBaseMethodsVWG
     {
         protected override IControlHabanero CreateControl()
         {
             return GetControlFactory().CreateNumericUpDown();
+        }
+
+        [Test]
+        public void Test_defaultTextAlignment()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Execute Test ----------------------
+            INumericUpDown numericUpDown = GetControlFactory().CreateNumericUpDown();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(HorizontalAlignment.Left, numericUpDown.TextAlign);
+            //---------------Tear Down -------------------------
+        }
+
+
+        
+
+        [Test , Ignore("VWG does not support setting the TextAlign Property. Default value is Left")]
+        public void Test_setTextAlignment_Center()
+        {
+            //---------------Set up test pack-------------------
+            INumericUpDown numericUpDown = GetControlFactory().CreateNumericUpDown();
+            //---------------Execute Test ----------------------
+            numericUpDown.TextAlign = HorizontalAlignment.Center;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(HorizontalAlignment.Center, numericUpDown.TextAlign);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test , Ignore("VWG does not support setting the TextAlign Property. Default value is Left")]
+        public void Test_setTextAlignment_Right()
+        {
+            //---------------Set up test pack-------------------
+            INumericUpDown numericUpDown = GetControlFactory().CreateNumericUpDown();
+            //---------------Execute Test ----------------------
+            numericUpDown.TextAlign = HorizontalAlignment.Right;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(HorizontalAlignment.Right, numericUpDown.TextAlign);
+            //---------------Tear Down -------------------------
         }
     }
 
@@ -50,5 +130,6 @@ namespace Habanero.Test.UI.Base
     [TestFixture]
     public class TestNumericUpDown
     {
+
     }
 }
