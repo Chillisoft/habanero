@@ -195,6 +195,7 @@
     <Compile Include="ClassDefinition\TestRelPropDef.cs" />
     <Compile Include="Comparer\TestReflectedPropertyComparer.cs" />
     <Compile Include="Comparer\TestComparers.cs" />
+    <Compile Include="TestPack\BOWithIntID_DifferentType.cs" />
     <Compile Include="TestPack\ContactPersonTestBO.cs" />
     <Compile Include="TestPack\OrganisationTestBO.cs" />
     <Compile Include="SqlGeneration\StatementGeneratorTestHelper.cs" />

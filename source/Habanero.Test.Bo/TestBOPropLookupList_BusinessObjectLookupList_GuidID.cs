@@ -22,6 +22,17 @@ namespace Habanero.Test.BO
         public void Setup()
         {
             ClassDef.ClassDefs.Clear();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            MyBO.LoadClassDefsNoUIDef();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            _propDef_guid = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
+            _validBusinessObject = new MyBO { TestProp = "ValidValue" };
+            _collection = new BusinessObjectCollection<MyBO> { _validBusinessObject };
+            _validLookupValue = _validBusinessObject.ToString();
+
+            _propDef_guid.LookupList = new BusinessObjectLookupListStub(typeof(MyBO), _collection);
+            _validBusinessObject_NotInList = new MyBO { TestProp = "AnotherValue" };
+            ClassDef.ClassDefs.Clear();
         }
 
         [TestFixtureSetUp]
@@ -30,15 +41,6 @@ namespace Habanero.Test.BO
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
             ClassDef.ClassDefs.Clear();
-            MyBO.LoadClassDefsNoUIDef();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            _propDef_guid = new PropDef("PropName", typeof (Guid), PropReadWriteRule.ReadWrite, null);
-            _validBusinessObject = new MyBO {TestProp = "ValidValue"};
-            _collection = new BusinessObjectCollection<MyBO> {_validBusinessObject};
-            _validLookupValue = _validBusinessObject.ToString();
-
-            _propDef_guid.LookupList = new BusinessObjectLookupListStub(typeof (MyBO), _collection);
-            _validBusinessObject_NotInList = new MyBO {TestProp = "AnotherValue"};
         }
 
         private static string GuidToUpper(Guid guid)
@@ -795,7 +797,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_SetValue_BusinessObject_ToStringNull_BONotInList()
+        public void Test_SetValue_BusinessObject_NotInBOManager_ToStringNull_BONotInList()
         {
             ContactPersonTestBO.LoadDefaultClassDef();
             PropDef propDef = new PropDef("PropName", typeof (Guid), PropReadWriteRule.ReadWrite, null)
@@ -803,6 +805,7 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOPropLookupList(propDef);
             boProp.InitialiseProp(_validBusinessObject.ID.GetAsGuid());
             ContactPersonTestBO boWithNullToString = new ContactPersonTestBO();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             //---------------Assert Precondition----------------
             Assert.AreEqual(typeof (Guid), boProp.PropDef.PropertyType);
             Assert.IsTrue(boProp.IsValid);
@@ -819,7 +822,7 @@ namespace Habanero.Test.BO
 
         //If Set inherited child to a list defined for the lookup for parent then no error.
         [Test]
-        public void Test_SetValue_BusinessObject_InheritedChild_BONotInList()
+        public void Test_SetValue_BusinessObject_InheritedChild()
         {
             PropDef propDef = new PropDef("PropName", typeof (Guid), PropReadWriteRule.ReadWrite, null)
                                   {LookupList = new BusinessObjectLookupList(typeof (Shape))};
@@ -833,12 +836,31 @@ namespace Habanero.Test.BO
             boProp.Value = inheritedBO;
             //---------------Test Result -----------------------
             Assert.AreEqual(inheritedBO.ID.GetAsValue(), boProp.Value);
+            Assert.IsTrue(boProp.IsValid);
+        }
+
+        //If Set inherited child to a list defined for the lookup for parent then no error.
+        [Test]
+        public void Test_SetValue_BusinessObject_InheritedChild_BONotInList()
+        {
+            PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = new BusinessObjectLookupList(typeof(Shape)) };
+            BOProp boProp = new BOPropLookupList(propDef);
+            Circle inheritedBO = new Circle();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(typeof(Guid), boProp.PropDef.PropertyType);
+
+            //---------------Execute Test ----------------------
+            boProp.Value = inheritedBO;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(inheritedBO.ID.GetAsValue(), boProp.Value);
             string expectedErrorMessage = String.Format
                 ("{0}' invalid since '{1}' is not in the lookup list of available values.", boProp.DisplayName,
                  boProp.Value);
             StringAssert.Contains(expectedErrorMessage, boProp.IsValidMessage);
             Assert.IsFalse(boProp.IsValid);
         }
+
 
         [Test]
         public void Test_SetValue_NullValue()
@@ -877,10 +899,33 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_SetValue_InvalidGuid_NotInList()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BOProp boProp = new BOPropLookupList(_propDef_guid);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(boProp.Value);
+            //---------------Execute Test ----------------------
+            Guid guid = Guid.NewGuid();
+            boProp.Value = guid;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(boProp.Value);
+            Assert.IsInstanceOfType(typeof(Guid), boProp.Value);
+            Assert.AreEqual(guid, boProp.Value);
+            string expectedErrorMessage = String.Format
+                ("{0}' invalid since '{1}' is not in the lookup list of available values.", boProp.DisplayName,
+                 boProp.Value);
+            StringAssert.Contains(expectedErrorMessage, boProp.InvalidReason);
+            Assert.IsFalse(boProp.IsValid);
+        }
+
+        [Test]
         public void Test_SetValue_ValidGuid_NotInList()
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
+            
             BOProp boProp = new BOPropLookupList(_propDef_guid);
             //---------------Assert Precondition----------------
             Assert.IsNull(boProp.Value);
@@ -890,11 +935,13 @@ namespace Habanero.Test.BO
             Assert.IsNotNull(boProp.Value);
             Assert.IsInstanceOfType(typeof (Guid), boProp.Value);
             Assert.AreEqual(_validBusinessObject_NotInList.ID.GetAsValue(), boProp.Value);
-            string expectedErrorMessage = String.Format
-                ("{0}' invalid since '{1}' is not in the lookup list of available values.", boProp.DisplayName,
-                 boProp.Value);
-            StringAssert.Contains(expectedErrorMessage, boProp.InvalidReason);
-            Assert.IsFalse(boProp.IsValid);
+            Assert.AreEqual("", boProp.InvalidReason);
+            Assert.IsTrue(boProp.IsValid);
+            //string expectedErrorMessage = String.Format
+            //    ("{0}' invalid since '{1}' is not in the lookup list of available values.", boProp.DisplayName,
+            //     boProp.Value);
+            //StringAssert.Contains(expectedErrorMessage, boProp.InvalidReason);
+            //Assert.IsFalse(boProp.IsValid);
         }
 
         [Test]
@@ -908,13 +955,41 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             boProp.Value = _validBusinessObject_NotInList.ID.GetAsValue().ToString();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof (Guid), boProp.Value);
+            Assert.IsNotNull(boProp.Value);
+            Assert.IsInstanceOfType(typeof(Guid), boProp.Value);
             Assert.AreEqual(_validBusinessObject_NotInList.ID.GetAsValue(), boProp.Value);
-            string expectedErrorMessage = String.Format
-                ("{0}' invalid since '{1}' is not in the lookup list of available values.", boProp.DisplayName,
-                 boProp.Value);
-            StringAssert.Contains(expectedErrorMessage, boProp.InvalidReason);
-            Assert.IsFalse(boProp.IsValid);
+            Assert.AreEqual("", boProp.InvalidReason);
+            Assert.IsTrue(boProp.IsValid);
+            //string expectedErrorMessage = String.Format
+            //    ("{0}' invalid since '{1}' is not in the lookup list of available values.", boProp.DisplayName,
+            //     boProp.Value);
+            //StringAssert.Contains(expectedErrorMessage, boProp.InvalidReason);
+            //Assert.IsFalse(boProp.IsValid);
+        }
+
+
+        [Test]
+        public void Test_SetValue__NewObject_ValidGuid_NotInList()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BOProp boProp = new BOPropLookupList(_propDef_guid);
+            MyBO newMyBO = new MyBO();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(boProp.Value);
+            //---------------Execute Test ----------------------
+            boProp.Value = newMyBO.ID.GetAsValue();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(boProp.Value);
+            Assert.IsInstanceOfType(typeof(Guid), boProp.Value);
+            Assert.AreEqual(newMyBO.ID.GetAsValue(), boProp.Value);
+            Assert.AreEqual("", boProp.InvalidReason);
+            Assert.IsTrue(boProp.IsValid);
+            //string expectedErrorMessage = String.Format
+            //    ("{0}' invalid since '{1}' is not in the lookup list of available values.", boProp.DisplayName,
+            //     boProp.Value);
+            //StringAssert.Contains(expectedErrorMessage, boProp.InvalidReason);
+            //Assert.IsFalse(boProp.IsValid);
         }
 
         [Test]
@@ -932,6 +1007,31 @@ namespace Habanero.Test.BO
             Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
             Assert.AreEqual("", boProp.InvalidReason);
             Assert.IsTrue(boProp.IsValid);
+        }
+
+
+
+        [Test]
+        public void Test_SetValue__NewObject_DifferentType_NotInList()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BOProp boProp = new BOPropLookupList(_propDef_guid);
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO newContactPersonTestBO = new ContactPersonTestBO();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(boProp.Value);
+            //---------------Execute Test ----------------------
+            boProp.Value = newContactPersonTestBO.ID.GetAsValue();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(boProp.Value);
+            Assert.IsInstanceOfType(typeof(Guid), boProp.Value);
+            Assert.AreEqual(newContactPersonTestBO.ID.GetAsValue(), boProp.Value);
+            string expectedErrorMessage = String.Format
+                ("{0}' is not valid. The Business object '{1}' returned for this ID is not a type of 'Habanero.Test.MyBO'.",
+                 boProp.DisplayName, newContactPersonTestBO.GetType());
+            StringAssert.Contains(expectedErrorMessage, boProp.InvalidReason);
+            Assert.IsFalse(boProp.IsValid);
         }
 
         #endregion
@@ -1027,13 +1127,17 @@ namespace Habanero.Test.BO
                 (boProp.PropertyName, _validBusinessObject_NotInList.ID.GetAsValue().ToString());
             //---------------Test Result -----------------------
             Assert.AreEqual(_validBusinessObject_NotInList.ID.GetAsValue(), boProp.Value);
-            string expectedErrorMessage = String.Format
-                ("{0}' invalid since '{1}' is not in the lookup list of available values.", boProp.DisplayName,
-                 boProp.Value);
-            StringAssert.Contains(expectedErrorMessage, boProp.InvalidReason);
-            Assert.IsFalse(boProp.IsValid);
-            StringAssert.Contains(expectedErrorMessage, businessObject.Status.IsValidMessage);
-            Assert.IsFalse(businessObject.Status.IsValid());
+            Assert.AreEqual("", boProp.InvalidReason);
+            Assert.IsTrue(boProp.IsValid);
+
+
+            //string expectedErrorMessage = String.Format
+            //    ("{0}' invalid since '{1}' is not in the lookup list of available values.", boProp.DisplayName,
+            //     boProp.Value);
+            //StringAssert.Contains(expectedErrorMessage, boProp.InvalidReason);
+            //Assert.IsFalse(boProp.IsValid);
+            //StringAssert.Contains(expectedErrorMessage, businessObject.Status.IsValidMessage);
+            //Assert.IsFalse(businessObject.Status.IsValid());
         }
 
         private IBusinessObject GetBusinessObjectStub()

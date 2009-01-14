@@ -141,8 +141,8 @@ namespace Habanero.BO
 
         internal IBusinessObject GetBusinessObjectForProp(ClassDef classDef)
         {
-            IBusinessObject businessObject;
-//            BOPrimaryKey boPrimaryKey = GetRelatedBOPrimaryKeyForProp(classDef);
+            IBusinessObject businessObject = ((PropDef) this.PropDef).GetBusinessObjectFromObjectManager(this.Value);
+            if (businessObject != null) return businessObject;
             try
             {
                 businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue(classDef, this.Value);

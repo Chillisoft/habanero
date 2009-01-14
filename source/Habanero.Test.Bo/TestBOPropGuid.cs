@@ -153,13 +153,16 @@ namespace Habanero.Test.BO
             Assert.AreEqual(bo.MyBoID, boProp.Value);
         }
 
-        [Test, Ignore("Currently throws an error while trying to get the object id")]
+        // , Ignore("Currently throws an error while trying to get the object id")]
+        [Test]  
         public void Test_InitialiseProp_InValidBusinessObject()
         {
             //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             BOProp boProp = new BOProp(_propDef);
             MyBO bo = new MyBO();
-            bo.SetPropertyValue("MyBoID", null);
+            //bo.SetPropertyValue("MyBoID", null);
             //---------------Assert Precondition----------------
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------

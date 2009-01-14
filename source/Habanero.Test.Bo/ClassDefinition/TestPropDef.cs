@@ -34,8 +34,9 @@ namespace Habanero.Test.BO.ClassDefinition
         #region Setup/Teardown
 
         [SetUp]
-        public void Init()
+        public void Setup()
         {
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             _propDef = new PropDef("PropName", typeof (string), PropReadWriteRule.ReadOnly, null);
         }
 
@@ -244,6 +245,65 @@ namespace Habanero.Test.BO.ClassDefinition
             string expectedErrorMessage = "Prop Name' invalid since '" + invalidValue + "' is not in the lookup list of available values.";
             StringAssert.Contains(expectedErrorMessage, errMsg);
             Assert.IsFalse(valid);
+        }
+        [Test]
+        public void Test_GetBusinessObjectFromObjectManager()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            BOWithIntID.LoadClassDefWithIntID();
+            PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
+            BOWithIntID expectedBO = new BOWithIntID { IntID = 3, TestField = "ValidValue" };
+            expectedBO.Save();
+            propDef.LookupList = new BusinessObjectLookupList(typeof(BOWithIntID));
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IBusinessObject returnedBO = propDef.GetBusinessObjectFromObjectManager(expectedBO.IntID);
+            //---------------Test Result -----------------------
+            Assert.AreSame(returnedBO, expectedBO);
+        }
+        [Test]
+        public void Test_GetBusinessObjectFromObjectManager_IdNotInObjectManager()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            BOWithIntID.LoadClassDefWithIntID();
+            PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
+            BOWithIntID expectedBO = new BOWithIntID { IntID = 3, TestField = "ValidValue" };
+            expectedBO.Save();
+            propDef.LookupList = new BusinessObjectLookupList(typeof(BOWithIntID));
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, BusinessObjectManager.Instance.Count);
+            //---------------Execute Test ----------------------
+            IBusinessObject returnedBO = propDef.GetBusinessObjectFromObjectManager(expectedBO.IntID);
+            //---------------Test Result -----------------------
+            Assert.IsNull(returnedBO);
+        }
+        [Ignore("To do test that does not allow two object in object manager with same type and same ID field Test_TwoObjectTypesWithTheSameIDField_HaveTheSamevalue_CanBeAddedToObjectMan")]
+        [Test]
+        public void Test_GetBusinessObjectFromObjectManager_IdInObjectManager_ButWrongType()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID_DifferentType.LoadClassDefWithIntID();
+            PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
+            BOWithIntID expectedBO = new BOWithIntID { IntID = 3, TestField = "ValidValue" };
+            expectedBO.Save();
+            propDef.LookupList = new BusinessObjectLookupList(typeof(BOWithIntID_DifferentType));
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            //---------------Execute Test ----------------------
+            IBusinessObject returnedBO = propDef.GetBusinessObjectFromObjectManager(expectedBO.IntID);
+            //---------------Test Result -----------------------
+            Assert.IsNull(returnedBO);
         }
 
         [Test]

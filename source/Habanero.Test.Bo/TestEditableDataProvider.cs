@@ -115,10 +115,10 @@ namespace Habanero.Test.BO
         }
 
         [Test, Ignore("//TODO Brett: Changes have been made recently (Brett?) that are now breaking editable grids.")]
-//        [Test]
         public void TestRejectChangesRemovesNewRow()
         {
             //---------------Set up test pack-------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             SetupTestData();
             int originalCount = _collection.Count;
             itsTable.Rows.Add(new object[] { null, "bo1prop1", "s1" });

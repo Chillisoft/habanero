@@ -700,22 +700,21 @@ namespace Habanero.BO.ClassDefinition
         {
             if (!this.HasLookupList()) return true;
             if (propValue == null || string.IsNullOrEmpty(Convert.ToString(propValue))) return true;
-            
-//            if(this.LookupList is BusinessObjectLookupList)
-//            {
-//                BusinessObjectLookupList list = ((BusinessObjectLookupList) this.LookupList);
-//                if(list.Criteria == null) return true;//If there are no criteria then the business object will
-//                // definitely be in the list since the business object is the right type.
-//                IBusinessObject businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue(list.BoType, propValue);
-//                if (businessObject == null)
-//                {
-//                    //foreach(IBusinessObject businessObject in BusinessObjectManager.Instance)
-//                    //{
-//
-//                    //}
-//                }
-//                return businessObject == null? true: list.Criteria.IsMatch(businessObject);
-//            }
+
+            if (this.LookupList is BusinessObjectLookupList)
+            {
+                BusinessObjectLookupList list = ((BusinessObjectLookupList)this.LookupList);
+               // if (list.Criteria == null) return true;//If there are no criteria then the business object will
+                // definitely be in the list since the business object is the right type.
+
+                //if (BusinessObjectManager.Instance.Contains(propValue.ToString()) )
+                IBusinessObject businessObject = GetBusinessObjectFromObjectManager(propValue);
+                if (businessObject != null)
+                {
+                    return CheckBusinessObjectMeetsLookupListCriteria(propValue, businessObject, list, ref errorMessage);
+                }
+            }
+
             Dictionary<string, string> idValueLookupList = this.LookupList.GetIDValueLookupList();
             if (!idValueLookupList.ContainsKey(ConvertValueToString((propValue))))
             {
@@ -724,6 +723,53 @@ namespace Habanero.BO.ClassDefinition
                 return false;
             }
             return true;
+        }
+
+        private bool CheckBusinessObjectMeetsLookupListCriteria(object propValue
+                , IBusinessObject businessObject
+                , BusinessObjectLookupList list, ref string errorMessage)
+        {
+            Type type = businessObject.GetType();
+            if (type == list.BoType || type.IsSubclassOf(list.BoType))
+            {
+                if (list.Criteria == null) return true;
+                if (list.Criteria.IsMatch(businessObject)) return true;
+
+                string classNameFull = ClassDef == null ? "" : ClassDef.ClassNameFull;
+                errorMessage += String.Format("'{0} - {1}' invalid since '{2}' is not in the lookup list of available values.",
+                                              classNameFull, DisplayName, propValue);
+                return false;
+            }
+            errorMessage = String.Format("'{0}' for property '{1}' is not valid. ", propValue, DisplayName);
+            errorMessage += "The Business object '" + type + "' returned for this ID is not a type of '" + list.BoType + "'.";
+            return false;
+        }
+
+        internal IBusinessObject GetBusinessObjectFromObjectManager(object propValue)
+        {
+            if (!this.HasLookupList()) return null;
+            if (!(this.LookupList is BusinessObjectLookupList)) return null;
+            string currentValue;
+            if (propValue is Guid)
+            {
+                currentValue = propValue.ToString();
+            }
+            else
+            {
+                BusinessObjectLookupList list = ((BusinessObjectLookupList)this.LookupList);
+                IBusinessObject newBusinessObject = list.LookupBoClassDef.CreateNewBusinessObject();
+                IBOProp prop = newBusinessObject.ID[0];//This is based on the logic that a lookup list can never be against a  
+                // business object with a composite key.
+                currentValue = prop.PropertyName + "=" + propValue;
+                BusinessObjectManager.Instance.Remove(newBusinessObject);
+            }
+
+            IBusinessObject businessObject = null;
+            if (BusinessObjectManager.Instance.Contains(currentValue))
+            {
+                businessObject = BusinessObjectManager.Instance[currentValue];
+            }
+            return businessObject;
         }
 
         internal object GetNewValue(object value)
@@ -1017,14 +1063,16 @@ namespace Habanero.BO.ClassDefinition
         public IPropDef Clone()
         {
             PropDef propDef = new PropDef
-                (this.PropertyName, this.PropertyTypeAssemblyName, this.PropertyTypeName, this.ReadWriteRule,
-                 this.DatabaseFieldName, this.DefaultValueString, this.Compulsory, this.AutoIncrementing, this.Length,
-                 this.DisplayName, this.Description, this.KeepValuePrivate);
-            propDef.LookupList = this.LookupList;
-            propDef.Persistable = this.Persistable;
-            propDef.DefaultValue = this.DefaultValue;
-            propDef.PropertyTypeAssemblyName = PropertyTypeAssemblyName;
-            propDef.PropType = this.PropType;
+                (PropertyName, PropertyTypeAssemblyName, PropertyTypeName, ReadWriteRule,
+                 DatabaseFieldName, DefaultValueString, Compulsory, AutoIncrementing, Length,
+                 DisplayName, Description, KeepValuePrivate)
+                {
+                    LookupList = LookupList,
+                    Persistable = Persistable,
+                    DefaultValue = DefaultValue,
+                    PropertyTypeAssemblyName = PropertyTypeAssemblyName,
+                    PropType = PropType
+                };
             foreach (IPropRule rule in _propRules)
             {
                 propDef.AddPropRule(rule);

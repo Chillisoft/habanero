@@ -63,7 +63,7 @@ namespace Habanero.Test.BO
             SetupDataAccessor();
             new TestUsingDatabase().SetupDBConnection();
         }
-
+        // ReSharper disable AccessToStaticMemberViaDerivedType
         [Test]
         public void Test_CreateObjectManager()
         {
@@ -109,8 +109,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
-            ContactPersonTestBO cp = new ContactPersonTestBO();
-            cp.Surname = TestUtil.CreateRandomString();
+            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = TestUtil.CreateRandomString()};
             boMan.Add(cp);
 
             //---------------Assert Precondition----------------
@@ -149,8 +148,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
                         BusinessObjectManager boMan = BusinessObjectManager.Instance;
-            ContactPersonTestBO cp = new ContactPersonTestBO();
-            cp.Surname = TestUtil.CreateRandomString();
+            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = TestUtil.CreateRandomString()};
             boMan.Add(cp);
 
             //---------------Assert Precondition----------------
@@ -164,7 +162,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual(0, boMan.Count);
             Assert.IsFalse(boMan.Contains(cp));
         }
-        // ReSharper disable AccessToStaticMemberViaDerivedType
         [Test]
         public void Test_RemoveFromObjectManager_DerigistersForEvent()
         {
@@ -324,8 +321,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
-            ContactPersonTestBO cp = new ContactPersonTestBO();
-            cp.Surname = TestUtil.CreateRandomString();
+            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = TestUtil.CreateRandomString()};
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boMan.Count);
@@ -452,8 +448,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
-            ContactPersonTestBO cp = new ContactPersonTestBO();
-            cp.Surname = TestUtil.CreateRandomString();
+            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = TestUtil.CreateRandomString()};
             cp.Save();
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boMan.Count);
@@ -472,7 +467,6 @@ namespace Habanero.Test.BO
             Assert.AreSame(cp, boMan[cp.ID.AsString_CurrentValue()]);
             Assert.AreSame(cp, boMan[cp.ID]);
         }
-        // ReSharper disable AccessToStaticMemberViaDerivedType
         [Test]
         public void Test_ContainsBusinessObjectReturnsFalseIfReferenceNotEquals()
         {
@@ -839,9 +833,7 @@ namespace Habanero.Test.BO
             Assert.IsFalse(containsOrigContactPerson);
         }
 
-        // ReSharper restore AccessToStaticMemberViaDerivedType
 
-        // ReSharper disable AccessToStaticMemberViaDerivedType
         [Test]
         public void Test_RemoveBusinessObject_DoesNotRemoveCurrentValue_ReferenceNotEquals()
         {
@@ -989,7 +981,7 @@ namespace Habanero.Test.BO
             BusinessObjectManagerStub boMan = (BusinessObjectManagerStub)BusinessObjectManagerStub.Instance;
 
             ContactPersonTestBO originalContactPerson = new ContactPersonTestBO { ContactPersonID = Guid.NewGuid() };
-            ContactPersonTestBO anotherContactperson = new ContactPersonTestBO(); ;
+            ContactPersonTestBO anotherContactperson = new ContactPersonTestBO();
             boMan.ClearLoadedObjects();
             string asString_CurrentValue = originalContactPerson.ID.AsString_CurrentValue();
             boMan.AddBusinessObject(anotherContactperson, asString_CurrentValue);
@@ -1012,9 +1004,9 @@ namespace Habanero.Test.BO
             BusinessObjectManagerStub.SetNewBusinessObjectManager();
             BusinessObjectManagerStub boMan = (BusinessObjectManagerStub)BusinessObjectManagerStub.Instance;
 
-            ContactPersonTestBO originalContactPerson = new ContactPersonTestBO { };
-            ContactPersonTestBO anotherContactperson = new ContactPersonTestBO(); ;
-            
+            new ContactPersonTestBO();
+            new ContactPersonTestBO();
+
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, boMan.Count);
             //---------------Execute Test ----------------------
@@ -1029,7 +1021,9 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManagerStub.SetNewBusinessObjectManager();
+
             BusinessObjectManagerStub boMan = (BusinessObjectManagerStub)BusinessObjectManagerStub.Instance;
+
 
             ContactPersonTestBO originalContactPerson = new ContactPersonTestBO { ContactPersonID = Guid.NewGuid() };
             boMan.ClearLoadedObjects();
@@ -1046,7 +1040,6 @@ namespace Habanero.Test.BO
         }
 
 
-//        // ReSharper restore AccessToStaticMemberViaDerivedType
         /// <summary>
         /// <see cref="Test_SaveDuplicateObject_DoesNotAddItselfToObjectManager"/>
         /// </summary>
@@ -1088,8 +1081,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
-            ContactPersonTestBO originalContactPerson = new ContactPersonTestBO();
-            originalContactPerson.Surname = "FirstSurname";
+            ContactPersonTestBO originalContactPerson = new ContactPersonTestBO {Surname = "FirstSurname"};
             originalContactPerson.Save();
             IPrimaryKey origCPID = originalContactPerson.ID;
             BusinessObjectManager.Instance.ClearLoadedObjects();
@@ -1308,9 +1300,9 @@ namespace Habanero.Test.BO
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
-//            boMan.Add(cp);
             cp.ContactPersonID = Guid.NewGuid();
             cp.Surname = TestUtil.CreateRandomString();
+            //            boMan.Add(cp);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boMan.Count);
             Assert.IsTrue(boMan.Contains(cp));
@@ -1322,6 +1314,36 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(0, boMan.Count);
+        }
+
+        //Created this test to prove that creating an object with the object initialiser still
+        // resulted in the business object moving out of scope.
+        [Test]
+        public void Test_ObjectDestructor_UsingObjectInitialiser_RemovesFromObjectManager()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
+
+            ContactPersonTestBO cp = GetCp();
+            //            boMan.Add(cp);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, boMan.Count);
+            Assert.IsTrue(boMan.Contains(cp));
+            Assert.IsTrue(boMan.Contains(cp.ID));
+
+            //---------------Execute Test ----------------------
+            cp = null;
+            TestUtil.WaitForGC();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, boMan.Count);
+        }
+
+        private ContactPersonTestBO GetCp()
+        {
+            ContactPersonTestBO cp = new ContactPersonTestBO {ContactPersonID = Guid.NewGuid(), Surname = TestUtil.CreateRandomString()};
+            return cp;
         }
         // ReSharper restore RedundantAssignment
 
@@ -1485,8 +1507,7 @@ namespace Habanero.Test.BO
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();
-            AddressTestBO address = new AddressTestBO();
-            address.ContactPersonID = cp.ContactPersonID;
+            AddressTestBO address = new AddressTestBO {ContactPersonID = cp.ContactPersonID};
             address.Save();
 
             IPrimaryKey contactPersonID = cp.ID;
@@ -1534,8 +1555,7 @@ namespace Habanero.Test.BO
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
             ContactPersonTestBO cp = CreateSavedCP();
-            AddressTestBO address = new AddressTestBO();
-            address.ContactPersonID = cp.ContactPersonID;
+            AddressTestBO address = new AddressTestBO {ContactPersonID = cp.ContactPersonID};
             address.Save();
 
             IPrimaryKey contactPersonID = cp.ID;
@@ -1651,8 +1671,7 @@ namespace Habanero.Test.BO
         private static ContactPersonTestBO CreateSavedCP_WithOneAddresss(out AddressTestBO address)
         {
             ContactPersonTestBO cp = CreateSavedCP();
-            address = new AddressTestBO();
-            address.ContactPersonID = cp.ContactPersonID;
+            address = new AddressTestBO {ContactPersonID = cp.ContactPersonID};
             address.Save();
             return cp;
         }
@@ -1822,8 +1841,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BusinessObjectManager.Instance.ClearLoadedObjects();
             BOWithIntID.LoadClassDefWithIntID();
-            BOWithIntID boWithIntID = new BOWithIntID();
-            boWithIntID.IntID = TestUtil.GetRandomInt();
+            BOWithIntID boWithIntID = new BOWithIntID {IntID = TestUtil.GetRandomInt()};
             //---------------Assert Precondition----------------
             Assert.IsTrue(boWithIntID.Status.IsNew);
             Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
@@ -1939,7 +1957,19 @@ namespace Habanero.Test.BO
             Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID.AsString_CurrentValue()));
             Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID));
         }
+        [Ignore ("This test to be run")]
+        [Test]
+        public void Test_TwoObjectTypesWithTheSameIDField_HaveTheSamevalue_CanBeAddedToObjectMan()
+        {
+            //--------------- Set up test pack ------------------
+            Assert.Fail("Test Not Implemented");
+            //--------------- Test Preconditions ----------------
 
+            //--------------- Execute Test ----------------------
+
+            //--------------- Test Result -----------------------
+
+        }
         //Test if ccreate a new object with object id then must be in object manager.
         //Test that persist this object hten in object manager
         //test that remove revf to this object then call gccolllectt then removed from object mamnager
@@ -1949,9 +1979,11 @@ namespace Habanero.Test.BO
         // test serialization constructor
         private static ContactPersonTestBO CreateSavedCP()
         {
-            ContactPersonTestBO cp = new ContactPersonTestBO();
-            cp.Surname = TestUtil.CreateRandomString();
-            cp.FirstName = TestUtil.CreateRandomString();
+            ContactPersonTestBO cp = new ContactPersonTestBO
+                                         {
+                                             Surname = TestUtil.CreateRandomString(),
+                                             FirstName = TestUtil.CreateRandomString()
+                                         };
             cp.Save();
             return cp;
         }
@@ -1996,5 +2028,6 @@ namespace Habanero.Test.BO
                 this.Remove(asString_CurrentValue, businessObject);
             }
         }
+        // ReSharper restore AccessToStaticMemberViaDerivedType
     }
 }

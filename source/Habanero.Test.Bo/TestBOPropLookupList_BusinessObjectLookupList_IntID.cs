@@ -340,11 +340,11 @@ namespace Habanero.Test.BO
             Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
             Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         }
-        [Ignore("//TODO Brett 13 Jan 2009:  Currently implementing this")]
+        //[Ignore("//TODO Brett 13 Jan 2009:  Currently implementing this")]
         [Test]
         public void Test_SetValue_PersistedBusinessObject_InList()
         {
-            Assert.Fail("Not yet implemented");
+            //Assert.Fail("Not yet implemented");
             BOProp boProp = new BOPropLookupList(_propDef_int);
             const int originalPropValue = 99;
             boProp.Value = originalPropValue;
@@ -357,42 +357,50 @@ namespace Habanero.Test.BO
             Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
             Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         }
-        [Ignore("//TODO Brett 13 Jan 2009:  Currently implementing this")]
+        //[Ignore("//TODO Brett 13 Jan 2009:  Currently implementing this")]
         [Test]
         public void Test_SetValue_PersistedBusinessObject_NotInList()
         {
-            Assert.Fail("Not yet implemented");
+            //Assert.Fail("Not yet implemented");
             BOProp boProp = new BOPropLookupList(_propDef_int);
-            const int originalPropValue = 99;
-            boProp.Value = originalPropValue;
+            BOWithIntID savedBoWithIntID = new BOWithIntID();
+            savedBoWithIntID.IntID = TestUtil.GetRandomInt();
+            savedBoWithIntID.TestField = TestUtil.CreateRandomString();
+            savedBoWithIntID.Save();
+
             //---------------Assert Precondition----------------
             Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
-            Assert.IsNotNull(boProp.Value);
+            
             //---------------Execute Test ----------------------
-            boProp.Value = _validLookupValue;
+            boProp.Value = savedBoWithIntID;
             //---------------Test Result -----------------------
-            Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
-            Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
+            Assert.AreEqual(savedBoWithIntID.ID.GetAsValue(), boProp.Value);
+            Assert.AreEqual(savedBoWithIntID.TestField, boProp.PropertyValueToDisplay);
+            Assert.AreEqual("", boProp.IsValidMessage);
+            Assert.IsTrue(boProp.IsValid);
         }
-
-        [Ignore("//TODO Brett 13 Jan 2009: Currently working on this")]
         [Test]
         public void Test_SetValue_NewBusinessObject_NotInList()
         {
-            Assert.Fail("Not yet implemented");
+            //Assert.Fail("Not yet implemented");
             //Check Validation of lookup list does not make invalid
+
             BOProp boProp = new BOPropLookupList(_propDef_int);
-            const int originalPropValue = 99;
-            boProp.Value = originalPropValue;
+            BOWithIntID savedBoWithIntID = new BOWithIntID();
+            savedBoWithIntID.IntID = TestUtil.GetRandomInt();
+            savedBoWithIntID.TestField = TestUtil.CreateRandomString();
             //---------------Assert Precondition----------------
             Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
-            Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
-            boProp.Value = _validLookupValue;
+            boProp.Value = savedBoWithIntID;
             //---------------Test Result -----------------------
-            Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
-            Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
+            Assert.AreEqual(savedBoWithIntID.ID.GetAsValue(), boProp.Value);
+            Assert.AreEqual(savedBoWithIntID.TestField, boProp.PropertyValueToDisplay);
+            Assert.AreEqual("", boProp.IsValidMessage);
+            Assert.IsTrue(boProp.IsValid);
         }
+
+
         //If an invalid property types is set to the property then
         //  An error is raised. Stating the error reason.
         //  The property value will be set to the previous property value.
@@ -568,6 +576,46 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsNotNull(returnedBO);
         }
+
+        [Test]
+        public void Test_GetBusinessObject_NewBusinessObject_NotInList()
+        {
+            //Assert.Fail("Not yet implemented");
+            //Check Validation of lookup list does not make invalid
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDefWithIntID = BOWithIntID.LoadClassDefWithIntID();
+            BOPropLookupList boProp = new BOPropLookupList(_propDef_int);
+            BOWithIntID unSavedBoWithIntID = new BOWithIntID();
+            unSavedBoWithIntID.IntID = TestUtil.GetRandomInt();
+            unSavedBoWithIntID.TestField = TestUtil.CreateRandomString();
+            boProp.Value = unSavedBoWithIntID;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IBusinessObject returneedBusinessObject = boProp.GetBusinessObjectForProp(classDefWithIntID);
+            //---------------Test Result -----------------------
+            Assert.AreSame(unSavedBoWithIntID, returneedBusinessObject);
+        }
+
+        [Test]
+        public void Test_GetBusinessObject_SavedBusinessObject_NotInList()
+        {
+            //Assert.Fail("Not yet implemented");
+            //Check Validation of lookup list does not make invalid
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDefWithIntID = BOWithIntID.LoadClassDefWithIntID();
+            BOPropLookupList boProp = new BOPropLookupList(_propDef_int);
+            BOWithIntID unSavedBoWithIntID = new BOWithIntID();
+            unSavedBoWithIntID.IntID = TestUtil.GetRandomInt();
+            unSavedBoWithIntID.TestField = TestUtil.CreateRandomString();
+            unSavedBoWithIntID.Save();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            boProp.Value = unSavedBoWithIntID;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IBusinessObject returneedBusinessObject = boProp.GetBusinessObjectForProp(classDefWithIntID);
+            //---------------Test Result -----------------------
+            Assert.AreSame(unSavedBoWithIntID, returneedBusinessObject);
+        }
 //        [Test, Ignore("Problem with In Memory Database")]
 //        public void Test_Memory_LoadWithIntID_ManualCreatePrimaryKey()
 //        {
@@ -622,6 +670,10 @@ namespace Habanero.Test.BO
             : base(type)
         {
             _boCollection = boCollection;
+        }
+
+        public BusinessObjectLookupListStub(Type type, string criteria, string sort) : base(type, criteria, sort)
+        {
         }
 
         public override IBusinessObjectCollection GetBusinessObjectCollection()
