@@ -24,6 +24,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
+using DataGridViewSelectionMode=Gizmox.WebGUI.Forms.DataGridViewSelectionMode;
 
 namespace Habanero.UI.VWG
 {

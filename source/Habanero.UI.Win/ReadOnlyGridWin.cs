@@ -21,6 +21,7 @@ using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
+using DataGridViewSelectionMode=System.Windows.Forms.DataGridViewSelectionMode;
 
 namespace Habanero.UI.Win
 {

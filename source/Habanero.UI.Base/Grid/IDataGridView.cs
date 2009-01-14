@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
@@ -24,6 +25,27 @@ using System.Drawing.Design;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>Describes how cells of a DataGridView control can be selected.</summary>
+    /// <filterpriority>2</filterpriority>
+    //[Serializable()]
+    public enum DataGridViewSelectionMode
+    {
+        ///<summary>One or more individual cells can be selected.</summary>
+        CellSelect = 1,
+
+        ///<summary>The entire row will be selected by clicking its row's header or a cell contained in that row.</summary>
+        FullRowSelect = 2,
+
+        ///<summary>The entire column will be selected by clicking the column's header or a cell contained in that column.</summary>
+        FullColumnSelect = 4,
+
+        ///<summary>The row will be selected by clicking in the row's header cell. An individual cell can be selected by clicking that cell.</summary>
+        RowHeaderSelect = 8,
+
+        ///<summary>The column will be selected by clicking in the column's header cell. An individual cell can be selected by clicking that cell.</summary>
+        ColumnHeaderSelect = 16
+    }
+
     /// <summary>
     /// Displays data in a customizable grid
     /// </summary>
@@ -424,5 +446,17 @@ namespace Habanero.UI.Base
         /// Gets the collection of currently selected cells
         /// </summary>
         IDataGridViewSelectedCellCollection SelectedCells { get; }
+
+        /// <summary>
+        /// Occurs when the current selection changes.
+        /// </summary>
+        /// <filterpriority>1</filterpriority>
+        event EventHandler SelectionChanged;
+
+        /// <summary>Gets or sets a value indicating how the cells of the DataGridView can be selected.</summary>
+        /// <returns>One of the DataGridViewSelectionMode values. The default is DataGridViewSelectionMode.RowHeaderSelect.</returns>
+        /// <exception cref="T:System.InvalidOperationException">The specified value when setting this property is DataGridViewSelectionMode.FullColumnSelect or DataGridViewSelectionMode.ColumnHeaderSelect and the DataGridViewColumn.SortMode property of one or more columns is set to DataGridViewColumnSortMode.Automatic.</exception>
+        /// <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The specified value when setting this property is not a valid DataGridViewSelectionMode value.</exception>
+        DataGridViewSelectionMode SelectionMode { get; set; }
     }
 }

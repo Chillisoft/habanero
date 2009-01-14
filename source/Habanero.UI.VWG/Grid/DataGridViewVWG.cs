@@ -143,6 +143,16 @@ namespace Habanero.UI.VWG
             get { return new DataGridViewSelectedCellCollectionVWG(base.SelectedCells); }
         }
 
+        /// <summary>Gets or sets a value indicating how the cells of the DataGridView can be selected.</summary>
+        /// <returns>One of the DataGridViewSelectionMode values. The default is DataGridViewSelectionMode.RowHeaderSelect.</returns>
+        /// <exception cref="T:System.InvalidOperationException">The specified value when setting this property is DataGridViewSelectionMode.FullColumnSelect or DataGridViewSelectionMode.ColumnHeaderSelect and the DataGridViewColumn.SortMode property of one or more columns is set to DataGridViewColumnSortMode.Automatic.</exception>
+        /// <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The specified value when setting this property is not a valid DataGridViewSelectionMode value.</exception>
+        Habanero.UI.Base.DataGridViewSelectionMode IDataGridView.SelectionMode
+        {
+            get { return (Habanero.UI.Base.DataGridViewSelectionMode)base.SelectionMode; }
+            set { base.SelectionMode = (Gizmox.WebGUI.Forms.DataGridViewSelectionMode)value; }
+        }
+
         /// <summary>
         /// Gets the currently selected row
         /// </summary>
