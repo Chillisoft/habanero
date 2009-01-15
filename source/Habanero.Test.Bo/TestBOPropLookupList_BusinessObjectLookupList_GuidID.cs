@@ -1189,9 +1189,11 @@ namespace Habanero.Test.BO
             Assert.IsNull(boProp.Value);
             Assert.IsTrue(bo1.Status.IsNew);
             //---------------Execute Test ----------------------
+           
             boProp.Value = expctedID;
             //---------------Test Result -----------------------
             Assert.AreEqual(expctedID, boProp.Value);
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             Assert.AreEqual(null, boProp.PropertyValueToDisplay);
         }
 
