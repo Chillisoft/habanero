@@ -70,7 +70,7 @@ namespace Habanero.BO
             collection.SelectQuery.OrderCriteria = preparedOrderCriteria;
         }
 
-        internal static void CheckCorrespondingSingleRelationshipsAreValid(ISingleRelationship singleRelationship, ISingleRelationship singleReverseRelationship)
+        internal static void CheckCorrespondingSingleRelationshipsAreValid(SingleRelationshipBase singleRelationship, SingleRelationshipBase singleReverseRelationship)
         {
             if (singleRelationship.RelationshipDef.RelationshipType == RelationshipType.Association &&
                 singleReverseRelationship.RelationshipDef.RelationshipType == RelationshipType.Association

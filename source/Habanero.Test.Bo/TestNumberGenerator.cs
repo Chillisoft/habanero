@@ -200,13 +200,14 @@ namespace Habanero.Test.BO
             BOSequenceNumberLocking.DeleteAllNumbers();
             INumberGenerator numGen = new NumberGeneratorPessimisticLocking(numberType);
             numGen.SetSequenceNumber(0);
+
             //get the next number for invoice number
             int num = numGen.NextNumber();
             Assert.AreEqual(1, num,"The first generated number should be 1");
             // set the datetime locked to > 15 minutes ago.
             UpdateDatabaseLockAsExpired(15);
             BusinessObjectManager.Instance.ClearLoadedObjects();
-            TestUtil.WaitForGC();
+            TestUtil.WaitForGC(); 
             //---------------Execute Test ----------------------
             //Create a seperate instance of the number generator.
             //try Get  number
@@ -217,7 +218,7 @@ namespace Habanero.Test.BO
             Assert.AreNotSame(numGen, numGen2);
             //should not get locking error
             //assert nextnumber = 1
-            Assert.AreEqual(1, num, "The second generated number should be 1");
+            Assert.AreEqual(1, num, "The second generated number should be 1. Time: " + DateTime.Now.ToLongTimeString());
             //---------------Tear Down -------------------------          
         }
 

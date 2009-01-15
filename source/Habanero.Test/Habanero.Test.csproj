@@ -105,7 +105,6 @@
     <Compile Include="Util\File\TestCsvFileReader.cs" />
     <Compile Include="Util\File\TestCsvFileWriter.cs" />
     <Compile Include="Util\TestByteString.cs" />
-    <Compile Include="Util\TestDelayedMethodCall.cs" />
     <Compile Include="Util\TestEmailSender.cs" />
     <Compile Include="Util\TestImageThumbnailCreator.cs" />
     <Compile Include="Util\TestJpgMetaData.cs" />

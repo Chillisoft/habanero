@@ -42,7 +42,7 @@ namespace Habanero.BO
         /// Returns the related object for the single relationship.
         ///</summary>
         ///<returns>returns the related business object</returns>
-        IBusinessObject GetRelatedObject();
+        IBusinessObject GetRelatedObject ();
 
         /// <summary>
         /// Indicates whether the related object has been specified
@@ -50,7 +50,6 @@ namespace Habanero.BO
         /// <returns>Returns true if related object exists</returns>
         bool HasRelatedObject();
 
-        bool OwningBOHasForeignKey { get; set; }
 
     }
 
@@ -58,6 +57,7 @@ namespace Habanero.BO
     {
         protected SingleRelationshipBase(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol) : base(owningBo, lRelDef, lBOPropCol) {}
         internal abstract IBusinessObject RemovedBOInternal { get; }
+        internal abstract bool OwningBOHasForeignKey { get; set; }
     }
     /// <summary>
     /// Manages a relationship where the relationship owner relates to one
@@ -140,7 +140,7 @@ namespace Habanero.BO
         internal override IBusinessObject RemovedBOInternal
         { get { return RemovedBO; } }
 
-        public bool OwningBOHasForeignKey { get { return _relDef.OwningBOHasForeignKey; } set { _relDef.OwningBOHasForeignKey = value; } }
+        internal override  bool OwningBOHasForeignKey { get { return _relDef.OwningBOHasForeignKey; } set { _relDef.OwningBOHasForeignKey = value; } }
 
         /// <summary>
         /// Indicates whether the related object has been specified
@@ -273,11 +273,11 @@ namespace Habanero.BO
         }
 
         private void RemoveFromSingleReverseRelationship(IRelationship reverseRelationship) {
-            ISingleRelationship singleReverseRelationship = reverseRelationship as ISingleRelationship;
+            SingleRelationshipBase singleReverseRelationship = reverseRelationship as SingleRelationshipBase;
             if (singleReverseRelationship != null)
             {
                 RelationshipUtils.CheckCorrespondingSingleRelationshipsAreValid(this, singleReverseRelationship);
-                singleReverseRelationship.SetRelatedObject(null);
+                ((ISingleRelationship)singleReverseRelationship).SetRelatedObject(null);
             }
         }
 

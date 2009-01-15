@@ -121,9 +121,6 @@
     <Compile Include="File\CSVFileWriter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DelayedMethodCall.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="EmailSender.cs">
       <SubType>Code</SubType>
     </Compile>
