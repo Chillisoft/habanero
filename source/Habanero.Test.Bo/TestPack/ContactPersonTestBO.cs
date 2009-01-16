@@ -62,6 +62,27 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
+        public static ClassDef LoadDefaultClassDefWithPersonTestBOSuperClass()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+                     <superClass class=""PersonTestBO"" assembly=""Habanero.Test.BO"" />
+					<property name=""ContactPersonID"" type=""Guid"" />
+					<property name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property name=""FirstName"" databaseField=""FirstName_field"" />
+					<property name=""DateOfBirth"" type=""DateTime"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
         public static ClassDef LoadDefaultClassDefWithKeyOnSurname()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();

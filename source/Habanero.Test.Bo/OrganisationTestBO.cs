@@ -41,6 +41,14 @@ namespace Habanero.Test.BO
 					<relationship name=""ContactPeople"" type=""multiple"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"">
 						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
 					</relationship>
+                    <ui>
+                        <grid>
+                            <column heading=""OrganisationID"" property=""OrganisationID"" />
+                        </grid>
+                        <form>
+                            <field label=""OrganisationID: *"" property=""OrganisationID"" />
+                        </form>
+                    </ui>
 			    </class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
@@ -73,6 +81,7 @@ namespace Habanero.Test.BO
         public Guid OrganisationID
         {
             get { return (Guid)this.GetPropertyValue("OrganisationID"); }
+            set { SetPropertyValue("OrganisationID",value); }
         }
 
         public static void ClearAllFromDB()

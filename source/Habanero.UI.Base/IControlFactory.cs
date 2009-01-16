@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
@@ -485,7 +486,22 @@ namespace Habanero.UI.Base
         ///<returns>The message box result.</returns>
         Base.DialogResult ShowMessageBox(string message);
 
-        
+
+        /// <summary>
+        /// Creates a TextBox that provides filtering of characters depending on the property type.
+        /// </summary>
+        IPictureBox CreatePictureBox();
+
+        IDateTimePickerMapperStrategy CreateDateTimePickerMapperStrategy();
+        IBusinessObjectControlWithErrorDisplay CreateBOEditorForm(ClassDef lookupTypeClassDef, string uiDefName, IControlFactory controlFactory);
+
+        IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>() 
+            where TBusinessObject:class, IBusinessObject;
+
+        IGridAndBOEditorControl CreateGridAndBOEditorControl(ClassDef classDef);
+
+        IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>(IBusinessObjectControlWithErrorDisplay editorPanel)
+            where TBusinessObject : class, IBusinessObject;
     }
 
     /// <summary>
@@ -543,6 +559,20 @@ namespace Habanero.UI.Base
         void AddKeyPressEventHandler(TextBoxMapper mapper, IBOProp boProp);
 
         void AddUpdateBoPropOnTextChangedHandler(TextBoxMapper mapper, IBOProp boProp);
+    }
+
+    /// <summary>
+    /// Provides a set of behaviour strategies that can be applied to a TextBox
+    /// depending on the environment
+    /// </summary>
+    public interface IDateTimePickerMapperStrategy
+    {
+
+        /// <summary>
+        /// Adds value changed event handlers.
+        /// </summary>
+        /// <param name="mapper">The DateTime mapper</param>
+       void AddUpdateBoPropOnValueChangedHandler(DateTimePickerMapper mapper);
     }
 
     /// <summary>

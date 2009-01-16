@@ -177,6 +177,7 @@
     <Compile Include="TestBusinessObjectLoader.cs" />
     <Compile Include="TestBusinessObjectManager.cs" />
     <Compile Include="CriteriaManager\TestCriteria.cs" />
+    <Compile Include="TestPack\PersonTestBO.cs" />
     <Compile Include="TestQueryBuilderWithInheritance.cs" />
     <Compile Include="TestSource_Join.cs" />
     <Compile Include="TestSource_JoinList.cs" />

@@ -308,8 +308,9 @@ namespace Habanero.UI.Base
                 if (ctl is IComboBox) mapperTypeName = "LookupComboBoxMapper";
                 else if (ctl is ICheckBox) mapperTypeName = "CheckBoxMapper";
                 else if (ctl is IDateTimePicker) mapperTypeName = "DateTimePickerMapper";
-//                else if (ctl is IListView) mapperTypeName = "ListViewCollectionSelector"; TODO: Port
+                //                else if (ctl is IListView) mapperTypeName = "ListViewCollectionSelector"; TODO: Port
                 else if (ctl is INumericUpDown) mapperTypeName = "NumericUpDownIntegerMapper";
+                else if (ctl is IExtendedComboBox) mapperTypeName = "ExtendedComboBoxMapper";
                 else
                 {
                     throw new InvalidXmlDefinitionException

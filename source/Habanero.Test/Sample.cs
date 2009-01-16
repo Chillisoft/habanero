@@ -397,6 +397,26 @@ namespace Habanero.Test
 						</form>");
             }
 
+            public UIForm GetSimpleUIFormTabOneFieldRowAndColSpan()
+            {
+                XmlUIFormLoader loader = new XmlUIFormLoader();
+                return
+                     loader.LoadUIFormDef(
+                         @"<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Text:"" property=""SampleText"" type=""TextBox"" mapperType=""TextBoxMapper"" >
+                                            <parameter name=""colSpan"" value=""2"" />
+                                            <parameter name=""rowSpan"" value=""2"" />
+                                    </field>
+								</columnLayout>
+                                <columnLayout>
+									<field label=""Integer:"" property=""SampleInt"" type=""NumericUpDown"" mapperType=""NumericUpDownIntegerMapper"" />
+								</columnLayout>
+							</tab>
+						</form>");
+            }
+
             public UIForm GetSimpleUIFormDefInt()
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader();
@@ -915,6 +935,10 @@ namespace Habanero.Test
             }
 
 
+            public UIFormTab GetFormTabOneFieldHasRowAndColSpan()
+            {
+                return GetSimpleUIFormTabOneFieldRowAndColSpan()[0];
+            }
         }
 
 
