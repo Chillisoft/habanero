@@ -757,11 +757,8 @@ namespace Habanero.BO.ClassDefinition
             else
             {
                 BusinessObjectLookupList list = ((BusinessObjectLookupList)this.LookupList);
-                IBusinessObject newBusinessObject = list.LookupBoClassDef.CreateNewBusinessObject();
-                IBOProp prop = newBusinessObject.ID[0];//This is based on the logic that a lookup list can never be against a  
-                // business object with a composite key.
-                currentValue = prop.PropertyName + "=" + propValue;
-                BusinessObjectManager.Instance.Remove(newBusinessObject);
+                BOPrimaryKey boPrimaryKey = BOPrimaryKey.CreateWithValue(list.LookupBoClassDef, propValue);
+                currentValue = boPrimaryKey.AsString_CurrentValue();
             }
 
             IBusinessObject businessObject = null;

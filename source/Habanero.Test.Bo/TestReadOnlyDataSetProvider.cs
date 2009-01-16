@@ -100,8 +100,8 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, provider.FindRow(chair));
             Assert.AreEqual(car, provider.Find(0));
             Assert.AreEqual(chair, provider.Find(1));
-            Assert.AreEqual(car, provider.Find("OrderNumber=1;Product=car"));
-            Assert.AreEqual(chair, provider.Find("OrderNumber=2;Product=chair"));
+            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=1;OrderItem.Product=car"));
+            Assert.AreEqual(chair, provider.Find("OrderItem.OrderNumber=2;OrderItem.Product=chair"));
 
             OrderItem roof = OrderItem.AddOrder3Roof();
             Assert.AreEqual(2, provider.GetDataTable(uiGrid).Rows.Count);
@@ -117,13 +117,13 @@ namespace Habanero.Test.BO
                 Assert.AreEqual(typeof(IndexOutOfRangeException), e.GetType());
             }
             Assert.IsTrue(causedException);
-            Assert.IsNull(provider.Find("OrderNumber=3;Product=roof"));
+            Assert.IsNull(provider.Find("OrderItem.OrderNumber=3;OrderItem.Product=roof"));
 
             col.Add(roof);
             Assert.AreEqual(3, provider.GetDataTable(uiGrid).Rows.Count);
             Assert.AreEqual(2, provider.FindRow(roof));
             Assert.AreEqual(roof, provider.Find(2));
-            Assert.AreEqual(roof, provider.Find("OrderNumber=3;Product=roof"));
+            Assert.AreEqual(roof, provider.Find("OrderItem.OrderNumber=3;OrderItem.Product=roof"));
         }
 
         [Test]
@@ -181,22 +181,22 @@ namespace Habanero.Test.BO
             car.OrderNumber = 11;
             Assert.AreEqual(0, provider.FindRow(car));
             Assert.AreEqual(car, provider.Find(0));
-            Assert.AreEqual(car, provider.Find("OrderNumber=11;Product=car")); 
+            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=11;OrderItem.Product=car")); 
             
             car.Save();
             Assert.AreEqual(0, provider.FindRow(car));
             Assert.AreEqual(car, provider.Find(0));
-            Assert.AreEqual(car, provider.Find("OrderNumber=11;Product=car"));
+            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=11;OrderItem.Product=car"));
             
             car.OrderNumber = 12;
             Assert.AreEqual(0, provider.FindRow(car));
             Assert.AreEqual(car, provider.Find(0));
-            Assert.AreEqual(car, provider.Find("OrderNumber=12;Product=car"));
+            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=12;OrderItem.Product=car"));
             
             car.OrderNumber = 13;
             Assert.AreEqual(0, provider.FindRow(car));
             Assert.AreEqual(car, provider.Find(0));
-            Assert.AreEqual(car, provider.Find("OrderNumber=13;Product=car"));
+            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=13;OrderItem.Product=car"));
         }
     }
 }

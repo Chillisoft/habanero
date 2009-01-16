@@ -19,7 +19,6 @@
 
 
 using System;
-using System.Collections;
 using System.Runtime.Serialization;
 using System.Threading;
 using Habanero.Base;
@@ -48,6 +47,7 @@ namespace Habanero.BO
         public event EventHandler<BOEventArgs> MarkedForDelete;
         public event EventHandler<BOEventArgs> PropertyUpdated;
         public event EventHandler<BOEventArgs> IDUpdated;
+
         #endregion
 
         #region Fields
@@ -65,6 +65,7 @@ namespace Habanero.BO
         protected IRelationshipCol _relationshipCol;
         private ITransactionLog _transactionLog;
         private IBusinessObjectAuthorisation _authorisationRules;
+
         #endregion //Fields
 
         #region Constructors
@@ -421,10 +422,10 @@ namespace Habanero.BO
         {
             string output = "";
             output += "Type: " + GetType().Name + Environment.NewLine;
-            foreach (DictionaryEntry entry in _boPropCol)
+            foreach (IBOProp entry in _boPropCol)
             {
-                BOProp prop = (BOProp) entry.Value;
-                output += prop.PropertyName + " - " + prop.PropertyValueString + Environment.NewLine;
+//                BOProp prop = (BOProp) entry.Value;
+                output += entry.PropertyName + " - " + entry.PropertyValueString + Environment.NewLine;
             }
             return output;
         }
@@ -1050,6 +1051,7 @@ namespace Habanero.BO
                 PropertyUpdated(this, new BOEventArgs(this));
             }
         }
+
         protected void FireIDUpdatedEvent()
         {
             if (IDUpdated != null)

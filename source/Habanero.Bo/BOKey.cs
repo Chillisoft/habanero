@@ -333,9 +333,11 @@ namespace Habanero.BO
         {
             string[] propsAsStrings = new string[_props.Count];
             int i = 0;
+
             foreach (BOProp prop in _props.Values)
             {
-                propsAsStrings[i++] = prop.PropertyName + "=" + prop.Value;
+                string classNameFull = prop.PropDef.ClassDef == null ? "" : prop.PropDef.ClassDef.ClassNameFull;
+                propsAsStrings[i++] = classNameFull + "." + prop.PropertyName + "=" + prop.Value;
             }
             return String.Join(";", propsAsStrings);
         }
@@ -354,6 +356,7 @@ namespace Habanero.BO
                 {
                     propString.Append(" AND ");
                 }
+
                 propString.Append(prop.PropertyName + "=" + prop.PersistedPropertyValue);
             }
             return propString.ToString();
@@ -371,7 +374,8 @@ namespace Habanero.BO
             int i = 0;
             foreach (BOProp prop in _props.Values)
             {
-                propsAsStrings[i++] = prop.PropertyName + "=" + prop.ValueBeforeLastEdit;
+                string classNameFull = prop.PropDef.ClassDef == null ? "" : prop.PropDef.ClassDef.ClassNameFull;
+                propsAsStrings[i++] = classNameFull + "." + prop.PropertyName + "=" + prop.ValueBeforeLastEdit;
             }
             return String.Join(";", propsAsStrings);
         }

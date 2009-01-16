@@ -230,7 +230,7 @@ namespace Habanero.BO
         {
             string message = string.Format("{0} cannot be set to {1}. It is not a type of {2}" 
                                           , this.PropertyName, value, this.PropDef.PropertyTypeName);
-            throw new HabaneroDeveloperException(
+            throw new HabaneroIncorrectTypeException(
                 message, message);
         }
 

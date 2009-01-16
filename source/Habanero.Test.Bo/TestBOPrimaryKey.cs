@@ -269,7 +269,7 @@ namespace Habanero.Test.BO
             primaryKey[0].Value = str;
             string keyAsString = primaryKey.AsString_CurrentValue();
             //--------------- Test Result -----------------------
-            StringAssert.AreEqualIgnoringCase("PropName1=" + str, keyAsString);
+            StringAssert.AreEqualIgnoringCase("ContactPersonTestBO.PropName1=" + str, keyAsString);
         }
 
         [Test]
@@ -321,7 +321,7 @@ namespace Habanero.Test.BO
             primaryKey[0].Value = str2;
             string keyAsString = primaryKey.AsString_PreviousValue();
             //--------------- Test Result -----------------------
-            StringAssert.AreEqualIgnoringCase("PropName1=" + str1, keyAsString);
+            StringAssert.AreEqualIgnoringCase("ContactPersonTestBO.PropName1=" + str1, keyAsString);
         }
         
         [Test]
@@ -372,7 +372,7 @@ namespace Habanero.Test.BO
             string keyAsString = primaryKey.AsString_CurrentValue();
             //--------------- Test Result -----------------------
             Assert.AreNotEqual(guid.ToString(), keyAsString);
-            Assert.AreEqual("PropName1=" + primaryKey[0].Value + ";PropName2=" + primaryKey[1].Value , keyAsString);
+            Assert.AreEqual("ContactPersonTestBO.PropName1=" + primaryKey[0].Value + ";ContactPersonTestBO.PropName2=" + primaryKey[1].Value, keyAsString);
 
         }    
         
@@ -392,7 +392,7 @@ namespace Habanero.Test.BO
             string keyAsString = primaryKey.AsString_CurrentValue();
             //--------------- Test Result -----------------------
             Assert.AreNotEqual(guid.ToString(), keyAsString);
-            Assert.AreEqual("PropName1=" + primaryKey[0].Value + ";PropName2=" + primaryKey[1].Value , keyAsString);
+            Assert.AreEqual("ContactPersonTestBO.PropName1=" + primaryKey[0].Value + ";ContactPersonTestBO.PropName2=" + primaryKey[1].Value, keyAsString);
 
         }        
 
@@ -420,7 +420,8 @@ namespace Habanero.Test.BO
 
         private static BOPrimaryKey CreateBOPrimaryKeyString()
         {
-            PropDef propDef1 = new PropDef("PropName1", typeof(String), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef1 = new PropDef("PropName1", typeof(String), PropReadWriteRule.ReadWrite, null)
+                                   {ClassDef = ContactPersonTestBO.LoadDefaultClassDef()};
             BOPropCol propCol = new BOPropCol();
             
             propCol.Add(propDef1.CreateBOProp(true));
@@ -431,11 +432,16 @@ namespace Habanero.Test.BO
 
         private static BOPrimaryKey CreatePrimaryBOKeyGuidAndString()
         {
-            PropDef propDef1 = new PropDef("PropName1", typeof(Guid), PropReadWriteRule.ReadWrite, null);
-            PropDef propDef2 = new PropDef("PropName2", typeof(string), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef1 = new PropDef("PropName1", typeof(Guid), PropReadWriteRule.ReadWrite, null)
+                        { ClassDef = ContactPersonTestBO.LoadDefaultClassDef()};
+            PropDef propDef2 = new PropDef("PropName2", typeof(string), PropReadWriteRule.ReadWrite, null) 
+                        { ClassDef = propDef1.ClassDef};
             BOPropCol propCol = new BOPropCol();
             propCol.Add(propDef1.CreateBOProp(true));
             propCol.Add(propDef2.CreateBOProp(true));
+//            BOPropCol propCol = new BOPropCol();
+//            propCol.Add(propDef1.CreateBOProp(true));
+//            propCol.Add(propDef2.CreateBOProp(true));
             PrimaryKeyDef keyDef = new PrimaryKeyDef {IsGuidObjectID = false};
             keyDef.Add(propDef1);
             keyDef.Add(propDef2);

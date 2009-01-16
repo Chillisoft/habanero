@@ -21,8 +21,10 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
+
 //using log4net;
 
 namespace Habanero.BO
@@ -79,7 +81,7 @@ namespace Habanero.BO
         /// <returns>Returns the interface mapper</returns>
         public UIDef GetUIDef(string uiDefName)
         {
-            return ((ClassDef)_businessObject.ClassDef).GetUIDef(uiDefName);
+            return ((ClassDef) _businessObject.ClassDef).GetUIDef(uiDefName);
         }
 
         /// <summary>
@@ -93,7 +95,6 @@ namespace Habanero.BO
         {
             if (propertyName.IndexOf(".") != -1)
             {
-                
                 IBusinessObject relatedBo = this._businessObject;
                 //Get the first property name
                 string relationshipName = propertyName.Substring(0, propertyName.IndexOf("."));
@@ -137,7 +138,7 @@ namespace Habanero.BO
             {
                 return GetVirtualPropertyValue(propertyName);
             }
-            return ((BusinessObject)_businessObject).GetPropertyValueToDisplay(propertyName);
+            return ((BusinessObject) _businessObject).GetPropertyValueToDisplay(propertyName);
         }
 
         private object GetVirtualPropertyValue(string propertyName)
@@ -197,7 +198,7 @@ namespace Habanero.BO
                     DatabaseLookupList databaseLookupList = (DatabaseLookupList) propDef.LookupList;
                     return databaseLookupList.ClassDef;
                 }
-                if (propDef.LookupList is BusinessObjectLookupList) 
+                if (propDef.LookupList is BusinessObjectLookupList)
                 {
                     BusinessObjectLookupList businessObjectLookupList = (BusinessObjectLookupList) propDef.LookupList;
                     return businessObjectLookupList.LookupBoClassDef;

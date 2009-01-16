@@ -92,20 +92,24 @@ namespace Habanero.BO
                 IBusinessObject loadedBusinessObject = this[businessObject.ID];
                 if (ReferenceEquals(loadedBusinessObject, businessObject)) return;
 
-                throw new HabaneroDeveloperException(
-                    "There was a serious developer exception. Two copies of the business object '"
-                    + businessObject.ClassDef.ClassNameFull + "' were added to the object manager",
-                    "Two copies of the business object '"
-                    + businessObject.ClassDef.ClassNameFull + "' identified by '" + businessObject.ID.AsString_CurrentValue() +
-                    "' were added to the object manager");
+                string developerMessage = string.Format
+                    ("Two copies of the business object '{0}' identified by '{1}' " + "were added to the object manager",
+                     businessObject.ClassDef.ClassNameFull, businessObject.ID.AsString_CurrentValue());
+                string userMessage = "There was a serious developer exception. " + Environment.NewLine
+                                     + developerMessage;
+                throw new HabaneroDeveloperException(userMessage, developerMessage);
             }
-            //If object is new and does not have IsObjectID then add with the Guid.?
-            //Else add as below
             _loadedBusinessObjects.Add(businessObject.ID.AsString_CurrentValue(), new WeakReference(businessObject));
-            businessObject.IDUpdated += _updateIDEventHandler;
-            // to investigate with tests.
+            businessObject.IDUpdated += _updateIDEventHandler; //Register for ID Updated event this event is fired
+            // if any of the properties that make up the primary key are changed/Updated this event is fires.
         }
 
+        /// <summary>
+        /// If the businessObject's IDUpdated Event has been fired then the business object is removed with the
+        ///   old ID and added with the new ID. This is only required in cases with mutable primary keys.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected virtual void ObjectID_Updated_Handler(object sender, BOEventArgs e)
         {
             this.Remove(e.BusinessObject);
@@ -119,26 +123,26 @@ namespace Habanero.BO
         /// <returns>Whether the busienss object is loadd or not</returns>
         internal bool Contains(IBusinessObject businessObject)
         {
-             if (Contains(businessObject.ID))
-             {
-                 //if business object references are the same return true
-                 if (ReferenceEquals(businessObject, this[businessObject.ID])) return true;
-             }
-             //if contains by previous value and refrences are equal return true  --- this._primaryKey.AsString_PreviousValue()
-             string objectID = businessObject.ID.AsString_PreviousValue();
-             if (Contains(objectID))
-             {
-                 if (ReferenceEquals(businessObject, this[objectID])) return true;
-             }
-             //if contans by last persisted value and references are equal return true. --- this._primaryKey.AsString_LastPersistedValue()
-             objectID = businessObject.ID.AsString_LastPersistedValue();
-             if (Contains(objectID))
-             {
-                 if (ReferenceEquals(businessObject, this[objectID])) return true;
-             }
+            if (Contains(businessObject.ID))
+            {
+                //if business object references are the same return true
+                if (ReferenceEquals(businessObject, this[businessObject.ID])) return true;
+            }
+            //if contains by previous value and refrences are equal return true  --- this._primaryKey.AsString_PreviousValue()
+            string objectID = businessObject.ID.AsString_PreviousValue();
+            if (Contains(objectID))
+            {
+                if (ReferenceEquals(businessObject, this[objectID])) return true;
+            }
+            //if contans by last persisted value and references are equal return true. --- this._primaryKey.AsString_LastPersistedValue()
+            objectID = businessObject.ID.AsString_LastPersistedValue();
+            if (Contains(objectID))
+            {
+                if (ReferenceEquals(businessObject, this[objectID])) return true;
+            }
             return false;
         }
-        
+
         /// <summary>
         /// Checks whether the business object is currently loaded.
         /// </summary>
@@ -147,7 +151,6 @@ namespace Habanero.BO
         internal bool Contains(IPrimaryKey id)
         {
             return Contains(id.AsString_CurrentValue());
-            
         }
 
         /// <summary>
@@ -186,7 +189,7 @@ namespace Habanero.BO
             if (!Contains(businessObject)) return;
 
             string objectID = businessObject.ID.AsString_CurrentValue();
-            if (Contains(objectID) )
+            if (Contains(objectID))
             {
                 Remove(objectID, businessObject);
             }
@@ -210,7 +213,7 @@ namespace Habanero.BO
         /// <param name="businessObject">The business object being removed at this position.</param>
         protected void Remove(string objectID, IBusinessObject businessObject)
         {
-            if (Contains(objectID) && ReferenceEquals(businessObject , this[objectID]))
+            if (Contains(objectID) && ReferenceEquals(businessObject, this[objectID]))
             {
                 _loadedBusinessObjects.Remove(objectID);
                 DeregisterForIDUpdatedEvent(businessObject);
@@ -229,16 +232,17 @@ namespace Habanero.BO
         /// <returns>The business object from the object manger.</returns>
         internal IBusinessObject this[string objectID]
         {
-            get {
+            get
+            {
                 if (Contains(objectID))
                 {
-                    return (IBusinessObject) _loadedBusinessObjects[objectID].Target; 
+                    return (IBusinessObject) _loadedBusinessObjects[objectID].Target;
                 }
-                string message = "There was an attempt to retrieve the object identified by '" 
-                                 + objectID + "' from the object manager but it is not currently loaded.";
-                throw new HabaneroDeveloperException("There is an application error please contact your system administrator." 
-                        + Environment.NewLine + message
-                        , message);
+                string message = "There was an attempt to retrieve the object identified by '" + objectID
+                                 + "' from the object manager but it is not currently loaded.";
+                throw new HabaneroDeveloperException
+                    ("There is an application error please contact your system administrator." + Environment.NewLine
+                     + message, message);
             }
         }
 
@@ -268,9 +272,7 @@ namespace Habanero.BO
                 this.Remove(key, businessObject);
             }
         }
-         
+
         #endregion
     }
-
-
 }

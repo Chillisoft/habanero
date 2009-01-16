@@ -416,7 +416,7 @@ namespace Habanero.Test.UI.Base
 
         #region TestIntRules
 
-        [Test, Ignore("//TODO Brett: This needs to be fixed for new boprop.set")]
+//        [Test, Ignore("//TODO Brett: This needs to be fixed for new boprop.set")]
 //        [Test]
         public void Test_ErrorProvider_HasCorrectMessage_ForIntegerDataType_NoRule()
         {
@@ -432,7 +432,7 @@ namespace Habanero.Test.UI.Base
             StringAssert.Contains("It is not a type of System.Int32", mapperStub.ErrorProvider.GetError(_txtNormal));
         }
 
-        [Test, Ignore("//TODO Brett: This needs to be fixed for new boprop.set")]
+//        [Test, Ignore("//TODO Brett: This needs to be fixed for new boprop.set")]
 //        [Test]
         public void Test_ErrorProvider_HasCorrectMessage_ForIntegerDataType()
         {
@@ -644,7 +644,7 @@ namespace Habanero.Test.UI.Base
 
         #region TestDateTimeRules
 
-        [Test, Ignore("//TODO Brett: This needs to be fixed for new boprop.set")]
+//        [Test, Ignore("//TODO Brett: This needs to be fixed for new boprop.set")]
 //        [Test]
         public void Test_ErrorProvider_HasCorrectMessage_ForDateTimeDataType_SetToString_NoRule()
         {
@@ -660,7 +660,7 @@ namespace Habanero.Test.UI.Base
             StringAssert.Contains("It is not a type of DateTime", mapperStub.ErrorProvider.GetError(_txtNormal));
         }
 
-        [Test, Ignore("//TODO Brett: This needs to be fixed for new boprop.set")]
+//        [Test, Ignore("//TODO Brett: This needs to be fixed for new boprop.set")]
 //        [Test]
         public void Test_ErrorProvider_HasCorrectMessage_ForDateTimeDataType_SetToInt_NoRule()
         {
@@ -964,7 +964,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
         }
 
-        [Test, Ignore("Need to move tests to include BO lookups and then refactor.")]
+//        [Test, Ignore("Need to move tests to include BO lookups and then refactor.")]
         public void TestCanSetIntProp_ItemNotInList()
         {
             //---------------Set up test pack-------------------
@@ -1003,7 +1003,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
         }
 
-        [Test, Ignore("Need to move tests to include BO lookups and then refactor.")]
+//        [Test, Ignore("Need to move tests to include BO lookups and then refactor.")]
         public void Test_NotCanSetGuidToStringLookupValue_InvalidValue()
         {
             //---------------Set up test pack-------------------

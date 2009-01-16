@@ -26,7 +26,7 @@ using NUnit.Framework;
 namespace Habanero.Test.BO
 {
     [TestFixture]
-    public class TestBusinessObjectManager //:TestBase
+    public class TestBusinessObjectManager
     {
         #region Setup/Teardown
 
@@ -387,7 +387,8 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
             {
-                StringAssert.Contains("There was a serious developer exception. Two copies of the business object", ex.Message);
+                StringAssert.Contains("There was a serious developer exception.", ex.Message);
+                StringAssert.Contains("Two copies of the business object", ex.Message);
                 StringAssert.Contains(" were added to the object manager", ex.Message);
             }
         }
@@ -436,7 +437,8 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
             {
-                StringAssert.Contains("There was a serious developer exception. Two copies of the business object", ex.Message);
+                StringAssert.Contains("There was a serious developer exception.", ex.Message);
+                StringAssert.Contains("Two copies of the business object", ex.Message);
                 StringAssert.Contains(" were added to the object manager", ex.Message);
             }
         }
@@ -1325,7 +1327,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
-            ContactPersonTestBO cp = GetCp();
+            ContactPersonTestBO cp = GetContactPerson();
             //            boMan.Add(cp);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boMan.Count);
@@ -1340,14 +1342,12 @@ namespace Habanero.Test.BO
             Assert.AreEqual(0, boMan.Count);
         }
 
-        private ContactPersonTestBO GetCp()
+        private static ContactPersonTestBO GetContactPerson()
         {
-            ContactPersonTestBO cp = new ContactPersonTestBO {ContactPersonID = Guid.NewGuid(), Surname = TestUtil.CreateRandomString()};
+            ContactPersonTestBO cp = new ContactPersonTestBO 
+                    {ContactPersonID = Guid.NewGuid() , Surname = TestUtil.CreateRandomString()};
             return cp;
         }
-        // ReSharper restore RedundantAssignment
-
-        // ReSharper disable RedundantAssignment
         //Test load objects load them into the boMan
         [Test]
         public void Test_LoadObject_UpdateObjectMan()
@@ -1957,18 +1957,76 @@ namespace Habanero.Test.BO
             Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID.AsString_CurrentValue()));
             Assert.IsTrue(BusinessObjectManager.Instance.Contains(boWithIntID.ID));
         }
-        [Ignore ("This test to be run")]
         [Test]
         public void Test_TwoObjectTypesWithTheSameIDField_HaveTheSamevalue_CanBeAddedToObjectMan()
         {
             //--------------- Set up test pack ------------------
-            Assert.Fail("Test Not Implemented");
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
+            boMan.ClearLoadedObjects();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID_DifferentType.LoadClassDefWithIntID();
+            const int id = 3;
+            BOWithIntID boWithIntID = new BOWithIntID {IntID = id};
+            boMan.ClearLoadedObjects();
+            BOWithIntID_DifferentType boWithIntID_DifferentType = new BOWithIntID_DifferentType{IntID = id};
+            boMan.ClearLoadedObjects();
+            boMan.Add(boWithIntID);
             //--------------- Test Preconditions ----------------
-
+            Assert.AreEqual(1, boMan.Count);
             //--------------- Execute Test ----------------------
-
+            boMan.Add(boWithIntID_DifferentType);
             //--------------- Test Result -----------------------
-
+            Assert.AreEqual(2, boMan.Count);
+            Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
+            Assert.IsTrue(boMan.Contains(boWithIntID));
+        }
+        [Test]
+        public void Test_TwoObjectTypesWithTheSameIDField_EdidtedToHaveTheSamevalue_CanBeAddedToObjectMan()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
+            boMan.ClearLoadedObjects();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID_DifferentType.LoadClassDefWithIntID();
+            const int id = 3;
+            BOWithIntID boWithIntID = new BOWithIntID {IntID = id};
+            BOWithIntID_DifferentType boWithIntID_DifferentType = new BOWithIntID_DifferentType{IntID = 6};
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(2, boMan.Count);
+            //--------------- Execute Test ----------------------
+            boWithIntID_DifferentType.IntID = boWithIntID.IntID;
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(2, boMan.Count);
+            Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
+            Assert.IsTrue(boMan.Contains(boWithIntID));
+        }
+        //TODO  15 Jan 2009: Do test as above for previous and persisted.
+        [Test]
+        public void Test_TestInheritedObjectCanStillGetObjectOutOfManager_HOwDoesKeyKnowType()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
+            BOWithIntID_Child.LoadClassDefWith_SingleTableInherit();
+            const int id = 3;
+            BOWithIntID boWithIntID = new BOWithIntID { IntID = id };
+            boMan.ClearLoadedObjects();
+            BOWithIntID_Child boWithIntID_Child = new BOWithIntID_Child {IntID = id};
+            boMan.ClearLoadedObjects();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, boMan.Count);
+            //---------------Execute Test ----------------------
+            boMan.Add(boWithIntID);
+            try
+            {
+                boMan.Add(boWithIntID_Child);
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (Exception ex)
+            {
+                StringAssert.Contains("There was a serious developer exception", ex.Message);
+                StringAssert.Contains("Two copies of the business object 'Habanero.Test.BO.BOWithIntID_Child' identified by", ex.Message);
+            }
         }
         //Test if ccreate a new object with object id then must be in object manager.
         //Test that persist this object hten in object manager

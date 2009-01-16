@@ -379,6 +379,8 @@ namespace Habanero.Test.BO
             Assert.AreEqual("", boProp.IsValidMessage);
             Assert.IsTrue(boProp.IsValid);
         }
+
+        //TODO  15 Jan 2009: test this with inheritance
         [Test]
         public void Test_SetValue_NewBusinessObject_NotInList()
         {

@@ -30,7 +30,7 @@ namespace Habanero.Base.Exceptions
 [Serializable]
     public class HabaneroDeveloperException:Exception
     {
-        private readonly string _developerMessage;
+        protected readonly string _developerMessage;
 
         /// <summary>
         /// Constructor to initialise the exception
@@ -75,7 +75,7 @@ namespace Habanero.Base.Exceptions
         ///<summary>
         /// The developer message set in teh constructor
         ///</summary>
-        public string DeveloperMessage
+        public virtual string DeveloperMessage
         {
             get { return _developerMessage; }
         }
@@ -174,6 +174,73 @@ namespace Habanero.Base.Exceptions
         /// <param name="context">The streaming context</param>
         protected UserException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
+        }
+    }
+    /// <summary>
+    /// Provides an Exception class which is raised in the Habanero Architecture when a developer uses 
+    /// the architecture or a method in the architecture incorrectly e.g. if a method is called with invalid 
+    /// paramaters.
+    /// </summary>    
+    [Serializable]
+    public class HabaneroIncorrectTypeException : HabaneroDeveloperException
+    {
+
+        /// <summary>
+        /// Constructor to initialise the exception
+        /// </summary>
+        public HabaneroIncorrectTypeException()
+        {
+        }
+        /// <summary>
+        /// Constructor to initialise the exception with a specific message
+        /// to display
+        /// </summary>
+        /// <param name="userMessage">The error message</param>
+        /// <param name="developerMessage">An Extended error message for the developer</param>
+        public HabaneroIncorrectTypeException(string userMessage, string developerMessage)
+            : base(userMessage, developerMessage)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with a specific message
+        /// to display, and the inner exception specified
+        /// </summary>
+        /// <param name="userMessage">The user error message</param>
+        /// <param name="developerMessage">An extended error message for the developer</param>
+        /// <param name="inner">The inner exception</param>
+        public HabaneroIncorrectTypeException(string userMessage, string developerMessage, Exception inner)
+            : base(userMessage, developerMessage, inner)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with the serialisation info
+        /// and streaming context provided
+        /// </summary>
+        /// <param name="info">The serialisation info</param>
+        /// <param name="context">The streaming context</param>
+        protected HabaneroIncorrectTypeException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+
+        ///<summary>
+        /// The developer message set in the constructor
+        ///</summary>
+        public override string DeveloperMessage
+        {
+            get { return _developerMessage; }
+        }
+        /// <summary>
+        /// Required for ISerializable.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            info.AddValue("developerMessage", _developerMessage);
         }
     }
 }

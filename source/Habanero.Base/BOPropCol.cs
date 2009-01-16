@@ -33,7 +33,7 @@ namespace Habanero.Base
     /// This collection in should thus not be used by the application developer.
     /// This collection is typically controlled by an <see cref="IBusinessObject"/>
     /// </summary>
-    public class BOPropCol 
+    public class BOPropCol : IEnumerable<IBOProp>
     {
         private readonly Dictionary<string, IBOProp> _boProps;
 
@@ -198,14 +198,39 @@ namespace Habanero.Base
             get { return new SortedList(_boProps).Values; }
         }
 
+        #region IEnumerable<PropDef> Members
+
         ///<summary>
-        /// returns an enumerator for a collection of <see cref="IBOProp"/>s
+        ///Returns an enumerator that iterates through the collection.
         ///</summary>
-        ///<returns></returns>
-        public IEnumerator GetEnumerator()
+        ///
+        ///<returns>
+        ///A <see cref="T:System.Collections.Generic.IEnumerator`1"></see> that can be used to iterate through the collection.
+        ///</returns>
+        ///<filterpriority>1</filterpriority>
+        IEnumerator<IBOProp> IEnumerable<IBOProp>.GetEnumerator()
         {
-            return SortedValues.GetEnumerator();
+            return _boProps.Values.GetEnumerator();
         }
+
+        #endregion
+
+        #region IEnumerable Members
+
+        ///<summary>
+        ///Returns an enumerator that iterates through a collection.
+        ///</summary>
+        ///
+        ///<returns>
+        ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+        ///</returns>
+        ///<filterpriority>2</filterpriority>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _boProps.Values.GetEnumerator();
+        }
+
+        #endregion
 
         ///<summary>
         /// Returns a count of the number of properties <see cref="IBOProp"/> in the properties collection.

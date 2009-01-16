@@ -263,7 +263,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Execute Test ----------------------
             IBusinessObject returnedBO = propDef.GetBusinessObjectFromObjectManager(expectedBO.IntID);
             //---------------Test Result -----------------------
-            Assert.AreSame(returnedBO, expectedBO);
+            Assert.AreSame(expectedBO, returnedBO );
         }
         [Test]
         public void Test_GetBusinessObjectFromObjectManager_IdNotInObjectManager()
@@ -284,7 +284,6 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.IsNull(returnedBO);
         }
-        [Ignore("To do test that does not allow two object in object manager with same type and same ID field Test_TwoObjectTypesWithTheSameIDField_HaveTheSamevalue_CanBeAddedToObjectMan")]
         [Test]
         public void Test_GetBusinessObjectFromObjectManager_IdInObjectManager_ButWrongType()
         {

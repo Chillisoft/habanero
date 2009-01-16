@@ -39,11 +39,12 @@ namespace Habanero.Test.BO
         private BOPropCol _boPropCol2;
         private KeyDef _keyDef2;
 
-        private bool _updatedEventHandled = false;
+        private bool _updatedEventHandled;
 
         [SetUp]
-        public void Init()
+        public void Setup()
         {
+            ClassDef.ClassDefs.Clear();
         	_boPropCol1 = new BOPropCol();
         	_keyDef1 = new KeyDef();
         	_boPropCol2 = new BOPropCol();
@@ -100,12 +101,14 @@ namespace Habanero.Test.BO
             IBOProp lProp = _boPropCol2["PropName"];
             Assert.AreSame(lProp, lBOKey1.SortedValues[0]);
         }
-
+#pragma warning disable 168
         [Test, ExpectedException(typeof(InvalidPropertyNameException))]
         public void TestIndexerPropertyNotFound()
         {
             BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
+
             IBOProp prop = boKey["invalidpropname"];
+
         }
 
         [Test, ExpectedException(typeof(IndexOutOfRangeException))]
@@ -114,7 +117,7 @@ namespace Habanero.Test.BO
             BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
             IBOProp prop = boKey[2];
         }
-
+#pragma warning restore 168
         [Test, ExpectedException(typeof(HabaneroArgumentException))]
         public void TestAddNullBOProp()
         {
@@ -199,7 +202,7 @@ namespace Habanero.Test.BO
             //--------------- Execute Test ----------------------
             string keyAsString = boKey.AsString_CurrentValue();
             //--------------- Test Result -----------------------
-            StringAssert.AreEqualIgnoringCase("PropName1=", keyAsString);
+            StringAssert.AreEqualIgnoringCase("ContactPersonTestBO.PropName1=", keyAsString);
         }
 
         [Test]
@@ -214,7 +217,7 @@ namespace Habanero.Test.BO
             boKey[0].Value = guid;
             string keyAsString = boKey.AsString_CurrentValue();
             //--------------- Test Result -----------------------
-            StringAssert.AreEqualIgnoringCase("PropName1=" + guid.ToString(), keyAsString);
+            StringAssert.AreEqualIgnoringCase("ContactPersonTestBO.PropName1=" + guid, keyAsString);
         }
 
         [Test]
@@ -231,7 +234,7 @@ namespace Habanero.Test.BO
             boKey[1].Value = str;
             string keyAsString = boKey.AsString_CurrentValue();
             //--------------- Test Result -----------------------
-            StringAssert.AreEqualIgnoringCase("PropName1=" + guid.ToString() + ";PropName2=" + str, keyAsString);
+            StringAssert.AreEqualIgnoringCase("ContactPersonTestBO.PropName1=" + guid + ";ContactPersonTestBO.PropName2=" + str, keyAsString);
         }
 
         [Test]
@@ -322,26 +325,26 @@ namespace Habanero.Test.BO
 
 
 
-        private BOKey CreateBOKeyGuid()
+        private static BOKey CreateBOKeyGuid()
         {
-            PropDef propDef1 = new PropDef("PropName1", typeof(Guid), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef1 = new PropDef("PropName1", typeof(Guid), PropReadWriteRule.ReadWrite, null)
+                                   {ClassDef = ContactPersonTestBO.LoadDefaultClassDef()};
             BOPropCol propCol = new BOPropCol();
             propCol.Add(propDef1.CreateBOProp(false));
-            KeyDef keyDef = new KeyDef();
-            keyDef.Add(propDef1);
+            KeyDef keyDef = new KeyDef {propDef1};
             return keyDef.CreateBOKey(propCol);
         }
 
-        private BOKey CreateBOKeyGuidAndString()
+        private static BOKey CreateBOKeyGuidAndString()
         {
-            PropDef propDef1 = new PropDef("PropName1", typeof(Guid), PropReadWriteRule.ReadWrite, null);
-            PropDef propDef2 = new PropDef("PropName2", typeof(string), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef1 = new PropDef("PropName1", typeof(Guid), PropReadWriteRule.ReadWrite, null)
+                                   {ClassDef = ContactPersonTestBO.LoadDefaultClassDef()};
+            PropDef propDef2 = new PropDef("PropName2", typeof(string), PropReadWriteRule.ReadWrite, null)
+                                   {ClassDef = propDef1.ClassDef};
             BOPropCol propCol = new BOPropCol();
             propCol.Add( propDef1.CreateBOProp(false));
             propCol.Add(propDef2.CreateBOProp(false));
-            KeyDef keyDef = new KeyDef();
-            keyDef.Add(propDef1);
-            keyDef.Add(propDef2);
+            KeyDef keyDef = new KeyDef {propDef1, propDef2};
             return keyDef.CreateBOKey(propCol);
         }
 
@@ -355,9 +358,7 @@ namespace Habanero.Test.BO
             propCol.Add(propDef1.CreateBOProp(false));
             propCol.Add(propDef2.CreateBOProp(false));
 
-            KeyDef keyDef = new KeyDef();
-            keyDef.Add(propDef1);
-            keyDef.Add(propDef2);
+            KeyDef keyDef = new KeyDef {propDef1, propDef2};
             BOKey boKey = keyDef.CreateBOKey(propCol);
 
             boKey.Updated += UpdatedEventHandler;
@@ -378,8 +379,7 @@ namespace Habanero.Test.BO
             propDef1.AutoIncrementing = false;
             BOPropCol propCol = new BOPropCol();
             propCol.Add(propDef1.CreateBOProp(false));
-            KeyDef keyDef = new KeyDef();
-            keyDef.Add(propDef1);
+            KeyDef keyDef = new KeyDef {propDef1};
             BOKey boKey = keyDef.CreateBOKey(propCol);
 
             //---------------Assert PreConditions---------------            
@@ -401,8 +401,7 @@ namespace Habanero.Test.BO
             propDef1.AutoIncrementing = true;
             BOPropCol propCol = new BOPropCol();
             propCol.Add(propDef1.CreateBOProp(false));
-            KeyDef keyDef = new KeyDef();
-            keyDef.Add(propDef1);
+            KeyDef keyDef = new KeyDef {propDef1};
             BOKey boKey = keyDef.CreateBOKey(propCol);
 
             //---------------Assert PreConditions---------------            

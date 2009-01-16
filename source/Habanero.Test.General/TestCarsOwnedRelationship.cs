@@ -59,7 +59,8 @@ namespace Habanero.Test.General
         {
             Car.DeleteAllCars();
             ContactPerson.DeleteAllContactPeople();
-
+            new Address();
+            new Engine();
             Car car = new Car();
             ContactPerson person = new ContactPerson();
             person.Surname = "Owner Surname3";
@@ -75,8 +76,8 @@ namespace Habanero.Test.General
             Car carOwned = (Car) carsOwned[0];
             Assert.AreEqual(car.ID, carOwned.ID);
             IBusinessObjectCollection carsOwned2 = person.GetCarsOwned();
-            Assert.IsFalse(ReferenceEquals(carsOwned, carsOwned2),
-                           "The references should not be equal since the collection should be reloaded each time");
+            Assert.IsTrue(ReferenceEquals(carsOwned, carsOwned2),
+                           "The references should be equal since the collection should be reloaded with the same objects each time");
         }
     }
 }

@@ -386,7 +386,16 @@ namespace Habanero.UI.Base
         {
             if (_businessObject == null) return;
             BOMapper boMapper = new BOMapper(_businessObject);
-            boMapper.SetDisplayPropertyValue(_propertyName, value);
+
+            try
+            {
+                boMapper.SetDisplayPropertyValue(_propertyName, value);
+            }
+            catch (HabaneroIncorrectTypeException ex)
+            {
+                this.ErrorProvider.SetError(_control, ex.Message);
+                return;
+            }
             IBOProp prop = _businessObject.Props[_propertyName];
             if (prop != null)
             {

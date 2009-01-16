@@ -176,7 +176,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             catch (BusObjDeleteConcurrencyControlException ex)
             {
                 StringAssert.Contains
-                    ("A Error has occured since the object you are trying to refresh has been deleted by another user. There are no records in the database for the Class: BOWithIntID identified by IntID=5425",
+                    ("A Error has occured since the object you are trying to refresh has been deleted by another user. There are no records in the database for the Class: BOWithIntID identified by",
                      ex.Message);
             }
         }
@@ -222,7 +222,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             catch (BusObjDeleteConcurrencyControlException ex)
             {
                 StringAssert.Contains
-                    ("A Error has occured since the object you are trying to refresh has been deleted by another user. There are no records in the database for the Class: BOWithIntID identified by IntID=5425",
+                    ("A Error has occured since the object you are trying to refresh has been deleted by another user. There are no records in the database for the Class: BOWithIntID identified by",
                      ex.Message);
             }
         }

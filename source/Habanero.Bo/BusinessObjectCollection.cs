@@ -24,7 +24,6 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
 using Habanero.BO.Comparer;
 
 namespace Habanero.BO
@@ -82,7 +81,6 @@ namespace Habanero.BO
         #endregion//StronglyTypedComparer
 
         private IClassDef _boClassDef;
-        private Hashtable _keyObjectHashTable;
         private readonly List<TBusinessObject> _createdBusinessObjects = new List<TBusinessObject>();
         private readonly List<TBusinessObject> _persistedObjectsCollection = new List<TBusinessObject>();
         protected readonly List<TBusinessObject> _removedBusinessObjects = new List<TBusinessObject>();
@@ -95,7 +93,7 @@ namespace Habanero.BO
         private readonly EventHandler<BOEventArgs> _restoredEventHandler;
         private readonly EventHandler<BOKeyEventArgs> _updateIDEventHandler;
         private readonly EventHandler<BOEventArgs> _markForDeleteEventHandler;
-        private bool _loading;
+
         /// <summary>
         /// Default constructor. 
         /// The classdef will be implied from TBusinessObject and the Current Database Connection will be used.
@@ -136,17 +134,10 @@ namespace Habanero.BO
 
         private void Initialise(IClassDef classDef, TBusinessObject sampleBo)
         {
-            if (classDef == null)
-            {
-                _boClassDef = sampleBo == null
-                                  ? ClassDefinition.ClassDef.ClassDefs[typeof (TBusinessObject)]
-                                  : sampleBo.ClassDef;
-            }
-            else
-            {
-                _boClassDef = classDef;
-            }
-            _keyObjectHashTable = new Hashtable();
+            _boClassDef = classDef ?? (sampleBo == null
+                                           ? ClassDefinition.ClassDef.ClassDefs[typeof (TBusinessObject)]
+                                           : sampleBo.ClassDef);
+            KeyObjectHashTable = new Hashtable();
             _selectQuery = QueryBuilder.CreateSelectQuery(_boClassDef);
         }
 
@@ -237,7 +228,7 @@ namespace Habanero.BO
                 AddWithoutEvents(bo);
                 if (!AddedBusinessObjects.Contains(bo) && !PersistedBusinessObjects.Contains(bo))
                 {
-                    AddedBusinessObjects.Add(bo);                    
+                    AddedBusinessObjects.Add(bo);
                 }
                 this.RemovedBusinessObjects.Remove(bo);
                 this.FireBusinessObjectAdded(bo);
@@ -266,11 +257,7 @@ namespace Habanero.BO
             if (bo == null) throw new ArgumentNullException("bo");
 
             base.Add(bo);
-            if (bo.ID != null)
-            {
-// if (KeyObjectHashTable.ContainsKey(bo.ID.AsString_CurrentValue())) throw new 
-                KeyObjectHashTable.Add(bo.ID.AsString_CurrentValue(), bo);
-            }
+            if (bo.ID != null) KeyObjectHashTable.Add(bo.ID.AsString_CurrentValue(), bo);
 
             RegisterForBOEvents(bo);
         }
@@ -345,17 +332,7 @@ namespace Habanero.BO
 
         protected virtual void RestoredEventHandler(object sender, BOEventArgs e)
         {
-            TBusinessObject bo = (TBusinessObject)e.BusinessObject;
-            //TODO: Brett removed this Restoring (cancelling edits) on a created bo should not 
-            //affect the collection restoring the collection is a different matter.
-            //            bool createdContains = CreatedBusinessObjects.Contains(bo);
-            //            if (bo.Status.IsNew || createdContains)
-            //            {
-            //                //Cancel Edits (Restore) has been called 
-            //                // on a created business object.
-            //                RemoveInternal(bo);
-            //                this.RemovedBusinessObjects.Remove(bo);//The remove inte
-            //            }
+            TBusinessObject bo = (TBusinessObject) e.BusinessObject;
             if (!this.MarkedForDeleteBusinessObjects.Remove(bo) || (this.Contains(bo))) return;
             if (this.AddedBusinessObjects.Contains(bo) && this.Contains(bo))
             {
@@ -369,7 +346,7 @@ namespace Habanero.BO
 
         protected virtual void SavedEventHandler(object sender, BOEventArgs e)
         {
-            TBusinessObject bo = (TBusinessObject)e.BusinessObject;
+            TBusinessObject bo = (TBusinessObject) e.BusinessObject;
             CreatedBusinessObjects.Remove(bo);
 
             if (!this.RemovedBusinessObjects.Remove(bo))
@@ -580,8 +557,6 @@ namespace Habanero.BO
         }
 
 
-
-
         /// <summary>
         /// Removes the business object at the index position specified
         /// </summary>
@@ -616,6 +591,7 @@ namespace Habanero.BO
             base.Clear();
             KeyObjectHashTable.Clear();
         }
+
 // ReSharper restore UnusedPrivateMember
 
         /// <summary>
@@ -630,13 +606,14 @@ namespace Habanero.BO
             bool removed = base.Remove(businessObject);
             KeyObjectHashTable.Remove(businessObject.ID.ToString());
 
-            if (!_removedBusinessObjects.Contains(businessObject) && !_markedForDeleteBusinessObjects.Contains(businessObject))
+            if (!_removedBusinessObjects.Contains(businessObject)
+                && !_markedForDeleteBusinessObjects.Contains(businessObject))
             {
                 _removedBusinessObjects.Add(businessObject);
                 this.FireBusinessObjectRemoved(businessObject);
             }
             RemoveCreatedBusinessObject(businessObject);
-            RemoveAddedBusinessObject(businessObject);            
+            RemoveAddedBusinessObject(businessObject);
             return removed;
         }
 
@@ -1048,6 +1025,7 @@ namespace Habanero.BO
             RemovedBusinessObjects.Clear();
             //TODO: Markfor delete clear.
         }
+
         /// <summary>
         /// Restores all the business objects to their last persisted state, that
         /// is their state and values at the time they were last saved to the database
@@ -1250,7 +1228,7 @@ namespace Habanero.BO
         {
             get { return _createdBusinessObjects; }
         }
-        
+
         /// <summary>
         /// The list of business objects that have been created via this collection (@see CreateBusinessObject) and have not
         /// yet been persisted.
@@ -1342,10 +1320,7 @@ namespace Habanero.BO
             get { return _addedBusinessObjects; }
         }
 
-        private Hashtable KeyObjectHashTable
-        {
-            get { return _keyObjectHashTable; }
-        }
+        private Hashtable KeyObjectHashTable { get; set; }
 
 // ReSharper disable UnusedPrivateMember 
         //This method is used by reflection only
@@ -1353,12 +1328,10 @@ namespace Habanero.BO
         /// This property is set to true while loading the collection from the datastore so as to 
         /// prevent certain checks being done (e.g. Adding persisted business objects to a collection.
         /// </summary>
-        protected bool Loading
-        {
-            get { return _loading; }
-            set { _loading = value; }
-        }
+        protected bool Loading { get; set; }
+
 // ReSharper restore UnusedPrivateMember
+
         #endregion
 
         /// <summary>
@@ -1453,9 +1426,7 @@ namespace Habanero.BO
         public void MarkForDeleteAt(int index)
         {
             TBusinessObject boToMark = this[index];
-            MarkForDelete(boToMark);            
+            MarkForDelete(boToMark);
         }
-
-
     }
 }
