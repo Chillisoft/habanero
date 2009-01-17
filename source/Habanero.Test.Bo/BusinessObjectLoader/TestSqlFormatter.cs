@@ -31,10 +31,10 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestCreateSqlFormatter()
         {
             //-------------Setup Test Pack ------------------
-            string leftFieldDelimiter = "LEFT_DELIMIT";
-            string rightFieldDelimiter = "RIGHT_DELIMIT";
+            const string leftFieldDelimiter = "LEFT_DELIMIT";
+            const string rightFieldDelimiter = "RIGHT_DELIMIT";
             //-------------Execute test ---------------------
-            SqlFormatter sqlFormatter = new SqlFormatter(leftFieldDelimiter, rightFieldDelimiter);
+            SqlFormatter sqlFormatter = new SqlFormatter(leftFieldDelimiter, rightFieldDelimiter, "","");
 
             //-------------Test Result ----------------------
             Assert.AreEqual(leftFieldDelimiter, sqlFormatter.LeftFieldDelimiter);
@@ -45,10 +45,10 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestDelimitField()
         {
             //-------------Setup Test Pack ------------------
-            string leftDelimiter = "LEFT_DELIMIT";
-            string rightDelimiter = "RIGHT_DELIMIT";
-            SqlFormatter sqlFormatter = new SqlFormatter(leftDelimiter, rightDelimiter);
-            string fieldName = "MY_FIELD";
+            const string leftDelimiter = "LEFT_DELIMIT";
+            const string rightDelimiter = "RIGHT_DELIMIT";
+            SqlFormatter sqlFormatter = new SqlFormatter(leftDelimiter, rightDelimiter,"","");
+            const string fieldName = "MY_FIELD";
             //-------------Execute test ---------------------
             string delimitedField = sqlFormatter.DelimitField(fieldName);
             //-------------Test Result ----------------------
@@ -59,14 +59,88 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestDelimitTable()
         {
             //-------------Setup Test Pack ------------------
-            string leftDelimiter = "LEFT_DELIMIT";
-            string rightDelimiter = "RIGHT_DELIMIT";
-            SqlFormatter sqlFormatter = new SqlFormatter(leftDelimiter, rightDelimiter);
-            string tableName = "MY_TABLE";
+            const string leftDelimiter = "LEFT_DELIMIT";
+            const string rightDelimiter = "RIGHT_DELIMIT";
+            SqlFormatter sqlFormatter = new SqlFormatter(leftDelimiter, rightDelimiter,"","");
+            const string tableName = "MY_TABLE";
             //-------------Execute test ---------------------
             string delimitedField = sqlFormatter.DelimitTable(tableName);
             //-------------Test Result ----------------------
             Assert.AreEqual(String.Format("{0}{1}{2}", leftDelimiter, tableName, rightDelimiter), delimitedField);
+        }
+
+        [Test]
+        public void Test_CreateSqlFormatter()
+        {
+            //---------------Set up test pack-------------------
+            const string limitClauseAtBeginning = "TOP";
+            const string limitClauseAtEnd = "LIMIT";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            SqlFormatter sqlFormatter = new SqlFormatter("`", "z", limitClauseAtBeginning, limitClauseAtEnd);
+            //---------------Test Result -----------------------
+            Assert.AreEqual("`", sqlFormatter.LeftFieldDelimiter);
+            Assert.AreEqual("z", sqlFormatter.RightFieldDelimiter);
+            Assert.AreEqual(limitClauseAtEnd, sqlFormatter.LimitClauseAtEnd);
+            Assert.AreEqual(limitClauseAtBeginning, sqlFormatter.LimitClauseAtBeginning);
+        }
+        [Test]
+        public void Test_GetLimitClauseForEnd()
+        {
+            //---------------Set up test pack-------------------
+            const string limitClauseAtEnd = "LIMIT";
+            SqlFormatter sqlFormatter = new SqlFormatter("", "", "", limitClauseAtEnd);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string limitClauseForEnd = sqlFormatter.GetLimitClauseCriteriaForEnd(10);
+            //---------------Test Result -----------------------
+            const string expectedLimitClauseForEnd = limitClauseAtEnd + " 10";
+            Assert.AreEqual(expectedLimitClauseForEnd, limitClauseForEnd);
+        }
+
+        [Test]
+        public void Test_GetLimitClauseForEnd_EndHasNoClauseSet()
+        {
+            //---------------Set up test pack-------------------
+            SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
+            //---------------Execute Test ----------------------
+            string limitClauseForEnd = sqlFormatter.GetLimitClauseCriteriaForEnd(10);
+            //---------------Test Result -----------------------
+            const string expectedLimitClauseForEnd = "";
+            Assert.AreEqual(expectedLimitClauseForEnd, limitClauseForEnd);
+        }
+
+        [Test]
+        public void Test_GetLimitClauseForBegin()
+        {
+            //---------------Set up test pack-------------------
+            const string limitClauseAtBeginning = "TOP";
+            SqlFormatter sqlFormatter = new SqlFormatter("", "", limitClauseAtBeginning, "");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(limitClauseAtBeginning, sqlFormatter.LimitClauseAtBeginning);
+            //---------------Execute Test ----------------------
+            string limitClauseForBegin = sqlFormatter.GetLimitClauseCriteriaForBegin(10);
+            //---------------Test Result -----------------------
+            const string expectedLimitClauseForEnd = limitClauseAtBeginning + " 10";
+            Assert.AreEqual(expectedLimitClauseForEnd, limitClauseForBegin);
+        }
+
+        [Test]
+        public void Test_GetLimitClauseForBegin_HasNotClauseSet()
+        {
+            //---------------Set up test pack-------------------
+            const string limitClauseAtBeginning = "";
+            SqlFormatter sqlFormatter = new SqlFormatter("", "", limitClauseAtBeginning, "");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual("", sqlFormatter.LimitClauseAtBeginning);
+            //---------------Execute Test ----------------------
+            string limitClauseForBegin = sqlFormatter.GetLimitClauseCriteriaForBegin(10);
+            //---------------Test Result -----------------------
+            Assert.AreEqual("", limitClauseForBegin);
         }
     }
 }

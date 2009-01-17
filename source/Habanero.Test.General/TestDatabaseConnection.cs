@@ -19,7 +19,9 @@
 
 using System;
 using System.Data;
+using Habanero.Base;
 using Habanero.DB;
+using Habanero.Test.BO.BusinessObjectLoader;
 using NUnit.Framework;
 
 namespace Habanero.Test.General
@@ -30,14 +32,6 @@ namespace Habanero.Test.General
     [TestFixture]
     public class TestDatabaseConnection : TestUsingDatabase
     {
-        public TestDatabaseConnection()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-
-
         [TestFixtureSetUp]
         public void SetUpDBCon()
         {
@@ -207,5 +201,22 @@ namespace Habanero.Test.General
             string strg = g.ToString("B").ToUpper();
             Assert.AreEqual(strg, DatabaseUtil.PrepareValue(g), "PrepareValue is not preparing guids correctly.");
         }
+
+        [Test]
+        public void Test_CreateSqlFormatter()
+        {
+            //---------------Set up test pack-------------------
+            IDatabaseConnection dbConn = new DatabaseConnection_Stub();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            SqlFormatter sqlFormatter = dbConn.SqlFormatter;
+            //---------------Test Result -----------------------
+
+        }
+        internal class DatabaseConnection_Stub : DatabaseConnection
+        {
+        }
     }
+
 }

@@ -20,7 +20,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -122,7 +121,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(0, cpCol.Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
-            //Assert.AreEqual(0, cpCol..Count); TODO: Removed/deleted bo should be 0
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count); 
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count); 
             //---------------Execute Test ----------------------
             cpCol.LoadAll();
 
@@ -130,7 +130,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(1, cpCol.Count);
             Assert.AreEqual(cpCol.Count, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
-            //Assert.AreEqual(0, cpCol..Count); TODO: Removed/deleted bo should be 0
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count); 
         }
 
         [Test]
@@ -147,7 +148,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(0, cpCol.Count);
             Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
-            //Assert.AreEqual(0, cpCol..Count); TODO: Removed/deleted bo should be 0
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count); 
             //---------------Execute Test ----------------------
             cpCol.LoadAll();
 
@@ -155,8 +157,12 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(2, cpCol.Count);
             Assert.AreEqual(cpCol.Count, cpCol.PersistedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
-            //Assert.AreEqual(0, cpCol..Count); TODO: Removed/deleted bo should be 0
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count); 
         }
+
+
+
         //
         //        Clear a business object collection
         //This clears the current collection, persisted, removed, deleted and created list
@@ -467,12 +473,12 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual("Cope", col[0].Surname);
             Assert.AreEqual("Pope", col[1].Surname);
 
-            col.RestoreAll();
+            col.CancelEdits();
             Assert.AreEqual("Soap", col[0].Surname);
             Assert.AreEqual("Hope", col[1].Surname);
 
-            contact1.Delete();
-            contact2.Delete();
+            contact1.MarkForDelete();
+            contact2.MarkForDelete();
             col.SaveAll();
             Assert.AreEqual(0, col.Count);
         }
@@ -515,7 +521,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
 
             //---------------Execute Test ----------------------
-            //TODO: persisted, created, deleted, and removed BO's should be cloned. 
             BusinessObjectCollection<ContactPersonTestBO> clone = cpCol.Clone();
 
             //---------------Test Result -----------------------
@@ -544,7 +549,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
 
             //---------------Execute Test ----------------------
-            //TODO: persisted, created, deleted, and removed BO's should be cloned. 
             BusinessObjectCollection<ContactPersonTestBO> clone = cpCol.Clone();
 
             //---------------Test Result -----------------------
@@ -573,7 +577,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(2, cpCol.PersistedBusinessObjects.Count);
 
             //---------------Execute Test ----------------------
-            //TODO: persisted, created, deleted, and removed BO's should be cloned. 
             BusinessObjectCollection<ContactPersonTestBO> clone = cpCol.Clone();
 
             //---------------Test Result -----------------------
@@ -627,7 +630,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(1, clone.AddedBusinessObjects.Count);
             Assert.AreEqual(1, cpCol.Count);
         }
-        //TODO: deleted BO's should be cloned. 
 
         [Test]
         public void Test_CloneBusinessObject_WithCreateObjects_CreatedObjectsStillRespondToEvents()
@@ -643,8 +645,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             ContactPersonTestBO createdCp = cpCol.CreateBusinessObject();
             createdCp.Surname = BOTestUtils.RandomString;
 
-            //TODO: persisted, created, deleted, and removed BO's should be cloned. 
-            BusinessObjectCollection<ContactPersonTestBO> clone = cpCol.Clone();
+            cpCol.Clone();
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, cpCol.Count);
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);

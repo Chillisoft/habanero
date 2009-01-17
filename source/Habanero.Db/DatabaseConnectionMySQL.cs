@@ -19,6 +19,7 @@
 
 using System.Data;
 using System.Reflection;
+using Habanero.Base;
 
 namespace Habanero.DB
 {
@@ -35,6 +36,7 @@ namespace Habanero.DB
         /// <param name="className">The class name</param>
         public DatabaseConnectionMySql(string assemblyName, string className) : base(assemblyName, className)
         {
+            _sqlFormatter = new SqlFormatter("`", "`", "", "LIMIT");
         }
 
         /// <summary>
@@ -49,45 +51,7 @@ namespace Habanero.DB
         public DatabaseConnectionMySql(string assemblyName, string className, string connectString)
             : base(assemblyName, className, connectString)
         {
-        }
-
-        /// <summary>
-        /// Returns an empty string
-        /// </summary>
-        public override string LeftFieldDelimiter
-        {
-            get { return "`"; }
-        }
-
-        /// <summary>
-        /// Returns an empty string
-        /// </summary>
-        public override string RightFieldDelimiter
-        {
-            get { return "`"; }
-        }
-
-        /// <summary>
-        /// Returns an empty string in this implementation
-        /// </summary>
-        /// <param name="limit">The limit - not relevant in this
-        /// implementation</param>
-        /// <returns>Returns an empty string in this implementation</returns>
-        public override string GetLimitClauseForBeginning(int limit)
-        {
-            return "";
-        }
-
-        /// <summary>
-        /// Creates a limit clause from the limit provided, in the format of:
-        /// "limit [limit]" (eg. "limit 3")
-        /// </summary>
-        /// <param name="limit">The limit - the maximum number of rows that
-        /// can be affected by the action</param>
-        /// <returns>Returns a string</returns>
-        public override string GetLimitClauseForEnd(int limit)
-        {
-            return "limit " + limit;
+            _sqlFormatter = new SqlFormatter("`", "`", "", "LIMIT");
         }
 
         /// <summary>

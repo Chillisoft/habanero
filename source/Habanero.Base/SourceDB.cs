@@ -72,7 +72,7 @@ namespace Habanero.Base
         /// </summary>
         public string CreateSQL()
         {
-            return CreateSQL(new SqlFormatter("", ""));
+            return CreateSQL(new SqlFormatter("", "", "", ""));
         }
 
         private string GetJoinString(Source source, SqlFormatter sqlFormatter)

@@ -27,16 +27,31 @@ namespace Habanero.Base
     {
         private readonly string _leftFieldDelimiter;
         private readonly string _rightFieldDelimiter;
+        /// <summary>
+        /// Returns the Limit clause to be used at the end of a select statement e.g. for MySQL `LIMIT`
+        /// </summary>
+        public string LimitClauseAtEnd { get; private set; }
+
+
+        /// <summary>
+        /// Returns the Limit clause to be used at the beginning of a select statement e.g. for SQLServer `TOP`
+        /// </summary>
+        public string LimitClauseAtBeginning { get; private set; }
+
 
         ///<summary>
         /// Constructor of a sql formatter
         ///</summary>
         ///<param name="leftFieldDelimiter">The left field delimiter to be used for formatting a sql statement</param>
         ///<param name="rightFieldDelimiter">The right field delimiter to be used for formatting a sql statement</param>
-        public SqlFormatter(string leftFieldDelimiter, string rightFieldDelimiter)
+        ///<param name="limitClauseAtBeginning"></param>
+        ///<param name="limitClauseAtEnd"></param>
+        public SqlFormatter(string leftFieldDelimiter, string rightFieldDelimiter, string limitClauseAtBeginning, string limitClauseAtEnd)
         {
             _leftFieldDelimiter = leftFieldDelimiter;
             _rightFieldDelimiter = rightFieldDelimiter;
+            LimitClauseAtBeginning = limitClauseAtBeginning;
+            LimitClauseAtEnd = limitClauseAtEnd;
         }
 
         ///<summary>
@@ -74,7 +89,25 @@ namespace Habanero.Base
         {
             get { return _rightFieldDelimiter; }
         }
-
-            
+        /// <summary>
+        /// Creates a limit clause from the limit provided, in the format of:
+        /// "limit [limit]" (eg. "limit 3")
+        /// </summary>
+        /// <param name="limit">The limit - the maximum number of rows that
+        /// can be affected by the action</param>
+        /// <returns>Returns a string</returns>
+        public string GetLimitClauseCriteriaForEnd(int limit)
+        {
+            return string.IsNullOrEmpty(LimitClauseAtEnd)?"": LimitClauseAtEnd + " " + limit;
+        }
+        /// <summary>
+        /// Returns the beginning limit clause with the limit specified
+        /// </summary>
+        /// <param name="limit">The limit</param>
+        /// <returns>Returns a string</returns>
+        public string GetLimitClauseCriteriaForBegin(int limit)
+        {
+            return string.IsNullOrEmpty(LimitClauseAtBeginning) ? "" : LimitClauseAtBeginning + " " + limit;
+        }
     }
 }

@@ -31,12 +31,8 @@ namespace Habanero.BO
     public class SelectQuery : ISelectQuery
     {
         private readonly Dictionary<string, QueryField> _fields = new Dictionary<string, QueryField>(5);
-        private IClassDef _classDef;
         private Criteria _criteria;
-        private int _limit = -1;
         private OrderCriteria _orderCriteria = new OrderCriteria();
-        private Source _source;
-        private Criteria _discriminatorCriteria;
 
         ///<summary>
         /// Creates a SelectQuery with no Criteria and no fields.  In order to use the SelectQuery at least on field must be added
@@ -44,6 +40,8 @@ namespace Habanero.BO
         ///</summary>
         public SelectQuery()
         {
+            Limit = -1;
+            FirstRecordToLoad = 0;
         }
 
 
@@ -67,13 +65,11 @@ namespace Habanero.BO
             {
                 _criteria = value;
                 if (Source == null)
-                    throw new HabaneroApplicationException(
-                        "You cannot set a Criteria for a SelectQuery if no Source has been set");
+                    throw new HabaneroApplicationException
+                        ("You cannot set a Criteria for a SelectQuery if no Source has been set");
                 if (_criteria == null) return;
                 MergeCriteriaSource(_criteria);
-
-
-        }
+            }
         }
 
         private void MergeCriteriaSource(Criteria criteria)
@@ -101,11 +97,7 @@ namespace Habanero.BO
         /// <summary>
         /// The source of the data. In a database query this would be the first table listed in the FROM clause.
         /// </summary>
-        public Source Source
-        {
-            get { return _source; }
-            set { _source = value; }
-        }
+        public Source Source { get; set; }
 
         /// <summary>
         /// The fields to use to order a collection of objects when loading them.
@@ -117,8 +109,8 @@ namespace Habanero.BO
             {
                 _orderCriteria = value;
                 if (Source == null)
-                    throw new HabaneroApplicationException(
-                        "You cannot set an OrderCriteria for a SelectQuery if no Source has been set");
+                    throw new HabaneroApplicationException
+                        ("You cannot set an OrderCriteria for a SelectQuery if no Source has been set");
                 if (_orderCriteria == null) return;
                 foreach (OrderCriteria.Field field in _orderCriteria.Fields) this.Source.MergeWith(field.Source);
             }
@@ -127,30 +119,23 @@ namespace Habanero.BO
         /// <summary>
         /// The number of objects to load
         /// </summary>
-        public int Limit
-        {
-            get { return _limit; }
-            set { _limit = value; }
-        }
+        public int Limit { get; set; }
 
         /// <summary>
         /// The classdef this select query corresponds to. This can be null if the select query is being used
         /// without classdefs, but if it is built using the QueryBuilder 
         /// </summary>
-        public IClassDef ClassDef
-        {
-            get { return _classDef; }
-            set { _classDef = value; }
-        }
+        public IClassDef ClassDef { get; set; }
 
         /// <summary>
         /// Gets or sets criteria for the discriminator that is used in single table
         /// inheritance
         /// </summary>
-        public Criteria DiscriminatorCriteria
-        {
-            get { return _discriminatorCriteria; }
-            set { _discriminatorCriteria = value; }
-        }
+        public Criteria DiscriminatorCriteria { get; set; }
+
+        ///<summary>
+        /// Gets and sets the first record to be loaded by the select query.
+        ///</summary>
+        public int FirstRecordToLoad { get; set; }
     }
 }

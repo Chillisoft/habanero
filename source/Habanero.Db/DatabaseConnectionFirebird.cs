@@ -16,6 +16,7 @@
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
+using Habanero.Base;
 using Habanero.DB;
 
 namespace Habanero.DB
@@ -34,6 +35,7 @@ namespace Habanero.DB
         public DatabaseConnectionFirebird(string assemblyName, string className)
             : base(assemblyName, className)
         {
+            _sqlFormatter = new SqlFormatter("", "", "TOP", "");
         }
 
         /// <summary>
@@ -48,6 +50,7 @@ namespace Habanero.DB
         public DatabaseConnectionFirebird(string assemblyName, string className, string connectString)
             : base(assemblyName, className, connectString)
         {
+            _sqlFormatter = new SqlFormatter("", "", "TOP", "");
         }
 
         /// <summary>
@@ -55,7 +58,7 @@ namespace Habanero.DB
         /// </summary>
         public override string LeftFieldDelimiter
         {
-            get { return ""; }
+            get { return _sqlFormatter.LeftFieldDelimiter; }
         }
 
         /// <summary>
@@ -63,7 +66,7 @@ namespace Habanero.DB
         /// </summary>
         public override string RightFieldDelimiter
         {
-            get { return ""; }
+            get { return _sqlFormatter.RightFieldDelimiter; }
         }
 
     }

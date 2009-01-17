@@ -51,6 +51,7 @@ namespace Habanero.DB
         private static IDatabaseConnection _currentDatabaseConnection;
         private static readonly ILog log = LogManager.GetLogger("Habanero.DB.DatabaseConnection");
         private int _timeoutPeriod = 30;
+        protected SqlFormatter _sqlFormatter;
 
 
         /// <summary>
@@ -59,6 +60,7 @@ namespace Habanero.DB
         protected DatabaseConnection()
         {
             _connections = new ArrayList(5);
+            _sqlFormatter = new SqlFormatter("[", "]", "TOP", "");
         }
 
         //private IDbConnection sampleCon;
@@ -73,7 +75,6 @@ namespace Habanero.DB
         {
             _assemblyName = assemblyName;
             _className = className;
-            //this.CreateDatabaseConnection(assemblyName, className);
         }
 
         /// <summary>
@@ -361,11 +362,23 @@ namespace Habanero.DB
         public IDataReader LoadDataReader(ISqlStatement selectSql, string strOrderByCriteria)
         {
             if (selectSql == null) throw new ArgumentNullException("selectSql");
-            //selectSql.AppendCriteria(strSearchCriteria) ;
-            selectSql.AppendOrderBy(strOrderByCriteria);
+  
+            AppendOrderBy(selectSql, strOrderByCriteria);
             return LoadDataReader(selectSql);
         }
-
+        /// <summary>
+        /// Appends an order-by clause to the sql statement. " ORDER BY " is
+        /// automatically prefixed by this method.
+        /// </summary>
+        /// <param name="statement"></param>
+        /// <param name="orderByCriteria">The order-by clause</param>
+        private static void AppendOrderBy(ISqlStatement statement,  string orderByCriteria)
+        {
+            if (!string.IsNullOrEmpty(orderByCriteria))
+            {
+                statement.Statement.Append(" ORDER BY " + orderByCriteria);
+            }
+        }
         /// <summary>
         /// Loads a data reader with the given raw sql select statement
         /// </summary>
@@ -687,7 +700,7 @@ namespace Habanero.DB
         /// </summary>
         public virtual string LeftFieldDelimiter
         {
-            get { return "["; }
+            get { return _sqlFormatter.LeftFieldDelimiter; }
         }
 
         /// <summary>
@@ -695,9 +708,18 @@ namespace Habanero.DB
         /// </summary>
         public virtual string RightFieldDelimiter
         {
-            get { return "]"; }
+            get { return _sqlFormatter.LeftFieldDelimiter; }
         }
 
+        ///<summary>
+        /// Creates a SQL formatter for the specified database.
+        ///</summary>
+        public SqlFormatter SqlFormatter
+        {
+            get { return _sqlFormatter; }
+        }
+
+        [Obsolete ("please use the SqlFormatter directly")]
         /// <summary>
         /// Returns a limit clause with the limit specified, with the format
         /// as " TOP [limit] " (eg. " TOP 4 ")
@@ -706,9 +728,9 @@ namespace Habanero.DB
         /// <returns>Returns a string</returns>
         public virtual string GetLimitClauseForBeginning(int limit)
         {
-            return " TOP " + limit + " ";
+            return _sqlFormatter.GetLimitClauseCriteriaForBegin(limit);
         }
-
+        [Obsolete("please use the SqlFormatter directly")]
         /// <summary>
         /// Returns an empty string in this implementation
         /// </summary>
@@ -717,7 +739,7 @@ namespace Habanero.DB
         /// <returns>Returns an empty string in this implementation</returns>
         public virtual string GetLimitClauseForEnd(int limit)
         {
-            return "";
+            return _sqlFormatter.GetLimitClauseCriteriaForEnd(limit);
         }
 
         /// <summary>

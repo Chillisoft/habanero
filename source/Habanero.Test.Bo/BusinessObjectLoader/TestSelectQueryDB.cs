@@ -22,7 +22,6 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
-using Habanero.Test.Structure;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.BusinessObjectLoader
@@ -40,7 +39,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         [SetUp]
         public void SetupTest()
         {
-            _sqlFormatter = new SqlFormatter("[", "]");
+            _sqlFormatter = new SqlFormatter("[", "]", "TOP", "");
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
             ClassDef.ClassDefs.Clear();
             new Address();
@@ -51,23 +50,35 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             public DatabaseConnectionStub()
                 : base("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection")
             {
+                _sqlFormatter = new SqlFormatter("","","", "");
             }
+        }
+        //            if (firstRecordToLoad > -1) this.SelectQuery.FirstRecordToLoad = firstRecordToLoad;
+//            if (noOfRecords> -1) this.SelectQuery.NoOfRecords = noOfRecords;
+        [Test]
+        public void Test_Set_FirstRecordToLoad()
+        {
+            //---------------Set up test pack-------------------
+            ISelectQuery selectQuery = new SelectQuery();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, selectQuery.FirstRecordToLoad);
+            //---------------Execute Test ----------------------
+            selectQuery.FirstRecordToLoad = 10;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(10, selectQuery.FirstRecordToLoad);
+        }
 
-            /// <summary>
-            /// Returns a left square bracket
-            /// </summary>
-            public override string LeftFieldDelimiter
-            {
-                get { return ""; }
-            }
-
-            /// <summary>
-            /// Returns a right square bracket
-            /// </summary>
-            public override string RightFieldDelimiter
-            {
-                get { return ""; }
-            }
+        [Test]
+        public void Test_SelectQueryDB_Set_FirstRecordToLoad()
+        {
+            //---------------Set up test pack-------------------
+            ISelectQuery selectQuery = new SelectQueryDB(new SelectQuery());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, selectQuery.FirstRecordToLoad);
+            //---------------Execute Test ----------------------
+            selectQuery.FirstRecordToLoad = 10;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(10, selectQuery.FirstRecordToLoad);
         }
 
         [Test]
@@ -359,15 +370,15 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestCreateSqlStatement_WithLimit_AtBeginning()
         {
             //---------------Set up test pack-------------------
-            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtBeginning();
-            SelectQuery selectQuery = new SelectQuery();
-            selectQuery.Limit = 10;
+//            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtBeginning();
+            SelectQuery selectQuery = new SelectQuery {Limit = 10};
             const string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SqlFormatter sqlFormatter = new SqlFormatter("", "", "TOP ROWS", "");
             //---------------Execute Test ----------------------
-            ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
             StringAssert.StartsWith("SELECT TOP ROWS 10 ", statementString);
@@ -379,8 +390,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtBeginning();
-            SelectQuery selectQuery = new SelectQuery();
-            selectQuery.Limit = -1;
+            SelectQuery selectQuery = new SelectQuery {Limit = (-1)};
             const string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");
@@ -395,9 +405,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
         public class DatabaseConnectionStub_LimitClauseAtBeginning : DatabaseConnectionStub
         {
-            public override string GetLimitClauseForBeginning(int limit)
+            public DatabaseConnectionStub_LimitClauseAtBeginning()
             {
-                return "TOP ROWS " + limit;
+                _sqlFormatter = new SqlFormatter("`", "`", "TOP ROWS", "");
             }
         }
 
@@ -406,14 +416,14 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtEnd();
-            SelectQuery selectQuery = new SelectQuery();
-            selectQuery.Limit = 10;
+            SelectQuery selectQuery = new SelectQuery {Limit = 10};
             const string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "LIMIT");
             //---------------Execute Test ----------------------
-            ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
             StringAssert.EndsWith(" LIMIT 10", statementString);
@@ -425,15 +435,15 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtEnd();
-            SelectQuery selectQuery = new SelectQuery();
-            selectQuery.Limit = 10;
+            SelectQuery selectQuery = new SelectQuery {Limit = 10};
             const string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
             selectQuery.Source = new Source("Table1");
             selectQuery.OrderCriteria = OrderCriteria.FromString(fieldName);
             SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "LIMIT");
             //---------------Execute Test ----------------------
-            ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
             StringAssert.EndsWith(" LIMIT 10", statementString);
@@ -495,7 +505,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             Structure.Entity.LoadDefaultClassDef();
-            ClassDef classDef = Test.Structure.Part.LoadClassDef_WithClassTableInheritance();
+            ClassDef classDef = Structure.Part.LoadClassDef_WithClassTableInheritance();
             string entityType = TestUtil.CreateRandomString();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             Criteria criteria = new Criteria("EntityType", Criteria.ComparisonOp.Equals, entityType);
@@ -551,6 +561,82 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Tear Down -------------------------          
         }
 
+        [Test]
+        public void Test_CreateSQL_LoadWithLimit_PaginatedFind()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
+            ClassDef classDef = MyBO.LoadClassDefs_OneProp();
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            selectQuery.FirstRecordToLoad = 2;
+            selectQuery.Limit = 4;
+            selectQuery.OrderCriteria = OrderCriteria.FromString("MyBOID");
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SqlFormatter sqlFormatter = new SqlFormatter("", "", "TOP", "");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, selectQuery.FirstRecordToLoad);
+            Assert.AreEqual(4, selectQuery.Limit);
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
+            string actualStatement = statement.Statement.ToString();
+            //---------------Test Result -----------------------
+            const string expectedFirstSelect = "(SELECT TOP 6 MyBO.MyBoID FROM MyBO ORDER BY MyBO.MyBOID ASC) As FirstSelect";
+            StringAssert.Contains(expectedFirstSelect, actualStatement);
+
+            string expectedSecondSelect = string.Format("(SELECT TOP 4 FirstSelect.MyBoID FROM {0} ORDER BY FirstSelect.MyBOID DESC ) AS SecondSelect", expectedFirstSelect);
+            StringAssert.Contains(expectedSecondSelect, actualStatement);
+            string expectedMainSelect = string.Format("SELECT SecondSelect.MyBoID FROM {0} ORDER BY SecondSelect.MyBOID ASC", expectedSecondSelect);
+            Assert.AreEqual(expectedMainSelect, actualStatement);
+//            string expectedStatement =
+//                @"SELECT MyBO.MyBoID FROM 
+//                    (SELECT MyBO.MyBoID FROM 
+//                        (SELECT MyBO.MyBoID FROM MyBO ORDER BY MyBO.MyBOID ASC LIMIT 4) As FirstSelect 
+//                    ORDER BY FirstSelect.MyBOID DESC LIMIT 2) AS SecondSelect 
+//                ORDER BY SecondSelect.MyBOID ASC";
+//            StringAssert.AreEqualIgnoringCase(expectedStatement, statement.Statement.ToString());
+
+        }
+
+        //TODO  17 Jan 2009: Do test for LIMIT
+
+        [Test]
+        public void Test_CreateSQL_LoadWithLimit_AtEnd_PaginatedFind()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
+            ClassDef classDef = MyBO.LoadClassDefs_OneProp();
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            selectQuery.FirstRecordToLoad = 2;
+            selectQuery.Limit = 4;
+            selectQuery.OrderCriteria = OrderCriteria.FromString("MyBOID");
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "LIMIT");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, selectQuery.FirstRecordToLoad);
+            Assert.AreEqual(4, selectQuery.Limit);
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
+            string actualStatement = statement.Statement.ToString();
+            //---------------Test Result -----------------------
+            const string expectedFirstSelect = "(SELECT MyBO.MyBoID FROM MyBO ORDER BY MyBO.MyBOID ASC LIMIT 6) As FirstSelect";
+            StringAssert.Contains(expectedFirstSelect, actualStatement);
+
+            string expectedSecondSelect = string.Format("(SELECT FirstSelect.MyBoID FROM {0} ORDER BY FirstSelect.MyBOID DESC LIMIT 4 ) AS SecondSelect", expectedFirstSelect);
+            StringAssert.Contains(expectedSecondSelect, actualStatement);
+            string expectedMainSelect = string.Format("SELECT SecondSelect.MyBoID FROM {0} ORDER BY SecondSelect.MyBOID ASC", expectedSecondSelect);
+            Assert.AreEqual(expectedMainSelect, actualStatement);
+            //            string expectedStatement =
+            //                @"SELECT MyBO.MyBoID FROM 
+            //                    (SELECT MyBO.MyBoID FROM 
+            //                        (SELECT MyBO.MyBoID FROM MyBO ORDER BY MyBO.MyBOID ASC LIMIT 4) As FirstSelect 
+            //                    ORDER BY FirstSelect.MyBOID DESC LIMIT 2) AS SecondSelect 
+            //                ORDER BY SecondSelect.MyBOID ASC";
+            //            StringAssert.AreEqualIgnoringCase(expectedStatement, statement.Statement.ToString());
+
+        }
+
+
+ 
         public class DatabaseConnectionStub_LimitClauseAtEnd : DatabaseConnectionStub
         {
             public override string GetLimitClauseForEnd(int limit)

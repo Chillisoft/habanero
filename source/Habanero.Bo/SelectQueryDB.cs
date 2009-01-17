@@ -108,6 +108,15 @@ namespace Habanero.BO
             set { _selectQuery.DiscriminatorCriteria = value; }
         }
 
+        ///<summary>
+        /// Gets and sets the first record to be loaded by the select query.
+        ///</summary>
+        public int FirstRecordToLoad
+        {
+            get { return _selectQuery.FirstRecordToLoad; }
+            set { _selectQuery.FirstRecordToLoad = value; }
+        }
+
         #endregion
 
         /// <summary>
@@ -124,7 +133,8 @@ namespace Habanero.BO
                 throw new HabaneroDeveloperException("The Sql cannot be created because the database connection is not set up. Please contact your system administrator", "");
             }
 
-            return CreateSqlStatement(new SqlFormatter(databaseConnection.LeftFieldDelimiter, databaseConnection.RightFieldDelimiter));
+            return CreateSqlStatement(databaseConnection.SqlFormatter);
+//            return CreateSqlStatement(new SqlFormatter(databaseConnection.LeftFieldDelimiter, databaseConnection.RightFieldDelimiter, databaseConnection.GetLimitClauseForBeginning()));
         }
 
         /// <summary>
@@ -136,122 +146,85 @@ namespace Habanero.BO
         {
             _sqlFormatter = sqlFormatter;
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
-            StringBuilder builder = statement.Statement.Append("SELECT ");
+
+            StringBuilder builder = statement.Statement;
+
+            if (this.FirstRecordToLoad > 0)
+            {
+                builder.Append("SELECT ");
+                foreach (QueryField field in this.Fields.Values)
+                {
+                    builder.AppendFormat("{0}, ", DelimitField("SecondSelect", field.FieldName));
+                } 
+                builder.Remove(builder.Length - 2, 2);
+//                AppendFields(builder);
+                builder.Append(" FROM (SELECT ");
+                AppendNoOfRecordsClauseAtBeginning(builder);
+                foreach (QueryField field in this.Fields.Values)
+                {
+                    builder.AppendFormat("{0}, ", DelimitField("FirstSelect", field.FieldName));
+                } 
+                builder.Remove(builder.Length - 2, 2);
+//                AppendFields(builder);
+                builder.Append(" FROM (");
+            }
+            builder.Append("SELECT ");
             AppendLimitClauseAtBeginning(builder);
             AppendFields(builder);
             AppendFrom(builder);
             AppendWhereClause(builder, statement);
             AppendOrderByClause(builder);
             AppendLimitClauseAtEnd(builder);
+            //" ORDER BY SecondSelect.MyBOID ASC";
+            if (this.FirstRecordToLoad > 0)
+            {
+                builder.Append(") As FirstSelect");
+                builder.Append(" ORDER BY ");
+                foreach (OrderCriteria.Field field in this.OrderCriteria.Fields)
+                {
+                    builder.Append("FirstSelect.").Append(field.FieldName);
+                    if (field.SortDirection == OrderCriteria.SortDirection.Ascending)
+                    {
+                        builder.Append(" DESC");
+                    } else
+                    {
+                        builder.Append(" ASC");
+                    }
+                }
+                builder.Append(" ");
+                AppendNoOfRecordsClauseAtEnd(builder);
+                builder.Append(") AS SecondSelect");
+                builder.Append(" ORDER BY ");
+                foreach (OrderCriteria.Field field in this.OrderCriteria.Fields)
+                {
+                    builder.Append("SecondSelect.").Append(field.FieldName);
+                    if (field.SortDirection == OrderCriteria.SortDirection.Ascending)
+                    {
+                        builder.Append(" ASC");
+                    }
+                    else
+                    {
+                        builder.Append(" DESC");
+                    }
+                }
+            }
             return statement;
         }
 
-//        private string AddRelationshipJoin(StringBuilder builder, ClassDef currentClassDef, QueryField field, Source fieldSource)
-//        {
-//            if (fieldSource == null || String.IsNullOrEmpty(fieldSource.Name))
-//            {
-//                IPropDef propDef = currentClassDef.GetPropDef(field.PropertyName, true);
-//                if (propDef != null)
-//                {
-//                    field.FieldName = propDef.DatabaseFieldName;
-//                }
-//                return currentClassDef.GetTableName();
-//            }
-//
-//            string relationshipName = fieldSource.Name;
-//            RelationshipDef relationshipDef = currentClassDef.GetRelationship(relationshipName);
-//            if (relationshipDef != null)
-//            {
-//                string joinString = GetJoinStringForRelationship(relationshipDef, currentClassDef);
-//                builder.Append(joinString);
-//                ClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
-//                if (relatedObjectClassDef != null)
-//                {
-//                    Source childSource = null;
-//                    if (fieldSource.Joins.Count > 0)
-//                    {
-//                        childSource = fieldSource.Joins[0].ToSource;
-//                    }
-//                    string relationshipJoinTable = AddRelationshipJoin(builder, relatedObjectClassDef, field, childSource);
-//                    if (String.IsNullOrEmpty(relationshipJoinTable))
-//                    {
-//                        relationshipJoinTable = relatedObjectClassDef.GetTableName();
-//                    }
-//                    return relationshipJoinTable;
-//                }
-//            }
-//            else
-//            {
-//                return currentClassDef.GetTableName();
-//            }
-//            return currentClassDef.GetTableName();
-//        }
-
-        //private string GetJoinStringForRelationship(RelationshipDef relationshipDef)
-        //{
-        //    return GetJoinStringForRelationship(relationshipDef, this.ClassDef);
-        //}
-//
-//        private string GetJoinStringForRelationship(RelationshipDef relationshipDef, IClassDef classDef)
-//        {
-//            string joinString = "";
-//            foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
-//            {
-//                ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
-//                IPropDef ownerPropDef = classDef.GetPropDef(relPropDef.OwnerPropertyName);
-//                IPropDef relatedPropDef = relatedClassDef.GetPropDef(relPropDef.RelatedClassPropName);
-//                joinString +=
-//                    GetJoinString(joinString, classDef.TableName, ownerPropDef.DatabaseFieldName,
-//                        relatedClassDef.TableName, relatedPropDef.DatabaseFieldName);
-//            }
-//            return joinString;
-//        }
-
-//        private string GetJoinString(string currentJointString, string joinFromTableName, string joinFromFieldName,
-//            string joinToTableName, string joinToFieldName)
-//        {
-//            string firstBit = "";
-//            if (String.IsNullOrEmpty(currentJointString))
-//            {
-//                firstBit += " JOIN " + DelimitTable(joinToTableName) + " ON";
-//            }
-//            else
-//            {
-//                firstBit += " AND";
-//            }
-//            string joinString = String.Format("{0} {1} = {2}",
-//                firstBit,
-//                DelimitField(new Source(joinFromTableName), joinFromFieldName),
-//                DelimitField(new Source(joinToTableName), joinToFieldName));
-//            return joinString;
-//        }
+        private void AppendNoOfRecordsClauseAtEnd(StringBuilder builder)
+        {
+            string limitClauseAtEnd = _sqlFormatter.GetLimitClauseCriteriaForEnd(this.Limit);
+            if (!String.IsNullOrEmpty(limitClauseAtEnd))
+            {
+                builder.Append(limitClauseAtEnd + " ");
+            }
+        }
 
         private void AppendFrom(StringBuilder builder)
         {
             SourceDB source = new SourceDB(_selectQuery.Source);
             builder.AppendFormat(" FROM {0}", source.CreateSQL(_sqlFormatter));
-            //builder.AppendFormat(" FROM {0}", DelimitTable(_selectQuery.Source.EntityName));
-            //ClassDef currentClassDef = (ClassDef) _selectQuery.ClassDef;
-            //while (currentClassDef != null && currentClassDef.IsUsingClassTableInheritance())
-            //{
-            //    ClassDef superClassClassDef = currentClassDef.SuperClassClassDef;
-            //    IPropDef superClassPropDef = superClassClassDef.GetPrimaryKeyDef()[0];
-            //    IPropDef thisClassPropDef = currentClassDef.GetPrimaryKeyDef()[0];
-            //    builder.Append(
-            //        GetJoinString("", currentClassDef.GetTableName(), thisClassPropDef.DatabaseFieldName,
-            //            superClassClassDef.GetTableName(), superClassPropDef.DatabaseFieldName));
-            //    currentClassDef = currentClassDef.SuperClassClassDef;
-            //}
             if (_selectQuery.OrderCriteria == null) return;
-            //foreach (OrderCriteria.Field field in _selectQuery.OrderCriteria.Fields)
-            //{
-            //    if (field.Source != null && !field.Source.Equals(this.Source))
-            //    {
-            //        currentClassDef = (ClassDef)this.ClassDef;
-            //        string relationshipJoinTable = AddRelationshipJoin(builder, currentClassDef, field, field.Source);
-            //        field.Source.EntityName = relationshipJoinTable;
-            //    }
-            //}
         }
 
 
@@ -265,12 +238,23 @@ namespace Habanero.BO
             builder.Remove(builder.Length - 2, 2);
         }
 
+
+        private void AppendNoOfRecordsClauseAtBeginning(StringBuilder builder)
+        {
+            string limitClauseAtBeginning = _sqlFormatter.GetLimitClauseCriteriaForBegin(this.Limit);
+            if (!String.IsNullOrEmpty(limitClauseAtBeginning))
+            {
+                builder.Append(limitClauseAtBeginning + " ");
+            }
+        }
+
         private void AppendLimitClauseAtBeginning(StringBuilder builder)
         {
             if (_selectQuery.Limit < 0) return;
 
-            string limitClauseAtBeginning =
-                DatabaseConnection.CurrentConnection.GetLimitClauseForBeginning(_selectQuery.Limit);
+//            string limitClauseAtBeginning =
+//                DatabaseConnection.CurrentConnection.GetLimitClauseForBeginning(_selectQuery.Limit);
+            string limitClauseAtBeginning = _sqlFormatter.GetLimitClauseCriteriaForBegin(this.Limit + this.FirstRecordToLoad);
             if (!String.IsNullOrEmpty(limitClauseAtBeginning))
             {
                 builder.Append(limitClauseAtBeginning + " ");
@@ -281,7 +265,8 @@ namespace Habanero.BO
         {
             if (_selectQuery.Limit < 0) return;
 
-            string limitClauseAtEnd = DatabaseConnection.CurrentConnection.GetLimitClauseForEnd(_selectQuery.Limit);
+//            string limitClauseAtEnd = DatabaseConnection.CurrentConnection.GetLimitClauseForEnd(_selectQuery.Limit);
+            string limitClauseAtEnd = _sqlFormatter.GetLimitClauseCriteriaForEnd(this.Limit + this.FirstRecordToLoad);
             if (!String.IsNullOrEmpty(limitClauseAtEnd))
             {
                 builder.Append(" " + limitClauseAtEnd);
@@ -325,13 +310,6 @@ namespace Habanero.BO
             StringUtilities.AppendMessage(orderByClause, tableAndFieldName + " " + direction, ", ");
         }
 
-//        private string GetRelatedTableName(string relationshipName)
-//        {
-//            RelationshipDef relationshipDef = ((ClassDef)this.ClassDef).GetRelationship(relationshipName);
-//            ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
-//            return DelimitTable(relatedClassDef.TableName);
-//        }
-
         private void AppendWhereClause(StringBuilder builder, SqlStatement statement)
         {
             Criteria fullCriteria = Criteria.MergeCriteria(_selectQuery.Criteria, _selectQuery.DiscriminatorCriteria);
@@ -358,17 +336,15 @@ namespace Habanero.BO
 
             builder.Append(whereClause);
         }
-
         private string DelimitField(Source source, string fieldName)
         {
-            if (source == null) return _sqlFormatter.DelimitField(fieldName);
-            return string.Format("{0}.{1}", _sqlFormatter.DelimitTable(source.EntityName), _sqlFormatter.DelimitField(fieldName));
+            return source == null ? _sqlFormatter.DelimitField(fieldName) : DelimitField(source.EntityName, fieldName);
         }
 
-        private string DelimitTable(string tableName)
+        private string DelimitField(string entityName, string fieldName)
         {
-            return _sqlFormatter.DelimitTable(tableName);
+            if (string.IsNullOrEmpty(entityName)) return _sqlFormatter.DelimitField(fieldName);
+            return string.Format("{0}.{1}", _sqlFormatter.DelimitTable(entityName), _sqlFormatter.DelimitField(fieldName));
         }
-
     }
 }

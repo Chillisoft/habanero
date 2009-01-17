@@ -204,6 +204,18 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual(limit, selectQuery.Limit);
             //---------------Tear Down -------------------------
         }
+        [Test]
+        public void TestFirstRecordToLoad()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            //---------------Execute Test ----------------------
+            const int firstRecordToLoad = 40;
+            selectQuery.FirstRecordToLoad = firstRecordToLoad;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(firstRecordToLoad, selectQuery.FirstRecordToLoad);
+            //---------------Tear Down -------------------------
+        }
 
         [Test]
         public void TestLimit_NotSet()
@@ -214,6 +226,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             SelectQuery selectQuery = new SelectQuery();
             //---------------Test Result -----------------------
             Assert.AreEqual(-1, selectQuery.Limit);
+            Assert.AreEqual(0, selectQuery.FirstRecordToLoad);
             //---------------Tear Down -------------------------
         }
     }

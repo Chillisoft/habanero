@@ -72,6 +72,93 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             {
                 // do nothing
             }
+            [Ignore("Not doen for memory")]
+
+            [Test]
+            public void Test_CollectionLoad_LoadWithLimit_NoRecords_StartRecords_SecondRecords()
+            {
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("eeeee");
+                ContactPersonTestBO.CreateSavedContactPerson("ggggg");
+                ContactPersonTestBO.CreateSavedContactPerson("bbbbb");
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+                col.LoadWithLimit("", "Surname", 1, 1);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, col.SelectQuery.FirstRecordToLoad);
+                Assert.AreEqual(1, col.SelectQuery.Limit);
+                Assert.AreEqual(1, col.Count);
+                Assert.AreSame(cp1, col[0]);
+            }
+            [Ignore("Not doen for memory")]
+            [Test]
+            public void Test_CollectionLoad_LoadWithLimit_NoRecords2_StartRecord1()
+            {
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("eeeee");
+                ContactPersonTestBO.CreateSavedContactPerson("ggggg");
+                ContactPersonTestBO.CreateSavedContactPerson("bbbbb");
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+                col.LoadWithLimit("", "Surname", 1, 2);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, col.SelectQuery.FirstRecordToLoad);
+                Assert.AreEqual(2, col.SelectQuery.Limit);
+                Assert.AreEqual(2, col.Count);
+                Assert.AreSame(cp1, col[0]);
+            }
+            [Ignore("Not doen for memory")]
+            [Test]
+            public void Test_CollectionLoad_LoadWithLimit_NoRecords2_StartRecord1_UsingWhereClause()
+            {
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("eeeee");
+                ContactPersonTestBO.CreateSavedContactPerson("gggggg");
+                ContactPersonTestBO.CreateSavedContactPerson("gggdfasd");
+                ContactPersonTestBO.CreateSavedContactPerson("bbbbbb");
+                ContactPersonTestBO.CreateSavedContactPerson("zazaza");
+                ContactPersonTestBO.CreateSavedContactPerson("zbbbbb");
+                ContactPersonTestBO.CreateSavedContactPerson("zccccc");
+                ContactPersonTestBO.CreateSavedContactPerson("zddddd");
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+                col.LoadWithLimit("Surname Not Like 'z%'", "Surname", 1, 2);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, col.SelectQuery.FirstRecordToLoad);
+                Assert.AreEqual(2, col.SelectQuery.Limit);
+                Assert.AreEqual(2, col.Count);
+                Assert.AreSame(cp1, col[0]);
+            }
+
+            [Test, Ignore("This test shows a limitation of the sql statements being used when hte end of hte records is reached")]
+            public void Test_CollectionLoad_LoadWithLimit_ExceedsTheEndOfTheCollection()
+            {
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("eeeee");
+                ContactPersonTestBO.CreateSavedContactPerson("gggggg");
+                ContactPersonTestBO.CreateSavedContactPerson("gggdfasd");
+                ContactPersonTestBO.CreateSavedContactPerson("bbbbbb");
+                ContactPersonTestBO.CreateSavedContactPerson("zazaza");
+                ContactPersonTestBO.CreateSavedContactPerson("zbbbbb");
+                ContactPersonTestBO.CreateSavedContactPerson("zccccc");
+                ContactPersonTestBO.CreateSavedContactPerson("zddddd");
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+                col.LoadWithLimit("", "Surname", 5, 6);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(5, col.SelectQuery.FirstRecordToLoad);
+                Assert.AreEqual(6, col.SelectQuery.Limit);
+                Assert.AreEqual(3, col.Count);
+                Assert.AreSame(cp1, col[0]);
+            }
         }
 
         [TestFixture]
@@ -103,6 +190,92 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             protected override void SetupDataAccessor()
             {
                 BORegistry.DataAccessor = new DataAccessorDB();
+            }
+
+            //TODO Brett 17 Jan 2009: This is temporary the functionality has not yet been put into memory
+            [Test]
+            public void Test_CollectionLoad_LoadWithLimit_NoRecords_StartRecords_SecondRecords()
+            {
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("eeeee");
+                ContactPersonTestBO.CreateSavedContactPerson("ggggg");
+                ContactPersonTestBO.CreateSavedContactPerson("bbbbb");
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+                col.LoadWithLimit("", "Surname", 1, 1);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, col.SelectQuery.FirstRecordToLoad);
+                Assert.AreEqual(1, col.SelectQuery.Limit);
+                Assert.AreEqual(1, col.Count);
+                Assert.AreSame(cp1, col[0]);
+            }
+            [Test]
+            public void Test_CollectionLoad_LoadWithLimit_NoRecords2_StartRecord1()
+            {
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("eeeee");
+                ContactPersonTestBO.CreateSavedContactPerson("ggggg");
+                ContactPersonTestBO.CreateSavedContactPerson("bbbbb");
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+                col.LoadWithLimit("", "Surname", 1, 2);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, col.SelectQuery.FirstRecordToLoad);
+                Assert.AreEqual(2, col.SelectQuery.Limit);
+                Assert.AreEqual(2, col.Count);
+                Assert.AreSame(cp1, col[0]);
+            }
+
+            [Test]
+            public void Test_CollectionLoad_LoadWithLimit_NoRecords2_StartRecord1_UsingWhereClause()
+            {
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("eeeee");
+                ContactPersonTestBO.CreateSavedContactPerson("gggggg");
+                ContactPersonTestBO.CreateSavedContactPerson("gggdfasd");
+                ContactPersonTestBO.CreateSavedContactPerson("bbbbbb");
+                ContactPersonTestBO.CreateSavedContactPerson("zazaza");
+                ContactPersonTestBO.CreateSavedContactPerson("zbbbbb");
+                ContactPersonTestBO.CreateSavedContactPerson("zccccc");
+                ContactPersonTestBO.CreateSavedContactPerson("zddddd");
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+                col.LoadWithLimit("Surname Not Like 'z%'", "Surname", 1, 2);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, col.SelectQuery.FirstRecordToLoad);
+                Assert.AreEqual(2, col.SelectQuery.Limit);
+                Assert.AreEqual(2, col.Count);
+                Assert.AreSame(cp1, col[0]);
+            }
+
+            [Test, Ignore("This test shows a limitation of the sql statements being used when hte end of hte records is reached")]
+            public void Test_CollectionLoad_LoadWithLimit_ExceedsTheEndOfTheCollection()
+            {
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("eeeee");
+                ContactPersonTestBO.CreateSavedContactPerson("gggggg");
+                ContactPersonTestBO.CreateSavedContactPerson("gggdfasd");
+                ContactPersonTestBO.CreateSavedContactPerson("bbbbbb");
+                ContactPersonTestBO.CreateSavedContactPerson("zazaza");
+                ContactPersonTestBO.CreateSavedContactPerson("zbbbbb");
+                ContactPersonTestBO.CreateSavedContactPerson("zccccc");
+                ContactPersonTestBO.CreateSavedContactPerson("zddddd");
+                //---------------Assert Precondition----------------
+
+                //---------------Execute Test ----------------------
+                BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+                col.LoadWithLimit("", "Surname", 5, 6);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(5, col.SelectQuery.FirstRecordToLoad);
+                Assert.AreEqual(6, col.SelectQuery.Limit);
+                Assert.AreEqual(3, col.Count);
+                Assert.AreSame(cp1, col[0]);
             }
 
             [Test]
@@ -664,12 +837,83 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Tear Down -------------------------
         }
 
-
-        private static BusinessObjectCollection<ContactPersonTestBO> CreateCol_OneCP(out ContactPersonTestBO cp)
+        [Test]
+        public void Test_CollectionLoad_LoadWithLimit_NoRecords_StartRecords_ContainsAllRecords()
         {
-            cp = ContactPersonTestBO.CreateSavedContactPerson();
-            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>("");
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("eeeee");
+            ContactPersonTestBO cp2 = ContactPersonTestBO.CreateSavedContactPerson("ggggg");
+            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson("bbbbb");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.LoadWithLimit("", "Surname", 0, 3);
+            //---------------Test Result -----------------------            
+            Assert.AreSame(cp3, col[0]);
+            Assert.AreSame(cp1, col[1]);
+            Assert.AreSame(cp2, col[2]);
+
         }
+        [Test]
+        public void Test_CollectionLoad_LoadWithLimit_NoRecords_StartRecords_First2Records()
+        {
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("eeeee");
+            ContactPersonTestBO.CreateSavedContactPerson("ggggg");
+            ContactPersonTestBO cp3 = ContactPersonTestBO.CreateSavedContactPerson("bbbbb");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.LoadWithLimit("", "Surname", 0, 2);
+            //---------------Test Result -----------------------    
+            Assert.AreEqual(0, col.SelectQuery.FirstRecordToLoad);
+            Assert.AreEqual(2, col.SelectQuery.Limit);
+            Assert.AreEqual(2, col.Count);
+            Assert.AreSame(cp3, col[0]);
+            Assert.AreSame(cp1, col[1]);
+        }
+        [Test]
+        public void Test_CollectionLoad_LoadWithLimit_NoRecords_StartRecords_NoRecordsNegReturnsAll()
+        {
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.CreateSavedContactPerson("eeeee");
+            ContactPersonTestBO.CreateSavedContactPerson("ggggg");
+            ContactPersonTestBO.CreateSavedContactPerson("bbbbb");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.LoadWithLimit("", "Surname", 1, -1);
+            //---------------Test Result -----------------------   
+            Assert.AreEqual(0, col.SelectQuery.FirstRecordToLoad);
+            Assert.AreEqual(-1, col.SelectQuery.Limit);
+            Assert.AreEqual(3, col.Count);
+        }
+        [Test]
+        public void Test_CollectionLoad_LoadWithLimit_NoRecords_StartRecords_StartRecordNeg_ReturnsTop()
+        {
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.CreateSavedContactPerson("eeeee");
+            ContactPersonTestBO.CreateSavedContactPerson("ggggg");
+            ContactPersonTestBO.CreateSavedContactPerson("bbbbb");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.LoadWithLimit("", "Surname", -11, 1);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, col.SelectQuery.FirstRecordToLoad);
+            Assert.AreEqual(1, col.SelectQuery.Limit);
+            Assert.AreEqual(1, col.Count);
+        }
+
+//        private static BusinessObjectCollection<ContactPersonTestBO> CreateCol_OneCP(out ContactPersonTestBO cp)
+//        {
+//            cp = ContactPersonTestBO.CreateSavedContactPerson();
+//            return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>("");
+//        }
         //
         //        private static void CreateTwoSavedContactPeople()
         //        {

@@ -50,7 +50,7 @@ namespace Habanero.Test.BO
             CriteriaDB surnameCriteria = new CriteriaDB(criteria);
 
             //-------------Execute test ---------------------
-            string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>"),
+            string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>", "", ""),
                                                        delegate(object value) { return Convert.ToString(value); });
             //-------------Test Result ----------------------
 
@@ -68,7 +68,7 @@ namespace Habanero.Test.BO
             CriteriaDB surnameCriteria = new CriteriaDB(criteria);
 
             //-------------Execute test ---------------------
-            string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>"),
+            string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>", "",""),
                                                        delegate(object value) { return Convert.ToString(value); });
             //-------------Test Result ----------------------
 
@@ -87,8 +87,8 @@ namespace Habanero.Test.BO
             CriteriaDB surnameCriteria = new CriteriaDB(criteria);
 
             //-------------Execute test ---------------------
-            string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>"),
-                                                       delegate(object value) { return Convert.ToString(value); });
+            string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>", "",""),
+                                                       Convert.ToString);
             //-------------Test Result ----------------------
 
             Assert.AreEqual(string.Format("<<{0}>>.<<{1}>> IS NULL", surnameTable, surnameField), tostring);
@@ -104,7 +104,7 @@ namespace Habanero.Test.BO
             CriteriaDB surnameCriteria = new CriteriaDB(criteria);
 
             //-------------Execute test ---------------------
-            string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>"),
+            string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>","", ""),
                                                        delegate(object value) { return Convert.ToString(value); });
             //-------------Test Result ----------------------
 
@@ -123,7 +123,7 @@ namespace Habanero.Test.BO
             CriteriaDB surnameCriteria = new CriteriaDB(criteria);
 
             //-------------Execute test ---------------------
-            string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>"),
+            string tostring = surnameCriteria.ToString(new SqlFormatter("<<", ">>","",""),
                                                        delegate(object value) { return Convert.ToString(value); });
             //-------------Test Result ----------------------
 
@@ -148,7 +148,7 @@ namespace Habanero.Test.BO
 
             //---------------Execute Test ----------------------
             int i = 0;
-            string criteriaAsString = andCriteria.ToString(new SqlFormatter("", ""), delegate { return "param" + i++; });
+            string criteriaAsString = andCriteria.ToString(new SqlFormatter("", "","",""), delegate { return "param" + i++; });
 
             //---------------Test Result -----------------------
             const string expectedString = "(Surname = param0) AND (DateTime > param1)";

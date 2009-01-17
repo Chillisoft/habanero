@@ -97,6 +97,23 @@ namespace Habanero.Test
             }
         }
 
+        public static ClassDef LoadClassDefs_OneProp()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID""  type=""Guid"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
         public static ClassDef LoadClassDefsNoUIDef()
         {
                         XmlClassLoader itsLoader = new XmlClassLoader();

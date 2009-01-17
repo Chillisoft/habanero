@@ -78,11 +78,11 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestCreateSQL_Simple_WithDelimiter()
         {
             //-------------Setup Test Pack ------------------
-            string tableName = "MY_SOURCE";
+            const string tableName = "MY_SOURCE";
             Source source = new Source("MySource", tableName);
             SourceDB sourceDB = new SourceDB(source);
             //-------------Execute test ---------------------
-            string sql = sourceDB.CreateSQL(new SqlFormatter("[", "]"));
+            string sql = sourceDB.CreateSQL(new SqlFormatter("[", "]", "TOP", ""));
             //-------------Test Result ----------------------
             Assert.AreEqual(string.Format("[{0}]", tableName), sql);
         }
@@ -182,7 +182,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             SourceDB sourceDB = new SourceDB(source);
 
             //-------------Execute test ---------------------
-            SqlFormatter myFormatter = new SqlFormatter("[", "]");
+            SqlFormatter myFormatter = new SqlFormatter("[", "]", "TOP", "");
             string sql = sourceDB.CreateSQL(myFormatter);
             //-------------Test Result ----------------------
             Source.Join.JoinField joinField = join.JoinFields[0];

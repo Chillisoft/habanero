@@ -74,5 +74,10 @@ namespace Habanero.Base
         ///<summary>
         ///</summary>
         Criteria DiscriminatorCriteria { get; set; }
+
+        ///<summary>
+        /// Gets and sets the first record to be loaded by the select query.
+        ///</summary>
+        int FirstRecordToLoad { get; set; }
     }
 }

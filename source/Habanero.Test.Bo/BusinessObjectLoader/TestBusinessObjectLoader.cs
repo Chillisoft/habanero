@@ -180,7 +180,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                      ex.Message);
             }
         }
-#pragma warning restore 168
         [Test]
         public void Test_GetBusinessObjectByValue_Generic()
         {
@@ -199,7 +198,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.IsNotNull(returnedBO);
         }
 
-#pragma warning disable 168
         [Test]
         public void Test_GetBusinessObjectByValue_Generic_DoesNotExist()
         {

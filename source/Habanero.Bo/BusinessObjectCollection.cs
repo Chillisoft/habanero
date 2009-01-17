@@ -507,6 +507,29 @@ namespace Habanero.BO
             LoadWithLimit(criteriaExpression, orderByClause, limit);
         }
 
+        /// <summary>
+        /// Loads business objects that match the search criteria provided, 
+        /// loaded in the order specified, 
+        /// and limiting the number of objects loaded. The limited number of objects is
+        ///  limited as follows. If you want record 11 to 20 then firstRecordToLoad will be set to 
+        ///  11 and the number of records to load will be set to 10 this will load 10 records (or fewer 
+        ///   if there are less records returned) starting at record 11 ordered by the orderByClause.
+        /// </summary>
+        /// <param name="searchCriteria">The search criteria</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="noOfRecords">The number of records to be loaded</param>
+        /// <param name="firstRecordToLoad">The first record to load</param>
+        public void LoadWithLimit(string searchCriteria, string orderByClause, int firstRecordToLoad, int noOfRecords)
+        {
+            Criteria criteriaExpression = null;
+            if (searchCriteria.Length > 0)
+            {
+                criteriaExpression = CriteriaParser.CreateCriteria(searchCriteria);
+                QueryBuilder.PrepareCriteria(this.ClassDef, criteriaExpression);
+            }
+            LoadWithLimit(criteriaExpression, orderByClause, firstRecordToLoad, noOfRecords);
+        }
+
 //        /// <summary>
 //        /// Loads business objects that match the search criteria provided in
 //        /// an expression, loaded in the order specified, 
@@ -537,6 +560,30 @@ namespace Habanero.BO
             this.SelectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(this.ClassDef, orderByClause);
             if (limit > -1) this.SelectQuery.Limit = limit;
 
+            Refresh();
+        }
+
+        /// <summary>
+        /// Loads business objects that match the search criteria provided in
+        /// an expression and an extra criteria literal, 
+        /// loaded in the order specified, 
+        /// and limiting the number of objects loaded
+        /// </summary>
+        /// <param name="searchExpression">The search expression</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="noOfRecords">The number of records to be loaded</param>
+        /// <param name="firstRecordToLoad">The first record to load</param>
+        public void LoadWithLimit(Criteria searchExpression, string orderByClause, int firstRecordToLoad, int noOfRecords)
+        {
+            this.SelectQuery.Criteria = searchExpression;
+
+            this.SelectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(this.ClassDef, orderByClause);
+            if (firstRecordToLoad <= 0) this.SelectQuery.Limit = noOfRecords;
+            if ((firstRecordToLoad > 0) && (noOfRecords > 0))
+            {
+                this.SelectQuery.FirstRecordToLoad = firstRecordToLoad;
+                this.SelectQuery.Limit = noOfRecords;
+            }
             Refresh();
         }
 

@@ -143,7 +143,13 @@ namespace Habanero.Base
         /// vendor
         /// </summary>
         string RightFieldDelimiter { get; }
-        
+
+        ///<summary>
+        /// Creates a SQL formatter for the specified database.
+        ///</summary>
+        SqlFormatter SqlFormatter { get; }
+
+        //TODO Brett 17 Jan 2009: Remove these two methods
         /// <summary>
         /// Returns the beginning limit clause with the limit specified
         /// </summary>

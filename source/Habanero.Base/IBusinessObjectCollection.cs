@@ -220,14 +220,6 @@ namespace Habanero.Base
         /// <param name="orderByClause">The order-by clause</param>
         void Load(string searchCriteria, string orderByClause);
 
-        ///// <summary>
-        ///// Loads business objects that match the search criteria provided in
-        ///// an expression, loaded in the order specified
-        ///// </summary>
-        ///// <param name="searchExpression">The search expression</param>
-        ///// <param name="orderByClause">The order-by clause</param>
-        //void Load(IExpression searchExpression, string orderByClause);
-
         /// <summary>
         /// Creates a business object of type TBusinessObject
         /// Adds this BO to the CreatedBusinessObjects list. When the object is saved it will
@@ -235,7 +227,6 @@ namespace Habanero.Base
         /// </summary>
         /// <returns></returns>
         IBusinessObject CreateBusinessObject();
-
 
         /// <summary>
         /// Loads the entire collection for the type of object.
@@ -250,26 +241,6 @@ namespace Habanero.Base
         /// <param name="orderByClause">The order-by clause</param>
         void LoadAll(string orderByClause);
 
-//        /// <summary>
-//        /// Loads business objects that match the search criteria provided
-//        /// and an extra criteria literal,
-//        /// loaded in the order specified
-//        /// </summary>
-//        /// <param name="searchCriteria">The search criteria</param>
-//        /// <param name="orderByClause">The order-by clause</param>
-//        /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
-//        void Load(string searchCriteria, string orderByClause, string extraSearchCriteriaLiteral);
-
-        ///// <summary>
-        ///// Loads business objects that match the search criteria provided in
-        ///// an expression and an extra criteria literal, 
-        ///// loaded in the order specified
-        ///// </summary>
-        ///// <param name="searchExpression">The search expression</param>
-        ///// <param name="orderByClause">The order-by clause</param>
-        ///// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
-        //void Load(IExpression searchExpression, string orderByClause, string extraSearchCriteriaLiteral);
-
         /// <summary>
         /// Loads business objects that match the search criteria provided, 
         /// loaded in the order specified, 
@@ -279,6 +250,21 @@ namespace Habanero.Base
         /// <param name="orderByClause">The order-by clause</param>
         /// <param name="limit">The limit</param>
         void LoadWithLimit(string searchCriteria, string orderByClause, int limit);
+        /// <summary>
+        /// Loads business objects that match the search criteria provided, 
+        /// loaded in the order specified, 
+        /// and limiting the number of objects loaded. The limited number of objects is
+        ///  limited as follows. If you want record 11 to 20 then firstRecordToLoad will be set to 
+        ///  11 and the number of records to load will be set to 10 this will load 10 records (or fewer 
+        ///   if there are less records returned) starting at record 11 ordered by the orderByClause.
+        /// </summary>
+        /// <param name="searchCriteria">The search criteria</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="noOfRecords">The number of records to be loaded</param>
+        /// <param name="firstRecordToLoad">The first record to load</param>
+        void LoadWithLimit(string searchCriteria, string orderByClause, int firstRecordToLoad, int noOfRecords);
+
+        //TODO  17 Jan 2009: Do load with limit for objects and mixes of these.
 
         ///// <summary>
         ///// Loads business objects that match the search criteria provided in
