@@ -1,5 +1,6 @@
 #include column.dtd
-<!ELEMENT grid (column+)>
+#include filter.dtd
+<!ELEMENT grid (filter?, column+)>
 <!ATTLIST grid
 	sortColumn CDATA ""
 >

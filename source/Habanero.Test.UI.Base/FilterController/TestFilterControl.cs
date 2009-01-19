@@ -106,7 +106,7 @@ namespace Habanero.Test.UI.Base.FilterController
             IDateRangeComboBox dr1 = filterControl.AddDateRangeFilterComboBox("test", "test", true, true);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, filterControl.CountOfFilters);
+            Assert.AreEqual(1, filterControl.FilterControls.Count);
             Assert.IsTrue(filterControl.FilterPanel.Controls.Contains(dr1));
         }
 
@@ -186,15 +186,15 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             //---------------Set up test pack-------------------
             IFilterControl filterControl = GetControlFactory().CreateFilterControl();
-            FilterControlManager.ICustomFilter customFilter = new CustomFilterStub(GetControlFactory());
+            ICustomFilter customFilter = new CustomFilterStub(GetControlFactory());
 
             //---------------Execute Test ----------------------
-            IControlHabanero control = filterControl.AddCustomFilter("LabelText","test", customFilter);
+            filterControl.AddCustomFilter("LabelText", customFilter);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, filterControl.CountOfFilters);
             IControlHabanero controlHabanero = filterControl.GetChildControl("test");
-            Assert.AreEqual(control,controlHabanero);
+            Assert.AreEqual(customFilter.Control, controlHabanero);
             Assert.IsNotNull(controlHabanero);
             Assert.IsInstanceOfType(typeof(ITextBox),controlHabanero);
             //---------------Tear Down -------------------------
@@ -205,7 +205,7 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             //---------------Set up test pack-------------------
             IFilterControl filterControl = GetControlFactory().CreateFilterControl();
-            FilterControlManager.ICustomFilter customFilter = new CustomFilterStub(GetControlFactory());
+            ICustomFilter customFilter = new CustomFilterStub(GetControlFactory());
             filterControl.AddCustomFilter("LabelText", "test", customFilter);
 
             //---------------Assert pre conditions--------------
@@ -346,8 +346,8 @@ namespace Habanero.Test.UI.Base.FilterController
             ICheckBox cb = filterControl.AddBooleanFilterCheckBox("Test:", "TestColumn", false);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, filterControl.FilterPanel.Controls.Count);
-            Assert.AreSame(cb, filterControl.FilterPanel.Controls[0]);
+            Assert.AreEqual(2, filterControl.FilterPanel.Controls.Count);
+            Assert.AreSame(cb, filterControl.FilterPanel.Controls[1]);
             //---------------Tear Down -------------------------          
         }
 
@@ -1030,7 +1030,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
     }
 
-    internal class CustomFilterStub : FilterControlManager.ICustomFilter
+    internal class CustomFilterStub : ICustomFilter
     {
         private readonly IControlFactory _factory;
         private static ITextBox _box;
@@ -1069,5 +1069,6 @@ namespace Habanero.Test.UI.Base.FilterController
         }
 
         public event EventHandler ValueChanged;
+        public string PropertyName { get { return "test"; } }
     }
 }

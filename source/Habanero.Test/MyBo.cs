@@ -216,6 +216,44 @@ namespace Habanero.Test
 			return itsClassDef;
         }
 
+        public static ClassDef LoadDefaultClassDefWithFilterDef()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" type=""Guid"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+                            <filter>
+                                <filterProperty name=""TestProp"" label=""Test Prop:"" />
+                                <filterProperty name=""TestProp2"" label=""Test Prop2:"" />
+                            </filter>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+
+        }
+
 
         public static ClassDef LoadDefaultClassDef_CompulsoryField_TestProp()
         {
@@ -1326,6 +1364,8 @@ namespace Habanero.Test
             classDef.RelationshipDefCol["MyMultipleRelationship"].RelationshipType = RelationshipType.Composition;
             return classDef;
         }
+
+        
     }
 
     public class MyRelatedBo : BusinessObject

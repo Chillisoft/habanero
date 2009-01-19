@@ -111,6 +111,8 @@
     <Compile Include="ClassDefinition\BOPropIntDataMapper.cs" />
     <Compile Include="ClassDefinition\BOPropStringDataMapper.cs" />
     <Compile Include="ClassDefinition\ClassDefHelper.cs" />
+    <Compile Include="ClassDefinition\FilterDef.cs" />
+    <Compile Include="ClassDefinition\FilterPropertyDef.cs" />
     <Compile Include="ClassDefinition\TriggerCol.cs" />
     <Compile Include="ClassDefinition\Trigger.cs" />
     <Compile Include="ClassDefinition\UIDef.cs" />
@@ -362,6 +364,7 @@
     <None Include="Loaders\DTDs\classes.dtd" />
     <None Include="Loaders\DTDs\column.dtd" />
     <None Include="Loaders\DTDs\columnLayout.dtd" />
+    <None Include="Loaders\DTDs\filter.dtd" />
     <None Include="Loaders\DTDs\trigger.dtd" />
     <None Include="Loaders\DTDs\databaseLookupList.dtd" />
     <None Include="Loaders\DTDs\field.dtd" />

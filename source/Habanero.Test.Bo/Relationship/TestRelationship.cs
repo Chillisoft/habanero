@@ -304,6 +304,8 @@ namespace Habanero.Test.BO.Relationship
             mMockBo.Save();
         }
 
+        //TODO:Peter 2009/01/19: make GetReverseRelationship more strict about what makes a match - check both prop names
+
         [Test]
         public void TestGetReverseRelationship()
         {

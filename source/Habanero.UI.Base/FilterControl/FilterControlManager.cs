@@ -34,7 +34,7 @@ namespace Habanero.UI.Base
     {
         private readonly IControlFactory _controlFactory;
         private readonly IFilterClauseFactory _clauseFactory;
-        private readonly List<FilterUI> _filterControls = new List<FilterUI>();
+        private readonly List<ICustomFilter> _filterControls = new List<ICustomFilter>();
         private LayoutManager _layoutManager;
 
         public FilterControlManager(IControlFactory controlFactory, LayoutManager layoutManager)
@@ -44,6 +44,7 @@ namespace Habanero.UI.Base
             _clauseFactory = new DataViewFilterClauseFactory();
         }
 
+        [Obsolete("Please use FilterControls.Count")]
         /// <summary>
         /// See <see cref="IFilterControl.CountOfFilters"/>
         /// </summary>
@@ -55,7 +56,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// See <see cref="IFilterControl.FilterControls"/>
         /// </summary>
-        public IList FilterControls
+        public List<ICustomFilter> FilterControls
         {
             get { return _filterControls; }
         }
@@ -75,14 +76,14 @@ namespace Habanero.UI.Base
         public IFilterClause GetFilterClause()
         {
             if (_filterControls.Count == 0) return _clauseFactory.CreateNullFilterClause();
-            FilterUI filterUi = _filterControls[0];
-            IFilterClause clause = filterUi.GetFilterClause();
+            ICustomFilter filterUi = _filterControls[0];
+            IFilterClause clause = filterUi.GetFilterClause(_clauseFactory);
             for (int i = 1; i < _filterControls.Count; i++)
             {
                 filterUi = _filterControls[i];
                 clause =
                     _clauseFactory.CreateCompositeFilterClause(clause, FilterClauseCompositeOperator.OpAnd,
-                                                               filterUi.GetFilterClause());
+                                                               filterUi.GetFilterClause(_clauseFactory));
             }
             return clause;
         }
@@ -90,14 +91,11 @@ namespace Habanero.UI.Base
         /// <summary>
         /// See <see cref="IFilterControl.AddStringFilterTextBox(string,string)"/>
         /// </summary>
-        public ITextBox AddStringFilterTextBox(string labelText, string propertyName)
+        public ICustomFilter AddStringFilterTextBox(string labelText, string propertyName)
         {
-
-            ILabel label = _controlFactory.CreateLabel(labelText);
-            ITextBox textBox = _controlFactory.CreateTextBox();
-            AddControlToLayoutManager(label, textBox);
-            _filterControls.Add(new FilterUIString(_clauseFactory, propertyName, textBox));
-            return textBox;
+            StringTextBoxFilter filter = new StringTextBoxFilter(_controlFactory, propertyName, FilterClauseOperator.OpLike);
+            AddCustomFilter(labelText, filter);
+            return filter;
         }
 
         private void AddControlToLayoutManager(ILabel label, IControlHabanero entryControl)
@@ -113,91 +111,64 @@ namespace Habanero.UI.Base
         /// <summary>
         /// See <see cref="IFilterControl.AddStringFilterTextBox(string,string,FilterClauseOperator)"/>
         /// </summary>
-        public ITextBox AddStringFilterTextBox(string labelText, string propertyName, FilterClauseOperator filterClauseOperator)
+        public ICustomFilter AddStringFilterTextBox(string labelText, string propertyName, FilterClauseOperator filterClauseOperator)
         {
-            ILabel label = _controlFactory.CreateLabel(labelText);
-            ITextBox textBox = _controlFactory.CreateTextBox();
-            AddControlToLayoutManager(label, textBox);
-            _filterControls.Add(new FilterUIString(_clauseFactory, propertyName, textBox, filterClauseOperator));
-            return textBox;
+            StringTextBoxFilter filter = new StringTextBoxFilter(_controlFactory, propertyName, filterClauseOperator);
+            AddCustomFilter(labelText,  filter);
+            return filter;
         }
 
         /// <summary>
         /// See <see cref="IFilterControl.AddStringFilterComboBox"/>
         /// </summary>
-        public IComboBox AddStringFilterComboBox(string labelText, string columnName, ICollection options, bool strictMatch)
+        public ICustomFilter AddStringFilterComboBox(string labelText, string columnName, ICollection options, bool strictMatch)
         {
+            StringComboBoxFilter filter = new StringComboBoxFilter(_controlFactory, columnName,
+                                                                   strictMatch 
+                                                                       ? FilterClauseOperator.OpEquals
+                                                                       : FilterClauseOperator.OpLike);
 
-            IComboBox cb = _controlFactory.CreateComboBox();
-            ILabel label = _controlFactory.CreateLabel(labelText);
-            AddControlToLayoutManager(label, cb);
-            _filterControls.Add(new FilterUIStringOptions(_clauseFactory, columnName, cb, options, strictMatch));
-
-            return cb;
+            AddCustomFilter(labelText, filter);
+            filter.Options = options;
+            return filter;
         }
 
         /// <summary>
         /// See <see cref="IFilterControl.AddBooleanFilterCheckBox"/>
         /// </summary>
-        public ICheckBox AddBooleanFilterCheckBox(string labelText, string propertyName, bool isChecked)
+        public ICustomFilter AddBooleanFilterCheckBox(string labelText, string propertyName, bool isChecked)
         {
-            ICheckBox cb = _controlFactory.CreateCheckBox();
-            _layoutManager.AddControl(cb);
-            _filterControls.Add(new FilterUICheckBox(_clauseFactory, propertyName, cb, labelText, isChecked));
-            return cb;
+            BoolCheckBoxFilter filter = new BoolCheckBoxFilter(_controlFactory, propertyName, FilterClauseOperator.OpEquals);
+            filter.IsChecked = isChecked;
+            AddCustomFilter(labelText,  filter);
+            return filter;
         }
 
         /// <summary>
         /// See <see cref="IFilterControl.AddDateFilterDateTimePicker"/>
         /// </summary>
-        public IDateTimePicker AddDateFilterDateTimePicker(string labelText, string columnName, FilterClauseOperator filterClauseOperator, bool nullable, DateTime defaultDate)
+        public ICustomFilter AddDateFilterDateTimePicker(string labelText, string propertyName, FilterClauseOperator filterClauseOperator, DateTime defaultDate)
         {
-            IDateTimePicker dtPicker = _controlFactory.CreateDateTimePicker();
-            ILabel label = _controlFactory.CreateLabel(labelText);
-            AddControlToLayoutManager(label, dtPicker);
-//            _layoutManager.AddControl(dtPicker);
-            _filterControls.Add(new FilterUIDate(_clauseFactory, columnName, dtPicker, filterClauseOperator));
-            dtPicker.Value = defaultDate;
-            return dtPicker;
-            //if (defaultDate == null)
-            //{
-            //    dte = (IDateTimePicker)ControlFactory.CreateDateTimePicker();
-            //}
-            //else
-            //{
-            //    dte = (IDateTimePicker)ControlFactory.CreateDateTimePicker((DateTime)defaultDate);
-            //}
-            //dte.Width = _filterWidth;
-            //if (nullable)
-            //{
-            //    DateTimePickerController dateTimePickerController = new DateTimePickerController(dte);
-            //    _filterUIs.Add(new FilterUIDateNullable(_clauseFactory, columnName, dateTimePickerController, filterClauseOperator));
-            //    dateTimePickerController.ValueChanged += delegate(object sender, EventArgs e)
-            //                                                 {
-            //                                                     FilterControlValueChangedHandler(dte, e);
-            //                                                 };
-            //}
-            //else
-            //{
-            //    _filterUIs.Add(new FilterUIDate(_clauseFactory, columnName, dte, filterClauseOperator));
-            //    dte.ValueChanged += FilterControlValueChangedHandler;
-            //}
+            DateTimePickerFilter filter = new DateTimePickerFilter(_controlFactory, propertyName, filterClauseOperator);
+            AddCustomFilter(labelText, filter);
+            filter.DefaultDate = defaultDate;
+
+            return filter;
         }
 
         /// <summary>
-        /// See <see cref="IFilterControl.AddCustomFilter"/>
+        /// See <see cref="IFilterControl.AddCustomFilter(string,ICustomFilter)"/>
         /// </summary>
-        public IControlHabanero AddCustomFilter(string labelText, string columnName, ICustomFilter customFilter)
+        public void AddCustomFilter(string labelText, ICustomFilter customFilter)
         {
             ILabel label = _controlFactory.CreateLabel(labelText);
             IControlHabanero control = customFilter.Control;
             AddControlToLayoutManager(label, control);
-            _filterControls.Add(new FilterUICustom(_clauseFactory, customFilter, columnName));
-            return control;
+           _filterControls.Add(customFilter);
         }
 
         /// <summary>
-        /// See <see cref="IFilterControl.Clear_Filter_Click"/>
+        /// See <see cref="IFilterControl.ClearFilters"/>
         /// </summary>
         public void ClearFilters()
         {
@@ -212,11 +183,11 @@ namespace Habanero.UI.Base
         /// </summary>
         public IControlHabanero GetChildControl(string propertyName)
         {
-            foreach (FilterUI filterUI in this._filterControls)
+            foreach (ICustomFilter customFilter in this._filterControls)
             {
-                if (filterUI.PropertyName  == propertyName)
+                if (customFilter.PropertyName == propertyName)
                 {
-                    return filterUI.FilterControl;
+                    return customFilter.Control;
                 }
             }
             return null;
@@ -225,332 +196,298 @@ namespace Habanero.UI.Base
         /// <summary>
         /// See <see cref="IFilterControl.AddDateRangeFilterComboBox(string,string,List{DateRangeOptions},bool,bool)"/>
         /// </summary>
-        public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, List<DateRangeOptions> options, bool includeStartDate, bool includeEndDate)
+        public ICustomFilter AddDateRangeFilterComboBox(string labelText, string propertyName, List<DateRangeOptions> options, bool includeStartDate, bool includeEndDate)
         {
-            IDateRangeComboBox dateRangeComboBox;
-            if (options == null) 
-                dateRangeComboBox = _controlFactory.CreateDateRangeComboBox();
-            else 
-                dateRangeComboBox = _controlFactory.CreateDateRangeComboBox(options);
-            return ConfigureDateRangeComboBox(labelText, columnName, dateRangeComboBox, includeStartDate, includeEndDate);
-        }
+            DateRangeComboBoxFilter filter = new DateRangeComboBoxFilter(_controlFactory, propertyName, FilterClauseOperator.OpEquals);
 
-        /// <summary>
-        /// Configures the given DateRangeComboBox and sets up the filter control
-        /// </summary>
-        private IDateRangeComboBox ConfigureDateRangeComboBox(string labelText, string columnName, IDateRangeComboBox dateRangeComboBox, bool includeStartDate, bool includeEndDate)
-        {
-            //dateRangeComboBox.Width = _filterWidth;
-            ILabel label = _controlFactory.CreateLabel(labelText);
-            AddControlToLayoutManager(label, dateRangeComboBox);
-            _filterControls.Add(new FilterUIDateRangeString(_clauseFactory, columnName, dateRangeComboBox, includeStartDate, includeEndDate));
-            return dateRangeComboBox;
-        } 
+            if (options !=null) filter.OptionsToDisplay = options;
+            filter.IncludeStartDate = includeStartDate;
+            filter.IncludeEndDate = includeEndDate;
+            AddCustomFilter(labelText, filter);
 
-        /// <summary>
-        /// A super-class for user interface elements that provide filter clauses
-        /// </summary>
-        public abstract class FilterUI
-        {
-            protected readonly IFilterClauseFactory _clauseFactory;
-            protected readonly string _columnName;
-
-            /// <summary>
-            /// Constructor to initialise a new instance
-            /// </summary>
-            /// <param name="clauseFactory">The filter clause factory</param>
-            /// <param name="columnName">The column name</param>
-            protected FilterUI(IFilterClauseFactory clauseFactory, string columnName)
-            {
-                if (clauseFactory == null) throw new ArgumentNullException("clauseFactory");
-                _columnName = columnName;
-                _clauseFactory = clauseFactory;
-            }
-
-            public string PropertyName
-            {
-                get { return _columnName; }
-            }
-
-            public abstract IControlHabanero FilterControl
-            { get; }
-
-            ///// <summary>
-            ///// Returns the filter clause
-            ///// </summary>
-            ///// <returns>Returns the filter clause</returns>
-            public abstract IFilterClause GetFilterClause();
-
-            public abstract void Clear();
-
-            //public abstract IFilterClause GetFilterClause(string stringLikeDelimiter, string dateTimeDelimiter);
-
-        }
-
-        private class FilterUICustom : FilterUI
-        {
-            private readonly ICustomFilter _customFilter;
-
-            public FilterUICustom(IFilterClauseFactory clauseFactory, ICustomFilter customFilter, string propertyName)
-                : base(clauseFactory, propertyName)
-            {
-                _customFilter = customFilter;
-            }
-            
-            public override IControlHabanero FilterControl
-            {
-                get { return _customFilter.Control; }
-            }
-
-            public override IFilterClause GetFilterClause()
-            {
-                return _customFilter.GetFilterClause(_clauseFactory);
-            }
-
-            public override void Clear()
-            {
-                _customFilter.Clear();
-            }
-        }
-
-
-        ///<summary>
-        /// Provides a means to create custom filters.
-        ///</summary>
-        public interface ICustomFilter : IControlManager
-        {
-            IFilterClause GetFilterClause(IFilterClauseFactory filterClauseFactory);
-            void Clear();
-            event EventHandler ValueChanged;
-        }
-
-
-        /// <summary>
-        /// Manages a TextBox in which the user can type string filter clauses
-        /// </summary>
-        private class FilterUIString : FilterUI
-        {
-            private readonly ITextBox _textBox;
-            private readonly FilterClauseOperator _filterClauseOperator;
-
-            public FilterUIString(IFilterClauseFactory clauseFactory, string propertyName, ITextBox textBox)
-                : this(clauseFactory, propertyName, textBox, FilterClauseOperator.OpLike)
-                
-            {
-                
-            }
-
-            public FilterUIString(IFilterClauseFactory clauseFactory, string propertyName, ITextBox textBox, FilterClauseOperator filterClauseOperator)
-                : base(clauseFactory, propertyName)
-            {
-                _textBox = textBox;
-                _filterClauseOperator = filterClauseOperator;
-            }
-
-            public override IControlHabanero FilterControl
-            {
-                get { return _textBox; }
-            }
-
-            public override IFilterClause GetFilterClause()
-            {
-                return _textBox.Text.Length > 0 
-                    ? _clauseFactory.CreateStringFilterClause(_columnName, _filterClauseOperator,_textBox.Text) 
-                    : _clauseFactory.CreateNullFilterClause();
-            }
-
-            public override void Clear()
-            {
-                _textBox.Text = "";
-            }
-        }
-
-        /// <summary>
-        /// Manages a ComboBox from which the user can select a string option
-        /// on which values are filtered
-        /// </summary>
-        private class FilterUIStringOptions : FilterUI
-        {
-            private readonly IComboBox _comboBox;
-            private readonly bool _strictMatch;
-
-            public FilterUIStringOptions(IFilterClauseFactory clauseFactory, string columnName, IComboBox comboBox,
-                                         ICollection options, bool strictMatch)
-                : base(clauseFactory, columnName)
-            {
-                if (comboBox == null) throw new ArgumentNullException("comboBox");
-                if (options == null) throw new ArgumentNullException("options");
-                _comboBox = comboBox;
-                _comboBox.Items.Add("");
-                foreach (object option in options)
-                {
-                    _comboBox.Items.Add(option);
-                }
-                _strictMatch = strictMatch;
-            }
-
-            public override IControlHabanero FilterControl
-            {
-                get { return _comboBox; }
-            }
-
-            public override IFilterClause GetFilterClause()
-            {
-                if (_comboBox.SelectedIndex != -1 && _comboBox.SelectedItem.ToString().Length > 0)
-                {
-                    FilterClauseOperator op = _strictMatch ? FilterClauseOperator.OpEquals : FilterClauseOperator.OpLike;
-                    return
-                        _clauseFactory.CreateStringFilterClause(_columnName, op,
-                                                                _comboBox.SelectedItem.ToString());
-                }
-                return _clauseFactory.CreateNullFilterClause();
-            }
-
-            public override void Clear()
-            {
-                _comboBox.SelectedIndex = -1;
-            }
-
-
-        }
-
-        /// <summary>
-        /// Manages a CheckBox which the user can select to filter boolean
-        /// values
-        /// </summary>
-        private class FilterUICheckBox : FilterUI
-        {
-            private readonly ICheckBox _checkBox;
-            private readonly bool _isChecked;
-
-            public FilterUICheckBox(IFilterClauseFactory clauseFactory, string columnName, ICheckBox checkBox,
-                                    string text, bool isChecked)
-                : base(clauseFactory, columnName)
-            {
-                _checkBox = checkBox;
-                _isChecked = isChecked;
-                _checkBox.Checked = isChecked;
-                _checkBox.Text = text;
-            }
-
-            public override IControlHabanero FilterControl
-            {
-                get { return _checkBox; }
-            }
-
-            public override IFilterClause GetFilterClause()
-            {
-                if (_checkBox.Checked)
-                {
-                    return
-                        _clauseFactory.CreateStringFilterClause(_columnName,
-                                                                FilterClauseOperator.OpEquals, "true");
-                }
-                return
-                    _clauseFactory.CreateStringFilterClause(_columnName,
-                                                            FilterClauseOperator.OpEquals, "false");
-            }
-
-            public override void Clear()
-            {
-                //Reset the check box to its default value
-                _checkBox.Checked = _isChecked;
-            }
-        }
-
-        /// <summary>
-        /// Provides a filter clause from a given DateTime Picker, using the
-        /// column name and filter clause operator provided
-        /// </summary>
-        private class FilterUIDate : FilterUI
-        {
-            private readonly IDateTimePicker _dateTimePicker;
-            private readonly FilterClauseOperator _filterClauseOperator;
-
-            public FilterUIDate(IFilterClauseFactory clauseFactory, string columnName, IDateTimePicker dtp,
-                                      FilterClauseOperator op)
-                : base(clauseFactory, columnName)
-            {
-                _dateTimePicker = dtp;
-                _filterClauseOperator = op;
-            }
-
-            public override IControlHabanero FilterControl
-            {
-                get { return _dateTimePicker; }
-            }
-
-            public override IFilterClause GetFilterClause()
-            {
-                DateTime date = _dateTimePicker.Value;
-                date = date.Date;
-                if (_filterClauseOperator == FilterClauseOperator.OpLike)
-                {
-                    IFilterClause startClause = _clauseFactory.CreateDateFilterClause(
-                        _columnName, FilterClauseOperator.OpGreaterThanOrEqualTo, date);
-                    IFilterClause endClause = _clauseFactory.CreateDateFilterClause(
-                        _columnName, FilterClauseOperator.OpLessThan, date.AddDays(1));
-                    return _clauseFactory.CreateCompositeFilterClause(
-                        startClause, FilterClauseCompositeOperator.OpAnd, endClause);
-                }
-                return _clauseFactory.CreateDateFilterClause(_columnName, _filterClauseOperator, date);
-            }
-
-            public override void Clear()
-            {
-                _dateTimePicker.ValueOrNull = null;
-            }
-        }
-
-        /// <summary>
-        /// Manages a Date-Time Picker through which the user can select a date
-        /// to serve as either a greater-than or less-than watershed, depending
-        /// on the boolean set in the constructor
-        /// </summary>
-        private class FilterUIDateRangeString : FilterUI
-        {
-            private readonly IDateRangeComboBox _dateRangeComboBox;
-            private readonly bool _filterIncludeStart;
-            private readonly bool _filterIncludeEnd;
-
-            public FilterUIDateRangeString(IFilterClauseFactory clauseFactory, string columnName, IDateRangeComboBox dateRangeComboBox,
-                                      bool filterIncludeStart, bool filterIncludeEnd)
-                : base(clauseFactory, columnName)
-            {
-                _dateRangeComboBox = dateRangeComboBox;
-                _filterIncludeStart = filterIncludeStart;
-                _filterIncludeEnd = filterIncludeEnd;
-            }
-
-            public override IFilterClause GetFilterClause()
-            {
-                if (_dateRangeComboBox.SelectedIndex > 0)
-                {
-                    FilterClauseOperator op = _filterIncludeStart ? FilterClauseOperator.OpGreaterThanOrEqualTo : FilterClauseOperator.OpGreaterThan;
-                    IFilterClause startClause = _clauseFactory.CreateDateFilterClause(_columnName, op, _dateRangeComboBox.StartDate);
-                    op = _filterIncludeEnd 
-                        ? FilterClauseOperator.OpLessThanOrEqualTo 
-                        : FilterClauseOperator.OpLessThan;
-                    IFilterClause endClause = _clauseFactory.CreateDateFilterClause(_columnName, op, _dateRangeComboBox.EndDate);
-
-                    return
-                        _clauseFactory.CreateCompositeFilterClause(startClause, FilterClauseCompositeOperator.OpAnd,
-                                                                   endClause);
-                }
-                return _clauseFactory.CreateNullFilterClause();
-            }
-
-            public override IControlHabanero FilterControl
-            {
-                get { return _dateRangeComboBox; }
-            }
-
-            public override void Clear()
-            {
-                _dateRangeComboBox.SelectedIndex = -1;
-            }
+            return filter;
         }
     }
 
+    public class DateRangeComboBoxFilter : ICustomFilter
+    {
+         private readonly IControlFactory _controlFactory;
+        private readonly string _propertyName;
+        private readonly FilterClauseOperator _filterClauseOperator;
+        private IDateRangeComboBox _dateRangeComboBox;
+        private bool _includeStartDate = true;
+        private bool _includeEndDate = true;
+
+        public DateRangeComboBoxFilter(IControlFactory controlFactory, string propertyName, FilterClauseOperator filterClauseOperator)
+        {
+            _controlFactory = controlFactory;
+            _propertyName = propertyName;
+            _filterClauseOperator = filterClauseOperator;
+            _dateRangeComboBox = _controlFactory.CreateDateRangeComboBox();
+            _dateRangeComboBox.SelectedIndexChanged += (sender, e) => FireValueChanged();
+            _dateRangeComboBox.TextChanged += (sender,e) => FireValueChanged();
+        }
+
+        private void FireValueChanged()
+        {
+            if (ValueChanged != null)
+            {
+                this.ValueChanged(this, new EventArgs());
+            }
+        }
+
+        public IControlHabanero Control { get { return _dateRangeComboBox; } }
+        public IFilterClause GetFilterClause(IFilterClauseFactory filterClauseFactory) {
+            if (_dateRangeComboBox.SelectedIndex > 0)
+            {
+                FilterClauseOperator op = _includeStartDate ? FilterClauseOperator.OpGreaterThanOrEqualTo : FilterClauseOperator.OpGreaterThan;
+                IFilterClause startClause = filterClauseFactory.CreateDateFilterClause(_propertyName, op, _dateRangeComboBox.StartDate);
+                op = _includeEndDate
+                    ? FilterClauseOperator.OpLessThanOrEqualTo
+                    : FilterClauseOperator.OpLessThan;
+                IFilterClause endClause = filterClauseFactory.CreateDateFilterClause(_propertyName, op, _dateRangeComboBox.EndDate);
+
+                return
+                    filterClauseFactory.CreateCompositeFilterClause(startClause, FilterClauseCompositeOperator.OpAnd,
+                                                               endClause);
+            }
+            return filterClauseFactory.CreateNullFilterClause();
+        }
+        public void Clear() { _dateRangeComboBox.SelectedIndex = -1;}
+        public event EventHandler ValueChanged;
+        public string PropertyName { get { return _propertyName; } }
+        public bool IncludeStartDate { get { return _includeStartDate; } set { _includeStartDate = value; } }
+        public bool IncludeEndDate { get { return _includeEndDate; } set { _includeEndDate = value; } }
+        public List<DateRangeOptions> OptionsToDisplay { get { return _dateRangeComboBox.OptionsToDisplay; } set { _dateRangeComboBox.OptionsToDisplay = value; } }
+    }
+
+    public class StringTextBoxFilter : ICustomFilter
+    {
+        private readonly IControlFactory _controlFactory;
+        private readonly string _propertyName;
+        private readonly FilterClauseOperator _filterClauseOperator;
+        private ITextBox _textBox;
+
+        public StringTextBoxFilter(IControlFactory controlFactory, string propertyName, FilterClauseOperator filterClauseOperator)
+        {
+            _controlFactory = controlFactory;
+            _propertyName = propertyName;
+            _filterClauseOperator = filterClauseOperator;
+            _textBox = _controlFactory.CreateTextBox();
+            _textBox.TextChanged += (sender, e) => FireValueChanged();
+        }
+
+        private void FireValueChanged()
+        {
+            if (ValueChanged != null)
+            {
+                this.ValueChanged(this, new EventArgs());
+            }
+        }
+
+        public IControlHabanero Control { get { return _textBox; } }
+        public IFilterClause GetFilterClause(IFilterClauseFactory filterClauseFactory) {
+            return _textBox.Text.Length > 0
+                      ? filterClauseFactory.CreateStringFilterClause(_propertyName, _filterClauseOperator, _textBox.Text)
+                      : filterClauseFactory.CreateNullFilterClause();
+        }
+        public void Clear() { _textBox.Text = ""; }
+        public event EventHandler ValueChanged;
+        public string PropertyName { get { return _propertyName; } }
+    }
+
+    public class StringComboBoxFilter : ICustomFilter
+    {
+        private readonly IControlFactory _controlFactory;
+        private readonly string _propertyName;
+        private readonly FilterClauseOperator _filterClauseOperator;
+        private IComboBox _comboBox;
+
+        public StringComboBoxFilter(IControlFactory controlFactory, string propertyName, FilterClauseOperator filterClauseOperator)
+        {
+            _controlFactory = controlFactory;
+            _propertyName = propertyName;
+            _filterClauseOperator = filterClauseOperator;
+            _comboBox = _controlFactory.CreateComboBox();
+            _comboBox.SelectedIndexChanged += (sender, e) => FireValueChanged();
+            _comboBox.TextChanged += (sender,e) => FireValueChanged();
+        }
+
+        private void FireValueChanged()
+        {
+            if (ValueChanged != null)
+            {
+                this.ValueChanged(this, new EventArgs());
+            }
+        }
+
+        public IControlHabanero Control { get { return _comboBox; } }
+        public IFilterClause GetFilterClause(IFilterClauseFactory filterClauseFactory) {
+            if (_comboBox.SelectedIndex != -1 && _comboBox.SelectedItem.ToString().Length > 0)
+            {
+                return
+                    filterClauseFactory.CreateStringFilterClause(_propertyName, _filterClauseOperator,
+                                                            _comboBox.SelectedItem.ToString());
+            }
+            return filterClauseFactory.CreateNullFilterClause();
+        }
+        public void Clear() { _comboBox.SelectedIndex = -1;  }
+        public event EventHandler ValueChanged;
+        public string PropertyName { get { return _propertyName; } }
+        public ICollection Options { set {
+            _comboBox.Items.Clear();
+            _comboBox.Items.Add("");
+            foreach (object option in value)
+            {
+                _comboBox.Items.Add(option);
+            }
+        } }
+    }
+
+    public class BoolCheckBoxFilter : ICustomFilter
+    {
+                private readonly IControlFactory _controlFactory;
+        private readonly string _propertyName;
+        private readonly FilterClauseOperator _filterClauseOperator;
+        private ICheckBox _checkBox;
+
+        public BoolCheckBoxFilter(IControlFactory controlFactory, string propertyName, FilterClauseOperator filterClauseOperator)
+        {
+            _controlFactory = controlFactory;
+            _propertyName = propertyName;
+            _filterClauseOperator = filterClauseOperator;
+            _checkBox = _controlFactory.CreateCheckBox();
+            _checkBox.Text = "";
+            _checkBox.CheckedChanged += (sender, e) => FireValueChanged();
+        }
+
+        private void FireValueChanged()
+        {
+            if (ValueChanged != null)
+            {
+                this.ValueChanged(this, new EventArgs());
+            }
+        }
+
+        public IControlHabanero Control { get { return _checkBox; } }
+        public bool IsChecked { get { return _checkBox.Checked; } set { _checkBox.Checked = value;} }
+
+        public IFilterClause GetFilterClause(IFilterClauseFactory filterClauseFactory) {
+            if (_checkBox.Checked)
+            {
+                return
+                    filterClauseFactory.CreateStringFilterClause(_propertyName,
+                                                            FilterClauseOperator.OpEquals, "true");
+            }
+            return
+                filterClauseFactory.CreateStringFilterClause(_propertyName,
+                                                        FilterClauseOperator.OpEquals, "false");
+        }
+        public void Clear() { _checkBox.Checked = false; }
+        public event EventHandler ValueChanged;
+        public string PropertyName { get { return _propertyName; } }
+    }
+
+    public class DateTimePickerFilter : ICustomFilter
+    {
+          private readonly IControlFactory _controlFactory;
+        private readonly string _propertyName;
+        private readonly FilterClauseOperator _filterClauseOperator;
+        private IDateTimePicker _dateTimePicker;
+        private DateTime _defaultDate;
+
+        public DateTimePickerFilter(IControlFactory controlFactory, string propertyName, FilterClauseOperator filterClauseOperator)
+        {
+            _controlFactory = controlFactory;
+            _propertyName = propertyName;
+            _filterClauseOperator = filterClauseOperator;
+            _dateTimePicker = _controlFactory.CreateDateTimePicker();
+            _dateTimePicker.ValueChanged += (sender, e) => FireValueChanged();     
+        }
+
+        private void FireValueChanged()
+        {
+            if (ValueChanged != null)
+            {
+                this.ValueChanged(this, new EventArgs());
+            }
+        }
+
+        public IControlHabanero Control { get { return _dateTimePicker; } }
+
+        public IFilterClause GetFilterClause(IFilterClauseFactory filterClauseFactory) {
+            DateTime date = _dateTimePicker.Value;
+            date = date.Date;
+            if (_filterClauseOperator == FilterClauseOperator.OpLike)
+            {
+                IFilterClause startClause = filterClauseFactory.CreateDateFilterClause(
+                    _propertyName, FilterClauseOperator.OpGreaterThanOrEqualTo, date);
+                IFilterClause endClause = filterClauseFactory.CreateDateFilterClause(
+                    _propertyName, FilterClauseOperator.OpLessThan, date.AddDays(1));
+                return filterClauseFactory.CreateCompositeFilterClause(
+                    startClause, FilterClauseCompositeOperator.OpAnd, endClause);
+            }
+            return filterClauseFactory.CreateDateFilterClause(_propertyName, _filterClauseOperator, date);
+        }
+        public void Clear() { _dateTimePicker.ValueOrNull = null; }
+        public event EventHandler ValueChanged;
+        public string PropertyName { get { return _propertyName; } }
+        public DateTime DefaultDate
+        {
+            get { return _defaultDate; }
+            set
+            {
+                _defaultDate = value;
+                _dateTimePicker.Value = _defaultDate;
+        } }
+    }
+
+    ///<summary>
+    /// Provides a means to create custom filters.
+    ///</summary>
+    public interface ICustomFilter : IControlManager
+    {
+        IFilterClause GetFilterClause(IFilterClauseFactory filterClauseFactory);
+        void Clear();
+        event EventHandler ValueChanged;
+        string PropertyName { get; }
+    }
+
+    /// <summary>
+    /// A super-class for user interface elements that provide filter clauses
+    /// </summary>
+    public abstract class FilterUI
+    {
+        protected readonly IFilterClauseFactory _clauseFactory;
+        protected readonly string _columnName;
+
+        /// <summary>
+        /// Constructor to initialise a new instance
+        /// </summary>
+        /// <param name="clauseFactory">The filter clause factory</param>
+        /// <param name="columnName">The column name</param>
+        protected FilterUI(IFilterClauseFactory clauseFactory, string columnName)
+        {
+            if (clauseFactory == null) throw new ArgumentNullException("clauseFactory");
+            _columnName = columnName;
+            _clauseFactory = clauseFactory;
+        }
+
+        public string PropertyName
+        {
+            get { return _columnName; }
+        }
+
+        public abstract IControlHabanero FilterControl
+        { get; }
+
+        ///// <summary>
+        ///// Returns the filter clause
+        ///// </summary>
+        ///// <returns>Returns the filter clause</returns>
+        public abstract IFilterClause GetFilterClause();
+
+        public abstract void Clear();
+    }
 
 }

@@ -1,0 +1,7 @@
+﻿#include parameter.dtd
+<!ELEMENT filter (filterProperty+)>
+<!ELEMENT filterProperty (parameter*)>
+<!ATTLIST filterProperty 
+	name NMTOKEN #IMPLIED
+	label CDATA #IMPLIED
+>

@@ -83,10 +83,15 @@ namespace Habanero.UI.Win
         /// <returns>Returns the new TextBox added</returns>
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName)
         {
-            ITextBox textBox = _filterControlManager.AddStringFilterTextBox(labelText, propertyName);
-            //textBox.TextChanged += delegate { FireFilterEvent(); };
-            textBox.TextChanged += delegate { if (this.FilterMode == FilterModes.Filter ) FireFilterEvent(); };
-            return textBox;
+            ICustomFilter filter = _filterControlManager.AddStringFilterTextBox(labelText, propertyName);
+            if (this.FilterMode == FilterModes.Filter )
+            {
+                filter.ValueChanged += (sender,e) => FireFilterEvent();
+            } 
+            //ITextBox textBox = _filterControlManager.AddStringFilterTextBox(labelText, propertyName);
+            //textBox.TextChanged += delegate { if (this.FilterMode == FilterModes.Filter ) FireFilterEvent(); };
+            return (ITextBox) filter.Control;
+            //return textBox;
         }
 
         /// <summary>
@@ -100,7 +105,8 @@ namespace Habanero.UI.Win
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName,
                                                FilterClauseOperator filterClauseOperator)
         {
-            return _filterControlManager.AddStringFilterTextBox(labelText, propertyName, filterClauseOperator);
+            ICustomFilter filter =  _filterControlManager.AddStringFilterTextBox(labelText, propertyName, filterClauseOperator);
+            return (ITextBox)filter.Control;
         }
 
         /// <summary>
@@ -132,11 +138,12 @@ namespace Habanero.UI.Win
         public IComboBox AddStringFilterComboBox(string labelText, string propertyName, ICollection options,
                                                  bool strictMatch)
         {
-            IComboBox comboBox =
+            ICustomFilter filter =
                 _filterControlManager.AddStringFilterComboBox(labelText, propertyName, options, strictMatch);
-            comboBox.TextChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
-            comboBox.SelectedIndexChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
-            return comboBox;
+            filter.ValueChanged += (sender, e) => { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
+            //comboBox.TextChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
+            //comboBox.SelectedIndexChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
+            return (IComboBox) filter.Control;
         }
 
         /// <summary>
@@ -152,9 +159,10 @@ namespace Habanero.UI.Win
         /// <returns>Returns the new CheckBox added</returns>
         public ICheckBox AddBooleanFilterCheckBox(string labelText, string propertyName, bool defaultValue)
         {
-            ICheckBox checkBox = _filterControlManager.AddBooleanFilterCheckBox(labelText, propertyName, defaultValue);
-            checkBox.CheckedChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
-            return checkBox;
+            ICustomFilter filter = _filterControlManager.AddBooleanFilterCheckBox(labelText, propertyName, defaultValue);
+
+            filter.ValueChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
+            return (ICheckBox)filter.Control;
         }
 
         /// <summary>
@@ -178,11 +186,17 @@ namespace Habanero.UI.Win
             //    _filterInputBoxCollection.AddDateFilterDateTimePicker(columnName, defaultValue, filterClauseOperator, ignoreTime, nullable);
             //_layoutManager.AddControl(picker);
             //return picker;
-            IDateTimePicker dtPicker = _filterControlManager.AddDateFilterDateTimePicker(labelText, propertyName,
-                                                                                         filterClauseOperator, nullable,
-                                                                                         defaultValue);
-            dtPicker.ValueChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
-            return dtPicker;
+
+            //IDateTimePicker dtPicker = _filterControlManager.AddDateFilterDateTimePicker( labelText, propertyName,
+            //                                                                             filterClauseOperator, nullable,
+            //                                                                             defaultValue);
+
+            ICustomFilter filter =
+                _filterControlManager.AddDateFilterDateTimePicker(labelText, propertyName, filterClauseOperator, defaultValue);
+            
+            filter.ValueChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
+           // return dtPicker;
+            return (IDateTimePicker)filter.Control;
         }
 
         /// <summary>
@@ -209,6 +223,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// The number of controls used for filtering that are on the filter control. <see cref="IFilterControl.FilterControls"/>
         /// </summary>
+        [Obsolete("Please use FilterControls.Count")]
         public int CountOfFilters
         {
             get { return _filterControlManager.CountOfFilters; }
@@ -258,7 +273,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets the collection of individual filters
         /// </summary>
-        public IList FilterControls
+        public List<ICustomFilter> FilterControls
         {
             get { return _filterControlManager.FilterControls; }
         }
@@ -331,10 +346,11 @@ namespace Habanero.UI.Win
                                                              List<DateRangeOptions> options, bool includeStartDate,
                                                              bool includeEndDate)
         {
-            IDateRangeComboBox dateRangeComboBox = _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, options, includeStartDate,
-                                                                                      includeEndDate);
-            dateRangeComboBox.TextChanged += delegate {if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
-            return dateRangeComboBox;
+            ICustomFilter filter = _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, options, includeStartDate,
+                includeEndDate);
+           
+            filter.ValueChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
+            return (IDateRangeComboBox)filter.Control;
         }
 
         ///<summary>
@@ -344,11 +360,23 @@ namespace Habanero.UI.Win
         ///<param name="propertyName">The property of the Business Object to filter</param>
         ///<param name="customFilter">The custom filter</param>
         ///<returns>Returns the new Custom Filter Control </returns>
-        public IControlHabanero AddCustomFilter(string labelText,string propertyName, FilterControlManager.ICustomFilter customFilter)
+        [Obsolete("Please use the overload without the propertyName parameter")] 
+        public IControlHabanero AddCustomFilter(string labelText,string propertyName, ICustomFilter customFilter)
         {
-            IControlHabanero filter = _filterControlManager.AddCustomFilter(labelText, propertyName, customFilter);
+            AddCustomFilter(labelText, customFilter);
+            return customFilter.Control;
+        }
+
+
+        ///<summary>
+        /// Adds a custom filter which allows filtering using an ICustomFilter 
+        ///</summary>
+        ///<param name="labelText">The Label to appear before the control</param>
+        ///<param name="customFilter">The custom filter</param>
+        public void AddCustomFilter(string labelText, ICustomFilter customFilter)
+        {
+            _filterControlManager.AddCustomFilter(labelText, customFilter);
             customFilter.ValueChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
-            return filter;
         }
 
         private void CreateFilterButtons(IPanel filterButtonPanel)

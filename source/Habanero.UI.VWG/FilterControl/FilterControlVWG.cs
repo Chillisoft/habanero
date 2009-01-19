@@ -127,6 +127,7 @@ namespace Habanero.UI.VWG
         /// <summary>
         /// The number of controls used for filtering that are on the filter control. <see cref="IFilterControl.FilterControls"/>
         /// </summary>
+        [Obsolete("Please use FilterControls.Count")]
         public int CountOfFilters
         {
             get { return _filterControlManager.CountOfFilters; }
@@ -150,8 +151,11 @@ namespace Habanero.UI.VWG
         /// <returns>Returns the new TextBox added</returns>
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName)
         {
-            ITextBox textBox = _filterControlManager.AddStringFilterTextBox(labelText, propertyName);
-            return textBox;
+            //ITextBox textBox = _filterControlManager.AddStringFilterTextBox(labelText, propertyName);
+
+            //return textBox;
+            ICustomFilter filter = _filterControlManager.AddStringFilterTextBox(labelText, propertyName);
+            return (ITextBox)filter.Control;
         }
 
         /// <summary>
@@ -165,7 +169,8 @@ namespace Habanero.UI.VWG
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName,
                                                FilterClauseOperator filterClauseOperator)
         {
-            return _filterControlManager.AddStringFilterTextBox(labelText, propertyName, filterClauseOperator);
+            ICustomFilter filter = _filterControlManager.AddStringFilterTextBox(labelText, propertyName, filterClauseOperator);
+            return (ITextBox) filter.Control;
         }
 
         /// <summary>
@@ -179,8 +184,9 @@ namespace Habanero.UI.VWG
         public IComboBox AddStringFilterComboBox(string labelText, string propertyName, ICollection options,
                                                  bool strictMatch)
         {
-            IComboBox comboBox =
+            ICustomFilter filter =
                 _filterControlManager.AddStringFilterComboBox(labelText, propertyName, options, strictMatch);
+            IComboBox comboBox = (IComboBox) filter.Control;
             comboBox.Height = new TextBox().Height;
             return comboBox;
         }
@@ -198,8 +204,8 @@ namespace Habanero.UI.VWG
         /// <returns>Returns the new CheckBox added</returns>
         public ICheckBox AddBooleanFilterCheckBox(string labelText, string propertyName, bool defaultValue)
         {
-            ICheckBox checkBox = _filterControlManager.AddBooleanFilterCheckBox(labelText, propertyName, defaultValue);
-            return checkBox;
+            ICustomFilter filter = _filterControlManager.AddBooleanFilterCheckBox(labelText, propertyName, defaultValue);
+            return (ICheckBox) filter.Control;
         }
 
         /// <summary>
@@ -218,10 +224,13 @@ namespace Habanero.UI.VWG
         public IDateTimePicker AddDateFilterDateTimePicker(string labelText, string propertyName, DateTime defaultValue,
                                                            FilterClauseOperator filterClauseOperator, bool nullable)
         {
-            IDateTimePicker dtPicker =
-                _filterControlManager.AddDateFilterDateTimePicker(labelText, propertyName, filterClauseOperator, nullable,
-                                                                  defaultValue);
-            return dtPicker;
+            //IDateTimePicker dtPicker =
+            //    _filterControlManager.AddDateFilterDateTimePicker(labelText, propertyName, filterClauseOperator, nullable,
+            //                                                      defaultValue);
+            ICustomFilter customFilter = 
+                _filterControlManager.AddDateFilterDateTimePicker(labelText, propertyName, filterClauseOperator, defaultValue);
+
+            return (IDateTimePicker) customFilter.Control;
         }
 
         /// <summary>
@@ -272,7 +281,7 @@ namespace Habanero.UI.VWG
         /// <summary>
         /// Gets the collection of individual filters
         /// </summary>
-        public IList FilterControls
+        public List<ICustomFilter> FilterControls
         {
             get { return _filterControlManager.FilterControls; }
         }
@@ -352,13 +361,21 @@ namespace Habanero.UI.VWG
         /// <returns>Returns the new DateRangeComboBox added</returns>
         public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, List<DateRangeOptions> options, bool includeStartDate, bool includeEndDate)
         {
-            return _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, options, includeStartDate,
-                                                                 includeEndDate);
+            ICustomFilter filter =  _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, options, includeStartDate,
+                includeEndDate);
+            return (IDateRangeComboBox) filter.Control;
         }
 
-        public IControlHabanero AddCustomFilter(string labelText,string propertyName, FilterControlManager.ICustomFilter customFilter)
+        [Obsolete("Please use the overload without the propertyName parameter")]
+        public IControlHabanero AddCustomFilter(string labelText,string propertyName, ICustomFilter customFilter)
         {
-            return _filterControlManager.AddCustomFilter(labelText, propertyName, customFilter);
+             AddCustomFilter(labelText, customFilter);
+            return customFilter.Control;
+        }
+
+        public void AddCustomFilter(string labelText, ICustomFilter customFilter)
+        {
+             _filterControlManager.AddCustomFilter(labelText, customFilter);
         }
 
         public void RemoveDefaultClearClickEvent()

@@ -628,8 +628,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //            string expectedStatement =
             //                @"SELECT MyBO.MyBoID FROM 
             //                    (SELECT MyBO.MyBoID FROM 
-            //                        (SELECT MyBO.MyBoID FROM MyBO ORDER BY MyBO.MyBOID ASC LIMIT 4) As FirstSelect 
-            //                    ORDER BY FirstSelect.MyBOID DESC LIMIT 2) AS SecondSelect 
+            //                        (SELECT MyBO.MyBoID FROM MyBO ORDER BY MyBO.MyBOID ASC LIMIT 6) As FirstSelect 
+            //                    ORDER BY FirstSelect.MyBOID DESC LIMIT 4) AS SecondSelect 
             //                ORDER BY SecondSelect.MyBOID ASC";
             //            StringAssert.AreEqualIgnoringCase(expectedStatement, statement.Statement.ToString());
 

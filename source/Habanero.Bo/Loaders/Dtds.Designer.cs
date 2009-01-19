@@ -179,6 +179,20 @@ namespace Habanero.BO.Loaders {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;!ELEMENT filter (filterProperty+)&gt;
+        ///&lt;!ELEMENT filterProperty EMPTY&gt;
+        ///&lt;!ATTLIST filterProperty 
+        ///	name NMTOKEN #IMPLIED
+        ///	label CDATA #IMPLIED
+        ///&gt;.
+        /// </summary>
+        internal static string filter {
+            get {
+                return ResourceManager.GetString("filter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to #include tab.dtd
         ///#include columnLayout.dtd
         ///#include field.dtd
@@ -213,7 +227,8 @@ namespace Habanero.BO.Loaders {
         
         /// <summary>
         ///   Looks up a localized string similar to #include column.dtd
-        ///&lt;!ELEMENT grid (column+)&gt;
+        ///#include filter.dtd
+        ///&lt;!ELEMENT grid (filter?, column+)&gt;
         ///&lt;!ATTLIST grid
         ///	sortColumn CDATA &quot;&quot;
         ///&gt;.
@@ -306,17 +321,15 @@ namespace Habanero.BO.Loaders {
         ///&lt;!ATTLIST relationship
         ///	name NMTOKEN #REQUIRED
         ///	type (single | multiple) #REQUIRED
+        ///  relationshipType ( Association | Aggregation | Composition ) &quot;Association&quot;
+        ///  owningBOHasForeignKey ( true | false ) &quot;true&quot;
         ///	relatedClass NMTOKEN #REQUIRED
         ///	relatedAssembly	NMTOKEN #REQUIRED
         ///	keepReference ( true | false ) &quot;true&quot;
+        ///  reverseRelationship NMTOKEN #IMPLIED
         ///	orderBy CDATA &quot;&quot;
         ///	deleteAction ( DeleteRelated | DereferenceRelated | Prevent | DoNothing ) &quot;Prevent&quot;
-        ///&gt;
-        ///		&lt;!ELEMENT relatedProperty EMPTY&gt;
-        ///    &lt;!ATTLIST relatedProperty
-        ///			property NMTOKEN #REQUIRED
-        ///			relatedProperty NMTOKEN #REQUIRED
-        ///		&gt;.
+        ///&gt; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string relationship {
             get {

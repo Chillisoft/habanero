@@ -115,6 +115,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// The number of controls used for filtering that are on the filter control. <see cref="FilterControls"/>
         /// </summary>
+        [Obsolete("Please use FilterControls.Count")]
         int CountOfFilters { get; }
 
         /// <summary>
@@ -136,7 +137,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Gets the collection of individual filters
         /// </summary>
-        IList FilterControls { get; }
+        List<ICustomFilter> FilterControls { get; }
 
         /// <summary>
         /// Returns the filter control used to filter the column for the given property name
@@ -192,7 +193,15 @@ namespace Habanero.UI.Base
         ///<param name="propertyName">The property of the Business Object to filter</param>
         ///<param name="customFilter">The custom filter</param>
         ///<returns>Returns the new Custom Filter Control </returns>
-        IControlHabanero AddCustomFilter(string labelText,string propertyName, FilterControlManager.ICustomFilter customFilter);
+        [Obsolete("Please use the overload without the propertyName parameter")]
+        IControlHabanero AddCustomFilter(string labelText,string propertyName, ICustomFilter customFilter);
+
+        ///<summary>
+        /// Adds a custom filter which allows filtering using an ICustomFilter 
+        ///</summary>
+        ///<param name="labelText">The Label to appear before the control</param>
+        ///<param name="customFilter">The custom filter</param>
+        void AddCustomFilter(string labelText, ICustomFilter customFilter);
 
         /// <summary>
         /// Removes the default Click Event. 
