@@ -708,7 +708,7 @@ namespace Habanero.DB
         /// </summary>
         public virtual string RightFieldDelimiter
         {
-            get { return _sqlFormatter.LeftFieldDelimiter; }
+            get { return _sqlFormatter.RightFieldDelimiter; }
         }
 
         ///<summary>

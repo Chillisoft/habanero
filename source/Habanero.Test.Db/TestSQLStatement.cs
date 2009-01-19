@@ -147,29 +147,29 @@ namespace Habanero.Test.DB
         [Test]
         public void TestAppendCriteria_WithNoWhere_AddWhere()
         {
-            SqlStatement sql = new SqlStatement(_connection, "select * from bob");
+            SqlStatementBuilder sql = new SqlStatementBuilder(_connection, "select * from bob");
             sql.AppendCriteria("this = that");
-            Assert.AreEqual("select * from bob WHERE this = that", sql.Statement.ToString());
+            Assert.AreEqual("select * from bob WHERE this = that", sql.GetStatement().Statement.ToString());
         }
 
         [Test]
         public void TestAppendCriteria_WithWhere_AddWhere()
         {
-            SqlStatement sql = new SqlStatement(_connection, "select * from bob WHERE that = this");
+            SqlStatementBuilder sql = new SqlStatementBuilder(_connection, "select * from bob WHERE that = this");
             sql.AppendCriteria("this = that");
-            Assert.AreEqual("select * from bob WHERE that = this AND this = that", sql.Statement.ToString());
+            Assert.AreEqual("select * from bob WHERE that = this AND this = that", sql.GetStatement().Statement.ToString());
         }
 
         [Test]
         public void TestAppendCriteria_Complex()
         {
-            SqlStatement sql;
-            sql = new SqlStatement(_connection, "select [FAKE WHERE CLAUSE] from bob");
+            SqlStatementBuilder sql;
+            sql = new SqlStatementBuilder(_connection, "select [FAKE WHERE CLAUSE] from bob");
             sql.AppendCriteria("this = that");
-            Assert.AreEqual("select [FAKE WHERE CLAUSE] from bob WHERE this = that", sql.Statement.ToString());
-            sql = new SqlStatement(_connection, "select [FAKE WHERE CLAUSE] from bob WHERE that = 'FAKE WHERE CLAUSE'");
+            Assert.AreEqual("select [FAKE WHERE CLAUSE] from bob WHERE this = that", sql.GetStatement().Statement.ToString());
+            sql = new SqlStatementBuilder(_connection, "select [FAKE WHERE CLAUSE] from bob WHERE that = 'FAKE WHERE CLAUSE'");
             sql.AppendCriteria("this = that");
-            Assert.AreEqual("select [FAKE WHERE CLAUSE] from bob WHERE that = 'FAKE WHERE CLAUSE' AND this = that", sql.Statement.ToString());
+            Assert.AreEqual("select [FAKE WHERE CLAUSE] from bob WHERE that = 'FAKE WHERE CLAUSE' AND this = that", sql.GetStatement().Statement.ToString());
         }
 
         #endregion //Test AppendCriteria
@@ -177,9 +177,9 @@ namespace Habanero.Test.DB
         [Test]
         public void TestAppendOrderBy()
         {
-            SqlStatement sql = new SqlStatement(_connection, "select * from bob WHERE that = this");
+            SqlStatementBuilder sql = new SqlStatementBuilder(_connection, "select * from bob WHERE that = this");
             sql.AppendOrderBy("this");
-            Assert.AreEqual("select * from bob WHERE that = this ORDER BY this", sql.Statement.ToString());
+            Assert.AreEqual("select * from bob WHERE that = this ORDER BY this", sql.GetStatement().Statement.ToString());
         }
 
         #region Test AddJoin
@@ -187,79 +187,79 @@ namespace Habanero.Test.DB
         [Test, ExpectedException(typeof(SqlStatementException))]
         public void TestAddJoin_WithEmptyStatement()
         {
-            SqlStatement sql = new SqlStatement(_connection, "");
+            SqlStatementBuilder sql = new SqlStatementBuilder(_connection, "");
             sql.AddJoin("left join", "bobby", "bobs = bobbys");
         }
 
         [Test]
         public void TestAddJoin_WithNoWhere()
         {
-            SqlStatement sql = new SqlStatement(_connection, "select * from bob");
+            SqlStatementBuilder sql = new SqlStatementBuilder(_connection, "select * from bob");
             sql.AddJoin("left join", "bobby", "bobs = bobbys");
-            Assert.AreEqual("select DISTINCT * from bob LEFT JOIN [bobby] ON bobs = bobbys", sql.Statement.ToString());
+            Assert.AreEqual("select DISTINCT * from bob LEFT JOIN [bobby] ON bobs = bobbys", sql.GetStatement().Statement.ToString());
         }
 
         [Test]
         public void TestAddJoin_WithNoWhere_InnerJoin()
         {
-            SqlStatement sql = new SqlStatement(_connection, "select * from bob");
+            SqlStatementBuilder sql = new SqlStatementBuilder(_connection, "select * from bob");
             sql.AddJoin("inner join", "bobby", "bobs = bobbys");
-            Assert.AreEqual("select * from bob INNER JOIN [bobby] ON bobs = bobbys", sql.Statement.ToString());
+            Assert.AreEqual("select * from bob INNER JOIN [bobby] ON bobs = bobbys", sql.GetStatement().Statement.ToString());
         }
 
         [Test]
         public void TestAddJoin_WithNoWhere_AlsoAddWhere()
         {
-            SqlStatement sql = new SqlStatement(_connection, "select * from bob");
+            SqlStatementBuilder sql = new SqlStatementBuilder(_connection, "select * from bob");
             sql.AddJoin("left join", "bobby", "bobs = bobbys");
             sql.AppendCriteria("this = that");
-            Assert.AreEqual("select DISTINCT * from bob LEFT JOIN [bobby] ON bobs = bobbys WHERE this = that", sql.Statement.ToString());
+            Assert.AreEqual("select DISTINCT * from bob LEFT JOIN [bobby] ON bobs = bobbys WHERE this = that", sql.GetStatement().Statement.ToString());
         }
 
         [Test]
         public void TestAddJoin_WithNoWhere_AddWhereThenAddJoin()
         {
-            SqlStatement sql = new SqlStatement(_connection, "select * from bob");
+            SqlStatementBuilder sql = new SqlStatementBuilder(_connection, "select * from bob");
             sql.AppendCriteria("this = that");
             sql.AddJoin("left join", "bobby", "bobs = bobbys");
-            Assert.AreEqual("select DISTINCT * from bob LEFT JOIN [bobby] ON bobs = bobbys WHERE this = that", sql.Statement.ToString());
+            Assert.AreEqual("select DISTINCT * from bob LEFT JOIN [bobby] ON bobs = bobbys WHERE this = that", sql.GetStatement().Statement.ToString());
         }
 
         [Test]
         public void AddJoin_WithWhere()
         {
-            SqlStatement sql = new SqlStatement(_connection, "select * from bob WHERE that = this");
+            SqlStatementBuilder sql = new SqlStatementBuilder(_connection, "select * from bob WHERE that = this");
             sql.AddJoin("left join", "bobby", "bobs = bobbys");
-            Assert.AreEqual("select DISTINCT * from bob LEFT JOIN [bobby] ON bobs = bobbys WHERE that = this", sql.Statement.ToString());
+            Assert.AreEqual("select DISTINCT * from bob LEFT JOIN [bobby] ON bobs = bobbys WHERE that = this", sql.GetStatement().Statement.ToString());
         }
 
         [Test]
         public void AddJoin_WithWhere_AlsoAddWhere()
         {
-            SqlStatement sql = new SqlStatement(_connection, "select * from bob WHERE that = this");
+            SqlStatementBuilder sql = new SqlStatementBuilder(_connection, "select * from bob WHERE that = this");
             sql.AddJoin("left join", "bobby", "bobs = bobbys");
             sql.AppendCriteria("this = that");
-            Assert.AreEqual("select DISTINCT * from bob LEFT JOIN [bobby] ON bobs = bobbys WHERE that = this AND this = that", sql.Statement.ToString());
+            Assert.AreEqual("select DISTINCT * from bob LEFT JOIN [bobby] ON bobs = bobbys WHERE that = this AND this = that", sql.GetStatement().Statement.ToString());
         }
 
         [Test]
         public void AddJoin_WithWhere_AlsoAddWhere_AddAnotherJoin()
         {
-            SqlStatement sql = new SqlStatement(_connection, "select * from bob WHERE that = this");
+            SqlStatementBuilder sql = new SqlStatementBuilder(_connection, "select * from bob WHERE that = this");
             sql.AddJoin("left join", "bobby", "bobs = bobbys");
             sql.AppendCriteria("this = that");
             sql.AddJoin("left join", "bobbin", "bobbys = bobbins");
             Assert.AreEqual("select DISTINCT * from (bob LEFT JOIN [bobby] ON bobs = bobbys) "+
-                "LEFT JOIN [bobbin] ON bobbys = bobbins WHERE that = this AND this = that", sql.Statement.ToString());
+                "LEFT JOIN [bobbin] ON bobbys = bobbins WHERE that = this AND this = that", sql.GetStatement().Statement.ToString());
         }
 
         [Test]
         public void AddJoin_Complex()
         {
-            SqlStatement sql = new SqlStatement(_connection, "select [FALSE FROM CLAUSE], [FALSE WHERE CLAUSE] from bob WHERE that = this");
+            SqlStatementBuilder sql = new SqlStatementBuilder(_connection, "select [FALSE FROM CLAUSE], [FALSE WHERE CLAUSE] from bob WHERE that = this");
             sql.AddJoin("left join", "bobby", "bobs = bobbys");
             sql.AppendCriteria("this = that");
-            Assert.AreEqual("select DISTINCT [FALSE FROM CLAUSE], [FALSE WHERE CLAUSE] from bob LEFT JOIN [bobby] ON bobs = bobbys WHERE that = this AND this = that", sql.Statement.ToString());
+            Assert.AreEqual("select DISTINCT [FALSE FROM CLAUSE], [FALSE WHERE CLAUSE] from bob LEFT JOIN [bobby] ON bobs = bobbys WHERE that = this AND this = that", sql.GetStatement().Statement.ToString());
         }
 
         #endregion //Test AddJoin
@@ -270,7 +270,7 @@ namespace Habanero.Test.DB
         public void TestAddSelectFields()
         {
             //-------------Setup Test Pack ------------------
-            SqlStatement sql = new SqlStatement(_connection, "select [FALSE FROM CLAUSE], [FALSE WHERE CLAUSE] from bob WHERE that = this");
+            SqlStatementBuilder sql = new SqlStatementBuilder(_connection, "select [FALSE FROM CLAUSE], [FALSE WHERE CLAUSE] from bob WHERE that = this");
             List<string> fields = new List<string>();
             fields.Add("myField1");
             fields.Add("myField2");
@@ -281,7 +281,7 @@ namespace Habanero.Test.DB
             sql.AddSelectFields(fields);
 
             //-------------Test Result ----------------------
-            Assert.AreEqual("select [FALSE FROM CLAUSE], [FALSE WHERE CLAUSE], [myField1], [myField2] from bob WHERE that = this", sql.Statement.ToString());
+            Assert.AreEqual("select [FALSE FROM CLAUSE], [FALSE WHERE CLAUSE], [myField1], [myField2] from bob WHERE that = this", sql.GetStatement().Statement.ToString());
         }           
 
         #endregion //Test AddSelectFields
@@ -303,4 +303,5 @@ namespace Habanero.Test.DB
         //    _testStatement.SetupCommand(_command);
         //}
     }
+
 }
