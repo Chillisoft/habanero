@@ -179,6 +179,7 @@ namespace Habanero.BO.ClassDefinition
 			{
 				if (_superClassClassDef == null && _assemblyName != null && _className != null)
 				{
+                    //TODO Mark 2009-01-15: Look at how we can change this ClassDef.ClassDefs to the actual parent collection of this SuperClassDef's Class (Low priority)
 					_superClassClassDef = ClassDef.ClassDefs[_assemblyName, _className];
                     if (_superClassClassDef == null)
                     {
