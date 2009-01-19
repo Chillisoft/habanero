@@ -35,9 +35,7 @@ namespace Habanero.BO
     /// </summary>
     public abstract class PropRuleBase : IPropRule
     {
-		private string _name;
-        private string _message;
-    	protected Dictionary<string, object> _parameters;
+        protected Dictionary<string, object> _parameters;
 
 		/// <summary>
 		/// Constructor to initialise a new property rule
@@ -47,8 +45,8 @@ namespace Habanero.BO
 		///// <param name="parameters">The parameters for this rule.</param>
 		protected PropRuleBase(string name, string message)
 		{
-			_name = name;
-			_message = message;
+			Name = name;
+			Message = message;
 			_parameters = FillParameters(AvailableParameters(), _parameters);
 		}
 
@@ -116,21 +114,14 @@ namespace Habanero.BO
         /// <summary>
         /// Returns the rule name
         /// </summary>
-        public string Name
-        {
-            get { return _name; }
-			set { _name = value; }
-        }
+        public string Name { get; set; }
 
         /// <summary>
         /// Returns the error message for if the rule fails.
         /// </summary>
-        public string  Message {
-			get { return _message; }
-			set { _message = value; }
-        }
+        public string Message { get; set; }
 
-		private static Dictionary<string, object> FillParameters(List<string> availableParams, Dictionary<string, object> currentCollection)
+        private static Dictionary<string, object> FillParameters(List<string> availableParams, Dictionary<string, object> currentCollection)
 		{
 			Dictionary<string, object> parameters = new Dictionary<string, object>();
 			if (currentCollection == null)

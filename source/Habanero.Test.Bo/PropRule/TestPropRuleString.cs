@@ -31,10 +31,8 @@ namespace Habanero.Test.BO
         {
             PropRuleString rule = new PropRuleString("Surname", "Test", 2, 50, null);
 
-            string errorMessage;
-            
             //Test less than min length
-            errorMessage = "";
+            string errorMessage = "";
             Assert.IsFalse(rule.IsPropValueValid("Propname", "a", ref errorMessage));
             Assert.IsTrue(errorMessage.Length > 0);
             //Test valid data

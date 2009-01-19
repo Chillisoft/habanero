@@ -242,8 +242,10 @@ namespace Habanero.Test.BO.ClassDefinition
             bool valid = propDef.IsValueValid(invalidValue, ref errMsg);
 
             //---------------Test Result -----------------------
+
             string expectedErrorMessage = "Prop Name' invalid since '" + invalidValue + "' is not in the lookup list of available values.";
             StringAssert.Contains(expectedErrorMessage, errMsg);
+//            StringAssert.Contains();
             Assert.IsFalse(valid);
         }
         [Test]

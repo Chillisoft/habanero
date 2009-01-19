@@ -652,12 +652,14 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>Returns true if valid, false if not</returns>
         public bool IsValueValid(object propValue, ref string errorMessage)
         {
+            string tmpErrMsg = "";
+            string displayNameFull = this.ClassDef == null ? DisplayName : this.ClassDef.ClassName + "." + DisplayName;
             if (_compulsory)
             {
                 if (propValue == null || propValue == DBNull.Value
                     || (propValue is string && (string) propValue == String.Empty))
                 {
-                    errorMessage = String.Format("'{0}' is a compulsory field and has no value.", DisplayName);
+                    errorMessage = String.Format("'{0}' is a compulsory field and has no value.", displayNameFull);
                     return false;
                 }
             }
@@ -679,7 +681,7 @@ namespace Habanero.BO.ClassDefinition
             {
                 if (((string) propValue).Length > _length)
                 {
-                    errorMessage = String.Format("'{0}' cannot be longer than {1} characters.", DisplayName, _length);
+                    errorMessage = String.Format("'{0}' cannot be longer than {1} characters.", displayNameFull, _length);
                     return false;
                 }
             }
@@ -687,9 +689,9 @@ namespace Habanero.BO.ClassDefinition
             bool valid = true;
             foreach (IPropRule propRule in _propRules)
             {
-                string tmpErrMsg = "";
+
                 bool tmpValid = (propRule == null
-                                 || propRule.IsPropValueValid(DisplayName, GetNewValue(propValue), ref tmpErrMsg));
+                                 || propRule.IsPropValueValid(displayNameFull, GetNewValue(propValue), ref tmpErrMsg));
                 valid = valid & tmpValid;
                 errorMessage = StringUtilities.AppendMessage(errorMessage, tmpErrMsg);
             }
