@@ -261,7 +261,7 @@ namespace Habanero.BO
         /// NNB: this method should only ever be used for testing. E.g. where the tester wants to test concurrency control or 
         /// to ensure that saving or loading from the data base is correct.
         /// </summary>
-        internal void ClearLoadedObjects()
+        public void ClearLoadedObjects()
         {
             string[] keysArray = new string[_loadedBusinessObjects.Count];
             _loadedBusinessObjects.Keys.CopyTo(keysArray, 0);
