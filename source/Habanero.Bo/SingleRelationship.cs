@@ -68,7 +68,7 @@ namespace Habanero.BO
     {
         //TODO: Implement logging private static readonly ILog log = LogManager.GetLogger("Habanero.BO.SingleRelationship");
         private TBusinessObject _relatedBo;
-        private IExpression _storedRelationshipExpression;
+        private Criteria _storedKeyCriteria;
         private bool _isRemoved;
         private TBusinessObject _removedBO;
         
@@ -166,14 +166,35 @@ namespace Habanero.BO
         ///<returns>returns the related business object</returns>
         public virtual TBusinessObject GetRelatedObject()
         {
-            if (RelatedBoForeignKeyHasChanged()) _relatedBo = null;
-
-            IExpression newRelationshipExpression = _relKey.RelationshipExpression();
-            if (_storedRelationshipExpression == null || (_storedRelationshipExpression != null && _storedRelationshipExpression.ExpressionString() != newRelationshipExpression.ExpressionString()))
+            if (!OwningBOHasForeignKey && (RelatedBoForeignKeyHasChanged() || _relatedBo == null))
+            {
+              
+                BusinessObjectCollection<TBusinessObject> relatedCol 
+                    = BusinessObjectManager.Instance.Find<TBusinessObject>(_relKey.Criteria);
+                if (relatedCol.Count == 0)
+                {
+                      _relatedBo = null;
+                } else if (relatedCol.Count == 1)
+                {
+                    if (relatedCol[0] == _relatedBo)
+                    {
+                          _relatedBo = null;
+                    } else
+                    {
+                        _relatedBo = relatedCol[0];
+                    }
+                }
+                return _relatedBo;
+            }
+            Criteria newKeyCriteria = _relKey.Criteria;
+            if (_storedKeyCriteria == null ||
+                (_storedKeyCriteria != null &&
+                 ! _storedKeyCriteria.Equals(newKeyCriteria)))
             {
                 _relatedBo = HasRelatedObject() ? Broker.GetRelatedBusinessObject(this) : null;
-                _storedRelationshipExpression = newRelationshipExpression;
+                _storedKeyCriteria = newKeyCriteria;
             }
+         
             return _relatedBo;
         }
 
@@ -302,7 +323,7 @@ namespace Habanero.BO
                     _owningBo.SetPropertyValue(relProp.OwnerPropertyName, relatedObjectValue);
                 }
             }
-            _storedRelationshipExpression = _relKey.RelationshipExpression();
+            _storedKeyCriteria = _relKey.Criteria;
         }
 
         private bool IsRelatedBODirty() { return _relatedBo != null && _relatedBo.Status.IsDirty ; }

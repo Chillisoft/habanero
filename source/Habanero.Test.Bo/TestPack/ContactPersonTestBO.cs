@@ -207,6 +207,24 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
+        public static ClassDef LoadClassDefWithSurnameAsPrimaryKey_WriteNew()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property name=""ContactPersonID"" type=""Guid"" />
+					<property name=""Surname"" databaseField=""Surname_field"" readWriteRule=""WriteNew"" compulsory=""true"" />
+					<primaryKey isObjectID=""false"" >
+						<prop name=""Surname"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
         public static ClassDef LoadClassDefWithCompositePrimaryKey()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();

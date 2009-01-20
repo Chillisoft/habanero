@@ -86,6 +86,15 @@ namespace Habanero.BO
         {
             get { return _boProp; }
         }
+
+        /// <summary>
+        /// Returns the Criteria for this RelProp
+        /// </summary>
+        /// <returns>Returns an Criteria object</returns>
+        internal Criteria Criteria
+        {
+            get { return new Criteria(this.RelatedClassPropName, Criteria.ComparisonOp.Equals, this.BOProp.Value); }
+        }
     }
 
 }

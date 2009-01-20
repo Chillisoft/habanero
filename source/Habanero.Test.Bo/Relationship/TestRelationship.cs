@@ -136,6 +136,28 @@ namespace Habanero.Test.BO.Relationship
         }
 
         [Test]
+        public void TestChangedEnginesForeignKey_SetIDToNull()
+        {
+            //---------------Set up test pack-------------------
+            Car car = new Car();
+            Engine engine = new Engine();
+            engine.CarID = car.CarID;
+            car.Save();
+            engine.Save();
+
+            //---------------Assert Precondition----------------
+            Assert.AreSame(engine, car.GetEngine());
+            Assert.AreSame(car, engine.GetCar());
+
+            //---------------Execute Test ----------------------
+            engine.SetPropertyValue("CarID", null);
+            Engine loadedEngine = car.GetEngine();
+
+            //---------------Test Result -----------------------
+            Assert.IsNull(loadedEngine);
+        }
+
+        [Test]
         public void TestGetRelatedBusinessObjectCollection_SortOrder()
         {
             //---------------Set up test pack-------------------

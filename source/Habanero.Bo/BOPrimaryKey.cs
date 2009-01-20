@@ -218,7 +218,7 @@ namespace Habanero.BO
             PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
             if (primaryKeyDef.IsCompositeKey) return null;
 
-            BOPropCol boPropCol = classDef.createBOPropertyCol(false);
+            BOPropCol boPropCol = classDef.createBOPropertyCol(true);
             BOPrimaryKey boPrimaryKey = primaryKeyDef.CreateBOKey(boPropCol) as BOPrimaryKey;
             if (boPrimaryKey != null)
             {

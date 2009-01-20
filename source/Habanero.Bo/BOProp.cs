@@ -513,7 +513,7 @@ namespace Habanero.BO
                     if (_isObjectNew)
                     {
                         message = "The property '" + this.DisplayName
-                                  + "' is not editable since it is set up as WriteNew and the object is new";
+                                  + "' is not editable since it is set up as WriteNotNew and the object is new";
                         return false;
                     }
                     break;

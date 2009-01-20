@@ -2028,6 +2028,8 @@ namespace Habanero.Test.BO
                 StringAssert.Contains("Two copies of the business object 'Habanero.Test.BO.BOWithIntID_Child' identified by", ex.Message);
             }
         }
+
+        //TODO 20 Jan 2009: remove these comments if the tests are done
         //Test if ccreate a new object with object id then must be in object manager.
         //Test that persist this object hten in object manager
         //test that remove revf to this object then call gccolllectt then removed from object mamnager
@@ -2035,6 +2037,58 @@ namespace Habanero.Test.BO
         //Test int id change ID ensure in object manger with new id removed with old id
         //test int id change id change id still in object manger with new id removed with intermediate id.
         // test serialization constructor
+
+        [Test]
+        public void Test_Find_NotFound()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, TestUtil.CreateRandomString());
+           
+            //--------------- Execute Test ----------------------
+            BusinessObjectCollection<ContactPersonTestBO> found = BusinessObjectManager.Instance.Find<ContactPersonTestBO>(criteria);
+            
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(0, found.Count);
+        }
+
+        [Test]
+        public void Test_Find_OneMatch()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            string surname = cp.Surname = TestUtil.CreateRandomString();
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
+
+            //--------------- Execute Test ----------------------
+            BusinessObjectCollection<ContactPersonTestBO> found = BusinessObjectManager.Instance.Find<ContactPersonTestBO>(criteria);
+
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(1, found.Count);
+            Assert.AreSame(cp, found[0]);
+
+        }
+
+        [Test]
+        public void Test_Find_Null_ReturnsAllOfType()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            new ContactPersonTestBO(); new ContactPersonTestBO(); new ContactPersonTestBO();
+
+            //--------------- Execute Test ----------------------
+            BusinessObjectCollection<ContactPersonTestBO> found = BusinessObjectManager.Instance.Find<ContactPersonTestBO>(null);
+
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(3, found.Count);
+
+        }
+
+
         private static ContactPersonTestBO CreateSavedCP()
         {
             ContactPersonTestBO cp = new ContactPersonTestBO

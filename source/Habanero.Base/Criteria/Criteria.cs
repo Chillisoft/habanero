@@ -225,13 +225,7 @@ namespace Habanero.Base
         }
 
 
-        /// <summary>
-        /// Evaluates the businessObject passed in to see if it matches the criteria that have been set up
-        /// </summary>
-        /// <typeparam name="T">The type of BusinessObject</typeparam>
-        /// <param name="businessObject">The businessobject to check for a match against the criteria</param>
-        /// <returns>True if the businessobject matches the criteria, false if it does not</returns>
-        public bool IsMatch<T>(T businessObject) where T : IBusinessObject
+        public bool IsMatch<T>(T businessObject, bool usePersistedValue) where T : class, IBusinessObject 
         {
             if (businessObject == null) throw new ArgumentNullException("businessObject", "The IsMatch cannot be called for null object");
 
@@ -252,9 +246,18 @@ namespace Habanero.Base
             object leftValue = null;
             if (_field.Source != null && _field.Source.ChildSource != null)
             {
-                leftValue = businessObject.GetPersistedPropertyValue(_field.Source.ChildSource, _field.PropertyName);
+                if (usePersistedValue)
+                    leftValue = businessObject.GetPersistedPropertyValue(_field.Source.ChildSource, _field.PropertyName);
+                else 
+                    leftValue = businessObject.GetPropertyValue(_field.Source.ChildSource, _field.PropertyName);
             }
-            else leftValue = businessObject.GetPersistedPropertyValue(null, _field.PropertyName);
+            else
+            {
+                if (usePersistedValue) 
+                    leftValue = businessObject.GetPersistedPropertyValue(null, _field.PropertyName);
+                else
+                    leftValue = businessObject.GetPropertyValue(null, _field.PropertyName);
+            }
             if (leftValue == null)
             {
                 return IsNullMatch();
@@ -271,6 +274,17 @@ namespace Habanero.Base
             IComparable compareToValue = _fieldValue as IComparable;
             compareToValue = ConvertDateTimeStringToValue(compareToValue);
             return IsNonNullMatch(boPropertyValue, compareToValue);
+        }
+
+        /// <summary>
+        /// Evaluates the businessObject passed in to see if it matches the criteria that have been set up
+        /// </summary>
+        /// <typeparam name="T">The type of BusinessObject</typeparam>
+        /// <param name="businessObject">The businessobject to check for a match against the criteria</param>
+        /// <returns>True if the businessobject matches the criteria, false if it does not</returns>
+        public bool IsMatch<T>(T businessObject) where T : class, IBusinessObject 
+        {
+            return IsMatch(businessObject, true);
         }
 
         private static IComparable ConvertDateTimeStringToValue(IComparable y)
@@ -412,15 +426,18 @@ namespace Habanero.Base
         private string GetValueAsString()
         {
             string valueString;
-            if (FieldValue is DateTime)
+            if (FieldValue == null)
+            {
+                return "NULL";
+            } else if (FieldValue is DateTime)
             {
                 valueString = ((DateTime)FieldValue).ToString(DATE_FORMAT);
             }
             else if (FieldValue is Guid)
             {
                 valueString = ((Guid)FieldValue).ToString("B");
-            }
-            else
+            } 
+            else 
             {
                 valueString = FieldValue.ToString();
             }
@@ -453,6 +470,8 @@ namespace Habanero.Base
             }
             if (ComparisonOperator != otherCriteria.ComparisonOperator) return false;
             if (String.Compare(Field.PropertyName, otherCriteria.Field.PropertyName) != 0) return false;
+            if (_fieldValue == null && otherCriteria.FieldValue == null) return true;
+            if (_fieldValue == null && otherCriteria.FieldValue != null) return false;
             return _fieldValue.Equals(otherCriteria.FieldValue);
         }
 
@@ -552,6 +571,8 @@ namespace Habanero.Base
 
         protected string ComparisonOperatorString()
         {
+            if (ComparisonOperator == ComparisonOp.Equals && FieldValue == null)
+                return ComparisonOps[(int) ComparisonOp.Is];
             return ComparisonOps[(int)ComparisonOperator];
         }
 
@@ -566,5 +587,6 @@ namespace Habanero.Base
             if (criteria1 == null) return criteria2;
             return new Criteria(criteria1, LogicalOp.And, criteria2);
         }
+
     }
 }

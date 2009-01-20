@@ -33,8 +33,9 @@ namespace Habanero.Test.BO.ClassDefinition
         private PropDefCol mPropDefCol;
 
         [SetUp]
-        public void init()
+        public void Setup()
         {
+            ClassDef.ClassDefs.Clear();
             mRelKeyDef = new RelKeyDef();
             mPropDefCol = new PropDefCol();
 
@@ -82,7 +83,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsTrue(relKey.HasRelatedObject(),
                           "This is true since the values for the properties should have defaulted to 1 each");
 
-            Assert.AreEqual("(PropName = '1' AND PropName2 = '2')", relKey.RelationshipExpression().ExpressionString());
+            Assert.AreEqual("(PropName = '1') AND (PropName2 = '2')", relKey.Criteria.ToString());
         }
 
         [Test, ExpectedException(typeof(HabaneroArgumentException))]

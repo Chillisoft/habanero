@@ -54,6 +54,100 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreSame(bo1.GetPropertyValue("RelatedID"), relatedBo1.GetPropertyValue("MyRelatedBoID"));
         }
 
+
+        [Test]
+        public void Test_SetToNull()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
+            relationship.OwningBOHasForeignKey = false;
+            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
+            contactPerson.Surname = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Organisation = organisationTestBO;
+            contactPerson.Save();
+           
+            //---------------Assert Precondition----------------
+            Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
+
+            //---------------Execute Test ----------------------
+            organisationTestBO.ContactPerson = null;
+
+            //---------------Test Result -----------------------
+            Assert.IsNull(organisationTestBO.ContactPerson);
+        }
+
+        [Test]
+        public void Test_SetToNull_ByID()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
+            relationship.OwningBOHasForeignKey = false;
+            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
+            contactPerson.Surname = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Organisation = organisationTestBO;
+            contactPerson.Save();
+            contactPerson.OrganisationID = null;
+
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO currentContactPerson = organisationTestBO.ContactPerson;
+
+            //---------------Test Result -----------------------
+            Assert.IsNull(currentContactPerson);
+        }
+
+
+        [Test]
+        public void Test_SetToAlternate_ByID_InBOManager()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
+            relationship.OwningBOHasForeignKey = false;
+            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
+            contactPerson.Surname = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Organisation = organisationTestBO;
+            contactPerson.Save();
+
+            ContactPersonTestBO alternatecontactPerson = new ContactPersonTestBO();
+            alternatecontactPerson.Surname = TestUtil.CreateRandomString();
+            alternatecontactPerson.FirstName = TestUtil.CreateRandomString();
+
+            //---------------Execute Test ----------------------
+            contactPerson.OrganisationID = null;
+            alternatecontactPerson.OrganisationID = organisationTestBO.OrganisationID;
+            
+            //---------------Test Result -----------------------
+            //Assert.AreSame(organisationTestBO, alternatecontactPerson.Organisation);
+            Assert.AreSame(alternatecontactPerson, organisationTestBO.ContactPerson);
+        }
+        
+        [Test]
+        public void Test_SetByID_InBOManager()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
+            relationship.OwningBOHasForeignKey = false;
+            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
+            contactPerson.Surname = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.CreateRandomString();
+
+
+            //---------------Execute Test ----------------------
+            contactPerson.OrganisationID = organisationTestBO.OrganisationID;
+            
+            //---------------Test Result -----------------------
+            Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
+        }
+        
+
+
+
         [Test]
         public void Test_IsRemoved()
         {
@@ -80,8 +174,7 @@ namespace Habanero.Test.BO.Relationship
 
         }
 
-
-       [Test]
+        [Test]
         public void Test_IsRemoved_False()
         {
             //---------------Set up test pack-------------------

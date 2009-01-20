@@ -118,6 +118,38 @@ namespace Habanero.BO
             return (_relProps.ContainsKey(propName));
         }
 
+        public Criteria Criteria
+        {
+            get
+            {
+                if (_relProps.Count == 0) return null;
+                Criteria criteria = null;
+                foreach (RelProp relProp in this)
+                {
+                    if (criteria == null)
+                        criteria = relProp.Criteria;
+                    else
+                    {
+                        criteria = new Criteria(criteria, Criteria.LogicalOp.And, relProp.Criteria);
+                    }
+                }
+                return criteria;
+ 
+                //if (_relProps.Count >= 1)
+                //{
+                //    IExpression exp = null;
+                //    foreach (RelProp relProp in this)
+                //    {
+                //        exp = exp == null
+                //            ? relProp.RelatedPropExpression()
+                //            : new Expression(exp, new SqlOperator("AND"), relProp.RelatedPropExpression());
+                //    }
+                //    return exp;
+                //}
+                //return null;
+            }
+        }
+
         /// <summary>
         /// Indicates if there is a related object.
         /// If all relationship properties are null then it is assumed that 
@@ -136,25 +168,25 @@ namespace Habanero.BO
             return false;
         }
 
-        /// <summary>
-        /// Returns the relationship expression. This is a copy of the expression as stored in the <see cref="RelKey"/>
-        /// </summary>
-        /// <returns>Returns an IExpression object</returns>
-        public IExpression RelationshipExpression()
-        {
-            if (_relProps.Count >= 1)
-            {
-                IExpression exp = null;
-                foreach (RelProp relProp in this)
-                {
-                    exp = exp == null 
-                        ? relProp.RelatedPropExpression() 
-                        : new Expression(exp, new SqlOperator("AND"), relProp.RelatedPropExpression());
-                }
-                return exp;
-            }
-            return null;
-        }
+        ///// <summary>
+        ///// Returns the relationship expression. This is a copy of the expression as stored in the <see cref="RelKey"/>
+        ///// </summary>
+        ///// <returns>Returns an IExpression object</returns>
+        //public IExpression RelationshipExpression()
+        //{
+        //    if (_relProps.Count >= 1)
+        //    {
+        //        IExpression exp = null;
+        //        foreach (RelProp relProp in this)
+        //        {
+        //            exp = exp == null 
+        //                ? relProp.RelatedPropExpression() 
+        //                : new Expression(exp, new SqlOperator("AND"), relProp.RelatedPropExpression());
+        //        }
+        //        return exp;
+        //    }
+        //    return null;
+        //}
 
         /// <summary>
         /// Returns an enumrated for theis RelKey to iterate through its RelProps

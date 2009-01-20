@@ -61,11 +61,11 @@ namespace Habanero.Base
         /// <returns>Returns true if there is a valid relationship</returns>
         bool HasRelatedObject();
 
-        /// <summary>
-        /// Returns the relationship expression. This is a copy of the expression as stored in the <see cref="Habanero.BO.RelKey"/>
-        /// </summary>
-        /// <returns>Returns an IExpression object</returns>
-        IExpression RelationshipExpression();
+        ///// <summary>
+        ///// Returns the relationship expression. This is a copy of the expression as stored in the <see cref="Habanero.BO.RelKey"/>
+        ///// </summary>
+        ///// <returns>Returns an IExpression object</returns>
+        //IExpression RelationshipExpression();
 
         /// <summary>
         /// Indicates whether a property with the given name is part of the key
@@ -73,5 +73,11 @@ namespace Habanero.Base
         /// <param name="propName">The property name</param>
         /// <returns>Returns true if a property with this name is held</returns>
         bool Contains(string propName);
+
+        /// <summary>
+        /// Returns a copy of the key's Criteria (ie the search string matching this key). 
+        /// </summary>
+        /// <returns>Returns a Criteria object</returns>
+        Criteria Criteria { get; }
     }
 }

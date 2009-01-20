@@ -308,6 +308,29 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void Test_GetBusinessObjectFromObjectManager_WriteNewProp()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ContactPersonTestBO.LoadClassDefWithSurnameAsPrimaryKey_WriteNew();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            string surname = TestUtil.CreateRandomString();
+            contactPersonTestBO.Surname = surname;
+            PropDef propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadWrite, null);
+            propDef.LookupList = new BusinessObjectLookupList(typeof(ContactPersonTestBO));
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IBusinessObject returnedBO = propDef.GetBusinessObjectFromObjectManager(contactPersonTestBO.Surname);
+            //---------------Test Result -----------------------
+            Assert.AreSame(contactPersonTestBO, returnedBO);
+        }
+
+
+
+        [Test]
         public void Test_IsValueValid_OnePropRule_ValidValue()
         {
             //---------------Set up test pack-------------------

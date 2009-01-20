@@ -185,6 +185,24 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_CreateWithValue_ClassDef_WriteNewProp()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            string value = TestUtil.CreateRandomString();
+            ClassDef classDef = ContactPersonTestBO.LoadClassDefWithSurnameAsPrimaryKey_WriteNew();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO {Surname = value};
+            object expectedID = contactPersonTestBO.ID;
+
+            //---------------Execute Test ----------------------
+            BOPrimaryKey key = BOPrimaryKey.CreateWithValue(classDef, value);
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(expectedID, key);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
         public void Test_CreateWithValue_Type()
         {
             //---------------Set up test pack-------------------

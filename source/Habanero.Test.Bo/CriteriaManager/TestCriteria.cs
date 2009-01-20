@@ -134,6 +134,36 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestEquals_Leaf_FieldValueIsNull_True()
+        {
+            //---------------Set up test pack-------------------
+            DateTime dateTimeValue = DateTime.Now;
+            const string datetimePropName = "DateTime";
+            Criteria criteria1 = new Criteria(datetimePropName, Criteria.ComparisonOp.Equals, null);
+            Criteria criteria2 = new Criteria(datetimePropName, Criteria.ComparisonOp.Equals, null);
+            //---------------Execute Test ----------------------
+            bool areEquals = criteria1.Equals(criteria2);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(areEquals);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestEquals_Leaf_FieldValueIsNull_False()
+        {
+            //---------------Set up test pack-------------------
+            DateTime dateTimeValue = DateTime.Now;
+            const string datetimePropName = "DateTime";
+            Criteria criteria1 = new Criteria(datetimePropName, Criteria.ComparisonOp.Equals, null);
+            Criteria criteria2 = new Criteria(datetimePropName, Criteria.ComparisonOp.Equals, DateTime.Now);
+            //---------------Execute Test ----------------------
+            bool areEquals = criteria1.Equals(criteria2);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(areEquals);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
         public void TestEquals_CompositeAndLeaf()
         {
             //---------------Set up test pack-------------------
@@ -384,7 +414,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_TwoProps_Or()
+        public void TestIsMatch_TwoProps_Or()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -407,7 +437,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_TwoProps_And()
+        public void TestIsMatch_TwoProps_And()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -431,7 +461,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_TwoProps_Not()
+        public void TestIsMatch_TwoProps_Not()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -448,6 +478,45 @@ namespace Habanero.Test.BO
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
         }
 
+        [Test]
+        public void TestIsMatch_UsesPersistedValue()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithBoolean();
+            MyBO bo = new MyBO();
+            bo.TestBoolean = false;
+            bo.Save();
+
+            bo.TestBoolean = true;
+            Criteria criteria = new Criteria("TestBoolean", Criteria.ComparisonOp.Equals, false);
+
+            //--------------- Execute Test ----------------------
+            bool isMatch = criteria.IsMatch(bo);
+            //--------------- Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since its persisted values match the criteria given.");
+        }
+
+        [Test]
+        public void TestIsMatch_UsingCurrentValue()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithBoolean();
+            MyBO bo = new MyBO();
+            bo.TestBoolean = false;
+            bo.Save();
+
+            bo.TestBoolean = true;
+            Criteria criteria = new Criteria("TestBoolean", Criteria.ComparisonOp.Equals, true);
+
+            //--------------- Execute Test ----------------------
+            bool isMatch = criteria.IsMatch(bo, false);
+            //--------------- Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since its current values match the criteria given.");
+        }
 
         [Test]
         public void TestToString_Guid()
@@ -623,12 +692,14 @@ namespace Habanero.Test.BO
 
         }
 
+
+
         #region Test Comparison operators
 
         #region Equals
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_Equals_NoMatch()
+        public void TestIsMatch_OneProp_Equals_NoMatch()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -646,7 +717,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_Equals()
+        public void TestIsMatch_OneProp_Equals()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -713,6 +784,36 @@ namespace Habanero.Test.BO
             StringAssert.AreEqualIgnoringCase("Surname = '" + surnameValue + "'", criteriaAsString);
         }
  
+        [Test]
+        public void TestToString_LeafCriteria_String_Equals_Null()
+        {
+            //---------------Set up test pack-------------------
+            string surnameValue = Guid.NewGuid().ToString("N");
+            const string surname = "Surname";
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.Equals, null);
+
+            //---------------Execute Test ----------------------
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("Surname IS NULL", criteriaAsString);
+        }
+  
+        [Test]
+        public void TestToString_LeafCriteria_String_Is_Null()
+        {
+            //---------------Set up test pack-------------------
+            string surnameValue = Guid.NewGuid().ToString("N");
+            const string surname = "Surname";
+            Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.Is, null);
+
+            //---------------Execute Test ----------------------
+            string criteriaAsString = criteria.ToString();
+
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("Surname IS NULL", criteriaAsString);
+        }
+ 
 
        
 
@@ -722,7 +823,7 @@ namespace Habanero.Test.BO
         #region Greater Than
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_GreaterThan()
+        public void TestIsMatch_OneProp_GreaterThan()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -741,7 +842,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_GreaterThan_NoMatch()
+        public void TestIsMatch_OneProp_GreaterThan_NoMatch()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -873,7 +974,7 @@ namespace Habanero.Test.BO
         #region Less Than
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_LessThan()
+        public void TestIsMatch_OneProp_LessThan()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -891,7 +992,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_LessThan_NoMatch()
+        public void TestIsMatch_OneProp_LessThan_NoMatch()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -991,7 +1092,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_LessThanEqual()
+        public void TestIsMatch_OneProp_LessThanEqual()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1009,7 +1110,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_LessThanEqual_ValuesEqual()
+        public void TestIsMatch_OneProp_LessThanEqual_ValuesEqual()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1027,7 +1128,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_LessThanEqual_NoMatch()
+        public void TestIsMatch_OneProp_LessThanEqual_NoMatch()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1127,7 +1228,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_GreaterThanEqual()
+        public void TestIsMatch_OneProp_GreaterThanEqual()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1145,7 +1246,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_GreaterThanEqual_ValuesEqual()
+        public void TestIsMatch_OneProp_GreaterThanEqual_ValuesEqual()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1163,7 +1264,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_GreaterThanEqual_NoMatch()
+        public void TestIsMatch_OneProp_GreaterThanEqual_NoMatch()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1264,7 +1365,7 @@ namespace Habanero.Test.BO
 
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_NotEquals_NoMatch()
+        public void TestIsMatch_OneProp_NotEquals_NoMatch()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1283,7 +1384,7 @@ namespace Habanero.Test.BO
 
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_NotEquals()
+        public void TestIsMatch_OneProp_NotEquals()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1368,7 +1469,7 @@ namespace Habanero.Test.BO
 
         #region Like
         [Test]
-        public void TestCriteria_Like()
+        public void TestLike()
         {
             //-------------Setup Test Pack ------------------
             //-------------Test Pre-conditions --------------
@@ -1386,7 +1487,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_Like()
+        public void TestIsMatch_OneProp_Like()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1404,7 +1505,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_Like_ValuesIdentical()
+        public void TestIsMatch_OneProp_Like_ValuesIdentical()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1422,7 +1523,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_Like_ValuesStartsWith()
+        public void TestIsMatch_OneProp_Like_ValuesStartsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1441,7 +1542,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_Like_ValuesEndsWith()
+        public void TestIsMatch_OneProp_Like_ValuesEndsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1460,7 +1561,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_Like_CriteriaStartsWith()
+        public void TestIsMatch_OneProp_Like_CriteriaStartsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1476,7 +1577,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_Like_ValuesIdentical_CriteriaStartsWith()
+        public void TestIsMatch_OneProp_Like_ValuesIdentical_CriteriaStartsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1494,7 +1595,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_Like_ValuesStartsWith_CriteriaStartsWith()
+        public void TestIsMatch_OneProp_Like_ValuesStartsWith_CriteriaStartsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1513,7 +1614,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_NotIsMatch_OneProp_Like_ValuesEndsWith_CriteriaStartsWith()
+        public void TestNotIsMatch_OneProp_Like_ValuesEndsWith_CriteriaStartsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1532,7 +1633,7 @@ namespace Habanero.Test.BO
 
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_Like_CriteriaEndsWith()
+        public void TestIsMatch_OneProp_Like_CriteriaEndsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1548,7 +1649,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_Like_ValuesIdentical_CriteriaEndsWith()
+        public void TestIsMatch_OneProp_Like_ValuesIdentical_CriteriaEndsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1566,7 +1667,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_Like_ValuesStartsWith_CriteriaEndsWith()
+        public void TestIsMatch_OneProp_Like_ValuesStartsWith_CriteriaEndsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1584,7 +1685,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_NotIsMatch_OneProp_Like_ValuesEndsWith_CriteriaEndsWith()
+        public void TestNotIsMatch_OneProp_Like_ValuesEndsWith_CriteriaEndsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1603,7 +1704,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_Like_NoMatch()
+        public void TestIsMatch_OneProp_Like_NoMatch()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1701,7 +1802,7 @@ namespace Habanero.Test.BO
 
         #region Not Like
         [Test]
-        public void TestCriteria_NotLike()
+        public void TestNotLike()
         {
             //-------------Setup Test Pack ------------------
             //-------------Test Pre-conditions --------------
@@ -1719,7 +1820,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_NotLike()
+        public void TestIsMatch_OneProp_NotLike()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1737,7 +1838,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_NotLike_ValuesIdentical()
+        public void TestIsMatch_OneProp_NotLike_ValuesIdentical()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1755,7 +1856,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_NotLike_ValuesStartsWith()
+        public void TestIsMatch_OneProp_NotLike_ValuesStartsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1774,7 +1875,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_NotLike_ValuesEndsWith()
+        public void TestIsMatch_OneProp_NotLike_ValuesEndsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1793,7 +1894,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_NotLike_CriteriaStartsWith()
+        public void TestIsMatch_OneProp_NotLike_CriteriaStartsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1808,7 +1909,7 @@ namespace Habanero.Test.BO
             Assert.IsTrue(isMatch, "The object should be a match since it does not start with MyValue.");
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_NotLike_ValuesIdentical_CriteriaStartsWith()
+        public void TestIsMatch_OneProp_NotLike_ValuesIdentical_CriteriaStartsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1825,7 +1926,7 @@ namespace Habanero.Test.BO
             Assert.IsFalse(isMatch, "The object should not be a match since it matches the criteria given.");
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_NotLike_ValuesStartsWith_CriteriaStartsWith()
+        public void TestIsMatch_OneProp_NotLike_ValuesStartsWith_CriteriaStartsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1843,7 +1944,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_NotIsMatch_OneProp_NotLike_ValuesEndsWith_CriteriaStartsWith()
+        public void TestNotIsMatch_OneProp_NotLike_ValuesEndsWith_CriteriaStartsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1860,7 +1961,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_NotLike_CriteriaEndsWith()
+        public void TestIsMatch_OneProp_NotLike_CriteriaEndsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1876,7 +1977,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_NotLike_ValuesIdentical_CriteriaEndsWith()
+        public void TestIsMatch_OneProp_NotLike_ValuesIdentical_CriteriaEndsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1893,7 +1994,7 @@ namespace Habanero.Test.BO
             Assert.IsFalse(isMatch, "The object should not be a match since it matches the criteria given.");
         }
         [Test]
-        public void TestCriteria_IsMatch_OneProp_NotLike_ValuesStartsWith_CriteriaEndsWith()
+        public void TestIsMatch_OneProp_NotLike_ValuesStartsWith_CriteriaEndsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1911,7 +2012,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_NotIsMatch_OneProp_NotLike_ValuesEndsWith_CriteriaEndsWith()
+        public void TestNotIsMatch_OneProp_NotLike_ValuesEndsWith_CriteriaEndsWith()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1929,7 +2030,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_NotLike_NoMatch()
+        public void TestIsMatch_OneProp_NotLike_NoMatch()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -2024,7 +2125,7 @@ namespace Habanero.Test.BO
 
         #region Is Not
         [Test]
-        public void TestCriteria_IsNot()
+        public void TestIsNot()
         {
             //-------------Setup Test Pack ------------------
             //-------------Test Pre-conditions --------------
@@ -2043,7 +2144,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_ISNot()
+        public void TestIsMatch_OneProp_ISNot()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -2058,7 +2159,7 @@ namespace Habanero.Test.BO
             Assert.IsFalse(isMatch, "The object should not be a match since it does not matches the criteria given.");
         }
         [Test]
-        public void TestCriteria_NotIsMatch_OneProp_ISNot()
+        public void TestNotIsMatch_OneProp_ISNot()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -2092,7 +2193,7 @@ namespace Habanero.Test.BO
 
         #region Is
         [Test]
-        public void TestCriteria_IS()
+        public void TestIS()
         {
             //-------------Setup Test Pack ------------------
             //-------------Test Pre-conditions --------------
@@ -2111,7 +2212,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCriteria_IsMatch_OneProp_IS()
+        public void TestIsMatch_OneProp_IS()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -2127,7 +2228,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
         [Test]
-        public void TestCriteria_NotIsMatch_OneProp_IS()
+        public void TestNotIsMatch_OneProp_IS()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();

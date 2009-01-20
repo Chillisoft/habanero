@@ -1034,6 +1034,28 @@ namespace Habanero.Test.BO
             Assert.IsFalse(boProp.IsValid);
         }
 
+
+        [Test]
+        public void Test_SetValue_ValidString_NewObject_NotInList()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadClassDefWithBOStringLookup();
+            ContactPersonTestBO.LoadClassDefWithSurnameAsPrimaryKey_WriteNew();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            string surname = TestUtil.CreateRandomString();
+            contactPersonTestBO.Surname = surname;
+            contactPersonTestBO.Save();
+            MyBO myBO = new MyBO();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            myBO.TestProp2 = surname;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(myBO.TestProp2);
+            Assert.AreEqual(surname, myBO.TestProp2);
+            Assert.AreEqual("", myBO.Props["TestProp"].InvalidReason);
+            Assert.IsTrue(myBO.Props["TestProp"].IsValid);
+        }
+
         #endregion
 
         #region Business Object SetPropertyValue

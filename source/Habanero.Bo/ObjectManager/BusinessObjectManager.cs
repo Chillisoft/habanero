@@ -274,5 +274,29 @@ namespace Habanero.BO
         }
 
         #endregion
+
+        //TODO 20 Jan 2009: improve performance of this, it's currently just using brute force.
+        /// <summary>
+        /// Finds all the loaded business objects that match the type T and the Criteria given.
+        /// </summary>
+        /// <typeparam name="T">The Type of business object to find</typeparam>
+        /// <param name="criteria">The Criteria to match on</param>
+        /// <returns>A collection of all loaded matching business objects</returns>
+        public BusinessObjectCollection<T> Find<T>(Criteria criteria)
+             where T : class, IBusinessObject, new()
+        {
+                        BusinessObjectCollection<T> collection = new BusinessObjectCollection<T>();
+            foreach (KeyValuePair<string, WeakReference> valuePair in _loadedBusinessObjects)
+            {
+                WeakReference weakReference = valuePair.Value;
+                BusinessObject bo = (BusinessObject) weakReference.Target;
+                if (bo is T && (criteria == null || criteria.IsMatch(bo, false)))
+                {
+                    collection.Add(bo as T);
+                }
+            }
+
+            return collection;
+        }
     }
 }

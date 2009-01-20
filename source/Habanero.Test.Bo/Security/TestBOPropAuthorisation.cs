@@ -154,7 +154,7 @@ namespace Habanero.Test.BO.Security
 
             //---------------Test Result -----------------------
             Assert.IsFalse(isEditable);
-            StringAssert.Contains("The property 'Name' is not editable since it is set up as WriteNew and the object is new", message);
+            StringAssert.Contains("The property 'Name' is not editable since it is set up as WriteNotNew and the object is new", message);
         }
 
         [Test]

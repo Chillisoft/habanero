@@ -593,9 +593,9 @@ namespace Habanero.Test.BO
             boProp.Value = unSavedBoWithIntID;
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            IBusinessObject returneedBusinessObject = boProp.GetBusinessObjectForProp(classDefWithIntID);
+            IBusinessObject returnedBusinessObject = boProp.GetBusinessObjectForProp(classDefWithIntID);
             //---------------Test Result -----------------------
-            Assert.AreSame(unSavedBoWithIntID, returneedBusinessObject);
+            Assert.AreSame(unSavedBoWithIntID, returnedBusinessObject);
         }
 
         [Test]
@@ -614,10 +614,11 @@ namespace Habanero.Test.BO
             boProp.Value = unSavedBoWithIntID;
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            IBusinessObject returneedBusinessObject = boProp.GetBusinessObjectForProp(classDefWithIntID);
+            IBusinessObject returnedBusinessObject = boProp.GetBusinessObjectForProp(classDefWithIntID);
             //---------------Test Result -----------------------
-            Assert.AreSame(unSavedBoWithIntID, returneedBusinessObject);
+            Assert.AreSame(unSavedBoWithIntID, returnedBusinessObject);
         }
+
 //        [Test, Ignore("Problem with In Memory Database")]
 //        public void Test_Memory_LoadWithIntID_ManualCreatePrimaryKey()
 //        {

@@ -114,7 +114,7 @@ namespace Habanero.Test
             relKeyDef.Add(lRelPropDef);
 
             relDef = new SingleRelationshipDef("Engine", typeof(Engine), relKeyDef, false, DeleteParentAction.DereferenceRelated);
-
+            relDef.OwningBOHasForeignKey = false;
             relDefCol.Add(relDef);
             return relDefCol;
         }
