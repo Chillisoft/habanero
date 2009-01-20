@@ -69,7 +69,11 @@ namespace Habanero.BO
         {
             // if type of value to parse is of prop type then try lookup in keys dict. if exists then
             //    use this as the value and return
-
+            if (valueToParse == null) 
+            {
+                returnValue = null;
+                return;
+            }
             CheckPropDefHasLookupList(_propDef);
             if (_propDef.LookupList is BusinessObjectLookupList 
                     &&  valueToParse is IBusinessObject)
