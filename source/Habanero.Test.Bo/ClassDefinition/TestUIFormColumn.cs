@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -206,6 +207,68 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.AreEqual(3, rowsRequired);
 
+        }
+
+        [Test]
+        public void GetRowSpanForColumnToTheRight_None()
+        {
+            //---------------Set up test pack-------------------
+            Hashtable parameters = new Hashtable();
+            parameters.Add("rowSpan", 2);
+            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, parameters, null);
+            UIFormColumn uiFormColumn = new UIFormColumn();
+            uiFormColumn.Add(field2);
+            //---------------Execute Test ----------------------
+            int rowsPanForColumnToTheRight = uiFormColumn.GetRowSpanForColumnToTheRight(1);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, rowsPanForColumnToTheRight);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void GetRowSpanForColumnToTheRight_Zero()
+        {
+            //---------------Execute Test ----------------------
+           new UIFormColumn().GetRowSpanForColumnToTheRight(0);
+           
+        }
+
+        [Test]
+        public void GetRowSpanForColumnToTheRight_One()
+        {
+            //---------------Set up test pack-------------------
+            Hashtable parameters = new Hashtable();
+            parameters.Add("rowSpan", 1);
+            parameters.Add("colSpan", 2);
+            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, parameters, null);
+            UIFormColumn uiFormColumn = new UIFormColumn();
+            uiFormColumn.Add(field2);
+            //---------------Execute Test ----------------------
+            int rowsPanForColumnToTheRight = uiFormColumn.GetRowSpanForColumnToTheRight(1);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, rowsPanForColumnToTheRight);
+        }
+
+        [Test]
+        public void GetRowSpanForColumnToTheRight_TwoColumns()
+        {
+            //---------------Set up test pack-------------------
+            Hashtable parameters1 = new Hashtable();
+            parameters1.Add("rowSpan", 1);
+            parameters1.Add("colSpan", 3);
+            UIFormField field1 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, parameters1, null);
+            Hashtable parameters2 = new Hashtable();
+            parameters2.Add("rowSpan", 2);
+            parameters2.Add("colSpan", 2);
+            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, parameters2, null);
+            UIFormColumn uiFormColumn = new UIFormColumn();
+            uiFormColumn.Add(field1); 
+            uiFormColumn.Add(field2);
+            //---------------Execute Test ----------------------
+            int rowsPanForColumnToTheRight1 = uiFormColumn.GetRowSpanForColumnToTheRight(1);
+            int rowsPanForColumnToTheRight2 = uiFormColumn.GetRowSpanForColumnToTheRight(2);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, rowsPanForColumnToTheRight1);
+            Assert.AreEqual(1, rowsPanForColumnToTheRight2);
         }
 
         [Test]

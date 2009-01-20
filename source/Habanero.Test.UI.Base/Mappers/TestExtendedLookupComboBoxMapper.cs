@@ -267,33 +267,6 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(organisationTestBOS.Count, mapper.LookupList.Count);
         }
 
-        [Test]
-        public void Test_ShowGridAndBOEditorControlWinWithSuperClassDef_DatabaseLookupList()
-        {
-            //--------------- Set up test pack ------------------
-            ClassDef.ClassDefs.Clear();
-            OrganisationTestBO.LoadDefaultClassDef();
-            PersonTestBO.LoadDefaultClassDefWithTestOrganisationBOLookup_DatabaseLookupList();
-            ContactPersonTestBO.LoadDefaultClassDefWithPersonTestBOSuperClass();
-            IControlFactory controlFactory = GetControlFactory();
-            ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
-            string propName = "OrganisationID";
-            ExtendedComboBoxMapper mapper = new ExtendedComboBoxMapper(
-                extendedComboBox, propName, true, controlFactory);
-            DatabaseConfig databaseConfig = new DatabaseConfig("MySql", "localhost", "habanero_test_branch_2_1", "root", "root", "3306");
-            DatabaseConnection.CurrentConnection = databaseConfig.GetDatabaseConnection();
-            mapper.BusinessObject = new ContactPersonTestBO();
-           // mapper.RelatedBusinessObject = OrganisationTestBO.CreateSavedOrganisation();
-            //--------------- Test Preconditions ----------------
-            Assert.IsNull(mapper.PopupForm);
-            //--------------- Execute Test ----------------------
-            //extendedComboBox.Button.PerformClick();
-            mapper.ShowPopupForm();
-            //--------------- Test Result -----------------------
-            Assert.IsNotNull(mapper.PopupForm);
-
-            Assert.AreEqual(2, mapper.LookupList.Count);
-        }
 
         private BusinessObjectCollection<OrganisationTestBO> CreateSavedOrganisationTestBOSCollection()
         {

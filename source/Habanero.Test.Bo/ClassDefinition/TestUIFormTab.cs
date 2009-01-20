@@ -226,6 +226,52 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void TestGetMaxRowsInColumns_RowSpan()
+        {
+            //---------------Set up test pack-------------------
+            UIFormTab uiFormTab1 = new UIFormTab("tab1");
+            uiFormTab1.Add(CreateUIFormColumn_2FieldsWithRowSpan());
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            int maxFieldCount = uiFormTab1.GetMaxRowsInColumns();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, maxFieldCount);
+        }
+
+        [Test]
+        public void TestGetMaxRowsInColumns_RowAndColSpan()
+        {
+            //---------------Set up test pack-------------------
+            UIFormTab uiFormTab1 = new UIFormTab("tab1");
+            uiFormTab1.Add(CreateUIFormColumn_1FieldWith2RowAnd2ColSpan());
+            uiFormTab1.Add(CreateUIFormColumn_1Field());
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            int maxFieldCount = uiFormTab1.GetMaxRowsInColumns();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, maxFieldCount);
+        }
+
+        [Test]
+        public void TestGetMaxRowsInColumns_RowAndColSpan_3Cols()
+        {
+            //---------------Set up test pack-------------------
+            UIFormTab uiFormTab1 = new UIFormTab("tab1");
+            uiFormTab1.Add(CreateUIFormColumn_1FieldWith2RowAnd3ColSpan());
+            uiFormTab1.Add(CreateUIFormColumn_1FieldWith2RowAnd2ColSpan());
+            uiFormTab1.Add(CreateUIFormColumn_1Field());
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            int maxFieldCount = uiFormTab1.GetMaxRowsInColumns();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(5, maxFieldCount);
+        }
+
+
+        [Test]
         public void TestUIForm()
         {
             //---------------Set up test pack-------------------
@@ -254,6 +300,30 @@ namespace Habanero.Test.BO.ClassDefinition
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);
+            return uiFormColumn;
+        }
+
+        public UIFormColumn CreateUIFormColumn_1FieldWith2RowAnd2ColSpan()
+        {
+            
+            Hashtable parameters = new Hashtable();
+            parameters.Add("rowSpan", 2);
+            parameters.Add("colSpan", 2);
+            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, parameters, null);
+            UIFormColumn uiFormColumn = new UIFormColumn();
+            uiFormColumn.Add(field1);
+            return uiFormColumn;
+        }
+
+        public UIFormColumn CreateUIFormColumn_1FieldWith2RowAnd3ColSpan()
+        {
+            
+            Hashtable parameters = new Hashtable();
+            parameters.Add("rowSpan", 2);
+            parameters.Add("colSpan", 3);
+            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, parameters, null);
+            UIFormColumn uiFormColumn = new UIFormColumn();
+            uiFormColumn.Add(field1);
             return uiFormColumn;
         }
 

@@ -320,12 +320,21 @@ namespace Habanero.BO.ClassDefinition
         public int GetMaxRowsInColumns()
         {
             int maxRowsInColumns = 0;
-            foreach (UIFormColumn column in this)
+            for (int colNum = 0; colNum < this.Count; colNum++)
             {
+                UIFormColumn column = this[colNum];
+
                 int rowsInColumn = column.GetRowsRequired();
-                if (rowsInColumn > maxRowsInColumns)
-                    maxRowsInColumns = rowsInColumn;
+
+                for (int previousColNum = 0; previousColNum < colNum; previousColNum++)
+                {
+                    rowsInColumn += this[previousColNum].GetRowSpanForColumnToTheRight(colNum-previousColNum);
+                }
+
+                    if (rowsInColumn > maxRowsInColumns)
+                        maxRowsInColumns = rowsInColumn;
             }
+
             return maxRowsInColumns;
         }
     }

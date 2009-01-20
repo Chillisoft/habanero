@@ -44,12 +44,13 @@ namespace Habanero.Test.UI.Base
     /// - When filtering on win version, should selection move to top? (in similar way that on Giz it moves back to page 1)
     /// - Custom methods like one that changes behaviour of combobox clicking and pressing delete button
     /// </summary>
-    public abstract class TestEditableGridControl : TestUsingDatabase
+    public abstract class TestEditableGridControl //: TestUsingDatabase
     {
         [SetUp]
         public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         [TestFixtureSetUp]
@@ -57,7 +58,7 @@ namespace Habanero.Test.UI.Base
         {
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
-            base.SetupDBConnection();
+           // base.SetupDBConnection();
         }
 
         [TearDown]

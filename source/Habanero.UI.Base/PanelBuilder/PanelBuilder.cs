@@ -100,15 +100,16 @@ namespace Habanero.UI.Base
             int numberOfColumns = formTab.Count;
             int[] currentFieldPositionInColumns = new int[numberOfColumns];
             int[] rowSpanTrackerForColumn = new int[numberOfColumns];
-            for (int currentRowNo = 0; currentRowNo < formTab.GetMaxRowsInColumns(); currentRowNo++)
+            int maxRowsInColumns = formTab.GetMaxRowsInColumns();
+            int[] columnSpanTrackerForRow = new int[maxRowsInColumns];
+            for (int currentRowNo = 0; currentRowNo < maxRowsInColumns; currentRowNo++)
             {
-                int columnSpanTracker = 0;
                 for (int currentColumnNo = 0; currentColumnNo < numberOfColumns; currentColumnNo++)
                 {
                     UIFormColumn currentFormColumn = formTab[currentColumnNo];
 
                     if (--rowSpanTrackerForColumn[currentColumnNo] > 0) continue;  // keep skipping this grid position until a previous row span in this column has been decremented 
-                    if (--columnSpanTracker > 0) continue;  // keep skipping this grid position until a previous column span in this row has been decremented
+                    if (--columnSpanTrackerForRow[currentRowNo] > 0) continue;  // keep skipping this grid position until a previous column span in this row has been decremented
 
                     int currentFieldNoInColumn = currentFieldPositionInColumns[currentColumnNo];
                     int totalFieldsInColumn = currentFormColumn.Count;
@@ -116,7 +117,8 @@ namespace Habanero.UI.Base
                     {
                         UIFormField formField = currentFormColumn[currentFieldNoInColumn];
                         rowSpanTrackerForColumn[currentColumnNo] = formField.RowSpan;
-                        columnSpanTracker = formField.ColSpan;
+                        for (int i = currentRowNo; i < currentRowNo + formField.RowSpan; i++) // update colspan of all rows that this field spans into.
+                            columnSpanTrackerForRow[i] = formField.ColSpan;
 
                         AddControlsForField(formField, panelInfo);
                     }
