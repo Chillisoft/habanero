@@ -458,5 +458,13 @@ namespace Habanero.UI.Base
         /// <exception cref="T:System.InvalidOperationException">The specified value when setting this property is DataGridViewSelectionMode.FullColumnSelect or DataGridViewSelectionMode.ColumnHeaderSelect and the DataGridViewColumn.SortMode property of one or more columns is set to DataGridViewColumnSortMode.Automatic.</exception>
         /// <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The specified value when setting this property is not a valid DataGridViewSelectionMode value.</exception>
         DataGridViewSelectionMode SelectionMode { get; set; }
+
+        /// <summary>
+        /// Provides an indexer to get or set the cell located at the intersection of the column and row with the specified indexes.
+        /// </summary>
+        /// <param name="columnIndex">The index of the column containing the cell.</param>
+        /// <param name="rowIndex">The index of the row containing the cell</param>
+        /// <returns>The DataGridViewCell at the specified location</returns>
+        IDataGridViewCell this[int columnIndex, int rowIndex] { set; get; }
     }
 }

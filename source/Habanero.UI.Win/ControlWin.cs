@@ -21,6 +21,7 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using Habanero.UI.Base;
+using KeyPressEventHandler=Habanero.UI.Base.KeyPressEventHandler;
 
 
 namespace Habanero.UI.Win

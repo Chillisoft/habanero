@@ -134,6 +134,18 @@ namespace Habanero.UI.Win
             set { base.SelectionMode = (System.Windows.Forms.DataGridViewSelectionMode)value; }
         }
 
+        /// <summary>
+        /// Provides an indexer to get or set the cell located at the intersection of the column and row with the specified indexes.
+        /// </summary>
+        /// <param name="columnIndex">The index of the column containing the cell.</param>
+        /// <param name="rowIndex">The index of the row containing the cell</param>
+        /// <returns>The DataGridViewCell at the specified location</returns>
+        public new IDataGridViewCell this[int columnIndex, int rowIndex]
+        {
+            get { return new DataGridViewCellWin(base[columnIndex, rowIndex]); }
+            set { base[columnIndex, rowIndex] = value == null ? null : ((DataGridViewCellWin)value).DataGridViewCell; }
+        }
+
         /// <summary>Sorts the contents of the <see cref="IDataGridView"></see> control in ascending or
         /// descending order based on the contents of the specified column.</summary>
         /// <param name="direction">One of the <see cref="T:System.ComponentModel.ListSortDirection"></see> values. </param>

@@ -451,5 +451,12 @@ namespace Habanero.UI.Base
         /// Occurs when the .Text property value changes
         /// </summary>
         event EventHandler TextChanged;
+
+        //----This will require catching the keypress event and refiring it in the constructor, because
+        //----the signature is different
+        ///// <summary>
+        ///// Occurs when a key is pressed while the control has focus
+        ///// </summary>
+        //event KeyPressEventHandler KeyPress;
     }
 }

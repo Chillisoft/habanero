@@ -76,5 +76,10 @@ namespace Habanero.UI.Base
         /// Gets or sets the alignment of text in the TextBox control
         /// </summary>
         HorizontalAlignment TextAlign { get; set; }
+
+        /// <summary>
+        /// Selects all text in the text box
+        /// </summary>
+        void SelectAll();
     }
 }
