@@ -419,5 +419,13 @@ namespace Habanero.UI.Base
         /// Gets the collection of currently selected cells
         /// </summary>
         IDataGridViewSelectedCellCollection SelectedCells { get; }
+
+        /// <summary>
+        /// Provides an indexer to get or set the cell located at the intersection of the column and row with the specified indexes.
+        /// </summary>
+        /// <param name="columnIndex">The index of the column containing the cell.</param>
+        /// <param name="rowIndex">The index of the row containing the cell</param>
+        /// <returns>The DataGridViewCell at the specified location</returns>
+        IDataGridViewCell this[int columnIndex, int rowIndex] { set; get; }
     }
 }

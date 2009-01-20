@@ -121,7 +121,7 @@ namespace Habanero.UI.Win
             get { return _boPanel; }
         }
 
-        private void CreateLayout()
+        protected void CreateLayout()
         {
             BorderLayoutManager borderLayoutManager = new BorderLayoutManagerWin(this, _controlFactory);
             borderLayoutManager.AddControl(BoPanel, BorderLayoutManager.Position.Centre);
