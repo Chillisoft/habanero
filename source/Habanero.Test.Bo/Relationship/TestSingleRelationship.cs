@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -226,6 +227,78 @@ namespace Habanero.Test.BO.Relationship
                 StringAssert.Contains("Organisation (on ContactPersonTestBO)", ex.Message);
                 StringAssert.Contains("cannot both be configured as having the foreign key", ex.Message);
             }
+        }
+
+
+        [Test]
+        public void Test_SetRelatedObjectRaisesUpdatedEvent_Referenced()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson();
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship<OrganisationTestBO> relationship =
+                contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation");
+            bool updatedFired = false;
+            OrganisationTestBO boReceivedByEvent = null;
+            OrganisationTestBO currentOrganisationInEvent = null;
+            Guid? organisationidInEvent = null;
+            
+            relationship.Updated += delegate(object sender, BOEventArgs<OrganisationTestBO> e)
+                                    {
+                                        updatedFired = true;
+                                        boReceivedByEvent = e.BusinessObject;
+                                        organisationidInEvent = contactPersonTestBO.OrganisationID;
+                                        currentOrganisationInEvent = contactPersonTestBO.Organisation;
+                                    };
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(updatedFired);
+            Assert.IsNull(boReceivedByEvent);
+
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.Organisation = organisationTestBO;
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(updatedFired);
+            Assert.AreSame(organisationTestBO, boReceivedByEvent);
+            Assert.AreSame(organisationTestBO, currentOrganisationInEvent);
+            Assert.AreEqual(organisationTestBO.OrganisationID, organisationidInEvent);
+        }
+
+
+        [Test]
+        public void Test_SetRelatedObjectRaisesUpdatedEvent_Unreferenced()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson();
+            SingleRelationship<ContactPersonTestBO> relationship =
+                organisationTestBO.Relationships.GetSingle<ContactPersonTestBO>("ContactPerson");
+            bool updatedFired = false;
+            ContactPersonTestBO boReceivedByEvent = null;
+            ContactPersonTestBO currentContactPersonInEvent = null;
+            Guid? organisationidInEvent = null;
+
+            relationship.Updated += delegate(object sender, BOEventArgs<ContactPersonTestBO> e)
+                                    {
+                                        updatedFired = true;
+                                        boReceivedByEvent = e.BusinessObject;
+                                        organisationidInEvent = boReceivedByEvent.OrganisationID;
+                                        currentContactPersonInEvent = organisationTestBO.ContactPerson;
+                                    };
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(updatedFired);
+            Assert.IsNull(boReceivedByEvent);
+
+            //---------------Execute Test ----------------------
+            organisationTestBO.ContactPerson = contactPersonTestBO;
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(updatedFired);
+            Assert.AreSame(contactPersonTestBO, boReceivedByEvent);
+            Assert.AreSame(contactPersonTestBO, currentContactPersonInEvent);
+            Assert.AreEqual(organisationTestBO.OrganisationID, organisationidInEvent);
         }
 
         private SingleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO)

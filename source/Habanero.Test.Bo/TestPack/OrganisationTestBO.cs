@@ -85,7 +85,8 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""OrganisationID"" />
 					</primaryKey>
-					<relationship name=""ContactPerson"" type=""single"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"">
+					<relationship name=""ContactPerson"" type=""single"" relatedClass=""ContactPersonTestBO"" 
+                        relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"" owningBOHasForeignKey=""false"">
 						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
 					</relationship>
 			    </class>

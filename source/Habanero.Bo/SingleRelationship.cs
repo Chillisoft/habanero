@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -50,7 +51,6 @@ namespace Habanero.BO
         /// <returns>Returns true if related object exists</returns>
         bool HasRelatedObject();
 
-
     }
 
     public abstract class SingleRelationshipBase : Relationship
@@ -59,6 +59,7 @@ namespace Habanero.BO
         internal abstract IBusinessObject RemovedBOInternal { get; }
         internal abstract bool OwningBOHasForeignKey { get; set; }
     }
+
     /// <summary>
     /// Manages a relationship where the relationship owner relates to one
     /// other object
@@ -71,7 +72,13 @@ namespace Habanero.BO
         private Criteria _storedKeyCriteria;
         private bool _isRemoved;
         private TBusinessObject _removedBO;
-        
+
+        /// <summary>
+        /// Indicates that the related BO has been changed. 
+        /// This is fired any time that the related BO of the relationship is changed.
+        /// </summary>
+        public event EventHandler<BOEventArgs<TBusinessObject>> Updated;
+
         /// <summary>
         /// Constructor to initialise a new relationship
         /// </summary>
@@ -237,9 +244,16 @@ namespace Habanero.BO
             RemoveFromReverseRelationship(_relatedBo);
             AddToReverseRelationship(relatedObject);
 
-            _relatedBo = relatedObject;            
-
+            _relatedBo = relatedObject;
             UpdatedForeignKeyAndStoredRelationshipExpression();
+
+            FireUpdatedEvent();
+        }
+
+        private void FireUpdatedEvent()
+        {
+            if (Updated != null) this.Updated(this, new BOEventArgs<TBusinessObject>(_relatedBo)); 
+           
         }
 
         private void AddToReverseRelationship(TBusinessObject relatedObject) {
