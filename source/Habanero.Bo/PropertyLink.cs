@@ -1,5 +1,6 @@
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.BO
 {
@@ -40,7 +41,16 @@ namespace Habanero.BO
 
         private void SourcePropUpdatedHandler(object sender, BOPropEventArgs e)
         {
-            TInput sourcePropValue = GetSourcePropValue() ;
+            TInput sourcePropValue;
+            try
+            {
+                sourcePropValue = GetSourcePropValue();
+            }
+            catch (InvalidCastException ex)
+            {
+                string message = "An error occured in the Updating a property via the property Link " + ex.Message;
+                throw new HabaneroDeveloperException(message, message, ex);
+            }
             object destPropValue = _owningBO.Props[_destPropName].Value;
             object transformedValue = _transform(_previousSourceValue);
             if (destPropValue == null || destPropValue.Equals(transformedValue))
