@@ -208,6 +208,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
+            relationship.OwningBOHasForeignKey = true;
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             relationship.SetRelatedObject(contactPerson);
 
