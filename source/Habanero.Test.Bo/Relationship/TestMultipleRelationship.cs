@@ -35,7 +35,7 @@ namespace Habanero.Test.BO.Relationship
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef_PreventAddChild();
         }
 
@@ -69,7 +69,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             OrganisationTestBO.LoadDefaultClassDef();
-            ClassDef contactPersonClassDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ClassDef contactPersonClassDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             RelKeyDef keyDef = new RelKeyDef();
             keyDef.Add(new RelPropDef(contactPersonClassDef.PropDefcol["OrganisationID"], "OrganisationID"));
             MultipleRelationshipDef def = new MultipleRelationshipDef

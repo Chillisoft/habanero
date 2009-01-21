@@ -30,6 +30,7 @@ namespace Habanero.BO.ClassDefinition
     {
         private ArrayList _list;
         private string _sortColumn;
+        private FilterDef _filterDef;
 
         /// <summary>
         /// Constructor to initialise a new collection of definitions
@@ -156,6 +157,8 @@ namespace Habanero.BO.ClassDefinition
             get { return _sortColumn; }
             set { _sortColumn = value; }
         }
+
+        public FilterDef FilterDef { get { return _filterDef; } set { _filterDef = value; } }
 
 
         ///<summary>

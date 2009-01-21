@@ -73,5 +73,7 @@ namespace Habanero.UI.Base
         string AdditionalSearchCriteria { get; set; }
 
         bool HasDoubleClickEventHandler { get; }
+
+        IFilterControl FilterControl { get; }
     }
 }

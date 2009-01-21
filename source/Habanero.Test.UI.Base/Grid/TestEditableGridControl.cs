@@ -303,7 +303,7 @@ namespace Habanero.Test.UI.Base
         public void TestSetupComboBoxFromClassDef_SetsItemsInComboBox()
         {
             //---------------Set up test pack-------------------
-            ClassDef classDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ClassDef classDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef();
             ContactPerson.DeleteAllContactPeople();
             OrganisationTestBO.ClearAllFromDB();
@@ -677,7 +677,6 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-
         [Test]
         public void TestAcceptance_SearchGridSearchesTheGrid()
         {
@@ -727,6 +726,27 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------   
             ContactPerson.DeleteAllContactPeople();
         }
+
+
+        [Test]
+        public void TestFilterControlIsBuiltFromDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDefWithFilterDef();
+            IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            gridControl.Initialise(classDef);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(gridControl.FilterControl.Visible);
+            Assert.AreEqual(FilterModes.Filter, gridControl.FilterControl.FilterMode);
+            Assert.IsNotNull(gridControl.FilterControl.GetChildControl("TestProp"));
+            Assert.IsNotNull(gridControl.FilterControl.GetChildControl("TestProp2"));
+            //---------------Tear Down -------------------------          
+        }
+
+
 
 
         private ClassDef LoadMyBoDefaultClassDef()

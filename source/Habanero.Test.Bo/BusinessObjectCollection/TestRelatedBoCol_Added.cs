@@ -21,7 +21,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
             ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef();
         }
 
@@ -30,7 +30,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         {
             //Runs every time that any testmethod is executed            
             ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             _organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();

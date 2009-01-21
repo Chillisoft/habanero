@@ -323,7 +323,7 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
-					<relationship name=""Addresses"" type=""multiple"" relatedClass=""AddressTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"">
+					<relationship name=""Addresses"" type=""multiple"" relatedClass=""AddressTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"" reverseRelationship=""ContactPersonTestBO"">
 						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
 					</relationship>
 			    </class>
@@ -348,7 +348,7 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
-					<relationship name=""AddressTestBOs"" type=""multiple"" relatedClass=""AddressTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"">
+					<relationship name=""AddressTestBOs"" type=""multiple"" relatedClass=""AddressTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"" reverseRelationship=""ContactPersonTestBO"">
 						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
 					</relationship>
 			    </class>
@@ -363,7 +363,7 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""AddressID"" />
 					</primaryKey>
-					<relationship name=""ContactPersonTestBO"" type=""single"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"">
+					<relationship name=""ContactPersonTestBO"" type=""single"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"" reverseRelationship=""AddressTestBOs"">
 						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
 					</relationship>
 			    </class>");
@@ -498,7 +498,7 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""AddressID"" />
 					</primaryKey>
-					<relationship name=""ContactPersonTestBO"" type=""single"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DoNothing"">
+					<relationship name=""ContactPersonTestBO"" type=""single"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DoNothing"" reverseRelationship=""Addresses"">
 						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
 					</relationship>
 			    </class>
@@ -619,7 +619,7 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefOrganisationTestBORelationship()
+        public static ClassDef LoadClassDefOrganisationTestBORelationship_MultipleReverse()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef =
@@ -636,7 +636,38 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
-                    <relationship name=""Organisation"" type=""single"" relatedClass=""OrganisationTestBO"" relatedAssembly=""Habanero.Test.BO"" >
+                    <relationship name=""Organisation"" type=""single"" relatedClass=""OrganisationTestBO"" relatedAssembly=""Habanero.Test.BO"" reverseRelationship=""ContactPeople"">
+						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
+					</relationship>
+					<ui>
+						<grid>
+							<column heading=""OrganisationID"" property=""OrganisationID"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+                    </ui>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static ClassDef LoadClassDefOrganisationTestBORelationship_SingleReverse()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" databaseField=""Surname_field"" />
+                    <property  name=""FirstName"" compulsory=""true"" databaseField=""FirstName_field"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+                    <property  name=""OrganisationID"" type=""Guid"" >
+                      <businessObjectLookupList class=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" />
+                    </property>
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+                    <relationship name=""Organisation"" type=""single"" relatedClass=""OrganisationTestBO"" relatedAssembly=""Habanero.Test.BO""                                           reverseRelationship=""ContactPerson"">
 						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
 					</relationship>
 					<ui>

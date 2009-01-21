@@ -102,6 +102,7 @@
     <Compile Include="DateTimeToday.cs" />
     <Compile Include="Exceptions\InvalidObjectIdException.cs" />
     <Compile Include="Exceptions\InvalidXmlDefinitionException.cs" />
+    <Compile Include="FilterModes.cs" />
     <Compile Include="HabaneroApp.cs" />
     <Compile Include="Criteria\HabaneroStringBuilder.cs" />
     <Compile Include="IApplicationVersionUpgrader.cs" />

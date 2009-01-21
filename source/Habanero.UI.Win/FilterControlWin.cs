@@ -88,10 +88,7 @@ namespace Habanero.UI.Win
             {
                 filter.ValueChanged += (sender,e) => FireFilterEvent();
             } 
-            //ITextBox textBox = _filterControlManager.AddStringFilterTextBox(labelText, propertyName);
-            //textBox.TextChanged += delegate { if (this.FilterMode == FilterModes.Filter ) FireFilterEvent(); };
             return (ITextBox) filter.Control;
-            //return textBox;
         }
 
         /// <summary>

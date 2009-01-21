@@ -24,6 +24,8 @@ using Habanero.Base;
 
 namespace Habanero.UI.Base
 {
+
+
     /// <summary>
     /// Manages a group of filter controls that create a filter clause used to limit
     /// which rows of data to show on a DataGridView
@@ -131,6 +133,8 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Gets and sets the FilterMode <see cref="FilterModes"/>, which determines the
         /// behaviour of the filter control
+        /// /// If the <see cref="FilterModes.Search"/> mode is chosen, the loading procedures can be customised
+        /// by using an alternate loading mechanism (see <see cref="GridLoaderDelegate"/>).
         /// </summary>
         FilterModes FilterMode { get; set; }
 

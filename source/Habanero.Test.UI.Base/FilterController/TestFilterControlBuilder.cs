@@ -155,6 +155,139 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.IsInstanceOfType(typeof(SimpleFilter), filterControl.FilterControls[0]);
             //---------------Tear Down -------------------------          
         }
+
+        [Test]
+        public void TestPopulateConstructedFilterControl()
+        {
+            //---------------Set up test pack-------------------
+            FilterControlBuilder builder = new FilterControlBuilder(GetControlFactory());
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+            FilterPropertyDef filterPropertyDef1 =
+               new FilterPropertyDef(TestUtil.CreateRandomString(), TestUtil.CreateRandomString(),
+                   "Habanero.Test.UI.Base.FilterController.SimpleFilter", "Habanero.Test.UI.Base", null);
+            FilterDef filterDef = new FilterDef(new List<FilterPropertyDef> { filterPropertyDef1 });
+
+            //---------------Execute Test ----------------------
+            builder.BuildFilterControl(filterDef, filterControl);
+            
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, filterControl.FilterControls.Count);
+            Assert.IsInstanceOfType(typeof(SimpleFilter), filterControl.FilterControls[0]);
+
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestFilterMode_FilterIsDefault()
+        {
+            //---------------Set up test pack-------------------
+            FilterControlBuilder builder = new FilterControlBuilder(GetControlFactory());
+            FilterPropertyDef filterPropertyDef1 =
+                new FilterPropertyDef(TestUtil.CreateRandomString(), TestUtil.CreateRandomString(),
+                    "Habanero.Test.UI.Base.FilterController.SimpleFilter", "Habanero.Test.UI.Base", null);
+            FilterDef filterDef = new FilterDef(new List<FilterPropertyDef> { filterPropertyDef1 });
+        
+            //---------------Execute Test ----------------------
+            IFilterControl filterControl = builder.BuildFilterControl(filterDef);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(FilterModes.Filter, filterControl.FilterMode);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestFilterMode_Search()
+        {
+            //---------------Set up test pack-------------------
+            FilterControlBuilder builder = new FilterControlBuilder(GetControlFactory());
+            FilterPropertyDef filterPropertyDef1 =
+                new FilterPropertyDef(TestUtil.CreateRandomString(), TestUtil.CreateRandomString(),
+                    "Habanero.Test.UI.Base.FilterController.SimpleFilter", "Habanero.Test.UI.Base", null);
+            FilterDef filterDef = new FilterDef(new List<FilterPropertyDef> { filterPropertyDef1 });
+        
+            //---------------Execute Test ----------------------
+            filterDef.FilterMode = FilterModes.Search;
+            IFilterControl filterControl = builder.BuildFilterControl(filterDef);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(FilterModes.Search, filterControl.FilterMode);
+            
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestLayout_0Columns_UsesFlowLayout()
+        {
+            //---------------Set up test pack-------------------
+            FilterControlBuilder builder = new FilterControlBuilder(GetControlFactory());
+            FilterPropertyDef filterPropertyDef1 =
+                new FilterPropertyDef(TestUtil.CreateRandomString(), TestUtil.CreateRandomString(),
+                    "Habanero.Test.UI.Base.FilterController.SimpleFilter", "Habanero.Test.UI.Base", null);
+            FilterDef filterDef = new FilterDef(new List<FilterPropertyDef> { filterPropertyDef1 });
+          
+            //---------------Execute Test ----------------------
+            filterDef.Columns = 0;
+            IFilterControl filterControl = builder.BuildFilterControl(filterDef);
+
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(FlowLayoutManager), filterControl.LayoutManager);
+
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestLayout_1OrMoreColumns_UsesGridLayout()
+        {
+            //---------------Set up test pack-------------------
+            FilterControlBuilder builder = new FilterControlBuilder(GetControlFactory());
+            FilterPropertyDef filterPropertyDef1 =
+                new FilterPropertyDef(TestUtil.CreateRandomString(), TestUtil.CreateRandomString(),
+                    "Habanero.Test.UI.Base.FilterController.SimpleFilter", "Habanero.Test.UI.Base", null);
+            FilterDef filterDef = new FilterDef(new List<FilterPropertyDef> { filterPropertyDef1 });
+          
+            //---------------Execute Test ----------------------
+            filterDef.Columns = 3;
+            IFilterControl filterControl = builder.BuildFilterControl(filterDef);
+
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(GridLayoutManager), filterControl.LayoutManager);
+            GridLayoutManager layoutManager = (GridLayoutManager) filterControl.LayoutManager;
+            Assert.AreEqual(6, layoutManager.Columns.Count);
+            Assert.AreEqual(1, layoutManager.Rows.Count);
+
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestLayout_1OrMoreColumns_UsesGridLayout_MoreThanOneRow()
+        {
+            //---------------Set up test pack-------------------
+            FilterControlBuilder builder = new FilterControlBuilder(GetControlFactory());
+            FilterPropertyDef filterPropertyDef1 =
+                new FilterPropertyDef(TestUtil.CreateRandomString(), TestUtil.CreateRandomString(),
+                    "Habanero.Test.UI.Base.FilterController.SimpleFilter", "Habanero.Test.UI.Base", null); 
+            FilterPropertyDef filterPropertyDef2 =
+                new FilterPropertyDef(TestUtil.CreateRandomString(), TestUtil.CreateRandomString(),
+                    "Habanero.Test.UI.Base.FilterController.SimpleFilter", "Habanero.Test.UI.Base", null);
+            FilterPropertyDef filterPropertyDef3 =
+                new FilterPropertyDef(TestUtil.CreateRandomString(), TestUtil.CreateRandomString(),
+                    "Habanero.Test.UI.Base.FilterController.SimpleFilter", "Habanero.Test.UI.Base", null);
+            FilterDef filterDef = new FilterDef(new List<FilterPropertyDef> { filterPropertyDef1, filterPropertyDef2, filterPropertyDef3 });
+          
+            //---------------Execute Test ----------------------
+            filterDef.Columns = 2;
+            IFilterControl filterControl = builder.BuildFilterControl(filterDef);
+
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(GridLayoutManager), filterControl.LayoutManager);
+            GridLayoutManager layoutManager = (GridLayoutManager) filterControl.LayoutManager;
+            Assert.AreEqual(4, layoutManager.Columns.Count);
+            Assert.AreEqual(2, layoutManager.Rows.Count);
+
+            //---------------Tear Down -------------------------          
+        }
+
+
     }
     
     internal class SimpleFilter : ICustomFilter
@@ -172,37 +305,4 @@ namespace Habanero.Test.UI.Base.FilterController
     }
 
 
-    internal class FilterControlBuilder {
-        private readonly IControlFactory _controlFactory;
-        public FilterControlBuilder(IControlFactory controlFactory) { _controlFactory = controlFactory; }
-        public IFilterControl BuildFilterControl(FilterDef filterDef) {
-            IFilterControl filterControl  = _controlFactory.CreateFilterControl();
-            foreach (FilterPropertyDef filterPropertyDef in filterDef.FilterPropertyDefs)
-            {
-                Type filterType = TypeLoader.LoadType(filterPropertyDef.FilterTypeAssembly, filterPropertyDef.FilterType);
-                ICustomFilter customFilter = (ICustomFilter) Activator.CreateInstance(filterType, _controlFactory,
-                                                                                      filterPropertyDef.PropertyName,
-                                                                                      FilterClauseOperator.OpEquals);
-                if (filterPropertyDef.Parameters != null)
-                {
-                    foreach (KeyValuePair<string, string> parameter in filterPropertyDef.Parameters)
-                    {
-                        System.Reflection.PropertyInfo propertyInfo = filterType.GetProperty(parameter.Key,
-                                                                                             BindingFlags.Instance |
-                                                                                             BindingFlags.Public);
-                        if (propertyInfo == null)
-                        {
-                            throw new HabaneroDeveloperException(
-                                string.Format("The property '{0}' was not found on a filter of type '{1}' for property '{2}'",
-                                              parameter.Key, filterPropertyDef.FilterType, filterPropertyDef.PropertyName), "");
-                        }
-
-                        propertyInfo.SetValue(customFilter, Convert.ChangeType(parameter.Value, propertyInfo.PropertyType), null);
-                    }
-                }
-                filterControl.AddCustomFilter(filterPropertyDef.Label, filterPropertyDef.PropertyName, customFilter);
-            }
-            return filterControl;
-        }
-    }
 }

@@ -86,7 +86,8 @@ namespace Habanero.Test.BO
 						<prop name=""OrganisationID"" />
 					</primaryKey>
 					<relationship name=""ContactPerson"" type=""single"" relatedClass=""ContactPersonTestBO"" 
-                        relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"" owningBOHasForeignKey=""false"">
+                        relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"" owningBOHasForeignKey=""false""
+                        reverseRelationship=""Organisation"">
 						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
 					</relationship>
 			    </class>
@@ -113,8 +114,9 @@ namespace Habanero.Test.BO
             RelKeyDef relKeyDef = new RelKeyDef();
             relKeyDef.Add(relPropDef);
             MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef("ContactPeople", "Habanero.Test.BO",
-                    "ContactPersonTestBO", relKeyDef, true, "", DeleteParentAction.DeleteRelated
+                    "ContactPersonTestBO", relKeyDef,true, "", DeleteParentAction.DeleteRelated
                     , RelationshipType.Composition);
+            relationshipDef.ReverseRelationshipName = "Organisation";
             itsClassDef.RelationshipDefCol.Add(relationshipDef);
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;

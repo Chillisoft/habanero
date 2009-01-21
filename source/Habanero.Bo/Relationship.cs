@@ -161,8 +161,8 @@ namespace Habanero.BO
                         this.RelationshipDef.ReverseRelationshipName,
                         this.RelatedObjectClassDef.ClassName), "");
             }
-
-            return FindRelationshipByRelationshipKey(bo);
+            return null;
+            //return FindRelationshipByRelationshipKey(bo);
         }
 
         private IRelationship FindRelationshipByRelationshipKey(IBusinessObject bo) {

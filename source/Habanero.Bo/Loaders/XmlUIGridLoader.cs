@@ -28,7 +28,7 @@ namespace Habanero.BO.Loaders
     /// </summary>
     public class XmlUIGridLoader : XmlLoader
     {
-        private UIGrid _collection;
+        private UIGrid _uiGrid;
 
         /// <summary>
         /// Constructor to initialise a new loader
@@ -73,7 +73,7 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a UIGridDef object</returns>
         protected override object Create()
         {
-            return _collection;
+            return _uiGrid;
         }
 
         /// <summary>
@@ -81,26 +81,26 @@ namespace Habanero.BO.Loaders
         /// </summary>
         protected override void LoadFromReader()
         {
-			_collection = _defClassFactory.CreateUIGridDef();
-			//_collection = new UIGridDef();
-
-            //_reader.Read();
-            //string className = _reader.GetAttribute("class");
-            //string assemblyName = _reader.GetAttribute("assembly");
-            //_collection.Class = TypeLoader.LoadType(assemblyName, className);
-            //_collection.Name = new UIPropertyCollectionName(_collection.Class, _reader.GetAttribute("name"));
+			_uiGrid = _defClassFactory.CreateUIGridDef();
 
             _reader.Read();
-            _collection.SortColumn = _reader.GetAttribute("sortColumn");
+            _uiGrid.SortColumn = _reader.GetAttribute("sortColumn");
 
             _reader.Read();
+
+            if (_reader.Name == "filter")
+            {
+                XmlFilterLoader filterLoader = new XmlFilterLoader(DtdLoader, _defClassFactory);
+                _uiGrid.FilterDef = filterLoader.LoadFilterDef(_reader.ReadOuterXml());
+            }
+
             while (_reader.Name == "column")
             {
                 XmlUIGridColumnLoader propLoader = new XmlUIGridColumnLoader(DtdLoader, _defClassFactory);
-                _collection.Add(propLoader.LoadUIProperty(_reader.ReadOuterXml()));
+                _uiGrid.Add(propLoader.LoadUIProperty(_reader.ReadOuterXml()));
             }
 
-            if (_collection.Count == 0)
+            if (_uiGrid.Count == 0)
             {
                 throw new InvalidXmlDefinitionException("No 'column' " +
                     "elements were specified in a 'grid' element.  Ensure " +

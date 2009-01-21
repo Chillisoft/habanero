@@ -78,7 +78,7 @@ namespace Habanero.Test.BO.SqlGeneration
         public void Test_UpdateSqlStatement()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPerson();
             OrganisationTestBO organisationTestBO = new OrganisationTestBO();

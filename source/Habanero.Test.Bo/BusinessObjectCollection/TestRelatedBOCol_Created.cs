@@ -23,7 +23,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             _dataStore = new DataStoreInMemory();
             _dataAccessor = new DataAccessorInMemory(_dataStore);
             BORegistry.DataAccessor = _dataAccessor;
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef();
         }
 

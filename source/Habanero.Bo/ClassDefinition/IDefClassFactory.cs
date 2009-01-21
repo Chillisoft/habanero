@@ -89,5 +89,9 @@ namespace Habanero.BO.ClassDefinition
 		RelKeyDef CreateRelKeyDef();
 
 		ClassDefCol CreateClassDefCol();
+
+        FilterPropertyDef CreateFilterPropertyDef(string propertyName, string label, string filterType, string filterTypeAssembly, Dictionary<string, string> parameters);
+
+        FilterDef CreateFilterDef(IList<FilterPropertyDef> filterPropertyDefs);
 	}
 }

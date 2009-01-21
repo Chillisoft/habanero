@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{18828910-F528-48F5-B56D-7C1658D0987A}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -73,6 +73,7 @@
     <Compile Include="ControlMappers\ComboBoxCollectionSelector.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
     <Compile Include="DateTimePicker\DateTimePickerManager.cs" />
+    <Compile Include="FilterControl\FilterControlBuilder.cs" />
     <Compile Include="FormController.cs" />
     <Compile Include="GridWithPanelControlManager.cs" />
     <Compile Include="Grid\DataGridViewManager.cs" />

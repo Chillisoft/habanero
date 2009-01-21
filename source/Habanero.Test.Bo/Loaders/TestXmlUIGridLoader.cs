@@ -71,5 +71,28 @@ namespace Habanero.Test.BO.Loaders
         {
             loader.LoadUIGridDef(@"<grid/>");
         }
+
+        [Test]
+        public void TestFilterDef()
+        {
+            //---------------Set up test pack-------------------
+            string gridDefXml = string.Format(
+                @"
+					<grid>
+                        <filter>
+                            <filterProperty name=""{0}"" label=""{1}"" />
+                        </filter>
+						<column heading=""testheading1"" property=""{0}""  />
+					</grid>", "testpropname1", "testlabel1");
+           
+            //---------------Execute Test ----------------------
+            UIGrid def = loader.LoadUIGridDef(gridDefXml);
+            FilterDef filterDef = def.FilterDef;
+            //---------------Test Result -----------------------
+
+            Assert.IsNotNull(filterDef);
+            Assert.AreEqual(1, def.Count);
+            //---------------Tear Down -------------------------          
+        }
     }
 }

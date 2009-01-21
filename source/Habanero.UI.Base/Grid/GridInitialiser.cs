@@ -104,6 +104,13 @@ namespace Habanero.UI.Base
             //if (_isInitialised) throw new GridBaseSetUpException("You cannot initialise the grid more than once");
 
             UIGrid gridDef = GetGridDef((ClassDef) classDef, uiDefName);
+            if (gridDef.FilterDef == null) { _gridControl.FilterControl.Visible = false; }
+            else
+            {
+                FilterControlBuilder builder = new FilterControlBuilder(_controlFactory);
+                builder.BuildFilterControl(gridDef.FilterDef, _gridControl.FilterControl);
+            }
+
             SetUpGridColumns((ClassDef) classDef, gridDef);
             _gridControl.UiDefName = uiDefName;
             _gridControl.ClassDef = classDef;
@@ -191,20 +198,6 @@ namespace Habanero.UI.Base
 
         private void CreateColumnForUIDef(IClassDef classDef, UIGrid gridDef)
         {
-            //foreach (UIGridColumn gridColDef in gridDef)
-            //{
-            //    IDataGridViewColumn col = CreateStandardColumn(gridColDef.PropertyName, gridColDef.GetHeading());
-            //    //col.ReadOnly = true;
-            //    col.HeaderText = gridColDef.GetHeading();
-            //    col.Name = gridColDef.PropertyName;
-            //    col.DataPropertyName = gridColDef.PropertyName;
-            //    col.Visible = true;
-            //    col.Width = gridColDef.Width;
-            //    col.SortMode = DataGridViewColumnSortMode.Automatic;
-            //    PropDef propDef = GetPropDef(classDef, gridColDef);
-            //    if (propDef != null) col.ValueType = propDef.PropertyType;
-            //    //this._grid.Columns.Add(col);
-            //}
             foreach (UIGridColumn gridColDef in gridDef)
             {
                 IDataGridViewColumn col;

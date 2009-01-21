@@ -17,7 +17,7 @@ namespace Habanero.Test.BO.Relationship
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef();
         }
 
@@ -113,8 +113,9 @@ namespace Habanero.Test.BO.Relationship
 
             SingleRelationship<OrganisationTestBO> singleRelationship = contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation");
             BusinessObjectCollection<ContactPersonTestBO> people = organisationTestBO.ContactPeople;
-            contactPersonTestBO.Organisation = organisationTestBO;
             organisationTestBO.Save();
+            contactPersonTestBO.Organisation = organisationTestBO;
+            contactPersonTestBO.Save();
             contactPersonTestBO.Organisation = null;
             TransactionalSingleRelationship_Removed tsr = new TransactionalSingleRelationship_Removed(singleRelationship);
             //---------------Assert PreConditions--------------- 

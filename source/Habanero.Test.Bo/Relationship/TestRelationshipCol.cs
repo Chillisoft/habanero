@@ -397,7 +397,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             new AddressTestBO();
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef_WithRelationShipToAddress();
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             RelationshipCol relationships = organisationTestBO.Relationships;

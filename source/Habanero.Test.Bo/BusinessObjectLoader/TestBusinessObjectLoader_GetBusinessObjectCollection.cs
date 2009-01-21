@@ -1463,7 +1463,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             const string surname = "TestSurname";
             ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(surname);
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();

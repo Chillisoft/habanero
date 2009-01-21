@@ -30,7 +30,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef_PreventAddChild();
         }
 

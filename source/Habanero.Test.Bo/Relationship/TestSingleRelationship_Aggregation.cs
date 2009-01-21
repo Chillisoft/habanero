@@ -18,7 +18,7 @@ namespace Habanero.Test.BO.Relationship
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse();
         }
 
         

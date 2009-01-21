@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
@@ -43,6 +44,7 @@ namespace Habanero.Test.BO.ClassDefinition
             FilterDef filterDef = new FilterDef(defs);
             //---------------Test Result -----------------------
             Assert.AreSame(defs,filterDef.FilterPropertyDefs);
+            Assert.AreEqual(FilterModes.Filter, filterDef.FilterMode);
             //---------------Tear Down -------------------------          
         }
     }

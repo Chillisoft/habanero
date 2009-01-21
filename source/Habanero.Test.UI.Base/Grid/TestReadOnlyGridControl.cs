@@ -1354,6 +1354,7 @@ namespace Habanero.Test.UI.Base
             IReadOnlyGridControl grid = CreateReadOnlyGridControl(true);
             grid.AdditionalSearchCriteria = "ContactPersonID <> " + boExclude.ContactPersonID.ToString("B");
             grid.Initialise(classDef);
+            grid.FilterControl.Visible = true;
             grid.FilterMode = FilterModes.Search;
 
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -1385,6 +1386,7 @@ namespace Habanero.Test.UI.Base
             IReadOnlyGridControl grid = CreateReadOnlyGridControl(true);
             grid.AdditionalSearchCriteria = "ContactPersonID <> " + boExclude.ContactPersonID.ToString("B");
             grid.Initialise(classDef);
+            grid.FilterControl.Visible = true;
             grid.FilterMode = FilterModes.Search;
 
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -1418,7 +1420,23 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(objectDeletor.HasBeenCalled);
         }
 
-        [Test, Ignore("Soriya-working on this - this is the acceptance test for filter defs")]
+
+        [Test]
+        public void TestFilterControlNotVisibleIfNoFilterDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IReadOnlyGridControl gridControl = GetControlFactory().CreateReadOnlyGridControl();
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            gridControl.Initialise(classDef);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(gridControl.FilterControl.Visible);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
         public void TestFilterControlIsBuiltFromDef()
         {
             //---------------Set up test pack-------------------
@@ -1435,6 +1453,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsNotNull(gridControl.FilterControl.GetChildControl("TestProp2"));
             //---------------Tear Down -------------------------          
         }
+
 
         //These cannot be tested in Giz since they are now raising messages to test in windows using NUnitForms
 //        [Test]
