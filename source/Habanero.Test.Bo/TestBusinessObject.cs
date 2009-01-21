@@ -929,7 +929,6 @@ namespace Habanero.Test.BO
 
             Assert.IsFalse(contactPerson.Status.IsDirty);
             //---------------Tear Down -------------------------          
-
         }
     }
 }

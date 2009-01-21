@@ -49,13 +49,6 @@ namespace Habanero.BO
         ///   any displayed value. E.g. the persisted value may be a GUID but the
         ///   displayed value may be a related string.
         /// </summary>
-        private Dictionary<string, string> _displayValueDictionary;
-
-        /// <summary>
-        /// Provides a key value pair where the persisted value can be returned for 
-        ///   any displayed value. E.g. the persisted value may be a GUID but the
-        ///   displayed value may be a related string.
-        /// </summary>
         private Dictionary<string, string> _keyValueDictionary = new Dictionary<string, string>();
 
         private DateTime _lastCallTime;
@@ -271,7 +264,7 @@ namespace Habanero.BO
             if (!ignoreTimeout && DateTime.Now.Subtract(_lastCallTime).TotalMilliseconds < _timeout)
             {
                 _lastCallTime = DateTime.Now;
-                return _displayValueDictionary;
+                return DisplayValueDictionary;
             }
             ClassDef classDef = LookupBoClassDef;
             if (classDef.PrimaryKeyDef.Count > 1)
@@ -283,10 +276,10 @@ namespace Habanero.BO
             }
 
             IBusinessObjectCollection col = GetBusinessObjectCollection();
-            _displayValueDictionary = CreateDisplayValueDictionary(col, OrderCriteria == null);
+            DisplayValueDictionary = CreateDisplayValueDictionary(col, OrderCriteria == null);
             FillKeyValueDictionary();
             _lastCallTime = DateTime.Now;
-            return _displayValueDictionary;
+            return DisplayValueDictionary;
         }
 
         ///<summary>
@@ -404,6 +397,13 @@ namespace Habanero.BO
                 TypeLoader.ClassTypeInfo(_boType, out _assemblyName, out _className);
             }
         }
+
+        /// <summary>
+        /// Provides a key value pair where the persisted value can be returned for 
+        ///   any displayed value. E.g. the persisted value may be a GUID but the
+        ///   displayed value may be a related string.
+        /// </summary>
+        internal Dictionary<string, string> DisplayValueDictionary { get; private set; }
 
         #endregion Type Initialisation
 
@@ -540,7 +540,7 @@ namespace Habanero.BO
                      "There is no propdef set for the business object lookup list.");
             }
             _keyValueDictionary = new Dictionary<string, string>();
-            foreach (KeyValuePair<string, string> pair in _displayValueDictionary)
+            foreach (KeyValuePair<string, string> pair in DisplayValueDictionary)
             {
                 if (string.IsNullOrEmpty(Convert.ToString(pair.Value)))
                 {

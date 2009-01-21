@@ -39,7 +39,9 @@ namespace Habanero.BO
         /// <param name="propValue">the default value for this property</param>
         internal BOPropLookupList(IPropDef propDef, object propValue) : base(propDef, propValue)
         {
+            Loading = true;
             CheckPropDefHasLookupList(propDef);
+            Loading = false;
         }
 
         private static void CheckPropDefHasLookupList(IPropDef propDef)
@@ -52,6 +54,19 @@ namespace Habanero.BO
                          ("The application tried to configure a BOPropLookupList - with the propDef {0} that does not have a lookup list defined",
                           propDef.PropertyName));
             }
+        }
+
+        /// <summary>
+        /// Initialises the property with the specified value, and indicates
+        /// whether the object is new or not
+        /// </summary>
+        /// <param name="propValue">The value to assign</param>
+        /// <param name="isObjectNew">Whether the object is new or not</param>
+        protected override void InitialiseProp(object propValue, bool isObjectNew)
+        {
+            Loading = true;
+            base.InitialiseProp(propValue, isObjectNew);
+            Loading = false;
         }
 
         /// <summary>
@@ -69,50 +84,55 @@ namespace Habanero.BO
         {
             // if type of value to parse is of prop type then try lookup in keys dict. if exists then
             //    use this as the value and return
-            if (valueToParse == null) 
+            if (valueToParse == null)
             {
                 returnValue = null;
                 return;
             }
             CheckPropDefHasLookupList(_propDef);
-            if (_propDef.LookupList is BusinessObjectLookupList 
-                    &&  valueToParse is IBusinessObject)
+            if (_propDef.LookupList is BusinessObjectLookupList && valueToParse is IBusinessObject)
             {
-                Type expectedBOType = ((BusinessObjectLookupList)_propDef.LookupList).BoType;
+                Type expectedBOType = ((BusinessObjectLookupList) _propDef.LookupList).BoType;
                 if (!expectedBOType.IsInstanceOfType(valueToParse))
                 {
-                    string message = string.Format("'{0}' cannot be set to a business object of type '{1}' since the lookup list is defined for type '{2}'"
-                              , this.PropertyName, valueToParse.GetType(), expectedBOType);
-                    throw new HabaneroDeveloperException(
-                        message, message);
+                    string message = string.Format
+                        ("'{0}' cannot be set to a business object of type '{1}' since the lookup list is defined for type '{2}'",
+                         this.PropertyName, valueToParse.GetType(), expectedBOType);
+                    throw new HabaneroDeveloperException(message, message);
                 }
                 returnValue = ((IBusinessObject) valueToParse).ID.GetAsValue();
                 return;
             }
-            Dictionary<string, string> keyLookupList = _propDef.LookupList.GetIDValueLookupList();
-            if (this.PropertyType.IsInstanceOfType(valueToParse)
-                && keyLookupList.ContainsKey(Convert.ToString(valueToParse)))
+            if (!(_propDef.LookupList is BusinessObjectLookupList && this.Loading))
             {
-                returnValue = valueToParse;
+                Dictionary<string, string> keyLookupList = _propDef.LookupList.GetIDValueLookupList();
+                if (this.PropertyType.IsInstanceOfType(valueToParse)
+                    && keyLookupList.ContainsKey(Convert.ToString(valueToParse)))
+                {
+                    returnValue = valueToParse;
+                    return;
+                }
+
+                // if type of valueToParse is string then try lookup in value dict. If exists then
+                //   use the key as the value and return.
+                Dictionary<string, string> lookupList = _propDef.LookupList.GetLookupList();
+                if (lookupList.ContainsKey(Convert.ToString(valueToParse)))
+                {
+                    returnValue = lookupList[Convert.ToString(valueToParse)];
+                    this.PropDef.TryParsePropValue(returnValue, out returnValue);
+                    return;
+                }
+            }
+
+            if (this.PropDef.TryParsePropValue(valueToParse, out returnValue))
+            {
                 return;
             }
 
-            // if type of valueToParse is string then try lookup in value dict. If exists then
-            //   use the key as the value and return.
-            Dictionary<string, string> lookupList = _propDef.LookupList.GetLookupList();
-            if (lookupList.ContainsKey(Convert.ToString(valueToParse)))
-            {
-                returnValue = lookupList[Convert.ToString(valueToParse)];
-                this.PropDef.TryParsePropValue(returnValue, out returnValue);
-                return;
-            }
-            if (!this.PropDef.TryParsePropValue(valueToParse, out returnValue))
-            {
-                throw new HabaneroApplicationException
-                    (this.PropertyName + " cannot be set to '" + valueToParse
-                     + "' this value does not exist in the lookup list");
-            }
-
+            string className = this.PropDef.ClassDef == null ? "" : this.PropDef.ClassDef.ClassName;
+            throw new HabaneroApplicationException
+                (className + "." + this.PropertyName + " cannot be set to '" + valueToParse
+                 + "' this value cannot be converted to a " + this.PropDef.PropertyTypeName);
         }
 
         /// <summary>
@@ -143,13 +163,22 @@ namespace Habanero.BO
             }
         }
 
+        /// <summary>
+        /// This is used to determine whether the BOPropLookup is loading or not.
+        /// when the lookup is loading it does not validate entries against the lookup list
+        ///  and it does not try to parse a value to a lookup value for database and business objects 
+        ///  lookup items.
+        /// </summary>
+        protected virtual bool Loading { get; set; }
+
         internal IBusinessObject GetBusinessObjectForProp(ClassDef classDef)
         {
             IBusinessObject businessObject = ((PropDef) this.PropDef).GetBusinessObjectFromObjectManager(this.Value);
             if (businessObject != null) return businessObject;
             try
             {
-                businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue(classDef, this.Value);
+                businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue
+                    (classDef, this.Value);
             }
             catch (BusObjDeleteConcurrencyControlException ex)
             {

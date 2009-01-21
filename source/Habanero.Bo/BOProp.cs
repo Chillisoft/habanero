@@ -108,7 +108,7 @@ namespace Habanero.BO
         /// Initialises the property with the specified value
         /// </summary>
         /// <param name="propValue">The value to assign</param>
-        public void InitialiseProp(object propValue)
+        public virtual void InitialiseProp(object propValue)
         {
             InitialiseProp(propValue, false);
         }

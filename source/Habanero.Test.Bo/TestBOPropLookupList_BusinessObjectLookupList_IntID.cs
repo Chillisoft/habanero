@@ -305,7 +305,7 @@ namespace Habanero.Test.BO
             catch (HabaneroApplicationException ex)
             {
                 StringAssert.Contains(boProp.PropertyName + " cannot be set to '" + invalid + "'", ex.Message);
-                StringAssert.Contains("this value does not exist in the lookup list", ex.Message);
+                StringAssert.Contains("this value cannot be converted to a System.Int32", ex.Message);
                 Assert.AreEqual(null, boProp.Value);
                 Assert.IsTrue(boProp.IsValid);
             }
@@ -319,10 +319,19 @@ namespace Habanero.Test.BO
             Assert.AreEqual(typeof (int), boProp.PropDef.PropertyType);
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
-            boProp.InitialiseProp(_validLookupValue);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
-            Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
+            try
+            {
+                boProp.InitialiseProp(_validLookupValue);
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroApplicationException ex)
+            {
+                StringAssert.Contains("this value cannot be converted to a System.Int32", ex.Message);
+            }
+//            //---------------Test Result -----------------------
+//            Assert.AreEqual(_validBusinessObject.ID.GetAsValue(), boProp.Value);
+//            Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         }
 
         [Test]
@@ -432,7 +441,7 @@ namespace Habanero.Test.BO
             {
                 //You are trying to set the value for a lookup property PropName to 'Invalid' this value does not exist in the lookup list
                 StringAssert.Contains(boProp.PropertyName + " cannot be set to '" + invalid + "'", ex.Message);
-                StringAssert.Contains("this value does not exist in the lookup list", ex.Message);
+                StringAssert.Contains("this value cannot be converted to a System.Int32", ex.Message);
                 Assert.AreEqual(originalPropValue, boProp.Value);
                 Assert.IsTrue(boProp.IsValid);
             }
