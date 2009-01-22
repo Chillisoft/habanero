@@ -90,7 +90,7 @@ namespace Habanero.BO.ClassDefinition
 
 		ClassDefCol CreateClassDefCol();
 
-        FilterPropertyDef CreateFilterPropertyDef(string propertyName, string label, string filterType, string filterTypeAssembly, Dictionary<string, string> parameters);
+        FilterPropertyDef CreateFilterPropertyDef(string propertyName, string label, string filterType, string filterTypeAssembly, FilterClauseOperator filterClauseOperator, Dictionary<string, string> parameters);
 
         FilterDef CreateFilterDef(IList<FilterPropertyDef> filterPropertyDefs);
 	}

@@ -199,7 +199,12 @@ namespace Habanero.BO.ClassDefinition
 			return new ClassDefCol();
 		}
 
-        public FilterPropertyDef CreateFilterPropertyDef(string propertyName, string label, string filterType, string filterTypeAssembly, Dictionary<string, string> parameters) { return new FilterPropertyDef(propertyName, label, filterType, filterTypeAssembly, parameters);}
+        public FilterPropertyDef CreateFilterPropertyDef(string propertyName, string label, string filterType, 
+                string filterTypeAssembly, FilterClauseOperator filterClauseOperator, 
+                Dictionary<string, string> parameters)
+        {
+            return new FilterPropertyDef(propertyName, label, filterType, filterTypeAssembly, filterClauseOperator, parameters);
+        }
         public FilterDef CreateFilterDef(IList<FilterPropertyDef> filterPropertyDefs) { return new FilterDef(filterPropertyDefs);}
 	}
 }

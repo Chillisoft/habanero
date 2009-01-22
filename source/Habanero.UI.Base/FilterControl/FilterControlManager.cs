@@ -256,44 +256,10 @@ namespace Habanero.UI.Base
         public void Clear() { _dateRangeComboBox.SelectedIndex = -1;}
         public event EventHandler ValueChanged;
         public string PropertyName { get { return _propertyName; } }
+        public FilterClauseOperator FilterClauseOperator { get { return _filterClauseOperator; } }
         public bool IncludeStartDate { get { return _includeStartDate; } set { _includeStartDate = value; } }
         public bool IncludeEndDate { get { return _includeEndDate; } set { _includeEndDate = value; } }
         public List<DateRangeOptions> OptionsToDisplay { get { return _dateRangeComboBox.OptionsToDisplay; } set { _dateRangeComboBox.OptionsToDisplay = value; } }
-    }
-
-    public class StringTextBoxFilter : ICustomFilter
-    {
-        private readonly IControlFactory _controlFactory;
-        private readonly string _propertyName;
-        private readonly FilterClauseOperator _filterClauseOperator;
-        private ITextBox _textBox;
-
-        public StringTextBoxFilter(IControlFactory controlFactory, string propertyName, FilterClauseOperator filterClauseOperator)
-        {
-            _controlFactory = controlFactory;
-            _propertyName = propertyName;
-            _filterClauseOperator = filterClauseOperator;
-            _textBox = _controlFactory.CreateTextBox();
-            _textBox.TextChanged += (sender, e) => FireValueChanged();
-        }
-
-        private void FireValueChanged()
-        {
-            if (ValueChanged != null)
-            {
-                this.ValueChanged(this, new EventArgs());
-            }
-        }
-
-        public IControlHabanero Control { get { return _textBox; } }
-        public IFilterClause GetFilterClause(IFilterClauseFactory filterClauseFactory) {
-            return _textBox.Text.Length > 0
-                      ? filterClauseFactory.CreateStringFilterClause(_propertyName, _filterClauseOperator, _textBox.Text)
-                      : filterClauseFactory.CreateNullFilterClause();
-        }
-        public void Clear() { _textBox.Text = ""; }
-        public event EventHandler ValueChanged;
-        public string PropertyName { get { return _propertyName; } }
     }
 
     public class StringComboBoxFilter : ICustomFilter
@@ -342,6 +308,7 @@ namespace Habanero.UI.Base
                 _comboBox.Items.Add(option);
             }
         } }
+        public FilterClauseOperator FilterClauseOperator { get { return _filterClauseOperator; } }
     }
 
     public class BoolCheckBoxFilter : ICustomFilter
@@ -386,6 +353,7 @@ namespace Habanero.UI.Base
         public void Clear() { _checkBox.Checked = false; }
         public event EventHandler ValueChanged;
         public string PropertyName { get { return _propertyName; } }
+        public FilterClauseOperator FilterClauseOperator { get { return _filterClauseOperator; } }
     }
 
     public class DateTimePickerFilter : ICustomFilter
@@ -440,6 +408,7 @@ namespace Habanero.UI.Base
                 _defaultDate = value;
                 _dateTimePicker.Value = _defaultDate;
         } }
+        public FilterClauseOperator FilterClauseOperator { get { return _filterClauseOperator; } }
     }
 
     ///<summary>
@@ -451,6 +420,7 @@ namespace Habanero.UI.Base
         void Clear();
         event EventHandler ValueChanged;
         string PropertyName { get; }
+        FilterClauseOperator FilterClauseOperator { get; }
     }
 
     /// <summary>

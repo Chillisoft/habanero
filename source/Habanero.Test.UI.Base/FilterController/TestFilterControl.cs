@@ -1070,5 +1070,6 @@ namespace Habanero.Test.UI.Base.FilterController
 
         public event EventHandler ValueChanged;
         public string PropertyName { get { return "test"; } }
+        public FilterClauseOperator FilterClauseOperator { get { return FilterClauseOperator.OpLike; } }
     }
 }

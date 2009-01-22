@@ -9,11 +9,13 @@ namespace Habanero.BO.Loaders
     {
         private IList<FilterPropertyDef> _propertyDefs = new List<FilterPropertyDef>();
         private FilterModes _filterMode;
+        private int _columns;
         public XmlFilterLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory) : base(dtdLoader, defClassFactory) { }
         public XmlFilterLoader() { }
         protected override object Create()
         {
             FilterDef filterDef = _defClassFactory.CreateFilterDef(_propertyDefs);
+            filterDef.Columns = _columns;
             filterDef.FilterMode = _filterMode;
             return filterDef;
         }
@@ -25,6 +27,8 @@ namespace Habanero.BO.Loaders
                 _reader.Read();
                 string filterModeStr = _reader.GetAttribute("filterMode");
                 _filterMode = (FilterModes) Enum.Parse(typeof (FilterModes), filterModeStr);
+                _columns = Convert.ToInt32(_reader.GetAttribute("columns"));
+
             }
             _reader.Read();
 
@@ -34,9 +38,12 @@ namespace Habanero.BO.Loaders
                 string label = _reader.GetAttribute("label");
                 string filterType = _reader.GetAttribute("filterType");
                 string filterTypeAssembly = _reader.GetAttribute("filterTypeAssembly");
+                string filterClauseOperatorStr = _reader.GetAttribute("operator");
+                FilterClauseOperator filterClauseOperator 
+                    = (FilterClauseOperator) Enum.Parse(typeof (FilterClauseOperator), filterClauseOperatorStr);
                 Dictionary<string, string> parameters = new Dictionary<string, string>();
                 FilterPropertyDef filterPropertyDef = 
-                    _defClassFactory.CreateFilterPropertyDef(propertyName, label, filterType, filterTypeAssembly, parameters);
+                    _defClassFactory.CreateFilterPropertyDef(propertyName, label, filterType, filterTypeAssembly, filterClauseOperator, parameters);
               
                 _reader.Read();
               

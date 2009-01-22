@@ -18,13 +18,16 @@ namespace Habanero.Test.BO.ClassDefinition
             string propName = TestUtil.CreateRandomString();
             string label = TestUtil.CreateRandomString();
             Dictionary<string, string> parameters = new Dictionary<string, string>();
+            FilterClauseOperator opEquals = FilterClauseOperator.OpEquals;
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            FilterPropertyDef def = new FilterPropertyDef(propName, label, "BoolCheckBoxFilter", "Habanero.Test.UI.Base", parameters);
+            FilterPropertyDef def = 
+                new FilterPropertyDef(propName, label, "BoolCheckBoxFilter", "Habanero.Test.UI.Base", opEquals, parameters);
             //---------------Test Result -----------------------
             Assert.AreEqual(propName, def.PropertyName);
             Assert.AreEqual(label, def.Label);
             Assert.AreSame(parameters, def.Parameters);
+            Assert.AreEqual(opEquals, def.FilterClauseOperator);
             //---------------Tear Down -------------------------          
         }
 
@@ -34,7 +37,8 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             string propName = TestUtil.CreateRandomString();
             string label = TestUtil.CreateRandomString();
-            FilterPropertyDef def = new FilterPropertyDef(propName, label, "BoolCheckBoxFilter", "Habanero.Test.UI.Base", null);
+            FilterPropertyDef def = 
+                new FilterPropertyDef(propName, label, "BoolCheckBoxFilter", "Habanero.Test.UI.Base", FilterClauseOperator.OpEquals, null);
 
             IList<FilterPropertyDef> defs = new List<FilterPropertyDef>() {def};
 

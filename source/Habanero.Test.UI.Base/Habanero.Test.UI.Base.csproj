@@ -84,6 +84,7 @@
     </Compile>
     <Compile Include="ButtonsControl\TestButtonGroupControl.cs" />
     <Compile Include="FilterController\TestFilterControlBuilder.cs" />
+    <Compile Include="FilterController\TestStringTextBoxFilter.cs" />
     <Compile Include="PanelBuilder\TestPanelBuilder.cs" />
     <Compile Include="PanelBuilder\TestPanelInfo.cs" />
     <Compile Include="TestButton.cs" />

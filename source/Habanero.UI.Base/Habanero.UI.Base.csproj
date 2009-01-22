@@ -74,6 +74,7 @@
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
     <Compile Include="DateTimePicker\DateTimePickerManager.cs" />
     <Compile Include="FilterControl\FilterControlBuilder.cs" />
+    <Compile Include="FilterControl\StringTextBoxFilter.cs" />
     <Compile Include="FormController.cs" />
     <Compile Include="GridWithPanelControlManager.cs" />
     <Compile Include="Grid\DataGridViewManager.cs" />
