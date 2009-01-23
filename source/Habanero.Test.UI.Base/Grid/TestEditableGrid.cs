@@ -48,12 +48,13 @@ namespace Habanero.Test.UI.Base
     ///  - that combo box click doesn't edit when already editing(as we cannot call beginEdit)
     ///  - that the combo box drops down on click as this requires being in edit mode
     /// </summary>
-    public abstract class TestEditableGrid : TestUsingDatabase
+    public abstract class TestEditableGrid //: TestUsingDatabase
     {
         [SetUp]
         public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         [TestFixtureSetUp]
@@ -61,7 +62,7 @@ namespace Habanero.Test.UI.Base
         {
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
-            base.SetupDBConnection();
+            //base.SetupDBConnection();
         }
 
         [TearDown]

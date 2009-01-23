@@ -29,7 +29,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    public abstract class TestReadonlyGridControl : TestUsingDatabase
+    public abstract class TestReadonlyGridControl //: TestUsingDatabase
     {
         //TODO: Tests that if init not called throws sensible errors
         //TODO: Date searchby
@@ -38,12 +38,13 @@ namespace Habanero.Test.UI.Base
         public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
-            base.SetupDBConnection();
+           // base.SetupDBConnection();
 
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
@@ -484,7 +485,7 @@ namespace Habanero.Test.UI.Base
             // the dataview will try to filter with a column that does not exist this will raise an error
             //---------------Set up test pack-------------------
             //Clear all contact people from the DB
-            ContactPerson.DeleteAllContactPeople();
+           // ContactPerson.DeleteAllContactPeople();
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
             CreateContactPersonInDB();
 
@@ -509,7 +510,8 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             //Clear all contact people from the DB
-            ContactPerson.DeleteAllContactPeople();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            //ContactPerson.DeleteAllContactPeople();
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
             //Create data in the database with the 5 contact people two with Search in surname
             CreateContactPersonInDB();
@@ -1285,8 +1287,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-//        [Test, Ignore("Custom delete should not pop up messagebox by default")]
-        [Test]
+        [Test, Ignore("Custom delete should not pop up messagebox by default")]
         public void TestDeleteButton_CallsObjectDeletor()
         {
             //---------------Set up test pack-------------------
@@ -1300,9 +1301,9 @@ namespace Habanero.Test.UI.Base
             grid.Buttons["Delete"].PerformClick();
             //---------------Test Result -----------------------
 
-            //    Assert.IsTrue(objectDeletor.HasBeenCalled);
-            //    Assert.AreSame(col[2], objectDeletor.Bo);
-            //    //---------------Tear Down -------------------------          
+            Assert.IsTrue(objectDeletor.HasBeenCalled);
+            Assert.AreSame(col[2], objectDeletor.Bo);
+            //---------------Tear Down -------------------------          
         }
 
         [Test]
@@ -1343,12 +1344,12 @@ namespace Habanero.Test.UI.Base
 
             ContactPersonTestBO boExclude = new ContactPersonTestBO();
             boExclude.Surname = "Excude this one.";
-            AddObjectToDelete(boExclude);
+            //AddObjectToDelete(boExclude);
             boExclude.Save();
 
             ContactPersonTestBO boInclude = new ContactPersonTestBO();
             boInclude.Surname = "Include this one.";
-            AddObjectToDelete(boInclude);
+            //AddObjectToDelete(boInclude);
             boInclude.Save();
 
             IReadOnlyGridControl grid = CreateReadOnlyGridControl(true);
@@ -1375,12 +1376,12 @@ namespace Habanero.Test.UI.Base
 
             ContactPersonTestBO boExclude = new ContactPersonTestBO();
             boExclude.Surname = "Excude this one.";
-            AddObjectToDelete(boExclude);
+            //AddObjectToDelete(boExclude);
             boExclude.Save();
 
             ContactPersonTestBO boInclude = new ContactPersonTestBO();
             boInclude.Surname = "Include this one.";
-            AddObjectToDelete(boInclude);
+            //AddObjectToDelete(boInclude);
             boInclude.Save();
 
             IReadOnlyGridControl grid = CreateReadOnlyGridControl(true);

@@ -294,8 +294,6 @@ namespace Habanero.Test.UI.Base.Mappers
             mapper.ShowPopupForm();
             //--------------- Test Result -----------------------
             Assert.IsNotNull(mapper.PopupForm);
-
-            Assert.AreEqual(2, mapper.LookupList.Count);
         }
 
         private BusinessObjectCollection<OrganisationTestBO> CreateSavedOrganisationTestBOSCollection()

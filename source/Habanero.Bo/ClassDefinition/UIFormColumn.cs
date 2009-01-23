@@ -239,5 +239,20 @@ namespace Habanero.BO.ClassDefinition
             }
             return rowsRequired;
         }
+
+        public int GetRowSpanForColumnToTheRight(int columnsRight)
+        {
+            if (columnsRight == 0) throw new ArgumentException("columnsRight cannot be zero", "columnsRight");
+
+            int totalRowSpan = 0;
+            foreach (UIFormField field in _list)
+            {
+                if (field.ColSpan - columnsRight > 0)
+                {
+                    totalRowSpan += field.RowSpan;
+                }
+            }
+            return totalRowSpan;
+        }
     }
 }
