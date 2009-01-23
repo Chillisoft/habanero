@@ -37,6 +37,8 @@ namespace Habanero.UI.Base
             SetupInputControlColumnWidth(panelInfo, formTab);
 
             panel.Width = layoutManager.GetFixedWidthIncludingGaps();
+            panel.Height = layoutManager.GetFixedHeightIncludingGaps();
+
             panelInfo.Panel = panel;
             return panelInfo;
         }
@@ -54,6 +56,8 @@ namespace Habanero.UI.Base
                 ITabPage tabPage = Factory.CreateTabPage(formTab.Name);
                 IPanelInfo tabPagePanelInfo = BuildPanelForTab(formTab);
                 tabPagePanel = tabPagePanelInfo.Panel;
+                tabPage.Width = tabPagePanel.Width;
+                tabPage.Height = tabPagePanel.Height;
                 tabPagePanel.Dock = DockStyle.Fill;
                 tabPage.Controls.Add(tabPagePanel);
                 tabControl.TabPages.Add(tabPage);
