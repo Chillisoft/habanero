@@ -42,6 +42,14 @@ namespace Habanero.Test.BO
 					<relationship name=""ContactPeople"" type=""multiple"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"" reverseRelationship=""Organisation"">
 						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
 					</relationship>
+                    <ui>
+                        <grid>
+                            <column heading=""OrganisationID"" property=""OrganisationID"" />
+                        </grid>
+                        <form>
+                            <field label=""OrganisationID: *"" property=""OrganisationID"" />
+                        </form>
+                    </ui>
 			    </class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);

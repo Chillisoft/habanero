@@ -128,7 +128,7 @@ namespace Habanero.Test.UI.Base
             UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneField();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
-
+            
             //---------------Execute Test ----------------------
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
@@ -497,7 +497,22 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_Parameter_RowSpan()
+        public void Test_BuildPanel_RowSpanAndColumnSpan()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            UIFormTab oneFieldRowColSpan = interfaceMapper.GetFormTabOneFieldHasRowAndColSpan();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(oneFieldRowColSpan).Panel;
+            //---------------Test Result -----------------------
+            IControlCollection controlCollection = panel.Controls;
+        }
+
+        [Test]
+        public void Test_BuildPanel_RowSpan()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();

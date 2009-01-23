@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BOEditorPanelWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ComboBoxAutoCompleteSourceWin.cs" />
     <Compile Include="ComboBoxAutoCompleteModeWin.cs" />
     <Compile Include="BOColTabControlWin.cs">
@@ -77,6 +80,7 @@
     <Compile Include="DateRangeComboBoxWin.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DateTimePickerMapperStrategyWin.cs" />
     <Compile Include="DateTimePickerWin.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -98,6 +102,9 @@
     <Compile Include="ErrorProviderWin.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ExtendedComboBoxWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="FileChooserWin.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -107,6 +114,9 @@
     <Compile Include="FormExceptionNotifier.cs" />
     <Compile Include="FormWin.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GridAndBOEditorControlWin.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GridBaseWin.cs">
       <SubType>Component</SubType>
@@ -163,6 +173,9 @@
     </Compile>
     <Compile Include="OKCancelDialogFactoryWin.cs" />
     <Compile Include="PanelWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PictureBoxWin.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ProgressBarWin.cs">

@@ -140,7 +140,7 @@ namespace Habanero.Test
             //relDefCol.Add(relDef1);
             relDefCol.Add(relDef2);
             relKeyDef = new RelKeyDef();
-            propDef = lPropDefCol["ContactPersonID"];
+           // propDef = lPropDefCol["ContactPersonID"];
             lRelPropDef = new RelPropDef(propDef, "ContactPersonID");
             relKeyDef.Add(lRelPropDef);
             RelationshipDef relDef3 = new MultipleRelationshipDef("Addresses", typeof(Address),

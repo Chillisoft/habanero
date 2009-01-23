@@ -28,6 +28,8 @@ namespace Habanero.UI.Base
     public class DateTimePickerMapper : ControlMapper
     {
         private readonly IDateTimePicker _picker;
+        private readonly IDateTimePickerMapperStrategy _dateTimePickerMapperStrategy;
+
 
         /// <summary>
         /// Constructor to initialise a new instance of the class
@@ -41,6 +43,8 @@ namespace Habanero.UI.Base
         {
             _picker = picker;
             _propertyName = propName;
+            _dateTimePickerMapperStrategy = factory.CreateDateTimePickerMapperStrategy();
+            _dateTimePickerMapperStrategy.AddUpdateBoPropOnValueChangedHandler(this);
         }
 
         /// <summary>

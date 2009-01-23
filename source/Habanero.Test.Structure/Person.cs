@@ -50,6 +50,7 @@ namespace Habanero.Test.Structure
 			    <property name=""FirstName"" databaseField=""field_First_Name"" />
 			    <property name=""LastName"" databaseField=""field_Last_Name"" />
 			    <property name=""PersonID"" type=""System.Guid"" databaseField=""field_Person_ID"" compulsory=""true"" />
+                <property name=""DriverID"" type=""System.Guid"" />
 			    <primaryKey>
 			      <prop name=""PersonID"" />
 			    </primaryKey>

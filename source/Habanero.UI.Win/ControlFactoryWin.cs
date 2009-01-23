@@ -26,6 +26,7 @@ using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.Util;
 using AutoCompleteMode=System.Windows.Forms.AutoCompleteMode;
@@ -918,6 +919,45 @@ namespace Habanero.UI.Win
         public ITextBox CreateTextBox(Type propertyType)
         {
             return new TextBoxWin();
+        }
+
+        /// <summary>
+        /// Creates a TextBox that provides filtering of characters depending on the property type.
+        /// </summary>
+         public IPictureBox CreatePictureBox()
+        {
+            return new PictureBoxWin();
+        }
+
+        public IDateTimePickerMapperStrategy CreateDateTimePickerMapperStrategy()
+        {
+            return new DateTimePickerMapperStrategyWin();
+        }
+
+        public IBusinessObjectControlWithErrorDisplay CreateBOEditorForm(ClassDef lookupTypeClassDef, string uiDefName, IControlFactory controlFactory)
+        {
+            return new BOEditorPanelWin(lookupTypeClassDef, uiDefName, controlFactory);
+        }
+
+        public IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>() where TBusinessObject : class, IBusinessObject
+        {
+            return new GridAndBOEditorControlWin<TBusinessObject>(this, "default");
+
+        }
+
+        public IGridAndBOEditorControl CreateGridAndBOEditorControl(ClassDef classDef)
+        {
+            return new GridAndBOEditorControlWin(this, classDef, "default");
+        }
+
+        public IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>(IBusinessObjectControlWithErrorDisplay editorPanel) where TBusinessObject : class, IBusinessObject
+        {
+            return new GridAndBOEditorControlWin<TBusinessObject>(this, editorPanel);
+        }
+
+        public IGridAndBOEditorControl CreateGridAndBOEditorControl(IBusinessObjectControlWithErrorDisplay boEditorPanel,IBusinessObject businessObject)
+        {
+            return new GridAndBOEditorControlWin<IBusinessObject>(this, boEditorPanel,businessObject);
         }
 
         /// <summary>

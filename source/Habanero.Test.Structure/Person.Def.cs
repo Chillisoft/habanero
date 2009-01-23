@@ -78,7 +78,19 @@ namespace Habanero.Test.Structure
                 base.SetPropertyValue("LastName", value);
             }
         }
-        
+
+        public virtual String DriverID
+        {
+            get
+            {
+                return ((String)(base.GetPropertyValue("DriverID")));
+            }
+            set
+            {
+                base.SetPropertyValue("DriverID", value);
+            }
+        }
+
         public virtual String PersonID
         {
             get

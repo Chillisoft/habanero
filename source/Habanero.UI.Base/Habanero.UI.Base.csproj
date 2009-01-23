@@ -68,10 +68,16 @@
     <Compile Include="ControlInterfaces\IFormHabanero.cs" />
     <Compile Include="ControlInterfaces\IGridWithPanelControl.cs" />
     <Compile Include="ControlInterfaces\IListControl.cs" />
+    <Compile Include="ControlInterfaces\IPictureBox.cs" />
     <Compile Include="ControlInterfaces\IStaticDataEditor.cs" />
     <Compile Include="ControlInterfaces\IUserControlHabanero.cs" />
     <Compile Include="ControlMappers\ComboBoxCollectionSelector.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
+    <Compile Include="ControlMappers\ExtendedComboBoxMapper.cs" />
+    <Compile Include="IBOEditorPanel.cs" />
+    <Compile Include="IBusinessObjectControlWithErrorDisplay.cs" />
+    <Compile Include="IGridAndBOEditorControl.cs" />
+    <Compile Include="IExtendedComboBox.cs" />
     <Compile Include="DateTimePicker\DateTimePickerManager.cs" />
     <Compile Include="FilterControl\FilterControlBuilder.cs" />
     <Compile Include="FilterControl\StringTextBoxFilter.cs" />

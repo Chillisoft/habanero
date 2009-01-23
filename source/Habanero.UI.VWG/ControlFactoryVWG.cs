@@ -25,11 +25,14 @@ using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.Util;
+using AnchorStyles=Habanero.UI.Base.AnchorStyles;
 using DateTimePickerFormat=Habanero.UI.Base.DateTimePickerFormat;
 using HorizontalAlignment=Gizmox.WebGUI.Forms.HorizontalAlignment;
+using DockStyle=Habanero.UI.Base.DockStyle;
 using ScrollBars=Gizmox.WebGUI.Forms.ScrollBars;
 
 namespace Habanero.UI.VWG
@@ -545,6 +548,41 @@ namespace Habanero.UI.VWG
         public Base.DialogResult ShowMessageBox(string message)
         {
             return (Base.DialogResult)MessageBox.Show(message);
+        }
+
+        public IPictureBox CreatePictureBox()
+        {
+            return new PictureBoxVWG();
+        }
+
+        public IDateTimePickerMapperStrategy CreateDateTimePickerMapperStrategy()
+        {
+            return new DateTimePickerMapperStrategyVWG();
+        }
+
+        public IBusinessObjectControlWithErrorDisplay CreateBOEditorForm(ClassDef lookupTypeClassDef, string uiDefName, IControlFactory controlFactory)
+        {
+            return null;
+        }
+
+        public IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>() where TBusinessObject : class, IBusinessObject
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IGridAndBOEditorControl CreateGridAndBOEditorControl(ClassDef classDef)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>(IBusinessObjectControlWithErrorDisplay editorPanel) where TBusinessObject : class, IBusinessObject
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IGridAndBOEditorControl CreateGridAndBOEditorControl(IBusinessObjectControlWithErrorDisplay boEditorPanel)
+        {
+            throw new NotImplementedException();
         }
 
 

@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
@@ -25,6 +26,38 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
+    internal class BusinessObjectControlStub : UserControlWin, IBusinessObjectControlWithErrorDisplay
+    {
+        private IBusinessObject _businessObject;
+        private bool _displayErrorsCalled;
+        private bool _clearErrorsCalled;
+
+        public bool DisplayErrorsCalled
+        {
+            get { return _displayErrorsCalled; }
+        }
+
+        public bool ClearErrorsCalled
+        {
+            get { return _clearErrorsCalled; }
+        }
+
+        public IBusinessObject BusinessObject
+        {
+            get { return _businessObject; }
+            set { _businessObject = value; }
+        }
+
+        public void DisplayErrors()
+        {
+            _displayErrorsCalled = true;
+        }
+
+        public void ClearErrors()
+        {
+            _clearErrorsCalled = true;
+        }
+    }
     /// <summary>
     /// This test class tests the base inherited methods of the ComboBox class.
     /// </summary>

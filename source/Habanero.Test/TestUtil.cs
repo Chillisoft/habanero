@@ -19,6 +19,7 @@
 using System;
 using System.ComponentModel;
 using System.Reflection;
+using Habanero.DB;
 
 namespace Habanero.Test
 {
@@ -150,6 +151,10 @@ namespace Habanero.Test
         public static int GetRandomInt()
         {
             return rnd.Next();
+        }
+
+        public static DatabaseConfig GetDatabaseConfig() { 
+            return new DatabaseConfig("MySql", "localhost", "habanero_test_trunk", "root", "root", "3306");
         }
     }
 }

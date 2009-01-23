@@ -74,7 +74,8 @@
     </Compile>
     <Compile Include="ComboBoxAutoCompleteSourceVWG.cs" />
     <Compile Include="ControlCollectionVWG.cs" />
-    <Compile Include="ControlFactoryVWG.cs" />
+    <Compile Include="ControlFactoryVWG.cs">
+    </Compile>
     <Compile Include="ControlVWG.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -83,6 +84,7 @@
     <Compile Include="DateRangeComboBoxVWG.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DateTimePickerMapperStrategyVWG.cs" />
     <Compile Include="DateTimePickerVWG.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -166,6 +168,9 @@
     </Compile>
     <Compile Include="OKCancelDialogFactoryVWG.cs" />
     <Compile Include="PanelVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PictureBoxVWG.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ProgressBarVWG.cs">
