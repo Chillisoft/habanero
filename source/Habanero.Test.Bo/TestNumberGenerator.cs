@@ -194,15 +194,17 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             //Create an entry in the number generator table for entry type to seed with seed = 0 and lockduration = 15 minutes.
-
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC(); 
             const string numberType = "tmp";
             BOSequenceNumberLocking.LoadNumberGenClassDef();
             BOSequenceNumberLocking.DeleteAllNumbers();
-            INumberGenerator numGen = new NumberGeneratorPessimisticLocking(numberType);
+            NumberGeneratorPessimisticLocking numGen = new NumberGeneratorPessimisticLocking(numberType);
             numGen.SetSequenceNumber(0);
 
             //get the next number for invoice number
             int num = numGen.NextNumber();
+            BOSequenceNumberLocking boSequenceNumber1 = numGen.BoSequenceNumber;
             Assert.AreEqual(1, num,"The first generated number should be 1");
             // set the datetime locked to > 15 minutes ago.
             UpdateDatabaseLockAsExpired(20);
@@ -211,11 +213,13 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             //Create a seperate instance of the number generator.
             //try Get  number
-            INumberGenerator numGen2 = new NumberGeneratorPessimisticLocking(numberType);
+            NumberGeneratorPessimisticLocking numGen2 = new NumberGeneratorPessimisticLocking(numberType);
             //try Get second number
             num = numGen2.NextNumber();
+            BOSequenceNumberLocking boSequenceNumber2 = numGen2.BoSequenceNumber;
             //---------------Test Result -----------------------
             Assert.AreNotSame(numGen, numGen2);
+            Assert.AreNotSame(boSequenceNumber2, boSequenceNumber1);
             //should not get locking error
             //assert nextnumber = 1
             Assert.AreEqual(1, num, "The second generated number should be 1. Time: " + DateTime.Now.ToLongTimeString());

@@ -52,13 +52,15 @@ namespace Habanero.BO
             _boSequenceNumber = LoadSequenceNumber(numberType);
         }
 
+        internal BOSequenceNumberLocking BoSequenceNumber { get { return _boSequenceNumber; } }
+
         /// <summary>
         /// Returns the next number in the sequence
         /// </summary>
         public int NextNumber()
         {
-            _boSequenceNumber.SequenceNumber++;
-            return _boSequenceNumber.SequenceNumber.Value;
+            BoSequenceNumber.SequenceNumber++;
+            return BoSequenceNumber.SequenceNumber.Value;
         }
 
         private static BOSequenceNumberLocking LoadSequenceNumber(string numberType)
@@ -91,13 +93,13 @@ namespace Habanero.BO
         /// </summary>
         public void SetSequenceNumber(int newSequenceNumber)
         {
-            _boSequenceNumber.SequenceNumber = newSequenceNumber;
-            _boSequenceNumber.Save();
+            BoSequenceNumber.SequenceNumber = newSequenceNumber;
+            BoSequenceNumber.Save();
         }
 
         private BusinessObject GetTransactionalBO()
         {
-            return _boSequenceNumber;
+            return BoSequenceNumber;
         }
 
         /// <summary>
