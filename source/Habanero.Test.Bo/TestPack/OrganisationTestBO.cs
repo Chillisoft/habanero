@@ -39,7 +39,7 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""OrganisationID"" />
 					</primaryKey>
-					<relationship name=""ContactPeople"" type=""multiple"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"">
+					<relationship name=""ContactPeople"" type=""multiple"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"" reverseRelationship=""Organisation"">
 						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
 					</relationship>
 			    </class>

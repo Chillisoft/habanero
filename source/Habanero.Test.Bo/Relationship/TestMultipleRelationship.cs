@@ -90,32 +90,6 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreSame(contactPersonClassDef, collection.ClassDef);
             Assert.IsInstanceOfType(typeof(ContactPersonTestBO), collection.CreateBusinessObject());
         }        
-        
-        [Test]
-        public void Test_Loads_AddedObject_Before_Saving()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            OrganisationTestBO.LoadDefaultClassDef();
-            ClassDef contactPersonClassDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            RelKeyDef keyDef = new RelKeyDef();
-            keyDef.Add(new RelPropDef(contactPersonClassDef.PropDefcol["OrganisationID"], "OrganisationID"));
-            MultipleRelationshipDef def = new MultipleRelationshipDef
-                (TestUtil.CreateRandomString(), typeof(ContactPersonTestBO),
-                 keyDef, false, "", DeleteParentAction.DoNothing);
-
-            OrganisationTestBO organisation = new OrganisationTestBO();
-            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-            IMultipleRelationship rel = (IMultipleRelationship) def.CreateRelationship(organisation, organisation.Props);
-            organisation.ContactPeople.Add(contactPersonTestBO);
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(contactPersonTestBO.Organisation);
-        }
-
-
 
         [Test]
         public void Test_GetDirtyChildren_ReturnAllDirty()

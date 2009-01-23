@@ -205,7 +205,7 @@ namespace Habanero.Test.BO
             int num = numGen.NextNumber();
             Assert.AreEqual(1, num,"The first generated number should be 1");
             // set the datetime locked to > 15 minutes ago.
-            UpdateDatabaseLockAsExpired(15);
+            UpdateDatabaseLockAsExpired(20);
             BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC(); 
             //---------------Execute Test ----------------------
