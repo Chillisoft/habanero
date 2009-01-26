@@ -241,7 +241,12 @@ namespace Habanero.BO
             IBusinessObjectCollection col = BusinessObjectCollection;
             for (int i = col.Count - 1; i >= 0; i--)
             {
-                DeleteChild(committer, col[i]);
+                IBusinessObject businessObject = col[i];
+                if (!businessObject.Status.IsNew)
+                {
+                    DeleteChild(committer, businessObject);
+                }
+                
             }
         }
     }

@@ -1455,6 +1455,25 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
+        [Test]
+        public void TestFilterControlStillVisibleAfterSetCollection()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            IReadOnlyGridControl grid = GetControlFactory().CreateReadOnlyGridControl();
+            grid.FilterControl.AddStringFilterTextBox("Surname", "Surname");
+            grid.FilterControl.Visible = true;
+            grid.FilterMode = FilterModes.Search;
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.LoadAll();
+            //---------------Assert PreConditions---------------     
+            Assert.IsTrue(grid.FilterControl.Visible);
+            //---------------Execute Test ----------------------
+            grid.SetBusinessObjectCollection(col);
+            //---------------Tear Down ------------------------- 
+            Assert.IsTrue(grid.FilterControl.Visible);
+        }
+
 
         //These cannot be tested in Giz since they are now raising messages to test in windows using NUnitForms
 //        [Test]

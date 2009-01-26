@@ -119,6 +119,25 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreEqual(4, dirtyChildren.Count);
         }
 
+        [Test]
+        public void Test_CanDeleteParentWithNewChildren()
+        {
+            //--------------- Set up test pack ------------------
+            ClassDef.ClassDefs.Clear();
+            OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            organisationTestBO.ContactPeople.CreateBusinessObject();
+
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            organisationTestBO.Save();
+            //--------------- Test Result -----------------------
+            Assert.IsTrue(organisationTestBO.Status.IsDeleted);
+        }
+
 
         private MultipleRelationship<ContactPersonTestBO> GetAggregationRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {

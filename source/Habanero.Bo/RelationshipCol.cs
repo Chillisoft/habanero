@@ -309,7 +309,10 @@ namespace Habanero.BO
         {
             foreach (RelationshipBase relationship in this)
             {
-                relationship.AddDirtyChildrenToTransactionCommitter(transactionCommitter);
+                if (!(relationship.DeleteParentAction == DeleteParentAction.DeleteRelated && this._bo.Status.IsDeleted ))
+                {
+                    relationship.AddDirtyChildrenToTransactionCommitter(transactionCommitter);
+                }
             }
         }
 

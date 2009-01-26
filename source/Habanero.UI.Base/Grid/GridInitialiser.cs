@@ -104,13 +104,13 @@ namespace Habanero.UI.Base
             //if (_isInitialised) throw new GridBaseSetUpException("You cannot initialise the grid more than once");
 
             UIGrid gridDef = GetGridDef((ClassDef) classDef, uiDefName);
-            if (gridDef.FilterDef == null) { _gridControl.FilterControl.Visible = false; }
-            else
+            if (gridDef.FilterDef != null)
             {
                 FilterControlBuilder builder = new FilterControlBuilder(_controlFactory);
                 builder.BuildFilterControl(gridDef.FilterDef, _gridControl.FilterControl);
-            }
-
+                _gridControl.FilterControl.Visible = true;
+            } else if (_gridControl.FilterControl.FilterControls.Count == 0) { _gridControl.FilterControl.Visible = false; }
+    
             SetUpGridColumns((ClassDef) classDef, gridDef);
             _gridControl.UiDefName = uiDefName;
             _gridControl.ClassDef = classDef;
