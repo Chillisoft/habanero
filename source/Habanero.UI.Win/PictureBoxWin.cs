@@ -36,6 +36,22 @@ namespace Habanero.UI.Win
             get { return DockStyleWin.GetDockStyle(base.Dock); }
             set { base.Dock = DockStyleWin.GetDockStyle(value); }
         }
+
+        #region Implementation of IPictureBox
+
+        /// <summary>
+        /// Indicates how the image is displayed.
+        /// </summary>
+        ///	<returns>One of the <see cref="Habanero.UI.Base.PictureBoxSizeMode"></see> values. The default is <see cref="Habanero.UI.Base.PictureBoxSizeMode.Normal"></see>.</returns>
+        ///	<exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The value assigned is not one of the <see cref="Habanero.UI.Base.PictureBoxSizeMode"></see> values. </exception>
+        //[DefaultValue(0), Localizable(true), SRDescription("PictureBoxSizeModeDescr"), SRCategory("CatBehavior"), RefreshProperties(RefreshProperties.Repaint)]
+        Base.PictureBoxSizeMode IPictureBox.SizeMode
+        {
+            get { return (Base.PictureBoxSizeMode)base.SizeMode; }
+            set { base.SizeMode = (System.Windows.Forms.PictureBoxSizeMode)value; }
+        }
+
+        #endregion
     }
 
 

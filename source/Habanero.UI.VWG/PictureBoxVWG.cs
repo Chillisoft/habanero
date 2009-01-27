@@ -1,3 +1,4 @@
+using System.Drawing;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 
@@ -32,5 +33,32 @@ namespace Habanero.UI.VWG
             get { return (Base.DockStyle)base.Dock; }
             set { base.Dock = (Gizmox.WebGUI.Forms.DockStyle)value; }
         }
+
+        #region Implementation of IPictureBox
+
+        /// <summary>
+        /// Indicates how the image is displayed.
+        /// </summary>
+        ///	<returns>One of the <see cref="Habanero.UI.Base.PictureBoxSizeMode"></see> values. The default is <see cref="Habanero.UI.Base.PictureBoxSizeMode.Normal"></see>.</returns>
+        ///	<exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The value assigned is not one of the <see cref="Habanero.UI.Base.PictureBoxSizeMode"></see> values. </exception>
+        //[DefaultValue(0), Localizable(true), SRDescription("PictureBoxSizeModeDescr"), SRCategory("CatBehavior"), RefreshProperties(RefreshProperties.Repaint)]
+        Base.PictureBoxSizeMode IPictureBox.SizeMode
+        {
+            get { return (Base.PictureBoxSizeMode)base.SizeMode; }
+            set { base.SizeMode = (Gizmox.WebGUI.Forms.PictureBoxSizeMode)value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the image that is displayed by <see cref="IPictureBox"></see>.
+        /// </summary>
+        /// <returns>The <see cref="T:System.Drawing.Image"></see> to display.</returns>
+        //[SRDescription("PictureBoxImageDescr"), Localizable(true), Bindable(true), SRCategory("CatAppearance")]
+        Image IPictureBox.Image
+        {
+            get { return this.Image.ToImage(); }
+            set { this.Image = value; }
+        }
+
+        #endregion
     }
 }

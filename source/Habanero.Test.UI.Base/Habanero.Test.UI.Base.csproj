@@ -103,6 +103,7 @@
     <Compile Include="TestGridAndBOEditorControl.cs" />
     <Compile Include="TestGroupBox.cs" />
     <Compile Include="TestNumericUpDown.cs" />
+    <Compile Include="TestPictureBox.cs" />
     <Compile Include="TestProgressBar.cs" />
     <Compile Include="TestRadioButton.cs" />
     <Compile Include="TestSplitter.cs" />
