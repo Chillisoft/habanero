@@ -19,7 +19,7 @@ namespace Habanero.UI.Win
         {
             if (mapper.Control is IDateTimePicker)
             {
-                DateTimePickerWin dtp = (DateTimePickerWin)mapper.Control;
+                IDateTimePicker dtp = (IDateTimePicker)mapper.Control;
                 dtp.ValueChanged +=delegate {
                                            mapper.ApplyChangesToBusinessObject();
                                        };
