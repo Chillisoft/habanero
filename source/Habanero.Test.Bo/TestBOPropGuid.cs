@@ -426,7 +426,8 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             string persistedPropertyValueString = boProp.PersistedPropertyValueString;
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedGuid.ToString("B").ToUpperInvariant(), persistedPropertyValueString);
+           // Assert.AreEqual(expectedGuid.ToString("B").ToUpperInvariant(), persistedPropertyValueString);
+            Assert.AreEqual(expectedGuid.ToString(), persistedPropertyValueString);
         }
 
         [Test]
@@ -460,7 +461,8 @@ namespace Habanero.Test.BO
             string propertyValueString = boProp.PropertyValueString;
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedGuid.ToString("B").ToUpperInvariant(), propertyValueString);
+            //Assert.AreEqual(expectedGuid.ToString("B").ToUpperInvariant(), propertyValueString);
+            Assert.AreEqual(expectedGuid.ToString(), propertyValueString);
         }
 
         [Test]
@@ -470,6 +472,7 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOProp(_propDef);
             Guid expectedGuid = Guid.NewGuid();
 //            boProp.InitialiseProp(expectedGuid.ToString("B"));
+            //boProp.Value = expectedGuid.ToString("B");
             boProp.Value = expectedGuid.ToString("B");
             //---------------Assert Precondition----------------
             Assert.IsNotNull(boProp.Value);
@@ -478,7 +481,8 @@ namespace Habanero.Test.BO
             string propertyValueString = boProp.PropertyValueString;
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedGuid.ToString("B").ToUpperInvariant(), propertyValueString);
+            //Assert.AreEqual(expectedGuid.ToString("B").ToUpperInvariant(), propertyValueString);
+            Assert.AreEqual(expectedGuid.ToString(), propertyValueString);
         }
     }
 }

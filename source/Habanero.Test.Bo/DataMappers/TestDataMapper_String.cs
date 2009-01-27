@@ -115,7 +115,7 @@ namespace Habanero.Test.BO
             string parsedValue = _propDef.ConvertValueToString(expectedGuid);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedGuid.ToString("B").ToUpperInvariant(), parsedValue);
+            Assert.AreEqual(expectedGuid.ToString(), parsedValue);
             Assert.IsInstanceOfType(typeof(string), parsedValue);
         }
 
@@ -384,7 +384,7 @@ namespace Habanero.Test.BO
             string parsedValue = _dataMapper.ConvertValueToString(expectedGuid);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedGuid.ToString("B").ToUpperInvariant(), parsedValue);
+            Assert.AreEqual(expectedGuid.ToString(), parsedValue);
             Assert.IsInstanceOfType(typeof (string), parsedValue);
         }
 

@@ -245,7 +245,7 @@ namespace Habanero.Test.BO
             BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
 
             bo.SetPropertyValue("TestProp2", "abc");
-            Assert.AreEqual(cp.ContactPersonID.ToString("B").ToUpperInvariant(), bo.GetPropertyValue("TestProp2"));
+            Assert.AreEqual(cp.ContactPersonID.ToString(), bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
         }
 

@@ -37,10 +37,10 @@ namespace Habanero.Test.UI.Base.Mappers
         protected const string LOOKUP_ITEM_2 = "Test2";
         protected const string LOOKUP_ITEM_1 = "Test1";
         protected DataStoreInMemory _store;
-        protected static string GuidToUpper(Guid guid)
-        {
-            return guid.ToString("B").ToUpperInvariant();
-        }
+        //protected static string GuidToUpper(Guid guid)
+        //{
+        //    return guid.ToString("B").ToUpperInvariant();
+        //}
         
         [TestFixture]
         public class TestLookupComboBoxMapperVWG : TestLookupComboBoxMapper
@@ -75,7 +75,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 cmbox.SelectedItem = LOOKUP_ITEM_2;
                 
                 //---------------Test Result -----------------------
-                Assert.AreEqual(Sample.LookupCollection[LOOKUP_ITEM_1], GuidToUpper(s.SampleLookupID));
+                Assert.AreEqual(Sample.LookupCollection[LOOKUP_ITEM_1], s.SampleLookupID.ToString());
                 //---------------Tear Down -------------------------
             }
         }
@@ -313,7 +313,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Test Result -----------------------
             Assert.IsNotNull(cmbox.SelectedItem);
             Assert.AreEqual(LOOKUP_ITEM_1, cmbox.SelectedItem, "Item is not set.");
-            Assert.AreEqual(GuidToUpper(s.SampleLookupID), cmbox.SelectedValue, "Value is not set");
+            Assert.AreEqual(s.SampleLookupID.ToString(), cmbox.SelectedValue, "Value is not set");
         }
 //        protected static string GuidToUpper(Guid guid)
 //        {

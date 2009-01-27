@@ -53,7 +53,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(2, lookupList.Count, "There should be two item in the lookup list");
             Assert.IsTrue(lookupList.ContainsKey(_validLookupValue));
             string objectIDAsString = lookupList[_validLookupValue];
-            Assert.AreEqual(GuidToUpper(_validID), objectIDAsString);
+            Assert.AreEqual(_validID.ToString(), objectIDAsString);
         }
 
         private static string GuidToUpper(Guid guid)
@@ -88,9 +88,9 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, idValueLookupList.Count, "There should be two item in the lookup list");
-            string guidToUpper = GuidToUpper(_validID);
-            Assert.IsTrue(idValueLookupList.ContainsKey(guidToUpper));
-            string returnedValue = idValueLookupList[guidToUpper];
+            string guidToString = _validID.ToString();
+            Assert.IsTrue(idValueLookupList.ContainsKey(guidToString));
+            string returnedValue = idValueLookupList[guidToString];
             Assert.AreEqual(_validLookupValue, returnedValue);
         }
 
@@ -169,7 +169,7 @@ namespace Habanero.Test.BO
             bool keyReturned = list.TryGetValue(_validLookupValue, out returnedKey);
             //---------------Test Result -----------------------
             Assert.IsTrue(keyReturned);
-            Assert.AreEqual(GuidToUpper(_validID), returnedKey);
+            Assert.AreEqual(_validID.ToString(), returnedKey);
         }
 
         [Test]
@@ -205,7 +205,7 @@ namespace Habanero.Test.BO
             Assert.AreSame(propDef, databaseLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
-            bool keyReturned = list.TryGetValue(GuidToUpper(_validID), out returnedValue);
+            bool keyReturned = list.TryGetValue(_validID.ToString(), out returnedValue);
             //---------------Test Result -----------------------
             Assert.IsTrue(keyReturned);
             Assert.AreEqual(_validLookupValue, returnedValue);

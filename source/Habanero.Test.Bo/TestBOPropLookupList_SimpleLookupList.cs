@@ -184,7 +184,7 @@ namespace Habanero.Test.BO
             Assert.AreSame(propDef, simpleLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
-            bool keyReturned = list.TryGetValue(GuidToUpperInvariant(_validGuid), out returnedValue);
+            bool keyReturned = list.TryGetValue(_validGuid.ToString(), out returnedValue);
             //---------------Test Result -----------------------
             Assert.IsTrue(keyReturned);
             Assert.AreEqual(_validLookupValue, returnedValue);

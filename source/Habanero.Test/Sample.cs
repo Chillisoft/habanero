@@ -198,9 +198,9 @@ namespace Habanero.Test
                 new PropDef("SampleMoney", typeof (Decimal), PropReadWriteRule.ReadWrite, "SampleInt", new Decimal(0)));
             PropDef propDef = new PropDef("SampleLookup2ID", typeof (Guid), PropReadWriteRule.ReadWrite, "SampleLookup2ID", null);
             itsLookupCollection = new Dictionary<string, string>();
-            itsLookupCollection.Add("Test1",StringUtilities.GuidToUpper( new Guid("{6E8B3DDB-1B13-4566-868D-57478C1F4BEE}")));
-            itsLookupCollection.Add("Test2", StringUtilities.GuidToUpper(new Guid("{7209B956-96A0-4720-8E49-DE154FA0E096}")));
-            itsLookupCollection.Add("Test3", StringUtilities.GuidToUpper(new Guid("{F45DE850-C693-44d8-AC39-8CEE5435B21A}")));
+            itsLookupCollection.Add("Test1", new Guid("{6E8B3DDB-1B13-4566-868D-57478C1F4BEE}").ToString());
+            itsLookupCollection.Add("Test2",new Guid("{7209B956-96A0-4720-8E49-DE154FA0E096}").ToString());
+            itsLookupCollection.Add("Test3", new Guid("{F45DE850-C693-44d8-AC39-8CEE5435B21A}").ToString());
             propDef.LookupList = new SimpleLookupList(itsLookupCollection);
             lPropDefCol.Add(propDef);
             lPropDefCol.Add(new PropDef("SampleLookup3ID", typeof (String), PropReadWriteRule.ReadWrite, "SampleLookup3ID",
@@ -243,9 +243,9 @@ namespace Habanero.Test
                     sample1.Save();
                     itsBOLookupCollection = new Dictionary<string, string>
                                 {
-                                    {"Test3", StringUtilities.GuidToUpper(sample3.ID.GetAsGuid())},
-                                    {"Test2", StringUtilities.GuidToUpper(sample2.ID.GetAsGuid())},
-                                    {"Test1", StringUtilities.GuidToUpper(sample1.ID.GetAsGuid())}
+                                    {"Test3", sample3.ID.GetAsGuid().ToString()},
+                                    {"Test2", sample2.ID.GetAsGuid().ToString()},
+                                    {"Test1", sample1.ID.GetAsGuid().ToString()}
                                 };
                 }
                 return itsBOLookupCollection;

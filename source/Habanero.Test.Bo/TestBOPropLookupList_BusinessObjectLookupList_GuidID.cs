@@ -65,7 +65,8 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, lookupList.Count, "There should be one item in the lookup list");
             Assert.IsTrue(lookupList.ContainsKey(_validLookupValue));
             string objectIDAsString = lookupList[_validLookupValue];
-            Assert.AreEqual(GuidToUpper(_validBusinessObject.ID.GetAsGuid()), objectIDAsString);
+            //Assert.AreEqual(GuidToUpper(_validBusinessObject.ID.GetAsGuid()), objectIDAsString);
+            Assert.AreEqual(_validBusinessObject.ID.GetAsGuid().ToString(), objectIDAsString);
         }
 
         [Test]
@@ -83,9 +84,9 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, idValueLookupList.Count, "There should be one item in the lookup list");
-            string guidToUpper = GuidToUpper(_validBusinessObject.ID.GetAsGuid());
-            Assert.IsTrue(idValueLookupList.ContainsKey(guidToUpper));
-            string returnedValue = idValueLookupList[guidToUpper];
+            string guid = _validBusinessObject.ID.GetAsGuid().ToString();
+            Assert.IsTrue(idValueLookupList.ContainsKey(guid));
+            string returnedValue = idValueLookupList[guid];
             Assert.AreEqual(_validLookupValue, returnedValue);
         }
 
@@ -106,7 +107,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, lookupList.Count, "There should be one item in the lookup list");
             Assert.IsTrue(lookupList.ContainsKey(_validLookupValue));
             string objectIDAsString = lookupList[_validLookupValue];
-            Assert.AreEqual(GuidToUpper(_validBusinessObject.ID.GetAsGuid()), objectIDAsString);
+            Assert.AreEqual(_validBusinessObject.ID.GetAsGuid().ToString(), objectIDAsString);
         }
 
         [Test]
@@ -124,9 +125,9 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, idValueLookupList.Count, "There should be one item in the lookup list");
-            string guidToUpper = GuidToUpper(_validBusinessObject.ID.GetAsGuid());
-            Assert.IsTrue(idValueLookupList.ContainsKey(guidToUpper));
-            string returnedValue = idValueLookupList[guidToUpper];
+            string guid = _validBusinessObject.ID.GetAsGuid().ToString();
+            Assert.IsTrue(idValueLookupList.ContainsKey(guid));
+            string returnedValue = idValueLookupList[guid];
             Assert.AreEqual(_validLookupValue, returnedValue);
         }
 
@@ -319,7 +320,7 @@ namespace Habanero.Test.BO
             bool keyReturned = list.TryGetValue(_validLookupValue, out returnedKey);
             //---------------Test Result -----------------------
             Assert.IsTrue(keyReturned);
-            Assert.AreEqual(GuidToUpper(_validBusinessObject.ID.GetAsGuid()), returnedKey);
+            Assert.AreEqual(_validBusinessObject.ID.GetAsGuid().ToString(), returnedKey);
         }
 
         [Test]
@@ -358,7 +359,7 @@ namespace Habanero.Test.BO
             Assert.AreSame(propDef, businessObjectLookupList.PropDef);
             //---------------Execute Test ----------------------
             string returnedValue;
-            bool keyReturned = list.TryGetValue(GuidToUpper(_validBusinessObject.ID.GetAsGuid()), out returnedValue);
+            bool keyReturned = list.TryGetValue(_validBusinessObject.ID.GetAsGuid().ToString(), out returnedValue);
             //---------------Test Result -----------------------
             Assert.IsTrue(keyReturned);
             Assert.AreEqual(_validLookupValue, returnedValue);

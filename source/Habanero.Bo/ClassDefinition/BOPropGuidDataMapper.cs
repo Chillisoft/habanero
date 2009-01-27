@@ -22,7 +22,8 @@ namespace Habanero.BO.ClassDefinition
             if (value is Guid)
             {
                 Guid guidValue = ((Guid) value);
-                return guidValue == Guid.Empty ? "" : ToUpperInvariant(guidValue);
+                //return guidValue == Guid.Empty ? "" : ToUpperInvariant(guidValue);
+                return guidValue == Guid.Empty ? "" : guidValue.ToString();
             }
             object parsedPropValue;
             TryParsePropValue(value, out parsedPropValue);

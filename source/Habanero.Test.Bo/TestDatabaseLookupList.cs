@@ -113,7 +113,7 @@ namespace Habanero.Test.BO
             string str = "";
             foreach (KeyValuePair<string, string> pair in col)
             {
-                if (pair.Value != null && pair.Value.Equals(GuidToUpper(_guid1)))
+                if (pair.Value != null && pair.Value.Equals(_guid1.ToString()))
                 {
                     str = pair.Key;
                 }
