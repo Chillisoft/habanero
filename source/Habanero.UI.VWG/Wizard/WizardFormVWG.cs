@@ -77,9 +77,9 @@ namespace Habanero.UI.VWG
             this.Close();
         }
 
-        private void _uxWizardControl_StepChanged(string headingText)
+        private void _uxWizardControl_StepChanged(IWizardStep obj)
         {
-            this.Text = this.WizardText + " - " + headingText;
+            this.Text = string.Format("{0} - {1}", this.WizardText, obj.HeaderText);
         }
 
         /// <summary>

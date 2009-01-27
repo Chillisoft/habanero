@@ -41,7 +41,7 @@ namespace Habanero.UI.VWG
 
         public event EventHandler Finished;
         public event Action<string> MessagePosted;
-        public event Action<string> StepChanged;
+        public event Action<IWizardStep> StepChanged;
 
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace Habanero.UI.VWG
             if (stepControl != null)
             {
                 _currentControl = stepControl;
-                FireStepChanged(step.HeaderText);
+                FireStepChanged(step);
                 //TODO: The border layout manager clearing panel etc not unit tested
                 _wizardStepPanel.Controls.Clear();
                 stepControl.Top = WizardControl.PADDING;
@@ -320,11 +320,11 @@ namespace Habanero.UI.VWG
                 MessagePosted(message);
             }
         }
-        private void FireStepChanged(string message)
+        private void FireStepChanged(IWizardStep wizardStep)
         {
             if (StepChanged != null)
             {
-                StepChanged(message);
+                StepChanged(wizardStep);
             }
         }
     }

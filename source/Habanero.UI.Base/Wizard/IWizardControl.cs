@@ -46,6 +46,11 @@ namespace Habanero.UI.Base
         event Action<string> MessagePosted;//TODO: Peter what the hell are these things 
 
         /// <summary>
+        /// Raised when the wizard step changes. The new step is passed through as an event argument.
+        /// </summary>
+        event Action<IWizardStep> StepChanged;
+
+        /// <summary>
         /// Gets the control that is currently displayed in the WizardControl (the current wizard step's control)
         /// </summary>
         IControlHabanero CurrentControl { get; }
@@ -100,5 +105,6 @@ namespace Habanero.UI.Base
         /// Calls the finish method on the controller to being the completion process.  If this is successful the Finished event is fired.
         /// </summary>
         void Finish();
+        
     }
 }
