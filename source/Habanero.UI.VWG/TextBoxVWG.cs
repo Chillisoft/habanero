@@ -21,6 +21,7 @@ using System;
 using System.Collections;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
+using HorizontalAlignment=Habanero.UI.Base.HorizontalAlignment;
 using ScrollBars=Habanero.UI.Base.ScrollBars;
 
 namespace Habanero.UI.VWG
@@ -67,6 +68,21 @@ namespace Habanero.UI.VWG
         {
             get { return (ScrollBars) ScrollBars; }
             set { ScrollBars = (Gizmox.WebGUI.Forms.ScrollBars) value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the alignment of text in the TextBox control
+        /// </summary>
+        HorizontalAlignment ITextBox.TextAlign
+        {
+            get
+            {
+                return EnumerationConverter.HorizontalAlignmentToHabanero(TextAlign);
+            }
+            set
+            {
+                TextAlign=EnumerationConverter.HorizontalAlignmentToVWG(value);
+            }
         }
     }
 

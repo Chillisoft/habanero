@@ -364,7 +364,35 @@ namespace Habanero.Test.BO.ClassDefinition
             int colSpan = uiFormField1.ColSpan;
             //---------------Test Result -----------------------
             Assert.AreEqual(3, colSpan);
+        }
 
+        [Test]
+        public void TestAlignment_NotSet()
+        {
+            //---------------Set up test pack-------------------
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string alignment = uiFormField1.Alignment;
+            //---------------Test Result -----------------------
+            Assert.IsNull(alignment);
+
+        }
+
+        [Test]
+        public void TestAlignment_Set()
+        {
+            //---------------Set up test pack-------------------
+            Hashtable parameters = new Hashtable();
+            parameters.Add("alignment", "right");
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", parameters, null);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string alignment = uiFormField1.Alignment;
+            //---------------Test Result -----------------------
+            Assert.AreEqual("right", alignment);
         }
 
         [Test]

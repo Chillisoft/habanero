@@ -19,6 +19,7 @@
 
 using System.Windows.Forms;
 using Habanero.UI.Base;
+using HorizontalAlignment=Habanero.UI.Base.HorizontalAlignment;
 using ScrollBars=Habanero.UI.Base.ScrollBars;
 
 namespace Habanero.UI.Win
@@ -63,6 +64,15 @@ namespace Habanero.UI.Win
         {
             get { return (ScrollBars)ScrollBars; }
             set { ScrollBars = (System.Windows.Forms.ScrollBars)value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the alignment of text in the TextBox control
+        /// </summary>
+        HorizontalAlignment ITextBox.TextAlign
+        {
+            get { return (HorizontalAlignment)TextAlign; }
+            set { TextAlign = (System.Windows.Forms.HorizontalAlignment)value; }
         }
     }
 }

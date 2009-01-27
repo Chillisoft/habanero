@@ -86,6 +86,8 @@
     <Compile Include="TestComboBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="TestEnumerationConverter.cs" />
+    <Compile Include="TestEnumerations.cs" />
     <Compile Include="TestExtendedComboBox.cs" />
     <Compile Include="TestForm.cs" />
     <Compile Include="TestGridAndBOEditorControl.cs" />

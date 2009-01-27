@@ -154,6 +154,31 @@ namespace Habanero.UI.Base
         /// </summary>
         RecentlyUsedList = 4
     }
+
+        /// <summary>
+        /// Specifies how an object or text in a control is horizontally aligned relative to an element of the control.  
+        /// </summary>
+        //[Serializable()]
+
+        public enum HorizontalAlignment
+        {
+            /// <summary>
+            ///  The object or text is aligned on the left of the control element.   
+            /// </summary>
+            Left,
+
+            /// <summary>
+            ///  The object or text is aligned on the right of the control element.   
+            /// </summary>
+            Right,
+
+            /// <summary>
+            ///  The object or text is aligned in the center of the control element.   
+            /// </summary>
+            Center
+        }
+
+
     /// <summary>
     /// Defines controls, which are components with visual representation
     /// </summary>

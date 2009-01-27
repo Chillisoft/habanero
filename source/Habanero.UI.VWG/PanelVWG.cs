@@ -55,5 +55,7 @@ namespace Habanero.UI.VWG
             get { return (Base.DockStyle)base.Dock; }
             set { base.Dock = (Gizmox.WebGUI.Forms.DockStyle)value; }
         }
+
+
     }
 }

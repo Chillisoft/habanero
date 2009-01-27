@@ -19,7 +19,6 @@
 
 namespace Habanero.UI.VWG
 {
-
     ///<summary>
     /// Class that provides utility methods for the Gizmox.WebGUI.Forms.DockStyle class
     ///</summary>

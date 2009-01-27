@@ -47,7 +47,6 @@ namespace Habanero.UI.Base
         {
             _textBox = tb;
             _textBoxMapperStrategy = factory.CreateTextBoxMapperStrategy();
-
             _oldText = "";
         }
 

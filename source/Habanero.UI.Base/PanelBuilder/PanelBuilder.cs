@@ -1,8 +1,12 @@
 using System;
+using System.Diagnostics;
+using System.Reflection;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
+
     public class PanelBuilder
     {
         private IControlFactory _factory;
@@ -159,6 +163,53 @@ namespace Habanero.UI.Base
             IControlMapper controlMapper = ControlMapper.Create(formField.MapperTypeName,
                                                                 formField.MapperAssembly, inputControl,
                                                                 formField.PropertyName, !formField.Editable, _factory);
+
+
+            if (!String.IsNullOrEmpty(formField.Alignment)) SetInputControlAlignment(formField, inputControl);
+            if (!String.IsNullOrEmpty(formField.NumLines))  SetInputControlNumLines(formField, inputControl);
+            
+            if (!String.IsNullOrEmpty(formField.DecimalPlaces))
+            {
+                if (inputControl is INumericUpDown && formField.MapperTypeName.ToLower() == "numericupdowncurrencymapper")
+                {
+                    int decimalPlaces = Convert.ToInt32(formField.DecimalPlaces);
+                    if (decimalPlaces>=0)
+                    {
+                        ((INumericUpDown)inputControl).DecimalPlaces = decimalPlaces;
+                    }
+                }
+            }
+
+            if (!String.IsNullOrEmpty(formField.Options))
+            {
+                if (inputControl is IComboBox && formField.MapperTypeName.ToLower() == "listcomboboxmapper")
+                {
+                    string[] items = formField.Options.Split('|');
+                    IComboBox comboBox = ((IComboBox)inputControl);
+                    comboBox.Items.Add(""); // This creates the blank item for the ComboBox 
+                    foreach (string item in items)
+                    {
+                        
+                        comboBox.Items.Add(item);
+                    }
+                }
+            }
+
+            if (!String.IsNullOrEmpty(formField.IsEmail))
+            {
+                if (inputControl is ITextBox && Convert.ToBoolean(formField.IsEmail))
+                {
+                    ITextBox textBox = (ITextBox)inputControl;
+                    textBox.DoubleClick += EmailTextBoxDoubleClickedHandler;
+                }
+            }
+
+            if (formField.MapperTypeName=="DateTimePickerMapper")
+            {
+                DateTimePickerMapper dateTimePickerMapper = new DateTimePickerMapper((IDateTimePicker) inputControl, formField.PropertyName,formField.Editable,_factory);
+                dateTimePickerMapper.SetPropertyAttributes(formField.Parameters);
+            }
+
             if (formField.RowSpan > 1)
             {
                 if (inputControl is ITextBox) ((ITextBox)inputControl).Multiline = true;
@@ -170,6 +221,71 @@ namespace Habanero.UI.Base
             SetToolTip(formField, inputControl);
             panelInfo.LayoutManager.AddControl(inputControlInfo);
             return controlMapper;
+        }
+
+        /// A handler to deal with a double-click on an email textbox, which
+        /// causes the default mail client on the user system to be opened
+        /// </summary>
+        /// <param name="sender">The object that notified of the event</param>
+        /// <param name="e">Attached arguments regarding the event</param>
+        private static void EmailTextBoxDoubleClickedHandler(object sender, EventArgs e)
+        {
+            ITextBox tb = (ITextBox)sender;
+            if (tb.Text.IndexOf("@") != -1)
+            {
+                string comm = "mailto:" + tb.Text;
+                Process.Start(comm);
+            }
+        }
+
+        private void SetInputControlNumLines(UIFormField formField, IControlHabanero inputControl)
+        {
+           if (inputControl is ITextBox)
+           {
+               int numLines;
+               try
+               {
+                   numLines = Convert.ToInt32(formField.NumLines);
+               }
+               catch (Exception)
+               {
+                   throw new InvalidXmlDefinitionException
+                       ("An error " + "occurred while reading the 'numLines' parameter "
+                        + "from the class definitions.  The 'value' "
+                        + "attribute must be a valid integer.");
+               }
+
+               ITextBox textBox = ((ITextBox)inputControl);
+               textBox.Multiline = true;
+               textBox.AcceptsReturn = true;
+               textBox.ScrollBars = ScrollBars.Vertical;
+               textBox.Height = inputControl.Height * numLines;
+           }
+            
+        }
+
+        private void SetInputControlAlignment(UIFormField formField, IControlHabanero inputControl)
+        {
+           
+            // Some controls have TextAlign and others don't. This code uses reflection to apply it if appropriate.
+            // This did not work because the propertyInfo.SetValue method was not calling the TestBoxVWG TextAlign Set property method.
+            // PropertyInfo propertyInfo = inputControl.GetType().GetProperty("TextAlign");
+            //if (propertyInfo != null &&
+            //    propertyInfo.PropertyType.Name == "HorizontalAlignment") //caters for the possibility of a custom control that implements textalign but doesn't have HorizontalAlignment as its type
+            //{
+
+            //    propertyInfo.SetValue(inputControl, GetAlignmentValue(formField.Alignment), new object[0]);
+            //}
+            if (inputControl is ITextBox)
+            {
+                ((ITextBox) inputControl).TextAlign = GetAlignmentValue(formField.Alignment);
+            }
+            if (inputControl is INumericUpDown)
+            {
+                ((INumericUpDown)inputControl).TextAlign = GetAlignmentValue(formField.Alignment);
+            }
+
+            
         }
 
         private ILabel CreateAndAddLabel(IPanelInfo panelInfo, UIFormField formField)
@@ -216,5 +332,29 @@ namespace Habanero.UI.Base
             }
         }
 
+        ///<summary>
+        /// Checks if the alignment value is valid
+        ///</summary>
+        ///<param name="alignmentValue">The alignment value from the FieldInfo</param>
+        ///<returns>The valid Habanero.UI.Base Horizontal Alignment</returns>
+        ///<exception cref="HabaneroDeveloperException">Throws a HabaneroDeveloperException if the alignment value is invalid</exception>
+        public static HorizontalAlignment GetAlignmentValue(string alignmentValue)
+        {
+            HorizontalAlignment horizontalAlignment = HorizontalAlignment.Left;
+            if (!(alignmentValue.ToLower() == "left" || alignmentValue.ToLower() == "right" || alignmentValue.ToLower() == "center" || alignmentValue.ToLower() == "centre"))
+            {
+                string errMessage = "Invalid alignment property value '" + alignmentValue + "' in the class definitions.";
+                throw new HabaneroDeveloperException(errMessage, errMessage);
+            }
+
+
+            if (alignmentValue.ToLower() == "left") horizontalAlignment = HorizontalAlignment.Left;
+            if (alignmentValue.ToLower()=="right") horizontalAlignment=HorizontalAlignment.Right;
+            if (alignmentValue.ToLower() == "center" || alignmentValue.ToLower() == "centre") horizontalAlignment = HorizontalAlignment.Center;
+
+            return horizontalAlignment;
+        }
+
+       
     }
 }

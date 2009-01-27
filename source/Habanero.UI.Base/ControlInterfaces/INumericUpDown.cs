@@ -58,6 +58,11 @@ namespace Habanero.UI.Base
         /// <param name="i">The position of the first character to be selected</param>
         /// <param name="length">The total number of characters to be selected</param>
         void Select(int i, int length);
+
+        /// <summary>
+        /// Gets or sets the alignment of text in the up-down control
+        /// </summary>
+        HorizontalAlignment TextAlign { get; set; }
     }
 
 }

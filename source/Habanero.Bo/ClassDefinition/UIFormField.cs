@@ -386,6 +386,8 @@ namespace Habanero.BO.ClassDefinition
             return HasParameterValue(parameterName) ? this._parameters[parameterName] : null;
         }
 
+
+     
         public bool HasParameterValue(string parameterName)
         {
             return (this._parameters.ContainsKey(parameterName));
@@ -438,6 +440,54 @@ namespace Habanero.BO.ClassDefinition
         {
             get { return _uiFormColumn; }
             internal set { _uiFormColumn = value; }
+        }
+
+        ///<summary>
+        /// Returns the alignment property of the form field or null if none is provided
+        ///</summary>
+        public string Alignment
+        {
+            get { return HasParameterValue("alignment") ? Convert.ToString(GetParameterValue("alignment")) : null; }
+        }
+
+        ///<summary>
+        /// Returns the numlines property from the form field or null if none is provided 
+        ///</summary>
+        public string NumLines
+        {
+            get { return HasParameterValue("numLines") ? Convert.ToString(GetParameterValue("numLines")) : null; }
+        }
+
+        ///<summary>
+        /// Returns the decimalPlaces property from the form field or null if none is provided
+        ///</summary>
+        public string DecimalPlaces
+        {
+            get { return HasParameterValue("decimalPlaces") ? Convert.ToString(GetParameterValue("decimalPlaces")) : null; }
+        }
+
+        ///<summary>
+        /// Returns the Options property from the form field or null if none is provided
+        ///</summary>
+        public string Options
+        {
+            get { return HasParameterValue("options") ? Convert.ToString(GetParameterValue("options")) : null; }
+        }
+
+        ///<summary>
+        /// Returns the IsEmail property from the form field or null if none is provided
+        ///</summary>
+        public string IsEmail
+        {
+            get { return HasParameterValue("isEmail") ? Convert.ToString(GetParameterValue("isEmail")) : null; }
+        }
+
+        ///<summary>
+        /// Returns the DateFormat property from the form field or null if none is provided
+        ///</summary>
+        public string DateFormat
+        {
+            get { return HasParameterValue("dateFormat") ? Convert.ToString(GetParameterValue("dateFormat")) : null; }
         }
 
         private ClassDef GetClassDef()

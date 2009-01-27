@@ -21,6 +21,7 @@ using System;
 using System.Collections;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
+using HorizontalAlignment=Habanero.UI.Base.HorizontalAlignment;
 
 namespace Habanero.UI.VWG
 {
@@ -66,6 +67,17 @@ namespace Habanero.UI.VWG
         public void Select(int i, object length)
         {
             throw new NotImplementedException();
+        }
+
+        
+        /// <summary>
+        /// Gets or sets the alignment of text in the up-down control
+        /// Gizmox does not support changing the TextAlign Property (Default value iss Left) 
+        /// </summary>
+        HorizontalAlignment INumericUpDown.TextAlign
+        {
+            get { return EnumerationConverter.HorizontalAlignmentToHabanero(TextAlign); }
+            set { throw new System.NotSupportedException(); }
         }
     }
 }

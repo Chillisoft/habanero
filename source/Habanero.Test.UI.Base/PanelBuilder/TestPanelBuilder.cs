@@ -1,30 +1,115 @@
 using System;
+using System.Reflection;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
-    public class TestPanelBuilder
+    
+    public abstract class TestPanelBuilder
     {
-        private const int DEFAULT_CONTROLS_PER_FIELD = 3;
+        protected const int DEFAULT_CONTROLS_PER_FIELD = 3;
+        protected abstract IControlFactory GetControlFactory();
+        protected abstract Sample.SampleUserInterfaceMapper GetSampleUserInterfaceMapper();
+
+        [TestFixture]
+        public class TestPanelBuilderWin : TestPanelBuilder
+        {
+
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
+
+            protected override Sample.SampleUserInterfaceMapper GetSampleUserInterfaceMapper()
+            {
+                return new Sample.SampleUserInterfaceMapperWin();
+            }
+
+            [Test]
+            public void Test_BuildPanel_Parameter_SetNumericUpDownAlignment()
+            {
+                //---------------Set up test pack-------------------
+                Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+                UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldsWithAlignment_NumericUpDown();
+                PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+                //---------------Assert Precondition----------------
+                Assert.AreEqual("left", singleFieldTab[0][0].Alignment);
+                Assert.AreEqual("right", singleFieldTab[0][1].Alignment);
+                Assert.AreEqual("center", singleFieldTab[0][2].Alignment);
+                Assert.AreEqual("centre", singleFieldTab[0][3].Alignment);
+                //---------------Execute Test ----------------------
+                IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+                //---------------Test Result -----------------------
+
+                Assert.IsInstanceOfType(typeof(INumericUpDown), panel.Controls[1]);
+                INumericUpDown control1 = (INumericUpDown)panel.Controls[1];
+                Assert.AreEqual(HorizontalAlignment.Left, control1.TextAlign);
+
+                Assert.IsInstanceOfType(typeof(INumericUpDown), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN+1]);
+                INumericUpDown control2 = (INumericUpDown)panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1];
+                Assert.AreEqual(HorizontalAlignment.Right, control2.TextAlign);
+
+                Assert.IsInstanceOfType(typeof(INumericUpDown), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN*2 + 1]);
+                INumericUpDown control3 = (INumericUpDown)panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN * 2 + 1];
+                Assert.AreEqual(HorizontalAlignment.Center, control3.TextAlign);
+
+                Assert.IsInstanceOfType(typeof(INumericUpDown), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN * 3 + 1]);
+                INumericUpDown control4 = (INumericUpDown)panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN * 3 + 1];
+                Assert.AreEqual(HorizontalAlignment.Center, control4.TextAlign);
+            }
+
+        }
+
+        [TestFixture]
+        public class TestPanelBuilderVWG : TestPanelBuilder
+        {
+
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryVWG();
+            }
+
+            protected override Sample.SampleUserInterfaceMapper GetSampleUserInterfaceMapper()
+            {
+                return new Sample.SampleUserInterfaceMapperVWG();
+            }
+
+            [Test, Ignore("Gizmox does not support changing the TextAlign Property (Default value iss Left) ")]
+            public void Test_BuildPanel_Parameter_SetAlignment_NumericUpDown()
+            {
+                //---------------Set up test pack-------------------
+                Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+                UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldsWithNumericUpDown();
+                PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+                //---------------Assert Precondition----------------
+                Assert.AreEqual("right", singleFieldTab[0][0].Alignment);
+
+                //---------------Execute Test ----------------------
+                IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+                //---------------Test Result -----------------------
+
+                Assert.IsInstanceOfType(typeof(ITextBox), panel.Controls[1]);
+                ITextBox control = (ITextBox)panel.Controls[1];
+                Assert.AreEqual(HorizontalAlignment.Right, control.TextAlign);
+            }
+        }
+
 
         [SetUp]
         public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
         }
-        private IControlFactory GetControlFactory()
-        {
-            return new ControlFactoryWin();
-        }
 
         [Test]
-        public void TestConstructor()
+        public virtual void TestConstructor()
         {
             //---------------Set up test pack-------------------
             //---------------Assert Precondition----------------
@@ -32,14 +117,14 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Test Result -----------------------
-            Assert.AreEqual(typeof (ControlFactoryWin), panelBuilder.Factory.GetType());
+            Assert.AreEqual(GetControlFactory().GetType(), panelBuilder.Factory.GetType());
         }
 
         [Test]
         public void Test_BuildPanel_1Field_String()
         {
             //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneField();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
@@ -60,7 +145,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanel_1Field_Integer()
         {
             //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabOneIntegerField();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
@@ -78,7 +163,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanel_1Field_Layout()
         {
             //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabOneField();
             UIFormColumn column = singleIntegerFieldTab[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
@@ -96,19 +181,19 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(label.PreferredWidth, label.Width);
 
             //--- check horizontal position of error provider (should be right aligned and a specified width) -----
-            Assert.AreEqual(column.Width - LayoutManager.DefaultBorderSize, errorProviderPanel.Right);
+            Assert.AreEqual(column.Width - LayoutManager.DefaultBorderSize, errorProviderPanel.Left + errorProviderPanel.Width);
             Assert.AreEqual(PanelBuilder.ERROR_PROVIDER_WIDTH, errorProviderPanel.Width);
 
             //--- check horizontal position of text box (should fill the rest of the row -----
-            Assert.AreEqual(label.Right + LayoutManager.DefaultGapSize, textbox.Left);
-            Assert.AreEqual(errorProviderPanel.Left - LayoutManager.DefaultGapSize, textbox.Right);
+            Assert.AreEqual(LayoutManager.DefaultBorderSize + label.Width + LayoutManager.DefaultGapSize, textbox.Left);
+            Assert.AreEqual(errorProviderPanel.Left - LayoutManager.DefaultGapSize, textbox.Left + textbox.Width);
         }
 
         [Test]
         public void Test_BuildPanel_2Fields_Layout()
         {
             //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab twoFieldTab = interfaceMapper.GetFormTabTwoFields();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
@@ -131,7 +216,7 @@ namespace Habanero.Test.UI.Base
             IControlHabanero textbox2 = panel.Controls[4];
             IPanel errorProviderPanel2 = (IPanel) panel.Controls[5];
 
-            int expectedSecondRowTop = textbox1.Bottom + LayoutManager.DefaultGapSize;
+            int expectedSecondRowTop = textbox1.Top + textbox1.Height + LayoutManager.DefaultGapSize;
             Assert.AreEqual(expectedSecondRowTop, label2.Top);
             Assert.AreEqual(expectedSecondRowTop, textbox2.Top);
             Assert.AreEqual(expectedSecondRowTop, errorProviderPanel2.Top);
@@ -145,10 +230,10 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_2Fields()
+        public virtual void Test_BuildPanel_2Fields()
         {
             //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab twoFieldTab = interfaceMapper.GetFormTabTwoFields();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             int expectedFields = 2;
@@ -170,7 +255,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsInstanceOfType(typeof (ILabel), panel.Controls[3]);
             ILabel row2Label = (ILabel) panel.Controls[3];
             Assert.AreEqual("Integer:", row2Label.Text);
-            Assert.IsInstanceOfType(typeof (NumericUpDownWin), panel.Controls[4]);
+            Assert.IsInstanceOfType(typeof (INumericUpDown), panel.Controls[4]);
             Assert.IsInstanceOfType(typeof (IPanel), panel.Controls[5]);
         }
 
@@ -178,7 +263,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanel_2Columns_1_1()
         {
             //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumns_1_1();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             int expectedColumns = 2;
@@ -197,7 +282,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanel_2Columns_1_2()
         {
             //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumns_1_2();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             int expectedColumns = 2;
@@ -216,7 +301,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanel_2Columns_1_2_CorrectLayout()
         {
             //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumns_1_2();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             UIFormColumn formColumn = twoColumnTab[0];
@@ -257,7 +342,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanel_ColumnWidths_SingleColumn()
         {
             //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab twoColumnTab = interfaceMapper.GetFormTabOneColumnOneRowWithWidth();
             UIFormColumn column1 = twoColumnTab[0];
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
@@ -276,14 +361,14 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(LayoutManager.DefaultBorderSize, column1Control1.Left);
 
             // check that the last control of column 1 has its right edge at the correct position (column width)
-            Assert.AreEqual(column1.Width - LayoutManager.DefaultBorderSize, column1LastControl.Right);
+            Assert.AreEqual(column1.Width - LayoutManager.DefaultBorderSize, column1LastControl.Left + column1LastControl.Width);
         }
 
         [Test]
         public void Test_BuildPanel_ColumnWidths_FirstColumnOfMultiColumn()
         {
             //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumnsOneRowWithWidths();
             UIFormColumn column1 = twoColumnTab[0];
             UIFormColumn column2 = twoColumnTab[1];
@@ -303,14 +388,14 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(LayoutManager.DefaultBorderSize, column1Control1.Left);
 
             // check that the last control of column 1 has its right edge at the correct position (column width)
-            Assert.AreEqual(column1.Width, column1LastControl.Right);
+            Assert.AreEqual(column1.Width, column1LastControl.Left + column1LastControl.Width);
         }
 
         [Test]
         public void Test_BuildPanel_ColumnWidths_LastColumnOfMultiColumn()
         {
             //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumnsOneRowWithWidths();
 
             UIFormColumn column1 = twoColumnTab[0];
@@ -328,14 +413,14 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(column1.Width + LayoutManager.DefaultGapSize, column2Control1.Left);
 
             // check that the last control of column 2 has its right edge at the correct position (panel width - border)
-            Assert.AreEqual(column1.Width + column2.Width - LayoutManager.DefaultBorderSize, column2LastControl.Right);
+            Assert.AreEqual(column1.Width + column2.Width - LayoutManager.DefaultBorderSize, column2LastControl.Left + column2LastControl.Width);
         }
 
         [Test]
         public void Test_BuildPanel_ColumnWidths_MiddleColumnOfMultiColumn()
         {
             //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab threeColumnTab = interfaceMapper.GetFormTabThreeColumnsOneRowWithWidths();
 
             UIFormColumn column1 = threeColumnTab[0];
@@ -353,7 +438,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(column1.Width + LayoutManager.DefaultGapSize, column2Control1.Left);
 
             // check that the last control of column 2 has its right edge at the correct position (panel width - border)
-            Assert.AreEqual(column1.Width + column2.Width, column2LastControl.Right);
+            Assert.AreEqual(column1.Width + column2.Width, column2LastControl.Left + column2LastControl.Width);
         }
 
 
@@ -361,7 +446,7 @@ namespace Habanero.Test.UI.Base
         public void Test_BuildPanel_ColumnWidths_DataColumnResizes()
         {
             //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabOneFieldNoColumnWidth();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             IPanel panel = panelBuilder.BuildPanelForTab(singleIntegerFieldTab).Panel;
@@ -375,8 +460,8 @@ namespace Habanero.Test.UI.Base
             int originalWidth = textbox.Width;
 
             //---------------Assert Precondition----------------
-            Assert.AreEqual(label.Right + LayoutManager.DefaultGapSize, textbox.Left);
-            Assert.AreEqual(errorProviderPanel.Left - LayoutManager.DefaultGapSize, textbox.Right);
+            Assert.AreEqual(label.Left+label.Width + LayoutManager.DefaultGapSize, textbox.Left);
+            Assert.AreEqual(errorProviderPanel.Left - LayoutManager.DefaultGapSize, textbox.Left + textbox.Width);
             //---------------Execute Test ----------------------
             panel.Width = columnWidthAfter;
             //---------------Test Result -----------------------
@@ -385,9 +470,9 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_3Columns_1Column_RowSpan2()
+        public virtual void Test_BuildPanel_3Columns_1Column_RowSpan2()
         {
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabThreeColumnsOneColumnWithRowSpan();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             
@@ -406,9 +491,9 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(textBoxCol2.Height * 2 + LayoutManager.DefaultGapSize, textBoxCol1.Height);
             Assert.AreEqual(col1Text1RowSpan2Label.Left, nullControl.Left);
 
-            Assert.IsInstanceOfType(typeof(LabelWin), col2TextBox2Label);
+            Assert.IsInstanceOfType(typeof(ILabel), col2TextBox2Label);
             Assert.AreEqual("Col2TextBox2",col2TextBox2Label.Text);
-            Assert.AreEqual(textBoxCol1.Right+PanelBuilder.ERROR_PROVIDER_WIDTH+GridLayoutManager.DefaultGapSize*2,col2TextBox2Label.Left);
+            Assert.AreEqual(textBoxCol1.Left + textBoxCol1.Width+ PanelBuilder.ERROR_PROVIDER_WIDTH + GridLayoutManager.DefaultGapSize * 2, col2TextBox2Label.Left);
         }
 
         [Test]
@@ -427,10 +512,10 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_RowSpan()
+        public void Test_BuildPanel_Parameter_RowSpan()
         {
             //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab formTab = interfaceMapper.GetFormTabOneColumnThreeRowsWithRowSpan();
 
             UIFormColumn column1 = formTab[0];
@@ -450,10 +535,10 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_ColumnSpan()
+        public void Test_BuildPanel_Parameter_ColumnSpan()
         {
             //---------------Set up test pack-------------------
-            Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab formTab = interfaceMapper.GetFormTabTwoColumns_2_1_ColSpan();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
@@ -481,6 +566,341 @@ namespace Habanero.Test.UI.Base
             // check that the first control in the second column is moved down to accommodate the col spanning control
             Assert.AreEqual(row2Col1InputControl.Top, row2Col2InputControl.Top);
         }
+
+        [Test]
+        public void Test_BuildPanel_Parameter_DefaultAlignment_Left()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabTwoFieldsWithNoAlignment();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(String.IsNullOrEmpty(singleFieldTab[0][0].Alignment));
+          
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+            //---------------Test Result -----------------------
+           
+            Assert.IsInstanceOfType(typeof(ITextBox), panel.Controls[1]);
+            ITextBox control = (ITextBox) panel.Controls[1];
+            Assert.AreEqual(HorizontalAlignment.Left, control.TextAlign);
+
+            Assert.IsInstanceOfType(typeof(INumericUpDown), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN+1]);
+            INumericUpDown numericUpDown = (INumericUpDown)panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1];
+            Assert.AreEqual(HorizontalAlignment.Left, numericUpDown.TextAlign);
+
+
+        }
+
+        [Test]
+        public void Test_BuildPanel_Parameter_Alignment_Right()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithRightAlignment();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual("right", singleFieldTab[0][0].Alignment);
+            
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+            //---------------Test Result -----------------------
+
+            Assert.IsInstanceOfType(typeof(ITextBox), panel.Controls[1]);
+            ITextBox control = (ITextBox)panel.Controls[1];
+            Assert.AreEqual(HorizontalAlignment.Right, control.TextAlign);
+        }
+
+        
+        [Test]
+        public void Test_BuildPanel_Parameter_Alignment_Center()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithCenterAlignment();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual("center", singleFieldTab[0][0].Alignment);
+            
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+            //---------------Test Result -----------------------
+
+            Assert.IsInstanceOfType(typeof(ITextBox), panel.Controls[1]);
+            ITextBox control = (ITextBox)panel.Controls[1];
+            Assert.AreEqual(HorizontalAlignment.Center, control.TextAlign);
+        }
+
+        [Test]
+        public void Test_BuildPanel_Parameter_Alignment_InvalidAlignment()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithInvalidAlignment();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            bool errorThrown = false;
+            string errMessage = "";
+            //---------------Assert Precondition----------------
+            Assert.AreEqual("Top", singleFieldTab[0][0].Alignment);
+            //---------------Execute Test ----------------------
+            
+            try
+            {
+                IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+            }
+            catch (HabaneroDeveloperException ex)
+            {
+                errorThrown = true;
+                errMessage = ex.Message;
+            }
+
+            //---------------Test Result -----------------------
+
+            Assert.IsTrue(errorThrown, "The alignment value is invalid and a HabaneroDeveloperException should be thrown.");
+            StringAssert.Contains("Invalid alignment property value ", errMessage);
+        }
+
+        [Test]
+        public void Test_BuildPanel_Parameter_MultiLine()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithMultiLineParameter();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][0].NumLines));
+            Assert.AreEqual("3", singleFieldTab[0][0].NumLines);
+            Assert.Greater(Convert.ToInt32(singleFieldTab[0][0].NumLines), 1);
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+            //---------------Test Result -----------------------
+
+            Assert.IsInstanceOfType(typeof(ITextBox), panel.Controls[1]);
+            ITextBox control = (ITextBox)panel.Controls[1];
+            Assert.IsTrue(control.Multiline);
+            Assert.IsTrue(control.AcceptsReturn);
+            Assert.AreEqual(20, control.Height);
+            Assert.AreEqual(ScrollBars.Vertical, control.ScrollBars);
+        }
+
+        [Test]
+        public void Test_BuildPanel_Parameter_InvalidMultiLineValue()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithInvalidMultiLineParameter();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            bool errorThrown = false;
+            string errMessage = "";
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][0].NumLines));
+           
+            //---------------Execute Test ----------------------
+            try
+            {
+                IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+            }
+            catch (InvalidXmlDefinitionException ex)
+            {
+                errorThrown = true;
+                errMessage = ex.Message;
+            }
+            Assert.IsTrue(errorThrown, "An error occurred while reading the 'numLines' parameter from the class definitions.  The 'value' attribute must be a valid integer.");
+            StringAssert.Contains("An error occurred while reading the 'numLines' parameter from the class definitions.  The 'value' attribute must be a valid integer.", errMessage);
+
+        }
+
+        [Test]
+        public void Test_BuildPanel_Parameter_DecimalPlaces_NumericUpDownMoneyMapper()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithDecimalPlacesParameter();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][0].DecimalPlaces));
+            Assert.AreEqual("3", singleFieldTab[0][0].DecimalPlaces);
+            Assert.AreEqual("NumericUpDownCurrencyMapper", singleFieldTab[0][0].MapperTypeName);
+            
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+            //---------------Test Result -----------------------
+
+            Assert.IsInstanceOfType(typeof (INumericUpDown), panel.Controls[1]);
+            INumericUpDown control = (INumericUpDown)panel.Controls[1];
+            Assert.AreEqual(3, control.DecimalPlaces);
+        }
+
+        [Test]
+        public void Test_BuildPanel_Parameter_Options()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithOptionsParameter();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][0].Options));
+            Assert.AreEqual("M|F", singleFieldTab[0][0].Options);
+            Assert.AreEqual("ListComboBoxMapper", singleFieldTab[0][0].MapperTypeName);
+
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+            //---------------Test Result -----------------------
+
+            Assert.IsInstanceOfType(typeof(IComboBox), panel.Controls[1]);
+            IComboBox control = (IComboBox)panel.Controls[1];
+            Assert.AreEqual(3, control.Items.Count);
+            Assert.AreEqual("",control.Items[0].ToString());
+            Assert.AreEqual("M",control.Items[1].ToString());
+            Assert.AreEqual("F",control.Items[2].ToString());
+        }
+
+        [Test,Ignore("Can not test the event on the TextBox")]
+        public void Test_BuildPanel_Parameter_isEmal()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithIsEmailParameter();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][0].IsEmail));
+            Assert.IsTrue(Convert.ToBoolean(singleFieldTab[0][0].IsEmail));
+
+            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][1].IsEmail));
+            Assert.IsFalse(Convert.ToBoolean(singleFieldTab[0][1].IsEmail));
+            
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+            //---------------Test Result -----------------------
+
+            Assert.IsInstanceOfType(typeof(ITextBox), panel.Controls[1]);
+            ITextBox control = (ITextBox)panel.Controls[1];
+        }
+
+        [Test]
+        public void Test_BuildPanel_Parameter_DateFormat()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+            UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithDateFormatParameter();
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][0].DateFormat));
+            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][1].DateFormat));
+
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
+            //---------------Test Result -----------------------
+
+            Assert.IsInstanceOfType(typeof(IDateTimePicker), panel.Controls[1]);
+            IDateTimePicker control1 = (IDateTimePicker)panel.Controls[1];
+            Assert.AreEqual(DateTimePickerFormat.Short, control1.Format);
+            
+            Assert.IsInstanceOfType(typeof(IDateTimePicker), panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN+1]);
+            IDateTimePicker control2 = (IDateTimePicker)panel.Controls[PanelBuilder.CONTROLS_PER_COLUMN + 1];
+            Assert.AreEqual(DateTimePickerFormat.Custom, control2.Format);
+            Assert.AreEqual(singleFieldTab[0][1].DateFormat, control2.CustomFormat);
+        }
+
+        [Test]
+        public void Test_BuildPanel_GetAlignmentValueMethod_Left()
+        {
+            //---------------Set up test pack-------------------
+            string alignment = "left";
+
+            //---------------Assert Precondition----------------
+            
+            //---------------Execute Test ----------------------
+            HorizontalAlignment alignmentValueLowerCase = PanelBuilder.GetAlignmentValue(alignment.ToLower());
+            HorizontalAlignment alignmentValueUpperCase = PanelBuilder.GetAlignmentValue(alignment.ToUpper());
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(HorizontalAlignment.Left, alignmentValueLowerCase);
+            Assert.AreEqual(HorizontalAlignment.Left, alignmentValueUpperCase);
+            Assert.AreEqual(alignmentValueUpperCase, alignmentValueLowerCase);
+        }
+
+        [Test]
+        public void Test_BuildPanel_GetAlignmentValueMethod_Right()
+        {
+            //---------------Set up test pack-------------------
+            string alignment = "right";
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            HorizontalAlignment alignmentValueLowerCase = PanelBuilder.GetAlignmentValue(alignment.ToLower());
+            HorizontalAlignment alignmentValueUpperCase = PanelBuilder.GetAlignmentValue(alignment.ToUpper());
+            //---------------Test Result -----------------------
+            Assert.AreEqual(HorizontalAlignment.Right, alignmentValueLowerCase);
+            Assert.AreEqual(HorizontalAlignment.Right, alignmentValueUpperCase);
+            Assert.AreEqual(alignmentValueUpperCase, alignmentValueLowerCase);
+        }
+
+        [Test]
+        public void Test_BuildPanel_GetAlignmentValueMethod_Center()
+        {
+            //---------------Set up test pack-------------------
+            string alignment = "center";
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            HorizontalAlignment alignmentValueLowerCase = PanelBuilder.GetAlignmentValue(alignment.ToLower());
+            HorizontalAlignment alignmentValueUpperCase = PanelBuilder.GetAlignmentValue(alignment.ToUpper());
+            //---------------Test Result -----------------------
+            Assert.AreEqual(HorizontalAlignment.Center, alignmentValueLowerCase);
+            Assert.AreEqual(HorizontalAlignment.Center, alignmentValueUpperCase);
+            Assert.AreEqual(alignmentValueUpperCase, alignmentValueLowerCase);
+        }
+
+        [Test]
+        public void Test_BuildPanel_GetAlignmentValueMethod_Centre()
+        {
+            //---------------Set up test pack-------------------
+            string alignment = "centre";
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            HorizontalAlignment alignmentValueLowerCase = PanelBuilder.GetAlignmentValue(alignment.ToLower());
+            HorizontalAlignment alignmentValueUpperCase = PanelBuilder.GetAlignmentValue(alignment.ToUpper());
+            //---------------Test Result -----------------------
+            Assert.AreEqual(HorizontalAlignment.Center, alignmentValueLowerCase);
+            Assert.AreEqual(HorizontalAlignment.Center, alignmentValueUpperCase);
+            Assert.AreEqual(alignmentValueUpperCase, alignmentValueLowerCase);
+        }
+
+
+        //Throws a HabaneroDeveloperException 
+        //if an invalid alignment value is passed into the method.
+        [Test]
+        public void Test_BuildPanel_GetAlignmentValueMethod_ThrowsADeveloperException()
+        {
+           
+            //---------------Set up test pack-------------------
+            string alignment = "TestAlignment";
+            bool errorThrown = false;
+            string errMessage="";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            
+            try
+            {
+                HorizontalAlignment alignmentValueLowerCase = PanelBuilder.GetAlignmentValue(alignment.ToLower());
+            }
+            catch (HabaneroDeveloperException ex)
+            {
+                errorThrown = true;
+                errMessage = ex.Message;
+            }
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(errorThrown,"The alignment value is invalid and a HabaneroDeveloperException should be thrown.");
+            StringAssert.Contains("Invalid alignment property value ", errMessage);
+        }
+
 
         [Test]
         public void Test_BuildPanel_CompulsoryFieldsAreBoldAndStarred()
@@ -651,6 +1071,7 @@ namespace Habanero.Test.UI.Base
            Assert.AreEqual(6,panelInfo.Panel.Controls.Count);
         }
 
+
         //[Test, Ignore("This doesn't work in code for some reason")]
         //public void Test_BuildPanel_SetToolTip()
         //{
@@ -673,4 +1094,5 @@ namespace Habanero.Test.UI.Base
         //    Assert.AreEqual("Test tooltip text", toolTip.GetToolTip(controlHabanero));
         //}
     }
+   
 }
