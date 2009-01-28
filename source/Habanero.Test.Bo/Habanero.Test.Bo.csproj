@@ -83,10 +83,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Habanero.Test.Structure.dll</HintPath>
     </Reference>
-    <Reference Include="Habanero.UI, Version=1.5.0.0, Culture=neutral, PublicKeyToken=71779386dead1c10, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\Habanero.UI.dll</HintPath>
-    </Reference>
     <Reference Include="Habanero.UI.Base, Version=2.0.1.0, Culture=neutral, PublicKeyToken=a8408464fc128d8b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Habanero.UI.Base.dll</HintPath>
