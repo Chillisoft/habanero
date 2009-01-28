@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using Habanero.Base.Exceptions;
@@ -31,7 +32,7 @@ namespace Habanero.UI.Base
         public IPanelInfo BuildPanelForTab(UIFormTab formTab)
         {
             IPanel panel = Factory.CreatePanel();
-            IPanelInfo panelInfo = new PanelInfo();
+            PanelInfo panelInfo = new PanelInfo();
             GridLayoutManager layoutManager = panelInfo.LayoutManager = SetupLayoutManager(formTab, panel);
             AddFieldsToLayoutManager(formTab, panelInfo);
             SetupInputControlColumnWidth(panelInfo, formTab);
@@ -40,13 +41,17 @@ namespace Habanero.UI.Base
             panel.Height = layoutManager.GetFixedHeightIncludingGaps();
 
             panelInfo.Panel = panel;
+
+            panelInfo.UIFormTab = formTab;
+            panelInfo.MinimumPanelHeight = panel.Height;
+            panelInfo.UIForm = formTab.UIForm;
             return panelInfo;
         }
 
 
         public IPanelInfo BuildPanelForForm(UIForm uiForm)
         {
-            IPanelInfo panelInfo = new PanelInfo();
+            PanelInfo panelInfo = new PanelInfo();
             IPanel panel = Factory.CreatePanel();
             panelInfo.Panel = panel;
             ITabControl tabControl = Factory.CreateTabControl();
@@ -76,6 +81,8 @@ namespace Habanero.UI.Base
             {
                 panel.Controls.Add(tabControl);
             }
+
+            panelInfo.UIForm = uiForm;
             return panelInfo;
         }
 
@@ -355,6 +362,22 @@ namespace Habanero.UI.Base
             return horizontalAlignment;
         }
 
+        /// <summary>
+        /// Creates one panel for each UI Form definition of a business object
+        /// </summary>
+        /// <returns>Returns the list of panel info objects created</returns>
+        /// TODO: improve tab order (ie make all tabs use one sequence rather than each starting a new sequence)
+        public List<IPanelInfo> CreateOnePanelPerUIFormTab(UIForm uiForm)
+        {
+            List<IPanelInfo> panelInfoList = new List<IPanelInfo>();
+            foreach (UIFormTab formTab in uiForm)
+            {
+                IPanelInfo onePanelInfo = BuildPanelForTab(formTab);
+
+                panelInfoList.Add(onePanelInfo);
+            }
+            return panelInfoList;
+        }
        
     }
 }

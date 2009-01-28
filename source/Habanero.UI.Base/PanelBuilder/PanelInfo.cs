@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
@@ -93,6 +94,37 @@ namespace Habanero.UI.Base
             foreach (FieldInfo fieldInfo in FieldInfos)
             {
                 fieldInfo.ControlMapper.ErrorProvider.SetError(fieldInfo.InputControl, "");
+            }
+        }
+
+        /// <summary>
+        /// Gets the UIFormTab definition used to construct the panel
+        /// for a single tab in the form.  By default, there is one
+        /// tab for a form, even if it has not been explicitly defined.
+        /// </summary>
+        public UIFormTab UIFormTab { get; internal set; }
+
+        /// <summary>
+        /// Gets and sets the minimum height for the panel
+        /// </summary>
+        public int MinimumPanelHeight { get; internal set; }
+
+        /// <summary>
+        /// Gets and sets the UIForm definition used to construct the
+        /// panel - this is taken from the class definitions for the
+        /// business object
+        /// </summary>
+        public UIForm UIForm { get; internal set; }
+
+
+        /// <summary>
+        /// Gets the text for the panel tab (UIFormTab.Name)
+        /// </summary>
+        public string PanelTabText
+        {
+            get
+            {
+                return this.UIFormTab == null ? "" : this.UIFormTab.Name;
             }
         }
 

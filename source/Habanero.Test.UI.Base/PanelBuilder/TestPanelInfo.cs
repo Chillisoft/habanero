@@ -151,6 +151,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(panelInfo.FieldInfos[0].InputControl.Enabled);
             Assert.IsFalse(panelInfo.FieldInfos[1].InputControl.Enabled);
 
+
         }
 
         [Test]
@@ -185,6 +186,22 @@ namespace Habanero.Test.UI.Base
             panelInfo.ClearErrorProviders();
             //---------------Test Result -----------------------
             Assert.IsFalse(errorProvider.GetError(fieldInfo.InputControl).Length > 0);
+        }
+
+        [Test]
+        public void Test_UIFormTab()
+        {
+            //--------------- Set up test pack ------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            PanelBuilder panelBuilder = new PanelBuilder(_controlFactory);
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(classDef.UIDefCol["default"].UIForm[0]);
+
+            //--------------- Test Result -----------------------
+            Assert.IsNotNull(panelInfo.UIFormTab);
+            Assert.AreEqual(panelInfo.UIFormTab.Name, panelInfo.PanelTabText);
         }
 
         private PanelInfo.FieldInfo CreateFieldInfo(string propertyName)

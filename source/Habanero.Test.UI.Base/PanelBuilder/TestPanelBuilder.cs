@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -139,6 +140,7 @@ namespace Habanero.Test.UI.Base
 
             ILabel label = (ILabel) panel.Controls[0];
             Assert.AreEqual("Text:", label.Text);
+
         }
 
         [Test]
@@ -1069,6 +1071,44 @@ namespace Habanero.Test.UI.Base
             IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form);
             //---------------Test Result -----------------------
            Assert.AreEqual(6,panelInfo.Panel.Controls.Count);
+           Assert.AreEqual(form, panelInfo.UIForm);
+        }
+
+        [Test]
+        public void Test_CreateOnePanelPerUIFormTab_2Panels()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWithTwoUITabs();
+            UIForm uiForm = classDef.UIDefCol["default"].UIForm;
+            MyBO myBo = new MyBO();
+            //--------------Assert PreConditions----------------            
+            //---------------Execute Test ----------------------
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            IList<IPanelInfo> panelList = panelBuilder.CreateOnePanelPerUIFormTab(uiForm);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, panelList.Count);
+            Assert.AreEqual("Tab1", panelList[0].UIFormTab.Name);
+            Assert.AreEqual("Tab2", panelList[1].UIFormTab.Name);
+            Assert.AreSame(uiForm, panelList[0].UIForm);
+            Assert.AreSame(uiForm, panelList[1].UIForm);
+
+        }
+
+        [Test]
+        public void Test_MinimumPanelHeight()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIForm uiForm = classDef.UIDefCol["default"].UIForm;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForTab(uiForm[0]);
+            IPanel pnl = panelInfo.Panel;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(pnl.Height, panelInfo.MinimumPanelHeight);
+            //---------------Tear Down -------------------------          
         }
 
 
