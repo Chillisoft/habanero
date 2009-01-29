@@ -47,9 +47,10 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreEqual(propName, mapper.PropertyName);
             Assert.AreEqual(false, mapper.IsReadOnly);
             Assert.AreEqual(controlFactory, mapper.ControlFactory);
-            LookupComboBoxMapper lookupComboBoxMapper = mapper;
+            ExtendedComboBoxMapper lookupComboBoxMapper = mapper;
             Assert.IsNotNull(lookupComboBoxMapper);
-            Assert.AreSame(extendedComboBox.ComboBox, lookupComboBoxMapper.Control);
+//            Assert.AreSame(extendedComboBox.ComboBox, lookupComboBoxMapper.Control);
+            Assert.AreSame(extendedComboBox, lookupComboBoxMapper.Control);
             Assert.AreEqual(propName, lookupComboBoxMapper.PropertyName);
             Assert.AreEqual(false, lookupComboBoxMapper.IsReadOnly);
             Assert.AreEqual(controlFactory, lookupComboBoxMapper.ControlFactory);
@@ -71,7 +72,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //--------------- Test Result -----------------------
             Assert.IsInstanceOfType(typeof(IControlMapper), mapper);
             Assert.AreEqual(true, mapper.IsReadOnly);
-            LookupComboBoxMapper lookupComboBoxMapper = mapper;
+            ExtendedComboBoxMapper lookupComboBoxMapper = mapper;
             Assert.IsNotNull(lookupComboBoxMapper);
             Assert.AreEqual(true, lookupComboBoxMapper.IsReadOnly);
         }
@@ -80,7 +81,7 @@ namespace Habanero.Test.UI.Base.Mappers
         public void Test_SetBusinessObject()
         {
             //--------------- Set up test pack ------------------
-            ExtendedComboBoxMapper mapper = CreateExtendedLookupComboBoxMapper();
+            ExtendedComboBoxMapper mapper = CreateExtendedLookupComboBoxMapper("TestProp");
             //--------------- Test Preconditions ----------------
             Assert.IsNull(mapper.BusinessObject);
             Assert.IsNull(mapper.BusinessObject);
@@ -126,7 +127,7 @@ namespace Habanero.Test.UI.Base.Mappers
         public void Test_SetBusinessObject_OnInternalLookupComboBoxMapper()
         {
             //--------------- Set up test pack ------------------
-            ExtendedComboBoxMapper mapper = CreateExtendedLookupComboBoxMapper();
+            ExtendedComboBoxMapper mapper = CreateExtendedLookupComboBoxMapper("Surname");
             //--------------- Test Preconditions ----------------
             Assert.IsNull(mapper.BusinessObject);
             Assert.IsNull(mapper.BusinessObject);
@@ -138,13 +139,12 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreSame(businessObjectInfo, mapper.BusinessObject);
         }
 
-        private static ExtendedComboBoxMapper CreateExtendedLookupComboBoxMapper()
+        private static ExtendedComboBoxMapper CreateExtendedLookupComboBoxMapper(string propertyName)
         {
             IControlFactory controlFactory = GetControlFactory();
             ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
-            string propName = TestUtil.CreateRandomString();
             ExtendedComboBoxMapper mapper = new ExtendedComboBoxMapper(
-                extendedComboBox, propName, true, controlFactory);
+                extendedComboBox, propertyName, true, controlFactory);
             return mapper;
         }
 

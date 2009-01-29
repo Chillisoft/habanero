@@ -54,12 +54,17 @@ namespace Habanero.BO
         /// not available</returns>
         public Dictionary<string, string> GetLookupList(string propertyName)
         {
-            IPropDef propDef = _businessObject.ClassDef.GetPropDef(propertyName, false);
-            //return def.GetLookupList(_businessObject.GetDatabaseConnection());
-            if (propDef != null && propDef.LookupList != null && propDef.HasLookupList())
+            if (_businessObject != null)
             {
-//                return propDef.LookupList.GetLookupList(_businessObject.GetDatabaseConnection());
-                return propDef.LookupList.GetLookupList();
+                IPropDef propDef = _businessObject.ClassDef.GetPropDef(propertyName, false);
+                if (propDef != null && propDef.LookupList != null && propDef.HasLookupList())
+                {
+                    return propDef.LookupList.GetLookupList();
+                }
+            } else
+            {
+                string message = string.Format("The lookup list for '{0}' could not be returned since the business object is null", propertyName);
+                throw new HabaneroDeveloperException(message, message);
             }
             return new Dictionary<string, string>();
         }

@@ -290,6 +290,36 @@ namespace Habanero.Test.BO.TransactionCommitters
             contactPersonCompositeKey.Save();
         }
 
+
+        [Test]
+        public void Test_DoNotChangeChangeCompositePrimaryKey()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
+            ContactPersonTestBO contactPersonCompositeKey = GetSavedContactPersonCompositeKey();
+            //            string oldID = contactPersonCompositeKey.ID.AsString_CurrentValue();
+            //            Assert.IsNotNull(BusinessObjectManager.Instance[oldID]);
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+            committer.AddBusinessObject(contactPersonCompositeKey);
+            string origFirstname = contactPersonCompositeKey.FirstName;
+            contactPersonCompositeKey.FirstName = "Temp Firstname";
+            contactPersonCompositeKey.FirstName = origFirstname;
+            IBOProp prop = contactPersonCompositeKey.Props["FirstName"];
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(contactPersonCompositeKey.Status.IsDirty);
+            Assert.IsFalse(prop.IsDirty);
+            //---------------Execute Test ----------------------
+            committer.CommitTransaction();
+            //---------------Test Result -----------------------
+            TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(contactPersonCompositeKey);
+            //            Assert.IsFalse(BusinessObjectManager.Instance.Contains(oldID));
+            //            Assert.IsNotNull(BusinessObjectManager.Instance[contactPersonCompositeKey.ID.AsString_CurrentValue()]);
+            //            //---------------Tear Down--------------------------
+            //            contactPersonCompositeKey.MarkForDelete();
+            //            contactPersonCompositeKey.Save();
+        }
+//                                <prop name=""Surname"" />
+//                        <prop name=""FirstName"" />
         [Test]
         public void TestCheckForDuplicateAlternateKey()
         {

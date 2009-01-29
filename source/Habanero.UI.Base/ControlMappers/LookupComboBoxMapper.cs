@@ -30,11 +30,17 @@ namespace Habanero.UI.Base
     /// </summary>
     public class LookupComboBoxMapper : ComboBoxMapper
     {
-        private EventHandler _keyPressHandler;
         private ILookupComboBoxMapperStrategy _mapperStrategy;
-        private EventHandler _selectedIndexChangedHandler;
 
+        /// <summary>
+        /// Gets or sets the KeyPress event handler assigned to this mapper
+        /// </summary>
+        public EventHandler KeyPressHandler { get; set; }
 
+        /// <summary>
+        /// Gets or sets the SelectedIndexChanged event handler assigned to this mapper
+        /// </summary>
+        public EventHandler SelectedIndexChangedHandler { get; set; }
         //private readonly IControlFactory _controlFactory;
         //private bool _allowRightClick = true;
         //private bool _isRightClickInitialised;
@@ -112,30 +118,20 @@ namespace Habanero.UI.Base
             }
         }
 
-        /// <summary>
-        /// Gets or sets the KeyPress event handler assigned to this mapper
-        /// </summary>
-        public EventHandler KeyPressHandler
-        {
-            get { return _keyPressHandler; }
-            set { _keyPressHandler = value; }
-        }
 
-        /// <summary>
-        /// Gets or sets the SelectedIndexChanged event handler assigned to this mapper
-        /// </summary>
-        public EventHandler SelectedIndexChangedHandler
-        {
-            get { return _selectedIndexChangedHandler; }
-            set { _selectedIndexChangedHandler = value; }
-        }
 
         //
         //		private void ComboBoxDoubleClickHandler(object sender, EventArgs e) {
         //
         //		}
-
-
+        /// <summary>
+        /// This is a hack that allows Extended Combo box mapper to use Lookup ComboBox mapper code
+        ///  without having to inherit from it.
+        /// </summary>
+        internal void DoUpdateControlValueFromBO()
+        {
+            this.InternalUpdateControlValueFromBo();
+        }
         /// <summary>
         /// Updates the value on the control from the corresponding property
         /// on the represented <see cref="IControlMapper.BusinessObject"/>
@@ -172,7 +168,7 @@ namespace Habanero.UI.Base
                 foreach (KeyValuePair<string, string> pair in _collection)
                 {
                     if (pair.Value == null) continue;
-                    //TODO Brett: 
+                    //TODO Brett: Removed with new lookup list need to test if still works reliably
 //                    if (pair.Value is IBusinessObject)
 //                    {
 //                        BusinessObject pairValueBo = (BusinessObject) pair.Value;
@@ -308,7 +304,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Sets up the items to be listed in the ComboBox
         /// </summary>
-        protected override void SetupComboBoxItems()
+        protected internal override void SetupComboBoxItems()
         {
             SetupLookupList();
         }

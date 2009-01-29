@@ -9,54 +9,50 @@ namespace Habanero.UI.Base
     ///<summary>
     /// The mapper for <see cref="IExtendedComboBox"/>.
     ///</summary>
-    public class ExtendedComboBoxMapper : LookupComboBoxMapper
+    public class ExtendedComboBoxMapper : ControlMapper //: LookupComboBoxMapper
     {
         private readonly IExtendedComboBox _extendedComboBox;
-        private IFormHabanero _popupForm;
         //private IBusinessObject _relatedBusinessObject;
+        private readonly LookupComboBoxMapper _lookupComboBoxMapper;
 
         ///<summary>
         /// Constructs the mapper for <see cref="IExtendedComboBox"/>.
         ///</summary>
-        public ExtendedComboBoxMapper(IExtendedComboBox ctl, string propName, bool isReadOnly, IControlFactory controlFactory)
-            : base(ctl.ComboBox, propName, isReadOnly, controlFactory)
+        public ExtendedComboBoxMapper
+            (IExtendedComboBox ctl, string propName, bool isReadOnly, IControlFactory controlFactory)
+            : base(ctl, propName, isReadOnly, controlFactory)
         {
             _extendedComboBox = ctl;
+            _lookupComboBoxMapper = new LookupComboBoxMapper
+                (_extendedComboBox.ComboBox, propName, isReadOnly, controlFactory);
             _extendedComboBox.Button.Click += delegate
-            {
-                ShowPopupForm();
-                _popupForm.Closed += delegate
-                    {
-                        IGridAndBOEditorControl gridAndBOEditorControl =
-                            (IGridAndBOEditorControl) _popupForm.Controls[0];
-                        IBusinessObject currentBusinessObject = gridAndBOEditorControl.CurrentBusinessObject;
-                        if ((currentBusinessObject != null) && currentBusinessObject.IsValid())
+                {
+                    ShowPopupForm();
+                    PopupForm.Closed += delegate
                         {
-                            currentBusinessObject.Save();
-                        }
-                        ReloadLookupValues();
-                        if (currentBusinessObject != null)
-                        {
-                            _extendedComboBox.ComboBox.SelectedValue = currentBusinessObject;
-                        }
-                    };
-                _popupForm.ShowDialog();
-
-            };
+                            IGridAndBOEditorControl gridAndBOEditorControl =
+                                (IGridAndBOEditorControl) PopupForm.Controls[0];
+                            IBusinessObject currentBusinessObject = gridAndBOEditorControl.CurrentBusinessObject;
+                            if ((currentBusinessObject != null) && currentBusinessObject.IsValid())
+                            {
+                                currentBusinessObject.Save();
+                            }
+                            ReloadLookupValues();
+                            if (currentBusinessObject != null)
+                            {
+                                _extendedComboBox.ComboBox.SelectedValue = currentBusinessObject;
+                            }
+                        };
+                    PopupForm.ShowDialog();
+                };
         }
-
-        //public IBusinessObject RelatedBusinessObject
-        //{
-        //    get { return _relatedBusinessObject; }
-        //    set { _relatedBusinessObject = value; }
-        //}
 
         private void ReloadLookupValues()
         {
             Type classType;
             GetLookupTypeClassDef(out classType);
             IBusinessObjectCollection collection = GetCollection(classType);
-            base.LookupList.Clear();
+            _lookupComboBoxMapper.LookupList.Clear();
             Dictionary<string, string> lookupValues = new Dictionary<string, string>();
             foreach (IBusinessObject businessObject in collection)
             {
@@ -67,7 +63,7 @@ namespace Habanero.UI.Base
                 }
                 lookupValues.Add(toString, businessObject.ID.GetAsValue().ToString());
             }
-           base.SetupComboBoxItems();
+            _lookupComboBoxMapper.SetupComboBoxItems();
         }
 
         ///<summary>
@@ -78,13 +74,14 @@ namespace Habanero.UI.Base
         {
             Type classType;
             ClassDef lookupTypeClassDef = GetLookupTypeClassDef(out classType);
-            _popupForm = ControlFactory.CreateForm();
-            _popupForm.Height = 600;
-            _popupForm.Width = 800;
-            
-            IGridAndBOEditorControl gridAndBOEditorControl = ControlFactory.CreateGridAndBOEditorControl(lookupTypeClassDef); 
+            PopupForm = ControlFactory.CreateForm();
+            PopupForm.Height = 600;
+            PopupForm.Width = 800;
+
+            IGridAndBOEditorControl gridAndBOEditorControl = ControlFactory.CreateGridAndBOEditorControl
+                (lookupTypeClassDef);
             gridAndBOEditorControl.Dock = DockStyle.Fill;
-            _popupForm.Controls.Add(gridAndBOEditorControl);
+            PopupForm.Controls.Add(gridAndBOEditorControl);
             IBusinessObjectCollection col = GetCollection(classType);
             gridAndBOEditorControl.SetBusinessObjectCollection(col);
         }
@@ -99,33 +96,55 @@ namespace Habanero.UI.Base
 
         private static IBusinessObjectCollection GetCollection(Type classType)
         {
-            Type collectionType = typeof(BusinessObjectCollection<>).MakeGenericType(classType);
-            IBusinessObjectCollection col = (IBusinessObjectCollection)Activator.CreateInstance(collectionType);
+            Type collectionType = typeof (BusinessObjectCollection<>).MakeGenericType(classType);
+            IBusinessObjectCollection col = (IBusinessObjectCollection) Activator.CreateInstance(collectionType);
             col.LoadAll();
             return col;
-        }
-
-        //public LookupComboBoxMapper LookupComboBoxMapper
-        //{
-        //    get { return _lookupComboBoxMapper; }
-        //    //internal set { _lookupComboBoxMapper = value; }
-        //    set { _lookupComboBoxMapper = value; }
-        //}
-
-        ///<summary>
-        /// Returns the <see cref="IExtendedComboBox"/> that is managed by this mapper.
-        ///</summary>
-        public new IControlHabanero Control
-        {
-            get { return _extendedComboBox; }
         }
 
         ///<summary>
         /// Returns the Popup Form.
         ///</summary>
-        public IFormHabanero PopupForm
+        public IFormHabanero PopupForm { get; private set; }
+
+        /// <summary>
+        /// Updates the properties on the represented business object
+        /// </summary>
+        public override void ApplyChangesToBusinessObject()
         {
-            get { return _popupForm; }
+            _lookupComboBoxMapper.ApplyChangesToBusinessObject();
+        }
+
+        /// <summary>
+        /// Updates the value on the control from the corresponding property
+        /// on the represented <see cref="IControlMapper.BusinessObject"/>
+        /// </summary>
+        public override void UpdateControlValueFromBusinessObject()
+        {
+            _lookupComboBoxMapper.UpdateControlValueFromBusinessObject();
+        }
+
+        protected override void InternalUpdateControlValueFromBo()
+        {
+            _lookupComboBoxMapper.DoUpdateControlValueFromBO();
+        }
+
+        public override IBusinessObject BusinessObject
+        {
+            get { return base.BusinessObject; }
+            set
+            {
+                _lookupComboBoxMapper.BusinessObject = value;
+                base.BusinessObject = value;
+            }
+        }
+        /// <summary>
+        /// Gets and sets the lookup list used to populate the items in the
+        /// ComboBox.  This method is typically called by SetupLookupList().
+        /// </summary>
+        public Dictionary<string, string> LookupList
+        {
+            get { return _lookupComboBoxMapper.LookupList; }
         }
     }
 }
