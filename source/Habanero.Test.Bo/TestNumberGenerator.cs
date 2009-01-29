@@ -186,7 +186,6 @@ namespace Habanero.Test.BO
             {
                 Assert.IsTrue(ex.Message.Contains("You cannot begin edits on the 'BOSequenceNumberLocking', as another user has started edits and therefore locked to this record"));
             }
-            //---------------Tear Down -------------------------          
         }
 
         [Test]
@@ -223,7 +222,6 @@ namespace Habanero.Test.BO
             //should not get locking error
             //assert nextnumber = 1
             Assert.AreEqual(1, num, "The second generated number should be 1. Time: " + DateTime.Now.ToLongTimeString());
-            //---------------Tear Down -------------------------          
         }
 
         [Test]
@@ -309,9 +307,8 @@ namespace Habanero.Test.BO
         {
             //---------------Clean Up --------------------------
             CleanupNumberGenerator();
-            INumberGenerator numGen;
             //---------------Set up test pack-------------------
-            numGen = new NumberGenerator("tmp");
+            INumberGenerator numGen = new NumberGenerator("tmp");
             //---------------Execute Test ----------------------
             numGen.NextNumber();
             numGen = new NumberGenerator("tmp");

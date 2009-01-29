@@ -687,7 +687,8 @@ namespace Habanero.Test.BO
             //-------------------Assert Precondition ----------------
             string message;
             Assert.IsFalse(boProp.IsEditable(out message));
-            StringAssert.Contains("The property 'Test Prop' is not editable since it is set up as WriteOnce", message);
+            StringAssert.Contains("The property ", message);
+            StringAssert.Contains("Test Prop' is not editable since it is set up as WriteOnce", message);
             //-------------------Execute Test -----------------------
             try
             {
@@ -697,7 +698,8 @@ namespace Habanero.Test.BO
                 //---------------Test Result -----------------------
             catch (BOPropWriteException ex)
             {
-                StringAssert.Contains("The property 'Test Prop' is not editable since it is set up as WriteOnce", ex.Message);
+                StringAssert.Contains("The property ", ex.Message);
+                StringAssert.Contains("Test Prop' is not editable since it is set up as WriteOnce", ex.Message);
             }
         }
 

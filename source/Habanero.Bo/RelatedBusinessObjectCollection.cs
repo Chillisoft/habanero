@@ -50,6 +50,10 @@ namespace Habanero.BO
 
         //-- 
 
+        /// <summary>
+        /// Adds a business object to the collection
+        /// </summary>
+        /// <param name="bo">The business object to add</param>
         public override void Add(TBusinessObject bo)
         {
             if (!Loading)

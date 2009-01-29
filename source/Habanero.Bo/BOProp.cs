@@ -497,22 +497,24 @@ namespace Habanero.BO
         private bool AreReadWriteRulesEditable(out string message)
         {
             //TODO Brett Jan 2009: This should be turned into a strategy pattern.
+            string className = this.PropDef.ClassDef == null ? "" : this.PropDef.ClassDef.ClassNameFull;
+            string propNameFull = className + "." + this.DisplayName;
             switch (_propDef.ReadWriteRule)
             {
                 case PropReadWriteRule.ReadWrite:
                     break;
                 case PropReadWriteRule.ReadOnly:
-                    message = "The property '" + this.DisplayName + "' is not editable since it is set up as ReadOnly";
+                    message = "The property '" + propNameFull + "' is not editable since it is set up as ReadOnly";
                     return false;
                 case PropReadWriteRule.WriteOnce:
                     if (_isObjectNew || _persistedValue == null) break;
-                    message = "The property '" + this.DisplayName
+                    message = "The property '" + propNameFull
                               + "' is not editable since it is set up as WriteOnce and the value has already been set";
                     return false;
                 case PropReadWriteRule.WriteNotNew:
                     if (_isObjectNew)
                     {
-                        message = "The property '" + this.DisplayName
+                        message = "The property '" + propNameFull
                                   + "' is not editable since it is set up as WriteNotNew and the object is new";
                         return false;
                     }
@@ -520,7 +522,7 @@ namespace Habanero.BO
                 case PropReadWriteRule.WriteNew:
                     if (!_isObjectNew)
                     {
-                        message = "The property '" + this.DisplayName
+                        message = "The property '" + propNameFull
                                   + "' is not editable since it is set up as WriteNew and the object is not new";
                         return false;
                     }

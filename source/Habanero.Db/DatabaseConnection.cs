@@ -463,27 +463,21 @@ namespace Habanero.DB
                 con = GetOpenConnectionForReading();
                 IDbCommand cmd = con.CreateCommand();
                 selectSql.SetupCommand(cmd);
-                //log.Debug("LoadDataReader with sql statement: " + selectSql.ToString() ) ;
-                //cmd.CommandText = selectSql;
-                //_currentDbConnection = null;
                 cmd.Transaction = con.BeginTransaction(IsolationLevel.RepeatableRead);
                 return cmd.ExecuteReader(CommandBehavior.CloseConnection);
             }
             catch (Exception ex)
             {
                 log.Error("Error reading from database : " + Environment.NewLine +
-                          ExceptionUtilities.GetExceptionString(ex, 10, true));
+                         ExceptionUtilities.GetExceptionString(ex, 10, true));
                 log.Error("Sql: " + selectSql);
-                //				if (con != null && con.State != ConnectionState.Closed) 
-                //				{
-                //					con.Close();
-                //				}
+
                 Console.Out.WriteLine("Error reading from database : " + Environment.NewLine +
-                                      ExceptionUtilities.GetExceptionString(ex, 10, true));
+                        ExceptionUtilities.GetExceptionString(ex, 10, true));
                 Console.Out.WriteLine("Sql: " + selectSql);
                 throw new DatabaseReadException(
-                    "There was an error reading the database. Please contact your system administrator.",
-                    "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
+                        "There was an error reading the database. Please contact your system administrator.",
+                        "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
             }
         }
 

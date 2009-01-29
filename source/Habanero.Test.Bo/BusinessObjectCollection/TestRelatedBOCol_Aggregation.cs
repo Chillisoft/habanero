@@ -1,12 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO.RelatedBusinessObjectCollection;
-using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.BusinessObjectCollection
@@ -59,7 +54,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreSame(contactPerson.Organisation, aggregateRelationship.OwningBO);
         }
 
-        private MultipleRelationship<ContactPersonTestBO> GetAggregateRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol) {
+        private static MultipleRelationship<ContactPersonTestBO> GetAggregateRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol) {
             MultipleRelationship<ContactPersonTestBO> aggregateRelationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
             RelationshipDef relationshipDef = (RelationshipDef) aggregateRelationship.RelationshipDef;
             relationshipDef.RelationshipType = RelationshipType.Aggregation;
@@ -99,7 +94,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregateRelationship(organisationTestBO, out cpCol);
+            GetAggregateRelationship(organisationTestBO, out cpCol);
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.CreateRandomString();
             contactPerson.FirstName = TestUtil.CreateRandomString();
@@ -135,7 +130,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregateRelationship(organisationTestBO, out cpCol);
+            GetAggregateRelationship(organisationTestBO, out cpCol);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
             util.RegisterForAddedAndRemovedEvents(cpCol);
 
@@ -175,7 +170,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregateRelationship(organisationTestBO, out cpCol);
+            GetAggregateRelationship(organisationTestBO, out cpCol);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             contactPerson.Save();
@@ -201,7 +196,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregateRelationship(organisationTestBO, out cpCol);
+            GetAggregateRelationship(organisationTestBO, out cpCol);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             contactPerson.Save();

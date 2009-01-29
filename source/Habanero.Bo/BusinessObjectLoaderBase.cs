@@ -351,9 +351,15 @@ namespace Habanero.BO
             {
                 collection.Remove(businessObject);
                 collection.RemovedBusinessObjects.Remove(businessObject);
-            }            
+            }
         }
 
+        /// <summary>
+        /// Restores the removed collection. I.e. moves the items that are in the removed collection
+        ///  back to the main collection. Remember the main collection shows all the items from the database
+        ///   plus the items added, and created less the items removed or marked for deletion.
+        /// </summary>
+        /// <param name="collection"></param>
         private static void RestoreRemovedCollection(IBusinessObjectCollection collection)
         {
             foreach (BusinessObject businessObject in collection.RemovedBusinessObjects)
@@ -361,7 +367,12 @@ namespace Habanero.BO
                 collection.Remove(businessObject);
             }
         }
-
+        /// <summary>
+        /// Restores the created collection. I.e. moves the items that are in the created collection
+        ///  back to the main collection. Remember the main collection shows all the items from the database
+        ///   plus the items added, and created less the items removed or marked for deletion.
+        /// </summary>
+        /// <param name="collection"></param>
         private static void RestoreCreatedCollection(IBusinessObjectCollection collection)
         {
             foreach (BusinessObject businessObject in collection.CreatedBusinessObjects)

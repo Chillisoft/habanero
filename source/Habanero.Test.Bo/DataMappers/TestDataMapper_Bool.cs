@@ -421,6 +421,22 @@ namespace Habanero.Test.BO
             Assert.IsFalse(parsedOK);
             Assert.IsNull(parsedValue);
         }
+        [Test]
+        public void Test_DataMapper_ParsePropValue_FromString_On()
+        {
+            //---------------Set up test pack-------------------
+            const string invalidString = "On";
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsedOK = _dataMapper.TryParsePropValue(invalidString, out parsedValue);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsedOK);
+            Assert.IsTrue((bool)parsedValue);
+        }
 
         [Test]
         public void Test_DataMapper_ParsePropValue_FromDBNull()

@@ -30,8 +30,8 @@ namespace Habanero.Base
     {
         private string _name;
         private string _entityName;
-        private JoinList _joins;
-        private JoinList _inheritanceJoins;
+        private readonly JoinList _joins;
+        private readonly JoinList _inheritanceJoins;
         private bool _isPrepared;
 
         public Source(string name) : this(name, name)

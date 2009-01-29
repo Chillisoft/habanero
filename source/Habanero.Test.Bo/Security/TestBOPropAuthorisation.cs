@@ -57,7 +57,7 @@ namespace Habanero.Test.BO.Security
         public void Test_ReadOnly_IsEditable_False()
         {
             //---------------Set up test pack-------------------
-            PropDef propDef = new PropDef("Name","NN", "String", PropReadWriteRule.ReadOnly, "DD", "", false, false);
+            PropDef propDef = new PropDef("Name", "NN", "String", PropReadWriteRule.ReadOnly, "DD", "", false, false);
             BOProp prop1 = new BOProp(propDef);
 
             //---------------Assert Precondition----------------
@@ -69,7 +69,8 @@ namespace Habanero.Test.BO.Security
 
             //---------------Test Result -----------------------
             Assert.IsFalse(isEditable);
-            StringAssert.Contains("The property 'Name' is not editable since it is set up as ReadOnly", message);
+            StringAssert.Contains("The property ", message);
+            StringAssert.Contains("Name' is not editable since it is set up as ReadOnly", message);
         }
 
         [Test]
@@ -111,7 +112,9 @@ namespace Habanero.Test.BO.Security
 
             //---------------Test Result -----------------------
             Assert.IsFalse(isEditable);
-            StringAssert.Contains("The property 'Name' is not editable since it is set up as WriteNew and the object is not new", message);
+            StringAssert.Contains("The property ", message);
+            StringAssert.Contains
+                ("Name' is not editable since it is set up as WriteNew and the object is not new", message);
         }
 
         [Test]
@@ -154,17 +157,17 @@ namespace Habanero.Test.BO.Security
 
             //---------------Test Result -----------------------
             Assert.IsFalse(isEditable);
-            StringAssert.Contains("The property 'Name' is not editable since it is set up as WriteNotNew and the object is new", message);
+            StringAssert.Contains("The property ", message);
+            StringAssert.Contains
+                ("Name' is not editable since it is set up as WriteNotNew and the object is new", message);
         }
 
         [Test]
         public void Test_WriteOnce_PersistedValueSet_IsEditable_False()
         {
             //---------------Set up test pack-------------------
-            PropDef propDef = new PropDef("Name", typeof(string), PropReadWriteRule.WriteOnce, "DD", "", false, false);
-            BOProp prop1 = new BOProp(propDef);
-            prop1.Value = "new Value";
-            prop1.IsObjectNew = false;
+            PropDef propDef = new PropDef("Name", typeof (string), PropReadWriteRule.WriteOnce, "DD", "", false, false);
+            BOProp prop1 = new BOProp(propDef) {Value = "new Value", IsObjectNew = false};
             prop1.BackupPropValue();
 
             //---------------Assert Precondition----------------
@@ -177,14 +180,16 @@ namespace Habanero.Test.BO.Security
 
             //---------------Test Result -----------------------
             Assert.IsFalse(isEditable);
-            StringAssert.Contains("The property 'Name' is not editable since it is set up as WriteOnce and the value has already been set", message);
+            StringAssert.Contains("The property ", message);
+            StringAssert.Contains
+                ("Name' is not editable since it is set up as WriteOnce and the value has already been set", message);
         }
 
         [Test]
         public void Test_WriteOnce_PersistedValueNotSet_IsEditable_True()
         {
             //---------------Set up test pack-------------------
-            PropDef propDef = new PropDef("Name", typeof(string), PropReadWriteRule.WriteOnce, "DD", "", false, false);
+            PropDef propDef = new PropDef("Name", typeof (string), PropReadWriteRule.WriteOnce, "DD", "", false, false);
             BOProp prop1 = new BOProp(propDef);
             prop1.Value = "new Value";
             prop1.IsObjectNew = false;
@@ -206,7 +211,7 @@ namespace Habanero.Test.BO.Security
         public void Test_WriteOnce_NewObject_IsEditable_True()
         {
             //---------------Set up test pack-------------------
-            PropDef propDef = new PropDef("Name", typeof(string), PropReadWriteRule.WriteOnce, "DD", "", false, false);
+            PropDef propDef = new PropDef("Name", typeof (string), PropReadWriteRule.WriteOnce, "DD", "", false, false);
             BOProp prop1 = new BOProp(propDef) {Value = "new Value"};
             prop1.BackupPropValue();
             prop1.IsObjectNew = true;
@@ -252,7 +257,7 @@ namespace Habanero.Test.BO.Security
             MyBoAuthenticationStub.LoadDefaultClassDef();
             IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanUpdate_False();
             MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
-            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+            BOProp prop1 = (BOProp) myBoStub.Props["Prop1"];
             prop1.SetAuthorisationRules(propAuthorisationStub);
 
             //---------------Assert Precondition----------------
@@ -274,7 +279,7 @@ namespace Habanero.Test.BO.Security
             MyBoAuthenticationStub.LoadDefaultClassDef();
             IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanUpdate_True();
             MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
-            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+            BOProp prop1 = (BOProp) myBoStub.Props["Prop1"];
             prop1.SetAuthorisationRules(propAuthorisationStub);
             myBoStub.Save();
 
@@ -298,7 +303,7 @@ namespace Habanero.Test.BO.Security
             IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanUpdate_False();
 
             MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
-            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+            BOProp prop1 = (BOProp) myBoStub.Props["Prop1"];
             prop1.SetAuthorisationRules(propAuthorisationStub);
             myBoStub.Save();
 
@@ -315,7 +320,7 @@ namespace Habanero.Test.BO.Security
                 prop1.Value = newPropValue;
                 Assert.Fail("expected Err");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (BOPropWriteException ex)
             {
                 StringAssert.Contains("The logged on user  is not authorised to update the Prop1 ", ex.Message);
@@ -329,7 +334,7 @@ namespace Habanero.Test.BO.Security
             MyBoAuthenticationStub.LoadDefaultClassDef_ReadOnlyProp1();
 
             MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
-            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+            BOProp prop1 = (BOProp) myBoStub.Props["Prop1"];
 
             //---------------Assert Precondition----------------
             string message;
@@ -342,10 +347,11 @@ namespace Habanero.Test.BO.Security
                 prop1.Value = newPropValue;
                 Assert.Fail("expected Err");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (BOPropWriteException ex)
             {
-                StringAssert.Contains("The property 'Prop 1' is not editable since it is set up as ReadOnly", ex.Message);
+                StringAssert.Contains
+                    ("The property 'MyBoAuthenticationStub.Prop 1' is not editable since it is set up as ReadOnly", ex.Message);
             }
         }
 
@@ -357,7 +363,7 @@ namespace Habanero.Test.BO.Security
             IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanUpdate_False();
 
             MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
-            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+            BOProp prop1 = (BOProp) myBoStub.Props["Prop1"];
             prop1.SetAuthorisationRules(propAuthorisationStub);
 
             //---------------Assert Precondition----------------
@@ -372,7 +378,7 @@ namespace Habanero.Test.BO.Security
                 myBoStub.SetPropertyValue("Prop1", newPropValue);
                 Assert.Fail("expected Err");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (BOPropWriteException ex)
             {
                 StringAssert.Contains("The logged on user  is not authorised to update the Prop1 ", ex.Message);
@@ -393,6 +399,7 @@ namespace Habanero.Test.BO.Security
             authorisationStub.AddAuthorisedRole("A Role", BOPropActions.CanRead);
             return authorisationStub;
         }
+
         #endregion /TestDelete
 
         #region TestRead
@@ -404,7 +411,7 @@ namespace Habanero.Test.BO.Security
             MyBoAuthenticationStub.LoadDefaultClassDef();
             IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanRead_True();
             MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
-            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+            BOProp prop1 = (BOProp) myBoStub.Props["Prop1"];
             prop1.SetAuthorisationRules(propAuthorisationStub);
 
             //---------------Assert Precondition----------------
@@ -426,7 +433,7 @@ namespace Habanero.Test.BO.Security
             MyBoAuthenticationStub.LoadDefaultClassDef();
             IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanRead_False();
             MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
-            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+            BOProp prop1 = (BOProp) myBoStub.Props["Prop1"];
             prop1.SetAuthorisationRules(propAuthorisationStub);
 
             //---------------Assert Precondition----------------
@@ -449,7 +456,7 @@ namespace Habanero.Test.BO.Security
             MyBoAuthenticationStub.LoadDefaultClassDef();
             IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanRead_True();
             MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
-            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+            BOProp prop1 = (BOProp) myBoStub.Props["Prop1"];
             prop1.SetAuthorisationRules(propAuthorisationStub);
             myBoStub.Save();
 
@@ -475,7 +482,7 @@ namespace Habanero.Test.BO.Security
             IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanRead_False();
 
             MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
-            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+            BOProp prop1 = (BOProp) myBoStub.Props["Prop1"];
             prop1.SetAuthorisationRules(propAuthorisationStub);
 
             //---------------Assert Precondition----------------
@@ -489,7 +496,7 @@ namespace Habanero.Test.BO.Security
                 object value = prop1.Value;
                 Assert.Fail("expected Err");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (BOPropReadException ex)
             {
                 StringAssert.Contains("The logged on user  is not authorised to read the Prop1 ", ex.Message);
@@ -505,7 +512,7 @@ namespace Habanero.Test.BO.Security
             IBOPropAuthorisation propAuthorisationStub = GetPropAuthorisationStub_CanRead_False();
 
             MyBoAuthenticationStub myBoStub = new MyBoAuthenticationStub();
-            BOProp prop1 = (BOProp)myBoStub.Props["Prop1"];
+            BOProp prop1 = (BOProp) myBoStub.Props["Prop1"];
             prop1.SetAuthorisationRules(propAuthorisationStub);
 
             //---------------Assert Precondition----------------
@@ -519,12 +526,13 @@ namespace Habanero.Test.BO.Security
                 myBoStub.GetPropertyValue("Prop1");
                 Assert.Fail("expected Err");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (BOPropReadException ex)
             {
                 StringAssert.Contains("The logged on user  is not authorised to read the Prop1 ", ex.Message);
             }
         }
+
         private static IBOPropAuthorisation GetPropAuthorisationStub_CanRead_True()
         {
             IBOPropAuthorisation authorisationStub = new BOPropAuthorisationStub();
@@ -538,16 +546,17 @@ namespace Habanero.Test.BO.Security
             IBOPropAuthorisation authorisationStub = new BOPropAuthorisationStub();
             return authorisationStub;
         }
+
         #endregion /TestRead
     }
+
     internal class MyBo_PropAuthenticationStub : BusinessObject
     {
         public static ClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
-            ClassDef itsClassDef =
-                itsLoader.LoadClass(
-                    @"
+            ClassDef itsClassDef = itsLoader.LoadClass
+                (@"
 				<class name=""MyBoAuthenticationStub"" assembly=""Habanero.Test.BO"">
 					<property  name=""MyBoAuthenticationStubID"" type=""Guid""/>
                     <property  name=""Prop1""/>
@@ -561,7 +570,6 @@ namespace Habanero.Test.BO.Security
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-
     }
 
     internal class BOPropAuthorisationStub : IBOPropAuthorisation

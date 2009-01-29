@@ -160,6 +160,7 @@ namespace Habanero.Util
                         case "Y":
                         case "1":
                         case "-1":
+                        case "ON":
                             result = true;
                             return true;
                         case "FALSE":
@@ -167,6 +168,7 @@ namespace Habanero.Util
                         case "NO":
                         case "N":
                         case "0":
+                        case "OFF":
                             result = false;
                             return true;
                         default:

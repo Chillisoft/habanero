@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using Habanero.Base;
 
 namespace Habanero.Base
 {

@@ -53,14 +53,8 @@ namespace Habanero.BO.ClassDefinition
 		private Type _relatedObjectClassType;
 		private string _relatedObjectAssemblyName;
 		private string _relatedObjectClassName;
-		private IRelKeyDef _relKeyDef;
-		private string _relationshipName;
-		private bool _keepReferenceToRelatedObject;
-        private DeleteParentAction _deleteParentAction;
-        private RelationshipType _relationshipType;
 
         protected OrderCriteria _orderCriteria;
-        private string _reverseRelationshipName;
 
         #region Constructors
 
@@ -76,7 +70,7 @@ namespace Habanero.BO.ClassDefinition
 		/// <param name="deleteParentAction">The required action when the parent is deleted e.g. Dereference related, delete related, prevent delete</param>
         protected RelationshipDef(string relationshipName,
 							   Type relatedObjectClassType,
-							   RelKeyDef relKeyDef,
+							   IRelKeyDef relKeyDef,
                                bool keepReferenceToRelatedObject,
                                DeleteParentAction deleteParentAction)
             : this(relationshipName, relatedObjectClassType, null, null, relKeyDef, keepReferenceToRelatedObject, deleteParentAction, RelationshipType.Association)
@@ -95,10 +89,11 @@ namespace Habanero.BO.ClassDefinition
         /// reference to the related object.  Could be false for memory-
         /// intensive applications.</param>
         ///<param name="deleteParentAction">The required action when the parent is deleted e.g. Dereference related, delete related, prevent delete</param>
+        /// <param name="relationshipType"></param>
         protected RelationshipDef(string relationshipName,
 								string relatedObjectAssemblyName,
 								string relatedObjectClassName,
-								RelKeyDef relKeyDef,
+								IRelKeyDef relKeyDef,
 								bool keepReferenceToRelatedObject,
                                 DeleteParentAction deleteParentAction,
                                 RelationshipType relationshipType 
@@ -113,7 +108,7 @@ namespace Habanero.BO.ClassDefinition
 								Type relatedObjectClassType,
 								string relatedObjectAssemblyName,
 								string relatedObjectClassName,
-								RelKeyDef relKeyDef,
+								IRelKeyDef relKeyDef,
 								bool keepReferenceToRelatedObject,
                                 DeleteParentAction deleteParentAction,
                                 RelationshipType relationshipType)
@@ -129,27 +124,23 @@ namespace Habanero.BO.ClassDefinition
 				_relatedObjectClassName = relatedObjectClassName;
 				_relatedObjectClassType = null;
 			}
-			_relKeyDef = relKeyDef;
-            _relationshipName = relationshipName;
-            _keepReferenceToRelatedObject = keepReferenceToRelatedObject;
-            _deleteParentAction = deleteParentAction;
-    	    _relationshipType = relationshipType;
+			RelKeyDef = relKeyDef;
+            RelationshipName = relationshipName;
+            KeepReferenceToRelatedObject = keepReferenceToRelatedObject;
+            DeleteParentAction = deleteParentAction;
+    	    RelationshipType = relationshipType;
 		}
 
 		#endregion Constructors
 
 		#region Properties
 
-		/// <summary>
-		/// A name for the relationship e.g. Employee, Manager.
-		/// </summary>
-		public string RelationshipName
-		{
-			get { return _relationshipName; }
-			protected set { _relationshipName = value; }
-		}
+        /// <summary>
+        /// A name for the relationship e.g. Employee, Manager.
+        /// </summary>
+        public string RelationshipName { get; protected set; }
 
-		/// <summary>
+        /// <summary>
 		/// The assembly name of the related object type. In cases where the related object is in a different assebly
 		/// the object will be constructed via reflection.
 		/// </summary>
@@ -180,21 +171,14 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// The related key definition. <see cref="RelKeyDef"/>
         /// </summary>
-        public IRelKeyDef RelKeyDef
-        {
-			get { return _relKeyDef; }
-			protected set { _relKeyDef = value; }
-        }
+        public IRelKeyDef RelKeyDef { get; protected set; }
 
         /// <summary>
         /// Whether to keep a reference to the related object or to reload every time the relationship is called.
         /// Could be false for memory-intensive applications.
         /// </summary>
-        public bool KeepReferenceToRelatedObject
-        {
-			get { return _keepReferenceToRelatedObject; }
-			protected set { _keepReferenceToRelatedObject = value; }
-        }
+        public bool KeepReferenceToRelatedObject { get; protected set; }
+
         /// <summary>
         /// The <see cref="ClassDef"/> for the related object.
         /// </summary>
@@ -231,11 +215,7 @@ namespace Habanero.BO.ClassDefinition
         /// Provides specific instructions with regards to deleting a parent
         /// object.  See the DeleteParentAction enumeration for more detail.
         /// </summary>
-        public DeleteParentAction DeleteParentAction
-        {
-            get { return _deleteParentAction; }
-            protected set { _deleteParentAction = value; }
-        }
+        public DeleteParentAction DeleteParentAction { get; protected set; }
 
         ///<summary>
         /// The order by clause that the related object will be sorted by.
@@ -251,17 +231,20 @@ namespace Habanero.BO.ClassDefinition
         /// Returns the specific action that the relationship must carry out in the case of a child being added to it.
         /// <see cref="RelationshipType"/>
         ///</summary>
-        public RelationshipType RelationshipType
-        {
-            get { return _relationshipType; }
-            internal set { _relationshipType = value; }
-        }
+        public RelationshipType RelationshipType { get; internal set; }
 
+        ///<summary>
+        /// Returns true where the owning business object has the foreign key false otherwise.
+        /// This is used to differentiate between the two sides of the relationship.
+        ///</summary>
         public abstract  bool OwningBOHasForeignKey { 
             get; set;
         }
 
-        public string ReverseRelationshipName { get { return _reverseRelationshipName; } set { _reverseRelationshipName = value; } }
+        ///<summary>
+        /// Returns the relationship name of the reverse relationship.
+        ///</summary>
+        public string ReverseRelationshipName { get; set; }
 
         #endregion Type Initialisation
 
@@ -274,26 +257,45 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>The new relationship object created</returns>
         public abstract IRelationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol);
 
+        ///<summary>
+        /// Can the child business object be added to this relationship. Typically a persisted child business object 
+        /// cannot be added to a compositional relationship. A new (i.e. unpersisted) child object can however be.
+        ///</summary>
+        ///<param name="bo"></param>
+        ///<exception cref="HabaneroDeveloperException"></exception>
         public void CheckCanAddChild(IBusinessObject bo)
         {
-
-            if (!bo.Status.IsNew && (this.RelationshipType == RelationshipType.Composition))
+            string message;
+            if (bo == null)
             {
-                string message = "The " + this.RelatedObjectClassName + " could not be added since the "
-                                 + this.RelationshipName +
-                                 " relationship is set up as a composition relationship (AddChildAction.Prevent)";
-                throw new HabaneroDeveloperException(message, message);
+                message = "The " + this.RelatedObjectClassName + " could not be added since the "
+                          + " business object is null";
+                throw new HabaneroDeveloperException(message, message);  
             }
+            if (bo.Status.IsNew || (this.RelationshipType != RelationshipType.Composition)) return;
+
+            message = "The " + this.RelatedObjectClassName + " could not be added since the "
+                      + this.RelationshipName
+                      +
+                      " relationship is set up as a composition relationship (AddChildAction.Prevent) and an "
+                      + "already persisted child business object cannot be added";
+            throw new HabaneroDeveloperException(message, message);
         }
+
+        ///<summary>
+        /// Checks to see whether a business object can be removed from the relationship. Typically a
+        ///   business object cannot be removed from the relationship if the relationship is composition.
+        ///</summary>
+        ///<param name="bo">The business object being removed</param>
+        ///<exception cref="HabaneroDeveloperException"></exception>
         public void CheckCanRemoveChild(IBusinessObject bo)
         {
-            if (this.RelationshipType == RelationshipType.Composition)
-            {
-                string message = "The " + this.RelatedObjectClassName + " could not be removed since the "
-                                 + this.RelationshipName
-                                 + " relationship is set up as a composition relationship (RemoveChildAction.Prevent)";
-                throw new HabaneroDeveloperException(message, message);
-            }
+            if (this.RelationshipType != RelationshipType.Composition) return;
+
+            string message = "The " + this.RelatedObjectClassName + " could not be removed since the "
+                             + this.RelationshipName
+                             + " relationship is set up as a composition relationship (RemoveChildAction.Prevent)";
+            throw new HabaneroDeveloperException(message, message);
         }
     }
 }

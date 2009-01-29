@@ -18,11 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -87,6 +85,9 @@ namespace Habanero.BO
         }
     }
 
+    ///<summary>
+    /// This provides a base class from which all relationship classes inherit.
+    ///</summary>
     public abstract class RelationshipBase : IRelationship
     {
         protected IRelKey _relKey;
@@ -118,6 +119,9 @@ namespace Habanero.BO
         /// Returns the relationship name
         /// </summary>
         public abstract string RelationshipName { get; }
+        ///<summary>
+        /// Is the relationship initialised.
+        ///</summary>
         public abstract bool Initialised { get; }
         ///<summary>
         /// Returns the appropriate delete action when the parent is deleted.
@@ -144,7 +148,7 @@ namespace Habanero.BO
         /// <returns>The reverse relationship or null if no reverse relationship is set up.</returns>
         internal IRelationship GetReverseRelationship(IBusinessObject bo)
         {
-            if (!String.IsNullOrEmpty(this.RelationshipDef.ReverseRelationshipName))
+            if (HasReverseRelationshipDefined(this))
             {
                 foreach (IRelationship relationship in bo.Relationships)
                 {
@@ -165,43 +169,16 @@ namespace Habanero.BO
             //return FindRelationshipByRelationshipKey(bo);
         }
 
-        private IRelationship FindRelationshipByRelationshipKey(IBusinessObject bo) {
-            IRelationship reverseRelationship = null;
-            foreach (IRelationship relationship in bo.Relationships)
-            {
-                if (!IsPossibleReverseRelationship(relationship)) continue;
-
-                if (reverseRelationship != null)
-                {
-                    throw new HabaneroDeveloperException(
-                        String.Format(
-                            "When searching for the reverse relationship of '{0}' " +
-                            "on an object of type '{1}', more than one match was found.  " +
-                            "Please specify which relationship should be used as the reverse relationship.",
-                            this.RelationshipName, this.OwningBO.ClassDef.ClassName), "");
-                }
-                reverseRelationship = relationship;
-            }
-            if (reverseRelationship != null && !reverseRelationship.Initialised)
-                ReflectionUtilities.ExecutePrivateMethod(reverseRelationship, "Initialise");
-            return reverseRelationship;
-        }
-
-        private bool IsPossibleReverseRelationship(IRelationship relationship) {
-            if (relationship.RelationshipDef.RelatedObjectClassType != this.OwningBO.GetType()) return false;
-            int foundMatches = 0;
-            foreach (IRelProp prop in this._relKey)
-            {
-                if (relationship.RelKey.Contains(prop.RelatedClassPropName)) foundMatches++;
-            }
-            return (foundMatches == relationship.RelKey.Count);
+        private static bool HasReverseRelationshipDefined(IRelationship relationship)
+        {
+            return !String.IsNullOrEmpty(relationship.RelationshipDef.ReverseRelationshipName);
         }
     }
     
     /// <summary>
     /// Provides a super-class for relationships between business objects
     /// </summary>
-    public abstract class Relationship : RelationshipBase, IRelationship
+    public abstract class Relationship : RelationshipBase
     {
         protected RelationshipDef _relDef;
         protected readonly IBusinessObject _owningBo;

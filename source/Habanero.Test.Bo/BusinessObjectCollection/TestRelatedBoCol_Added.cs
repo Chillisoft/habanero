@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO.RelatedBusinessObjectCollection;
@@ -130,6 +131,34 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsNotNull(newCP.OrganisationID);
             Assert.Contains(newCP, cpCol);
             Assert.IsTrue(util.AddedEventFired);
+        }
+        [Test]
+        public void Test_Add_NullBO()
+        {
+            //---------------Set up test pack-------------------
+            //ContactPersonTestBO.LoadDefaultClassDef();
+            RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
+                new RelatedBusinessObjectCollection<ContactPersonTestBO>(GetContactPersonRelationship());
+            const ContactPersonTestBO newCP = null;
+            util.RegisterForAddedEvent(cpCol);
+
+            //---------------Assert Precondition----------------
+            util.AssertAllCollectionsHaveNoItems(cpCol);
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                cpCol.Add(newCP);
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("could not be added since the  business object is null", ex.Message);
+            }
+
+            //---------------Test Result -----------------------
+
         }
 
         [Test]
