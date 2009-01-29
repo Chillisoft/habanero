@@ -110,8 +110,7 @@ namespace Habanero.Test.DB
 
         #region SQLite
 
-//        [Test, Ignore("Issue with SQLite 64-bit driver")]
-        [Test]
+        [Test, Ignore("Issue with SQLite 64-bit driver in Hudson")]
         public void TestNameGenerationSQLite()
         {
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.SQLite, "test", "test", "test", "test", "1000");

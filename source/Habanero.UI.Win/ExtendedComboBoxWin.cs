@@ -2,7 +2,7 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
-    class ExtendedComboBoxWin : UserControlWin, IExtendedComboBox
+    public class ExtendedComboBoxWin : UserControlWin, IExtendedComboBox
     {
         private readonly IControlFactory _controlFactory;
         private readonly IComboBox _comboBox;
