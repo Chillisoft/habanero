@@ -61,6 +61,7 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the base inherited methods of the ComboBox class.
     /// </summary>
+    [TestFixture]
     public class TestBaseMethodsWin_ComboBox : TestBaseMethods.TestBaseMethodsWin
     {
         [STAThread]
@@ -73,6 +74,7 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the base inherited methods of the ComboBox class.
     /// </summary>
+    [TestFixture]
     public class TestBaseMethodsVWG_ComboBox : TestBaseMethods.TestBaseMethodsVWG
     {
         protected override IControlHabanero CreateControl()

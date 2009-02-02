@@ -25,6 +25,7 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the base inherited methods of the Splitter class.
     /// </summary>
+    [TestFixture]
     public class TestBaseMethodsWin_Splitter : TestBaseMethods.TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
@@ -48,6 +49,7 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the base inherited methods of the Splitter class.
     /// </summary>
+    [TestFixture]
     public class TestBaseMethodsVWG_Splitter : TestBaseMethods.TestBaseMethodsVWG
     {
         protected override IControlHabanero CreateControl()

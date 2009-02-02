@@ -25,6 +25,7 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the base inherited methods of the Form class.
     /// </summary>
+    [TestFixture]
     public class TestBaseMethodsWin_Form : TestBaseMethods.TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
@@ -36,6 +37,7 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the base inherited methods of the Form class.
     /// </summary>
+    [TestFixture]
     public class TestBaseMethodsVWG_Form : TestBaseMethods.TestBaseMethodsVWG
     {
         protected override IControlHabanero CreateControl()

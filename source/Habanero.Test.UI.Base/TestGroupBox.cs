@@ -25,6 +25,7 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the base inherited methods of the GroupBox class.
     /// </summary>
+    [TestFixture]
     public class TestBaseMethodsWin_GroupBox : TestBaseMethods.TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
@@ -36,6 +37,7 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the base inherited methods of the GroupBox class.
     /// </summary>
+    [TestFixture]
     public class TestBaseMethodsVWG_GroupBox : TestBaseMethods.TestBaseMethodsVWG
     {
         protected override IControlHabanero CreateControl()

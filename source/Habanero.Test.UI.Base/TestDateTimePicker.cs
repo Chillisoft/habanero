@@ -30,6 +30,7 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the base inherited methods of the DateTimePicker class.
     /// </summary>
+    [TestFixture]
     public class TestBaseMethodsWin_DateTimePicker : TestBaseMethods.TestBaseMethodsWin
     {
         protected override IControlHabanero CreateControl()
@@ -41,6 +42,7 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the base inherited methods of the DateTimePicker class.
     /// </summary>
+    [TestFixture]
     public class TestBaseMethodsVWG_DateTimePicker : TestBaseMethods.TestBaseMethodsVWG
     {
         protected override IControlHabanero CreateControl()
