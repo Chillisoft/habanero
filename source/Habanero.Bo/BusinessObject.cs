@@ -44,7 +44,7 @@ namespace Habanero.BO
         public event EventHandler<BOEventArgs> Saved;
         public event EventHandler<BOEventArgs> Deleted;
         public event EventHandler<BOEventArgs> Restored;
-        public event EventHandler<BOEventArgs> MarkedForDelete;
+        public event EventHandler<BOEventArgs> MarkedForDeletion;
         public event EventHandler<BOEventArgs> PropertyUpdated;
         public event EventHandler<BOEventArgs> IDUpdated;
 
@@ -1029,9 +1029,9 @@ namespace Habanero.BO
 
         protected void FireMarkForDeleteEvent()
         {
-            if (MarkedForDelete != null)
+            if (MarkedForDeletion != null)
             {
-                MarkedForDelete(this, new BOEventArgs(this));
+                MarkedForDeletion(this, new BOEventArgs(this));
             }
         }
 

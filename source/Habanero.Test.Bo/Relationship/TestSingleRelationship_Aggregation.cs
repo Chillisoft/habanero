@@ -1,14 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Relationship
 {
-
     [TestFixture]
     public class TestSingleRelationship_Aggregation
     {
@@ -21,7 +19,6 @@ namespace Habanero.Test.BO.Relationship
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse();
         }
 
-        
 
         [Test]
         public void Test_SetChild_PersistedChild()
@@ -29,7 +26,8 @@ namespace Habanero.Test.BO.Relationship
             //An already persisted Heart can be set as the heart of a person (since you can transplant hearts)
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship =
+                GetAggregationRelationshipContactPerson(organisationTestBO, "ContactPerson");
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
 
             //---------------Execute Test ----------------------
@@ -37,6 +35,22 @@ namespace Habanero.Test.BO.Relationship
 
             //---------------Test Result -----------------------
             Assert.AreSame(contactPerson, relationship.GetRelatedObject());
+        }
+
+        [Test]
+        public void Test_SetChild_AggregateDoesNotOwnForeignKey_PersistedChild()
+        {
+            //An already persisted Heart can be set as the heart of a person (since you can transplant hearts)
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
+            SingleRelationship<OrganisationTestBO> relationship =
+                GetAggregationRelationshipOrganisation(contactPerson, "Organisation");
+            //---------------Execute Test ----------------------
+            relationship.SetRelatedObject(organisationTestBO);
+            OrganisationTestBO returnedOrganisationTestBO = relationship.GetRelatedObject();
+            //---------------Test Result -----------------------
+            Assert.AreSame(organisationTestBO, returnedOrganisationTestBO);
         }
 
         [Test]
@@ -46,14 +60,27 @@ namespace Habanero.Test.BO.Relationship
             // it is rather recommended that the Person creates the Heart.
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship =
+                GetAggregationRelationshipContactPerson(organisationTestBO, "ContactPerson");
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
-
             //---------------Execute Test ----------------------
             relationship.SetRelatedObject(contactPerson);
-
             //---------------Test Result -----------------------
             Assert.AreSame(contactPerson, relationship.GetRelatedObject());
+        }
+        [Test]
+        public void Test_SetChild_AggregateDoesNotOwnForeignKey_NewChild()
+        {
+            //A new Heart can be set as the heart of a person.  This is allowed in Habanero for flexibility, but
+            // it is rather recommended that the Person creates the Heart.
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            SingleRelationship<OrganisationTestBO> relationship = GetAggregationRelationshipOrganisation(contactPerson, "Organisation");
+            //---------------Execute Test ----------------------
+            relationship.SetRelatedObject(organisationTestBO);
+            //---------------Test Result -----------------------
+            Assert.AreSame(organisationTestBO, relationship.GetRelatedObject());
         }
 
         [Test]
@@ -61,12 +88,23 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisation);
+            GetAggregationRelationshipContactPerson(organisation, "ContactPerson");
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
-
             //---------------Execute Test ----------------------
             contactPerson.Organisation = organisation;
-
+            //---------------Test Result -----------------------
+            Assert.AreSame(contactPerson, organisation.ContactPerson);
+            Assert.AreSame(organisation, contactPerson.Organisation);
+        }
+        [Test]
+        public void Test_SetParent_AggregateDoesNotOwnForeignKey_PersistedChild()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
+            GetAggregationRelationshipOrganisation(contactPerson, "Organisation");
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = organisation;
             //---------------Test Result -----------------------
             Assert.AreSame(contactPerson, organisation.ContactPerson);
             Assert.AreSame(organisation, contactPerson.Organisation);
@@ -77,7 +115,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisation);
+            GetAggregationRelationshipContactPerson(organisation, "ContactPerson");
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
 
             //---------------Execute Test ----------------------
@@ -87,13 +125,27 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreSame(contactPerson, organisation.ContactPerson);
             Assert.AreSame(organisation, contactPerson.Organisation);
         }
+        [Test]
+        public void Test_SetParent_AggregateDoesNotOwnForeignKey_NewChild()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            GetAggregationRelationshipOrganisation(contactPerson, "Organisation");
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = organisation;
+            //---------------Test Result -----------------------
+            Assert.AreSame(contactPerson, organisation.ContactPerson);
+            Assert.AreSame(organisation, contactPerson.Organisation);
+        }
+
 
         [Test]
         public void Test_SetParentNull_PersistedChild()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisation);
+            GetAggregationRelationshipContactPerson(organisation, "ContactPerson");
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             contactPerson.Organisation = organisation;
             contactPerson.Save();
@@ -104,7 +156,7 @@ namespace Habanero.Test.BO.Relationship
             contactPerson.Organisation = null;
             //---------------Test Result -----------------------
             Assert.IsNull(contactPerson.Organisation);
-
+            Assert.IsNotNull(organisation.OrganisationID);
         }
 
         [Test]
@@ -112,7 +164,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisation);
+            GetAggregationRelationshipContactPerson(organisation, "ContactPerson");
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             contactPerson.Organisation = organisation;
             //---------------Assert Precondition----------------
@@ -122,13 +174,15 @@ namespace Habanero.Test.BO.Relationship
             contactPerson.Organisation = null;
             //---------------Test Result -----------------------
             Assert.IsNull(contactPerson.Organisation);
+            Assert.IsNotNull(organisation.OrganisationID);
         }
+
         [Test]
         public void Test_SetParentNull()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisation);
+            GetAggregationRelationshipContactPerson(organisation, "ContactPerson");
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             //---------------Assert Precondition----------------
             Assert.IsNull(contactPerson.Organisation);
@@ -138,7 +192,132 @@ namespace Habanero.Test.BO.Relationship
 
             //---------------Test Result -----------------------
             Assert.IsNull(contactPerson.Organisation);
+        }
 
+
+        [Test]
+        public void Test_SetParent_PersistedChild_NonPersistedParent()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+            GetAggregationRelationshipContactPerson(organisation, "ContactPerson");
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
+            //---------------Assert Precondition -----------------------
+            Assert.IsNotNull(organisation.OrganisationID);
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = organisation;
+            //---------------Test Result -----------------------
+            Assert.AreSame(contactPerson, organisation.ContactPerson);
+            Assert.AreSame(organisation, contactPerson.Organisation);
+        }
+
+        [Test]
+        public void Test_SetParent_NewChild_NonPersistedParent()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+            GetAggregationRelationshipContactPerson(organisation, "ContactPerson");
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = organisation;
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(contactPerson, organisation.ContactPerson);
+            Assert.AreSame(organisation, contactPerson.Organisation);
+        }
+
+
+        [Test]
+        public void Test_SetParentNull_PersistedChild_NonPersistedParent()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationshipContactPerson(organisation, "ContactPerson");
+            relationship.OwningBOHasForeignKey = false;
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            contactPerson.Organisation = organisation;
+            contactPerson.Save();
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(contactPerson.Organisation);
+            AssertIsAggregateRelationship(organisation);
+
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = null;
+            //---------------Test Result -----------------------
+            Assert.IsNull(contactPerson.Organisation);
+            Assert.IsNotNull(organisation.OrganisationID);
+        }
+
+        [Test]
+        public void Test_ResetParent_NewChild_SetToNull_NonPersistedParent()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationshipContactPerson(organisation, "ContactPerson");
+            
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            contactPerson.Organisation = organisation;
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(relationship.OwningBOHasForeignKey);
+            Assert.IsNotNull(contactPerson.Organisation);
+            Assert.IsNotNull(contactPerson.Organisation);
+            AssertIsAggregateRelationship(organisation);
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = null;
+            //---------------Test Result -----------------------
+            Assert.IsNull(contactPerson.Organisation);
+            Assert.IsNotNull(organisation.OrganisationID);
+            Assert.IsNull(organisation.ContactPerson);
+        }
+        [Test]
+        public void Test_SetChildNull_NewChild_NonPersistedParent()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationshipContactPerson(organisation, "ContactPerson");
+
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            contactPerson.Organisation = organisation;
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(relationship.OwningBOHasForeignKey);
+            Assert.IsNotNull(contactPerson.Organisation);
+            Assert.IsNotNull(contactPerson.Organisation);
+            Assert.IsNotNull(organisation.ContactPerson);
+            AssertIsAggregateRelationship(organisation);
+            //---------------Execute Test ----------------------
+            organisation.ContactPerson = null;
+            //---------------Test Result -----------------------
+            Assert.IsNull(contactPerson.Organisation);
+            Assert.IsNotNull(organisation.OrganisationID);
+            Assert.IsNull(organisation.ContactPerson);
+        }
+        private static void AssertIsAggregateRelationship(BusinessObject organisation)
+        {
+            SingleRelationship<ContactPersonTestBO> aggregationRelationship =
+                organisation.Relationships.GetSingle<ContactPersonTestBO>("ContactPerson");
+            Assert.AreEqual(RelationshipType.Aggregation, aggregationRelationship.RelationshipDef.RelationshipType);
+        }
+
+        [Test]
+        public void Test_SetParentNull_NonPersistedParent()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+            GetAggregationRelationshipContactPerson(organisation, "ContactPerson");
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            //---------------Assert Precondition----------------
+            SingleRelationship<ContactPersonTestBO> aggregationRelationship =
+                organisation.Relationships.GetSingle<ContactPersonTestBO>("ContactPerson");
+            Assert.IsNull(contactPerson.Organisation);
+            Assert.AreEqual(RelationshipType.Aggregation, aggregationRelationship.RelationshipDef.RelationshipType);
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = null;
+
+            //---------------Test Result -----------------------
+            Assert.IsNull(contactPerson.Organisation);
+            Assert.IsNotNull(organisation.OrganisationID);
+            Assert.IsNull(organisation.ContactPerson);
         }
 
         [Test]
@@ -146,21 +325,19 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisation);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationshipContactPerson(organisation, "ContactPerson");
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             relationship.SetRelatedObject(contactPerson);
-
             //---------------Assert Precondition----------------
             Assert.AreEqual(contactPerson.OrganisationID, organisation.OrganisationID);
             Assert.AreSame(organisation.ContactPerson, contactPerson);
-
             //---------------Execute Test ----------------------
             relationship.SetRelatedObject(null);
-
             //---------------Test Result -----------------------
             Assert.IsNull(contactPerson.OrganisationID);
             Assert.IsNull(organisation.ContactPerson);
             Assert.IsNotNull(organisation.OrganisationID);
+            Assert.IsNull(contactPerson.Organisation);
         }
 
 
@@ -169,7 +346,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationshipContactPerson(organisationTestBO, "ContactPerson");
             ContactPersonTestBO myBO = new ContactPersonTestBO();
             myBO.Surname = TestUtil.CreateRandomString();
             myBO.FirstName = TestUtil.CreateRandomString();
@@ -191,7 +368,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationshipContactPerson(organisationTestBO, "ContactPerson");
             ContactPersonTestBO myBO = new ContactPersonTestBO();
             myBO.Surname = TestUtil.CreateRandomString();
             myBO.FirstName = TestUtil.CreateRandomString();
@@ -204,13 +381,13 @@ namespace Habanero.Test.BO.Relationship
             Assert.Contains(myBO, (ICollection) dirtyChildren);
             Assert.AreEqual(1, dirtyChildren.Count);
         }
-        
+
         [Test]
         public void Test_DirtyIfHasMarkForDeleteChildren()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationshipContactPerson(organisationTestBO, "ContactPerson");
             ContactPersonTestBO myBO = new ContactPersonTestBO();
             myBO.Surname = TestUtil.CreateRandomString();
             myBO.FirstName = TestUtil.CreateRandomString();
@@ -233,7 +410,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationshipContactPerson(organisationTestBO, "ContactPerson");
             ContactPersonTestBO myBO = new ContactPersonTestBO();
             myBO.Surname = TestUtil.CreateRandomString();
             myBO.FirstName = TestUtil.CreateRandomString();
@@ -246,16 +423,16 @@ namespace Habanero.Test.BO.Relationship
             IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();
 
             //---------------Test Result -----------------------
-            Assert.Contains(myBO, (ICollection)dirtyChildren);
+            Assert.Contains(myBO, (ICollection) dirtyChildren);
             Assert.AreEqual(1, dirtyChildren.Count);
         }
-        
+
         [Test]
         public void Test_DirtyIfHasRemovedChildren()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationshipContactPerson(organisationTestBO, "ContactPerson");
             ContactPersonTestBO myBO = new ContactPersonTestBO();
             myBO.Surname = TestUtil.CreateRandomString();
             myBO.FirstName = TestUtil.CreateRandomString();
@@ -278,7 +455,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationshipContactPerson(organisationTestBO, "ContactPerson");
             ContactPersonTestBO myBO = new ContactPersonTestBO();
             myBO.Surname = TestUtil.CreateRandomString();
             myBO.FirstName = TestUtil.CreateRandomString();
@@ -291,7 +468,7 @@ namespace Habanero.Test.BO.Relationship
             IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();
 
             //---------------Test Result -----------------------
-            Assert.Contains(myBO, (ICollection)dirtyChildren);
+            Assert.Contains(myBO, (ICollection) dirtyChildren);
             Assert.AreEqual(1, dirtyChildren.Count);
         }
 
@@ -301,7 +478,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationshipContactPerson(organisationTestBO, "ContactPerson");
 
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
             contactPerson.Surname = TestUtil.CreateRandomString();
@@ -324,7 +501,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationshipContactPerson(organisationTestBO, "ContactPerson");
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
             contactPerson.Surname = TestUtil.CreateRandomString();
             contactPerson.FirstName = TestUtil.CreateRandomString();
@@ -337,11 +514,11 @@ namespace Habanero.Test.BO.Relationship
             IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();
 
             //---------------Test Result -----------------------
-            Assert.Contains(contactPerson, (ICollection)dirtyChildren);
+            Assert.Contains(contactPerson, (ICollection) dirtyChildren);
             Assert.AreEqual(1, dirtyChildren.Count);
         }
 
-        
+
         /// <summary>
         /// A Person is considered dirty if it has a dirty heart.
         /// </summary>
@@ -350,7 +527,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisation);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationshipContactPerson(organisation, "ContactPerson");
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             relationship.SetRelatedObject(contactPerson);
             contactPerson.Surname = TestUtil.CreateRandomString();
@@ -367,14 +544,26 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsTrue(organisation.Status.IsDirty);
         }
 
-        private SingleRelationship<ContactPersonTestBO> GetAggregationRelationship(OrganisationTestBO organisationTestBO)
+        private static SingleRelationship<ContactPersonTestBO> GetAggregationRelationshipContactPerson
+            (BusinessObject businessObject, string relationshipName)
         {
-            RelationshipType relationshipType = RelationshipType.Aggregation;
-            SingleRelationship<ContactPersonTestBO> compositionRelationship =
-                organisationTestBO.Relationships.GetSingle<ContactPersonTestBO>("ContactPerson");
-            RelationshipDef relationshipDef = (RelationshipDef)compositionRelationship.RelationshipDef;
+            const RelationshipType relationshipType = RelationshipType.Aggregation;
+            SingleRelationship<ContactPersonTestBO> aggregationRelationship =
+                businessObject.Relationships.GetSingle<ContactPersonTestBO>(relationshipName);
+            RelationshipDef relationshipDef = (RelationshipDef) aggregationRelationship.RelationshipDef;
             relationshipDef.RelationshipType = relationshipType;
-            return compositionRelationship;
+            return aggregationRelationship;
+        }
+
+        private static SingleRelationship<OrganisationTestBO> GetAggregationRelationshipOrganisation
+            (BusinessObject businessObject, string relationshipName)
+        {
+            const RelationshipType relationshipType = RelationshipType.Aggregation;
+            SingleRelationship<OrganisationTestBO> aggregationRelationship =
+                businessObject.Relationships.GetSingle<OrganisationTestBO>(relationshipName);
+            RelationshipDef relationshipDef = (RelationshipDef) aggregationRelationship.RelationshipDef;
+            relationshipDef.RelationshipType = relationshipType;
+            return aggregationRelationship;
         }
     }
 
@@ -388,5 +577,4 @@ namespace Habanero.Test.BO.Relationship
             TestUsingDatabase.SetupDBDataAccessor();
         }
     }
-
 }

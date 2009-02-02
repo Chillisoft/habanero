@@ -353,9 +353,9 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
 
             cp.Surname = Guid.NewGuid().ToString();
-#pragma warning disable RedundantAssignment
-            cp = null; //so that garbage collector can work
-#pragma warning restore RedundantAssignment
+
+            cp = new ContactPersonPessimisticLockingDB(); //so that garbage collector can work
+
             BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
             //---------------Test Result -----------------------
@@ -365,7 +365,6 @@ namespace Habanero.Test.BO
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue<ContactPersonPessimisticLockingDB>(value);
             AssertIsNotLocked(cp2);
         }
-
         [Test]
         public void Test_WhenContactPersonsavedReleaseLocks()
         {

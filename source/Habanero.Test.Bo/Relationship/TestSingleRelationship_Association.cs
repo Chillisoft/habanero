@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -108,6 +106,94 @@ namespace Habanero.Test.BO.Relationship
         }
 
         [Test]
+        public void Test_SetParent_PersistedChild_NonPersistedParent()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation(); 
+            GetAssociationRelationship(organisation);
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
+            //---------------Assert Precondition -----------------------
+            Assert.IsNotNull(organisation.OrganisationID);
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = organisation;
+            //---------------Test Result -----------------------
+            Assert.AreSame(contactPerson, organisation.ContactPerson);
+            Assert.AreSame(organisation, contactPerson.Organisation);
+        }
+
+        [Test]
+        public void Test_SetParent_NewChild_NonPersistedParent()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+            GetAssociationRelationship(organisation);
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = organisation;
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(contactPerson, organisation.ContactPerson);
+            Assert.AreSame(organisation, contactPerson.Organisation);
+        }
+
+
+        [Test]
+        public void Test_SetParentNull_PersistedChild_NonPersistedParent()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
+            relationship.OwningBOHasForeignKey = false;
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            contactPerson.Organisation = organisation;
+            contactPerson.Save();
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(contactPerson.Organisation);
+
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = null;
+            //---------------Test Result -----------------------
+            Assert.IsNull(contactPerson.Organisation);
+
+        }
+
+
+        [Test]
+        public void Test_ResetParent_NewChild_SetToNull_NonPersistedParent()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
+            relationship.OwningBOHasForeignKey = false;
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            contactPerson.Organisation = organisation;
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(contactPerson.Organisation);
+
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = null;
+            //---------------Test Result -----------------------
+            Assert.IsNull(contactPerson.Organisation);
+        }
+
+        [Test]
+        public void Test_SetParentNull_NonPersistedParent()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateUnsavedOrganisation();
+            GetAssociationRelationship(organisation);
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(contactPerson.Organisation);
+
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = null;
+
+            //---------------Test Result -----------------------
+            Assert.IsNull(contactPerson.Organisation);
+        }
+        [Test]
         public void Test_SetParent_PersistedChild()
         {
             //---------------Set up test pack-------------------
@@ -117,7 +203,7 @@ namespace Habanero.Test.BO.Relationship
             IBusinessObjectCollection collection = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(organisation.ClassDef, null, "");
             //---------------Assert Precondition -----------------------
             Assert.IsNotNull(organisation.OrganisationID);
-            Assert.AreEqual(1, collection.Count); ;
+            Assert.AreEqual(1, collection.Count);
             //---------------Execute Test ----------------------
             contactPerson.Organisation = organisation;
             //---------------Test Result -----------------------
@@ -186,7 +272,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
+            GetAssociationRelationship(organisation);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             //---------------Assert Precondition----------------
             Assert.IsNull(contactPerson.Organisation);
@@ -196,7 +282,6 @@ namespace Habanero.Test.BO.Relationship
 
             //---------------Test Result -----------------------
             Assert.IsNull(contactPerson.Organisation);
-
         }
 
         [Test]
@@ -249,7 +334,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
+            GetAssociationRelationship(organisationTestBO);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
             
             //---------------Assert Precondition----------------
@@ -680,9 +765,9 @@ namespace Habanero.Test.BO.Relationship
 
         }
         
-        private SingleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO)
+        private static SingleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO)
         {
-            RelationshipType relationshipType = RelationshipType.Association;
+            const RelationshipType relationshipType = RelationshipType.Association;
             SingleRelationship<ContactPersonTestBO> compositionRelationship =
                 organisationTestBO.Relationships.GetSingle<ContactPersonTestBO>("ContactPerson");
             RelationshipDef relationshipDef = (RelationshipDef)compositionRelationship.RelationshipDef;

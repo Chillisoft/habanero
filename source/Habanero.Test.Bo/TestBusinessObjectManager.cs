@@ -1574,6 +1574,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO loadedCP = loadedAddress.ContactPersonTestBO;
 
             //---------------Test Result -----------------------
+            Assert.IsNotNull(loadedCP);
             Assert.AreEqual(2, boMan.Count);
 
             Assert.IsTrue(boMan.Contains(loadedCP));

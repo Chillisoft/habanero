@@ -37,7 +37,7 @@ namespace Habanero.Base
         ///•	An already persisted Department can be added to a the Manager’s Departments relationship (In Habanero a new Department can be added to a Manager’s Departments relationship).
         ///•	A driver can be removed from its related car. 
         ///•	A Manager can create a new Department via its Departments Relationship (this is not a strict implementation of domain design but is allowed due to the convenience of this).
-        ///•	A Manager is considered to be dirty only if it has added, created, MarkedForDelete or removed dirty Departments. 
+        ///•	A Manager is considered to be dirty only if it has added, created, MarkedForDeletion or removed dirty Departments. 
         ///•	If a Manager is persisted then it will only persist its Department’s relationship and will not persist a related Department that is dirty (I.e. if a department has been added to the Relationship then it’s foreign key (ManagerID) will be updated. The department name could also have been edited. If the manager is saved then the foreign key (ManagerID) will be updated but the department name will not be updated).
         /// </summary>
         Association = 1,

@@ -22,7 +22,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 
 namespace Habanero.BO
@@ -161,12 +160,22 @@ namespace Habanero.BO
     	    return relationship.GetRelatedObject();
     	}
 
+        ///<summary>
+        /// Returns a single relationship for with the specified relationship name.
+        ///</summary>
+        ///<param name="relationshipName">The specified relationship name</param>
+        ///<returns>THe single relationship</returns>
         public ISingleRelationship GetSingle(string relationshipName)
         {
             IRelationship relationship = GetRelationshipAsSingle(relationshipName);
             return (ISingleRelationship)relationship;
         }
 
+        ///<summary>
+        /// Returns a strongly typed single relationship for with the specified relationship name.
+        ///</summary>
+        ///<param name="relationshipName">The specified relationship name</param>
+        ///<returns>THe single relationship</returns>
         public SingleRelationship<T> GetSingle<T>(string relationshipName)
              where T : class, IBusinessObject, new()
         {
@@ -228,9 +237,14 @@ namespace Habanero.BO
             where TBusinessObject : BusinessObject, new()
 		{
             MultipleRelationship<TBusinessObject> multipleRelationship = GetMultiple<TBusinessObject>(relationshipName);
-            return (BusinessObjectCollection<TBusinessObject>) multipleRelationship.BusinessObjectCollection;
+            return multipleRelationship.BusinessObjectCollection;
         }
 
+        ///<summary>
+        /// Returns a strongly typed multiple relationship for with the specified relationship name.
+        ///</summary>
+        ///<param name="relationshipName">The specified relationship name</param>
+        ///<returns>The multiple relationship</returns>
         public MultipleRelationship<T> GetMultiple<T>(string relationshipName)
                 where T : BusinessObject, new()
         {
@@ -239,6 +253,12 @@ namespace Habanero.BO
             return (MultipleRelationship<T>)relationship;
         }
 
+
+        ///<summary>
+        /// Returns a multiple relationship for with the specified relationship name.
+        ///</summary>
+        ///<param name="relationshipName">The specified relationship name</param>
+        ///<returns>The multiple relationship</returns>
         public IMultipleRelationship GetMultiple(string relationshipName)
         {
             ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
@@ -277,7 +297,7 @@ namespace Habanero.BO
                                                              relationshipName +
                                                              ") that is of type 'multiple' when it expects a 'single' relationship");
             }
-            ((ISingleRelationship) this[relationshipName]).SetRelatedObject(relatedObject);
+            ((ISingleRelationship)relationship).SetRelatedObject(relatedObject);
         }
 
         ///<summary>

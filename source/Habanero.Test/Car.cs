@@ -41,14 +41,7 @@ namespace Habanero.Test
 
         protected internal static ClassDef GetClassDef()
         {
-            if (!ClassDef.IsDefined(typeof (Car)))
-            {
-                return CreateClassDef();
-            }
-            else
-            {
-                return ClassDef.ClassDefs[typeof (Car)];
-            }
+            return !ClassDef.IsDefined(typeof (Car)) ? CreateClassDef() : ClassDef.ClassDefs[typeof (Car)];
         }
 
         protected override ClassDef ConstructClassDef()
@@ -74,7 +67,7 @@ namespace Habanero.Test
             return lClassDef;
         }
 
-        private static RelationshipDefCol CreateRelationshipDefCol(PropDefCol lPropDefCol)
+        private static RelationshipDefCol CreateRelationshipDefCol(IPropDefCol lPropDefCol)
         {
             RelationshipDefCol relDefCol = new RelationshipDefCol();
 
@@ -103,7 +96,6 @@ namespace Habanero.Test
 
             relDef = new SingleRelationshipDef("Driver", typeof(ContactPersonCompositeKey), relKeyDef, true, DeleteParentAction.Prevent);
 
-
             relDefCol.Add(relDef);
 
             //Define Engine Relationships
@@ -113,8 +105,8 @@ namespace Habanero.Test
             lRelPropDef = new RelPropDef(propDef, "CarID");
             relKeyDef.Add(lRelPropDef);
 
-            relDef = new SingleRelationshipDef("Engine", typeof(Engine), relKeyDef, false, DeleteParentAction.DereferenceRelated);
-            relDef.OwningBOHasForeignKey = false;
+            relDef = new SingleRelationshipDef("Engine", typeof(Engine), relKeyDef, false, DeleteParentAction.DereferenceRelated)
+                         {OwningBOHasForeignKey = false};
             relDefCol.Add(relDef);
             return relDefCol;
         }

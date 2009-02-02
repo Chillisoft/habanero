@@ -176,6 +176,11 @@ namespace Habanero.BO
         private bool BusinessObjectWeakReferenceIsAlive(string objectID)
         {
             WeakReference boWeakRef = _loadedBusinessObjects[objectID];
+            return WeakReferenceIsAlive(boWeakRef);
+        }
+
+        private static bool WeakReferenceIsAlive(WeakReference boWeakRef)
+        {
             return (boWeakRef.IsAlive && boWeakRef.Target != null);
         }
 
@@ -285,11 +290,14 @@ namespace Habanero.BO
         public BusinessObjectCollection<T> Find<T>(Criteria criteria)
              where T : class, IBusinessObject, new()
         {
-                        BusinessObjectCollection<T> collection = new BusinessObjectCollection<T>();
-            foreach (KeyValuePair<string, WeakReference> valuePair in _loadedBusinessObjects)
+            BusinessObjectCollection<T> collection = new BusinessObjectCollection<T>();
+            WeakReference[] valueArray = new WeakReference[_loadedBusinessObjects.Count];
+            _loadedBusinessObjects.Values.CopyTo(valueArray, 0);
+            foreach (WeakReference weakReference in valueArray)
             {
-                WeakReference weakReference = valuePair.Value;
-                BusinessObject bo = (BusinessObject) weakReference.Target;
+                if (!WeakReferenceIsAlive(weakReference)) continue;
+
+                BusinessObject bo = (BusinessObject)weakReference.Target;
                 if (bo is T && (criteria == null || criteria.IsMatch(bo, false)))
                 {
                     collection.Add(bo as T);

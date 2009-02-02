@@ -198,7 +198,7 @@ namespace Habanero.Test.BO
             return bo;
         }
 
-        private static OrganisationTestBO CreateUnsavedOrganisation() {
+        internal static OrganisationTestBO CreateUnsavedOrganisation() {
             return new OrganisationTestBO();
         }
     }

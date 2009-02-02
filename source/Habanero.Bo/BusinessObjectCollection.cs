@@ -269,7 +269,7 @@ namespace Habanero.BO
             bo.Restored += _restoredEventHandler;
             //TODO: businessObject.Updated += _updatedEventHandler;
             if (bo.ID != null) bo.ID.Updated += _updateIDEventHandler;
-            bo.MarkedForDelete += _markForDeleteEventHandler;
+            bo.MarkedForDeletion += _markForDeleteEventHandler;
         }
 
         private void DeRegisterForBOEvents(TBusinessObject businessObject)
@@ -279,7 +279,7 @@ namespace Habanero.BO
             businessObject.Deleted -= _deletedEventHandler;
             //TODO: businessObject.Updated -= _updatedEventHandler;
             if (businessObject.ID != null) businessObject.ID.Updated -= _updateIDEventHandler;
-            businessObject.MarkedForDelete -= _markForDeleteEventHandler;
+            businessObject.MarkedForDeletion -= _markForDeleteEventHandler;
         }
 
         /// <summary>
@@ -618,7 +618,7 @@ namespace Habanero.BO
         /// Removes the specified business object from the collection
         /// </summary>
         /// <param name="bo">The business object to remove</param>
-        public virtual bool Remove(TBusinessObject bo)
+        public new virtual bool Remove(TBusinessObject bo)
         {
             return RemoveInternal(bo);
         }
@@ -1457,7 +1457,7 @@ namespace Habanero.BO
         }
 
         ///<summary>
-        /// Marks the business object as MarkedForDelete and places the 
+        /// Marks the business object as MarkedForDeletion and places the 
         ///</summary>
         ///<param name="businessObject"></param>
         public void MarkForDelete(TBusinessObject businessObject)
@@ -1466,7 +1466,7 @@ namespace Habanero.BO
         }
 
         ///<summary>
-        /// Marks the business object as MarkedForDelete and places the 
+        /// Marks the business object as MarkedForDeletion and places the 
         ///</summary>
         ///<param name="index">The index position to remove from</param>if index does not exist in col
         /// <exception cref="ArgumentOutOfRangeException"></exception>

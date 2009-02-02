@@ -596,12 +596,9 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO.LoadClassDefWithAddresBOsRelationship_AddressReverseRelationshipConfigured();
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
-
             //---------------Assert Precondition----------------
-            
             //---------------Execute Test ----------------------
             AddressTestBO address = contactPersonTestBO.AddressTestBOs.CreateBusinessObject();
-
             //---------------Test Result -----------------------
             Assert.IsNotNull(address.ContactPersonTestBO);
             Assert.IsNotNull(address.ContactPersonID);
@@ -617,15 +614,17 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             ContactPersonTestBO.LoadClassDefWithAddresBOsRelationship_AddressReverseRelationshipConfigured();
             ContactPersonTestBO contactPersonTestBO = 
                 ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(),TestUtil.CreateRandomString());
-
             //---------------Assert Precondition----------------
-            
+            Assert.IsTrue(contactPersonTestBO.Status.IsNew);
             //---------------Execute Test ----------------------
             AddressTestBO address = contactPersonTestBO.AddressTestBOs.CreateBusinessObject();
-
+            ContactPersonTestBO returnedContactPerson = address.ContactPersonTestBO;
             //---------------Test Result -----------------------
+            Assert.IsTrue(address.Status.IsNew);
             Assert.IsNotNull(address.ContactPersonID);
-            Assert.IsNotNull(address.ContactPersonTestBO);
+            Assert.AreEqual(contactPersonTestBO.ContactPersonID, address.ContactPersonID);
+            Assert.IsNotNull(returnedContactPerson);
+            Assert.AreEqual(contactPersonTestBO.ContactPersonID,  returnedContactPerson.ContactPersonID);
         }
         [Test]
         public void Test_TestAddNewChildBO_ParentNotPersisted_ParentSet()
@@ -640,10 +639,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
                 ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
             AddressTestBO address = new AddressTestBO();
             //---------------Assert Precondition----------------
-
             //---------------Execute Test ----------------------
             contactPersonTestBO.AddressTestBOs.Add(address);
-
             //---------------Test Result -----------------------
             Assert.IsNotNull(address.ContactPersonID);
             Assert.IsNotNull(address.ContactPersonTestBO);

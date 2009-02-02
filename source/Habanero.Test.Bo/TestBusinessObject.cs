@@ -497,7 +497,7 @@ namespace Habanero.Test.BO
             MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
             bo.Save();
             bool markForDeleteEventFired = false;
-            bo.MarkedForDelete += delegate { markForDeleteEventFired = true; };
+            bo.MarkedForDeletion += delegate { markForDeleteEventFired = true; };
 
             //---------------Assert Precondition----------------
             Assert.IsFalse(bo.Status.IsDeleted);

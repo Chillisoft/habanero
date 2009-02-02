@@ -168,7 +168,7 @@ namespace Habanero.Base
         bool IsCreatable(out string message);
 
         event EventHandler<BOEventArgs> PropertyUpdated;
-        event EventHandler<BOEventArgs> MarkedForDelete;
+        event EventHandler<BOEventArgs> MarkedForDeletion;
 
         /// <summary>
         /// Returns the value stored in the DataStore for the property name specified, accessing it through the 'source'

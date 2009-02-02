@@ -117,8 +117,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             Car car = new Car();
             Car car2 = new Car();
-            Engine engine = new Engine();
-            engine.CarID = car.CarID;
+            Engine engine = new Engine {CarID = car.CarID};
             car.Save();
             car2.Save();
             engine.Save();
@@ -140,8 +139,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             Car car = new Car();
-            Engine engine = new Engine();
-            engine.CarID = car.CarID;
+            Engine engine = new Engine {CarID = car.CarID};
             car.Save();
             engine.Save();
 
@@ -154,6 +152,8 @@ namespace Habanero.Test.BO.Relationship
             Engine loadedEngine = car.GetEngine();
 
             //---------------Test Result -----------------------
+            Assert.IsNull(engine.GetPropertyValue("CarID"));
+            //Assert.IsNull(car.GetPropertyValue("EngineID"));
             Assert.IsNull(loadedEngine);
         }
 
@@ -332,7 +332,7 @@ namespace Habanero.Test.BO.Relationship
         public void TestGetReverseRelationship()
         {
             //---------------Set up test pack-------------------
-            ClassDef orgClassDef = OrganisationTestBO.LoadDefaultClassDef_WithTwoRelationshipsToContactPerson();
+            OrganisationTestBO.LoadDefaultClassDef_WithTwoRelationshipsToContactPerson();
             ClassDef cpClassDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
 
             cpClassDef.RelationshipDefCol["Organisation"].ReverseRelationshipName = "OtherContactPeople";
@@ -354,7 +354,7 @@ namespace Habanero.Test.BO.Relationship
         public void TestGetReverseRelationship_ReverseRelationshipSpecifiedButNotFound()
         {
             //---------------Set up test pack-------------------
-            ClassDef orgClassDef = OrganisationTestBO.LoadDefaultClassDef();
+            OrganisationTestBO.LoadDefaultClassDef();
             ClassDef cpClassDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
 
             string reverseRelationshipName = TestUtil.CreateRandomString();
