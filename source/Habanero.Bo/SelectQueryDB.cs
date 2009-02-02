@@ -146,9 +146,27 @@ namespace Habanero.BO
         {
             _sqlFormatter = sqlFormatter;
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
-
             StringBuilder builder = statement.Statement;
+            CheckRecordOffSetAndAppendFields(builder);
+            builder.Append("SELECT ");
+            AppendLimitClauseAtBeginning(builder);
+            AppendFields(builder);
+            AppendFrom(builder);
+            AppendWhereClause(builder, statement);
+            AppendOrderByClause(builder);
+            AppendLimitClauseAtEnd(builder);
+            if (this.FirstRecordToLoad > 0)
+            {
+                AppendOrderByFirstSelect(builder);
+                builder.Append(" ");
+                AppendNoOfRecordsClauseAtEnd(builder);
+                AppendOrderBySecondSelect(builder);
+            }
+            return statement;
+        }
 
+        private void CheckRecordOffSetAndAppendFields(StringBuilder builder)
+        {
             if (this.FirstRecordToLoad > 0)
             {
                 builder.Append("SELECT ");
@@ -157,7 +175,6 @@ namespace Habanero.BO
                     builder.AppendFormat("{0}, ", DelimitField("SecondSelect", field.FieldName));
                 } 
                 builder.Remove(builder.Length - 2, 2);
-//                AppendFields(builder);
                 builder.Append(" FROM (SELECT ");
                 AppendNoOfRecordsClauseAtBeginning(builder);
                 foreach (QueryField field in this.Fields.Values)
@@ -165,50 +182,43 @@ namespace Habanero.BO
                     builder.AppendFormat("{0}, ", DelimitField("FirstSelect", field.FieldName));
                 } 
                 builder.Remove(builder.Length - 2, 2);
-//                AppendFields(builder);
                 builder.Append(" FROM (");
             }
-            builder.Append("SELECT ");
-            AppendLimitClauseAtBeginning(builder);
-            AppendFields(builder);
-            AppendFrom(builder);
-            AppendWhereClause(builder, statement);
-            AppendOrderByClause(builder);
-            AppendLimitClauseAtEnd(builder);
-            //" ORDER BY SecondSelect.MyBOID ASC";
-            if (this.FirstRecordToLoad > 0)
+        }
+
+        private void AppendOrderBySecondSelect(StringBuilder builder)
+        {
+            builder.Append(") AS SecondSelect");
+            builder.Append(" ORDER BY ");
+            foreach (OrderCriteria.Field field in this.OrderCriteria.Fields)
             {
-                builder.Append(") As FirstSelect");
-                builder.Append(" ORDER BY ");
-                foreach (OrderCriteria.Field field in this.OrderCriteria.Fields)
+                builder.Append("SecondSelect.").Append(field.FieldName);
+                if (field.SortDirection == OrderCriteria.SortDirection.Ascending)
                 {
-                    builder.Append("FirstSelect.").Append(field.FieldName);
-                    if (field.SortDirection == OrderCriteria.SortDirection.Ascending)
-                    {
-                        builder.Append(" DESC");
-                    } else
-                    {
-                        builder.Append(" ASC");
-                    }
+                    builder.Append(" ASC");
                 }
-                builder.Append(" ");
-                AppendNoOfRecordsClauseAtEnd(builder);
-                builder.Append(") AS SecondSelect");
-                builder.Append(" ORDER BY ");
-                foreach (OrderCriteria.Field field in this.OrderCriteria.Fields)
+                else
                 {
-                    builder.Append("SecondSelect.").Append(field.FieldName);
-                    if (field.SortDirection == OrderCriteria.SortDirection.Ascending)
-                    {
-                        builder.Append(" ASC");
-                    }
-                    else
-                    {
-                        builder.Append(" DESC");
-                    }
+                    builder.Append(" DESC");
                 }
             }
-            return statement;
+        }
+
+        private void AppendOrderByFirstSelect(StringBuilder builder)
+        {
+            builder.Append(") As FirstSelect");
+            builder.Append(" ORDER BY ");
+            foreach (OrderCriteria.Field field in this.OrderCriteria.Fields)
+            {
+                builder.Append("FirstSelect.").Append(field.FieldName);
+                if (field.SortDirection == OrderCriteria.SortDirection.Ascending)
+                {
+                    builder.Append(" DESC");
+                } else
+                {
+                    builder.Append(" ASC");
+                }
+            }
         }
 
         private void AppendNoOfRecordsClauseAtEnd(StringBuilder builder)

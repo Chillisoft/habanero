@@ -179,6 +179,17 @@ namespace Habanero.BO
             return businessObject;
         }
 
+        /// <summary>
+        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
+        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
+        /// only fire for the new objects added to the collection, not for the ones that already existed).
+        /// </summary>
+        public int GetCount(IClassDef classDef, Criteria criteria)
+        {
+            IBusinessObjectCollection collection = _dataStore.FindAll(classDef.ClassType, criteria);
+            return collection.Count;
+        }
+
         #endregion //GetBusinessObject Members
 
         #region GetBusinessObjectCollection Members

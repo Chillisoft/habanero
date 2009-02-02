@@ -254,16 +254,17 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 Assert.AreSame(cp1, col[0]);
             }
 
-            [Test, Ignore("This test shows a limitation of the sql statements being used when hte end of hte records is reached")]
+            //[Ignore("This test shows a limitation of the sql statements being used when hte end of hte records is reached")]
+            [Test]
             public void Test_CollectionLoad_LoadWithLimit_ExceedsTheEndOfTheCollection()
             {
                 ContactPersonTestBO.LoadDefaultClassDef();
-                ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("eeeee");
+                ContactPersonTestBO.CreateSavedContactPerson("eeeee");
                 ContactPersonTestBO.CreateSavedContactPerson("gggggg");
                 ContactPersonTestBO.CreateSavedContactPerson("gggdfasd");
                 ContactPersonTestBO.CreateSavedContactPerson("bbbbbb");
                 ContactPersonTestBO.CreateSavedContactPerson("zazaza");
-                ContactPersonTestBO.CreateSavedContactPerson("zbbbbb");
+                ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson("zbbbbb");
                 ContactPersonTestBO.CreateSavedContactPerson("zccccc");
                 ContactPersonTestBO.CreateSavedContactPerson("zddddd");
                 //---------------Assert Precondition----------------
@@ -273,7 +274,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 col.LoadWithLimit("", "Surname", 5, 6);
                 //---------------Test Result -----------------------
                 Assert.AreEqual(5, col.SelectQuery.FirstRecordToLoad);
-                Assert.AreEqual(6, col.SelectQuery.Limit);
+                Assert.AreEqual(3, col.SelectQuery.Limit);
                 Assert.AreEqual(3, col.Count);
                 Assert.AreSame(cp1, col[0]);
             }

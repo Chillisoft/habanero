@@ -298,5 +298,21 @@ namespace Habanero.BO
                                                    classDef.GetTableName());
             }
         }
+
+        public static ISelectQuery CreateSelectCountQuery(ClassDef classDef)
+        {
+            return CreateSelectCountQuery(classDef, null);
+
+        }
+
+        public static ISelectQuery CreateSelectCountQuery(IClassDef classDef, Criteria criteria)
+        {
+            if (classDef == null) throw new ArgumentNullException("classDef");
+            ISelectQuery selectQuery = CreateSelectQuery(classDef,criteria);
+            selectQuery.Fields.Clear();
+
+            selectQuery.Fields.Add("count", QueryField.FromString("Count(*)"));
+            return selectQuery;
+        }
     }
 }

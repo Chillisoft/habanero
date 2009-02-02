@@ -342,6 +342,28 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
+        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
+        /// only fire for the new objects added to the collection, not for the ones that already existed).
+        /// </summary>
+        public int GetCount(IClassDef classDef, Criteria criteria)
+        {
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectCountQuery(classDef, criteria);
+            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
+            SqlFormatter sqlFormatter = new SqlFormatter("","","","");
+            ISqlStatement statement = selectQueryDB.CreateSqlStatement(sqlFormatter);
+            int totalNoOfRecords = 0;
+            using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
+            {
+                while (dr.Read())
+                {
+                    totalNoOfRecords = Convert.ToInt32(dr[0].ToString());
+                }
+            }
+            return totalNoOfRecords;
+        }
+
+        /// <summary>
         /// loads an object of the correct sub type (for single table inheritance)
         /// </summary>
         /// <typeparam name="T"></typeparam>

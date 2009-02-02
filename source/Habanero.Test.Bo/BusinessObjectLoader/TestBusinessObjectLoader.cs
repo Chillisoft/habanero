@@ -825,6 +825,25 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.IsTrue(cpLoaded.Status.IsEditing);
         }
 
+        [Test]
+        public void Test_GetCount()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
+            ContactPersonTestBO.CreateSavedContactPerson("aaaa", "aaa");
+            ContactPersonTestBO.CreateSavedContactPerson("bbbb", "bbb");
+            ContactPersonTestBO.CreateSavedContactPerson("cccc", "ccc");
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            int count = BORegistry.DataAccessor.BusinessObjectLoader.GetCount(classDef, null);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, count);
+        }
+
         #region Nested type: TestBusinessObjectLoaderDB
 
         [TestFixture]

@@ -636,6 +636,44 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
 
+        [Test]
+        public void Test_CreateSQL_SelectCountQuery()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
+            ClassDef classDef = MyBO.LoadClassDefs_OneProp();
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectCountQuery(classDef);
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            Assert.AreEqual("SELECT Count(*) FROM MyBO", statement.Statement.ToString());
+        }
+
+        [Test]
+        public void Test_CreateSQL_SelectCountQuery_WithCriteria()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            Criteria criteria = new Criteria("TestProp", Criteria.ComparisonOp.Equals, "test");
+            SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectCountQuery(classDef, criteria);
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.Contains("SELECT [Count(*)] FROM [MyBO] WHERE ", statement.Statement.ToString());
+            StringAssert.EndsWith("WHERE [MyBO].[TestProp] = ?Param0", statementString);
+            Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
+            Assert.AreEqual("test", statement.Parameters[0].Value);
+
+        }
  
         public class DatabaseConnectionStub_LimitClauseAtEnd : DatabaseConnectionStub
         {

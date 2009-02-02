@@ -322,5 +322,12 @@ namespace Habanero.BO
         ///  </returns>
         /// <exception cref="BusObjDeleteConcurrencyControlException"/>
         T GetBusinessObjectByValue<T>(object idValue) where T : class, IBusinessObject, new();
+
+        /// <summary>
+        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
+        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
+        /// only fire for the new objects added to the collection, not for the ones that already existed).
+        /// </summary>
+        int GetCount(IClassDef classDef, Criteria criteria);
     }
 }

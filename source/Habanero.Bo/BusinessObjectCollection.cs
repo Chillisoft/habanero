@@ -527,7 +527,8 @@ namespace Habanero.BO
                 criteriaExpression = CriteriaParser.CreateCriteria(searchCriteria);
                 QueryBuilder.PrepareCriteria(this.ClassDef, criteriaExpression);
             }
-            LoadWithLimit(criteriaExpression, orderByClause, firstRecordToLoad, noOfRecords);
+            int totalRecords = 0;
+            LoadWithLimit(criteriaExpression, orderByClause, firstRecordToLoad, noOfRecords, ref totalRecords);
         }
 
 //        /// <summary>
@@ -573,16 +574,22 @@ namespace Habanero.BO
         /// <param name="orderByClause">The order-by clause</param>
         /// <param name="noOfRecords">The number of records to be loaded</param>
         /// <param name="firstRecordToLoad">The first record to load</param>
-        public void LoadWithLimit(Criteria searchExpression, string orderByClause, int firstRecordToLoad, int noOfRecords)
+        /// <param name="totalNoOfRecords">The total number of records that exist</param>
+        public void LoadWithLimit(Criteria searchExpression, string orderByClause, int firstRecordToLoad, int noOfRecords, ref int totalNoOfRecords)
         {
             this.SelectQuery.Criteria = searchExpression;
-
             this.SelectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(this.ClassDef, orderByClause);
             if (firstRecordToLoad <= 0) this.SelectQuery.Limit = noOfRecords;
             if ((firstRecordToLoad > 0) && (noOfRecords > 0))
             {
                 this.SelectQuery.FirstRecordToLoad = firstRecordToLoad;
-                this.SelectQuery.Limit = noOfRecords;
+                if (totalNoOfRecords <= 0)
+                {
+                    totalNoOfRecords =
+                        ((BusinessObjectLoaderDB) BORegistry.DataAccessor.BusinessObjectLoader).GetCount(this.ClassDef, searchExpression);
+                }
+                int newLimit = totalNoOfRecords - firstRecordToLoad;
+                this.SelectQuery.Limit = (newLimit > noOfRecords) ? noOfRecords : newLimit;
             }
             Refresh();
         }
