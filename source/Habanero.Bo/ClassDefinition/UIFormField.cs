@@ -32,16 +32,13 @@ namespace Habanero.BO.ClassDefinition
     {
         private string _label;
         private string _propertyName;
-        private string _mapperAssembly;
-        private string _mapperTypeName;
-		private string _controlAssembly;
+        private readonly string _mapperAssembly;
+        private string _controlAssembly;
 		private string _controlTypeName;
 		private Type _controlType;
-		private bool _editable;
         private readonly Hashtable _parameters;
-        private TriggerCol _triggers;
-        private string _toolTipText;
-        private UIFormTab _uiFormTab;
+        private readonly TriggerCol _triggers;
+        private readonly string _toolTipText;
         private UIFormColumn _uiFormColumn;
 
         /// <summary>
@@ -98,18 +95,14 @@ namespace Habanero.BO.ClassDefinition
             if (parameters == null) parameters = new Hashtable(0);
             _label = label;
             _propertyName = propertyName;
-            _mapperTypeName = mapperTypeName;
+            MapperTypeName = mapperTypeName;
             _mapperAssembly = mapperAssembly;
-            _editable = editable;
+            Editable = editable;
             _toolTipText = toolTipText;
             _parameters = parameters;
             //_controlType = controlType;
-            _triggers = triggers;
-            if (_triggers == null)
-            {
-                _triggers = new TriggerCol();
-            }
-		}
+            _triggers = triggers ?? new TriggerCol();
+        }
 
 		#region Properties
 
@@ -134,13 +127,9 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Returns the mapper type name
         /// </summary>
-        public string MapperTypeName
-        {
-            get { return _mapperTypeName; }
-            protected set { _mapperTypeName = value; }
-        }
+        public string MapperTypeName { get; protected set; }
 
-		///<summary>
+        ///<summary>
 		/// Returns the mapper assembly
 		///</summary>
 		public string MapperAssembly
@@ -193,11 +182,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Indicates whether the control is editable
         /// </summary>
-        public bool Editable
-        {
-            get { return _editable; }
-            protected set { _editable = value; }
-        }
+        public bool Editable { get; protected set; }
 
         ///<summary>
         /// Returns the text that will be shown in the Tool Tip for the control.
@@ -352,7 +337,7 @@ namespace Habanero.BO.ClassDefinition
         public static bool operator ==(UIFormField a, UIFormField b)
         {
             // If both are null, or both are same instance, return true.
-            if (System.Object.ReferenceEquals(a, b))
+            if (ReferenceEquals(a, b))
             {
                 return true;
             }
@@ -387,6 +372,11 @@ namespace Habanero.BO.ClassDefinition
 
 
      
+        ///<summary>
+        /// Returns true if the UIFormField has a paramter value.
+        ///</summary>
+        ///<param name="parameterName"></param>
+        ///<returns></returns>
         public bool HasParameterValue(string parameterName)
         {
             return (this._parameters.ContainsKey(parameterName));
