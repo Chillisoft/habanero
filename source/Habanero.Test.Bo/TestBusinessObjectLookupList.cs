@@ -31,12 +31,13 @@ using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
-{
+{ 
     public abstract class TestBusinessObjectLookupList : TestUsingDatabase
     {
         protected abstract void SetupDataAccessor();
         protected abstract void DeleteAllContactPeople();
-
+        
+        [TestFixture]
         public class TestBusinessObjectLookupListDB : TestBusinessObjectLookupList
         {
             protected override void SetupDataAccessor()
@@ -49,7 +50,7 @@ namespace Habanero.Test.BO
                 ContactPersonTestBO.DeleteAllContactPeople();
             }
         }
-
+        [TestFixture]
         public class TestBusinessObjectLookupListMemory : TestBusinessObjectLookupList
         {
             private DataStoreInMemory _dataStore;
@@ -66,9 +67,9 @@ namespace Habanero.Test.BO
                 BORegistry.DataAccessor = new DataAccessorInMemory(_dataStore);
             }
         }
-        protected static string GuidToUpperInvariant(Guid guid)
+        protected static string GuidToString(Guid guid)
         {
-            return guid.ToString("B").ToUpperInvariant();
+            return guid.ToString();//("B").ToUpperInvariant();
         }
         [TestFixtureSetUp]
         public void SetupTestFixture()
@@ -165,7 +166,7 @@ namespace Habanero.Test.BO
 
             //-------------Test Result ----------------------
             Assert.AreEqual(1, col.Count);
-            Assert.IsTrue(col.ContainsValue(GuidToUpperInvariant(contactPerson1.ID.GetAsGuid())));
+            Assert.IsTrue(col.ContainsValue(GuidToString(contactPerson1.ID.GetAsGuid())));
         }
 
 
@@ -192,7 +193,7 @@ namespace Habanero.Test.BO
 
             //-------------Test Result ----------------------
             Assert.AreEqual(1, col.Count);
-            Assert.IsTrue(col.ContainsValue(GuidToUpperInvariant(contactPerson2.ID.GetAsGuid())));
+            Assert.IsTrue(col.ContainsValue(GuidToString(contactPerson2.ID.GetAsGuid())));
         }
 
         [Test]
@@ -219,7 +220,7 @@ namespace Habanero.Test.BO
 
             //-------------Test Result ----------------------
             Assert.AreEqual(1, col.Count);
-            Assert.IsTrue(col.ContainsValue(GuidToUpperInvariant(contactPerson3.ID.GetAsGuid())));
+            Assert.IsTrue(col.ContainsValue(GuidToString(contactPerson3.ID.GetAsGuid())));
         }
 
         [Test]
@@ -248,9 +249,9 @@ namespace Habanero.Test.BO
             businessObjectLookupList.PropDef = new PropDef("name", typeof(string), PropReadWriteRule.ReadWrite, null);
             Dictionary<string, string> col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(3, col.Count);
-            Assert.IsTrue(col.ContainsValue(GuidToUpperInvariant(contactPerson1.ID.GetAsGuid())));
-            Assert.IsTrue(col.ContainsValue(GuidToUpperInvariant(contactPerson2.ID.GetAsGuid())));
-            Assert.IsTrue(col.ContainsValue(GuidToUpperInvariant(contactPerson3.ID.GetAsGuid())));
+            Assert.IsTrue(col.ContainsValue(GuidToString(contactPerson1.ID.GetAsGuid())));
+            Assert.IsTrue(col.ContainsValue(GuidToString(contactPerson2.ID.GetAsGuid())));
+            Assert.IsTrue(col.ContainsValue(GuidToString(contactPerson3.ID.GetAsGuid())));
             businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
                 "ContactPersonTestBO", "DateOfBirth > 'now'", "")
                    {
@@ -268,35 +269,102 @@ namespace Habanero.Test.BO
 
             col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(1, col.Count);
-            Assert.IsTrue(col.ContainsValue(GuidToUpperInvariant(contactPerson4.ID.GetAsGuid())));
+            Assert.IsTrue(col.ContainsValue(GuidToString(contactPerson4.ID.GetAsGuid())));
+        }
+
+        [Test]
+        public void Test_LimitToList_Attribute_Default()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPersonTestBO));
+            //---------------Test Result -----------------------
+            Assert.IsFalse(source.LimitToList);
+        }
+
+        [Test]
+        public void Test_Constructor_WithLimitToList_AsTrue()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            BusinessObjectLookupList source = new BusinessObjectLookupList(
+                "Habanero.Test.BO", "ContactPersonTestBO", "", "surname", true);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(source.LimitToList);
+        }
+
+        [Test]
+        public void Test_Constructor_WithLimitToList_AsFalse()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            BusinessObjectLookupList source = new BusinessObjectLookupList(
+                "Habanero.Test.BO", "ContactPersonTestBO", "", "surname", false);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(source.LimitToList);
         }
 
         [Test]
         public void TestSortAttribute()
         {
+            //---------------Set up test pack-------------------
             BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPersonTestBO));
+            //---------------Assert Precondition----------------
             Assert.IsNull(source.OrderCriteria);
-
+            //---------------Execute Test ----------------------
             source = new BusinessObjectLookupList("Habanero.Test.BO",
                 "ContactPersonTestBO", "", "surname");
-            Assert.AreEqual("surname", source.OrderCriteria);
-
-//            source.Sort = "surname asc";
-//            Assert.AreEqual("surname asc", source.Sort);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, source.OrderCriteria.Fields.Count);
+            OrderCriteria.Field orderField = source.OrderCriteria.Fields[0];
+            Assert.AreEqual("surname", orderField.PropertyName);
+            Assert.AreEqual(OrderCriteria.SortDirection.Ascending, orderField.SortDirection);
+            Assert.AreEqual("ContactPersonTestBO", orderField.Source.Name);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Ignore("This should be looked at so that it validates the attributes as early as possible")]
+        [Test]
         public void TestSortInvalidProperty()
         {
-            new BusinessObjectLookupList("Habanero.Test.BO",
-                                         "ContactPersonTestBO", "", "invalidprop");
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            InvalidXmlDefinitionException exception = null;
+            try
+            {
+                new BusinessObjectLookupList(
+                    "Habanero.Test.BO", "ContactPersonTestBO", "", "invalidprop");
+            }
+            catch (InvalidXmlDefinitionException ex)
+            {
+                exception = ex;
+            }
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(exception, "Exception of type 'InvalidXmlDefinitionException' expected.");
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Ignore("This should be looked at so that it validates the attributes as early as possible")]
+        [Test]
         public void TestSortInvalidDirection()
         {
-            new BusinessObjectLookupList("Habanero.Test.BO",
-                                         "ContactPersonTestBO", "", "surname invalidorder");
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            InvalidXmlDefinitionException exception = null;
+            try
+            {
+                new BusinessObjectLookupList(
+                    "Habanero.Test.BO", "ContactPersonTestBO", "", "surname invalidorder");
+            }
+            catch (InvalidXmlDefinitionException ex)
+            {
+                exception = ex;
+            }
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(exception, "Exception of type 'InvalidXmlDefinitionException' expected.");
         }
 
         //  This test is excluded because the sort attribute is checked in the middle of
@@ -308,7 +376,7 @@ namespace Habanero.Test.BO
         //        "InvalidClass", "", "surname");
         //    source.Sort = "surname desc";
         //}
-        //[Test, Ignore("We are now storing the object and not the GUid so sorting tests need to be reworked")]
+
         [Test]
         public void TestSortingByDefault()
         {
@@ -330,59 +398,68 @@ namespace Habanero.Test.BO
             Assert.AreEqual(expected, businessObject.ToString());
         }
 
-//        [Test, Ignore("We are now storing the object and not the GUid so sorting tests need to be reworked")]
-        [Test]
-        public void TestSortingCollection()
+        private static BusinessObjectLookupList GetBusinessObjectLookupListForContactPerson(string sortCriteria)
         {
-            BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPersonTestBO", "", "surname");
-            new PropDef("N", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = source };
+            BusinessObjectLookupList businessObjectLookupList = new BusinessObjectLookupList(
+                "Habanero.Test.BO", "ContactPersonTestBO", "", sortCriteria);
+            new PropDef("N", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = businessObjectLookupList };
+            return businessObjectLookupList;
+        }
 
-            Dictionary<string, string> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
+        [Test]
+        public void TestSortingCollection_PropOnlySpecified()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectLookupList businessObjectLookupList = 
+                GetBusinessObjectLookupListForContactPerson("surname");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Dictionary<string, string> col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
+            //---------------Test Result -----------------------
             ArrayList items = new ArrayList(col.Values);
-            
             Assert.AreEqual(3, col.Count);
             object item = items[0];
             IBusinessObject businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue(typeof(ContactPersonTestBO), item);
             Assert.AreEqual("abc", businessObject.ToString());
-
             AssertCorrectlySortedBusinessObjectInList(items, 0, "abc");
             AssertCorrectlySortedBusinessObjectInList(items, 1, "abcd");
             AssertCorrectlySortedBusinessObjectInList(items, 2, "zzz");
+        }
 
-            source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPersonTestBO", "", "surname asc");
-            new PropDef("N", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = source };
-            col = source.GetLookupList(DatabaseConnection.CurrentConnection);
-            items = new ArrayList(col.Values);
-
+        [Test]
+        public void TestSortingCollection_Ascending()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectLookupList businessObjectLookupList =
+                GetBusinessObjectLookupListForContactPerson("surname asc");
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            Dictionary<string, string> col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
+            //---------------Test Result -----------------------
+            ArrayList items = new ArrayList(col.Values);
             Assert.AreEqual(3, col.Count);
             AssertCorrectlySortedBusinessObjectInList(items, 0, "abc");
             AssertCorrectlySortedBusinessObjectInList(items, 1, "abcd");
             AssertCorrectlySortedBusinessObjectInList(items, 2, "zzz");
+        }
 
-            source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPersonTestBO", "", "surname desc");
-            new PropDef("N", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = source };
-            col = source.GetLookupList(DatabaseConnection.CurrentConnection);
-            items = new ArrayList(col.Values);
-
+        [Test]
+        public void TestSortingCollection_Descending()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectLookupList businessObjectLookupList =
+                GetBusinessObjectLookupListForContactPerson("surname desc");
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            Dictionary<string, string> col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
+            //---------------Test Result -----------------------
+            ArrayList items = new ArrayList(col.Values);
             Assert.AreEqual(3, col.Count);
             AssertCorrectlySortedBusinessObjectInList(items, 0, "zzz");
             AssertCorrectlySortedBusinessObjectInList(items, 1, "abcd");
             AssertCorrectlySortedBusinessObjectInList(items, 2, "abc");
 
-            source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPersonTestBO", "", "surname des");
-            new PropDef("N", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = source };
-
-            col = source.GetLookupList(DatabaseConnection.CurrentConnection);
-            items = new ArrayList(col.Values);
-
-            Assert.AreEqual(3, col.Count);
-            AssertCorrectlySortedBusinessObjectInList(items, 0, "zzz");
-            AssertCorrectlySortedBusinessObjectInList(items, 1, "abcd");
-            AssertCorrectlySortedBusinessObjectInList(items, 2, "abc");
         }
     }
 }

@@ -107,7 +107,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassDefinition\TestFilterDef.cs" />
+    <Compile Include="Loaders\TestXmlBusinessObjectLookupListLoader.cs" />
+    <Compile Include="Loaders\TestXmlDatabaseLookupListLoader.cs" />
     <Compile Include="Loaders\TestXmlFilterLoader.cs" />
+    <Compile Include="Loaders\TestXmlSimpleLookupListLoader.cs" />
     <Compile Include="TestBOObjectID.cs" />
     <Compile Include="TestPack\BOWithIntID.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection.cs" />

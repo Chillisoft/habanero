@@ -33,19 +33,19 @@ namespace Habanero.Test.BO.Loaders
     [TestFixture]
     public class TestXmlPropertyLoader
     {
-        private XmlPropertyLoader itsLoader;
+        private XmlPropertyLoader _loader;
 
         [SetUp]
         public void SetupTest()
         {
-            itsLoader = new XmlPropertyLoader();
+            _loader = new XmlPropertyLoader();
             ClassDef.ClassDefs.Clear();
         }
 
         [Test]
         public void TestSimpleProperty()
         {
-            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" />");
+            PropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" />");
             Assert.AreEqual("TestProp", def.PropertyName, "Property name should be same as that specified in xml");
             Assert.AreEqual(typeof (string), def.PropertyType,
                             "Property type should be the default as defined in the dtd");
@@ -61,47 +61,47 @@ namespace Habanero.Test.BO.Loaders
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestNoPropsInString()
         {
-            itsLoader.LoadProperty(@"");
+            _loader.LoadProperty(@"");
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestPropertyWithNoName()
         {
-            itsLoader.LoadProperty(@"<property />");
+            _loader.LoadProperty(@"<property />");
         }
 
         [Test]
         public void TestPropertyWithType()
         {
-            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" type=""Int32"" />");
+            PropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" type=""Int32"" />");
             Assert.AreEqual(typeof (int), def.PropertyType, "Property type should be same as that specified in xml");
         }
 
         [Test]
         public void TestPropertyWithDescription()
         {
-            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" description=""Property for Testing"" />");
+            PropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" description=""Property for Testing"" />");
             Assert.AreEqual("Property for Testing", def.Description, "Property description should be same as that specified in xml");
         }
 
         [Test]
         public void TestPropertyWithDisplayValue()
         {
-            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" displayName=""Test Property"" />");
+            PropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" displayName=""Test Property"" />");
             Assert.AreEqual("Test Property", def.DisplayName, "Property description should be same as that specified in xml");
         }
 
         [Test]
         public void TestPropertyWithKeepValuePrivate()
         {
-            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" keepValuePrivate=""true"" />");
+            PropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" keepValuePrivate=""true"" />");
             Assert.AreEqual(true, def.KeepValuePrivate, "Property 'keep value private' attribute should be same as that specified in xml");
         }
 
         [Test]
         public void TestPropertyWithReadWriteRule()
         {
-            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""ReadWrite"" />");
+            PropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""ReadWrite"" />");
             Assert.AreEqual(PropReadWriteRule.ReadWrite, def.ReadWriteRule,
                             "Property read write rule should be same as that specified in xml");
         }
@@ -109,7 +109,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropertyWithReadOnlyRule()
         {
-            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""ReadOnly"" />");
+            PropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""ReadOnly"" />");
             Assert.AreEqual(PropReadWriteRule.ReadOnly, def.ReadWriteRule,
                             "Property read write rule should be same as that specified in xml");
         }
@@ -117,7 +117,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropertyWithWriteOnceRule()
         {
-            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""WriteOnce"" />");
+            PropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""WriteOnce"" />");
             Assert.AreEqual(PropReadWriteRule.WriteOnce, def.ReadWriteRule,
                             "Property read write rule should be same as that specified in xml");
         }
@@ -125,7 +125,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropertyWithWriteNotNewRule()
         {
-            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""WriteNotNew"" />");
+            PropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""WriteNotNew"" />");
             Assert.AreEqual(PropReadWriteRule.WriteNotNew, def.ReadWriteRule,
                             "Property read write rule should be same as that specified in xml");
         }
@@ -133,7 +133,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropertyWithWriteNewRule()
         {
-            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""WriteNew"" />");
+            PropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""WriteNew"" />");
             Assert.AreEqual(PropReadWriteRule.WriteNew, def.ReadWriteRule,
                             "Property read write rule should be same as that specified in xml");
         }
@@ -141,13 +141,13 @@ namespace Habanero.Test.BO.Loaders
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestPropertyWithInvalidReadWriterule()
         {
-            itsLoader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""invalid"" />");
+            _loader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""invalid"" />");
         }
 
         [Test]
         public void TestPropertyWithDefaultValue()
         {
-            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" default=""TestValue"" />");
+            PropDef def = _loader.LoadProperty(@"<property  name=""TestProp"" default=""TestValue"" />");
             Assert.AreEqual("TestValue", def.DefaultValue, "Default value should be same as that specified in xml");
         }
 
@@ -155,7 +155,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestPropertyWithGuidDefaultValue()
         {
             PropDef def =
-                itsLoader.LoadProperty(
+                _loader.LoadProperty(
                     @"<property  name=""TestProp"" type=""Guid"" default=""{38373667-B06A-40c5-B4CE-299CE925E121}"" />");
             Assert.AreEqual(new Guid("{38373667-B06A-40c5-B4CE-299CE925E121}"), def.DefaultValue,
                             "Default value should be same as that specified in xml");
@@ -164,7 +164,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropertyWithDateTimeDefaultValueToday()
         {
-            PropDef def = itsLoader.LoadProperty(
+            PropDef def = _loader.LoadProperty(
                     @"<property  name=""TestProp"" type=""DateTime"" default=""Today"" />");
             Assert.AreEqual(DateTime.Today, def.DefaultValue,
                             "Default value should be same as that specified in xml");
@@ -173,7 +173,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropertyWithDateTimeDefaultValueNow()
         {
-            PropDef def = itsLoader.LoadProperty(
+            PropDef def = _loader.LoadProperty(
                     @"<property  name=""TestProp"" type=""DateTime"" default=""Now"" />");
             DateTime nowBefore = DateTime.Now;
             DateTime defaultValue = Convert.ToDateTime(def.DefaultValue);
@@ -186,7 +186,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestPropertyWithDatabaseFieldName()
         {
             PropDef def =
-                itsLoader.LoadProperty(@"<property  name=""TestProp"" databaseField=""TestFieldName"" />");
+                _loader.LoadProperty(@"<property  name=""TestProp"" databaseField=""TestFieldName"" />");
             Assert.AreEqual("TestFieldName", def.DatabaseFieldName, "Field Name should be the same as that specified in xml");
         }
 
@@ -194,15 +194,49 @@ namespace Habanero.Test.BO.Loaders
         public void TestPropertyWithDatabaseFieldNameWithSpaces()
         {
             PropDef def =
-                itsLoader.LoadProperty(@"<property name=""TestProp"" databaseField=""Test FieldName"" />");
+                _loader.LoadProperty(@"<property name=""TestProp"" databaseField=""Test FieldName"" />");
             Assert.AreEqual("Test FieldName", def.DatabaseFieldName);
+        }
+
+        [Test]
+        public void TestPropertyWithAutoIncrementingField()
+        {
+            PropDef def = _loader.LoadProperty(
+                      @"<property name=""TestProp"" autoIncrementing=""true"" />");
+            Assert.AreEqual(true, def.AutoIncrementing);
+        }
+
+        [Test]
+        public void TestPropertyWithLength()
+        {
+            PropDef def = _loader.LoadProperty(
+                      @"<property name=""TestProp"" length=""5"" />");
+            Assert.AreEqual(5, def.Length);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestPropertyWithInvalidLengthException()
+        {
+            _loader.LoadProperty(@"<property name=""TestProp"" length=""fff"" />");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestPropertyWithNegativeLengthException()
+        {
+            _loader.LoadProperty(@"<property name=""TestProp"" length=""-1"" />");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestPropertyWithLengthForNonString()
+        {
+            _loader.LoadProperty(@"<property name=""TestProp"" type=""bool"" length=""5"" />");
         }
 
         [Test]
         public void TestPropertyWithPropRule()
         {
             PropDef def =
-                itsLoader.LoadProperty(
+                _loader.LoadProperty(
                     @"<property  name=""TestProp""><rule name=""StringRule""><add key=""minLength"" value=""8""/><add key=""maxLength"" value=""8"" /></rule></property>");
             Assert.AreEqual(1, def.PropRules.Count);
             Assert.AreEqual("PropRuleString", def.PropRules[0].GetType().Name);
@@ -213,7 +247,7 @@ namespace Habanero.Test.BO.Loaders
         {
             // this should not work as min is an invalid setting for a string rule.
             PropDef def =
-                itsLoader.LoadProperty(
+                _loader.LoadProperty(
                     @"<property  name=""TestProp""><rule name=""StringRule""><add key=""min"" value=""8""/></rule></property>");
             Assert.AreEqual(1, def.PropRules.Count);
             Assert.IsNotNull(def.PropRules[0]);
@@ -225,7 +259,7 @@ namespace Habanero.Test.BO.Loaders
         {
             ClassDef classDef = MyBO.LoadDefaultClassDef();
             PropDef def =
-                itsLoader.LoadProperty(
+                _loader.LoadProperty(
                     @"<property  name=""TestProp""><databaseLookupList sql=""Source"" timeout=""100"" class=""MyBO"" assembly=""Habanero.Test"" /></property>");
             Assert.AreSame(typeof (DatabaseLookupList), def.LookupList.GetType(),
                            "LookupList should be of type DatabaseLookupList but is of type " +
@@ -238,41 +272,13 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreSame(classDef, source.ClassDef);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestDatabaseLookupListWithInvalidTimeout()
-        {
-            itsLoader.LoadProperty(
-                    @"<property name=""TestProp""><databaseLookupList sql=""Source"" timeout=""aaa"" /></property>");
-        }
-
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestDatabaseLookupListWithNegativeTimeout()
-        {
-            itsLoader.LoadProperty(
-                    @"<property name=""TestProp""><databaseLookupList sql=""Source"" timeout=""-1"" /></property>");
-        }
-
-        [Test]
-        public void TestDatabaseLookupListWithClassDef()
-        {
-        	ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
-
-			PropDef def =
-                itsLoader.LoadProperty(
-                    @"<property  name=""TestProp""><databaseLookupList sql=""Source"" class=""MyBO"" assembly=""Habanero.Test"" /></property>");
-            DatabaseLookupList source = (DatabaseLookupList) def.LookupList;
-            Assert.IsNotNull(source.ClassDef);
-            Assert.AreEqual(classDef.ClassName, source.ClassDef.ClassName);
-            Assert.AreEqual(10000, source.TimeOut);
-        }
-
+        
 
         [Test]
         public void TestPropertyWithSimpleLookupList()
         {
             PropDef def =
-                itsLoader.LoadProperty(
+                _loader.LoadProperty(
                     @"
 					<property  name=""TestProp"">
 						<simpleLookupList>
@@ -286,140 +292,21 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(2, source.GetLookupList().Count, "LookupList should have two keyvaluepairs");
         }
 
+         
         [Test]
-        public void TestSimpleLookupListOptions()
+        public void TestPropertyWithBusinessObjectLookupList()
         {
-            PropDef def =
-                itsLoader.LoadProperty(
-                    @"
-					<property  name=""TestProp"">
-						<simpleLookupList options=""option1|option2|option3"" />
-					</property>");
-            SimpleLookupList source = (SimpleLookupList)def.LookupList;
-            Assert.AreEqual(3, source.GetLookupList().Count, "LookupList should have three keyvaluepairs");
-        }
-
-        [Test]
-        public void TestSimpleLookupListOptionsAndItems()
-        {
-            PropDef def =
-                itsLoader.LoadProperty(
-                    @"
-					<property  name=""TestProp"">
-						<simpleLookupList options=""option1|option2|option3"" >
-							<item display=""s1"" value=""{C2887FB1-7F4F-4534-82AB-FED92F954783}"" />
-							<item display=""s2"" value=""{B89CC2C9-4CBB-4519-862D-82AB64796A58}"" />
-                        </simpleLookupList>
-					</property>");
-            SimpleLookupList source = (SimpleLookupList)def.LookupList;
-            Assert.AreEqual(5, source.GetLookupList().Count, "LookupList should have 5 keyvaluepairs");
-        }
-
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestSimpleLookupListNoItems()
-        {
-            PropDef def = itsLoader.LoadProperty(@"
-				<property  name=""TestProp"">
-					<simpleLookupList></simpleLookupList>
-				</property>");
-        }
-
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestSimpleLookupListItemHasNoDisplay()
-        {
-            PropDef def = itsLoader.LoadProperty(@"
-				<property  name=""TestProp"">
-					<simpleLookupList>
-						<item value=""{C2887FB1-7F4F-4534-82AB-FED92F954783}"" />
-                    </simpleLookupList>
-				</property>");
-        }
-
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestSimpleLookupListItemHasNoValue()
-        {
-            PropDef def = itsLoader.LoadProperty(@"
-				<property  name=""TestProp"">
-					<simpleLookupList>
-						<item display=""s1"" />
-                    </simpleLookupList>
-				</property>");
-        }
-
-        [Test]
-        public void TestBusinessObjectLookupList()
-        {
-            PropDef def = itsLoader.LoadProperty(
+            PropDef def = _loader.LoadProperty(
                     @"<property  name=""TestProp"">
 						<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" />
 					</property>");
-            Assert.AreSame(typeof(BusinessObjectLookupList), def.LookupList.GetType(),
-                           "LookupList should be of type BusinessObjectLookupList but is of type " +
-                           def.LookupList.GetType().Name);
+            Assert.IsNotNull(def.LookupList);
+            Assert.IsInstanceOfType(typeof(BusinessObjectLookupList), def.LookupList);
             BusinessObjectLookupList source = (BusinessObjectLookupList)def.LookupList;
             //Assert.AreEqual(5, source.GetLookupList().Count, "LookupList should have 5 keyvaluepairs");
             Assert.AreEqual("MyBO", source.ClassName);
             Assert.AreEqual("Habanero.Test", source.AssemblyName);
             Assert.AreEqual(null, source.Criteria);
-        }
-
-        [Test]
-        public void TestBusinessObjectLookupListWithCriteria()
-        {
-            PropDef def = itsLoader.LoadProperty(
-                    @"<property  name=""TestProp"">
-						<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" criteria=""TestProp=Test"" />
-					</property>");
-            BusinessObjectLookupList source = (BusinessObjectLookupList)def.LookupList;
-            Assert.AreEqual("TestProp = 'Test'", source.Criteria.ToString());
-        }
-
-        [Test]
-        public void TestBusinessObjectLookupListWithSort()
-        {
-            ClassDef.ClassDefs.Clear();
-            MyBO.LoadDefaultClassDef();
-
-            PropDef def = itsLoader.LoadProperty(
-                    @"<property  name=""TestProp"">
-						<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" sort=""TestProp asc"" />
-					</property>");
-            BusinessObjectLookupList source = (BusinessObjectLookupList)def.LookupList;
-            Assert.AreEqual("MyBO.TestProp ASC", source.OrderCriteria.ToString());
-        }
-
-        [Test]
-        public void TestBusinessObjectWithAutoIncrementingField()
-        {
-            PropDef def = itsLoader.LoadProperty(
-                      @"<property name=""TestProp"" autoIncrementing=""true"" />");
-            Assert.AreEqual(true, def.AutoIncrementing);
-        }
-
-        [Test]
-        public void TestBusinessObjectWithLength()
-        {
-            PropDef def = itsLoader.LoadProperty(
-                      @"<property name=""TestProp"" length=""5"" />");
-            Assert.AreEqual(5, def.Length);
-        }
-
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestBusinessObjectWithInvalidLengthException()
-        {
-            itsLoader.LoadProperty(@"<property name=""TestProp"" length=""fff"" />");
-        }
-
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestBusinessObjectWithNegativeLengthException()
-        {
-            itsLoader.LoadProperty(@"<property name=""TestProp"" length=""-1"" />");
-        }
-
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestBusinessObjectWithLengthForNonString()
-        {
-            itsLoader.LoadProperty(@"<property name=""TestProp"" type=""bool"" length=""5"" />");
         }
 
         [Test]

@@ -39,6 +39,7 @@ namespace Habanero.BO
     /// </summary>
     public class BusinessObjectLookupList : ILookupList
     {
+        private readonly bool _limitToList;
         private readonly int _timeout;
         private Type _boType;
         private string _assemblyName;
@@ -122,6 +123,24 @@ namespace Habanero.BO
         /// <summary>
         /// Constructor to initialise a new lookup-list
         /// </summary>
+        /// <param name="assemblyName">The assembly containing the class</param>
+        /// <param name="className">The class from which to load the values</param>
+        /// <param name="criteria">Sql criteria to apply on loading of the 
+        /// collection</param>
+        /// <param name="sort">The property to sort on.
+        /// The possible formats are: "property", "property asc",
+        /// "property desc" and "property des".</param>
+        /// <param name="limitToList">The specification of whether to create a validating lookup or not.</param>
+        public BusinessObjectLookupList(string assemblyName, string className, string criteria, string sort, bool limitToList)
+            : this(assemblyName, className, criteria, sort)
+        {
+            _limitToList = limitToList;
+        }
+
+
+        /// <summary>
+        /// Constructor to initialise a new lookup-list
+        /// </summary>
         /// <param name="type">The type of business object that the lookup list is being loaded for</param>
         /// <param name="criteria">Sql criteria to apply on loading of the 
         /// collection</param>
@@ -182,6 +201,8 @@ namespace Habanero.BO
 //            }
 //        }
         private Criteria _criteria;
+
+        
 
 
         /// <summary>
@@ -404,6 +425,15 @@ namespace Habanero.BO
         ///   displayed value may be a related string.
         /// </summary>
         internal Dictionary<string, string> DisplayValueDictionary { get; private set; }
+
+        ///<summary>
+        /// Returns true if the <see cref="ILookupList"/> should validate the value of the 
+        /// <see cref="IBOProp"/> against the items in the <see cref="ILookupList"/>.
+        ///</summary>
+        public bool LimitToList
+        {
+            get { return _limitToList;}
+        }
 
         #endregion Type Initialisation
 
