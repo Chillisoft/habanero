@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -340,6 +341,34 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsNull(contactPerson.Organisation);
         }
 
+        [Test]
+        public void Test_SetParentNull_NewChild_BotRelationshipSetUpAsOwning()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            SingleRelationship<OrganisationTestBO> relationshipOrganisation = GetAggregationRelationshipOrganisation(contactPerson, "Organisation");
+            relationshipOrganisation.OwningBOHasForeignKey = true;
+
+            SingleRelationship<ContactPersonTestBO> relationshipContactPerson = GetAggregationRelationshipContactPerson(organisation, "ContactPerson");
+            relationshipContactPerson.OwningBOHasForeignKey = true;
+            //---------------Assert Preconditon-----------------
+            Assert.IsNull(organisation.ContactPerson);
+            Assert.IsNull(contactPerson.Organisation);
+            Assert.IsNotNull(organisation.OrganisationID);
+            //---------------Execute Test ----------------------
+            try
+            {
+                contactPerson.Organisation = organisation;
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("The corresponding single (one to one) relationships Organisation ", ex.Message);
+                StringAssert.Contains("cannot both be configured as having the foreign key", ex.Message);
+            }
+        }
 
         [Test]
         public void Test_DirtyIfHasCreatedChildren()
@@ -543,6 +572,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Test Result -----------------------
             Assert.IsTrue(organisation.Status.IsDirty);
         }
+
 
         private static SingleRelationship<ContactPersonTestBO> GetAggregationRelationshipContactPerson
             (BusinessObject businessObject, string relationshipName)

@@ -113,15 +113,12 @@ namespace Habanero.BO.ClassDefinition
                             "you have correctly indicated the name of the ui " +
                             "definition you are intending to use.");
                     }
-                    else
-                    {
-                        throw new HabaneroApplicationException(String.Format(
-                                                                   "The ui definition with the name '{0}' does not " +
-                                                                   "exist in the collection of definitions for the " +
-                                                                   "class.", name));
-                    }
+                    throw new HabaneroApplicationException(String.Format(
+                                                               "The ui definition with the name '{0}' does not " +
+                                                               "exist in the collection of definitions for the " +
+                                                               "class.", name));
                 }
-                return (UIDef) this._defs[name];
+                return this._defs[name];
             }
         }
 
@@ -136,6 +133,9 @@ namespace Habanero.BO.ClassDefinition
             get { return _defs.Count; }
         }
 
+        ///<summary>
+        /// Returns the class definition for the UIDefCol.
+        ///</summary>
         public ClassDef ClassDef
         {
             get { return _classDef; }
@@ -220,16 +220,10 @@ namespace Habanero.BO.ClassDefinition
         public static bool operator ==(UIDefCol a, UIDefCol b)
         {
             // If both are null, or both are same instance, return true.
-            if (System.Object.ReferenceEquals(a, b))
-            {
-                return true;
-            }
+            if (ReferenceEquals(a, b)) return true;
 
             // If one is null, but not both, return false.
-            if (((object)a == null) || ((object)b == null))
-            {
-                return false;
-            }
+            if (((object) a == null) || ((object) b == null)) return false;
 
             // Return true if the fields match:
             return a.Equals(b);

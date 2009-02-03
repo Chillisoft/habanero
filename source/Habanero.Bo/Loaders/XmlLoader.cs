@@ -40,7 +40,7 @@ namespace Habanero.BO.Loaders
 		private bool _documentValid = true;
 		private ValidationEventArgs _invalidDocumentArgs;
 		private XmlElement _element;
-	    private DtdLoader _dtdLoader;
+	    private readonly DtdLoader _dtdLoader;
 
 	    /// <summary>
 		/// Constructor to initialise a new loader with a dtd path
@@ -120,16 +120,17 @@ namespace Habanero.BO.Loaders
 		{
 			XmlDocument doc = new XmlDocument();
 			doc.LoadXml(propertyElement.OuterXml);
-			doc.InsertBefore(
-				doc.CreateDocumentType(doc.DocumentElement.Name, null, null, GetDTD(doc.DocumentElement.Name)),
-				doc.DocumentElement);
-			XmlReaderSettings settings = new XmlReaderSettings();
+		    if (doc.DocumentElement != null)
+		        doc.InsertBefore(
+		            doc.CreateDocumentType(doc.DocumentElement.Name, null, null, GetDTD(doc.DocumentElement.Name)),
+		            doc.DocumentElement);
+		    XmlReaderSettings settings = new XmlReaderSettings();
 			settings.CheckCharacters = true;
 			settings.ConformanceLevel = ConformanceLevel.Auto;
 			settings.IgnoreComments = true;
 			settings.IgnoreWhitespace = true;
 			settings.ValidationType = ValidationType.DTD;
-			settings.ValidationEventHandler += new ValidationEventHandler(ValidationHandler);
+			settings.ValidationEventHandler += ValidationHandler;
 			_reader = XmlReader.Create(new XmlTextReader(new StringReader(doc.OuterXml)), settings);
 
             
@@ -151,7 +152,7 @@ namespace Habanero.BO.Loaders
 		/// Handles the event of an xml document being invalid
 		/// </summary>
 		/// <param name="sender">The object that notified of the event</param>
-		/// <param name="e">Attached arguments regarding the event</param>
+        /// <param name="args">Attached arguments regarding the event</param>
 		private void ValidationHandler(object sender, ValidationEventArgs args)
 		{
 			_documentValid = false;

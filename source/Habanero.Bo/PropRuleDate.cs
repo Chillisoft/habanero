@@ -193,10 +193,8 @@ namespace Habanero.BO
         /// <returns>A list of the parameters that this rule uses</returns>
 		protected internal override List<string> AvailableParameters()
 		{
-		    List<string> parameters = new List<string>();
-		    parameters.Add("min");
-		    parameters.Add("max");
-		    return parameters;
+		    List<string> parameters = new List<string> {"min", "max"};
+            return parameters;
 		}
 
 
@@ -207,17 +205,7 @@ namespace Habanero.BO
         {
             get
             {
-                if (_minValueExpression == "Today")
-                {
-                    return DateTime.Today;
-                }
-                if (_minValueExpression == "Now")
-                {
-                    return DateTime.Now;
-                }
-                return _minValue;                    
-
-
+                return GetValue(_minValueExpression, _minValueExpression == "Now" ? DateTime.Now : _minValue);
             }
 			protected set { _minValue = value; }
 		}
@@ -229,17 +217,18 @@ namespace Habanero.BO
         {
             get
             {
-                if (_maxValueExpression == "Today")
-                {
-                    return DateTime.Today;
-                }
-                if (_maxValueExpression == "Now")
-                {
-                    return DateTime.Now;
-                }
-                return _maxValue;
+                return GetValue(_maxValueExpression, _maxValueExpression == "Now" ? DateTime.Now : _maxValue);
             }
-			protected set { _maxValue = value; }
+           protected set { _maxValue = value; }
+        }
+
+        private static DateTime GetValue(string valueExpression, DateTime value)
+        {
+            if (valueExpression == "Today")
+            {
+                return DateTime.Today;
+            }
+            return value;
         }
     }
 

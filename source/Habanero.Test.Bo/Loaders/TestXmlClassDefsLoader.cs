@@ -17,7 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -97,6 +96,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClassInherited"), "Class 'TestClassInherited' should have been loaded.");
             ClassDef classDefTestClass = classDefList["Habanero.Test.BO.Loaders", "TestClass"];
             ClassDef classDefInherited = classDefList["Habanero.Test.BO.Loaders", "TestClassInherited"];
+            Assert.IsNotNull(classDefTestClass);
             Assert.IsNotNull(classDefInherited.SuperClassDef);
             Assert.IsNull(classDefInherited.PrimaryKeyDef);
         }
@@ -105,7 +105,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestLoadClassDefs_KeyDefinedWithInheritedProperties()
         {
             //-------------Setup Test Pack ------------------
-            string xml = @"
+            const string xml = @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" />
@@ -143,7 +143,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestLoadClassDefs_KeyDefinedWithNonExistantProperty()
         {
             //-------------Setup Test Pack ------------------
-            string xml = @"
+            const string xml = @"
 				<classes>
 					<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 						<property  name=""TestClassID"" />
@@ -161,55 +161,337 @@ namespace Habanero.Test.BO.Loaders
 				</classes>
 			";
             XmlClassDefsLoader loader = new XmlClassDefsLoader();
-            Exception exception = null;
             //-------------Execute test ---------------------
             try
             {
-                ClassDefCol classDefList = loader.LoadClassDefs(xml);
-            } catch(Exception ex)
-            {
-                exception = ex;
+                loader.LoadClassDefs(xml);
+                Assert.Fail("expected Err");
             }
-            //-------------Test Result ----------------------
-            Assert.IsNotNull(exception, "An error should have been thrown for this xml.");
-            Assert.IsInstanceOfType(typeof(InvalidXmlDefinitionException), exception);
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a 'prop' element for the '' key of the 'TestClassInherited' class, the propery 'DoesNotExist' given in the 'name' attribute does not exist for the class or for any of it's superclasses. Either add the property definition or check the spelling and capitalisation of the specified property", ex.Message);
+            }
+        }
+        [Test]
+        public void Test_Invalid_Relationship_PropDefDoesNotExistOnOwningClassDef()
+        {
+            //----------------------Test Setup ----------------------
+            const string classDefsString = @"
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestRelatedClass"" type=""single"" relatedClass=""TestRelatedClass"" relatedAssembly=""Habanero.Test.BO.Loaders"">
+						        <relatedProperty property=""PropDefDoesNonExist"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestRelatedClassID"" />
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestRelatedClassID""/>
+                            </primaryKey>
+						</class>
+					</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //--------------------Execute Test-------------------------
+            try
+            {
+                loader.LoadClassDefs(classDefsString);
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("The property 'PropDefDoesNonExist' defined "
+                          + "in the 'relatedProperty' element in its 'Property' " 
+                          + "attribute, which specifies the property in the class " 
+                          + "'TestClass' from which the relationship 'TestRelatedClass' will link is not defined in the " 
+                          + "class 'TestClass'.", ex.Message);
+            }
         }
 
+        [Test]
+        public void Test_Invalid_Relationship_PropDefDoesNotExistOnRelatedClassDef()
+        {
+            //----------------------Test Setup ----------------------
+            const string classDefsString = @"
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestRelatedClass"" type=""single"" relatedClass=""TestRelatedClass"" relatedAssembly=""Habanero.Test.BO.Loaders"">
+						        <relatedProperty property=""TestClassID"" relatedProperty=""PropDefDoesNonExist"" />
+					        </relationship>
+						</class>
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestRelatedClassID"" />
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestRelatedClassID""/>
+                            </primaryKey>
+						</class>
+					</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //--------------------Execute Test-------------------------
+            try
+            {
+                loader.LoadClassDefs(classDefsString);
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In a 'relatedProperty' element " 
+                    + "for the 'TestRelatedClass' relationship of the 'TestClass' " 
+                    + "class, the property 'PropDefDoesNonExist'", ex.Message);
+            }
+        }
+
+        [Test]
+        public void Test_Invalid_Relationship_SingleSingleRelationships_BothSetAsOwning()
+        {
+            //----------------------Test Setup ----------------------
+            const string classDefsString = @"
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" />
+							<property  name=""ForeignKeyProp"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestRelatedClass"" type=""single"" relatedClass=""TestRelatedClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" owningBOHasForeignKey=""true"" reverseRelationship=""TestClass"">
+						        <relatedProperty property=""ForeignKeyProp"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestRelatedClassID"" />
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestRelatedClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestClass"" type=""single"" relatedClass=""TestClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" owningBOHasForeignKey=""true"" reverseRelationship=""TestRelatedClass"">
+						        <relatedProperty property=""TestClassID"" relatedProperty=""ForeignKeyProp"" />
+					        </relationship>
+						</class>
+					</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //--------------------Execute Test-------------------------
+            try
+            {
+                loader.LoadClassDefs(classDefsString);
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("The relationship 'TestRelatedClass' could not be loaded because the reverse relationship 'TestClass' ", ex.Message);
+                StringAssert.Contains("are both set up as owningBOHasForeignKey = true", ex.Message);
+            }
+        }
+        [Test]
+        public void Test_Valid_Relationship_SingleSingleRelationships_OnlyOneHasOwningBOHasForeignKey()
+        {
+            //----------------------Test Setup ----------------------
+            const string classDefsString = @"
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestRelatedClass"" type=""single"" relatedClass=""TestRelatedClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" owningBOHasForeignKey=""true"" reverseRelationship=""TestClass"">
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestRelatedClassID"" />
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestRelatedClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestClass"" type=""single"" relatedClass=""TestClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" reverseRelationship=""TestRelatedClass"" owningBOHasForeignKey=""false"" >
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+					</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //--------------------Execute Test-------------------------
+            ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, classDefList.Count);
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
+
+        }
+        [Test]
+        public void Test_Valid_Relationship_SingleSingleRelationships_CanDetermine_OwningBOHasForeignKey()
+        {
+            //----------------------Test Setup ----------------------
+            const string classDefsString = @"
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestRelatedClass"" type=""single"" relatedClass=""TestRelatedClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" reverseRelationship=""TestClass"">
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestRelatedClassID"" />
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestRelatedClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestClass"" type=""single"" relatedClass=""TestClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" reverseRelationship=""TestRelatedClass"" >
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+					</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //--------------------Execute Test-------------------------
+            ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, classDefList.Count);
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
+
+        }
+        [Test]
+        public void Test_Valid_Relationship_SingleSingleRelationships_CanDetermine_OwningBOHasForeignKey_SecondClass()
+        {
+            //----------------------Test Setup ----------------------
+            const string classDefsString = @"
+					<classes>
+
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestRelatedClassID"" />
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestRelatedClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestClass"" type=""single"" relatedClass=""TestClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" reverseRelationship=""TestRelatedClass"" >
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestRelatedClass"" type=""single"" relatedClass=""TestRelatedClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" reverseRelationship=""TestClass"">
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+					</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //--------------------Execute Test-------------------------
+            ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, classDefList.Count);
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
+
+        }
+
+        [Test]
+        public void Test_Invalid_Relationship_SingleSingleRelationships_ReverseRelationshipNotDefined()
+        {
+            //----------------------Test Setup ----------------------
+            const string classDefsString = @"
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestRelatedClass"" type=""single"" relatedClass=""TestRelatedClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" owningBOHasForeignKey=""true"" reverseRelationship=""ReverseRelNonExist"">
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestRelatedClassID"" />
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestRelatedClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestClass"" type=""single"" relatedClass=""TestClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" owningBOHasForeignKey=""true"" reverseRelationship=""TestRelatedClass"">
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+					</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //--------------------Execute Test-------------------------
+            try
+            {
+                loader.LoadClassDefs(classDefsString);
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("The relationship 'TestRelatedClass' could not be loaded for because " 
+                        + "the reverse relationship 'ReverseRelNonExist'", ex.Message);
+            }
+        }
+        [Test]
+        public void Test_Invalid_Relationship_RelatedClassDefDoesNotExist()
+        {
+            //----------------------Test Setup ----------------------
+            const string classDefsString = @"
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestRelatedClass"" type=""single"" relatedClass=""RelatedClassDoesNotExist"" relatedAssembly=""Habanero.Test.BO.Loaders"">
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestRelatedClassID"" />
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestRelatedClassID""/>
+                            </primaryKey>
+						</class>
+					</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //--------------------Execute Test-------------------------
+            try
+            {
+                loader.LoadClassDefs(classDefsString);
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("The relationship 'TestRelatedClass' could not be loaded for because when trying to retrieve its related class the folllowing", ex.Message);
+            }
+        }
         [Test, ExpectedException(typeof(XmlException))]
         public void TestNoRootNodeException()
         {
             XmlClassDefsLoader loader = new XmlClassDefsLoader();
-            ClassDefCol classDefList = loader.LoadClassDefs(@"<invalidRootNode>");
+            loader.LoadClassDefs(@"<invalidRootNode>");
         }
-
-        // Trying to catch the exception in line 209 of XmlClassDefsLoader
-        //   but the exception gets caught earlier.
-//        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-//        public void TestRelatedPropertyException()
-//        {
-//            XmlClassDefsLoader loader = new XmlClassDefsLoader();
-//            ClassDefCol classDefList = loader.LoadClassDefs(@"
-//					<classes>
-//						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-//							<property name=""TestClassID"" />
-//                            <primaryKey>
-//                                <prop name=""TestClassID""/>
-//                            </primaryKey>
-//						</class>
-//						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
-//							<property name=""TestRelatedClassID"" />
-//							<property name=""TestClassID"" />
-//                            <primaryKey>
-//                                <prop name=""TestRelatedClassID""/>
-//                            </primaryKey>
-//                            <relationship name=""TestClass"" type=""single"" relatedClass=""TestClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" >
-//                                <relatedProperty name=""notexists"" relatedProperty=""notexists"" />
-//                            </relationship>
-//						</class>
-//					</classes>
-//			");
-//        }
-
-
     }
+
+
 }

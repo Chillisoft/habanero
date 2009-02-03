@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassDefinition\TestFilterDef.cs" />
+    <Compile Include="Loaders\TestClassDefValidator.cs" />
     <Compile Include="Loaders\TestXmlBusinessObjectLookupListLoader.cs" />
     <Compile Include="Loaders\TestXmlDatabaseLookupListLoader.cs" />
     <Compile Include="Loaders\TestXmlFilterLoader.cs" />

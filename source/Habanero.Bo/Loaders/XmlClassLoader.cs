@@ -153,10 +153,10 @@ namespace Habanero.BO.Loaders
                         break;
                     default:
                         throw new InvalidXmlDefinitionException("The element '" +
-                                                                _reader.Name + "' is not a recognised class " +
-                                                                "definition element.  Ensure that you have the correct " +
-                                                                "spelling and capitalisation, or see the documentation " +
-                                                                "for available options.");
+                                _reader.Name + "' is not a recognised class " +
+                                "definition element.  Ensure that you have the correct " +
+                                "spelling and capitalisation, or see the documentation " +
+                                "for available options.");
                 }
             }
 
@@ -181,10 +181,9 @@ namespace Habanero.BO.Loaders
         /// <summary>
         /// Loads the relationship data
         /// </summary>
-        private void LoadRelationshipDefs(List<string> xmlDefs)
+        private void LoadRelationshipDefs(IEnumerable<string> xmlDefs)
         {
             _relationshipDefCol = _defClassFactory.CreateRelationshipDefCol();
-            //_relationshipDefCol = new RelationshipDefCol();
             foreach (string relDefXml in xmlDefs)
             {
                 XmlRelationshipLoader relationshipLoader = new XmlRelationshipLoader(DtdLoader, _defClassFactory, _className);
@@ -195,10 +194,9 @@ namespace Habanero.BO.Loaders
         /// <summary>
         /// Loads the UIDef data
         /// </summary>
-        private void LoadUIDefs(List<string> xmlDefs)
+        private void LoadUIDefs(IEnumerable<string> xmlDefs)
         {
             _uiDefCol = _defClassFactory.CreateUIDefCol();
-            //_uiDefCol = new UIDefCol();
             foreach (string uiDefXml in xmlDefs)
             {
                 XmlUILoader loader = new XmlUILoader(DtdLoader, _defClassFactory);
@@ -209,10 +207,9 @@ namespace Habanero.BO.Loaders
         /// <summary>
         /// Loads the key definition data
         /// </summary>
-        private void LoadKeyDefs(List<string> xmlDefs)
+        private void LoadKeyDefs(IEnumerable<string> xmlDefs)
         {
             _keyDefCol = _defClassFactory.CreateKeyDefCol();
-            //_keyDefCol = new KeyDefCol();
             foreach (string keyDefXml in xmlDefs)
             {
                 XmlKeyLoader loader = new XmlKeyLoader(DtdLoader, _defClassFactory);
@@ -227,43 +224,42 @@ namespace Habanero.BO.Loaders
         {
             if (xmlDef == null && _superClassDef == null)
             {
-                throw new InvalidXmlDefinitionException(String.Format("Could not find a " +
-                                                                      "'primaryKey' element in the class definition for the class '{0}'. " +
-                                                                      "Each class definition requires a primary key " +
-                                                                      "definition, which is composed of one or more property definitions, " +
-                                                                      "implying that you will need at least one 'prop' element as " +
-                                                                      "well.", _className));
+                throw new InvalidXmlDefinitionException
+                    (String.Format
+                         ("Could not find a " + "'primaryKey' element in the class definition for the class '{0}'. "
+                          + "Each class definition requires a primary key "
+                          + "definition, which is composed of one or more property definitions, "
+                          + "implying that you will need at least one 'prop' element as " + "well.", _className));
             }
-            if (xmlDef != null)
+            if (xmlDef == null) return;
+
+            XmlPrimaryKeyLoader primaryKeyLoader = new XmlPrimaryKeyLoader(DtdLoader, _defClassFactory);
+            _primaryKeyDef = primaryKeyLoader.LoadPrimaryKey(xmlDef, _propDefCol);
+            if (_primaryKeyDef == null)
             {
-                //_primaryKeyDef = new PrimaryKeyDef();
-                XmlPrimaryKeyLoader primaryKeyLoader = new XmlPrimaryKeyLoader(DtdLoader, _defClassFactory);
-                _primaryKeyDef = primaryKeyLoader.LoadPrimaryKey(xmlDef, _propDefCol);
-                if (_primaryKeyDef == null)
-                {
-                    throw new InvalidXmlDefinitionException(String.Format("There was an error loading " +
-                                                                          "the 'primaryKey' element in the class definition for the class '{0}. '" +
-                                                                          "Each class definition requires a primary key " +
-                                                                          "definition, which is composed of one or more property definitions, " +
-                                                                          "implying that you will need at least one 'prop' element as " +
-                                                                          "well.", _className));
-                }
+                throw new InvalidXmlDefinitionException
+                    (String.Format
+                         ("There was an error loading "
+                          + "the 'primaryKey' element in the class definition for the class '{0}. '"
+                          + "Each class definition requires a primary key "
+                          + "definition, which is composed of one or more property definitions, "
+                          + "implying that you will need at least one 'prop' element as " + "well.", _className));
             }
         }
 
         /// <summary>
         /// Loads the property definition data
         /// </summary>
-        private void LoadPropDefs(List<string> xmlDefs)
+        private void LoadPropDefs(ICollection<string> xmlDefs)
         {
             if (xmlDefs.Count == 0 && _superClassDef == null)
             {
                 throw new InvalidXmlDefinitionException(String.Format("No property " +
-                                                                      "definitions have been specified for the class definition of '{0}'. " +
-                                                                      "Each class requires at least one 'property' and 'primaryKey' " +
-                                                                      "element which define the mapping from the database table fields to " +
-                                                                      "properties in the class that is being mapped to.",
-                                                                      _className));
+                          "definitions have been specified for the class definition of '{0}'. " +
+                          "Each class requires at least one 'property' and 'primaryKey' " +
+                          "element which define the mapping from the database table fields to " +
+                          "properties in the class that is being mapped to.",
+                          _className));
             }
             _propDefCol = _defClassFactory.CreatePropDefCol();
             foreach (string propDefXml in xmlDefs)
@@ -318,25 +314,5 @@ namespace Habanero.BO.Loaders
                                        "class to which a database table will be mapped.");
             }
         }
-
-        ///// <summary>
-        ///// Loads the attribute that indicates whether synchronisation is
-        ///// supported
-        ///// </summary>
-        //private void LoadSupportsSynchronisation()
-        //{
-        //    string supportsSynch = _reader.GetAttribute("supportsSynchronising");
-        //    try
-        //    {
-        //        _SupportsSynchronising = Convert.ToBoolean(supportsSynch);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new InvalidXmlDefinitionException(String.Format(
-        //            "In the class definition for '{0}', the value provided for " +
-        //            "the 'supportsSynchronising' attribute is not valid. The value " +
-        //            "needs to be 'true' or 'false'.", _className));
-        //    }
-        //}
     }
 }

@@ -110,7 +110,7 @@ namespace Habanero.BO.Loaders
                 relationshipDef.ReverseRelationshipName = _reverseRelationshipName;
                 return relationshipDef;
             }
-            else if (_type == "multiple")
+            if (_type == "multiple")
             {
                 MultipleRelationshipDef relationshipDef = 
                     _defClassFactory.CreateMultipleRelationshipDef(
@@ -120,11 +120,8 @@ namespace Habanero.BO.Loaders
                 relationshipDef.ReverseRelationshipName = _reverseRelationshipName;
                 return relationshipDef;
             }
-            else
-            {
-                throw new InvalidXmlDefinitionException(
-                    "There seems to be a problem with the relationship dtd as it should only allow relationships of type 'single' or 'multiple'.");
-            }
+            throw new InvalidXmlDefinitionException(
+                "There seems to be a problem with the relationship dtd as it should only allow relationships of type 'single' or 'multiple'.");
         }
 
         /// <summary>
@@ -206,9 +203,9 @@ namespace Habanero.BO.Loaders
 			_relKeyDef = _defClassFactory.CreateRelKeyDef();
             while (_reader.Name == "relatedProperty")
             {
-                string defName = _reader.GetAttribute("property");
+                string propName = _reader.GetAttribute("property");
                 string relPropName = _reader.GetAttribute("relatedProperty");
-                if (string.IsNullOrEmpty(defName))
+                if (string.IsNullOrEmpty(propName))
                 {
                     throw new InvalidXmlDefinitionException("A 'relatedProperty' element " +
                         "is missing the 'property' attribute, which specifies the " +
@@ -222,8 +219,15 @@ namespace Habanero.BO.Loaders
                         "property in the related class to which the " + 
                         "relationship will link.");
                 }
-
-				_relKeyDef.Add(_defClassFactory.CreateRelPropDef(_propDefCol[defName], relPropName));
+                if (!_propDefCol.Contains(propName))
+                {
+                    throw new InvalidXmlDefinitionException(string.Format("The property '{0}' defined in the "
+                        + "'relatedProperty' element " +
+                        "in its 'Property' attribute, which specifies the " +
+                        "property in the class '{1}' from which the " +
+                        "relationship '{2}' will link is not defined in the class '{1}'.", propName, _className ,_name));
+                }
+				_relKeyDef.Add(_defClassFactory.CreateRelPropDef(_propDefCol[propName], relPropName));
                 ReadAndIgnoreEndTag();
             }
         }

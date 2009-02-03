@@ -263,6 +263,7 @@ namespace Habanero.BO
 
             if (relatedObject != null) RelationshipDef.CheckCanAddChild(relatedObject);
             if (_relatedBo != null) RelationshipDef.CheckCanRemoveChild(_relatedBo);
+            
 
             RemoveFromReverseRelationship(_relatedBo);
             AddToReverseRelationship(relatedObject);
@@ -294,10 +295,10 @@ namespace Habanero.BO
 
         private void AddToSingleReverseRelationship(IRelationship reverseRelationship) {
             ISingleRelationship singleRelationship = reverseRelationship as ISingleRelationship;
-            if (singleRelationship != null)
-            {
-                singleRelationship.SetRelatedObject(this.OwningBO);
-            }
+
+            if (singleRelationship == null) return;
+            RelationshipUtils.CheckCorrespondingSingleRelationshipsAreValid(this, (SingleRelationshipBase) singleRelationship);
+            singleRelationship.SetRelatedObject(this.OwningBO);
         }
 
         private void AddToMultipleReverseRelationship(IRelationship reverseRelationship) {
@@ -320,6 +321,7 @@ namespace Habanero.BO
             if (reverseRelationship != null)
             {
                 reverseRelationship.RelationshipDef.CheckCanRemoveChild(this.OwningBO);
+
                 _relatedBo = null;
                 UpdatedForeignKeyAndStoredRelationshipExpression();
 
@@ -349,12 +351,6 @@ namespace Habanero.BO
 
         private void UpdatedForeignKeyAndStoredRelationshipExpression()
         {
-            //TODO  01 Feb 2009: Changed by brett why was this limited to only associations
-            // firestarter currently does not limit you to allowing the aggregate relationship 
-            // in one direction or another
-//            if (this.RelationshipDef.RelationshipType == RelationshipType.Association && this.OwningBOHasForeignKey)
-
-            //Maybe because I am not having problems with the OwningBOHsForeignKey Firestarter allows you to create both relationships with OwningBoHasForeignKey = true ??
             if (this.OwningBOHasForeignKey)
             {
                 foreach (RelProp relProp in _relKey)
@@ -362,7 +358,6 @@ namespace Habanero.BO
                     object relatedObjectValue = _relatedBo == null
                                                     ? null
                                                     : _relatedBo.GetPropertyValue(relProp.RelatedClassPropName);
-                    if (_owningBo.ID.Contains(relProp.OwnerPropertyName)) return;//Added 
                     _owningBo.SetPropertyValue(relProp.OwnerPropertyName, relatedObjectValue);
                 }
             }

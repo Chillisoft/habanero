@@ -94,7 +94,6 @@ namespace Habanero.BO.ClassDefinition
 
         private SuperClassDef _superClassDef;
         private UIDefCol _uiDefCol;
-        private string _typeParameter;
 
         #region Constructors
 
@@ -703,11 +702,7 @@ namespace Habanero.BO.ClassDefinition
         /// This parameter can be used to allow multiple classdefs for one .NET type, as long as the
         /// type parameter between the classdefs are different.
         /// </summary>
-        public string TypeParameter
-        {
-            get { return _typeParameter; }
-            set { _typeParameter = value; }
-        }
+        public string TypeParameter { get; set; }
 
         /// <summary>
         /// Creates a list of classdefs in this inheritance hierarchy.  The first item in the list is this classdef,
@@ -1053,11 +1048,7 @@ namespace Habanero.BO.ClassDefinition
                     }
                 });
 
-                if (currentPropertyType != null)
-                {
-                    return currentPropertyType;
-                }
-                return typeof (object);
+                return currentPropertyType ?? typeof (object);
             }
             if (propertyName.IndexOf("-") != -1)
             {

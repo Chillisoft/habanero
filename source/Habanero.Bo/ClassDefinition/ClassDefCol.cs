@@ -279,9 +279,6 @@ namespace Habanero.BO.ClassDefinition
                 return _classDefcol;
             }
             return LoadColClassDef(new ClassDefCol());
-            //TODO: Is throwing an error correct? Maybe return null?
-            //throw new Generic.HabaneroApplicationException(
-            //    "The Class Definitions cannot be accessed before they have been loaded.");
         }
 
         /// <summary>
@@ -374,7 +371,7 @@ namespace Habanero.BO.ClassDefinition
         ///<param name="className">The class's name</param>
         ///<returns>A string representing the Class Type.</returns>
         ///<param name="includeNamespace">Should the TypeId include the namespace or not</param>
-        private static string GetTypeId(string assemblyName, string className, bool includeNamespace)
+        internal static string GetTypeId(string assemblyName, string className, bool includeNamespace)
         {
             string namespaceString;
             className = StripOutNameSpace(className, out namespaceString);

@@ -143,6 +143,7 @@
     <Compile Include="IBusinessObjectLoader.cs" />
     <Compile Include="IDataAccessor.cs" />
     <Compile Include="IDataSetProvider.cs" />
+    <Compile Include="Loaders\ClassDefValidator.cs" />
     <Compile Include="Loaders\XmlFilterLoader.cs" />
     <Compile Include="Loaders\XmlTriggerLoader.cs" />
     <Compile Include="Loaders\XmlUIFormGridLoader.cs" />

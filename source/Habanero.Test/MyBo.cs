@@ -849,8 +849,7 @@ namespace Habanero.Test
 
         private static string ConvertToXmlString(string input, XmlNodeType xmlNodeType)
         {
-            XmlDocument doc;
-            doc = new XmlDocument();
+            XmlDocument doc = new XmlDocument();
             doc.LoadXml("<foo/>");
             string result = input;
             switch (xmlNodeType)
@@ -862,12 +861,15 @@ namespace Habanero.Test
                 case XmlNodeType.Attribute:
                     XmlAttribute newAttribute = doc.CreateAttribute("genre");
                     newAttribute.Value = input;
-                    doc.DocumentElement.Attributes.Append(newAttribute);
+                    if (doc.DocumentElement != null) doc.DocumentElement.Attributes.Append(newAttribute);
                     result = newAttribute.InnerXml;
                     break;
                 case XmlNodeType.Text:
-                    doc.DocumentElement.InnerText = input;
-                    result = doc.DocumentElement.InnerXml;
+                    if (doc.DocumentElement != null)
+                    {
+                        doc.DocumentElement.InnerText = input;
+                        result = doc.DocumentElement.InnerXml;
+                    }
                     break;
                 case XmlNodeType.CDATA:
                     break;

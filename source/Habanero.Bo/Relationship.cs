@@ -70,13 +70,12 @@ namespace Habanero.BO
 
         internal static void CheckCorrespondingSingleRelationshipsAreValid(SingleRelationshipBase singleRelationship, SingleRelationshipBase singleReverseRelationship)
         {
-            if (singleRelationship.RelationshipDef.RelationshipType == RelationshipType.Association &&
-                singleReverseRelationship.RelationshipDef.RelationshipType == RelationshipType.Association
-                && singleRelationship.OwningBOHasForeignKey && singleReverseRelationship.OwningBOHasForeignKey)
+            if (singleRelationship.OwningBOHasForeignKey && singleReverseRelationship.OwningBOHasForeignKey)
             {
                 string message = String.Format("The corresponding single (one to one) relationships " +
-                                               "{0} (on {1}) and {2} (on {3}) cannot both be configured as having the foreign key " +
-                                               "(OwningBOHasForeignKey). Please set this property to false on one of these relationships.",
+                                               "{0} (on {1}) and {2} (on {3}) cannot both be configured as having the foreign key " 
+                                               + "(OwningBOHasForeignKey). Please set this property to false on one of these relationships " 
+                                               + "(In the ClassDefs.XML or in Firestarter.",
                                                singleRelationship.RelationshipName, singleRelationship.OwningBO.GetType().Name,
                                                singleReverseRelationship.RelationshipName,
                                                singleRelationship.RelatedObjectClassDef.ClassName);

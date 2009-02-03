@@ -72,7 +72,7 @@ namespace Habanero.Base
     /// related Business Object.
     /// This class collaborates with the <see cref="RelKeyDef"/>, the <see cref="IClassDef"/> 
     ///   to provide a definition Relationship. This class along with the <see cref="RelKeyDef"/> and 
-    ///   <see cref="RelPropDef"/> provides
+    ///   <see cref="IRelPropDef"/> provides
     ///   an implementation of the Foreign Key Mapping pattern (Fowler (236) -
     ///   'Patterns of Enterprise Application Architecture' - 'Maps an association between objects to a 
     ///   foreign Key Reference between tables.')

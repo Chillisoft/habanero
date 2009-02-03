@@ -141,6 +141,12 @@ namespace Habanero.BO
 			}
 			return parameters;
 		}
+        /// <summary>
+        /// Returns the base error message that can be used by sub classes of PropRuleBase.
+        /// </summary>
+        /// <param name="propValue">The value that has cuased the broken rule.</param>
+        /// <param name="displayName">The display name of the property that the business rule is broken for.</param>
+        /// <returns></returns>
         protected string GetBaseErrorMessage(object propValue, string displayName)
         {
             string errorMessage = String.Format("'{0}' for property '{1}' is not valid for the rule '{2}'. ",

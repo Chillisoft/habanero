@@ -32,6 +32,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 { 
+    
     public abstract class TestBusinessObjectLookupList : TestUsingDatabase
     {
         protected abstract void SetupDataAccessor();

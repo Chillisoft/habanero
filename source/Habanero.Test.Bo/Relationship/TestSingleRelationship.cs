@@ -34,7 +34,7 @@ namespace Habanero.Test.BO.Relationship
     {
 
         [SetUp]
-        public void SetupTest()
+        public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
@@ -295,11 +295,17 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsNull(contactPerson.Organisation);
             Assert.IsNotNull(organisation.OrganisationID);
             //---------------Execute Test ----------------------
-            contactPerson.Organisation = organisation;
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(organisation.OrganisationID);
-            Assert.AreSame(organisation, contactPerson.Organisation);
-            Assert.AreSame(contactPerson, organisation.ContactPerson);
+            try
+            {
+                contactPerson.Organisation = organisation;
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("The corresponding single (one to one) relationships Organisation ", ex.Message);
+                StringAssert.Contains("cannot both be configured as having the foreign key", ex.Message);
+            }
         }
         [Test]
         public void Test_SetByID_InBOManager_UnsavedOrganisation_NoReverseRelationship_HasOwningForeighKeyFalse()
@@ -440,7 +446,6 @@ namespace Habanero.Test.BO.Relationship
             //---------------Test Result -----------------------
             Assert.IsTrue(relationship.IsRemoved);
             Assert.AreSame(myBO, relationship.RemovedBO);
-
         }
 
         [Test]
@@ -478,18 +483,38 @@ namespace Habanero.Test.BO.Relationship
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
             relationship.OwningBOHasForeignKey = true;
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
-            relationship.SetRelatedObject(contactPerson);
-
             //---------------Assert Precondition----------------
-            Assert.AreEqual(contactPerson.OrganisationID, organisation.OrganisationID);
-            Assert.AreSame(organisation.ContactPerson, contactPerson);
+            //---------------Execute Test ----------------------
+            try
+            {
+                relationship.SetRelatedObject(contactPerson);
+                Assert.Fail("An error should have occurred as corresponding single relationships are not configured correctly (one should have the OwningBOHasForeignKey property set to false)");
+            } catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("The corresponding single (one to one) relationships ", ex.Message);
+                StringAssert.Contains("ContactPerson (on OrganisationTestBO)", ex.Message);
+                StringAssert.Contains("Organisation (on ContactPersonTestBO)", ex.Message);
+                StringAssert.Contains("cannot both be configured as having the foreign key", ex.Message);
+            }
+        }
 
+        [Test]
+        public void Test_ErrorIfBothOwningBOHasForeignKey_Remove()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
+            relationship.OwningBOHasForeignKey = true;
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
+            contactPerson.OrganisationID = organisation.OrganisationID;
+            //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             try
             {
                 relationship.SetRelatedObject(null);
                 Assert.Fail("An error should have occurred as corresponding single relationships are not configured correctly (one should have the OwningBOHasForeignKey property set to false)");
-            } catch (HabaneroDeveloperException ex)
+            }
+            catch (HabaneroDeveloperException ex)
             {
                 StringAssert.Contains("The corresponding single (one to one) relationships ", ex.Message);
                 StringAssert.Contains("ContactPerson (on OrganisationTestBO)", ex.Message);
@@ -599,4 +624,31 @@ namespace Habanero.Test.BO.Relationship
             return relationship;
         }
     }
+
+    [TestFixture]
+    public class TestSingleRelationship_CompositePrimaryKeyContainsCompositeForeignKey : TestSingleRelationship
+    {
+        [SetUp]
+        public override void SetupTest()
+        {
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleCompositeReverse();
+            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
+        }
+    }
+//    [TestFixture]
+//    public class TestSingleRelationship_CompositePrimaryKeyContainsCompositeForeignKey : TestSingleRelationship
+//    {
+//        [SetUp]
+//        public override void SetupTest()
+//        {
+//            ClassDef.ClassDefs.Clear();
+//            BORegistry.DataAccessor = new DataAccessorInMemory();
+//            BusinessObjectManager.Instance.ClearLoadedObjects();
+//            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleCompositeReverse();
+//            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
+//        }
+//    }
 }
