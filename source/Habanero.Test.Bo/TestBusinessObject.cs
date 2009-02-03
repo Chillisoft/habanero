@@ -67,6 +67,66 @@ namespace Habanero.Test.BO
             bo.GetPropertyValueString("TestProp");
         }
 
+        [Test]
+        public void Test_Instantiate_SetsDefaults()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            string testPropDefault = TestUtil.GetRandomString();
+            MyBO.LoadDefaultClassDefWithDefault(testPropDefault);
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            MyBO bo = new MyBO();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(testPropDefault, bo.TestProp);
+        }
+
+        [Test]
+        public void Test_Instantiate_DefaultValuesAreBackedUp()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            string testPropDefault = TestUtil.GetRandomString();
+            MyBO.LoadDefaultClassDefWithDefault(testPropDefault);
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            MyBO bo = new MyBO();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(testPropDefault, bo.Props["TestProp"].PersistedPropertyValue);
+            Assert.AreEqual(null, bo.Props["TestProp2"].PersistedPropertyValue);
+        }
+
+        [Test]
+        public void Test_Instantiate_NewObjectIdIsBackedUp()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            string testPropDefault = TestUtil.GetRandomString();
+            MyBO.LoadDefaultClassDefWithDefault(testPropDefault);
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            MyBO bo = new MyBO();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(bo.MyBoID, bo.Props["MyBoID"].PersistedPropertyValue);
+            Assert.IsTrue(bo.Props["MyBoID"].IsObjectNew);
+        }
+
+        [Test]
+        public void Test_Instantiate_NewObjectIdRemainsAfterCancelEdit()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            string testPropDefault = TestUtil.GetRandomString();
+            MyBO.LoadDefaultClassDefWithDefault(testPropDefault);
+            MyBO bo = new MyBO();
+            Guid id = bo.MyBoID.Value;
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            bo.CancelEdits();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(id, bo.MyBoID);
+        }
+
         //[Test]
         //public void TestIndexer()
         //{
@@ -294,31 +354,25 @@ namespace Habanero.Test.BO
         [Test]
         public void TestApplyEditResetsPreviousValues()
         {
+            //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadDefaultClassDef();
             MockRepository mock = new MockRepository();
             IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
-            //Mock itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
-            //IDatabaseConnection itsConnection = (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
             Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
                 Repeat.Times(2);
             Expect.Call(itsConnection.ExecuteSql(null, null)).IgnoreArguments().Return(1).Repeat.Times(1);
-            //itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-            //                                                 DatabaseConnection.CurrentConnection.GetConnection());
-            //itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
             mock.ReplayAll();
-
-            //MyBO bo = (MyBO) classDef.CreateNewBusinessObject(itsConnection);
             MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
-            //bo.SetPropertyValue("TestProp", "Hello") ;
-            //bo.Save() ;
-
 
             bo.SetPropertyValue("TestProp", "Goodbye");
             TransactionCommitterStub committer = new TransactionCommitterStub();
             committer.AddBusinessObject(bo);
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
             committer.CommitTransaction();
             bo.CancelEdits();
+            //---------------Test Result -----------------------
             Assert.AreEqual("Goodbye", bo.GetPropertyValueString("TestProp"));
         }
 
@@ -336,20 +390,6 @@ namespace Habanero.Test.BO
             Assert.AreNotEqual(0, bo.TestAutoIncID);
             Assert.IsFalse(bo.Status.IsDirty);
         }
-
-        [Test]
-        public void TestMethod()
-        {
-            
-            
-            //---------------Assert PreConditions---------------            
-            //---------------Execute Test ----------------------
-            //---------------Test Result -----------------------
-            //---------------Tear Down -------------------------          
-        }
-
-
-
 
         [Test]
         public void TestSaveWithBeforeSaveImplemented()
@@ -686,7 +726,7 @@ namespace Habanero.Test.BO
         public void TestGetPropertyValue_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
-            string surname = TestUtil.CreateRandomString();
+            string surname = TestUtil.GetRandomString();
             new Engine(); new Car(); new ContactPerson();
             ContactPerson owner = ContactPerson.CreateSavedContactPerson(surname);
             Car car = Car.CreateSavedCar("5", owner);

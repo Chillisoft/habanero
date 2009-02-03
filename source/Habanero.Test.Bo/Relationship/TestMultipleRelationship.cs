@@ -73,7 +73,7 @@ namespace Habanero.Test.BO.Relationship
             RelKeyDef keyDef = new RelKeyDef();
             keyDef.Add(new RelPropDef(contactPersonClassDef.PropDefcol["OrganisationID"], "OrganisationID"));
             MultipleRelationshipDef def = new MultipleRelationshipDef
-                (TestUtil.CreateRandomString(), typeof(ContactPersonTestBO),
+                (TestUtil.GetRandomString(), typeof(ContactPersonTestBO),
                  keyDef, false, "", DeleteParentAction.DoNothing);
 
             OrganisationTestBO organisation = new OrganisationTestBO();
@@ -102,7 +102,7 @@ namespace Habanero.Test.BO.Relationship
             ContactPersonTestBO myBO_delete = ContactPersonTestBO.CreateSavedContactPerson_AsChild(cpCol);
             cpCol.MarkForDelete(myBO_delete);
             ContactPersonTestBO myBO_Edited = ContactPersonTestBO.CreateSavedContactPerson_AsChild(cpCol);
-            myBO_Edited.Surname = TestUtil.CreateRandomString();
+            myBO_Edited.Surname = TestUtil.GetRandomString();
 
             ContactPersonTestBO myBo_Created = ContactPersonTestBO.CreateUnsavedContactPerson_AsChild(cpCol);
             ContactPersonTestBO myBo_Removed = ContactPersonTestBO.CreateSavedContactPerson_AsChild(cpCol);

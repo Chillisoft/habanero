@@ -118,15 +118,10 @@ namespace Habanero.BO
         private void UpdatedHandler(object sender, BOEventArgs e)
         {
             BusinessObject businessObject = (BusinessObject) e.BusinessObject;
-            int rowNum = this.FindRow(businessObject);
-            if (rowNum == -1)
-            {
-                return;
-            }
-            object[] values = GetValues(businessObject);
-            //values[0] = _table.Rows[rowNum].ItemArray[0];
-            _table.Rows[rowNum].ItemArray = values;
+            UpdateBusinessObjectRowValues(businessObject);
         }
+
+        
 
         /// <summary>
         /// Initialises the local data

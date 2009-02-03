@@ -316,7 +316,7 @@ namespace Habanero.Test.BO.ClassDefinition
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO.LoadClassDefWithSurnameAsPrimaryKey_WriteNew();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-            string surname = TestUtil.CreateRandomString();
+            string surname = TestUtil.GetRandomString();
             contactPersonTestBO.Surname = surname;
             PropDef propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadWrite, null);
             propDef.LookupList = new BusinessObjectLookupList(typeof(ContactPersonTestBO));

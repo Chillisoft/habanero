@@ -758,7 +758,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             ContactPersonTestBO cpLoaded =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cpTemp.ID);
-            cpLoaded.FirstName = TestUtil.CreateRandomString();
+            cpLoaded.FirstName = TestUtil.GetRandomString();
 
             //-------------Assert Preconditon ---------------
             Assert.IsTrue(cpLoaded.Status.IsEditing);
@@ -808,7 +808,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPerson cpLoaded = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>
                 (cp.ID);
-            string newSurname = TestUtil.CreateRandomString();
+            string newSurname = TestUtil.GetRandomString();
             cpLoaded.Surname = newSurname;
 
             //---------------Assert Precondition----------------
@@ -1386,7 +1386,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
                 ContactPersonTestBO cpLoaded =
                     BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cp.ID);
-                string newFirstname = cp.FirstName = TestUtil.CreateRandomString();
+                string newFirstname = cp.FirstName = TestUtil.GetRandomString();
                 cp.Save();
                 cpLoaded.AfterLoadCalled = false;
 

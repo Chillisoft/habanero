@@ -107,7 +107,7 @@ namespace Habanero.Test.Structure
 
         private static Person CreateUnsavedPerson()
         {
-            return CreateUnsavedPerson(TestUtil.CreateRandomString());
+            return CreateUnsavedPerson(TestUtil.GetRandomString());
         }
 
         private static Person CreateUnsavedPerson(string firstName)

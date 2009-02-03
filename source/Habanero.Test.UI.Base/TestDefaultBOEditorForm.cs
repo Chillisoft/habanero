@@ -93,16 +93,23 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestSuccessFullEditCallsDelegate()
+            public void TestSuccessfulEditCallsDelegate()
             {
                 //---------------Set up test pack-------------------
                 //IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject(_conn);
                 IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject();
 
                 bool delegateCalled = false;
-                IDefaultBOEditorForm boEditorForm =
-                    GetControlFactory().CreateBOEditorForm((BusinessObject)bo, "default",
-                        delegate { delegateCalled = true; });
+                bool cancelledValue = true;
+                IBusinessObject boInDelegate = null;
+                IDefaultBOEditorForm boEditorForm = GetControlFactory()
+                    .CreateBOEditorForm((BusinessObject)bo, "default", 
+                    delegate(IBusinessObject bo1, bool cancelled)
+                    {
+                        delegateCalled = true;
+                        cancelledValue = cancelled;
+                        boInDelegate = bo1;
+                    });
                 boEditorForm.Show();
                 bo.SetPropertyValue("TestProp", "TestValue");
                 bo.SetPropertyValue("TestProp2", "TestValue2");
@@ -113,6 +120,41 @@ namespace Habanero.Test.UI.Base
                 boEditorForm.Buttons["OK"].PerformClick();
                 //---------------Test Result -----------------------
                 Assert.IsTrue(delegateCalled);
+                Assert.IsFalse(cancelledValue);
+                Assert.AreSame(bo, boInDelegate);
+                //---------------Tear Down -------------------------          
+            }
+
+            [Test]
+            public void TestUnsuccessfulEditCallsDelegate()
+            {
+                //---------------Set up test pack-------------------
+                //IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject(_conn);
+                IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject();
+
+                bool delegateCalled = false;
+                bool cancelledValue = false;
+                IBusinessObject boInDelegate = null;
+                IDefaultBOEditorForm boEditorForm =
+                    GetControlFactory().CreateBOEditorForm((BusinessObject)bo, "default",
+                    delegate(IBusinessObject bo1, bool cancelled)
+                    {
+                        delegateCalled = true;
+                        cancelledValue = cancelled;
+                        boInDelegate = bo1;
+                    });
+                boEditorForm.Show();
+                bo.SetPropertyValue("TestProp", "TestValue");
+                bo.SetPropertyValue("TestProp2", "TestValue2");
+                PrepareMockForSave();
+                //--------------Assert PreConditions----------------            
+                Assert.IsFalse(delegateCalled);
+                //---------------Execute Test ----------------------
+                boEditorForm.Buttons["Cancel"].PerformClick();
+                //---------------Test Result -----------------------
+                Assert.IsTrue(delegateCalled);
+                Assert.IsTrue(cancelledValue);
+                Assert.AreSame(bo, boInDelegate);
                 //---------------Tear Down -------------------------          
             }
 
@@ -168,6 +210,7 @@ namespace Habanero.Test.UI.Base
 
             //_conn = (IDatabaseConnection) _databaseConnectionMockControl.MockInstance;
             //_bo = _classDefMyBo.CreateNewBusinessObject(_conn);
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             _bo = _classDefMyBo.CreateNewBusinessObject();
             _defaultBOEditorForm = GetControlFactory().CreateBOEditorForm((BusinessObject) _bo);
         }

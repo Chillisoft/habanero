@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
@@ -69,8 +69,8 @@ namespace Habanero.Test.BO
             //--------------- Set up test pack ------------------
             new Car();
             ContactPersonCompositeKey person = new ContactPersonCompositeKey();
-            person.PK1Prop1 = TestUtil.CreateRandomString();
-            person.PK1Prop2 = TestUtil.CreateRandomString();
+            person.PK1Prop1 = TestUtil.GetRandomString();
+            person.PK1Prop2 = TestUtil.GetRandomString();
             MultipleRelationship<Car> relationship = person.Relationships.GetMultiple<Car>("Driver");
             //--------------- Test Preconditions ----------------
 

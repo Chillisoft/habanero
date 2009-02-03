@@ -92,7 +92,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol);
-            ContactPersonTestBO myBO = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
+            ContactPersonTestBO myBO = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
             util.RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
@@ -117,8 +117,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Save();
 
             OrganisationTestBO alternateOrganisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
@@ -154,8 +154,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Save();
 
             //---------------Assert Precondition----------------
@@ -193,7 +193,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
-            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
             util.RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
@@ -218,7 +218,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             // In this case the organisation can be set to null for myBO since myBO has never
             //   been associated with am organisation.
             //---------------Set up test pack-------------------
-            ContactPersonTestBO myBO = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
+            ContactPersonTestBO myBO = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
 
             //---------------Assert Precondition----------------
             Assert.IsNull(myBO.Organisation);
@@ -238,7 +238,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol);
-            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             contactPerson.Save();
             cpCol.LoadAll();
@@ -279,7 +279,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol);
-            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
             contactPerson.Organisation = (OrganisationTestBO)compositionRelationship.OwningBO;
             util.RegisterForAddedAndRemovedEvents(cpCol);
 

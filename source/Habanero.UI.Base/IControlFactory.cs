@@ -357,9 +357,9 @@ namespace Habanero.UI.Base
         /// <param name="uiDefName">The name of the set of UI definitions
         /// used to design the edit form. Setting this to an empty string
         /// will use a UI definition with no name attribute specified.</param>
-        /// <param name="action">Action to be performed when the editing is complete. Typically used if you want to update
+        /// <param name="action">Action to be performed when the editing is completed or cancelled. Typically used if you want to update
         /// a grid or a list in an asynchronous environment (E.g. to select the recently edited item in the grid)</param>
-        IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName, PostObjectPersistingDelegate action);
+        IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName, PostObjectEditDelegate action);
 
         ///// <summary>
         ///// Creates a ListView control

@@ -18,9 +18,11 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Data;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Console;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
 using NUnit.Framework;
@@ -39,6 +41,25 @@ namespace Habanero.Test.UI.Base
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
+            GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
+        }
+
+        public class RethrowingExceptionNotifier : IExceptionNotifier
+        {
+            #region Implementation of IExceptionNotifier
+
+            /// <summary>
+            /// Notifies the user of an exception that has occurred
+            /// </summary>
+            /// <param name="ex">The exception</param>
+            /// <param name="furtherMessage">Any further error messages</param>
+            /// <param name="title">The title</param>
+            public void Notify(Exception ex, string furtherMessage, string title)
+            {
+                throw new Exception(furtherMessage, ex);
+            }
+
+            #endregion
         }
 
         [TestFixtureSetUp]
@@ -413,6 +434,7 @@ namespace Habanero.Test.UI.Base
                 AddControlToForm(control, 200);
             }
 
+
             [Test]
             public void TestVWGInitialiseGrid()
             {
@@ -453,6 +475,82 @@ namespace Habanero.Test.UI.Base
                 // verify that grid has moved back to page 1
                 Assert.AreEqual(1, readOnlyGridControl.Grid.CurrentPage);
                 //---------------Tear Down -------------------------          
+            }
+
+            [Ignore("This is no longer a requirement")]
+            [Test]
+            public void Test_AddClicked_RowNotAddedBeforeEditorFinished()
+            {
+                //---------------Set up test pack-------------------
+                //Get Grid with 4 items
+                BusinessObjectCollection<MyBO> col;
+                IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col, true);
+                //AddControlToForm(readOnlyGridControl);
+                IButton button = readOnlyGridControl.Buttons["Add"];
+                int rowCountInEditorMethod = -1;
+                readOnlyGridControl.BusinessObjectEditor = new DelegatedBusinessObjectEditor((bo, uiName, postEditAction) =>
+                {
+                    rowCountInEditorMethod = readOnlyGridControl.Grid.Rows.Count;
+                    return true;
+                });
+                //-------------Assert Preconditions -------------
+                Assert.IsNotNull(button);
+                Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
+                //---------------Execute Test ----------------------
+                button.PerformClick();
+                //---------------Test Result -----------------------
+                Assert.AreEqual(4, rowCountInEditorMethod);
+            }
+
+            [Ignore("This is no longer a requirement")]
+            [Test]
+            public void Test_AddClicked_RowNotAddedBeforePostEditActionCalled()
+            {
+                //---------------Set up test pack-------------------
+                //Get Grid with 4 items
+                BusinessObjectCollection<MyBO> col;
+                IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col, true);
+                //AddControlToForm(readOnlyGridControl);
+                IButton button = readOnlyGridControl.Buttons["Add"];
+                readOnlyGridControl.BusinessObjectEditor = new DelegatedBusinessObjectEditor<MyBO>(
+                    (obj, uiDefName, postEditAction) => true);
+                //-------------Assert Preconditions -------------
+                Assert.IsNotNull(button);
+                Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
+                //---------------Execute Test ----------------------
+                button.PerformClick();
+                //---------------Test Result -----------------------
+                Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
+            }
+
+            [Ignore("This is no longer a requirement")]
+            [Test]
+            public void Test_AddClicked_RowAddedAfterPostEditActionCalled()
+            {
+                //---------------Set up test pack-------------------
+                //Get Grid with 4 items
+                BusinessObjectCollection<MyBO> col;
+                IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col, true);
+                //AddControlToForm(readOnlyGridControl);
+                IButton button = readOnlyGridControl.Buttons["Add"];
+                MyBO myNewBo = null;
+                PostObjectEditDelegate editorPostEditAction = null;
+                readOnlyGridControl.BusinessObjectEditor = new DelegatedBusinessObjectEditor<MyBO>(
+                    delegate(MyBO obj, string uiDefName, PostObjectEditDelegate postEditAction)
+                    {
+                        myNewBo = obj;
+                        editorPostEditAction = postEditAction;
+                        return true;
+                    });
+                button.PerformClick();
+                //-------------Assert Preconditions -------------
+                Assert.IsNotNull(editorPostEditAction);
+                Assert.IsNotNull(myNewBo);
+                Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
+                //---------------Execute Test ----------------------
+                editorPostEditAction(myNewBo, true);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(5, readOnlyGridControl.Grid.Rows.Count);
             }
         }
 
@@ -1474,8 +1572,194 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(grid.FilterControl.Visible);
         }
 
+ 
 
-        //These cannot be tested in Giz since they are now raising messages to test in windows using NUnitForms
+        [Test]
+        public void Test_AddClicked_RowNotAddedBeforeEditorFinished_CreatorDoesntAddToCol()
+        {
+            //---------------Set up test pack-------------------
+            //Get Grid with 4 items
+            BusinessObjectCollection<MyBO> col;
+            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col, true);
+            //AddControlToForm(readOnlyGridControl);
+            IButton button = readOnlyGridControl.Buttons["Add"];
+            int rowCountInEditorMethod = -1;
+            readOnlyGridControl.BusinessObjectCreator = new DelegatedBusinessObjectCreator(() => new MyBO());
+            readOnlyGridControl.BusinessObjectEditor = new DelegatedBusinessObjectEditor((bo, uiName, postEditAction) =>
+            {
+                rowCountInEditorMethod = readOnlyGridControl.Grid.Rows.Count;
+                return true;
+            });
+            //-------------Assert Preconditions -------------
+            Assert.IsNotNull(button);
+            Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
+            //---------------Execute Test ----------------------
+            button.PerformClick();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, rowCountInEditorMethod);
+        }
+
+        [Test]
+        public void Test_AddClicked_RowAddedAfterPostEditActionCalled_CreatorDoesntAddToCol()
+        {
+            //---------------Set up test pack-------------------
+            //Get Grid with 4 items
+            BusinessObjectCollection<MyBO> col;
+            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col, true);
+            readOnlyGridControl.BusinessObjectCreator = new DelegatedBusinessObjectCreator(() => new MyBO());
+            //AddControlToForm(readOnlyGridControl);
+            IButton button = readOnlyGridControl.Buttons["Add"];
+            MyBO myNewBo = null;
+            PostObjectEditDelegate editorPostEditAction = null;
+            readOnlyGridControl.BusinessObjectEditor = new DelegatedBusinessObjectEditor<MyBO>(
+                delegate(MyBO obj, string uiDefName, PostObjectEditDelegate postEditAction)
+                {
+                    myNewBo = obj;
+                    editorPostEditAction = postEditAction;
+                    return true;
+                });
+            button.PerformClick();
+            //-------------Assert Preconditions -------------
+            Assert.IsNotNull(editorPostEditAction);
+            Assert.IsNotNull(myNewBo);
+            Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
+            //---------------Execute Test ----------------------
+            editorPostEditAction(myNewBo, false);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(5, readOnlyGridControl.Grid.Rows.Count);
+        }
+
+        [Test]
+        public void Test_AddClicked_RowAddedAfterEditorFinished()
+        {
+            //---------------Set up test pack-------------------
+            //Get Grid with 4 items
+            BusinessObjectCollection<MyBO> col;
+            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col, true);
+            //AddControlToForm(readOnlyGridControl);
+            MyBO myNewBo = null;
+            IButton button = readOnlyGridControl.Buttons["Add"];
+            readOnlyGridControl.BusinessObjectEditor = new DelegatedBusinessObjectEditor<MyBO>(
+                delegate(MyBO obj, string uiDefName, PostObjectEditDelegate postEditAction)
+                {
+                    obj.TestProp = "test";
+                    myNewBo = obj;
+                    postEditAction(obj, false);
+                    return true;
+                });
+            //-------------Assert Preconditions -------------
+            Assert.IsNotNull(button);
+            Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
+            //---------------Execute Test ----------------------
+            button.PerformClick();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(5, readOnlyGridControl.Grid.Rows.Count);
+            IDataGridViewRow row = readOnlyGridControl.Grid.GetBusinessObjectRow(myNewBo);
+            Assert.AreEqual(myNewBo.TestProp, row.Cells["TestProp"].Value);
+        }
+
+        [Test]
+        public void Test_AddClicked_ThenCancelled_RowNotInGridAfterFinished()
+        {
+            //---------------Set up test pack-------------------
+            //Get Grid with 4 items
+            BusinessObjectCollection<MyBO> col;
+            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col, true);
+
+            //AddControlToForm(readOnlyGridControl);
+            IButton button = readOnlyGridControl.Buttons["Add"];
+            readOnlyGridControl.BusinessObjectEditor = new DelegatedBusinessObjectEditor(
+                delegate(IBusinessObject obj, string uiDefName, PostObjectEditDelegate postEditAction)
+                {
+                    obj.Restore();
+                    postEditAction(obj, true);
+                    return false;
+                });
+            //-------------Assert Preconditions -------------
+            Assert.IsNotNull(button);
+            Assert.IsTrue(button.Enabled);
+            Assert.AreEqual(4, col.Count);
+            Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
+            //---------------Execute Test ----------------------
+            button.PerformClick();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, col.Count);
+            Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
+        }
+
+        [Test]
+        public void Test_AddClicked_ThenCancelled_RowRemovedFromGridDuringPostEdit()
+        {
+            //---------------Set up test pack-------------------
+            //Get Grid with 4 items
+            BusinessObjectCollection<MyBO> col;
+            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col, true);
+
+            //AddControlToForm(readOnlyGridControl);
+            IButton button = readOnlyGridControl.Buttons["Add"];
+            MyBO myNewBo = null;
+            PostObjectEditDelegate editorPostEditAction = null;
+            readOnlyGridControl.BusinessObjectEditor = new DelegatedBusinessObjectEditor<MyBO>(
+                delegate(MyBO obj, string uiDefName, PostObjectEditDelegate postEditAction)
+                {
+                    myNewBo = obj;
+                    editorPostEditAction = postEditAction;
+                    return true;
+                });
+            button.PerformClick();
+            //-------------Assert Preconditions -------------
+            Assert.IsNotNull(editorPostEditAction);
+            Assert.IsNotNull(myNewBo);
+            Assert.AreEqual(5, readOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(5, col.Count);
+            //---------------Execute Test ----------------------
+            editorPostEditAction(myNewBo, true);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, col.Count);
+            Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
+        }
+
+        // custom create - click cancel - no issue removing - not in col before or after
+        [Test]
+        public void Test_AddClicked_ThenCancelled_RowRemovedFromGridDuringPostEdit_CustomCreate()
+        {
+            //---------------Set up test pack-------------------
+            //Get Grid with 4 items
+            BusinessObjectCollection<MyBO> col;
+            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col, true);
+            readOnlyGridControl.BusinessObjectCreator = new DelegatedBusinessObjectCreator<MyBO>(delegate
+            {
+                return new MyBO();
+            });
+            //AddControlToForm(readOnlyGridControl);
+            IButton button = readOnlyGridControl.Buttons["Add"];
+            MyBO myNewBo = null;
+            PostObjectEditDelegate editorPostEditAction = null;
+            readOnlyGridControl.BusinessObjectEditor = new DelegatedBusinessObjectEditor<MyBO>(
+                delegate(MyBO obj, string uiDefName, PostObjectEditDelegate postEditAction)
+                {
+                    myNewBo = obj;
+                    editorPostEditAction = postEditAction;
+                    return true;
+                });
+            button.PerformClick();
+            //-------------Assert Preconditions -------------
+            Assert.IsNotNull(editorPostEditAction);
+            Assert.IsNotNull(myNewBo);
+            Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(4, col.Count);
+            //---------------Execute Test ----------------------
+            editorPostEditAction(myNewBo, true);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, col.Count);
+            Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
+        }
+
+        
+        
+
+
+ //These cannot be tested in Giz since they are now raising messages to test in windows using NUnitForms
 //        [Test]
 //        public void TestClickAddWhenNoCollectionSet()
 //        {
@@ -1638,11 +1922,11 @@ namespace Habanero.Test.UI.Base
             /// <param name="uiDefName">The name of the set of ui definitions
             /// used to design the edit form. Setting this to an empty string
             /// will use a ui definition with no name attribute specified.</param>
+            /// <param name="postEditAction">Action to be performed when the editing is completed or cancelled. Typically used if you want to update
+            /// a grid or a list in an asynchronous environment (E.g. to select the recently edited item in the grid)</param>
             /// <returns>Returs true if edited successfully of false if the edits
             /// were cancelled</returns>
-            /// <param name="postEditAction">The delete to be executeActionOn After The edit is saved.
-            /// will be the object that the method is called on</param>
-            public bool EditObject(IBusinessObject obj, string uiDefName, PostObjectPersistingDelegate postEditAction)
+            public bool EditObject(IBusinessObject obj, string uiDefName, PostObjectEditDelegate postEditAction)
             {
                 return EditObject(obj, uiDefName);
             }

@@ -226,7 +226,7 @@ namespace Habanero.Test.BO
             //--------------- Set up test pack ------------------
             BOKey boKey = CreateBOKeyGuidAndString();
             Guid guid = Guid.NewGuid();
-            string str = TestUtil.CreateRandomString();
+            string str = TestUtil.GetRandomString();
             //--------------- Test Preconditions ----------------
 
             //--------------- Execute Test ----------------------
@@ -291,7 +291,7 @@ namespace Habanero.Test.BO
             BOKey boKey = CreateBOKeyGuidAndString();
             string expectedPreviousValue = boKey.AsString_CurrentValue();
             Guid guid = Guid.NewGuid();
-            string str = TestUtil.CreateRandomString();
+            string str = TestUtil.GetRandomString();
             //--------------- Test Preconditions ----------------
 
             //--------------- Execute Test ----------------------
@@ -309,10 +309,10 @@ namespace Habanero.Test.BO
             //--------------- Set up test pack ------------------
             BOKey boKey = CreateBOKeyGuidAndString();
             boKey[0].Value = Guid.NewGuid();
-            boKey[1].Value = TestUtil.CreateRandomString();
+            boKey[1].Value = TestUtil.GetRandomString();
             string expectedPreviousValue = boKey.AsString_CurrentValue();
             Guid guid = Guid.NewGuid();
-            string str = TestUtil.CreateRandomString();
+            string str = TestUtil.GetRandomString();
             //--------------- Test Preconditions ----------------
 
             //--------------- Execute Test ----------------------

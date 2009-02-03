@@ -17,7 +17,10 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
+using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -49,8 +52,58 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// This test class tests the Button class.
     /// </summary>
-    [TestFixture]
-    public class TestButton
+    public abstract class TestButton
     {
+        protected abstract IControlFactory GetControlFactory();
+
+        [TestFixture]
+        public class TestButtonWin : TestButton
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
+        }
+
+        [TestFixture]
+        public class TestButtonVWG : TestButton
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryVWG();
+            }
+        }
+
+        [Test]
+        public void TestCreateButton()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Execute Test ----------------------
+            IButton myButton = GetControlFactory().CreateButton();
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(myButton);
+
+            //---------------Tear Down -------------------------   
+        }
+
+        [Test]
+        public void Test_PerformClick()
+        {
+            //---------------Set up test pack-------------------
+            IButton button = this.GetControlFactory().CreateButton();
+            bool clicked = false;
+            button.Click += delegate(object sender, EventArgs e)
+            {
+                clicked = true;
+            };
+            //AddControlToForm(button);
+            //-------------Assert Preconditions -------------
+            Assert.IsFalse(clicked);
+            //---------------Execute Test ----------------------
+            button.PerformClick();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(clicked);
+        }
     }
 }

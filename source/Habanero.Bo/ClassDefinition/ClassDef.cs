@@ -473,13 +473,13 @@ namespace Habanero.BO.ClassDefinition
         /// loaded from the DB. If it is new, then the property is
         /// initialised with the default value.</param>
         /// <returns>Returns the collection of BOProps</returns>
-        public BOPropCol createBOPropertyCol(bool newObject)
+        public BOPropCol CreateBOPropertyCol(bool newObject)
         {
             BOPropCol propCol = _propDefCol.CreateBOPropertyCol(newObject);
             if (this.SuperClassDef != null)
             {
                 ClassDef superClassDef = (ClassDef) SuperClassDef.SuperClassClassDef;
-                propCol.Add(superClassDef.createBOPropertyCol(newObject));
+                propCol.Add(superClassDef.CreateBOPropertyCol(newObject));
                 switch (this.SuperClassDef.ORMapping)
                 {
                     case ORMapping.ConcreteTableInheritance:

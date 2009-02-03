@@ -86,6 +86,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------   
         }
 
+        [Test]
         public void TestListBoxItems()
         {
             //---------------Set up test pack-------------------

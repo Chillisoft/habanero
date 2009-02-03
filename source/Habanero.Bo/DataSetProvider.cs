@@ -57,6 +57,7 @@ namespace Habanero.BO
 
             _uiGridProperties = uiGrid; 
             DataColumn column = _table.Columns.Add();
+            //TODO - Mark 02 Feb 2009: Rename this default column name for ID!!!
             column.Caption = "ID";
             column.ColumnName = "ID";
             IClassDef classDef = _collection.ClassDef;
@@ -93,7 +94,21 @@ namespace Habanero.BO
             column.ExtendedProperties.Add("Alignment", uiProperty.Alignment);
         }
 
-        
+        ///<summary>
+        /// Updates the row values for the specified <see cref="IBusinessObject"/>.
+        ///</summary>
+        ///<param name="businessObject">The <see cref="IBusinessObject"/> for which the row values need to updated.</param>
+        public virtual void UpdateBusinessObjectRowValues(IBusinessObject businessObject)
+        {
+            if (businessObject == null) return;
+            int rowNum = this.FindRow(businessObject);
+            if (rowNum == -1)
+            {
+                return;
+            }
+            object[] values = GetValues(businessObject);
+            _table.Rows[rowNum].ItemArray = values;
+        }
 
         /// <summary>
         /// Gets a list of the property values to display to the user
@@ -156,7 +171,9 @@ namespace Habanero.BO
         {
             for (int i = 0; i < _table.Rows.Count; i++)
             {
-                string gridIDValue = _table.Rows[i][0].ToString();
+                DataRow dataRow = _table.Rows[i];
+                if (dataRow.RowState == DataRowState.Deleted) continue;
+                string gridIDValue = dataRow[0].ToString();
                 string valuePersisted = bo.ID.AsString_LastPersistedValue();
                 string valueBeforeLastEdit = bo.ID.AsString_PreviousValue();
                 string currentValue = bo.ID.ToString();

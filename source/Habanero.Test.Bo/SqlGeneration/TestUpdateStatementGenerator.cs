@@ -110,8 +110,8 @@ namespace Habanero.Test.BO.SqlGeneration
             car.Save();
 
             ContactPersonCompositeKey contactPerson = new ContactPersonCompositeKey();
-            contactPerson.PK1Prop1 = TestUtil.CreateRandomString();
-            contactPerson.PK1Prop2 = TestUtil.CreateRandomString();
+            contactPerson.PK1Prop1 = TestUtil.GetRandomString();
+            contactPerson.PK1Prop2 = TestUtil.GetRandomString();
             contactPerson.Save();
 
             

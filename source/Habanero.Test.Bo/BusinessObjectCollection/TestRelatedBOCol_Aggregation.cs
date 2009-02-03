@@ -96,8 +96,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             GetAggregateRelationship(organisationTestBO, out cpCol);
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Save();
 
             OrganisationTestBO alternateOrganisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
@@ -131,7 +131,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             GetAggregateRelationship(organisationTestBO, out cpCol);
-            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
             util.RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
@@ -151,7 +151,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_SetParentNull()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
 
             //---------------Assert Precondition----------------
             Assert.IsNull(contactPerson.Organisation);
@@ -171,7 +171,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             GetAggregateRelationship(organisationTestBO, out cpCol);
-            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             contactPerson.Save();
             cpCol.LoadAll();
@@ -197,7 +197,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             GetAggregateRelationship(organisationTestBO, out cpCol);
-            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
+            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             contactPerson.Save();
             cpCol.LoadAll();

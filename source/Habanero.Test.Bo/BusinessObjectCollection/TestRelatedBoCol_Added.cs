@@ -77,8 +77,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         {
             MultipleRelationship<ContactPersonTestBO> relationship = GetContactPersonRelationship();
             ContactPersonTestBO cp = relationship.BusinessObjectCollection.CreateBusinessObject();
-            cp.Surname = TestUtil.CreateRandomString();
-            cp.FirstName = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
+            cp.FirstName = TestUtil.GetRandomString();
             cp.Save();
             return cp;
         }
@@ -397,7 +397,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
                 new RelatedBusinessObjectCollection<ContactPersonTestBO>(GetContactPersonRelationship());
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
             cpCol.Add(myBO);
-            myBO.Surname = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
             util.RegisterForAddedEvent(cpCol);
             //---------------Assert Precondition----------------
             util.AssertOneObjectInCurrentAndAddedCollection(cpCol);
@@ -420,7 +420,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
                 new RelatedBusinessObjectCollection<ContactPersonTestBO>(GetContactPersonRelationship());
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
             cpCol.Add(myBO);
-            myBO.Surname = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
             util.RegisterForAddedEvent(cpCol);
             //---------------Assert Precondition----------------
             util.AssertOneObjectInCurrentAndAddedCollection(cpCol);
@@ -445,7 +445,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
                 new RelatedBusinessObjectCollection<ContactPersonTestBO>(GetContactPersonRelationship());
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
             cpCol.Add(myBO);
-            myBO.Surname = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
             util.RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
@@ -523,7 +523,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol =
                 new RelatedBusinessObjectCollection<ContactPersonTestBO>(GetContactPersonRelationship());
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateUnsavedContactPerson
-                (TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
+                (TestUtil.GetRandomString(), TestUtil.GetRandomString());
             cpCol.Add(myBO);
             util.RegisterForAddedAndRemovedEvents(cpCol);
 

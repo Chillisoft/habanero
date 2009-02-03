@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
@@ -168,7 +168,7 @@ namespace Habanero.Test.BO.Relationship
             singleRelationship.SetRelatedObject(organisationTestBO);
             TransactionalSingleRelationship_Added tsr = new TransactionalSingleRelationship_Added(singleRelationship);
 
-            contactPersonTestBO.Surname = TestUtil.CreateRandomString();
+            contactPersonTestBO.Surname = TestUtil.GetRandomString();
             
             //---------------Assert PreConditions--------------- 
             Assert.IsTrue(contactPersonTestBO.Status.IsDirty);

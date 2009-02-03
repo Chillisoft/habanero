@@ -44,6 +44,18 @@ namespace Habanero.UI.VWG
         public event RowDoubleClickedHandler RowDoubleClicked;
 
         /// <summary>
+        /// Occurs when the collection in the grid is changed
+        /// </summary>
+        public event EventHandler CollectionChanged;
+
+        /// <summary>
+        /// Occurs when a business object is being edited
+        /// </summary>
+        public event EventHandler<BOEventArgs> BusinessObjectEdited;
+
+        private readonly GridBaseManager _manager;
+        
+        /// <summary>
         /// Gets and sets the UI definition used to initialise the grid structure (the UI name is indicated
         /// by the "name" attribute on the UI element in the class definitions
         /// </summary>
@@ -62,17 +74,15 @@ namespace Habanero.UI.VWG
             set { _manager.ClassDef = value; }
         }
 
-        /// <summary>
-        /// Occurs when the collection in the grid is changed
-        /// </summary>
-        public event EventHandler CollectionChanged;
-
-        /// <summary>
-        /// Occurs when a business object is being edited
-        /// </summary>
-        public event EventHandler<BOEventArgs> BusinessObjectEdited;
-
-        private readonly GridBaseManager _manager;
+        ///<summary>
+        /// Refreshes the row values for the specified <see cref="IBusinessObject"/>.
+        ///</summary>
+        ///<param name="businessObject">The <see cref="IBusinessObject"/> for which the row must be refreshed.</param>
+        public void RefreshBusinessObjectRow(IBusinessObject businessObject)
+        {
+            if (DataSetProvider == null) return;
+            DataSetProvider.UpdateBusinessObjectRowValues(businessObject);
+        }
 
         protected GridBaseVWG()
         {
@@ -182,6 +192,17 @@ namespace Habanero.UI.VWG
         public IBusinessObject GetBusinessObjectAtRow(int row)
         {
             return _manager.GetBusinessObjectAtRow(row);
+        }
+
+        ///<summary>
+        /// Returns the row for the specified <see cref="IBusinessObject"/>.
+        ///</summary>
+        ///<param name="businessObject">The <see cref="IBusinessObject"/> to search for.</param>
+        ///<returns>Returns the row for the specified <see cref="IBusinessObject"/>, 
+        /// or null if the <see cref="IBusinessObject"/> is not found in the grid.</returns>
+        public IDataGridViewRow GetBusinessObjectRow(IBusinessObject businessObject)
+        {
+            return _manager.GetBusinessObjectRow(businessObject);
         }
 
         /// <summary>

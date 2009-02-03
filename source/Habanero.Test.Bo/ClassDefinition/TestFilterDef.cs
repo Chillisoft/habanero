@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
@@ -15,8 +15,8 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestFilterPropertyDef_Constructor()
         {
             //---------------Set up test pack-------------------
-            string propName = TestUtil.CreateRandomString();
-            string label = TestUtil.CreateRandomString();
+            string propName = TestUtil.GetRandomString();
+            string label = TestUtil.GetRandomString();
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             FilterClauseOperator opEquals = FilterClauseOperator.OpEquals;
             //---------------Assert PreConditions---------------            
@@ -35,8 +35,8 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestConstructor()
         {
             //---------------Set up test pack-------------------
-            string propName = TestUtil.CreateRandomString();
-            string label = TestUtil.CreateRandomString();
+            string propName = TestUtil.GetRandomString();
+            string label = TestUtil.GetRandomString();
             FilterPropertyDef def = 
                 new FilterPropertyDef(propName, label, "BoolCheckBoxFilter", "Habanero.Test.UI.Base", FilterClauseOperator.OpEquals, null);
 

@@ -1118,7 +1118,7 @@ namespace Habanero.Test.BO
             MyBO.LoadClassDefWithBOStringLookup();
             ContactPersonTestBO.LoadClassDefWithSurnameAsPrimaryKey_WriteNew();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-            string surname = TestUtil.CreateRandomString();
+            string surname = TestUtil.GetRandomString();
             contactPersonTestBO.Surname = surname;
             contactPersonTestBO.Save();
             MyBO myBO = new MyBO();

@@ -27,7 +27,7 @@ namespace Habanero.Test
     {
         private static readonly Random rnd = new Random();
 
-        public static string CreateRandomString()
+        public static string GetRandomString()
         {
             return Guid.NewGuid().ToString("N");
         }

@@ -357,7 +357,7 @@ namespace Habanero.Test.BO.Relationship
             OrganisationTestBO.LoadDefaultClassDef();
             ClassDef cpClassDef = ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
 
-            string reverseRelationshipName = TestUtil.CreateRandomString();
+            string reverseRelationshipName = TestUtil.GetRandomString();
             cpClassDef.RelationshipDefCol["Organisation"].ReverseRelationshipName = reverseRelationshipName;
 
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();

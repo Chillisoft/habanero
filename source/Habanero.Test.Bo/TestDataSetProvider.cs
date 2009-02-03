@@ -30,8 +30,7 @@ namespace Habanero.Test.BO
 {
     /// <summary>
     /// Summary description for Class1.
-    /// </summary>   
-    //[TestFixture] 
+    /// </summary>
     public abstract class TestDataSetProvider : TestUsingDatabase
     {
         protected XmlClassLoader _loader;
@@ -97,7 +96,7 @@ namespace Habanero.Test.BO
             _dataSetProvider = CreateDataSetProvider(_collection);
             
             BOMapper mapper = new BOMapper( _collection.ClassDef.CreateNewBusinessObject());
-            itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef().GetUIGridProperties());
+            itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
             itsDatabaseConnectionMockControl.Verify();
         }
 
@@ -159,6 +158,37 @@ namespace Habanero.Test.BO
             Assert.AreEqual("s1", row1["TestProp2"]);
             Assert.AreEqual("bo2prop1", row2["TestProp"]);
             Assert.AreEqual("s2", row2["TestProp2"]);
+        }
+
+        [Test]
+        public virtual void TestUpdateBusinessObjectRowValues()
+        {
+            //---------------Set up test pack-------------------
+            SetupTestData();
+            DataRow row1 = itsTable.Rows[0];
+            MyBO myBO = (MyBO)_dataSetProvider.Find(0);
+            string testPropValue = myBO.TestProp;
+            row1["TestProp"] = "";
+            //-------------Assert Preconditions -------------
+            Assert.AreEqual(testPropValue, myBO.TestProp);
+            Assert.AreNotEqual(testPropValue, row1["TestProp"]);
+            //---------------Execute Test ----------------------
+            _dataSetProvider.UpdateBusinessObjectRowValues(myBO);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(testPropValue, myBO.TestProp);
+            Assert.AreEqual(testPropValue, row1["TestProp"]);
+        }
+
+        [Test]
+        public void TestUpdateBusinessObjectRowValues_NullBo()
+        {
+            //---------------Set up test pack-------------------
+            SetupTestData();
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            _dataSetProvider.UpdateBusinessObjectRowValues(null);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(true, "Error should not be thrown and this assert should be reached.");
         }
 
         [Test]

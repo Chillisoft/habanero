@@ -17,7 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 using System;
-using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -41,16 +40,31 @@ namespace Habanero.UI.Win
         private IPanelInfo _panelInfo;
         private IPanel _boPanel;
         private IButtonGroupControl _buttons;
-        private PostObjectPersistingDelegate _action;
+        private PostObjectEditDelegate _action;
 
 
-        public DefaultBOEditorFormWin(BusinessObject bo, string uiDefName, IControlFactory controlFactory, PostObjectPersistingDelegate action)
+        /// <summary>
+        /// Constructs the <see cref="DefaultBOEditorFormWin"/> class  with 
+        /// the specified <see cref="BusinessObject"/>, uiDefName, <see cref="IControlFactory"/> and post edit action. 
+        /// </summary>
+        /// <param name="bo">The business object to represent</param>
+        /// <param name="uiDefName">The name of the ui def to use.</param>
+        /// <param name="controlFactory">The <see cref="IControlFactory"/> to use for creating the Editor form controls</param>
+        /// <param name="action">Action to be performed when the editing is completed or cancelled. Typically used if you want to update
+        /// a grid or a list in an asynchronous environment (E.g. to select the recently edited item in the grid).</param>
+        public DefaultBOEditorFormWin(BusinessObject bo, string uiDefName, IControlFactory controlFactory, PostObjectEditDelegate action)
             : this(bo, uiDefName, controlFactory)
         {
             _action = action;
-            
         }
 
+        /// <summary>
+        /// Constructs the <see cref="DefaultBOEditorFormWin"/> class  with 
+        /// the specified <see cref="BusinessObject"/>, uiDefName and <see cref="IControlFactory"/>. 
+        /// </summary>
+        /// <param name="bo">The business object to represent</param>
+        /// <param name="uiDefName">The name of the ui def to use.</param>
+        /// <param name="controlFactory">The <see cref="IControlFactory"/> to use for creating the Editor form controls</param>
         public DefaultBOEditorFormWin(BusinessObject bo, string uiDefName, IControlFactory controlFactory)
         {
             _bo = bo;
@@ -71,7 +85,7 @@ namespace Habanero.UI.Win
                                                      "'form' section for the class, under the 'ui' " +
                                                      "with the name '" + _uiDefName + "'.");
                 }
-                def = uiMapper.GetUIFormProperties();
+                def = uiMapper.UIForm;
             }
             else
             {
@@ -83,7 +97,7 @@ namespace Habanero.UI.Win
                                                      "cause is that the class definitions do not have a " +
                                                      "'form' section for the class.");
                 }
-                def = uiMapper.GetUIFormProperties();
+                def = uiMapper.UIForm;
             }
             if (def == null)
             {
@@ -170,7 +184,7 @@ namespace Habanero.UI.Win
                 Close();
                 if (_action != null)
                 {
-                    _action(this._bo);
+                    _action(this._bo, false);
                 }
                 _panelInfo.BusinessObject = null;
             }
@@ -192,9 +206,13 @@ namespace Habanero.UI.Win
         private void CancelButtonHandler(object sender, EventArgs e)
         {
             _panelInfo.BusinessObject = null;
-            _bo.Restore();
+            _bo.CancelEdits();
             DialogResult = Base.DialogResult.Cancel;
             Close();
+            if (_action != null)
+            {
+                _action(this._bo, true);
+            }
         }
 
         /// <summary>

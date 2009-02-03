@@ -167,7 +167,7 @@ namespace Habanero.Test.BO
                 
                 T testBO2 = new T();
                 testBO2.SetStatus(BOStatus.Statuses.isNew, isNew);
-                testBO2.MyBoID = "2." + TestUtil.CreateRandomString();
+                testBO2.MyBoID = "2." + TestUtil.GetRandomString();
                 testBO2.MyParentBoID = testBO.MyParentBoID;
                 children.Add(testBO2);
             }

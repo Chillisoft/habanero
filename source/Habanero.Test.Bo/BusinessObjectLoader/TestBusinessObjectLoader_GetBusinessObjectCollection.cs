@@ -799,7 +799,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ClassDef changedClassDef = classDef.Clone();
-            changedClassDef.TypeParameter = TestUtil.CreateRandomString();
+            changedClassDef.TypeParameter = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
             IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(changedClassDef, "");
             //---------------Test Result -----------------------
@@ -814,7 +814,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ClassDef changedClassDef = classDef.Clone();
-            changedClassDef.TypeParameter = TestUtil.CreateRandomString();
+            changedClassDef.TypeParameter = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
             IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(changedClassDef, "", "");
             //---------------Test Result -----------------------
@@ -830,7 +830,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             ClassDef changedClassDef = classDef.Clone();
-            changedClassDef.TypeParameter = TestUtil.CreateRandomString();
+            changedClassDef.TypeParameter = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
             IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(changedClassDef, selectQuery);
             //---------------Test Result -----------------------
@@ -1178,10 +1178,10 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-            ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
-            ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
-            CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
-            ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.CreateRandomString(), 3);
+            ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
+            ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
+            CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
+            ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.GetRandomString(), 3);
 
             string criteria = "IntegerProperty > " + 3;
             //---------------Assert Precondition----------------
@@ -1513,7 +1513,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             Engine.DeleteAllEngines();
             Engine.LoadClassDef_IncludingCarAndOwner();
-            string engineNo = TestUtil.CreateRandomString();
+            string engineNo = TestUtil.GetRandomString();
             Engine engine = Engine.CreateSavedEngine(engineNo);
             string criteria = string.Format("Car.OwnerID is NULL");
 
@@ -1561,9 +1561,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
         private static Engine CreateEngineWithCarWithContact(out string surname, out string regno, out string engineNo)
         {
-            regno = TestUtil.CreateRandomString();
-            engineNo = TestUtil.CreateRandomString();
-            surname = TestUtil.CreateRandomString();
+            regno = TestUtil.GetRandomString();
+            engineNo = TestUtil.GetRandomString();
+            surname = TestUtil.GetRandomString();
             ContactPerson owner = ContactPerson.CreateSavedContactPerson(surname);
             Car car = Car.CreateSavedCar(regno, owner);
             return Engine.CreateSavedEngine(car, engineNo);
@@ -1571,8 +1571,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
 //        private Engine CreateEngineWithCarNoContact(out string regno, out string engineNo)
 //        {
-//            regno = TestUtil.CreateRandomString();
-//            engineNo = TestUtil.CreateRandomString();
+//            regno = TestUtil.GetRandomString();
+//            engineNo = TestUtil.GetRandomString();
 //            Car car = Car.CreateSavedCar(regno);
 //            return Engine.CreateSavedEngine(car, engineNo);
 //        }

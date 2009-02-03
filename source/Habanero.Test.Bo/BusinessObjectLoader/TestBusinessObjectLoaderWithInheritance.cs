@@ -294,7 +294,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             Entity.LoadDefaultClassDef();
             Part.LoadClassDef_WithClassTableInheritance();
-            string entityType = TestUtil.CreateRandomString();
+            string entityType = TestUtil.GetRandomString();
             Part part = Part.CreateSavedPart();
             part.EntityType = entityType;
             part.Save();

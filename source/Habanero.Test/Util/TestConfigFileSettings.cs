@@ -55,7 +55,7 @@ namespace Habanero.Test.Util
             //---------------Set up test pack-------------------
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.CreateRandomString();
+            string settingName = TestUtil.GetRandomString();
             //---------------Assert Preconditions --------------
 
             //---------------Execute Test ----------------------
@@ -80,8 +80,8 @@ namespace Habanero.Test.Util
             //---------------Set up test pack-------------------
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.CreateRandomString();
-            string settingValue = TestUtil.CreateRandomString();
+            string settingName = TestUtil.GetRandomString();
+            string settingValue = TestUtil.GetRandomString();
             configuration.AppSettings.Settings.Add(settingName, settingValue);
             //---------------Assert Preconditions --------------
 
@@ -103,7 +103,7 @@ namespace Habanero.Test.Util
             Exception exception = null;
             try
             {
-                configFileSettings.GetString(TestUtil.CreateRandomString(), DateTime.Now);
+                configFileSettings.GetString(TestUtil.GetRandomString(), DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -121,8 +121,8 @@ namespace Habanero.Test.Util
             //---------------Set up test pack-------------------
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.CreateRandomString();
-            string settingValue = TestUtil.CreateRandomString();
+            string settingName = TestUtil.GetRandomString();
+            string settingValue = TestUtil.GetRandomString();
             //---------------Assert Preconditions --------------
 
             //---------------Execute Test ----------------------
@@ -139,8 +139,8 @@ namespace Habanero.Test.Util
             //---------------Set up test pack-------------------
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.CreateRandomString();
-            string settingValue = TestUtil.CreateRandomString();
+            string settingName = TestUtil.GetRandomString();
+            string settingValue = TestUtil.GetRandomString();
             configuration.AppSettings.Settings.Add(settingName, "");
             //---------------Assert Preconditions --------------
 
@@ -160,7 +160,7 @@ namespace Habanero.Test.Util
             //---------------Set up test pack-------------------
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.CreateRandomString();
+            string settingName = TestUtil.GetRandomString();
             //---------------Assert Preconditions --------------
 
             //---------------Execute Test ----------------------
@@ -185,7 +185,7 @@ namespace Habanero.Test.Util
             //---------------Set up test pack-------------------
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.CreateRandomString();
+            string settingName = TestUtil.GetRandomString();
             decimal settingValue = GetRandomDecimal();
             configuration.AppSettings.Settings.Add(settingName, Convert.ToString(settingValue, CultureInfo.InvariantCulture.NumberFormat));
             //---------------Assert Preconditions --------------
@@ -214,7 +214,7 @@ namespace Habanero.Test.Util
             Exception exception = null;
             try
             {
-                configFileSettings.GetDecimal(TestUtil.CreateRandomString(), DateTime.Now);
+                configFileSettings.GetDecimal(TestUtil.GetRandomString(), DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -232,7 +232,7 @@ namespace Habanero.Test.Util
             //---------------Set up test pack-------------------
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.CreateRandomString();
+            string settingName = TestUtil.GetRandomString();
             decimal settingValue = GetRandomDecimal();
             //---------------Assert Preconditions --------------
 
@@ -250,7 +250,7 @@ namespace Habanero.Test.Util
             //---------------Set up test pack-------------------
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.CreateRandomString();
+            string settingName = TestUtil.GetRandomString();
             decimal settingValue = GetRandomDecimal();
             configuration.AppSettings.Settings.Add(settingName, Convert.ToString(0, CultureInfo.InvariantCulture.NumberFormat));
             //---------------Assert Preconditions --------------
@@ -271,7 +271,7 @@ namespace Habanero.Test.Util
             //---------------Set up test pack-------------------
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.CreateRandomString();
+            string settingName = TestUtil.GetRandomString();
             //---------------Assert Preconditions --------------
 
             //---------------Execute Test ----------------------
@@ -296,7 +296,7 @@ namespace Habanero.Test.Util
             //---------------Set up test pack-------------------
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.CreateRandomString();
+            string settingName = TestUtil.GetRandomString();
             bool settingValue = GetRandomBoolean();
             configuration.AppSettings.Settings.Add(settingName, Convert.ToString(settingValue, CultureInfo.InvariantCulture.NumberFormat));
             //---------------Assert Preconditions --------------
@@ -318,7 +318,7 @@ namespace Habanero.Test.Util
             //---------------Set up test pack-------------------
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.CreateRandomString();
+            string settingName = TestUtil.GetRandomString();
             bool settingValue = GetRandomBoolean();
             //---------------Assert Preconditions --------------
 
@@ -336,7 +336,7 @@ namespace Habanero.Test.Util
             //---------------Set up test pack-------------------
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.CreateRandomString();
+            string settingName = TestUtil.GetRandomString();
             bool settingValue = GetRandomBoolean();
             configuration.AppSettings.Settings.Add(settingName, Convert.ToString(true));
             //---------------Assert Preconditions --------------

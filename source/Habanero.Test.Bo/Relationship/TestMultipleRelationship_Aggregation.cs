@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
@@ -90,8 +90,8 @@ namespace Habanero.Test.BO.Relationship
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
-            myBO.Surname = TestUtil.CreateRandomString();
-            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
+            myBO.FirstName = TestUtil.GetRandomString();
             myBO.Save();
 
             //---------------Assert Precondition----------------
@@ -117,8 +117,8 @@ namespace Habanero.Test.BO.Relationship
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(organisationTestBO, out cpCol);
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
-            myBO.Surname = TestUtil.CreateRandomString();
-            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
+            myBO.FirstName = TestUtil.GetRandomString();
             myBO.Save();
 
             //---------------Assert Precondition----------------
@@ -140,8 +140,8 @@ namespace Habanero.Test.BO.Relationship
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
-            myBO.Surname = TestUtil.CreateRandomString();
-            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
+            myBO.FirstName = TestUtil.GetRandomString();
             myBO.Save();
 
             //---------------Assert Precondition----------------
@@ -169,8 +169,8 @@ namespace Habanero.Test.BO.Relationship
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
-            myBO.Surname = TestUtil.CreateRandomString();
-            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
+            myBO.FirstName = TestUtil.GetRandomString();
             myBO.Save();
 
             //---------------Assert Precondition----------------
@@ -193,15 +193,15 @@ namespace Habanero.Test.BO.Relationship
             MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Save();
 
             //---------------Assert Precondition----------------
             Assert.IsFalse(relationship.IsDirty);
 
             //---------------Execute Test ----------------------
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
 
             //---------------Test Result -----------------------
             Assert.IsTrue(relationship.IsDirty);
@@ -222,15 +222,15 @@ namespace Habanero.Test.BO.Relationship
             MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Save();
 
             //---------------Assert Precondition----------------
             Assert.IsFalse(organisationTestBO.Status.IsDirty);
 
             //---------------Execute Test ----------------------
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             bool isDirty = organisationTestBO.Status.IsDirty;
 
             //---------------Test Result -----------------------
@@ -246,10 +246,10 @@ namespace Habanero.Test.BO.Relationship
             MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Save();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
 
             //---------------Execute Test ----------------------
             IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();
@@ -269,8 +269,8 @@ namespace Habanero.Test.BO.Relationship
             MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
 
             //---------------Execute Test ----------------------
             IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();
@@ -308,8 +308,8 @@ namespace Habanero.Test.BO.Relationship
             MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Save();
             cpCol.MarkForDelete(contactPerson);
 
@@ -330,8 +330,8 @@ namespace Habanero.Test.BO.Relationship
             MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Save();
             cpCol.MarkForDelete(contactPerson);
 
@@ -344,7 +344,7 @@ namespace Habanero.Test.BO.Relationship
         }
 
         /// <summary>
-        /// • If a car is persisted then it must persist all its tyres.
+        /// � If a car is persisted then it must persist all its tyres.
         /// </summary>
         [Test]
         public void Test_ParentPersistsDirtyChildren()
@@ -356,10 +356,10 @@ namespace Habanero.Test.BO.Relationship
             MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(organisationTestBO, out cpCol);
 
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
-            myBO.Surname = TestUtil.CreateRandomString();
-            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
+            myBO.FirstName = TestUtil.GetRandomString();
             myBO.Save();
-            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.FirstName = TestUtil.GetRandomString();
 
             //---------------Assert Precondition----------------
             Assert.IsTrue(aggregateRelationship.IsDirty);

@@ -90,7 +90,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, boMan.Count);
 
             //---------------Execute Test ----------------------
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             boMan.Add(cp);
 
             //---------------Test Result -----------------------
@@ -109,7 +109,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
-            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = TestUtil.CreateRandomString()};
+            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = TestUtil.GetRandomString()};
             boMan.Add(cp);
 
             //---------------Assert Precondition----------------
@@ -148,7 +148,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
                         BusinessObjectManager boMan = BusinessObjectManager.Instance;
-            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = TestUtil.CreateRandomString()};
+            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = TestUtil.GetRandomString()};
             boMan.Add(cp);
 
             //---------------Assert Precondition----------------
@@ -172,7 +172,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManagerStub.SetNewBusinessObjectManager();
             BusinessObjectManagerStub boMan = (BusinessObjectManagerStub)BusinessObjectManagerStub.Instance;
-            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = TestUtil.CreateRandomString()};
+            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = TestUtil.GetRandomString()};
             boMan.ClearLoadedObjects();
             boMan.Add(cp);
             //---------------Assert Precondition----------------
@@ -197,7 +197,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManagerStub.SetNewBusinessObjectManager();
             BusinessObjectManagerStub boMan = (BusinessObjectManagerStub)BusinessObjectManagerStub.Instance;
-            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = TestUtil.CreateRandomString()};
+            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = TestUtil.GetRandomString()};
             boMan.ClearLoadedObjects();
             boMan.Add(cp);
             //---------------Assert Precondition----------------
@@ -321,7 +321,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
-            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = TestUtil.CreateRandomString()};
+            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = TestUtil.GetRandomString()};
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boMan.Count);
@@ -348,7 +348,7 @@ namespace Habanero.Test.BO
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             boMan.Add(cp);
 
             //---------------Assert Precondition----------------
@@ -450,7 +450,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectManager boMan = BusinessObjectManager.Instance;
 
-            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = TestUtil.CreateRandomString()};
+            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = TestUtil.GetRandomString()};
             cp.Save();
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boMan.Count);
@@ -458,7 +458,7 @@ namespace Habanero.Test.BO
 
             //---------------Execute Test ----------------------
             
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             cp.Save();
 
             //---------------Test Result -----------------------
@@ -636,8 +636,8 @@ namespace Habanero.Test.BO
 
             ContactPersonCompositeKey origCp = new ContactPersonCompositeKey
             {
-                PK1Prop1 = TestUtil.CreateRandomString(),
-                PK1Prop2 = TestUtil.CreateRandomString()
+                PK1Prop1 = TestUtil.GetRandomString(),
+                PK1Prop2 = TestUtil.GetRandomString()
             };
 
             ContactPersonCompositeKey copyContactPerson = new ContactPersonCompositeKey();
@@ -646,9 +646,9 @@ namespace Habanero.Test.BO
             copyContactPerson.PK1Prop2 = origCp.PK1Prop2;
 
             origCp.Props.BackupPropertyValues();
-            origCp.PK1Prop1 = TestUtil.CreateRandomString();
+            origCp.PK1Prop1 = TestUtil.GetRandomString();
             copyContactPerson.Props.BackupPropertyValues();
-            copyContactPerson.PK1Prop1 = TestUtil.CreateRandomString();
+            copyContactPerson.PK1Prop1 = TestUtil.GetRandomString();
 
             boMan.AddBusinessObject(copyContactPerson, origCp.ID.AsString_PreviousValue());
             //---------------Assert Precondition----------------
@@ -678,14 +678,14 @@ namespace Habanero.Test.BO
 
             ContactPersonCompositeKey origCp = new ContactPersonCompositeKey
             {
-                PK1Prop1 = TestUtil.CreateRandomString(),
-                PK1Prop2 = TestUtil.CreateRandomString()
+                PK1Prop1 = TestUtil.GetRandomString(),
+                PK1Prop2 = TestUtil.GetRandomString()
             };
 
             boMan.ClearLoadedObjects();
 
             origCp.Props.BackupPropertyValues();
-            origCp.PK1Prop1 = TestUtil.CreateRandomString();
+            origCp.PK1Prop1 = TestUtil.GetRandomString();
 
             boMan.AddBusinessObject(origCp, origCp.ID.AsString_PreviousValue());
             //---------------Assert Precondition----------------
@@ -711,14 +711,14 @@ namespace Habanero.Test.BO
 
             ContactPersonCompositeKey origCp = new ContactPersonCompositeKey
             {
-                PK1Prop1 = TestUtil.CreateRandomString(),
-                PK1Prop2 = TestUtil.CreateRandomString()
+                PK1Prop1 = TestUtil.GetRandomString(),
+                PK1Prop2 = TestUtil.GetRandomString()
             };
 
             boMan.ClearLoadedObjects();
 
             origCp.Props.BackupPropertyValues();
-            origCp.PK1Prop1 = TestUtil.CreateRandomString();
+            origCp.PK1Prop1 = TestUtil.GetRandomString();
 
             boMan.AddBusinessObject(origCp, origCp.ID.AsString_CurrentValue());
             //---------------Assert Precondition----------------
@@ -746,14 +746,14 @@ namespace Habanero.Test.BO
 
             ContactPersonCompositeKey origCp = new ContactPersonCompositeKey
             {
-                PK1Prop1 = TestUtil.CreateRandomString(),
-                PK1Prop2 = TestUtil.CreateRandomString()
+                PK1Prop1 = TestUtil.GetRandomString(),
+                PK1Prop2 = TestUtil.GetRandomString()
             };
 
             boMan.ClearLoadedObjects();
 
             origCp.Props.BackupPropertyValues();
-            origCp.PK1Prop1 = TestUtil.CreateRandomString();
+            origCp.PK1Prop1 = TestUtil.GetRandomString();
 
             boMan.AddBusinessObject(origCp, origCp.ID.AsString_LastPersistedValue());
             //---------------Assert Precondition----------------
@@ -782,8 +782,8 @@ namespace Habanero.Test.BO
 
             ContactPersonCompositeKey origCp = new ContactPersonCompositeKey
             {
-                PK1Prop1 = TestUtil.CreateRandomString(),
-                PK1Prop2 = TestUtil.CreateRandomString()
+                PK1Prop1 = TestUtil.GetRandomString(),
+                PK1Prop2 = TestUtil.GetRandomString()
             };
             ContactPersonCompositeKey copyContactPerson = new ContactPersonCompositeKey();
             boMan.ClearLoadedObjects();
@@ -814,8 +814,8 @@ namespace Habanero.Test.BO
 
             ContactPersonCompositeKey origCp = new ContactPersonCompositeKey
             {
-                PK1Prop1 = TestUtil.CreateRandomString(),
-                PK1Prop2 = TestUtil.CreateRandomString()
+                PK1Prop1 = TestUtil.GetRandomString(),
+                PK1Prop2 = TestUtil.GetRandomString()
             };
             ContactPersonCompositeKey copyContactPerson = new ContactPersonCompositeKey();
             boMan.ClearLoadedObjects();
@@ -1098,7 +1098,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, boMan.Count);
             Assert.IsTrue(boMan.Contains(myContact2));
             //---------------Execute Test Step 2----------------------
-            originalContactPerson.Surname = TestUtil.CreateRandomString();
+            originalContactPerson.Surname = TestUtil.GetRandomString();
             originalContactPerson.Save();
             //---------------Test Result Step 1-----------------------
             Assert.AreNotSame(originalContactPerson, myContact2);
@@ -1141,8 +1141,8 @@ namespace Habanero.Test.BO
 
             ContactPersonCompositeKey cp = new ContactPersonCompositeKey
                                                {
-                                                   PK1Prop1 = TestUtil.CreateRandomString(),
-                                                   PK1Prop2 = TestUtil.CreateRandomString()
+                                                   PK1Prop1 = TestUtil.GetRandomString(),
+                                                   PK1Prop2 = TestUtil.GetRandomString()
                                                };
 
             //---------------Assert Precondition----------------
@@ -1170,8 +1170,8 @@ namespace Habanero.Test.BO
 
             ContactPersonCompositeKey cp = new ContactPersonCompositeKey
                                                {
-                                                   PK1Prop1 = TestUtil.CreateRandomString(),
-                                                   PK1Prop2 = TestUtil.CreateRandomString()
+                                                   PK1Prop1 = TestUtil.GetRandomString(),
+                                                   PK1Prop2 = TestUtil.GetRandomString()
                                                };
             cp.Save();
 
@@ -1181,8 +1181,8 @@ namespace Habanero.Test.BO
             Assert.AreSame(cp, boMan[cp.ID]);
 
             //---------------Execute Test ----------------------
-            cp.PK1Prop1 = TestUtil.CreateRandomString();
-            cp.PK1Prop2 = TestUtil.CreateRandomString();
+            cp.PK1Prop1 = TestUtil.GetRandomString();
+            cp.PK1Prop2 = TestUtil.GetRandomString();
             cp.Save();
 
             //---------------Test Result -----------------------
@@ -1202,8 +1202,8 @@ namespace Habanero.Test.BO
 
             ContactPersonCompositeKey cp = new ContactPersonCompositeKey
                                                {
-                                                   PK1Prop1 = TestUtil.CreateRandomString(),
-                                                   PK1Prop2 = TestUtil.CreateRandomString()
+                                                   PK1Prop1 = TestUtil.GetRandomString(),
+                                                   PK1Prop2 = TestUtil.GetRandomString()
                                                };
             cp.Save();
             boMan.ClearLoadedObjects();
@@ -1214,8 +1214,8 @@ namespace Habanero.Test.BO
             Assert.AreSame(cp, boMan[cp.ID]);
 
             //---------------Execute Test ----------------------
-            cp.PK1Prop1 = TestUtil.CreateRandomString();
-            cp.PK1Prop2 = TestUtil.CreateRandomString();
+            cp.PK1Prop1 = TestUtil.GetRandomString();
+            cp.PK1Prop2 = TestUtil.GetRandomString();
 
             //---------------Test Result -----------------------
             Assert.AreEqual(1, boMan.Count);
@@ -1235,11 +1235,11 @@ namespace Habanero.Test.BO
 
             ContactPersonCompositeKey cp = new ContactPersonCompositeKey
                                                {
-                                                   PK1Prop1 = TestUtil.CreateRandomString(),
-                                                   PK1Prop2 = TestUtil.CreateRandomString()
+                                                   PK1Prop1 = TestUtil.GetRandomString(),
+                                                   PK1Prop2 = TestUtil.GetRandomString()
                                                };
             cp.Save();
-            cp.PK1Prop1 = TestUtil.CreateRandomString();
+            cp.PK1Prop1 = TestUtil.GetRandomString();
             string origIdCurrentValue = cp.ID.AsString_CurrentValue();
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boMan.Count);
@@ -1248,7 +1248,7 @@ namespace Habanero.Test.BO
             Assert.AreSame(cp, boMan[cp.ID]);
 
             //---------------Execute Test ----------------------
-            cp.PK1Prop2 = TestUtil.CreateRandomString();
+            cp.PK1Prop2 = TestUtil.GetRandomString();
 
             //---------------Test Result -----------------------
             Assert.AreNotEqual(origIdCurrentValue, cp.ID.AsString_CurrentValue());
@@ -1270,8 +1270,8 @@ namespace Habanero.Test.BO
 
             ContactPersonCompositeKey cp = new ContactPersonCompositeKey
                                                {
-                                                   PK1Prop1 = TestUtil.CreateRandomString(),
-                                                   PK1Prop2 = TestUtil.CreateRandomString()
+                                                   PK1Prop1 = TestUtil.GetRandomString(),
+                                                   PK1Prop2 = TestUtil.GetRandomString()
                                                };
             cp.Save();
             string origIdCurrentValue = cp.ID.AsString_CurrentValue();
@@ -1282,7 +1282,7 @@ namespace Habanero.Test.BO
             Assert.AreSame(cp, boMan[cp.ID]);
 
             //---------------Execute Test ----------------------
-            cp.PK1Prop1 = TestUtil.CreateRandomString();
+            cp.PK1Prop1 = TestUtil.GetRandomString();
 
             //---------------Test Result -----------------------
             Assert.AreNotEqual(origIdCurrentValue, cp.ID.AsString_CurrentValue());
@@ -1303,7 +1303,7 @@ namespace Habanero.Test.BO
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.ContactPersonID = Guid.NewGuid();
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             //            boMan.Add(cp);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boMan.Count);
@@ -1345,7 +1345,7 @@ namespace Habanero.Test.BO
         private static ContactPersonTestBO GetContactPerson()
         {
             ContactPersonTestBO cp = new ContactPersonTestBO 
-                    {ContactPersonID = Guid.NewGuid() , Surname = TestUtil.CreateRandomString()};
+                    {ContactPersonID = Guid.NewGuid() , Surname = TestUtil.GetRandomString()};
             return cp;
         }
         //Test load objects load them into the boMan
@@ -1740,7 +1740,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO {Surname = TestUtil.CreateRandomString()};
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO {Surname = TestUtil.GetRandomString()};
             //---------------Assert Precondition----------------
             Assert.IsTrue(contactPersonTestBO.Status.IsNew);
             Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
@@ -2045,7 +2045,7 @@ namespace Habanero.Test.BO
             //--------------- Set up test pack ------------------
             BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO.LoadDefaultClassDef();
-            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, TestUtil.CreateRandomString());
+            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, TestUtil.GetRandomString());
            
             //--------------- Execute Test ----------------------
             BusinessObjectCollection<ContactPersonTestBO> found = BusinessObjectManager.Instance.Find<ContactPersonTestBO>(criteria);
@@ -2061,7 +2061,7 @@ namespace Habanero.Test.BO
             BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
-            string surname = cp.Surname = TestUtil.CreateRandomString();
+            string surname = cp.Surname = TestUtil.GetRandomString();
             Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, surname);
 
             //--------------- Execute Test ----------------------
@@ -2094,8 +2094,8 @@ namespace Habanero.Test.BO
         {
             ContactPersonTestBO cp = new ContactPersonTestBO
                                          {
-                                             Surname = TestUtil.CreateRandomString(),
-                                             FirstName = TestUtil.CreateRandomString()
+                                             Surname = TestUtil.GetRandomString(),
+                                             FirstName = TestUtil.GetRandomString()
                                          };
             cp.Save();
             return cp;

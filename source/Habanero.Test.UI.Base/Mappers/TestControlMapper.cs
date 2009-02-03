@@ -284,7 +284,7 @@ namespace Habanero.Test.UI.Base
             IControlFactory controlFactory = GetControlFactory();
             ITextBox ctl = controlFactory.CreateTextBox();
             //---------------Execute Test ----------------------
-            string propName = TestUtil.CreateRandomString();
+            string propName = TestUtil.GetRandomString();
             ControlMapperStub mapper = new ControlMapperStub(ctl, propName, false, controlFactory);
             //---------------Test Result -----------------------
             Assert.IsInstanceOfType(typeof(ControlMapper), mapper);
@@ -301,7 +301,7 @@ namespace Habanero.Test.UI.Base
             IControlFactory controlFactory = GetControlFactory();
             ITextBox ctl = controlFactory.CreateTextBox();
             //---------------Execute Test ----------------------
-            string propName = TestUtil.CreateRandomString();
+            string propName = TestUtil.GetRandomString();
             ControlMapperStub mapper = new ControlMapperStub(ctl, propName, true, controlFactory);
             //---------------Test Result -----------------------
             Assert.IsInstanceOfType(typeof(ControlMapper), mapper);

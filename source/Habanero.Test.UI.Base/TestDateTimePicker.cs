@@ -595,7 +595,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IDateTimePicker dateTimePicker = CreateDateTimePicker();
-            string nullDisplayValue = TestUtil.CreateRandomString();
+            string nullDisplayValue = TestUtil.GetRandomString();
             IControlHabanero nullDisplayControl = GetNullDisplayControl(dateTimePicker);
             //-------------Assert Preconditions -------------
             Assert.AreEqual("", dateTimePicker.NullDisplayValue);

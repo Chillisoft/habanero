@@ -315,6 +315,17 @@ namespace Habanero.UI.Win
                 _rows.Clear();
             }
 
+            /// <summary>Removes the row from the collection.</summary>
+            /// <param name="dataGridViewRow">The row to remove from the <see cref="IDataGridViewRowCollection"></see>.</param>
+            /// <exception cref="T:System.InvalidOperationException">The associated <see cref="IDataGridView"></see> control is performing one of the following actions that temporarily prevents new rows from being added:Selecting all cells in the control.Clearing the selection.-or-This method is being called from a handler for one of the following <see cref="IDataGridView"></see> events:<see cref="IDataGridView.CellEnter"></see><see cref="IDataGridView.CellLeave"></see><see cref="IDataGridView.CellValidating"></see><see cref="IDataGridView.CellValidated"></see><see cref="IDataGridView.RowEnter"></see><see cref="IDataGridView.RowLeave"></see><see cref="IDataGridView.RowValidated"></see><see cref="IDataGridView.RowValidating"></see>-or-dataGridViewRow is the row for new records.-or-The associated <see cref="IDataGridView"></see> control is bound to an <see cref="T:System.ComponentModel.IBindingList"></see> implementation with <see cref="P:System.ComponentModel.IBindingList.AllowRemove"></see> and <see cref="P:System.ComponentModel.IBindingList.SupportsChangeNotification"></see> property values that are not both true. </exception>
+            /// <exception cref="T:System.ArgumentException">dataGridViewRow is not contained in this collection.-or-dataGridViewRow is a shared row.</exception>
+            /// <exception cref="T:System.ArgumentNullException">dataGridViewRow is null.</exception>
+            /// <filterpriority>1</filterpriority>
+            public void Remove(IDataGridViewRow dataGridViewRow)
+            {
+                _rows.RemoveAt(dataGridViewRow.Index);
+            }
+
             /// <summary>Removes the row at the specified position from the collection.</summary>
             /// <param name="index">The position of the row to remove.</param>
             /// <exception cref="T:System.ArgumentOutOfRangeException">index is less than zero and greater than the number of rows in the collection minus one. </exception>

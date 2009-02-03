@@ -414,8 +414,23 @@ namespace Habanero.UI.Win
             newBo = _businessObjectCreator.CreateBusinessObject();
             if (_businessObjectEditor != null && newBo != null)
             {
-                _businessObjectEditor.EditObject(newBo, UiDefName,
-                                                 delegate(IBusinessObject bo) { Grid.SelectedBusinessObject = bo; });
+                _businessObjectEditor.EditObject(newBo, UiDefName, 
+                    delegate(IBusinessObject bo, bool cancelled)
+                    {
+                        IBusinessObjectCollection collection = this.Grid.GetBusinessObjectCollection();
+                        if (cancelled)
+                        {
+                            collection.Remove(bo);
+                        }
+                        else
+                        {
+                            if (!collection.Contains(bo))
+                            {
+                                collection.Add(bo);
+                            }
+                            Grid.SelectedBusinessObject = bo;
+                        }
+                    });
             }
         }
 

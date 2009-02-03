@@ -506,7 +506,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             Structure.Entity.LoadDefaultClassDef();
             ClassDef classDef = Structure.Part.LoadClassDef_WithClassTableInheritance();
-            string entityType = TestUtil.CreateRandomString();
+            string entityType = TestUtil.GetRandomString();
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             Criteria criteria = new Criteria("EntityType", Criteria.ComparisonOp.Equals, entityType);
             QueryBuilder.PrepareCriteria(classDef, criteria);

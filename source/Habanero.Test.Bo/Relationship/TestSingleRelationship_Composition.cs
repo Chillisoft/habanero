@@ -230,8 +230,8 @@ namespace Habanero.Test.BO.Relationship
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             SingleRelationship<ContactPersonTestBO> relationship = GetCompositionRelationship(organisationTestBO);
             ContactPersonTestBO myBO = new ContactPersonTestBO();
-            myBO.Surname = TestUtil.CreateRandomString();
-            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
+            myBO.FirstName = TestUtil.GetRandomString();
 
             //---------------Assert Precondition----------------
             Assert.IsFalse(relationship.IsDirty);
@@ -251,8 +251,8 @@ namespace Habanero.Test.BO.Relationship
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             SingleRelationship<ContactPersonTestBO> relationship = GetCompositionRelationship(organisationTestBO);
             ContactPersonTestBO myBO = new ContactPersonTestBO();
-            myBO.Surname = TestUtil.CreateRandomString();
-            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
+            myBO.FirstName = TestUtil.GetRandomString();
             myBO.Organisation = organisationTestBO;
             //---------------Execute Test ----------------------
 
@@ -271,8 +271,8 @@ namespace Habanero.Test.BO.Relationship
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             SingleRelationship<ContactPersonTestBO> relationship = GetCompositionRelationship(organisationTestBO);
             ContactPersonTestBO myBO = new ContactPersonTestBO();
-            myBO.Surname = TestUtil.CreateRandomString();
-            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
+            myBO.FirstName = TestUtil.GetRandomString();
             myBO.Organisation = organisationTestBO;
             organisationTestBO.Save();
 
@@ -295,8 +295,8 @@ namespace Habanero.Test.BO.Relationship
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             SingleRelationship<ContactPersonTestBO> relationship = GetCompositionRelationship(organisationTestBO);
             ContactPersonTestBO myBO = new ContactPersonTestBO();
-            myBO.Surname = TestUtil.CreateRandomString();
-            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
+            myBO.FirstName = TestUtil.GetRandomString();
             myBO.Organisation = organisationTestBO;
             organisationTestBO.Save();
             myBO.MarkForDelete();
@@ -320,8 +320,8 @@ namespace Habanero.Test.BO.Relationship
             SingleRelationship<ContactPersonTestBO> relationship = GetCompositionRelationship(organisationTestBO);
 
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Organisation = organisationTestBO;
             contactPerson.Save();
 
@@ -329,7 +329,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsFalse(relationship.IsDirty);
 
             //---------------Execute Test ----------------------
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
 
             //---------------Test Result -----------------------
             Assert.IsTrue(relationship.IsDirty);
@@ -342,11 +342,11 @@ namespace Habanero.Test.BO.Relationship
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             SingleRelationship<ContactPersonTestBO> relationship = GetCompositionRelationship(organisationTestBO);
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Organisation = organisationTestBO;
             contactPerson.Save();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
 
             //---------------Execute Test ----------------------
 
@@ -371,8 +371,8 @@ namespace Habanero.Test.BO.Relationship
             SingleRelationship<ContactPersonTestBO> relationship = GetCompositionRelationship(organisation);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
             relationship.SetRelatedObject(contactPerson);
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Save();
 
             //---------------Assert Precondition----------------
@@ -382,7 +382,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsFalse(organisation.Status.IsDirty);
 
             //---------------Execute Test ----------------------
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
 
             //---------------Test Result -----------------------
             Assert.IsTrue(contactPerson.Status.IsDirty);

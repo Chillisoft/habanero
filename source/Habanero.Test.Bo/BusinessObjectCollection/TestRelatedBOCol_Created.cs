@@ -53,8 +53,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             var cpRelationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
             ContactPersonTestBO cp = cpRelationship.BusinessObjectCollection.CreateBusinessObject();
-            cp.FirstName = TestUtil.CreateRandomString();
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.FirstName = TestUtil.GetRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert Precondition----------------
 
@@ -71,8 +71,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             IMultipleRelationship cpRelationship = (IMultipleRelationship)organisationTestBO.Relationships["ContactPeople"];
             ContactPersonTestBO cp = (ContactPersonTestBO)cpRelationship.BusinessObjectCollection.CreateBusinessObject();
-            cp.FirstName = TestUtil.CreateRandomString();
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.FirstName = TestUtil.GetRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert Precondition----------------
 
@@ -122,8 +122,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             cpCol.LoadAll();
 
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
-            newCP.Surname = TestUtil.CreateRandomString();
-            newCP.FirstName = TestUtil.CreateRandomString();
+            newCP.Surname = TestUtil.GetRandomString();
+            newCP.FirstName = TestUtil.GetRandomString();
             RegisterForAddedEvent(cpCol);
 
             //---------------Assert Preconditions --------------
@@ -157,8 +157,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             cpCol.LoadAll();
 
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
-            newCP.Surname = TestUtil.CreateRandomString();
-            newCP.FirstName = TestUtil.CreateRandomString();
+            newCP.Surname = TestUtil.GetRandomString();
+            newCP.FirstName = TestUtil.GetRandomString();
             RegisterForAddedEvent(cpCol);
 
             //---------------Assert Preconditions --------------
@@ -208,15 +208,15 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateRelatedCPCol();
 
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
-            newCP.Surname = TestUtil.CreateRandomString();
-            newCP.FirstName = TestUtil.CreateRandomString();
+            newCP.Surname = TestUtil.GetRandomString();
+            newCP.FirstName = TestUtil.GetRandomString();
             newCP.Save();
 
             //---------------Assert Precondition----------------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
 
             //---------------Execute Test ----------------------
-            newCP.Surname = TestUtil.CreateRandomString();
+            newCP.Surname = TestUtil.GetRandomString();
             newCP.Save();
 
             //---------------Test Result -----------------------
@@ -287,7 +287,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //ContactPersonTestBO.LoadDefaultClassDef();
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateRelatedCPCol();
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
-            newCP.Surname = TestUtil.CreateRandomString();
+            newCP.Surname = TestUtil.GetRandomString();
             newCP.FirstName = BOTestUtils.RandomString;
 
             //---------------Assert Precondition----------------
@@ -308,7 +308,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateRelatedCPCol();
 
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
-            newCP.Surname = TestUtil.CreateRandomString();
+            newCP.Surname = TestUtil.GetRandomString();
             newCP.CancelEdits();
 
             //---------------Assert Precondition----------------
@@ -329,7 +329,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateRelatedCPCol();
 
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
-            newCP.Surname = TestUtil.CreateRandomString();
+            newCP.Surname = TestUtil.GetRandomString();
             RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
@@ -351,7 +351,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateRelatedCPCol();
 
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
-            newCP.Surname = TestUtil.CreateRandomString();
+            newCP.Surname = TestUtil.GetRandomString();
 
             //---------------Assert Precondition----------------
             AssertOneObjectInCurrentAndCreatedCollection(cpCol);
@@ -369,7 +369,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateRelatedCPCol();
 
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
-            newCP.Surname = TestUtil.CreateRandomString();
+            newCP.Surname = TestUtil.GetRandomString();
 
             //---------------Assert Precondition----------------
             AssertOneObjectInCurrentAndCreatedCollection(cpCol);
@@ -387,7 +387,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateRelatedCPCol();
 
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
-            newCP.Surname = TestUtil.CreateRandomString();
+            newCP.Surname = TestUtil.GetRandomString();
 
             //---------------Assert Precondition----------------
             AssertOneObjectInCurrentAndCreatedCollection(cpCol);
@@ -405,7 +405,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateRelatedCPCol();
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
-            newCP.Surname = TestUtil.CreateRandomString();
+            newCP.Surname = TestUtil.GetRandomString();
             RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
@@ -475,8 +475,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = new RelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
 
             ContactPersonTestBO cp = cpCol.CreateBusinessObject();
-            cp.FirstName = TestUtil.CreateRandomString();
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.FirstName = TestUtil.GetRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             return BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<ContactPersonTestBO>(cpRelationship);
         }

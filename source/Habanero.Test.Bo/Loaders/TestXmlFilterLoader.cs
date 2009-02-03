@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
@@ -30,8 +30,8 @@ namespace Habanero.Test.BO.Loaders
         {
             //---------------Set up test pack-------------------
             XmlFilterLoader loader = new XmlFilterLoader();
-            string propName = TestUtil.CreateRandomString();
-            string label = TestUtil.CreateRandomString();
+            string propName = TestUtil.GetRandomString();
+            string label = TestUtil.GetRandomString();
             string filterDefXml = string.Format(
                 @"
                         <filter>
@@ -63,8 +63,8 @@ namespace Habanero.Test.BO.Loaders
         {
             //---------------Set up test pack-------------------
             XmlFilterLoader loader = new XmlFilterLoader();
-            string paramName = TestUtil.CreateRandomString();
-            string paramValue = TestUtil.CreateRandomString();
+            string paramName = TestUtil.GetRandomString();
+            string paramValue = TestUtil.GetRandomString();
             string filterDefXml = string.Format(
                 @"
                         <filter>

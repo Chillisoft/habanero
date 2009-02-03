@@ -146,7 +146,7 @@ namespace Habanero.Test.UI.Base
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             ITreeView treeView = (ITreeView) editor.Controls[1];
-            string sectionName = TestUtil.CreateRandomString();
+            string sectionName = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
             editor.AddSection(sectionName);
 
@@ -166,8 +166,8 @@ namespace Habanero.Test.UI.Base
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             ITreeView treeView = (ITreeView) editor.Controls[1];
-            editor.AddSection(TestUtil.CreateRandomString());
-            string itemName = TestUtil.CreateRandomString();
+            editor.AddSection(TestUtil.GetRandomString());
+            string itemName = TestUtil.GetRandomString();
             //---------------Assert Preconditions---------------
             Assert.AreEqual(1, treeView.Nodes.Count);
             //---------------Execute Test ----------------------
@@ -192,8 +192,8 @@ namespace Habanero.Test.UI.Base
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             ITreeView treeView = (ITreeView) editor.Controls[1];
-            editor.AddSection(TestUtil.CreateRandomString());
-            string sectionName = TestUtil.CreateRandomString();
+            editor.AddSection(TestUtil.GetRandomString());
+            string sectionName = TestUtil.GetRandomString();
 
             //---------------Assert Preconditions---------------
             Assert.AreEqual(1, treeView.Nodes.Count);
@@ -219,9 +219,9 @@ namespace Habanero.Test.UI.Base
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             ITreeView treeView = (ITreeView) editor.Controls[1];
-            editor.AddSection(TestUtil.CreateRandomString());
-            editor.AddSection(TestUtil.CreateRandomString());
-            string itemName = TestUtil.CreateRandomString();
+            editor.AddSection(TestUtil.GetRandomString());
+            editor.AddSection(TestUtil.GetRandomString());
+            string itemName = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
             editor.AddItem(itemName, classDef);
             //---------------Test Result -----------------------
@@ -242,8 +242,8 @@ namespace Habanero.Test.UI.Base
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl) editor.Controls[0];
-            editor.AddSection(TestUtil.CreateRandomString());
-            string itemName = TestUtil.CreateRandomString();
+            editor.AddSection(TestUtil.GetRandomString());
+            string itemName = TestUtil.GetRandomString();
             editor.AddItem(itemName, classDef);
 
             //---------------Execute Test ----------------------
@@ -267,9 +267,9 @@ namespace Habanero.Test.UI.Base
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl)editor.Controls[0];
-            editor.AddSection(TestUtil.CreateRandomString());
-            string itemName = TestUtil.CreateRandomString();
-            string itemName2 = TestUtil.CreateRandomString();
+            editor.AddSection(TestUtil.GetRandomString());
+            string itemName = TestUtil.GetRandomString();
+            string itemName2 = TestUtil.GetRandomString();
             editor.AddItem(itemName, classDef);
             editor.AddItem(itemName2,classDef2);
             //---------------Execute Test ----------------------
@@ -291,8 +291,8 @@ namespace Habanero.Test.UI.Base
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl)editor.Controls[0];
-            editor.AddSection(TestUtil.CreateRandomString());
-            string itemName = TestUtil.CreateRandomString();
+            editor.AddSection(TestUtil.GetRandomString());
+            string itemName = TestUtil.GetRandomString();
             editor.AddItem(itemName, classDef);
             ITreeView treeView = (ITreeView)editor.Controls[1];
             treeView.SelectedNode = treeView.Nodes[0].Nodes[0];
@@ -321,8 +321,8 @@ namespace Habanero.Test.UI.Base
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl)editor.Controls[0];
-            editor.AddSection(TestUtil.CreateRandomString());
-            string itemName = TestUtil.CreateRandomString();
+            editor.AddSection(TestUtil.GetRandomString());
+            string itemName = TestUtil.GetRandomString();
             editor.AddItem(itemName, classDef);
             ITreeView treeView = (ITreeView)editor.Controls[1];
             //---------------Execute Test ----------------------
@@ -345,8 +345,8 @@ namespace Habanero.Test.UI.Base
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl)editor.Controls[0];
-            editor.AddSection(TestUtil.CreateRandomString());
-            string itemName = TestUtil.CreateRandomString();
+            editor.AddSection(TestUtil.GetRandomString());
+            string itemName = TestUtil.GetRandomString();
             editor.AddItem(itemName, classDef);
              ITreeView treeView = (ITreeView) editor.Controls[1];
             //---------------Execute Test ----------------------
@@ -373,10 +373,10 @@ namespace Habanero.Test.UI.Base
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl) editor.Controls[0];
-            editor.AddSection(TestUtil.CreateRandomString());
-            string itemName1 = TestUtil.CreateRandomString();
+            editor.AddSection(TestUtil.GetRandomString());
+            string itemName1 = TestUtil.GetRandomString();
             editor.AddItem(itemName1, classDef1);
-            string itemName2 = TestUtil.CreateRandomString();
+            string itemName2 = TestUtil.GetRandomString();
             editor.AddItem(itemName2, classDef2);
             editor.SelectItem(itemName1);
 
@@ -406,12 +406,12 @@ namespace Habanero.Test.UI.Base
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl)editor.Controls[0];
-            editor.AddSection(TestUtil.CreateRandomString());
-            string itemName1 = TestUtil.CreateRandomString();
+            editor.AddSection(TestUtil.GetRandomString());
+            string itemName1 = TestUtil.GetRandomString();
             editor.AddItem(itemName1, classDef1);
             editor.SelectItem(itemName1);
             gridControl.Grid.SelectedBusinessObject = myBO;
-            string newValue = TestUtil.CreateRandomString();
+            string newValue = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
             gridControl.Grid.CurrentRow.Cells["TestProp"].Value = newValue;
             bool result = editor.SaveChanges();
@@ -432,20 +432,20 @@ namespace Habanero.Test.UI.Base
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef classDef1 = MyBO.LoadDefaultClassDef();
             MyBO myBO = new MyBO();
-            string originalValue = TestUtil.CreateRandomString();
+            string originalValue = TestUtil.GetRandomString();
             myBO.TestProp = originalValue;
             myBO.Save();
             IFormHabanero frm;
             IStaticDataEditor editor = CreateEditorOnForm(out frm);
             IEditableGridControl gridControl = (IEditableGridControl)editor.Controls[0];
-            editor.AddSection(TestUtil.CreateRandomString());
-            string itemName1 = TestUtil.CreateRandomString();
+            editor.AddSection(TestUtil.GetRandomString());
+            string itemName1 = TestUtil.GetRandomString();
             editor.AddItem(itemName1, classDef1);
             editor.SelectItem(itemName1);
 
             //---------------Execute Test ----------------------
             gridControl.Grid.SelectedBusinessObject = myBO;
-            string newValue = TestUtil.CreateRandomString();
+            string newValue = TestUtil.GetRandomString();
             gridControl.Grid.CurrentRow.Cells["TestProp"].Value = newValue;
             bool result = editor.RejectChanges();
             //---------------Test Result -----------------------

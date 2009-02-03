@@ -100,6 +100,8 @@
     <Compile Include="Criteria\CriteriaExpression.cs" />
     <Compile Include="Criteria\CriteriaParser.cs" />
     <Compile Include="DateTimeToday.cs" />
+    <Compile Include="DelegatedBusinessObjectCreator.cs" />
+    <Compile Include="DelegatedBusinessObjectEditor.cs" />
     <Compile Include="Exceptions\InvalidObjectIdException.cs" />
     <Compile Include="Exceptions\InvalidXmlDefinitionException.cs" />
     <Compile Include="FilterModes.cs" />

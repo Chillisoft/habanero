@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
@@ -17,7 +17,7 @@ namespace Habanero.Test.UI.Base.FilterController
         public void TestConstructor()
         {
             //---------------Set up test pack-------------------
-            string propertyName = TestUtil.CreateRandomString();
+            string propertyName = TestUtil.GetRandomString();
             const FilterClauseOperator filterClauseOperator = FilterClauseOperator.OpGreaterThan;
             
             //---------------Execute Test ----------------------
@@ -34,11 +34,11 @@ namespace Habanero.Test.UI.Base.FilterController
         public void TestFilterClause()
         {
             //---------------Set up test pack-------------------
-            string propertyName = TestUtil.CreateRandomString();
+            string propertyName = TestUtil.GetRandomString();
             const FilterClauseOperator filterClauseOperator = FilterClauseOperator.OpGreaterThan;
             StringTextBoxFilter filter = new StringTextBoxFilter(GetControlFactory(), propertyName, filterClauseOperator);
             ITextBox textBox = (ITextBox) filter.Control;
-            string text = TestUtil.CreateRandomString();
+            string text = TestUtil.GetRandomString();
             textBox.Text = text;
 
             //---------------Execute Test ----------------------

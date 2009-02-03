@@ -126,7 +126,7 @@ namespace Habanero.Test
         public static Shape CreateSavedShape()
         {
             Shape shape = new Shape();
-            shape.ShapeName = TestUtil.CreateRandomString();
+            shape.ShapeName = TestUtil.GetRandomString();
             shape.Save();
             return shape;
         }

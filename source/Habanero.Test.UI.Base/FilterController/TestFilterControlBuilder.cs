@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -30,7 +30,7 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             //---------------Set up test pack-------------------
             FilterControlBuilder builder = new FilterControlBuilder(GetControlFactory());
-            string propName = TestUtil.CreateRandomString();
+            string propName = TestUtil.GetRandomString();
             FilterDef filterDef = CreateFilterDef_1Property(propName);
 
             //---------------Execute Test ----------------------
@@ -52,8 +52,8 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             //---------------Set up test pack-------------------
             FilterControlBuilder builder = new FilterControlBuilder(GetControlFactory());
-            string testprop1 = TestUtil.CreateRandomString();
-            string testprop2 = TestUtil.CreateRandomString();
+            string testprop1 = TestUtil.GetRandomString();
+            string testprop2 = TestUtil.GetRandomString();
             FilterDef filterDef = CreateFilterDef_2Properties(testprop1, testprop2);
 
             //---------------Execute Test ----------------------
@@ -245,7 +245,7 @@ namespace Habanero.Test.UI.Base.FilterController
             Dictionary<string, string> parameters = new Dictionary<string, string> { { "IsChecked", "true" } };
 
             FilterPropertyDef filterPropertyDef =
-                new FilterPropertyDef(TestUtil.CreateRandomString(), TestUtil.CreateRandomString(), "BoolCheckBoxFilter", "", FilterClauseOperator.OpEquals, parameters);
+                new FilterPropertyDef(TestUtil.GetRandomString(), TestUtil.GetRandomString(), "BoolCheckBoxFilter", "", FilterClauseOperator.OpEquals, parameters);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             ICustomFilter customFilter = builder.BuildCustomFilter(filterPropertyDef);
@@ -261,13 +261,13 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             //---------------Set up test pack-------------------
             FilterControlBuilder builder = new FilterControlBuilder(GetControlFactory());
-            string parameterName = TestUtil.CreateRandomString();
-            Dictionary<string, string> parameters = new Dictionary<string, string> { { parameterName, TestUtil.CreateRandomString()} };
+            string parameterName = TestUtil.GetRandomString();
+            Dictionary<string, string> parameters = new Dictionary<string, string> { { parameterName, TestUtil.GetRandomString()} };
 
-            string propertyName = TestUtil.CreateRandomString();
+            string propertyName = TestUtil.GetRandomString();
             const string filterType = "BoolCheckBoxFilter";
             FilterPropertyDef filterPropertyDef =
-                new FilterPropertyDef(propertyName, TestUtil.CreateRandomString(), filterType, "", FilterClauseOperator.OpEquals, parameters);
+                new FilterPropertyDef(propertyName, TestUtil.GetRandomString(), filterType, "", FilterClauseOperator.OpEquals, parameters);
             //---------------Execute Test ----------------------
             try
             {
@@ -303,7 +303,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
         private static FilterDef CreateFilterDef_1Property()
         {
-            return CreateFilterDef_1Property(TestUtil.CreateRandomString());
+            return CreateFilterDef_1Property(TestUtil.GetRandomString());
          
         }
         
@@ -314,7 +314,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
         private static FilterPropertyDef CreateFilterPropertyDef()
         {
-            return CreateFilterPropertyDef(TestUtil.CreateRandomString());
+            return CreateFilterPropertyDef(TestUtil.GetRandomString());
         }
 
         private static FilterPropertyDef CreateFilterPropertyDef(string propName) {
@@ -323,7 +323,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
         private static FilterPropertyDef CreateFilterPropertyDef(FilterClauseOperator op)
         {
-            return CreateFilterPropertyDef(TestUtil.CreateRandomString(), op);
+            return CreateFilterPropertyDef(TestUtil.GetRandomString(), op);
         }
 
         private static FilterPropertyDef CreateFilterPropertyDef(string propName, FilterClauseOperator filterClauseOperator)
@@ -333,7 +333,7 @@ namespace Habanero.Test.UI.Base.FilterController
         
         private static FilterPropertyDef CreateFilterPropertyDef(string propName, string filterType, string filterTypeAssembly, FilterClauseOperator filterClauseOperator)
         {
-            return new FilterPropertyDef(propName, TestUtil.CreateRandomString(), filterType, filterTypeAssembly, filterClauseOperator, null);
+            return new FilterPropertyDef(propName, TestUtil.GetRandomString(), filterType, filterTypeAssembly, filterClauseOperator, null);
         }  
         
         private static FilterDef CreateFilterDef_1PropertyWithTypeAndAssembly(string filterType, string filterTypeAssembly)
@@ -343,7 +343,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
         private static FilterPropertyDef CreateFilterPropertyDefWithType(string filterType, string filterTypeAssembly)
         {
-            return CreateFilterPropertyDef(TestUtil.CreateRandomString(), filterType, filterTypeAssembly,
+            return CreateFilterPropertyDef(TestUtil.GetRandomString(), filterType, filterTypeAssembly,
                                            FilterClauseOperator.OpEquals);
         }
 
@@ -357,7 +357,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
         private static FilterDef CreateFilterDef_2PropertiesWithType(string filterType1, string filterType2)
         {
-            return CreateFilterDef_2Properties(TestUtil.CreateRandomString(), filterType1, TestUtil.CreateRandomString(), filterType2);
+            return CreateFilterDef_2Properties(TestUtil.GetRandomString(), filterType1, TestUtil.GetRandomString(), filterType2);
         }
 
         private static FilterDef CreateFilterDef_2Properties(string propName1, string filterType1, string propName2, string filterType2) {

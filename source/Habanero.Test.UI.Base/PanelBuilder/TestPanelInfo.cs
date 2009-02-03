@@ -71,7 +71,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ILabel label = _controlFactory.CreateLabel();
-            string propertyName = TestUtil.CreateRandomString();
+            string propertyName = TestUtil.GetRandomString();
             ITextBox tb = _controlFactory.CreateTextBox();
             IControlMapper controlMapper = new TextBoxMapper(tb, propertyName, false, _controlFactory);
             //---------------Assert Precondition----------------
@@ -215,7 +215,7 @@ namespace Habanero.Test.UI.Base
 
         private PanelInfo.FieldInfo CreateFieldInfo()
         {
-            return CreateFieldInfo(TestUtil.CreateRandomString());
+            return CreateFieldInfo(TestUtil.GetRandomString());
         }
     }
     

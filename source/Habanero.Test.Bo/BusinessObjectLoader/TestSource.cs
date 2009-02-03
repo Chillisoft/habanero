@@ -32,8 +32,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestConstructor()
         {
             //---------------Set up test pack-------------------
-            string sourceName = TestUtil.CreateRandomString();
-            string entityName = TestUtil.CreateRandomString();
+            string sourceName = TestUtil.GetRandomString();
+            string entityName = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
             Source source = new Source(sourceName, entityName);
             //---------------Test Result -----------------------
@@ -47,7 +47,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestToString()
         {
             //---------------Set up test pack-------------------
-            string sourceName = TestUtil.CreateRandomString();
+            string sourceName = TestUtil.GetRandomString();
             Source source = new Source(sourceName);
 
             //---------------Execute Test ----------------------
@@ -62,9 +62,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestToString_WithJoin()
         {
             //---------------Set up test pack-------------------
-            string sourceName = TestUtil.CreateRandomString();
+            string sourceName = TestUtil.GetRandomString();
             Source source = new Source(sourceName);
-            string subSourceName = TestUtil.CreateRandomString();
+            string subSourceName = TestUtil.GetRandomString();
             source.JoinToSource(new Source(subSourceName));
             //---------------Execute Test ----------------------
             string sourceToString = source.ToString();
@@ -79,9 +79,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestToString_WithJoin_WithFurtherJoin()
         {
             //---------------Set up test pack-------------------
-            string sourceName = TestUtil.CreateRandomString();
-            string subSourceName = TestUtil.CreateRandomString();
-            string subsubSourceName = TestUtil.CreateRandomString();
+            string sourceName = TestUtil.GetRandomString();
+            string subSourceName = TestUtil.GetRandomString();
+            string subsubSourceName = TestUtil.GetRandomString();
             Source source = new Source(sourceName);
             Source subSource = new Source(subSourceName);
             source.JoinToSource(subSource);
@@ -99,7 +99,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestEquals()
         {
             //---------------Set up test pack-------------------
-            string sourceName = TestUtil.CreateRandomString();
+            string sourceName = TestUtil.GetRandomString();
             Source source = new Source(sourceName);
             Source source2 = new Source(sourceName);
             //---------------Execute Test ----------------------
@@ -115,8 +115,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestEquals_Fails()
         {
             //---------------Set up test pack-------------------
-            Source source = new Source(TestUtil.CreateRandomString());
-            Source source2 = new Source(TestUtil.CreateRandomString());
+            Source source = new Source(TestUtil.GetRandomString());
+            Source source2 = new Source(TestUtil.GetRandomString());
             //---------------Execute Test ----------------------
             bool success = source.Equals(source2);
             //---------------Test Result -----------------------
@@ -130,7 +130,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestEquals_ComparedToNull()
         {
             //---------------Set up test pack-------------------
-            string sourceName = TestUtil.CreateRandomString();
+            string sourceName = TestUtil.GetRandomString();
             Source source = new Source(sourceName);
             //---------------Execute Test ----------------------
             bool success = source.Equals(null);
@@ -143,8 +143,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestName()
         {
             //---------------Set up test pack-------------------
-            string sourceName = TestUtil.CreateRandomString();
-            Source source = new Source(TestUtil.CreateRandomString());
+            string sourceName = TestUtil.GetRandomString();
+            Source source = new Source(TestUtil.GetRandomString());
             //---------------Execute Test ----------------------
             source.Name = sourceName;
             //---------------Test Result -----------------------
@@ -156,8 +156,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestEntityName()
         {
             //---------------Set up test pack-------------------
-            string entityName = TestUtil.CreateRandomString();
-            Source source = new Source(TestUtil.CreateRandomString());
+            string entityName = TestUtil.GetRandomString();
+            Source source = new Source(TestUtil.GetRandomString());
             //---------------Execute Test ----------------------
             source.EntityName = entityName;
             //---------------Test Result -----------------------

@@ -30,7 +30,7 @@ namespace Habanero.Test.BO
         {
             //-------------Setup Test Pack ------------------
             const string surname = "Surname";
-            string surnameValue = TestUtil.CreateRandomString();
+            string surnameValue = TestUtil.GetRandomString();
             Criteria criteria = new Criteria(surname, Criteria.ComparisonOp.Equals, surnameValue);
 
             //-------------Execute test ---------------------

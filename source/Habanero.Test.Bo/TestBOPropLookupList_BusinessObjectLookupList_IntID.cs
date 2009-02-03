@@ -374,7 +374,7 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOPropLookupList(_propDef_int);
             BOWithIntID savedBoWithIntID = new BOWithIntID();
             savedBoWithIntID.IntID = TestUtil.GetRandomInt();
-            savedBoWithIntID.TestField = TestUtil.CreateRandomString();
+            savedBoWithIntID.TestField = TestUtil.GetRandomString();
             savedBoWithIntID.Save();
 
             //---------------Assert Precondition----------------
@@ -399,7 +399,7 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOPropLookupList(_propDef_int);
             BOWithIntID savedBoWithIntID = new BOWithIntID();
             savedBoWithIntID.IntID = TestUtil.GetRandomInt();
-            savedBoWithIntID.TestField = TestUtil.CreateRandomString();
+            savedBoWithIntID.TestField = TestUtil.GetRandomString();
             //---------------Assert Precondition----------------
             Assert.AreEqual(typeof(int), boProp.PropDef.PropertyType);
             //---------------Execute Test ----------------------
@@ -598,7 +598,7 @@ namespace Habanero.Test.BO
             BOPropLookupList boProp = new BOPropLookupList(_propDef_int);
             BOWithIntID unSavedBoWithIntID = new BOWithIntID();
             unSavedBoWithIntID.IntID = TestUtil.GetRandomInt();
-            unSavedBoWithIntID.TestField = TestUtil.CreateRandomString();
+            unSavedBoWithIntID.TestField = TestUtil.GetRandomString();
             boProp.Value = unSavedBoWithIntID;
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
@@ -617,7 +617,7 @@ namespace Habanero.Test.BO
             BOPropLookupList boProp = new BOPropLookupList(_propDef_int);
             BOWithIntID unSavedBoWithIntID = new BOWithIntID();
             unSavedBoWithIntID.IntID = TestUtil.GetRandomInt();
-            unSavedBoWithIntID.TestField = TestUtil.CreateRandomString();
+            unSavedBoWithIntID.TestField = TestUtil.GetRandomString();
             unSavedBoWithIntID.Save();
             BusinessObjectManager.Instance.ClearLoadedObjects();
             boProp.Value = unSavedBoWithIntID;

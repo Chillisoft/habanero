@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E761E05B-B9CC-4EAC-B940-C19E42D3819C}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -184,13 +184,13 @@
     <Compile Include="RadioButtonWin.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ReadOnlyGridButtonsControlWin.cs">
+    <Compile Include="Grid\ReadOnlyGridButtonsControlWin.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ReadOnlyGridWin.cs">
+    <Compile Include="Grid\ReadOnlyGridWin.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ReadOnlyGridControlWin.cs">
+    <Compile Include="Grid\ReadOnlyGridControlWin.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SplitterWin.cs">

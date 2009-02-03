@@ -465,10 +465,10 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-            ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
-            ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
-            CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
-            ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.CreateRandomString(), 3);
+            ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
+            ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
+            CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
+            ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.GetRandomString(), 3);
 
             string criteria = "IntegerProperty <> " + 3;
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -481,9 +481,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.IsFalse(col.Contains(cpEqual));
 
             //---------------Execute Test ----------------------
-            ContactPersonTestBO cp3 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
-            ContactPersonTestBO cpNotEqual = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
-            ContactPersonTestBO cpEqualNew = CreateSavedContactPerson(TestUtil.CreateRandomString(), 3);
+            ContactPersonTestBO cp3 = CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
+            ContactPersonTestBO cpNotEqual = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
+            ContactPersonTestBO cpEqualNew = CreateSavedContactPerson(TestUtil.GetRandomString(), 3);
             col.Refresh();
 
             //---------------Test Result -----------------------
@@ -860,17 +860,17 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-            ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 1);
-            ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 1);
-            CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
-            ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
+            ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.GetRandomString(), 1);
+            ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.GetRandomString(), 1);
+            CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
+            ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
 
             string criteria = "IntegerProperty <= " + 2;
             IBusinessObjectCollection col =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(criteria);
-            ContactPersonTestBO cp3 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 1);
-            ContactPersonTestBO cpExclude = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
-            ContactPersonTestBO cpEqualNew = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
+            ContactPersonTestBO cp3 = CreateSavedContactPerson(TestUtil.GetRandomString(), 1);
+            ContactPersonTestBO cpExclude = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
+            ContactPersonTestBO cpEqualNew = CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
 
             //---------------Assert Precondition ---------------
             Assert.AreEqual(3, col.Count);
@@ -1064,16 +1064,16 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-            ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
-            ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
-            CreateSavedContactPerson(TestUtil.CreateRandomString(), 1);
-            ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
+            ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
+            ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
+            CreateSavedContactPerson(TestUtil.GetRandomString(), 1);
+            ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
 
             string criteria = "IntegerProperty > " + 2;
             IBusinessObjectCollection col =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
-            ContactPersonTestBO cp3 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
-            CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
+            ContactPersonTestBO cp3 = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
+            CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
             //---------------Assert Precondition ---------------
             Assert.AreEqual(2, col.Count);
             Assert.IsFalse(col.Contains(cpEqual));
@@ -1196,17 +1196,17 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-            ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
-            ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
-            CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
-            ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.CreateRandomString(), 3);
+            ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
+            ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
+            CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
+            ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.GetRandomString(), 3);
 
             string criteria = "IntegerProperty <= " + 3;
             IBusinessObjectCollection col =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
-            ContactPersonTestBO cp3 = CreateSavedContactPerson(TestUtil.CreateRandomString(), 2);
-            ContactPersonTestBO cpEqualNew = CreateSavedContactPerson(TestUtil.CreateRandomString(), 3);
-            ContactPersonTestBO cpExclude = CreateSavedContactPerson(TestUtil.CreateRandomString(), 4);
+            ContactPersonTestBO cp3 = CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
+            ContactPersonTestBO cpEqualNew = CreateSavedContactPerson(TestUtil.GetRandomString(), 3);
+            ContactPersonTestBO cpExclude = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
 
             //---------------Assert Precondition ---------------
             Assert.AreEqual(3, col.Count);

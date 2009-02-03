@@ -64,8 +64,8 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef(TestUtil.CreateRandomString(),
-                TestUtil.CreateRandomString(), TestUtil.CreateRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated);
+            MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef(TestUtil.GetRandomString(),
+                TestUtil.GetRandomString(), TestUtil.GetRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(RelationshipType.Association, relationshipDef.RelationshipType);
@@ -80,8 +80,8 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef(TestUtil.CreateRandomString(),
-                TestUtil.CreateRandomString(), TestUtil.CreateRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated
+            MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef(TestUtil.GetRandomString(),
+                TestUtil.GetRandomString(), TestUtil.GetRandomString(), new RelKeyDef(), false, "", DeleteParentAction.DeleteRelated
                 , RelationshipType.Composition);
             //---------------Test Result -----------------------
             Assert.AreEqual(RelationshipType.Composition, relationshipDef.RelationshipType);

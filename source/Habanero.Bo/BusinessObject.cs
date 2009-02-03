@@ -77,6 +77,21 @@ namespace Habanero.BO
         {
         }
 
+        /// <summary>
+        /// Constructor that specifies a class definition
+        /// </summary>
+        /// <param name="def">The class definition</param>
+        protected internal BusinessObject(ClassDef def)
+        {
+            Initialise(def);
+            AddToObjectManager();
+        }
+
+        #region Serialisation of BusinessObject
+
+        // TODO - Mark 03 Feb 2009 : The only detail that is recorded off of a BOProp is the current value. Is this correct?
+        //      I noticed that the prop values that have come out of a seriaizable context are all going to be the persisted values as well.
+
         protected BusinessObject(SerializationInfo info, StreamingContext context)
         {
             Initialise(ClassDef.ClassDefs[this.GetType()]);
@@ -84,7 +99,7 @@ namespace Habanero.BO
             {
                 prop.InitialiseProp(info.GetValue(prop.PropertyName, prop.PropertyType));
             }
-            _boStatus = (BOStatus) info.GetValue("Status", typeof (BOStatus));
+            _boStatus = (BOStatus)info.GetValue("Status", typeof(BOStatus));
             AddToObjectManager();
         }
 
@@ -97,15 +112,7 @@ namespace Habanero.BO
             info.AddValue("Status", this.Status);
         }
 
-        /// <summary>
-        /// Constructor that specifies a class definition
-        /// </summary>
-        /// <param name="def">The class definition</param>
-        protected internal BusinessObject(ClassDef def)
-        {
-            Initialise(def);
-            AddToObjectManager();
-        }
+        #endregion // Serialisation of BusinessObject
 
         private void AddToObjectManager()
         {
@@ -187,6 +194,18 @@ namespace Habanero.BO
                     ("There is an error constructing a business object. Please refer to the system administrator",
                      "The Class could not be constructed since no _primaryKey has been created");
             }
+            BackupObjectIdPropValues();
+        }
+
+        private void BackupObjectIdPropValues()
+        {
+            foreach (BOProp prop in ID)
+            {
+                prop.BackupPropValue();
+                //This next line sets the prop to be for a new object again, because 
+                // the Backup would have set it to be not for a new object.
+                prop.IsObjectNew = true;
+            }
         }
 
         /// <summary>
@@ -199,7 +218,7 @@ namespace Habanero.BO
 
             CheckClassDefNotNull();
 
-            _boPropCol = _classDef.createBOPropertyCol(newObject);
+            _boPropCol = _classDef.CreateBOPropertyCol(newObject);
             _keysCol = _classDef.createBOKeyCol(_boPropCol);
 
             SetPrimaryKeyForInheritedClass();
@@ -771,7 +790,7 @@ namespace Habanero.BO
 //                    PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
 //                    if (primaryKeyDef.IsGuidObjectID)
 //                    {
-//                        BOPropCol boPropCol = classDef.createBOPropertyCol(true);
+//                        BOPropCol boPropCol = classDef.CreateBOPropertyCol(true);
 //                        BOPrimaryKey boPrimaryKey = primaryKeyDef.CreateBOKey(boPropCol) as BOPrimaryKey;
 //                        if (boPrimaryKey != null)
 //                        {

@@ -17,8 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-
 namespace Habanero.Base
 {
     ///<summary>
@@ -28,7 +26,7 @@ namespace Habanero.Base
     /// rest of the application.
     ///</summary>
     ///<param name="bo"></param>
-    public delegate void PostObjectPersistingDelegate(IBusinessObject bo);
+    public delegate void PostObjectEditDelegate(IBusinessObject bo, bool cancelled);
 
     /// <summary>
     /// Provides a facility to edit business objects
@@ -53,11 +51,11 @@ namespace Habanero.Base
         /// <param name="uiDefName">The name of the set of ui definitions
         /// used to design the edit form. Setting this to an empty string
         /// will use a ui definition with no name attribute specified.</param>
+        /// <param name="postEditAction">Action to be performed when the editing is completed or cancelled. Typically used if you want to update
+        /// a grid or a list in an asynchronous environment (E.g. to select the recently edited item in the grid)</param>
         /// <returns>Returs true if edited successfully of false if the edits
         /// were cancelled</returns>
-        /// <param name="postEditAction">The delete to be executeActionOn After The edit is saved.
-        /// will be the object that the method is called on</param>
-        bool EditObject(IBusinessObject obj, string uiDefName, PostObjectPersistingDelegate postEditAction);
+        bool EditObject(IBusinessObject obj, string uiDefName, PostObjectEditDelegate postEditAction);
     }
 
     /// <summary>

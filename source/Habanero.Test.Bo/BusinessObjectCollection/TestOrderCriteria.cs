@@ -246,7 +246,7 @@ namespace Habanero.Test.BO
             
             //---------------Execute Test ----------------------
             OrderCriteria.Field field = new OrderCriteria.Field("TestProp", OrderCriteria.SortDirection.Descending);
-            Source source = new Source(TestUtil.CreateRandomString());
+            Source source = new Source(TestUtil.GetRandomString());
             field.Source = source;
             //---------------Test Result -----------------------
             Assert.AreEqual(source, field.Source);

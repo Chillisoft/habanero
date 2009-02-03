@@ -132,6 +132,12 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public override void TestUpdateBusinessObjectRowValues()
+        {
+            //This test does not apply to EditableGrid
+        }
+
+        [Test]
         public void TestAcceptChangesSavesNewBusinessObjects()
         {
             SetupTestData();

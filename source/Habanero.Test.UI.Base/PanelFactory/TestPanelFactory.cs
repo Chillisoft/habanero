@@ -581,8 +581,8 @@
 //            Sample sample = new Sample();
 //            Type type = typeof(MockControlMapper);
 
-//            string attributeName = TestUtil.CreateRandomString();
-//            string attributeValue = TestUtil.CreateRandomString();
+//            string attributeName = TestUtil.GetRandomString();
+//            string attributeValue = TestUtil.GetRandomString();
 //            UIForm uiForm = _sampleUserInterfaceMapper.
 //                SampleUserInterface_CustomMapper_WithAttributes(type.FullName, type.Assembly.FullName, attributeName, attributeValue);
 //            IPanelFactory panelFactory = new PanelFactory(sample, uiForm, GetControlFactory());

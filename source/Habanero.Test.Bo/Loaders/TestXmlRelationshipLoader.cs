@@ -245,7 +245,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestRelationshipType_Invalid() 
         {
             //---------------Set up test pack-------------------
-            string className = TestUtil.CreateRandomString();
+            string className = TestUtil.GetRandomString();
             XmlRelationshipLoader loader = new XmlRelationshipLoader(className);
             const string singleRelationshipStringComposition = @"
 					<relationship 

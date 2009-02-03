@@ -613,7 +613,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO.LoadClassDefWithAddresBOsRelationship_AddressReverseRelationshipConfigured();
             ContactPersonTestBO contactPersonTestBO = 
-                ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(),TestUtil.CreateRandomString());
+                ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(),TestUtil.GetRandomString());
             //---------------Assert Precondition----------------
             Assert.IsTrue(contactPersonTestBO.Status.IsNew);
             //---------------Execute Test ----------------------
@@ -636,7 +636,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO.LoadClassDefWithAddresBOsRelationship_AddressReverseRelationshipConfigured();
             ContactPersonTestBO contactPersonTestBO =
-                ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
+                ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
             AddressTestBO address = new AddressTestBO();
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
@@ -661,7 +661,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO.LoadClassDefWithAddresBOsRelationship_AddressReverseRelationshipConfigured();
             ContactPersonTestBO contactPersonTestBO =
-                ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
+                ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
 
             //---------------Assert Precondition----------------
 

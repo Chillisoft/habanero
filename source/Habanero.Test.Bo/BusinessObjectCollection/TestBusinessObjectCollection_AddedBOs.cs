@@ -284,7 +284,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
             cpCol.Add(myBO);
-            myBO.Surname = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
             RegisterForAddedEvent(cpCol);
             //---------------Assert Precondition----------------
             AssertOneObjectInCurrentAndAddedCollection(cpCol);
@@ -306,7 +306,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
             cpCol.Add(myBO);
-            myBO.Surname = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
             RegisterForAddedEvent(cpCol);
             //---------------Assert Precondition----------------
             AssertOneObjectInCurrentAndAddedCollection(cpCol);
@@ -348,7 +348,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
             cpCol.Add(myBO);
-            myBO.Surname = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
             RegisterForAddedAndRemovedEvents(cpCol);
 
             //---------------Assert Precondition----------------
@@ -421,7 +421,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateUnsavedContactPerson
-                (TestUtil.CreateRandomString(), TestUtil.CreateRandomString());
+                (TestUtil.GetRandomString(), TestUtil.GetRandomString());
             cpCol.Add(myBO);
             RegisterForAddedAndRemovedEvents(cpCol);
 
@@ -495,7 +495,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
-            cpCol.Load(new Criteria("Surname", Criteria.ComparisonOp.Equals, TestUtil.CreateRandomString()), "" );
+            cpCol.Load(new Criteria("Surname", Criteria.ComparisonOp.Equals, TestUtil.GetRandomString()), "" );
             cpCol.Add(myBO);
             myBO.MarkForDelete();
             RegisterForAddedAndRemovedEvents(cpCol);

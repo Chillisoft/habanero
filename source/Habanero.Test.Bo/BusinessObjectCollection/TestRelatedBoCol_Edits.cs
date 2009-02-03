@@ -122,8 +122,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         {
             MultipleRelationship<ContactPersonTestBO> relationship = GetContactPersonRelationship(organisation);
             ContactPersonTestBO cp = relationship.BusinessObjectCollection.CreateBusinessObject();
-            cp.Surname = TestUtil.CreateRandomString();
-            cp.FirstName = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
+            cp.FirstName = TestUtil.GetRandomString();
             cp.Save();
             return cp;
         }
@@ -235,7 +235,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp, OrganisationTestBO.CreateSavedOrganisation());
-            cp.FirstName = TestUtil.CreateRandomString();
+            cp.FirstName = TestUtil.GetRandomString();
 
             //--------------Assert Preconditions--------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
@@ -253,7 +253,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp, OrganisationTestBO.CreateSavedOrganisation());
-            cp.FirstName = TestUtil.CreateRandomString();
+            cp.FirstName = TestUtil.GetRandomString();
 
             //--------------Assert Preconditions--------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
@@ -271,7 +271,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp, OrganisationTestBO.CreateSavedOrganisation());
-            cp.FirstName = TestUtil.CreateRandomString();
+            cp.FirstName = TestUtil.GetRandomString();
 
             //--------------Assert Preconditions--------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
@@ -289,7 +289,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp, OrganisationTestBO.CreateSavedOrganisation());
-//            cp.FirstName = TestUtil.CreateRandomString();
+//            cp.FirstName = TestUtil.GetRandomString();
 
             //--------------Assert Preconditions--------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
@@ -307,7 +307,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp, OrganisationTestBO.CreateSavedOrganisation());
-            cp.FirstName = TestUtil.CreateRandomString();
+            cp.FirstName = TestUtil.GetRandomString();
 
             //--------------Assert Preconditions--------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);

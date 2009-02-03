@@ -202,7 +202,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
-            cp.FirstName = TestUtil.CreateRandomString();
+            cp.FirstName = TestUtil.GetRandomString();
 
             //--------------Assert Preconditions--------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
@@ -220,7 +220,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
-            cp.FirstName = TestUtil.CreateRandomString();
+            cp.FirstName = TestUtil.GetRandomString();
 
             //--------------Assert Preconditions--------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
@@ -238,7 +238,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
-            cp.FirstName = TestUtil.CreateRandomString();
+            cp.FirstName = TestUtil.GetRandomString();
 
             //--------------Assert Preconditions--------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
@@ -256,7 +256,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
-//            cp.FirstName = TestUtil.CreateRandomString();
+//            cp.FirstName = TestUtil.GetRandomString();
 
             //--------------Assert Preconditions--------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
@@ -274,7 +274,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
-            cp.FirstName = TestUtil.CreateRandomString();
+            cp.FirstName = TestUtil.GetRandomString();
 
             //--------------Assert Preconditions--------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);

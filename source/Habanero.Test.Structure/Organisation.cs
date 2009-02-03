@@ -89,7 +89,7 @@ namespace Habanero.Test.Structure
 
         private static Organisation CreateUnsavedOrganisation()
         {
-            return CreateUnsavedOrganisation(TestUtil.CreateRandomString());
+            return CreateUnsavedOrganisation(TestUtil.GetRandomString());
         }
 
         private static Organisation CreateUnsavedOrganisation(string name)

@@ -599,7 +599,7 @@ namespace Habanero.Test.UI.Base
             MyBO.LoadDefaultClassDef();
             MyBO businessObject = new MyBO();
             string uiDefName = "Alternate";
-            PostObjectPersistingDelegate action = delegate(IBusinessObject bo) {  };
+            PostObjectEditDelegate action = delegate(IBusinessObject bo, bool cancelled) {  };
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
             IDefaultBOEditorForm boEditorForm = _factory.CreateBOEditorForm(businessObject, uiDefName, action);
@@ -753,7 +753,7 @@ namespace Habanero.Test.UI.Base
         public void TestCreateUserControl_WithName()
         {
             //---------------Set up test pack-------------------
-            string name = TestUtil.CreateRandomString();
+            string name = TestUtil.GetRandomString();
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
             IUserControlHabanero userControlHabanero = _factory.CreateUserControl(name);
@@ -806,7 +806,7 @@ namespace Habanero.Test.UI.Base
         public void TestCreateRadioButton()
         {
             //---------------Set up test pack-------------------
-            string text = TestUtil.CreateRandomString();
+            string text = TestUtil.GetRandomString();
             int expectedWidth = _factory.CreateLabel(text, false).PreferredWidth + 25;
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------

@@ -235,7 +235,7 @@ namespace Habanero.Test
 
         private static Address CreateUnsavedAddress(Guid contactPersonID)
         {
-            return CreateUnsavedAddress(contactPersonID, TestUtil.CreateRandomString());
+            return CreateUnsavedAddress(contactPersonID, TestUtil.GetRandomString());
         }
 
         private static Address CreateUnsavedAddress(ContactPerson contactPerson, string firstLine)

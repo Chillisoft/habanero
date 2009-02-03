@@ -89,7 +89,7 @@ namespace Habanero.Test.Structure
 
         private static Car CreateUnsavedCar()
         {
-            return CreateUnsavedCar(TestUtil.CreateRandomString());
+            return CreateUnsavedCar(TestUtil.GetRandomString());
         }
 
         private static Car CreateUnsavedCar(string registrationNo)

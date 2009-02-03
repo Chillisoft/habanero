@@ -801,8 +801,8 @@ namespace Habanero.Test.BO
         public static ContactPersonTestBO CreateSavedContactPersonNoAddresses()
         {
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-            contactPersonTestBO.Surname = TestUtil.CreateRandomString();
-            contactPersonTestBO.FirstName = TestUtil.CreateRandomString();
+            contactPersonTestBO.Surname = TestUtil.GetRandomString();
+            contactPersonTestBO.FirstName = TestUtil.GetRandomString();
             contactPersonTestBO.Save();
             return contactPersonTestBO;
         }
@@ -895,7 +895,7 @@ namespace Habanero.Test.BO
 
         public static ContactPersonTestBO CreateUnsavedContactPerson()
         {
-            return CreateUnsavedContactPerson(TestUtil.CreateRandomString());
+            return CreateUnsavedContactPerson(TestUtil.GetRandomString());
         }
 
         private static ContactPersonTestBO CreateUnsavedContactPerson(DateTime dateOfBirth)
@@ -907,7 +907,7 @@ namespace Habanero.Test.BO
 
         public static ContactPersonTestBO CreateUnsavedContactPerson(string surname)
         {
-            return CreateUnsavedContactPerson(surname, TestUtil.CreateRandomString());
+            return CreateUnsavedContactPerson(surname, TestUtil.GetRandomString());
         }
 
         private static ContactPersonTestBO CreateUnsavedContactPerson(DateTime dateOfBirth, string surname)
@@ -1005,8 +1005,8 @@ namespace Habanero.Test.BO
         public static ContactPersonTestBO CreateUnsavedContactPerson_AsChild(BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
-            myBO.Surname = TestUtil.CreateRandomString();
-            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
+            myBO.FirstName = TestUtil.GetRandomString();
             return myBO;
         }
 

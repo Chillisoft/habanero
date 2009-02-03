@@ -340,13 +340,13 @@ namespace Habanero.Test
 
         private static ContactPerson CreateUnsavedContactPerson()
         {
-            return  CreateUnsavedContactPerson(TestUtil.CreateRandomString());
+            return  CreateUnsavedContactPerson(TestUtil.GetRandomString());
           
         }
 
         private static ContactPerson CreateUnsavedContactPerson(string surname)
         {
-            return  CreateUnsavedContactPerson(surname, TestUtil.CreateRandomString());
+            return  CreateUnsavedContactPerson(surname, TestUtil.GetRandomString());
         }
 
         private static ContactPerson CreateUnsavedContactPerson(string surname, string firstName)

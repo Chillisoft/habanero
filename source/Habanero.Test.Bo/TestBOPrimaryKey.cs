@@ -189,7 +189,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            string value = TestUtil.CreateRandomString();
+            string value = TestUtil.GetRandomString();
             ClassDef classDef = ContactPersonTestBO.LoadClassDefWithSurnameAsPrimaryKey_WriteNew();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO {Surname = value};
             object expectedID = contactPersonTestBO.ID;
@@ -279,7 +279,7 @@ namespace Habanero.Test.BO
             //--------------- Set up test pack ------------------
             BOPrimaryKey primaryKey = CreateBOPrimaryKeyString();
             Guid guid = Guid.NewGuid();
-            string str = TestUtil.CreateRandomString();
+            string str = TestUtil.GetRandomString();
             //--------------- Test Preconditions ----------------
 
             //--------------- Execute Test ----------------------
@@ -312,7 +312,7 @@ namespace Habanero.Test.BO
             //--------------- Set up test pack ------------------
             BOPrimaryKey primaryKey = CreateBOPrimaryKeyString();
             Guid guid = Guid.NewGuid();
-            string str = TestUtil.CreateRandomString();
+            string str = TestUtil.GetRandomString();
             //--------------- Test Preconditions ----------------
 
             //--------------- Execute Test ----------------------
@@ -330,9 +330,9 @@ namespace Habanero.Test.BO
             BOPrimaryKey primaryKey = CreateBOPrimaryKeyString();
             Guid guid = Guid.NewGuid();
             primaryKey.SetObjectGuidID(guid);
-            string str1 = TestUtil.CreateRandomString();
+            string str1 = TestUtil.GetRandomString();
             primaryKey[0].Value = str1;
-            string str2 = TestUtil.CreateRandomString();
+            string str2 = TestUtil.GetRandomString();
             //--------------- Test Preconditions ----------------
 
             //--------------- Execute Test ----------------------
@@ -383,7 +383,7 @@ namespace Habanero.Test.BO
             Guid guid = Guid.NewGuid();
             primaryKey.SetObjectGuidID(guid);
             primaryKey[0].Value = Guid.NewGuid();
-            primaryKey[1].Value = TestUtil.CreateRandomString();
+            primaryKey[1].Value = TestUtil.GetRandomString();
             //--------------- Test Preconditions ----------------
             
             //--------------- Execute Test ----------------------
@@ -402,11 +402,11 @@ namespace Habanero.Test.BO
             Guid guid = Guid.NewGuid();
             primaryKey.SetObjectGuidID(guid);
             primaryKey[0].Value = Guid.NewGuid();
-            primaryKey[1].Value = TestUtil.CreateRandomString();
+            primaryKey[1].Value = TestUtil.GetRandomString();
             //--------------- Test Preconditions ----------------
             
             //--------------- Execute Test ----------------------
-            primaryKey[1].Value = TestUtil.CreateRandomString();
+            primaryKey[1].Value = TestUtil.GetRandomString();
             string keyAsString = primaryKey.AsString_CurrentValue();
             //--------------- Test Result -----------------------
             Assert.AreNotEqual(guid.ToString(), keyAsString);
@@ -422,12 +422,12 @@ namespace Habanero.Test.BO
             Guid guid = Guid.NewGuid();
             primaryKey.SetObjectGuidID(guid);
             primaryKey[0].Value = Guid.NewGuid();
-            primaryKey[1].Value = TestUtil.CreateRandomString();
+            primaryKey[1].Value = TestUtil.GetRandomString();
             string origKeyAsString = primaryKey.AsString_CurrentValue();
             //--------------- Test Preconditions ----------------
             
             //--------------- Execute Test ----------------------
-            primaryKey[1].Value = TestUtil.CreateRandomString();
+            primaryKey[1].Value = TestUtil.GetRandomString();
             string keyAsString = primaryKey.AsString_PreviousValue();
             //--------------- Test Result -----------------------
             Assert.AreNotEqual(guid.ToString(), keyAsString);

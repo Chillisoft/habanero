@@ -57,7 +57,7 @@ namespace Habanero.UI.VWG
         private IBusinessObjectDeletor _businessObjectDeletor;
         private IBusinessObjectEditor _businessObjectEditor;
         private string _orderBy;
-        private bool _hasDoubleClickEventHandler;
+        private readonly bool _hasDoubleClickEventHandler;
 
         public ReadOnlyGridControlVWG() : this(GlobalUIRegistry.ControlFactory)
         {
@@ -446,11 +446,29 @@ namespace Habanero.UI.VWG
                         "You cannot call add as there is no business object creator set up for the grid");
                 }
                 newBo = _businessObjectCreator.CreateBusinessObject();
+                //IDataGridViewRow newBoRow = _grid.GetBusinessObjectRow(newBo);
+                //if (newBoRow != null) _grid.Rows.Remove(newBoRow);
                 if (_businessObjectEditor != null && newBo != null)
                 {
-                    _businessObjectEditor.EditObject(newBo, UiDefName,
-                                                     delegate(IBusinessObject bo) { Grid.SelectedBusinessObject = bo; });
+                    _businessObjectEditor.EditObject(newBo, UiDefName, delegate(IBusinessObject bo, bool cancelled)
+                    {
+                        IBusinessObjectCollection collection = this.Grid.GetBusinessObjectCollection();
+                        if (cancelled)
+                        {
+                            collection.Remove(bo);
+                        }
+                        else
+                        {
+                            if (!collection.Contains(bo))
+                            {
+                                collection.Add(bo);
+                            }
+                            Grid.RefreshBusinessObjectRow(bo);
+                            Grid.SelectedBusinessObject = bo;
+                        }
+                    });
                 }
+
             }
             catch (Exception ex)
             {

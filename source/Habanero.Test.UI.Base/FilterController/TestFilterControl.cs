@@ -722,7 +722,7 @@ namespace Habanero.Test.UI.Base.FilterController
                 IControlFactory factory = GetControlFactory();
                 IFilterControl ctl = factory.CreateFilterControl();
                 ITextBox textBox = ctl.AddStringFilterTextBox("test", "propname");
-                string text = TestUtil.CreateRandomString();
+                string text = TestUtil.GetRandomString();
 
                 bool filterFired = false;
                 ctl.Filter += delegate { filterFired = true; };
@@ -742,7 +742,7 @@ namespace Habanero.Test.UI.Base.FilterController
                 IFilterControl ctl = factory.CreateFilterControl();
                 string[] optionList = { "one", "two" };
                 IComboBox comboBox = ctl.AddStringFilterComboBox("test", "propname", optionList, true);
-                string text = TestUtil.CreateRandomString();
+                string text = TestUtil.GetRandomString();
 
                 bool filterFired = false;
                 ctl.Filter += delegate { filterFired = true; };
@@ -818,7 +818,7 @@ namespace Habanero.Test.UI.Base.FilterController
                 IControlFactory factory = GetControlFactory();
                 IFilterControl ctl = factory.CreateFilterControl();
                 IDateRangeComboBox dateRangeComboBox = ctl.AddDateRangeFilterComboBox("test", "propname", true, true);
-                string text = TestUtil.CreateRandomString();
+                string text = TestUtil.GetRandomString();
 
                 bool filterFired = false;
                 ctl.Filter += delegate { filterFired = true; };
@@ -838,7 +838,7 @@ namespace Habanero.Test.UI.Base.FilterController
                 IFilterControl ctl = factory.CreateFilterControl();
                 ctl.FilterMode = FilterModes.Search;
                 ITextBox textBox = ctl.AddStringFilterTextBox("test", "propname");
-                string text = TestUtil.CreateRandomString();
+                string text = TestUtil.GetRandomString();
 
                 bool filterFired = false;
                 ctl.Filter += delegate { filterFired = true; };
@@ -860,7 +860,7 @@ namespace Habanero.Test.UI.Base.FilterController
                 ctl.FilterMode = FilterModes.Search;
                 string[] optionList = { "one", "two" };
                 IComboBox comboBox = ctl.AddStringFilterComboBox("test", "propname", optionList, true);
-                string text = TestUtil.CreateRandomString();
+                string text = TestUtil.GetRandomString();
 
                 bool filterFired = false;
                 ctl.Filter += delegate { filterFired = true; };
@@ -945,7 +945,7 @@ namespace Habanero.Test.UI.Base.FilterController
                 IFilterControl ctl = factory.CreateFilterControl();
                 ctl.FilterMode = FilterModes.Search;
                 IDateRangeComboBox dateRangeComboBox = ctl.AddDateRangeFilterComboBox("test", "propname", true, true);
-                string text = TestUtil.CreateRandomString();
+                string text = TestUtil.GetRandomString();
 
                 bool filterFired = false;
                 ctl.Filter += delegate { filterFired = true; };

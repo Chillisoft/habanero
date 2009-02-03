@@ -510,6 +510,45 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void TestRefreshBusinessObjectRow()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IGridBase gridBase = CreateGridBaseStub();
+            SetupGridColumnsForMyBo(gridBase);
+            gridBase.SetBusinessObjectCollection(col);
+            MyBO myBO = col[0];
+            string testPropValue = TestUtil.GetRandomString();
+            myBO.TestProp = testPropValue;
+            IDataGridViewRow row = gridBase.GetBusinessObjectRow(myBO);
+            row.Cells["TestProp"].Value = "";
+            //---------------Assert Precondition----------------
+            Assert.AreEqual("", row.Cells["TestProp"].Value);
+            Assert.AreEqual(testPropValue, myBO.TestProp);
+            //---------------Execute Test ----------------------
+            gridBase.RefreshBusinessObjectRow(myBO);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(testPropValue, row.Cells["TestProp"].Value);
+        }
+
+        [Test]
+        public void TestRefreshBusinessObjectRow_NullBo()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IGridBase gridBase = CreateGridBaseStub();
+            SetupGridColumnsForMyBo(gridBase);
+            gridBase.SetBusinessObjectCollection(col);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            gridBase.RefreshBusinessObjectRow(null);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(true, "Error should not be thrown and this assert should be reached.");
+        }
+
+        [Test]
         public void Test_TryReturnAColumnThatDoesNotExist_ReturnsNull()
         {
             //---------------Set up test pack-------------------
@@ -721,6 +760,51 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(col[2], businessObject2);
             Assert.AreSame(col[3], businessObject3);
             //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestGetBusinessObjectRow()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+            MyBO myBO2 = col[2];
+            const int expectedIndex = 2;
+            //-------------Assert Preconditions -------------
+            Assert.AreSame(myBO2, gridBase.GetBusinessObjectAtRow(expectedIndex));
+            //---------------Execute Test ----------------------
+            IDataGridViewRow dataGridViewRow = gridBase.GetBusinessObjectRow(myBO2);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedIndex, dataGridViewRow.Index);
+            Assert.AreEqual(myBO2.ID.AsString_CurrentValue(), dataGridViewRow.Cells["ID"].Value);
+        }
+
+        [Test]
+        public void TestGetBusinessObjectRow_NullBO()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+            MyBO myBO2 = col[2];
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            IDataGridViewRow dataGridViewRow = gridBase.GetBusinessObjectRow(null);
+            //---------------Test Result -----------------------
+            Assert.IsNull(dataGridViewRow);
+        }
+
+        [Test]
+        public void TestGetBusinessObjectRow_ReturnsNullIfNotFound()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+            MyBO notFoundBO = new MyBO();
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            IDataGridViewRow dataGridViewRow = gridBase.GetBusinessObjectRow(notFoundBO);
+            //---------------Test Result -----------------------
+            Assert.IsNull(dataGridViewRow);
         }
 
         [Test]

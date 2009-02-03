@@ -24,7 +24,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
             MyBO bo = new MyBO();
-            string testValue = TestUtil.CreateRandomString();
+            string testValue = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
             new PropertyLink<string, string>(bo, "TestProp", "TestProp2", delegate(string input) { return input; });
             bo.TestProp = testValue;
@@ -39,8 +39,8 @@ namespace Habanero.Test.BO
             MyBO.LoadDefaultClassDef();
             MyBO bo = new MyBO();
             new PropertyLink<string, string>(bo, "TestProp", "TestProp2", delegate(string input) { return input; });
-            bo.TestProp = TestUtil.CreateRandomString();;
-            string testValue = TestUtil.CreateRandomString();
+            bo.TestProp = TestUtil.GetRandomString();;
+            string testValue = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
             bo.TestProp = testValue;
             //---------------Test Result -----------------------
@@ -53,7 +53,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
             MyBO bo = new MyBO();
-            string testValue = TestUtil.CreateRandomString();
+            string testValue = TestUtil.GetRandomString();
             const string prop2Value = "my set value";
             bo.TestProp2 = prop2Value;
             //---------------Execute Test ----------------------
@@ -70,7 +70,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
             MyBO bo = new MyBO();
-            string testValue = TestUtil.CreateRandomString();
+            string testValue = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
             new PropertyLink<string, string>(bo, "TestProp", "TestProp2", delegate(string input) { return String.IsNullOrEmpty(input) ? "" : input.ToUpper(); });
             bo.TestProp = testValue;
@@ -85,14 +85,14 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
             MyBO bo = new MyBO();
-            string testValue = TestUtil.CreateRandomString();
+            string testValue = TestUtil.GetRandomString();
             PropertyLink<string, string> link = new PropertyLink<string, string>(bo, "TestProp", "TestProp2", delegate(string input) { return input; });
             bo.TestProp = testValue;
             //---------------Assert PreConditions---------------      
             Assert.AreEqual(testValue, bo.TestProp2);
             //---------------Execute Test ----------------------
             link.Disable();
-            bo.TestProp = TestUtil.CreateRandomString();
+            bo.TestProp = TestUtil.GetRandomString();
             //---------------Test Result -----------------------
             Assert.AreEqual(testValue, bo.TestProp2);     
         }
@@ -103,8 +103,8 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
             MyBO bo = new MyBO();
-            string testValue = TestUtil.CreateRandomString();
-            string testValue2 = TestUtil.CreateRandomString();
+            string testValue = TestUtil.GetRandomString();
+            string testValue2 = TestUtil.GetRandomString();
             PropertyLink<string, string> link = new PropertyLink<string, string>(bo, "TestProp", "TestProp2", delegate(string input) { return input; });
             link.Disable();
             bo.TestProp = testValue;
@@ -124,10 +124,10 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
             MyBO bo = new MyBO();
-            string testValue = TestUtil.CreateRandomString();
+            string testValue = TestUtil.GetRandomString();
             new PropertyLink<string, string>(bo, "TestProp", "TestProp2", delegate(string input) { return input; });
             bo.TestProp = testValue;
-            bo.TestProp2 = TestUtil.CreateRandomString(); ;
+            bo.TestProp2 = TestUtil.GetRandomString(); ;
             //---------------Execute Test ----------------------
             bo.TestProp = bo.TestProp2;
             bo.TestProp = testValue;

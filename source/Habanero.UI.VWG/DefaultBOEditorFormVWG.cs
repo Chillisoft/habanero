@@ -37,7 +37,7 @@ namespace Habanero.UI.VWG
     /// </summary>
     public class DefaultBOEditorFormVWG : FormVWG, IDefaultBOEditorForm
     {
-        private readonly PostObjectPersistingDelegate _action;
+        private readonly PostObjectEditDelegate _action;
         private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.DefaultBOEditorFormVWG");
         private readonly string _uiDefName;
         private readonly IButtonGroupControl _buttons;
@@ -46,12 +46,28 @@ namespace Habanero.UI.VWG
         private readonly IPanel _boPanel;
         protected IPanelInfo _panelInfo;
 
-        public DefaultBOEditorFormVWG(BusinessObject bo, string name, IControlFactory controlFactory, PostObjectPersistingDelegate action):this(bo, name, controlFactory)
+        /// <summary>
+        /// Constructs the <see cref="DefaultBOEditorFormVWG"/> class  with 
+        /// the specified businessObject, uiDefName and post edit action. 
+        /// </summary>
+        /// <param name="bo">The business object to represent</param>
+        /// <param name="uiDefName">The name of the ui def to use.</param>
+        /// <param name="controlFactory">The <see cref="IControlFactory"/> to use for creating the Editor form controls</param>
+        /// <param name="action">Action to be performed when the editing is completed or cancelled. Typically used if you want to update
+        /// a grid or a list in an asynchronous environment (E.g. to select the recently edited item in the grid).</param>
+        public DefaultBOEditorFormVWG(BusinessObject bo, string uiDefName, IControlFactory controlFactory, PostObjectEditDelegate action)
+            : this(bo, uiDefName, controlFactory)
         {
             _action = action;
-            
         }
 
+        /// <summary>
+        /// Constructs the <see cref="DefaultBOEditorFormVWG"/> class  with 
+        /// the specified <see cref="BusinessObject"/>, uiDefName and <see cref="IControlFactory"/>. 
+        /// </summary>
+        /// <param name="bo">The business object to represent</param>
+        /// <param name="uiDefName">The name of the ui def to use.</param>
+        /// <param name="controlFactory">The <see cref="IControlFactory"/> to use for creating the Editor form controls</param>
         public DefaultBOEditorFormVWG(BusinessObject bo, string uiDefName, IControlFactory controlFactory)
         {
             _bo = bo;
@@ -72,7 +88,7 @@ namespace Habanero.UI.VWG
                                                      "'form' section for the class, under the 'ui' " +
                                                      "with the name '" + _uiDefName + "'.");
                 }
-                def = uiMapper.GetUIFormProperties();
+                def = uiMapper.UIForm;
             }
             else
             {
@@ -84,7 +100,7 @@ namespace Habanero.UI.VWG
                                                      "cause is that the class definitions do not have a " +
                                                      "'form' section for the class.");
                 }
-                def = uiMapper.GetUIFormProperties();
+                def = uiMapper.UIForm;
             }
             if (def == null)
             {
@@ -126,14 +142,6 @@ namespace Habanero.UI.VWG
             //    focusMethod.Invoke(controlToFocus, new object[] { });
             //}
         }
-
-        //private void DefaultBOEditorForm_Load(object sender, EventArgs e)
-        //{
-        //    if (_panelInfo.ControlMappers.BusinessObject == null && _bo != null)
-        //    {
-        //        _panelInfo.ControlMappers.BusinessObject = _bo;
-        //    }
-        //}
 
         protected virtual void SetupFormSize(UIForm def)
         {
@@ -192,10 +200,14 @@ namespace Habanero.UI.VWG
         private void CancelButtonHandler(object sender, EventArgs e)
         {
             _panelInfo.BusinessObject = null;
-            _bo.Restore();
+            _bo.CancelEdits();
             //DialogResult = Gizmox.WebGUI.Forms.DialogResult.Cancel;
             DialogResult = Base.DialogResult.Cancel;
             Close();
+            if (_action != null)
+            {
+                _action(this._bo, true);
+            }
         }
 
         /// <summary>
@@ -239,7 +251,7 @@ namespace Habanero.UI.VWG
                 Close();
                 if (_action != null)
                 {
-                    _action(this._bo);
+                    _action(this._bo, false);
                 }
                 _panelInfo.BusinessObject = null;
             }

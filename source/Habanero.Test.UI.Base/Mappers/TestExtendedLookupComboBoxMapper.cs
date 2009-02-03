@@ -35,7 +35,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //--------------- Set up test pack ------------------
             IControlFactory controlFactory = GetControlFactory();
             ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
-            string propName = TestUtil.CreateRandomString();
+            string propName = TestUtil.GetRandomString();
             //--------------- Test Preconditions ----------------
 
             //--------------- Execute Test ----------------------
@@ -63,7 +63,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //--------------- Set up test pack ------------------
             IControlFactory controlFactory = GetControlFactory();
             ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
-            string propName = TestUtil.CreateRandomString();
+            string propName = TestUtil.GetRandomString();
             //--------------- Test Preconditions ----------------
 
             //--------------- Execute Test ----------------------
@@ -100,8 +100,8 @@ namespace Habanero.Test.UI.Base.Mappers
             //--------------- Set up test pack ------------------
 
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-            contactPersonTestBO.Surname = TestUtil.CreateRandomString();
-            contactPersonTestBO.FirstName = TestUtil.CreateRandomString();
+            contactPersonTestBO.Surname = TestUtil.GetRandomString();
+            contactPersonTestBO.FirstName = TestUtil.GetRandomString();
             OrganisationTestBO.LoadDefaultClassDef();
             OrganisationTestBO.CreateSavedOrganisation();
             OrganisationTestBO.CreateSavedOrganisation();
@@ -154,7 +154,7 @@ namespace Habanero.Test.UI.Base.Mappers
         //    //--------------- Set up test pack ------------------
         //    IControlFactory controlFactory = GetControlFactory();
         //    ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
-        //    string propName = TestUtil.CreateRandomString();
+        //    string propName = TestUtil.GetRandomString();
         //    ExtendedComboBoxMapper<IBusinessObject> mapper = new ExtendedComboBoxMapperStub<IBusinessObject>(
         //        extendedComboBox, propName, true, controlFactory);
         //    MockRepository mock = new MockRepository();
@@ -176,7 +176,7 @@ namespace Habanero.Test.UI.Base.Mappers
         //    //--------------- Set up test pack ------------------
         //    IControlFactory controlFactory = GetControlFactory();
         //    ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
-        //    string propName = TestUtil.CreateRandomString();
+        //    string propName = TestUtil.GetRandomString();
         //    ExtendedComboBoxMapper mapper = new ExtendedComboBoxMapper(
         //        extendedComboBox, propName, true, controlFactory);
         //    MockRepository mock = new MockRepository();

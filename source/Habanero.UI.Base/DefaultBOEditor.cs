@@ -61,11 +61,11 @@ namespace Habanero.UI.Base
         /// <param name="uiDefName">The name of the set of ui definitions
         /// used to design the edit form. Setting this to an empty string
         /// will use a ui definition with no name attribute specified.</param>
+        /// <param name="postEditAction">Action to be performed when the editing is completed or cancelled. Typically used if you want to update
+        /// a grid or a list in an asynchronous environment (E.g. to select the recently edited item in the grid)</param>
         /// <returns>Returs true if edited successfully of false if the edits
         /// were cancelled</returns>
-        /// <param name="postEditAction">The delete to be executeActionOn After The edit is saved.
-        /// will be the object that the method is called on</param>
-        public bool EditObject(IBusinessObject obj, string uiDefName, PostObjectPersistingDelegate postEditAction)
+        public bool EditObject(IBusinessObject obj, string uiDefName, PostObjectEditDelegate postEditAction)
         {
             BusinessObject bo = (BusinessObject)obj;
             IDefaultBOEditorForm form = CreateEditorForm(bo, uiDefName, postEditAction);
@@ -85,7 +85,7 @@ namespace Habanero.UI.Base
             return _controlFactory.CreateBOEditorForm(bo, uiDefName);
         }
 
-        private IDefaultBOEditorForm CreateEditorForm(BusinessObject bo, string uiDefName, PostObjectPersistingDelegate action)
+        private IDefaultBOEditorForm CreateEditorForm(BusinessObject bo, string uiDefName, PostObjectEditDelegate action)
         {
             return _controlFactory.CreateBOEditorForm(bo, uiDefName, action);
         }

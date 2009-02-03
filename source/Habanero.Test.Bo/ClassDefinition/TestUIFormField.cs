@@ -283,7 +283,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            bool hasParameterValue = uiFormField1.HasParameterValue(TestUtil.CreateRandomString());
+            bool hasParameterValue = uiFormField1.HasParameterValue(TestUtil.GetRandomString());
             //---------------Test Result -----------------------
             Assert.IsFalse(hasParameterValue);
 

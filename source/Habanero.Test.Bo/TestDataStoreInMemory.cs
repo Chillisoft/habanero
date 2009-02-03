@@ -172,14 +172,14 @@ namespace Habanero.Test.BO
             DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = new ContactPersonTestBO();
             cp1.DateOfBirth = now;
-            cp1.Surname = TestUtil.CreateRandomString();
+            cp1.Surname = TestUtil.GetRandomString();
             cp1.Save();
             dataStore.Add(cp1);
             ContactPersonTestBO cp2 = new ContactPersonTestBO();
             cp2.DateOfBirth = now;
             dataStore.Add(cp2);
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
-            cp2.Surname = TestUtil.CreateRandomString();
+            cp2.Surname = TestUtil.GetRandomString();
             cp2.Save();
 
             //---------------Execute Test ----------------------
@@ -203,12 +203,12 @@ namespace Habanero.Test.BO
             DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = new ContactPersonTestBO();
             cp1.DateOfBirth = now;
-            cp1.Surname = TestUtil.CreateRandomString();
+            cp1.Surname = TestUtil.GetRandomString();
             cp1.Save();
             dataStore.Add(cp1);
             ContactPersonTestBO cp2 = new ContactPersonTestBO();
             cp2.DateOfBirth = now;
-            cp2.Surname = TestUtil.CreateRandomString();
+            cp2.Surname = TestUtil.GetRandomString();
             cp2.Save();
             dataStore.Add(cp2);
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);

@@ -64,8 +64,8 @@ namespace Habanero.Test.BO.Relationship
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Organisation = organisationTestBO;
             contactPerson.Save();
            
@@ -87,8 +87,8 @@ namespace Habanero.Test.BO.Relationship
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Organisation = organisationTestBO;
             contactPerson.Save();
             contactPerson.OrganisationID = null;
@@ -109,14 +109,14 @@ namespace Habanero.Test.BO.Relationship
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Organisation = organisationTestBO;
             contactPerson.Save();
 
             ContactPersonTestBO alternatecontactPerson = new ContactPersonTestBO();
-            alternatecontactPerson.Surname = TestUtil.CreateRandomString();
-            alternatecontactPerson.FirstName = TestUtil.CreateRandomString();
+            alternatecontactPerson.Surname = TestUtil.GetRandomString();
+            alternatecontactPerson.FirstName = TestUtil.GetRandomString();
 
             //---------------Execute Test ----------------------
             contactPerson.OrganisationID = null;
@@ -135,8 +135,8 @@ namespace Habanero.Test.BO.Relationship
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             //---------------Assert preconditions --------------
             Assert.AreEqual(2, BusinessObjectManager.Instance.Count);
             //---------------Execute Test ----------------------
@@ -316,8 +316,8 @@ namespace Habanero.Test.BO.Relationship
             relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO
                     {
-                        Surname = TestUtil.CreateRandomString(),
-                        FirstName = TestUtil.CreateRandomString()
+                        Surname = TestUtil.GetRandomString(),
+                        FirstName = TestUtil.GetRandomString()
                     };
             //---------------Execute Test ----------------------
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
@@ -336,8 +336,8 @@ namespace Habanero.Test.BO.Relationship
             relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO
             {
-                Surname = TestUtil.CreateRandomString(),
-                FirstName = TestUtil.CreateRandomString()
+                Surname = TestUtil.GetRandomString(),
+                FirstName = TestUtil.GetRandomString()
             };
             //---------------Assert Preconditions --------------
             Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
@@ -358,8 +358,8 @@ namespace Habanero.Test.BO.Relationship
             relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO
             {
-                Surname = TestUtil.CreateRandomString(),
-                FirstName = TestUtil.CreateRandomString()
+                Surname = TestUtil.GetRandomString(),
+                FirstName = TestUtil.GetRandomString()
             };
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             contactPerson.Save();
@@ -389,8 +389,8 @@ namespace Habanero.Test.BO.Relationship
             relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO
             {
-                Surname = TestUtil.CreateRandomString(),
-                FirstName = TestUtil.CreateRandomString()
+                Surname = TestUtil.GetRandomString(),
+                FirstName = TestUtil.GetRandomString()
             };
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             OrganisationTestBO origOrganisation = contactPerson.Organisation;
@@ -414,8 +414,8 @@ namespace Habanero.Test.BO.Relationship
             relationship.OwningBOHasForeignKey = true;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO
                     {
-                        Surname = TestUtil.CreateRandomString(),
-                        FirstName = TestUtil.CreateRandomString()
+                        Surname = TestUtil.GetRandomString(),
+                        FirstName = TestUtil.GetRandomString()
                     };
             //---------------Execute Test ----------------------
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
@@ -431,8 +431,8 @@ namespace Habanero.Test.BO.Relationship
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO myBO = new ContactPersonTestBO();
-            myBO.Surname = TestUtil.CreateRandomString();
-            myBO.FirstName = TestUtil.CreateRandomString();
+            myBO.Surname = TestUtil.GetRandomString();
+            myBO.FirstName = TestUtil.GetRandomString();
             myBO.Organisation = organisationTestBO;
             myBO.Save();
             
@@ -456,8 +456,8 @@ namespace Habanero.Test.BO.Relationship
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
-            contactPerson.Surname = TestUtil.CreateRandomString();
-            contactPerson.FirstName = TestUtil.CreateRandomString();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Organisation = organisationTestBO;
             contactPerson.Save();
             organisationTestBO.ContactPerson = null;

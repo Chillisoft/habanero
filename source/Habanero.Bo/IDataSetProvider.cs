@@ -40,5 +40,25 @@ namespace Habanero.Base
         /// <param name="id">The id of the bo to search for</param>
         /// <returns>The business object corresponding to the ID</returns>
         IBusinessObject Find(string id);
+
+        /// <summary>
+        /// Returns the business object at the row number specified
+        /// </summary>
+        /// <param name="rowNum">The row number</param>
+        /// <returns>Returns a business object</returns>
+        IBusinessObject Find(int rowNum);
+
+        /// <summary>
+        /// Finds the row number in which a specified business object resides
+        /// </summary>
+        /// <param name="bo">The business object to search for</param>
+        /// <returns>Returns the row number if found, or -1 if not found</returns>
+        int FindRow(IBusinessObject bo);
+
+        ///<summary>
+        /// Updates the row values for the specified <see cref="IBusinessObject"/>.
+        ///</summary>
+        ///<param name="businessObject">The <see cref="IBusinessObject"/> for which the row values need to updated.</param>
+        void UpdateBusinessObjectRowValues(IBusinessObject businessObject);
     }
 }

@@ -830,7 +830,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.DateOfBirth = DateTime.Now;
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -981,7 +981,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.DateOfBirth = DateTime.Now;
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1035,7 +1035,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
             Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThan, new System.Drawing.Bitmap(20, 20));
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1099,7 +1099,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.DateOfBirth = DateTime.Now;
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1117,7 +1117,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.DateOfBirth = DateTime.Now;
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1171,7 +1171,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
             Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThanEqual, new System.Drawing.Bitmap(20, 20));
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1235,7 +1235,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.DateOfBirth = DateTime.Now;
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1253,7 +1253,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.DateOfBirth = DateTime.Now;
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1307,7 +1307,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
             Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.GreaterThanEqual, new System.Drawing.Bitmap(20, 20));
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -1763,7 +1763,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
             Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.Like, new System.Drawing.Bitmap(20, 20));
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             cp.Save();
 
             //---------------Assert PreConditions---------------            
@@ -2086,7 +2086,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
             Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.NotLike, new System.Drawing.Bitmap(20, 20));
-            cp.Surname = TestUtil.CreateRandomString();
+            cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             
             //---------------Assert PreConditions---------------            

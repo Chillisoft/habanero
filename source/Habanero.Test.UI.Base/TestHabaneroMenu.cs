@@ -43,7 +43,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             HabaneroMenu menu = new HabaneroMenu("Main");
-            string menuName = TestUtil.CreateRandomString();
+            string menuName = TestUtil.GetRandomString();
             //---------------Execute Test ----------------------
             HabaneroMenu submenu = menu.AddSubmenu(menuName);
             //---------------Test Result -----------------------
@@ -58,7 +58,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             HabaneroMenu submenu = new HabaneroMenu("Main").AddSubmenu("Submenu");
-            string menuItemName = TestUtil.CreateRandomString();
+            string menuItemName = TestUtil.GetRandomString();
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -74,7 +74,7 @@ namespace Habanero.Test.UI.Base
         public void TestSetFormControlCreator()
         {
             //---------------Set up test pack-------------------
-            HabaneroMenu.Item menuItem = new HabaneroMenu.Item(TestUtil.CreateRandomString());
+            HabaneroMenu.Item menuItem = new HabaneroMenu.Item(TestUtil.GetRandomString());
             IFormControl formControl = null;
             //---------------Assert PreConditions---------------            
             Assert.IsNull(menuItem.FormControlCreator);
@@ -92,7 +92,7 @@ namespace Habanero.Test.UI.Base
         public void TestSetControlManagerCreator()
         {
             //---------------Set up test pack-------------------
-            HabaneroMenu.Item menuItem = new HabaneroMenu.Item(TestUtil.CreateRandomString());
+            HabaneroMenu.Item menuItem = new HabaneroMenu.Item(TestUtil.GetRandomString());
             IControlManager controlManager = null;
             //---------------Assert PreConditions---------------            
             Assert.IsNull(menuItem.ControlManagerCreator);

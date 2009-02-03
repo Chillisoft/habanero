@@ -145,9 +145,36 @@ namespace Habanero.Test.BO.ClassDefinition
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
             IBusinessObject bo = itsClassDef.CreateNewBusinessObject();
-            Assert.AreSame(typeof (MyBO), bo.GetType());
+            Assert.AreSame(typeof(MyBO), bo.GetType());
             bo.SetPropertyValue("TestProp", "TestValue");
             Assert.AreEqual("TestValue", bo.GetPropertyValue("TestProp"));
+        }
+
+        [Test]
+        public void TestCreateBusinessObject_SetsDefaults()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            XmlClassLoader loader = new XmlClassLoader();
+            itsClassDef =
+                loader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" type=""Guid"" />
+					<property  name=""TestProp"" default=""defaultValue"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            //-------------Assert Preconditions -------------
+
+            //---------------Execute Test ----------------------
+            IBusinessObject bo = itsClassDef.CreateNewBusinessObject();
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(MyBO), bo);
+            Assert.AreEqual("defaultValue", bo.GetPropertyValue("TestProp"));
         }
 
         [Test]
@@ -729,7 +756,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(classDef1, classDef2);
 
             //---------------Execute Test ----------------------
-            classDef2.TypeParameter = TestUtil.CreateRandomString();
+            classDef2.TypeParameter = TestUtil.GetRandomString();
             //---------------Test Result -----------------------
             Assert.AreNotEqual(classDef1, classDef2);
             //---------------Tear Down -------------------------

@@ -95,7 +95,7 @@ namespace Habanero.Test.Structure
 
         private static Engine CreateUnsavedEngine()
         {
-            return CreateUnsavedEngine(TestUtil.CreateRandomString());
+            return CreateUnsavedEngine(TestUtil.GetRandomString());
         }
 
         private static Engine CreateUnsavedEngine(string engineNo)

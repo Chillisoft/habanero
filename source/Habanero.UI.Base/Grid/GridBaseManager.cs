@@ -309,6 +309,23 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
+        /// See <see cref="IGridBase.GetBusinessObjectRow"/>
+        /// </summary>
+        public IDataGridViewRow GetBusinessObjectRow(IBusinessObject businessObject)
+        {
+            if (businessObject == null) return null;
+            string boIdString = businessObject.ID.AsString_CurrentValue();
+            foreach (IDataGridViewRow row in _gridBase.Rows)
+            {
+                if (Convert.ToString(row.Cells["ID"].Value) == boIdString)
+                {
+                    return row;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// See <see cref="IGridBase.Clear"/>
         /// </summary>
         public void Clear()

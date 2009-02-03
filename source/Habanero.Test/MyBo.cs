@@ -1367,7 +1367,12 @@ namespace Habanero.Test
             return classDef;
         }
 
-        
+        public static ClassDef LoadDefaultClassDefWithDefault(string testPropDefault)
+        {
+            ClassDef classDef = LoadDefaultClassDef();
+            classDef.PropDefcol["TestProp"].DefaultValueString = testPropDefault;
+            return classDef;
+        }
     }
 
     public class MyRelatedBo : BusinessObject

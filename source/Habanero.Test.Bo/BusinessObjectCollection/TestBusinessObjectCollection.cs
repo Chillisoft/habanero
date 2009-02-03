@@ -336,7 +336,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
             ClassDef classDef = addressTestBO.ClassDef;
             ClassDef alternateClassDef = classDef.Clone();
-            alternateClassDef.TypeParameter = TestUtil.CreateRandomString();
+            alternateClassDef.TypeParameter = TestUtil.GetRandomString();
             BusinessObjectCollection<AddressTestBO> addressCol = new BusinessObjectCollection<AddressTestBO>();
             addressCol.ClassDef = alternateClassDef;
 
@@ -355,7 +355,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
             ClassDef alternateClassDef = classDef.Clone();
-            alternateClassDef.TypeParameter = TestUtil.CreateRandomString();
+            alternateClassDef.TypeParameter = TestUtil.GetRandomString();
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             cpCol.ClassDef = alternateClassDef;
 

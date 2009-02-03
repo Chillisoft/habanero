@@ -259,7 +259,7 @@ namespace Habanero.Test.BO
 
         private static AddressTestBO CreateUnsavedAddress(Guid contactPersonID)
         {
-            return CreateUnsavedAddress(contactPersonID, TestUtil.CreateRandomString());
+            return CreateUnsavedAddress(contactPersonID, TestUtil.GetRandomString());
         }
 
         private static AddressTestBO CreateUnsavedAddress(ContactPerson contactPerson, string firstLine)

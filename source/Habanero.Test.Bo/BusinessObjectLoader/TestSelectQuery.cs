@@ -72,7 +72,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const string sourceName = "mysource";
             selectQuery.Source = new Source(sourceName);
             Source fieldSource = new Source(sourceName);
-            string expectedSourceName = TestUtil.CreateRandomString();
+            string expectedSourceName = TestUtil.GetRandomString();
             fieldSource.JoinToSource(new Source(expectedSourceName));
             QueryField field = new QueryField("testfield", "testfield", fieldSource);
             Criteria criteria = new Criteria(field, Criteria.ComparisonOp.Equals, "value");
@@ -94,8 +94,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             selectQuery.Source = new Source(sourceName);
             Source field1Source = new Source(sourceName);
             Source field2Source = new Source(sourceName); 
-            string expectedSourceName1 = TestUtil.CreateRandomString();
-            string expectedSourceName2 = TestUtil.CreateRandomString();
+            string expectedSourceName1 = TestUtil.GetRandomString();
+            string expectedSourceName2 = TestUtil.GetRandomString();
             field1Source.JoinToSource(new Source(expectedSourceName1));
             field2Source.JoinToSource(new Source(expectedSourceName2));
             QueryField field1 = new QueryField("testfield", "testfield", field1Source);
@@ -120,7 +120,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             SelectQuery selectQuery = new SelectQuery();
-            selectQuery.Source = new Source(TestUtil.CreateRandomString());
+            selectQuery.Source = new Source(TestUtil.GetRandomString());
             //---------------Execute Test ----------------------
             selectQuery.OrderCriteria = null;
 
@@ -134,7 +134,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             SelectQuery selectQuery = new SelectQuery();
-            selectQuery.Source = new Source(TestUtil.CreateRandomString());
+            selectQuery.Source = new Source(TestUtil.GetRandomString());
             //---------------Execute Test ----------------------
             OrderCriteria orderCriteria = new OrderCriteria().Add("testfield");
             selectQuery.OrderCriteria = orderCriteria;
@@ -152,7 +152,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             const string sourceName = "mysource";
             selectQuery.Source = new Source(sourceName);
             Source orderSource = new Source(sourceName);
-            string expectedSourceName = TestUtil.CreateRandomString();
+            string expectedSourceName = TestUtil.GetRandomString();
             orderSource.JoinToSource(new Source(expectedSourceName));
             OrderCriteria.Field orderField = new OrderCriteria.Field("testfield", "testfield", orderSource, OrderCriteria.SortDirection.Ascending);
             OrderCriteria orderCriteria = new OrderCriteria().Add(orderField);

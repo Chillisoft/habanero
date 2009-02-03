@@ -99,6 +99,14 @@ namespace Habanero.UI.Base
         /// if none is found</returns>
         IBusinessObject GetBusinessObjectAtRow(int row);
 
+        ///<summary>
+        /// Returns the row for the specified <see cref="IBusinessObject"/>.
+        ///</summary>
+        ///<param name="businessObject">The <see cref="IBusinessObject"/> to search for.</param>
+        ///<returns>Returns the row for the specified <see cref="IBusinessObject"/>, 
+        /// or null if the <see cref="IBusinessObject"/> is not found in the grid.</returns>
+        IDataGridViewRow GetBusinessObjectRow(IBusinessObject businessObject);
+
         /// <summary>
         /// Applies a filter clause to the data table and updates the filter.
         /// The filter allows you to determine which objects to display using
@@ -171,5 +179,11 @@ namespace Habanero.UI.Base
         /// Gets and sets the class definition used to initialise the grid structure
         /// </summary>
         IClassDef ClassDef { get; set;}
+
+        ///<summary>
+        /// Refreshes the row values for the specified <see cref="IBusinessObject"/>.
+        ///</summary>
+        ///<param name="businessObject">The <see cref="IBusinessObject"/> for which the row must be refreshed.</param>
+        void RefreshBusinessObjectRow(IBusinessObject businessObject);
     }
 }
