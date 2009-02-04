@@ -17,22 +17,20 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Data;
 using Habanero.Base;
 using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.DB
 {
-    /// <summary>
-    /// Summary description for TestDatabaseConnectionCreation.
-    /// </summary>
     [TestFixture]
     public class TestDatabaseConnectionCreation
     {
         #region MySql
 
         [Test]
-        public void TestCreateDatabaseConnectionMySql()
+        public void Test_CreateDatabaseConnection_MySQL()
         {
             DatabaseConnection conn = new DatabaseConnectionMySql
                 ("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
@@ -43,12 +41,22 @@ namespace Habanero.Test.DB
                  "Namespace of mysqlconnection is wrong.");
         }
 
+        [Test]
+        public void Test_IsolationLevel_MySQL()
+        {
+            //---------------Execute Test ----------------------
+            DatabaseConnection conn =
+                new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(IsolationLevel.RepeatableRead, conn.IsolationLevel);
+        }
+
         #endregion
 
         #region SqlServer
 
         [Test]
-        public void TestCreateDatabaseConnectionSqlServer()
+        public void Test_CreateDatabaseConnection_SqlServer()
         {
             DatabaseConnection conn = new DatabaseConnectionSqlServer
                 ("System.Data", "System.Data.SqlClient.SqlConnection");
@@ -58,6 +66,16 @@ namespace Habanero.Test.DB
             Assert.AreEqual
                 ("System.Data.SqlClient", conn.TestConnection.GetType().Namespace,
                  "Namespace of Sql connection is wrong.");
+        }
+
+        [Test]
+        public void Test_IsolationLevel_SqlServer()
+        {
+            //---------------Execute Test ----------------------
+            DatabaseConnection conn =
+                new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(IsolationLevel.RepeatableRead, conn.IsolationLevel);
         }
 
         [Test]
@@ -110,7 +128,7 @@ namespace Habanero.Test.DB
         #region Oracle
 
         //[Test]
-        //public void TestCreateDatabaseConnectionOracle()
+        //public void Test_Oracle_CreateDatabaseConnection()
         //{
 
         //    DatabaseConnection conn =
@@ -122,7 +140,7 @@ namespace Habanero.Test.DB
         //}
 
         [Test]
-        public void TestCreateDatabaseConnectionOracleMicrosoft()
+        public void Test_CreateDatabaseConnection_OracleMicrosoft()
         {
             DatabaseConnection conn = new DatabaseConnectionOracle
                 ("System.Data.OracleClient", "System.Data.OracleClient.OracleConnection");
@@ -131,6 +149,16 @@ namespace Habanero.Test.DB
             Assert.AreEqual
                 ("System.Data.OracleClient", conn.TestConnection.GetType().Namespace,
                  "Namespace of Oracle connection is wrong.");
+        }
+
+        [Test]
+        public void Test_IsolationLevel_Oracle()
+        {
+            //---------------Execute Test ----------------------
+            DatabaseConnection conn =
+                new DatabaseConnectionOracle("System.Data.OracleClient", "System.Data.OracleClient.OracleConnection");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(IsolationLevel.ReadCommitted, conn.IsolationLevel);
         }
 
         [Test]
@@ -182,15 +210,27 @@ namespace Habanero.Test.DB
         #region Access
 
         [Test]
-        public void TestCreateDatabaseConnectionAccess()
+        public void Test_CreateDatabaseConnection_Access()
         {
-            DatabaseConnection conn = new DatabaseConnectionAccess("System.Data", "System.Data.OleDb.OleDbConnection");
+            DatabaseConnection conn =
+                new DatabaseConnectionAccess("System.Data", "System.Data.OleDb.OleDbConnection");
             conn.ConnectionString =
                 new DatabaseConfig(DatabaseConfig.Access, "test", "test", "test", "test", "1000").GetConnectionString();
             Assert.AreEqual
                 ("System.Data.OleDb", conn.TestConnection.GetType().Namespace,
                  "Namespace of Access connection is wrong.");
         }
+
+        [Test]
+        public void Test_IsolationLevel_Access()
+        {
+            //---------------Execute Test ----------------------
+            DatabaseConnection conn =
+                new DatabaseConnectionAccess("System.Data", "System.Data.OleDb.OleDbConnection");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(IsolationLevel.RepeatableRead, conn.IsolationLevel);
+        }
+
         [Test]
         public void Test_CreateSqlFormatter_Access()
         {
@@ -239,15 +279,27 @@ namespace Habanero.Test.DB
         #region PostgreSql
 
         [Test]
-        public void TestCreateDatabaseConnectionPostgreSql()
+        public void Test_CreateDatabaseConnection_PostgreSql()
         {
-            DatabaseConnection conn = new DatabaseConnectionPostgreSql("Npgsql", "Npgsql.NpgsqlConnection");
+            DatabaseConnection conn =
+                new DatabaseConnectionPostgreSql("Npgsql", "Npgsql.NpgsqlConnection");
             conn.ConnectionString =
                 new DatabaseConfig(DatabaseConfig.PostgreSql, "test", "test", "test", "test", "1000").
                     GetConnectionString();
             Assert.AreEqual
                 ("Npgsql", conn.TestConnection.GetType().Namespace, "Namespace of PostgreSql connection is wrong.");
         }
+
+        [Test]
+        public void Test_IsolationLevel_PostgreSql()
+        {
+            //---------------Execute Test ----------------------
+            DatabaseConnection conn =
+                new DatabaseConnectionPostgreSql("Npgsql", "Npgsql.NpgsqlConnection");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(IsolationLevel.RepeatableRead, conn.IsolationLevel);
+        }
+
         [Test]
         public void Test_CreateSqlFormatter_PostgreSql()
         {
@@ -273,8 +325,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             string connectionString =
-                new DatabaseConfig(DatabaseConfig.SqlServer, "test", "test", "test", "test", "1000").GetConnectionString
-                    ();
+                new DatabaseConfig(DatabaseConfig.SqlServer, "test", "test", "test", "test", "1000").GetConnectionString();
             IDatabaseConnection dbConn = new DatabaseConnectionPostgreSql
                 ("System.Data", "System.Data.SqlClient.SqlConnection", connectionString);
             //---------------Assert Precondition----------------
@@ -297,16 +348,26 @@ namespace Habanero.Test.DB
         #region SQLite
 
         [Test, Ignore("Issue with SQLite 64-bit driver with Hudson")]
-        public void TestCreateDatabaseConnectionSQLite()
+        public void Test_CreateDatabaseConnection_SQLite()
         {
-            DatabaseConnection conn = new DatabaseConnectionSQLite
-                ("System.Data.SQLite", "System.Data.SQLite.SQLiteConnection");
+            DatabaseConnection conn =
+                new DatabaseConnectionSQLite("System.Data.SQLite", "System.Data.SQLite.SQLiteConnection");
             conn.ConnectionString =
                 new DatabaseConfig(DatabaseConfig.SQLite, "test", "test", "test", "test", "1000").GetConnectionString();
-            Assert.AreEqual
-                ("System.Data.SQLite", conn.TestConnection.GetType().Namespace,
-                 "Namespace of SQLite connection is wrong.");
+            Assert.AreEqual("System.Data.SQLite", conn.TestConnection.GetType().Namespace,
+                            "Namespace of SQLite connection is wrong.");
         }
+
+        [Test, Ignore("Issue with SQLite 64-bit driver with Hudson")]
+        public void Test_IsolationLevel_SQLite()
+        {
+            //---------------Execute Test ----------------------
+            DatabaseConnection conn =
+                new DatabaseConnectionSQLite("System.Data.SQLite", "System.Data.SQLite.SQLiteConnection");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(IsolationLevel.RepeatableRead, conn.IsolationLevel);
+        }
+       
         [Test]
         public void Test_CreateSqlFormatter_SQLite()
         {
@@ -356,7 +417,7 @@ namespace Habanero.Test.DB
         #region Firebird
 
         [Test]
-        public void TestCreateDatabaseConnectionFirebird()
+        public void Test_CreateDatabaseConnection_Firebird()
         {
             DatabaseConnection conn = new DatabaseConnectionFirebird
                 ("FirebirdSql.Data.FirebirdClient", "FirebirdSql.Data.FirebirdClient.FbConnection");
@@ -367,6 +428,16 @@ namespace Habanero.Test.DB
             Assert.AreEqual
                 ("FirebirdSql.Data.FirebirdClient", conn.TestConnection.GetType().Namespace,
                  "Namespace of firebird connection is wrong.");
+        }
+
+        [Test]
+        public void Test_IsolationLevel_Firebird()
+        {
+            //---------------Execute Test ----------------------
+            DatabaseConnection conn =
+                new DatabaseConnectionFirebird("FirebirdSql.Data.FirebirdClient", "FirebirdSql.Data.FirebirdClient.FbConnection");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(IsolationLevel.RepeatableRead, conn.IsolationLevel);
         }
 
         [Test]

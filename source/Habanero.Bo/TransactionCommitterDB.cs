@@ -65,9 +65,10 @@ namespace Habanero.BO
         /// </summary>
         protected override void BeginDataSource()
         {
-            _dbConnection = GetDatabaseConnection().GetConnection();
+            IDatabaseConnection databaseConnection = GetDatabaseConnection();
+            _dbConnection = databaseConnection.GetConnection();
             _dbConnection.Open();
-            _dbTransaction = _dbConnection.BeginTransaction(IsolationLevel.RepeatableRead);
+            _dbTransaction = _dbConnection.BeginTransaction(databaseConnection.IsolationLevel);
         }
 
         private IDatabaseConnection GetDatabaseConnection()

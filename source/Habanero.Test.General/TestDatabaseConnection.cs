@@ -117,13 +117,14 @@ namespace Habanero.Test.General
 
             Console.WriteLine("deleting from testtableread");
             string sql = "DELETE from TestTableRead";
-            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            IDatabaseConnection databaseConnection = DatabaseConnection.CurrentConnection;
+            databaseConnection.ExecuteRawSql(sql);
 
             //Create transaction with Error
             Console.WriteLine("beginning transaction");
-            IDbConnection connection = DatabaseConnection.CurrentConnection.GetConnection();
-            connection.Open();
-            IDbTransaction dbTransaction = connection.BeginTransaction(IsolationLevel.ReadCommitted);
+            IDbConnection dbConnection = databaseConnection.GetConnection();
+            dbConnection.Open();
+            IDbTransaction dbTransaction = dbConnection.BeginTransaction(databaseConnection.IsolationLevel);
             //insert first record
             bool rolledBack = false;
             int statementsExecutedPriorToRollBack = 0;
@@ -131,29 +132,29 @@ namespace Habanero.Test.General
             {
                 Console.WriteLine("doing first insert.");
                 sql = "Insert into TestTableRead (TestTableReadData) VALUES ('Test')";
-                DatabaseConnection.CurrentConnection.ExecuteRawSql(sql, dbTransaction);
+                databaseConnection.ExecuteRawSql(sql, dbTransaction);
                 statementsExecutedPriorToRollBack++;
                 //insert second record
                 Console.WriteLine("doing second insert.");
                 sql = "Insert into TestTableRead (TestTableReadData) VALUES ('Test')";
-                DatabaseConnection.CurrentConnection.ExecuteRawSql(sql, dbTransaction);
+                databaseConnection.ExecuteRawSql(sql, dbTransaction);
                 statementsExecutedPriorToRollBack++;
                 Console.WriteLine("committing.");
                 dbTransaction.Commit();
-                connection.Close();
+                dbConnection.Close();
                 statementsExecutedPriorToRollBack++;
             }
             catch
             {
                 Console.WriteLine("error. rolling back. ");
                 dbTransaction.Rollback();
-                connection.Close();
+                dbConnection.Close();
                 rolledBack = true;
             }
             Console.WriteLine("creating second datareader.");
             IDataReader dr2 =
-                DatabaseConnection.CurrentConnection.LoadDataReader(
-                    new SqlStatement(DatabaseConnection.CurrentConnection,
+                databaseConnection.LoadDataReader(
+                    new SqlStatement(databaseConnection,
                                      "SELECT * FROM TestTableRead Order By TestTableReadData"));
             Assert.IsTrue(rolledBack);
             Console.WriteLine("reading from second datareader.");
@@ -162,30 +163,30 @@ namespace Habanero.Test.General
             Assert.IsTrue(statementsExecutedPriorToRollBack == 1);
 
             //Create transaction without Error
-            connection = DatabaseConnection.CurrentConnection.GetConnection();
-            connection.Open();
-            dbTransaction = connection.BeginTransaction(IsolationLevel.ReadCommitted);
+            dbConnection = databaseConnection.GetConnection();
+            dbConnection.Open();
+            dbTransaction = dbConnection.BeginTransaction(databaseConnection.IsolationLevel);
             //insert first record
             try
             {
                 sql = "Insert into TestTableRead (TestTableReadData) VALUES ('Test')";
-                DatabaseConnection.CurrentConnection.ExecuteRawSql(sql, dbTransaction);
+                databaseConnection.ExecuteRawSql(sql, dbTransaction);
                 //insert second record
                 sql = "Insert into TestTableRead (TestTableReadData) VALUES ('Test2')";
-                DatabaseConnection.CurrentConnection.ExecuteRawSql(sql, dbTransaction);
+                databaseConnection.ExecuteRawSql(sql, dbTransaction);
 
                 dbTransaction.Commit();
-                connection.Close();
+                dbConnection.Close();
             }
             catch
             {
                 dbTransaction.Rollback();
-                connection.Close();
+                dbConnection.Close();
             }
             dr2.Close();
             dr2 =
-                DatabaseConnection.CurrentConnection.LoadDataReader(
-                    new SqlStatement(DatabaseConnection.CurrentConnection,
+                databaseConnection.LoadDataReader(
+                    new SqlStatement(databaseConnection,
                                      "SELECT * FROM TestTableRead Order By TestTableReadData"));
             Assert.IsTrue(dr2.Read());
             Assert.IsTrue(dr2.Read());

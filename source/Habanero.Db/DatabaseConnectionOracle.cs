@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Data;
 using Habanero.Base;
 
 namespace Habanero.DB
@@ -51,6 +52,14 @@ namespace Habanero.DB
             : base(assemblyName, className, connectString)
         {
             _sqlFormatter = new SqlFormatter("", "", "", "ROWNUM <=");
+        }
+
+        /// <summary>
+        /// Gets the IsolationLevel to use for this connection
+        /// </summary>
+        public override IsolationLevel IsolationLevel
+        {
+            get { return IsolationLevel.ReadCommitted; }
         }
     }
 }

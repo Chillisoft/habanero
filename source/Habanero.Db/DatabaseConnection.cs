@@ -414,7 +414,7 @@ namespace Habanero.DB
                 IDbCommand cmd = con.CreateCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = selectSql;
-                cmd.Transaction = con.BeginTransaction(IsolationLevel.RepeatableRead);
+                cmd.Transaction = con.BeginTransaction(IsolationLevel);
                 return cmd.ExecuteReader(CommandBehavior.CloseConnection);
             }
             catch (Exception ex)
@@ -481,7 +481,7 @@ namespace Habanero.DB
                 con = GetOpenConnectionForReading();
                 IDbCommand cmd = con.CreateCommand();
                 selectSql.SetupCommand(cmd);
-                cmd.Transaction = con.BeginTransaction(IsolationLevel.RepeatableRead);
+                cmd.Transaction = con.BeginTransaction(IsolationLevel);
                 return cmd.ExecuteReader(CommandBehavior.CloseConnection);
             }
             catch (Exception ex)
@@ -733,6 +733,14 @@ namespace Habanero.DB
             get { return _sqlFormatter; }
         }
 
+        /// <summary>
+        /// Gets the IsolationLevel to use for this connection
+        /// </summary>
+        public virtual IsolationLevel IsolationLevel
+        {
+            get { return IsolationLevel.RepeatableRead; }
+        }
+
         [Obsolete ("please use the SqlFormatter directly")]
         /// <summary>
         /// Returns a limit clause with the limit specified, with the format
@@ -744,6 +752,7 @@ namespace Habanero.DB
         {
             return _sqlFormatter.GetLimitClauseCriteriaForBegin(limit);
         }
+
         [Obsolete("please use the SqlFormatter directly")]
         /// <summary>
         /// Returns an empty string in this implementation

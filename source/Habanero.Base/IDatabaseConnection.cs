@@ -149,6 +149,11 @@ namespace Habanero.Base
         ///</summary>
         SqlFormatter SqlFormatter { get; }
 
+        /// <summary>
+        /// Gets the IsolationLevel to use for this connection
+        /// </summary>
+        IsolationLevel IsolationLevel { get; }
+
         //TODO Brett 17 Jan 2009: Remove these two methods
         /// <summary>
         /// Returns the beginning limit clause with the limit specified
