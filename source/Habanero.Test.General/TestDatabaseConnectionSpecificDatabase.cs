@@ -41,7 +41,7 @@ namespace Habanero.Test.General
             //---------------Test Result -----------------------
             Assert.AreEqual("", formatter.LeftFieldDelimiter);
             Assert.AreEqual("", formatter.RightFieldDelimiter);
-            Assert.AreEqual("TOP", formatter.LimitClauseAtBeginning);
+            Assert.AreEqual("FIRST", formatter.LimitClauseAtBeginning);
             Assert.AreEqual("", formatter.LimitClauseAtEnd);
 
         }
@@ -59,7 +59,7 @@ namespace Habanero.Test.General
             //---------------Test Result -----------------------
             Assert.AreEqual("", formatter.LeftFieldDelimiter);
             Assert.AreEqual("", formatter.RightFieldDelimiter);
-            Assert.AreEqual("TOP", formatter.LimitClauseAtBeginning);
+            Assert.AreEqual("FIRST", formatter.LimitClauseAtBeginning);
             Assert.AreEqual("", formatter.LimitClauseAtEnd);
 
         }

@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
+
 namespace Habanero.DB
 {
     /// <summary>
@@ -32,6 +34,7 @@ namespace Habanero.DB
         /// <param name="className">The class name</param>
         public DatabaseConnectionAccess(string assemblyName, string className) : base(assemblyName, className)
         {
+            _sqlFormatter = new Base.SqlFormatter("[", "]", "TOP", "");
         }
 
         /// <summary>
@@ -46,6 +49,7 @@ namespace Habanero.DB
         public DatabaseConnectionAccess(string assemblyName, string className, string connectString)
             : base(assemblyName, className, connectString)
         {
+            _sqlFormatter = new SqlFormatter("[", "]", "TOP", "");
         }
     }
 }

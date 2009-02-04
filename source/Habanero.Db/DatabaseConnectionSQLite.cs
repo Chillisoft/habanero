@@ -19,6 +19,7 @@
 
 using System;
 using System.Data;
+using Habanero.Base;
 
 namespace Habanero.DB
 {
@@ -37,6 +38,7 @@ namespace Habanero.DB
         public DatabaseConnectionSQLite(string assemblyName, string className)
             : base(assemblyName, className)
         {
+            _sqlFormatter = new SqlFormatter("\"", "\"", "", "limit");
         }
 
         /// <summary>
@@ -51,6 +53,7 @@ namespace Habanero.DB
         public DatabaseConnectionSQLite(string assemblyName, string className, string connectString)
             : base(assemblyName, className, connectString)
         {
+            _sqlFormatter = new SqlFormatter("\"", "\"", "", "limit");
         } 
 
         /// <summary>
@@ -85,44 +88,5 @@ namespace Habanero.DB
             return id;
         }
 
-
-        /// <summary>
-        /// Returns a double quote
-        /// </summary>
-        public override string LeftFieldDelimiter
-        {
-            get { return "\""; }
-        }
-
-        /// <summary>
-        /// Returns a double quote
-        /// </summary>
-        public override string RightFieldDelimiter
-        {
-            get { return "\""; }
-        }
-
-        /// <summary>
-        /// Returns an empty string in this implementation
-        /// </summary>
-        /// <param name="limit">The limit - not relevant in this
-        /// implementation</param>
-        /// <returns>Returns an empty string in this implementation</returns>
-        public override string GetLimitClauseForBeginning(int limit)
-        {
-            return "";
-        }
-
-        /// <summary>
-        /// Creates a limit clause from the limit provided, in the format of:
-        /// "limit [limit]" (eg. "limit 3")
-        /// </summary>
-        /// <param name="limit">The limit - the maximum number of rows that
-        /// can be affected by the action</param>
-        /// <returns>Returns a string</returns>
-        public override string GetLimitClauseForEnd(int limit)
-        {
-            return "limit " + limit;
-        }
     }
 }

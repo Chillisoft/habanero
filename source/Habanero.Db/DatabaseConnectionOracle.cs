@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
+
 namespace Habanero.DB
 {
     /// <summary>
@@ -33,6 +35,7 @@ namespace Habanero.DB
         public DatabaseConnectionOracle(string assemblyName, string className)
             : base(assemblyName, className)
         {
+            _sqlFormatter = new SqlFormatter("", "", "", "ROWNUM <=");
         }
 
         /// <summary>
@@ -47,22 +50,7 @@ namespace Habanero.DB
         public DatabaseConnectionOracle(string assemblyName, string className, string connectString)
             : base(assemblyName, className, connectString)
         {
-        }
-
-        /// <summary>
-        /// Returns an empty string
-        /// </summary>
-        public override string LeftFieldDelimiter
-        {
-            get { return ""; }
-        }
-
-        /// <summary>
-        /// Returns an empty string
-        /// </summary>
-        public override string RightFieldDelimiter
-        {
-            get { return ""; }
+            _sqlFormatter = new SqlFormatter("", "", "", "ROWNUM <=");
         }
     }
 }

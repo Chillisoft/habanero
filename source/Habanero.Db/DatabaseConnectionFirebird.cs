@@ -35,7 +35,7 @@ namespace Habanero.DB
         public DatabaseConnectionFirebird(string assemblyName, string className)
             : base(assemblyName, className)
         {
-            _sqlFormatter = new SqlFormatter("", "", "TOP", "");
+            _sqlFormatter = new SqlFormatter("", "", "FIRST", "");
         }
 
         /// <summary>
@@ -50,23 +50,7 @@ namespace Habanero.DB
         public DatabaseConnectionFirebird(string assemblyName, string className, string connectString)
             : base(assemblyName, className, connectString)
         {
-            _sqlFormatter = new SqlFormatter("", "", "TOP", "");
-        }
-
-        /// <summary>
-        /// Returns an empty string
-        /// </summary>
-        public override string LeftFieldDelimiter
-        {
-            get { return _sqlFormatter.LeftFieldDelimiter; }
-        }
-
-        /// <summary>
-        /// Returns an empty string
-        /// </summary>
-        public override string RightFieldDelimiter
-        {
-            get { return _sqlFormatter.RightFieldDelimiter; }
+            _sqlFormatter = new SqlFormatter("", "", "FIRST", "");
         }
 
     }

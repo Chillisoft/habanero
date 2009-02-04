@@ -35,6 +35,24 @@ using log4net;
 // Firebird: SELECT FIRST 10 * FROM [TABLE]
 // MySQL: SELECT * FROM [TABLE] LIMIT 10
 
+//pagination: LIMIT in MySQL vs. FIRST / SKIP in FireBird
+//
+//    I got stuck writing a query for Firebird today. And here I was thinking that SQL was a standard - if only the “S” was for “Standard”…
+//
+//I was busy writing scripts at work to paginate results in our BI portals. In MySQL I would usually write something like this to return the first 20 records:
+//
+//SELECT * FROM table LIMIT 1, 20
+//
+//Not so in Firebird:
+//
+//SELECT FIRST 20 SKIP 0 * FROM table
+//
+//In the MySQL, the 1 denotes from which record to start, and the 20 how many records to return. In the Firebird syntax, the FIRST denotes the number of records to return, and the SKIP specifies from which record to start.
+//
+//Naturally, to effect the pagination, you would use variables passed between the pages to control moving between sets of records.
+//
+//The support for Firebird is nothing like that for MySQL - and it took me quite a while to find the answer. Sometimes the geeks disappoint…
+
 
 namespace Habanero.DB
 {
@@ -690,7 +708,8 @@ namespace Habanero.DB
         }
 
         /// <summary>
-        /// Returns a left square bracket
+        /// Returns a left field delimiter appropriate for the database (based on the <see cref="SqlFormatter"/> setup for
+        ///   connection
         /// </summary>
         public virtual string LeftFieldDelimiter
         {
@@ -698,7 +717,8 @@ namespace Habanero.DB
         }
 
         /// <summary>
-        /// Returns a right square bracket
+        /// Returns a Right field delimiter appropriate for the database (based on the <see cref="SqlFormatter"/> setup for
+        ///   connection
         /// </summary>
         public virtual string RightFieldDelimiter
         {

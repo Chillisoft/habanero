@@ -21,7 +21,6 @@ using System;
 using System.Data;
 using Habanero.Base;
 using Habanero.DB;
-using Habanero.Test.BO.BusinessObjectLoader;
 using NUnit.Framework;
 
 namespace Habanero.Test.General
@@ -208,11 +207,18 @@ namespace Habanero.Test.General
             //---------------Set up test pack-------------------
             IDatabaseConnection dbConn = new DatabaseConnection_Stub();
             //---------------Assert Precondition----------------
-
             //---------------Execute Test ----------------------
             SqlFormatter sqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
-
+            Assert.IsNotNull(sqlFormatter);
+            Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
+            Assert.AreEqual("]", sqlFormatter.RightFieldDelimiter);
+            Assert.AreEqual("TOP", sqlFormatter.LimitClauseAtBeginning);
+            Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
+            Assert.AreEqual("[", dbConn.LeftFieldDelimiter);
+            Assert.AreEqual("]", dbConn.RightFieldDelimiter);
+            StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
+            Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
         }
         internal class DatabaseConnection_Stub : DatabaseConnection
         {
