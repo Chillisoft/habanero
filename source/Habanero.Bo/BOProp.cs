@@ -291,7 +291,7 @@ namespace Habanero.BO
                 _valueBeforeLastEdit = _currentValue;
                 _currentValue = newValue;
                 FireBOPropValueUpdated();
-                _isDirty = true;
+                _isDirty = !Equals(_persistedValue, newValue);
             }
         }
 
