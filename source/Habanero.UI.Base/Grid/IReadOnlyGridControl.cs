@@ -108,6 +108,12 @@ namespace Habanero.UI.Base
         /// already been defined for the grid</exception>
         void Initialise();
 
-        void DisableDefaultRowDoubleClickEventHandler();
+        ///<summary>
+        /// Enable or disable the default double click handler for the grid where the <see cref="IBusinessObjectEditor"/>
+        /// is used to edit the <see cref="IBusinessObject"/> represented by the row that was double clicked.
+        /// If you want to implement a custom handler on double click, you should set this to false so that 
+        /// the default handler does not interfere with your custom handler. 
+        ///</summary>
+        bool DoubleClickEditsBusinessObject { get; set; }
     }
 }

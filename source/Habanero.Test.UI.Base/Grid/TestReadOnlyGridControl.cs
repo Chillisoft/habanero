@@ -85,7 +85,7 @@ namespace Habanero.Test.UI.Base
         protected abstract void CloseForm();
 
         [TestFixture]
-        public class TestreadOnlyGridControlWin : TestReadonlyGridControl
+        public class TestReadOnlyGridControlWin : TestReadonlyGridControl
         {
             private System.Windows.Forms.Form frm;
 
@@ -157,13 +157,11 @@ namespace Habanero.Test.UI.Base
                 IReadOnlyGridControl onlyGridControlgrid = CreateReadOnlyGridControl(true);
                 // onlyGridControlgrid.Initialise();
                 //-----Test PreCondition----------------------------------------
-                Assert.IsTrue(onlyGridControlgrid.HasDoubleClickEventHandler);
+                Assert.IsTrue(onlyGridControlgrid.DoubleClickEditsBusinessObject);
                 //---------------Execute Test ----------------------
-                onlyGridControlgrid.DisableDefaultRowDoubleClickEventHandler();
+                onlyGridControlgrid.DoubleClickEditsBusinessObject = false;
                 //---------------Test Result -----------------------
-
-                Assert.IsFalse(onlyGridControlgrid.HasDoubleClickEventHandler);
-                //---------------Tear Down -------------------------
+                Assert.IsFalse(onlyGridControlgrid.DoubleClickEditsBusinessObject);
             }
 
 //        [Test]
@@ -391,9 +389,9 @@ namespace Habanero.Test.UI.Base
         //}
         //}
         [TestFixture]
-        public class TestreadOnlyGridControlVWG : TestReadonlyGridControl
+        public class TestReadOnlyGridControlVWG : TestReadonlyGridControl
         {
-            public TestreadOnlyGridControlVWG()
+            public TestReadOnlyGridControlVWG()
             {
                 GlobalUIRegistry.ControlFactory = new Habanero.UI.VWG.ControlFactoryVWG();
             }

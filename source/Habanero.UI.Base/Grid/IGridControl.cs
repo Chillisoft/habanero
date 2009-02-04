@@ -72,8 +72,9 @@ namespace Habanero.UI.Base
         /// </summary>
         string AdditionalSearchCriteria { get; set; }
 
-        bool HasDoubleClickEventHandler { get; }
-
+        ///<summary>
+        /// The <see cref="IFilterControl"/> that is displayed for the grid.
+        ///</summary>
         IFilterControl FilterControl { get; }
     }
 }

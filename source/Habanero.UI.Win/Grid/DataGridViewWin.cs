@@ -523,12 +523,23 @@ namespace Habanero.UI.Win
                 get { return _dataGridViewRow.Index; }
             }
 
-            /// <summary>
-            /// Gets a value indicating whether this row is displayed on the screen
-            /// </summary>
+            /// <summary>Gets a value indicating whether this row is displayed on the screen.</summary>
+            /// <returns>true if the row is currently displayed on the screen; otherwise, false.</returns>
+            /// <exception cref="T:System.InvalidOperationException">The row is in a <see cref="IDataGridView"></see> control and is a shared row.</exception>
             public bool Displayed
             {
                 get { return _dataGridViewRow.Displayed; }
+            }
+
+            /// <summary>Gets or sets a value indicating whether the row is visible. </summary>
+            /// <returns>true if the row is visible; otherwise, false.</returns>
+            /// <exception cref="T:System.InvalidOperationException">The row is in a <see cref="IDataGridView"></see>
+            ///  control and is a shared row.</exception>
+            /// <filterpriority>1</filterpriority>
+            public bool Visible
+            {
+                get { return _dataGridViewRow.Visible; }
+                set { _dataGridViewRow.Visible = value; }
             }
 
             /// <summary>Sets the values of the row's cells.</summary>
@@ -558,6 +569,16 @@ namespace Habanero.UI.Win
             public object DataBoundItem
             {
                 get { return _dataGridViewRow.DataBoundItem; }
+            }
+
+            /// <summary>Gets or sets a value indicating whether the row is read-only.</summary>
+            /// <returns>true if the row is read-only; otherwise, false.</returns>
+            /// <exception cref="T:System.InvalidOperationException">The row is in a <see cref="IDataGridView"></see> control and is a shared row.</exception>
+            /// <filterpriority>1</filterpriority>
+            public bool ReadOnly
+            {
+                get { return _dataGridViewRow.ReadOnly; }
+                set { _dataGridViewRow.ReadOnly = value; }
             }
         }
 

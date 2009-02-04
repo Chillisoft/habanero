@@ -175,7 +175,7 @@ namespace Habanero.UI.Win
                 }
             }
             _readOnlyGridControl.Grid.SelectionChanged += GridSelectionChanged;
-            _readOnlyGridControl.DisableDefaultRowDoubleClickEventHandler();
+            _readOnlyGridControl.DoubleClickEditsBusinessObject = false;
         }
 
         private void FireBusinessObjectSelected(IBusinessObject businessObject)
@@ -510,7 +510,7 @@ namespace Habanero.UI.Win
                 }
             }
             _readOnlyGridControl.Grid.SelectionChanged += GridSelectionChanged;
-            _readOnlyGridControl.DisableDefaultRowDoubleClickEventHandler();
+            _readOnlyGridControl.DoubleClickEditsBusinessObject = false;
         }
 
         private void FireBusinessObjectSelected(IBusinessObject businessObject)

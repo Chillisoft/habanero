@@ -60,7 +60,7 @@ namespace Habanero.UI.Base
             if (!string.IsNullOrEmpty(gridUiDefName)) _readOnlyGridControl.Initialise(classDef, gridUiDefName);
 
             AddGridSelectionEvent();
-            _readOnlyGridControl.DisableDefaultRowDoubleClickEventHandler();
+            _readOnlyGridControl.DoubleClickEditsBusinessObject = false;
         }
 
         private void SetupButtonGroupControl()

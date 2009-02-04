@@ -55,7 +55,7 @@ namespace Habanero.UI.Win
         private IBusinessObjectEditor _businessObjectEditor;
         private ClassDef _classDef;
         private string _orderBy;
-        private bool _hasDoubleClickEventHandler;
+        private bool _doubleClickEditsBusinessObject;
         /// <summary>
         /// Constructor to initialise a new grid
         /// </summary>
@@ -68,7 +68,6 @@ namespace Habanero.UI.Win
             _gridInitialiser = new GridInitialiser(this, _controlFactory);
             InitialiseButtons();
             InitialiseFilterControl();
-            _hasDoubleClickEventHandler = false;
             BorderLayoutManager borderLayoutManager = new BorderLayoutManagerWin(this, _controlFactory);
             borderLayoutManager.AddControl(_grid, BorderLayoutManager.Position.Centre);
             borderLayoutManager.AddControl(_buttons, BorderLayoutManager.Position.South);
@@ -76,7 +75,8 @@ namespace Habanero.UI.Win
             FilterMode = FilterModes.Filter;
             _grid.Name = "GridControl";
 
-            SetDoubleClickEventHandlers();
+            _doubleClickEditsBusinessObject = false;
+            DoubleClickEditsBusinessObject = true;
         }
 
         #region IReadOnlyGridControl Members
@@ -234,11 +234,6 @@ namespace Habanero.UI.Win
             set { _additionalSearchCriteria = value; }
         }
 
-        public bool HasDoubleClickEventHandler
-        {
-            get { return _hasDoubleClickEventHandler; }
-        }
-
         /// <summary>
         /// Sets the business object collection to display.  Loading of
         /// the collection needs to be done before it is assigned to the
@@ -297,10 +292,21 @@ namespace Habanero.UI.Win
             _gridInitialiser.InitialiseGrid();
         }
 
-        public void DisableDefaultRowDoubleClickEventHandler()
+        public bool DoubleClickEditsBusinessObject
         {
-            _grid.RowDoubleClicked -= Buttons_EditClicked;
-            _hasDoubleClickEventHandler = false;
+            get { return _doubleClickEditsBusinessObject; }
+            set
+            {
+                if (_doubleClickEditsBusinessObject == value) return;
+                _doubleClickEditsBusinessObject = value;
+                if (value)
+                {
+                    _grid.RowDoubleClicked += Buttons_EditClicked;
+                } else
+                {
+                    _grid.RowDoubleClicked -= Buttons_EditClicked;
+                }
+            }
         }
 
         #endregion
@@ -394,7 +400,7 @@ namespace Habanero.UI.Win
             {
                 if (_businessObjectEditor != null)
                 {
-                    _businessObjectEditor.EditObject(selectedBo, UiDefName, delegate { Grid.RefreshGrid(); });
+                    _businessObjectEditor.EditObject(selectedBo, UiDefName, null);
                 }
             }
         }
@@ -405,13 +411,12 @@ namespace Habanero.UI.Win
             {
                 throw new GridDeveloperException("You cannot call add since the grid has not been set up");
             }
-            IBusinessObject newBo;
             if (_businessObjectCreator == null)
             {
                 throw new GridDeveloperException(
                     "You cannot call add as there is no business object creator set up for the grid");
             }
-            newBo = _businessObjectCreator.CreateBusinessObject();
+            IBusinessObject newBo = _businessObjectCreator.CreateBusinessObject();
             if (_businessObjectEditor != null && newBo != null)
             {
                 _businessObjectEditor.EditObject(newBo, UiDefName, 
@@ -434,11 +439,6 @@ namespace Habanero.UI.Win
             }
         }
 
-        private void SetDoubleClickEventHandlers()
-        {
-            _grid.RowDoubleClicked += Buttons_EditClicked;
-            _hasDoubleClickEventHandler = true;
-            //_grid.RowDoubleClicked += new RowDoubleClickedHandler(_grid_RowDoubleClicked);
-        }
+        
     }
 }

@@ -62,12 +62,6 @@ namespace Habanero.UI.Base
         [EditorBrowsable(EditorBrowsableState.Advanced), Browsable(false)]
         object DataBoundItem { get; }
 
-        ///// <summary>Gets a value indicating whether this row is displayed on the screen.</summary>
-        ///// <returns>true if the row is currently displayed on the screen; otherwise, false.</returns>
-        ///// <exception cref="T:System.InvalidOperationException">The row is in a <see cref="IDataGridView"></see> control and is a shared row.</exception>
-        //[Browsable(false)]
-        //bool Displayed { get; }
-
         ///// <summary>Gets or sets a value indicating whether the row is frozen. </summary>
         ///// <returns>true if the row is frozen; otherwise, false.</returns>
         ///// <exception cref="T:System.InvalidOperationException">The row is in a <see cref="IDataGridView"></see> control and is a shared row.</exception>
@@ -94,11 +88,11 @@ namespace Habanero.UI.Base
         //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
         //int MinimumHeight { get; set; }
 
-        ///// <summary>Gets or sets a value indicating whether the row is read-only.</summary>
-        ///// <returns>true if the row is read-only; otherwise, false.</returns>
-        ///// <exception cref="T:System.InvalidOperationException">The row is in a <see cref="IDataGridView"></see> control and is a shared row.</exception>
-        ///// <filterpriority>1</filterpriority>
-        //bool ReadOnly { get; set; }
+        /// <summary>Gets or sets a value indicating whether the row is read-only.</summary>
+        /// <returns>true if the row is read-only; otherwise, false.</returns>
+        /// <exception cref="T:System.InvalidOperationException">The row is in a <see cref="IDataGridView"></see> control and is a shared row.</exception>
+        /// <filterpriority>1</filterpriority>
+        bool ReadOnly { get; set; }
 
         /// <summary>Gets or sets a value indicating whether the row is selected. </summary>
         /// <returns>true if the row is selected; otherwise, false.</returns>
@@ -111,18 +105,20 @@ namespace Habanero.UI.Base
         /// </summary>
         int Index { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether this row is displayed on the screen
-        /// </summary>
+        /// <summary>Gets a value indicating whether this row is displayed on the screen.</summary>
+        /// <returns>true if the row is currently displayed on the screen; otherwise, false.</returns>
+        /// <exception cref="T:System.InvalidOperationException">The row is in a <see cref="IDataGridView"></see> control and is a shared row.</exception>
+        [Browsable(false)]
         bool Displayed { get; }
 
-        ///// <summary>Gets or sets a value indicating whether the row is visible. </summary>
-        ///// <returns>true if the row is visible; otherwise, false.</returns>
-        ///// <exception cref="T:System.InvalidOperationException">The row is in a <see cref="IDataGridView"></see>
+ 
+        /// <summary>Gets or sets a value indicating whether the row is visible. </summary>
+        /// <returns>true if the row is visible; otherwise, false.</returns>
+        /// <exception cref="T:System.InvalidOperationException">The row is in a <see cref="IDataGridView"></see>
         ///  control and is a shared row.</exception>
-        ///// <filterpriority>1</filterpriority>
-        //[Browsable(false)]
-        //bool Visible { get; set; }
+        /// <filterpriority>1</filterpriority>
+        [Browsable(false)]
+        bool Visible { get; set; }
 
         /// <summary>Sets the values of the row's cells.</summary>
         /// <returns>true if all values have been set; otherwise, false.</returns>

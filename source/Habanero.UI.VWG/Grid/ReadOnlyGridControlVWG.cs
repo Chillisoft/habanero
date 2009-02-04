@@ -57,7 +57,6 @@ namespace Habanero.UI.VWG
         private IBusinessObjectDeletor _businessObjectDeletor;
         private IBusinessObjectEditor _businessObjectEditor;
         private string _orderBy;
-        private readonly bool _hasDoubleClickEventHandler;
 
         public ReadOnlyGridControlVWG() : this(GlobalUIRegistry.ControlFactory)
         {
@@ -75,7 +74,6 @@ namespace Habanero.UI.VWG
             _gridInitialiser = new GridInitialiser(this, _controlFactory);
             InitialiseButtons();
             InitialiseFilterControl();
-            _hasDoubleClickEventHandler = false;
             BorderLayoutManager borderLayoutManager = new BorderLayoutManagerVWG(this, _controlFactory);
             borderLayoutManager.AddControl(_grid, BorderLayoutManager.Position.Centre);
             borderLayoutManager.AddControl(_buttons, BorderLayoutManager.Position.South);
@@ -238,11 +236,6 @@ namespace Habanero.UI.VWG
             set { _additionalSearchCriteria = value; }
         }
 
-        public bool HasDoubleClickEventHandler
-        {
-            get { return _hasDoubleClickEventHandler; }
-        }
-
         /// <summary>
         /// Sets the business object collection to display.  Loading of
         /// the collection needs to be done before it is assigned to the
@@ -300,9 +293,16 @@ namespace Habanero.UI.VWG
             _gridInitialiser.InitialiseGrid();
         }
 
-        public void DisableDefaultRowDoubleClickEventHandler()
+        ///<summary>
+        /// Enable or disable the default double click handler for the grid where the <see cref="IBusinessObjectEditor"/>
+        /// is used to edit the <see cref="IBusinessObject"/> represented by the row that was double clicked.
+        /// If you want to implement a custom handler on double click, you should set this to false so that 
+        /// the default handler does not interfere with your custom handler. 
+        ///</summary>
+        public bool DoubleClickEditsBusinessObject
         {
-            //throw new System.NotImplementedException();
+            get { return false; }
+            set {  }
         }
 
         #endregion
@@ -421,7 +421,11 @@ namespace Habanero.UI.VWG
                 {
                     if (_businessObjectEditor != null)
                     {
-                        _businessObjectEditor.EditObject(selectedBo, UiDefName, delegate { Grid.RefreshGrid(); });
+                        _businessObjectEditor.EditObject(selectedBo, UiDefName, delegate
+                        {
+                            _grid.Update();
+                            _grid.SelectedBusinessObject = selectedBo;
+                        });
                     }
                 }
             }
@@ -439,15 +443,12 @@ namespace Habanero.UI.VWG
                 {
                     throw new GridDeveloperException("You cannot call add since the grid has not been set up");
                 }
-                IBusinessObject newBo;
                 if (_businessObjectCreator == null)
                 {
                     throw new GridDeveloperException(
                         "You cannot call add as there is no business object creator set up for the grid");
                 }
-                newBo = _businessObjectCreator.CreateBusinessObject();
-                //IDataGridViewRow newBoRow = _grid.GetBusinessObjectRow(newBo);
-                //if (newBoRow != null) _grid.Rows.Remove(newBoRow);
+                IBusinessObject newBo = _businessObjectCreator.CreateBusinessObject();
                 if (_businessObjectEditor != null && newBo != null)
                 {
                     _businessObjectEditor.EditObject(newBo, UiDefName, delegate(IBusinessObject bo, bool cancelled)
@@ -463,7 +464,8 @@ namespace Habanero.UI.VWG
                             {
                                 collection.Add(bo);
                             }
-                            Grid.RefreshBusinessObjectRow(bo);
+                            _grid.RefreshBusinessObjectRow(bo);
+                            _grid.Update();
                             Grid.SelectedBusinessObject = bo;
                         }
                     });
