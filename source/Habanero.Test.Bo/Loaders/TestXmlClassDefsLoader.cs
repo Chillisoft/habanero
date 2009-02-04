@@ -214,6 +214,47 @@ namespace Habanero.Test.BO.Loaders
                           + "class 'TestClass'.", ex.Message);
             }
         }
+        [Test]
+        public void Test_Invalid_Relationship_PropDefForReverseRelationshipNotSameAsRelationship()
+        {
+            //----------------------Test Setup ----------------------
+            const string classDefsString = @"
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" />
+							<property  name=""OtherFieldID"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestRelatedClass"" type=""single"" relatedClass=""TestRelatedClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" owningBOHasForeignKey=""true"" reverseRelationship=""TestClass"">
+						        <relatedProperty property=""OtherFieldID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestRelatedClassID"" />
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestRelatedClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestClass"" type=""single"" relatedClass=""TestClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" reverseRelationship=""TestRelatedClass"" owningBOHasForeignKey=""false"" >
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+					</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //--------------------Execute Test-------------------------
+            try
+            {
+                loader.LoadClassDefs(classDefsString);
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("do not have the same properties defined as the relationship keys", ex.Message);
+            }
+        }
 
         [Test]
         public void Test_Invalid_Relationship_PropDefDoesNotExistOnRelatedClassDef()

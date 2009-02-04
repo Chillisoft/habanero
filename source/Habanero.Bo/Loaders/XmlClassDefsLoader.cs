@@ -36,7 +36,7 @@ namespace Habanero.BO.Loaders
         private ClassDefCol _classDefList;
         //private IList _classDefList;
         private readonly string _xmlClassDefs;
-        private static RelationshipDef reverseRelationshipDef;
+        
 
         /// <summary>
         /// Constructor to initialise a new loader. If you create the object
@@ -343,8 +343,8 @@ namespace Habanero.BO.Loaders
             }
             if (!relationshipDef.OwningBOHasForeignKey) return;
 
-            reverseRelationshipDef = relatedClassDef.RelationshipDefCol[reverseRelationshipName];
-
+            RelationshipDef reverseRelationshipDef = relatedClassDef.RelationshipDefCol[reverseRelationshipName];
+            CheckReverseRelationshipRelKeyDefProps(relationshipDef, relatedClassDef, reverseRelationshipName, reverseRelationshipDef, classDef);
             if (!reverseRelationshipDef.OwningBOHasForeignKey) return;
 
             if (RelKeyDefOwningClassIsThePrimaryKey(relationshipDef, classDef))
@@ -357,11 +357,52 @@ namespace Habanero.BO.Loaders
                 reverseRelationshipDef.OwningBOHasForeignKey = false;
                 return;
             }
+
             string errorMessage = string.Format
                 ("The relationship '{0}' could not be loaded because the reverse relationship '{1}' defined for the related class '{2}' and the relationship '{3}' defined for the class '{4}' are both set up as owningBOHasForeignKey = true. Please check your ClassDefs.xml or fix in Firestarter.",
                  relationshipDef.RelationshipName, reverseRelationshipName, relatedClassDef.ClassNameFull,
                  relationshipDef.RelationshipName, classDef.ClassNameFull);
             throw new InvalidXmlDefinitionException(errorMessage);
+        }
+        /// <summary>
+        /// Checks to see if the relationship and reverse relationship are defined for the same relationship.
+        /// </summary>
+        /// <param name="relationshipDef"></param>
+        /// <param name="relatedClassDef"></param>
+        /// <param name="reverseRelationshipName"></param>
+        /// <param name="reverseRelationshipDef"></param>
+        /// <param name="classDef"></param>
+        private static void CheckReverseRelationshipRelKeyDefProps(RelationshipDef relationshipDef, ClassDef relatedClassDef, string reverseRelationshipName, RelationshipDef reverseRelationshipDef, ClassDef classDef)
+        {
+            if (!ReverseRelationshipHasSameProps(relationshipDef, reverseRelationshipDef))
+            {
+                string message = string.Format
+                    ("The relationship '{0}' could not be loaded because the reverse relationship '{1}' " 
+                     + "defined for the related class '{2}' and the relationship '{3}' defined for the class '{4}' do not have the same properties defined as the relationship keys"
+                     ,relationshipDef.RelationshipName, reverseRelationshipName, relatedClassDef.ClassNameFull,
+                     relationshipDef.RelationshipName, classDef.ClassNameFull);
+                throw new InvalidXmlDefinitionException(message);
+            }
+        }
+
+        private static bool ReverseRelationshipHasSameProps(IRelationshipDef relationshipDef, IRelationshipDef reverseRelationshipDef)
+        {
+            if (relationshipDef.RelKeyDef.Count != reverseRelationshipDef.RelKeyDef.Count) return false;
+            foreach (IRelPropDef relPropDef in relationshipDef.RelKeyDef)
+            {
+                bool foundMatch = false;
+                foreach (IRelPropDef reverseRelPropDef in reverseRelationshipDef.RelKeyDef)
+                {
+                    if (relPropDef.OwnerPropertyName == reverseRelPropDef.RelatedClassPropName 
+                        && relPropDef.RelatedClassPropName == reverseRelPropDef.OwnerPropertyName)
+                    {
+                        foundMatch = true;
+                        break;
+                    }
+                }
+                if (!foundMatch) return false;
+            }
+            return true;
         }
 
         private static bool RelKeyDefOwningClassIsThePrimaryKey(IRelationshipDef relationshipDef, ClassDef classDef)

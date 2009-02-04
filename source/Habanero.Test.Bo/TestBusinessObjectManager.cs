@@ -2001,7 +2001,53 @@ namespace Habanero.Test.BO
             Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
             Assert.IsTrue(boMan.Contains(boWithIntID));
         }
-        //TODO  15 Jan 2009: Do test as above for previous and persisted.
+        public void Test_TwoObjectTypesWithTheSameIDField_EdidtedToHaveTheSamevalue_CanBeAddedToObjectMan_PreviousPropValue()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManagerStub.SetNewBusinessObjectManager();
+            BusinessObjectManagerStub boMan = (BusinessObjectManagerStub)BusinessObjectManagerStub.Instance;
+            boMan.ClearLoadedObjects();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID_DifferentType.LoadClassDefWithIntID();
+            const int id = 3;
+            BOWithIntID boWithIntID = new BOWithIntID { IntID = id };
+            BOWithIntID_DifferentType boWithIntID_DifferentType = new BOWithIntID_DifferentType { IntID = 6 };
+            boWithIntID_DifferentType.IntID = boWithIntID.IntID;
+            boMan.ClearLoadedObjects();
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(0, boMan.Count);
+            //--------------- Execute Test ----------------------
+            boMan.AddBusinessObject(boWithIntID, boWithIntID.ID.AsString_PreviousValue());
+            boMan.AddBusinessObject(boWithIntID_DifferentType, boWithIntID_DifferentType.ID.AsString_PreviousValue());
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(2, boMan.Count);
+            Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
+            Assert.IsTrue(boMan.Contains(boWithIntID));
+        }
+
+        public void Test_TwoObjectTypesWithTheSameIDField_EdidtedToHaveTheSamevalue_CanBeAddedToObjectMan_AsString_LastPersistedValue()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManagerStub.SetNewBusinessObjectManager();
+            BusinessObjectManagerStub boMan = (BusinessObjectManagerStub)BusinessObjectManagerStub.Instance;
+            boMan.ClearLoadedObjects();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID_DifferentType.LoadClassDefWithIntID();
+            const int id = 3;
+            BOWithIntID boWithIntID = new BOWithIntID { IntID = id };
+            BOWithIntID_DifferentType boWithIntID_DifferentType = new BOWithIntID_DifferentType { IntID = 6 };
+            boWithIntID_DifferentType.IntID = boWithIntID.IntID;
+            boMan.ClearLoadedObjects();
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(0, boMan.Count);
+            //--------------- Execute Test ----------------------
+            boMan.AddBusinessObject(boWithIntID, boWithIntID.ID.AsString_LastPersistedValue());
+            boMan.AddBusinessObject(boWithIntID_DifferentType, boWithIntID_DifferentType.ID.AsString_LastPersistedValue());
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(2, boMan.Count);
+            Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
+            Assert.IsTrue(boMan.Contains(boWithIntID));
+        }
         [Test]
         public void Test_TestInheritedObjectCanStillGetObjectOutOfManager_HOwDoesKeyKnowType()
         {
@@ -2029,16 +2075,30 @@ namespace Habanero.Test.BO
                 StringAssert.Contains("Two copies of the business object 'Habanero.Test.BO.BOWithIntID_Child' identified by", ex.Message);
             }
         }
-
-        //TODO 20 Jan 2009: remove these comments if the tests are done
-        //Test if ccreate a new object with object id then must be in object manager.
-        //Test that persist this object hten in object manager
-        //test that remove revf to this object then call gccolllectt then removed from object mamnager
-        //Test for IntID object as above.
-        //Test int id change ID ensure in object manger with new id removed with old id
-        //test int id change id change id still in object manger with new id removed with intermediate id.
-        // test serialization constructor
-
+        [Test]
+        public void Test_Find_TwoObjectTypesWithTheSameIDField_HaveSameValue()
+        {
+            //--------------- Set up test pack ------------------
+            BusinessObjectManagerStub.SetNewBusinessObjectManager();
+            BusinessObjectManagerStub boMan = (BusinessObjectManagerStub)BusinessObjectManagerStub.Instance;
+            boMan.ClearLoadedObjects();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID_DifferentType.LoadClassDefWithIntID();
+            const int id = 3;
+            BOWithIntID boWithIntID = new BOWithIntID { IntID = id };
+            BOWithIntID_DifferentType boWithIntID_DifferentType = new BOWithIntID_DifferentType { IntID = id };
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(2, boMan.Count);
+            Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
+            Assert.IsTrue(boMan.Contains(boWithIntID));
+            //--------------- Execute Test ----------------------
+            BusinessObjectCollection<BOWithIntID> found = boMan.Find<BOWithIntID>(new Criteria("IntID", Criteria.ComparisonOp.Equals, id));
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(1, found.Count);
+            Assert.AreEqual(2, boMan.Count);
+            Assert.IsTrue(boMan.Contains(boWithIntID_DifferentType));
+            Assert.IsTrue(boMan.Contains(boWithIntID));
+        }
         [Test]
         public void Test_Find_NotFound()
         {

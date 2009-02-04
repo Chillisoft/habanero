@@ -47,6 +47,34 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+        public static ClassDef LoadClassDefWithIntID_RelationshipToSelf()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""BOWithIntID"" assembly=""Habanero.Test.BO"" table=""bowithintid"" >
+					<property  name=""IntID"" type=""Int32"" />
+					<property  name=""ChildIntID"" type=""Int32"" />
+					<property  name=""TestField"" default=""testing"" />
+					<primaryKey isObjectID=""false"">
+						<prop name=""IntID"" />
+					</primaryKey>
+					<relationship name=""MyChildBoWithInt"" type=""single"" relatedClass=""BOWithIntID"" 
+                        relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"" owningBOHasForeignKey=""true""
+                        reverseRelationship=""MyParentBOWithInt"">
+						<relatedProperty property=""ChildIntID"" relatedProperty=""IntID"" />
+					</relationship>
+                    <relationship name=""MyParentBOWithInt"" type=""single"" relatedClass=""BOWithIntID"" 
+                        relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"" owningBOHasForeignKey=""false""
+                        reverseRelationship=""MyChildBoWithInt"">
+						<relatedProperty property=""IntID"" relatedProperty=""ChildIntID"" />
+					</relationship>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         public static ClassDef LoadClassDefWithIntID_DiscriminatorField()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();

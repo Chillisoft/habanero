@@ -68,13 +68,10 @@ namespace Habanero.Test.BO.Relationship
             contactPerson.FirstName = TestUtil.GetRandomString();
             contactPerson.Organisation = organisationTestBO;
             contactPerson.Save();
-           
             //---------------Assert Precondition----------------
             Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
-
             //---------------Execute Test ----------------------
             organisationTestBO.ContactPerson = null;
-
             //---------------Test Result -----------------------
             Assert.IsNull(organisationTestBO.ContactPerson);
         }
@@ -99,7 +96,6 @@ namespace Habanero.Test.BO.Relationship
             //---------------Test Result -----------------------
             Assert.IsNull(currentContactPerson);
         }
-
 
         [Test]
         public void Test_SetToAlternate_ByID_InBOManager()
@@ -263,7 +259,6 @@ namespace Habanero.Test.BO.Relationship
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateUnsavedOrganisation();
             BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
-
             //---------------Assert preconditions---------------
             Assert.IsTrue(organisationTestBO.Status.IsNew);
             Assert.IsTrue(contactPerson.Status.IsNew);
@@ -272,7 +267,6 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
             //---------------Execute Test ----------------------
             organisationTestBO.ContactPerson = contactPerson;
-
             //---------------Test Result -----------------------
             Assert.IsNotNull(contactPerson.OrganisationID);
             Assert.IsNotNull(contactPerson.Organisation);
@@ -600,6 +594,40 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreEqual(organisationTestBO.OrganisationID, organisationidInEvent);
         }
 
+        [Test]
+        public void Test_SetRelatedObjectRaisesReverseRelationshipUpdatedEvent_Unreferenced()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson();
+            SingleRelationship<OrganisationTestBO> organisationRelationship =
+                contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation");
+            bool updatedFired = false;
+            OrganisationTestBO boReceivedByEvent = null;
+            Guid? organisationidInEvent = null;
+
+            organisationRelationship.Updated += delegate(object sender, BOEventArgs<OrganisationTestBO> e)
+            {
+                updatedFired = true;
+                boReceivedByEvent = e.BusinessObject;
+                organisationidInEvent = contactPersonTestBO.OrganisationID;
+            };
+
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(updatedFired);
+            Assert.IsNull(boReceivedByEvent);
+//            Assert.IsFalse(contactPersonRelationship.OwningBOHasForeignKey);
+            Assert.IsTrue(contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation").OwningBOHasForeignKey);
+
+            //---------------Execute Test ----------------------
+            organisationTestBO.ContactPerson = contactPersonTestBO;
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(updatedFired);
+            Assert.AreSame(organisationTestBO, boReceivedByEvent);
+            Assert.AreEqual(organisationTestBO.OrganisationID, organisationidInEvent);
+        }
+
         private static SingleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO)
         {
             const RelationshipType relationshipType = RelationshipType.Association;
@@ -638,6 +666,87 @@ namespace Habanero.Test.BO.Relationship
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
         }
     }
+
+    [TestFixture]
+    public class TestSingleRelationship_TwoObjectsHaveIdenticallyNamedPrimaryKeyPropertyName
+    {
+        [SetUp]
+        public virtual void SetupTest()
+        {
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            BOWithIntID.LoadClassDefWithIntID_RelationshipToSelf();
+            BOWithIntID_DifferentType.LoadClassDefWithIntID();
+        }
+        [Test]
+        public void Test_TwoObjectTypesWithTheSameIDField_EditedToHaveTheSamevalue_UseOneInRelationships()
+        {
+            //--------------- Set up test pack ------------------
+            const int id = 3;
+            BOWithIntID boWithIntID = new BOWithIntID { IntID = id };
+            BOWithIntID_DifferentType boWithIntID_DifferentType = new BOWithIntID_DifferentType { IntID = id };
+            boWithIntID_DifferentType.IntID = boWithIntID.IntID;
+            SingleRelationship<BOWithIntID> childRelationship = (SingleRelationship<BOWithIntID>) boWithIntID.Relationships["MyChildBoWithInt"];
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(2, BusinessObjectManager.Instance.Count);
+            Assert.IsNull(childRelationship.GetRelatedObject());
+            Assert.AreEqual(boWithIntID.IntID, boWithIntID_DifferentType.IntID);
+            //--------------- Execute Test ----------------------
+            BOWithIntID childBOWithID = new BOWithIntID { IntID = 4 };
+            childRelationship.SetRelatedObject(childBOWithID);
+            //--------------- Test Result -----------------------
+            SingleRelationship<BOWithIntID> parentRelationship = (SingleRelationship<BOWithIntID>) childBOWithID.Relationships["MyParentBOWithInt"];
+            Assert.AreSame(childBOWithID ,childRelationship.GetRelatedObject());
+            Assert.AreSame(boWithIntID, parentRelationship.GetRelatedObject());
+            Assert.AreEqual(childRelationship.GetReverseRelationship(childBOWithID), parentRelationship);
+        }
+        [Test]
+        public void Test_TwoObjectTypesWithTheSameIDField_EdidtedToHaveTheSamevalue_ResetOneInRelationships()
+        {
+            //--------------- Set up test pack ------------------
+            const int id = 3;
+            BOWithIntID boWithIntID = new BOWithIntID { IntID = id };
+            BOWithIntID_DifferentType boWithIntID_DifferentType = new BOWithIntID_DifferentType { IntID = id };
+            boWithIntID_DifferentType.IntID = boWithIntID.IntID;
+            SingleRelationship<BOWithIntID> childRelationship = (SingleRelationship<BOWithIntID>) boWithIntID.Relationships["MyChildBoWithInt"];
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(2, BusinessObjectManager.Instance.Count);
+            Assert.IsNull(childRelationship.GetRelatedObject());
+            Assert.AreEqual(boWithIntID.IntID, boWithIntID_DifferentType.IntID);
+            //--------------- Execute Test ----------------------
+            BOWithIntID childBOWithID = new BOWithIntID { IntID = 4 };
+            SingleRelationship<BOWithIntID> parentRelationship = (SingleRelationship<BOWithIntID>) childBOWithID.Relationships["MyParentBOWithInt"];
+            parentRelationship.SetRelatedObject(boWithIntID);
+            //--------------- Test Result -----------------------
+            Assert.AreSame(childBOWithID ,childRelationship.GetRelatedObject());
+            Assert.AreSame(boWithIntID, parentRelationship.GetRelatedObject());
+            Assert.AreEqual(childRelationship.GetReverseRelationship(childBOWithID), parentRelationship);
+        }
+        [Test]
+        public void Test_TwoObjectTypesWithTheSameIDField_EdidtedToHaveTheSamevalue_ResetOneInRelationships_WDuplicateID()
+        {
+            //--------------- Set up test pack ------------------
+            const int id = 3;
+            BOWithIntID boWithIntID = new BOWithIntID { IntID = id };
+            BOWithIntID_DifferentType boWithIntID_DifferentType = new BOWithIntID_DifferentType { IntID = id };
+            boWithIntID_DifferentType.IntID = boWithIntID.IntID;
+            SingleRelationship<BOWithIntID> parentRelationship = (SingleRelationship<BOWithIntID>)boWithIntID.Relationships["MyParentBOWithInt"];
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(2, BusinessObjectManager.Instance.Count);
+            Assert.IsNull(parentRelationship.GetRelatedObject());
+            Assert.AreEqual(boWithIntID.IntID, boWithIntID_DifferentType.IntID);
+            //--------------- Execute Test ----------------------
+            BOWithIntID childBOWithID = new BOWithIntID { IntID = 4 };
+            SingleRelationship<BOWithIntID> childRelationship = (SingleRelationship<BOWithIntID>)childBOWithID.Relationships["MyChildBoWithInt"];
+            childRelationship.SetRelatedObject(boWithIntID);
+            //--------------- Test Result -----------------------
+            Assert.AreSame(childBOWithID ,parentRelationship.GetRelatedObject());
+            Assert.AreSame(boWithIntID, childRelationship.GetRelatedObject());
+            Assert.AreEqual(parentRelationship.GetReverseRelationship(childBOWithID), childRelationship);
+        }
+    }
+
 //    [TestFixture]
 //    public class TestSingleRelationship_CompositePrimaryKeyContainsCompositeForeignKey : TestSingleRelationship
 //    {
