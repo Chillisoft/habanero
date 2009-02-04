@@ -943,6 +943,27 @@ namespace Habanero.Test.BO
         //}
 
         #endregion //Tests for CustomProperty type Bo Props
+
+        [Test]
+        public void Test_SetPropertyToNewValueAndThenToOrigValue_PropNotDirty()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("TestProp", "System", "String",
+                       PropReadWriteRule.ReadWrite, null, null, true, false);
+            IBOProp boProp = propDef.CreateBOProp(true);
+            const string origValue = "OrigValue";
+            boProp.InitialiseProp(origValue);
+            boProp.Value = "newValue";
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(origValue, boProp.PersistedPropertyValue);
+            Assert.IsTrue(boProp.IsDirty);
+            //---------------Execute Test ----------------------
+            boProp.Value = origValue;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(origValue, boProp.PersistedPropertyValue);
+            Assert.AreEqual(origValue, boProp.Value);
+            Assert.IsFalse(boProp.IsDirty);
+        }
     }
 
 }
