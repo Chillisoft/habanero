@@ -55,57 +55,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="statement">The sql statement used to specify which
         /// objects to load for the lookup-list</param>
-        public DatabaseLookupList(string statement) : this(statement, 10000)
-        {
-        }
-
-        /// <summary>
-        /// Constructor that specifies the sql statement and the type of 
-        /// object represented in the lookup-list
-        /// </summary>
-        /// <param name="statement">The sql statement used to specify which
-        /// objects to load for the lookup-list</param>
-        /// <param name="lookupObjectType">The object type</param>
-        public DatabaseLookupList(string statement, Type lookupObjectType) : this(statement, 10000, lookupObjectType)
-        {
-        }
-
-        /// <summary>
-        /// Constructor that specifies the sql statement and the type of 
-        /// object represented in the lookup-list
-        /// </summary>
-        /// <param name="statement">The sql statement used to specify which
-        /// objects to load for the lookup-list</param>
-        /// <param name="assemblyName">The class type assembly name.</param>
-        /// <param name="className">The class type name</param>
-        public DatabaseLookupList(string statement, string assemblyName, string className)
-            : this(statement, 10000, null, assemblyName, className)
-        {
-        }
-
-        /// <summary>
-        /// Constructor that specifies the sql statement and the type of 
-        /// object represented in the lookup-list
-        /// </summary>
-        /// <param name="statement">The sql statement used to specify which
-        /// objects to load for the lookup-list</param>
-        /// <param name="timeout">The time-out period in milliseconds after
-        /// which a fresh copy will be loaded</param>
-        /// <param name="assemblyName">The class type assembly name.</param>
-        /// <param name="className">The class type name</param>
-        public DatabaseLookupList(string statement, int timeout, string assemblyName, string className)
-            : this(statement, timeout, null, assemblyName, className)
-        {
-        }
-
-        /// <summary>
-        /// Constructor that specifies the sql statement and time-out period
-        /// </summary>
-        /// <param name="statement">The sql statement used to specify which
-        /// objects to load for the lookup-list</param>
-        /// <param name="timeout">The time-out period in milliseconds after
-        /// which a fresh copy will be loaded</param>
-        public DatabaseLookupList(string statement, int timeout) : this(statement, timeout, null)
+        public DatabaseLookupList(string statement) : this(statement, 10000, null, null, false)
         {
         }
 
@@ -117,30 +67,25 @@ namespace Habanero.BO
         /// objects to load for the lookup-list</param>
         /// <param name="timeout">The time-out period in milliseconds after
         /// which a fresh copy will be loaded</param>
-        /// <param name="lookupObjectType">The object type</param>
-        public DatabaseLookupList(string statement, int timeout, Type lookupObjectType)
-            : this(statement, timeout, lookupObjectType, null, null)
+        /// <param name="assemblyName">The class type assembly name.</param>
+        /// <param name="className">The class type name.  This is the BO type that this lookup list is referring to</param>
+        /// <param name="limitToList">Whether to limit the item set to those in the list</param>
+        public DatabaseLookupList
+            (string statement, int timeout, string assemblyName, string className, bool limitToList)
         {
-        }
-
-        /// <summary>
-        /// Private constructor with all available parameters
-        /// </summary>
-        private DatabaseLookupList
-            (string statement, int timeout, Type lookupObjectType, string assemblyName, string className)
-        {
+            LimitToList = limitToList;
             _statement = statement;
             _timeout = timeout;
-            if (lookupObjectType != null)
-            {
-                MyLookupObjectType = lookupObjectType;
-            }
-            else
-            {
+//            if (lookupObjectType != null)
+//            {
+//                MyLookupObjectType = lookupObjectType;
+//            }
+//            else
+//            {
                 _assemblyName = assemblyName;
                 _className = className;
                 _lookupObjectType = null;
-            }
+//            }
             _lastCallTime = DateTime.MinValue;
         }
 
@@ -295,6 +240,9 @@ namespace Habanero.BO
             _keyLookupList.Add(keyAsString, stringValue);
         }
 
+        ///<summary>
+        /// The property definition that this lookup list is for
+        ///</summary>
         public IPropDef PropDef { get; set; }
 
         public Dictionary<string, string> GetIDValueLookupList()
@@ -322,6 +270,8 @@ namespace Habanero.BO
                 TypeLoader.ClassTypeInfo(_lookupObjectType, out _assemblyName, out _className);
             }
         }
+
+        public bool LimitToList { get; set; }
 
         #endregion Type Initialisation
 

@@ -78,7 +78,7 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a DatabaseLookupList object</returns>
         protected override object Create()
         {
-			return _defClassFactory.CreateDatabaseLookupList(_sqlString, _timeout,_assemblyName, _className);
+			return _defClassFactory.CreateDatabaseLookupList(_sqlString, _timeout,_assemblyName, _className, false);
 			//return new DatabaseLookupList(_sqlString, _assemblyName, _className);
 		}
     }

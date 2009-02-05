@@ -30,65 +30,65 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
 	public interface IDefClassFactory
 	{
-		BusinessObjectLookupList CreateBusinessObjectLookupList(string assemblyName, string className, string criteria, string sort);
+        BusinessObjectLookupList CreateBusinessObjectLookupList(string assemblyName, string className, string criteria, string sort);
 
-		ClassDef CreateClassDef(string assemblyName, string className, string displayName, PrimaryKeyDef primaryKeyDef, PropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol);
+        ClassDef CreateClassDef(string assemblyName, string className, string displayName, PrimaryKeyDef primaryKeyDef, PropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol);
 
-        DatabaseLookupList CreateDatabaseLookupList(string sqlString, int timeout, string assemblyName, string className);
-		
-		KeyDef CreateKeyDef(string keyName);
-		
-		PrimaryKeyDef CreatePrimaryKeyDef();
+        SimpleLookupList CreateSimpleLookupList(Dictionary<string, string> displayValueDictionary);
+        
+        DatabaseLookupList CreateDatabaseLookupList(string sqlString, int timeout, string assemblyName, string className, bool limitToList);
 
-		PropDef CreatePropDef(string propertyName, string assemblyName, string typeName, PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length, string displayName, string description, bool keepValuePrivate);
+        KeyDef CreateKeyDef(string keyName);
 
-		PropRuleDate CreatePropRuleDate(string name, string message);
+        PrimaryKeyDef CreatePrimaryKeyDef();
 
-		PropRuleDecimal CreatePropRuleDecimal(string name, string message);
+        PropDef CreatePropDef(string propertyName, string assemblyName, string typeName, PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length, string displayName, string description, bool keepValuePrivate);
 
-		PropRuleInteger CreatePropRuleInteger(string name, string message);
+        PropRuleDate CreatePropRuleDate(string name, string message);
 
-		PropRuleString CreatePropRuleString(string name, string message);
+        PropRuleDecimal CreatePropRuleDecimal(string name, string message);
 
-		SingleRelationshipDef CreateSingleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction, RelationshipType relationshipType);
+        PropRuleInteger CreatePropRuleInteger(string name, string message);
+
+        PropRuleString CreatePropRuleString(string name, string message);
+
+        SingleRelationshipDef CreateSingleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction, RelationshipType relationshipType);
 
         MultipleRelationshipDef CreateMultipleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, string orderBy, DeleteParentAction deleteParentAction, RelationshipType relationshipType);
 
-		SimpleLookupList CreateSimpleLookupList(Dictionary<string, string> displayValueDictionary);
+        SuperClassDef CreateSuperClassDef(string assemblyName, string className, ORMapping orMapping, string id, string discriminator);
 
-		SuperClassDef CreateSuperClassDef(string assemblyName, string className, ORMapping orMapping, string id, string discriminator);
+        UIDef CreateUIDef(string name, UIForm uiForm, UIGrid uiGrid);
 
-		UIDef CreateUIDef(string name, UIForm uiForm, UIGrid uiGrid);
+        UIFormColumn CreateUIFormColumn();
 
-		UIFormColumn CreateUIFormColumn();
+        UIForm CreateUIFormDef();
 
-		UIForm CreateUIFormDef();
+        UIFormGrid CreateUIFormGrid(string relationshipName, Type gridType, string correspondingRelationshipName);
 
-		UIFormGrid CreateUIFormGrid(string relationshipName, Type gridType, string correspondingRelationshipName);
+        UIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable propertyAttributes, TriggerCol triggers);
 
-		UIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable propertyAttributes, TriggerCol triggers);
-
-		UIFormTab CreateUIFormTab();
+        UIFormTab CreateUIFormTab();
 
         Trigger CreateTrigger(string triggeredBy, string target, string conditionValue, string action, string value);
 
-		UIGrid CreateUIGridDef();
+        UIGrid CreateUIGridDef();
 
         UIGridColumn CreateUIGridProperty(string heading, string propertyName, String gridControlTypeName, String gridControlAssembly, bool editable, int width, UIGridColumn.PropAlignment alignment, Hashtable propertyAttributes);
 
-		PropDefCol CreatePropDefCol();
+        PropDefCol CreatePropDefCol();
 
-		KeyDefCol CreateKeyDefCol();
+        KeyDefCol CreateKeyDefCol();
 
-		UIDefCol CreateUIDefCol();
+        UIDefCol CreateUIDefCol();
 
-		RelationshipDefCol CreateRelationshipDefCol();
+        RelationshipDefCol CreateRelationshipDefCol();
 
-		RelPropDef CreateRelPropDef(IPropDef propDef, string relPropName);
+        RelPropDef CreateRelPropDef(IPropDef propDef, string relPropName);
 
-		RelKeyDef CreateRelKeyDef();
+        RelKeyDef CreateRelKeyDef();
 
-		ClassDefCol CreateClassDefCol();
+        ClassDefCol CreateClassDefCol();
 
         FilterPropertyDef CreateFilterPropertyDef(string propertyName, string label, string filterType, string filterTypeAssembly, FilterClauseOperator filterClauseOperator, Dictionary<string, string> parameters);
 

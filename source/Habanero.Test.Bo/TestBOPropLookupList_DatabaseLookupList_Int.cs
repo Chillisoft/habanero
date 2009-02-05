@@ -25,6 +25,14 @@ namespace Habanero.Test.BO
         public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
+            this.SetupDBConnection();
+
+            BORegistry.DataAccessor = new DataAccessorDB();
+            _propDef_int = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
+            DatabaseLookupList databaseLookupList = new DatabaseLookupList(_sql, 10000, "", "", true);
+            _propDef_int.LookupList = databaseLookupList;
+            databaseLookupList.GetLookupList();
+
         }
 
         [TestFixtureSetUp]
@@ -32,14 +40,6 @@ namespace Habanero.Test.BO
         {
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
-            ClassDef.ClassDefs.Clear();
-            this.SetupDBConnection();
-
-            BORegistry.DataAccessor = new DataAccessorDB();
-            _propDef_int = new PropDef("PropName", typeof (int), PropReadWriteRule.ReadWrite, null);
-            DatabaseLookupList databaseLookupList = new DatabaseLookupList(_sql);
-            _propDef_int.LookupList = databaseLookupList;
-            databaseLookupList.GetLookupList();
         }
 
 
@@ -216,7 +216,7 @@ namespace Habanero.Test.BO
         private static PropDef GetPropDef_int_WithLookupList()
         {
             PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null);
-            propDef.LookupList = new DatabaseLookupList(_sql);
+            propDef.LookupList = new DatabaseLookupList(_sql, 10000, "", "", true);
             propDef.LookupList.GetLookupList();
             propDef.LookupList.GetIDValueLookupList();
             return propDef;
@@ -421,6 +421,7 @@ namespace Habanero.Test.BO
         {
             IBusinessObject businessObject = GetBusinessObjectStub();
             BOProp boProp = (BOProp)businessObject.Props[_propDef_int.PropertyName];
+            
             const string invalid = "Invalid";
             object originalPropValue = _intKeyDoesNotExistInList;
             businessObject.SetPropertyValue(_propDef_int.PropertyName, originalPropValue);
@@ -430,6 +431,7 @@ namespace Habanero.Test.BO
             Assert.IsNotNull(boProp.Value);
             Assert.AreEqual(originalPropValue, boProp.Value);
             Assert.IsInstanceOfType(typeof(BOPropLookupList), boProp);
+            Assert.IsTrue(boProp.PropDef.LookupList.LimitToList);
             Assert.IsFalse(boProp.IsValid);
             //---------------Execute Test ----------------------
             try

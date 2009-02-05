@@ -52,8 +52,21 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="collection">The string-Guid pair collection</param>
         public SimpleLookupList(Dictionary<string, string> collection)
+            : this(collection, false)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the provider with a specified
+        /// collection of string-Guid pairs
+        /// </summary>
+        /// <param name="collection">The string-Guid pair collection</param>
+        /// <param name="limitToList">Whether to limit the items to those in the lookup list</param>
+        public SimpleLookupList(Dictionary<string, string> collection, bool limitToList) 
         {
             _displayValueDictionary = collection;
+            LimitToList = limitToList;
+            
         }
 
         /// <summary>
@@ -84,6 +97,13 @@ namespace Habanero.BO
             get ;
             set;
         }
+
+        ///<summary>
+        /// Whether to validate that the property set is in this list.  Eg, if the BOProp's value is set to an
+        /// item not in the list and this value is True, a validation error will occur upon save.  If this 
+        /// value is set to false no validation will occur.
+        ///</summary>
+        public bool LimitToList { get; set; }
 
         /// <summary>
         /// Returns the lookup list contents being held where the list is keyed on the list key 
