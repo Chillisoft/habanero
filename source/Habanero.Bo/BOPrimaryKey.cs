@@ -242,6 +242,10 @@ namespace Habanero.BO
             return CreateWithValue(classDef, idValue);
         }
 
+        /// <summary>
+        /// Returns a string containing all the properties and their values
+        /// </summary>
+        /// <returns>Returns a string</returns>
         public override string AsString_CurrentValue()
         {
             if (AllPropValuesAreNonNull()) return base.AsString_CurrentValue();
@@ -252,6 +256,12 @@ namespace Habanero.BO
             return base.AsString_CurrentValue();
         }
 
+        /// <summary>
+        /// Returns a string containing all the properties and their values,
+        /// but using the values held before the last time they were edited.  This
+        /// method differs from AsString_LastPersistedValue in that the properties may have
+        /// been edited several times since their last persistence.
+        /// </summary>
         public override string AsString_PreviousValue()
         {
             if (string.IsNullOrEmpty(_previousValue))
@@ -284,6 +294,10 @@ namespace Habanero.BO
             return true;
         }
 
+        ///<summary>
+        /// Returns the previous objects Id
+        ///</summary>
+        ///<returns></returns>
         public string GetPreviousObjectID()
         {
             return "";

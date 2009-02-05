@@ -138,7 +138,7 @@ namespace Habanero.DB
         }
 
         /// <summary>
-        /// Creates a transaction to update the number in the database
+        /// Creates an ITransactional object to update the number in the database when the number is updated.
         /// </summary>
         private class NumberUpdate : ITransactionalDB
         {

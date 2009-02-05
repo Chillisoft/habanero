@@ -36,11 +36,6 @@ namespace Habanero.Base
     ///</summary>
     public interface IPrimaryKey : IBOKey
     {
-        /// <summary>
-        /// Returns the object's ID as a string.
-        /// </summary>
-        /// <returns>Returns a string</returns>
-        //string GetObjectId();
 
         /// <summary>
         /// Returns the ID as a Guid in cases where the <see cref="IBusinessObject"/> is using a Guid object ID./>

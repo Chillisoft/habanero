@@ -669,7 +669,7 @@ namespace Habanero.BO.ClassDefinition
                 return false;
             }
             //Valid Item in list
-            if (!IsItemInList(propValue, ref errorMessage))
+            if (!IsLookupListItemValid(propValue, ref errorMessage))
             {
                 return false;
             }
@@ -698,9 +698,10 @@ namespace Habanero.BO.ClassDefinition
             return valid;
         }
 
-        private bool IsItemInList(object propValue, ref string errorMessage)
+        protected bool IsLookupListItemValid(object propValue, ref string errorMessage)
         {
             if (!this.HasLookupList()) return true;
+
             if (propValue == null || string.IsNullOrEmpty(Convert.ToString(propValue))) return true;
 
             if (this.LookupList is BusinessObjectLookupList)
@@ -727,7 +728,7 @@ namespace Habanero.BO.ClassDefinition
             return true;
         }
 
-        private bool CheckBusinessObjectMeetsLookupListCriteria(object propValue
+        protected bool CheckBusinessObjectMeetsLookupListCriteria(object propValue
                 , IBusinessObject businessObject
                 , BusinessObjectLookupList list, ref string errorMessage)
         {
@@ -1195,5 +1196,8 @@ namespace Habanero.BO.ClassDefinition
             if (_propDataMapper == null) _propDataMapper = new BOPropGeneralDataMapper(this);
             return _propDataMapper;
         }
+
     }
+
+
 }

@@ -956,12 +956,68 @@ namespace Habanero.Test.BO.ClassDefinition
             //-----Test PreCondition--------------------------
             Assert.IsTrue(propDef.HasLookupList());
             //---------------Execute Test ----------------------
-
             IBOProp prop = propDef.CreateBOProp(true);
             //---------------Test Result -----------------------
-
             Assert.IsInstanceOfType(typeof(BOPropLookupList), prop);
+        }
 
+        [Ignore("//TODO Brett 05 Feb 2009: Working on this now")]
+        [Test]
+        public void Test_TestLookupListCriteria()
+        {
+            //---------------Set up test pack-------------------
+            PropDefStub propDef = new PropDefStub("PropName", typeof(int), PropReadWriteRule.ReadWrite, null, 99);
+            Dictionary<string, string> collection = new Dictionary<string, string>();
+            SimpleLookupList simpleLookupList = new SimpleLookupList(collection);
+            propDef.LookupList = simpleLookupList;
+
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(propDef.HasLookupList());
+            //Assert.IsFalse(propDef.LookupList.LimitToList);
+            //---------------Execute Test ----------------------
+            string errorMessage = "";
+            bool isItemInList = propDef.CallIsLookupListItemValid(TestUtil.GetRandomInt(), ref errorMessage);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "The error message should be null since limit to list is false");
+            Assert.IsTrue(isItemInList);
+        }
+        class PropDefStub : PropDef
+        {
+            public PropDefStub(string propertyName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName, object defaultValue) : base(propertyName, propType, propRWStatus, databaseFieldName, defaultValue)
+            {
+            }
+
+            public PropDefStub(string propertyName, Type propType, PropReadWriteRule propRWStatus, object defaultValue) : base(propertyName, propType, propRWStatus, defaultValue)
+            {
+            }
+
+            public PropDefStub(string propertyName, string assemblyName, string typeName, PropReadWriteRule propRWStatus, string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing) : base(propertyName, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValueString, compulsory, autoIncrementing)
+            {
+            }
+
+            internal PropDefStub(string propertyName, string assemblyName, string typeName, PropReadWriteRule propRWStatus, string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length) : base(propertyName, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValueString, compulsory, autoIncrementing, length)
+            {
+            }
+
+            public PropDefStub(string propertyName, string assemblyName, string typeName, PropReadWriteRule propRWStatus, string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length, string displayName, string description, bool keepValuePrivate) : base(propertyName, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValueString, compulsory, autoIncrementing, length, displayName, description, keepValuePrivate)
+            {
+            }
+
+            public PropDefStub(string propertyName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName, object defaultValue, bool compulsory, bool autoIncrementing, int length, string displayName, string description) : base(propertyName, propType, propRWStatus, databaseFieldName, defaultValue, compulsory, autoIncrementing, length, displayName, description)
+            {
+            }
+
+            public PropDefStub(string propertyName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName, object defaultValue, bool compulsory, bool autoIncrementing) : base(propertyName, propType, propRWStatus, databaseFieldName, defaultValue, compulsory, autoIncrementing)
+            {
+            }
+
+            internal PropDefStub(string propertyName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName, object defaultValue, bool compulsory, bool autoIncrementing, int length, string displayName, string description, bool keepValuePrivate) : base(propertyName, propType, propRWStatus, databaseFieldName, defaultValue, compulsory, autoIncrementing, length, displayName, description, keepValuePrivate)
+            {
+            }
+            public bool CallIsLookupListItemValid(object propValue, ref string errorMessage)
+            {
+                return this.IsLookupListItemValid(propValue, ref errorMessage);
+            }
         }
     }
 }

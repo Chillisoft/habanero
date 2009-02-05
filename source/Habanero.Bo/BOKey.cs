@@ -523,6 +523,10 @@ namespace Habanero.BO
             return _props.Values.GetEnumerator();
         }
 
+        ///<summary>
+        /// Returns a Criteria object for the BOKey.
+        ///</summary>
+        ///<returns></returns>
         public Criteria GetKeyCriteria()
         {
             if (this.Count == 1)
