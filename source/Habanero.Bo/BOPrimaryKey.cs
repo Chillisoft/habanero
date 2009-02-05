@@ -86,6 +86,7 @@ namespace Habanero.BO
         /// <returns>Returns a hashcode integer</returns>
         public override int GetHashCode()
         {
+//            return AsString_CurrentValue().GetHashCode();
             return GetAsValue().GetHashCode();
             //if (_newObjectID != Guid.Empty) return NewObjectID().GetHashCode();
             //return GetObjectId().GetHashCode();
@@ -191,9 +192,9 @@ namespace Habanero.BO
                 {
                     return boProp.Value;
                 }
-                list.Add(boProp.PropertyName + "=" + boProp.Value);
+//                list.Add(boProp.PropDef.ClassDef.ClassName + "." + boProp.PropertyName + "=" + boProp.Value);
             }
-            return string.Join(";", list.ToArray());
+            return base.AsString_CurrentValue();
         }
 
         ///<summary>

@@ -47,6 +47,24 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+        public static ClassDef LoadClassDefWithIntID_CompositeKey()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""BOWithIntID_DifferentType"" assembly=""Habanero.Test.BO"" table=""bowithintid"" >
+					<property  name=""IntID"" type=""Int32"" />
+					<property  name=""TestField"" default=""testing"" />
+					<primaryKey isObjectID=""false"">
+						<prop name=""IntID"" />
+						<prop name=""TestField"" />
+					</primaryKey>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         internal static void DeleteAllBOWithIntID()
         {
             const string sql = "DELETE FROM bowithintid";
