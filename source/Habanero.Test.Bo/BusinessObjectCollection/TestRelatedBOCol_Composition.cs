@@ -5,6 +5,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.DB;
 using Habanero.Test.BO.RelatedBusinessObjectCollection;
 using Habanero.Util;
 using NUnit.Framework;
@@ -17,7 +18,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         private readonly TestUtilsRelated util = new TestUtilsRelated();
 
         [TestFixtureSetUp]
-        public void TestFixtureSetup()
+        public virtual void TestFixtureSetup()
         {
         }
 
@@ -318,5 +319,26 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
         #endregion
 
+    }
+
+    [TestFixture]
+    public class TestRelatedBOCol_Composition_UsingDB : TestRelatedBOCol_Composition
+    {
+        [TestFixtureSetUp]
+        public override void TestFixtureSetup()
+        {
+            if (DatabaseConnection.CurrentConnection != null &&
+DatabaseConnection.CurrentConnection.GetType() == typeof(DatabaseConnectionMySql))
+            {
+                return;
+            }
+            DatabaseConnection.CurrentConnection =
+                new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
+            DatabaseConnection.CurrentConnection.ConnectionString =
+                MyDBConnection.GetDatabaseConfig().GetConnectionString();
+            DatabaseConnection.CurrentConnection.GetConnection();
+
+            BORegistry.DataAccessor = new DataAccessorDB();
+        }
     }
 }
