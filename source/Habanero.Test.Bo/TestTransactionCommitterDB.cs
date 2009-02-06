@@ -24,7 +24,6 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace Habanero.Test.BO
 {
@@ -838,6 +837,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(cp.Surname, cp.Props["Surname"].PersistedPropertyValueString);
         }
 
-     
+
+
     }
 }
