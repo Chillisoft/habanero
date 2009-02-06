@@ -88,7 +88,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
 
-        private MultipleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
+        private static MultipleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
             MultipleRelationship<ContactPersonTestBO> associationRelationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
             RelationshipDef relationshipDef = (RelationshipDef)associationRelationship.RelationshipDef;
@@ -129,7 +129,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            GetAssociationRelationship(organisationTestBO, out cpCol);
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.GetRandomString();
             contactPerson.FirstName = TestUtil.GetRandomString();
@@ -164,7 +164,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            GetAssociationRelationship(organisationTestBO, out cpCol);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
             util.RegisterForAddedAndRemovedEvents(cpCol);
 
@@ -204,7 +204,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            GetAssociationRelationship(organisationTestBO, out cpCol);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             contactPerson.Save();
@@ -230,7 +230,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> associationRelationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            GetAssociationRelationship(organisationTestBO, out cpCol);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             contactPerson.Save();
@@ -250,14 +250,520 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             util.AssertRemovedEventFired();
         }
 
+        #region Delete Parent
+//-------------------------------------------DELETE Parent with added, removed and created children ----
+        [Test]
+        public void Test_DeleteParent_WithCreatedChild_DeleteRule_DeleteRelated()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson(out contactPerson, out relationship);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.CreatedBusinessObjects[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsTrue(contactPerson.Status.IsNew);
+            Assert.AreEqual(DeleteParentAction.DeleteRelated, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            organisationTestBO.Save();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(contactPerson.Status.IsNew);
+            Assert.IsTrue(contactPerson.Status.IsDeleted, "Should be deleted");
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+        }
 
+        private static OrganisationTestBO CreateSavedOrganisation_WithOneValidCreatedContactPerson(out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
+        {
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            cpCol.Add(contactPerson);
+            return organisationTestBO;
+        }
 
+        [Test]
+        public void Test_DeleteParent_WithTwoCreatedChild_DeleteRule_DeleteRelated()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson(out contactPerson, out relationship);
+            ContactPersonTestBO secondContactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            organisationTestBO.ContactPeople.Add(secondContactPerson);
+            
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.CreatedBusinessObjects[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsTrue(contactPerson.Status.IsNew);
+            Assert.IsTrue(secondContactPerson.Status.IsNew);
+            Assert.AreEqual(DeleteParentAction.DeleteRelated, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            organisationTestBO.Save();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(contactPerson.Status.IsNew);
+            Assert.IsTrue(contactPerson.Status.IsDeleted, "Should be deleted");
+            Assert.IsTrue(secondContactPerson.Status.IsNew);
+            Assert.IsTrue(secondContactPerson.Status.IsDeleted, "Should be deleted");
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+        }
 
+        [Test]
+        public void Test_DeleteParent_WithCreatedChild_DeleteRule_DeleteRelated_DoesNotValidate()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson(out contactPerson, out relationship);
+            contactPerson.Surname = null;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.CreatedBusinessObjects[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsTrue(contactPerson.Status.IsNew);
+            Assert.IsFalse(contactPerson.Status.IsValid());
+            Assert.AreEqual(DeleteParentAction.DeleteRelated, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            organisationTestBO.Save();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(contactPerson.Status.IsNew);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+        }
 
+        [Test]
+        public void Test_DeleteParent_WithCreatedChild_DeleteRule_DoNothing()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson(out contactPerson, out relationship);
+            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DoNothing;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.CreatedBusinessObjects[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsTrue(contactPerson.Status.IsNew);
+            Assert.AreEqual(DeleteParentAction.DoNothing, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            organisationTestBO.Save();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(contactPerson.Status.IsNew);
+            Assert.IsTrue(contactPerson.Status.IsDeleted, "Should be deleted");
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+        }
 
+        [Test]
+        public void Test_DeleteParent_WithCreatedChild_DeleteRule_DoNothing_DoesNotValidate()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson(out contactPerson, out relationship);
+            
+            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DoNothing;
+            contactPerson.Surname = null;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.CreatedBusinessObjects[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsTrue(contactPerson.Status.IsNew);
+            Assert.AreEqual(DeleteParentAction.DoNothing, relationship.DeleteParentAction);
+            Assert.IsFalse(contactPerson.Status.IsValid());
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            organisationTestBO.Save();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(contactPerson.Status.IsNew);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+        }
 
+        [Test]
+        public void Test_DeleteParent_WithCreatedChild_DeleteRule_PreventDelete()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson(out contactPerson, out relationship);
+            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.Prevent;
+            contactPerson.Surname = null;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.CreatedBusinessObjects[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsTrue(contactPerson.Status.IsNew);
+            Assert.IsFalse(contactPerson.Status.IsValid());
+            Assert.AreEqual(DeleteParentAction.Prevent, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            try
+            {
+                organisationTestBO.Save();
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (BusinessObjectReferentialIntegrityException ex)
+            {
+                StringAssert.Contains("There are 1 objects related through the 'ContactPeople' relationship ", ex.Message);
+            }
+        }
+        [Test]
+        public void Test_DeleteParent_WithTwoCreatedChild_DeleteRule_DerefRelated()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidCreatedContactPerson(out contactPerson, out relationship);
+            ContactPersonTestBO secondContactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            organisationTestBO.ContactPeople.Add(secondContactPerson);
+            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DereferenceRelated;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.CreatedBusinessObjects[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsTrue(contactPerson.Status.IsNew);
+            Assert.IsNotNull(contactPerson.OrganisationID);
+            Assert.IsTrue(secondContactPerson.Status.IsNew);
+            Assert.AreEqual(DeleteParentAction.DereferenceRelated, relationship.DeleteParentAction);
+//            contactPerson.MarkedForDeletion += delegate(object sender, BOEventArgs e)
+//                                   {
+//                                       string aa = "";
+//                                   };
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            organisationTestBO.Save();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(contactPerson.Status.IsNew, "Should be new");
+            Assert.IsFalse(contactPerson.Status.IsDeleted, "Should not be deleted");
+            Assert.IsNull(contactPerson.OrganisationID);
+            Assert.IsTrue(secondContactPerson.Status.IsNew, "Should be new");
+            Assert.IsFalse(secondContactPerson.Status.IsDeleted, "Should not be deleted");
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+        }
 
+        [Test]
+        public void Test_DeleteParent_WithAddedChild_DeleteRule_DeleteRelated()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidAddedContactPerson(out contactPerson, out relationship);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.AddedBusinessObjects[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsFalse(contactPerson.Status.IsNew);
+            Assert.AreEqual(DeleteParentAction.DeleteRelated, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            organisationTestBO.Save();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(contactPerson.Status.IsDeleted, "Should be permanently deleted");
+            Assert.IsTrue(contactPerson.Status.IsNew, "Should be permanently deleted");
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+        }
 
+        [Test]
+        public void Test_DeleteParent_WithAddedDirtyChild_DeleteRule_DeRefRelated()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidAddedContactPerson(out contactPerson, out relationship);
+            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DereferenceRelated;
+            contactPerson.Surname = TestUtil.GetRandomString();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.AddedBusinessObjects[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsFalse(contactPerson.Status.IsNew);
+            Assert.IsTrue(contactPerson.Status.IsDirty, "Should be dirty");
+            Assert.IsNotNull(contactPerson.OrganisationID);
+            Assert.AreEqual(DeleteParentAction.DereferenceRelated, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            organisationTestBO.Save();
+            //---------------Test Result -----------------------
+            Assert.IsNull(contactPerson.OrganisationID);
+            Assert.IsFalse(contactPerson.Status.IsNew, "Should not be new");
+            Assert.IsTrue(contactPerson.Status.IsDirty, "Should be dirty");
+            Assert.IsFalse(contactPerson.Status.IsDeleted, "Should not be deleted");
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+        }
+        [Test]
+        public void Test_DeleteParent_WithAddedChild_DeleteRule_DeRefRelated()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidAddedContactPerson(out contactPerson, out relationship);
+            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DereferenceRelated;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.AddedBusinessObjects[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsFalse(contactPerson.Status.IsNew);
+            Assert.IsTrue(contactPerson.Status.IsDirty, "Should be dirty");
+            Assert.IsNotNull(contactPerson.OrganisationID);
+            Assert.AreEqual(DeleteParentAction.DereferenceRelated, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            organisationTestBO.Save();
+            //---------------Test Result -----------------------
+            Assert.IsNull(contactPerson.OrganisationID);
+            Assert.IsFalse(contactPerson.Status.IsNew, "Should not be new");
+            Assert.IsTrue(contactPerson.Status.IsDirty, "Should be dirty");
+            Assert.IsFalse(contactPerson.Status.IsDeleted, "Should not be deleted");
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+        }
+
+        [Test]
+        public void Test_DeleteParent_WithAddedChild_DeleteRule_PreventDelete()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidAddedContactPerson(out contactPerson, out relationship);
+            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.Prevent;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(1, organisationTestBO.ContactPeople.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.AddedBusinessObjects[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsFalse(contactPerson.Status.IsNew);
+            Assert.IsNotNull(contactPerson.OrganisationID);
+            Assert.AreEqual(DeleteParentAction.Prevent, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            try
+            {
+                organisationTestBO.Save();
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (BusinessObjectReferentialIntegrityException ex)
+            {
+                StringAssert.Contains("There are 1 objects related through the 'ContactPeople' relationship ", ex.Message);
+            }
+        }
+        [Test]
+        public void Test_DeleteParent_WithRemovedChild_DeleteRule_PreventDelete()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidRemovedContactPerson(out contactPerson, out relationship);
+            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.Prevent;
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(1, organisationTestBO.ContactPeople.RemovedBusinessObjects.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.RemovedBusinessObjects[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsFalse(contactPerson.Status.IsNew);
+            Assert.IsNull(contactPerson.OrganisationID);
+            Assert.AreEqual(DeleteParentAction.Prevent, relationship.DeleteParentAction);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            organisationTestBO.Save();
+            //---------------Test Result -----------------------
+            Assert.IsNull(contactPerson.OrganisationID);
+            Assert.IsFalse(contactPerson.Status.IsNew, "Should not be new");
+            Assert.IsFalse(contactPerson.Status.IsDirty, "Should not be dirty");
+            Assert.IsFalse(contactPerson.Status.IsDeleted, "Should not be deleted");
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+        }
+        [Test]
+        public void Test_DeleteParent_WithRemovedChild_DeleteRule_Deref()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidRemovedContactPerson(out contactPerson, out relationship);
+            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DereferenceRelated;
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(1, organisationTestBO.ContactPeople.RemovedBusinessObjects.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.RemovedBusinessObjects[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsFalse(contactPerson.Status.IsNew);
+            Assert.IsNull(contactPerson.OrganisationID);
+            Assert.AreEqual(DeleteParentAction.DereferenceRelated, relationship.DeleteParentAction);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            organisationTestBO.Save();
+            //---------------Test Result -----------------------
+            Assert.IsNull(contactPerson.OrganisationID);
+            Assert.IsFalse(contactPerson.Status.IsNew, "Should not be new");
+            Assert.IsFalse(contactPerson.Status.IsDirty, "Should not be dirty");
+            Assert.IsFalse(contactPerson.Status.IsDeleted, "Should not be deleted");
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+        }
+        [Test]
+        public void Test_DeleteParent_WithRemovedChild_DeleteRule_Delete()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneValidRemovedContactPerson(out contactPerson, out relationship);
+            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DeleteRelated;
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(1, organisationTestBO.ContactPeople.RemovedBusinessObjects.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.RemovedBusinessObjects[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsFalse(contactPerson.Status.IsNew);
+            Assert.IsNull(contactPerson.OrganisationID);
+            Assert.AreEqual(DeleteParentAction.DeleteRelated, relationship.DeleteParentAction);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            organisationTestBO.Save();
+            //---------------Test Result -----------------------
+            Assert.IsNull(contactPerson.OrganisationID);
+            Assert.IsFalse(contactPerson.Status.IsNew, "Should not be new");
+            Assert.IsFalse(contactPerson.Status.IsDirty, "Should not be dirty");
+            Assert.IsFalse(contactPerson.Status.IsDeleted, "Should not be deleted");
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.AddedBusinessObjects.Count);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+        }
+
+        [Test]
+        public void Test_DeleteParent_WithMark4Child_DeleteRule_DeRefRelated()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneMark4DeleteContactPerson(out contactPerson, out relationship);
+            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DereferenceRelated;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, organisationTestBO.ContactPeople.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.MarkedForDeleteBusinessObjects[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsFalse(contactPerson.Status.IsNew);
+            Assert.IsTrue(contactPerson.Status.IsDirty, "Should be dirty");
+            Assert.IsTrue(contactPerson.Status.IsDeleted, "Should b deleted");
+            Assert.IsNotNull(contactPerson.OrganisationID);
+            Assert.AreEqual(DeleteParentAction.DereferenceRelated, relationship.DeleteParentAction);
+//                        contactPerson.Updated += delegate(object sender, BOEventArgs e)
+//                                               {
+//                                                   string aa = "";
+//                                               };
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            organisationTestBO.Save();
+            //---------------Test Result -----------------------
+//            Assert.IsNull(contactPerson.OrganisationID);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.MarkedForDeleteBusinessObjects.Count);
+            Assert.IsTrue(contactPerson.Status.IsNew, "Should not be permanetly deleted");
+            Assert.IsTrue(contactPerson.Status.IsDeleted, "Should be permanetly deleted");
+            //Assert.IsFalse(contactPerson.Status.IsDirty, "Should not be dirty (permanetly deleted)");           
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+        }
+        [Test]
+        public void Test_DeleteParent_WithMark4Child_DeleteRule_DeleteRelated()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneMark4DeleteContactPerson(out contactPerson, out relationship);
+            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DeleteRelated;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, organisationTestBO.ContactPeople.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople.MarkedForDeleteBusinessObjects[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsFalse(contactPerson.Status.IsNew);
+            Assert.IsTrue(contactPerson.Status.IsDirty, "Should be dirty");
+            Assert.IsTrue(contactPerson.Status.IsDeleted, "Should b deleted");
+            Assert.IsNotNull(contactPerson.OrganisationID);
+            Assert.AreEqual(DeleteParentAction.DeleteRelated, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            organisationTestBO.Save();
+            //---------------Test Result -----------------------
+//            Assert.IsNull(contactPerson.OrganisationID);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.MarkedForDeleteBusinessObjects.Count);
+            Assert.IsTrue(contactPerson.Status.IsNew, "Should not be permanetly deleted");
+            Assert.IsTrue(contactPerson.Status.IsDeleted, "Should be permanetly deleted");
+            //Assert.IsFalse(contactPerson.Status.IsDirty, "Should not be dirty (permanetly deleted)");           
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+        }
+        [Test]
+        public void Test_DeleteParent_WithPersistedChild_DeleteRule_DeleteRelated()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithPersistedContactPerson(out contactPerson, out relationship);
+            ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DeleteRelated;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, organisationTestBO.ContactPeople.Count);
+            Assert.AreEqual(contactPerson, organisationTestBO.ContactPeople[0]);
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsFalse(contactPerson.Status.IsNew);
+            Assert.IsFalse(contactPerson.Status.IsDirty, "Should be dirty");
+            Assert.IsFalse(contactPerson.Status.IsDeleted, "Should b deleted");
+            Assert.IsNotNull(contactPerson.OrganisationID);
+            Assert.AreEqual(DeleteParentAction.DeleteRelated, relationship.DeleteParentAction);
+            //---------------Execute Test ----------------------
+            organisationTestBO.MarkForDelete();
+            organisationTestBO.Save();
+            //---------------Test Result -----------------------
+//            Assert.IsNull(contactPerson.OrganisationID);
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.MarkedForDeleteBusinessObjects.Count);
+            Assert.IsTrue(contactPerson.Status.IsNew, "Should not be permanetly deleted");
+            Assert.IsTrue(contactPerson.Status.IsDeleted, "Should be permanetly deleted");
+            //Assert.IsFalse(contactPerson.Status.IsDirty, "Should not be dirty (permanetly deleted)");           
+            Assert.AreEqual(0, organisationTestBO.ContactPeople.Count);
+        }
+        private static OrganisationTestBO CreateSavedOrganisation_WithOneValidAddedContactPerson(out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
+        {
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            contactPerson = ContactPersonTestBO.CreateSavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            cpCol.Add(contactPerson);
+            return organisationTestBO;
+        }
+        private static OrganisationTestBO CreateSavedOrganisation_WithOneMark4DeleteContactPerson(out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
+        {
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            contactPerson = ContactPersonTestBO.CreateSavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            cpCol.Add(contactPerson);
+            cpCol.SaveAll();
+            contactPerson.MarkForDelete();
+            return organisationTestBO;
+        }
+        private static OrganisationTestBO CreateSavedOrganisation_WithPersistedContactPerson(out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
+        {
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            contactPerson = ContactPersonTestBO.CreateSavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            cpCol.Add(contactPerson);
+            cpCol.SaveAll();
+            return organisationTestBO;
+        }
+        private static OrganisationTestBO CreateSavedOrganisation_WithOneValidRemovedContactPerson(out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
+        {
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            relationship = GetAssociationRelationship(organisationTestBO, out cpCol);
+            contactPerson = ContactPersonTestBO.CreateSavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
+            cpCol.Add(contactPerson);
+            cpCol.SaveAll();
+            cpCol.Remove(contactPerson);
+            return organisationTestBO;
+        }
+        #endregion
 
     }
 }

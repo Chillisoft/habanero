@@ -327,14 +327,18 @@ namespace Habanero.BO
 
         internal void AddDirtyChildrenToTransactionCommitter(TransactionCommitter transactionCommitter)
         {
+            
             foreach (RelationshipBase relationship in this)
             {
-                if (!(relationship.DeleteParentAction == DeleteParentAction.DeleteRelated && this._bo.Status.IsDeleted ))
-                {
-                    relationship.AddDirtyChildrenToTransactionCommitter(transactionCommitter);
-                }
+//                if (BoIsDeletedAndDeleteActionIsDeleteRelated(relationship)) continue;
+                relationship.AddDirtyChildrenToTransactionCommitter(transactionCommitter);
             }
         }
+//
+//        private bool BoIsDeletedAndDeleteActionIsDeleteRelated(IRelationship relationship)
+//        {
+//            return (this._bo.Status.IsDeleted && relationship.DeleteParentAction == DeleteParentAction.DeleteRelated );
+//        }
 
         internal void DereferenceChildren(TransactionCommitter committer) {
             foreach (RelationshipBase relationship in this)

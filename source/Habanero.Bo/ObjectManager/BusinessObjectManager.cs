@@ -268,6 +268,7 @@ namespace Habanero.BO
         /// </summary>
         public void ClearLoadedObjects()
         {
+            if (_loadedBusinessObjects.Count == 0) return;
             string[] keysArray = new string[_loadedBusinessObjects.Count];
             _loadedBusinessObjects.Keys.CopyTo(keysArray, 0);
             foreach (string key in keysArray)

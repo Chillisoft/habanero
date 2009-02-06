@@ -215,7 +215,7 @@ namespace Habanero.BO.ClassDefinition
         /// Provides specific instructions with regards to deleting a parent
         /// object.  See the DeleteParentAction enumeration for more detail.
         /// </summary>
-        public DeleteParentAction DeleteParentAction { get; protected set; }
+        public DeleteParentAction DeleteParentAction { get; protected internal set; }
 
         ///<summary>
         /// The order by clause that the related object will be sorted by.

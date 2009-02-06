@@ -58,17 +58,33 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void CheckCanDeleteWithSomePrevents()
+        public void CheckCanDeleteWithSomePrevents_NotInPersisted()
         {
+            //-----------Setup test---------------------------------
             TestBO1 testBO1 = PopulateObjectWithSomePrevents();
             string result;
+            //-----------Execute test-------------------------------
             bool canDelete = DeleteHelper.CheckCanDelete(testBO1, out result);
+            //-----------Assert Result------------------------------
             Assert.IsFalse(canDelete, "Should prevent delete.");
             Assert.AreEqual("Cannot delete this 'TestBO1' for the following reasons:" + Environment.NewLine +
                     "There are 7 objects related through the 'MyBO2.MyPreventBO3' relationship that need to be deleted first.",
                     result);
         }
-
+        [Test]
+        public void CheckCanDeleteWithSomePrevents_InPersisted()
+        {
+            //-----------Setup test---------------------------------
+            TestBO1 testBO1 = PopulateObjectWithSomePreventsInPersisted();
+            string result;
+            //-----------Execute test-------------------------------
+            bool canDelete = DeleteHelper.CheckCanDelete(testBO1, out result);
+            //-----------Assert Result------------------------------
+            Assert.IsFalse(canDelete, "Should prevent delete.");
+            Assert.AreEqual("Cannot delete this 'TestBO1' for the following reasons:" + Environment.NewLine +
+                    "There are 7 objects related through the 'MyBO2.MyPreventBO3' relationship that need to be deleted first.",
+                    result);
+        }
 
         [Test]
         public void CheckCanDeleteWithNoPrevents()
@@ -81,9 +97,24 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void CheckCanDeleteWithTieredPrevents()
+        public void CheckCanDeleteWithTieredPrevents_NotInPersisted()
         {
             TestBO1 testBO1 = PopulateObjectWithTieredPrevents();
+            //-----------Execute test-------------------------------
+            string result;
+            bool canDelete = DeleteHelper.CheckCanDelete(testBO1, out result);
+            //-----------------Assert Result-----------------------
+            Assert.IsFalse(canDelete, "Should prevent delete.");
+            Assert.AreEqual("Cannot delete this 'TestBO1' for the following reasons:" + Environment.NewLine +
+                    "There are 9 objects related through the 'MyBO2.MyBO3.MyBO4.MyPreventBO5' relationship that need to be deleted first." + Environment.NewLine +
+                    "There are 7 objects related through the 'MyBO2.MyPreventBO3' relationship that need to be deleted first." + Environment.NewLine +
+                    "There are 1 objects related through the 'MyBO2.MyBO3.MyBO4.MyBO5.MyBO6.MyPreventBO7' relationship that need to be deleted first.",
+                    result);
+        }
+        [Test]
+        public void CheckCanDeleteWithTieredPrevents_InPersisted()
+        {
+            TestBO1 testBO1 = PopulateObjectWithTieredPrevents_InPersisted();
             string result;
             bool canDelete = DeleteHelper.CheckCanDelete(testBO1, out result);
             Assert.IsFalse(canDelete, "Should prevent delete.");
@@ -107,6 +138,18 @@ namespace Habanero.Test.BO
             AddRelatedObjects<TestBO3>((TestBO)children[1], "MyBO3", 2);
             AddRelatedObjects<TestBO3>((TestBO)children[1], "MyPreventBO3", 4);
             AddRelatedObjects<TestBO3>((TestBO)children[2], "MyPreventBO3", 2);
+            return testBO1;
+        }
+        private static TestBO1 PopulateObjectWithSomePreventsInPersisted()
+        {
+            TestBO1 testBO1 = new TestBO1 {MyBoID = "1"};
+            testBO1.SetStatus(BOStatus.Statuses.isNew, false);
+            IBusinessObjectCollection children = AddRelatedObjects<TestBO2>(testBO1, "MyBO2", 3);
+            AddRelatedObjectsToPersisted<TestBO3>((TestBO)children[0], "MyBO3", 2);
+            AddRelatedObjectsToPersisted<TestBO3>((TestBO)children[0], "MyPreventBO3", 1);
+            AddRelatedObjectsToPersisted<TestBO3>((TestBO)children[1], "MyBO3", 2);
+            AddRelatedObjectsToPersisted<TestBO3>((TestBO)children[1], "MyPreventBO3", 4);
+            AddRelatedObjectsToPersisted<TestBO3>((TestBO)children[2], "MyPreventBO3", 2);
             return testBO1;
         }
 
@@ -149,6 +192,33 @@ namespace Habanero.Test.BO
 
             return testBO1;
         }
+        private static TestBO1 PopulateObjectWithTieredPrevents_InPersisted()
+        {
+            TestBO1 testBO1 = new TestBO1();
+            testBO1.MyBoID = "1";
+            IBusinessObjectCollection children2 = AddRelatedObjectsToPersisted<TestBO2>(testBO1, "MyBO2", 3);
+            IBusinessObjectCollection children3 = AddRelatedObjectsToPersisted<TestBO3>((TestBO)children2[0], "MyBO3", 2);
+            IBusinessObjectCollection children4 = AddRelatedObjectsToPersisted<TestBO4>((TestBO)children3[0], "MyBO4", 1);
+            AddRelatedObjectsToPersisted<TestBO5>((TestBO)children4[0], "MyPreventBO5", 1);
+            AddRelatedObjectsToPersisted<TestBO3>((TestBO)children2[0], "MyPreventBO3", 1);
+            AddRelatedObjectsToPersisted<TestBO3>((TestBO)children2[1], "MyBO3", 2);
+            AddRelatedObjectsToPersisted<TestBO3>((TestBO)children2[1], "MyPreventBO3", 4);
+            AddRelatedObjectsToPersisted<TestBO3>((TestBO)children2[2], "MyPreventBO3", 2);
+            children3 = AddRelatedObjectsToPersisted<TestBO3>((TestBO)children2[2], "MyBO3", 3);
+            children4 = AddRelatedObjectsToPersisted<TestBO4>((TestBO)children3[0], "MyBO4", 2);
+            AddRelatedObjectsToPersisted<TestBO5>((TestBO)children4[0], "MyPreventBO5", 1);
+            children4 = AddRelatedObjectsToPersisted<TestBO4>((TestBO)children3[1], "MyBO4", 2);
+            IBusinessObjectCollection children5 = AddRelatedObjectsToPersisted<TestBO5>((TestBO)children4[1], "MyBO5", 2);
+            IBusinessObjectCollection children6 = AddRelatedObjectsToPersisted<TestBO6>((TestBO)children5[1], "MyBO6", 2);
+            AddRelatedObjectsToPersisted<TestBO7>((TestBO)children6[1], "MyBO7", 2);
+            AddRelatedObjectsToPersisted<TestBO7>((TestBO)children6[1], "MyPreventBO7", 1);
+            AddRelatedObjectsToPersisted<TestBO5>((TestBO)children4[1], "MyPreventBO5", 3);
+            children4 = AddRelatedObjectsToPersisted<TestBO4>((TestBO)children3[2], "MyBO4", 4);
+            AddRelatedObjectsToPersisted<TestBO5>((TestBO)children4[0], "MyBO5", 2);
+            AddRelatedObjectsToPersisted<TestBO5>((TestBO)children4[0], "MyPreventBO5", 4);
+
+            return testBO1;
+        }
 
         private static IBusinessObjectCollection AddRelatedObjects<T>(TestBO testBO,
             string relationshipName, int numberOfBos)
@@ -170,6 +240,30 @@ namespace Habanero.Test.BO
                 testBO2.MyBoID = "2." + TestUtil.GetRandomString();
                 testBO2.MyParentBoID = testBO.MyParentBoID;
                 children.Add(testBO2);
+            }
+            return children;
+        }
+        private static IBusinessObjectCollection AddRelatedObjectsToPersisted<T>(TestBO testBO,
+            string relationshipName, int numberOfBos)
+            where T : TestBO, new()
+        {
+            return AddRelatedObjectsToPersisted<T>(testBO, relationshipName, numberOfBos, false);
+        }
+
+        private static IBusinessObjectCollection AddRelatedObjectsToPersisted<T>(TestBO testBO,
+            string relationshipName, int numberOfBos, bool isNew)
+            where T : TestBO, new()
+        {
+            IBusinessObjectCollection children = testBO.Relationships.GetRelatedCollection(relationshipName);
+            for (int count = 1; count <= numberOfBos; count++)
+            {
+                
+                T testBO2 = new T();
+                testBO2.SetStatus(BOStatus.Statuses.isNew, isNew);
+                testBO2.MyBoID = "2." + TestUtil.GetRandomString();
+                testBO2.MyParentBoID = testBO.MyParentBoID;
+                children.Add(testBO2);
+                children.PersistedBusinessObjects.Add(testBO2);
             }
             return children;
         }
