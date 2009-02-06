@@ -61,7 +61,7 @@ namespace Habanero.UI.Base
 	public class ValidationProvider : IExtenderProvider
 	{
         private readonly Dictionary<IControlHabanero, List<ValidationRule>> _ValidationRules = new Dictionary<IControlHabanero, List<ValidationRule>>();
-		private readonly ValidationRule				_DefaultValidationRule	= new ValidationRule();
+		private readonly ValidationRule	_DefaultValidationRule	= new ValidationRule();
 	    private readonly IErrorProvider _ErrorProvider;
 
 	    public ValidationProvider(IErrorProvider errorProvider)
