@@ -147,7 +147,7 @@ namespace Habanero.Test.BO
             dbConnMock.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection(),
                                        new object[] {});
             PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
-            DatabaseLookupList source = new DatabaseLookupList(Sql, 100);
+            DatabaseLookupList source = new DatabaseLookupList(Sql, 100, null, null, false);
             source.PropDef = propDef;
             Dictionary<string, string> col = source.GetLookupList(conn);
             Thread.Sleep(250);
@@ -155,5 +155,40 @@ namespace Habanero.Test.BO
             Assert.AreNotSame(col2, col);
             dbConnMock.Verify();
         }
+
+        [Test]
+        public void Test_LimitToList_Attribute_Default()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            DatabaseLookupList source = new DatabaseLookupList("");
+            //---------------Test Result -----------------------
+            Assert.IsFalse(source.LimitToList);
+        }
+
+        [Test]
+        public void Test_Constructor_WithLimitToList_AsTrue()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            DatabaseLookupList source = new DatabaseLookupList("", 10000, null, null, true);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(source.LimitToList);
+        }
+
+        [Test]
+        public void Test_Constructor_WithLimitToList_AsFalse()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            DatabaseLookupList source = new DatabaseLookupList("", 10000, null, null, false);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(source.LimitToList);
+        }
+
     }
 }

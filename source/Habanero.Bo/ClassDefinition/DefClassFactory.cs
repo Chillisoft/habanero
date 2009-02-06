@@ -42,9 +42,9 @@ namespace Habanero.BO.ClassDefinition
 			return new ClassDef(assemblyName, className, displayName, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol);
 		}
 
-		public DatabaseLookupList CreateDatabaseLookupList(string sqlString, int timeout, string assemblyName, string className)
+		public DatabaseLookupList CreateDatabaseLookupList(string sqlString, int timeout, string assemblyName, string className, bool limitToList)
 		{
-			return new DatabaseLookupList(sqlString, timeout, assemblyName, className);
+			return new DatabaseLookupList(sqlString, timeout, assemblyName, className, limitToList);
 		}
 
 		public KeyDef CreateKeyDef(string keyName)

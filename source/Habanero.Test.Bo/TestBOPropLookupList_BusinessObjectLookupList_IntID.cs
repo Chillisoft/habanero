@@ -673,18 +673,17 @@ namespace Habanero.Test.BO
         private readonly IBusinessObjectCollection _boCollection;
 
         public BusinessObjectLookupListStub(Type boType, IBusinessObjectCollection boCollection, string sort)
-            : base(boType, "", sort)
+            : base(boType, "", sort, true)
         {
             _boCollection = boCollection;
         }
 
         public BusinessObjectLookupListStub(Type type, IBusinessObjectCollection boCollection)
-            : base(type)
+            : this(type, boCollection, "")
         {
-            _boCollection = boCollection;
         }
 
-        public BusinessObjectLookupListStub(Type type, string criteria, string sort) : base(type, criteria, sort)
+        public BusinessObjectLookupListStub(Type type, string criteria, string sort) : base(type, criteria, sort, true)
         {
         }
 

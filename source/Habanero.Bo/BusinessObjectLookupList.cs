@@ -147,11 +147,15 @@ namespace Habanero.BO
         /// <param name="sort">The property to sort on.
         /// The possible formats are: "property", "property asc",
         /// "property desc" and "property des".</param>
-        public BusinessObjectLookupList(Type type, string criteria, string sort):this(type)
+        /// <param name="limitToList">The specification of whether to create a validating lookup or not.</param>
+        public BusinessObjectLookupList(Type type, string criteria, string sort, bool limitToList)
+            : this(type)
         {
             _criteriaString = criteria;
             _sortString = sort;
+            _limitToList = limitToList;
         }
+
         #endregion Constructors
 
         #region Properties

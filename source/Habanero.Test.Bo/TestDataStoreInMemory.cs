@@ -269,5 +269,67 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsTrue(dataStore.AllObjects.ContainsKey(contactPerson.ID));
         }
+
+        [Test]
+        public void Test_MutableKeyObject_TwoObjectsWithSameFieldNameAndValueAsPrimaryKey()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BOWithIntID_DifferentType.LoadClassDefWithIntID();
+            BOWithIntID.LoadClassDefWithIntID();
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            BORegistry.DataAccessor = new DataAccessorInMemory(dataStore);
+            new Car();
+            BOWithIntID boWithIntID = new BOWithIntID();
+            boWithIntID.IntID = TestUtil.GetRandomInt();
+            boWithIntID.Save();
+            BOWithIntID_DifferentType intID_DifferentType = new BOWithIntID_DifferentType();
+            intID_DifferentType.IntID = TestUtil.GetRandomInt();
+            intID_DifferentType.Save();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, dataStore.Count);
+            //---------------Execute Test ----------------------
+//            dataStore.Add(intID_DifferentType);
+//            // in the save process the ID is updated to the persisted field values, so the hash of the ID changes
+//            // this is why the object is removed and re-added to the BusinessObjectManager (to ensure the dictionary
+//            // of objects is hashed on the correct, updated value.
+//            intID_DifferentType.Save();
+            IBusinessObject returnedBOWitID = dataStore.AllObjects[boWithIntID.ID];
+            IBusinessObject returnedBOWitID_diffType = dataStore.AllObjects[intID_DifferentType.ID];
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(boWithIntID, returnedBOWitID);
+            Assert.AreSame(intID_DifferentType, returnedBOWitID_diffType);
+        }
+
+        [Test]
+        public void TestMutableCompositeKeyObject_TwoObjectsWithSameFieldNameAndValueAsPrimaryKey()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BOWithIntID_DifferentType.LoadClassDefWithIntID_CompositeKey();
+            BOWithIntID.LoadClassDefWithIntID_WithCompositeKey();
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            BORegistry.DataAccessor = new DataAccessorInMemory(dataStore);
+            new Car();
+            BOWithIntID boWithIntID = new BOWithIntID {IntID = TestUtil.GetRandomInt()};
+            boWithIntID.Save();
+            BOWithIntID_DifferentType intID_DifferentType = new BOWithIntID_DifferentType();
+            intID_DifferentType.IntID = boWithIntID.IntID;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            intID_DifferentType.Save();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, dataStore.Count);
+
+            Assert.IsTrue(dataStore.AllObjects.ContainsKey(boWithIntID.ID));
+            Assert.IsTrue(dataStore.AllObjects.ContainsKey(intID_DifferentType.ID));
+
+            IBusinessObject returnedBOWitID = dataStore.AllObjects[boWithIntID.ID];
+            IBusinessObject returnedBOWitID_diffType = dataStore.AllObjects[intID_DifferentType.ID];
+
+            Assert.AreSame(boWithIntID, returnedBOWitID);
+            Assert.AreSame(intID_DifferentType, returnedBOWitID_diffType);
+        }
     }
 }

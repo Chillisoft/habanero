@@ -187,7 +187,7 @@ namespace Habanero.Test.BO.ClassDefinition
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             MyBO.LoadDefaultClassDef();
-            PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = new BusinessObjectLookupList(typeof(MyBO)) };
+            PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = new BusinessObjectLookupList(typeof(MyBO), "", "", true) };
             Guid invalidValue = Guid.NewGuid();
             //---------------Assert Precondition----------------
             
@@ -232,7 +232,7 @@ namespace Habanero.Test.BO.ClassDefinition
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             BOWithIntID.LoadClassDefWithIntID();
-            PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null) { LookupList = new BusinessObjectLookupList(typeof(BOWithIntID)) };
+            PropDef propDef = new PropDef("PropName", typeof(int), PropReadWriteRule.ReadWrite, null) { LookupList = new BusinessObjectLookupList(typeof(BOWithIntID), "", "", true) };
             const int invalidValue = 4555;
             //---------------Assert Precondition----------------
             
@@ -961,7 +961,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsInstanceOfType(typeof(BOPropLookupList), prop);
         }
 
-        [Ignore("//TODO Brett 05 Feb 2009: Working on this now")]
+        //[Ignore("//TODO Brett 05 Feb 2009: Working on this now")]
         [Test]
         public void Test_TestLookupListCriteria()
         {
@@ -973,7 +973,8 @@ namespace Habanero.Test.BO.ClassDefinition
 
             //---------------Assert Precondition----------------
             Assert.IsTrue(propDef.HasLookupList());
-            //Assert.IsFalse(propDef.LookupList.LimitToList);
+            Assert.AreEqual(0, propDef.LookupList.GetLookupList().Count);
+            Assert.IsFalse(propDef.LookupList.LimitToList);
             //---------------Execute Test ----------------------
             string errorMessage = "";
             bool isItemInList = propDef.CallIsLookupListItemValid(TestUtil.GetRandomInt(), ref errorMessage);

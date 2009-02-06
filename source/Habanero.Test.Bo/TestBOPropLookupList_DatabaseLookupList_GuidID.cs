@@ -264,7 +264,7 @@ namespace Habanero.Test.BO
         private static PropDef GetPropDef_Guid_WithLookupList()
         {
             PropDef propDef = new PropDef("PropName", typeof (Guid), PropReadWriteRule.ReadWrite, null);
-            propDef.LookupList = new DatabaseLookupList(_sql);
+            propDef.LookupList = new DatabaseLookupList(_sql, 10000, "", "", true);
             propDef.LookupList.GetLookupList();
             propDef.LookupList.GetIDValueLookupList();
             return propDef;

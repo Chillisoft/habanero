@@ -208,7 +208,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             int value = TestUtil.GetRandomInt();
-            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID.LoadClassDefWithIntID();
             BOWithIntID bo = new BOWithIntID { TestField = "PropValue", IntID = value };
             object expectedID = bo.ID;
             
@@ -226,7 +226,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             int value = TestUtil.GetRandomInt();
-            ClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
+            BOWithIntID.LoadClassDefWithIntID();
             BOWithIntID bo = new BOWithIntID { TestField = "PropValue", IntID = value };
             BOPrimaryKey key = BOPrimaryKey.CreateWithValue(typeof(BOWithIntID), value);
             //---------------Assert PreConditions---------------       

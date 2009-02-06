@@ -877,7 +877,7 @@ namespace Habanero.Test.BO
         {
             ContactPersonTestBO.LoadDefaultClassDef();
             PropDef propDef = new PropDef("PropName", typeof (Guid), PropReadWriteRule.ReadWrite, null)
-                                  {LookupList = new BusinessObjectLookupList(typeof (ContactPersonTestBO))};
+                                  {LookupList = new BusinessObjectLookupList(typeof (ContactPersonTestBO), "", "", true)};
             BOProp boProp = new BOPropLookupList(propDef);
             boProp.InitialiseProp(_validBusinessObject.ID.GetAsGuid());
             ContactPersonTestBO boWithNullToString = new ContactPersonTestBO();
@@ -919,7 +919,7 @@ namespace Habanero.Test.BO
         [Test]
         public void Test_SetValue_BusinessObject_InheritedChild_BONotInList()
         {
-            PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = new BusinessObjectLookupList(typeof(Shape)) };
+            PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null) { LookupList = new BusinessObjectLookupList(typeof(Shape), "", "", true) };
             BOProp boProp = new BOPropLookupList(propDef);
             Circle inheritedBO = new Circle();
             BusinessObjectManager.Instance.ClearLoadedObjects();

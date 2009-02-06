@@ -212,6 +212,7 @@
     <Compile Include="BusinessObjectLoader\TestSourceDB.cs" />
     <Compile Include="TestPropertyLink.cs" />
     <Compile Include="TestRelKey.cs" />
+    <Compile Include="TestSimpleLookupList.cs" />
     <Compile Include="TransactionCommitters\TestTransactionalBusinessObject.cs" />
     <Compile Include="TransactionCommitters\TestTransactionCommitter.cs" />
     <Compile Include="Relationship\TestMultipleRelationship.cs" />

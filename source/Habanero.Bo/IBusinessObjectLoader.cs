@@ -24,7 +24,6 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
 {
-
     /// <summary>
     /// Defines methods for loading BusinessObjects and BusinessObjectCollections for any datastore e.g. Database 
     /// XML File, CSV.  For any new type of data store (eg file based, or TCP, or

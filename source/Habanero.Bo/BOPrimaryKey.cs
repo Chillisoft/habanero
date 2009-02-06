@@ -85,6 +85,7 @@ namespace Habanero.BO
         /// <returns>Returns a hashcode integer</returns>
         public override int GetHashCode()
         {
+//            return AsString_CurrentValue().GetHashCode();
             return GetAsValue().GetHashCode();
             //if (_newObjectID != Guid.Empty) return NewObjectID().GetHashCode();
             //return GetObjectId().GetHashCode();

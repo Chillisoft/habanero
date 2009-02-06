@@ -701,6 +701,7 @@ namespace Habanero.BO.ClassDefinition
         protected bool IsLookupListItemValid(object propValue, ref string errorMessage)
         {
             if (!this.HasLookupList()) return true;
+            if (!this.LookupList.LimitToList) return true;
 
             if (propValue == null || string.IsNullOrEmpty(Convert.ToString(propValue))) return true;
 
