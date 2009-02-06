@@ -23,11 +23,8 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
-using Habanero.Util;
-using NMock;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
 
 namespace Habanero.Test.BO
 {
@@ -79,6 +76,9 @@ namespace Habanero.Test.BO
             MyBO bo = new MyBO();
             //---------------Test Result -----------------------
             Assert.AreEqual(testPropDefault, bo.TestProp);
+
+
+
         }
 
         [Test]

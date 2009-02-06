@@ -36,6 +36,16 @@ namespace Habanero.UI.VWG
     /// </summary>
     public class FormExceptionNotifier : IExceptionNotifier
     {
+        private string exceptionMessage ;
+
+        ///<summary>
+        /// The last exception logged by the exception notifier
+        ///</summary>
+        public string ExceptionMessage
+        {
+            get { return exceptionMessage; }
+        }
+
         /// <summary>
         /// Displays a dialog with exception information to the user
         /// </summary>
@@ -44,6 +54,7 @@ namespace Habanero.UI.VWG
         /// <param name="title">The title</param>
         public void Notify(Exception ex, string furtherMessage, string title)
         {
+            exceptionMessage = furtherMessage + Environment.NewLine + ex.Message;
             if (ex is UserException || ex is BusinessObjectException)
             {
                 MessageBox.Show(furtherMessage + Environment.NewLine + ex.Message, title);

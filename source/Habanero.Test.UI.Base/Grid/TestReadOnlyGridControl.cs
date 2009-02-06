@@ -59,6 +59,14 @@ namespace Habanero.Test.UI.Base
                 throw new Exception(furtherMessage, ex);
             }
 
+            ///<summary>
+            /// The last exception logged by the exception notifier
+            ///</summary>
+            public string ExceptionMessage
+            {
+                get { throw new NotImplementedException(); }
+            }
+
             #endregion
         }
 
@@ -1854,6 +1862,14 @@ namespace Habanero.Test.UI.Base
             public void Notify(Exception ex, string furtherMessage, string title)
             {
                 _notified = true;
+            }
+
+            ///<summary>
+            /// The last exception logged by the exception notifier
+            ///</summary>
+            public string ExceptionMessage
+            {
+                get { throw new NotImplementedException(); }
             }
 
             public bool Notified

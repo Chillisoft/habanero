@@ -99,7 +99,10 @@ namespace Habanero.BO
                                      + developerMessage;
                 throw new HabaneroDeveloperException(userMessage, developerMessage);
             }
-            _loadedBusinessObjects.Add(businessObject.ID.AsString_CurrentValue(), new WeakReference(businessObject));
+            lock (_loadedBusinessObjects)
+            {
+                _loadedBusinessObjects.Add(businessObject.ID.AsString_CurrentValue(), new WeakReference(businessObject));
+            }
             businessObject.IDUpdated += _updateIDEventHandler; //Register for ID Updated event this event is fired
             // if any of the properties that make up the primary key are changed/Updated this event is fires.
         }
@@ -220,7 +223,13 @@ namespace Habanero.BO
         {
             if (Contains(objectID) && ReferenceEquals(businessObject, this[objectID]))
             {
-                _loadedBusinessObjects.Remove(objectID);
+                lock (_loadedBusinessObjects)
+                {
+
+
+                        _loadedBusinessObjects.Remove(objectID);
+   
+                }
                 DeregisterForIDUpdatedEvent(businessObject);
             }
         }
@@ -288,24 +297,25 @@ namespace Habanero.BO
         /// <typeparam name="T">The Type of business object to find</typeparam>
         /// <param name="criteria">The Criteria to match on</param>
         /// <returns>A collection of all loaded matching business objects</returns>
-        public BusinessObjectCollection<T> Find<T>(Criteria criteria)
-             where T : class, IBusinessObject, new()
+        public BusinessObjectCollection<T> Find<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
-            BusinessObjectCollection<T> collection = new BusinessObjectCollection<T>();
-            WeakReference[] valueArray = new WeakReference[_loadedBusinessObjects.Count];
-            _loadedBusinessObjects.Values.CopyTo(valueArray, 0);
-            foreach (WeakReference weakReference in valueArray)
+            lock (_loadedBusinessObjects)
             {
-                if (!WeakReferenceIsAlive(weakReference)) continue;
-
-                BusinessObject bo = (BusinessObject)weakReference.Target;
-                if (bo is T && (criteria == null || criteria.IsMatch(bo, false)))
+                BusinessObjectCollection<T> collection = new BusinessObjectCollection<T>();
+                WeakReference[] valueArray = new WeakReference[_loadedBusinessObjects.Count];
+                _loadedBusinessObjects.Values.CopyTo(valueArray, 0);
+                foreach (WeakReference weakReference in valueArray)
                 {
-                    collection.Add(bo as T);
-                }
-            }
+                    if (!WeakReferenceIsAlive(weakReference)) continue;
 
-            return collection;
+                    BusinessObject bo = (BusinessObject) weakReference.Target;
+                    if (bo is T && (criteria == null || criteria.IsMatch(bo, false)))
+                    {
+                        collection.Add(bo as T);
+                    }
+                }
+                return collection;
+            }
         }
     }
 }
