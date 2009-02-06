@@ -183,17 +183,17 @@ namespace Habanero.BO
         /// <returns>Returns an object</returns>
         public object GetAsValue()
         {
-            List<string> list = new List<string>();
             BOPropCol boPropCol = this.GetBOPropCol();
             foreach (BOProp  boProp in boPropCol)
             {
+                //HACK: This is really wierd code the boPropCol does not have an int accessor.
+                // there is therefore no way to get hte first item in the col other than this.
                 if (boPropCol.Count == 1)
                 {
                     return boProp.Value;
                 }
-                list.Add(boProp.PropertyName + "=" + boProp.Value);
             }
-            return string.Join(";", list.ToArray());
+            return this.AsString_CurrentValue();
         }
 
         ///<summary>
