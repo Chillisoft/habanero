@@ -33,5 +33,10 @@ namespace Habanero.Base
         /// <param name="furtherMessage">Any further error messages</param>
         /// <param name="title">The title</param>
         void Notify(Exception ex, string furtherMessage, string title);
+
+        ///<summary>
+        /// The last exception logged by the exception notifier
+        ///</summary>
+        string ExceptionMessage { get; }
     }
 }

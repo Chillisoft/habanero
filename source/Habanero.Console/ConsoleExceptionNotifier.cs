@@ -37,7 +37,6 @@ namespace Habanero.Console
             // TODO: Add constructor logic here
             //
         }
-
         /// <summary>
         /// Notifies the user of an exception that has occurred, by adding
         /// the error text to the console
@@ -47,8 +46,19 @@ namespace Habanero.Console
         /// <param name="title">The title</param>
         public void Notify(Exception ex, string furtherMessage, string title)
         {
+            _exceptionMessage = "Error: " + furtherMessage + "Further details: "
+                                + ExceptionUtilities.GetExceptionString(ex, 0, true);
             System.Console.Out.WriteLine("Error: " + furtherMessage);
             System.Console.Out.WriteLine("Further details: " + ExceptionUtilities.GetExceptionString(ex, 0, true));
+        }
+        private string _exceptionMessage;
+
+        ///<summary>
+        /// The last exception logged by the exception notifier
+        ///</summary>
+        public string ExceptionMessage
+        {
+            get { return _exceptionMessage; }
         }
     }
 }

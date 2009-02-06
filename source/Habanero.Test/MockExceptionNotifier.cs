@@ -35,6 +35,14 @@ namespace Habanero.Test
             _title = title;
         }
 
+        ///<summary>
+        /// The last exception logged by the exception notifier
+        ///</summary>
+        public string ExceptionMessage
+        {
+            get { return _exception.Message; }
+        }
+
         public Exception Exception
         {
             get { return _exception; }

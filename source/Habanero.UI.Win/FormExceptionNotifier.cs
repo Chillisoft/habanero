@@ -41,6 +41,15 @@ namespace Habanero.UI.Win
     public class FormExceptionNotifier : IExceptionNotifier
     {
         private static readonly IControlFactory _controlFactory = GlobalUIRegistry.ControlFactory;
+                private string _exceptionMessage ;
+
+        ///<summary>
+        /// The last exception logged by the exception notifier
+        ///</summary>
+        public string ExceptionMessage
+        {
+            get { return _exceptionMessage; }
+        }
         /// <summary>
         /// Displays a dialog with exception information to the user
         /// </summary>
@@ -50,6 +59,7 @@ namespace Habanero.UI.Win
         public void Notify(Exception ex, string furtherMessage, string title)
         {
             //new ExceptionNotifyForm(ex, furtherMessage, title).ShowDialog();
+            _exceptionMessage = furtherMessage + Environment.NewLine + ex.Message;
             if (ex is UserException)
             {
                 string message = ex.Message;
@@ -66,6 +76,8 @@ namespace Habanero.UI.Win
                 form.ShowDialog();
             }
         }
+
+
 
         /// <summary>
         /// Provides a form to display the exception message, using a "More Detail"

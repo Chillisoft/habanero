@@ -204,11 +204,11 @@ namespace Habanero.BO
         protected override void DoRefresh<T>(BusinessObjectCollection<T> collection) 
             //where T : class, IBusinessObject, new()
         {
-            if (typeof(T) == typeof(BusinessObject))
-            {
-                Refresh(collection);
-                return;
-            }
+//            if (typeof(T) == typeof(BusinessObject))
+//            {
+//                Refresh(collection);
+//                return;
+//            }
             ISelectQuery selectQuery = collection.SelectQuery;
             Criteria criteria = selectQuery.Criteria;
             OrderCriteria orderCriteria = selectQuery.OrderCriteria;
