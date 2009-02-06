@@ -2138,12 +2138,13 @@ namespace Habanero.Test.BO
         {
             //--------------- Set up test pack ------------------
             BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
             ContactPersonTestBO.LoadDefaultClassDef();
             new ContactPersonTestBO(); new ContactPersonTestBO(); new ContactPersonTestBO();
-
+            //----------------Assert preconditions ---------------
+            Assert.AreEqual(3, BusinessObjectManager.Instance.Count);
             //--------------- Execute Test ----------------------
             BusinessObjectCollection<ContactPersonTestBO> found = BusinessObjectManager.Instance.Find<ContactPersonTestBO>(null);
-
             //--------------- Test Result -----------------------
             Assert.AreEqual(3, found.Count);
 

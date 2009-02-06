@@ -64,7 +64,6 @@ namespace Habanero.BO
             {
                 throw new InvalidObjectIdException("The ObjectGuidID has already been set for this object.");
             }
-
         }
 
         /// <summary>

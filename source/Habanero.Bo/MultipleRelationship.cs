@@ -43,6 +43,9 @@ namespace Habanero.BO
 
     }
 
+    ///<summary>
+    /// The base class to be used for MultipleRelationships
+    ///</summary>
     public abstract class MultipleRelationshipBase : Relationship
     {
         protected MultipleRelationshipBase(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol) : base(owningBo, lRelDef, lBOPropCol) {}
@@ -126,6 +129,9 @@ namespace Habanero.BO
             }
         }
 
+        ///<summary>
+        /// The collection of business objects under the control of this relationship.
+        ///</summary>
         public IBusinessObjectCollection CurrentBusinessObjectCollection
         {
             get
@@ -182,8 +188,12 @@ namespace Habanero.BO
             {
                 transactionCommitter.AddBusinessObject(businessObject);
             }
-            if (this.RelationshipDef.RelationshipType == RelationshipType.Association)
+//            if (this.RelationshipDef.RelationshipType == RelationshipType.Association)
+//            {
+            if (!this.OwningBO.Status.IsDeleted)
             {
+                
+ 
                 foreach (TBusinessObject businessObject in _boCol.AddedBusinessObjects)
                 {
                     ISingleRelationship reverseRelationship = GetReverseRelationship(businessObject) as ISingleRelationship;
@@ -192,6 +202,7 @@ namespace Habanero.BO
                         transactionCommitter.AddTransaction(new TransactionalSingleRelationship_Added(reverseRelationship));
                     }
                 }
+            }
                 foreach (TBusinessObject businessObject in _boCol.RemovedBusinessObjects)
                 {
                     ISingleRelationship reverseRelationship = GetReverseRelationship(businessObject) as ISingleRelationship;
@@ -200,16 +211,19 @@ namespace Habanero.BO
                         transactionCommitter.AddTransaction(new TransactionalSingleRelationship_Removed(reverseRelationship));
                     }
                 }
-            }
+//            }
 
         }
 
         internal IList<TBusinessObject> GetDirtyChildren()
         {
             IList<TBusinessObject> dirtyChildren = new List<TBusinessObject>();
-            foreach (TBusinessObject bo in _boCol.CreatedBusinessObjects)
+            if (!_owningBo.Status.IsDeleted)
             {
-                dirtyChildren.Add(bo);
+                foreach (TBusinessObject bo in _boCol.CreatedBusinessObjects)
+                {
+                    dirtyChildren.Add(bo);
+                }
             }
             foreach (TBusinessObject bo in _boCol.MarkedForDeleteBusinessObjects)
             {

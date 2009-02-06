@@ -19,6 +19,7 @@
 
 
 using System;
+using System.Collections;
 using System.Runtime.Serialization;
 using System.Threading;
 using Habanero.Base;
@@ -963,6 +964,7 @@ namespace Habanero.BO
         {
             if (Status.IsDeleted)
             {
+                CleanUpAllRelationshipCollections();
                 SetStateAsPermanentlyDeleted();
                 BusinessObjectManager.Instance.Remove(this);
                 FireDeleted();
@@ -983,6 +985,26 @@ namespace Habanero.BO
             }
             AfterSave();
             ReleaseWriteLocks();
+        }
+
+        private void CleanUpAllRelationshipCollections()
+        {
+            if (!Status.IsDeleted) return;
+            foreach (IRelationship relationship in this.Relationships)
+            {
+                if (!(relationship is IMultipleRelationship)) continue;
+                IMultipleRelationship multipleRelationship = (IMultipleRelationship) relationship;
+
+                IList createdBos = multipleRelationship.BusinessObjectCollection.CreatedBusinessObjects;
+                while (createdBos.Count > 0)
+                {
+                    IBusinessObject businessObject = (IBusinessObject) createdBos[createdBos.Count-1];
+                    createdBos.Remove(businessObject);
+                    if (relationship.DeleteParentAction == DeleteParentAction.DereferenceRelated) continue;
+                    ((BOStatus) businessObject.Status).IsDeleted = true;
+                }
+                multipleRelationship.BusinessObjectCollection.RemovedBusinessObjects.Clear();
+            }
         }
 
         private void StorePersistedPropertyValues()
@@ -1254,4 +1276,6 @@ namespace Habanero.BO
             return false;
         }
     }
+
+
 }

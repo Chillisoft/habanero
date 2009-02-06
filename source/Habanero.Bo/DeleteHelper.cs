@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
@@ -90,15 +91,15 @@ namespace Habanero.BO
 				if (relationship == null) continue;
 				if (pair.Value == null)
 				{
-				    IBusinessObjectCollection boCol = relationship.BusinessObjectCollection;
-				    if (boCol.Count > 0)
+				    IBusinessObjectCollection businessObjects = relationship.BusinessObjectCollection;
+				    if (businessObjects.Count > 0)
 					{
 						if (!results.ContainsKey(thisRelationshipPath))
 						{
-							results.Add(thisRelationshipPath, boCol.Count);
+							results.Add(thisRelationshipPath, businessObjects.Count);
 						} else
 						{
-							results[thisRelationshipPath] += boCol.Count;
+							results[thisRelationshipPath] += businessObjects.Count;
 						}
 					}
 				}

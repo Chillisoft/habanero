@@ -224,7 +224,6 @@ namespace Habanero.BO
         protected internal bool CheckCanDelete(out string errMsg)
         {
             return DeleteHelper.CheckCanDelete(this.BusinessObject, out errMsg);
-
         }
         /// <summary>
         /// Checks whether the Wrapped business object can be Persisted.

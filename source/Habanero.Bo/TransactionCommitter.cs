@@ -127,10 +127,8 @@ namespace Habanero.BO
         ///<param name="transaction"></param>
         public void AddTransaction(ITransactional transaction)
         {
-            ITransactional foundTransactional = _originalTransactions.Find(delegate(ITransactional obj)
-            {
-                return obj.TransactionID() == transaction.TransactionID();
-            });
+            ITransactional foundTransactional = _originalTransactions.Find(
+                    obj => obj.TransactionID() == transaction.TransactionID());
             if (foundTransactional != null) return;
             _originalTransactions.Add(transaction);
         }
