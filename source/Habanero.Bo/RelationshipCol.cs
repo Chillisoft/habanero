@@ -327,32 +327,40 @@ namespace Habanero.BO
 
         internal void AddDirtyChildrenToTransactionCommitter(TransactionCommitter transactionCommitter)
         {
-            
+            if (_bo.Status.IsDeleted) return;
+
             foreach (RelationshipBase relationship in this)
             {
 //                if (BoIsDeletedAndDeleteActionIsDeleteRelated(relationship)) continue;
                 relationship.AddDirtyChildrenToTransactionCommitter(transactionCommitter);
             }
         }
+
 //
 //        private bool BoIsDeletedAndDeleteActionIsDeleteRelated(IRelationship relationship)
 //        {
 //            return (this._bo.Status.IsDeleted && relationship.DeleteParentAction == DeleteParentAction.DeleteRelated );
 //        }
 
-        internal void DereferenceChildren(TransactionCommitter committer) {
+        internal void DereferenceChildren(TransactionCommitter transactionCommitter) {
             foreach (RelationshipBase relationship in this)
             {
-                if (relationship.DeleteParentAction != DeleteParentAction.DereferenceRelated) continue;
-                relationship.DereferenceChildren(committer);
+                if (relationship.DeleteParentAction == DeleteParentAction.DereferenceRelated)
+                {
+                    relationship.DereferenceChildren(transactionCommitter);
+                }
+                relationship.DereferenceRemovedChildren(transactionCommitter);
             }
         }
         
-        internal void DeleteChildren(TransactionCommitter committer) {
+        internal void DeleteChildren(TransactionCommitter transactionCommitter) {
             foreach (RelationshipBase relationship in this)
             {
-                if (relationship.DeleteParentAction != DeleteParentAction.DeleteRelated) continue;
-                relationship.DeleteChildren(committer);
+                relationship.DeleteMarkedForDeleteChildren(transactionCommitter);
+                if (relationship.DeleteParentAction == DeleteParentAction.DeleteRelated)
+                {
+                    relationship.DeleteChildren(transactionCommitter);
+                }
             }
         }
 

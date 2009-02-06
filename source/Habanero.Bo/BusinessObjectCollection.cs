@@ -353,7 +353,10 @@ namespace Habanero.BO
             {
                 if (!this.Contains(bo))
                 {
-                    Add(bo);
+                    if (this.SelectQuery.Criteria.IsMatch(bo))
+                    {
+                        Add(bo);
+                    }
                 }
                 if (!bo.Status.IsNew && !bo.Status.IsDeleted && !this.PersistedBusinessObjects.Contains(bo))
                 {

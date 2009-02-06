@@ -41,6 +41,10 @@ namespace Habanero.BO
         ///</summary>
         IBusinessObjectCollection BusinessObjectCollection { get; }
 
+        ///<summary>
+        /// The collection of business objects under the control of this relationship.
+        ///</summary>
+        IBusinessObjectCollection CurrentBusinessObjectCollection { get; }
     }
 
     ///<summary>
@@ -86,7 +90,38 @@ namespace Habanero.BO
                 DereferenceChild(committer, bo);
             }
         }
+        internal override void DereferenceRemovedChildren(TransactionCommitter committer)
+        {
+            IList col = this.CurrentBusinessObjectCollection.RemovedBusinessObjects;
+            for (int i = col.Count - 1; i >= 0; i--)
+            {
+                IBusinessObject bo = (IBusinessObject) col[i];
+                DereferenceChild(committer, bo);
+            }
+        }
+        internal override void DeleteMarkedForDeleteChildren(TransactionCommitter committer)
+        {
+            IList col = CurrentBusinessObjectCollection.MarkedForDeleteBusinessObjects;
+            for (int i = col.Count - 1; i >= 0; i--)
+            {
+                IBusinessObject bo = (IBusinessObject) col[i];
+                DeleteChild(committer, bo);
+            }
+        }
 
+        internal override void DeleteChildren(TransactionCommitter committer)
+        {
+            IBusinessObjectCollection col = BusinessObjectCollection;
+            for (int i = col.Count - 1; i >= 0; i--)
+            {
+                IBusinessObject businessObject = col[i];
+                if (!businessObject.Status.IsNew)
+                {
+                    DeleteChild(committer, businessObject);
+                }
+
+            }
+        }
         ///<summary>
         /// Returns whether the relationship is dirty or not.
         /// A relationship is always dirty if it has Added, created, removed or deleted Related business objects.
@@ -251,17 +286,5 @@ namespace Habanero.BO
             return dirtyChildren;
         }
 
-        internal override void DeleteChildren(TransactionCommitter committer) {
-            IBusinessObjectCollection col = BusinessObjectCollection;
-            for (int i = col.Count - 1; i >= 0; i--)
-            {
-                IBusinessObject businessObject = col[i];
-                if (!businessObject.Status.IsNew)
-                {
-                    DeleteChild(committer, businessObject);
-                }
-                
-            }
-        }
     }
 }

@@ -397,6 +397,16 @@ namespace Habanero.BO
             DeleteChild(committer, GetRelatedObject());
         }
 
+        internal override void DereferenceRemovedChildren(TransactionCommitter committer)
+        {
+            //DO Nothing Single relationship does not store children;
+        }
+
+        internal override void DeleteMarkedForDeleteChildren(TransactionCommitter committer)
+        {
+            //Do nothing single relationship does not have children
+        }
+
         internal override void AddDirtyChildrenToTransactionCommitter(TransactionCommitter transactionCommitter) {
             foreach (TBusinessObject businessObject in GetDirtyChildren())
             {

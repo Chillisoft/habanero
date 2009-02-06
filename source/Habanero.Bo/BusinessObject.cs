@@ -995,7 +995,7 @@ namespace Habanero.BO
                 if (!(relationship is IMultipleRelationship)) continue;
                 IMultipleRelationship multipleRelationship = (IMultipleRelationship) relationship;
 
-                IList createdBos = multipleRelationship.BusinessObjectCollection.CreatedBusinessObjects;
+                IList createdBos = multipleRelationship.CurrentBusinessObjectCollection.CreatedBusinessObjects;
                 while (createdBos.Count > 0)
                 {
                     IBusinessObject businessObject = (IBusinessObject) createdBos[createdBos.Count-1];
@@ -1003,7 +1003,7 @@ namespace Habanero.BO
                     if (relationship.DeleteParentAction == DeleteParentAction.DereferenceRelated) continue;
                     ((BOStatus) businessObject.Status).IsDeleted = true;
                 }
-                multipleRelationship.BusinessObjectCollection.RemovedBusinessObjects.Clear();
+                multipleRelationship.CurrentBusinessObjectCollection.RemovedBusinessObjects.Clear();
             }
         }
 

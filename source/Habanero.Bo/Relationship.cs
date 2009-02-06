@@ -136,7 +136,12 @@ namespace Habanero.BO
 
         internal abstract void AddDirtyChildrenToTransactionCommitter(TransactionCommitter committer);
         internal abstract void DereferenceChildren(TransactionCommitter committer);
+
         internal abstract void DeleteChildren(TransactionCommitter committer);
+
+        internal abstract void DereferenceRemovedChildren(TransactionCommitter committer);
+
+        internal abstract void DeleteMarkedForDeleteChildren(TransactionCommitter committer);
 
         /// <summary>
         /// Returns the reverse relationship for this relationship i.e. If invoice has invoice lines and you 
@@ -280,6 +285,7 @@ namespace Habanero.BO
         {
             if (bo == null) return;
             bo.Delete();
+//            if (bo.Status.IsNew) return;
             committer.ExecuteTransactionToDataSource(committer.CreateTransactionalBusinessObject(bo));
         }
 

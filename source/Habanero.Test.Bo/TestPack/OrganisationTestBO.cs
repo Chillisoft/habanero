@@ -22,6 +22,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
+using Habanero.DB;
 
 namespace Habanero.Test.BO
 {
@@ -200,6 +201,16 @@ namespace Habanero.Test.BO
 
         internal static OrganisationTestBO CreateUnsavedOrganisation() {
             return new OrganisationTestBO();
+        }
+
+        public static void DeleteAllOrganisations()
+        {
+            string sql = "DELETE FROM contact_person_address";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            sql = "DELETE FROM Contact_Person";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            sql = "DELETE FROM organisation";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
     }
 }
