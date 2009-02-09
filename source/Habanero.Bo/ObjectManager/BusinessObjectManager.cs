@@ -87,20 +87,22 @@ namespace Habanero.BO
         /// <param name="businessObject"></param>
         internal void Add(IBusinessObject businessObject)
         {
-            if (_loadedBusinessObjects.ContainsKey(businessObject.ID.AsString_CurrentValue()))
-            {
-                IBusinessObject loadedBusinessObject = this[businessObject.ID];
-                if (ReferenceEquals(loadedBusinessObject, businessObject)) return;
-
-                string developerMessage = string.Format
-                    ("Two copies of the business object '{0}' identified by '{1}' " + "were added to the object manager",
-                     businessObject.ClassDef.ClassNameFull, businessObject.ID.AsString_CurrentValue());
-                string userMessage = "There was a serious developer exception. " + Environment.NewLine
-                                     + developerMessage;
-                throw new HabaneroDeveloperException(userMessage, developerMessage);
-            }
             lock (_loadedBusinessObjects)
             {
+                if (_loadedBusinessObjects.ContainsKey(businessObject.ID.AsString_CurrentValue()))
+                {
+                    IBusinessObject loadedBusinessObject = this[businessObject.ID];
+                    if (ReferenceEquals(loadedBusinessObject, businessObject)) return;
+
+                    string developerMessage = string.Format
+                        ("Two copies of the business object '{0}' identified by '{1}' "
+                         + "were added to the object manager", businessObject.ClassDef.ClassNameFull,
+                         businessObject.ID.AsString_CurrentValue());
+                    string userMessage = "There was a serious developer exception. " + Environment.NewLine
+                                         + developerMessage;
+                    throw new HabaneroDeveloperException(userMessage, developerMessage);
+                }
+
                 _loadedBusinessObjects.Add(businessObject.ID.AsString_CurrentValue(), new WeakReference(businessObject));
             }
             businessObject.IDUpdated += _updateIDEventHandler; //Register for ID Updated event this event is fired
@@ -115,8 +117,11 @@ namespace Habanero.BO
         /// <param name="e"></param>
         protected virtual void ObjectID_Updated_Handler(object sender, BOEventArgs e)
         {
-            this.Remove(e.BusinessObject);
-            this.Add(e.BusinessObject);
+            lock (_loadedBusinessObjects)
+            {
+                this.Remove(e.BusinessObject);
+                this.Add(e.BusinessObject);
+            }
         }
 
         /// <summary>
@@ -163,15 +168,18 @@ namespace Habanero.BO
         /// <returns>Whether the busienss object is loadd or not</returns>
         internal bool Contains(string objectID)
         {
-            bool containsKey = _loadedBusinessObjects.ContainsKey(objectID);
-            if (containsKey)
+            lock (_loadedBusinessObjects)
             {
-                if (!BusinessObjectWeakReferenceIsAlive(objectID))
+                bool containsKey = _loadedBusinessObjects.ContainsKey(objectID);
+                if (containsKey)
                 {
-                    _loadedBusinessObjects.Remove(objectID);
-                    return false;
+                    if (!BusinessObjectWeakReferenceIsAlive(objectID))
+                    {
+                        _loadedBusinessObjects.Remove(objectID);
+                        return false;
+                    }
+                    return true;
                 }
-                return true;
             }
             return false;
         }
@@ -194,22 +202,25 @@ namespace Habanero.BO
         /// <param name="businessObject">business object to be removed.</param>
         internal void Remove(IBusinessObject businessObject)
         {
-            if (!Contains(businessObject)) return;
+            lock (_loadedBusinessObjects)
+            {
+                if (!Contains(businessObject)) return;
 
-            string objectID = businessObject.ID.AsString_CurrentValue();
-            if (Contains(objectID))
-            {
-                Remove(objectID, businessObject);
-            }
-            objectID = businessObject.ID.AsString_PreviousValue();
-            if (Contains(objectID))
-            {
-                Remove(objectID, businessObject);
-            }
-            objectID = businessObject.ID.AsString_LastPersistedValue();
-            if (Contains(objectID))
-            {
-                Remove(objectID, businessObject);
+                string objectID = businessObject.ID.AsString_CurrentValue();
+                if (Contains(objectID))
+                {
+                    Remove(objectID, businessObject);
+                }
+                objectID = businessObject.ID.AsString_PreviousValue();
+                if (Contains(objectID))
+                {
+                    Remove(objectID, businessObject);
+                }
+                objectID = businessObject.ID.AsString_LastPersistedValue();
+                if (Contains(objectID))
+                {
+                    Remove(objectID, businessObject);
+                }
             }
         }
 
@@ -221,13 +232,14 @@ namespace Habanero.BO
         /// <param name="businessObject">The business object being removed at this position.</param>
         protected void Remove(string objectID, IBusinessObject businessObject)
         {
-            if (Contains(objectID) && ReferenceEquals(businessObject, this[objectID]))
+            lock (_loadedBusinessObjects)
             {
-                lock (_loadedBusinessObjects)
+                if (Contains(objectID) && ReferenceEquals(businessObject, this[objectID]))
                 {
                     _loadedBusinessObjects.Remove(objectID);
+
+                    DeregisterForIDUpdatedEvent(businessObject);
                 }
-                DeregisterForIDUpdatedEvent(businessObject);
             }
         }
 
@@ -274,14 +286,14 @@ namespace Habanero.BO
         /// </summary>
         public void ClearLoadedObjects()
         {
-            if (_loadedBusinessObjects.Count == 0) return;
-            string[] keysArray = new string[_loadedBusinessObjects.Count];
-            _loadedBusinessObjects.Keys.CopyTo(keysArray, 0);
-            foreach (string key in keysArray)
-            { 
-                if (key == null) return;
-                lock (_loadedBusinessObjects)
+            lock (_loadedBusinessObjects)
+            {
+                if (_loadedBusinessObjects.Count == 0) return;
+                string[] keysArray = new string[_loadedBusinessObjects.Count];
+                _loadedBusinessObjects.Keys.CopyTo(keysArray, 0);
+                foreach (string key in keysArray)
                 {
+                    if (key == null) return;
                     if (!Contains(key)) continue;
                     IBusinessObject businessObject = this[key];
                     this.Remove(key, businessObject);
