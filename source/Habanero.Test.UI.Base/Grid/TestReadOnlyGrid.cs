@@ -194,20 +194,15 @@ namespace Habanero.Test.UI.Base
 
         private static BusinessObjectCollection<MyBO> CreateCollectionWith_4_Objects()
         {
-            MyBO cp = new MyBO();
-            cp.TestProp = "b";
-            MyBO cp2 = new MyBO();
-            cp2.TestProp = "d";
-            MyBO cp3 = new MyBO();
-            cp3.TestProp = "c";
-            MyBO cp4 = new MyBO();
-            cp4.TestProp = "a";
-            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
-            col.Add(cp, cp2, cp3, cp4);
+            MyBO cp = new MyBO {TestProp = "b"};
+            MyBO cp2 = new MyBO {TestProp = "d"};
+            MyBO cp3 = new MyBO {TestProp = "c"};
+            MyBO cp4 = new MyBO {TestProp = "a"};
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO> {{cp, cp2, cp3, cp4}};
             return col;
         }
 
-        private static void SetupGridColumnsForMyBo(IReadOnlyGrid readOnlyGrid)
+        private static void SetupGridColumnsForMyBo(IDataGridView readOnlyGrid)
         {
             readOnlyGrid.Columns.Add("TestProp", "TestProp");
         }

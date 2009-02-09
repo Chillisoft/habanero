@@ -97,6 +97,30 @@ namespace Habanero.Test.UI.Base.FilterController
         }
 
         [Test]
+        public void Test_ClearFilters()
+        {
+            //---------------Set up test pack-------------------
+            IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
+            IFilterControl filterControl = GetControlFactory().CreateFilterControl();
+            ITextBox tb = filterControl.AddStringFilterTextBox("Test:", "TestColumn");
+            tb.Text = "testvalue";
+            IFilterClause clause =
+                filterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpLike, "testvalue");
+
+            ITextBox tb2 = filterControl.AddStringFilterTextBox("Test2:", "TestColumn2");
+            tb2.Text = "testvalue2";
+            string initialFilterClause = filterControl.GetFilterClause().GetFilterClauseString();
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(string.IsNullOrEmpty(initialFilterClause), "Should not be empty : " + initialFilterClause);
+            //---------------Execute Test ----------------------
+            filterControl.ClearFilters();
+            //---------------Test Result -----------------------
+            string finalFilterClause = filterControl.GetFilterClause().GetFilterClauseString();
+            Assert.IsTrue(string.IsNullOrEmpty(finalFilterClause), "Should be empty : " + finalFilterClause);
+
+        }
+
+        [Test]
         public void TestAdd_DateRangeFilterComboBox()
         {
             //---------------Set up test pack-------------------

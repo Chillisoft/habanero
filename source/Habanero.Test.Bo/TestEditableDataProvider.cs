@@ -35,6 +35,11 @@ namespace Habanero.Test.BO
             return new EditableDataSetProvider(col);
         }
 
+        public override void TestUpdateBusinessObjectRowValues()
+        {
+            Assert.IsTrue(true, "This test cannot be conducted since edits to the grid update the BO and visa versa");
+        }
+
         [Test]
         public void TestUpdateRowUpdatesBusinessObject()
         {
@@ -90,31 +95,41 @@ namespace Habanero.Test.BO
             //Note: This behaviour has changed and we need to asses the impact of this change.
         }
 
+        //TODO  08 Feb 2009: 
         [Test]
         public void TestDeleteRowMarksBOAsDeleted()
         {
             SetupTestData();
+            Assert.AreEqual(2, _collection.Count, "Before Deleting a row shouldn't remove any Bo's from the collection.");
             itsTable.Rows[0].Delete();
-            //TODO: Discuss with peter
-            //I have changed this what are the consequences
-            // : Assert.AreEqual(2, _collection.Count, "Deleting a row shouldn't remove any Bo's from the collection.");
             Assert.AreEqual(1, _collection.Count, "Deleting a row shouldn't remove any Bo's from the collection.");
-            int numDeleted = 0;
-//
-            //TODO: Discuss with peter
-            //foreach (BusinessObject businessObjectBase in _collection)
-//            {
-//                if (businessObjectBase.Status.IsDeleted)
-//                {
-//                    numDeleted++;
-//                }
-//            }
-
-            numDeleted = _collection.MarkedForDeleteBusinessObjects.Count;
+            int numDeleted = _collection.MarkedForDeleteBusinessObjects.Count;
             Assert.AreEqual(1, numDeleted, "BO should be marked as deleted.");
         }
 
-        [Test, Ignore("//TODO Brett: Changes have been made recently (Brett?) that are now breaking editable grids.")]
+        [Test]
+        public void TestAddRowAddsBo()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            SetupTestData();
+            int originalCount = _collection.Count;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(originalCount, _collection.Count);
+            Assert.AreEqual(1, _collection.CreatedBusinessObjects.Count);
+            Assert.AreEqual(originalCount, itsTable.Rows.Count);
+            //---------------Execute Test ----------------------
+            itsTable.Rows.Add(new object[] { null, "bo1prop1", "s1" });
+            //---------------Test Result ----------------
+            Assert.AreEqual(originalCount + 1, _collection.Count);
+            Assert.AreEqual(2 , _collection.CreatedBusinessObjects.Count);
+            Assert.AreEqual(originalCount + 1, itsTable.Rows.Count);
+//            itsTable.RejectChanges();
+//            //---------------Test Result -----------------------
+//            Assert.AreEqual(originalCount, itsTable.Rows.Count);
+//            Assert.AreEqual(originalCount, _collection.Count);
+        }
+        [Test]
         public void TestRejectChangesRemovesNewRow()
         {
             //---------------Set up test pack-------------------
@@ -123,18 +138,38 @@ namespace Habanero.Test.BO
             int originalCount = _collection.Count;
             itsTable.Rows.Add(new object[] { null, "bo1prop1", "s1" });
             //---------------Assert Precondition----------------
-            //Assert.AreEqual(originalCount + 1, _collection.Count);
-
+            Assert.AreEqual(originalCount + 1, _collection.Count);
+            Assert.AreEqual(originalCount, _collection.CreatedBusinessObjects.Count);
+            Assert.AreEqual(originalCount + 1, itsTable.Rows.Count);
             //---------------Execute Test ----------------------
             itsTable.RejectChanges();
             //---------------Test Result -----------------------
-
+            Assert.AreEqual(originalCount, itsTable.Rows.Count);
+            Assert.AreEqual(originalCount -1, _collection.CreatedBusinessObjects.Count);
+            Assert.AreEqual(originalCount, _collection.Count);
         }
-
         [Test]
-        public override void TestUpdateBusinessObjectRowValues()
+        public void TestRejectChangesUnDoesDeletedRow()
         {
-            //This test does not apply to EditableGrid
+            //---------------Set up test pack-------------------
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            SetupTestData();
+            _collection.SaveAll();
+            int originalCount = _collection.Count;
+//            itsTable.Rows.Add(new object[] { null, "bo1prop1", "s1" });
+            DataRow row = itsTable.Rows[1];
+            row.Delete();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, _collection.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(originalCount, itsTable.Rows.Count);
+            Assert.AreEqual(DataRowState.Deleted,  row.RowState);
+            Assert.AreEqual(originalCount -1, _collection.Count);
+            //---------------Execute Test ----------------------
+            itsTable.RejectChanges();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(originalCount, itsTable.Rows.Count);
+            Assert.AreEqual(0, _collection.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(originalCount, _collection.Count);
         }
 
         [Test]
@@ -147,7 +182,6 @@ namespace Habanero.Test.BO
             itsTable.AcceptChanges();
         }
 
-
         [Test]
         public void TestDeleteRowDeletesBOOnSave()
         {
@@ -159,12 +193,81 @@ namespace Habanero.Test.BO
             itsTable.AcceptChanges();
         }
 
+        [Test]
+        public void TestDeleteRow_ThenRemoveBusinessObjectRemovesRow()
+        {
+            SetupTestData();
+            _collection.SaveAll();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, itsTable.Rows.Count);
+            Assert.AreEqual(2, _collection.Count);
+            //---------------Execute Test-----------
+            itsTable.Rows[1].Delete();
+            _collection.Remove(itsBo1);
+            //---------------Test Result -----------
+            Assert.AreEqual(0, _collection.Count);
+            Assert.AreEqual(1, _collection.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(1, _collection.RemovedBusinessObjects.Count);
+            Assert.AreEqual(DataRowState.Deleted, itsTable.Rows[0].RowState);
+            Assert.AreEqual(1, itsTable.Rows.Count);
+        }
+        [Test]
+        public void TestRemoveBusinessObject_ThenDeleteRow_UpdatesCollection()
+        {
+            SetupTestData();
+            _collection.SaveAll();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, itsTable.Rows.Count);
+            Assert.AreEqual(2, _collection.Count);
+            //---------------Execute Test-----------
+            _collection.Remove(itsBo1);
+            itsTable.Rows[0].Delete();
+            //---------------Test Result -----------
+            Assert.AreEqual(0, _collection.Count);
+            Assert.AreEqual(1, _collection.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(1, _collection.RemovedBusinessObjects.Count);
+            Assert.AreEqual(DataRowState.Deleted, itsTable.Rows[0].RowState);
+            Assert.AreEqual(1, itsTable.Rows.Count);
+        }
+        [Test]
+        public void TestDeleteRow_UpdatesColAndTable()
+        {
+            SetupTestData();
+            _collection.SaveAll();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, itsTable.Rows.Count);
+            Assert.AreEqual(2, _collection.Count);
+            Assert.AreEqual(0, _collection.MarkedForDeleteBusinessObjects.Count);
+            //---------------Execute Test-----------
+            itsTable.Rows[1].Delete();
+            //---------------Test Result -----------
+            Assert.AreEqual(1, _collection.Count);
+            Assert.AreEqual(1, _collection.MarkedForDeleteBusinessObjects.Count);
+            Assert.AreEqual(DataRowState.Deleted, itsTable.Rows[1].RowState);
+        }
+        [Test]
+        public void TestRemoveItem_UpdatesTable()
+        {
+            SetupTestData();
+            _collection.SaveAll();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, itsTable.Rows.Count);
+            Assert.AreEqual(2, _collection.Count);
+            Assert.AreEqual(0, _collection.MarkedForDeleteBusinessObjects.Count);
+            //---------------Execute Test-----------
+            _collection.Remove(itsBo1);
+            //---------------Test Result -----------
+            Assert.AreEqual(1, _collection.Count);
+            Assert.AreEqual(1, _collection.RemovedBusinessObjects.Count);
+            Assert.AreEqual(1, itsTable.Rows.Count);
+//            Assert.AreEqual(DataRowState.Deleted, itsTable.Rows[1].RowState);
+        }
         //TODO Brett : Jan 2009
-        [Test,
-         Ignore(
-             "Brett - to consult with peter by fundamentally changing the way BO's respond to edits we are fundamentally altering the way these data providers work"
-             )]
-//        [Test]
+//        [Test,
+//         Ignore(
+//             "Brett - to consult with peter by fundamentally changing the way BO's respond to edits we are fundamentally altering the way these data providers work"
+//             )]
+        [Test]
         public void TestRevertChangesRevertsBoValues()
         {
             SetupTestData();
@@ -204,7 +307,7 @@ namespace Habanero.Test.BO
         {
             SetupTestData();
             BOMapper mapper = new BOMapper(_collection.ClassDef.CreateNewBusinessObject());
-            itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef("duplicateColumns").GetUIGridProperties());
+            itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef("duplicateColumns").UIGrid);
         }
 
         [Test]
@@ -216,6 +319,132 @@ namespace Habanero.Test.BO
 
             MyBO unlistedBO = new MyBO();
             Assert.AreEqual(-1, ((EditableDataSetProvider) _dataSetProvider).FindRow(unlistedBO));
+        }
+        [Test]
+        public void TestAddBusinessObjectAndUpdatesAnotherRow_UpdatesBO()
+        {
+            SetupTestData();
+            //IBusinessObject bo3 = _classDef.CreateNewBusinessObject(itsConnection);
+            IBusinessObject bo3 = _classDef.CreateNewBusinessObject();
+            bo3.SetPropertyValue("TestProp", "bo3prop1");
+            bo3.SetPropertyValue("TestProp2", "s2");
+            const string updatedvalue = "UpdatedValue";
+            object origionalPropValue = itsBo1.GetPropertyValue("TestProp");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, itsTable.Rows.Count);
+            Assert.AreNotEqual(updatedvalue, itsTable.Rows[0][1]);
+            Assert.AreEqual(origionalPropValue, itsTable.Rows[0][1]);
+            //---------------Execute Test ----------------------
+            _collection.Add(bo3);
+            itsTable.Rows[0]["TestProp"] = updatedvalue;
+            //---------------Test Result -----------------------
+//            Assert.AreEqual(3, itsTable.Rows.Count);
+            Assert.AreEqual(updatedvalue, itsTable.Rows[0][1]);
+            Assert.AreNotEqual(origionalPropValue, itsTable.Rows[0][1]);
+            Assert.AreEqual(itsTable.Rows[0][0], itsBo1.ID.AsString_CurrentValue());
+            Assert.AreEqual(updatedvalue, itsBo1.GetPropertyValue("TestProp"));
+            Assert.AreNotEqual(origionalPropValue, itsBo1.GetPropertyValue("TestProp"));
+        }
+        [Test]
+        public void TestAddBusinessObject_ThenAddRow_UpdatesCollection()
+        {
+            BusinessObjectCollection<MyBO> col = null;
+            IDataSetProvider dataSetProvider = GetDataSetProviderWithCollection(ref col);
+            BOMapper mapper = new BOMapper(col.ClassDef.CreateNewBusinessObject());
+            DataTable table = dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
+            MyBO boNew = new MyBO();
+            boNew.SetPropertyValue("TestProp", "bo3prop1");
+            boNew.SetPropertyValue("TestProp2", "s2");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(4, table.Rows.Count);
+            Assert.AreEqual(4, col.Count);
+            Assert.AreEqual(4, col.CreatedBusinessObjects.Count);
+            //---------------Execute Test ----------------------
+            col.Add(boNew);
+            table.Rows.Add(new object[] { null, "bo3prop1", "bo3prop2" });
+            //---------------Test Result -----------------------
+            Assert.AreEqual(6, col.Count);
+            Assert.AreEqual(6, col.CreatedBusinessObjects.Count);
+            Assert.AreEqual(6, table.Rows.Count);
+        }
+
+        [Test]
+        public void TestAddRow_UpdatesCollection()
+        {
+            BusinessObjectCollection<MyBO> col = null;
+            IDataSetProvider dataSetProvider = GetDataSetProviderWithCollection(ref col);
+            BOMapper mapper = new BOMapper(col.ClassDef.CreateNewBusinessObject());
+            DataTable table = dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
+            MyBO boNew = new MyBO();
+            boNew.SetPropertyValue("TestProp", "bo3prop1");
+            boNew.SetPropertyValue("TestProp2", "s2");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(4, table.Rows.Count);
+            Assert.AreEqual(4, col.Count);
+            Assert.AreEqual(4, col.CreatedBusinessObjects.Count);
+            //---------------Execute Test ----------------------
+            table.Rows.Add(new object[] { null, "bo3prop1", "bo3prop2" });
+            //---------------Test Result -----------------------
+            Assert.AreEqual(5, col.Count);
+            Assert.AreEqual(5, col.CreatedBusinessObjects.Count);
+            Assert.AreEqual(5, table.Rows.Count);
+        }
+
+        [Test]
+        public void TestAddRow_ThenAddBO_UpdatesTable()
+        {
+            BusinessObjectCollection<MyBO> col = null;
+            IDataSetProvider dataSetProvider = GetDataSetProviderWithCollection(ref col);
+            BOMapper mapper = new BOMapper(col.ClassDef.CreateNewBusinessObject());
+            DataTable table = dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
+            MyBO boNew = new MyBO();
+            boNew.SetPropertyValue("TestProp", "bo3prop1");
+            boNew.SetPropertyValue("TestProp2", "s2");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(4, table.Rows.Count);
+            Assert.AreEqual(4, col.Count);
+            Assert.AreEqual(4, col.CreatedBusinessObjects.Count);
+            //---------------Execute Test ----------------------
+            table.Rows.Add(new object[] { null, "bo3prop1", "bo3prop2" });
+            col.Add(boNew);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(6, col.Count);
+            Assert.AreEqual(6, col.CreatedBusinessObjects.Count);
+            Assert.AreEqual(6, table.Rows.Count);
+        }
+
+//                    
+//
+//            //---------------Test Result -----------------------
+//            Assert.AreEqual
+//                (1, boCollection.CreatedBusinessObjects.Count,
+//                 "Adding a row to the table should use the collection to create the object");
+
+
+
+        [Test]
+        public void Test_EditDataTableEditsBo()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col = null;
+            IDataSetProvider dataSetProvider = GetDataSetProviderWithCollection(ref col);
+            BOMapper mapper = new BOMapper(col.ClassDef.CreateNewBusinessObject());
+            DataTable table = dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
+            MyBO bo1 = col[0];
+            const string updatedvalue = "UpdatedValue";
+            const string columnName = "TestProp";
+            object origionalPropValue = bo1.GetPropertyValue(columnName);
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(dataSetProvider is EditableDataSetProvider);
+            Assert.AreEqual(4, table.Rows.Count);
+            Assert.AreEqual(bo1.ID.AsString_CurrentValue(), table.Rows[0][_dataTableIdColumnName]);
+            Assert.AreEqual(origionalPropValue, table.Rows[0][columnName]);
+            //---------------Execute Test ----------------------
+            table.Rows[0][columnName] = updatedvalue;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(bo1.ID.AsString_CurrentValue(), table.Rows[0][_dataTableIdColumnName]);
+            Assert.AreEqual(updatedvalue, table.Rows[0][columnName]);
+            Assert.AreEqual(updatedvalue, bo1.GetPropertyValue(columnName));
         }
 
         [Test]

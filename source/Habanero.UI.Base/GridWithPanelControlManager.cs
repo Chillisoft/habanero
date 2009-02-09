@@ -153,7 +153,7 @@ namespace Habanero.UI.Base
             _lastSelectedBusinessObject = businessObjectInGrid;
         }
 
-        private void BusinessObjectUpdated(object sender, BOEventArgs e)
+        private void BusinessObjectUpdated(object sender, BOEventArgs e, BOPropEventArgs eventArgs2)
         {
             UpdateControlEnabledState();
         }

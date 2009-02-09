@@ -18,12 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
-using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
 {
-
-
     /// <summary>
     /// Provides a combination of read-only grid, filter and buttons used to edit a
     /// collection of business objects.
@@ -71,12 +68,6 @@ namespace Habanero.UI.Base
         IBusinessObjectDeletor BusinessObjectDeletor { get; set; }
 
         /// <summary>
-        /// Gets the filter control for the readonly grid, which is used to filter
-        /// which rows are shown in the grid
-        /// </summary>
-        IFilterControl FilterControl { get; }
-
-        /// <summary>
         /// Gets the value indicating whether one of the overloaded initialise
         /// methods been called for the grid
         /// </summary>
@@ -101,7 +92,7 @@ namespace Habanero.UI.Base
         /// Initialises the grid without a ClassDef. This is used where the columns are set up manually.
         /// A typical case of when you would want to set the columns manually would be when the grid
         /// requires alternate columns, such as images to indicate the state of the object or buttons/links.
-        /// The grid must already have at least one column added with the name "ID". This column is used
+        /// The grid must already have at least one column added with the name "HABANERO_OBJECTID". This column is used
         /// to synchronise the grid with the business objects.
         /// </summary>
         /// <exception cref="GridBaseInitialiseException">Occurs where the columns have not

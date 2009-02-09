@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
-using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
@@ -73,7 +72,7 @@ namespace Habanero.UI.Base
         string AdditionalSearchCriteria { get; set; }
 
         ///<summary>
-        /// The <see cref="IFilterControl"/> that is displayed for the grid.
+        /// The <see cref="IFilterControl"/> that is displayed for the grid which is used to filter the grid rows.
         ///</summary>
         IFilterControl FilterControl { get; }
     }

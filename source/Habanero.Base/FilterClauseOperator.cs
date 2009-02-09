@@ -22,7 +22,7 @@ namespace Habanero.Base
     /// <summary>
     /// An enumeration that provides an operator for filter clauses, which
     /// allow only rows of data to be shown that meet the requirements set by the
-    /// filter.  Note that some types of operators may not be appropriate for
+    /// filter.  Note_ that some types of operators may not be appropriate for
     /// certain data types, such as "OpLike" for an integer.
     /// </summary>
     public enum FilterClauseOperator

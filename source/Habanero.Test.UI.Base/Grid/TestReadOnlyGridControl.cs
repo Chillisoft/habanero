@@ -18,11 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Data;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.Console;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
 using NUnit.Framework;
@@ -33,41 +31,19 @@ namespace Habanero.Test.UI.Base
 {
     public abstract class TestReadonlyGridControl //: TestUsingDatabase
     {
+        private const string _gridIdColumnName = "HABANERO_OBJECTID";
         //TODO: Tests that if init not called throws sensible errors
         //TODO: Date searchby
-
+        //TODO  07 Feb 2009: The bahaviour for updating a business object updating the grid should be moved to 
+        // DataSetProvider with test so that it is available in editable grids.
         [SetUp]
         public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
             GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
-        }
-
-        public class RethrowingExceptionNotifier : IExceptionNotifier
-        {
-            #region Implementation of IExceptionNotifier
-
-            /// <summary>
-            /// Notifies the user of an exception that has occurred
-            /// </summary>
-            /// <param name="ex">The exception</param>
-            /// <param name="furtherMessage">Any further error messages</param>
-            /// <param name="title">The title</param>
-            public void Notify(Exception ex, string furtherMessage, string title)
-            {
-                throw new Exception(furtherMessage, ex);
-            }
-
-            ///<summary>
-            /// The last exception logged by the exception notifier
-            ///</summary>
-            public string ExceptionMessage
-            {
-                get { throw new NotImplementedException(); }
-            }
-
-            #endregion
         }
 
         [TestFixtureSetUp]
@@ -653,7 +629,7 @@ namespace Habanero.Test.UI.Base
             int rowNum = 0;
             foreach (ContactPersonTestBO person in col)
             {
-                object rowID = readOnlyGridControl.Grid.Rows[rowNum++].Cells["ID"].Value;
+                object rowID = readOnlyGridControl.Grid.Rows[rowNum++].Cells[_gridIdColumnName].Value;
                 Assert.AreEqual(person.ID.ToString(), rowID.ToString());
             }
         }
@@ -885,7 +861,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(grid.IsInitialised);
             //---------------Execute Test ----------------------
             grid.Grid.Columns.Add("ManualColumn", "mm");
-            grid.Grid.Columns.Add("ID", "ID");
+            grid.Grid.Columns.Add(_gridIdColumnName, _gridIdColumnName);
             grid.Initialise();
 
             //---------------Test Result -----------------------
@@ -1665,6 +1641,138 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void Test_AddClicked_RowAddedAfterEditorFinished_NonGuidID()
+        {
+            //---------------Set up test pack-------------------
+            //Get Grid with 4 items
+            BusinessObjectCollection<MyBO> col;
+            LoadMyBoClassDef_NonGuidID();
+            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows_ClassDefAlreadyLoaded(out col, true);
+            //AddControlToForm(readOnlyGridControl);
+            MyBO myNewBo = null;
+            IButton addButton = readOnlyGridControl.Buttons["Add"];
+            readOnlyGridControl.BusinessObjectEditor = new DelegatedBusinessObjectEditor<MyBO>(
+                delegate(MyBO obj, string uiDefName, PostObjectEditDelegate postEditAction)
+                {
+                    obj.TestProp = "test";
+                    obj.Save();
+                    myNewBo = obj;
+                    postEditAction(obj, false);
+                    return true;
+                });
+            //-------------Assert Preconditions -------------
+            Assert.IsNotNull(addButton);
+            Assert.AreEqual(4, readOnlyGridControl.Grid.Rows.Count);
+            //---------------Execute Test ----------------------
+            addButton.PerformClick();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(5, readOnlyGridControl.Grid.Rows.Count);
+            IBusinessObject returnedBusinessObject = readOnlyGridControl.Grid.GetBusinessObjectAtRow(4);
+            Assert.IsNotNull(returnedBusinessObject);
+            Assert.AreSame(myNewBo, returnedBusinessObject);
+            IDataGridViewRow row = readOnlyGridControl.Grid.GetBusinessObjectRow(myNewBo);
+            Assert.IsNotNull(row);
+            Assert.AreEqual(myNewBo.TestProp, row.Cells["TestProp"].Value);
+            Assert.AreEqual(myNewBo.ID.AsString_CurrentValue(), row.Cells[_gridIdColumnName].Value);
+        }
+
+        [Test]
+        public void Test_EditClicked_RowAddedThenEdited_NonGuidID()
+        {
+            //---------------Set up test pack-------------------
+            //Get Grid with 4 items
+            BusinessObjectCollection<MyBO> col;
+            LoadMyBoClassDef_NonGuidID();
+            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows_ClassDefAlreadyLoaded(out col, true);
+            //AddControlToForm(readOnlyGridControl);
+            IButton addButton = readOnlyGridControl.Buttons["Add"];
+            IButton editButton = readOnlyGridControl.Buttons["Edit"];
+            readOnlyGridControl.BusinessObjectEditor = new DelegatedBusinessObjectEditor<MyBO>(
+                delegate(MyBO obj, string uiDefName, PostObjectEditDelegate postEditAction)
+                {
+                    obj.TestProp = "OriginalTestPropValue";
+                    obj.Save();
+                    if (postEditAction != null) postEditAction(obj, false);
+                    return true;
+                });
+            addButton.PerformClick();
+            MyBO myEditedBo = null;
+            const string testPropValue = "EditedValue";
+            bool postEditActionCalled = false;
+            readOnlyGridControl.BusinessObjectEditor = new DelegatedBusinessObjectEditor<MyBO>(
+                delegate(MyBO obj, string uiDefName, PostObjectEditDelegate postEditAction)
+                {
+                    postEditActionCalled = true;
+                    obj.TestProp = testPropValue;
+                    myEditedBo = obj;
+                    obj.Save();
+                    if (postEditAction != null) postEditAction(obj, false);
+                    return true;
+                });
+            postEditActionCalled = false;
+            //-------------Assert Preconditions -------------
+            Assert.IsNotNull(addButton);
+            Assert.AreEqual(5, readOnlyGridControl.Grid.Rows.Count);
+            Assert.IsFalse(postEditActionCalled);
+            //---------------Execute Test ----------------------
+            editButton.PerformClick();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(postEditActionCalled);
+            Assert.IsNotNull(myEditedBo);
+            Assert.AreEqual(5, readOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(testPropValue, myEditedBo.TestProp);
+            int myeditedRowNo = readOnlyGridControl.Grid.DataSetProvider.FindRow(myEditedBo);
+            Assert.AreEqual(4, myeditedRowNo);
+            IBusinessObject returnedBusinessObject = readOnlyGridControl.Grid.GetBusinessObjectAtRow(4);
+            Assert.IsNotNull(returnedBusinessObject);
+            Assert.AreSame(myEditedBo,returnedBusinessObject);
+            IDataGridViewRow row = readOnlyGridControl.Grid.GetBusinessObjectRow(myEditedBo);
+            Assert.IsNotNull(row);
+            Assert.AreEqual(myEditedBo.TestProp, row.Cells["TestProp"].Value);
+        }
+        [Test]
+        public void Test_EditClicked_RowAddedThenBOEditedOutsideOfGrid_NonGuidID()
+        {
+            //---------------Set up test pack-------------------
+            //Get Grid with 4 items
+            BusinessObjectCollection<MyBO> col;
+            LoadMyBoClassDef_NonGuidID();
+            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows_ClassDefAlreadyLoaded(out col, true);
+            //AddControlToForm(readOnlyGridControl);
+            IButton addButton = readOnlyGridControl.Buttons["Add"];
+            IButton editButton = readOnlyGridControl.Buttons["Edit"];
+            MyBO myEditedBo = null;
+            readOnlyGridControl.BusinessObjectEditor = new DelegatedBusinessObjectEditor<MyBO>(
+                delegate(MyBO obj, string uiDefName, PostObjectEditDelegate postEditAction)
+                {
+                    obj.TestProp = "OriginalTestPropValue";
+                    myEditedBo = obj;
+                    myEditedBo.Save();
+                    if (postEditAction != null) postEditAction(obj, false);
+                    return true;
+                });
+            addButton.PerformClick();
+            const string testPropValue = "EditedValue";
+            //-------------Assert Preconditions -------------
+            Assert.IsNotNull(addButton);
+            Assert.AreEqual(5, readOnlyGridControl.Grid.Rows.Count);
+            Assert.IsNotNull(myEditedBo);
+            //---------------Execute Test ----------------------
+            myEditedBo.TestProp = testPropValue;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(5, readOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(testPropValue, myEditedBo.TestProp);
+            int myeditedRowNo = readOnlyGridControl.Grid.DataSetProvider.FindRow(myEditedBo);
+            Assert.AreEqual(4, myeditedRowNo);
+            IBusinessObject returnedBusinessObject = readOnlyGridControl.Grid.GetBusinessObjectAtRow(4);
+            Assert.IsNotNull(returnedBusinessObject);
+            Assert.AreSame(myEditedBo,returnedBusinessObject);
+            IDataGridViewRow row = readOnlyGridControl.Grid.GetBusinessObjectRow(myEditedBo);
+            Assert.IsNotNull(row);
+            Assert.AreEqual(myEditedBo.TestProp, row.Cells["TestProp"].Value);
+        }
+
+        [Test]
         public void Test_AddClicked_ThenCancelled_RowNotInGridAfterFinished()
         {
             //---------------Set up test pack-------------------
@@ -1853,6 +1961,20 @@ namespace Habanero.Test.UI.Base
             return classDef;
         }
 
+        private ClassDef LoadMyBoClassDef_NonGuidID()
+        {
+            ClassDef classDef;
+            if (GetControlFactory() is Habanero.UI.VWG.ControlFactoryVWG)
+            {
+                classDef = MyBO.LoadClassDefVWG_NonGuidID();
+            }
+            else
+            {
+                classDef = MyBO.LoadClassDef_NonGuidID();
+            }
+            return classDef;
+        }
+
         #region stubs
 
         public class ExceptionNotifierStub : IExceptionNotifier
@@ -2017,6 +2139,12 @@ namespace Habanero.Test.UI.Base
         private IReadOnlyGridControl GetGridWith_4_Rows(out BusinessObjectCollection<MyBO> col, bool putOnForm)
         {
             LoadMyBoDefaultClassDef();
+            IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows_ClassDefAlreadyLoaded(out col, putOnForm);
+            return readOnlyGridControl;
+        }
+
+        private IReadOnlyGridControl GetGridWith_4_Rows_ClassDefAlreadyLoaded(out BusinessObjectCollection<MyBO> col, bool putOnForm)
+        {
             col = CreateCollectionWith_4_Objects();
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(putOnForm);
             SetupGridColumnsForMyBo(readOnlyGridControl.Grid);
@@ -2031,4 +2159,6 @@ namespace Habanero.Test.UI.Base
 
         #endregion //Utility Methods
     }
+
+    
 }

@@ -282,7 +282,7 @@ namespace Habanero.UI.Win
         /// Initialises the grid without a ClassDef. This is used where the columns are set up manually.
         /// A typical case of when you would want to set the columns manually would be when the grid
         /// requires alternate columns, such as images to indicate the state of the object or buttons/links.
-        /// The grid must already have at least one column added with the name "ID". This column is used
+        /// The grid must already have at least one column added with the name "HABANERO_OBJECTID". This column is used
         /// to synchronise the grid with the business objects.
         /// </summary>
         /// <exception cref="GridBaseInitialiseException">Occurs where the columns have not

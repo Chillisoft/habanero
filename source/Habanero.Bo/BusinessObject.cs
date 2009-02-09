@@ -46,7 +46,7 @@ namespace Habanero.BO
         public event EventHandler<BOEventArgs> Deleted;
         public event EventHandler<BOEventArgs> Restored;
         public event EventHandler<BOEventArgs> MarkedForDeletion;
-        public event EventHandler<BOEventArgs> PropertyUpdated;
+        public event EventHandler<BOEventArgs, BOPropEventArgs> PropertyUpdated;
         public event EventHandler<BOEventArgs> IDUpdated;
 
         #endregion
@@ -639,7 +639,7 @@ namespace Habanero.BO
                 if (prop.IsValid)
                 {
                     //FireUpdatedEvent();
-                    FirePropertyUpdatedEvent();
+                    FirePropertyUpdatedEvent(prop);
                 }
             }
         }
@@ -967,7 +967,7 @@ namespace Habanero.BO
                 CleanUpAllRelationshipCollections();
                 SetStateAsPermanentlyDeleted();
                 BusinessObjectManager.Instance.Remove(this);
-                FireDeleted();
+                FireDeletedEvent();
             }
             else
             {
@@ -981,7 +981,7 @@ namespace Habanero.BO
                         BusinessObjectManager.Instance.Add(this);
                     }
                 }
-                FireSaved();
+                FireSavedEvent();
             }
             AfterSave();
             ReleaseWriteLocks();
@@ -1085,11 +1085,11 @@ namespace Habanero.BO
         }
 
 
-        protected void FirePropertyUpdatedEvent()
+        protected void FirePropertyUpdatedEvent(IBOProp prop)
         {
             if (PropertyUpdated != null)
             {
-                PropertyUpdated(this, new BOEventArgs(this));
+                PropertyUpdated(this, new BOEventArgs(this), new BOPropEventArgs(prop));
             }
         }
 
@@ -1109,7 +1109,7 @@ namespace Habanero.BO
             }
         }
 
-        private void FireSaved()
+        private void FireSavedEvent()
         {
             if (Saved != null)
             {
@@ -1117,7 +1117,7 @@ namespace Habanero.BO
             }
         }
 
-        private void FireDeleted()
+        private void FireDeletedEvent()
         {
             if (Deleted != null)
             {

@@ -33,6 +33,8 @@ namespace Habanero.Test.UI.Base
 {
     public abstract class TestGridBase : TestUsingDatabase
     {
+        private const string _gridIdColumnName = "HABANERO_OBJECTID";
+
         [SetUp]
         public void SetupTest()
         {
@@ -122,7 +124,7 @@ namespace Habanero.Test.UI.Base
                 string filterString = col[2].ID.ToString().Substring(5, 30);
                 IFilterClauseFactory factory = new DataViewFilterClauseFactory();
                 IFilterClause filterClause =
-                    factory.CreateStringFilterClause("ID", FilterClauseOperator.OpLike, filterString);
+                    factory.CreateStringFilterClause(_gridIdColumnName, FilterClauseOperator.OpLike, filterString);
                 bool filterUpdatedFired = false;
                 gridBase.FilterUpdated += delegate { filterUpdatedFired = true; };
                 //---------------Execute Test ----------------------
@@ -776,7 +778,7 @@ namespace Habanero.Test.UI.Base
             IDataGridViewRow dataGridViewRow = gridBase.GetBusinessObjectRow(myBO2);
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedIndex, dataGridViewRow.Index);
-            Assert.AreEqual(myBO2.ID.AsString_CurrentValue(), dataGridViewRow.Cells["ID"].Value);
+            Assert.AreEqual(myBO2.ID.AsString_CurrentValue(), dataGridViewRow.Cells[_gridIdColumnName].Value);
         }
 
         [Test]
@@ -928,7 +930,7 @@ namespace Habanero.Test.UI.Base
             MyBO.LoadDefaultClassDef();
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
             IGridBase gridBase = CreateGridBaseStub();
-            gridBase.Columns.Add("ID", "ID");
+            gridBase.Columns.Add("HABANERO_OBJECTID", "HABANERO_OBJECTID");
             gridBase.Columns.Add(Guid.NewGuid().ToString("N"), "");
             //--------------Assert PreConditions----------------            
 
@@ -948,7 +950,7 @@ namespace Habanero.Test.UI.Base
             MyBO.LoadDefaultClassDef();
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
             IGridBase gridBase = CreateGridBaseStub();
-            gridBase.Columns.Add("ID", "ID");
+            gridBase.Columns.Add(_gridIdColumnName, _gridIdColumnName);
             gridBase.Columns.Add(Guid.NewGuid().ToString("N"), "");
             gridBase.GridLoader = GridLoaderDelegateStub_LoadAllItems;
             gridBase.SetBusinessObjectCollection(col);
@@ -1080,7 +1082,7 @@ namespace Habanero.Test.UI.Base
             string filterString = col[2].ID.ToString().Substring(5, 30);
             IFilterClauseFactory factory = new DataViewFilterClauseFactory();
             IFilterClause filterClause =
-                factory.CreateStringFilterClause("ID", FilterClauseOperator.OpLike, filterString);
+                factory.CreateStringFilterClause(_gridIdColumnName, FilterClauseOperator.OpLike, filterString);
             //---------------Execute Test ----------------------
 
             gridBase.ApplyFilter(filterClause);
@@ -1100,7 +1102,7 @@ namespace Habanero.Test.UI.Base
             string filterString = boColllection[2].ID.ToString().Substring(5, 30);
             IFilterClauseFactory factory = new DataViewFilterClauseFactory();
             IFilterClause filterClause =
-                factory.CreateStringFilterClause("ID", FilterClauseOperator.OpLike, filterString);
+                factory.CreateStringFilterClause(_gridIdColumnName, FilterClauseOperator.OpLike, filterString);
             MyBO bo = boColllection[2];
             //---------------Execute Test ----------------------
 
@@ -1122,7 +1124,7 @@ namespace Habanero.Test.UI.Base
             string filterString = boRemainingInThisGrid.ID.ToString().Substring(5, 30);
             IFilterClauseFactory factory = new DataViewFilterClauseFactory();
             IFilterClause filterClause =
-                factory.CreateStringFilterClause("ID", FilterClauseOperator.OpLike, filterString);
+                factory.CreateStringFilterClause(_gridIdColumnName, FilterClauseOperator.OpLike, filterString);
             MyBO boNotInGrid = boColllection[1];
             //---------------Execute Test ----------------------
 
@@ -1143,7 +1145,7 @@ namespace Habanero.Test.UI.Base
             string filterString = col[2].ID.ToString().Substring(5, 30);
             IFilterClauseFactory factory = new DataViewFilterClauseFactory();
             IFilterClause filterClause =
-                factory.CreateStringFilterClause("ID", FilterClauseOperator.OpLike, filterString);
+                factory.CreateStringFilterClause(_gridIdColumnName, FilterClauseOperator.OpLike, filterString);
             gridBase.ApplyFilter(filterClause);
 
             //---------------Verify PreConditions --------------
@@ -1322,7 +1324,7 @@ namespace Habanero.Test.UI.Base
         }
         private static void AddColumnsForContactPerson(BusinessObjectCollection<ContactPersonTestBO> businessObjectCollection, IGridBase gridBase, string propName)
         {
-            gridBase.Columns.Add("ID", "ID");
+            gridBase.Columns.Add(_gridIdColumnName, _gridIdColumnName);
             gridBase.Columns.Add(propName, propName);
             gridBase.SetBusinessObjectCollection(businessObjectCollection);
         }
@@ -1369,7 +1371,7 @@ namespace Habanero.Test.UI.Base
 
         private static void SetupGridColumnsForMyBo(IGridBase gridBase)
         {
-            gridBase.Columns.Add("ID", "ID");
+            gridBase.Columns.Add(_gridIdColumnName, _gridIdColumnName);
             gridBase.Columns.Add("TestProp", "TestProp");
         }
 
@@ -1378,7 +1380,7 @@ namespace Habanero.Test.UI.Base
             public override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
             {
                 ReadOnlyDataSetProvider dataSetProvider = new ReadOnlyDataSetProvider(col);
-                dataSetProvider.AddPropertyUpdatedHandler = false;
+                dataSetProvider.RegisterForBusinessObjectPropertyUpdatedEvents = false;
                 return dataSetProvider;
             }
         }
@@ -1394,7 +1396,7 @@ namespace Habanero.Test.UI.Base
             public override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
             {
                 ReadOnlyDataSetProvider dataSetProvider = new ReadOnlyDataSetProvider(col);
-                dataSetProvider.AddPropertyUpdatedHandler = true;
+                dataSetProvider.RegisterForBusinessObjectPropertyUpdatedEvents = true;
                 return dataSetProvider;
             }
         }

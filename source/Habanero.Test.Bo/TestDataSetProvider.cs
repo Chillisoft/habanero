@@ -28,10 +28,12 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
+
     /// <summary>
-    /// Summary description for Class1.
-    /// </summary>
-    public abstract class TestDataSetProvider : TestUsingDatabase
+    /// Tests the DataSet provider base behaviour via the ReadOnlyDataSetProvider
+    /// </summary
+   [TestFixture]
+    public class TestDataSetProvider : TestUsingDatabase
     {
         protected XmlClassLoader _loader;
         protected ClassDef _classDef;
@@ -44,6 +46,7 @@ namespace Habanero.Test.BO
 
         protected Mock itsDatabaseConnectionMockControl;
         protected IDatabaseConnection itsConnection;
+        protected const string _dataTableIdColumnName = "HABANERO_OBJECTID";
 
         [TestFixtureSetUp]
         public void SetupTestFixture()
@@ -106,8 +109,12 @@ namespace Habanero.Test.BO
 //            OrderItem.ClearTable();
         }
 
-        protected abstract IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col);
-
+        protected virtual IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
+        {
+            _dataSetProvider = new ReadOnlyDataSetProvider(col);
+            ((ReadOnlyDataSetProvider)_dataSetProvider).RegisterForBusinessObjectPropertyUpdatedEvents = true;
+            return _dataSetProvider;
+        }
 		protected void SetupSaveExpectation()
 		{
 //            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
@@ -121,6 +128,70 @@ namespace Habanero.Test.BO
 		}
 
         [Test]
+        public void Test_Construct_WithNullCollection_RaisesError()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            try
+            {
+                CreateDataSetProvider(null);
+                Assert.Fail("expected ArgumentNullException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("collection", ex.ParamName);
+            }
+
+        }
+        [Test]
+        public void Test_GetDataTable_WithNullCollection_RaisesError()
+        {
+            //---------------Set up test pack-------------------
+
+            BusinessObjectCollection<MyBO> col = null;
+            IDataSetProvider provider = GetDataSetProviderWithCollection(ref col);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            try
+            {
+                provider.GetDataTable(null);
+                Assert.Fail("expected ArgumentNullException");
+            }
+            //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("uiGrid", ex.ParamName);
+            }
+
+        }
+
+        protected IDataSetProvider GetDataSetProviderWithCollection(ref BusinessObjectCollection<MyBO> col)
+        {
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithLookup();
+            col = CreateCollectionWith_4_Objects();
+            return CreateDataSetProvider(col);
+        }
+
+        [Test]
+        public void Test_RegisterForBusinessObjectPropertyUpdatedEvents()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col = null;
+            IDataSetProvider dataSetProvider = GetDataSetProviderWithCollection(ref col);
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(dataSetProvider.RegisterForBusinessObjectPropertyUpdatedEvents);
+            //---------------Execute Test ----------------------
+            dataSetProvider.RegisterForBusinessObjectPropertyUpdatedEvents = false;  
+            //---------------Test Result -----------------------
+            Assert.IsFalse(dataSetProvider.RegisterForBusinessObjectPropertyUpdatedEvents);
+
+        }
+        [Test]
         public void TestCorrectNumberOfRows()
         {
             SetupTestData();
@@ -133,13 +204,267 @@ namespace Habanero.Test.BO
             SetupTestData();
             Assert.AreEqual(3, itsTable.Columns.Count);
         }
+        protected static BusinessObjectCollection<MyBO> CreateCollectionWith_4_Objects()
+        {
+            MyBO cp = new MyBO {TestProp = "b"};
+            MyBO cp2 = new MyBO {TestProp = "d"};
+            MyBO cp3 = new MyBO {TestProp = "c"};
+            MyBO cp4 = new MyBO {TestProp = "a"};
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO> {{cp, cp2, cp3, cp4}};
+            return col;
+        }
+        [Test]
+        public void Test_UpdateBusinessObjectUpdatesRow()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col = null;
+            IDataSetProvider dataSetProvider = GetDataSetProviderWithCollection(ref col);
+            BOMapper mapper = new BOMapper( col.ClassDef.CreateNewBusinessObject());
+            DataTable table = dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
+            MyBO bo1 = col[0];
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(dataSetProvider.RegisterForBusinessObjectPropertyUpdatedEvents);
+            //---------------Execute Test ----------------------
+            bo1.SetPropertyValue("TestProp", "UpdatedValue");
+            //---------------Test Result -----------------------
+            Assert.AreEqual("UpdatedValue", table.Rows[0][1]);
+        }
+        [Test]
+        public void Test_UpdateBusinessObject_DoesNotUpdatesRow_NotRegisteredForPropUpdated()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col = null;
+            IDataSetProvider dataSetProvider = GetDataSetProviderWithCollection(ref col);
+            dataSetProvider.RegisterForBusinessObjectPropertyUpdatedEvents = false;
+            BOMapper mapper = new BOMapper(col.ClassDef.CreateNewBusinessObject());
+            DataTable table = dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
+            MyBO bo1 = col[0];
+            object origValue = bo1.GetPropertyValue("TestProp");
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(dataSetProvider.RegisterForBusinessObjectPropertyUpdatedEvents);
+            Assert.AreEqual(origValue, table.Rows[0][1]);
+            //---------------Execute Test ----------------------
+            bo1.SetPropertyValue("TestProp", "UpdatedValue");
+            //---------------Test Result -----------------------
+            Assert.AreNotEqual("UpdatedValue", table.Rows[0][1]);
+            Assert.AreEqual(origValue, table.Rows[0][1]);
+        }
+
+        [Test]
+        public void Test_UpdateBusinessObjectUpdatedDataTable()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col = null;
+            IDataSetProvider dataSetProvider = GetDataSetProviderWithCollection(ref col);
+            dataSetProvider.RegisterForBusinessObjectPropertyUpdatedEvents = false;
+            BOMapper mapper = new BOMapper(col.ClassDef.CreateNewBusinessObject());
+            DataTable table = dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
+            MyBO bo1 = col[0];
+            object origValue = bo1.GetPropertyValue("TestProp");
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(dataSetProvider.RegisterForBusinessObjectPropertyUpdatedEvents);
+            Assert.AreEqual(origValue, table.Rows[0][1]);
+            //---------------Execute Test ----------------------
+            bo1.SetPropertyValue("TestProp", "UpdatedValue");
+            bo1.Save();
+            //---------------Test Result -----------------------
+            Assert.AreNotEqual(origValue, table.Rows[0][1]);
+            Assert.AreEqual("UpdatedValue", table.Rows[0][1]);
+        }
+
+        [Test]
+        public void TestAddBusinessObjectAddsRow()
+        {
+            SetupTestData();
+            //IBusinessObject bo3 = _classDef.CreateNewBusinessObject(itsConnection);
+            IBusinessObject bo3 = _classDef.CreateNewBusinessObject();
+            bo3.SetPropertyValue("TestProp", "bo3prop1");
+            bo3.SetPropertyValue("TestProp2", "s1");
+            //---------------Execute Test---------------------
+            _collection.Add(bo3);
+            //---------------Test Result-----------------------
+            Assert.AreEqual(3, itsTable.Rows.Count);
+            Assert.AreEqual("bo3prop1", itsTable.Rows[2][1]);
+        }
+        [Test]
+        public void TestAddBusinessObjectAndUpdateUpdatesNewRow()
+        {
+            SetupTestData();
+            //IBusinessObject bo3 = _classDef.CreateNewBusinessObject(itsConnection);
+            IBusinessObject bo3 = _classDef.CreateNewBusinessObject();
+            bo3.SetPropertyValue("TestProp", "bo3prop1");
+            bo3.SetPropertyValue("TestProp2", "s2");
+            const string updatedvalue = "UpdatedValue";
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, itsTable.Rows.Count);
+            Assert.AreNotEqual(updatedvalue,bo3.GetPropertyValue("TestProp"));
+            //---------------Execute Test ----------------------
+            _collection.Add(bo3);
+            bo3.SetPropertyValue("TestProp", updatedvalue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(updatedvalue, itsTable.Rows[2][1]);
+            Assert.AreEqual(3, itsTable.Rows.Count);
+        }
+       [Test]
+        public void TestAddBusinessObjectAndUpdateUpdatesAnotherRow()
+        {
+            SetupTestData();
+            //IBusinessObject bo3 = _classDef.CreateNewBusinessObject(itsConnection);
+            IBusinessObject bo3 = _classDef.CreateNewBusinessObject();
+            bo3.SetPropertyValue("TestProp", "bo3prop1");
+            bo3.SetPropertyValue("TestProp2", "s2");
+            const string updatedvalue = "UpdatedValue";
+           object origionalPropValue = itsBo1.GetPropertyValue("TestProp");
+           //---------------Assert Precondition----------------
+            Assert.AreEqual(2, itsTable.Rows.Count);
+            Assert.AreNotEqual(updatedvalue, itsTable.Rows[0][1]);
+            Assert.AreEqual(origionalPropValue, itsTable.Rows[0][1]);
+            //---------------Execute Test ----------------------
+            _collection.Add(bo3);
+            itsBo1.SetPropertyValue("TestProp", updatedvalue);
+            //---------------Test Result -----------------------
+           Assert.AreEqual(3, itsTable.Rows.Count);
+           Assert.AreEqual(updatedvalue, itsTable.Rows[0][1]);
+           Assert.AreNotEqual(origionalPropValue, itsTable.Rows[0][1]);
+        }
+
+        [Test]
+        public void TestRemoveBusinessObjectRemovesRow()
+        {
+            SetupTestData();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, itsTable.Rows.Count);
+            //---------------Execute Test-----------
+            _collection.Remove(itsBo1);
+            //---------------Test Result -----------
+            Assert.AreEqual(1, itsTable.Rows.Count);
+        }
+
+        [Test]
+        public void TestOrderItemAddAndFindBO()
+        {
+            SetupTestData();
+            OrderItem car = OrderItem.AddOrder1Car();
+            OrderItem chair = OrderItem.AddOrder2Chair();
+            BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
+            col.LoadAll();
+            col.Sort("OrderNumber",true, true);
+            Assert.AreEqual(car, col[0]);
+            Assert.AreEqual(chair, col[1]);
+
+            ReadOnlyDataSetProvider provider = new ReadOnlyDataSetProvider(col);
+            UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
+            Assert.AreEqual(2, provider.GetDataTable(uiGrid).Rows.Count);
+            Assert.AreEqual(0, provider.FindRow(car));
+            Assert.AreEqual(1, provider.FindRow(chair));
+            Assert.AreEqual(car, provider.Find(0));
+            Assert.AreEqual(chair, provider.Find(1));
+            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=1;OrderItem.Product=car"));
+            Assert.AreEqual(chair, provider.Find("OrderItem.OrderNumber=2;OrderItem.Product=chair"));
+
+            OrderItem roof = OrderItem.AddOrder3Roof();
+            Assert.AreEqual(2, provider.GetDataTable(uiGrid).Rows.Count);
+            Assert.AreEqual(-1, provider.FindRow(roof));
+            bool causedException = false;
+            try
+            {
+                provider.Find(2);
+            }
+            catch (Exception e)
+            {
+                causedException = true;
+                Assert.AreEqual(typeof(IndexOutOfRangeException), e.GetType());
+            }
+            Assert.IsTrue(causedException);
+            Assert.IsNull(provider.Find("OrderItem.OrderNumber=3;OrderItem.Product=roof"));
+
+            col.Add(roof);
+            Assert.AreEqual(3, provider.GetDataTable(uiGrid).Rows.Count);
+            Assert.AreEqual(2, provider.FindRow(roof));
+            Assert.AreEqual(roof, provider.Find(2));
+            Assert.AreEqual(roof, provider.Find("OrderItem.OrderNumber=3;OrderItem.Product=roof"));
+        }
+        [Test]
+        public void TestOrderItemRemove()
+        {
+            SetupTestData();
+            OrderItem.ClearTable();
+            OrderItem.AddOrder1Car();
+            OrderItem chair = OrderItem.AddOrder2Chair();
+            BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
+            col.LoadAll();
+            col.Sort("OrderNumber", true, true);
+            ReadOnlyDataSetProvider provider = new ReadOnlyDataSetProvider(col);
+            UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
+            DataTable table = provider.GetDataTable(uiGrid);
+            Assert.AreEqual(2, table.Rows.Count);
+
+            col.Remove(chair);
+            Assert.AreEqual(1, table.Rows.Count);
+            Assert.AreEqual(-1, provider.FindRow(chair));
+            bool causedException = false;
+            try
+            {
+                provider.Find(1);
+            }
+            catch (Exception e)
+            {
+                causedException = true;
+                Assert.AreEqual(typeof(IndexOutOfRangeException), e.GetType());
+            }
+            Assert.IsTrue(causedException);
+            Assert.IsNull(provider.Find("OrderNumber=2 AND Product=chair"));
+        }
+
+        [Test]
+        public void TestOrderItemChangeItemAndFind()
+        {
+            SetupTestData();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            OrderItem.ClearTable();
+            BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
+            col.LoadAll();
+            col.Sort("OrderNumber", true, true);
+            Assert.AreEqual(0, col.Count);
+
+            OrderItem car = OrderItem.AddOrder1Car();
+            OrderItem.AddOrder2Chair();
+            col = new BusinessObjectCollection<OrderItem>();
+            col.LoadAll();
+            col.Sort("OrderNumber", true, true);
+            Assert.AreEqual(2, col.Count);
+            ReadOnlyDataSetProvider provider = new ReadOnlyDataSetProvider(col);
+            UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
+            DataTable table = provider.GetDataTable(uiGrid);
+            Assert.AreEqual(2, table.Rows.Count);
+
+            car.OrderNumber = 11;
+            Assert.AreEqual(0, provider.FindRow(car));
+            Assert.AreEqual(car, provider.Find(0));
+            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=11;OrderItem.Product=car"));
+
+            car.Save();
+            Assert.AreEqual(0, provider.FindRow(car));
+            Assert.AreEqual(car, provider.Find(0));
+            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=11;OrderItem.Product=car"));
+
+            car.OrderNumber = 12;
+            Assert.AreEqual(0, provider.FindRow(car));
+            Assert.AreEqual(car, provider.Find(0));
+            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=12;OrderItem.Product=car"));
+
+            car.OrderNumber = 13;
+            Assert.AreEqual(0, provider.FindRow(car));
+            Assert.AreEqual(car, provider.Find(0));
+            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=13;OrderItem.Product=car"));
+        }
 
         [Test]
         public void TestCorrectColumnNames()
         {
             SetupTestData();
-            Assert.AreEqual("ID", itsTable.Columns[0].Caption);
-            Assert.AreEqual("ID", itsTable.Columns[0].ColumnName);
+            Assert.AreEqual(_dataTableIdColumnName, itsTable.Columns[0].Caption);
+            Assert.AreEqual(_dataTableIdColumnName, itsTable.Columns[0].ColumnName);
 
             Assert.AreEqual("Test Prop", itsTable.Columns[1].Caption);
             Assert.AreEqual("TestProp", itsTable.Columns[1].ColumnName);
@@ -154,7 +479,7 @@ namespace Habanero.Test.BO
             DataRow row1 = itsTable.Rows[0];
             DataRow row2 = itsTable.Rows[1];
             Assert.AreEqual("bo1prop1", row1["TestProp"]);
-            Assert.AreEqual(itsBo1.ID.ToString(), row1["ID"]);
+            Assert.AreEqual(itsBo1.ID.ToString(), row1[_dataTableIdColumnName]);
             Assert.AreEqual("s1", row1["TestProp2"]);
             Assert.AreEqual("bo2prop1", row2["TestProp"]);
             Assert.AreEqual("s2", row2["TestProp2"]);
@@ -170,6 +495,7 @@ namespace Habanero.Test.BO
             string testPropValue = myBO.TestProp;
             row1["TestProp"] = "";
             //-------------Assert Preconditions -------------
+            Assert.AreEqual(row1[_dataTableIdColumnName], myBO.ID.AsString_CurrentValue());
             Assert.AreEqual(testPropValue, myBO.TestProp);
             Assert.AreNotEqual(testPropValue, row1["TestProp"]);
             //---------------Execute Test ----------------------
@@ -207,7 +533,7 @@ namespace Habanero.Test.BO
             MyBO.LoadClassDefWithDateTime();
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             MyBO bo = new MyBO();
-            string dateTimeProp = "TestDateTime";
+            const string dateTimeProp = "TestDateTime";
             DateTime expectedDate = DateTime.Now;
             bo.SetPropertyValue(dateTimeProp, expectedDate);
 
@@ -265,13 +591,13 @@ namespace Habanero.Test.BO
             
             new Car();
             ClassDef classDef = MyContactPerson.LoadClassDef();
-            string columnName = "Father.DateOfBirth";
+            const string columnName = "Father.DateOfBirth";
             UIGrid uiGrid = CreateUiGridWithColumn(classDef, columnName);
             
             MyContactPerson myContactPerson = new MyContactPerson();
             MyContactPerson myFather = new MyContactPerson();
             myContactPerson.Father = myFather;
-            string fatherFirstName = "Father John";
+            const string fatherFirstName = "Father John";
             myFather.FirstName = fatherFirstName;
             DateTime fatherDOB = DateTime.Now;
             myFather.DateOfBirth = fatherDOB;
@@ -303,7 +629,7 @@ namespace Habanero.Test.BO
             new Car();
 //            DateTime startDate = DateTime.Now;
             ClassDef classDef = MyContactPerson.LoadClassDef();
-            string columnName = "-DateProperty-";
+            const string columnName = "-DateProperty-";
             UIGrid uiGrid = CreateUiGridWithColumn(classDef, columnName);
             BusinessObjectCollection<ContactPerson> contactPersons = new BusinessObjectCollection<ContactPerson>();
             MyContactPerson bo = new MyContactPerson();
@@ -338,8 +664,8 @@ namespace Habanero.Test.BO
 
         public class MyContactPerson : ContactPerson
         {
-            private DateTime _dateTime = DateTime.Now;
-            private static string fatherRelationshipName = "Father";
+            private readonly DateTime _dateTime = DateTime.Now;
+            private const string fatherRelationshipName = "Father";
 
             public MyContactPerson() : base(LoadClassDef())
             {

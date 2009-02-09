@@ -29,10 +29,11 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestReadOnlyDataSetProvider : TestDataSetProvider
     {
+     
         protected override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
         {
             _dataSetProvider = new ReadOnlyDataSetProvider(col);
-            ((ReadOnlyDataSetProvider)_dataSetProvider).AddPropertyUpdatedHandler = true;
+            ((ReadOnlyDataSetProvider)_dataSetProvider).RegisterForBusinessObjectPropertyUpdatedEvents = true;
             return _dataSetProvider;
         }
 
@@ -41,162 +42,162 @@ namespace Habanero.Test.BO
         {
             BORegistry.DataAccessor = new DataAccessorDB();
         }
+//
+//        [Test]
+//        public void TestUpdateBusinessObjectUpdatesRow()
+//        {
+//            SetupTestData();
+//            itsBo1.SetPropertyValue("TestProp", "UpdatedValue");
+//            Assert.AreEqual("UpdatedValue", itsTable.Rows[0][1]);
+//        }
 
-        [Test]
-        public void TestUpdateBusinessObjectUpdatesRow()
-        {
-            SetupTestData();
-            itsBo1.SetPropertyValue("TestProp", "UpdatedValue");
-            Assert.AreEqual("UpdatedValue", itsTable.Rows[0][1]);
-        }
+//        [Test]
+//        public void TestAddBusinessObjectAddsRow()
+//        {
+//            SetupTestData();
+//            //IBusinessObject bo3 = _classDef.CreateNewBusinessObject(itsConnection);
+//            IBusinessObject bo3 = _classDef.CreateNewBusinessObject();
+//            bo3.SetPropertyValue("TestProp", "bo3prop1");
+//            bo3.SetPropertyValue("TestProp2", "s1");
+//            _collection.Add(bo3);
+//            Assert.AreEqual(3, itsTable.Rows.Count);
+//            Assert.AreEqual("bo3prop1", itsTable.Rows[2][1]);
+//        }
 
-        [Test]
-        public void TestAddBusinessObjectAddsRow()
-        {
-            SetupTestData();
-            //IBusinessObject bo3 = _classDef.CreateNewBusinessObject(itsConnection);
-            IBusinessObject bo3 = _classDef.CreateNewBusinessObject();
-            bo3.SetPropertyValue("TestProp", "bo3prop1");
-            bo3.SetPropertyValue("TestProp2", "s1");
-            _collection.Add(bo3);
-            Assert.AreEqual(3, itsTable.Rows.Count);
-            Assert.AreEqual("bo3prop1", itsTable.Rows[2][1]);
-        }
-
-        [Test]
-        public void TestAddBusinessObjectAndUpdateUpdatesNewRow()
-        {
-            SetupTestData();
-            //IBusinessObject bo3 = _classDef.CreateNewBusinessObject(itsConnection);
-            IBusinessObject bo3 = _classDef.CreateNewBusinessObject();
-            bo3.SetPropertyValue("TestProp", "bo3prop1");
-            bo3.SetPropertyValue("TestProp2", "s2");
-            _collection.Add(bo3);
-            bo3.SetPropertyValue("TestProp", "UpdatedValue");
-            Assert.AreEqual("UpdatedValue", itsTable.Rows[2][1]);
-        }
-
-        [Test]
-        public void TestRemoveBusinessObjectRemovesRow()
-        {
-            SetupTestData();
-            _collection.Remove(itsBo1);
-            Assert.AreEqual(1, itsTable.Rows.Count);
-        }
-
-        [Test]
-        public void TestOrderItemAddAndFindBO()
-        {
-            SetupTestData();
-            OrderItem car = OrderItem.AddOrder1Car();
-            OrderItem chair = OrderItem.AddOrder2Chair();
-            BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
-            col.LoadAll();
-
-            ReadOnlyDataSetProvider provider = new ReadOnlyDataSetProvider(col);
-            UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
-            Assert.AreEqual(2, provider.GetDataTable(uiGrid).Rows.Count);
-            Assert.AreEqual(0, provider.FindRow(car));
-            Assert.AreEqual(1, provider.FindRow(chair));
-            Assert.AreEqual(car, provider.Find(0));
-            Assert.AreEqual(chair, provider.Find(1));
-            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=1;OrderItem.Product=car"));
-            Assert.AreEqual(chair, provider.Find("OrderItem.OrderNumber=2;OrderItem.Product=chair"));
-
-            OrderItem roof = OrderItem.AddOrder3Roof();
-            Assert.AreEqual(2, provider.GetDataTable(uiGrid).Rows.Count);
-            Assert.AreEqual(-1, provider.FindRow(roof));
-            bool causedException = false;
-            try
-            {
-                provider.Find(2);
-            }
-            catch (Exception e)
-            {
-                causedException = true;
-                Assert.AreEqual(typeof(IndexOutOfRangeException), e.GetType());
-            }
-            Assert.IsTrue(causedException);
-            Assert.IsNull(provider.Find("OrderItem.OrderNumber=3;OrderItem.Product=roof"));
-
-            col.Add(roof);
-            Assert.AreEqual(3, provider.GetDataTable(uiGrid).Rows.Count);
-            Assert.AreEqual(2, provider.FindRow(roof));
-            Assert.AreEqual(roof, provider.Find(2));
-            Assert.AreEqual(roof, provider.Find("OrderItem.OrderNumber=3;OrderItem.Product=roof"));
-        }
-
-        [Test]
-        public void TestOrderItemRemove()
-        {
-            SetupTestData();
-            OrderItem.ClearTable();
-            OrderItem.AddOrder1Car();
-            OrderItem chair = OrderItem.AddOrder2Chair();
-            BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
-            col.LoadAll();
-
-            ReadOnlyDataSetProvider provider = new ReadOnlyDataSetProvider(col);
-            UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
-            DataTable table = provider.GetDataTable(uiGrid);
-            Assert.AreEqual(2, table.Rows.Count);
-
-            col.Remove(chair);
-            Assert.AreEqual(1, table.Rows.Count);
-            Assert.AreEqual(-1, provider.FindRow(chair));
-            bool causedException = false;
-            try
-            {
-                provider.Find(1);
-            }
-            catch (Exception e)
-            {
-                causedException = true;
-                Assert.AreEqual(typeof(IndexOutOfRangeException), e.GetType());
-            }
-            Assert.IsTrue(causedException);
-            Assert.IsNull(provider.Find("OrderNumber=2 AND Product=chair"));
-        }
-
-        [Test]
-        public void TestOrderItemChangeItemAndFind()
-        {
-            SetupTestData();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            OrderItem.ClearTable();
-            BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
-            col.LoadAll();
-            Assert.AreEqual(0, col.Count);
-
-            OrderItem car = OrderItem.AddOrder1Car();
-            OrderItem.AddOrder2Chair();
-            col = new BusinessObjectCollection<OrderItem>();
-            col.LoadAll();
-            Assert.AreEqual(2, col.Count);
-            ReadOnlyDataSetProvider provider = new ReadOnlyDataSetProvider(col);
-            UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
-            DataTable table = provider.GetDataTable(uiGrid);
-            Assert.AreEqual(2, table.Rows.Count);
-
-            car.OrderNumber = 11;
-            Assert.AreEqual(0, provider.FindRow(car));
-            Assert.AreEqual(car, provider.Find(0));
-            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=11;OrderItem.Product=car")); 
-            
-            car.Save();
-            Assert.AreEqual(0, provider.FindRow(car));
-            Assert.AreEqual(car, provider.Find(0));
-            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=11;OrderItem.Product=car"));
-            
-            car.OrderNumber = 12;
-            Assert.AreEqual(0, provider.FindRow(car));
-            Assert.AreEqual(car, provider.Find(0));
-            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=12;OrderItem.Product=car"));
-            
-            car.OrderNumber = 13;
-            Assert.AreEqual(0, provider.FindRow(car));
-            Assert.AreEqual(car, provider.Find(0));
-            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=13;OrderItem.Product=car"));
-        }
+//        [Test]
+//        public void TestAddBusinessObjectAndUpdateUpdatesNewRow()
+//        {
+//            SetupTestData();
+//            //IBusinessObject bo3 = _classDef.CreateNewBusinessObject(itsConnection);
+//            IBusinessObject bo3 = _classDef.CreateNewBusinessObject();
+//            bo3.SetPropertyValue("TestProp", "bo3prop1");
+//            bo3.SetPropertyValue("TestProp2", "s2");
+//            _collection.Add(bo3);
+//            bo3.SetPropertyValue("TestProp", "UpdatedValue");
+//            Assert.AreEqual("UpdatedValue", itsTable.Rows[2][1]);
+//        }
+//
+//        [Test]
+//        public void TestRemoveBusinessObjectRemovesRow()
+//        {
+//            SetupTestData();
+//            _collection.Remove(itsBo1);
+//            Assert.AreEqual(1, itsTable.Rows.Count);
+//        }
+//
+//        [Test]
+//        public void TestOrderItemAddAndFindBO()
+//        {
+//            SetupTestData();
+//            OrderItem car = OrderItem.AddOrder1Car();
+//            OrderItem chair = OrderItem.AddOrder2Chair();
+//            BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
+//            col.LoadAll();
+//
+//            ReadOnlyDataSetProvider provider = new ReadOnlyDataSetProvider(col);
+//            UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
+//            Assert.AreEqual(2, provider.GetDataTable(uiGrid).Rows.Count);
+//            Assert.AreEqual(0, provider.FindRow(car));
+//            Assert.AreEqual(1, provider.FindRow(chair));
+//            Assert.AreEqual(car, provider.Find(0));
+//            Assert.AreEqual(chair, provider.Find(1));
+//            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=1;OrderItem.Product=car"));
+//            Assert.AreEqual(chair, provider.Find("OrderItem.OrderNumber=2;OrderItem.Product=chair"));
+//
+//            OrderItem roof = OrderItem.AddOrder3Roof();
+//            Assert.AreEqual(2, provider.GetDataTable(uiGrid).Rows.Count);
+//            Assert.AreEqual(-1, provider.FindRow(roof));
+//            bool causedException = false;
+//            try
+//            {
+//                provider.Find(2);
+//            }
+//            catch (Exception e)
+//            {
+//                causedException = true;
+//                Assert.AreEqual(typeof(IndexOutOfRangeException), e.GetType());
+//            }
+//            Assert.IsTrue(causedException);
+//            Assert.IsNull(provider.Find("OrderItem.OrderNumber=3;OrderItem.Product=roof"));
+//
+//            col.Add(roof);
+//            Assert.AreEqual(3, provider.GetDataTable(uiGrid).Rows.Count);
+//            Assert.AreEqual(2, provider.FindRow(roof));
+//            Assert.AreEqual(roof, provider.Find(2));
+//            Assert.AreEqual(roof, provider.Find("OrderItem.OrderNumber=3;OrderItem.Product=roof"));
+//        }
+//
+//        [Test]
+//        public void TestOrderItemRemove()
+//        {
+//            SetupTestData();
+//            OrderItem.ClearTable();
+//            OrderItem.AddOrder1Car();
+//            OrderItem chair = OrderItem.AddOrder2Chair();
+//            BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
+//            col.LoadAll();
+//
+//            ReadOnlyDataSetProvider provider = new ReadOnlyDataSetProvider(col);
+//            UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
+//            DataTable table = provider.GetDataTable(uiGrid);
+//            Assert.AreEqual(2, table.Rows.Count);
+//
+//            col.Remove(chair);
+//            Assert.AreEqual(1, table.Rows.Count);
+//            Assert.AreEqual(-1, provider.FindRow(chair));
+//            bool causedException = false;
+//            try
+//            {
+//                provider.Find(1);
+//            }
+//            catch (Exception e)
+//            {
+//                causedException = true;
+//                Assert.AreEqual(typeof(IndexOutOfRangeException), e.GetType());
+//            }
+//            Assert.IsTrue(causedException);
+//            Assert.IsNull(provider.Find("OrderNumber=2 AND Product=chair"));
+//        }
+//
+//        [Test]
+//        public void TestOrderItemChangeItemAndFind()
+//        {
+//            SetupTestData();
+//            BusinessObjectManager.Instance.ClearLoadedObjects();
+//            OrderItem.ClearTable();
+//            BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
+//            col.LoadAll();
+//            Assert.AreEqual(0, col.Count);
+//
+//            OrderItem car = OrderItem.AddOrder1Car();
+//            OrderItem.AddOrder2Chair();
+//            col = new BusinessObjectCollection<OrderItem>();
+//            col.LoadAll();
+//            Assert.AreEqual(2, col.Count);
+//            ReadOnlyDataSetProvider provider = new ReadOnlyDataSetProvider(col);
+//            UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
+//            DataTable table = provider.GetDataTable(uiGrid);
+//            Assert.AreEqual(2, table.Rows.Count);
+//
+//            car.OrderNumber = 11;
+//            Assert.AreEqual(0, provider.FindRow(car));
+//            Assert.AreEqual(car, provider.Find(0));
+//            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=11;OrderItem.Product=car")); 
+//            
+//            car.Save();
+//            Assert.AreEqual(0, provider.FindRow(car));
+//            Assert.AreEqual(car, provider.Find(0));
+//            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=11;OrderItem.Product=car"));
+//            
+//            car.OrderNumber = 12;
+//            Assert.AreEqual(0, provider.FindRow(car));
+//            Assert.AreEqual(car, provider.Find(0));
+//            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=12;OrderItem.Product=car"));
+//            
+//            car.OrderNumber = 13;
+//            Assert.AreEqual(0, provider.FindRow(car));
+//            Assert.AreEqual(car, provider.Find(0));
+//            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=13;OrderItem.Product=car"));
+//        }
     }
 }

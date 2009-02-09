@@ -36,7 +36,7 @@ namespace Habanero.UI.Base
         /// column with buttons/links.
         /// <br/>
         /// The grid must already have at least one column added. At least one column must be a column with the name
-        /// "ID", which is used to synchronise the grid with the business objects.
+        /// "HABANERO_OBJECTID", which is used to synchronise the grid with the business objects.
         /// </summary>
         /// <exception cref="GridBaseInitialiseException">Thrown in the case where the columns
         /// have not already been defined for the grid</exception>

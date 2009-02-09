@@ -136,6 +136,13 @@ namespace Habanero.UI.Base
         /// data into a DataSet suitable for the grid
         /// </summary>
         IDataSetProvider DataSetProvider { get; }
+        
+        ///<summary>
+        /// Returns the name of the column being used for tracking the business object identity.
+        /// If a <see cref="IDataSetProvider"/> is used then it will be the <see cref="IDataSetProvider.IDColumnName"/>
+        /// Else it will be "HABANERO_OBJECTID".
+        ///</summary>
+        string IDColumnName { get; }
 
         /// <summary>
         /// Fires an event indicating that the selected business object

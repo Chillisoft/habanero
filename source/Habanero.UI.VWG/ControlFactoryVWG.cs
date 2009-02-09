@@ -45,6 +45,9 @@ namespace Habanero.UI.VWG
         public const int TEXTBOX_HEIGHT = 20;
         private readonly ControlFactoryManager _manager;
 
+        ///<summary>
+        /// base Constructor
+        ///</summary>
         public ControlFactoryVWG()
         {
             _manager = new ControlFactoryManager(this);

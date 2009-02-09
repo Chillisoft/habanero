@@ -50,7 +50,7 @@ namespace Habanero.UI.Win
         public override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
         {
             ReadOnlyDataSetProvider dataSetProvider = new ReadOnlyDataSetProvider(col);
-            dataSetProvider.AddPropertyUpdatedHandler = true;
+            dataSetProvider.RegisterForBusinessObjectPropertyUpdatedEvents = true;
             return dataSetProvider;
         }
     }

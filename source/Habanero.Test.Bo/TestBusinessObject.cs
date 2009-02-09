@@ -794,13 +794,25 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             Engine engine1 = new Engine();
             bool propertyEventFired = false;
+            IBusinessObject eventBusinessObject = null;
+            IBOProp eventProp = null;
+            engine1.PropertyUpdated +=
+                delegate(object sender, BOEventArgs eventArgs1, BOPropEventArgs eventArgs2)
+                {
+                    eventBusinessObject = eventArgs1.BusinessObject;
+                    eventProp = eventArgs2.Prop;
+                    propertyEventFired = true;
+                };
             //-------------Assert Preconditions -------------
             Assert.IsFalse(propertyEventFired);
+            Assert.IsNull(eventBusinessObject);
+            Assert.IsNull(eventProp);
             //---------------Execute Test ----------------------
-            engine1.PropertyUpdated += delegate { propertyEventFired = true; };
             engine1.EngineNo = "20";
             //---------------Test Result -----------------------
             Assert.IsTrue(propertyEventFired);
+            Assert.AreSame(engine1,eventBusinessObject);
+            Assert.AreSame(engine1.Props["EngineNo"], eventProp);
         }
 
         [Test]

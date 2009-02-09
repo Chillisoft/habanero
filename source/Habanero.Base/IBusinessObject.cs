@@ -112,6 +112,12 @@ namespace Habanero.Base
         void Restore();
 
         /// <summary>
+        /// Cancel all edits made to the object since it was loaded from the 
+        /// database or last saved to the database
+        /// </summary>
+        void CancelEdits();
+
+        /// <summary>
         /// Marks the business object for deleting.  Calling Save() will
         /// then carry out the deletion from the database.
         /// </summary>
@@ -167,7 +173,7 @@ namespace Habanero.Base
         /// </summary>
         bool IsCreatable(out string message);
 
-        event EventHandler<BOEventArgs> PropertyUpdated;
+        event EventHandler<BOEventArgs, BOPropEventArgs> PropertyUpdated;
         event EventHandler<BOEventArgs> MarkedForDeletion;
 
         /// <summary>
