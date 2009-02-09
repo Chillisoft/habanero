@@ -165,7 +165,7 @@ namespace Habanero.BO
         /// Checks whether the business object is currently loaded.
         /// </summary>
         /// <param name="objectID">The string identity (usually bo.ID.GetObjectID()) of the object being checked.</param>
-        /// <returns>Whether the busienss object is loadd or not</returns>
+        ///<returns>Whether the business object is in the <see cref="BusinessObjectManager"/> or not.</returns>
         internal bool Contains(string objectID)
         {
             lock (_loadedBusinessObjects)
@@ -178,6 +178,26 @@ namespace Habanero.BO
                         _loadedBusinessObjects.Remove(objectID);
                         return false;
                     }
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        ///<summary>
+        /// Checks whether the business object is in the <see cref="BusinessObjectManager"/>.
+        ///</summary>
+        ///<param name="objectID">The <see cref="IBusinessObject"/>'s <see cref="IBusinessObject.ID"/>.<see cref="IPrimaryKey.ObjectID"/> value.</param>
+        ///<returns>Whether the business object is in the <see cref="BusinessObjectManager"/> or not.</returns>
+        public bool Contains(Guid objectID)
+        {
+            foreach (KeyValuePair<string, WeakReference> pair in _loadedBusinessObjects)
+            {
+                WeakReference weakReference = pair.Value;
+                if (!weakReference.IsAlive) continue;
+                IBusinessObject businessObject = (IBusinessObject) weakReference.Target;
+                if (businessObject.ID.ObjectID == objectID)
+                {
                     return true;
                 }
             }

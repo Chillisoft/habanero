@@ -168,9 +168,29 @@ namespace Habanero.BO.Loaders
 //            CheckRelationships();
             CheckRelationships(_classDefList);
             UpdateKeyDefinitionsWithBoProp(_classDefList);
+            UpdatePrimaryKeys(_classDefList);
             //TODO Brett 02 Feb 2009: check valid business object lookup definition i.e. is property valid and is sort direction valid
             //TODO Brett 02 Feb 2009: Validation for relationships that reversed relationship and forward relationship for
             //  a bo are not both set to OwnerHasForeignKey
+        }
+
+        private static void UpdatePrimaryKeys(ClassDefCol col)
+        {
+            foreach (ClassDef classDef in col)
+            {
+                PrimaryKeyDef primaryKeyDef = classDef.PrimaryKeyDef;
+                if (primaryKeyDef == null) continue;
+                if (!primaryKeyDef.IsGuidObjectID) continue;
+                IPropDef keyPropDef = primaryKeyDef[0];
+                if (primaryKeyDef.IsGuidObjectID && keyPropDef.PropertyType != typeof(Guid))
+                {
+                    throw new InvalidXmlDefinitionException("In the class called '" + classDef.ClassNameFull + 
+                        "', the primary key is set as IsObjectID but the property '" + keyPropDef.PropertyName +
+                    "' defined as part of the ObjectID primary key is not a Guid.");
+                }
+                keyPropDef.Compulsory = true;
+                keyPropDef.ReadWriteRule = PropReadWriteRule.WriteOnce;
+            }
         }
 
         private static void UpdateKeyDefinitionsWithBoProp(ClassDefCol col)

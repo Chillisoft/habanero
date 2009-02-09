@@ -47,13 +47,13 @@ namespace Habanero.Test.BO.Loaders
                     @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
 						</class>
 						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestRelatedClassID"" />
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestRelatedClassID""/>
                             </primaryKey>
@@ -74,13 +74,13 @@ namespace Habanero.Test.BO.Loaders
                     @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
 						</class>
 						<class name=""TestClass2"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClass2ID"" />
+							<property  name=""TestClass2ID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClass2ID""/>
                             </primaryKey>
@@ -108,7 +108,7 @@ namespace Habanero.Test.BO.Loaders
             const string xml = @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
 							<property  name=""TestClassName"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
@@ -146,7 +146,7 @@ namespace Habanero.Test.BO.Loaders
             const string xml = @"
 				<classes>
 					<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-						<property  name=""TestClassID"" />
+						<property  name=""TestClassID"" type=""Guid"" />
 						<property  name=""TestClassName"" />
                         <primaryKey>
                             <prop name=""TestClassID""/>
@@ -180,7 +180,7 @@ namespace Habanero.Test.BO.Loaders
             const string classDefsString = @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
@@ -189,8 +189,8 @@ namespace Habanero.Test.BO.Loaders
 					        </relationship>
 						</class>
 						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestRelatedClassID"" />
-							<property  name=""TestClassID"" />
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestRelatedClassID""/>
                             </primaryKey>
@@ -221,7 +221,7 @@ namespace Habanero.Test.BO.Loaders
             const string classDefsString = @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
 							<property  name=""OtherFieldID"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
@@ -231,8 +231,8 @@ namespace Habanero.Test.BO.Loaders
 					        </relationship>
 						</class>
 						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestRelatedClassID"" />
-							<property  name=""TestClassID"" />
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestRelatedClassID""/>
                             </primaryKey>
@@ -263,7 +263,7 @@ namespace Habanero.Test.BO.Loaders
             const string classDefsString = @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
@@ -272,8 +272,8 @@ namespace Habanero.Test.BO.Loaders
 					        </relationship>
 						</class>
 						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestRelatedClassID"" />
-							<property  name=""TestClassID"" />
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestRelatedClassID""/>
                             </primaryKey>
@@ -303,7 +303,7 @@ namespace Habanero.Test.BO.Loaders
             const string classDefsString = @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
 							<property  name=""ForeignKeyProp"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
@@ -313,8 +313,8 @@ namespace Habanero.Test.BO.Loaders
 					        </relationship>
 						</class>
 						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestRelatedClassID"" />
-							<property  name=""TestClassID"" />
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestRelatedClassID""/>
                             </primaryKey>
@@ -345,7 +345,7 @@ namespace Habanero.Test.BO.Loaders
             const string classDefsString = @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
@@ -354,8 +354,8 @@ namespace Habanero.Test.BO.Loaders
 					        </relationship>
 						</class>
 						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestRelatedClassID"" />
-							<property  name=""TestClassID"" />
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestRelatedClassID""/>
                             </primaryKey>
@@ -381,7 +381,7 @@ namespace Habanero.Test.BO.Loaders
             const string classDefsString = @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
@@ -390,8 +390,8 @@ namespace Habanero.Test.BO.Loaders
 					        </relationship>
 						</class>
 						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestRelatedClassID"" />
-							<property  name=""TestClassID"" />
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestRelatedClassID""/>
                             </primaryKey>
@@ -418,8 +418,8 @@ namespace Habanero.Test.BO.Loaders
 					<classes>
 
 						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestRelatedClassID"" />
-							<property  name=""TestClassID"" />
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestRelatedClassID""/>
                             </primaryKey>
@@ -428,7 +428,7 @@ namespace Habanero.Test.BO.Loaders
 					        </relationship>
 						</class>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
@@ -455,7 +455,7 @@ namespace Habanero.Test.BO.Loaders
             const string classDefsString = @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
@@ -464,8 +464,8 @@ namespace Habanero.Test.BO.Loaders
 					        </relationship>
 						</class>
 						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestRelatedClassID"" />
-							<property  name=""TestClassID"" />
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestRelatedClassID""/>
                             </primaryKey>
@@ -496,7 +496,7 @@ namespace Habanero.Test.BO.Loaders
             const string classDefsString = @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
@@ -505,8 +505,8 @@ namespace Habanero.Test.BO.Loaders
 					        </relationship>
 						</class>
 						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestRelatedClassID"" />
-							<property  name=""TestClassID"" />
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestRelatedClassID""/>
                             </primaryKey>
@@ -526,6 +526,207 @@ namespace Habanero.Test.BO.Loaders
                 StringAssert.Contains("The relationship 'TestRelatedClass' could not be loaded for because when trying to retrieve its related class the folllowing", ex.Message);
             }
         }
+
+        [Test]
+        public void Test_Force_PrimaryKey_IsObjectID_AsCompulsoryWriteOnce_WithReadWriteRule_ReadWrite()
+        {
+            //-------------Setup Test Pack ------------------
+            const string xml = @"
+				<classes>
+					<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+						<property name=""TestClassID"" type=""Guid"" readWriteRule=""ReadWrite""/>
+                        <primaryKey isObjectID=""true"">
+                            <prop name=""TestClassID""/>
+                        </primaryKey>
+					</class>
+				</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //-------------Execute test ---------------------
+            ClassDefCol classDefs = loader.LoadClassDefs(xml);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, classDefs.Count);
+            Assert.IsTrue(classDefs.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
+            ClassDef classDef = classDefs["Habanero.Test.BO.Loaders", "TestClass"];
+            Assert.AreEqual(1, classDef.PrimaryKeyDef.Count);
+            IPropDef keyPropDef = classDef.PrimaryKeyDef[0];
+            Assert.IsTrue(keyPropDef.Compulsory);
+            Assert.AreEqual(PropReadWriteRule.WriteOnce, keyPropDef.ReadWriteRule);
+        }
+
+        [Test]
+        public void Test_Force_PrimaryKey_IsObjectID_AsCompulsoryWriteOnce_WithReadWriteRule_WriteNew()
+        {
+            //-------------Setup Test Pack ------------------
+            const string xml = @"
+				<classes>
+					<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+						<property name=""TestClassID"" type=""Guid"" readWriteRule=""WriteNew""/>
+                        <primaryKey isObjectID=""true"">
+                            <prop name=""TestClassID""/>
+                        </primaryKey>
+					</class>
+				</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //-------------Execute test ---------------------
+            ClassDefCol classDefs = loader.LoadClassDefs(xml);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, classDefs.Count);
+            Assert.IsTrue(classDefs.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
+            ClassDef classDef = classDefs["Habanero.Test.BO.Loaders", "TestClass"];
+            Assert.AreEqual(1, classDef.PrimaryKeyDef.Count);
+            IPropDef keyPropDef = classDef.PrimaryKeyDef[0];
+            Assert.IsTrue(keyPropDef.Compulsory);
+            Assert.AreEqual(PropReadWriteRule.WriteOnce, keyPropDef.ReadWriteRule);
+        }
+
+        [Test]
+        public void Test_Validate_PrimaryKey_IsObjectID_True_NonGuidProp()
+        {
+            //-------------Setup Test Pack ------------------
+            const string xml = @"
+				<classes>
+					<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+						<property name=""TestClassID""/>
+                        <primaryKey isObjectID=""true"">
+                            <prop name=""TestClassID""/>
+                        </primaryKey>
+					</class>
+				</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //-------------Execute test ---------------------
+            try
+            {
+                loader.LoadClassDefs(xml);
+                //---------------Test Result -----------------------
+                Assert.Fail("Should have thrown an InvalidXmlDefinitionException");
+            }
+            catch (InvalidXmlDefinitionException ex)
+            {
+                Assert.AreEqual("In the class called 'TestClass', the primary key is set as IsObjectID but the property 'TestClassID' " +
+                    "defined as part of the ObjectID primary key is not a Guid.", ex.Message);
+            }
+        }
+
+        [Test]
+        public void Test_Validate_PrimaryKey_HasNoProps_IsObjectGuid()
+        {
+            //-------------Setup Test Pack ------------------
+            const string xml = @"
+				<classes>
+					<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+						<property name=""TestClassID""/>
+                        <primaryKey isObjectID=""true"">
+                        </primaryKey>
+					</class>
+				</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //-------------Execute test ---------------------
+            try
+            {
+                loader.LoadClassDefs(xml);
+                //---------------Test Result -----------------------
+                Assert.Fail("Should have thrown an InvalidXmlDefinitionException");
+            }
+            catch (InvalidXmlDefinitionException ex)
+            {
+                Assert.AreEqual("A primaryKey node must have one or more prop nodes", ex.Message);
+                //Assert.AreEqual("In the class called 'TestClass', the primary key has no properties defined.", ex.Message);
+                //TODO Mark: 09 Feb 2009 - Improve this error message to something similar to above
+            }
+        }
+
+        [Test]
+        public void Test_Validate_PrimaryKey_HasNoProps_IsNotObjectGuid()
+        {
+            //-------------Setup Test Pack ------------------
+            const string xml = @"
+				<classes>
+					<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+						<property name=""TestClassID""/>
+                        <primaryKey isObjectID=""false"">
+                        </primaryKey>
+					</class>
+				</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //-------------Execute test ---------------------
+            try
+            {
+                loader.LoadClassDefs(xml);
+                //---------------Test Result -----------------------
+                Assert.Fail("Should have thrown an InvalidXmlDefinitionException");
+            }
+            catch (InvalidXmlDefinitionException ex)
+            {
+                Assert.AreEqual("A primaryKey node must have one or more prop nodes", ex.Message);
+                //Assert.AreEqual("In the class called 'TestClass', the primary key has no properties defined.", ex.Message);
+                //TODO Mark: 09 Feb 2009 - Improve this error message to something similar to above
+            }
+        }
+
+        [Test]
+        public void Test_Validate_PrimaryKey_IsObjectID_True_MultipleProps()
+        {
+            //-------------Setup Test Pack ------------------
+            const string xml = @"
+				<classes>
+					<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+						<property name=""TestClassID"" type=""Guid""/>
+						<property name=""TestRelatedClassID"" type=""Guid"" />
+                        <primaryKey isObjectID=""true"">
+                            <prop name=""TestClassID""/>
+                            <prop name=""TestRelatedClassID""/>
+                        </primaryKey>
+					</class>
+				</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //-------------Execute test ---------------------
+            try
+            {
+                loader.LoadClassDefs(xml);
+                //---------------Test Result -----------------------
+                Assert.Fail("Should have thrown an InvalidPropertyException");
+            }
+            catch (InvalidPropertyException ex)
+            {
+                Assert.AreEqual("You cannot have more than one property for a primary key that represents an object's Guid ID", ex.Message);
+            }
+        }
+
+        [Test]
+        public void Test_Force_PrimaryKey_IsObjectID_False_AsCompulsoryWriteOnce_WithReadWriteRule_ReadWrite()
+        {
+            //-------------Setup Test Pack ------------------
+            const string xml = @"
+				<classes>
+					<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+						<property name=""TestClassID"" type=""string"" readWriteRule=""ReadWrite""/>
+                        <primaryKey isObjectID=""false"">
+                            <prop name=""TestClassID""/>
+                        </primaryKey>
+					</class>
+				</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //-------------Execute test ---------------------
+            ClassDefCol classDefs = loader.LoadClassDefs(xml);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, classDefs.Count);
+            Assert.IsTrue(classDefs.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
+            ClassDef classDef = classDefs["Habanero.Test.BO.Loaders", "TestClass"];
+            Assert.AreEqual(1, classDef.PrimaryKeyDef.Count);
+            IPropDef keyPropDef = classDef.PrimaryKeyDef[0];
+            Assert.IsFalse(keyPropDef.Compulsory);
+            Assert.AreEqual(PropReadWriteRule.ReadWrite, keyPropDef.ReadWriteRule);
+        }
+
+
+
         [Test, ExpectedException(typeof(XmlException))]
         public void TestNoRootNodeException()
         {

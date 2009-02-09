@@ -109,6 +109,15 @@ namespace Habanero.BO
             }
         }
 
+        public override Guid ObjectID
+        {
+            get
+            {
+                if (ObjectIDProp.Value == null) return Guid.Empty;
+                return (Guid) ObjectIDProp.Value;
+            }
+        }
+
         /// <summary>
         /// Returns the ObjectID as "ID=ObjectIDValue"
         /// </summary>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -165,6 +166,84 @@ namespace Habanero.Test.BO
             Assert.IsFalse(result);
         }
 
+        [Test]
+        public void Test_ObjectID_NotSet()
+        {
+            //--------------- Set up test pack ------------------
+            //--------------- Test Preconditions ----------------
+            //--------------- Execute Test ----------------------
+            BOObjectID primaryKey = CreateBOObjectID();
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(Guid.Empty, primaryKey.ObjectID);
+        }
+
+        [Test]
+        public void Test_ObjectID_SetObjectGuidID()
+        {
+            //--------------- Set up test pack ------------------
+            BOObjectID primaryKey = CreateBOObjectID();
+            Guid id = Guid.NewGuid();
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(Guid.Empty, primaryKey.ObjectID);
+            //--------------- Execute Test ----------------------
+            primaryKey.SetObjectGuidID(id);
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(id, primaryKey.ObjectID);
+        }
+
+        [Test]
+        public void Test_ObjectID_SetObjectGuidID_Twice()
+        {
+            //--------------- Set up test pack ------------------
+            BOObjectID primaryKey = CreateBOObjectID();
+            Guid id = Guid.NewGuid();
+            primaryKey.SetObjectGuidID(id);
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(id, primaryKey.ObjectID);
+            //--------------- Execute Test ----------------------
+            try
+            {
+                primaryKey.SetObjectGuidID(Guid.NewGuid());
+            //--------------- Test Result -----------------------
+                Assert.Fail("InvalidObjectIdException expected");
+            } catch(InvalidObjectIdException ex)
+            {
+                Assert.AreEqual("The ObjectGuidID has already been set for this object.", ex.Message);
+                Assert.AreEqual(id, primaryKey.ObjectID);
+            }
+        }
+
+        [Test]
+        public void Test_ObjectID_EqualsIdPropValue()
+        {
+            //--------------- Set up test pack ------------------
+            BOObjectID primaryKey = CreateBOObjectID();
+            Guid id = Guid.NewGuid();
+            IBOProp keyProp = primaryKey[0];
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(Guid.Empty, primaryKey.ObjectID);
+            //--------------- Execute Test ----------------------
+            keyProp.Value = id;
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(id, keyProp.Value);
+            Assert.AreEqual(id, primaryKey.ObjectID);
+        }
+
+        //[Test]
+        //public void Test_ObjectID_EqualsIdPropValue()
+        //{
+        //    //--------------- Set up test pack ------------------
+        //    BOObjectID primaryKey = CreateBOObjectID();
+        //    Guid id = Guid.NewGuid();
+        //    IBOProp keyProp = primaryKey[0];
+        //    //--------------- Test Preconditions ----------------
+        //    Assert.AreEqual(Guid.Empty, primaryKey.ObjectID);
+        //    //--------------- Execute Test ----------------------
+        //    keyProp.Value = id;
+        //    //--------------- Test Result -----------------------
+        //    Assert.AreEqual(id, keyProp.Value);
+        //    Assert.AreEqual(id, primaryKey.ObjectID);
+        //}
 
         private BOObjectID CreateBOObjectID()
         {

@@ -195,13 +195,13 @@ namespace Habanero.Test.BO.ClassDefinition
                 @"
 					<classes>
 						<class name=""TestClass{0}"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClass{0}ID"" />
+							<property name=""TestClass{0}ID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClass{0}ID""/>
                             </primaryKey>
 						</class>
 						<class name=""TestRelatedClass{0}"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestRelatedClass{0}ID"" />
+							<property name=""TestRelatedClass{0}ID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestRelatedClass{0}ID""/>
                             </primaryKey>

@@ -165,10 +165,13 @@ namespace Habanero.Test.BO.Loaders
                 //---------------Test Result -----------------------
             catch (InvalidXmlDefinitionException ex)
             {
-                StringAssert.Contains("In a 'prop' element for the '' key of the 'TestClassInherited' class, the propery 'DoesNotExist' given in the 'name' attribute does not exist for the class or for any of it's superclasses. Either add the property definition or check the spelling and capitalisation of the specified property", ex.Message);
+                StringAssert.Contains("In a 'prop' element for the '' key of the 'TestClassInherited' class, " +
+                    "the propery 'DoesNotExist' given in the 'name' attribute does not exist for the class or " +
+                    "for any of it's superclasses. Either add the property definition or check the spelling and " +
+                    "capitalisation of the specified property", ex.Message);
             }
         }
-
+        
         [Test, ExpectedException(typeof(XmlException))]
         public void TestNoRootNodeException()
         {

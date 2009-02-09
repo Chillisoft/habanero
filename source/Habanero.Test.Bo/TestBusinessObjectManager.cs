@@ -98,9 +98,40 @@ namespace Habanero.Test.BO
 
             Assert.IsTrue(boMan.Contains(cp));
             Assert.IsTrue(boMan.Contains(cp.ID));
-            Assert.IsTrue(boMan.Contains(cp.ID.AsString_CurrentValue()));
+            //Assert.IsTrue(boMan.Contains(cp.ID.AsString_CurrentValue()));
+            Assert.IsTrue(boMan.Contains(cp.ID.ObjectID));
             Assert.AreSame(cp, boMan[cp.ID.AsString_CurrentValue()]);
             Assert.AreSame(cp, boMan[cp.ID]);
+        }
+
+        [Test]
+        public void Test_Contains_ByObjectID_True()
+        {
+            //--------------- Set up test pack ------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(1, boMan.Count);
+            //--------------- Execute Test ----------------------
+            bool isContained = boMan.Contains(cp.ID.ObjectID);
+            //--------------- Test Result -----------------------
+            Assert.IsTrue(isContained);
+        }
+
+        [Test]
+        public void Test_Contains_ByObjectID_False()
+        {
+            //--------------- Set up test pack ------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            BusinessObjectManager boMan = BusinessObjectManager.Instance;
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(1, boMan.Count);
+            //--------------- Execute Test ----------------------
+            bool isContained = boMan.Contains(Guid.Empty);
+            //--------------- Test Result -----------------------
+            Assert.IsFalse(isContained);
         }
 
         [Test]

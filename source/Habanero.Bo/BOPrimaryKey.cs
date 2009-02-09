@@ -35,6 +35,7 @@ namespace Habanero.BO
         protected Guid _newObjectID = Guid.Empty;
         private string _currentValue;
         private string _previousValue;
+        private Guid _objectID;
 
         /// <summary>
         /// Constructor to initialise a new primary key
@@ -64,6 +65,7 @@ namespace Habanero.BO
             {
                 throw new InvalidObjectIdException("The ObjectGuidID has already been set for this object.");
             }
+            _objectID = id;
         }
 
         /// <summary>
@@ -202,6 +204,19 @@ namespace Habanero.BO
         public bool IsCompositeKey
         {
             get { return this.Count > 1; }
+        }
+
+        ///<summary>
+        /// The globally unique object identifier for the object that this Primary Key represents. 
+        /// This is the implementation of a fundamental Object Oriented concept 
+        /// that every object should be globally uniquely identifiable.
+        /// The value returned from this property will be the actual value of the primary key property 
+        /// for objects with a <see cref="Guid"/> id, or it will be a newly created <see cref="Guid"/> 
+        /// for objects with composite or non-guid primary keys.
+        ///</summary>
+        public virtual Guid ObjectID
+        {
+            get { return _objectID; }
         }
 
         ///<summary>

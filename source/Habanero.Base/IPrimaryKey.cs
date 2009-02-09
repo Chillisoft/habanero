@@ -72,5 +72,15 @@ namespace Habanero.Base
         /// Returns true if the primary key is a composite Key (i.e. if it consists of more than one property)
         ///</summary>
         bool IsCompositeKey { get; }
+
+        ///<summary>
+        /// The globally unique object identifier for the object that this Primary Key represents. 
+        /// This is the implementation of a fundamental Object Oriented concept 
+        /// that every object should be globally uniquely identifiable.
+        /// The value returned from this property will be the actual value of the primary key property 
+        /// for objects with a <see cref="Guid"/> id, or it will be a newly created <see cref="Guid"/> 
+        /// for objects with composite or non-guid primary keys.
+        ///</summary>
+        Guid ObjectID { get; }
     }
 }

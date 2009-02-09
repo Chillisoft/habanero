@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test;
@@ -430,6 +431,54 @@ namespace Habanero.Test.BO
             //--------------- Test Result -----------------------
             Assert.AreNotEqual(guid.ToString(), keyAsString);
             Assert.AreEqual(origKeyAsString, keyAsString);
+        }
+
+        [Test]
+        public void Test_ObjectID_NotSet()
+        {
+            //--------------- Set up test pack ------------------
+            //--------------- Test Preconditions ----------------
+            //--------------- Execute Test ----------------------
+            BOPrimaryKey primaryKey = CreateBOPrimaryKeyString();
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(Guid.Empty, primaryKey.ObjectID);
+        }
+
+        [Test]
+        public void Test_ObjectID_SetObjectGuidID()
+        {
+            //--------------- Set up test pack ------------------
+            BOPrimaryKey primaryKey = CreateBOPrimaryKeyString();
+            Guid id = Guid.NewGuid();
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(Guid.Empty, primaryKey.ObjectID);
+            //--------------- Execute Test ----------------------
+            primaryKey.SetObjectGuidID(id);
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(id, primaryKey.ObjectID);
+        }
+
+        [Test]
+        public void Test_ObjectID_SetObjectGuidID_Twice()
+        {
+            //--------------- Set up test pack ------------------
+            BOPrimaryKey primaryKey = CreateBOPrimaryKeyString();
+            Guid id = Guid.NewGuid();
+            primaryKey.SetObjectGuidID(id);
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(id, primaryKey.ObjectID);
+            //--------------- Execute Test ----------------------
+            try
+            {
+                primaryKey.SetObjectGuidID(Guid.NewGuid());
+                //--------------- Test Result -----------------------
+                Assert.Fail("InvalidObjectIdException expected");
+            }
+            catch (InvalidObjectIdException ex)
+            {
+                Assert.AreEqual("The ObjectGuidID has already been set for this object.", ex.Message);
+                Assert.AreEqual(id, primaryKey.ObjectID);
+            }
         }
 
         //TODO Brett 14 Jan 2009: Do composite for previous and last persisted 
