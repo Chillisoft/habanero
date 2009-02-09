@@ -140,9 +140,11 @@ namespace Habanero.BO
 
         private void Initialise(IClassDef classDef, TBusinessObject sampleBo)
         {
-            _boClassDef = classDef ?? (sampleBo == null
-                                           ? ClassDefinition.ClassDef.ClassDefs[typeof (TBusinessObject)]
-                                           : sampleBo.ClassDef);
+            _boClassDef = classDef
+                          ??
+                          (sampleBo == null
+                               ? ClassDefinition.ClassDef.ClassDefs[typeof (TBusinessObject)]
+                               : sampleBo.ClassDef);
             KeyObjectHashTable = new Hashtable();
             _selectQuery = QueryBuilder.CreateSelectQuery(_boClassDef);
         }
@@ -264,21 +266,24 @@ namespace Habanero.BO
         public new virtual void Add(TBusinessObject bo)
         {
             if (bo == null) throw new ArgumentNullException("bo");
-            if (this.Contains(bo)) return;
-            if (bo.Status.IsNew && !this.CreatedBusinessObjects.Contains(bo))
+            lock (KeyObjectHashTable)
             {
-                AddCreatedBusinessObject(bo);
-            }
-            else
-            {
-                if (bo.Status.IsDeleted) return;
-                AddWithoutEvents(bo);
-                if (!AddedBusinessObjects.Contains(bo) && !PersistedBusinessObjects.Contains(bo))
+                if (this.Contains(bo)) return;
+                if (bo.Status.IsNew && !this.CreatedBusinessObjects.Contains(bo))
                 {
-                    AddedBusinessObjects.Add(bo);
+                    AddCreatedBusinessObject(bo);
                 }
-                this.RemovedBusinessObjects.Remove(bo);
-                this.FireBusinessObjectAdded(bo);
+                else
+                {
+                    if (bo.Status.IsDeleted) return;
+                    AddWithoutEvents(bo);
+                    if (!AddedBusinessObjects.Contains(bo) && !PersistedBusinessObjects.Contains(bo))
+                    {
+                        AddedBusinessObjects.Add(bo);
+                    }
+                    this.RemovedBusinessObjects.Remove(bo);
+                    this.FireBusinessObjectAdded(bo);
+                }
             }
         }
 
@@ -304,8 +309,11 @@ namespace Habanero.BO
             if (bo == null) throw new ArgumentNullException("bo");
 
             base.Add(bo);
-            if (bo.ID != null) KeyObjectHashTable.Add(bo.ID.AsString_CurrentValue(), bo);
-
+            lock (KeyObjectHashTable)
+            {
+                if (KeyObjectHashTable.Contains(bo.ID.AsString_CurrentValue())) return;
+                if (bo.ID != null) KeyObjectHashTable.Add(bo.ID.AsString_CurrentValue(), bo);
+            }
             RegisterBOEvents(bo);
         }
 
@@ -664,7 +672,9 @@ namespace Habanero.BO
         /// <param name="noOfRecords">The number of records to be loaded</param>
         /// <param name="firstRecordToLoad">The first record to load</param>
         /// <param name="totalNoOfRecords">The total number of records that exist</param>
-        public void LoadWithLimit(Criteria searchExpression, string orderByClause, int firstRecordToLoad, int noOfRecords, ref int totalNoOfRecords)
+        public void LoadWithLimit
+            (Criteria searchExpression, string orderByClause, int firstRecordToLoad, int noOfRecords,
+             ref int totalNoOfRecords)
         {
             this.SelectQuery.Criteria = searchExpression;
             this.SelectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(this.ClassDef, orderByClause);
@@ -674,8 +684,8 @@ namespace Habanero.BO
                 this.SelectQuery.FirstRecordToLoad = firstRecordToLoad;
                 if (totalNoOfRecords <= 0)
                 {
-                    totalNoOfRecords =
-                        ((BusinessObjectLoaderDB) BORegistry.DataAccessor.BusinessObjectLoader).GetCount(this.ClassDef, searchExpression);
+                    totalNoOfRecords = ((BusinessObjectLoaderDB) BORegistry.DataAccessor.BusinessObjectLoader).GetCount
+                        (this.ClassDef, searchExpression);
                 }
                 int newLimit = totalNoOfRecords - firstRecordToLoad;
                 this.SelectQuery.Limit = (newLimit > noOfRecords) ? noOfRecords : newLimit;
@@ -699,8 +709,6 @@ namespace Habanero.BO
             this.AddedBusinessObjects.Clear();
             this.MarkedForDeleteBusinessObjects.Clear();
         }
-
-        
 
 
         /// <summary>
