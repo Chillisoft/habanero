@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
@@ -34,21 +35,33 @@ namespace Habanero.BO
         private static readonly ILog log =
             LogManager.GetLogger("Habanero.BO.EditableDataSetProvider");
 
-        private Hashtable _rowStates;
-        private Hashtable _rowIDs;
-        private Hashtable _deletedRowIDs;
-        private IDatabaseConnection _connection;
+//        private Hashtable _rowStates;
+//
+//        private Hashtable _rowIDs;
+//
+//        private Hashtable _deletedRowIDs;
+        private Dictionary<DataRow, IBusinessObject> _addedRows;
+        private Dictionary<DataRow, IBusinessObject> _deletedRows;
+
         private bool _isBeingAdded;
+        private readonly DataRowChangeEventHandler _rowChangedHandler;
+        private readonly DataRowChangeEventHandler _rowDeletedHandler;
+        private readonly DataTableNewRowEventHandler _newRowHandler;
 
         /// <summary>
-        /// An enumeration to specify the state of a row
+        /// Gets and sets the database connection
         /// </summary>
-        private enum RowState
-        {
-            Added,
-            Deleted,
-            Edited
-        }
+        public IDatabaseConnection Connection { get; set; }
+
+//        /// <summary>
+//        /// An enumeration to specify the state of a row
+//        /// </summary>
+//        private enum RowState
+//        {
+//            Added,
+//            Deleted,
+//            Edited
+//        }
 
         /// <summary>
         /// Constructor to initialise a new provider with the business object
@@ -56,8 +69,11 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="col">The business object collection</param>
 		public EditableDataSetProvider(IBusinessObjectCollection col)
-            : base(col)
+           : base(col)
         {
+            _rowChangedHandler = RowChangedHandler;
+            _rowDeletedHandler = RowDeletedHandler;
+            _newRowHandler = NewRowHandler;
         }
 
         /// <summary>
@@ -65,10 +81,27 @@ namespace Habanero.BO
         /// </summary>
         public override void AddHandlersForUpdates()
         {
-            _table.TableNewRow += NewRowHandler;
-            _table.RowChanged += RowChangedHandler;
-            _table.RowDeleting += RowDeletedHandler;
-            _collection.BusinessObjectAdded += BusinessObjectAddedToCollectionHandler;
+            base.AddHandlersForUpdates();
+            
+            _table.TableNewRow += _newRowHandler;
+            _table.RowChanged += _rowChangedHandler;
+            _table.RowDeleting += _rowDeletedHandler;
+        }
+        /// <summary>
+        /// Handles the event of a business object being added. Adds a new
+        /// data row containing the object.
+        /// </summary>
+        /// <param name="sender">The object that notified of the event</param>
+        /// <param name="e">Attached arguments regarding the event</param>
+        protected override void AddedHandler(object sender, BOEventArgs e)
+        {
+            BusinessObject businessObject = (BusinessObject) e.BusinessObject;
+            int rowNum = this.FindRow(e.BusinessObject);
+            if (rowNum >= 0) return;//If row already exists in the datatable then do not add it.
+            object[] values = GetValues(businessObject);
+            _table.RowChanged -= _rowChangedHandler;
+            _table.LoadDataRow(values, true);
+            _table.RowChanged += _rowChangedHandler;
         }
 
         /// <summary>
@@ -89,9 +122,9 @@ namespace Habanero.BO
         /// </summary>
         public void RemoveHandlersForUpdates()
         {
-            _table.RowChanged -= RowChangedHandler;
-            _table.RowDeleted -= RowDeletedHandler;
-            _collection.BusinessObjectAdded -= BusinessObjectAddedToCollectionHandler;
+            _table.RowChanged -= _rowChangedHandler;
+            _table.RowDeleted -= _rowDeletedHandler;
+//            _collection.BusinessObjectAdded -= BusinessObjectAddedToCollectionHandler;//TODO  08 Feb 2009: this seems crazy so have commented out.
         }
 
         /// <summary>
@@ -99,18 +132,11 @@ namespace Habanero.BO
         /// </summary>
         public override void InitialiseLocalData()
         {
-            _rowStates = new Hashtable();
-            _rowIDs = new Hashtable();
-            _deletedRowIDs = new Hashtable();
-        }
-
-        /// <summary>
-        /// Gets and sets the database connection
-        /// </summary>
-        public IDatabaseConnection Connection
-        {
-            get { return _connection; }
-            set { _connection = value; }
+//            _rowStates = new Hashtable();
+//            _rowIDs = new Hashtable();
+//            _deletedRowIDs = new Hashtable();
+            _addedRows = new Dictionary<DataRow, IBusinessObject>();
+            _deletedRows = new Dictionary<DataRow, IBusinessObject>();
         }
 
         /// <summary>
@@ -120,22 +146,44 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         protected void RowDeletedHandler(object sender, DataRowChangeEventArgs e)
         {
-            BusinessObject changedBo;
-            if (e.Row.HasVersion(DataRowVersion.Original))
+            DataRow row = e.Row;
+            BusinessObject changedBo = GetBusinessObjectForRow(row);
+            if (changedBo == null) return;
+            _collection.BusinessObjectRemoved -= RemovedHandler;
+            changedBo.MarkForDelete();
+            _deletedRows.Add(row, changedBo);
+//            _rowStates[e.Row] = RowState.Deleted;
+//            _deletedRowIDs[e.Row] = changedBo.ID.ToString();
+//            _rowIDs.Remove(e.Row);
+            _collection.BusinessObjectRemoved += RemovedHandler;
+        }
+
+        private BusinessObject GetBusinessObjectForRow(DataRow row)
+        {
+            IBusinessObject changedBo = null;
+            if (row.RowState == DataRowState.Detached)
             {
-                changedBo = (BusinessObject) _collection.Find(e.Row["ID", DataRowVersion.Original].ToString());
+                return null;
             }
-            else
+            if (row.HasVersion(DataRowVersion.Original))
             {
-                changedBo = (BusinessObject) _collection.Find(e.Row["ID"].ToString());
+                string origionalRowID = row[IDColumnName, DataRowVersion.Original].ToString();
+                changedBo = _collection.Find(origionalRowID);
+                if (changedBo == null && _deletedRows.ContainsKey(row))
+                {
+                    changedBo = _deletedRows[row];
+                }  
             }
-            if (changedBo != null)
+            if (changedBo == null)
             {
-                changedBo.MarkForDelete();
-                _rowStates[e.Row] = RowState.Deleted;
-                _deletedRowIDs[e.Row] = changedBo.ID.ToString();
-                _rowIDs.Remove(e.Row);
+                string currencyRowID = row[IDColumnName].ToString();
+                changedBo = _collection.Find(currencyRowID);
+                if (changedBo == null && _deletedRows.ContainsKey(row))
+                {
+                    changedBo = _deletedRows[row];
+                }  
             }
+            return (BusinessObject) changedBo;
         }
 
         /// <summary>
@@ -145,21 +193,20 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         protected void RowChangedHandler(object sender, DataRowChangeEventArgs e)
         {
-            if (e.Action == DataRowAction.Add)
+            switch (e.Action)
             {
-                RowAdded(e);
-            }
-            else if (e.Action == DataRowAction.Change)
-            {
-                RowChanged(e);
-            }
-            else if (e.Action == DataRowAction.Commit)
-            {
-                RowCommitted(e);
-            }
-            else if (e.Action == DataRowAction.Rollback)
-            {
-                RowRollback(e);
+                case DataRowAction.Add:
+                    RowAdded(e);
+                    break;
+                case DataRowAction.Change:
+                    RowChanged(e);
+                    break;
+                case DataRowAction.Commit:
+                    RowCommitted(e);
+                    break;
+                case DataRowAction.Rollback:
+                    RowRollback(e);
+                    break;
             }
         }
 
@@ -169,35 +216,36 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void RowRollback(DataRowChangeEventArgs e)
         {
-            if (_rowStates[e.Row] != null)
+            DataRow row = e.Row;
+//            if (_rowStates[row] == null) return;
+            IBusinessObject changedBo;
+            if (row.RowState == DataRowState.Detached)
             {
-                IBusinessObject changedBo;
-                if ((RowState) _rowStates[e.Row] == RowState.Edited)
-                {
-                    changedBo = _collection.Find(e.Row["ID"].ToString());
-                    //changedBo = _collection.Find(_rowIDs[e.Row].ToString());
-                    changedBo.Restore();
-                    _rowStates.Remove(e.Row);
-                }
-                else if ((RowState)_rowStates[e.Row] == RowState.Added)
-                {
-                    //changedBo = _collection.Find(e.Row["ID"].ToString());
-                    changedBo = _collection.Find(_rowIDs[e.Row].ToString());
-                    _collection.Remove(changedBo);
-                    _rowStates.Remove(e.Row);
-                    // should deletedRowIDs be added to?
-                }
-                else if ((RowState)_rowStates[e.Row] == RowState.Deleted)
-                {
-                    changedBo = _collection.Find((string) _deletedRowIDs[e.Row]);
-                    if (changedBo != null)
-                    {
-                        changedBo.Restore();
-                    }
-                    _rowStates.Remove(e.Row);
-                    _deletedRowIDs.Remove(e.Row);
-                }
+                changedBo = _addedRows[row];
+                _collection.Remove(changedBo);
+                return;
             }
+            changedBo = GetBusinessObjectForRow(row);
+            if (changedBo != null) changedBo.Restore();
+//            switch (row.RowState)
+//            {
+//                case DataRowState.Modified:
+////                    changedBo = _collection.Find(row[IDColumnName].ToString());
+//                    changedBo.Restore();
+////                    _rowStates.Remove(row);
+//                    break;
+//                case DataRowState.Added:
+////                    changedBo = _collection.Find(_rowIDs[row].ToString());
+//                    if (changedBo != null) _collection.Remove(changedBo);
+////                    _rowStates.Remove(row);
+//                    break;
+//                case DataRowState.Deleted:
+////                    changedBo = _collection.Find((string) _deletedRowIDs[row]);
+//                    if (changedBo != null) changedBo.Restore();
+////                    _rowStates.Remove(row);
+////                    _deletedRowIDs.Remove(row);
+//                    break;
+//            }
         }
 
         /// <summary>
@@ -206,44 +254,46 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void RowCommitted(DataRowChangeEventArgs e)
         {
-            if (_rowStates[e.Row] != null)
+//            e.Row.RowState == RowState.Deleted
+//            if (_rowStates[row] != null)
+//            {
+            try
             {
-                IBusinessObject changedBo;
-                try
-                {
-                    if ((RowState) _rowStates[e.Row] != RowState.Deleted)
-                    {
-                        //log.Debug("Saving...");
-                        changedBo = _collection.Find(e.Row["ID"].ToString());
-
-                        changedBo.Save();
-                        _rowStates.Remove(e.Row);
-                    }
-                    else
-                    {
-                        changedBo = _collection.Find((string) _deletedRowIDs[e.Row]);
-                        changedBo.Save();
-                        _rowStates.Remove(e.Row);
-                        _deletedRowIDs.Remove(e.Row);
-                    }
-                }
-                catch (Exception ex)
+                IBusinessObject changedBo = GetBusinessObjectForRow(e.Row);
+                if (changedBo != null) changedBo.Save();
+//                    if (row.RowState == DataRowState.Deleted)
+//                    {
+//                        changedBo = _collection.Find((string) _deletedRowIDs[row]);
+//                        if (changedBo != null) changedBo.Save();
+////                        _rowStates.Remove(row);
+////                        _deletedRowIDs.Remove(row);
+//                    }
+//                    else
+//                    {
+//                        //log.Debug("Saving...");
+//                        changedBo = _collection.Find(row[IDColumnName].ToString());
+//
+//                        if (changedBo != null) changedBo.Save();
+////                        _rowStates.Remove(row);
+//                    }
+            }
+            catch (Exception ex)
                 {
                     GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem saving.", "Problem Saving");
                     //log.Debug(ExceptionUtil.GetExceptionString(ex, 0, true) ) ;
                 }
-            }
-            else
-            {
-                try
-                {
-                    log.Debug("RowCommitted:  Row state is null for row " + e.Row["ID"]);
-                }
-                catch (RowNotInTableException)
-                {
-                    log.Debug("RowCommitted:  Row has been removed from table");
-                }
-            }
+//            }
+//            else
+//            {
+//                try
+//                {
+//                    log.Debug("RowCommitted:  Row state is null for row " + row[IDColumnName]);
+//                }
+//                catch (RowNotInTableException)
+//                {
+//                    log.Debug("RowCommitted:  Row has been removed from table");
+//                }
+//            }
         }
 
         /// <summary>
@@ -252,19 +302,17 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void RowChanged(DataRowChangeEventArgs e)
         {
-            //log.Debug("Row Changed " + e.Row["ID"]);
-            IBusinessObject changedBo = _collection.Find(e.Row["ID"].ToString());
-            if (changedBo != null && !_isBeingAdded)
+            //log.Debug("Row Changed " + e.Row[_idColumnName]);
+            IBusinessObject changedBo = _collection.Find(e.Row[IDColumnName].ToString());
+            if (changedBo == null || _isBeingAdded) return;
+            foreach (UIGridColumn uiProperty in _uiGridProperties)
             {
-                foreach (UIGridColumn uiProperty in _uiGridProperties)
+                if (uiProperty.PropertyName.IndexOf(".") == -1 && uiProperty.PropertyName.IndexOf("-") == -1)
                 {
-					if (uiProperty.PropertyName.IndexOf(".") == -1 && uiProperty.PropertyName.IndexOf("-") == -1)
-                    {
-                        changedBo.SetPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
-                    }
+                    changedBo.SetPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
                 }
-                this.AddToRowStates(e.Row, RowState.Edited);
             }
+//            this.AddToRowStates(e.Row, DataRowState.Modified);
         }
 
         /// <summary>
@@ -277,7 +325,9 @@ namespace Habanero.BO
             {
                 //log.Debug("Row Added");
                 _isBeingAdded = true;
+                _collection.BusinessObjectAdded -= AddedHandler;
                 BusinessObject newBo = (BusinessObject) _collection.CreateBusinessObject();
+                _collection.BusinessObjectAdded += AddedHandler;
 
                 //log.Debug("Initialising obj");
                 if (this._objectInitialiser != null)
@@ -286,36 +336,30 @@ namespace Habanero.BO
                 }
                 // set all the values in the grid to the bo's current prop values (defaults)
                 // make sure the part entered to create the row is not changed.
+                DataRow row = e.Row;
                 foreach (UIGridColumn uiProperty in _uiGridProperties)
                 {
                     if (uiProperty.PropertyName.IndexOf(".") == -1)
                     {
-                        if (DBNull.Value.Equals(e.Row[uiProperty.PropertyName]))
+                        if (DBNull.Value.Equals(row[uiProperty.PropertyName]))
                         {
-                            e.Row[uiProperty.PropertyName] = newBo.GetPropertyValueToDisplay(uiProperty.PropertyName);
+                            row[uiProperty.PropertyName] = newBo.GetPropertyValueToDisplay(uiProperty.PropertyName);
                         }
-//                        if (newBo.Props.Contains(uiProperty.PropertyName))
-//                        {
-//                            newBo.Props[uiProperty.PropertyName].DisplayName = uiProperty.Heading;
-//                        }
                     }
                 }
-
+                _addedRows.Add(row, newBo);
                 //AddNewRowToCollection(newBo);
                 //log.Debug(newBo.GetDebugOutput()) ;
-                e.Row["ID"] = newBo.ID.ToString();
-                if (!_rowIDs.ContainsKey(e.Row))
-                {
-                    _rowIDs.Add(e.Row, e.Row["ID"]);
-                    AddToRowStates(e.Row, RowState.Added);
-                }
-
-
-
+//                e.Row[IDColumnName] = newBo.ID.ToString();
+//                if (!_rowIDs.ContainsKey(e.Row))
+//                {
+//                    _rowIDs.Add(e.Row, e.Row[IDColumnName]);
+////                    AddToRowStates(e.Row, RowState.Added);
+//                }
                 //log.Debug("Row added complete.") ;
                 //log.Debug(newBo.GetDebugOutput()) ;
                 _isBeingAdded = false;
-                this.RowChanged(e);
+//                this.RowChanged(e);
             }
             catch (Exception)
             {
@@ -343,44 +387,42 @@ namespace Habanero.BO
         //    //log.Debug("Done Adding new row to col");
         //}
 
-        /// <summary>
-        /// Handles the event of a new business object being added
-        /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private void BusinessObjectAddedToCollectionHandler(object sender, BOEventArgs e)
-        {
-            IBusinessObject businessObject = e.BusinessObject;
-            if (FindRow(businessObject) != -1) return;
-            _table.RowChanged -= RowChangedHandler;
-            _table.NewRow();
-            object[] values = GetValues(businessObject);
-            _table.LoadDataRow(values, false);
+//        /// <summary>
+//        /// Handles the event of a new business object being added
+//        /// </summary>
+//        /// <param name="sender">The object that notified of the event</param>
+//        /// <param name="e">Attached arguments regarding the event</param>
+//        private void BusinessObjectAddedToCollectionHandler(object sender, BOEventArgs e)
+//        {
+//            IBusinessObject businessObject = e.BusinessObject;
+//            if (FindRow(businessObject) != -1) return;
+//            _table.RowChanged -= _rowChangedHandler;
+//            _table.NewRow();
+//            object[] values = GetValues(businessObject);
+//            _table.LoadDataRow(values, false);
+//
+//            DataRow newRow = _table.Rows[FindRow(businessObject)];
+//            if (!_rowIDs.ContainsKey(newRow))
+//            {
+//                _rowIDs.Add(newRow, newRow[IDColumnName]);
+//                _rowStates.Add(newRow, RowState.Added);
+//            }
+//            
+//            _table.RowChanged += _rowChangedHandler;
+//        }
 
-            DataRow newRow = _table.Rows[FindRow(businessObject)];
-            if (!_rowIDs.ContainsKey(newRow))
-            {
-                _rowIDs.Add(newRow, newRow["ID"]);
-                _rowStates.Add(newRow, RowState.Added);
-            }
-            
-            _table.RowChanged += RowChangedHandler;
-
-            //log.Debug("Done adding bo to collection " + e.BusinessObject.ID);
-        }
-
-        /// <summary>
-        /// Sets the state for a particular row
-        /// </summary>
-        /// <param name="row">The row to set</param>
-        /// <param name="rowState">The state to set to. See the RowState
-        /// enumeration for more detail.</param>
-        private void AddToRowStates(DataRow row, RowState rowState)
-        {
-            if (!this._rowStates.ContainsKey(row))
-            {
-                _rowStates.Add(row, rowState);
-            }
-        }
+//        /// <summary>
+//        /// Sets the state for a particular row
+//        /// </summary>
+//        /// <param name="row">The row to set</param>
+//        /// <param name="rowState">The state to set to. See the RowState
+//        /// enumeration for more detail.</param>
+//        private void AddToRowStates(DataRow row, RowState rowState)
+//        {
+//            if (!this._rowStates.ContainsKey(row))
+//            {
+//                _rowStates.Add(row, rowState);
+//            }
+//        }
     }
 }

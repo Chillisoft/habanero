@@ -102,6 +102,7 @@
     <Compile Include="DateTimeToday.cs" />
     <Compile Include="DelegatedBusinessObjectCreator.cs" />
     <Compile Include="DelegatedBusinessObjectEditor.cs" />
+    <Compile Include="EventHandler.cs" />
     <Compile Include="Exceptions\InvalidObjectIdException.cs" />
     <Compile Include="Exceptions\InvalidXmlDefinitionException.cs" />
     <Compile Include="FilterModes.cs" />
@@ -235,6 +236,7 @@
     </Compile>
     <Compile Include="PropReadWriteRule.cs" />
     <Compile Include="QueryField.cs" />
+    <Compile Include="RethrowingExceptionNotifier.cs" />
     <Compile Include="RSAPasswordCrypter.cs" />
     <Compile Include="Source.cs" />
     <Compile Include="SourceDB.cs" />

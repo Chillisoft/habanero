@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
@@ -54,7 +55,7 @@ namespace Habanero.UI.Base
         /// column with buttons/links.
         /// <br/>
         /// The grid must already have at least one column added. At least one column must be a column with the name
-        /// "ID", which is used to synchronise the grid with the business objects.
+        /// "HABANERO_OBJECTID", which is used to synchronise the grid with the business objects.
         /// </summary>
         /// <exception cref="GridBaseInitialiseException">Thrown in the case where the columns
         /// have not already been defined for the grid</exception>
@@ -70,7 +71,8 @@ namespace Habanero.UI.Base
                 //Try to get the id column from the grid. If there is no id column or if the id column
                 // is not set up with a header then an error should be thrown. This looks like checking if 
                 // column is null and throwing the error would achieve this objective.
-                IDataGridViewColumn column = _gridControl.Grid.Columns["ID"];
+                //TODO  07 Feb 2009: Change this check to a contains
+                IDataGridViewColumn column = _gridControl.Grid.Columns[GetGridIDColumnName()];
 #pragma warning disable 168
                 string text = column.HeaderText;
 #pragma warning restore 168
@@ -164,12 +166,24 @@ namespace Habanero.UI.Base
 
         private void CreateIDColumn()
         {
-            IDataGridViewColumn col = CreateStandardColumn("ID", "ID");
+            IDataGridViewColumn col = CreateStandardColumn(GetGridIDColumnName(), GetGridIDColumnName());
             col.Width = 0;
             col.Visible = false;
             col.ReadOnly = true;
-            col.DataPropertyName = "ID";
+            col.DataPropertyName = GetGridIDColumnName();
             col.ValueType = typeof (string);
+        }
+
+        private string GetGridIDColumnName()
+        {
+            if (_gridControl != null && _gridControl.Grid != null)
+            {
+                return _gridControl.Grid.IDColumnName;
+            }else
+            {
+                const string errorMessage = "There was an attempt to access the ID field for a grid when the grid is not yet initialised";
+                throw new HabaneroDeveloperException(errorMessage, errorMessage);
+            }
         }
 
         private IDataGridViewColumn CreateStandardColumn(string columnName, string columnHeader)

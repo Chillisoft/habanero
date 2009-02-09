@@ -37,21 +37,28 @@ namespace Habanero.UI.Base
         private readonly IGridBase _gridBase;
         private IDataSetProvider _dataSetProvider;
         private IBusinessObjectCollection _boCol;
-        private string _uiDefName;
         private DataView _dataTableDefaultView;
         public event EventHandler CollectionChanged;
         private GridLoaderDelegate _gridLoader;
-        private IClassDef _classDef;
 
+        ///<summary>
+        /// Constructor
+        ///</summary>
+        ///<param name="gridBase"></param>
+        ///<param name="uiDefName"></param>
         public GridBaseManager(IGridBase gridBase, string uiDefName)
         {
             _gridBase = gridBase;
-            _uiDefName = uiDefName;
+            UiDefName = uiDefName;
             _gridBase.AutoGenerateColumns = false;
             _gridLoader = DefaultGridLoader;
             _gridBase.AllowUserToAddRows = false;
         }
 
+        ///<summary>
+        /// Constructor
+        ///</summary>
+        ///<param name="gridBase"></param>
         public GridBaseManager(IGridBase gridBase) : this(gridBase, "default")
         {
         }
@@ -163,7 +170,7 @@ namespace Habanero.UI.Base
                 int rowNum = 0;
                 foreach (IDataGridViewRow row in gridRows)
                 {
-                    if (row.Cells["ID"].Value.ToString() == bo.ID.ToString())
+                    if (GetRowObjectIDValue(row) == bo.ID.AsString_CurrentValue())
                     {
                         gridRows[rowNum].Selected = true;
                         boFoundAndHighlighted = true;
@@ -184,7 +191,7 @@ namespace Habanero.UI.Base
                             _gridBase.FirstDisplayedScrollingRowIndex = _gridBase.Rows.IndexOf(_gridBase.CurrentRow);
                             gridRows[rowNum].Selected = true;  //Getting turned off for some reason
                         }
-                        catch(InvalidOperationException ex)
+                        catch(InvalidOperationException)
                         {
                             //Do nothing - designed to catch error "No room is available to display rows"
                             //  when grid height is insufficient
@@ -253,20 +260,12 @@ namespace Habanero.UI.Base
         /// <summary>
         /// See <see cref="IGridControl.UiDefName"/>
         /// </summary>
-        public string UiDefName
-        {
-            get { return _uiDefName; }
-            set { _uiDefName = value; }
-        }
+        public string UiDefName { get; set; }
 
         /// <summary>
         /// See <see cref="IGridControl.ClassDef"/>
         /// </summary>
-        public IClassDef ClassDef
-        {
-            get { return _classDef; }
-            set { _classDef = value; }
-        }
+        public IClassDef ClassDef { get; set; }
 
         private void FireCollectionChanged()
         {
@@ -297,13 +296,13 @@ namespace Habanero.UI.Base
                 {
                     if (i++ == rowIndex)
                     {
-                        return this._dataSetProvider.Find((string) dataRowView.Row["ID"]);
+                        return this._dataSetProvider.Find((string) dataRowView.Row[_dataSetProvider.IDColumnName]);
                     }
                 }
             }else
             {
                 IDataGridViewRow findRow =_gridBase.Rows[rowIndex];
-                return this._boCol.Find(findRow.Cells["ID"].Value.ToString());
+                return this._boCol.Find(GetRowObjectIDValue(findRow));
             }
             return null;
         }
@@ -317,12 +316,27 @@ namespace Habanero.UI.Base
             string boIdString = businessObject.ID.AsString_CurrentValue();
             foreach (IDataGridViewRow row in _gridBase.Rows)
             {
-                if (Convert.ToString(row.Cells["ID"].Value) == boIdString)
+                if (GetRowObjectIDValue(row) == boIdString)
                 {
                     return row;
                 }
             }
             return null;
+        }
+
+        private string GetRowObjectIDValue(IDataGridViewRow row)
+        {
+            return Convert.ToString(row.Cells[IDColumnName].Value);
+        }
+
+        ///<summary>
+        /// Returns the name of the column being used for tracking the business object identity.
+        /// If a <see cref="IDataSetProvider"/> is used then it will be the <see cref="IDataSetProvider.IDColumnName"/>
+        /// Else it will be "HABANERO_OBJECTID".
+        ///</summary>
+        public string IDColumnName
+        {
+            get { return _dataSetProvider != null ? _dataSetProvider.IDColumnName : "HABANERO_OBJECTID"; }
         }
 
         /// <summary>
@@ -343,16 +357,9 @@ namespace Habanero.UI.Base
                 throw new GridBaseInitialiseException(
                     "You cannot apply filters as the collection for the grid has not been set");
             }
-            if (filterClause != null)
-            {
-                _dataTableDefaultView.RowFilter = filterClause.GetFilterClauseString();
-            }
-            else
-            {
-                _dataTableDefaultView.RowFilter = null;
-            }
+            _dataTableDefaultView.RowFilter = filterClause != null ? filterClause.GetFilterClauseString() : null;
         }
-        
+
         /// <summary>
         /// See <see cref="IGridBase.RefreshGrid"/>
         /// </summary>
@@ -371,18 +378,35 @@ namespace Habanero.UI.Base
     /// </summary>
     public class GridBaseSetUpException : Exception
     {
+        ///<summary>
+        /// Base constructor with info and context for seraialisation
+        ///</summary>
+        ///<param name="info"></param>
+        ///<param name="context"></param>
         public GridBaseSetUpException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
 
+        ///<summary>
+        /// Constructor with message and inner exception
+        ///</summary>
+        ///<param name="message"></param>
+        ///<param name="innerException"></param>
         public GridBaseSetUpException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
+        ///<summary>
+        /// Constructor with a basic message
+        ///</summary>
+        ///<param name="message"></param>
         public GridBaseSetUpException(string message) : base(message)
         {
         }
 
+        ///<summary>
+        /// Base constructor with no parameters
+        ///</summary>
         public GridBaseSetUpException()
         {
         }
@@ -394,18 +418,31 @@ namespace Habanero.UI.Base
     /// </summary>
     public class GridDeveloperException : HabaneroDeveloperException
     {
+        ///<summary>
+        ///</summary>
+        ///<param name="message"></param>
         public GridDeveloperException(string message) : base(message, "")
         {
         }
 
+        ///<summary>
+        ///</summary>
+        ///<param name="message"></param>
+        ///<param name="inner"></param>
         public GridDeveloperException(string message, Exception inner) : base(message, "", inner)
         {
         }
 
+        ///<summary>
+        ///</summary>
+        ///<param name="info"></param>
+        ///<param name="context"></param>
         public GridDeveloperException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
 
+        ///<summary>
+        ///</summary>
         public GridDeveloperException()
         {
         }
@@ -416,18 +453,31 @@ namespace Habanero.UI.Base
     /// </summary>
     public class GridBaseInitialiseException : HabaneroDeveloperException
     {
+        ///<summary>
+        ///</summary>
+        ///<param name="info"></param>
+        ///<param name="context"></param>
         public GridBaseInitialiseException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
 
+        ///<summary>
+        ///</summary>
+        ///<param name="message"></param>
+        ///<param name="inner"></param>
         public GridBaseInitialiseException(string message, Exception inner) : base(message, "", inner)
         {
         }
 
+        ///<summary>
+        ///</summary>
+        ///<param name="message"></param>
         public GridBaseInitialiseException(string message) : base(message, "")
         {
         }
 
+        ///<summary>
+        ///</summary>
         public GridBaseInitialiseException()
         {
         }

@@ -60,5 +60,22 @@ namespace Habanero.Base
         ///</summary>
         ///<param name="businessObject">The <see cref="IBusinessObject"/> for which the row values need to updated.</param>
         void UpdateBusinessObjectRowValues(IBusinessObject businessObject);
+
+        ///<summary>
+        /// The column name used for the <see cref="DataTable"/> column which stores the unique object identifier of the <see cref="IBusinessObject"/>.
+        /// This column's values will always be the current <see cref="IBusinessObject"/>'s <see cref="IBusinessObject.ID"/> value.
+        ///</summary>
+        string IDColumnName { get; }
+
+        ///<summary>
+        /// Gets and sets whether the property update handler shold be set or not.
+        /// This is used to 
+        ///    change behaviour typically to differentiate behaviour
+        ///    between windows and web.
+        ///Typically in windows every time a business object property is changed
+        ///   the grid is updated with Web the grid is updated only when the object
+        ///    is persisted.
+        /// </summary>
+        bool RegisterForBusinessObjectPropertyUpdatedEvents { get; set; }
     }
 }

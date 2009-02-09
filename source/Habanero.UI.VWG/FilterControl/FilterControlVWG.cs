@@ -41,6 +41,9 @@ namespace Habanero.UI.VWG
         private FilterModes _filterMode; //Note all this should move up to windows need to decide buttons etc on win
         private readonly IPanel _controlPanel;
 
+        ///<summary>
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public FilterControlVWG(IControlFactory controlFactory)
         {
 
@@ -380,22 +383,22 @@ namespace Habanero.UI.VWG
 
         public void RemoveDefaultClearClickEvent()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void AddDefaultClearClickEvent()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void RemoveDefaultFilterClickEvent()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void AddDefaultFilterClickEvent()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

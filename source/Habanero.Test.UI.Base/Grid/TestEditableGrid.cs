@@ -50,6 +50,27 @@ namespace Habanero.Test.UI.Base
     /// </summary>
     public abstract class TestEditableGrid //: TestUsingDatabase
     {
+
+        //TODO  08 Feb 2009: Need to do tests and changes to update the ID on the grid column?
+        // am having problems where I edit the primary key then delete it and it is not found in the collection
+        // IN Editable Data Provider
+        //This could also be due to the fact that the item is now in the mark 4 deleted and not 
+        //  in the main collection.
+//                            if ((RowState) _rowStates[e.Row] != RowState.Deleted)
+//                    {
+//                        //log.Debug("Saving...");
+//                        changedBo = _collection.Find(e.Row[IDColumnName].ToString());
+//
+//                        if (changedBo != null) changedBo.Save();
+//                        _rowStates.Remove(e.Row);
+//                    }
+//                    else
+//                    {
+//                        changedBo = _collection.Find((string) _deletedRowIDs[e.Row]);
+//                        if (changedBo != null) changedBo.Save(); ************
+//                        _rowStates.Remove(e.Row);
+//                        _deletedRowIDs.Remove(e.Row);
+//                    }
         [SetUp]
         public void SetupTest()
         {

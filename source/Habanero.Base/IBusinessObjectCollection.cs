@@ -45,6 +45,23 @@ namespace Habanero.Base
         //event EventHandler<BOEventArgs> BusinessObjectEdited;
 
         /// <summary>
+        /// Handles the event of any business object in this collection being Updated(i.e the BO is saved, or edits are cancelled).
+        /// See the <see cref="IBusinessObject"/>.<see cref="IBusinessObject.Updated"/> event.
+        /// </summary>
+        event EventHandler<BOEventArgs> BusinessObjectUpdated;
+
+        /// <summary>
+        /// Handles the event of any business object in this collection being edited (i.e. a property value is changed).
+        /// See the <see cref="IBusinessObject"/>.<see cref="IBusinessObject.PropertyUpdated"/> event.
+        /// </summary>
+        event EventHandler<BOEventArgs, BOPropEventArgs> BusinessObjectPropertyUpdated;
+
+        /// <summary>
+        /// Handles the event when a BusinessObject in the collection has an ID that is Updated(i.e one of the properties of the ID is edited).
+        /// </summary>
+        event EventHandler<BOEventArgs> BusinessObjectIDUpdated;
+
+        /// <summary>
         /// Returns the class definition of the collection
         /// </summary>
         IClassDef ClassDef { get; set; }

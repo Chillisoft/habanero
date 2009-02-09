@@ -53,6 +53,12 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         //CreatedBusinessObjects list and MarkedForDeletion. See test
         //If the business object is not new then it is removed from the main list, marked for deletion and 
         //added to the DeletedBusinessObjects list See test
+        //If a BusinessObject in the collection is Updated(i.e the BO is saved, or edits are cancelled), then 
+        //  the BusinessObjectUpdated event on the collection is fired.
+        //If a BusinessObject in the collection has a property that is Updated(i.e the property is edited), then 
+        //  the BusinessObjectPropertyUpdated event on the collection is fired.
+        //If a BusinessObject in the collection has an ID that is Updated(i.e one of the properties of the ID is edited), then 
+        //  the BusinessObjectIDUpdated event on the collection is fired.
 
         //See Also TestBusinessObjectCollection_AddedBos
         //         TestBusinessObjectCollection_CreatedBo
@@ -61,10 +67,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         //TODO: Mark 4 deletion with a collection of objects.
 
 
-        private bool _addedEventFired;
         //private DataAccessorInMemory _dataAccessor;
         //private DataStoreInMemory _dataStore;
-        private bool _removedEventFired;
         private ClassDef _cpDefaultClassDef;
 
         #region SetupTearDown
@@ -85,7 +89,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void SetupTest()
         {
             //Runs every time that any testmethod is executed
-            BORegistry.DataAccessor = new DataAccessorInMemory(); ;
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         [TearDown]
@@ -312,18 +316,18 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
-            _removedEventFired = false;
-            cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
+            bool removedEventFired = false;
+            cpCol.BusinessObjectRemoved += delegate { removedEventFired = true; };
             //--------------Assert Preconditions--------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
-            Assert.IsFalse(_removedEventFired);
+            Assert.IsFalse(removedEventFired);
 
             //-----Run tests----------------------------
             cpCol.RemoveAt(0);
 
             ////-----Test results-------------------------
             AssertOneObjectInRemovedAndPersistedCollection(cpCol);
-            Assert.IsTrue(_removedEventFired);
+            Assert.IsTrue(removedEventFired);
         }
 
         [Test]
@@ -333,18 +337,18 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             ContactPersonTestBO cp;
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             cpCol.Remove(cp);
-            _removedEventFired = false;
-            cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
+            bool removedEventFired = false;
+            cpCol.BusinessObjectRemoved += delegate { removedEventFired = true; };
             //--------------Assert Preconditions--------
             AssertOneObjectInRemovedAndPersistedCollection(cpCol);
-            Assert.IsFalse(_removedEventFired);
+            Assert.IsFalse(removedEventFired);
 
             //-----Run tests----------------------------
             cpCol.Remove(cp);
 
             //-----Test results-------------------------
             AssertOneObjectInRemovedAndPersistedCollection(cpCol);
-            Assert.IsFalse(_removedEventFired);
+            Assert.IsFalse(removedEventFired);
         }
 
         //Persisting business object collections
@@ -380,19 +384,19 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             ContactPersonTestBO cp;
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             cpCol.Remove(cp);
-            _addedEventFired = false;
-            cpCol.BusinessObjectAdded += delegate { _addedEventFired = true; };
+            bool addedEventFired = false;
+            cpCol.BusinessObjectAdded += delegate { addedEventFired = true; };
 
             //--------------Assert Preconditions--------
             AssertOneObjectInRemovedAndPersistedCollection(cpCol);
-            Assert.IsFalse(_addedEventFired);
+            Assert.IsFalse(addedEventFired);
 
             //-----Run tests----------------------------
-            cpCol.RestoreAll();
+            cpCol.CancelEdits();
 
             //-----Test results-------------------------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
-            Assert.IsTrue(_addedEventFired);
+            Assert.IsTrue(addedEventFired);
         }
 
         [Test]
@@ -474,18 +478,18 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             ContactPersonTestBO cp;
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             cpCol.Remove(cp);
-            _removedEventFired = false;
-            cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
+            bool removedEventFired = false;
+            cpCol.BusinessObjectRemoved += delegate { removedEventFired = true; };
             //--------------Assert Preconditions--------
             AssertOneObjectInRemovedAndPersistedCollection(cpCol);
-            Assert.IsFalse(_removedEventFired);
+            Assert.IsFalse(removedEventFired);
 
             //-----Run tests----------------------------
             cpCol.MarkForDelete(cp);
 
             ////-----Test results-------------------------
             AssertOnePersisted_OneMark4Delete(cpCol);
-            Assert.IsFalse(_removedEventFired);
+            Assert.IsFalse(removedEventFired);
         }
 
         [Test]
@@ -495,18 +499,18 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             ContactPersonTestBO cp;
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             cpCol.Remove(cp);
-            _removedEventFired = false;
-            cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
+            bool removedEventFired = false;
+            cpCol.BusinessObjectRemoved += delegate { removedEventFired = true; };
             //--------------Assert Preconditions--------
             AssertOneObjectInRemovedAndPersistedCollection(cpCol);
-            Assert.IsFalse(_removedEventFired);
+            Assert.IsFalse(removedEventFired);
 
             //-----Run tests----------------------------
             cp.MarkForDelete();
 
             ////-----Test results-------------------------
             AssertOnePersisted_OneMark4Delete(cpCol);
-            Assert.IsFalse(_removedEventFired);
+            Assert.IsFalse(removedEventFired);
         }
 
         #endregion
@@ -534,8 +538,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO markForDeleteCP = cpCol[0];
-            _removedEventFired = false;
-            cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
+            bool removedEventFired = false;
+            cpCol.BusinessObjectRemoved += delegate { removedEventFired = true; };
             //---------------Assert Precondition----------------
             Assert.IsFalse(markForDeleteCP.Status.IsDeleted);
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
@@ -546,7 +550,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Test Result -----------------------
             Assert.IsTrue(markForDeleteCP.Status.IsDeleted);
             AssertOnePersisted_OneMark4Delete(cpCol);
-            Assert.IsTrue(_removedEventFired);
+            Assert.IsTrue(removedEventFired);
         }
 
         [Test]
@@ -557,12 +561,12 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO markForDeleteCP = cpCol[0];
-            _removedEventFired = false;
-            cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
+            bool removedEventFired = false;
+            cpCol.BusinessObjectRemoved += delegate { removedEventFired = true; };
 
             //---------------Assert Precondition----------------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
-            Assert.IsFalse(_removedEventFired);
+            Assert.IsFalse(removedEventFired);
 
             //---------------Execute Test ----------------------
             cpCol.MarkForDelete(markForDeleteCP);
@@ -570,7 +574,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Test Result -----------------------
             AssertOnePersisted_OneMark4Delete(cpCol);
             Assert.IsTrue(markForDeleteCP.Status.IsDeleted);
-            Assert.IsTrue(_removedEventFired);
+            Assert.IsTrue(removedEventFired);
         }
 
         [Test]
@@ -582,12 +586,12 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO markForDeleteCP = cpCol[0];
             cpCol.MarkForDelete(markForDeleteCP);
-            _removedEventFired = false;
-            cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
+            bool removedEventFired = false;
+            cpCol.BusinessObjectRemoved += delegate { removedEventFired = true; };
 
             //---------------Assert Precondition----------------
             AssertOnePersisted_OneMark4Delete(cpCol);
-            Assert.IsFalse(_removedEventFired);
+            Assert.IsFalse(removedEventFired);
 
             //---------------Execute Test ----------------------
             cpCol.Remove(markForDeleteCP);
@@ -595,7 +599,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Test Result -----------------------
             AssertOnePersisted_OneMark4Delete(cpCol);
             Assert.IsTrue(markForDeleteCP.Status.IsDeleted);
-            Assert.IsFalse(_removedEventFired);
+            Assert.IsFalse(removedEventFired);
         }
 
         [Test]
@@ -607,12 +611,12 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO markForDeleteCP = cpCol[0];
             cpCol.MarkForDelete(markForDeleteCP);
-            _removedEventFired = false;
-            cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
+            bool removedEventFired = false;
+            cpCol.BusinessObjectRemoved += delegate { removedEventFired = true; };
 
             //---------------Assert Precondition----------------
             AssertOnePersisted_OneMark4Delete(cpCol);
-            Assert.IsFalse(_removedEventFired);
+            Assert.IsFalse(removedEventFired);
 
             //---------------Execute Test ----------------------
             cpCol.MarkForDelete(markForDeleteCP);
@@ -620,7 +624,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Test Result -----------------------
             AssertOnePersisted_OneMark4Delete(cpCol);
             Assert.IsTrue(markForDeleteCP.Status.IsDeleted);
-            Assert.IsFalse(_removedEventFired);
+            Assert.IsFalse(removedEventFired);
         }
 
         [Test]
@@ -632,12 +636,12 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO markForDeleteCP = cpCol[0];
             cpCol.MarkForDelete(markForDeleteCP);
-            _removedEventFired = false;
-            cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
+            bool removedEventFired = false;
+            cpCol.BusinessObjectRemoved += delegate { removedEventFired = true; };
 
             //---------------Assert Precondition----------------
             AssertOnePersisted_OneMark4Delete(cpCol);
-            Assert.IsFalse(_removedEventFired);
+            Assert.IsFalse(removedEventFired);
 
             //---------------Execute Test ----------------------
             markForDeleteCP.MarkForDelete();
@@ -645,7 +649,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Test Result -----------------------
             AssertOnePersisted_OneMark4Delete(cpCol);
             Assert.IsTrue(markForDeleteCP.Status.IsDeleted);
-            Assert.IsFalse(_removedEventFired);
+            Assert.IsFalse(removedEventFired);
         }
 
         //TODO: Throw error if bo that is not in the col is handed to mark for delete
@@ -762,7 +766,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             AssertOnePersisted_OneMark4Delete(cpCol);
 
             //---------------Execute Test ----------------------
-            cpCol.RestoreAll();
+            cpCol.CancelEdits();
 
             //---------------Test Result -----------------------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
@@ -778,11 +782,11 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCollectionWith_OneBO();
             ContactPersonTestBO cp = cpCol[0];
             cpCol.MarkForDelete(cp);
-            _addedEventFired = false;
-            cpCol.BusinessObjectAdded += delegate { _addedEventFired = true; };
+            bool addedEventFired = false;
+            cpCol.BusinessObjectAdded += delegate { addedEventFired = true; };
             //---------------Assert Precondition----------------
             AssertOnePersisted_OneMark4Delete(cpCol);
-            Assert.IsFalse(_addedEventFired);
+            Assert.IsFalse(addedEventFired);
 
             //---------------Execute Test ----------------------
             cp.CancelEdits();
@@ -790,7 +794,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Test Result -----------------------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
             Assert.IsTrue(cpCol.Contains(cp));
-            Assert.IsTrue(_addedEventFired);
+            Assert.IsTrue(addedEventFired);
         }
 
         [Test, ExpectedException(typeof (HabaneroDeveloperException))]
@@ -810,6 +814,342 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         #endregion
+
+        #region BusinessObject events
+
+        //If a BusinessObject in the collection is Updated(i.e the BO is saved, or edits are cancelled), then 
+        //  the BusinessObjectUpdated event on the collection is fired.
+        [Test]
+        public void Test_BusinessObjectUpdated_Fired()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            bool updatedEventFired = false;
+            IBusinessObject eventBo = null;
+            cpCol.BusinessObjectUpdated += delegate(object sender, BOEventArgs e)
+            {
+                eventBo = e.BusinessObject;
+                updatedEventFired = true;
+            };
+            cp.Surname = "NewSurname";
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(updatedEventFired);
+            Assert.IsNull(eventBo);
+            //---------------Execute Test ----------------------
+            cp.Save();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(updatedEventFired, "BusinessObjectUpdated event should be fired");
+            Assert.IsNotNull(eventBo);
+            Assert.AreSame(cp, eventBo);
+        }
+
+        [Test]
+        public void Test_BusinessObjectUpdated_NotFired_AfterColCleared()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            bool updatedEventFired = false;
+            cpCol.BusinessObjectUpdated += delegate {
+                updatedEventFired = true;
+            };
+            cp.Surname = "NewSurname";
+            cpCol.Clear();
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(updatedEventFired);
+            //---------------Execute Test ----------------------
+            cp.Save();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(updatedEventFired, "BusinessObjectUpdated event should not be fired if the bo is not in the collection");
+        }
+
+        [Test]
+        public void Test_BusinessObjectUpdated_NotFired_AfterBoRemoved()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            bool updatedEventFired = false;
+            cpCol.BusinessObjectUpdated += delegate {
+                updatedEventFired = true;
+            };
+            cpCol.Remove(cp);
+            cp.Surname = "NewSurname";
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(updatedEventFired);
+            Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
+            //---------------Execute Test ----------------------
+            cp.Save();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(updatedEventFired, "BusinessObjectUpdated event should not be fired if the bo is not in the collection");
+        }    
+        [Test]
+        public void Test_BusinessObjectUpdated_NotFired_AfterBoMark4Delete()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            bool updatedEventFired = false;
+            cpCol.BusinessObjectUpdated += delegate {
+                updatedEventFired = true;
+            };
+            cpCol.MarkForDelete(cp);
+            cp.Surname = "NewSurname";
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(updatedEventFired);
+            Assert.AreEqual(1, cpCol.MarkedForDeleteBusinessObjects.Count);
+            //---------------Execute Test ----------------------
+            cp.Save();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(updatedEventFired, "BusinessObjectUpdated event should not be fired if the bo is not in the collection");
+        }
+
+        //If a BusinessObject in the collection has a property that is Updated(i.e the property is edited), then 
+        //  the BusinessObjectPropertyUpdated event on the collection is fired.
+        [Test]
+        public void Test_BusinessObjectPropertyUpdated_Fired()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            bool propertyUpdatedEventFired = false;
+            IBusinessObject eventBo = null;
+            IBOProp eventProp = null;
+            cpCol.BusinessObjectPropertyUpdated += delegate(object sender, BOEventArgs boEventArgs, BOPropEventArgs boPropEventArgs)
+            {
+                eventBo = boEventArgs.BusinessObject;
+                eventProp = boPropEventArgs.Prop;
+                propertyUpdatedEventFired = true;
+            };
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(propertyUpdatedEventFired);
+            Assert.IsNull(eventBo);
+            Assert.IsNull(eventProp);
+            //---------------Execute Test ----------------------
+            cp.Surname = "NewSurname";
+            //---------------Test Result -----------------------
+            Assert.IsTrue(propertyUpdatedEventFired, "BusinessObjectPropertyUpdated event should be fired");
+            Assert.IsNotNull(eventBo);
+            Assert.AreSame(cp, eventBo);
+            Assert.AreSame(cp.Props["Surname"], eventProp);
+        }
+
+        [Test]
+        public void Test_BusinessObjectPropertyUpdated_NotFired_AfterColCleared()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            bool propertyUpdatedEventFired = false;
+            cpCol.BusinessObjectPropertyUpdated += delegate
+            {
+                propertyUpdatedEventFired = true;
+            };
+            cpCol.Clear();
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(propertyUpdatedEventFired);
+            //---------------Execute Test ----------------------
+            cp.Surname = "NewSurname";
+            //---------------Test Result -----------------------
+            Assert.IsFalse(propertyUpdatedEventFired, "BusinessObjectPropertyUpdated event should not be fired if the bo is not in the collection");
+        }
+
+        [Test]
+        public void Test_BusinessObjectPropertyUpdated_NotFired_AfterBoRemoved()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            bool propertyUpdatedEventFired = false;
+            cpCol.BusinessObjectPropertyUpdated += delegate
+            {
+                propertyUpdatedEventFired = true;
+            };
+            cpCol.Remove(cp);
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(propertyUpdatedEventFired);
+            Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
+            //---------------Execute Test ----------------------
+            cp.Surname = "NewSurname";
+            //---------------Test Result -----------------------
+            Assert.IsFalse(propertyUpdatedEventFired, "BusinessObjectPropertyUpdated event should not be fired if the bo is not in the collection");
+        }
+        [Test]
+        public void Test_BusinessObjectPropertyUpdated_NotFired_AfterBoMark4Delete()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            bool propertyUpdatedEventFired = false;
+            cpCol.BusinessObjectPropertyUpdated += delegate
+            {
+                propertyUpdatedEventFired = true;
+            };
+            cpCol.MarkForDelete(cp);
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(propertyUpdatedEventFired);
+            Assert.AreEqual(1, cpCol.MarkedForDeleteBusinessObjects.Count);
+            //---------------Execute Test ----------------------
+            cp.Surname = "NewSurname";
+            //---------------Test Result -----------------------
+            Assert.IsFalse(propertyUpdatedEventFired, "BusinessObjectPropertyUpdated event should not be fired if the bo is not in the collection");
+        }
+        
+        //If a BusinessObject in the collection has an ID that is Updated(i.e one of the properties of the ID is edited), then 
+        //  the BusinessObjectIDUpdated event on the collection is fired.
+        [Test]
+        public void Test_BusinessObjectIDUpdated_Fired()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            bool businessObjectIDUpdatedEventFired = false;
+            IBusinessObject eventBo = null;
+            cpCol.BusinessObjectIDUpdated += delegate(object sender, BOEventArgs boEventArgs)
+            {
+                eventBo = boEventArgs.BusinessObject;
+                businessObjectIDUpdatedEventFired = true;
+            };
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(businessObjectIDUpdatedEventFired);
+            Assert.IsNull(eventBo);
+            //---------------Execute Test ----------------------
+            cp.ContactPersonID = Guid.NewGuid();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(businessObjectIDUpdatedEventFired, "BusinessObjectIDUpdated event should be fired");
+            Assert.IsNotNull(eventBo);
+            Assert.AreSame(cp, eventBo);
+        }
+
+        [Test]
+        public void Test_BusinessObjectIDUpdated_NotFired_AfterColCleared()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            bool businessObjectIDUpdatedEventFired = false;
+            cpCol.BusinessObjectIDUpdated += delegate
+            {
+                businessObjectIDUpdatedEventFired = true;
+            };
+            cpCol.Clear();
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(businessObjectIDUpdatedEventFired);
+            //---------------Execute Test ----------------------
+            cp.ContactPersonID = Guid.NewGuid();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(businessObjectIDUpdatedEventFired, "BusinessObjectIDUpdated event should not be fired if the bo is not in the collection");
+        }
+
+        [Test]
+        public void Test_BusinessObjectIDUpdated_NotFired_AfterBoRemoved()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            bool businessObjectIDUpdatedEventFired = false;
+            cpCol.BusinessObjectIDUpdated += delegate
+            {
+                businessObjectIDUpdatedEventFired = true;
+            };
+            cpCol.Remove(cp);
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(businessObjectIDUpdatedEventFired);
+            Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
+            //---------------Execute Test ----------------------
+            cp.ContactPersonID = Guid.NewGuid();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(businessObjectIDUpdatedEventFired, "BusinessObjectIDUpdated event should not be fired if the bo is not in the collection");
+        }
+
+        [Test]
+        public void Test_BusinessObjectIDUpdated_NotFired_AfterBoMark4Delete()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            bool businessObjectIDUpdatedEventFired = false;
+            cpCol.BusinessObjectIDUpdated += delegate
+            {
+                businessObjectIDUpdatedEventFired = true;
+            };
+            cpCol.MarkForDelete(cp);
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(businessObjectIDUpdatedEventFired);
+            Assert.AreEqual(1, cpCol.MarkedForDeleteBusinessObjects.Count);
+            //---------------Execute Test ----------------------
+            cp.ContactPersonID = Guid.NewGuid();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(businessObjectIDUpdatedEventFired, "BusinessObjectIDUpdated event should not be fired if the bo is not in the collection");
+        }
+
+        #endregion
+
+        [Test]
+        public void Test_Clear_DeRegisters_BoSavedEvent_FIXBUG()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            cp.Surname = "NewSurname";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            cpCol.Clear();
+            cp.Save();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(true, "Should not throw error");
+        }
+
+        [Test]
+        public void Test_Clear_DeRegisters_BoSavedEvent_BOInRemoved_FIXBUG()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            cp.Surname = "NewSurname";
+            cpCol.Remove(cp);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            cpCol.Clear();
+            cp.Save();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(true, "Should not throw error");
+        }
+
+        [Test]
+        public void Test_Clear_DeRegisters_BoSavedEvent_BOInMarkForDeletion_FIXBUG()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            cp.Surname = "NewSurname";
+            cpCol.MarkForDelete(cp);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            cpCol.Clear();
+            cp.CancelEdits();
+            cp.Surname = "fdafads";
+            cp.Save();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(true, "Should not throw error");
+        }
+
+        [Test]
+        public void Test_Clear_DeRegisters_BoDeletedEvent_FIXBUG()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            cpCol.Clear();
+            cp.MarkForDelete();
+            cp.Save();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(true, "Should not throw error");
+        }
+
 
         #region Utils
 

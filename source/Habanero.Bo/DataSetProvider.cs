@@ -34,6 +34,18 @@ namespace Habanero.BO
         protected ICollection _uiGridProperties;
         protected DataTable _table;
         protected IBusinessObjectInitialiser _objectInitialiser;
+        private const string _idColumnName = "HABANERO_OBJECTID";
+
+        ///<summary>
+        /// Gets and sets whether the property update handler shold be set or not.
+        /// This is used to 
+        ///    change behaviour typically to differentiate behaviour
+        ///    between windows and web.
+        ///Typically in windows every time a business object property is changed
+        ///   the grid is updated with Web the grid is updated only when the object
+        ///    is persisted.
+        /// </summary>
+        public bool RegisterForBusinessObjectPropertyUpdatedEvents { get; set; }
 
         /// <summary>
         /// Constructor to initialise a provider with a specified business
@@ -42,7 +54,9 @@ namespace Habanero.BO
         /// <param name="collection">The business object collection</param>
         protected DataSetProvider(IBusinessObjectCollection collection)
         {
+            if (collection == null) throw new ArgumentNullException("collection");
             this._collection = collection;
+            RegisterForBusinessObjectPropertyUpdatedEvents = true;
         }
 
         /// <summary>
@@ -52,14 +66,15 @@ namespace Habanero.BO
         /// <returns>Returns a DataTable object</returns>
         public DataTable GetDataTable(UIGrid uiGrid)
         {
+            if (uiGrid == null) throw new ArgumentNullException("uiGrid");
             _table = new DataTable();
             this.InitialiseLocalData();
 
             _uiGridProperties = uiGrid; 
             DataColumn column = _table.Columns.Add();
-            //TODO - Mark 02 Feb 2009: Rename this default column name for ID!!!
-            column.Caption = "ID";
-            column.ColumnName = "ID";
+            column.Caption = _idColumnName;
+            column.ColumnName = _idColumnName;
+            //_table.PrimaryKey = new DataColumn[]{column}; //TODO  07 Feb 2009: Investigate this in combination with the find code below (see todo note there)
             IClassDef classDef = _collection.ClassDef;
             foreach (UIGridColumn uiProperty in _uiGridProperties)
             {
@@ -80,9 +95,9 @@ namespace Habanero.BO
             if (_table.Columns.Contains(uiProperty.PropertyName))
             {
                 throw new DuplicateNameException(String.Format(
-                    "In a grid definition, a duplicate column with " +
-                    "the name '{0}' has been detected. Only one column " +
-                    "per property can be specified.", uiProperty.PropertyName));
+                                                     "In a grid definition, a duplicate column with " +
+                                                     "the name '{0}' has been detected. Only one column " +
+                                                     "per property can be specified.", uiProperty.PropertyName));
             }
             Type columnPropertyType = classDef.GetPropertyType(uiProperty.PropertyName);
             column.DataType = columnPropertyType;
@@ -119,7 +134,7 @@ namespace Habanero.BO
         protected object[] GetValues(IBusinessObject businessObject)
         {
             object[] values = new object[_uiGridProperties.Count + 1];
-            values[0] = businessObject.ID.ToString();
+            values[0] = businessObject.ID.AsString_CurrentValue();
             int i = 1;
             BOMapper mapper = new BOMapper(businessObject);
             foreach (UIGridColumn gridProperty in _uiGridProperties)
@@ -135,8 +150,70 @@ namespace Habanero.BO
         /// <summary>
         /// Adds handlers to be called when updates occur
         /// </summary>
-        public abstract void AddHandlersForUpdates();
-
+        public virtual void AddHandlersForUpdates()
+        {
+            if (RegisterForBusinessObjectPropertyUpdatedEvents)
+            {
+                _collection.BusinessObjectPropertyUpdated += PropertyUpdatedHandler;
+            }
+            else
+            {
+                _collection.BusinessObjectUpdated += UpdatedHandler;
+            }
+            _collection.BusinessObjectIDUpdated += IDUpdatedHandler;
+            _collection.BusinessObjectAdded += AddedHandler;
+            _collection.BusinessObjectRemoved += RemovedHandler;
+        }
+        private void PropertyUpdatedHandler(object sender, BOEventArgs boEventArgs, BOPropEventArgs propEventArgs)
+        {
+            UpdatedHandler(sender, boEventArgs);
+        }
+        /// <summary>
+        /// Handles the event of a <see cref="IBusinessObject"/> being updated
+        /// </summary>
+        /// <param name="sender">The object that notified of the event</param>
+        /// <param name="e">Attached arguments regarding the event</param>
+        private void UpdatedHandler(object sender, BOEventArgs e)
+        {
+            BusinessObject businessObject = (BusinessObject)e.BusinessObject;
+            UpdateBusinessObjectRowValues(businessObject);
+        }
+        /// <summary>
+        /// Handles the event of a business object being removed. Removes the
+        /// data row that contains the object.
+        /// </summary>
+        /// <param name="sender">The object that notified of the event</param>
+        /// <param name="e">Attached arguments regarding the event</param>
+        protected virtual void RemovedHandler(object sender, BOEventArgs e)
+        {
+            int rowNum = this.FindRow(e.BusinessObject);
+            if (rowNum != -1)
+            {
+                this._table.Rows.RemoveAt(rowNum);
+            }
+        }
+        /// <summary>
+        /// Handles the event of a business object being added. Adds a new
+        /// data row containing the object.
+        /// </summary>
+        /// <param name="sender">The object that notified of the event</param>
+        /// <param name="e">Attached arguments regarding the event</param>
+        protected virtual void AddedHandler(object sender, BOEventArgs e)
+        {
+            BusinessObject businessObject = (BusinessObject)e.BusinessObject;
+            object[] values = GetValues(businessObject);
+            _table.LoadDataRow(values, true);
+        }
+        /// <summary>
+        /// Updates the grid ID column when the Business's ID is changed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void IDUpdatedHandler(object sender, BOEventArgs e)
+        {
+            BusinessObject businessObject = (BusinessObject)e.BusinessObject;
+            UpdateBusinessObjectRowValues(businessObject);
+        }
         /// <summary>
         /// Initialises the local data
         /// </summary>
@@ -149,7 +226,7 @@ namespace Habanero.BO
         /// <returns>Returns a business object</returns>
         public IBusinessObject Find(int rowNum)
         {
-            return _collection.Find(this._table.Rows[rowNum]["ID"].ToString());
+            return _collection.Find(this._table.Rows[rowNum][_idColumnName].ToString());
         }
 
         /// <summary>
@@ -176,7 +253,7 @@ namespace Habanero.BO
                 string gridIDValue = dataRow[0].ToString();
                 string valuePersisted = bo.ID.AsString_LastPersistedValue();
                 string valueBeforeLastEdit = bo.ID.AsString_PreviousValue();
-                string currentValue = bo.ID.ToString();
+                string currentValue = bo.ID.AsString_CurrentValue();
                 if (gridIDValue == valueBeforeLastEdit ||
                     gridIDValue == valuePersisted ||
                     gridIDValue == currentValue)
@@ -193,6 +270,15 @@ namespace Habanero.BO
         public IBusinessObjectInitialiser ObjectInitialiser
         {
             set { _objectInitialiser = value; }
+        }
+
+        ///<summary>
+        /// The column name used for the <see cref="DataTable"/> column which stores the unique object identifier of the <see cref="IBusinessObject"/>.
+        /// This column's values will always be the current <see cref="IBusinessObject"/>'s <see cref="IBusinessObject.ID"/> value.
+        ///</summary>
+        public string IDColumnName
+        {
+            get { return _idColumnName; }
         }
     }
 }

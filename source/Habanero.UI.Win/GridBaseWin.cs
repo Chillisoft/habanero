@@ -262,6 +262,16 @@ namespace Habanero.UI.Win
             get { return _manager.DataSetProvider; }
         }
 
+        ///<summary>
+        /// Returns the name of the column being used for tracking the business object identity.
+        /// If a <see cref="IDataSetProvider"/> is used then it will be the <see cref="IDataSetProvider.IDColumnName"/>
+        /// Else it will be "HABANERO_OBJECTID".
+        ///</summary>
+        public string IDColumnName
+        {
+            get { return _manager.IDColumnName; }
+        }
+
         /// <summary>
         /// Fires an event indicating that the selected business object
         /// is being edited

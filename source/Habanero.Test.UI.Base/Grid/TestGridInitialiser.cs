@@ -28,6 +28,8 @@ namespace Habanero.Test.UI.Base
 {
     public abstract class TestGridInitialiser
     {
+        private const string _gridIdColumnName = "HABANERO_OBJECTID";
+
         [SetUp]
         public void SetupTest()
         {
@@ -184,7 +186,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
 //            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
-            grid.Grid.Columns.Add("ID", "ID");
+            grid.Grid.Columns.Add(_gridIdColumnName, _gridIdColumnName);
             //--------------Assert PreConditions----------------            
             Assert.IsFalse(grid.IsInitialised);
 
@@ -497,7 +499,7 @@ namespace Habanero.Test.UI.Base
 
         private static void AssertVerifyIDFieldSetUpCorrectly(IDataGridViewColumn column)
         {
-            string idPropertyName = "ID";
+            string idPropertyName = _gridIdColumnName;
             Assert.AreEqual(idPropertyName, column.Name);
             Assert.AreEqual(idPropertyName, column.HeaderText);
             Assert.AreEqual(idPropertyName, column.DataPropertyName);

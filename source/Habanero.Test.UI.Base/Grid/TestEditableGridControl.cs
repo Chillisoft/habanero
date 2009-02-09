@@ -721,7 +721,7 @@ namespace Habanero.Test.UI.Base
             int rowNum = 0;
             foreach (ContactPersonTestBO person in col)
             {
-                object rowID = gridControl.Grid.Rows[rowNum++].Cells["ID"].Value;
+                object rowID = gridControl.Grid.Rows[rowNum++].Cells["HABANERO_OBJECTID"].Value;
                 Assert.AreEqual(person.ID.ToString(), rowID.ToString());
             }
             //---------------Tear Down -------------------------   

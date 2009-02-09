@@ -49,7 +49,7 @@ namespace Habanero.Test.UI.Base
             // UIGridColumn extraColumn = originalGridDef[0].Clone();
             // extraGridDef.Add(extraColumn);
             extraGridDef.Remove(extraGridDef[extraGridDef.Count - 1]);
-            // UIGridColumn extraColumn = new UIGridColumn("ID", "ProjectAssemblyInfoID", typeof(System.Windows.Forms.DataGridViewTextBoxColumn), true, 100, UIGridColumn.PropAlignment.right, null);
+            // UIGridColumn extraColumn = new UIGridColumn("HABANERO_OBJECTID", "ProjectAssemblyInfoID", typeof(System.Windows.Forms.DataGridViewTextBoxColumn), true, 100, UIGridColumn.PropAlignment.right, null);
             // extraGridDef.Add(extraColumn);
             UIDef extraUIDef = new UIDef(CUSTOM_UIDEF_NAME, null, extraGridDef);
             classDef.UIDefCol.Add(extraUIDef);

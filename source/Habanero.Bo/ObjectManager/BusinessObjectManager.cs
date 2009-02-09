@@ -225,10 +225,7 @@ namespace Habanero.BO
             {
                 lock (_loadedBusinessObjects)
                 {
-
-
-                        _loadedBusinessObjects.Remove(objectID);
-   
+                    _loadedBusinessObjects.Remove(objectID);
                 }
                 DeregisterForIDUpdatedEvent(businessObject);
             }
@@ -248,9 +245,9 @@ namespace Habanero.BO
         {
             get
             {
-                if (Contains(objectID))
+                lock (_loadedBusinessObjects)
                 {
-                    return (IBusinessObject) _loadedBusinessObjects[objectID].Target;
+                    if (Contains(objectID)) return (IBusinessObject) _loadedBusinessObjects[objectID].Target;
                 }
                 string message = "There was an attempt to retrieve the object identified by '" + objectID
                                  + "' from the object manager but it is not currently loaded.";
@@ -281,10 +278,14 @@ namespace Habanero.BO
             string[] keysArray = new string[_loadedBusinessObjects.Count];
             _loadedBusinessObjects.Keys.CopyTo(keysArray, 0);
             foreach (string key in keysArray)
-            {
-                if (!Contains(key)) continue;
-                IBusinessObject businessObject = this[key];
-                this.Remove(key, businessObject);
+            { 
+                if (key == null) return;
+                lock (_loadedBusinessObjects)
+                {
+                    if (!Contains(key)) continue;
+                    IBusinessObject businessObject = this[key];
+                    this.Remove(key, businessObject);
+                }
             }
         }
 
