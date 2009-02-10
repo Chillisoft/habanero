@@ -16,7 +16,6 @@
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
-using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
 {

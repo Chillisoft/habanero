@@ -16,9 +16,9 @@
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.Base
@@ -34,6 +34,10 @@ namespace Habanero.Base
         private readonly JoinList _inheritanceJoins;
         private bool _isPrepared;
 
+        ///<summary>
+        /// Constructs a <see cref="Source"/> with the name of the source.
+        ///</summary>
+        ///<param name="name">The name of the source.</param>
         public Source(string name) : this(name, name)
         {
         }
