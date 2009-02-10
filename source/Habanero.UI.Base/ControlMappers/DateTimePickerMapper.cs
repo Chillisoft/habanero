@@ -65,7 +65,8 @@ namespace Habanero.UI.Base
         /// <returns>Returns the value held</returns>
         private object GetValueOfDateTimePicker()
         {
-            return DateTimePickerUtil.GetValue(_picker);
+                if (!_picker.ValueOrNull.HasValue) return null;
+                return _picker.ValueOrNull.Value;
         }
 
         /// <summary>
