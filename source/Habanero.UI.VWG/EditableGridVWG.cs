@@ -19,10 +19,8 @@
 
 using System;
 using System.Data;
-using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.BO;
-using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using DataGridViewSelectionMode=Gizmox.WebGUI.Forms.DataGridViewSelectionMode;
 
@@ -44,6 +42,9 @@ namespace Habanero.UI.VWG
     /// </remarks>
     public class EditableGridVWG : GridBaseVWG, IEditableGrid
     {
+        ///<summary>
+        /// parameterless constructor
+        ///</summary>
         public EditableGridVWG()
         {
             this.AllowUserToAddRows = true;

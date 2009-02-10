@@ -884,6 +884,7 @@ namespace Habanero.BO
             }
         }
 
+#pragma warning disable 693
         /// <summary>
         /// Finds a business object that has the key string specified.<br/>
         /// The format of the search term is strict, so that a Guid ID
@@ -895,15 +896,11 @@ namespace Habanero.BO
         /// <param name="key">The object identifier as a Guid</param>
         /// <returns>Returns the business object if found, or null if not</returns>
         public TBusinessObject Find<TBusinessObject>(Guid key)
+
         {
-//            if (KeyObjectHashTable.ContainsKey(key))
-//            {
-//                TBusinessObject bo = (TBusinessObject) KeyObjectHashTable[key];
-//                return this.Contains<TBusinessObject>(bo) ? bo : null;
-//            }
             return (TBusinessObject) Find(key);
         }
-
+#pragma warning restore 693
 
         /// <summary>
         /// Finds a business object that has the key string specified.<br/>

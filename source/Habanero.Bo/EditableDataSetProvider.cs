@@ -22,7 +22,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 using log4net;
 
 namespace Habanero.BO
@@ -146,16 +148,31 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         protected void RowDeletedHandler(object sender, DataRowChangeEventArgs e)
         {
-            DataRow row = e.Row;
-            BusinessObject changedBo = GetBusinessObjectForRow(row);
-            if (changedBo == null) return;
-            _collection.BusinessObjectRemoved -= RemovedHandler;
-            changedBo.MarkForDelete();
-            _deletedRows.Add(row, changedBo);
-//            _rowStates[e.Row] = RowState.Deleted;
-//            _deletedRowIDs[e.Row] = changedBo.ID.ToString();
-//            _rowIDs.Remove(e.Row);
-            _collection.BusinessObjectRemoved += RemovedHandler;
+            try
+            {
+                DataRow row = e.Row;
+                BusinessObject changedBo = GetBusinessObjectForRow(row);
+                if (changedBo == null) return;
+                if (changedBo.Status.IsNew)
+                {
+                    _collection.BusinessObjectRemoved -= RemovedHandler;
+                    _collection.Remove(changedBo);
+                    _collection.BusinessObjectRemoved += RemovedHandler;
+                    return;
+                }
+                _collection.BusinessObjectRemoved -= RemovedHandler;
+                changedBo.MarkForDelete();
+                _deletedRows.Add(row, changedBo);
+                _collection.BusinessObjectRemoved += RemovedHandler;
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "", "Error ");
+            }
+            finally
+            {
+                _collection.BusinessObjectRemoved += RemovedHandler;
+            }
         }
 
         private BusinessObject GetBusinessObjectForRow(DataRow row)
@@ -193,6 +210,9 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         protected void RowChangedHandler(object sender, DataRowChangeEventArgs e)
         {
+            if (!_isBeingAdded)
+            {
+
             switch (e.Action)
             {
                 case DataRowAction.Add:
@@ -208,6 +228,8 @@ namespace Habanero.BO
                     RowRollback(e);
                     break;
             }
+
+        }
         }
 
         /// <summary>
@@ -227,25 +249,6 @@ namespace Habanero.BO
             }
             changedBo = GetBusinessObjectForRow(row);
             if (changedBo != null) changedBo.Restore();
-//            switch (row.RowState)
-//            {
-//                case DataRowState.Modified:
-////                    changedBo = _collection.Find(row[IDColumnName].ToString());
-//                    changedBo.Restore();
-////                    _rowStates.Remove(row);
-//                    break;
-//                case DataRowState.Added:
-////                    changedBo = _collection.Find(_rowIDs[row].ToString());
-//                    if (changedBo != null) _collection.Remove(changedBo);
-////                    _rowStates.Remove(row);
-//                    break;
-//                case DataRowState.Deleted:
-////                    changedBo = _collection.Find((string) _deletedRowIDs[row]);
-//                    if (changedBo != null) changedBo.Restore();
-////                    _rowStates.Remove(row);
-////                    _deletedRowIDs.Remove(row);
-//                    break;
-//            }
         }
 
         /// <summary>
@@ -254,46 +257,18 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void RowCommitted(DataRowChangeEventArgs e)
         {
-//            e.Row.RowState == RowState.Deleted
-//            if (_rowStates[row] != null)
-//            {
+            DataRow row = e.Row;
             try
             {
-                IBusinessObject changedBo = GetBusinessObjectForRow(e.Row);
+                IBusinessObject changedBo = GetBusinessObjectForRow(row);
                 if (changedBo != null) changedBo.Save();
-//                    if (row.RowState == DataRowState.Deleted)
-//                    {
-//                        changedBo = _collection.Find((string) _deletedRowIDs[row]);
-//                        if (changedBo != null) changedBo.Save();
-////                        _rowStates.Remove(row);
-////                        _deletedRowIDs.Remove(row);
-//                    }
-//                    else
-//                    {
-//                        //log.Debug("Saving...");
-//                        changedBo = _collection.Find(row[IDColumnName].ToString());
-//
-//                        if (changedBo != null) changedBo.Save();
-////                        _rowStates.Remove(row);
-//                    }
             }
             catch (Exception ex)
                 {
-                    GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem saving.", "Problem Saving");
-                    //log.Debug(ExceptionUtil.GetExceptionString(ex, 0, true) ) ;
+                    string message = "There was a problem saving. : " + ex.Message;
+                    row.RowError = message;
+                    GlobalRegistry.UIExceptionNotifier.Notify(ex, message, "Problem Saving");
                 }
-//            }
-//            else
-//            {
-//                try
-//                {
-//                    log.Debug("RowCommitted:  Row state is null for row " + row[IDColumnName]);
-//                }
-//                catch (RowNotInTableException)
-//                {
-//                    log.Debug("RowCommitted:  Row has been removed from table");
-//                }
-//            }
         }
 
         /// <summary>
@@ -302,15 +277,38 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void RowChanged(DataRowChangeEventArgs e)
         {
-            IBusinessObject changedBo = _collection.Find(new Guid(e.Row[IDColumnName].ToString()));
-            if (changedBo == null || _isBeingAdded) return;
-            foreach (UIGridColumn uiProperty in _uiGridProperties)
+            object objectID = e.Row[IDColumnName];
+            Guid guidObjectID = Guid.Empty;
+            if (objectID == null)
             {
-                if (uiProperty.PropertyName.IndexOf(".") == -1 && uiProperty.PropertyName.IndexOf("-") == -1)
+                const string message = "The Editable Dataset provider is not set up correctly since the Row ID is null for a row.";
+                throw new HabaneroDeveloperException(message, message);
+            }
+
+            if (StringUtilities.GuidTryParse(objectID.ToString(), out guidObjectID))
+            {
+                if (guidObjectID == Guid.Empty)
                 {
-                    changedBo.SetPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
+                    const string message = "The Editable Dataset provider is not set up correctly since the Row ID is Empty for a row.";
+                    throw new HabaneroDeveloperException(message, message);
+                }
+                IBusinessObject changedBo = _collection.Find(guidObjectID);
+                if (changedBo == null || _isBeingAdded) return;
+                foreach (UIGridColumn uiProperty in _uiGridProperties)
+                {
+                    if (uiProperty.PropertyName.IndexOf(".") == -1 && uiProperty.PropertyName.IndexOf("-") == -1)
+                    {
+                        changedBo.SetPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
+                    } 
+
                 }
             }
+            else
+            {
+                const string message = "The Editable Dataset provider is not set up correctly since the Row ID is not set as a guid for a row.";
+                throw new HabaneroDeveloperException(message, message);
+            }
+ 
             //this.AddToRowStates(e.Row, DataRowState.Modified);
         }
 
@@ -325,7 +323,7 @@ namespace Habanero.BO
                 //log.Debug("Row Added");
                 _isBeingAdded = true;
                 _collection.BusinessObjectAdded -= AddedHandler;
-                BusinessObject newBo = (BusinessObject) _collection.CreateBusinessObject();
+                BusinessObject newBo = (BusinessObject)_collection.CreateBusinessObject();
                 _collection.BusinessObjectAdded += AddedHandler;
 
                 //log.Debug("Initialising obj");
@@ -336,6 +334,7 @@ namespace Habanero.BO
                 // set all the values in the grid to the bo's current prop values (defaults)
                 // make sure the part entered to create the row is not changed.
                 DataRow row = e.Row;
+                row[IDColumnName] = newBo.ID.ObjectID;
                 foreach (UIGridColumn uiProperty in _uiGridProperties)
                 {
                     if (uiProperty.PropertyName.IndexOf(".") == -1)
@@ -343,28 +342,37 @@ namespace Habanero.BO
                         if (DBNull.Value.Equals(row[uiProperty.PropertyName]))
                         {
                             row[uiProperty.PropertyName] = newBo.GetPropertyValueToDisplay(uiProperty.PropertyName);
+                        }else
+                        {
+                            newBo.SetPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
                         }
                     }
                 }
                 _addedRows.Add(row, newBo);
                 //AddNewRowToCollection(newBo);
                 //log.Debug(newBo.GetDebugOutput()) ;
-//                e.Row[IDColumnName] = newBo.ID.ToString();
-//                if (!_rowIDs.ContainsKey(e.Row))
-//                {
-//                    _rowIDs.Add(e.Row, e.Row[IDColumnName]);
-////                    AddToRowStates(e.Row, RowState.Added);
-//                }
+                if (newBo.ID.ObjectID == Guid.Empty)
+                {
+                    throw new HabaneroDeveloperException("Serios error", "Serios error"); //TODO Brett 10 Feb 2009: 
+                }
+                //                e.Row[IDColumnName] = newBo.ID.ObjectID;
+                //                if (!_rowIDs.ContainsKey(e.Row))
+                //                {
+                //                    _rowIDs.Add(e.Row, e.Row[IDColumnName]);
+                ////                    AddToRowStates(e.Row, RowState.Added);
+                //                }
                 //log.Debug("Row added complete.") ;
                 //log.Debug(newBo.GetDebugOutput()) ;
                 _isBeingAdded = false;
-//                this.RowChanged(e);
+                //                this.RowChanged(e);
             }
             catch (Exception)
             {
                 _isBeingAdded = false;
                 throw;
             }
+            finally { _isBeingAdded = false; }
+
         }
 
         ///// <summary>
