@@ -916,9 +916,9 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             bool propertyUpdatedEventFired = false;
             IBusinessObject eventBo = null;
             IBOProp eventProp = null;
-            cpCol.BusinessObjectPropertyUpdated += delegate(object sender, BOEventArgs boEventArgs, BOPropEventArgs boPropEventArgs)
+            cpCol.BusinessObjectPropertyUpdated += delegate(object sender, BOPropUpdatedEventArgs boPropEventArgs)
             {
-                eventBo = boEventArgs.BusinessObject;
+                eventBo = boPropEventArgs.BusinessObject;
                 eventProp = boPropEventArgs.Prop;
                 propertyUpdatedEventFired = true;
             };

@@ -164,9 +164,10 @@ namespace Habanero.BO
             _collection.BusinessObjectAdded += AddedHandler;
             _collection.BusinessObjectRemoved += RemovedHandler;
         }
-        private void PropertyUpdatedHandler(object sender, BOEventArgs boEventArgs, BOPropEventArgs propEventArgs)
+        private void PropertyUpdatedHandler(object sender, BOPropUpdatedEventArgs propEventArgs)
         {
-            UpdatedHandler(sender, boEventArgs);
+            BusinessObject businessObject = (BusinessObject)propEventArgs.BusinessObject;
+            UpdateBusinessObjectRowValues(businessObject);
         }
         /// <summary>
         /// Handles the event of a <see cref="IBusinessObject"/> being updated

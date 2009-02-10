@@ -94,7 +94,7 @@ namespace Habanero.BO
         private readonly EventHandler<BOEventArgs> _updateIDEventHandler;
         private readonly EventHandler<BOEventArgs> _markForDeleteEventHandler;
         private readonly EventHandler<BOEventArgs> _updatedEventHandler;
-        private readonly EventHandler<BOEventArgs, BOPropEventArgs> _boPropUpdatedEventHandler;
+        private readonly EventHandler<BOPropUpdatedEventArgs> _boPropUpdatedEventHandler;
         private readonly EventHandler<BOEventArgs> _boIDUpdatedEventHandler;
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace Habanero.BO
         /// Handles the event of any business object in this collection being edited (i.e. a property value is changed).
         /// See the <see cref="IBusinessObject"/>.<see cref="IBusinessObject.PropertyUpdated"/> event.
         /// </summary>
-        public event EventHandler<BOEventArgs, BOPropEventArgs> BusinessObjectPropertyUpdated;
+        public event EventHandler<BOPropUpdatedEventArgs> BusinessObjectPropertyUpdated;
 
         /// <summary>
         /// Handles the event when a BusinessObject in the collection has an ID that is Updated(i.e one of the properties of the ID is edited).
@@ -235,7 +235,7 @@ namespace Habanero.BO
         {
             if (this.BusinessObjectPropertyUpdated != null)
             {
-                this.BusinessObjectPropertyUpdated(this, new BOEventArgs(bo), new BOPropEventArgs(boProp));
+                this.BusinessObjectPropertyUpdated(this, new BOPropUpdatedEventArgs(bo, boProp));
             }
         }
 
@@ -447,9 +447,9 @@ namespace Habanero.BO
             FireBusinessObjectUpdated(businessObject);
         }
 
-        private void BOPropUpdatedEventHandler(object sender, BOEventArgs e, BOPropEventArgs propEventArgs)
+        private void BOPropUpdatedEventHandler(object sender, BOPropUpdatedEventArgs propEventArgs)
         {
-            TBusinessObject businessObject = (TBusinessObject) e.BusinessObject;
+            TBusinessObject businessObject = (TBusinessObject) propEventArgs.BusinessObject;
             if (!this.Contains(businessObject)) return;
             FireBusinessObjectPropertyUpdated(businessObject, propEventArgs.Prop);
         }

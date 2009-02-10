@@ -46,7 +46,7 @@ namespace Habanero.BO
         public event EventHandler<BOEventArgs> Deleted;
         public event EventHandler<BOEventArgs> Restored;
         public event EventHandler<BOEventArgs> MarkedForDeletion;
-        public event EventHandler<BOEventArgs, BOPropEventArgs> PropertyUpdated;
+        public event EventHandler<BOPropUpdatedEventArgs> PropertyUpdated;
         public event EventHandler<BOEventArgs> IDUpdated;
 
         #endregion
@@ -1089,7 +1089,7 @@ namespace Habanero.BO
         {
             if (PropertyUpdated != null)
             {
-                PropertyUpdated(this, new BOEventArgs(this), new BOPropEventArgs(prop));
+                PropertyUpdated(this, new BOPropUpdatedEventArgs(this, prop));
             }
         }
 

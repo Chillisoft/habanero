@@ -95,6 +95,7 @@
     <Compile Include="BOKeyEventArgs.cs" />
     <Compile Include="BOPropCol.cs" />
     <Compile Include="BOPropEventArgs.cs" />
+    <Compile Include="BOPropUpdatedEventArgs.cs" />
     <Compile Include="Criteria\Criteria.cs" />
     <Compile Include="Criteria\CriteriaDB.cs" />
     <Compile Include="Criteria\CriteriaExpression.cs" />

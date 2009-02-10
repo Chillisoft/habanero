@@ -238,7 +238,7 @@ namespace Habanero.UI.Win
             _lastSelectedBusinessObject = businessObject;
         }
 
-        private void PropertyUpdated(object sender, BOEventArgs e, BOPropEventArgs eventArgs2)
+        private void PropertyUpdated(object sender, BOPropUpdatedEventArgs eventArgs)
         {
             _cancelButton.Enabled = true;
         }
@@ -559,7 +559,7 @@ namespace Habanero.UI.Win
             _lastSelectedBusinessObject = businessObject;
         }
 
-        private void PropertyUpdated(object sender, BOEventArgs e, BOPropEventArgs eventArgs2)
+        private void PropertyUpdated(object sender, BOPropUpdatedEventArgs eventArgs)
         {
             _cancelButton.Enabled = true;
         }
