@@ -259,7 +259,6 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        [Ignore("//TODO Brett 06 Feb 2009: This is an in memory database issue and the object will only ever be in the db after persisting")]
         [Test]
         public void Test_HashCode_CompositeKey()
         {

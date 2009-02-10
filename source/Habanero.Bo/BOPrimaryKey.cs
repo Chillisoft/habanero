@@ -193,6 +193,7 @@ namespace Habanero.BO
                 {
                     return boProp.Value;
                 }
+//                list.Add(boProp.PropDef.ClassDef.ClassName + "." + boProp.PropertyName + "=" + boProp.Value);
             }
             return this.AsString_CurrentValue();
         }

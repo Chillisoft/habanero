@@ -243,7 +243,6 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
-        [Ignore("//TODO Brett 06 Feb 2009: This will be an issue with mutable composite keys using the in memory data store")]
         [Test]
         public void TestCompositeKeyObject()
         {

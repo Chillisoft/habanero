@@ -228,7 +228,7 @@ namespace Habanero.Test.DB
             DatabaseConnection conn =
                 new DatabaseConnectionAccess("System.Data", "System.Data.OleDb.OleDbConnection");
             //---------------Test Result -----------------------
-            Assert.AreEqual(IsolationLevel.RepeatableRead, conn.IsolationLevel);
+            Assert.AreEqual(IsolationLevel.ReadUncommitted, conn.IsolationLevel);
         }
 
         [Test]
