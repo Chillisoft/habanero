@@ -311,8 +311,8 @@ namespace Habanero.BO
             base.Add(bo);
             lock (KeyObjectHashTable)
             {
-                if (KeyObjectHashTable.Contains(bo.ID.AsString_CurrentValue())) return;
-                if (bo.ID != null) KeyObjectHashTable.Add(bo.ID.AsString_CurrentValue(), bo);
+                if (bo.ID != null) if (KeyObjectHashTable.Contains(bo.ID.ObjectID)) return;
+                if (bo.ID != null) KeyObjectHashTable.Add(bo.ID.ObjectID, bo);
             }
             RegisterBOEvents(bo);
         }
@@ -458,6 +458,14 @@ namespace Habanero.BO
         {
             TBusinessObject businessObject = (TBusinessObject) e.BusinessObject;
             if (!this.Contains(businessObject)) return;
+            if (businessObject.ID == null) return;
+
+            Guid previousObjectID = businessObject.ID.PreviousObjectID;
+            if (KeyObjectHashTable.Contains(previousObjectID))
+            {
+                KeyObjectHashTable.Remove(previousObjectID);
+                KeyObjectHashTable.Add(businessObject.ID.ObjectID, businessObject);
+            }
             FireBusinessObjectIDUpdated(businessObject);
         }
 
@@ -734,7 +742,7 @@ namespace Habanero.BO
         /// Clears only the current collection i.e. the persisted, removed, added and created lists 
         ///    are retained.
         ///</summary>
-        /// Note: This is used by reflection by the collection loader.
+        /// Note_: This is used by reflection by the collection loader.
 // ReSharper disable UnusedPrivateMember
         internal void ClearCurrentCollection()
         {
@@ -758,7 +766,7 @@ namespace Habanero.BO
         internal bool RemoveInternal(TBusinessObject businessObject)
         {
             bool removed = base.Remove(businessObject);
-            KeyObjectHashTable.Remove(businessObject.ID.ToString());
+            KeyObjectHashTable.Remove(businessObject.ID.ObjectID);
 
             if (!_removedBusinessObjects.Contains(businessObject)
                 && !_markedForDeleteBusinessObjects.Contains(businessObject))
@@ -884,9 +892,9 @@ namespace Habanero.BO
         /// Composite primary keys may be stored otherwise, such as a
         /// concatenation of the key names.
         /// </summary>
-        /// <param name="key">The orimary key as a string</param>
+        /// <param name="key">The object identifier as a Guid</param>
         /// <returns>Returns the business object if found, or null if not</returns>
-        public TBusinessObject Find(string key)
+        public TBusinessObject Find(Guid key)
         {
             if (KeyObjectHashTable.ContainsKey(key))
             {
@@ -910,10 +918,10 @@ namespace Habanero.BO
         /// found</returns>
         public TBusinessObject FindByGuid(Guid searchTerm)
         {
-            string formattedSearchItem = searchTerm.ToString();
-            if (KeyObjectHashTable.ContainsKey(formattedSearchItem))
+            //string formattedSearchItem = searchTerm.ToString();
+            if (KeyObjectHashTable.ContainsKey(searchTerm))
             {
-                return (TBusinessObject) KeyObjectHashTable[formattedSearchItem];
+                return (TBusinessObject)KeyObjectHashTable[searchTerm];
             }
             return null;
         }
@@ -1155,7 +1163,6 @@ namespace Habanero.BO
 
         protected virtual void SaveAllInTransaction(ITransactionCommitter transaction)
         {
-            //TODO: Save all added business object.
             foreach (TBusinessObject bo in this)
             {
                 if (bo.Status.IsDirty || bo.Status.IsNew)
@@ -1174,7 +1181,7 @@ namespace Habanero.BO
             transaction.CommitTransaction();
             CreatedBusinessObjects.Clear();
             RemovedBusinessObjects.Clear();
-            //TODO: Markfor delete clear.
+            this.MarkedForDeleteBusinessObjects.Clear();
         }
 
         /// <summary>
@@ -1245,7 +1252,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="key">The orimary key as a string</param>
         /// <returns>Returns the business object if found, or null if not</returns>
-        IBusinessObject IBusinessObjectCollection.Find(string key)
+        IBusinessObject IBusinessObjectCollection.Find(Guid key)
         {
             return this.Find(key);
         }

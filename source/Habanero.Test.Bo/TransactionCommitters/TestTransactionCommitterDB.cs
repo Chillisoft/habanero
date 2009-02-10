@@ -268,28 +268,27 @@ namespace Habanero.Test.BO.TransactionCommitters
             AssertBusinessObjectNotInDatabase(address);
         }
 
-        //TODO: Soriya 10 Feb 2009 Fix this test
-        //[Test]
-        //public void TestChangeCompositePrimaryKey()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
-        //    ContactPersonTestBO contactPersonCompositeKey = GetSavedContactPersonCompositeKey();
-        //    string oldID = contactPersonCompositeKey.ID.AsString_CurrentValue();
-        //    Assert.IsNotNull(BusinessObjectManager.Instance[oldID]);
-        //    TransactionCommitterDB committer = new TransactionCommitterDB();
-        //    committer.AddBusinessObject(contactPersonCompositeKey);
-        //    contactPersonCompositeKey.FirstName = "newName";
-        //    //---------------Execute Test ----------------------
-        //    committer.CommitTransaction();
-        //    //---------------Test Result -----------------------
-        //    TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(contactPersonCompositeKey);
-        //    Assert.IsFalse(BusinessObjectManager.Instance.Contains(oldID));
-        //    Assert.IsNotNull(BusinessObjectManager.Instance[contactPersonCompositeKey.ID.AsString_CurrentValue()]);
-        //    //---------------Tear Down--------------------------
-        //    contactPersonCompositeKey.MarkForDelete();
-        //    contactPersonCompositeKey.Save();
-        //}
+        [Test]
+        public void TestChangeCompositePrimaryKey()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
+            ContactPersonTestBO contactPersonCompositeKey = GetSavedContactPersonCompositeKey();
+            Guid oldID = contactPersonCompositeKey.ID.ObjectID;
+            Assert.IsNotNull(BusinessObjectManager.Instance[oldID]);
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+            committer.AddBusinessObject(contactPersonCompositeKey);
+            contactPersonCompositeKey.FirstName = "newName";
+            //---------------Execute Test ----------------------
+            committer.CommitTransaction();
+            //---------------Test Result -----------------------
+            TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(contactPersonCompositeKey);
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(oldID));
+            Assert.IsNotNull(BusinessObjectManager.Instance[contactPersonCompositeKey.ID.ObjectID]);
+            //---------------Tear Down--------------------------
+            contactPersonCompositeKey.MarkForDelete();
+            contactPersonCompositeKey.Save();
+        }
 
 
         [Test]

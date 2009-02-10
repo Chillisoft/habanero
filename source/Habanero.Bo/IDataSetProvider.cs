@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Data;
 using Habanero.BO.ClassDefinition;
 
@@ -39,7 +40,7 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="id">The id of the bo to search for</param>
         /// <returns>The business object corresponding to the ID</returns>
-        IBusinessObject Find(string id);
+        IBusinessObject Find(Guid id);
 
         /// <summary>
         /// Returns the business object at the row number specified

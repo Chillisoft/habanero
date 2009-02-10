@@ -99,7 +99,7 @@ namespace Habanero.Base
 		/// </summary>
 		/// <param name="key">The orimary key as a string</param>
 		/// <returns>Returns the business object if found, or null if not</returns>
-        IBusinessObject Find(string key);
+        IBusinessObject Find(Guid key);
 
 		/// <summary>
 		/// Returns a new collection that is a copy of this collection

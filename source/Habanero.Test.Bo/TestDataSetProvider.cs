@@ -348,7 +348,7 @@ namespace Habanero.Test.BO
             OrderItem chair = OrderItem.AddOrder2Chair();
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
             col.LoadAll();
-            col.Sort("OrderNumber",true, true);
+            col.Sort("OrderNumber", true, true);
             Assert.AreEqual(car, col[0]);
             Assert.AreEqual(chair, col[1]);
 
@@ -359,8 +359,10 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, provider.FindRow(chair));
             Assert.AreEqual(car, provider.Find(0));
             Assert.AreEqual(chair, provider.Find(1));
-            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=1;OrderItem.Product=car"));
-            Assert.AreEqual(chair, provider.Find("OrderItem.OrderNumber=2;OrderItem.Product=chair"));
+            //Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=1;OrderItem.Product=car"));
+            //Assert.AreEqual(chair, provider.Find("OrderItem.OrderNumber=2;OrderItem.Product=chair"));
+            Assert.AreEqual(car, provider.Find(car.ID.ObjectID));
+            Assert.AreEqual(chair, provider.Find(chair.ID.ObjectID));
 
             OrderItem roof = OrderItem.AddOrder3Roof();
             Assert.AreEqual(2, provider.GetDataTable(uiGrid).Rows.Count);
@@ -376,13 +378,15 @@ namespace Habanero.Test.BO
                 Assert.AreEqual(typeof(IndexOutOfRangeException), e.GetType());
             }
             Assert.IsTrue(causedException);
-            Assert.IsNull(provider.Find("OrderItem.OrderNumber=3;OrderItem.Product=roof"));
+            //Assert.IsNull(provider.Find("OrderItem.OrderNumber=3;OrderItem.Product=roof"));
+            Assert.IsNull(provider.Find(roof.ID.ObjectID));
 
             col.Add(roof);
             Assert.AreEqual(3, provider.GetDataTable(uiGrid).Rows.Count);
             Assert.AreEqual(2, provider.FindRow(roof));
             Assert.AreEqual(roof, provider.Find(2));
-            Assert.AreEqual(roof, provider.Find("OrderItem.OrderNumber=3;OrderItem.Product=roof"));
+            //Assert.AreEqual(roof, provider.Find("OrderItem.OrderNumber=3;OrderItem.Product=roof"));
+            Assert.AreEqual(roof, provider.Find(roof.ID.ObjectID));
         }
         [Test]
         public void TestOrderItemRemove()
@@ -413,7 +417,8 @@ namespace Habanero.Test.BO
                 Assert.AreEqual(typeof(IndexOutOfRangeException), e.GetType());
             }
             Assert.IsTrue(causedException);
-            Assert.IsNull(provider.Find("OrderNumber=2 AND Product=chair"));
+            //Assert.IsNull(provider.Find("OrderNumber=2 AND Product=chair"));
+            Assert.IsNull(provider.Find(chair.ID.ObjectID));
         }
 
         [Test]
@@ -441,22 +446,26 @@ namespace Habanero.Test.BO
             car.OrderNumber = 11;
             Assert.AreEqual(0, provider.FindRow(car));
             Assert.AreEqual(car, provider.Find(0));
-            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=11;OrderItem.Product=car"));
+            //Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=11;OrderItem.Product=car"));
+            Assert.AreEqual(car, provider.Find(car.ID.ObjectID));
 
             car.Save();
             Assert.AreEqual(0, provider.FindRow(car));
             Assert.AreEqual(car, provider.Find(0));
-            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=11;OrderItem.Product=car"));
+            //Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=11;OrderItem.Product=car"));
+            Assert.AreEqual(car, provider.Find(car.ID.ObjectID));
 
             car.OrderNumber = 12;
             Assert.AreEqual(0, provider.FindRow(car));
             Assert.AreEqual(car, provider.Find(0));
-            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=12;OrderItem.Product=car"));
+            //Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=12;OrderItem.Product=car"));
+            Assert.AreEqual(car, provider.Find(car.ID.ObjectID));
 
             car.OrderNumber = 13;
             Assert.AreEqual(0, provider.FindRow(car));
             Assert.AreEqual(car, provider.Find(0));
-            Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=13;OrderItem.Product=car"));
+            //Assert.AreEqual(car, provider.Find("OrderItem.OrderNumber=13;OrderItem.Product=car"));
+            Assert.AreEqual(car, provider.Find(car.ID.ObjectID));
         }
 
         [Test]
@@ -495,7 +504,8 @@ namespace Habanero.Test.BO
             string testPropValue = myBO.TestProp;
             row1["TestProp"] = "";
             //-------------Assert Preconditions -------------
-            Assert.AreEqual(row1[_dataTableIdColumnName], myBO.ID.AsString_CurrentValue());
+            //Assert.AreEqual(row1[_dataTableIdColumnName], myBO.ID.ObjectID);
+            Assert.AreEqual(row1[_dataTableIdColumnName], myBO.ID.ObjectID.ToString());
             Assert.AreEqual(testPropValue, myBO.TestProp);
             Assert.AreNotEqual(testPropValue, row1["TestProp"]);
             //---------------Execute Test ----------------------

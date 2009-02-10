@@ -170,7 +170,7 @@ namespace Habanero.UI.Base
                 int rowNum = 0;
                 foreach (IDataGridViewRow row in gridRows)
                 {
-                    if (GetRowObjectIDValue(row) == bo.ID.AsString_CurrentValue())
+                    if (GetRowObjectIDValue(row) == bo.ID.ObjectID)
                     {
                         gridRows[rowNum].Selected = true;
                         boFoundAndHighlighted = true;
@@ -296,7 +296,7 @@ namespace Habanero.UI.Base
                 {
                     if (i++ == rowIndex)
                     {
-                        return this._dataSetProvider.Find((string) dataRowView.Row[_dataSetProvider.IDColumnName]);
+                        return this._dataSetProvider.Find( new Guid(dataRowView.Row[_dataSetProvider.IDColumnName].ToString()));
                     }
                 }
             }else
@@ -313,10 +313,10 @@ namespace Habanero.UI.Base
         public IDataGridViewRow GetBusinessObjectRow(IBusinessObject businessObject)
         {
             if (businessObject == null) return null;
-            string boIdString = businessObject.ID.AsString_CurrentValue();
+            Guid boIdGuid = businessObject.ID.ObjectID;
             foreach (IDataGridViewRow row in _gridBase.Rows)
             {
-                if (GetRowObjectIDValue(row) == boIdString)
+                if (GetRowObjectIDValue(row) == boIdGuid) 
                 {
                     return row;
                 }
@@ -324,9 +324,9 @@ namespace Habanero.UI.Base
             return null;
         }
 
-        private string GetRowObjectIDValue(IDataGridViewRow row)
+        private Guid GetRowObjectIDValue(IDataGridViewRow row)
         {
-            return Convert.ToString(row.Cells[IDColumnName].Value);
+            return new  Guid(row.Cells[IDColumnName].Value.ToString()); 
         }
 
         ///<summary>
