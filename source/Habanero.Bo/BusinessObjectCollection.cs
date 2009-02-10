@@ -894,18 +894,34 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="key">The object identifier as a Guid</param>
         /// <returns>Returns the business object if found, or null if not</returns>
-        public TBusinessObject Find(Guid key)
+        public TBusinessObject Find<TBusinessObject>(Guid key)
+        {
+//            if (KeyObjectHashTable.ContainsKey(key))
+//            {
+//                TBusinessObject bo = (TBusinessObject) KeyObjectHashTable[key];
+//                return this.Contains<TBusinessObject>(bo) ? bo : null;
+//            }
+            return (TBusinessObject) Find(key);
+        }
+
+
+        /// <summary>
+        /// Finds a business object that has the key string specified.<br/>
+        /// The format of the search term is strict, so that a Guid ID
+        /// may be stored as "boIDname=########-####-####-####-############".
+        /// In the case of such Guid ID's, rather use the FindByGuid() function.
+        /// Composite primary keys may be stored otherwise, such as a
+        /// concatenation of the key names.
+        /// </summary>
+        /// <param name="key">The object identifier as a Guid</param>
+        /// <returns>Returns the business object if found, or null if not</returns>
+        public IBusinessObject Find(Guid key)
         {
             if (KeyObjectHashTable.ContainsKey(key))
             {
-                TBusinessObject bo = (TBusinessObject) KeyObjectHashTable[key];
+                TBusinessObject bo = (TBusinessObject)KeyObjectHashTable[key];
                 return this.Contains(bo) ? bo : null;
             }
-//
-//            foreach (TBusinessObject createdBusinessObject in _createdBusinessObjects)
-//            {
-//                if (createdBusinessObject.ID.AsString_CurrentValue() == key || createdBusinessObject.ID.AsString_LastPersistedValue() == key || createdBusinessObject.ID.AsString_PreviousValue() == key) return createdBusinessObject;
-//            }
             return null;
         }
 

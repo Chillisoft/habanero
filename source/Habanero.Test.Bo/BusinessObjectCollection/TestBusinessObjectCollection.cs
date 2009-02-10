@@ -492,7 +492,26 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             ContactPersonTestBO cp2 = cpCol.CreateBusinessObject();
 
             //---------------Execute Test ----------------------
-            ContactPersonTestBO foundCp = cpCol.Find(cp2.ID.ObjectID);
+            IBusinessObject foundCp = cpCol.Find(cp2.ID.ObjectID);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(foundCp);
+            Assert.AreSame(cp2, foundCp);
+        } 
+        [Test]
+        public void Test_FindIncludesCreatedBusinessObjects_UsingGeneric()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ContactPersonTestBO.LoadDefaultClassDef();
+
+            ContactPersonTestBO.CreateSavedContactPerson();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>("");
+            ContactPersonTestBO cp2 = cpCol.CreateBusinessObject();
+
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO foundCp = cpCol.Find<ContactPersonTestBO>(cp2.ID.ObjectID);
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(foundCp);

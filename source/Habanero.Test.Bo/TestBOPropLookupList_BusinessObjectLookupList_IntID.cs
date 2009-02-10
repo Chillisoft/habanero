@@ -627,6 +627,40 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_GetBusinessObject_NewBusinessObject_NotInList_NoClassDefOverloadedMethod()
+        {
+            //Assert.Fail("Not yet implemented");
+            //Check Validation of lookup list does not make invalid
+            ClassDef.ClassDefs.Clear();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOPropLookupList boProp = new BOPropLookupList(_propDef_int);
+            BOWithIntID unSavedBoWithIntID = new BOWithIntID {IntID = TestUtil.GetRandomInt(), TestField = TestUtil.GetRandomString()};
+            boProp.Value = unSavedBoWithIntID;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IBusinessObject returnedBusinessObject = boProp.GetBusinessObjectForProp();
+            //---------------Test Result -----------------------
+            Assert.AreSame(unSavedBoWithIntID, returnedBusinessObject);
+        }
+        [Test]
+        public void Test_GetBusinessObject_PersistedBusinessObject_NoClassDefOverloadedMethod()
+        {
+            //Assert.Fail("Not yet implemented");
+            //Check Validation of lookup list does not make invalid
+            ClassDef.ClassDefs.Clear();
+            BOWithIntID.LoadClassDefWithIntID();
+            BOPropLookupList boProp = new BOPropLookupList(_propDef_int);
+            BOWithIntID savedBoWithIntID = new BOWithIntID {IntID = TestUtil.GetRandomInt(), TestField = TestUtil.GetRandomString()};
+            savedBoWithIntID.Save();
+            boProp.Value = savedBoWithIntID;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IBusinessObject returnedBusinessObject = boProp.GetBusinessObjectForProp();
+            //---------------Test Result -----------------------
+            Assert.AreSame(savedBoWithIntID, returnedBusinessObject);
+        }
+
+        [Test]
         public void Test_GetBusinessObject_SavedBusinessObject_NotInList()
         {
             //Assert.Fail("Not yet implemented");
