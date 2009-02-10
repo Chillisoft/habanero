@@ -38,7 +38,7 @@ namespace Habanero.Test.UI.Base.Mappers
   
             }
             [Test]
-            public void TestSetBusinessObjectValue_ChangesDateTimePicker_InWin()
+            public void TestSetBusinessObjectValue_ChangesDateTimePickerImmediately_InWin()
             {
                 //---------------Set up test pack-------------------
                 Sample sampleBusinessObject = new Sample();
@@ -52,32 +52,12 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Execute Test ----------------------
                 DateTime testDateChangedValue = new DateTime(2000, 1, 1);
                 sampleBusinessObject.SampleDate = testDateChangedValue;
-                dtpMapper.UpdateControlValueFromBusinessObject();
-
+                
                 //---------------Test Result -----------------------
                 Assert.AreEqual(sampleBusinessObject.SampleDate, dateTimePicker.Value);
                 //---------------Tear Down -------------------------          
             }
-            [Test]
-            public void TestUpdateValueInPicker_ChangesValueInBO_ForWin()
-            {
-                //---------------Set up test pack-------------------
-                Sample sampleBusinessObject = new Sample();
-                DateTime origionalDate = new DateTime(2000, 1, 1);
-                sampleBusinessObject.SampleDate = origionalDate;
-                DateTimePickerMapper dtpMapper;
-                IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper);
-                dtpMapper.BusinessObject = sampleBusinessObject;
-                //---------------Verify Preconditions -------------------
-                Assert.AreEqual(origionalDate, dateTimePicker.Value.Date);
-                //---------------Execute Test ----------------------
-                DateTime newDate = DateTime.Today.AddDays(+3);
-                dateTimePicker.Value = newDate;
-                dtpMapper.ApplyChangesToBusinessObject();
-                //---------------Test Result -----------------------
-                Assert.AreEqual(newDate, sampleBusinessObject.SampleDate);
-                //---------------Tear Down -------------------------          
-            }
+            
         }
 
         [TestFixture]
@@ -96,7 +76,7 @@ namespace Habanero.Test.UI.Base.Mappers
             }
 
             [Test]
-            public void TestSetBusinessObjectValue_DoesNotChangeDateTimePicker_InVWG()
+            public void TestSetBusinessObjectValue_DoesNotChangeDateTimePickerImmediately_InVWG()
             {
                 //---------------Set up test pack-------------------
                 Sample sampleBusinessObject = new Sample();
@@ -116,7 +96,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Tear Down -------------------------          
             }
             [Test]
-            public void TestUpdateValueInPicker_DoesNot_ChangesValueInBO_ForVWG()
+            public void TestUpdateValueInPicker_DoesNotChangeValueInBO_ForVWG()
             {
                 //---------------Set up test pack-------------------
                 Sample sampleBusinessObject = new Sample();
@@ -130,11 +110,11 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Execute Test ----------------------
                 DateTime newDate = DateTime.Today.AddDays(+3);
                 dateTimePicker.Value = newDate;
-                dtpMapper.ApplyChangesToBusinessObject();
                 //---------------Test Result -----------------------
-                Assert.AreEqual(newDate, sampleBusinessObject.SampleDate);
+                Assert.AreEqual(origionalDate, sampleBusinessObject.SampleDate);
                 //---------------Tear Down -------------------------          
             }
+            
         }
 
         [Test]
@@ -172,12 +152,141 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Tear Down -------------------------          
         }
 
-        //TODO: Do tests for null value and changes from null value
         //TODO: Do tests for null business object
-        
         //TODO: Fix readonly compulsory field for control mappper base class
-
         //TODO: Have a look at if DateTimePickerUtils is needed anymore. I don't think it is.
+
+        [Test]
+        public void TestSetBusinessObjectValue_ChangesDateTimePickerValue()
+        {
+            //---------------Set up test pack-------------------
+            Sample sampleBusinessObject = new Sample();
+            sampleBusinessObject.SampleDate = DateTime.Today;
+            DateTimePickerMapper dtpMapper;
+            IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper);
+            dtpMapper.BusinessObject = sampleBusinessObject;
+
+            //---------------Verify test pack-------------------
+            Assert.AreEqual(DateTime.Today, dateTimePicker.Value.Date);
+            //---------------Execute Test ----------------------
+            DateTime testDateChangedValue = new DateTime(2000, 1, 1);
+            sampleBusinessObject.SampleDate = testDateChangedValue;
+            dtpMapper.UpdateControlValueFromBusinessObject();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(sampleBusinessObject.SampleDate, dateTimePicker.Value);
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestUpdateValueInPicker_ChangesValueInBO()
+        {
+            //---------------Set up test pack-------------------
+            Sample sampleBusinessObject = new Sample();
+            DateTime origionalDate = new DateTime(2000, 1, 1);
+            sampleBusinessObject.SampleDate = origionalDate;
+            DateTimePickerMapper dtpMapper;
+            IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper);
+            dtpMapper.BusinessObject = sampleBusinessObject;
+            //---------------Verify Preconditions -------------------
+            Assert.AreEqual(origionalDate, dateTimePicker.Value.Date);
+            //---------------Execute Test ----------------------
+            DateTime newDate = DateTime.Today.AddDays(+3);
+            dateTimePicker.Value = newDate;
+            dtpMapper.ApplyChangesToBusinessObject();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(newDate, sampleBusinessObject.SampleDate);
+            //---------------Tear Down -------------------------          
+        }
+
+
+        [Test]
+        public void TestSetBusinessObjectValue_ToNull_ChangesDateTimePickerValue()
+        {
+            //---------------Set up test pack-------------------
+            Sample sampleBusinessObject = new Sample();
+            sampleBusinessObject.SampleDateNullable = DateTime.Today;
+            DateTimePickerMapper dtpMapper;
+            IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper, "SampleDateNullable");
+            dtpMapper.BusinessObject = sampleBusinessObject;
+
+            //---------------Verify test pack-------------------
+            Assert.AreEqual(DateTime.Today, dateTimePicker.Value.Date);
+            Assert.IsTrue(dateTimePicker.ValueOrNull.HasValue, "DateTimePicker Should have a value");
+            //---------------Execute Test ----------------------
+            sampleBusinessObject.SampleDateNullable = null;
+            dtpMapper.UpdateControlValueFromBusinessObject();
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(dateTimePicker.ValueOrNull.HasValue, "DateTimePicker Should not have a value");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestUpdateValueInPicker_ToNull_ChangesValueInBO()
+        {
+            //---------------Set up test pack-------------------
+            Sample sampleBusinessObject = new Sample();
+            DateTime origionalDate = new DateTime(2000, 1, 1);
+            sampleBusinessObject.SampleDateNullable = origionalDate;
+            DateTimePickerMapper dtpMapper;
+            IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper, "SampleDateNullable");
+            dtpMapper.BusinessObject = sampleBusinessObject;
+            //---------------Verify Preconditions -------------------
+            Assert.AreEqual(origionalDate, dateTimePicker.Value.Date);
+            Assert.IsTrue(sampleBusinessObject.SampleDateNullable.HasValue, "BusinessObject SampleDateNullable Should have a value");
+            //---------------Execute Test ----------------------
+            dateTimePicker.ValueOrNull = null;
+            dtpMapper.ApplyChangesToBusinessObject();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(sampleBusinessObject.SampleDateNullable.HasValue, "BusinessObject SampleDateNullable Should not have a value");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestSetBusinessObjectValue_FromNull_ChangesDateTimePickerValue()
+        {
+            //---------------Set up test pack-------------------
+            Sample sampleBusinessObject = new Sample();
+            sampleBusinessObject.SampleDateNullable = null;
+            DateTimePickerMapper dtpMapper;
+            IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper, "SampleDateNullable");
+            dtpMapper.BusinessObject = sampleBusinessObject;
+
+            //---------------Verify test pack-------------------
+            Assert.IsFalse(dateTimePicker.ValueOrNull.HasValue, "DateTimePicker Should not have a value");
+            //---------------Execute Test ----------------------
+            DateTime newDate = new DateTime(2000, 1, 1);
+            sampleBusinessObject.SampleDateNullable = newDate;
+            dtpMapper.UpdateControlValueFromBusinessObject();
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(dateTimePicker.ValueOrNull.HasValue, "DateTimePicker Should have a value");
+            Assert.AreEqual(newDate, dateTimePicker.ValueOrNull.GetValueOrDefault(newDate.AddDays(1)));
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestUpdateValueInPicker_FromNull_ChangesValueInBO()
+        {
+            //---------------Set up test pack-------------------
+            Sample sampleBusinessObject = new Sample();
+            sampleBusinessObject.SampleDateNullable = null;
+            DateTimePickerMapper dtpMapper;
+            IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper, "SampleDateNullable");
+            dtpMapper.BusinessObject = sampleBusinessObject;
+            //---------------Verify Preconditions -------------------
+            Assert.IsFalse(dateTimePicker.ValueOrNull.HasValue);
+            Assert.IsFalse(sampleBusinessObject.SampleDateNullable.HasValue, "BusinessObject SampleDateNullable Should not have a value");
+            //---------------Execute Test ----------------------
+            DateTime newDate = new DateTime(2000, 1, 1);
+            dateTimePicker.ValueOrNull = newDate;
+            dtpMapper.ApplyChangesToBusinessObject();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(sampleBusinessObject.SampleDateNullable.HasValue, "BusinessObject SampleDateNullable Should have a value");
+            Assert.AreEqual(newDate, sampleBusinessObject.SampleDateNullable.GetValueOrDefault(newDate.AddDays(1)));
+            //---------------Tear Down -------------------------          
+        }
+        
         [Test]
         public void TestAttribute_DateFormat()
         {
@@ -226,8 +335,12 @@ namespace Habanero.Test.UI.Base.Mappers
 
         private IDateTimePicker GetDateTimePicker(out DateTimePickerMapper dtpMapper)
         {
+            return GetDateTimePicker(out dtpMapper, "SampleDate");
+        }
+
+        private IDateTimePicker GetDateTimePicker(out DateTimePickerMapper dtpMapper, string propertyName)
+        {
             IDateTimePicker dateTimePicker = GetControlFactory().CreateDateTimePicker();
-            string propertyName = "SampleDate";
             dtpMapper = new DateTimePickerMapper(dateTimePicker, propertyName, false, GetControlFactory());
             return dateTimePicker;
         }
