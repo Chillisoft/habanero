@@ -167,21 +167,21 @@ namespace Habanero.BO
             }
             if (row.HasVersion(DataRowVersion.Original))
             {
-                string origionalRowID = row[IDColumnName, DataRowVersion.Original].ToString();
-                changedBo = _collection.Find(origionalRowID);
+                string originalRowID = row[IDColumnName, DataRowVersion.Original].ToString();
+                changedBo = _collection.Find(new Guid(originalRowID));
                 if (changedBo == null && _deletedRows.ContainsKey(row))
                 {
                     changedBo = _deletedRows[row];
-                }  
+                }
             }
             if (changedBo == null)
             {
                 string currencyRowID = row[IDColumnName].ToString();
-                changedBo = _collection.Find(currencyRowID);
+                changedBo = _collection.Find(new Guid(currencyRowID));
                 if (changedBo == null && _deletedRows.ContainsKey(row))
                 {
                     changedBo = _deletedRows[row];
-                }  
+                }
             }
             return (BusinessObject) changedBo;
         }
@@ -302,8 +302,7 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void RowChanged(DataRowChangeEventArgs e)
         {
-            //log.Debug("Row Changed " + e.Row[_idColumnName]);
-            IBusinessObject changedBo = _collection.Find(e.Row[IDColumnName].ToString());
+            IBusinessObject changedBo = _collection.Find(new Guid(e.Row[IDColumnName].ToString()));
             if (changedBo == null || _isBeingAdded) return;
             foreach (UIGridColumn uiProperty in _uiGridProperties)
             {
@@ -312,7 +311,7 @@ namespace Habanero.BO
                     changedBo.SetPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
                 }
             }
-//            this.AddToRowStates(e.Row, DataRowState.Modified);
+            //this.AddToRowStates(e.Row, DataRowState.Modified);
         }
 
         /// <summary>

@@ -1673,7 +1673,7 @@ namespace Habanero.Test.UI.Base
             IDataGridViewRow row = readOnlyGridControl.Grid.GetBusinessObjectRow(myNewBo);
             Assert.IsNotNull(row);
             Assert.AreEqual(myNewBo.TestProp, row.Cells["TestProp"].Value);
-            Assert.AreEqual(myNewBo.ID.AsString_CurrentValue(), row.Cells[_gridIdColumnName].Value);
+            Assert.AreEqual(myNewBo.ID.ObjectID.ToString(), row.Cells[_gridIdColumnName].Value);
         }
 
         [Test]

@@ -16,6 +16,7 @@
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
+
 using System;
 
 namespace Habanero.Base
@@ -145,7 +146,7 @@ namespace Habanero.Base
         {
             if (IsComposite())
             {
-                string rightCriteriaAsString = null;
+                string rightCriteriaAsString;
                 if (LogicalOperator == LogicalOp.Not)
                 {
                     rightCriteriaAsString = new CriteriaDB(RightCriteria).ToString(formatter, addParameter);

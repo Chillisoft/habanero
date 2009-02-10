@@ -274,7 +274,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
             ContactPersonTestBO contactPersonCompositeKey = GetSavedContactPersonCompositeKey();
-            string oldID = contactPersonCompositeKey.ID.AsString_CurrentValue();
+            Guid oldID = contactPersonCompositeKey.ID.ObjectID;
             Assert.IsNotNull(BusinessObjectManager.Instance[oldID]);
             TransactionCommitterDB committer = new TransactionCommitterDB();
             committer.AddBusinessObject(contactPersonCompositeKey);
@@ -283,8 +283,8 @@ namespace Habanero.Test.BO.TransactionCommitters
             committer.CommitTransaction();
             //---------------Test Result -----------------------
             TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(contactPersonCompositeKey);
-            Assert.IsFalse(BusinessObjectManager.Instance.Contains(oldID));
-            Assert.IsNotNull(BusinessObjectManager.Instance[contactPersonCompositeKey.ID.AsString_CurrentValue()]);
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(oldID));
+            Assert.IsNotNull(BusinessObjectManager.Instance[contactPersonCompositeKey.ID.ObjectID]);
             //---------------Tear Down--------------------------
             contactPersonCompositeKey.MarkForDelete();
             contactPersonCompositeKey.Save();
@@ -353,7 +353,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             //---------------Test Result -----------------------
             IPrimaryKey objectID = contactPersonCompositeKey.ID;
             Assert.AreNotEqual(oldID, objectID.AsString_CurrentValue());
-            Assert.IsFalse(BusinessObjectManager.Instance.Contains(oldID));
+            Assert.IsTrue(BusinessObjectManager.Instance.Contains(contactPersonCompositeKey.ID.ObjectID));
         }
 
         [Test]

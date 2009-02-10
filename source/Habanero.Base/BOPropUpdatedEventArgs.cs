@@ -22,28 +22,40 @@ using System;
 namespace Habanero.Base
 {
     /// <summary>
-    /// Provides BOProp related arguments to an event
+    /// Provides <see cref="IBusinessObject"/> and <see cref="IBOProp"/> related arguments 
+    /// to an event which is fired when the <see cref="IBOProp"/> is updated.
     /// </summary>
-    public class BOPropEventArgs: EventArgs
+    public class BOPropUpdatedEventArgs : EventArgs
     {
         private readonly IBOProp _prop;
+        private readonly IBusinessObject _businessObject;
 
         /// <summary>
         /// Constructor to initialise a new event argument
-        /// with the affected BOProp
+        /// with the updated <see cref="IBOProp"/> and the <see cref="IBusinessObject"/> to which the prop belongs.
         /// </summary>
-        /// <param name="prop">The affected BOProp</param>
-        public BOPropEventArgs(IBOProp prop)
+        /// <param name="businessObject">The <see cref="IBusinessObject"/> to which the updated <see cref="IBOProp"/> belongs.</param>
+        /// <param name="prop">The updated <see cref="IBOProp"/>.</param>
+        public BOPropUpdatedEventArgs(IBusinessObject businessObject, IBOProp prop)
         {
+            _businessObject = businessObject;
             _prop = prop;
         }
 
         /// <summary>
-        /// Gets the BOProp affected in the event
+        /// Gets the BOProp updated in the event
         /// </summary>
         public IBOProp Prop
         {
             get { return _prop; }
+        }
+
+        ///<summary>
+        /// The <see cref="IBusinessObject"/> to which the updated <see cref="IBOProp"/> belongs.
+        ///</summary>
+        public IBusinessObject BusinessObject
+        {
+            get { return _businessObject; }
         }
     }
 }

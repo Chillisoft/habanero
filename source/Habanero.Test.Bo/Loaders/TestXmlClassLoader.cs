@@ -245,7 +245,7 @@ namespace Habanero.Test.BO.Loaders
                     @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
@@ -409,7 +409,7 @@ namespace Habanero.Test.BO.Loaders
                     @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
@@ -421,7 +421,7 @@ namespace Habanero.Test.BO.Loaders
                     @"
 				<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"">
 					<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" />
-					<property  name=""TestProp"" />
+					<property  name=""TestProp"" type=""Guid"" />
                     <primaryKey>
                         <prop name=""TestProp""/>
                     </primaryKey>

@@ -44,13 +44,13 @@ namespace Habanero.Test.BO.Loaders
                     @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestClassID"" />
+							<property  name=""TestClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
 						</class>
 						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
-							<property  name=""TestRelatedClassID"" />
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
                             <primaryKey>
                                 <prop name=""TestRelatedClassID""/>
                             </primaryKey>

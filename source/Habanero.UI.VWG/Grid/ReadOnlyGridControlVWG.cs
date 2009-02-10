@@ -274,7 +274,6 @@ namespace Habanero.UI.VWG
             if (BusinessObjectDeletor == null) BusinessObjectDeletor = new DefaultBODeletor();
 
             _grid.SetBusinessObjectCollection(boCollection);
-
             Buttons.Enabled = true;
             FilterControl.Enabled = true;
         }
@@ -449,6 +448,7 @@ namespace Habanero.UI.VWG
                     throw new GridDeveloperException(
                         "You cannot call add as there is no business object creator set up for the grid");
                 }
+                _grid.SelectedBusinessObject = null;
                 IBusinessObject newBo = _businessObjectCreator.CreateBusinessObject();
                 if (_businessObjectEditor != null && newBo != null)
                 {

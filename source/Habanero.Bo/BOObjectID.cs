@@ -78,6 +78,7 @@ namespace Habanero.BO
                 if (_objectIDProp == null)
                 {
                     _objectIDProp = base[KeyDef.KeyName];
+                    //HACK: This works because the primary key name is set to the property name in the case of an object ID
                 }
                 if (_objectIDProp == null)
                 {
@@ -102,12 +103,23 @@ namespace Habanero.BO
                 (Guid) ObjectIDProp.Value == Guid.Empty)
             {
                 ObjectIDProp.Value = id;
+                _objectID = id;
             }
             else if ((Guid) ObjectIDProp.Value != id)
             {
                 throw new InvalidObjectIdException("The ObjectGuidID has already been set for this object.");
             }
         }
+
+        public override Guid ObjectID
+        {
+            get
+            {
+                if (ObjectIDProp.Value == null) return Guid.Empty;
+                return (Guid) ObjectIDProp.Value;
+            }
+        }
+
 
         /// <summary>
         /// Returns the ObjectID as "ID=ObjectIDValue"
@@ -139,18 +151,18 @@ namespace Habanero.BO
 
         public override string AsString_CurrentValue()
         {
-            if (IsObjectNew && (_newObjectID != Guid.Empty))
+            if (IsObjectNew && (_objectID != Guid.Empty))
             {
-                return _newObjectID.ToString();
+                return _objectID.ToString();
             }
             return Convert.ToString(ObjectIDProp.Value);
         }
 
         public override string AsString_PreviousValue()
         {
-            if (IsObjectNew && (_newObjectID != Guid.Empty))
+            if (IsObjectNew && (_objectID != Guid.Empty))
             {
-                return _newObjectID.ToString();
+                return _objectID.ToString();
             }
             if (ObjectIDProp == null) return "";
             if (ObjectIDProp.ValueBeforeLastEdit == null) return Convert.ToString(ObjectIDProp.Value);

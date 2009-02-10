@@ -797,10 +797,10 @@ namespace Habanero.Test.BO
             IBusinessObject eventBusinessObject = null;
             IBOProp eventProp = null;
             engine1.PropertyUpdated +=
-                delegate(object sender, BOEventArgs eventArgs1, BOPropEventArgs eventArgs2)
+                delegate(object sender, BOPropUpdatedEventArgs eventArgs)
                 {
-                    eventBusinessObject = eventArgs1.BusinessObject;
-                    eventProp = eventArgs2.Prop;
+                    eventBusinessObject = eventArgs.BusinessObject;
+                    eventProp = eventArgs.Prop;
                     propertyEventFired = true;
                 };
             //-------------Assert Preconditions -------------

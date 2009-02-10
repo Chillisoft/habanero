@@ -529,8 +529,8 @@ namespace Habanero.BO
         {
             PopulateBOFromReader(bo, dataReader, selectQuery);
             IPrimaryKey key = bo.ID;
-
-            IBusinessObject boFromObjectManager = GetObjectFromObjectManager(key);
+            
+            IBusinessObject boFromObjectManager = GetObjectFromObjectManager(key, bo.ClassDef.ClassType);
 
             if (boFromObjectManager == null)
             {
@@ -549,10 +549,19 @@ namespace Habanero.BO
             return boFromObjectManager;
         }
 
-        private static IBusinessObject GetObjectFromObjectManager(IPrimaryKey key)
+        private static IBusinessObject GetObjectFromObjectManager(IPrimaryKey key, Type boType)
         {
             BusinessObjectManager businessObjectManager = BusinessObjectManager.Instance;
-            return businessObjectManager.Contains(key) ? businessObjectManager[key] : null;           
+            if (key.IsGuidObjectID)
+            {
+                lock (businessObjectManager)
+                {
+                    return businessObjectManager.Contains(key) ? businessObjectManager[key] : null;
+                }
+            }
+            BOPrimaryKey boPrimaryKey = ((BOPrimaryKey) key);
+            IBusinessObjectCollection find = businessObjectManager.Find(boPrimaryKey.GetKeyCriteria(), boType);
+            return find.Count>0 ? find[0] : null;
         }
 
         private static ClassDef GetCorrectSubClassDef(IBusinessObject bo, IDataRecord dataReader)

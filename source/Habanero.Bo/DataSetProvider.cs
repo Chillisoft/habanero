@@ -134,7 +134,7 @@ namespace Habanero.BO
         protected object[] GetValues(IBusinessObject businessObject)
         {
             object[] values = new object[_uiGridProperties.Count + 1];
-            values[0] = businessObject.ID.AsString_CurrentValue();
+            values[0] = businessObject.ID.ObjectID;
             int i = 1;
             BOMapper mapper = new BOMapper(businessObject);
             foreach (UIGridColumn gridProperty in _uiGridProperties)
@@ -164,9 +164,10 @@ namespace Habanero.BO
             _collection.BusinessObjectAdded += AddedHandler;
             _collection.BusinessObjectRemoved += RemovedHandler;
         }
-        private void PropertyUpdatedHandler(object sender, BOEventArgs boEventArgs, BOPropEventArgs propEventArgs)
+        private void PropertyUpdatedHandler(object sender, BOPropUpdatedEventArgs propEventArgs)
         {
-            UpdatedHandler(sender, boEventArgs);
+            BusinessObject businessObject = (BusinessObject)propEventArgs.BusinessObject;
+            UpdateBusinessObjectRowValues(businessObject);
         }
         /// <summary>
         /// Handles the event of a <see cref="IBusinessObject"/> being updated
@@ -226,7 +227,8 @@ namespace Habanero.BO
         /// <returns>Returns a business object</returns>
         public IBusinessObject Find(int rowNum)
         {
-            return _collection.Find(this._table.Rows[rowNum][_idColumnName].ToString());
+            string objectID = this._table.Rows[rowNum][_idColumnName].ToString();
+            return _collection.Find(new Guid(objectID));
         }
 
         /// <summary>
@@ -234,7 +236,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="strId">The ID</param>
         /// <returns>Returns a business object</returns>
-        public IBusinessObject Find(string strId)
+        public IBusinessObject Find(Guid strId)
         {
             return _collection.Find(strId);
         }
@@ -250,13 +252,22 @@ namespace Habanero.BO
             {
                 DataRow dataRow = _table.Rows[i];
                 if (dataRow.RowState == DataRowState.Deleted) continue;
-                string gridIDValue = dataRow[0].ToString();
-                string valuePersisted = bo.ID.AsString_LastPersistedValue();
-                string valueBeforeLastEdit = bo.ID.AsString_PreviousValue();
-                string currentValue = bo.ID.AsString_CurrentValue();
-                if (gridIDValue == valueBeforeLastEdit ||
-                    gridIDValue == valuePersisted ||
-                    gridIDValue == currentValue)
+                //string gridIDValue = dataRow[0].ToString();
+                //string valuePersisted = bo.ID.AsString_LastPersistedValue();
+                //string valueBeforeLastEdit = bo.ID.AsString_PreviousValue();
+                //string currentValue = bo.ID.AsString_CurrentValue();
+                //if (gridIDValue == valueBeforeLastEdit ||
+                //    gridIDValue == valuePersisted ||
+                //    gridIDValue == currentValue)
+                //{
+                //    return i;
+                //}
+
+                string rowID = dataRow[0].ToString();
+                Guid objectID = bo.ID.ObjectID;
+                //string valueBeforeLastEdit = bo.ID.AsString_PreviousValue();
+                //string currentValue = bo.ID.AsString_CurrentValue();
+                if (rowID == objectID.ToString())
                 {
                     return i;
                 }

@@ -54,7 +54,7 @@ namespace Habanero.Base
         /// Handles the event of any business object in this collection being edited (i.e. a property value is changed).
         /// See the <see cref="IBusinessObject"/>.<see cref="IBusinessObject.PropertyUpdated"/> event.
         /// </summary>
-        event EventHandler<BOEventArgs, BOPropEventArgs> BusinessObjectPropertyUpdated;
+        event EventHandler<BOPropUpdatedEventArgs> BusinessObjectPropertyUpdated;
 
         /// <summary>
         /// Handles the event when a BusinessObject in the collection has an ID that is Updated(i.e one of the properties of the ID is edited).
@@ -99,7 +99,7 @@ namespace Habanero.Base
 		/// </summary>
 		/// <param name="key">The orimary key as a string</param>
 		/// <returns>Returns the business object if found, or null if not</returns>
-        IBusinessObject Find(string key);
+        IBusinessObject Find(Guid key);
 
 		/// <summary>
 		/// Returns a new collection that is a copy of this collection

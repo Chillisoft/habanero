@@ -712,7 +712,7 @@ namespace Habanero.BO.ClassDefinition
                 // definitely be in the list since the business object is the right type.
 
                 //if (BusinessObjectManager.Instance.Contains(propValue.ToString()) )
-                IBusinessObject businessObject = GetBusinessObjectFromObjectManager(propValue);
+                IBusinessObject businessObject = GetlookupBusinessObjectFromObjectManager(propValue);
                 if (businessObject != null)
                 {
                     return CheckBusinessObjectMeetsLookupListCriteria(propValue, businessObject, list, ref errorMessage);
@@ -749,26 +749,28 @@ namespace Habanero.BO.ClassDefinition
             return false;
         }
 
-        internal IBusinessObject GetBusinessObjectFromObjectManager(object propValue)
+        internal IBusinessObject GetlookupBusinessObjectFromObjectManager(object propValue)
         {
             if (!this.HasLookupList()) return null;
             if (!(this.LookupList is BusinessObjectLookupList)) return null;
-            string currentValue;
-            if (propValue is Guid)
-            {
-                currentValue = propValue.ToString();
-            }
-            else
-            {
-                BusinessObjectLookupList list = ((BusinessObjectLookupList)this.LookupList);
-                BOPrimaryKey boPrimaryKey = BOPrimaryKey.CreateWithValue(list.LookupBoClassDef, propValue);
-                currentValue = boPrimaryKey.AsString_CurrentValue();
-            }
-
             IBusinessObject businessObject = null;
-            if (BusinessObjectManager.Instance.Contains(currentValue))
+            BusinessObjectLookupList list = ((BusinessObjectLookupList)this.LookupList);
+            if (propValue is Guid && list.LookupBoClassDef.PrimaryKeyDef.IsGuidObjectID)
             {
-                businessObject = BusinessObjectManager.Instance[currentValue];
+                lock (BusinessObjectManager.Instance)
+                {
+                    if (BusinessObjectManager.Instance.Contains((Guid)propValue))
+                    {
+                        return BusinessObjectManager.Instance[(Guid) propValue];
+                    }
+                }
+            }
+            BOPrimaryKey boPrimaryKey = BOPrimaryKey.CreateWithValue(list.LookupBoClassDef, propValue);
+
+            if (boPrimaryKey != null)
+            {
+                IBusinessObjectCollection find = BusinessObjectManager.Instance.Find(boPrimaryKey.GetKeyCriteria(), list.LookupBoClassDef.ClassType);
+                if (find.Count > 0) businessObject = find[0];
             }
             return businessObject;
         }

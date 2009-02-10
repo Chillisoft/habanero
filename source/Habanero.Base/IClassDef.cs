@@ -115,7 +115,7 @@ namespace Habanero.Base
         string TableName { get; }
 
         /// <summary>
-        /// The type of the class definition
+        /// The type of the business object that this class definition is for.
         /// </summary>
         Type ClassType
         {

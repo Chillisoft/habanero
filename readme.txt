@@ -1,4 +1,4 @@
-Habanero v2.0.1, 17 October 2008
+Habanero v2.2.0, 10 February 2009
 
 For more information on Habanero and FireStarter, visit:
 

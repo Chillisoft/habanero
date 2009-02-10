@@ -1,7 +1,27 @@
+//---------------------------------------------------------------------------------
+// Copyright (C) 2008 Chillisoft Solutions
+// 
+// This file is part of the Habanero framework.
+// 
+//     Habanero is a free framework: you can redistribute it and/or modify
+//     it under the terms of the GNU Lesser General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     The Habanero framework is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU Lesser General Public License for more details.
+// 
+//     You should have received a copy of the GNU Lesser General Public License
+//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
+//---------------------------------------------------------------------------------
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test;
@@ -450,6 +470,54 @@ namespace Habanero.Test.BO
             //--------------- Test Result -----------------------
             Assert.AreNotEqual(guid.ToString(), keyAsString);
             Assert.AreEqual(origKeyAsString, keyAsString);
+        }
+
+        [Test]
+        public void Test_ObjectID_NotSet()
+        {
+            //--------------- Set up test pack ------------------
+            //--------------- Test Preconditions ----------------
+            //--------------- Execute Test ----------------------
+            BOPrimaryKey primaryKey = CreateBOPrimaryKeyString();
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(Guid.Empty, primaryKey.ObjectID);
+        }
+
+        [Test]
+        public void Test_ObjectID_SetObjectGuidID()
+        {
+            //--------------- Set up test pack ------------------
+            BOPrimaryKey primaryKey = CreateBOPrimaryKeyString();
+            Guid id = Guid.NewGuid();
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(Guid.Empty, primaryKey.ObjectID);
+            //--------------- Execute Test ----------------------
+            primaryKey.SetObjectGuidID(id);
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(id, primaryKey.ObjectID);
+        }
+
+        [Test]
+        public void Test_ObjectID_SetObjectGuidID_Twice()
+        {
+            //--------------- Set up test pack ------------------
+            BOPrimaryKey primaryKey = CreateBOPrimaryKeyString();
+            Guid id = Guid.NewGuid();
+            primaryKey.SetObjectGuidID(id);
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(id, primaryKey.ObjectID);
+            //--------------- Execute Test ----------------------
+            try
+            {
+                primaryKey.SetObjectGuidID(Guid.NewGuid());
+                //--------------- Test Result -----------------------
+                Assert.Fail("InvalidObjectIdException expected");
+            }
+            catch (InvalidObjectIdException ex)
+            {
+                Assert.AreEqual("The ObjectGuidID has already been set for this object.", ex.Message);
+                Assert.AreEqual(id, primaryKey.ObjectID);
+            }
         }
 
         //TODO Brett 14 Jan 2009: Do composite for previous and last persisted 

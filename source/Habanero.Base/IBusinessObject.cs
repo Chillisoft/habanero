@@ -173,7 +173,7 @@ namespace Habanero.Base
         /// </summary>
         bool IsCreatable(out string message);
 
-        event EventHandler<BOEventArgs, BOPropEventArgs> PropertyUpdated;
+        event EventHandler<BOPropUpdatedEventArgs> PropertyUpdated;
         event EventHandler<BOEventArgs> MarkedForDeletion;
 
         /// <summary>
