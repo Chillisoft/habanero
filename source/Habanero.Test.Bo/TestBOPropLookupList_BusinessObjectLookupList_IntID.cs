@@ -634,9 +634,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ClassDef classDefWithIntID = BOWithIntID.LoadClassDefWithIntID();
             BOPropLookupList boProp = new BOPropLookupList(_propDef_int);
-            BOWithIntID unSavedBoWithIntID = new BOWithIntID();
-            unSavedBoWithIntID.IntID = TestUtil.GetRandomInt();
-            unSavedBoWithIntID.TestField = TestUtil.GetRandomString();
+            BOWithIntID unSavedBoWithIntID = new BOWithIntID {IntID = TestUtil.GetRandomInt(), TestField = TestUtil.GetRandomString()};
             unSavedBoWithIntID.Save();
             BusinessObjectManager.Instance.ClearLoadedObjects();
             boProp.Value = unSavedBoWithIntID;

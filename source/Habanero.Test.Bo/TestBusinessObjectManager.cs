@@ -1161,21 +1161,85 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(0, boMan.Count);
         }
+        [Test]
+        public void Test_ObjectID_CreateBO_DoesNotAddToObjectManager()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            BusinessObjectManager boMan = new BusinessObjectManager();
+            BusinessObjectManager.Instance = boMan;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, boMan.Count);
+            //---------------Execute Tests----------------------
+            new ContactPersonTestBO();
+            //---------------Execute Test ----------------------
+            Assert.AreEqual(1, boMan.Count);
+        }
+        [Test]
+        public void Test_CompositePrimaryKey_CreateBO_DoesNotAddToObjectManager()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonCompositeKey.LoadClassDefs();
+            BusinessObjectManager boMan = new BusinessObjectManager();
+            BusinessObjectManager.Instance = boMan;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, boMan.Count);
+            //---------------Execute Tests----------------------
+            new ContactPersonCompositeKey();
+            //---------------Execute Test ----------------------
+            Assert.AreEqual(1, boMan.Count);
+        }
+        [Test]
+        public void Test_CompositePrimaryKey_SetPrimaryKeyPropValue_DoesNotAddToObjectManager()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonCompositeKey.LoadClassDefs();
+            BusinessObjectManager boMan = new BusinessObjectManager();
+            BusinessObjectManager.Instance = boMan;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, boMan.Count);
+            //---------------Execute Tests----------------------
+            ContactPersonCompositeKey cp = new ContactPersonCompositeKey
+            {
+                PK1Prop1 = TestUtil.GetRandomString()
+            };
 
+            //---------------Execute Test ----------------------
+            Assert.AreEqual(1, boMan.Count);
+        }
+        
+        [Test]
+        public void Test_CompositePrimaryKey_SetBothPrimaryKeyPropValues_DoesNotAddToObjectManager()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonCompositeKey.LoadClassDefs();
+            BusinessObjectManager boMan = new BusinessObjectManager();
+            BusinessObjectManager.Instance = boMan;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, boMan.Count);
+            //---------------Execute Tests----------------------
+            ContactPersonCompositeKey cp = new ContactPersonCompositeKey
+                                               {
+                                                   PK1Prop1 = TestUtil.GetRandomString(),
+                                                   PK1Prop2 = TestUtil.GetRandomString()
+                                               };
+
+            //---------------Execute Test ----------------------
+            Assert.AreEqual(1, boMan.Count);
+        }
         //Test edit primary key and save.
         [Test]
         public void Test_SaveForCompositeKey_UpdatedObjectMan()
         {
             //---------------Set up test pack-------------------
             ContactPersonCompositeKey.LoadClassDefs();
-            BusinessObjectManager boMan = BusinessObjectManager.Instance;
-            boMan.ClearLoadedObjects();
-
+            BusinessObjectManager boMan = new BusinessObjectManager();
+            BusinessObjectManager.Instance = boMan;
             ContactPersonCompositeKey cp = new ContactPersonCompositeKey
-                                               {
-                                                   PK1Prop1 = TestUtil.GetRandomString(),
-                                                   PK1Prop2 = TestUtil.GetRandomString()
-                                               };
+                       {
+                           PK1Prop1 = TestUtil.GetRandomString(),
+                           PK1Prop2 = TestUtil.GetRandomString()
+                       };
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, boMan.Count);

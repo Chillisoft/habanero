@@ -21,6 +21,7 @@ using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -48,8 +49,7 @@ namespace Habanero.BO
         /// <returns>The instantiated <see cref="RelatedBusinessObjectCollection{TBusinessObject}"/></returns>
         internal static IBusinessObjectCollection CreateNewRelatedBusinessObjectCollection(Type boType, IRelationship relationship)
         {
-            //TODO: put this type check back in - for now it is causing infinite recursion.
-            //Utilities.CheckTypeCanBeCreated(boType);
+//            Utilities.CheckTypeCanBeCreated(boType);
             Type relatedCollectionType = typeof(RelatedBusinessObjectCollection<>);
             relatedCollectionType = relatedCollectionType.MakeGenericType(boType);
             IBusinessObjectCollection collection = (IBusinessObjectCollection)Activator.CreateInstance(relatedCollectionType, relationship);

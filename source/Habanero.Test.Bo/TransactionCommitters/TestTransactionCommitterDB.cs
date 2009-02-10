@@ -56,7 +56,7 @@ namespace Habanero.Test.BO.TransactionCommitters
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
-            base.SetupDBConnection();
+            SetupDBConnection();
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
         }
