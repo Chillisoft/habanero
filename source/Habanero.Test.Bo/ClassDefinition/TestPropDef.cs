@@ -263,7 +263,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IBusinessObject returnedBO = propDef.GetBusinessObjectFromObjectManager(expectedBO.IntID);
+            IBusinessObject returnedBO = propDef.GetlookupBusinessObjectFromObjectManager(expectedBO.IntID);
             //---------------Test Result -----------------------
             Assert.AreSame(expectedBO, returnedBO );
         }
@@ -282,7 +282,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, BusinessObjectManager.Instance.Count);
             //---------------Execute Test ----------------------
-            IBusinessObject returnedBO = propDef.GetBusinessObjectFromObjectManager(expectedBO.IntID);
+            IBusinessObject returnedBO = propDef.GetlookupBusinessObjectFromObjectManager(expectedBO.IntID);
             //---------------Test Result -----------------------
             Assert.IsNull(returnedBO);
         }
@@ -302,7 +302,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
             //---------------Execute Test ----------------------
-            IBusinessObject returnedBO = propDef.GetBusinessObjectFromObjectManager(expectedBO.IntID);
+            IBusinessObject returnedBO = propDef.GetlookupBusinessObjectFromObjectManager(expectedBO.IntID);
             //---------------Test Result -----------------------
             Assert.IsNull(returnedBO);
         }
@@ -323,7 +323,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            IBusinessObject returnedBO = propDef.GetBusinessObjectFromObjectManager(contactPersonTestBO.Surname);
+            IBusinessObject returnedBO = propDef.GetlookupBusinessObjectFromObjectManager(contactPersonTestBO.Surname);
             //---------------Test Result -----------------------
             Assert.AreSame(contactPersonTestBO, returnedBO);
         }

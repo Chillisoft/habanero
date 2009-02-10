@@ -189,7 +189,7 @@ namespace Habanero.BO.Loaders
                     "' defined as part of the ObjectID primary key is not a Guid.");
                 }
                 keyPropDef.Compulsory = true;
-                keyPropDef.ReadWriteRule = PropReadWriteRule.WriteOnce;
+                keyPropDef.ReadWriteRule = PropReadWriteRule.WriteNew;
             }
         }
 

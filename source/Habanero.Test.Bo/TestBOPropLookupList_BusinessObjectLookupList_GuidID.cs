@@ -531,8 +531,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual(guid.ToString("B").ToUpperInvariant(), boProp.Value);
             Assert.AreEqual(_validLookupValue, boProp.PropertyValueToDisplay);
         }
-
-
         [Test]
         public void Test_BOPropLookupList_PropValueToDisplay_ValidGuidStringLookUpList_IntialiseTODisplayValue()
         {

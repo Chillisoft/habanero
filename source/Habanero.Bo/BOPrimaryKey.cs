@@ -32,10 +32,9 @@ namespace Habanero.BO
     /// </summary>
     public class BOPrimaryKey : BOKey, IPrimaryKey
     {
-        protected Guid _newObjectID = Guid.Empty;
+        protected Guid _objectID = Guid.Empty;
         private string _currentValue;
         private string _previousValue;
-        private Guid _objectID;
 
         /// <summary>
         /// Constructor to initialise a new primary key
@@ -57,11 +56,11 @@ namespace Habanero.BO
                 throw new InvalidObjectIdException("The ObjectGuidID cannot be set for an object that is not new.");
             }
             //If the object id is not already set then set it.
-            if (_newObjectID == Guid.Empty)
+            if (_objectID == Guid.Empty)
             {
-                _newObjectID = id;
+                _objectID = id;
             }
-            else if (_newObjectID != id)
+            else if (_objectID != id)
             {
                 throw new InvalidObjectIdException("The ObjectGuidID has already been set for this object.");
             }
@@ -74,9 +73,9 @@ namespace Habanero.BO
         /// <returns>Returns a string representation of the object id</returns>
         public virtual string GetObjectId()
         {
-            if (IsObjectNew && (_newObjectID != Guid.Empty))
+            if (IsObjectNew && (_objectID != Guid.Empty))
             {
-                return _newObjectID.ToString();
+                return _objectID.ToString();
             }
             return IsObjectNew ? "" : PersistedDatabaseWhereClause(null);
         }
@@ -89,7 +88,7 @@ namespace Habanero.BO
         {
 //            return AsString_CurrentValue().GetHashCode();
             return GetAsValue().GetHashCode();
-            //if (_newObjectID != Guid.Empty) return NewObjectID().GetHashCode();
+            //if (_objectID != Guid.Empty) return NewObjectID().GetHashCode();
             //return GetObjectId().GetHashCode();
         }
         protected override void BOPropUpdated_Handler(object sender, BOPropEventArgs e)
@@ -100,7 +99,7 @@ namespace Habanero.BO
         }
         //internal string NewObjectID()
         //{
-        //    return  _newObjectID.ToString();
+        //    return  _objectID.ToString();
         //}
 
         /// <summary>
@@ -185,7 +184,6 @@ namespace Habanero.BO
         /// <returns>Returns an object</returns>
         public object GetAsValue()
         {
-            List<string> list = new List<string>();
             BOPropCol boPropCol = this.GetBOPropCol();
             foreach (BOProp  boProp in boPropCol)
             {
@@ -219,6 +217,16 @@ namespace Habanero.BO
             get { return _objectID; }
         }
 
+        ///<summary>
+        /// Returns the Previous Object ID this is only for new objects that are assigned
+        ///   an object id and then loaded from the database and the object is is updated to the 
+        ///   value from the database. The previous Object ID is then used by the object manager,
+        ///   collection, dataset provider to update the ID for the object.
+        ///</summary>
+        public Guid PreviousObjectID
+        {
+            get { return _objectID; }
+        }
         ///<summary>
         /// For a given value e.g. a Guid Identifier '{......}' this will build up a primary key object that can be used to
         /// load the business object from the Data store (see Business Object loader GetBusinessObjectByValue)
@@ -264,9 +272,9 @@ namespace Habanero.BO
         public override string AsString_CurrentValue()
         {
             if (AllPropValuesAreNonNull()) return base.AsString_CurrentValue();
-            if (IsObjectNew && (_newObjectID != Guid.Empty))
+            if (IsObjectNew && (_objectID != Guid.Empty))
             {
-                return _newObjectID.ToString();
+                return _objectID.ToString();
             } 
             return base.AsString_CurrentValue();
         }
@@ -282,9 +290,9 @@ namespace Habanero.BO
             if (string.IsNullOrEmpty(_previousValue))
             {
                 if (AllPropPreviousValuesAreNonNull()) return base.AsString_PreviousValue();
-                if (IsObjectNew && (_newObjectID != Guid.Empty))
+                if (IsObjectNew && (_objectID != Guid.Empty))
                 {
-                    return _newObjectID.ToString();
+                    return _objectID.ToString();
                 }
                 return base.AsString_PreviousValue();
             }

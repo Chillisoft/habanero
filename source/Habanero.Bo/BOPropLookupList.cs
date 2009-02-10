@@ -192,7 +192,7 @@ namespace Habanero.BO
 
         internal IBusinessObject GetBusinessObjectForProp(ClassDef classDef)
         {
-            IBusinessObject businessObject = ((PropDef) this.PropDef).GetBusinessObjectFromObjectManager(this.Value);
+            IBusinessObject businessObject = ((PropDef) this.PropDef).GetlookupBusinessObjectFromObjectManager(this.Value);
             if (businessObject != null) return businessObject;
             try
             {

@@ -551,7 +551,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(1, classDef.PrimaryKeyDef.Count);
             IPropDef keyPropDef = classDef.PrimaryKeyDef[0];
             Assert.IsTrue(keyPropDef.Compulsory);
-            Assert.AreEqual(PropReadWriteRule.WriteOnce, keyPropDef.ReadWriteRule);
+            Assert.AreEqual(PropReadWriteRule.WriteNew, keyPropDef.ReadWriteRule);
         }
 
         [Test]
@@ -578,7 +578,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(1, classDef.PrimaryKeyDef.Count);
             IPropDef keyPropDef = classDef.PrimaryKeyDef[0];
             Assert.IsTrue(keyPropDef.Compulsory);
-            Assert.AreEqual(PropReadWriteRule.WriteOnce, keyPropDef.ReadWriteRule);
+            Assert.AreEqual(PropReadWriteRule.WriteNew, keyPropDef.ReadWriteRule);
         }
 
         [Test]

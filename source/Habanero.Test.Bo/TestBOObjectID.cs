@@ -18,8 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -233,6 +231,43 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_SetObjectID_SetsThePreviousObjectID()
+        {
+            //--------------- Set up test pack ------------------
+            BOObjectID primaryKey = CreateBOObjectID();
+            Guid id = Guid.NewGuid();
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(Guid.Empty, primaryKey.ObjectID);
+            Assert.AreEqual(Guid.Empty, primaryKey.PreviousObjectID);
+            //--------------- Execute Test ----------------------
+            primaryKey.SetObjectGuidID(id);
+            //--------------- Test Result -----------------------
+            IBOProp iboProp = primaryKey[0];
+            Assert.AreEqual(id, primaryKey.ObjectID);
+            Assert.AreEqual(id, iboProp.Value);
+            Assert.AreEqual(id, primaryKey.PreviousObjectID);
+        }
+        [Test]
+        public void Test_ObjectID_ResetObjectIDProperty()
+        {
+            //--------------- Set up test pack ------------------
+            BOObjectID primaryKey = CreateBOObjectID();
+            Guid id = Guid.NewGuid();
+            primaryKey.SetObjectGuidID(id);
+            IBOProp iboProp = primaryKey[0];
+            Guid newID = Guid.NewGuid();
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(id, primaryKey.ObjectID);
+            Assert.AreEqual(id, iboProp.Value);
+            Assert.AreEqual(id, primaryKey.PreviousObjectID);
+            //--------------- Execute Test ----------------------
+            iboProp.Value = newID;
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(id, primaryKey.PreviousObjectID);
+            Assert.AreEqual(newID, iboProp.Value);
+            Assert.AreEqual(newID, primaryKey.ObjectID);
+        }
+        [Test]
         public void Test_ObjectID_EqualsIdPropValue()
         {
             //--------------- Set up test pack ------------------
@@ -264,7 +299,27 @@ namespace Habanero.Test.BO
         //    Assert.AreEqual(id, primaryKey.ObjectID);
         //}
 
-        private BOObjectID CreateBOObjectID()
+
+        [Test]
+        public void Test_ContactPersonIDIsSetForNewBusinessObject()
+        {
+            //--------------- Set up test pack ------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO originalContactPerson = new ContactPersonTestBO();
+            Guid origContactPersonID = originalContactPerson.ContactPersonID;
+            Guid newContactPersonID = Guid.NewGuid();
+            //--------------- Test Preconditions ----------------
+            Assert.IsNotNull(origContactPersonID);
+            Assert.AreEqual(origContactPersonID, originalContactPerson.ID.ObjectID);
+            //--------------- Execute Test ----------------------
+            originalContactPerson.ContactPersonID = newContactPersonID;
+            //--------------- Test Result -----------------------
+            Assert.IsNotNull(originalContactPerson.ContactPersonID);
+            Assert.AreEqual(newContactPersonID, originalContactPerson.ContactPersonID);
+            Assert.AreEqual(newContactPersonID, originalContactPerson.ID.ObjectID);
+        }
+
+        private static BOObjectID CreateBOObjectID()
         {
             PropDef propDef1 = new PropDef("PropName1", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             BOPropCol propCol = new BOPropCol();

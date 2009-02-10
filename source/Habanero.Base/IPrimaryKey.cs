@@ -82,5 +82,13 @@ namespace Habanero.Base
         /// for objects with composite or non-guid primary keys.
         ///</summary>
         Guid ObjectID { get; }
+
+        ///<summary>
+        /// Returns the Previous Object ID this is only for new objects that are assigned
+        ///   an object id and then loaded from the database and the object is is updated to the 
+        ///   value from the database. The previous Object ID is then used by the object manager,
+        ///   collection, dataset provider to update the ID for the object.
+        ///</summary>
+        Guid PreviousObjectID { get; }
     }
 }
