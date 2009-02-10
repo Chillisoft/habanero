@@ -248,18 +248,22 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
+            //Ther are two datastores so that you can manually add an item to a datastore without
+            // the save effecting the datastore you are testing.
             DataStoreInMemory dataStore = new DataStoreInMemory();
             DataStoreInMemory otherDataStore = new DataStoreInMemory();
             BORegistry.DataAccessor = new DataAccessorInMemory(otherDataStore);
             new Car();
             ContactPersonCompositeKey contactPerson = new ContactPersonCompositeKey();
+            contactPerson.Save();
             //---------------Assert Precondition----------------
-
+            Assert.IsFalse(dataStore.AllObjects.ContainsKey(contactPerson.ID));
             //---------------Execute Test ----------------------
             dataStore.Add(contactPerson);
-            // in the save process the ID is updated to the persisted field values, so the hash of the ID changes
+            //In the save process the ID is updated to the persisted field values, so the hash of the ID changes
             // this is why the object is removed and re-added to the BusinessObjectManager (to ensure the dictionary
             // of objects is hashed on the correct, updated value.
+            contactPerson.PK1Prop1 = TestUtil.GetRandomString();
             contactPerson.Save();  
             //---------------Test Result -----------------------
             Assert.IsTrue(dataStore.AllObjects.ContainsKey(contactPerson.ID));
