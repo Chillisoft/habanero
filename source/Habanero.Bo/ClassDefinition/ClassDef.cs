@@ -921,7 +921,7 @@ namespace Habanero.BO.ClassDefinition
             if (obj.GetType() != typeof (ClassDef)) return false;
             ClassDef otherClsDef = (ClassDef) obj;
             if (otherClsDef.TypeParameter != this.TypeParameter) return false;
-            //TODO this is a rough and ready equals test later need to improve
+            //This is a rough and ready equals test later need to improve
             if (PropDefcol == null) return false;
             if (PropDefcol.Count != otherClsDef.PropDefcol.Count)
             {
@@ -1008,7 +1008,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns>The type of the specified property</returns>
         public Type GetPropertyType(string propertyName)
         {
-            //TODO : Generalise this for properties that do not have PropDefs
+            //This could be Generalised this for properties that do not have PropDefs
 
             if (propertyName.IndexOf(".") != -1)
             {

@@ -484,7 +484,6 @@ namespace Habanero.BO
         /// <returns>The loaded RelatedBusinessObjectCollection</returns>
         public IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IMultipleRelationship relationship)
         {
-            //TODO: generalise with generic version of this method
             IBusinessObjectCollection relatedCol = RelationshipUtils.CreateRelatedBusinessObjectCollection(type, relationship);
             
             ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", true);

@@ -69,5 +69,40 @@ namespace Habanero.Test.BO.TransactionCommitters
             Assert.IsFalse(valid);
             Assert.IsFalse(bo.Status.IsValid());
         }
+
+        [Test]
+        public void Test_BusinessObject_TransactionID()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            BusinessObject bo = (BusinessObject)classDef.CreateNewBusinessObject();
+            TransactionalBusinessObject transactionalBusinessObject = new TransactionalBusinessObject(bo);
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string transactionID = transactionalBusinessObject.TransactionID();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(bo.ID.ObjectID.ToString(), transactionID);
+        }
+
+
+        [Test]
+        public void Test_BusinessObject_TransactionID_CompositeKey()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKey();
+            ContactPersonTestBO bo = ContactPersonTestBO.CreateUnsavedContactPerson_NoFirstNameProp();
+            TransactionalBusinessObject transactionalBusinessObject = new TransactionalBusinessObject(bo);
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string transactionID = transactionalBusinessObject.TransactionID();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(bo.ID.ObjectID.ToString(), transactionID);
+        }
     }
 }

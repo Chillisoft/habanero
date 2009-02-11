@@ -262,6 +262,7 @@ namespace Habanero.BO
             {
                 IBusinessObject changedBo = GetBusinessObjectForRow(row);
                 if (changedBo != null) changedBo.Save();
+                row.RowError = "";
             }
             catch (Exception ex)
                 {
