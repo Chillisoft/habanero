@@ -210,6 +210,7 @@ namespace Habanero.UI.Base
             {
                 IControlHabanero nullControl = _controlFactory.CreateControl();
                 nullControl.Visible = false;
+                nullControl.Name = "Null";
                 _controls.Add(nullControl);
                 this.ManagedControl.Controls.Add(nullControl);
                 this._controlInfoTable.Add(nullControl, new ControlInfo(nullControl, columnSpan, rowSpan));
@@ -266,6 +267,7 @@ namespace Habanero.UI.Base
                 int currentRow = i/ColumnCount;
                 int currentCol = i%ColumnCount;
                 IControlHabanero ctl = this._controls[i];
+                
                 if ((i > 0) && (currentCol == 0))
                 {
                     _currentPos.X = BorderSize;
@@ -303,7 +305,10 @@ namespace Habanero.UI.Base
                 }
                 height += (this.GapSize*(ctlInfo.RowSpan - 1));
                 ctl.Height = height;
-                _currentPos.X += ctl.Width + GapSize;
+                if (IsFixedColumn(currentCol)) _currentPos.X += _columnWidths[currentCol];
+                else 
+                    _currentPos.X += ctl.Width;
+                _currentPos.X += GapSize;
             }
         }
 

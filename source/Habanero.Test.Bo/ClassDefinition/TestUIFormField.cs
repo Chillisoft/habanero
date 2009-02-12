@@ -472,7 +472,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestFormColumn()
         {
             //---------------Set up test pack-------------------
-            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", null, null);
+            UIFormField uiFormField1 = CreateFormField();
             UIFormColumn column = new UIFormColumn();
             //---------------Assert Precondition----------------
 
@@ -481,6 +481,28 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.AreSame(column, uiFormField1.UIFormColumn);
         }
+
+
+
+        [Test]
+        public void Test_Layout()
+        {
+            UIFormField uiFormField1 = CreateFormField();
+            //---------------Execute Test ----------------------
+            uiFormField1.Layout = UIFormField.LayoutStyle.GroupBox;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(UIFormField.LayoutStyle.GroupBox, uiFormField1.Layout);
+        }
+        [Test]
+        public void Test_Layout_Default()
+        {
+            //---------------Execute Test ----------------------
+            UIFormField uiFormField1 = CreateFormField();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(UIFormField.LayoutStyle.Label, uiFormField1.Layout);
+        }
+
+        private UIFormField CreateFormField() { return new UIFormField("L", "L", "", "", "", "", true, "", null, null); }
 
         // Grants access to protected fields
         private class UIFormFieldInheritorStub : UIFormField

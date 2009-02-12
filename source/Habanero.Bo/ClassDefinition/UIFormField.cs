@@ -41,6 +41,12 @@ namespace Habanero.BO.ClassDefinition
         private readonly string _toolTipText;
         private UIFormColumn _uiFormColumn;
 
+        public enum LayoutStyle
+        {
+            Label,
+            GroupBox
+        }
+
         /// <summary>
         /// Constructor to initialise a new definition
         /// </summary>
@@ -478,6 +484,8 @@ namespace Habanero.BO.ClassDefinition
         {
             get { return HasParameterValue("dateFormat") ? Convert.ToString(GetParameterValue("dateFormat")) : null; }
         }
+
+        public LayoutStyle Layout { get; set; }
 
         private ClassDef GetClassDef()
         {
