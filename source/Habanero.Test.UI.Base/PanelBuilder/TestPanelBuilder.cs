@@ -94,7 +94,8 @@ namespace Habanero.Test.UI.Base
             Assert.IsInstanceOfType(typeof (INumericUpDown), panel.Controls[1]);
             Assert.IsInstanceOfType(typeof (IPanel), panel.Controls[2]);
         }
-        [Ignore("TODO:Peter 12 Feb 2009 working on this")]
+       
+        [Ignore("TODO:Peter:13 Feb 2009:working on this")]
         [Test]
         public void Test_BuildPanel_1Field_Integer_GroupBoxLayout()
         {
@@ -527,7 +528,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(row1InputControl.Height*2 + LayoutManager.DefaultGapSize, row2InputControl.Height);
         }
 
-        [Ignore("TODO:Peter 12 Feb 2009 working on this")]
         [Test]
         public void Test_BuildPanel_Parameter_ColumnSpan()
         {

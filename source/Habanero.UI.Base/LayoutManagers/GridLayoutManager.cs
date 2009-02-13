@@ -262,12 +262,13 @@ namespace Habanero.UI.Base
         protected override void RefreshControlPositions()
         {
             _currentPos = new Point(BorderSize, BorderSize);
+            int lastColSpan = 0;
             for (int i = 0; i < _controls.Count; i++)
             {
                 int currentRow = i/ColumnCount;
                 int currentCol = i%ColumnCount;
                 IControlHabanero ctl = this._controls[i];
-                
+
                 if ((i > 0) && (currentCol == 0))
                 {
                     _currentPos.X = BorderSize;
@@ -305,10 +306,18 @@ namespace Habanero.UI.Base
                 }
                 height += (this.GapSize*(ctlInfo.RowSpan - 1));
                 ctl.Height = height;
-                if (IsFixedColumn(currentCol)) _currentPos.X += _columnWidths[currentCol];
-                else 
-                    _currentPos.X += ctl.Width;
-                _currentPos.X += GapSize;
+
+                int posIncrement = 0;
+                if (lastColSpan > 1)
+                {
+                    //if (IsFixedColumn(currentCol)) posIncrement = _columnWidths[currentCol];
+                    lastColSpan--;
+                } else
+                {
+                    posIncrement = ctl.Width + GapSize;
+                    lastColSpan = ctlInfo.ColumnSpan;
+                }
+                _currentPos.X += posIncrement;
             }
         }
 
