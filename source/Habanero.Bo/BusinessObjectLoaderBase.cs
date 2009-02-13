@@ -308,7 +308,7 @@ namespace Habanero.BO
         //Note: This behaviour is fundamentally different than the business objects behaviour which 
         //  throws and error if any of the items are dirty when it is being refreshed.
         //Should a refresh be allowed on a dirty collection (what do we do with BO's
-        //TODO: I think this could be done via reflection instead of having all these public methods.
+        //I think this could be done via reflection instead of having all these public methods.
         //   especially where done via the interface.
         //  the other option would be for the business object collection to have another method (other than clone)
         //   that returns another type of object that has these methods to eliminate all these 
@@ -484,7 +484,6 @@ namespace Habanero.BO
         /// <returns>The loaded RelatedBusinessObjectCollection</returns>
         public IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IMultipleRelationship relationship)
         {
-            //TODO: generalise with generic version of this method
             IBusinessObjectCollection relatedCol = RelationshipUtils.CreateRelatedBusinessObjectCollection(type, relationship);
             
             ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", true);

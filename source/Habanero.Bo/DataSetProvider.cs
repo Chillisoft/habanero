@@ -187,10 +187,20 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         protected virtual void RemovedHandler(object sender, BOEventArgs e)
         {
-            int rowNum = this.FindRow(e.BusinessObject);
-            if (rowNum != -1)
+            lock (_table.Rows)
             {
-                this._table.Rows.RemoveAt(rowNum);
+                int rowNum = this.FindRow(e.BusinessObject);
+                if (rowNum != -1)
+                {
+                    try
+                    {
+                        this._table.Rows.RemoveAt(rowNum);
+                    }catch(Exception)
+                    {
+                        //IF you hit delete many times in succession then you get an issue with the events interfering and you get a wierd error
+                        Console.Write("There was an error");
+                    }
+                }
             }
         }
         /// <summary>

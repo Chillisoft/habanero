@@ -94,7 +94,8 @@ namespace Habanero.BO
         /// is not added twice in error.</returns>
         public string TransactionID()
         {
-            return this.BusinessObject.ID.AsString_CurrentValue();
+            //return this.BusinessObject.ID.AsString_CurrentValue();
+            return this.BusinessObject.ID.ObjectID.ToString();
         }
 
         ///<summary>

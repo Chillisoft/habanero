@@ -71,14 +71,18 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public IBusinessObject GetBusinessObject(IClassDef classDef, IPrimaryKey primaryKey)
         {
-            if (_dataStore.AllObjects.ContainsKey(primaryKey))
-                return _dataStore.AllObjects[primaryKey];
-
-            throw new BusObjDeleteConcurrencyControlException(
+//            if (_dataStore.AllObjects.ContainsKey(primaryKey))
+//                return _dataStore.AllObjects[primaryKey];
+            IBusinessObject businessObject = _dataStore.Find(classDef.ClassType, ((BOPrimaryKey)primaryKey).GetKeyCriteria());
+            if (businessObject == null)
+            {
+                throw new BusObjDeleteConcurrencyControlException(
                 string.Format(
                     "A Error has occured since the object you are trying to refresh has been deleted by another user."
                     + " There are no records in the database for the Class: {0} identified by {1} \n", classDef.ClassNameFull,
                     primaryKey));
+            }
+            return businessObject;
         }
 
         /// <summary>
@@ -160,7 +164,7 @@ namespace Habanero.BO
         /// <summary>
         /// Reloads a businessObject from the datasource using the id of the object.
         /// A dirty object will not be refreshed from the database and the appropriate error will be raised.
-        /// Cancel all edits before refreshing the object or call see TODO: Refresh with refresh dirty objects = true.
+        /// Cancel all edits before refreshing the object
         /// </summary>
         /// <exception cref="HabaneroDeveloperException">Exception thrown if the object is dirty and refresh is called.</exception>
         /// <param name="businessObject">The businessObject to refresh</param>

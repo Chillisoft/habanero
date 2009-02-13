@@ -976,7 +976,7 @@ namespace Habanero.BO
                 SetStateAsUpdated();
                 if (!BusinessObjectManager.Instance.Contains(this))
                 {
-                    if (!BusinessObjectManager.Instance.Contains(this.ID.AsString_CurrentValue()))
+                    if (!BusinessObjectManager.Instance.Contains(this.ID.ObjectID))
                     {
                         BusinessObjectManager.Instance.Add(this);
                     }

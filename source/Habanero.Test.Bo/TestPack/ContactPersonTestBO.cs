@@ -898,6 +898,11 @@ namespace Habanero.Test.BO
             return CreateUnsavedContactPerson(TestUtil.GetRandomString());
         }
 
+        public static ContactPersonTestBO CreateUnsavedContactPerson_NoFirstNameProp()
+        {
+            return CreateUnsavedContactPerson_NoFirstNameProp(TestUtil.GetRandomString());
+        }
+
         private static ContactPersonTestBO CreateUnsavedContactPerson(DateTime dateOfBirth)
         {
             ContactPersonTestBO contact = CreateUnsavedContactPerson();
@@ -908,6 +913,14 @@ namespace Habanero.Test.BO
         public static ContactPersonTestBO CreateUnsavedContactPerson(string surname)
         {
             return CreateUnsavedContactPerson(surname, TestUtil.GetRandomString());
+        }
+
+        public static ContactPersonTestBO CreateUnsavedContactPerson_NoFirstNameProp(string surname)
+        {
+            ContactPersonTestBO contact = new ContactPersonTestBO();
+            contact.ContactPersonID = Guid.NewGuid();
+            contact.Surname = surname;
+            return contact;
         }
 
         private static ContactPersonTestBO CreateUnsavedContactPerson(DateTime dateOfBirth, string surname)

@@ -61,7 +61,7 @@ namespace Habanero.BO
 
         private readonly EventHandler<BOEventArgs> _updateIDEventHandler;
 
-        protected BusinessObjectManager()
+        protected internal BusinessObjectManager()
         {
             _updateIDEventHandler = ObjectID_Updated_Handler;
   
@@ -74,6 +74,7 @@ namespace Habanero.BO
         public static BusinessObjectManager Instance
         {
             get { return _businessObjectManager; }
+            internal set { _businessObjectManager = value; }
         }
 
         #region IBusObjectManager Members
@@ -125,6 +126,7 @@ namespace Habanero.BO
         /// <param name="e"></param>
         protected virtual void ObjectID_Updated_Handler(object sender, BOEventArgs e)
         {
+            if (!e.BusinessObject.ID.IsGuidObjectID) return;
             lock (_loadedBusinessObjects)
             {
                 this.Remove(e.BusinessObject);

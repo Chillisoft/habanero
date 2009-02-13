@@ -240,24 +240,24 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        [Test]
-        public void Test_HashCode()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            int value = TestUtil.GetRandomInt();
-            BOWithIntID.LoadClassDefWithIntID();
-            BOWithIntID bo = new BOWithIntID { TestField = "PropValue", IntID = value };
-            BOPrimaryKey key = BOPrimaryKey.CreateWithValue(typeof(BOWithIntID), value);
-            //---------------Assert PreConditions---------------       
-            Assert.AreEqual(bo.ID, key);
-            //---------------Execute Test ----------------------
-            object expectedHashCode = bo.ID.GetHashCode();
-            object keyHashCode = key.GetHashCode();
-            //---------------Test Result -----------------------
-            Assert.AreEqual(expectedHashCode, keyHashCode);
-            //---------------Tear Down -------------------------          
-        }
+//        [Test]
+//        public void Test_HashCode()
+//        {
+//            //---------------Set up test pack-------------------
+//            ClassDef.ClassDefs.Clear();
+//            int value = TestUtil.GetRandomInt();
+//            BOWithIntID.LoadClassDefWithIntID();
+//            BOWithIntID bo = new BOWithIntID { TestField = "PropValue", IntID = value };
+//            BOPrimaryKey key = BOPrimaryKey.CreateWithValue(typeof(BOWithIntID), value);
+//            //---------------Assert PreConditions---------------       
+//            Assert.AreEqual(bo.ID, key);
+//            //---------------Execute Test ----------------------
+//            object expectedHashCode = bo.ID.GetHashCode();
+//            object keyHashCode = key.GetHashCode();
+//            //---------------Test Result -----------------------
+//            Assert.AreEqual(expectedHashCode, keyHashCode);
+//            //---------------Tear Down -------------------------          
+//        }
 
         [Test]
         public void Test_HashCode_CompositeKey()

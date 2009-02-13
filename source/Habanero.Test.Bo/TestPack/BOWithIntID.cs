@@ -133,7 +133,7 @@ namespace Habanero.Test.BO
         internal static void DeleteAllBOWithIntID()
         {
             const string sql = "DELETE FROM bowithintid";
-            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            if (DatabaseConnection.CurrentConnection != null) DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
     }
 }

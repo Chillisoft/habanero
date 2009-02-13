@@ -299,7 +299,7 @@ namespace Habanero.BO
         /// <summary>
         /// Reloads a businessObject from the datasource using the id of the object.
         /// A dirty object will not be refreshed from the database and the appropriate error will be raised.
-        /// Cancel all edits before refreshing the object or call see TODO: Refresh with refresh dirty objects = true.
+        /// Cancel all edits before refreshing the object
         /// </summary>
         /// <exception cref="HabaneroDeveloperException">Exception thrown if the object is dirty and refresh is called.</exception>
         /// <param name="businessObject">The businessObject to refresh</param>

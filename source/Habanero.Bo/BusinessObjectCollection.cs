@@ -91,7 +91,7 @@ namespace Habanero.BO
         private readonly EventHandler<BOEventArgs> _savedEventHandler;
         private readonly EventHandler<BOEventArgs> _deletedEventHandler;
         private readonly EventHandler<BOEventArgs> _restoredEventHandler;
-        private readonly EventHandler<BOEventArgs> _updateIDEventHandler;
+        //private readonly EventHandler<BOEventArgs> _updateIDEventHandler;
         private readonly EventHandler<BOEventArgs> _markForDeleteEventHandler;
         private readonly EventHandler<BOEventArgs> _updatedEventHandler;
         private readonly EventHandler<BOPropUpdatedEventArgs> _boPropUpdatedEventHandler;
@@ -132,7 +132,7 @@ namespace Habanero.BO
             this._savedEventHandler = SavedEventHandler;
             this._deletedEventHandler = DeletedEventHandler;
             this._restoredEventHandler = RestoredEventHandler;
-            this._updateIDEventHandler = UpdateHashTable;
+            //this._updateIDEventHandler = UpdateHashTable;
             this._markForDeleteEventHandler = MarkForDeleteEventHandler;
             this._updatedEventHandler = UpdatedEventHandler;
             this._boPropUpdatedEventHandler = BOPropUpdatedEventHandler;
@@ -170,7 +170,7 @@ namespace Habanero.BO
                 this.AddCreatedBusinessObject
                     ((TBusinessObject) info.GetValue(CREATED_BUSINESS_OBJECT + i, typeof (TBusinessObject)));
             }
-            _updateIDEventHandler = UpdateHashTable;
+            //_updateIDEventHandler = UpdateHashTable;
         }
 
         /// <summary>
@@ -315,8 +315,7 @@ namespace Habanero.BO
             businessObject.Saved += _savedEventHandler;
             businessObject.Deleted += _deletedEventHandler;
             businessObject.Restored += _restoredEventHandler;
-            //TODO: businessObject.Updated += _updatedEventHandler;
-            if (businessObject.ID != null) businessObject.IDUpdated += _updateIDEventHandler;
+            //if (businessObject.ID != null) businessObject.IDUpdated += _updateIDEventHandler;
             businessObject.MarkedForDeletion += _markForDeleteEventHandler;
             businessObject.Updated += _updatedEventHandler;
             businessObject.PropertyUpdated += _boPropUpdatedEventHandler;
@@ -328,8 +327,7 @@ namespace Habanero.BO
             businessObject.Saved -= _savedEventHandler;
             businessObject.Restored -= _restoredEventHandler;
             businessObject.Deleted -= _deletedEventHandler;
-            //TODO: businessObject.Updated -= _updatedEventHandler;
-            if (businessObject.ID != null) businessObject.IDUpdated -= _updateIDEventHandler;
+            //if (businessObject.ID != null) businessObject.IDUpdated -= _updateIDEventHandler;
             businessObject.MarkedForDeletion -= _markForDeleteEventHandler;
             businessObject.Updated -= _updatedEventHandler;
             businessObject.PropertyUpdated -= _boPropUpdatedEventHandler;
@@ -352,20 +350,20 @@ namespace Habanero.BO
             }
         }
 
-        /// <summary>
-        /// Updates the lookup table when a primary key property has
-        /// changed
-        /// </summary>
-        private void UpdateHashTable(object sender, BOEventArgs e)
-        {
-            string oldID = e.BusinessObject.ID.AsString_PreviousValue();
-            if (KeyObjectHashTable.Contains(oldID))
-            {
-                BusinessObject bo = (BusinessObject) KeyObjectHashTable[oldID];
-                KeyObjectHashTable.Remove(oldID);
-                KeyObjectHashTable.Add(bo.ID.AsString_CurrentValue(), bo);
-            }
-        }
+        ///// <summary>
+        ///// Updates the lookup table when a primary key property has
+        ///// changed
+        ///// </summary>
+        //private void UpdateHashTable(object sender, BOEventArgs e)
+        //{
+        //    string oldID = e.BusinessObject.ID.AsString_PreviousValue();
+        //    if (KeyObjectHashTable.Contains(oldID))
+        //    {
+        //        BusinessObject bo = (BusinessObject) KeyObjectHashTable[oldID];
+        //        KeyObjectHashTable.Remove(oldID);
+        //        KeyObjectHashTable.Add(bo.ID.AsString_CurrentValue(), bo);
+        //    }
+        //}
 
         private void MarkForDeleteEventHandler(object sender, BOEventArgs e)
         {
@@ -379,7 +377,8 @@ namespace Habanero.BO
 
                 this.MarkedForDeleteBusinessObjects.Add(bo);
                 base.Remove(bo);
-                KeyObjectHashTable.Remove(bo.ID.AsString_CurrentValue());
+                //KeyObjectHashTable.Remove(bo.ID.AsString_CurrentValue());
+				KeyObjectHashTable.Remove(bo.ID.ObjectID);
                 removeSuccessful = !this.RemovedBusinessObjects.Remove(bo);
             }
             if (removeSuccessful) this.FireBusinessObjectRemoved(bo);
@@ -860,6 +859,7 @@ namespace Habanero.BO
             }
         }
 
+#pragma warning disable 693
         /// <summary>
         /// Finds a business object that has the key string specified.<br/>
         /// The format of the search term is strict, so that a Guid ID
@@ -870,11 +870,28 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="key">The object identifier as a Guid</param>
         /// <returns>Returns the business object if found, or null if not</returns>
-        public TBusinessObject Find(Guid key)
+        public TBusinessObject Find<TBusinessObject>(Guid key)
+
+        {
+            return (TBusinessObject) Find(key);
+        }
+#pragma warning restore 693
+
+        /// <summary>
+        /// Finds a business object that has the key string specified.<br/>
+        /// The format of the search term is strict, so that a Guid ID
+        /// may be stored as "boIDname=########-####-####-####-############".
+        /// In the case of such Guid ID's, rather use the FindByGuid() function.
+        /// Composite primary keys may be stored otherwise, such as a
+        /// concatenation of the key names.
+        /// </summary>
+        /// <param name="key">The object identifier as a Guid</param>
+        /// <returns>Returns the business object if found, or null if not</returns>
+        public IBusinessObject Find(Guid key)
         {
             if (KeyObjectHashTable.ContainsKey(key))
             {
-                TBusinessObject bo = (TBusinessObject) KeyObjectHashTable[key];
+                TBusinessObject bo = (TBusinessObject)KeyObjectHashTable[key];
                 return this.Contains(bo) ? bo : null;
             }
             return null;

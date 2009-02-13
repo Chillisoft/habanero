@@ -220,5 +220,24 @@ namespace Habanero.BO
 //            }
 //            return boPrimaryKey;
 //        }
+        ///<summary>
+        /// Returns the Business Object that is related to this property in the case 
+        ///   where this property is related to a BusinessObjectLookupList
+        ///</summary>
+        ///<returns></returns>
+        ///<exception cref="NotImplementedException"></exception>
+        public IBusinessObject GetBusinessObjectForProp()
+        {
+            IPropDef propDef = this.PropDef;
+            if (propDef.LookupList is BusinessObjectLookupList)
+            {
+                BusinessObjectLookupList businessObjectLookupList = propDef.LookupList as BusinessObjectLookupList;
+                ClassDef classDef = businessObjectLookupList.LookupBoClassDef;
+                IBusinessObject businessObject = GetBusinessObjectForProp(classDef);
+                return businessObject;
+            }
+
+            return null;
+        }
     }
 }

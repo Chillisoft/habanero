@@ -492,7 +492,26 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             ContactPersonTestBO cp2 = cpCol.CreateBusinessObject();
 
             //---------------Execute Test ----------------------
-            ContactPersonTestBO foundCp = cpCol.Find(cp2.ID.ObjectID);
+            IBusinessObject foundCp = cpCol.Find(cp2.ID.ObjectID);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(foundCp);
+            Assert.AreSame(cp2, foundCp);
+        } 
+        [Test]
+        public void Test_FindIncludesCreatedBusinessObjects_UsingGeneric()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            ContactPersonTestBO.LoadDefaultClassDef();
+
+            ContactPersonTestBO.CreateSavedContactPerson();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>("");
+            ContactPersonTestBO cp2 = cpCol.CreateBusinessObject();
+
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO foundCp = cpCol.Find<ContactPersonTestBO>(cp2.ID.ObjectID);
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(foundCp);
@@ -677,6 +696,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsTrue(keyObjectHashTable.ContainsKey(person.ID.PreviousObjectID));
             Assert.IsTrue(keyObjectHashTable.ContainsKey(person.ContactPersonID));
         }
+
         [Test]
         public void Test_Contains_True_UnsavedBusinessObject_InCollection()
         {
@@ -760,6 +780,131 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsFalse(keyObjectHashTable.ContainsKey(person.ID.PreviousObjectID));
             Assert.IsTrue(keyObjectHashTable.ContainsKey(person.ContactPersonID));
         }
+
+        [Test]
+        public void Test_MarkForDelete_RemovesFromCollection()
+        {
+            //--------------- Set up test pack ------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO person = ContactPersonTestBO.CreateSavedContactPerson();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+            cpCol.Add(person);
+            Hashtable keyObjectHashTable = GetKeyObjectHashTable(cpCol);
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(1, cpCol.Count);
+            Assert.AreEqual(1, keyObjectHashTable.Count);
+            //--------------- Execute Test ----------------------
+            person.MarkForDelete();
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(0, cpCol.Count);
+            Assert.AreEqual(0, keyObjectHashTable.Count);
+        }
+
+
+
+        [Test]
+        public void Test_Add_UnsavedBusinessObjectToCollection_CompositeKey()
+        {
+            //--------------- Set up test pack ------------------
+            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKey();
+            ContactPersonTestBO person = ContactPersonTestBO.CreateUnsavedContactPerson_NoFirstNameProp();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+
+            Hashtable keyObjectHashTable = GetKeyObjectHashTable(cpCol);
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(0, cpCol.Count);
+            Assert.AreEqual(0, keyObjectHashTable.Count);
+            //--------------- Execute Test ----------------------
+            cpCol.Add(person);
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(1, cpCol.Count);
+            Assert.AreEqual(1, keyObjectHashTable.Count);
+            Assert.IsTrue(keyObjectHashTable.ContainsKey(person.ID.ObjectID));
+            Assert.IsTrue(keyObjectHashTable.ContainsKey(person.ID.PreviousObjectID));
+        }
+
+        [Test]
+        public void Test_Contains_True_UnsavedBusinessObject_InCollection_CompositeKey()
+        {
+            //--------------- Set up test pack ------------------
+            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKey();
+            ContactPersonTestBO person = ContactPersonTestBO.CreateUnsavedContactPerson_NoFirstNameProp();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+
+            Hashtable keyObjectHashTable = GetKeyObjectHashTable(cpCol);
+            cpCol.Add(person);
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(1, cpCol.Count);
+            Assert.IsTrue(keyObjectHashTable.ContainsKey(person.ID.ObjectID));
+            //--------------- Execute Test ----------------------
+            bool contains = cpCol.Contains(person);
+            //--------------- Test Result -----------------------
+            Assert.IsTrue(contains);
+        }
+
+        [Test]
+        public void Test_Contains_False_UnsavedBusinessObject_NotInCollection_CompositeKey()
+        {
+            //--------------- Set up test pack ------------------
+            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKey();
+            ContactPersonTestBO person = ContactPersonTestBO.CreateUnsavedContactPerson_NoFirstNameProp();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+
+            Hashtable keyObjectHashTable = GetKeyObjectHashTable(cpCol);
+            cpCol.Add(ContactPersonTestBO.CreateUnsavedContactPerson_NoFirstNameProp());
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(1, cpCol.Count);
+            Assert.IsFalse(keyObjectHashTable.ContainsKey(person.ID.ObjectID));
+            //--------------- Execute Test ----------------------
+            bool contains = cpCol.Contains(person);
+            //--------------- Test Result -----------------------
+            Assert.IsFalse(contains);
+        }
+
+        [Test]
+        public void Test_Remove_UnsavedBusinessObjectFromCollection_CompositeKey()
+        {
+            //--------------- Set up test pack ------------------
+            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKey();
+            ContactPersonTestBO person = ContactPersonTestBO.CreateUnsavedContactPerson_NoFirstNameProp();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+            Hashtable keyObjectHashTable = GetKeyObjectHashTable(cpCol);
+            cpCol.Add(person);
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(1, cpCol.Count);
+            Assert.AreEqual(1, keyObjectHashTable.Count);
+            Assert.IsTrue(cpCol.Contains(person));
+            //--------------- Execute Test ----------------------
+            cpCol.Remove(person);
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(0, cpCol.Count);
+            Assert.AreEqual(0, keyObjectHashTable.Count);
+        }
+
+        [Test]
+        public void Test_Add_UnsavedBusinessObjectToCollection_ChangePrimaryKeyPropertyValue_CompositeKey()
+        {
+            //--------------- Set up test pack ------------------
+            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKey();
+            ContactPersonTestBO person = ContactPersonTestBO.CreateUnsavedContactPerson_NoFirstNameProp();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+
+            Hashtable keyObjectHashTable = GetKeyObjectHashTable(cpCol);
+            cpCol.Add(person);
+            //--------------- Test Preconditions ----------------
+            Assert.AreEqual(1, cpCol.Count);
+            Assert.AreEqual(1, keyObjectHashTable.Count);
+            Assert.IsTrue(cpCol.Contains(person));
+            //--------------- Execute Test ----------------------
+            person.ContactPersonID = Guid.NewGuid();
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(1, cpCol.Count);
+            Assert.AreEqual(1, keyObjectHashTable.Count);
+            Assert.IsTrue(cpCol.Contains(person));
+            Assert.IsTrue(keyObjectHashTable.ContainsKey(person.ID.ObjectID));
+        }
+
+
 
         private static BusinessObjectCollection<ContactPersonTestBO> CreateCollectionWith_OneBO()
         {

@@ -496,7 +496,7 @@ namespace Habanero.BO
 
         private bool AreReadWriteRulesEditable(out string message)
         {
-            //TODO Brett Jan 2009: This should be turned into a strategy pattern.
+            //Brett Jan 2009 I think this should be turned into a strategy
             string className = this.PropDef.ClassDef == null ? "" : this.PropDef.ClassDef.ClassNameFull;
             string propNameFull = className + "." + this.DisplayName;
             switch (_propDef.ReadWriteRule)

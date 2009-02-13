@@ -37,11 +37,6 @@ namespace Habanero.UI.VWG
         private readonly IControlFactory _controlFactory;
         private readonly IEditableGrid _grid;
         private readonly EditableGridControlManager _editableGridManager;
-        private IEditableGridButtonsControl _buttons;
-        private IFilterControl _filterControl;
-        private string _orderBy;
-        private string _additionalSearchCriteria;
-        private bool _hasDoubleClickEventHandler;
 
 
         public EditableGridControlVWG(IControlFactory controlFactory)
@@ -51,27 +46,27 @@ namespace Habanero.UI.VWG
             _controlFactory = controlFactory;
             _editableGridManager = new EditableGridControlManager(this, controlFactory);
             _grid = _controlFactory.CreateEditableGrid();
-            _buttons = _controlFactory.CreateEditableGridButtonsControl();
-            _filterControl = _controlFactory.CreateFilterControl();
+            Buttons = _controlFactory.CreateEditableGridButtonsControl();
+            FilterControl = _controlFactory.CreateFilterControl();
             InitialiseButtons();
             InitialiseFilterControl();
-            _hasDoubleClickEventHandler = false;
+            HasDoubleClickEventHandler = false;
             BorderLayoutManager manager = controlFactory.CreateBorderLayoutManager(this);
-            manager.AddControl(_filterControl, BorderLayoutManager.Position.North);
+            manager.AddControl(FilterControl, BorderLayoutManager.Position.North);
             manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
-            manager.AddControl(_buttons, BorderLayoutManager.Position.South);
+            manager.AddControl(Buttons, BorderLayoutManager.Position.South);
             //TODO copy rest from readonly version
         }
 
         private void InitialiseButtons()
         {
-            _buttons.CancelClicked += Buttons_CancelClicked;
-            _buttons.SaveClicked += Buttons_SaveClicked;
+            Buttons.CancelClicked += Buttons_CancelClicked;
+            Buttons.SaveClicked += Buttons_SaveClicked;
         }
 
         private void InitialiseFilterControl()
         {
-            _filterControl.Filter += _filterControl_OnFilter;
+            FilterControl.Filter += _filterControl_OnFilter;
         }
 
         private void _filterControl_OnFilter(object sender, EventArgs e)
@@ -79,7 +74,7 @@ namespace Habanero.UI.VWG
             this.Grid.CurrentPage = 1;
             if (FilterMode == FilterModes.Search)
             {
-                string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
+                string searchClause = FilterControl.GetFilterClause().GetFilterClauseString("%", "'");
                 if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
                 {
                     if (!string.IsNullOrEmpty(searchClause))
@@ -94,7 +89,7 @@ namespace Habanero.UI.VWG
             }
             else
             {
-                this.Grid.ApplyFilter(_filterControl.GetFilterClause());
+                this.Grid.ApplyFilter(FilterControl.GetFilterClause());
             }
         }
 
@@ -197,26 +192,20 @@ namespace Habanero.UI.VWG
         /// <summary>
         /// Gets the buttons control used to save and cancel changes
         /// </summary>
-        public IEditableGridButtonsControl Buttons
-        {
-            get { return _buttons; }
-        }
+        public IEditableGridButtonsControl Buttons { get; private set; }
 
         /// <summary>
         /// Gets the filter control used to filter which rows are shown in the grid
         /// </summary>
-        public IFilterControl FilterControl
-        {
-            get { return _filterControl; }
-        }
+        public IFilterControl FilterControl { get; private set; }
 
         /// <summary>
         /// Gets and sets the filter modes for the grid (i.e. filter or search). See <see cref="FilterModes"/>.
         /// </summary>
         public FilterModes FilterMode
         {
-            get { return _filterControl.FilterMode; }
-            set { _filterControl.FilterMode = value; }
+            get { return FilterControl.FilterMode; }
+            set { FilterControl.FilterMode = value; }
         }
 
         IEditableGrid IEditableGridControl.Grid
@@ -228,35 +217,29 @@ namespace Habanero.UI.VWG
         /// Gets and sets the default order by clause used for loading the grid when the <see cref="FilterModes"/>
         /// is set to Search
         /// </summary>
-        public string OrderBy
-        {
-            get { return _orderBy; }
-            set { _orderBy = value;}
-        }
+        public string OrderBy { get; set; }
 
         /// <summary>
         /// Gets and sets the standard search criteria used for loading the grid when the <see cref="FilterModes"/>
         /// is set to Search. This search criteria will be appended with an AND to any search criteria returned
         /// by the FilterControl.
         /// </summary>
-        public string AdditionalSearchCriteria
-        {
-            get { return _additionalSearchCriteria; }
-            set { _additionalSearchCriteria = value; }
-        }
+        public string AdditionalSearchCriteria { get; set; }
 
-        public bool HasDoubleClickEventHandler
-        {
-            get { return _hasDoubleClickEventHandler; }
-        }
+        ///<summary>
+        /// Returns true if this countrol has a double clicked Handler. For VWG this always returns false
+        ///</summary>
+        public bool HasDoubleClickEventHandler { get; private set; }
 
         private void Buttons_CancelClicked(object sender, EventArgs e)
         {
+            _grid.SelectedBusinessObject = null;
            this._grid.RejectChanges();
         }  
         
         private void Buttons_SaveClicked(object sender, EventArgs e)
         {
+            _grid.SelectedBusinessObject = null;
             this._grid.SaveChanges();
         }
     }
