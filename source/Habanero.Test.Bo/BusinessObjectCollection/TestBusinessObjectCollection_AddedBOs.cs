@@ -509,7 +509,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         #region Added Business Objects Marked for Deletion
 
         [Test]
-        public void Test_Mark4Delete_Added_RefreshAll()
+        public void Test_MarkForDelete_Added_RefreshAll()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO myBO = ContactPersonTestBO.CreateSavedContactPerson();
@@ -533,7 +533,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void Test_Mark4Delete_Added_LoadWCriteria_RefreshAll()
+        public void Test_MarkForDelete_Added_LoadWCriteria_RefreshAll()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -557,7 +557,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void Test_Mark4Delete_Added_RestoreBO()
+        public void Test_MarkForDelete_Added_RestoreBO()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -583,7 +583,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void Test_Mark4Delete_Added_RestoreBO_LoadWCriteria()
+        public void Test_MarkForDelete_Added_RestoreBO_LoadWCriteria()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -608,7 +608,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void Test_Mark4Delete_Added_RemoveBO()
+        public void Test_MarkForDelete_Added_RemoveBO()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -631,7 +631,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void Test_Mark4Delete_Added_Mark4DeleteBO()
+        public void Test_MarkForDelete_Added_MarkForDeleteBO()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -653,7 +653,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void Test_Mark4Delete_Added_BO_Mark4Delete()
+        public void Test_MarkForDelete_Added_BO_MarkForDelete()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -675,7 +675,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void Test_Mark4Delete_Added_AddBo()
+        public void Test_MarkForDelete_Added_AddBo()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -699,7 +699,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void Test_Mark4Delete_Added_RestoreAll()
+        public void Test_MarkForDelete_Added_RestoreAll()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -724,7 +724,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void Test_Mark4Delete_Added_SaveAll()
+        public void Test_MarkForDelete_Added_SaveAll()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -746,7 +746,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void Test_Mark4Delete_Added_boSave()
+        public void Test_MarkForDelete_Added_boSave()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();

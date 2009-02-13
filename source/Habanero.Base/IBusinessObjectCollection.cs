@@ -117,15 +117,6 @@ namespace Habanero.Base
 		int IndexOf(IBusinessObject item);
 
 		/// <summary>
-		/// Inserts an item to the <see cref="T:System.Collections.Generic.IList`1"></see> at the specified index.
-		/// </summary>
-		/// <param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1"></see>.</param>
-		/// <param name="index">The zero-based index at which item should be inserted.</param>
-		/// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"></see> is read-only.</exception>
-		/// <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"></see>.</exception>
-		void Insert(int index, IBusinessObject item);
-
-		/// <summary>
 		/// Gets or sets the element at the specified index.
 		/// </summary>
 		/// <param name="index">The zero-based index of the element to get or set.</param>

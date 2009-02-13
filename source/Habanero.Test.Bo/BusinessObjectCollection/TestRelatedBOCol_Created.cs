@@ -363,7 +363,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test, ExpectedException(typeof(HabaneroDeveloperException))]
-        public void Test_CreatedBusinessObject_ColMark4Delete()
+        public void Test_CreatedBusinessObject_ColMarkForDelete()
         {
             //---------------Set up test pack-------------------
             //ContactPersonTestBO.LoadDefaultClassDef();
@@ -382,7 +382,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test, ExpectedException(typeof(HabaneroDeveloperException))]
-        public void Test_CreatedBusinessObject_Mark4Delete()
+        public void Test_CreatedBusinessObject_MarkForDelete()
         {
             //---------------Set up test pack-------------------
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpCol = CreateRelatedCPCol();

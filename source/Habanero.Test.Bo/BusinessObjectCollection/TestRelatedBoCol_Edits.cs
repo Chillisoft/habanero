@@ -181,7 +181,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
         }
 
-        private static void AssertOnePersisted_OneMark4Delete(IBusinessObjectCollection cpCol)
+        private static void AssertOnePersisted_OneMarkForDelete(IBusinessObjectCollection cpCol)
         {
             Assert.AreEqual(0, cpCol.Count);
             Assert.AreEqual(1, cpCol.MarkedForDeleteBusinessObjects.Count);
@@ -567,7 +567,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void Test_Remove_ColMark4Delete()
+        public void Test_Remove_ColMarkForDelete()
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
@@ -583,12 +583,12 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             cpCol.MarkForDelete(cp);
 
             ////-----Test results-------------------------
-            AssertOnePersisted_OneMark4Delete(cpCol);
+            AssertOnePersisted_OneMarkForDelete(cpCol);
             Assert.IsFalse(_removedEventFired);
         }
 
         [Test]
-        public void Test_Remove_BOMark4Delete()
+        public void Test_Remove_BOMarkForDelete()
         {
             //-----Create Test pack---------------------
             ContactPersonTestBO cp;
@@ -604,7 +604,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             cp.MarkForDelete();
 
             ////-----Test results-------------------------
-            AssertOnePersisted_OneMark4Delete(cpCol);
+            AssertOnePersisted_OneMarkForDelete(cpCol);
             Assert.IsFalse(_removedEventFired);
         }
 
@@ -645,7 +645,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
             //---------------Test Result -----------------------
             Assert.IsTrue(markForDeleteCP.Status.IsDeleted);
-            AssertOnePersisted_OneMark4Delete(cpCol);
+            AssertOnePersisted_OneMarkForDelete(cpCol);
             Assert.IsTrue(_removedEventFired);
         }
 
@@ -668,7 +668,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             cpCol.MarkForDelete(markForDeleteCP);
 
             //---------------Test Result -----------------------
-            AssertOnePersisted_OneMark4Delete(cpCol);
+            AssertOnePersisted_OneMarkForDelete(cpCol);
             Assert.IsTrue(markForDeleteCP.Status.IsDeleted);
             Assert.IsTrue(_removedEventFired);
         }
@@ -686,20 +686,20 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
 
             //---------------Assert Precondition----------------
-            AssertOnePersisted_OneMark4Delete(cpCol);
+            AssertOnePersisted_OneMarkForDelete(cpCol);
             Assert.IsFalse(_removedEventFired);
 
             //---------------Execute Test ----------------------
             cpCol.Remove(markForDeleteCP);
 
             //---------------Test Result -----------------------
-            AssertOnePersisted_OneMark4Delete(cpCol);
+            AssertOnePersisted_OneMarkForDelete(cpCol);
             Assert.IsTrue(markForDeleteCP.Status.IsDeleted);
             Assert.IsFalse(_removedEventFired);
         }
 
         [Test]
-        public void Test_MarkForDeleteBO_Mark4Delete_RemovedNotFired()
+        public void Test_MarkForDeleteBO_MarkForDelete_RemovedNotFired()
         {
             //A Business object that exists in the collection can be marked for deletion either as a bo or
             //  as an index in the collection
@@ -711,20 +711,20 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
 
             //---------------Assert Precondition----------------
-            AssertOnePersisted_OneMark4Delete(cpCol);
+            AssertOnePersisted_OneMarkForDelete(cpCol);
             Assert.IsFalse(_removedEventFired);
 
             //---------------Execute Test ----------------------
             cpCol.MarkForDelete(markForDeleteCP);
 
             //---------------Test Result -----------------------
-            AssertOnePersisted_OneMark4Delete(cpCol);
+            AssertOnePersisted_OneMarkForDelete(cpCol);
             Assert.IsTrue(markForDeleteCP.Status.IsDeleted);
             Assert.IsFalse(_removedEventFired);
         }
 
         [Test]
-        public void Test_MarkForDeleteBO_BOMark4Delete_RemovedNotFired()
+        public void Test_MarkForDeleteBO_BOMarkForDelete_RemovedNotFired()
         {
             //A Business object that exists in the collection can be marked for deletion either as a bo or
             //  as an index in the collection
@@ -736,14 +736,14 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             cpCol.BusinessObjectRemoved += delegate { _removedEventFired = true; };
 
             //---------------Assert Precondition----------------
-            AssertOnePersisted_OneMark4Delete(cpCol);
+            AssertOnePersisted_OneMarkForDelete(cpCol);
             Assert.IsFalse(_removedEventFired);
 
             //---------------Execute Test ----------------------
             markForDeleteCP.MarkForDelete();
 
             //---------------Test Result -----------------------
-            AssertOnePersisted_OneMark4Delete(cpCol);
+            AssertOnePersisted_OneMarkForDelete(cpCol);
             Assert.IsTrue(markForDeleteCP.Status.IsDeleted);
             Assert.IsFalse(_removedEventFired);
         }
@@ -766,7 +766,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             cpCol.MarkForDeleteAt(0);
 
             //---------------Test Result -----------------------
-            AssertOnePersisted_OneMark4Delete(cpCol);
+            AssertOnePersisted_OneMarkForDelete(cpCol);
             Assert.IsTrue(markForDeleteCP.Status.IsDeleted);
         }
 
@@ -856,7 +856,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             cpCol.MarkForDelete(cp);
 
             //---------------Assert Precondition----------------
-            AssertOnePersisted_OneMark4Delete(cpCol);
+            AssertOnePersisted_OneMarkForDelete(cpCol);
 
             //---------------Execute Test ----------------------
             cpCol.CancelEdits();
@@ -877,7 +877,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             _addedEventFired = false;
             cpCol.BusinessObjectAdded += delegate { _addedEventFired = true; };
             //---------------Assert Precondition----------------
-            AssertOnePersisted_OneMark4Delete(cpCol);
+            AssertOnePersisted_OneMarkForDelete(cpCol);
             Assert.IsFalse(_addedEventFired);
 
             //---------------Execute Test ----------------------
@@ -898,7 +898,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             cpCol.MarkForDelete(cp);
 
             //---------------Assert Precondition----------------
-            AssertOnePersisted_OneMark4Delete(cpCol);
+            AssertOnePersisted_OneMarkForDelete(cpCol);
 
             //---------------Execute Test ----------------------
             BORegistry.DataAccessor.BusinessObjectLoader.Refresh(cp);

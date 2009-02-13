@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -2103,7 +2104,11 @@ namespace Habanero.Test.BO
             BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
             ContactPersonTestBO.LoadDefaultClassDef();
-            new ContactPersonTestBO(); new ContactPersonTestBO(); new ContactPersonTestBO();
+            new ContactPersonTestBO();
+            Assert.AreEqual(1, BusinessObjectManager.Instance.Count);
+            new ContactPersonTestBO();
+            Assert.AreEqual(2, BusinessObjectManager.Instance.Count);
+            new ContactPersonTestBO();
             //----------------Assert preconditions ---------------
             Assert.AreEqual(3, BusinessObjectManager.Instance.Count);
             //--------------- Execute Test ----------------------

@@ -666,7 +666,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneMark4DeleteContactPerson(out contactPerson, out relationship);
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneMarkForDeleteContactPerson(out contactPerson, out relationship);
             ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DereferenceRelated;
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, organisationTestBO.ContactPeople.MarkedForDeleteBusinessObjects.Count);
@@ -697,7 +697,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO contactPerson; MultipleRelationship<ContactPersonTestBO> relationship;
-            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneMark4DeleteContactPerson(out contactPerson, out relationship);
+            OrganisationTestBO organisationTestBO = CreateSavedOrganisation_WithOneMarkForDeleteContactPerson(out contactPerson, out relationship);
             ((MultipleRelationshipDef)relationship.RelationshipDef).DeleteParentAction = DeleteParentAction.DeleteRelated;
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, organisationTestBO.ContactPeople.MarkedForDeleteBusinessObjects.Count);
@@ -756,7 +756,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             cpCol.Add(contactPerson);
             return organisationTestBO;
         }
-        private static OrganisationTestBO CreateSavedOrganisation_WithOneMark4DeleteContactPerson(out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
+        private static OrganisationTestBO CreateSavedOrganisation_WithOneMarkForDeleteContactPerson(out ContactPersonTestBO contactPerson, out MultipleRelationship<ContactPersonTestBO> relationship)
         {
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
