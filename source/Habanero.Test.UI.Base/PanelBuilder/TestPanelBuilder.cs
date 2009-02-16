@@ -95,9 +95,9 @@ namespace Habanero.Test.UI.Base
             Assert.IsInstanceOfType(typeof (IPanel), panel.Controls[2]);
         }
        
-        [Ignore("TODO:Peter:13 Feb 2009:working on this")]
+
         [Test]
-        public void Test_BuildPanel_1Field_Integer_GroupBoxLayout()
+        public void Test_BuildPanel_1Field_GroupBoxLayout_Integer()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -116,7 +116,29 @@ namespace Habanero.Test.UI.Base
 
             Assert.IsInstanceOfType(typeof (IPanel), panel.Controls[2]);
             Assert.AreEqual(1, groupBox.Controls.Count);
+            Assert.IsInstanceOfType(typeof(INumericUpDown), groupBox.Controls[0]);
+        }
+
+
+        [Test]
+        public void Test_BuildPanel_1Field_GroupBoxLayout_TextBox_Multiline()
+        {
+            //---------------Set up test pack-------------------
+            Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
+            UIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabOneFieldWithMultiLineParameter();
+            UIFormField formField = singleIntegerFieldTab[0][0];
+            formField.Layout = UIFormField.LayoutStyle.GroupBox;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IPanel panel = panelBuilder.BuildPanelForTab(singleIntegerFieldTab).Panel;
+            //---------------Test Result -----------------------
+            IGroupBox groupBox = (IGroupBox)panel.Controls[0];
             Assert.IsInstanceOfType(typeof(ITextBox), groupBox.Controls[0]);
+            Assert.AreEqual(3 * GetControlFactory().CreateTextBox().Height + 4, groupBox.Height);
+            ITextBox textBox = (ITextBox)groupBox.Controls[0];
+            Assert.IsTrue(textBox.Multiline);
         }
 
         [Test]
@@ -659,10 +681,7 @@ namespace Habanero.Test.UI.Base
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab singleFieldTab = interfaceMapper.GetFormTabOneFieldWithMultiLineParameter();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
-            //---------------Assert Precondition----------------
-            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][0].NumLines));
-            Assert.AreEqual("3", singleFieldTab[0][0].NumLines);
-            Assert.Greater(Convert.ToInt32(singleFieldTab[0][0].NumLines), 1);
+
             //---------------Execute Test ----------------------
             IPanel panel = panelBuilder.BuildPanelForTab(singleFieldTab).Panel;
             //---------------Test Result -----------------------
@@ -671,7 +690,7 @@ namespace Habanero.Test.UI.Base
             ITextBox control = (ITextBox) panel.Controls[1];
             Assert.IsTrue(control.Multiline);
             Assert.IsTrue(control.AcceptsReturn);
-            Assert.AreEqual(20, control.Height);
+            Assert.AreEqual(64, control.Height);
             Assert.AreEqual(ScrollBars.Vertical, control.ScrollBars);
         }
 
@@ -684,8 +703,6 @@ namespace Habanero.Test.UI.Base
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             bool errorThrown = false;
             string errMessage = "";
-            //---------------Assert Precondition----------------
-            Assert.IsFalse(String.IsNullOrEmpty(singleFieldTab[0][0].NumLines));
 
             //---------------Execute Test ----------------------
             try

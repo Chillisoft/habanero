@@ -171,7 +171,7 @@ namespace Habanero.UI.Base
             else
             {
                 labelControl = CreateAndAddGroupBox(panelInfo, formField);
-                controlMapper = null;
+                controlMapper = CreateAndAddInputControlToContainerControl(panelInfo, formField, (IGroupBox)labelControl); ;
             }
 
 
@@ -180,6 +180,8 @@ namespace Habanero.UI.Base
 
             panelInfo.FieldInfos.Add(new PanelInfo.FieldInfo(formField.PropertyName, labelControl, controlMapper));
         }
+
+      
 
         private IControlHabanero CreateAndAddGroupBox(IPanelInfo panelInfo, UIFormField formField) {
             IControlHabanero labelControl = Factory.CreateGroupBox(formField.GetLabel());
@@ -202,17 +204,40 @@ namespace Habanero.UI.Base
             panelInfo.LayoutManager.AddControl(panel, formField.RowSpan, 1);
         }
 
+        private IControlMapper CreateAndAddInputControlToContainerControl(IPanelInfo panelInfo, UIFormField formField, IControlHabanero containerControl)
+        {
+            IControlMapper controlMapper;
+            IControlHabanero inputControl = ConfigureInputControl(formField, out controlMapper);
+            inputControl.Dock = DockStyle.Fill;
+            containerControl.Controls.Add(inputControl);
+            return controlMapper;
+        }
+
         private IControlMapper CreateAndAddInputControl(IPanelInfo panelInfo, UIFormField formField)
         {
+            IControlMapper controlMapper;
+            IControlHabanero inputControl = ConfigureInputControl(formField, out controlMapper);
+
+
+            int numberOfGridColumnsToSpan = 1 + (CONTROLS_PER_COLUMN*(formField.ColSpan - 1));
+            GridLayoutManager.ControlInfo inputControlInfo =
+                new GridLayoutManager.ControlInfo(inputControl, numberOfGridColumnsToSpan,
+                                                  formField.RowSpan);
+
+            panelInfo.LayoutManager.AddControl(inputControlInfo);
+            return controlMapper;
+        }
+
+        private IControlHabanero ConfigureInputControl(UIFormField formField, out IControlMapper controlMapper) {
             IControlHabanero inputControl = Factory.CreateControl(formField.ControlTypeName,
                                                                   formField.ControlAssemblyName);
-            IControlMapper controlMapper = ControlMapper.Create(formField.MapperTypeName,
-                                                                formField.MapperAssembly, inputControl,
-                                                                formField.PropertyName, !formField.Editable, _factory);
+            controlMapper = ControlMapper.Create(formField.MapperTypeName,
+                                                 formField.MapperAssembly, inputControl,
+                                                 formField.PropertyName, !formField.Editable, _factory);
 
 
             if (!String.IsNullOrEmpty(formField.Alignment)) SetInputControlAlignment(formField, inputControl);
-            if (!String.IsNullOrEmpty(formField.NumLines)) SetInputControlNumLines(formField, inputControl);
+            SetInputControlNumLines(formField, inputControl);
 
             if (!String.IsNullOrEmpty(formField.DecimalPlaces))
             {
@@ -221,7 +246,7 @@ namespace Habanero.UI.Base
                     int decimalPlaces = Convert.ToInt32(formField.DecimalPlaces);
                     if (decimalPlaces >= 0)
                     {
-                        ((INumericUpDown) inputControl).DecimalPlaces = decimalPlaces;
+                        ((INumericUpDown)inputControl).DecimalPlaces = decimalPlaces;
                     }
                 }
             }
@@ -231,7 +256,7 @@ namespace Habanero.UI.Base
                 if (inputControl is IComboBox && formField.MapperTypeName.ToLower() == "listcomboboxmapper")
                 {
                     string[] items = formField.Options.Split('|');
-                    IComboBox comboBox = ((IComboBox) inputControl);
+                    IComboBox comboBox = ((IComboBox)inputControl);
                     comboBox.Items.Add(""); // This creates the blank item for the ComboBox 
                     foreach (string item in items)
                     {
@@ -244,14 +269,14 @@ namespace Habanero.UI.Base
             {
                 if (inputControl is ITextBox && Convert.ToBoolean(formField.IsEmail))
                 {
-                    ITextBox textBox = (ITextBox) inputControl;
+                    ITextBox textBox = (ITextBox)inputControl;
                     textBox.DoubleClick += EmailTextBoxDoubleClickedHandler;
                 }
             }
 
             if (formField.MapperTypeName == "DateTimePickerMapper")
             {
-                DateTimePickerMapper dateTimePickerMapper = new DateTimePickerMapper((IDateTimePicker) inputControl,
+                DateTimePickerMapper dateTimePickerMapper = new DateTimePickerMapper((IDateTimePicker)inputControl,
                                                                                      formField.PropertyName, formField.Editable,
                                                                                      _factory);
                 dateTimePickerMapper.SetPropertyAttributes(formField.Parameters);
@@ -259,15 +284,10 @@ namespace Habanero.UI.Base
 
             if (formField.RowSpan > 1)
             {
-                if (inputControl is ITextBox) ((ITextBox) inputControl).Multiline = true;
+                if (inputControl is ITextBox) ((ITextBox)inputControl).Multiline = true;
             }
-            int numberOfGridColumnsToSpan = 1 + (CONTROLS_PER_COLUMN*(formField.ColSpan - 1));
-            GridLayoutManager.ControlInfo inputControlInfo =
-                new GridLayoutManager.ControlInfo(inputControl, numberOfGridColumnsToSpan,
-                                                  formField.RowSpan);
             SetToolTip(formField, inputControl);
-            panelInfo.LayoutManager.AddControl(inputControlInfo);
-            return controlMapper;
+            return inputControl;
         }
 
         /// A handler to deal with a double-click on an email textbox, which
@@ -289,24 +309,13 @@ namespace Habanero.UI.Base
         {
             if (inputControl is ITextBox)
             {
-                int numLines;
-                try
-                {
-                    numLines = Convert.ToInt32(formField.NumLines);
-                }
-                catch (Exception)
-                {
-                    throw new InvalidXmlDefinitionException
-                        ("An error " + "occurred while reading the 'numLines' parameter "
-                         + "from the class definitions.  The 'value' "
-                         + "attribute must be a valid integer.");
-                }
+                if (formField.RowSpan <= 1) return;
 
                 ITextBox textBox = ((ITextBox) inputControl);
                 textBox.Multiline = true;
                 textBox.AcceptsReturn = true;
                 textBox.ScrollBars = ScrollBars.Vertical;
-                textBox.Height = inputControl.Height*numLines;
+
             }
         }
 

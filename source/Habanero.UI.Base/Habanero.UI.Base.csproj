@@ -70,6 +70,7 @@
     <Compile Include="ControlInterfaces\IUserControlHabanero.cs" />
     <Compile Include="ControlMappers\ComboBoxCollectionSelector.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
+    <Compile Include="ControlMappers\EditableGridControlMapper.cs" />
     <Compile Include="ControlMappers\ExtendedComboBoxMapper.cs" />
     <Compile Include="IBOEditorPanel.cs" />
     <Compile Include="IBusinessObjectControlWithErrorDisplay.cs" />

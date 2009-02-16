@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
@@ -59,9 +60,10 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="toolTipText">The tool tip text to be used.</param>
         /// <param name="parameters">The property attributes</param>
         /// <param name="triggers">The collection of triggers managed by the field</param>
+        /// <param name="layout">The <see cref="LayoutStyle"/> to use</param>
         public UIFormField(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly,
-                           bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers)
-            : this(label, propertyName, controlType, null, null, mapperTypeName, mapperAssembly, editable, toolTipText, parameters, triggers)
+                           bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers, LayoutStyle layout)
+            : this(label, propertyName, controlType, null, null, mapperTypeName, mapperAssembly, editable, toolTipText, parameters, triggers, layout)
 		{}
 
         /// <summary>
@@ -77,17 +79,16 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="toolTipText">The tool tip text to be used.</param>
         /// <param name="parameters">The property attributes</param>
         /// <param name="triggers">The collection of triggers managed by the field</param>
-        public UIFormField(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly,
-                           bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers)
+        /// <param name="layout">The <see cref="LayoutStyle"/> to use</param>
+        public UIFormField(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers, LayoutStyle layout)
 			: this(label, propertyName, null, controlTypeName, controlAssembly,
-                    mapperTypeName, mapperAssembly, editable, toolTipText, parameters, triggers)
+                    mapperTypeName, mapperAssembly, editable, toolTipText, parameters, triggers, layout)
 		{}
 
         /// <summary>
         /// The master constructor for all of the possible arguments
         /// </summary>
-        private UIFormField(string label, string propertyName, Type controlType, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly,
-                           bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers)
+        private UIFormField(string label, string propertyName, Type controlType, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers, LayoutStyle layout)
         {
 			if (controlType != null)
         	{
@@ -108,6 +109,7 @@ namespace Habanero.BO.ClassDefinition
             _parameters = parameters;
             //_controlType = controlType;
             _triggers = triggers ?? new TriggerCol();
+            Layout = layout;
         }
 
 		#region Properties
@@ -411,7 +413,30 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                return HasParameterValue("rowSpan") ? Convert.ToInt32(GetParameterValue("rowSpan")) : 1;
+                if (HasParameterValue("rowSpan"))
+                {
+                     try
+                     {
+                         return Convert.ToInt32(GetParameterValue("rowSpan"));
+                     }catch (FormatException)
+                    {
+                        throw new InvalidXmlDefinitionException(
+                            "An error occurred while reading the 'rowSpan' parameter from the class definitions.  The 'value' attribute must be a valid integer.");
+                    }
+                }
+                if (HasParameterValue("numLines"))
+                {
+                    try
+                    {
+                        return Convert.ToInt32(GetParameterValue("numLines"));
+
+                    } catch (FormatException)
+                    {
+                        throw new InvalidXmlDefinitionException(
+                            "An error occurred while reading the 'numLines' parameter from the class definitions.  The 'value' attribute must be a valid integer.");
+                    }
+                }
+                return 1;
             }
         }
 
@@ -443,14 +468,6 @@ namespace Habanero.BO.ClassDefinition
         public string Alignment
         {
             get { return HasParameterValue("alignment") ? Convert.ToString(GetParameterValue("alignment")) : null; }
-        }
-
-        ///<summary>
-        /// Returns the numlines property from the form field or null if none is provided 
-        ///</summary>
-        public string NumLines
-        {
-            get { return HasParameterValue("numLines") ? Convert.ToString(GetParameterValue("numLines")) : null; }
         }
 
         ///<summary>

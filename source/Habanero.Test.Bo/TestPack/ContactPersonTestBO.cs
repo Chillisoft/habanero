@@ -350,7 +350,8 @@ namespace Habanero.Test.BO
 			    </class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
-            CreateRelatedAddressClassDef(itsLoader);
+            if (!ClassDef.ClassDefs.Contains(typeof(AddressTestBO)))
+                AddressTestBO.LoadDefaultClassDef();
             return itsClassDef;
         }
 
@@ -414,7 +415,8 @@ namespace Habanero.Test.BO
 			    </class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
-            CreateRelatedAddressClassDef(itsLoader);
+            if (!ClassDef.ClassDefs.Contains(typeof(AddressTestBO)))
+                AddressTestBO.LoadDefaultClassDef();
             return itsClassDef;
         }
 
@@ -502,30 +504,12 @@ namespace Habanero.Test.BO
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
 
-            CreateRelatedAddressClassDef(itsLoader);
+            if (!ClassDef.ClassDefs.Contains(typeof(AddressTestBO)))
+                AddressTestBO.LoadDefaultClassDef();
             return itsClassDef;
         }
 
-        private static void CreateRelatedAddressClassDef(XmlClassLoader itsLoader)
-        {
-            ClassDef addressClassDef =
-                itsLoader.LoadClass(
-                    @"
-				<class name=""AddressTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person_address"">
-					<property  name=""AddressID"" type=""Guid"" />
-                    <property name=""AddressLine1"" />
-                    <property name=""OrganisationID"" type=""Guid"" />
-                    <property  name=""ContactPersonID"" type=""Guid"" />
-					<primaryKey>
-						<prop name=""AddressID"" />
-					</primaryKey>
-					<relationship name=""ContactPersonTestBO"" type=""single"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DoNothing"" reverseRelationship=""Addresses"">
-						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
-					</relationship>
-			    </class>
-			");
-            ClassDef.ClassDefs.Add(addressClassDef);
-        }
+
 
 
         public static ClassDef LoadClassDefWithAddressesRelationship_SortOrder_AddressLine1()
@@ -549,7 +533,8 @@ namespace Habanero.Test.BO
 			    </class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
-            CreateRelatedAddressClassDef(itsLoader);
+            if (!ClassDef.ClassDefs.Contains(typeof(AddressTestBO)))
+                AddressTestBO.LoadDefaultClassDef();
             return itsClassDef;
         }
 

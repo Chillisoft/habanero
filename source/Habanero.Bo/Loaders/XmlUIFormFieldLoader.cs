@@ -38,9 +38,10 @@ namespace Habanero.BO.Loaders
 		private string _controlAssembly;
 		//private Type _controlType;
         private bool _editable;
-        private Hashtable _propertyAttributes;
+        private Hashtable _parameters;
         private TriggerCol _triggers = new TriggerCol();
         private string _toolTipText;
+        private UIFormField.LayoutStyle _layout;
 
         /// <summary>
         /// Constructor to initialise a new loader
@@ -87,9 +88,7 @@ namespace Habanero.BO.Loaders
         {
 			return _defClassFactory.CreateUIFormProperty(_label, _propertyName,
 				_controlTypeName, _controlAssembly, _mapperTypeName, _mapperTypeAssembly,
-                _editable, _toolTipText, _propertyAttributes, _triggers);
-			//return _defClassFactory.CreateUIFormProperty(_label, _propertyName, 
-			//    _controlType, _mapperTypeName, _mapperTypeAssembly, _editable, _propertyAttributes);
+                _editable, _toolTipText, _parameters, _triggers, _layout);
         }
 
         /// <summary>
@@ -105,8 +104,26 @@ namespace Habanero.BO.Loaders
             LoadMapperTypeAssembly();
             LoadEditable();
             LoadToolTipText();
+            LoadLayout();
             LoadParameters();
             LoadTriggers();
+        }
+
+        private void LoadLayout()
+        {
+            string layoutAttribute = "";
+            try
+            {
+                layoutAttribute = _reader.GetAttribute("layout");
+                _layout = (UIFormField.LayoutStyle) Enum.Parse(typeof(UIFormField.LayoutStyle), layoutAttribute);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException(String.Format(
+                    "In the definition for the field '{0}' the 'layout' " +
+                    "was set to an invalid value ('{1}'). The valid options are " +
+                    "Label and GroupBox.", _propertyName, layoutAttribute), ex);
+            }
         }
 
         /// <summary>
@@ -203,7 +220,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadParameters()
         {
-            _propertyAttributes = new Hashtable();
+            _parameters = new Hashtable();
             //System.Console.WriteLine(_reader.Name);
             _reader.Read();
             //System.Console.WriteLine(_reader.Name);
@@ -222,7 +239,7 @@ namespace Habanero.BO.Loaders
 
                 try
                 {
-                    _propertyAttributes.Add(attName, attValue);
+                    _parameters.Add(attName, attValue);
                 }
                 catch (Exception ex)
                 {

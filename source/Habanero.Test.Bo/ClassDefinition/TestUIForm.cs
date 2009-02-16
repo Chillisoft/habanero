@@ -65,8 +65,8 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestCloneUIForm()
         {
             //---------------Set up test pack-------------------
-            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null);
+            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
+            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);
@@ -312,8 +312,8 @@ namespace Habanero.Test.BO.ClassDefinition
         public UIFormColumn CreateUIFormColumn_2Fields(string propName)
         {
             UIFormField field1 =
-                new UIFormField("label1", propName, "control", null, null, null, true, null, null, null);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null);
+                new UIFormField("label1", propName, "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
+            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);

@@ -181,5 +181,52 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("action2", field.Triggers[1].Action);
             Assert.AreEqual(2, field.Parameters.Count);
         }
+
+        [Test]
+        public void TestLayoutStyle_Default()
+        {
+            //---------------Set up test pack-------------------
+            loader = new XmlUIFormFieldLoader();
+            //---------------Execute Test ----------------------
+            UIFormField field = loader.LoadUIProperty(@"<field property=""prop"" />");
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(UIFormField.LayoutStyle.Label, field.Layout);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestLayoutStyle()
+        {
+            //---------------Set up test pack-------------------
+            loader = new XmlUIFormFieldLoader();
+            //---------------Execute Test ----------------------
+            UIFormField field = loader.LoadUIProperty(@"<field property=""prop"" layout=""GroupBox"" />");
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(UIFormField.LayoutStyle.GroupBox, field.Layout);
+            //---------------Tear Down -------------------------          
+        }       
+        
+        [Test]
+        public void TestLayoutStyle_Invalid()
+        {
+            //---------------Set up test pack-------------------
+            loader = new XmlUIFormFieldLoader();
+            //---------------Execute Test ----------------------
+            try
+            {
+                UIFormField field = loader.LoadUIProperty(@"<field property=""prop"" layout=""Invalid"" />");
+                Assert.Fail("Invalid layout should raise an error");
+            } 
+            //---------------Test Result -----------------------
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("In the definition for the field 'prop' the 'layout' " +
+                   "was set to an invalid value ('Invalid'). The valid options are " +
+                   "Label and GroupBox.", ex.Message);
+            }
+            //---------------Tear Down -------------------------          
+        }
     }
 }

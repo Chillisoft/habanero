@@ -30,7 +30,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestRemove()
         {
-            UIFormField field = new UIFormField("label", "prop", "control", null, null, null, true, null, null, null);
+            UIFormField field = CreateUIFormField();
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field);
 
@@ -42,8 +42,8 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestCopyTo()
         {
-            UIFormField field1 = new UIFormField("label", "prop", "control", null, null, null, true, null, null, null);
-            UIFormField field2 = new UIFormField("label", "prop", "control", null, null, null, true, null, null, null);
+            UIFormField field1 = CreateUIFormField();
+            UIFormField field2 = CreateUIFormField();
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);
@@ -67,8 +67,8 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestCloneUIFormColumn()
         {
             //---------------Set up test pack-------------------
-            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null);
+            UIFormField field1 = CreateUIFormField();
+            UIFormField field2 = CreateUIFormField();
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);
@@ -99,7 +99,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestEquals()
         {
             UIFormColumn uiFormColumn1 = new UIFormColumn();
-            UIFormField def = new UIFormField("bob", "bob", "", "", "", "", false, "", null, null);
+            UIFormField def = CreateUIFormField();
             uiFormColumn1.Add(def);
             UIFormColumn uiFormColumn2 = new UIFormColumn();
             uiFormColumn2.Add(def);
@@ -112,11 +112,11 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_NotEquals_SameFirstItemDiffSecondItem()
         {
             UIFormColumn uiFormColumn1 = new UIFormColumn();
-            UIFormField def = new UIFormField("bob", "bob", "", "", "", "", false, "", null, null);
+            UIFormField def = CreateUIFormField("bob", "bob");
             uiFormColumn1.Add(def);
             UIFormColumn uiFormColumn2 = new UIFormColumn();
             uiFormColumn2.Add(def);
-            UIFormField def2 = new UIFormField("bob1", "bob1", "", "", "", "", false, "", null, null);
+            UIFormField def2 = CreateUIFormField("bob1", "bob1");
             uiFormColumn2.Add(def2);
             Assert.IsFalse(uiFormColumn1 == uiFormColumn2);
             Assert.IsTrue(uiFormColumn1 != uiFormColumn2);
@@ -130,11 +130,11 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             //---------------Set up test pack-------------------
             UIFormColumn uiFormColumn1 = new UIFormColumn();
-            UIFormField def = new UIFormField("bob", "bob", "", "", "", "", false, "", null, null);
+            UIFormField def = CreateUIFormField("bob", "bob");
             uiFormColumn1.Add(def);
             UIFormColumn uiFormColumn2 = new UIFormColumn();
             uiFormColumn2.Add(def);
-            UIFormField def2 = new UIFormField("bob1", "bob1", "", "", "", "", false, "", null, null);
+            UIFormField def2 = CreateUIFormField("bob1", "bob1");
 
             uiFormColumn1.Add(def);
             uiFormColumn1.Add(def2);
@@ -153,10 +153,10 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_NotEquals()
         {
             UIFormColumn uiFormColumn1 = new UIFormColumn();
-            UIFormField def = new UIFormField("bob", "bob", "", "", "", "", false, "", null, null);
+            UIFormField def = CreateUIFormField("bob", "bob");
             uiFormColumn1.Add(def);
             UIFormColumn uiFormColumn2 = new UIFormColumn();
-            UIFormField def2 = new UIFormField("bob1", "bob1", "", "", "", "", false, "", null, null);
+            UIFormField def2 = CreateUIFormField("bob1", "bob1");
             uiFormColumn2.Add(def2);
             Assert.IsFalse(uiFormColumn1 == uiFormColumn2);
             Assert.IsFalse(uiFormColumn2 == uiFormColumn1);
@@ -191,11 +191,11 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestGetRowsRequired()
         {
             //---------------Set up test pack-------------------
-     
-            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null);
+
+            UIFormField field1 = CreateUIFormField("label1", "prop1"); 
             Hashtable parameters = new Hashtable();
             parameters.Add("rowSpan", 2);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, parameters, null);
+            UIFormField field2 = CreateUIFormField("label2", "prop2", parameters); 
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);
@@ -209,13 +209,14 @@ namespace Habanero.Test.BO.ClassDefinition
 
         }
 
+
         [Test]
         public void GetRowSpanForColumnToTheRight_None()
         {
             //---------------Set up test pack-------------------
             Hashtable parameters = new Hashtable();
             parameters.Add("rowSpan", 2);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, parameters, null);
+            UIFormField field2 = CreateUIFormField("label2", "prop2"); 
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field2);
             //---------------Execute Test ----------------------
@@ -239,7 +240,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Hashtable parameters = new Hashtable();
             parameters.Add("rowSpan", 1);
             parameters.Add("colSpan", 2);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, parameters, null);
+            UIFormField field2 = CreateUIFormField("label2", "prop2", parameters); 
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field2);
             //---------------Execute Test ----------------------
@@ -255,11 +256,11 @@ namespace Habanero.Test.BO.ClassDefinition
             Hashtable parameters1 = new Hashtable();
             parameters1.Add("rowSpan", 1);
             parameters1.Add("colSpan", 3);
-            UIFormField field1 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, parameters1, null);
+            UIFormField field1 = CreateUIFormField("label2", "prop2", parameters1); 
             Hashtable parameters2 = new Hashtable();
             parameters2.Add("rowSpan", 2);
             parameters2.Add("colSpan", 2);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, parameters2, null);
+            UIFormField field2 = CreateUIFormField("label2", "prop2", parameters2); 
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1); 
             uiFormColumn.Add(field2);
@@ -275,7 +276,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestAddUIFormField()
         {
             //---------------Set up test pack-------------------
-            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null);
+            UIFormField field1 = CreateUIFormField("label1", "prop1"); 
             UIFormColumn uiFormColumn = new UIFormColumn();
             //---------------Assert Precondition----------------
             Assert.IsNull(field1.UIFormColumn);
@@ -298,6 +299,24 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.AreSame(tab, column.UIFormTab);
         }
+
+
+        private UIFormField CreateUIFormField()
+        {
+            return CreateUIFormField("label", "prop");
+        }
+
+
+        private UIFormField CreateUIFormField(string label, string propName, Hashtable parameters)
+        {
+            return new UIFormField(label, propName, "control", null, null, null, true, null, parameters, null, UIFormField.LayoutStyle.Label);
+        }
+
+        private UIFormField CreateUIFormField(string label, string propName)
+        {
+            return CreateUIFormField(label, propName, null);
+        }
+
     }
 
 }
