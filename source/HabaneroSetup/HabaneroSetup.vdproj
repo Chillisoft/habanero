@@ -5738,13 +5738,14 @@
         "MsiBootstrapper"
         {
         "LangId" = "3:1033"
+        "RequiresElevation" = "11:FALSE"
         }
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Habanero v2.2.0a"
-        "ProductCode" = "8:{BDC2A3FB-13D9-495F-8282-8DE34711658E}"
-        "PackageCode" = "8:{AC68E965-34B6-439D-90B2-BA8AF1F25189}"
+        "ProductCode" = "8:{D07797B3-6E29-4428-A99C-CFD43DD3DAE3}"
+        "PackageCode" = "8:{2A607BCE-0457-4265-B97C-954F28676CA8}"
         "UpgradeCode" = "8:{3F3CD419-5D29-4D0C-ABA0-456887C00FE9}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -7616,9 +7617,6 @@
                 {
                 }
             }
-        }
-        "VJSharpPlugin"
-        {
         }
     }
 }
