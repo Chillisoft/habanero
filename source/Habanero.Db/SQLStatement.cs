@@ -147,7 +147,7 @@ namespace Habanero.DB
             {
                 if (paramValue.GetType().Name == "LongText")
                 {
-                    ReflectionUtilities.setEnumPropertyValue(newParameter,"OracleType","Clob");
+                    ReflectionUtilities.SetEnumPropertyValue(newParameter,"OracleType","Clob");
                 }
             }
             if (_idbConnection is OleDbConnection)

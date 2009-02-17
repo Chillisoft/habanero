@@ -55,7 +55,6 @@ namespace Habanero.Test.UI.Base
     public abstract class TestTextBoxMapper : TestMapperBase
     {
 
-
         protected abstract IControlFactory GetControlFactory();
 
         [TestFixture]

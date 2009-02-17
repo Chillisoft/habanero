@@ -236,8 +236,7 @@ namespace Habanero.Test.UI.Base
             _txtReadonly = GetControlFactory().CreateTextBox();
             _readOnlyMapper = new TextBoxMapper(_txtReadonly, "ShapeName", true, GetControlFactory());
             _txtReflectedProperty = GetControlFactory().CreateTextBox();
-            _reflectedPropertyMapper =
-                new TextBoxMapper(_txtReflectedProperty, "-ShapeNameGetOnly-", false, GetControlFactory());
+            _reflectedPropertyMapper = new TextBoxMapper(_txtReflectedProperty, "-ShapeNameGetOnly-", false, GetControlFactory());
             _txtNormal = GetControlFactory().CreateTextBox();
             _normalMapper = new TextBoxMapper(_txtNormal, "ShapeName", false, GetControlFactory());
             _shape = new Shape();
@@ -341,55 +340,91 @@ namespace Habanero.Test.UI.Base
         #region Test Reflected Property Mapper
 
         [Test]
-        public void TestReflectedWithNoSetDisablesControl()
+        public void Test_ReflectedProperty_WithNoSet_DisablesControl()
         {
-            Assert.IsFalse
-                (_txtReflectedProperty.Enabled,
+            //---------------Set up test pack-------------------
+            //-------------Assert Preconditions ----------------
+            Assert.IsFalse(_txtReflectedProperty.Enabled,
                  "A reflected property control should be disabled before it gets an object");
+            //---------------Execute Test ----------------------
             _reflectedPropertyMapper.BusinessObject = _shape;
-            Assert.IsFalse
-                (_txtReflectedProperty.Enabled, "A reflected property control should be disabled once it has an object");
+            //---------------Test Result -----------------------
+            Assert.IsFalse (_txtReflectedProperty.Enabled, 
+                "A reflected property control should be disabled once it has an object");
         }
 
         [Test]
-        public void TestReflectedWithSetEnablesControl()
+        public void Test_ReflectedProperty_WithSet_EnablesControl()
         {
+            //---------------Set up test pack-------------------
             ITextBox txtReflectedPropertyWithSet = GetControlFactory().CreateTextBox();
             TextBoxMapper reflectedPropertyWithSetMapper =
                 new TextBoxMapper(txtReflectedPropertyWithSet, "-ShapeName-", false, GetControlFactory());
-            Assert.IsFalse
-                (txtReflectedPropertyWithSet.Enabled,
+            //-------------Assert Preconditions ----------------
+            Assert.IsFalse(txtReflectedPropertyWithSet.Enabled,
                  "A reflected property control should be disabled before it gets an object");
+            //---------------Execute Test ----------------------
             reflectedPropertyWithSetMapper.BusinessObject = _shape;
-            Assert.IsTrue
-                (txtReflectedPropertyWithSet.Enabled,
+            //---------------Test Result -----------------------
+            Assert.IsTrue(txtReflectedPropertyWithSet.Enabled,
                  "A reflected property control should be enabled once it has an object if the reflected property has a set");
         }
 
         [Test]
-        public void TestReflectedChangeValue()
+        public void Test_ReflectedProperty_WithSet_WritesToReflectedProperty()
         {
-            _reflectedPropertyMapper.BusinessObject = _shape;
-            Assert.AreEqual("TestShapeName", _txtReflectedProperty.Text);
-            _shape.ShapeName = "TestShapeName2";
-            Assert.AreEqual
-                ("TestShapeName", _txtReflectedProperty.Text,
+            //---------------Set up test pack-------------------
+            ITextBox txtReflectedPropertyWithSet = GetControlFactory().CreateTextBox();
+            ControlMapperStub reflectedPropertyWithSetMapper = new ControlMapperStub(
+                txtReflectedPropertyWithSet, "-ShapeName-", false, GetControlFactory());
+            Shape shape = new Shape();
+            shape.ShapeName = TestUtil.GetRandomString();
+            string newValue = TestUtil.GetRandomString();
+            reflectedPropertyWithSetMapper.BusinessObject = shape;
+            //-------------Assert Preconditions ----------------
+            Assert.AreEqual(shape.ShapeName, txtReflectedPropertyWithSet.Text);
+            //---------------Execute Test ----------------------
+            reflectedPropertyWithSetMapper.TestSetPropertyValue(newValue);
+            //reflectedPropertyWithSetMapper.TestSetPropertyValue(newValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(newValue, shape.ShapeName,
+                 "The reflected property should have been set");
+        }
+
+        // This test documents the limitation that the mapper will not respond to a change in the reflected value
+        [Test]
+        public void Test_ReflectedProperty_ChangePropValue_ControlNotUpdated()
+        {
+            //---------------Set up test pack-------------------
+            const string oldShapeName = "TestShapeName";
+            const string newShapeName = "TestShapeName2";
+            Shape shape = new Shape();
+            shape.ShapeName = oldShapeName;
+            _reflectedPropertyMapper.BusinessObject = shape;
+            //-------------Assert Preconditions ----------------
+            Assert.AreEqual(oldShapeName, _txtReflectedProperty.Text);
+            //---------------Execute Test ----------------------
+            _shape.ShapeName = newShapeName;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(oldShapeName, _txtReflectedProperty.Text,
                  "A Reflected property will not be able to pick up changes to the property.");
         }
 
         [Test]
-        public void TestReflectedChangeBO()
+        public void Test_ReflectedProperty_ChangeBO()
         {
+            //---------------Set up test pack-------------------
             _reflectedPropertyMapper.BusinessObject = _shape;
-            Assert.AreEqual("TestShapeName", _txtReflectedProperty.Text);
-            Shape sh2 = new Shape();
-            sh2.ShapeName = "Different";
-            _reflectedPropertyMapper.BusinessObject = sh2;
-            Assert.AreEqual
-                ("Different", _txtReflectedProperty.Text,
+            Shape newShape = new Shape();
+            const string expectedShapeName = "Different";
+            newShape.ShapeName = expectedShapeName;
+            //-------------Assert Preconditions -------------
+            Assert.AreEqual(_shape.ShapeNameGetOnly, _txtReflectedProperty.Text);
+            //---------------Execute Test ----------------------
+            _reflectedPropertyMapper.BusinessObject = newShape;
+            //---------------Test Result -----------------------
+            Assert.AreEqual (expectedShapeName, _txtReflectedProperty.Text,
                  "A Reflected property should refresh the value when a new BO is loaded");
-            sh2.ShapeName = "Different2";
-            Assert.AreEqual("Different", _txtReflectedProperty.Text);
         }
 
         #endregion
@@ -677,7 +712,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestCanSetNonCompulsoryDateTime_ToNullString()
+        public void TestCanSetDateTimeProp_ToNullString_NonCompulsory()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -694,7 +729,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestCanSetNonCompulsoryDateTime_ToNull()
+        public void TestCanSetDateTimeProp_ToNull_NonCompulsory()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -1070,7 +1105,7 @@ namespace Habanero.Test.UI.Base
 
         protected override void InternalUpdateControlValueFromBo()
         {
-            this.Control.Text = Convert.ToString(this.BusinessObject.GetPropertyValue(this.PropertyName));
+            this.Control.Text = Convert.ToString(base.GetPropertyValue());
         }
 
         public void TestSetPropertyValue(object value)

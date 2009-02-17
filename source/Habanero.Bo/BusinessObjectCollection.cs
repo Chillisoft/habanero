@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Habanero.Base;
@@ -552,45 +553,6 @@ namespace Habanero.BO
             LoadWithLimit(searchExpression, orderByClause, -1);
         }
 
-
-        ///// <summary>
-        ///// Loads business objects that match the search criteria provided
-        ///// and an extra criteria literal,
-        ///// loaded in the order specified
-        ///// </summary>
-        ///// <param name="searchCriteria">The search criteria</param>
-        ///// <param name="orderByClause">The order-by clause</param>
-        ///// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
-        //public void Load(string searchCriteria, string orderByClause, string extraSearchCriteriaLiteral)
-        //{
-        //    LoadWithLimit(searchCriteria, orderByClause, extraSearchCriteriaLiteral, -1);
-        //}
-
-        ///// <summary>
-        ///// Loads business objects that match the search criteria provided in
-        ///// an expression and an extra criteria literal, 
-        ///// loaded in the order specified
-        ///// </summary>
-        ///// <param name="searchExpression">The search expression</param>
-        ///// <param name="orderByClause">The order-by clause</param>
-        ///// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
-        //public void Load(IExpression searchExpression, string orderByClause, string extraSearchCriteriaLiteral)
-        //{
-        //    LoadWithLimit(searchExpression, orderByClause, extraSearchCriteriaLiteral, -1);
-        //}
-
-//        /// <summary>
-//        /// Loads business objects that match the search criteria provided, 
-//        /// loaded in the order specified, 
-//        /// and limiting the number of objects loaded
-//        /// </summary>
-//        /// <param name="searchCriteria">The search criteria</param>
-//        /// <param name="orderByClause">The order-by clause</param>
-//        /// <param name="limit">The limit</param>
-//        public void LoadWithLimit(string searchCriteria, string orderByClause, int limit)
-//        {
-//            LoadWithLimit(searchCriteria, orderByClause, limit);
-//        }
         /// <summary>
         /// Loads business objects that match the search criteria provided
         /// and an extra criteria literal, 
@@ -610,43 +572,6 @@ namespace Habanero.BO
             }
             LoadWithLimit(criteriaExpression, orderByClause, limit);
         }
-
-        /// <summary>
-        /// Loads business objects that match the search criteria provided, 
-        /// loaded in the order specified, 
-        /// and limiting the number of objects loaded. The limited number of objects is
-        ///  limited as follows. If you want record 11 to 20 then firstRecordToLoad will be set to 
-        ///  11 and the number of records to load will be set to 10 this will load 10 records (or fewer 
-        ///   if there are less records returned) starting at record 11 ordered by the orderByClause.
-        /// </summary>
-        /// <param name="searchCriteria">The search criteria</param>
-        /// <param name="orderByClause">The order-by clause</param>
-        /// <param name="noOfRecords">The number of records to be loaded</param>
-        /// <param name="firstRecordToLoad">The first record to load</param>
-        public void LoadWithLimit(string searchCriteria, string orderByClause, int firstRecordToLoad, int noOfRecords)
-        {
-            Criteria criteriaExpression = null;
-            if (searchCriteria.Length > 0)
-            {
-                criteriaExpression = CriteriaParser.CreateCriteria(searchCriteria);
-                QueryBuilder.PrepareCriteria(this.ClassDef, criteriaExpression);
-            }
-            int totalRecords = 0;
-            LoadWithLimit(criteriaExpression, orderByClause, firstRecordToLoad, noOfRecords, ref totalRecords);
-        }
-
-//        /// <summary>
-//        /// Loads business objects that match the search criteria provided in
-//        /// an expression, loaded in the order specified, 
-//        /// and limiting the number of objects loaded
-//        /// </summary>
-//        /// <param name="searchExpression">The search expression</param>
-//        /// <param name="orderByClause">The order-by clause</param>
-//        /// <param name="limit">The limit</param>
-//        public void LoadWithLimit(IExpression searchExpression, string orderByClause, int limit)
-//        {
-//            LoadWithLimit(searchExpression, orderByClause, limit);
-//        }
 
 
         /// <summary>
@@ -669,35 +594,101 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Loads business objects that match the search criteria provided in
-        /// an expression and an extra criteria literal, 
-        /// loaded in the order specified, 
-        /// and limiting the number of objects loaded
+        /// Loads business objects that match the search criteria provided, 
+        /// loaded in the order specified, and limiting the number of objects loaded. 
+        /// The limited list of <see cref="TBusinessObject"/>s specified as follows:
+        /// If you want record 6 to 15 then 
+        /// <see cref="firstRecordToLoad"/> will be set to 5 (this is zero based) and 
+        /// <see cref="numberOfRecordsToLoad"/> will be set to 10.
+        /// This will load 10 records, starting at record 6 of the ordered set (ordered by the <see cref="orderByClause"/>).
+        /// If there are fewer than 15 records in total, then the remaining records after record 6 willbe returned. 
         /// </summary>
-        /// <param name="searchExpression">The search expression</param>
+        /// <remarks>
+        /// As a design decision, we have elected for the <see cref="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by MySql etc.
+        /// Also, the <see cref="numberOfRecordsToLoad"/> returns the specified number of records unless its value is '-1' where it will 
+        /// return all the remaining records from the specified <see cref="firstRecordToLoad"/>.
+        /// If you give '0' as the value for the <see cref="numberOfRecordsToLoad"/> parameter, it will load zero records.
+        /// </remarks>
+        /// <example>
+        /// The following code demonstrates how to loop through the invoices in the data store, 
+        /// ten at a time, and print their details:
+        /// <code>
+        /// BusinessObjectCollection&lt;Invoice&gt; col = new BusinessObjectCollection&lt;Invoice&gt;();
+        /// int interval = 10;
+        /// int firstRecord = 0;
+        /// int totalNoOfRecords = firstRecord + 1;
+        /// while (firstRecord &lt; totalNoOfRecords)
+        /// {
+        ///     col.LoadWithLimit("", "InvoiceNo", firstRecord, interval, out totalNoOfRecords);
+        ///     Debug.Print("The next {0} invoices:", interval);
+        ///     col.ForEach(bo =&gt; Debug.Print(bo.ToString()));
+        ///     firstRecord += interval;
+        /// }</code>
+        /// </example>
+        /// <param name="searchCriteria">The search criteria</param>
         /// <param name="orderByClause">The order-by clause</param>
-        /// <param name="noOfRecords">The number of records to be loaded</param>
-        /// <param name="firstRecordToLoad">The first record to load</param>
-        /// <param name="totalNoOfRecords">The total number of records that exist</param>
-        public void LoadWithLimit
-            (Criteria searchExpression, string orderByClause, int firstRecordToLoad, int noOfRecords,
-             ref int totalNoOfRecords)
+        /// <param name="firstRecordToLoad">The first record to load (NNB: this is zero based)</param>
+        /// <param name="numberOfRecordsToLoad">The number of records to be loaded</param>
+        /// <param name="totalNoOfRecords">The total number of records matching the criteria</param>
+        public void LoadWithLimit(Criteria searchCriteria, OrderCriteria orderByClause, 
+            int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
         {
-            this.SelectQuery.Criteria = searchExpression;
-            this.SelectQuery.OrderCriteria = QueryBuilder.CreateOrderCriteria(this.ClassDef, orderByClause);
-            if (firstRecordToLoad <= 0) this.SelectQuery.Limit = noOfRecords;
-            if ((firstRecordToLoad > 0) && (noOfRecords > 0))
-            {
-                this.SelectQuery.FirstRecordToLoad = firstRecordToLoad;
-                if (totalNoOfRecords <= 0)
-                {
-                    totalNoOfRecords = ((BusinessObjectLoaderDB) BORegistry.DataAccessor.BusinessObjectLoader).GetCount
-                        (this.ClassDef, searchExpression);
-                }
-                int newLimit = totalNoOfRecords - firstRecordToLoad;
-                this.SelectQuery.Limit = (newLimit > noOfRecords) ? noOfRecords : newLimit;
-            }
+            this.SelectQuery.Criteria = searchCriteria;
+            this.SelectQuery.OrderCriteria = orderByClause;
+            this.SelectQuery.FirstRecordToLoad = firstRecordToLoad;
+            this.SelectQuery.Limit = numberOfRecordsToLoad;
             Refresh();
+            totalNoOfRecords = TotalCountAvailableForPaging;
+        }
+
+        /// <summary>
+        /// Loads business objects that match the search criteria provided, 
+        /// loaded in the order specified, and limiting the number of objects loaded. 
+        /// The limited list of <see cref="TBusinessObject"/>s specified as follows:
+        /// If you want record 6 to 15 then 
+        /// <see cref="firstRecordToLoad"/> will be set to 5 (this is zero based) and 
+        /// <see cref="numberOfRecordsToLoad"/> will be set to 10.
+        /// This will load 10 records, starting at record 6 of the ordered set (ordered by the <see cref="orderByClause"/>).
+        /// If there are fewer than 15 records in total, then the remaining records after record 6 willbe returned. 
+        /// </summary>
+        /// <remarks>
+        /// As a design decision, we have elected for the <see cref="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by MySql etc.
+        /// Also, the <see cref="numberOfRecordsToLoad"/> returns the specified number of records unless its value is '-1' where it will 
+        /// return all the remaining records from the specified <see cref="firstRecordToLoad"/>.
+        /// If you give '0' as the value for the <see cref="numberOfRecordsToLoad"/> parameter, it will load zero records.
+        /// </remarks>
+        /// <example>
+        /// The following code demonstrates how to loop through the invoices in the data store, 
+        /// ten at a time, and print their details:
+        /// <code>
+        /// BusinessObjectCollection&lt;Invoice&gt; col = new BusinessObjectCollection&lt;Invoice&gt;();
+        /// int interval = 10;
+        /// int firstRecord = 0;
+        /// int totalNoOfRecords = firstRecord + 1;
+        /// while (firstRecord &lt; totalNoOfRecords)
+        /// {
+        ///     col.LoadWithLimit("", "InvoiceNo", firstRecord, interval, out totalNoOfRecords);
+        ///     Debug.Print("The next {0} invoices:", interval);
+        ///     col.ForEach(bo =&gt; Debug.Print(bo.ToString()));
+        ///     firstRecord += interval;
+        /// }</code>
+        /// </example>
+        /// <param name="searchCriteria">The search criteria</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="firstRecordToLoad">The first record to load (NNB: this is zero based)</param>
+        /// <param name="numberOfRecordsToLoad">The number of records to be loaded</param>
+        /// <param name="totalNoOfRecords">The total number of records matching the criteria</param>
+        public void LoadWithLimit(string searchCriteria, string orderByClause, 
+            int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
+        {
+            Criteria criteria = null;
+            if (searchCriteria.Length > 0)
+            {
+                criteria = CriteriaParser.CreateCriteria(searchCriteria);
+                QueryBuilder.PrepareCriteria(this.ClassDef, criteria);
+            }
+            OrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(this.ClassDef, orderByClause);
+            LoadWithLimit(criteria, orderCriteria, firstRecordToLoad, numberOfRecordsToLoad, out totalNoOfRecords);
         }
 
         #endregion
@@ -1499,6 +1490,12 @@ namespace Habanero.BO
         /// prevent certain checks being done (e.g. Adding persisted business objects to a collection.
         /// </summary>
         protected bool Loading { get; set; }
+
+        ///<summary>
+        /// This property is used to return the total number of records available for paging.
+        /// It is set internally by the loader when the collection is being loaded.
+        ///</summary>
+        internal int TotalCountAvailableForPaging { get; set; }
 
 // ReSharper restore UnusedPrivateMember
 

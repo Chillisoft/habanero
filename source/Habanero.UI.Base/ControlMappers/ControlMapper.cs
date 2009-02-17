@@ -397,10 +397,13 @@ namespace Habanero.UI.Base
                 this.ErrorProvider.SetError(_control, ex.Message);
                 return;
             }
-            IBOProp prop = _businessObject.Props[_propertyName];
-            if (prop != null)
+            if (_businessObject.Props.Contains(_propertyName))
             {
-                _errorProvider.SetError(_control, prop.InvalidReason);
+                IBOProp prop = _businessObject.Props[_propertyName];
+                if (prop != null)
+                {
+                    _errorProvider.SetError(_control, prop.InvalidReason);
+                }
             }
         }
 

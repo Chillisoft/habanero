@@ -269,39 +269,58 @@ namespace Habanero.BO
 
         #region GetBusinessObjectCollection
 
+
+
         /// <summary>
         /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
         /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
         /// only fire for the new objects added to the collection, not for the ones that already existed).
         /// </summary>
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        /// <param name="collection">The collection to refresh</param>
+        /// <param name="collection">The collection to refresh</param> 
         protected override void DoRefresh<T>(BusinessObjectCollection<T> collection) 
         {
             IClassDef classDef = collection.ClassDef;
             SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
             QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
 
-            ISqlStatement statement = selectQuery.CreateSqlStatement();
-            ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
-
-            using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
+            int totalNoOfRecords = GetTotalNoOfRecordsIfNeeded(classDef, selectQuery);
+            if (IsLoadNecessary(selectQuery, totalNoOfRecords))
             {
-                while (dr.Read())
+                ISqlStatement statement = CreateStatementAdjustedForLimits(selectQuery, totalNoOfRecords);
+                ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
+                using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
                 {
-                    T loadedBo = (T) LoadBOFromReader(collection.ClassDef, dr, selectQuery);
-                    //If the origional collection had the new business object then
-                    // use add internal this adds without any events being raised etc.
-                    //else adds via the Add method (normal add) this raises events such that the 
-                    // user interface can be updated.
-                    //Checks to see if the loaded object is the base of a single table inheritance structure
-                    // and has a sub type
-                    IClassDef correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
-                    // loads an object of the correct sub type (for single table inheritance)
-                    loadedBo = GetLoadedBoOfSpecifiedType(loadedBo, correctSubClassDef);
-                    AddBusinessObjectToCollection(collection, loadedBo);
+                    while (dr.Read())
+                    {
+                        T loadedBo = (T) LoadBOFromReader(collection.ClassDef, dr, selectQuery);
+                        //If the origional collection had the new business object then
+                        // use add internal this adds without any events being raised etc.
+                        //else adds via the Add method (normal add) this raises events such that the 
+                        // user interface can be updated.
+                        //Checks to see if the loaded object is the base of a single table inheritance structure
+                        // and has a sub type
+                        IClassDef correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
+                        // loads an object of the correct sub type (for single table inheritance)
+                        loadedBo = GetLoadedBoOfSpecifiedType(loadedBo, correctSubClassDef);
+                        AddBusinessObjectToCollection(collection, loadedBo);
+                    }
                 }
             }
+            else
+            {
+                //The first record is past the end of the available records, so return an empty collection.
+                ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
+            }
+
+            if (totalNoOfRecords == -1)
+            {
+                collection.TotalCountAvailableForPaging = collection.Count;
+            } else
+            {
+                collection.TotalCountAvailableForPaging = totalNoOfRecords;
+            }
+            
 
             //The collection should show all loaded object less removed or deleted object not yet persisted
             //     plus all created or added objects not yet persisted.
@@ -322,6 +341,7 @@ namespace Habanero.BO
         /// only fire for the new objects added to the collection, not for the ones that already existed).
         /// </summary>
         /// <param name="collection">The collection to refresh</param>
+        //TODO 17 Feb 2009 - Mark : NNB! This method is very different to the DoRefresh<T> method above. Check if this method is tested.
         protected override void DoRefresh(IBusinessObjectCollection collection)
         {
             SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
@@ -339,6 +359,51 @@ namespace Habanero.BO
                 }
             }
             RestoreEditedLists(collection);
+        }
+
+        private int GetTotalNoOfRecordsIfNeeded(IClassDef classDef, SelectQueryDB selectQuery)
+        {
+            int totalNoOfRecords = -1;
+            if ((selectQuery.FirstRecordToLoad > 0) || (selectQuery.Limit >= 0))
+            {
+                totalNoOfRecords = GetCount(classDef, selectQuery.Criteria);
+            }
+            return totalNoOfRecords;
+        }
+
+        private static bool IsLoadNecessary(SelectQueryDB selectQuery, int totalNoOfRecords)
+        {
+            if (selectQuery.FirstRecordToLoad < 0)
+            {
+                throw new IndexOutOfRangeException("FirstRecordToLoad should not be negative.");
+            }
+            //If the total number of records has not been determined, then the load is necessary.
+            if (totalNoOfRecords < 0) return true;
+            //If the limit is set to zero, then it is pointless to do a load.
+            if (selectQuery.Limit == 0) return false;
+            //If the first record is beyond the end of the records then there is nothing to load.
+            if (selectQuery.FirstRecordToLoad > totalNoOfRecords) return false;
+            return true;
+        }
+
+        private static ISqlStatement CreateStatementAdjustedForLimits(SelectQueryDB selectQuery, int totalNoOfRecords)
+        {
+            int originalLimit = selectQuery.Limit;
+            if (selectQuery.FirstRecordToLoad > 0)
+            {
+                int remainingNumberOfItems = totalNoOfRecords - selectQuery.FirstRecordToLoad;
+                if (originalLimit >= 0)
+                {
+                    selectQuery.Limit = (originalLimit < remainingNumberOfItems) ? originalLimit : remainingNumberOfItems;
+                }
+                else
+                {
+                    selectQuery.Limit = remainingNumberOfItems;
+                }
+            }
+            ISqlStatement statement = selectQuery.CreateSqlStatement();
+            selectQuery.Limit = originalLimit;
+            return statement;
         }
 
         /// <summary>

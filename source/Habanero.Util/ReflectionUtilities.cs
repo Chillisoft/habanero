@@ -40,7 +40,7 @@ namespace Habanero.Util
         ///<param name="obj">The object for which the property is being set</param>
         ///<param name="propertyName">The name of the property being set</param>
         ///<param name="enumItemName">The name of the Enumerated value (eg. this value for "TypeCode.Int64" would be "Int64")</param>
-        public static void setEnumPropertyValue(object obj, string propertyName, string enumItemName)
+        public static void SetEnumPropertyValue(object obj, string propertyName, string enumItemName)
         {
             if (obj == null) throw new HabaneroArgumentException("obj");
             if (String.IsNullOrEmpty(propertyName)) throw new HabaneroArgumentException("propertyName");

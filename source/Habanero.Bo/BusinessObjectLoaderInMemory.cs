@@ -221,14 +221,36 @@ namespace Habanero.BO
 
             List<T> loadedBos = _dataStore.FindAllInternal<T>(criteria);
             loadedBos.Sort(orderCriteria.Compare);
-            if (selectQuery.Limit >= 0)
+
+            collection.TotalCountAvailableForPaging = loadedBos.Count;
+            ApplyLimitsToList(selectQuery, loadedBos);
+            LoadBOCollection(collection, loadedBos);
+        }
+
+        private static void ApplyLimitsToList<T>(ISelectQuery selectQuery, IList<T> loadedBos)
+        {
+            int firstRecordToLoad = selectQuery.FirstRecordToLoad;
+            if (firstRecordToLoad < 0)
             {
-                while (loadedBos.Count > selectQuery.Limit)
+                throw new IndexOutOfRangeException("FirstRecordToLoad should not be negative.");
+            }
+            if (firstRecordToLoad > loadedBos.Count)
+            {
+                loadedBos.Clear();
+                return;
+            }
+            if (firstRecordToLoad > 0)
+            {
+                for (int i = 0; i < firstRecordToLoad; i++)
                 {
-                    loadedBos.RemoveAt(selectQuery.Limit);
+                    loadedBos.RemoveAt(0);
                 }
             }
-            LoadBOCollection(collection, loadedBos);
+            if (selectQuery.Limit < 0) return;
+            while (loadedBos.Count > selectQuery.Limit)
+            {
+                loadedBos.RemoveAt(selectQuery.Limit);
+            }
         }
 
         /// <summary>
