@@ -17,9 +17,11 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -92,10 +94,56 @@ namespace Habanero.Test.BO
                  "Adding a row to the table should use the collection to create the object");
             //Assert.AreEqual(2, boCollection.Count, "Adding a row to the table should not add a bo to the main collection");
             Assert.AreEqual(3, boCollection.Count, "Adding a row to the table should add a bo to the main collection");
-            //Note: This behaviour has changed and we need to asses the impact of this change.
         }
 
-        //TODO  08 Feb 2009: 
+        [Test]
+        public void TestAddRowP_RowValueDBNull_BOProp_NUll_ShouldNotRaiseException_FIXBUG()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithUIAllDataTypes();
+            BusinessObjectCollection<MyBO> boCollection = new BusinessObjectCollection<MyBO>();
+
+            _dataSetProvider = new EditableDataSetProvider(boCollection);
+            BOMapper mapper = new BOMapper(boCollection.ClassDef.CreateNewBusinessObject());
+            itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
+
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(0, boCollection.Count);
+            Assert.AreEqual(0, boCollection.CreatedBusinessObjects.Count, "Should be no created items to start");
+
+            //---------------Execute Test ----------------------
+            itsTable.Rows.Add(new object[] { DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value });
+            //---------------Test Result -----------------------
+            Assert.IsFalse(itsTable.Rows[0].HasErrors);
+            Assert.AreEqual
+                (1, boCollection.CreatedBusinessObjects.Count,
+                 "Adding a row to the table should use the collection to create the object");
+            Assert.AreEqual(1, boCollection.Count, "Adding a row to the table should add a bo to the main collection");
+        }
+        [Test]
+        public void TestAddRowP_RowValueDBNull_BOProp_DateTime_NUll_ShouldNotRaiseException_FIXBUG()
+        {
+            //---------------Set up test pack-------------------
+            SetupTestData();
+            BusinessObjectCollection<MyBO> boCollection = new BusinessObjectCollection<MyBO>();
+
+            _dataSetProvider = new EditableDataSetProvider(boCollection);
+            BOMapper mapper = new BOMapper(boCollection.ClassDef.CreateNewBusinessObject());
+            itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
+
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(0, boCollection.Count);
+            Assert.AreEqual(0, boCollection.CreatedBusinessObjects.Count, "Should be no created items to start");
+
+            //---------------Execute Test ----------------------
+            itsTable.Rows.Add(new object[] { DBNull.Value, DBNull.Value, DBNull.Value });
+            //---------------Test Result -----------------------
+            Assert.AreEqual
+                (1, boCollection.CreatedBusinessObjects.Count,
+                 "Adding a row to the table should use the collection to create the object");
+            Assert.AreEqual(1, boCollection.Count, "Adding a row to the table should add a bo to the main collection");
+        }
         [Test]
         public void TestDeleteRowMarksBOAsDeleted()
         {

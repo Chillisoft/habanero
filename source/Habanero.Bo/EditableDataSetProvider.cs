@@ -34,8 +34,7 @@ namespace Habanero.BO
     /// </summary>
     public class EditableDataSetProvider : DataSetProvider
     {
-        private static readonly ILog log =
-            LogManager.GetLogger("Habanero.BO.EditableDataSetProvider");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.EditableDataSetProvider");
 
 //        private Hashtable _rowStates;
 //
@@ -70,8 +69,7 @@ namespace Habanero.BO
         /// collection provided
         /// </summary>
         /// <param name="col">The business object collection</param>
-		public EditableDataSetProvider(IBusinessObjectCollection col)
-           : base(col)
+        public EditableDataSetProvider(IBusinessObjectCollection col) : base(col)
         {
             _rowChangedHandler = RowChangedHandler;
             _rowDeletedHandler = RowDeletedHandler;
@@ -84,11 +82,12 @@ namespace Habanero.BO
         public override void AddHandlersForUpdates()
         {
             base.AddHandlersForUpdates();
-            
+
             _table.TableNewRow += _newRowHandler;
             _table.RowChanged += _rowChangedHandler;
             _table.RowDeleting += _rowDeletedHandler;
         }
+
         /// <summary>
         /// Handles the event of a business object being added. Adds a new
         /// data row containing the object.
@@ -99,7 +98,7 @@ namespace Habanero.BO
         {
             BusinessObject businessObject = (BusinessObject) e.BusinessObject;
             int rowNum = this.FindRow(e.BusinessObject);
-            if (rowNum >= 0) return;//If row already exists in the datatable then do not add it.
+            if (rowNum >= 0) return; //If row already exists in the datatable then do not add it.
             object[] values = GetValues(businessObject);
             _table.RowChanged -= _rowChangedHandler;
             _table.LoadDataRow(values, true);
@@ -111,7 +110,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        void NewRowHandler(object sender, DataTableNewRowEventArgs e)
+        private void NewRowHandler(object sender, DataTableNewRowEventArgs e)
         {
             if (_objectInitialiser != null)
             {
@@ -210,8 +209,7 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         protected void RowChangedHandler(object sender, DataRowChangeEventArgs e)
         {
-            if (!_isBeingAdded)
-            {
+            if (_isBeingAdded) return;
 
             switch (e.Action)
             {
@@ -228,8 +226,6 @@ namespace Habanero.BO
                     RowRollback(e);
                     break;
             }
-
-        }
         }
 
         /// <summary>
@@ -265,11 +261,11 @@ namespace Habanero.BO
                 row.RowError = "";
             }
             catch (Exception ex)
-                {
-                    string message = "There was a problem saving. : " + ex.Message;
-                    row.RowError = message;
-                    GlobalRegistry.UIExceptionNotifier.Notify(ex, message, "Problem Saving");
-                }
+            {
+                string message = "There was a problem saving. : " + ex.Message;
+                row.RowError = message;
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, message, "Problem Saving");
+            }
         }
 
         /// <summary>
@@ -279,10 +275,11 @@ namespace Habanero.BO
         private void RowChanged(DataRowChangeEventArgs e)
         {
             object objectID = e.Row[IDColumnName];
-            Guid guidObjectID = Guid.Empty;
+            Guid guidObjectID;
             if (objectID == null)
             {
-                const string message = "The Editable Dataset provider is not set up correctly since the Row ID is null for a row.";
+                const string message =
+                    "The Editable Dataset provider is not set up correctly since the Row ID is null for a row.";
                 throw new HabaneroDeveloperException(message, message);
             }
 
@@ -290,7 +287,8 @@ namespace Habanero.BO
             {
                 if (guidObjectID == Guid.Empty)
                 {
-                    const string message = "The Editable Dataset provider is not set up correctly since the Row ID is Empty for a row.";
+                    const string message =
+                        "The Editable Dataset provider is not set up correctly since the Row ID is Empty for a row.";
                     throw new HabaneroDeveloperException(message, message);
                 }
                 IBusinessObject changedBo = _collection.Find(guidObjectID);
@@ -300,16 +298,16 @@ namespace Habanero.BO
                     if (uiProperty.PropertyName.IndexOf(".") == -1 && uiProperty.PropertyName.IndexOf("-") == -1)
                     {
                         changedBo.SetPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
-                    } 
-
+                    }
                 }
             }
             else
             {
-                const string message = "The Editable Dataset provider is not set up correctly since the Row ID is not set as a guid for a row.";
+                const string message =
+                    "The Editable Dataset provider is not set up correctly since the Row ID is not set as a guid for a row.";
                 throw new HabaneroDeveloperException(message, message);
             }
- 
+
             //this.AddToRowStates(e.Row, DataRowState.Modified);
         }
 
@@ -324,7 +322,7 @@ namespace Habanero.BO
                 //log.Debug("Row Added");
                 _isBeingAdded = true;
                 _collection.BusinessObjectAdded -= AddedHandler;
-                BusinessObject newBo = (BusinessObject)_collection.CreateBusinessObject();
+                BusinessObject newBo = (BusinessObject) _collection.CreateBusinessObject();
                 _collection.BusinessObjectAdded += AddedHandler;
 
                 //log.Debug("Initialising obj");
@@ -342,38 +340,36 @@ namespace Habanero.BO
                     {
                         if (DBNull.Value.Equals(row[uiProperty.PropertyName]))
                         {
-                            row[uiProperty.PropertyName] = newBo.GetPropertyValueToDisplay(uiProperty.PropertyName);
-                        }else
+                            object propertyValueToDisplay = newBo.GetPropertyValueToDisplay(uiProperty.PropertyName);
+                            if (propertyValueToDisplay != null)
+                            {
+                                row[uiProperty.PropertyName] = propertyValueToDisplay;
+                            }
+                        }
+                        else
                         {
-                            newBo.SetPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
+                            newBo.SetPropertyValue(uiProperty.PropertyName, row[uiProperty.PropertyName]);
                         }
                     }
                 }
                 _addedRows.Add(row, newBo);
-                //AddNewRowToCollection(newBo);
-                //log.Debug(newBo.GetDebugOutput()) ;
                 if (newBo.ID.ObjectID == Guid.Empty)
                 {
-                    throw new HabaneroDeveloperException("Serios error", "Serios error"); //TODO Brett 10 Feb 2009: 
+                    throw new HabaneroDeveloperException
+                        ("Serious error The objectID is Emnpty", "Serious error The objectID is Emnpty");
                 }
-                //                e.Row[IDColumnName] = newBo.ID.ObjectID;
-                //                if (!_rowIDs.ContainsKey(e.Row))
-                //                {
-                //                    _rowIDs.Add(e.Row, e.Row[IDColumnName]);
-                ////                    AddToRowStates(e.Row, RowState.Added);
-                //                }
-                //log.Debug("Row added complete.") ;
-                //log.Debug(newBo.GetDebugOutput()) ;
                 _isBeingAdded = false;
-                //                this.RowChanged(e);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 _isBeingAdded = false;
+                if (e.Row != null)
+                {
+                    e.Row.RowError = ex.Message;
+                }
                 throw;
             }
-            finally { _isBeingAdded = false; }
-
+//            finally { _isBeingAdded = false; }
         }
 
         ///// <summary>

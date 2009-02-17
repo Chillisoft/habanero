@@ -837,6 +837,51 @@ namespace Habanero.Test
 			ClassDef.ClassDefs.Add(itsClassDef);
 			return itsClassDef;
         }
+        public static ClassDef LoadClassDefWithUIAllDataTypes()
+        {
+            
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID""  type=""Guid""/>
+					<property  name=""TestProp"" type=""Int32"" />
+					<property  name=""TestProp1"" type=""DateTime"" />
+					<property  name=""TestProp2"" type=""Decimal"" />
+					<property  name=""TestProp3"" type=""Double"" />
+					<property  name=""TestProp4""  type=""Single"" />
+					<property  name=""TestProp5""  type=""TimeSpan"" />
+					<property  name=""TestProp6"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column  property=""TestProp1"" type=""DataGridViewTextBoxColumn"" />
+							<column  property=""TestProp2"" type=""DataGridViewTextBoxColumn"" />
+							<column property=""TestProp3"" type=""DataGridViewTextBoxColumn"" />
+							<column  property=""TestProp4"" type=""DataGridViewTextBoxColumn"" />
+							<column  property=""TestProp5"" type=""DataGridViewTextBoxColumn"" />
+							<column property=""TestProp6"" type=""DataGridViewTextBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+
+
+			");
+			ClassDef.ClassDefs.Add(itsClassDef);
+			return itsClassDef;
+        }
 
         public static ClassDef LoadClassDefWithSimpleIntegerLookup()
         {
