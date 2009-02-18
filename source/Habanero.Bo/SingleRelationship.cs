@@ -266,9 +266,11 @@ namespace Habanero.BO
             
 
             RemoveFromReverseRelationship(_relatedBo);
+            
+            _relatedBo = relatedObject;
+            
             AddToReverseRelationship(relatedObject);
 
-            _relatedBo = relatedObject;
             UpdatedForeignKeyAndStoredRelationshipExpression();
 
             FireUpdatedEvent();
