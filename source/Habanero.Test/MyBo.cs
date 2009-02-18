@@ -23,6 +23,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
+using Habanero.DB;
 
 namespace Habanero.Test
 {
@@ -1537,6 +1538,12 @@ namespace Habanero.Test
             classDef.PropDefcol["TestProp"].DefaultValueString = testPropDefault;
             return classDef;
         }
+
+        public static void DeleteAllMyBos()
+        {
+            string sql = "DELETE FROM mybo";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+        }
     }
 
     public class MyRelatedBo : BusinessObject
@@ -1843,5 +1850,7 @@ namespace Habanero.Test
             message = "";
             return _deletable; 
         }
+
+
     }
 }

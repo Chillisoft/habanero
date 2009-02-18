@@ -60,7 +60,5 @@ namespace Habanero.UI.Base
         /// (eg. myGridWithButtons.Grid.AddBusinessObject(...)).
         /// </summary>    
         new IEditableGrid Grid { get; }
-
-    
     }
 }

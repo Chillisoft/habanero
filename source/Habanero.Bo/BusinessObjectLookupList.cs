@@ -56,7 +56,13 @@ namespace Habanero.BO
         private OrderCriteria _orderCriteria;
         private readonly string _criteriaString;
         private readonly string _sortString;
-
+        ///<summary>
+        /// This is a delegate used for converting aprimary key to string this is declared so that 
+        /// the <see cref="BusinessObjectLookupList.CreateDisplayValueDictionary(IBusinessObjectCollection,bool)"/>
+        /// can be used externally without a Prop Def being defined
+        ///</summary>
+        ///<param name="primaryKeyGetAsValue">The PrimaryKey.GetAsValue</param>
+        public delegate string ConvertPrimaryKeyGetAsValueToString(object primaryKeyGetAsValue);
         #region Constructors
 
         /// <summary>
@@ -334,28 +340,18 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="col">The business object collection</param>
         /// <param name="sortByDisplayValue">Must the collection be sorted by the display value or not</param>
+        /// <param name="coverter">The delegated converter that converts a primary key to the appropriate string</param>
         /// <returns>Returns a collection of display-value pairs</returns>
-        public Dictionary<string, string> CreateDisplayValueDictionary
-            (IBusinessObjectCollection col, bool sortByDisplayValue)
+        public static Dictionary<string, string> CreateDisplayValueDictionary
+            (IBusinessObjectCollection col, bool sortByDisplayValue, ConvertPrimaryKeyGetAsValueToString coverter)
         {
-            if (col == null)
-            {
-                return new Dictionary<string, string>();
-            }
-            if (this.PropDef == null)
-            {
-                throw new HabaneroDeveloperException
-                    ("There is an application setup error. There is no propdef set for the business object lookup list. Please contact your system administrator",
-                     "There is no propdef set for the business object lookup list.");
-            }
-
             if (sortByDisplayValue)
             {
                 SortedDictionary<string, string> sortedLookupList = new SortedDictionary<string, string>();
                 foreach (BusinessObject bo in col)
                 {
                     string stringValue = GetAvailableDisplayValue(sortedLookupList, bo.ToString());
-                    sortedLookupList.Add(stringValue, this.PropDef.ConvertValueToString(bo.ID.GetAsValue()));
+                    sortedLookupList.Add(stringValue, coverter(bo.ID.GetAsValue()));
                 }
 
                 Dictionary<string, string> lookupList = new Dictionary<string, string>();
@@ -371,11 +367,37 @@ namespace Habanero.BO
                 foreach (BusinessObject bo in col)
                 {
                     string stringValue = GetAvailableDisplayValue(lookupList, bo.ToString());
-                    string objectID = this.PropDef.ConvertValueToString(bo.ID.GetAsValue());
+                    string objectID = coverter(bo.ID.GetAsValue());
                     AddBusinessObjectToLookupList(lookupList, objectID, stringValue);
                 }
                 return lookupList;
             }
+
+        }
+
+        /// <summary>
+        /// Returns a collection of string Guid pairs from the business object
+        /// collection provided. Each pair consists of a string version of a
+        /// business object and the object's ID.
+        /// </summary>
+        /// <param name="col">The business object collection</param>
+        /// <param name="sortByDisplayValue">Must the collection be sorted by the display value or not</param>
+        /// <returns>Returns a collection of display-value pairs</returns>
+        public Dictionary<string, string> CreateDisplayValueDictionary
+            (IBusinessObjectCollection col, bool sortByDisplayValue)
+        {
+            if (col == null)
+            {
+                return new Dictionary<string, string>();
+            }
+            if (this.PropDef == null)
+            {
+                throw new HabaneroDeveloperException
+                    ("There is an application setup error. There is no propdef set for the business object lookup list. Please contact your system administrator",
+                     "There is no propdef set for the business object lookup list.");
+            }
+
+            return CreateDisplayValueDictionary(col, sortByDisplayValue, this.PropDef.ConvertValueToString);
         }
 
         private static void AddBusinessObjectToLookupList

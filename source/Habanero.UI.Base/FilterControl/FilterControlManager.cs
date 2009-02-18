@@ -153,11 +153,15 @@ namespace Habanero.UI.Base
         /// <summary>
         /// See <see cref="IFilterControl.AddDateFilterDateTimePicker"/>
         /// </summary>
-        public ICustomFilter AddDateFilterDateTimePicker(string labelText, string propertyName, FilterClauseOperator filterClauseOperator, DateTime defaultDate)
+        public ICustomFilter AddDateFilterDateTimePicker(string labelText, string propertyName, FilterClauseOperator filterClauseOperator, DateTime? defaultDate)
         {
             DateTimePickerFilter filter = new DateTimePickerFilter(_controlFactory, propertyName, filterClauseOperator);
             AddCustomFilter(labelText, filter);
-            filter.DefaultDate = defaultDate;
+            if (defaultDate != null)
+            {
+                filter.DefaultDate = defaultDate.Value;
+            }
+            
 
             return filter;
         }
@@ -466,7 +470,7 @@ namespace Habanero.UI.Base
         private readonly string _propertyName;
         private readonly FilterClauseOperator _filterClauseOperator;
         private readonly IDateTimePicker _dateTimePicker;
-        private DateTime _defaultDate;
+        private DateTime? _defaultDate;
 
         ///<summary>
         /// An overridden constructor for controlFactory, propertyName and filterClauseOperator.
@@ -513,13 +517,13 @@ namespace Habanero.UI.Base
         ///<summary>
         /// Gets and Sets the DefaultDate that is used by the DateTimePicker.
         ///</summary>
-        public DateTime DefaultDate
+        public DateTime? DefaultDate
         {
             get { return _defaultDate; }
             set
             {
                 _defaultDate = value;
-                _dateTimePicker.Value = _defaultDate;
+                _dateTimePicker.ValueOrNull = _defaultDate;
         } }
         public FilterClauseOperator FilterClauseOperator { get { return _filterClauseOperator; } }
     }
