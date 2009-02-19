@@ -30,7 +30,7 @@ namespace Habanero.BO
     /// Provides an exception to throw when a business object is not found
     /// </summary>
     [Serializable]
-    public abstract class BusinessObjectException : Exception
+    public abstract class BusinessObjectException : HabaneroApplicationException
     {
         /// <summary>
         /// Constructor to initialise the exception
