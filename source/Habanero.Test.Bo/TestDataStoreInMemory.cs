@@ -29,12 +29,26 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestDataStoreInMemory
     {
+        private string _testFolderName;
+
+        public string GetTestPath(string folderName)
+        {
+            return Path.Combine(_testFolderName, folderName);
+        }
 
         [SetUp]
         public void Setup()
         {
             ClassDef.ClassDefs.Clear();
             new Address();
+            _testFolderName = Path.Combine(Environment.CurrentDirectory, "TestFolder");
+            if (!Directory.Exists(_testFolderName)) Directory.CreateDirectory(_testFolderName);
+        }
+
+        [TearDown]
+        public void TearDownTest()
+        {
+            if (Directory.Exists(_testFolderName)) Directory.Delete(_testFolderName, true);
         }
 
         [Test]
@@ -338,8 +352,8 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             DataStoreInMemory dataStore = new DataStoreInMemory();
             dataStore.Add(new Car());
-            const string fullFileName = @"C:\NonExistent\Brett.dt";
-            const string path = @"C:\NonExistent\";
+            string path = GetTestPath(@"NonExistent");
+            string fullFileName = Path.Combine(path,"TestStore.dt");
             if (File.Exists(fullFileName)) File.Delete(fullFileName);
             if (Directory.Exists(path)) Directory.Delete(path);
             //---------------Assert Precondition----------------
@@ -358,7 +372,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             DataStoreInMemory dataStore = new DataStoreInMemory();
             dataStore.Add(new Car());
-            const string fullFileName = @"C:\Brett.dt";
+            string fullFileName = GetTestPath(@"TestStore.dt");
             File.Delete(fullFileName);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, dataStore.Count);
@@ -377,7 +391,7 @@ namespace Habanero.Test.BO
             MyBO.LoadClassDefsNoUIDef();
             DataStoreInMemory savedDataStore = new DataStoreInMemory();
             savedDataStore.Add(new MyBO());
-            const string fullFileName = @"C:\Brett.dt";
+            string fullFileName = GetTestPath(@"TestStore.dt");
             File.Delete(fullFileName);
             savedDataStore.Save(fullFileName);
             BusinessObjectManager.Instance = new BusinessObjectManager();
@@ -396,7 +410,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefsNoUIDef();
-            const string fullFileName = @"C:\Brett.dat";
+            string fullFileName = GetTestPath(@"TestStore.dt");
             File.Delete(fullFileName);
             BusinessObjectManager.Instance = new BusinessObjectManager();
             //---------------Assert Precondition----------------
@@ -414,8 +428,8 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefsNoUIDef();
-            const string path = @"C:\NonExistent\";
-            const string fullFileName =  path + @"Brett.dt";
+            string path = GetTestPath(@"NonExistent");
+            string fullFileName = Path.Combine(path, "TestStore.dt");
             if (File.Exists(fullFileName)) File.Delete(fullFileName);
             if (Directory.Exists(path)) Directory.Delete(path);
             BusinessObjectManager.Instance = new BusinessObjectManager();
@@ -431,7 +445,7 @@ namespace Habanero.Test.BO
 
         private static void AssertDirectoryDoesNotExist(string fullFileName)
         {
-            Assert.IsFalse(Directory.Exists(Path.GetDirectoryName(fullFileName)), "The Directory : " + fullFileName + " exists but should not");
+            Assert.IsFalse(Directory.Exists(fullFileName), "The Directory : " + fullFileName + " exists but should not");
         }
         private static void AssertFileHasBeenCreated(string fullFileName)
         {
