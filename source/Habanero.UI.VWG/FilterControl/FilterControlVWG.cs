@@ -224,7 +224,7 @@ namespace Habanero.UI.VWG
         /// right side of the equation.</param>
         /// <param name="nullable">Whether the datetime picker allows null values</param>
         /// <returns>Returns the new DateTimePicker added</returns>
-        public IDateTimePicker AddDateFilterDateTimePicker(string labelText, string propertyName, DateTime defaultValue,
+        public IDateTimePicker AddDateFilterDateTimePicker(string labelText, string propertyName, DateTime? defaultValue,
                                                            FilterClauseOperator filterClauseOperator, bool nullable)
         {
             //IDateTimePicker dtPicker =

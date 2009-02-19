@@ -25,7 +25,6 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.Util;
-using Habanero.Util;
 using log4net;
 
 namespace Habanero.UI.Base
@@ -222,34 +221,35 @@ namespace Habanero.UI.Base
             //}
             if (_isEditable && !virtualPropertySetExists)
             {
-                if (_businessObject.ClassDef.PropDefColIncludingInheritance.Contains(_propertyName))
-                {
-                    IPropDef propDef = _businessObject.ClassDef.PropDefColIncludingInheritance[_propertyName];
-                    IBOProp boProp = CurrentBOProp();
-                    switch (propDef.ReadWriteRule)
+                if (_businessObject != null)
+                    if (_businessObject.ClassDef.PropDefColIncludingInheritance.Contains(_propertyName))
                     {
-                        case PropReadWriteRule.ReadOnly:
-                            _isEditable = false;
-                            break;
-                        case PropReadWriteRule.WriteOnce:
-                            object persistedPropertyValue = boProp.PersistedPropertyValue;
-                            if (persistedPropertyValue is string)
-                            {
-                                _isEditable = String.IsNullOrEmpty(persistedPropertyValue as string);
-                            }
-                            else
-                            {
-                                _isEditable = persistedPropertyValue == null;
-                            }
-                            break;
-                        case PropReadWriteRule.WriteNew:
-                            _isEditable = _businessObject.Status.IsNew;
-                            break;
-                        case PropReadWriteRule.WriteNotNew:
-                            _isEditable = !_businessObject.Status.IsNew;
-                            break;
+                        IPropDef propDef = _businessObject.ClassDef.PropDefColIncludingInheritance[_propertyName];
+                        IBOProp boProp = CurrentBOProp();
+                        switch (propDef.ReadWriteRule)
+                        {
+                            case PropReadWriteRule.ReadOnly:
+                                _isEditable = false;
+                                break;
+                            case PropReadWriteRule.WriteOnce:
+                                object persistedPropertyValue = boProp.PersistedPropertyValue;
+                                if (persistedPropertyValue is string)
+                                {
+                                    _isEditable = String.IsNullOrEmpty(persistedPropertyValue as string);
+                                }
+                                else
+                                {
+                                    _isEditable = persistedPropertyValue == null;
+                                }
+                                break;
+                            case PropReadWriteRule.WriteNew:
+                                _isEditable = _businessObject.Status.IsNew;
+                                break;
+                            case PropReadWriteRule.WriteNotNew:
+                                _isEditable = !_businessObject.Status.IsNew;
+                                break;
+                        }
                     }
-                }
             }
             if (_isEditable)
             {
@@ -303,7 +303,7 @@ namespace Habanero.UI.Base
             if (string.IsNullOrEmpty(mapperTypeName)) mapperTypeName = "TextBoxMapper";
 
             if (mapperTypeName == "TextBoxMapper" && !(ctl is ITextBox))
-                // TODO && !(ctl is PasswordTextBox))
+                // TODO: Port && !(ctl is PasswordTextBox))
             {
                 if (ctl is IComboBox) mapperTypeName = "LookupComboBoxMapper";
                 else if (ctl is ICheckBox) mapperTypeName = "CheckBoxMapper";
@@ -333,26 +333,23 @@ namespace Habanero.UI.Base
                 mapperType = TypeLoader.LoadType(mapperAssembly, mapperTypeName);
             }
             IControlMapper controlMapper;
-            if (mapperType != null
-                &&
-                mapperType.FindInterfaces
-                    (delegate(Type type, Object filterCriteria) { return type == typeof (IControlMapper); }, "").Length
-                > 0)
+            if (mapperType != null 
+               && mapperType.FindInterfaces ((type, filterCriteria) => type == typeof (IControlMapper), "").Length > 0)
             {
                 try
                 {
                     controlMapper =
-                        (IControlMapper)
-                        Activator.CreateInstance(mapperType, new object[] {ctl, propertyName, isReadOnly});
+                            (IControlMapper)
+                            Activator.CreateInstance(mapperType, new object[] {ctl, propertyName, isReadOnly});
                 } 
-                    //TODO - lookupcomboboxmapper has a slightly different constructor- perhaps all control mappers
-                    // should have a constructor that takes an IcontrolFactory ?
+
                 catch (MissingMethodException)
                 {
+                    //This is to deal with the fact that lookupcomboboxmapper has a slightly different constructor- perhaps all control mappers
+                    // should have a constructor that takes an IcontrolFactory ?
                     controlMapper =
-                        (IControlMapper)
-                        Activator.CreateInstance
-                            (mapperType, new object[] {ctl, propertyName, isReadOnly, controlFactory});
+                            (IControlMapper) 
+                            Activator.CreateInstance (mapperType, new object[] {ctl, propertyName, isReadOnly, controlFactory});
                 }
             }
             else
@@ -397,10 +394,13 @@ namespace Habanero.UI.Base
                 this.ErrorProvider.SetError(_control, ex.Message);
                 return;
             }
-            IBOProp prop = _businessObject.Props[_propertyName];
-            if (prop != null)
+            if (_businessObject.Props.Contains(_propertyName))
             {
-                _errorProvider.SetError(_control, prop.InvalidReason);
+                IBOProp prop = _businessObject.Props[_propertyName];
+                if (prop != null)
+                {
+                    _errorProvider.SetError(_control, prop.InvalidReason);
+                }
             }
         }
 

@@ -25,7 +25,8 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO.BusinessObjectLoader
 {
-    public abstract class TestBusinessObjectLoader_RefreshCollection 
+    [TestFixture]
+    public class TestBusinessObjectLoader_RefreshCollection 
     {
         #region Setup/Teardown
 
@@ -45,33 +46,22 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
         #endregion
 
-        protected abstract void SetupDataAccessor();
+        private DataStoreInMemory _dataStore;
 
-        protected abstract void DeleteEnginesAndCars();
-        /// <summary>
-        /// Tests loading a collection of business objects from memory.
-        /// </summary>
-        [TestFixture]
-        public class TestBusinessObjectLoader_GetBusinessObjectCollectionInMemory :
-            TestBusinessObjectLoader_GetBusinessObjectCollection
+        protected virtual void SetupDataAccessor()
         {
-            private DataStoreInMemory _dataStore;
+            _dataStore = new DataStoreInMemory();
+            BORegistry.DataAccessor = new DataAccessorInMemory(_dataStore);
+        }
 
-            protected override void SetupDataAccessor()
-            {
-                _dataStore = new DataStoreInMemory();
-                BORegistry.DataAccessor = new DataAccessorInMemory(_dataStore);
-            }
-
-            protected override void DeleteEnginesAndCars()
-            {
-                // do nothing
-            }
+        protected virtual void DeleteEnginesAndCars()
+        {
+            // do nothing
         }
 
         [TestFixture]
-        public class TestBusinessObjectLoader_GetBusinessObjectCollectionDB :
-            TestBusinessObjectLoader_GetBusinessObjectCollection
+        public class TestBusinessObjectLoader_RefreshCollectionDB :
+            TestBusinessObjectLoader_RefreshCollection
         {
             #region Setup/Teardown
 
@@ -90,7 +80,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 Car.DeleteAllCars();
             }
 
-            public TestBusinessObjectLoader_GetBusinessObjectCollectionDB()
+            public TestBusinessObjectLoader_RefreshCollectionDB()
             {
                 new TestUsingDatabase().SetupDBConnection();
             }
@@ -98,6 +88,43 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             protected override void SetupDataAccessor()
             {
                 BORegistry.DataAccessor = new DataAccessorDB();
+            }
+
+            [Test]
+            public void TestRefreshCollectionRefreshesNonDirtyObjects()
+            {
+                //---------------Set up test pack-------------------
+                BORegistry.DataAccessor = new DataAccessorDB();
+                ContactPersonTestBO.DeleteAllContactPeople();
+
+                ContactPersonTestBO.LoadDefaultClassDef();
+                BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+
+                ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson();
+                BusinessObjectManager.Instance.ClearLoadedObjects();
+
+                ContactPersonTestBO.CreateSavedContactPerson();
+                ContactPersonTestBO.CreateSavedContactPerson();
+                col.LoadAll();
+                string newSurname = Guid.NewGuid().ToString();
+                cp1.Surname = newSurname;
+                cp1.Save();
+                ContactPersonTestBO secondInstanceOfCP1 = col.FindByGuid(cp1.ContactPersonID);
+
+                //--------------------Assert Preconditions----------
+                Assert.IsFalse(col.Contains(cp1));
+                Assert.AreEqual(3, col.Count);
+                Assert.AreEqual(newSurname, cp1.Surname);
+                Assert.AreNotSame(secondInstanceOfCP1, cp1);
+                Assert.AreNotEqual(newSurname, secondInstanceOfCP1.Surname);
+                Assert.IsFalse(cp1.Status.IsDirty);
+                //---------------Execute Test ----------------------
+                BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
+
+                //---------------Test Result -----------------------
+                Assert.AreEqual(3, col.Count);
+                Assert.AreNotSame(secondInstanceOfCP1, cp1);
+                Assert.AreEqual(newSurname, secondInstanceOfCP1.Surname);
             }
         }
         #region Refresh
@@ -799,43 +826,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual(3, col.Count);
             Assert.AreEqual(newSurname, cp1.Surname);
             Assert.IsTrue(cp1.Status.IsDirty);
-        }
-
-        [Test]
-        public void TestRefreshCollectionRefreshesNonDirtyObjects()
-        {
-            //---------------Set up test pack-------------------
-            BORegistry.DataAccessor = new DataAccessorDB();
-            ContactPersonTestBO.DeleteAllContactPeople();
-
-            ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-
-            ContactPersonTestBO.CreateSavedContactPerson();
-            ContactPersonTestBO.CreateSavedContactPerson();
-            col.LoadAll();
-            string newSurname = Guid.NewGuid().ToString();
-            cp1.Surname = newSurname;
-            cp1.Save();
-            ContactPersonTestBO secondInstanceOfCP1 = col.FindByGuid(cp1.ContactPersonID);
-
-            //--------------------Assert Preconditions----------
-            Assert.IsFalse(col.Contains(cp1));
-            Assert.AreEqual(3, col.Count);
-            Assert.AreEqual(newSurname, cp1.Surname);
-            Assert.AreNotSame(secondInstanceOfCP1, cp1);
-            Assert.AreNotEqual(newSurname, secondInstanceOfCP1.Surname);
-            Assert.IsFalse(cp1.Status.IsDirty);
-            //---------------Execute Test ----------------------
-            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(3, col.Count);
-            Assert.AreNotSame(secondInstanceOfCP1, cp1);
-            Assert.AreEqual(newSurname, secondInstanceOfCP1.Surname);
         }
 
         [Test]

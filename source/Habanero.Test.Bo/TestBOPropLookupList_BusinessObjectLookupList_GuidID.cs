@@ -1312,6 +1312,8 @@ namespace Habanero.Test.BO
             Assert.AreEqual(null, boProp.PropertyValueToDisplay);
         }
 
+ 
+
         #endregion
 
         private class BOPropLookupList_Stub : BOPropLookupList

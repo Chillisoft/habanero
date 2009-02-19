@@ -18,19 +18,35 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Runtime.Serialization;
 using System.Xml;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
+using Habanero.DB;
+using Habanero.Util;
 
 namespace Habanero.Test
 {
     /// <summary>
     /// Summary description for MyBO.
     /// </summary>
+    [Serializable]
     public class MyBO : BusinessObject
     {
+        protected MyBO(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+
+        protected internal MyBO(ClassDef def) : base(def)
+        {
+        }
+
+        public MyBO()
+        {
+        }
+
         protected override ClassDef ConstructClassDef()
         {
             return _classDef;
@@ -837,6 +853,51 @@ namespace Habanero.Test
 			ClassDef.ClassDefs.Add(itsClassDef);
 			return itsClassDef;
         }
+        public static ClassDef LoadClassDefWithUIAllDataTypes()
+        {
+            
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID""  type=""Guid""/>
+					<property  name=""TestProp"" type=""Int32"" />
+					<property  name=""TestProp1"" type=""DateTime"" />
+					<property  name=""TestProp2"" type=""Decimal"" />
+					<property  name=""TestProp3"" type=""Double"" />
+					<property  name=""TestProp4""  type=""Single"" />
+					<property  name=""TestProp5""  type=""TimeSpan"" />
+					<property  name=""TestProp6"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column  property=""TestProp1"" type=""DataGridViewTextBoxColumn"" />
+							<column  property=""TestProp2"" type=""DataGridViewTextBoxColumn"" />
+							<column property=""TestProp3"" type=""DataGridViewTextBoxColumn"" />
+							<column  property=""TestProp4"" type=""DataGridViewTextBoxColumn"" />
+							<column  property=""TestProp5"" type=""DataGridViewTextBoxColumn"" />
+							<column property=""TestProp6"" type=""DataGridViewTextBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+
+
+			");
+			ClassDef.ClassDefs.Add(itsClassDef);
+			return itsClassDef;
+        }
 
         public static ClassDef LoadClassDefWithSimpleIntegerLookup()
         {
@@ -1411,7 +1472,16 @@ namespace Habanero.Test
         ///<filterpriority>2</filterpriority>
         public override string ToString()
         {
-            return this.TestProp + " - " + this.MyBoID;
+            if (Props.Contains("TestProp"))
+            {
+                return this.TestProp + " - " + this.MyBoID;
+                
+            }
+            if (this.MyBoID == null)
+            {
+                return this.ClassDef.ClassNameFull;
+            }
+            return StringUtilities.GuidToUpper(this.MyBoID.Value);
         }
 
         public static ClassDef GetLoadClassDefsUIDefNoFormDef()
@@ -1491,6 +1561,12 @@ namespace Habanero.Test
             ClassDef classDef = LoadDefaultClassDef();
             classDef.PropDefcol["TestProp"].DefaultValueString = testPropDefault;
             return classDef;
+        }
+
+        public static void DeleteAllMyBos()
+        {
+            string sql = "DELETE FROM mybo";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
     }
 
@@ -1798,5 +1874,7 @@ namespace Habanero.Test
             message = "";
             return _deletable; 
         }
+
+
     }
 }

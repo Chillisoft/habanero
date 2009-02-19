@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.IO;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -258,7 +259,7 @@ namespace Habanero.Test.BO
             ContactPersonCompositeKey contactPerson = new ContactPersonCompositeKey();
             contactPerson.Save();
             //---------------Assert Precondition----------------
-            Assert.IsFalse(dataStore.AllObjects.ContainsKey(contactPerson.ID));
+            Assert.IsFalse(dataStore.AllObjects.ContainsKey(contactPerson.ID.ObjectID));
             //---------------Execute Test ----------------------
             dataStore.Add(contactPerson);
             //In the save process the ID is updated to the persisted field values, so the hash of the ID changes
@@ -267,7 +268,7 @@ namespace Habanero.Test.BO
             contactPerson.PK1Prop1 = TestUtil.GetRandomString();
             contactPerson.Save();  
             //---------------Test Result -----------------------
-            Assert.IsTrue(dataStore.AllObjects.ContainsKey(contactPerson.ID));
+            Assert.IsTrue(dataStore.AllObjects.ContainsKey(contactPerson.ID.ObjectID));
         }
 
         [Test]
@@ -294,8 +295,8 @@ namespace Habanero.Test.BO
 //            // this is why the object is removed and re-added to the BusinessObjectManager (to ensure the dictionary
 //            // of objects is hashed on the correct, updated value.
 //            intID_DifferentType.Save();
-            IBusinessObject returnedBOWitID = dataStore.AllObjects[boWithIntID.ID];
-            IBusinessObject returnedBOWitID_diffType = dataStore.AllObjects[intID_DifferentType.ID];
+            IBusinessObject returnedBOWitID = dataStore.AllObjects[boWithIntID.ID.ObjectID];
+            IBusinessObject returnedBOWitID_diffType = dataStore.AllObjects[intID_DifferentType.ID.ObjectID];
 
             //---------------Test Result -----------------------
             Assert.AreSame(boWithIntID, returnedBOWitID);
@@ -322,14 +323,124 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(2, dataStore.Count);
 
-            Assert.IsTrue(dataStore.AllObjects.ContainsKey(boWithIntID.ID));
-            Assert.IsTrue(dataStore.AllObjects.ContainsKey(intID_DifferentType.ID));
+            Assert.IsTrue(dataStore.AllObjects.ContainsKey(boWithIntID.ID.ObjectID));
+            Assert.IsTrue(dataStore.AllObjects.ContainsKey(intID_DifferentType.ID.ObjectID));
 
-            IBusinessObject returnedBOWitID = dataStore.AllObjects[boWithIntID.ID];
-            IBusinessObject returnedBOWitID_diffType = dataStore.AllObjects[intID_DifferentType.ID];
+            IBusinessObject returnedBOWitID = dataStore.AllObjects[boWithIntID.ID.ObjectID];
+            IBusinessObject returnedBOWitID_diffType = dataStore.AllObjects[intID_DifferentType.ID.ObjectID];
 
             Assert.AreSame(boWithIntID, returnedBOWitID);
             Assert.AreSame(intID_DifferentType, returnedBOWitID_diffType);
+        }
+
+        [Test]
+        public void Test_SaveDataStore_ToFile_DirectoryDoesNotExist_CreatesOne()
+        {
+            //---------------Set up test pack-------------------
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            dataStore.Add(new Car());
+            const string fullFileName = @"C:\NonExistent\Brett.dt";
+            const string path = @"C:\NonExistent\";
+            if (File.Exists(fullFileName)) File.Delete(fullFileName);
+            if (Directory.Exists(path)) Directory.Delete(path);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, dataStore.Count);
+            AssertFileDoesNotExist(fullFileName);
+            AssertDirectoryDoesNotExist(fullFileName);
+            //---------------Execute Test ----------------------
+            dataStore.Save(fullFileName);
+            //---------------Test Result -----------------------
+            AssertFileHasBeenCreated(fullFileName);
+            //_contents = File.ReadAllText(solutionFileName);
+        }
+        [Test]
+        public void Test_SaveDataStore_ToFile()
+        {
+            //---------------Set up test pack-------------------
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            dataStore.Add(new Car());
+            const string fullFileName = @"C:\Brett.dt";
+            File.Delete(fullFileName);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, dataStore.Count);
+            AssertFileDoesNotExist(fullFileName);
+            //---------------Execute Test ----------------------
+            dataStore.Save(fullFileName);
+            //---------------Test Result -----------------------
+            AssertFileHasBeenCreated(fullFileName);
+            //_contents = File.ReadAllText(solutionFileName);
+        }
+        [Test]
+        public void Test_LoadDataStore_FromFile()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefsNoUIDef();
+            DataStoreInMemory savedDataStore = new DataStoreInMemory();
+            savedDataStore.Add(new MyBO());
+            const string fullFileName = @"C:\Brett.dt";
+            File.Delete(fullFileName);
+            savedDataStore.Save(fullFileName);
+            BusinessObjectManager.Instance = new BusinessObjectManager();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, savedDataStore.Count);
+            AssertFileHasBeenCreated(fullFileName);
+            //---------------Execute Test ----------------------
+            DataStoreInMemory loadedDataStore = new DataStoreInMemory();
+            loadedDataStore.Load(fullFileName);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, loadedDataStore.Count);
+        }
+        [Test]
+        public void Test_LoadDataStore_FromFile_DoesNotExist()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefsNoUIDef();
+            const string fullFileName = @"C:\Brett.dat";
+            File.Delete(fullFileName);
+            BusinessObjectManager.Instance = new BusinessObjectManager();
+            //---------------Assert Precondition----------------
+            AssertFileDoesNotExist(fullFileName);
+
+            //---------------Execute Test ----------------------
+            DataStoreInMemory loadedDataStore = new DataStoreInMemory();
+            loadedDataStore.Load(fullFileName);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, loadedDataStore.Count);
+        }
+        [Test]
+        public void Test_LoadDataStore_FromFile_DirectoryDoesNotExist()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefsNoUIDef();
+            const string path = @"C:\NonExistent\";
+            const string fullFileName =  path + @"Brett.dt";
+            if (File.Exists(fullFileName)) File.Delete(fullFileName);
+            if (Directory.Exists(path)) Directory.Delete(path);
+            BusinessObjectManager.Instance = new BusinessObjectManager();
+            //---------------Assert Precondition----------------
+            AssertFileDoesNotExist(fullFileName);
+            AssertDirectoryDoesNotExist(path);
+            //---------------Execute Test ----------------------
+            DataStoreInMemory loadedDataStore = new DataStoreInMemory();
+            loadedDataStore.Load(fullFileName);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, loadedDataStore.Count);
+        }
+
+        private static void AssertDirectoryDoesNotExist(string fullFileName)
+        {
+            Assert.IsFalse(Directory.Exists(Path.GetDirectoryName(fullFileName)), "The Directory : " + fullFileName + " exists but should not");
+        }
+        private static void AssertFileHasBeenCreated(string fullFileName)
+        {
+            Assert.IsTrue(File.Exists(fullFileName), "The file : " + fullFileName + " should have been created");
+        }
+        private static void AssertFileDoesNotExist(string fullFileName)
+        {
+            Assert.IsFalse(File.Exists(fullFileName), "The file : " + fullFileName + " should not exist");
         }
     }
 }

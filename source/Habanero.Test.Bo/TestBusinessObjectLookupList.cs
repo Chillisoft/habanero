@@ -20,7 +20,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -461,6 +460,60 @@ namespace Habanero.Test.BO
             AssertCorrectlySortedBusinessObjectInList(items, 1, "abcd");
             AssertCorrectlySortedBusinessObjectInList(items, 2, "abc");
 
+        }
+
+        [Test]
+        public void Test_CreateDisplayValueDictionary_Sorted()
+        {
+            //--------------- Set up test pack ------------------
+            MyBO.LoadDefaultClassDef();
+            MyBO.DeleteAllMyBos();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
+            MyBO myBO1 = new MyBO();
+            myBO1.Save();
+            MyBO myBO2 = new MyBO();
+            myBO2.Save();
+            MyBO myBO3 = new MyBO();
+            myBO3.Save();
+            BusinessObjectCollection<MyBO> myBOs = new BusinessObjectCollection<MyBO>();
+            myBOs.LoadAll();
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            Dictionary<string, string> dictionary = BusinessObjectLookupList.CreateDisplayValueDictionary(myBOs, true, Convert.ToString);
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(3, dictionary.Count);
+            Assert.IsTrue(dictionary.ContainsValue(myBO1.ID.ToString()));
+            Assert.IsTrue(dictionary.ContainsValue(myBO2.ID.ToString()));
+            Assert.IsTrue(dictionary.ContainsValue(myBO3.ID.ToString()));
+        } 
+        
+        [Test]
+        public void Test_CreateDisplayValueDictionary_NoSort()
+        {
+            //--------------- Set up test pack ------------------
+            MyBO.LoadDefaultClassDef();
+            MyBO.DeleteAllMyBos();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+            TestUtil.WaitForGC();
+            MyBO myBO1 = new MyBO();
+            myBO1.Save();
+            MyBO myBO2 = new MyBO();
+            myBO2.Save();
+            MyBO myBO3 = new MyBO();
+            myBO3.Save();
+            BusinessObjectCollection<MyBO> myBOs = new BusinessObjectCollection<MyBO>();
+            myBOs.LoadAll();            
+            //--------------- Test Preconditions ----------------
+
+            //--------------- Execute Test ----------------------
+            Dictionary<string, string> dictionary = BusinessObjectLookupList.CreateDisplayValueDictionary(myBOs, false, Convert.ToString);
+            //--------------- Test Result -----------------------
+            Assert.AreEqual(3, dictionary.Count);
+            Assert.IsTrue(dictionary.ContainsValue(myBO1.ID.ToString()));
+            Assert.IsTrue(dictionary.ContainsValue(myBO2.ID.ToString()));
+            Assert.IsTrue(dictionary.ContainsValue(myBO3.ID.ToString()));
         }
     }
 }

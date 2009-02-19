@@ -53,13 +53,12 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 _sqlFormatter = new SqlFormatter("","","", "");
             }
         }
-        //            if (firstRecordToLoad > -1) this.SelectQuery.FirstRecordToLoad = firstRecordToLoad;
-//            if (noOfRecords> -1) this.SelectQuery.NoOfRecords = noOfRecords;
+ 
         [Test]
         public void Test_Set_FirstRecordToLoad()
         {
             //---------------Set up test pack-------------------
-            ISelectQuery selectQuery = new SelectQuery();
+            ISelectQuery selectQuery = new SelectQueryDB(new SelectQuery());
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, selectQuery.FirstRecordToLoad);
             //---------------Execute Test ----------------------
@@ -582,19 +581,10 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Test Result -----------------------
             const string expectedFirstSelect = "(SELECT TOP 6 MyBO.MyBoID FROM MyBO ORDER BY MyBO.MyBOID ASC) As FirstSelect";
             StringAssert.Contains(expectedFirstSelect, actualStatement);
-
             string expectedSecondSelect = string.Format("(SELECT TOP 4 FirstSelect.MyBoID FROM {0} ORDER BY FirstSelect.MyBOID DESC ) AS SecondSelect", expectedFirstSelect);
             StringAssert.Contains(expectedSecondSelect, actualStatement);
             string expectedMainSelect = string.Format("SELECT SecondSelect.MyBoID FROM {0} ORDER BY SecondSelect.MyBOID ASC", expectedSecondSelect);
             Assert.AreEqual(expectedMainSelect, actualStatement);
-//            string expectedStatement =
-//                @"SELECT MyBO.MyBoID FROM 
-//                    (SELECT MyBO.MyBoID FROM 
-//                        (SELECT MyBO.MyBoID FROM MyBO ORDER BY MyBO.MyBOID ASC LIMIT 4) As FirstSelect 
-//                    ORDER BY FirstSelect.MyBOID DESC LIMIT 2) AS SecondSelect 
-//                ORDER BY SecondSelect.MyBOID ASC";
-//            StringAssert.AreEqualIgnoringCase(expectedStatement, statement.Statement.ToString());
-
         }
 
         //TODO  17 Jan 2009: Do test for LIMIT
@@ -620,19 +610,10 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Test Result -----------------------
             const string expectedFirstSelect = "(SELECT MyBO.MyBoID FROM MyBO ORDER BY MyBO.MyBOID ASC LIMIT 6) As FirstSelect";
             StringAssert.Contains(expectedFirstSelect, actualStatement);
-
             string expectedSecondSelect = string.Format("(SELECT FirstSelect.MyBoID FROM {0} ORDER BY FirstSelect.MyBOID DESC LIMIT 4 ) AS SecondSelect", expectedFirstSelect);
             StringAssert.Contains(expectedSecondSelect, actualStatement);
             string expectedMainSelect = string.Format("SELECT SecondSelect.MyBoID FROM {0} ORDER BY SecondSelect.MyBOID ASC", expectedSecondSelect);
             Assert.AreEqual(expectedMainSelect, actualStatement);
-            //            string expectedStatement =
-            //                @"SELECT MyBO.MyBoID FROM 
-            //                    (SELECT MyBO.MyBoID FROM 
-            //                        (SELECT MyBO.MyBoID FROM MyBO ORDER BY MyBO.MyBOID ASC LIMIT 6) As FirstSelect 
-            //                    ORDER BY FirstSelect.MyBOID DESC LIMIT 4) AS SecondSelect 
-            //                ORDER BY SecondSelect.MyBOID ASC";
-            //            StringAssert.AreEqualIgnoringCase(expectedStatement, statement.Statement.ToString());
-
         }
 
 

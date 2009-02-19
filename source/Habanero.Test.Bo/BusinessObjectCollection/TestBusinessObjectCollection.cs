@@ -904,7 +904,34 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsTrue(keyObjectHashTable.ContainsKey(person.ID.ObjectID));
         }
 
+        [Test]
+        public void Test_TotalCountAvailableForPaging_OriginalValue()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+            //-------------Assert Preconditions -------------
 
+            //---------------Execute Test ----------------------
+            int totalNumberOfRecords = cpCol.TotalCountAvailableForPaging;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, totalNumberOfRecords);
+        }
+
+        [Test]
+        public void Test_TotalCountAvailableForPaging_SetAndGet()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+            int totalNumberOfRecords = TestUtil.GetRandomInt();
+            //-------------Assert Preconditions -------------
+            Assert.AreEqual(0, cpCol.TotalCountAvailableForPaging);
+            //---------------Execute Test ----------------------
+            cpCol.TotalCountAvailableForPaging = totalNumberOfRecords;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(totalNumberOfRecords, cpCol.TotalCountAvailableForPaging);
+        }
 
         private static BusinessObjectCollection<ContactPersonTestBO> CreateCollectionWith_OneBO()
         {

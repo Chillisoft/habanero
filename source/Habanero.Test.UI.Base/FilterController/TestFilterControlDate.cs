@@ -94,6 +94,23 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.IsNotNull(dtPicker);
             Assert.IsTrue(dtPicker is IDateTimePicker);
         }
+
+        [Test]
+        public void TestAddDatePicker_NullDefaultValue()
+        {
+            //---------------Set up test pack-------------------
+            IControlFactory factory = GetControlFactory();
+            DateTime testDate = DateTime.Now;
+            IFilterControl filterControl = factory.CreateFilterControl();
+
+            //---------------Execute Test ----------------------
+            IDateTimePicker dtPicker = filterControl.AddDateFilterDateTimePicker("test:", "testcolumn", null, FilterClauseOperator.OpGreaterThan, true);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(dtPicker);
+            Assert.AreEqual(null, dtPicker.ValueOrNull);
+        }
+        
         
         [Test]
         public void TestLabelAndDateTimePickerAreOnPanel()

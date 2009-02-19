@@ -57,7 +57,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="appName">The application name</param>
         /// <param name="appVersion">The application version</param>
-        public HabaneroAppUI(string appName, string appVersion)
+        protected HabaneroAppUI(string appName, string appVersion)
             : base(appName, appVersion)
         {
             SetupUISettings();

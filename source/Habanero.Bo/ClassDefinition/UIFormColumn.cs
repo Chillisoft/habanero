@@ -146,6 +146,9 @@ namespace Habanero.BO.ClassDefinition
             set { _width = value; }
         }
 
+        ///<summary>
+        /// Returns the Form tab that this UIFormColumn is on.
+        ///</summary>
         public UIFormTab UIFormTab
         {
             get { return _uiFormTab; }
@@ -230,6 +233,10 @@ namespace Habanero.BO.ClassDefinition
             return !(a == b);
         }
 
+        ///<summary>
+        /// Returns the Number of rows required to draw this UFFormColumn
+        ///</summary>
+        ///<returns></returns>
         public int GetRowsRequired()
         {
             int rowsRequired = 0;
@@ -240,6 +247,12 @@ namespace Habanero.BO.ClassDefinition
             return rowsRequired;
         }
 
+        ///<summary>
+        /// Returns the Row span of the column to the right of this UIcolumn
+        ///</summary>
+        ///<param name="columnsRight"></param>
+        ///<returns></returns>
+        ///<exception cref="ArgumentException"></exception>
         public int GetRowSpanForColumnToTheRight(int columnsRight)
         {
             if (columnsRight == 0) throw new ArgumentException("columnsRight cannot be zero", "columnsRight");

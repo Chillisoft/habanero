@@ -32,7 +32,6 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBusinessObjectSerialisation
     {
-        //TODO: refactor these since there is much duplicated set up code.
         [Test]
         public void Test_SerialiseDeserialise_ReturnsCorrectType()
         {
@@ -50,7 +49,6 @@ namespace Habanero.Test.BO
             formatter.Serialize(memoryStream, originalPerson);
             memoryStream.Seek(0, SeekOrigin.Begin);
             Object deserialisedPerson = formatter.Deserialize(memoryStream);
-
             //---------------Test Result -----------------------
             Assert.IsInstanceOfType(typeof(Person),deserialisedPerson);
         }

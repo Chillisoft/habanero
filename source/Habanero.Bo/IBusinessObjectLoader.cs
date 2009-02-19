@@ -174,9 +174,95 @@ namespace Habanero.BO
         /// </summary>
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="criteriaString">The criteria to use to load the business object collection</param>
-        /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
+        /// <returns>The loaded collection</returns>
         BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString, string orderCriteria) where T : class, IBusinessObject, new();
+
+        /// <summary>
+        /// Loads business objects that match the search criteria provided, 
+        /// loaded in the order specified, and limiting the number of objects loaded. 
+        /// The limited list of <see cref="T"/>s specified as follows:
+        /// If you want record 6 to 15 then 
+        /// <see cref="firstRecordToLoad"/> will be set to 5 (this is zero based) and 
+        /// <see cref="numberOfRecordsToLoad"/> will be set to 10.
+        /// This will load 10 records, starting at record 6 of the ordered set (ordered by the <see cref="orderCriteria"/>).
+        /// If there are fewer than 15 records in total, then the remaining records after record 6 willbe returned. 
+        /// </summary>
+        /// <remarks>
+        /// As a design decision, we have elected for the <see cref="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by MySql etc.
+        /// Also, the <see cref="numberOfRecordsToLoad"/> returns the specified number of records unless its value is '-1' where it will 
+        /// return all the remaining records from the specified <see cref="firstRecordToLoad"/>.
+        /// If you give '0' as the value for the <see cref="numberOfRecordsToLoad"/> parameter, it will load zero records.
+        /// </remarks>
+        /// <example>
+        /// The following code demonstrates how to loop through the invoices in the data store, 
+        /// ten at a time, and print their details:
+        /// <code>
+        /// BusinessObjectCollection&lt;Invoice&gt; col = new BusinessObjectCollection&lt;Invoice&gt;();
+        /// int interval = 10;
+        /// int firstRecord = 0;
+        /// int totalNoOfRecords = firstRecord + 1;
+        /// while (firstRecord &lt; totalNoOfRecords)
+        /// {
+        ///     col.LoadWithLimit("", "InvoiceNo", firstRecord, interval, out totalNoOfRecords);
+        ///     Debug.Print("The next {0} invoices:", interval);
+        ///     col.ForEach(bo =&gt; Debug.Print(bo.ToString()));
+        ///     firstRecord += interval;
+        /// }</code>
+        /// </example>
+        /// <param name="criteria">The search criteria</param>
+        /// <param name="orderCriteria">The order-by clause</param>
+        /// <param name="firstRecordToLoad">The first record to load (NNB: this is zero based)</param>
+        /// <param name="numberOfRecordsToLoad">The number of records to be loaded</param>
+        /// <param name="totalNoOfRecords">The total number of records matching the criteria</param>
+        /// <returns>The loaded collection, limited in the specified way.</returns>
+        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria,
+                int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
+            where T : class, IBusinessObject, new();
+
+        /// <summary>
+        /// Loads business objects that match the search criteria provided, 
+        /// loaded in the order specified, and limiting the number of objects loaded. 
+        /// The limited list of <see cref="T"/>s specified as follows:
+        /// If you want record 6 to 15 then 
+        /// <see cref="firstRecordToLoad"/> will be set to 5 (this is zero based) and 
+        /// <see cref="numberOfRecordsToLoad"/> will be set to 10.
+        /// This will load 10 records, starting at record 6 of the ordered set (ordered by the <see cref="orderCriteriaString"/>).
+        /// If there are fewer than 15 records in total, then the remaining records after record 6 willbe returned. 
+        /// </summary>
+        /// <remarks>
+        /// As a design decision, we have elected for the <see cref="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by MySql etc.
+        /// Also, the <see cref="numberOfRecordsToLoad"/> returns the specified number of records unless its value is '-1' where it will 
+        /// return all the remaining records from the specified <see cref="firstRecordToLoad"/>.
+        /// If you give '0' as the value for the <see cref="numberOfRecordsToLoad"/> parameter, it will load zero records.
+        /// </remarks>
+        /// <example>
+        /// The following code demonstrates how to loop through the invoices in the data store, 
+        /// ten at a time, and print their details:
+        /// <code>
+        /// BusinessObjectCollection&lt;Invoice&gt; col = new BusinessObjectCollection&lt;Invoice&gt;();
+        /// int interval = 10;
+        /// int firstRecord = 0;
+        /// int totalNoOfRecords = firstRecord + 1;
+        /// while (firstRecord &lt; totalNoOfRecords)
+        /// {
+        ///     col.LoadWithLimit("", "InvoiceNo", firstRecord, interval, out totalNoOfRecords);
+        ///     Debug.Print("The next {0} invoices:", interval);
+        ///     col.ForEach(bo =&gt; Debug.Print(bo.ToString()));
+        ///     firstRecord += interval;
+        /// }</code>
+        /// </example>
+        /// <param name="criteriaString">The search criteria</param>
+        /// <param name="orderCriteriaString">The order-by clause</param>
+        /// <param name="firstRecordToLoad">The first record to load (NNB: this is zero based)</param>
+        /// <param name="numberOfRecordsToLoad">The number of records to be loaded</param>
+        /// <param name="totalNoOfRecords">The total number of records matching the criteria</param>
+        /// <returns>The loaded collection, limited in the specified way.</returns>
+        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(string criteriaString, string orderCriteriaString,
+                int firstRecordToLoad, int numberOfRecordsToLoad, out int totalNoOfRecords)
+            where T : class, IBusinessObject, new();
+        //TODO 17 Feb 2009 Mark: Add the GetBusinessObjectCollection with Limit eith the ClassDef parameter 
+
 
         /// <summary>
         /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 

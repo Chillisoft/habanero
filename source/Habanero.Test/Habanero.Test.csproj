@@ -100,6 +100,7 @@
     <Compile Include="TestUtil.cs" />
     <Compile Include="Util\TestConfigFileSettings.cs" />
     <Compile Include="Util\TestDateTimeUtilities.cs" />
+    <Compile Include="Util\TestFileUtilities.cs" />
     <Compile Include="Util\TestReflectionUtilities.cs" />
     <Compile Include="Util\File\CsvTestsSamples.cs" />
     <Compile Include="Util\File\TestCsvFileReader.cs" />

@@ -32,7 +32,6 @@ namespace Habanero.BO.ClassDefinition
         private UIForm _uiForm;
         private UIGrid _uiGrid;
         private ClassDef _classDef;
-        private UIDefCol _uiDefCol;
 
         /// <summary>
         /// Constructor to initialise a new definition with the name, form
@@ -76,11 +75,10 @@ namespace Habanero.BO.ClassDefinition
             set { _uiGrid = value; }
         }
 
-        public UIDefCol UIDefCol
-        {
-            get { return _uiDefCol; }
-            internal set { _uiDefCol = value; }
-        }
+        ///<summary>
+        /// Gets a Collection of UIDefs
+        ///</summary>
+        public UIDefCol UIDefCol { get; internal set; }
 
         /// <summary>
         /// Returns the form property definitions

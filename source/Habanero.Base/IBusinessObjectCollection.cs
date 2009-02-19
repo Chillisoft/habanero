@@ -171,6 +171,12 @@ namespace Habanero.Base
         /// </returns>
         bool Remove(IBusinessObject item);
 
+        /// <summary>
+        /// Removes the business object at the index position specified
+        /// </summary>
+        /// <param name="index">The index position to remove from</param>
+        void RemoveAt(int index);
+
 		/// <summary>
 		/// Clears the collection
 		/// </summary>
@@ -217,7 +223,6 @@ namespace Habanero.Base
         /// <param name="comparer">The property name to sort on</param>
         void Sort(IComparer comparer);
 
-
         /// <summary>
         /// Loads business objects that match the search criteria provided,
         /// loaded in the order specified.  
@@ -258,63 +263,12 @@ namespace Habanero.Base
         /// <param name="orderByClause">The order-by clause</param>
         /// <param name="limit">The limit</param>
         void LoadWithLimit(string searchCriteria, string orderByClause, int limit);
-        /// <summary>
-        /// Loads business objects that match the search criteria provided, 
-        /// loaded in the order specified, 
-        /// and limiting the number of objects loaded. The limited number of objects is
-        ///  limited as follows. If you want record 11 to 20 then firstRecordToLoad will be set to 
-        ///  11 and the number of records to load will be set to 10 this will load 10 records (or fewer 
-        ///   if there are less records returned) starting at record 11 ordered by the orderByClause.
-        /// </summary>
-        /// <param name="searchCriteria">The search criteria</param>
-        /// <param name="orderByClause">The order-by clause</param>
-        /// <param name="noOfRecords">The number of records to be loaded</param>
-        /// <param name="firstRecordToLoad">The first record to load</param>
-        void LoadWithLimit(string searchCriteria, string orderByClause, int firstRecordToLoad, int noOfRecords);
+
+        
 
         //TODO  17 Jan 2009: Do load with limit for objects and mixes of these.
 
-        ///// <summary>
-        ///// Loads business objects that match the search criteria provided in
-        ///// an expression, loaded in the order specified, 
-        ///// and limiting the number of objects loaded
-        ///// </summary>
-        ///// <param name="searchExpression">The search expression</param>
-        ///// <param name="orderByClause">The order-by clause</param>
-        ///// <param name="limit">The limit</param>
-        //void LoadWithLimit(IExpression searchExpression, string orderByClause, int limit);
-
-//        /// <summary>
-//        /// Loads business objects that match the search criteria provided
-//        /// and an extra criteria literal, 
-//        /// loaded in the order specified, 
-//        /// and limiting the number of objects loaded
-//        /// </summary>
-//        /// <param name="searchCriteria">The search expression</param>
-//        /// <param name="orderByClause">The order-by clause</param>
-//        /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
-//        /// <param name="limit">The limit</param>
-//        void LoadWithLimit(string searchCriteria, string orderByClause, int limit);
-
-        ///// <summary>
-        ///// Loads business objects that match the search criteria provided in
-        ///// an expression and an extra criteria literal, 
-        ///// loaded in the order specified, 
-        ///// and limiting the number of objects loaded
-        ///// </summary>
-        ///// <param name="searchExpression">The search expression</param>
-        ///// <param name="orderByClause">The order-by clause</param>
-        ///// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
-        ///// <param name="limit">The limit</param>
-        //void LoadWithLimit(IExpression searchExpression, string orderByClause, string extraSearchCriteriaLiteral,
-        //                          int limit);
-
-        ///// <summary>
-        ///// Removes the business object at the index position specified
-        ///// </summary>
-        ///// <param name="index">The index position to remove from</param>
-        //new void RemoveAt<TBusinessObject>(int index);
-
+        
         /// <summary>
         /// Allows the adding of business objects to the collection without
         /// this causing the added event to be fired.
@@ -322,14 +276,6 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="businessObject"></param>
         void AddWithoutEvents(IBusinessObject businessObject);
-
-//        /// <summary>
-//        /// Allows the adding of business objects to the collection without
-//        /// this causing the added event to be fired.
-//        /// This is intended to be used for internal use only.
-//        /// </summary>
-//        /// <param name="businessObject"></param>
-//        void AddToPersistedCollection(IBusinessObject businessObject);
 
         /// <summary>
         /// Returns a list of the business objects that are currently persisted to the 
@@ -377,12 +323,6 @@ namespace Habanero.Base
         /// Hack: This method was created returning a type IList to overcome problems with 
         ///   BusinessObjectCollecion being a generic collection.
         IList MarkedForDeleteBusinessObjects { get; }
-
-        /// <summary>
-        /// Removes the business object at the index position specified
-        /// </summary>
-        /// <param name="index">The index position to remove from</param>
-        void RemoveAt(int index);
 
         /// <summary>
         /// Restores all the business objects to their last persisted state, that

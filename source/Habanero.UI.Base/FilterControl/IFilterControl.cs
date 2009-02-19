@@ -95,7 +95,7 @@ namespace Habanero.UI.Base
         /// right side of the equation.</param>
         /// <param name="nullable">Whether the datetime picker allows null values</param>
         /// <returns>Returns the new DateTimePicker added</returns>
-        IDateTimePicker AddDateFilterDateTimePicker(string labelText, string propertyName, DateTime defaultValue, FilterClauseOperator filterClauseOperator, bool nullable);
+        IDateTimePicker AddDateFilterDateTimePicker(string labelText, string propertyName, DateTime? defaultValue, FilterClauseOperator filterClauseOperator, bool nullable);
 
         /// <summary>
         /// The event that is fired with the filter is ready so that another control e.g. a grid can be filtered.

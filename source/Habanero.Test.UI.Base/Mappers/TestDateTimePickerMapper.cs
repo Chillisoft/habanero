@@ -19,13 +19,14 @@
 
 using System;
 using System.Collections;
+using Habanero.Base;
 using Habanero.UI.Base;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.Mappers
 {
 
-    public abstract class TestDateTimePickerMapper
+    public abstract class TestDateTimePickerMapper : TestMapperBase
     {
         protected abstract IControlFactory GetControlFactory();
 
@@ -150,6 +151,57 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Test Result -----------------------
             Assert.AreEqual(origionalDate, dateTimePicker.Value);
             //---------------Tear Down -------------------------          
+        }
+
+        //Bug Fix: This test investigates the scenario where a bug was occuring
+        [Test]
+        public void TestSetBusinessObjectForDateTimePickerMapper_DoesntFirePropertyUpdate()
+        {
+            //---------------Set up test pack-------------------
+            Sample sampleBusinessObject = new Sample();
+            DateTime origionalDate = DateTime.Now;
+            sampleBusinessObject.SampleDate = origionalDate;
+            DateTimePickerMapper dtpMapper;
+            IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper);
+            bool updatedEventFired = false;
+            sampleBusinessObject.Props["SampleDate"].Updated += delegate(object sender, BOPropEventArgs e)
+            {
+                updatedEventFired = true;
+            };
+            //---------------Verify test pack-------------------
+            Assert.AreEqual(DateTime.Today, dateTimePicker.Value.Date);
+            Assert.IsFalse(updatedEventFired);
+            //---------------Execute Test ----------------------
+            dtpMapper.BusinessObject = sampleBusinessObject;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(origionalDate, dateTimePicker.Value);
+            Assert.IsFalse(updatedEventFired);
+        }
+
+        //Bug Fix: This tests the scenario where a bug was occuring
+        [Test]
+        public void TestSetBusinessObjectForDateTimePickerMapper_Changed_DoesntFirePropertyUpdate()
+        {
+            //---------------Set up test pack-------------------
+            Sample sampleBusinessObject = new Sample();
+            DateTime origionalDate = DateTime.Now;
+            sampleBusinessObject.SampleDate = origionalDate;
+            DateTimePickerMapper dtpMapper;
+            IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper);
+            bool updatedEventFired = false;
+            sampleBusinessObject.Props["SampleDate"].Updated += delegate(object sender, BOPropEventArgs e)
+            {
+                updatedEventFired = true;
+            };
+            dtpMapper.BusinessObject = new Sample();
+            //---------------Verify test pack-------------------
+            Assert.AreEqual(DateTime.Today, dateTimePicker.Value.Date);
+            Assert.IsFalse(updatedEventFired);
+            //---------------Execute Test ----------------------
+            dtpMapper.BusinessObject = sampleBusinessObject;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(origionalDate, dateTimePicker.Value);
+            Assert.IsFalse(updatedEventFired);
         }
 
         //TODO: Do tests for null business object

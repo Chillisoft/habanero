@@ -53,8 +53,8 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new()
         {
-            if (_dataStore.AllObjects.ContainsKey(primaryKey))
-                return (T) _dataStore.AllObjects[primaryKey];
+            if (_dataStore.AllObjects.ContainsKey(primaryKey.ObjectID))
+                return (T)_dataStore.AllObjects[primaryKey.ObjectID];
 
             throw new BusObjDeleteConcurrencyControlException(
                 string.Format(
@@ -221,14 +221,36 @@ namespace Habanero.BO
 
             List<T> loadedBos = _dataStore.FindAllInternal<T>(criteria);
             loadedBos.Sort(orderCriteria.Compare);
-            if (selectQuery.Limit >= 0)
+
+            collection.TotalCountAvailableForPaging = loadedBos.Count;
+            ApplyLimitsToList(selectQuery, loadedBos);
+            LoadBOCollection(collection, loadedBos);
+        }
+
+        private static void ApplyLimitsToList<T>(ISelectQuery selectQuery, IList<T> loadedBos)
+        {
+            int firstRecordToLoad = selectQuery.FirstRecordToLoad;
+            if (firstRecordToLoad < 0)
             {
-                while (loadedBos.Count > selectQuery.Limit)
+                throw new IndexOutOfRangeException("FirstRecordToLoad should not be negative.");
+            }
+            if (firstRecordToLoad > loadedBos.Count)
+            {
+                loadedBos.Clear();
+                return;
+            }
+            if (firstRecordToLoad > 0)
+            {
+                for (int i = 0; i < firstRecordToLoad; i++)
                 {
-                    loadedBos.RemoveAt(selectQuery.Limit);
+                    loadedBos.RemoveAt(0);
                 }
             }
-            LoadBOCollection(collection, loadedBos);
+            if (selectQuery.Limit < 0) return;
+            while (loadedBos.Count > selectQuery.Limit)
+            {
+                loadedBos.RemoveAt(selectQuery.Limit);
+            }
         }
 
         /// <summary>

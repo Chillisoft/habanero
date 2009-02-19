@@ -204,6 +204,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual(limit, selectQuery.Limit);
             //---------------Tear Down -------------------------
         }
+
         [Test]
         public void TestFirstRecordToLoad()
         {
