@@ -53,8 +53,8 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new()
         {
-            if (_dataStore.AllObjects.ContainsKey(primaryKey))
-                return (T) _dataStore.AllObjects[primaryKey];
+            if (_dataStore.AllObjects.ContainsKey(primaryKey.ObjectID))
+                return (T)_dataStore.AllObjects[primaryKey.ObjectID];
 
             throw new BusObjDeleteConcurrencyControlException(
                 string.Format(

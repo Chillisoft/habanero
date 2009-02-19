@@ -36,6 +36,10 @@ namespace Habanero.BO
         {
         }
 
+        ///<summary>
+        /// Alternate Constructore for the In Memory dataStore where the DataStore to be used is passed in.
+        ///</summary>
+        ///<param name="dataStore">The Data Store to be used.</param>
         public DataAccessorInMemory(DataStoreInMemory dataStore)
         {
             _dataStore = dataStore;

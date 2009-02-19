@@ -81,7 +81,7 @@ namespace Habanero.BO
             if (transaction is TransactionalBusinessObject)
             {
                 IBusinessObject businessObject = ((TransactionalBusinessObject) transaction).BusinessObject;
-                if (!_dataStoreInMemory.AllObjects.ContainsKey(businessObject.ID))
+                if (!_dataStoreInMemory.AllObjects.ContainsKey(businessObject.ID.ObjectID))
                 {
                     _dataStoreInMemory.Add(businessObject);
                 }

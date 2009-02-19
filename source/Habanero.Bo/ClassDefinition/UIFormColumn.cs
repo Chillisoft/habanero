@@ -146,6 +146,9 @@ namespace Habanero.BO.ClassDefinition
             set { _width = value; }
         }
 
+        ///<summary>
+        /// Returns the Form tab that this UIFormColumn is on.
+        ///</summary>
         public UIFormTab UIFormTab
         {
             get { return _uiFormTab; }
@@ -200,6 +203,39 @@ namespace Habanero.BO.ClassDefinition
             }
             return true;
         }
+//        ///<summary>
+//        ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
+//        ///</summary>
+//        ///
+//        ///<returns>
+//        ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
+//        ///</returns>
+//        ///
+//        ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
+//        public override bool Equals(object obj)
+//        {
+//            UIFormColumn otherFormColumn = obj as UIFormColumn;
+//            if ((object)otherFormColumn == null) return false;
+//
+//            if (otherFormColumn.Count != this.Count) return false;
+//            if  (otherFormColumn.Width != this.Width) return false;
+//            foreach (UIFormField field in this)
+//            {
+//                bool found = false;
+//                foreach (UIFormField otherFormField in otherFormColumn)
+//                {
+//                    if (otherFormField.Equals(field))
+//                    {
+//                        found = true;
+//                    }
+//                }
+//                if (!found)
+//                {
+//                    return false;
+//                }
+//            }
+//            return true;
+//        }
 
         /// <summary>
         /// Indicates whether to columns are equal
@@ -230,6 +266,10 @@ namespace Habanero.BO.ClassDefinition
             return !(a == b);
         }
 
+        ///<summary>
+        /// Returns the Number of rows required to draw this UFFormColumn
+        ///</summary>
+        ///<returns></returns>
         public int GetRowsRequired()
         {
             int rowsRequired = 0;
@@ -240,6 +280,12 @@ namespace Habanero.BO.ClassDefinition
             return rowsRequired;
         }
 
+        ///<summary>
+        /// Returns the Row span of the column to the right of this UIcolumn
+        ///</summary>
+        ///<param name="columnsRight"></param>
+        ///<returns></returns>
+        ///<exception cref="ArgumentException"></exception>
         public int GetRowSpanForColumnToTheRight(int columnsRight)
         {
             if (columnsRight == 0) throw new ArgumentException("columnsRight cannot be zero", "columnsRight");
@@ -253,6 +299,24 @@ namespace Habanero.BO.ClassDefinition
                 }
             }
             return totalRowSpan;
+        }
+
+        public bool Equals(UIFormColumn obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return Equals(obj._list, _list) && obj._width == _width && Equals(obj._uiFormTab, _uiFormTab);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int result = (_list != null ? _list.GetHashCode() : 0);
+                result = (result * 397) ^ _width;
+                result = (result * 397) ^ (_uiFormTab != null ? _uiFormTab.GetHashCode() : 0);
+                return result;
+            }
         }
     }
 }

@@ -909,17 +909,22 @@ namespace Habanero.BO.ClassDefinition
 
         #region Equals
 
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof(ClassDef)) return false;
+            return Equals((ClassDef) obj);
+        }
         /// <summary>
         /// Checks for equality between two classdefs. This checks that the properties
         /// are the same between the two.
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="otherClsDef">The Class Def to be compared to</param>
         /// <returns></returns>
-        public override bool Equals(object obj)
+        public bool Equals(ClassDef otherClsDef)
         {
-            if (obj == null) return false;
-            if (obj.GetType() != typeof (ClassDef)) return false;
-            ClassDef otherClsDef = (ClassDef) obj;
             if (otherClsDef.TypeParameter != this.TypeParameter) return false;
             //This is a rough and ready equals test later need to improve
             if (PropDefcol == null) return false;
@@ -935,7 +940,23 @@ namespace Habanero.BO.ClassDefinition
                 }
             }
             return true;
+//            return Equals(obj._className, _className) && Equals(obj._classType, _classType) && Equals(obj._primaryKeyDef, _primaryKeyDef) && Equals(obj._propDefCol, _propDefCol) && Equals(obj.TypeParameter, TypeParameter);
         }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int result = (_className != null ? _className.GetHashCode() : 0);
+                result = (result * 397) ^ (_classType != null ? _classType.GetHashCode() : 0);
+                result = (result * 397) ^ (_primaryKeyDef != null ? _primaryKeyDef.GetHashCode() : 0);
+                result = (result * 397) ^ (_propDefCol != null ? _propDefCol.GetHashCode() : 0);
+                result = (result * 397) ^ (TypeParameter != null ? TypeParameter.GetHashCode() : 0);
+                return result;
+            }
+        }
+
+
         #endregion
 
         ///<summary>
@@ -1125,6 +1146,5 @@ namespace Habanero.BO.ClassDefinition
         {
             return ClassDefs[typeof(T)];
         }
-
     }
 }

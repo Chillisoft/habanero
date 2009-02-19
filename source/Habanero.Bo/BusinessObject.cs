@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Runtime.Serialization;
+using System.Security.Permissions;
 using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -103,8 +104,9 @@ namespace Habanero.BO
             _boStatus = (BOStatus)info.GetValue("Status", typeof(BOStatus));
             AddToObjectManager();
         }
-
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        [SecurityPermissionAttribute(SecurityAction.Demand,
+        SerializationFormatter = true)]
+        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             foreach (IBOProp prop in _boPropCol)
             {
@@ -754,85 +756,7 @@ namespace Habanero.BO
         /// <returns>Returns the property value</returns>
         internal object GetPropertyValueToDisplay(string propName)
         {
-//            object propertyValue = GetPropertyValue(propName);
-//
-//            if (Props[propName].PropertyType == typeof (Guid) && GetPropertyValue(propName) != null &&
-//                !ID.Contains(propName))
-//            {
-//                Guid myGuid = (Guid) propertyValue;
-//                ILookupList lookupList = ClassDef.GetLookupList(propName);
-//                Dictionary<string, object> list = lookupList.GetLookupList();
-//
-//                foreach (KeyValuePair<string, object> pair in list)
-//                {
-//                    if (pair.Value == null) continue;
-//                    if (pair.Value is IBusinessObject)
-//                    {
-//                        BusinessObject bo = (BusinessObject) pair.Value;
-//                        if (bo._primaryKey.GetAsGuid().Equals(myGuid))
-//                        {
-//                            return pair.Key;
-//                        }
-//                    }
-//                    else
-//                    {
-//                        if (pair.Value.Equals(myGuid))
-//                        {
-//                            return pair.Key;
-//                        }
-//                    }
-//                }
-//                //Item was not found in the list, so try some alternate methods
-//                if (lookupList is BusinessObjectLookupList)
-//                {
-//                    BusinessObjectLookupList businessObjectLookupList = lookupList as BusinessObjectLookupList;
-//                    ClassDef classDef = businessObjectLookupList.LookupBoClassDef;
-//                    IBusinessObject businessObject = null;
-//                    PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
-//                    if (primaryKeyDef.IsGuidObjectID)
-//                    {
-//                        BOPropCol boPropCol = classDef.CreateBOPropertyCol(true);
-//                        BOPrimaryKey boPrimaryKey = primaryKeyDef.CreateBOKey(boPropCol) as BOPrimaryKey;
-//                        if (boPrimaryKey != null)
-//                        {
-//                            boPrimaryKey[0].Value = myGuid;
-//                            businessObject = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, boPrimaryKey);
-//                        }
-//                        if (businessObject != null) return businessObject;
-//                    }
-//                }
-//
-//                return myGuid;
-//            }
-//            if (ClassDef.GetPropDef(propName).HasLookupList())
-//            {
-//                Dictionary<string, object> lookupList = ClassDef.GetLookupList(propName).GetLookupList();
-//                foreach (KeyValuePair<string, object> pair in lookupList)
-//                {
-//                    if (pair.Value == null) continue;
-//                    if (pair.Value is string && pair.Value.Equals(Convert.ToString(propertyValue)))
-//                    {
-//                        return pair.Key;
-//                    }
-//                    if (pair.Value.Equals(propertyValue)) return pair.Key;
-//
-//                    if (!(pair.Value is IBusinessObject)) continue;
-//
-//                    BusinessObject bo = (BusinessObject) pair.Value;
-//                    if (String.Compare(bo.ID.ToString(), GetPropertyValueString(propName)) == 0)
-//                    {
-//                        return pair.Value.ToString();
-//                    }
-//                    if (bo.ID[0].Value != null &&
-//                        String.Compare(bo.ID[0].Value.ToString(), GetPropertyValueString(propName)) == 0)
-//                    {
-//                        return pair.Value.ToString();
-//                    }
-//                }
-//                return propertyValue;
-//            }
             IBOProp prop = Props[propName];
-
             return prop.PropertyValueToDisplay;
         }
 

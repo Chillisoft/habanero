@@ -18,20 +18,35 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Runtime.Serialization;
 using System.Xml;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB;
+using Habanero.Util;
 
 namespace Habanero.Test
 {
     /// <summary>
     /// Summary description for MyBO.
     /// </summary>
+    [Serializable]
     public class MyBO : BusinessObject
     {
+        protected MyBO(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+
+        protected internal MyBO(ClassDef def) : base(def)
+        {
+        }
+
+        public MyBO()
+        {
+        }
+
         protected override ClassDef ConstructClassDef()
         {
             return _classDef;
@@ -1457,7 +1472,16 @@ namespace Habanero.Test
         ///<filterpriority>2</filterpriority>
         public override string ToString()
         {
-            return this.TestProp + " - " + this.MyBoID;
+            if (Props.Contains("TestProp"))
+            {
+                return this.TestProp + " - " + this.MyBoID;
+                
+            }
+            if (this.MyBoID == null)
+            {
+                return this.ClassDef.ClassNameFull;
+            }
+            return StringUtilities.GuidToUpper(this.MyBoID.Value);
         }
 
         public static ClassDef GetLoadClassDefsUIDefNoFormDef()

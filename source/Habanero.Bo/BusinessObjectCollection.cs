@@ -1556,7 +1556,7 @@ namespace Habanero.BO
             return CreateBusinessObject();
         }
 
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             int count = 0;
             info.AddValue(COUNT, Count);

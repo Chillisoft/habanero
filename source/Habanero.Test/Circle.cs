@@ -41,7 +41,7 @@ namespace Habanero.Test
             return _classDef;
         }
 
-        private static ClassDef CreateClassDef()
+        private new static ClassDef CreateClassDef()
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =

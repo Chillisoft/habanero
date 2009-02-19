@@ -19,8 +19,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -29,8 +32,8 @@ namespace Habanero.BO
     ///</summary>
     public class DataStoreInMemory
     {
-        private readonly Dictionary<IPrimaryKey, IBusinessObject> _objects =
-            new Dictionary<IPrimaryKey, IBusinessObject>();
+        private Dictionary<Guid, IBusinessObject> _objects =
+            new Dictionary<Guid, IBusinessObject>();
 
         ///<summary>
         /// Returns the number of objects in the memory store.
@@ -43,7 +46,7 @@ namespace Habanero.BO
         ///<summary>
         /// Returns an Dictionary of all the objects in the memory store.
         ///</summary>
-        public Dictionary<IPrimaryKey, IBusinessObject> AllObjects
+        public Dictionary<Guid, IBusinessObject> AllObjects
         {
             get { return _objects; }
         }
@@ -54,7 +57,7 @@ namespace Habanero.BO
         ///<param name="businessObject"></param>
         public void Add(IBusinessObject businessObject)
         {
-            _objects.Add(businessObject.ID, businessObject);
+            _objects.Add(businessObject.ID.ObjectID, businessObject);
         }
 
         ///<summary>
@@ -118,7 +121,7 @@ namespace Habanero.BO
         ///<param name="businessObject"></param>
         public void Remove(IBusinessObject businessObject)
         {
-            _objects.Remove(businessObject.ID);
+            _objects.Remove(businessObject.ID.ObjectID);
         }
 
         ///<summary>
@@ -182,6 +185,36 @@ namespace Habanero.BO
         public void ClearAllBusinessObjects()
         {
             _objects.Clear();
+        }
+
+        /// <summary>
+        /// Saves all the objects in the dataStore to to the file defined in fullFileName
+        /// </summary>
+        /// <param name="fullFileName">The full file name to store including the file path e.g. C:\Systems\SomeFile.dat </param>
+        public void Save(string fullFileName)
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            string directoryName = Path.GetDirectoryName(fullFileName);
+            FileUtilities.CreateDirectory(directoryName);
+            // Serialize the all BO's in _objectsCollection
+            using (FileStream fs = new FileStream(fullFileName, FileMode.Create))
+            {
+                formatter.Serialize(fs, this._objects);
+            }
+        }
+        /// <summary>
+        /// Loads all the objects in the dataStore to to the file defined in fullFileName
+        /// </summary>
+        /// <param name="fullFileName">The full file name to store including the file path e.g. C:\Systems\SomeFile.dat </param>
+        public void Load(string fullFileName)
+        {
+            if (!File.Exists(fullFileName)) return;
+
+            BinaryFormatter formatter = new BinaryFormatter();
+            using (Stream stream = new FileStream(fullFileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                this._objects = (Dictionary<Guid, IBusinessObject>) formatter.Deserialize(stream);
+            }
         }
     }
 }

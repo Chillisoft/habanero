@@ -26,6 +26,7 @@ using Habanero.DB;
 
 namespace Habanero.Test
 {
+    [Serializable]
     public class Car : BusinessObject
     {
         #region Constructors

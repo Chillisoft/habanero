@@ -37,8 +37,12 @@ namespace Habanero.UI.Win
     {
         private readonly IControlFactory _controlFactory;
         private readonly MultiSelectorManager<T> _manager;
-        private GridLayoutManager _gridLayoutManager;
+        private readonly GridLayoutManager _gridLayoutManager;
 
+        ///<summary>
+        /// Constructs a multiselector
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public MultiSelectorWin(IControlFactory controlFactory)
         {
             _controlFactory = controlFactory;
@@ -83,6 +87,14 @@ namespace Habanero.UI.Win
             };
 
             SetDoubleClickEventHandlers();
+        }
+
+        ///<summary>
+        /// Returns the control factory used for creating the controls on this multiselector.
+        ///</summary>
+        public IControlFactory ControlFactory
+        {
+            get { return _controlFactory; }
         }
 
         /// <summary>
