@@ -446,8 +446,47 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
 
-        }
+        }       
+        
+        [Test]
+        public void Test_Valid_Relationship_Loads_Where_RelatedClass_IsLoaded_After_InitialLoad_NoReverseRelationshipSetup()
+        {
+            //----------------------Test Setup ----------------------
+            const string classDefsString = @"
+					<classes>
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
+							<property  name=""TestClassID"" type=""Guid"" />
+                            <primaryKey>
+                                <prop name=""TestRelatedClassID""/>
+                            </primaryKey>
+						</class>
+					</classes>
+			";
+            ClassDef.LoadClassDefs(new XmlClassDefsLoader(classDefsString,new DtdLoader()));
+            //--------------------Execute Test-------------------------
+            const string secondClassDefStringToLoad = @"
+                        <classes>
+                            <class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" type=""Guid"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestRelatedClass"" type=""single"" relatedClass=""TestRelatedClass"" relatedAssembly=""Habanero.Test.BO.Loaders"">
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+					</classes>
+			";
+            ClassDef.LoadClassDefs(new XmlClassDefsLoader(secondClassDefStringToLoad, new DtdLoader()));
+            ClassDefCol classDefList = ClassDef.ClassDefs;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, classDefList.Count);
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
 
+        }
+        //TODO : What should happen in the above case when a ReverseRelationship is set??
         [Test]
         public void Test_Invalid_Relationship_SingleSingleRelationships_ReverseRelationshipNotDefined()
         {

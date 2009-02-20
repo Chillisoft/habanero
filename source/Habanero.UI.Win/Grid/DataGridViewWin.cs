@@ -491,15 +491,22 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Represents a row in a DataGridView control
         /// </summary>
-        private class DataGridViewRowWin : IDataGridViewRow
+        public class DataGridViewRowWin : IDataGridViewRow
         {
             private readonly DataGridViewRow _dataGridViewRow;
 
+            /// <summary>
+            /// Returns the DataGridViewRow.
+            /// </summary>
             public DataGridViewRow DataGridViewRow
             {
                 get { return _dataGridViewRow; }
             }
 
+            /// <summary>
+            /// Constructor for a DataGridViewWin.
+            /// </summary>
+            /// <param name="dataGridViewRow"></param>
             public DataGridViewRowWin(DataGridViewRow dataGridViewRow)
             {
                 _dataGridViewRow = dataGridViewRow;

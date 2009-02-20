@@ -160,7 +160,8 @@ namespace Habanero.BO.Loaders
                 XmlClassLoader classLoader = new XmlClassLoader(DtdLoader, _defClassFactory);
                 _classDefList.Add(classLoader.LoadClass(_reader.ReadOuterXml()));
             } while (_reader.Name == "class");
-            DoPostLoadChecks();
+            DoPostLoadChecks(); //TODO: Hageshen 18/02/2009 this should be replaced need to find a different way of doing this since this is causing
+                // Issues with Firestarter
         }
 
         private void DoPostLoadChecks()
@@ -286,7 +287,7 @@ namespace Habanero.BO.Loaders
             (IDictionary<ClassDef, PropDefCol> loadedFullPropertyLists, ClassDef classDef, ClassDefCol classDefs)
         {
             if (classDef == null) return;
-
+            
             foreach (RelationshipDef relationshipDef in classDef.RelationshipDefCol)
             {
                 ClassDef relatedObjectClassDef;
@@ -295,12 +296,20 @@ namespace Habanero.BO.Loaders
                     relatedObjectClassDef =
                         classDefs[relationshipDef.RelatedObjectAssemblyName, relationshipDef.RelatedObjectClassName];
                 }
-                catch (HabaneroDeveloperException ex)
+                catch (HabaneroDeveloperException)
                 {
-                    throw new InvalidXmlDefinitionException
-                        (string.Format
-                             ("The relationship '{0}' could not be loaded for because when trying to retrieve its related class the folllowing error was thrown '{1}'",
-                              relationshipDef.RelationshipName, ex.Message), ex);
+                    try
+                    {
+                        relatedObjectClassDef =
+                        ClassDef.ClassDefs[relationshipDef.RelatedObjectAssemblyName, relationshipDef.RelatedObjectClassName];
+                    }
+                    catch (HabaneroDeveloperException ex)
+                    {
+                        throw new InvalidXmlDefinitionException
+                            (string.Format
+                                 ("The relationship '{0}' could not be loaded for because when trying to retrieve its related class the folllowing error was thrown '{1}'",
+                                  relationshipDef.RelationshipName, ex.Message), ex);
+                    }
                 }
                 ValidateReverseRelationship(classDef, relationshipDef, relatedObjectClassDef);
                 ValidateRelKeyDef(classDef, classDefs, relationshipDef, relatedObjectClassDef, loadedFullPropertyLists);

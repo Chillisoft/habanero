@@ -128,6 +128,7 @@ namespace Habanero.UI.Win
                 if (controlType == typeof (ListBox)) return CreateListBox();
                 if (controlType == typeof (DateTimePicker)) return CreateDateTimePicker();
                 if (controlType == typeof (NumericUpDown)) return CreateNumericUpDownInteger();
+                if (controlType == typeof (EditableGridControlWin)) return CreateEditableGridControl();
 
                 ctl = (IControlHabanero) Activator.CreateInstance(controlType);
                 PropertyInfo infoFlatStyle =

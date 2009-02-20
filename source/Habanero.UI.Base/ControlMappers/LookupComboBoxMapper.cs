@@ -104,6 +104,16 @@ namespace Habanero.UI.Base
             }
         }
 
+        ///<summary>
+        /// Sets the lookuplist used to populate the items in the ComboBox.
+        ///</summary>
+        ///<param name="lookupList">The items used to populate the list</param>
+        [Obsolete("This method is to be replaced with the property LookupList. Please use the property as this method will be removed in a future version.")]
+        public void SetLookupList(Dictionary<string, string> lookupList)
+        {
+            this.LookupList = lookupList;
+        }
+
         /// <summary>
         /// Gets or sets the strategy assigned to this mapper
         /// </summary>
