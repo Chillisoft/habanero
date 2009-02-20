@@ -360,6 +360,13 @@ namespace Habanero.BO.Loaders
         private static void ValidateReverseRelationship
             (ClassDef classDef, RelationshipDef relationshipDef, ClassDef relatedClassDef)
         {
+            if (relationshipDef.OwningBOHasForeignKey)
+            {
+                if (RelKeyDefOwningClassIsThePrimaryKey(relationshipDef, classDef))
+                {
+                    relationshipDef.OwningBOHasForeignKey = false;
+                }
+            }
             if (!HasReverseRelationship(relationshipDef)) return;
 
             string reverseRelationshipName = relationshipDef.ReverseRelationshipName;
@@ -370,28 +377,24 @@ namespace Habanero.BO.Loaders
                          ("The relationship '{0}' could not be loaded for because the reverse relationship '{1}' defined for class '{2}' is not defined as a relationship for class '{2}'. Please check your ClassDefs.xml or fix in Firestarter.",
                           relationshipDef.RelationshipName, reverseRelationshipName, relatedClassDef.ClassNameFull));
             }
-            if (!relationshipDef.OwningBOHasForeignKey) return;
 
             RelationshipDef reverseRelationshipDef = relatedClassDef.RelationshipDefCol[reverseRelationshipName];
             CheckReverseRelationshipRelKeyDefProps(relationshipDef, relatedClassDef, reverseRelationshipName, reverseRelationshipDef, classDef);
             if (!reverseRelationshipDef.OwningBOHasForeignKey) return;
 
-            if (RelKeyDefOwningClassIsThePrimaryKey(relationshipDef, classDef))
-            {
-                relationshipDef.OwningBOHasForeignKey = false;
-                return;
-            }
             if (RelKeyDefOwningClassIsThePrimaryKey(reverseRelationshipDef, relatedClassDef))
             {
                 reverseRelationshipDef.OwningBOHasForeignKey = false;
                 return;
             }
-
-            string errorMessage = string.Format
-                ("The relationship '{0}' could not be loaded because the reverse relationship '{1}' defined for the related class '{2}' and the relationship '{3}' defined for the class '{4}' are both set up as owningBOHasForeignKey = true. Please check your ClassDefs.xml or fix in Firestarter.",
-                 relationshipDef.RelationshipName, reverseRelationshipName, relatedClassDef.ClassNameFull,
-                 relationshipDef.RelationshipName, classDef.ClassNameFull);
-            throw new InvalidXmlDefinitionException(errorMessage);
+            if (relationshipDef.OwningBOHasForeignKey && reverseRelationshipDef.OwningBOHasForeignKey)
+            {
+                string errorMessage = string.Format
+                    ("The relationship '{0}' could not be loaded because the reverse relationship '{1}' defined for the related class '{2}' and the relationship '{3}' defined for the class '{4}' are both set up as owningBOHasForeignKey = true. Please check your ClassDefs.xml or fix in Firestarter.",
+                     relationshipDef.RelationshipName, reverseRelationshipName, relatedClassDef.ClassNameFull,
+                     relationshipDef.RelationshipName, classDef.ClassNameFull);
+                throw new InvalidXmlDefinitionException(errorMessage);
+            }
         }
         /// <summary>
         /// Checks to see if the relationship and reverse relationship are defined for the same relationship.

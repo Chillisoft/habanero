@@ -372,8 +372,14 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(2, classDefList.Count);
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
-
+            ClassDef classDef = classDefList.FindByClassName("TestClass");
+            RelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
+            Assert.IsFalse(relationshipDef.OwningBOHasForeignKey, "Should have converted this to false");
+            ClassDef revesreclassDef = classDefList.FindByClassName("TestClass");
+            RelationshipDef reverserelationshipDef = revesreclassDef.RelationshipDefCol["TestRelatedClass"];
+            Assert.IsFalse(reverserelationshipDef.OwningBOHasForeignKey, "Should not have converted this to true");
         }
+
         [Test]
         public void Test_Valid_Relationship_SingleSingleRelationships_CanDetermine_OwningBOHasForeignKey()
         {
@@ -385,7 +391,50 @@ namespace Habanero.Test.BO.Loaders
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
-					        <relationship name=""TestRelatedClass"" type=""single"" relatedClass=""TestRelatedClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" reverseRelationship=""TestClass"">
+					        <relationship name=""TestRelatedClass"" type=""single"" relatedClass=""TestRelatedClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" reverseRelationship=""TestClass"" owningBOHasForeignKey=""true"" >
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
+							<property  name=""TestClassID"" type=""Guid"" />
+                            <primaryKey>
+                                <prop name=""TestRelatedClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestClass"" type=""single"" relatedClass=""TestClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" reverseRelationship=""TestRelatedClass"" owningBOHasForeignKey=""true"" >
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+					</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //--------------------Execute Test-------------------------
+            ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, classDefList.Count);
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded."); 
+            ClassDef classDef = classDefList.FindByClassName("TestClass");
+            RelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
+            Assert.IsFalse(relationshipDef.OwningBOHasForeignKey);
+            ClassDef reverseClassDef = classDefList.FindByClassName("TestRelatedClass");
+            RelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
+            Assert.IsTrue(reverseRelationshipDef.OwningBOHasForeignKey);
+
+        }
+
+        [Test]
+        public void Test_Valid_Relationship_SingleSingleRelationships_CanDetermine_OwningBOHasForeignKey_ReverseDoesNotHave()
+        {
+            //----------------------Test Setup ----------------------
+            const string classDefsString = @"
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" type=""Guid"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestRelatedClass"" type=""single"" relatedClass=""TestRelatedClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" reverseRelationship=""TestClass"" owningBOHasForeignKey=""true"" >
 						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
 					        </relationship>
 						</class>
@@ -407,8 +456,49 @@ namespace Habanero.Test.BO.Loaders
             //---------------Test Result -----------------------
             Assert.AreEqual(2, classDefList.Count);
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
-            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded."); 
+            ClassDef classDef = classDefList.FindByClassName("TestClass");
+            RelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
+            Assert.IsFalse(relationshipDef.OwningBOHasForeignKey);
+            ClassDef reverseClassDef = classDefList.FindByClassName("TestRelatedClass");
+            RelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
+            Assert.IsTrue(reverseRelationshipDef.OwningBOHasForeignKey);
 
+        }
+        [Test]
+        public void Test_Valid_Relationship_SingleSingleRelationships_NoReverse_CanDetermine_OwningBOHasForeignKey()
+        {
+            //----------------------Test Setup ----------------------
+            const string classDefsString = @"
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" type=""Guid"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+					        <relationship name=""TestRelatedClass"" type=""single"" relatedClass=""TestRelatedClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" owningBOHasForeignKey=""true"">
+						        <relatedProperty property=""TestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>
+						</class>
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestRelatedClassID"" type=""Guid"" />
+							<property  name=""TestClassID"" type=""Guid"" />
+                            <primaryKey>
+                                <prop name=""TestRelatedClassID""/>
+                            </primaryKey>
+						</class>
+					</classes>
+			";
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            //--------------------Execute Test-------------------------
+            ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, classDefList.Count);
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
+            ClassDef classDef = classDefList.FindByClassName("TestClass");
+            RelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
+            Assert.IsFalse(relationshipDef.OwningBOHasForeignKey);
         }
         [Test]
         public void Test_Valid_Relationship_SingleSingleRelationships_CanDetermine_OwningBOHasForeignKey_SecondClass()
