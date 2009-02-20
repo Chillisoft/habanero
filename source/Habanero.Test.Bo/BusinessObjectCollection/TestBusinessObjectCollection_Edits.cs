@@ -846,7 +846,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             bool updatedEventFired = false;
             IBusinessObject eventBo = null;
-            cpCol.BusinessObjectUpdated += delegate(object sender, BOEventArgs e)
+            cpCol.BusinessObjectUpdated += delegate(object sender, BOEventArgs<ContactPersonTestBO> e)
             {
                 eventBo = e.BusinessObject;
                 updatedEventFired = true;
@@ -935,7 +935,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             bool propertyUpdatedEventFired = false;
             IBusinessObject eventBo = null;
             IBOProp eventProp = null;
-            cpCol.BusinessObjectPropertyUpdated += delegate(object sender, BOPropUpdatedEventArgs boPropEventArgs)
+            cpCol.BusinessObjectPropertyUpdated += delegate(object sender, BOPropUpdatedEventArgs<ContactPersonTestBO> boPropEventArgs)
             {
                 eventBo = boPropEventArgs.BusinessObject;
                 eventProp = boPropEventArgs.Prop;
@@ -1025,7 +1025,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             BusinessObjectCollection<ContactPersonTestBO> cpCol = CreateCol_OneCP(out cp);
             bool businessObjectIDUpdatedEventFired = false;
             IBusinessObject eventBo = null;
-            cpCol.BusinessObjectIDUpdated += delegate(object sender, BOEventArgs boEventArgs)
+            cpCol.BusinessObjectIDUpdated += delegate(object sender, BOEventArgs<ContactPersonTestBO> boEventArgs)
             {
                 eventBo = boEventArgs.BusinessObject;
                 businessObjectIDUpdatedEventFired = true;

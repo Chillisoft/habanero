@@ -42,7 +42,6 @@ namespace Habanero.BO
         #region IBusinessObject Members
 
         public event EventHandler<BOEventArgs> Updated;
-
         public event EventHandler<BOEventArgs> Saved;
         public event EventHandler<BOEventArgs> Deleted;
         public event EventHandler<BOEventArgs> Restored;

@@ -58,4 +58,30 @@ namespace Habanero.Base
             get { return _businessObject; }
         }
     }
+
+    /// <summary>
+    /// Provides arguments to attach for an event involving business objects
+    /// </summary>
+    public class BOPropUpdatedEventArgs<TBusinessObject> : BOPropUpdatedEventArgs where TBusinessObject : IBusinessObject
+    {
+        private readonly TBusinessObject _bo;
+
+        /// <summary>
+        /// Constructor to initialise a new set of arguments
+        /// </summary>
+        /// <param name="bo">The related business object</param>
+        public BOPropUpdatedEventArgs(TBusinessObject bo, IBOProp prop)
+            : base(bo, prop)
+        {
+            _bo = bo;
+        }
+
+        /// <summary>
+        /// Returns the business object related to the event
+        /// </summary>
+        public new TBusinessObject BusinessObject
+        {
+            get { return _bo; }
+        }
+    }
 }

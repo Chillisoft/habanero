@@ -511,7 +511,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             ContactPersonTestBO cp2 = cpCol.CreateBusinessObject();
 
             //---------------Execute Test ----------------------
-            ContactPersonTestBO foundCp = cpCol.Find<ContactPersonTestBO>(cp2.ID.ObjectID);
+            ContactPersonTestBO foundCp = cpCol.Find(cp2.ID.ObjectID);
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(foundCp);
