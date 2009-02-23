@@ -172,8 +172,12 @@ namespace Habanero.BO
             return null;
             //return FindRelationshipByRelationshipKey(bo);
         }
-
-        private static bool HasReverseRelationshipDefined(IRelationship relationship)
+        /// <summary>
+        /// Returns true if htis relationship has a reverse relationship defined. False otherwise.
+        /// </summary>
+        /// <param name="relationship"></param>
+        /// <returns></returns>
+        protected static bool HasReverseRelationshipDefined(IRelationship relationship)
         {
             return !String.IsNullOrEmpty(relationship.RelationshipDef.ReverseRelationshipName);
         }

@@ -28,9 +28,7 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class UIGrid : ICollection
     {
-        private ArrayList _list;
-        private string _sortColumn;
-        private FilterDef _filterDef;
+        private readonly ArrayList _list;
 
         /// <summary>
         /// Constructor to initialise a new collection of definitions
@@ -152,13 +150,12 @@ namespace Habanero.BO.ClassDefinition
         /// property is not specified, rows will be listed in the order
         /// they were added to the database.
         /// </summary>
-        public string SortColumn
-        {
-            get { return _sortColumn; }
-            set { _sortColumn = value; }
-        }
+        public string SortColumn { get; set; }
 
-        public FilterDef FilterDef { get { return _filterDef; } set { _filterDef = value; } }
+        ///<summary>
+        /// The definition of the filter that will be used for this grid.
+        ///</summary>
+        public FilterDef FilterDef { get; set; }
 
 
         ///<summary>
@@ -206,7 +203,7 @@ namespace Habanero.BO.ClassDefinition
         public static bool operator ==(UIGrid a, UIGrid b)
         {
             // If both are null, or both are same instance, return true.
-            if (System.Object.ReferenceEquals(a, b))
+            if (ReferenceEquals(a, b))
             {
                 return true;
             }

@@ -741,25 +741,26 @@ namespace Habanero.DB
             get { return IsolationLevel.RepeatableRead; }
         }
 
-        [Obsolete ("please use the SqlFormatter directly")]
+        
         /// <summary>
         /// Returns a limit clause with the limit specified, with the format
         /// as " TOP [limit] " (eg. " TOP 4 ")
         /// </summary>
         /// <param name="limit">The limit</param>
         /// <returns>Returns a string</returns>
+        [Obsolete("please use the SqlFormatter directly")]
         public virtual string GetLimitClauseForBeginning(int limit)
         {
             return _sqlFormatter.GetLimitClauseCriteriaForBegin(limit);
         }
 
-        [Obsolete("please use the SqlFormatter directly")]
         /// <summary>
         /// Returns an empty string in this implementation
         /// </summary>
         /// <param name="limit">The limit - has no relevance in this 
         /// implementation</param>
         /// <returns>Returns an empty string in this implementation</returns>
+        [Obsolete("please use the SqlFormatter directly")]
         public virtual string GetLimitClauseForEnd(int limit)
         {
             return _sqlFormatter.GetLimitClauseCriteriaForEnd(limit);

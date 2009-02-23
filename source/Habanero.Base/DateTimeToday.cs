@@ -137,6 +137,10 @@ namespace Habanero.Base
             return Value.CompareTo(other);
         }
 
+        ///<summary>
+        /// Returns a ToString of the Value (Today).
+        ///</summary>
+        ///<returns></returns>
         public override string ToString()
         {
             return Value.ToString();

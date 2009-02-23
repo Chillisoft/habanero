@@ -26,12 +26,12 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
 {
-
     /// <summary>
     /// Manages a relationship where the relationship owner relates to one
     /// other object
     /// </summary>
-    public interface ISingleRelationship : IRelationship {
+    public interface ISingleRelationship : IRelationship
+    {
         /// <summary>
         /// Sets the related object to that provided
         /// </summary>
@@ -42,14 +42,13 @@ namespace Habanero.BO
         /// Returns the related object for the single relationship.
         ///</summary>
         ///<returns>returns the related business object</returns>
-        IBusinessObject GetRelatedObject ();
+        IBusinessObject GetRelatedObject();
 
         /// <summary>
         /// Indicates whether the related object has been specified
         /// </summary>
         /// <returns>Returns true if related object exists</returns>
         bool HasRelatedObject();
-
     }
 
     ///<summary>
@@ -57,7 +56,11 @@ namespace Habanero.BO
     ///</summary>
     public abstract class SingleRelationshipBase : Relationship
     {
-        protected SingleRelationshipBase(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol) : base(owningBo, lRelDef, lBOPropCol) {}
+        protected SingleRelationshipBase(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
+            : base(owningBo, lRelDef, lBOPropCol)
+        {
+        }
+
         internal abstract IBusinessObject RemovedBOInternal { get; }
 
         ///<summary>
@@ -113,7 +116,8 @@ namespace Habanero.BO
             }
         }
 
-        private bool IsRelatedBOCreatedOrDeleted() {
+        private bool IsRelatedBOCreatedOrDeleted()
+        {
             return (_relatedBo != null && (_relatedBo.Status.IsNew || _relatedBo.Status.IsDeleted));
         }
 
@@ -133,7 +137,8 @@ namespace Habanero.BO
             return IsRelatedPropsDirty(_relatedBo);
         }
 
-        private bool IsRelatedPropsDirty(IBusinessObject bo) {
+        private bool IsRelatedPropsDirty(IBusinessObject bo)
+        {
             if (bo == null) return false;
             foreach (IRelPropDef relPropDef in this.RelationshipDef.RelKeyDef)
             {
@@ -147,12 +152,18 @@ namespace Habanero.BO
         internal TBusinessObject RemovedBO { get; private set; }
 
         internal override IBusinessObject RemovedBOInternal
-        { get { return RemovedBO; } }
+        {
+            get { return RemovedBO; }
+        }
 
         ///<summary>
         /// Returns true if the Business object that owns this relationship has the foreign key and true otherwise.
         ///</summary>
-        public override  bool OwningBOHasForeignKey { get { return _relDef.OwningBOHasForeignKey; } set { _relDef.OwningBOHasForeignKey = value; } }
+        public override bool OwningBOHasForeignKey
+        {
+            get { return _relDef.OwningBOHasForeignKey; }
+            set { _relDef.OwningBOHasForeignKey = value; }
+        }
 
         /// <summary>
         /// Indicates whether the related object has been specified
@@ -186,13 +197,13 @@ namespace Habanero.BO
 //            if (!OwningBOHasForeignKey && (RelatedBoForeignKeyHasChanged() || _relatedBo == null))
             if ((RelatedBoForeignKeyHasChanged() || _relatedBo == null))
             {
-              
-                BusinessObjectCollection<TBusinessObject> relatedCol 
-                    = BusinessObjectManager.Instance.Find<TBusinessObject>(_relKey.Criteria);
+                BusinessObjectCollection<TBusinessObject> relatedCol =
+                    BusinessObjectManager.Instance.Find<TBusinessObject>(_relKey.Criteria);
                 if (relatedCol.Count == 0)
                 {
-                      _relatedBo = null;
-                } else if (relatedCol.Count == 1)
+                    _relatedBo = null;
+                }
+                else if (relatedCol.Count == 1)
                 {
                     _relatedBo = relatedCol[0] == _relatedBo ? null : relatedCol[0];
                 }
@@ -204,9 +215,8 @@ namespace Habanero.BO
                 return _relatedBo;
             }
 
-            if (_storedKeyCriteria == null ||
-                (_storedKeyCriteria != null &&
-                 ! _storedKeyCriteria.Equals(newKeyCriteria)))
+            if (_storedKeyCriteria == null
+                || (_storedKeyCriteria != null && ! _storedKeyCriteria.Equals(newKeyCriteria)))
             {
                 if (HasRelatedObject())
                 {
@@ -263,12 +273,12 @@ namespace Habanero.BO
 
             if (relatedObject != null) RelationshipDef.CheckCanAddChild(relatedObject);
             if (_relatedBo != null) RelationshipDef.CheckCanRemoveChild(_relatedBo);
-            
+
 
             RemoveFromReverseRelationship(_relatedBo);
-            
+
             _relatedBo = relatedObject;
-            
+
             AddToReverseRelationship(relatedObject);
 
             UpdatedForeignKeyAndStoredRelationshipExpression();
@@ -278,13 +288,13 @@ namespace Habanero.BO
 
         private void FireUpdatedEvent()
         {
-            if (Updated != null) this.Updated(this, new BOEventArgs<TBusinessObject>(_relatedBo)); 
-           
+            if (Updated != null) this.Updated(this, new BOEventArgs<TBusinessObject>(_relatedBo));
         }
 
-        private void AddToReverseRelationship(TBusinessObject relatedObject) {
+        private void AddToReverseRelationship(TBusinessObject relatedObject)
+        {
             if (relatedObject == null) return;
-            
+
             IRelationship reverseRelationship = GetReverseRelationship(relatedObject);
             if (reverseRelationship == null) return;
 
@@ -295,30 +305,33 @@ namespace Habanero.BO
             AddToSingleReverseRelationship(reverseRelationship);
         }
 
-        private void AddToSingleReverseRelationship(IRelationship reverseRelationship) {
+        private void AddToSingleReverseRelationship(IRelationship reverseRelationship)
+        {
             ISingleRelationship singleRelationship = reverseRelationship as ISingleRelationship;
 
             if (singleRelationship == null) return;
-            RelationshipUtils.CheckCorrespondingSingleRelationshipsAreValid(this, (SingleRelationshipBase) singleRelationship);
+            RelationshipUtils.CheckCorrespondingSingleRelationshipsAreValid
+                (this, (SingleRelationshipBase) singleRelationship);
             singleRelationship.SetRelatedObject(this.OwningBO);
         }
 
-        private void AddToMultipleReverseRelationship(IRelationship reverseRelationship) {
+        private void AddToMultipleReverseRelationship(IRelationship reverseRelationship)
+        {
             MultipleRelationshipBase multipleRelationship = reverseRelationship as MultipleRelationshipBase;
-            if (multipleRelationship != null) 
+            if (multipleRelationship != null)
             {
                 multipleRelationship.GetLoadedBOColInternal().Add(this.OwningBO);
             }
         }
 
-        private void RemoveFromReverseRelationship(TBusinessObject previousRelatedBO) {
+        private void RemoveFromReverseRelationship(TBusinessObject previousRelatedBO)
+        {
             if (previousRelatedBO == null)
             {
                 IsRemoved = false;
                 RemovedBO = null;
                 return;
             }
-
             IRelationship reverseRelationship = GetReverseRelationship(previousRelatedBO);
             if (reverseRelationship != null)
             {
@@ -330,25 +343,32 @@ namespace Habanero.BO
                 RemoveFromMultipleReverseRelationship(reverseRelationship);
                 RemoveFromSingleReverseRelationship(reverseRelationship);
             }
+            else if (!this.OwningBOHasForeignKey)
+            {
+                foreach (RelProp relProp in _relKey)
+                {
+                    _relatedBo.SetPropertyValue(relProp.RelatedClassPropName, null);
+                }
+            }
             IsRemoved = true;
             RemovedBO = previousRelatedBO;
         }
 
-        private void RemoveFromSingleReverseRelationship(IRelationship reverseRelationship) {
+        private void RemoveFromSingleReverseRelationship(IRelationship reverseRelationship)
+        {
             SingleRelationshipBase singleReverseRelationship = reverseRelationship as SingleRelationshipBase;
             if (singleReverseRelationship == null) return;
 
             RelationshipUtils.CheckCorrespondingSingleRelationshipsAreValid(this, singleReverseRelationship);
-            ((ISingleRelationship)singleReverseRelationship).SetRelatedObject(null);
+            ((ISingleRelationship) singleReverseRelationship).SetRelatedObject(null);
         }
 
-        private void RemoveFromMultipleReverseRelationship(IRelationship reverseRelationship) {
+        private void RemoveFromMultipleReverseRelationship(IRelationship reverseRelationship)
+        {
             MultipleRelationshipBase multipleReverseRelationship = reverseRelationship as MultipleRelationshipBase;
-            if (multipleReverseRelationship != null)
-            {
-                IBusinessObjectCollection colInternal = multipleReverseRelationship.GetLoadedBOColInternal();
-                if (colInternal.Contains(this.OwningBO)) colInternal.Remove(this.OwningBO);
-            }
+            if (multipleReverseRelationship == null) return;
+            IBusinessObjectCollection colInternal = multipleReverseRelationship.GetLoadedBOColInternal();
+            if (colInternal.Contains(this.OwningBO)) colInternal.Remove(this.OwningBO);
         }
 
         private void UpdatedForeignKeyAndStoredRelationshipExpression()
@@ -363,29 +383,48 @@ namespace Habanero.BO
                     _owningBo.SetPropertyValue(relProp.OwnerPropertyName, relatedObjectValue);
                 }
             }
+            else if (!HasReverseRelationshipDefined(this))
+            {
+                foreach (RelProp relProp in _relKey)
+                {
+                    object owningBOValue = _owningBo == null
+                                               ? null
+                                               : _owningBo.GetPropertyValue(relProp.OwnerPropertyName);
+                    if (_relatedBo != null) _relatedBo.SetPropertyValue(relProp.RelatedClassPropName, owningBOValue);
+                }
+            }
             _storedKeyCriteria = _relKey.Criteria;
         }
 
-        private bool IsRelatedBODirty() { return _relatedBo != null && _relatedBo.Status.IsDirty ; }
+        private bool IsRelatedBODirty()
+        {
+            return _relatedBo != null && _relatedBo.Status.IsDirty;
+        }
 
         private bool MustAddToDirtyBusinessObjects()
         {
-            return IsRelatedBODirty() &&
+            return IsRelatedBODirty()
+                   &&
                    ((this.RelationshipDef.RelationshipType == RelationshipType.Aggregation
-                    || this.RelationshipDef.RelationshipType == RelationshipType.Composition)
-                   || _relatedBo.Status.IsNew
-                   || _relatedBo.Status.IsDeleted);
+                     || this.RelationshipDef.RelationshipType == RelationshipType.Composition)
+                    || _relatedBo.Status.IsNew || _relatedBo.Status.IsDeleted);
         }
 
-        private bool MustAddRemovedBOToDirtyBusinessObjects() { return IsRemoved && (this.RelationshipDef.RelationshipType == RelationshipType.Aggregation
-                    || this.RelationshipDef.RelationshipType == RelationshipType.Composition); }
+        private bool MustAddRemovedBOToDirtyBusinessObjects()
+        {
+            return IsRemoved
+                   &&
+                   (this.RelationshipDef.RelationshipType == RelationshipType.Aggregation
+                    || this.RelationshipDef.RelationshipType == RelationshipType.Composition);
+        }
 
         protected override void DoInitialisation()
         {
             // do nothing
         }
 
-        internal override void UpdateRelationshipAsPersisted() { 
+        internal override void UpdateRelationshipAsPersisted()
+        {
             IsRemoved = false;
             RemovedBO = null;
         }
@@ -395,7 +434,8 @@ namespace Habanero.BO
             DereferenceChild(committer, GetRelatedObject());
         }
 
-        internal override void DeleteChildren(TransactionCommitter committer) {
+        internal override void DeleteChildren(TransactionCommitter committer)
+        {
             DeleteChild(committer, GetRelatedObject());
         }
 
@@ -409,7 +449,8 @@ namespace Habanero.BO
             //Do nothing single relationship does not have children
         }
 
-        internal override void AddDirtyChildrenToTransactionCommitter(TransactionCommitter transactionCommitter) {
+        internal override void AddDirtyChildrenToTransactionCommitter(TransactionCommitter transactionCommitter)
+        {
             foreach (TBusinessObject businessObject in GetDirtyChildren())
             {
                 transactionCommitter.AddBusinessObject(businessObject);
@@ -421,14 +462,17 @@ namespace Habanero.BO
                     ISingleRelationship reverseRelationship = GetReverseRelationship(_relatedBo) as ISingleRelationship;
                     if (reverseRelationship != null)
                     {
-                        transactionCommitter.AddTransaction(new TransactionalSingleRelationship_Added(reverseRelationship));
+                        transactionCommitter.AddTransaction
+                            (new TransactionalSingleRelationship_Added(reverseRelationship));
                     }
-                } else if (IsRemoved)
+                }
+                else if (IsRemoved)
                 {
                     ISingleRelationship reverseRelationship = GetReverseRelationship(RemovedBO) as ISingleRelationship;
                     if (reverseRelationship != null)
                     {
-                        transactionCommitter.AddTransaction(new TransactionalSingleRelationship_Removed(reverseRelationship));
+                        transactionCommitter.AddTransaction
+                            (new TransactionalSingleRelationship_Removed(reverseRelationship));
                     }
                 }
             }
@@ -442,5 +486,4 @@ namespace Habanero.BO
             return dirtyChildren;
         }
     }
-
 }

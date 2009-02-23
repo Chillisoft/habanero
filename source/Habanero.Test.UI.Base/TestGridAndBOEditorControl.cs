@@ -61,7 +61,7 @@ namespace Habanero.Test.UI.Base
         private static ClassDef GetCustomClassDef()
         {
             ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadClassDefOrganisationRelationship();
+            ContactPersonTestBO.LoadClassDef_NoOrganisationRelationship();
             ClassDef classDef = OrganisationTestBO.LoadDefaultClassDef();
             UIGrid originalGridDef = classDef.UIDefCol["default"].UIGrid;
             UIGrid extraGridDef = originalGridDef.Clone();

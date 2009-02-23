@@ -166,7 +166,7 @@ namespace Habanero.BO.Loaders
 
         private void DoPostLoadChecks()
         {
-//            CheckRelationships();
+            UpdateOwningBOHasForeignKey(_classDefList);
             CheckRelationships(_classDefList);
             UpdateKeyDefinitionsWithBoProp(_classDefList);
             UpdatePrimaryKeys(_classDefList);
@@ -175,7 +175,27 @@ namespace Habanero.BO.Loaders
             //  a bo are not both set to OwnerHasForeignKey
         }
 
-        private static void UpdatePrimaryKeys(ClassDefCol col)
+        private static void UpdateOwningBOHasForeignKey(IEnumerable<ClassDef> classDefCol)
+        {
+            foreach (ClassDef classDef in classDefCol)
+            {
+                foreach (RelationshipDef relationshipDef in classDef.RelationshipDefCol)
+                {
+                    if (relationshipDef is MultipleRelationshipDef)
+                    {
+                        relationshipDef.OwningBOHasForeignKey = true;
+                    }
+                    else if (relationshipDef.OwningBOHasForeignKey)
+                    {
+                        relationshipDef.OwningBOHasForeignKey = !OwningClassHasPrimaryKey(relationshipDef, classDef);
+                        relationshipDef.OwningBOHasPrimaryKey = OwningClassHasPrimaryKey(relationshipDef, classDef);
+                    }
+                }
+            }
+        }
+
+
+        private static void UpdatePrimaryKeys(IEnumerable<ClassDef> col)
         {
             foreach (ClassDef classDef in col)
             {
@@ -290,30 +310,36 @@ namespace Habanero.BO.Loaders
             
             foreach (RelationshipDef relationshipDef in classDef.RelationshipDefCol)
             {
-                ClassDef relatedObjectClassDef;
-                try
-                {
-                    relatedObjectClassDef =
-                        classDefs[relationshipDef.RelatedObjectAssemblyName, relationshipDef.RelatedObjectClassName];
-                }
-                catch (HabaneroDeveloperException)
-                {
-                    try
-                    {
-                        relatedObjectClassDef =
-                        ClassDef.ClassDefs[relationshipDef.RelatedObjectAssemblyName, relationshipDef.RelatedObjectClassName];
-                    }
-                    catch (HabaneroDeveloperException ex)
-                    {
-                        throw new InvalidXmlDefinitionException
-                            (string.Format
-                                 ("The relationship '{0}' could not be loaded for because when trying to retrieve its related class the folllowing error was thrown '{1}'",
-                                  relationshipDef.RelationshipName, ex.Message), ex);
-                    }
-                }
+                ClassDef relatedObjectClassDef = GetRelatedObjectClassDef(classDefs, relationshipDef);
                 ValidateReverseRelationship(classDef, relationshipDef, relatedObjectClassDef);
                 ValidateRelKeyDef(classDef, classDefs, relationshipDef, relatedObjectClassDef, loadedFullPropertyLists);
             }
+        }
+
+        private static ClassDef GetRelatedObjectClassDef(ClassDefCol classDefs, IRelationshipDef relationshipDef)
+        {
+            ClassDef relatedObjectClassDef;
+            try
+            {
+                relatedObjectClassDef =
+                    classDefs[relationshipDef.RelatedObjectAssemblyName, relationshipDef.RelatedObjectClassName];
+            }
+            catch (HabaneroDeveloperException)
+            {
+                try
+                {
+                    relatedObjectClassDef =
+                        ClassDef.ClassDefs[relationshipDef.RelatedObjectAssemblyName, relationshipDef.RelatedObjectClassName];
+                }
+                catch (HabaneroDeveloperException ex)
+                {
+                    throw new InvalidXmlDefinitionException
+                        (string.Format
+                             ("The relationship '{0}' could not be loaded for because when trying to retrieve its related class the folllowing error was thrown '{1}'",
+                              relationshipDef.RelationshipName, ex.Message), ex);
+                }
+            }
+            return relatedObjectClassDef;
         }
 
         private static void ValidateRelKeyDef
@@ -358,15 +384,9 @@ namespace Habanero.BO.Loaders
         }
 
         private static void ValidateReverseRelationship
-            (ClassDef classDef, RelationshipDef relationshipDef, ClassDef relatedClassDef)
+            (IClassDef classDef, RelationshipDef relationshipDef, ClassDef relatedClassDef)
         {
-            if (relationshipDef.OwningBOHasForeignKey)
-            {
-                if (RelKeyDefOwningClassIsThePrimaryKey(relationshipDef, classDef))
-                {
-                    relationshipDef.OwningBOHasForeignKey = false;
-                }
-            }
+
             if (!HasReverseRelationship(relationshipDef)) return;
 
             string reverseRelationshipName = relationshipDef.ReverseRelationshipName;
@@ -380,13 +400,13 @@ namespace Habanero.BO.Loaders
 
             RelationshipDef reverseRelationshipDef = relatedClassDef.RelationshipDefCol[reverseRelationshipName];
             CheckReverseRelationshipRelKeyDefProps(relationshipDef, relatedClassDef, reverseRelationshipName, reverseRelationshipDef, classDef);
-            if (!reverseRelationshipDef.OwningBOHasForeignKey) return;
-
-            if (RelKeyDefOwningClassIsThePrimaryKey(reverseRelationshipDef, relatedClassDef))
-            {
-                reverseRelationshipDef.OwningBOHasForeignKey = false;
-                return;
-            }
+//            if (!reverseRelationshipDef.OwningBOHasForeignKey) return;
+//
+//            if (OwningClassHasPrimaryKey(reverseRelationshipDef, relatedClassDef))
+//            {
+//                reverseRelationshipDef.OwningBOHasForeignKey = false;
+//                return;
+//            }
             if (relationshipDef.OwningBOHasForeignKey && reverseRelationshipDef.OwningBOHasForeignKey)
             {
                 string errorMessage = string.Format
@@ -404,7 +424,7 @@ namespace Habanero.BO.Loaders
         /// <param name="reverseRelationshipName"></param>
         /// <param name="reverseRelationshipDef"></param>
         /// <param name="classDef"></param>
-        private static void CheckReverseRelationshipRelKeyDefProps(RelationshipDef relationshipDef, ClassDef relatedClassDef, string reverseRelationshipName, RelationshipDef reverseRelationshipDef, ClassDef classDef)
+        private static void CheckReverseRelationshipRelKeyDefProps(IRelationshipDef relationshipDef, IClassDef relatedClassDef, string reverseRelationshipName, IRelationshipDef reverseRelationshipDef, IClassDef classDef)
         {
             if (!ReverseRelationshipHasSameProps(relationshipDef, reverseRelationshipDef))
             {
@@ -437,16 +457,21 @@ namespace Habanero.BO.Loaders
             return true;
         }
 
-        private static bool RelKeyDefOwningClassIsThePrimaryKey(IRelationshipDef relationshipDef, ClassDef classDef)
+        private static bool OwningClassHasPrimaryKey(IRelationshipDef relationshipDef, ClassDef classDef)
         {
+            //For each Property in the Relationship Key check if it is defined as the primary key for the
+            //class if it is then check the other properties else this is not a primaryKey
             foreach (IRelPropDef relPropDef in relationshipDef.RelKeyDef)
             {
                 bool isInKeyDef = false;
                 foreach (IPropDef propDef in classDef.PrimaryKeyDef)
                 {
-                    if (propDef.PropertyName != relPropDef.OwnerPropertyName) continue;
+                    if (propDef.PropertyName != relPropDef.OwnerPropertyName)
+                    {
+                        isInKeyDef = false;
+                        break;
+                    }
                     isInKeyDef = true;
-                    break;
                 }
                 if (!isInKeyDef) return false;
             }

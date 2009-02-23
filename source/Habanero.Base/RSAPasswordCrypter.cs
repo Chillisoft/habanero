@@ -29,8 +29,12 @@ namespace Habanero.Base
     /// </summary>
     public class RSAPasswordCrypter : ICrypter
     {
-        private RSA _rsa;
+        private readonly RSA _rsa;
 
+        ///<summary>
+        /// Constructor
+        ///</summary>
+        ///<param name="rsa"></param>
         public RSAPasswordCrypter(RSA rsa)
         {
             _rsa = rsa;

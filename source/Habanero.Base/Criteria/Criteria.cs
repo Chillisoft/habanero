@@ -38,13 +38,16 @@ namespace Habanero.Base
         public enum LogicalOp
         {
             ///<summary>
-            /// The logical And (&&) operator
+            /// The logical And () operator
             ///</summary>
             And,
             /// <summary>
-            /// The logical Or (||) operator
+            /// The logical Or  operator
             /// </summary>
             Or,
+            ///<summary>
+            /// The logical unary Not !()
+            ///</summary>
             Not
         }
 
@@ -111,7 +114,14 @@ namespace Habanero.Base
         private readonly ComparisonOp _comparisonOp;
         private readonly Criteria _rightCriteria;
         private object _fieldValue;
+        /// <summary>
+        /// An array of logical operations (e.g. AND, OR, NOT') that can be used when building <see cref="Criteria"/>
+        /// </summary>
         protected readonly string[] LogicalOps = {"AND", "OR", "NOT"};
+        /// <summary>
+        /// An Arracy of Comparison Ops (e.g. '=', 'Like' that can be used when building <see cref="Criteria"/>
+        /// This is used to convert the <see cref="ComparisonOp"/> value to a <see cref="ComparisonOperatorString"/>
+        /// </summary>
         protected readonly string[] ComparisonOps = {"=", ">", "<", "<>", "<=", ">=", "LIKE", "NOT LIKE", "IS", "IS NOT"};
         private readonly QueryField _field;
 
@@ -130,9 +140,7 @@ namespace Habanero.Base
         /// <param name="value">The value to compare to</param>
         public Criteria(string propName, ComparisonOp comparisonOp, object value)
             : this(QueryField.FromString(propName), comparisonOp, value)
-        {
- 
-        }
+        {}
 
         /// <summary>
         /// Creates a composite criteria by logically joining two other criteria.
@@ -224,7 +232,15 @@ namespace Habanero.Base
             get { return _comparisonOp; }
         }
 
-
+        ///<summary>
+        /// Returns true if the business object matches 
+        ///</summary>
+        ///<param name="businessObject"></param>
+        ///<param name="usePersistedValue"></param>
+        ///<typeparam name="T"></typeparam>
+        ///<returns></returns>
+        ///<exception cref="ArgumentNullException"></exception>
+        ///<exception cref="InvalidOperationException"></exception>
         public bool IsMatch<T>(T businessObject, bool usePersistedValue) where T : class, IBusinessObject 
         {
             if (businessObject == null) throw new ArgumentNullException("businessObject", "The IsMatch cannot be called for null object");
@@ -243,7 +259,7 @@ namespace Habanero.Base
             }
 
             //todo: criterias with relationships - this will pass the source through to the GetPropertyValue
-            object leftValue = null;
+            object leftValue;
             if (_field.Source != null && _field.Source.ChildSource != null)
             {
                 if (usePersistedValue)
@@ -429,7 +445,8 @@ namespace Habanero.Base
             if (FieldValue == null)
             {
                 return "NULL";
-            } else if (FieldValue is DateTime)
+            }
+            if (FieldValue is DateTime)
             {
                 valueString = ((DateTime)FieldValue).ToString(DATE_FORMAT);
             }
@@ -472,7 +489,7 @@ namespace Habanero.Base
             if (String.Compare(Field.PropertyName, otherCriteria.Field.PropertyName) != 0) return false;
             if (_fieldValue == null && otherCriteria.FieldValue == null) return true;
             if (_fieldValue == null && otherCriteria.FieldValue != null) return false;
-            return _fieldValue.Equals(otherCriteria.FieldValue);
+            return _fieldValue == null || _fieldValue.Equals(otherCriteria.FieldValue);
         }
 
         ///<summary>
@@ -568,7 +585,10 @@ namespace Habanero.Base
             if (ComparisonOperator == ComparisonOp.Equals && FieldValue == null) return false;
             return true;
         }
-
+        /// <summary>
+        /// Returns the string comparison Operator for the enumerated <see cref="ComparisonOp" value (e.g. ComparisonOp.Equals will be converted to '='/>
+        /// </summary>
+        /// <returns></returns>
         protected string ComparisonOperatorString()
         {
             if (ComparisonOperator == ComparisonOp.Equals && FieldValue == null)

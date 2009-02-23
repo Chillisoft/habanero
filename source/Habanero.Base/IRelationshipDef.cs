@@ -162,6 +162,9 @@ namespace Habanero.Base
         ///</summary>
         RelationshipType RelationshipType { get; }
 
+        ///<summary>
+        /// The name of the reverse relationship.
+        ///</summary>
         string ReverseRelationshipName { get; set; }
 
         /// <summary>
@@ -173,7 +176,16 @@ namespace Habanero.Base
         /// <returns>The new relationship object created</returns>
         IRelationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol);
 
+        ///<summary>
+        /// Checks to see if the child can be added to the relationship
+        ///</summary>
+        ///<param name="bo"></param>
         void CheckCanAddChild(IBusinessObject bo);
+
+        ///<summary>
+        /// Checks to see if the child be removed to the relationship
+        ///</summary>
+        ///<param name="bo"></param>
         void CheckCanRemoveChild(IBusinessObject bo);
     }
 

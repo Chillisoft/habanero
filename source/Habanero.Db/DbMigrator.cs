@@ -37,6 +37,9 @@ namespace Habanero.DB
     /// </summary>
     public class DBMigrator
     {
+        /// <summary>
+        /// The string for the version of the Database.
+        /// </summary>
         public const string DatabaseVersionSetting = "DATABASE_VERSION";
         private readonly IDatabaseConnection _connection;
         private readonly SortedDictionary<int, SqlStatement> _migrations;

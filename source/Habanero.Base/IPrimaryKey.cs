@@ -59,10 +59,10 @@ namespace Habanero.Base
         bool IsGuidObjectID{ get;}
 
         /// <summary>
-        /// Returns the ID as a Value. 
+        /// Returns the ID as a Value:-
         /// <li>"In cases where the <see cref="IBusinessObject"/>
         ///   has an ID with a single property this will return the value of the property.</li>
-        // <li>"In cases where the <see cref="IBusinessObject"/>
+        /// <li>"In cases where the <see cref="IBusinessObject"/>
         ///   has an ccomposite ID (i.e. with more than one property) this will return a list with the values of the properties.</li>
         /// </summary>
         /// <returns>Returns an object</returns>

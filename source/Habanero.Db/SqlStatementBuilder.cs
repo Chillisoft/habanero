@@ -24,6 +24,9 @@ using Habanero.Util;
 
 namespace Habanero.DB
 {
+    ///<summary>
+    /// Builds a SQL Select statement for a specific database type
+    ///</summary>
     public class SqlStatementBuilder
     {
         private readonly IDatabaseConnection _connection;
@@ -35,7 +38,12 @@ namespace Habanero.DB
         private const string AND_TOKEN = " AND ";
         private const string ORDER_BY_CLAUSE_TOKEN = " ORDER BY ";
 
-        private ISqlStatement _statement;
+        private readonly ISqlStatement _statement;
+        ///<summary>
+        /// Constructor for SQL Builder
+        ///</summary>
+        ///<param name="connection"></param>
+        ///<param name="statement"></param>
         public SqlStatementBuilder(IDatabaseConnection connection, string statement)
         {
             _connection = connection;
@@ -51,11 +59,9 @@ namespace Habanero.DB
         /// <param name="criteria">The criteria clause</param>
         public void AppendCriteria(string criteria)
         {
-            if (!string.IsNullOrEmpty(criteria))
-            {
-                AppendWhere();
-                this.Append(criteria);
-            }
+            if (string.IsNullOrEmpty(criteria)) return;
+            AppendWhere();
+            this.Append(criteria);
         }
 
 
@@ -76,11 +82,19 @@ namespace Habanero.DB
             }
         }
 
+        ///<summary>
+        /// Appends the appendStatement to the end of the statement.
+        ///</summary>
+        ///<param name="appendStatement"></param>
         public void Append(string appendStatement)
         {
             _statement.Statement.Append(appendStatement);
         }
 
+        ///<summary>
+        /// Returns the statement
+        ///</summary>
+        ///<returns></returns>
         public ISqlStatement GetStatement()
         {
             return _statement;

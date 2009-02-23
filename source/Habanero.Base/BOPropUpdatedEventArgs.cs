@@ -70,6 +70,7 @@ namespace Habanero.Base
         /// Constructor to initialise a new set of arguments
         /// </summary>
         /// <param name="bo">The related business object</param>
+        /// <param name="prop">the property that updated event is being fired for</param>
         public BOPropUpdatedEventArgs(TBusinessObject bo, IBOProp prop)
             : base(bo, prop)
         {

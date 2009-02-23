@@ -30,8 +30,6 @@ namespace Habanero.BO.ClassDefinition
     public class UIFormColumn : ICollection
     {
         private readonly IList _list;
-        private int _width;
-        private UIFormTab _uiFormTab;
 
         /// <summary>
         /// Constructor to initialise a new column definition
@@ -47,7 +45,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="width">The column width</param>
         public UIFormColumn(int width)
         {
-            _width = width;
+            Width = width;
             _list = new ArrayList();
         }
 
@@ -140,20 +138,12 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Gets and sets the column width
         /// </summary>
-        public int Width
-        {
-            get { return _width; }
-            set { _width = value; }
-        }
+        public int Width { get; set; }
 
         ///<summary>
         /// Returns the Form tab that this UIFormColumn is on.
         ///</summary>
-        public UIFormTab UIFormTab
-        {
-            get { return _uiFormTab; }
-            internal set { _uiFormTab = value; }
-        }
+        public UIFormTab UIFormTab { get; internal set; }
 
         ///<summary>
         /// Clones the collection.
@@ -210,7 +200,7 @@ namespace Habanero.BO.ClassDefinition
         public static bool operator ==(UIFormColumn a, UIFormColumn b)
         {
             // If both are null, or both are same instance, return true.
-            if (System.Object.ReferenceEquals(a, b))
+            if (ReferenceEquals(a, b))
             {
                 return true;
             }

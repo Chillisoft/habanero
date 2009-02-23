@@ -26,6 +26,7 @@ namespace Habanero.Base
     /// rest of the application.
     ///</summary>
     ///<param name="bo"></param>
+    ///<param name="cancelled"></param>
     public delegate void PostObjectEditDelegate(IBusinessObject bo, bool cancelled);
 
     /// <summary>

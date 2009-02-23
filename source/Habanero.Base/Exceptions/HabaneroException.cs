@@ -30,6 +30,9 @@ namespace Habanero.Base.Exceptions
 [Serializable]
     public class HabaneroDeveloperException:Exception
     {
+    /// <summary>
+    /// The message shown to the developer, logged and emailed when this error is raised.
+    /// </summary>
         protected readonly string _developerMessage;
 
         /// <summary>

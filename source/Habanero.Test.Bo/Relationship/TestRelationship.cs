@@ -22,7 +22,6 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
 
@@ -251,7 +250,7 @@ namespace Habanero.Test.BO.Relationship
             mMockBo.Save();
         }
 
-        private MockBO GetMockBO(out RelationshipDef mRelationshipDef, out RelKeyDef mRelKeyDef) {
+        private static MockBO GetMockBO(out RelationshipDef mRelationshipDef, out RelKeyDef mRelKeyDef) {
             MockBO mMockBo = new MockBO();
             IPropDefCol mPropDefCol = mMockBo.PropDefCol;
             mRelKeyDef = new RelKeyDef();
@@ -325,8 +324,6 @@ namespace Habanero.Test.BO.Relationship
             mMockBo.MarkForDelete();
             mMockBo.Save();
         }
-
-        //TODO:Peter 2009/01/19: make GetReverseRelationship more strict about what makes a match - check both prop names
 
         [Test]
         public void TestGetReverseRelationship()

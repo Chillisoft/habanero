@@ -60,8 +60,8 @@ namespace Habanero.Base
         /// to begin edits on the object will result in 
         /// a BusObjPessimisticConcurrencyControlException Exception
         /// </summary>
-        /// <exception cref="BusObjBeginEditConcurrencyControlException"/>
-        /// <exception cref="BusObjPessimisticConcurrencyControlException"/>
+        /// <exception >BusObjBeginEditConcurrencyControlException</exception>
+        /// <exception >BusObjPessimisticConcurrencyControlException</exception>
         void CheckConcurrencyBeforeBeginEditing();
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Habanero.Base
         /// This would happen when an object is implementing a fully optimistic
         /// concurrency strategy.
         /// </summary>
-        /// <exception cref="BusObjOptimisticConcurrencyControlException"/>
+        /// <exception >BusObjOptimisticConcurrencyControlException</exception>
         void CheckConcurrencyBeforePersisting();
 
         /// <summary>

@@ -281,7 +281,7 @@ namespace Habanero.Util
                         {
                             StringValue += BitConverter.ToInt32
                                                (image.GetPropertyItem
-                                                    (propertyId).Value, Offset).ToString() + "/";
+                                                    (propertyId).Value, Offset) + "/";
                         }
 
                         metadata.ExposureTime.DisplayValue =
@@ -293,10 +293,8 @@ namespace Habanero.Util
                         metadata.Fstop.RawValueAsString =
                             BitConverter.ToString(image.GetPropertyItem(propertyId).Value);
 
-                        int int1;
-                        int int2;
-                        int1 = BitConverter.ToInt32(image.GetPropertyItem(propertyId).Value, 0);
-                        int2 = BitConverter.ToInt32(image.GetPropertyItem(propertyId).Value, 4);
+                        int int1 = BitConverter.ToInt32(image.GetPropertyItem(propertyId).Value, 0);
+                        int int2 = BitConverter.ToInt32(image.GetPropertyItem(propertyId).Value, 4);
 
                         metadata.Fstop.DisplayValue = "F/" + (int1/int2);
                     }

@@ -29,8 +29,7 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class UIDefCol :  IEnumerable<UIDef>
     {
-        private Dictionary<string, UIDef> _defs;
-        private ClassDef _classDef;
+        private readonly Dictionary<string, UIDef> _defs;
 
         /// <summary>
         /// Constructor to initialise a new empty collection
@@ -136,11 +135,7 @@ namespace Habanero.BO.ClassDefinition
         ///<summary>
         /// Returns the class definition for the UIDefCol.
         ///</summary>
-        public ClassDef ClassDef
-        {
-            get { return _classDef; }
-            internal set { _classDef = value; }
-        }
+        public ClassDef ClassDef { get; internal set; }
 
         #region Equals
 

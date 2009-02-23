@@ -35,7 +35,13 @@ namespace Habanero.BO.Loaders
 	/// sure all XmlLoaders implement dtd validation. 
 	public abstract class XmlLoader
 	{
-		protected IDefClassFactory _defClassFactory;
+		/// <summary>
+		/// The <see cref="IDefClassFactory"/> used to Create the classDef.
+		/// </summary>
+        protected IDefClassFactory _defClassFactory;
+        /// <summary>
+        /// The <see cref="XmlReader"/> used to read the xml for the <see cref="XmlLoader"/>
+        /// </summary>
 		protected XmlReader  _reader;
 		private bool _documentValid = true;
 		private ValidationEventArgs _invalidDocumentArgs;
@@ -47,7 +53,7 @@ namespace Habanero.BO.Loaders
 		/// </summary>
 		/// <param name="dtdLoader">The loader for the dtds (pass through a DtdLoader object using the standard constructor for the default behaviour)</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-		public XmlLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+	    protected XmlLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
 		{
 			_dtdLoader = dtdLoader;
 			if (defClassFactory != null)
@@ -62,7 +68,7 @@ namespace Habanero.BO.Loaders
 		/// <summary>
 		/// Constructor to initialise a new loader
 		/// </summary>
-		public XmlLoader() : this(new DtdLoader(), null)
+		protected XmlLoader() : this(new DtdLoader(), null)
 		{
 		}
 

@@ -39,7 +39,6 @@ namespace Habanero.Base
         private readonly string _appVersion;
         private static ILog log;
         private IApplicationVersionUpgrader _applicationVersionUpgrader;
-        private string _classDefsPath = "";
         private string _classDefsFileName = "ClassDefs.xml";
         private IExceptionNotifier _exceptionNotifier;
         private ISettings _settings;

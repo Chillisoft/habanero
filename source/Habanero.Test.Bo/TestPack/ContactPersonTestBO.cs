@@ -597,7 +597,7 @@ namespace Habanero.Test.BO
         }
 
 
-        public static ClassDef LoadClassDefOrganisationRelationship()
+        public static ClassDef LoadClassDef_NoOrganisationRelationship()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef =
@@ -609,7 +609,7 @@ namespace Habanero.Test.BO
                     <property  name=""FirstName"" databaseField=""FirstName_field"" compulsory=""true"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
                     <property  name=""OrganisationID"" type=""Guid"" >
-                      <businessObjectLookupList class=""Organisation"" assembly=""Habanero.Test"" />
+                      <businessObjectLookupList class=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" />
                     </property>
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
@@ -673,7 +673,37 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
-                    <relationship name=""Organisation"" type=""single"" relatedClass=""OrganisationTestBO"" relatedAssembly=""Habanero.Test.BO""                                           reverseRelationship=""ContactPerson"">
+                    <relationship name=""Organisation"" type=""single"" relatedClass=""OrganisationTestBO"" relatedAssembly=""Habanero.Test.BO"" reverseRelationship=""ContactPerson"">
+						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
+					</relationship>
+					<ui>
+						<grid>
+							<column heading=""OrganisationID"" property=""OrganisationID"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+                    </ui>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+        public static ClassDef LoadClassDefOrganisationTestBORelationship_SingleReverse_NoReverse()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" databaseField=""Surname_field"" />
+                    <property  name=""FirstName"" compulsory=""true"" databaseField=""FirstName_field"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+                    <property  name=""OrganisationID"" type=""Guid"" >
+                      <businessObjectLookupList class=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" />
+                    </property>
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+                    <relationship name=""Organisation"" type=""single"" relatedClass=""OrganisationTestBO"" relatedAssembly=""Habanero.Test.BO"">
 						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
 					</relationship>
 					<ui>

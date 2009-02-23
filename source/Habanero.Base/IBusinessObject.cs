@@ -172,8 +172,14 @@ namespace Habanero.Base
         /// E.g. Certain users may not be allowed to create certain Business Objects.
         /// </summary>
         bool IsCreatable(out string message);
-
+        /// <summary>
+        /// Event is raised when any <see cref="IBOProp"/> belonging to this <see cref="IBusinessObject"/>
+        ///  is updated (i.e. modified.
+        /// </summary>
         event EventHandler<BOPropUpdatedEventArgs> PropertyUpdated;
+        /// <summary>
+        /// This event is raised when this <see cref="IBusinessObject"/> is Marked for deletion.
+        /// </summary>
         event EventHandler<BOEventArgs> MarkedForDeletion;
 
         /// <summary>

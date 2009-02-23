@@ -51,6 +51,7 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="message">If the object is not valid then this returns the reason for it being invalid/param>
         /// <returns>Returns true if all are valid </returns>
+        /// </summary>
         bool IsValid(out string message);
 
         /// <summary>

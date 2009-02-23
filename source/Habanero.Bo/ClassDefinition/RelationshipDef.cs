@@ -234,7 +234,7 @@ namespace Habanero.BO.ClassDefinition
         public RelationshipType RelationshipType { get; internal set; }
 
         ///<summary>
-        /// Returns true where the owning business object has the foreign key false otherwise.
+        /// Returns true where the owning business object has the foreign key for this relationship false otherwise.
         /// This is used to differentiate between the two sides of the relationship.
         ///</summary>
         public abstract  bool OwningBOHasForeignKey { 
@@ -245,6 +245,12 @@ namespace Habanero.BO.ClassDefinition
         /// Returns the relationship name of the reverse relationship.
         ///</summary>
         public string ReverseRelationshipName { get; set; }
+
+        ///<summary>
+        /// Does this relationship link between the Primary Key of its owningBO and a foreign key of its related BO.
+        /// In most cases this will be the reverse of <see cref="OwningBOHasForeignKey"/>
+        ///</summary>
+        public bool? OwningBOHasPrimaryKey { get; set; }
 
         #endregion Type Initialisation
 
@@ -294,7 +300,7 @@ namespace Habanero.BO.ClassDefinition
 
             string message = "The " + this.RelatedObjectClassName + " could not be removed since the "
                              + this.RelationshipName
-                             + " relationship is set up as a composition relationship (RemoveChildAction.Prevent)";
+                             + " relationship is set up as a composition relationship (RemoveChildAction.Prevent)" ;
             throw new HabaneroDeveloperException(message, message);
         }
     }
