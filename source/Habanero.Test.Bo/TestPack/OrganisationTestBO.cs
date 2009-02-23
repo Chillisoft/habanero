@@ -169,6 +169,30 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+        public static ClassDef LoadDefaultClassDef_NoReverseRelationship()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
+					<property  name=""OrganisationID"" type=""Guid"" />
+                    <property name=""Name"" />
+					<primaryKey>
+						<prop name=""OrganisationID"" />
+					</primaryKey>
+			    </class>
+			");
+            RelPropDef relPropDef = new RelPropDef(itsClassDef.PropDefcol["OrganisationID"], "OrganisationID");
+            RelKeyDef relKeyDef = new RelKeyDef();
+            relKeyDef.Add(relPropDef);
+            MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef("ContactPeople", "Habanero.Test.BO",
+                    "ContactPersonTestBO", relKeyDef,true, "", DeleteParentAction.DeleteRelated
+                    , RelationshipType.Composition);
+            itsClassDef.RelationshipDefCol.Add(relationshipDef);
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         public static ClassDef LoadDefaultClassDef_WithRelationShipToAddress()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();

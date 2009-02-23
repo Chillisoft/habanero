@@ -64,5 +64,10 @@ namespace Habanero.Base
         /// Returns an invalid message if the object is valid <see IsValid()>
         ///</summary>
         string IsValidMessage { get; }
+
+        /// <summary>
+        /// Returns the Business Object that this Status is for.
+        /// </summary>
+        IBusinessObject BusinessObject { get; }
     }
 }

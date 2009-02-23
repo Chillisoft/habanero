@@ -26,10 +26,10 @@ namespace Habanero.BO
 {
     internal abstract class TransactionalSingleRelationship : ITransactionalDB
     {
-        private ISingleRelationship _singleRelationship;
-        private string _transactionID;
+        private readonly ISingleRelationship _singleRelationship;
+        private readonly string _transactionID;
 
-        public TransactionalSingleRelationship(ISingleRelationship singleRelationship)
+        protected TransactionalSingleRelationship(ISingleRelationship singleRelationship)
         {
             _transactionID = Guid.NewGuid().ToString();
             _singleRelationship = singleRelationship;
@@ -80,7 +80,6 @@ namespace Habanero.BO
                 reverseRelationship.BusinessObjectCollection.AddedBusinessObjects.Remove(Relationship.OwningBO);
             }
         }
-
     }
 
     internal class TransactionalSingleRelationship_Removed : TransactionalSingleRelationship

@@ -150,6 +150,11 @@ namespace Habanero.BO.SqlGeneration
             return propsToInclude;
         }
 
+        ///<summary>
+        /// Generate SqlStatementCollection for the Relationsp
+        ///</summary>
+        ///<param name="relationship"></param>
+        ///<returns></returns>
         public ISqlStatementCollection GenerateForRelationship(ISingleRelationship relationship)
         {
             _statementCollection = new SqlStatementCollection();

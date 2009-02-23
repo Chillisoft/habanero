@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.BO
 {
@@ -28,14 +29,14 @@ namespace Habanero.BO
     [Serializable]
     public class BOStatus : IBOStatus
     {
-        [NonSerialized]
-        private readonly IBusinessObject _bo;
+        private IBusinessObject _bo;
 
         ///<summary>
         ///</summary>
         ///<param name="bo"></param>
         public BOStatus(IBusinessObject bo)
         {
+            if (bo == null) throw new ArgumentNullException("bo");
             _bo = bo;
         }
 
@@ -64,11 +65,8 @@ namespace Habanero.BO
         public bool IsNew
         {
             get { return GetBOFlagValue(Statuses.isNew); }
-            
-            internal set
-            {
-                SetBOFlagValue(Statuses.isNew, value);
-            }
+
+            internal set { SetBOFlagValue(Statuses.isNew, value); }
         }
 
         /// <summary>
@@ -98,6 +96,11 @@ namespace Habanero.BO
         {
             get
             {
+                if (this._bo == null)
+                {
+                    const string message = "The IsDirty Failed because the Business Object is null";
+                    throw new HabaneroDeveloperException(message, message);
+                }
                 return (GetBOFlagValue(Statuses.isDirty)) || this._bo.Relationships.IsDirty;
             }
             internal set { SetBOFlagValue(Statuses.isDirty, value); }
@@ -132,7 +135,16 @@ namespace Habanero.BO
                 string message;
                 _bo.IsValid(out message);
                 return message;
+            }
+        }
 
+        public IBusinessObject BusinessObject
+        {
+            get { return _bo; }
+            internal set
+            {
+                if (value == null) throw new ArgumentNullException("value");
+                _bo = value;
             }
         }
 

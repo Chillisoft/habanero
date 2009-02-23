@@ -79,7 +79,7 @@ namespace Habanero.UI.Base
 
         /// <summary>
         /// Sets the list of options (left hand side list).
-        /// Note that this creates a shallow copy of the List.
+        /// Note_ that this creates a shallow copy of the List.
         /// </summary>
         public List<T> AllOptions
         {
@@ -167,7 +167,7 @@ namespace Habanero.UI.Base
         /// </summary>
         public List<T> AvailableOptions
         {
-            get { return _allOptions.FindAll(delegate(T obj) { return !_selectedOptions.Contains(obj); }); }
+            get { return _allOptions.FindAll(obj => !_selectedOptions.Contains(obj)); }
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace Habanero.UI.Base
         /// </summary>
         public List<T> Added
         {
-            get { return _selectedOptions.FindAll(delegate(T obj) { return !OriginalSelections.Contains(obj); }); }
+            get { return _selectedOptions.FindAll(obj => !OriginalSelections.Contains(obj)); }
         }
 
         /// <summary>
@@ -185,7 +185,7 @@ namespace Habanero.UI.Base
         /// </summary>
         public List<T> Removed
         {
-            get { return OriginalSelections.FindAll(delegate(T obj) { return !_selectedOptions.Contains(obj); }); }
+            get { return OriginalSelections.FindAll(obj => !_selectedOptions.Contains(obj)); }
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace Habanero.UI.Base
         /// <param name="items">The list of items to select</param>
         public void Select(List<T> items)
         {
-            items.ForEach(delegate(T obj) { Select(obj); });
+            items.ForEach(Select);
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace Habanero.UI.Base
         /// <param name="items">The list of items to deselect</param>
         public void Deselect(List<T> items)
         {
-            items.ForEach(delegate(T obj) { Deselect(obj); });
+            items.ForEach(Deselect);
         }
 
         /// <summary>

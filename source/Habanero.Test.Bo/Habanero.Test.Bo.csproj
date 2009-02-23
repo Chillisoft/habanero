@@ -114,6 +114,7 @@
     <Compile Include="Loaders\TestXmlSimpleLookupListLoader.cs" />
     <Compile Include="TestBOObjectID.cs" />
     <Compile Include="TestBOSerialisation.cs" />
+    <Compile Include="TestBOStatus.cs" />
     <Compile Include="TestPack\BOWithIntID.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_AddedBOs.cs" />
