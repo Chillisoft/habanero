@@ -45,7 +45,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual("Prop Value", _prop.Value);
         }
 
-
         [Test]
         public void Test_ConstructBOPropWithValue()
         {

@@ -1,23 +1,4 @@
-//---------------------------------------------------------------------------------
-// Copyright (C) 2008 Chillisoft Solutions
-// 
-// This file is part of the Habanero framework.
-// 
-//     Habanero is a free framework: you can redistribute it and/or modify
-//     it under the terms of the GNU Lesser General Public License as published by
-//     the Free Software Foundation, either version 3 of the License, or
-//     (at your option) any later version.
-// 
-//     The Habanero framework is distributed in the hope that it will be useful,
-//     but WITHOUT ANY WARRANTY; without even the implied warranty of
-//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU Lesser General Public License for more details.
-// 
-//     You should have received a copy of the GNU Lesser General Public License
-//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
-//---------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -27,17 +8,16 @@ using NUnit.Framework;
 namespace Habanero.Test.BO
 {
     [TestFixture]
-    public class TestBoPropDateTime 
+    public class TestBOPropInteger
     {
         private PropDef _propDef;
-        private const string _standardDateTimeFormat = "dd MMM yyyy HH:mm:ss:fff";
 
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
-            _propDef = new PropDef("PropName", typeof(DateTime), PropReadWriteRule.ReadWrite, null);
+            _propDef = new PropDef("PropName", typeof(Int32), PropReadWriteRule.ReadWrite, null);
         }
 
         [Test]
@@ -46,7 +26,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BOProp boProp = new BOProp(_propDef);
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(DateTime), boProp.PropertyType);
+            Assert.AreEqual(typeof(Int32), boProp.PropertyType);
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
             boProp.InitialiseProp(null);
@@ -55,11 +35,11 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_InitialiseProp_ValidDateTime()
+        public void Test_InitialiseProp_ValidInteger()
         {
             //---------------Set up test pack-------------------
             BOProp boProp = new BOProp(_propDef);
-            DateTime value = DateTime.MinValue.AddDays(1);
+            Int32 value = TestUtil.GetRandomInt();
             //---------------Assert Precondition----------------
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
@@ -70,31 +50,32 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_InitialiseProp_ValidDateTimeString()
+        public void Test_InitialiseProp_ValidIntegerString()
         {
             //---------------Set up test pack-------------------
             BOProp boProp = new BOProp(_propDef);
-            DateTime expectedDateTime = DateTime.MinValue.AddDays(1);
+            Int32 expectedInteger = TestUtil.GetRandomInt();
             //---------------Assert Precondition----------------
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
-            boProp.InitialiseProp(expectedDateTime.ToString("d"));
+            boProp.InitialiseProp(expectedInteger.ToString("d"));
             //---------------Test Result -----------------------
             Assert.IsNotNull(boProp.Value);
-            Assert.AreEqual(expectedDateTime, boProp.Value);
-            Assert.IsTrue(boProp.Value is DateTime, "Value should be a expectedDateTime");
+            Assert.AreEqual(expectedInteger, boProp.Value);
+            Assert.IsTrue(boProp.Value is Int32, "Value should be an Integer");
         }
+
         //If try initialise a property with invalid property types is set to the property then
         //  An error is raised. Stating the error reason.
         //  The property value will be set to the previous property value.
         //  The property is not changed to be in an invalid state. The prop invalid reason is not set.
         [Test]
-        public void Test_Initialise_InvalidDateTimeString()
+        public void Test_Initialise_InvalidIntegerString()
         {
             BOProp boProp = new BOProp(_propDef);
             const string invalid = "Invalid";
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(DateTime), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(Int32), boProp.PropDef.PropertyType);
             Assert.IsNull(boProp.Value);
             //---------------Execute Test ----------------------
             try
@@ -107,10 +88,87 @@ namespace Habanero.Test.BO
             {
                 StringAssert.Contains(boProp.PropertyName + " cannot be set to " + invalid, ex.Message);
                 StringAssert.Contains("It is not a type of ", ex.Message);
-                StringAssert.Contains("DateTime", ex.Message);
+                StringAssert.Contains("Int32", ex.Message);
                 Assert.AreEqual(null, boProp.Value);
                 Assert.IsTrue(boProp.IsValid);
             }
+        }
+
+        [Test]
+        public void Test_InitialiseProp_WithDecimal_Max()
+        {
+            //---------------Set up test pack-------------------
+            BOProp boProp = new BOProp(_propDef);
+            const decimal value = decimal.MaxValue;
+            decimal expectedInteger = Math.Round(value);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(boProp.Value);
+            //---------------Execute Test ----------------------
+            try
+            {
+                boProp.InitialiseProp(value);
+                Assert.Fail("expected Err");
+            }
+            //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains(boProp.PropertyName + " cannot be set to " + value, ex.Message);
+                StringAssert.Contains("It is not a type of ", ex.Message);
+                StringAssert.Contains("Int32", ex.Message);
+                Assert.AreEqual(null, boProp.Value);
+                Assert.IsTrue(boProp.IsValid);
+            }
+        }
+
+        [Test]
+        public void Test_InitialiseProp_WithDecimal_NoRoundingNecessary()
+        {
+            //---------------Set up test pack-------------------
+            BOProp boProp = new BOProp(_propDef);
+            const decimal value = 100.00m;
+            decimal expectedInteger = Math.Round(value);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(boProp.Value);
+            //---------------Execute Test ----------------------
+            boProp.InitialiseProp(value);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(boProp.Value);
+            Assert.AreEqual(expectedInteger, boProp.Value);
+            Assert.IsTrue(boProp.Value is Int32, "Value should be an Integer");
+        }
+
+        [Test]
+        public void Test_InitialiseProp_WithDecimal_RoundUp()
+        {
+            //---------------Set up test pack-------------------
+            BOProp boProp = new BOProp(_propDef);
+            const decimal value = 123.5m;
+            decimal expectedInteger = Math.Round(value);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(boProp.Value);
+            //---------------Execute Test ----------------------
+            boProp.InitialiseProp(value);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(boProp.Value);
+            Assert.AreEqual(expectedInteger, boProp.Value);
+            Assert.IsTrue(boProp.Value is Int32, "Value should be an Integer");
+        }
+
+        [Test]
+        public void Test_InitialiseProp_WithDecimal_RoundDown()
+        {
+            //---------------Set up test pack-------------------
+            BOProp boProp = new BOProp(_propDef);
+            const decimal value = 321.49m;
+            decimal expectedInteger = Math.Round(value);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(boProp.Value);
+            //---------------Execute Test ----------------------
+            boProp.InitialiseProp(value);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(boProp.Value);
+            Assert.AreEqual(expectedInteger, boProp.Value);
+            Assert.IsTrue(boProp.Value is Int32, "Value should be an Integer");
         }
 
         //If try construct a property with invalid property default value type then
@@ -118,7 +176,7 @@ namespace Habanero.Test.BO
         //  The property value will be set to the previous property value.
         //  The property is not set to be invalid.
         [Test]
-        public void Test_ConstructWithDefault_InvalidDateTimeString()
+        public void Test_ConstructWithDefault_InvalidIntegerString()
         {
             string invalid = "";
             //---------------Assert Precondition----------------
@@ -134,7 +192,7 @@ namespace Habanero.Test.BO
             {
                 StringAssert.Contains(" cannot be set to " + invalid, ex.Message);
                 StringAssert.Contains("It is not a type of ", ex.Message);
-                StringAssert.Contains("DateTime", ex.Message);
+                StringAssert.Contains("Int32", ex.Message);
             }
         }
 
@@ -177,31 +235,31 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_SetValue_ValidDateTime()
+        public void Test_SetValue_ValidInteger()
         {
             //---------------Set up test pack-------------------
             BOProp boProp = new BOProp(_propDef);
-            DateTime expectedDateTime = DateTime.MinValue.AddDays(1);
+            Int32 expectedInteger = TestUtil.GetRandomInt();
 
             //---------------Execute Test ----------------------
-            boProp.Value = expectedDateTime;
+            boProp.Value = expectedInteger;
             //---------------Test Result -----------------------
             Assert.IsTrue(boProp.IsValid);
-            Assert.AreEqual(expectedDateTime, boProp.Value);
+            Assert.AreEqual(expectedInteger, boProp.Value);
         }
 
         [Test]
-        public void Test_SetValue_ValidDateTimeString_d()
+        public void Test_SetValue_ValidIntegerString_d()
         {
             //---------------Set up test pack-------------------
             BOProp boProp = new BOProp(_propDef);
-            DateTime expectedDateTime = DateTime.MinValue.AddDays(1);
+            Int32 expectedInteger = TestUtil.GetRandomInt();
             //---------------Execute Test ----------------------
-            boProp.Value = expectedDateTime.ToString("d");
+            boProp.Value = expectedInteger.ToString("d");
             //---------------Test Result -----------------------
             Assert.IsTrue(boProp.IsValid);
-            Assert.AreEqual(expectedDateTime, boProp.Value);
-            Assert.IsTrue(boProp.Value is DateTime);
+            Assert.AreEqual(expectedInteger, boProp.Value);
+            Assert.IsTrue(boProp.Value is Int32);
         }
 
         //If an invalid property types is set to the property then
@@ -209,14 +267,14 @@ namespace Habanero.Test.BO
         //  The property value will be set to the previous property value.
         //  The property is not changed to be in an invalid state. The prop invalid reason is not set.
         [Test]
-        public void Test_SetValue_InvalidDateTimeString()
+        public void Test_SetValue_InvalidIntegerString()
         {
             BOProp boProp = new BOProp(_propDef);
             const string invalid = "Invalid";
-            object originalPropValue = DateTime.MinValue.AddDays(1);
+            object originalPropValue = TestUtil.GetRandomInt();
             boProp.Value = originalPropValue;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(typeof(DateTime), boProp.PropDef.PropertyType);
+            Assert.AreEqual(typeof(Int32), boProp.PropDef.PropertyType);
             Assert.IsNotNull(boProp.Value);
             //---------------Execute Test ----------------------
             try
@@ -229,7 +287,7 @@ namespace Habanero.Test.BO
             {
                 StringAssert.Contains(boProp.PropertyName + " cannot be set to " + invalid, ex.Message);
                 StringAssert.Contains("It is not a type of ", ex.Message);
-                StringAssert.Contains("DateTime", ex.Message);
+                StringAssert.Contains("Int32", ex.Message);
                 Assert.AreEqual(originalPropValue, boProp.Value);
                 Assert.IsTrue(boProp.IsValid);
             }
@@ -241,7 +299,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BOProp boProp = new BOProp(_propDef);
             boProp.InitialiseProp(DBNull.Value);
-            boProp.Value = DateTime.MaxValue;
+            boProp.Value = TestUtil.GetRandomInt();
 
             //---------------Assert Precondition----------------
             Assert.IsNull(boProp.PersistedPropertyValue);
@@ -253,13 +311,13 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_PersistedPropertyValueString_ValidDateTime()
+        public void Test_PersistedPropertyValueString_ValidInteger()
         {
             //---------------Set up test pack-------------------
             BOProp boProp = new BOProp(_propDef);
-            DateTime expectedDateTime = DateTime.MinValue.AddDays(1);
-            boProp.InitialiseProp(expectedDateTime);
-            boProp.Value = DateTime.MaxValue;
+            Int32 expectedInteger = TestUtil.GetRandomInt();
+            boProp.InitialiseProp(expectedInteger);
+            boProp.Value = TestUtil.GetRandomInt();
             //---------------Assert Precondition----------------
             Assert.IsNotNull(boProp.Value);
             Assert.IsNotNull(boProp.PersistedPropertyValue);
@@ -267,7 +325,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             string persistedPropertyValueString = boProp.PersistedPropertyValueString;
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedDateTime.ToString(_standardDateTimeFormat), persistedPropertyValueString);
+            Assert.AreEqual(expectedInteger.ToString(), persistedPropertyValueString);
         }
 
         [Test]
@@ -288,12 +346,12 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_PropertyValueString_ValidDateTime()
+        public void Test_PropertyValueString_ValidInteger()
         {
             //---------------Set up test pack-------------------
             BOProp boProp = new BOProp(_propDef);
-            DateTime expectedDateTime = DateTime.MinValue.AddDays(1);
-            boProp.InitialiseProp(expectedDateTime);
+            Int32 expectedInteger = TestUtil.GetRandomInt();
+            boProp.InitialiseProp(expectedInteger);
             //---------------Assert Precondition----------------
             Assert.IsNotNull(boProp.Value);
 
@@ -301,27 +359,24 @@ namespace Habanero.Test.BO
             string propertyValueString = boProp.PropertyValueString;
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedDateTime.ToString(_standardDateTimeFormat), propertyValueString);
+            Assert.AreEqual(expectedInteger.ToString(), propertyValueString);
         }
 
         [Test]
-        public void Test_PropertyValueString_ValidDateTimeString()
+        public void Test_PropertyValueString_ValidIntegerString()
         {
             //---------------Set up test pack-------------------
             BOProp boProp = new BOProp(_propDef);
-            DateTime expectedDateTime = DateTime.MinValue.AddDays(1);
-            boProp.Value = expectedDateTime.ToString("d");
+            Int32 expectedInteger = TestUtil.GetRandomInt();
+            boProp.Value = expectedInteger.ToString("d");
             //---------------Assert Precondition----------------
             Assert.IsNotNull(boProp.Value);
-            Assert.IsTrue(boProp.Value is DateTime);
+            Assert.IsTrue(boProp.Value is Int32);
             //---------------Execute Test ----------------------
             string propertyValueString = boProp.PropertyValueString;
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(expectedDateTime.ToString(_standardDateTimeFormat), propertyValueString);
+            Assert.AreEqual(expectedInteger.ToString(), propertyValueString);
         }
-
-
-        
     }
 }

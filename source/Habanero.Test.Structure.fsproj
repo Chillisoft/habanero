@@ -1,5 +1,5 @@
-<Project EditorVersion="1.1.0" ProjectFileName="D:\Systems\Habanero\trunk\source\Habanero.Test.Structure.fsproj">
-  <ProjectSettings HabaneroDllPath="D:\Systems\Habanero\trunk\bin" ProjectName="Habanero.Test.Structure" SolutionDirectory="D:\Systems\Habanero\trunk\source" BaseProjectName="ToBeDeleted" UiProjectName="ToBeDeleted" LogicProjectName="ToBeDeleted" BoProjectName="Habanero.Test.Structure" DefaultAssembly="Habanero.Test.Structure">
+<Project EditorVersion="2.1.2" ProjectFileName="C:\Systems\Habanero\branches\v2.2\source\Habanero.Test.Structure.fsproj">
+  <ProjectSettings HabaneroDllPath="..\bin" ProjectName="Habanero.Test.Structure" BaseProjectName="ToBeDeleted" BoProjectName="Habanero.Test.Structure" DefaultAssembly="Habanero.Test.Structure">
     <CustomPropertyTypes />
     <CustomControlTypes />
     <CustomControlMapperTypes />
@@ -122,7 +122,7 @@
             <Items />
           </LookupListSource>
         </Property>
-        <Property PropertyName="FuelInjected" DisplayName="Fuel Injected" DatabaseFieldName="field_Fue_lInjected" PropertyType="Boolean">
+        <Property PropertyName="FuelInjected" DisplayName="Fuel Injected" DatabaseFieldName="field_Fuel_Injected" PropertyType="Boolean">
           <PropertyRule>
             <Parameters />
           </PropertyRule>
@@ -216,7 +216,7 @@
         </Property>
       </Properties>
       <Relationships>
-        <Relationship RelationshipName="VehiclesOwned" RelationshipType="Multiple" RelatedClass="Vehicle">
+        <Relationship RelationshipName="VehiclesOwned" Cardinality="Multiple" RelatedClass="Vehicle">
           <RelationshipProperties>
             <RelationshipProperty OwnerProperty="LegalEntityID" RelatedProperty="OwnerID" />
           </RelationshipProperties>
@@ -270,7 +270,7 @@
         </Property>
       </Properties>
       <Relationships>
-        <Relationship RelationshipName="OrganisationPerson" RelationshipType="Multiple" RelatedClass="OrganisationPerson">
+        <Relationship RelationshipName="OrganisationPerson" Cardinality="Multiple" RelatedClass="OrganisationPerson">
           <RelationshipProperties>
             <RelationshipProperty OwnerProperty="OrganisationID" RelatedProperty="OrganisatiionID" />
           </RelationshipProperties>
@@ -430,14 +430,9 @@
             <Items />
           </LookupListSource>
         </Property>
-        <Property PropertyName="PersonID" DisplayName="Person I D" DatabaseFieldName="field_Person_ID" Compulsory="True" PropertyType="String">
+        <Property PropertyName="PersonID" DisplayName="Person I D" DatabaseFieldName="field_Person_ID" Compulsory="True" PropertyType="Guid">
           <PropertyRule>
-            <Parameters>
-              <KeyValuePair Key="maxLength" />
-              <KeyValuePair Key="minLength" />
-              <KeyValuePair Key="patternMatch" />
-              <KeyValuePair Key="patternMatchMessage" />
-            </Parameters>
+            <Parameters />
           </PropertyRule>
           <LookupListSource>
             <Items />
@@ -445,12 +440,12 @@
         </Property>
       </Properties>
       <Relationships>
-        <Relationship RelationshipName="CarsDriven" RelationshipType="Multiple" RelatedClass="Car">
+        <Relationship RelationshipName="CarsDriven" Cardinality="Multiple" RelatedClass="Car">
           <RelationshipProperties>
             <RelationshipProperty OwnerProperty="PersonID" RelatedProperty="DriverID" />
           </RelationshipProperties>
         </Relationship>
-        <Relationship RelationshipName="OrganisationPerson" RelationshipType="Multiple" RelatedClass="OrganisationPerson">
+        <Relationship RelationshipName="OrganisationPerson" Cardinality="Multiple" RelatedClass="OrganisationPerson">
           <RelationshipProperties>
             <RelationshipProperty OwnerProperty="PersonID" RelatedProperty="PersonID" />
           </RelationshipProperties>

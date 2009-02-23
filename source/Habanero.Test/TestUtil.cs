@@ -154,6 +154,11 @@ namespace Habanero.Test
             return rnd.Next();
         }
 
+        public static decimal GetRandomDecimal()
+        {
+            return (decimal) rnd.NextDouble();
+        }
+
         public static DatabaseConfig GetDatabaseConfig() { 
             return new DatabaseConfig("MySql", "localhost", "habanero_test_branch_2_2", "root", "root", "3306");
         }

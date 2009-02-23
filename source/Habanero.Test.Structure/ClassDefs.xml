@@ -1,5 +1,5 @@
 ﻿<classes>
-  <class name="Car" assembly="Habanero.Test.Structure" table="table_Car">
+  <class name="Car" assembly="Habanero.Test.Structure" table="table_Car" displayName="Car">
     <superClass class="Vehicle" assembly="Habanero.Test.Structure" />
     <property name="CarID" type="Guid" databaseField="field_Car_ID" />
     <property name="RegistrationNo" databaseField="field_Registration_No" />
@@ -13,13 +13,13 @@
       <relatedProperty property="DriverID" relatedProperty="PersonID" />
     </relationship>
   </class>
-  <class name="Engine" assembly="Habanero.Test.Structure" table="table_Engine">
+  <class name="Engine" assembly="Habanero.Test.Structure" table="table_Engine" displayName="Engine">
     <superClass class="Part" assembly="Habanero.Test.Structure" id="EngineID" />
     <property name="EngineID" type="Guid" databaseField="field_Engine_ID" compulsory="true" />
     <property name="EngineNo" databaseField="field_Engine_No" />
     <property name="DateManufactured" type="DateTime" databaseField="field_Date_Manufactured" />
     <property name="HorsePower" type="Int32" databaseField="field_Horse_Power" />
-    <property name="FuelInjected" type="Boolean" databaseField="field_Fue_lInjected" />
+    <property name="FuelInjected" type="Boolean" databaseField="field_Fuel_Injected" />
     <property name="CarID" type="Guid" databaseField="field_Car_ID" />
     <primaryKey>
       <prop name="EngineID" />
@@ -28,14 +28,14 @@
       <relatedProperty property="CarID" relatedProperty="CarID" />
     </relationship>
   </class>
-  <class name="Entity" assembly="Habanero.Test.Structure" table="table_Entity">
+  <class name="Entity" assembly="Habanero.Test.Structure" table="table_Entity" displayName="Entity">
     <property name="EntityID" type="Guid" databaseField="field_Entity_ID" compulsory="true" />
     <property name="EntityType" databaseField="field_Entity_Type" />
     <primaryKey>
       <prop name="EntityID" />
     </primaryKey>
   </class>
-  <class name="LegalEntity" assembly="Habanero.Test.Structure" table="table_LegalEntity">
+  <class name="LegalEntity" assembly="Habanero.Test.Structure" table="table_LegalEntity" displayName="Legal Entity">
     <superClass class="Entity" assembly="Habanero.Test.Structure" />
     <property name="LegalEntityID" type="Guid" databaseField="field_Legal_Entity_ID" />
     <property name="LegalEntityType" databaseField="field_Legal_Entity_Type" />
@@ -46,7 +46,7 @@
       <relatedProperty property="LegalEntityID" relatedProperty="OwnerID" />
     </relationship>
   </class>
-  <class name="Organisation" assembly="Habanero.Test.Structure" table="table_Organisation">
+  <class name="Organisation" assembly="Habanero.Test.Structure" table="table_Organisation" displayName="Organisation">
     <superClass class="LegalEntity" assembly="Habanero.Test.Structure" />
     <property name="Name" databaseField="field_Name" />
     <property name="DateFormed" databaseField="field_Date_Formed" />
@@ -58,7 +58,7 @@
       <relatedProperty property="OrganisationID" relatedProperty="OrganisatiionID" />
     </relationship>
   </class>
-  <class name="OrganisationPerson" assembly="Habanero.Test.Structure" table="table_OrganisationPerson">
+  <class name="OrganisationPerson" assembly="Habanero.Test.Structure" table="table_OrganisationPerson" displayName="Organisation Person">
     <property name="OrganisatiionID" type="Guid" databaseField="field_Organisatiion_ID" />
     <property name="PersonID" type="Guid" databaseField="field_Person_ID" />
     <property name="Relationship" databaseField="field_Relationship" />
@@ -73,7 +73,7 @@
       <relatedProperty property="PersonID" relatedProperty="PersonID" />
     </relationship>
   </class>
-  <class name="Part" assembly="Habanero.Test.Structure" table="table_Part">
+  <class name="Part" assembly="Habanero.Test.Structure" table="table_Part" displayName="Part">
     <superClass class="Entity" assembly="Habanero.Test.Structure" id="PartID" />
     <property name="PartID" type="Guid" databaseField="field_Part_ID" compulsory="true" />
     <property name="ModelNo" databaseField="field_Model_No" />
@@ -82,12 +82,12 @@
       <prop name="PartID" />
     </primaryKey>
   </class>
-  <class name="Person" assembly="Habanero.Test.Structure" table="table_Person">
+  <class name="Person" assembly="Habanero.Test.Structure" table="table_Person" displayName="Person">
     <superClass class="LegalEntity" assembly="Habanero.Test.Structure" />
     <property name="IDNumber" databaseField="field_ID_Number" />
     <property name="FirstName" databaseField="field_First_Name" />
     <property name="LastName" databaseField="field_Last_Name" />
-    <property name="PersonID" databaseField="field_Person_ID" compulsory="true" />
+    <property name="PersonID" type="Guid" databaseField="field_Person_ID" compulsory="true" />
     <primaryKey>
       <prop name="PersonID" />
     </primaryKey>
@@ -98,7 +98,7 @@
       <relatedProperty property="PersonID" relatedProperty="PersonID" />
     </relationship>
   </class>
-  <class name="Vehicle" assembly="Habanero.Test.Structure" table="table_Vehicle">
+  <class name="Vehicle" assembly="Habanero.Test.Structure" table="table_Vehicle" displayName="Vehicle">
     <superClass class="Entity" assembly="Habanero.Test.Structure" />
     <property name="VehicleID" type="Guid" databaseField="field_Vehicle_ID" />
     <property name="VehicleType" databaseField="field_Vehicle_Type" />
