@@ -29,7 +29,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    public abstract class TestReadonlyGridControl //: TestUsingDatabase
+    public abstract class TestReadOnlyGridControl //: TestUsingDatabase
     {
         private const string _gridIdColumnName = "HABANERO_OBJECTID";
         //TODO: Tests that if init not called throws sensible errors
@@ -69,7 +69,7 @@ namespace Habanero.Test.UI.Base
         protected abstract void CloseForm();
 
         [TestFixture]
-        public class TestReadOnlyGridControlWin : TestReadonlyGridControl
+        public class TestReadOnlyGridControlWin : TestReadOnlyGridControl
         {
             private System.Windows.Forms.Form frm;
 
@@ -373,7 +373,7 @@ namespace Habanero.Test.UI.Base
         //}
         //}
         [TestFixture]
-        public class TestReadOnlyGridControlVWG : TestReadonlyGridControl
+        public class TestReadOnlyGridControlVWG : TestReadOnlyGridControl
         {
             public TestReadOnlyGridControlVWG()
             {

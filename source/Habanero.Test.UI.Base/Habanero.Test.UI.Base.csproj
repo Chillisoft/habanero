@@ -104,6 +104,7 @@
     </Compile>
     <Compile Include="TestGridAndBOEditorControl.cs" />
     <Compile Include="TestGroupBox.cs" />
+    <Compile Include="TestMessageBoxConfirmer.cs" />
     <Compile Include="TestNumericUpDown.cs" />
     <Compile Include="TestPictureBox.cs" />
     <Compile Include="TestProgressBar.cs" />
