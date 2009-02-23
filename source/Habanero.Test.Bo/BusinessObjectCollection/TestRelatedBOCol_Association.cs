@@ -142,7 +142,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Test Result -----------------------
             util.AssertAddedEventFired();
             util.AssertOneObjectInCurrentPersistedCollection(cpCol);
-            Assert.AreSame(contactPerson.Organisation, associationRelationship.OwningBO);
+            Assert.AreEqual(contactPerson.OrganisationID, organisationTestBO.OrganisationID);
         }
 
         private static MultipleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)

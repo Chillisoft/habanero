@@ -459,21 +459,21 @@ namespace Habanero.BO
             {
                 if (IsRelatedBOPropsDirty())
                 {
-                    ISingleRelationship reverseRelationship = GetReverseRelationship(_relatedBo) as ISingleRelationship;
-                    if (reverseRelationship != null)
-                    {
+//                    ISingleRelationship reverseRelationship = GetReverseRelationship(_relatedBo) as ISingleRelationship;
+//                    if (reverseRelationship != null)
+//                    {
                         transactionCommitter.AddTransaction
-                            (new TransactionalSingleRelationship_Added(reverseRelationship));
-                    }
+                            (new TransactionalSingleRelationship_Added(this, this.GetRelatedObject()));
+//                    }
                 }
                 else if (IsRemoved)
                 {
-                    ISingleRelationship reverseRelationship = GetReverseRelationship(RemovedBO) as ISingleRelationship;
-                    if (reverseRelationship != null)
-                    {
+//                    ISingleRelationship reverseRelationship = GetReverseRelationship(RemovedBO) as ISingleRelationship;
+//                    if (reverseRelationship != null)
+//                    {
                         transactionCommitter.AddTransaction
-                            (new TransactionalSingleRelationship_Removed(reverseRelationship));
-                    }
+                            (new TransactionalSingleRelationship_Removed(this, this.RemovedBO));
+//                    }
                 }
             }
         }

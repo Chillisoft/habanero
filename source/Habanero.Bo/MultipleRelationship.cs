@@ -232,41 +232,41 @@ namespace Habanero.BO
             {
                 foreach (TBusinessObject businessObject in _boCol.AddedBusinessObjects)
                 {
-                    ISingleRelationship reverseRelationship =
-                        GetReverseRelationship(businessObject) as ISingleRelationship;
-                    if (reverseRelationship == null)
-                    {
-                        reverseRelationship = CreateReverseRelationship(businessObject);
-                    }
-                    if (reverseRelationship != null)
-                    {
+//                    ISingleRelationship reverseRelationship =
+//                        GetReverseRelationship(businessObject) as ISingleRelationship;
+//                    if (reverseRelationship == null)
+//                    {
+//                        reverseRelationship = CreateReverseRelationship(businessObject);
+//                    }
+//                    if (reverseRelationship != null)
+//                    {
                         transactionCommitter.AddTransaction
-                            (new TransactionalSingleRelationship_Added(reverseRelationship));
-                    }
+                            (new TransactionalSingleRelationship_Added(this, businessObject));
+//                    }
                 }
             }
             foreach (TBusinessObject businessObject in _boCol.RemovedBusinessObjects)
             {
-                ISingleRelationship reverseRelationship = GetReverseRelationship(businessObject) as ISingleRelationship;
-                if (reverseRelationship != null)
-                {
+//                ISingleRelationship reverseRelationship = GetReverseRelationship(businessObject) as ISingleRelationship;
+//                if (reverseRelationship != null)
+//                {
                     transactionCommitter.AddTransaction
-                        (new TransactionalSingleRelationship_Removed(reverseRelationship));
-                }
+                        (new TransactionalSingleRelationship_Removed(this, businessObject));
+//                }
             }
         }
 
-        private ISingleRelationship CreateReverseRelationship(TBusinessObject businessObject)
-        {
-            RelKeyDef def = new RelKeyDef();
-            foreach (IRelProp prop in this.RelKey)
-            {
-                def.Add(new RelPropDef(businessObject.ClassDef.PropDefcol[prop.OwnerPropertyName],prop.OwnerPropertyName));
-            }
-            RelationshipDef relationshipDef = new SingleRelationshipDef("TempSingleReverseRelationship", businessObject.ClassDef.ClassType, def, false,
-                 DeleteParentAction.DoNothing);
-            return (ISingleRelationship) relationshipDef.CreateRelationship(businessObject, businessObject.Props);
-        }
+//        private ISingleRelationship CreateReverseRelationship(TBusinessObject businessObject)
+//        {
+//            RelKeyDef def = new RelKeyDef();
+//            foreach (IRelProp prop in this.RelKey)
+//            {
+//                def.Add(new RelPropDef(businessObject.ClassDef.PropDefcol[prop.OwnerPropertyName],prop.OwnerPropertyName));
+//            }
+//            RelationshipDef relationshipDef = new SingleRelationshipDef("TempSingleReverseRelationship", businessObject.ClassDef.ClassType, def, false,
+//                 DeleteParentAction.DoNothing);
+//            return (ISingleRelationship) relationshipDef.CreateRelationship(businessObject, businessObject.Props);
+//        }
 
         internal IList<TBusinessObject> GetDirtyChildren()
         {

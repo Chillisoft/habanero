@@ -56,7 +56,7 @@ namespace Habanero.BO.SqlGeneration
             _statementCollection = new SqlStatementCollection();
             BOPropCol propsToInclude;
             string tableName;
-            ClassDef currentClassDef = (ClassDef) _bo.ClassDef;
+            ClassDef currentClassDef = _bo.ClassDef;
 
             while (currentClassDef.IsUsingClassTableInheritance())
             {
@@ -68,9 +68,9 @@ namespace Habanero.BO.SqlGeneration
                 }
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
-            propsToInclude = GetPropsToInclude((ClassDef) _bo.ClassDef);
+            propsToInclude = GetPropsToInclude(_bo.ClassDef);
             tableName = _bo.TableName;
-            GenerateSingleUpdateStatement(tableName, propsToInclude, false, (ClassDef) _bo.ClassDef);
+            GenerateSingleUpdateStatement(tableName, propsToInclude, false, _bo.ClassDef);
             return _statementCollection;
         }
 
@@ -94,8 +94,7 @@ namespace Habanero.BO.SqlGeneration
             {
                 if (propsToInclude.Contains(prop.PropertyName))
                 {
-                    PrimaryKeyDef primaryKeyDef = ((ClassDef)_bo.ClassDef).GetPrimaryKeyDef();
-                    if (primaryKeyDef == null) primaryKeyDef = (PrimaryKeyDef) _bo.ID.KeyDef;
+                    PrimaryKeyDef primaryKeyDef = _bo.ClassDef.GetPrimaryKeyDef() ?? (PrimaryKeyDef) _bo.ID.KeyDef;
                     if (prop.IsDirty &&
                         ((primaryKeyDef.IsGuidObjectID && !primaryKeyDef.Contains(prop.PropertyName)) ||
                          !primaryKeyDef.IsGuidObjectID))
@@ -104,7 +103,6 @@ namespace Habanero.BO.SqlGeneration
                         _updateSql.Statement.Append(SqlFormattingHelper.FormatFieldName(prop.DatabaseFieldName, _connection));
                         _updateSql.Statement.Append(" = ");
                         _updateSql.AddParameterToStatement(prop.Value);
-                        //_updateSql.AddParameterToStatement(DatabaseUtil.PrepareValue(prop.PropertyValue));
                         _updateSql.Statement.Append(", ");
                     }
                 }
@@ -132,7 +130,6 @@ namespace Habanero.BO.SqlGeneration
         {
             BOPropCol propsToIncludeTemp = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
 
-            //BRETT/PETER TODO: this is to be changed, just here for now.
             BOPropCol propsToInclude = new BOPropCol();
 
             foreach (BOProp prop in propsToIncludeTemp)
@@ -154,20 +151,21 @@ namespace Habanero.BO.SqlGeneration
         /// Generate SqlStatementCollection for the Relationsp
         ///</summary>
         ///<param name="relationship"></param>
+        ///<param name="relatedBusinessObject"></param>
         ///<returns></returns>
-        public ISqlStatementCollection GenerateForRelationship(ISingleRelationship relationship)
+        public ISqlStatementCollection GenerateForRelationship(IRelationship relationship, IBusinessObject relatedBusinessObject)
         {
             _statementCollection = new SqlStatementCollection();
             BOPropCol propsToInclude = new BOPropCol();
             IBOProp oneProp = null;
             foreach (IRelPropDef propDef in relationship.RelationshipDef.RelKeyDef)
             {
-                oneProp = relationship.OwningBO.Props[propDef.OwnerPropertyName];
+                oneProp = relatedBusinessObject.Props[propDef.RelatedClassPropName];
                 propsToInclude.Add(oneProp);
             }
 
             if (oneProp == null) return _statementCollection;
-            IClassDef classDef= relationship.OwningBO.ClassDef;
+            IClassDef classDef = relatedBusinessObject.ClassDef;
             string tableName = classDef.GetTableName(oneProp.PropDef);
             GenerateSingleUpdateStatement(tableName, propsToInclude, false, (ClassDef) classDef);
 

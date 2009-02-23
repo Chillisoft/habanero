@@ -593,14 +593,12 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreEqual(1, tc.OriginalTransactions.Count);
 
             Assert.IsInstanceOfType(typeof(TransactionalSingleRelationship_Added), tc.OriginalTransactions[0]);
-            Assert.AreSame(reverseRelationship, ((TransactionalSingleRelationship_Added)tc.OriginalTransactions[0]).Relationship);
-
-            //---------------Tear Down -------------------------          
+            Assert.AreSame(relationship, ((TransactionalSingleRelationship_Added)tc.OriginalTransactions[0]).Relationship);    
         }
 
-        private MultipleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
+        private static MultipleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
-            RelationshipType relationshipType = RelationshipType.Association;
+            const RelationshipType relationshipType = RelationshipType.Association;
             MultipleRelationship<ContactPersonTestBO> relationship =
                 organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
             RelationshipDef relationshipDef = (RelationshipDef)relationship.RelationshipDef;
