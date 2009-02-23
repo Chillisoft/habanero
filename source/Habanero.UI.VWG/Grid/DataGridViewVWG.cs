@@ -24,6 +24,7 @@ using System.ComponentModel;
 using System.Text;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
+using Habanero.UI.VWG.Grid;
 using IEnumerable=System.Collections.IEnumerable;
 
 namespace Habanero.UI.VWG
@@ -149,8 +150,8 @@ namespace Habanero.UI.VWG
         /// <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The specified value when setting this property is not a valid DataGridViewSelectionMode value.</exception>
         Habanero.UI.Base.DataGridViewSelectionMode IDataGridView.SelectionMode
         {
-            get { return (Habanero.UI.Base.DataGridViewSelectionMode)base.SelectionMode; }
-            set { base.SelectionMode = (Gizmox.WebGUI.Forms.DataGridViewSelectionMode)value; }
+            get { return DataGridViewSelectionModeVWG.GetDataGridViewSelectionMode(base.SelectionMode); }
+            set { base.SelectionMode = DataGridViewSelectionModeVWG.GetDataGridViewSelectionMode(value); }
         }
 
         /// <summary>

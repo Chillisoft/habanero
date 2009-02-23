@@ -31,19 +31,19 @@ namespace Habanero.UI.Base
     public enum DataGridViewSelectionMode
     {
         ///<summary>One or more individual cells can be selected.</summary>
-        CellSelect = 1,
+        CellSelect,// = 1,
 
         ///<summary>The entire row will be selected by clicking its row's header or a cell contained in that row.</summary>
-        FullRowSelect = 2,
+        FullRowSelect,// = 2,
 
         ///<summary>The entire column will be selected by clicking the column's header or a cell contained in that column.</summary>
-        FullColumnSelect = 4,
+        FullColumnSelect,// = 4,
 
         ///<summary>The row will be selected by clicking in the row's header cell. An individual cell can be selected by clicking that cell.</summary>
-        RowHeaderSelect = 8,
+        RowHeaderSelect,// = 8,
 
         ///<summary>The column will be selected by clicking in the column's header cell. An individual cell can be selected by clicking that cell.</summary>
-        ColumnHeaderSelect = 16
+        ColumnHeaderSelect,// = 16
     }
 
     /// <summary>

@@ -21,11 +21,11 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using System.Windows.Forms;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
 using NUnit.Framework;
+using DataGridViewSelectionMode=Habanero.UI.Base.DataGridViewSelectionMode;
 
 namespace Habanero.Test.UI.Base.Grid
 {
@@ -67,6 +67,12 @@ namespace Habanero.Test.UI.Base.Grid
             {
                 return new ControlFactoryWin();
             }
+
+            protected override string GetUnderlyingDataGridViewSelectionModeToString(IDataGridView dataGridView)
+            {
+                System.Windows.Forms.DataGridView control = (System.Windows.Forms.DataGridView)dataGridView;
+                return control.SelectionMode.ToString();
+            }
         }
 
         [TestFixture]
@@ -76,7 +82,14 @@ namespace Habanero.Test.UI.Base.Grid
             {
                 return new ControlFactoryVWG();
             }
+            protected override string GetUnderlyingDataGridViewSelectionModeToString(IDataGridView dataGridView)
+            {
+                Gizmox.WebGUI.Forms.DataGridView control = (Gizmox.WebGUI.Forms.DataGridView)dataGridView;
+                return control.SelectionMode.ToString();
+            } 
         }
+
+
 
         [Test]
         public void TestCreateDataGridView()
@@ -112,5 +125,77 @@ namespace Habanero.Test.UI.Base.Grid
             public string TestProperty { get; set; }
         }
 
+        protected abstract string GetUnderlyingDataGridViewSelectionModeToString(IDataGridView dataGridView);
+        protected void AssertDataGridViewSelectionModesSame(IDataGridView dataGridView)
+        {
+            DataGridViewSelectionMode DataGridViewSelectionMode = dataGridView.SelectionMode;
+            string DataGridViewSelectionModeToString = GetUnderlyingDataGridViewSelectionModeToString(dataGridView);
+            Assert.AreEqual(DataGridViewSelectionMode.ToString(), DataGridViewSelectionModeToString);
+        }
+
+        [Test]
+        public virtual void TestConversion_DataGridViewSelectionMode_CellSelect()
+        {
+            //---------------Set up test pack-------------------
+            IDataGridView control = GetControlFactory().CreateDataGridView();
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            control.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DataGridViewSelectionMode.CellSelect, control.SelectionMode);
+            AssertDataGridViewSelectionModesSame(control);
+        }
+
+        [Test]
+        public virtual void TestConversion_DataGridViewSelectionMode_FullRowSelect()
+        {
+            //---------------Set up test pack-------------------
+            IDataGridView control = GetControlFactory().CreateDataGridView();
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            control.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DataGridViewSelectionMode.FullRowSelect, control.SelectionMode);
+            AssertDataGridViewSelectionModesSame(control);
+        }
+
+        [Test]
+        public virtual void TestConversion_DataGridViewSelectionMode_FullColumnSelect()
+        {
+            //---------------Set up test pack-------------------
+            IDataGridView control = GetControlFactory().CreateDataGridView();
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            control.SelectionMode = DataGridViewSelectionMode.FullColumnSelect;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DataGridViewSelectionMode.FullColumnSelect, control.SelectionMode);
+            AssertDataGridViewSelectionModesSame(control);
+        }
+
+        [Test]
+        public virtual void TestConversion_DataGridViewSelectionMode_RowHeaderSelect()
+        {
+            //---------------Set up test pack-------------------
+            IDataGridView control = GetControlFactory().CreateDataGridView();
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            control.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DataGridViewSelectionMode.RowHeaderSelect, control.SelectionMode);
+            AssertDataGridViewSelectionModesSame(control);
+        }
+
+        [Test]
+        public virtual void TestConversion_DataGridViewSelectionMode_ColumnHeaderSelect()
+        {
+            //---------------Set up test pack-------------------
+            IDataGridView control = GetControlFactory().CreateDataGridView();
+            //-------------Assert Preconditions -------------
+            //---------------Execute Test ----------------------
+            control.SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DataGridViewSelectionMode.ColumnHeaderSelect, control.SelectionMode);
+            AssertDataGridViewSelectionModesSame(control);
+        }
     }
 }

@@ -24,6 +24,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 using Habanero.UI.Base;
+using Habanero.UI.Win.Grid;
 using IEnumerable=System.Collections.IEnumerable;
 
 namespace Habanero.UI.Win
@@ -130,8 +131,8 @@ namespace Habanero.UI.Win
         /// <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The specified value when setting this property is not a valid DataGridViewSelectionMode value.</exception>
         Habanero.UI.Base.DataGridViewSelectionMode IDataGridView.SelectionMode
         {
-            get { return (Habanero.UI.Base.DataGridViewSelectionMode)base.SelectionMode; }
-            set { base.SelectionMode = (System.Windows.Forms.DataGridViewSelectionMode)value; }
+            get { return DataGridViewSelectionModeWin.GetDataGridViewSelectionMode(base.SelectionMode); }
+            set { base.SelectionMode = DataGridViewSelectionModeWin.GetDataGridViewSelectionMode(value); }
         }
 
         /// <summary>
