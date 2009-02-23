@@ -256,12 +256,7 @@ namespace Habanero.Util
             {
                 return fullText.Substring(0, fullText.IndexOf(searchText));
             }
-            else
-            {
-                throw new UserException
-                    (String.Format
-                         ("The given search term '{0}' " + "does not exist in the text '{1}'.", searchText, fullText));
-            }
+            return "";
         }
 
         /// <summary>
@@ -279,12 +274,7 @@ namespace Habanero.Util
                 int startPos = fullText.IndexOf(searchText) + searchText.Length;
                 return fullText.Substring(startPos, fullText.Length - startPos);
             }
-            else
-            {
-                throw new UserException
-                    (String.Format
-                         ("The given search term '{0}' " + "does not exist in the text '{1}'.", searchText, fullText));
-            }
+            return "";
         }
 
         /// <summary>
