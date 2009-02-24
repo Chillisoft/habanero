@@ -252,6 +252,7 @@ namespace Habanero.Test.General
             DataTable dataTable = DatabaseConnection.CurrentConnection.LoadDataTable(sqlStatement, "", "");
             //---------------Test Result -----------------------
             Assert.AreEqual(1, dataTable.Columns.Count);
+            this.SetupDBConnection();
         }
         internal class DatabaseConnection_Stub : DatabaseConnection
         {
