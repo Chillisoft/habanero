@@ -813,7 +813,8 @@ namespace Habanero.DB
                     for (int i = 0; i < reader.FieldCount; i++)
                     {
                         DataColumn add = dt.Columns.Add();
-                        add.ColumnName = reader.GetName(i);
+                        string columnName = reader.GetName(i);
+                        if(!String.IsNullOrEmpty(columnName)) add.ColumnName = columnName;
                         add.DataType = reader.GetFieldType(i);
                     }
                     do
