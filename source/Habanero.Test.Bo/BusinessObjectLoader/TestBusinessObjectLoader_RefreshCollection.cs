@@ -109,7 +109,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 string newSurname = Guid.NewGuid().ToString();
                 cp1.Surname = newSurname;
                 cp1.Save();
-                ContactPersonTestBO secondInstanceOfCP1 = col.FindByGuid(cp1.ContactPersonID);
+                ContactPersonTestBO secondInstanceOfCP1 = col.Find(cp1.ContactPersonID);
 
                 //--------------------Assert Preconditions----------
                 Assert.IsFalse(col.Contains(cp1));

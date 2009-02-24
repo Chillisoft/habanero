@@ -101,6 +101,9 @@
     <Compile Include="Util\TestConfigFileSettings.cs" />
     <Compile Include="Util\TestDateTimeUtilities.cs" />
     <Compile Include="Util\TestFileUtilities.cs" />
+    <Compile Include="Util\TestJpgMetaData.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Util\TestReflectionUtilities.cs" />
     <Compile Include="Util\File\CsvTestsSamples.cs" />
     <Compile Include="Util\File\TestCsvFileReader.cs" />
@@ -108,7 +111,6 @@
     <Compile Include="Util\TestByteString.cs" />
     <Compile Include="Util\TestEmailSender.cs" />
     <Compile Include="Util\TestImageThumbnailCreator.cs" />
-    <Compile Include="Util\TestJpgMetaData.cs" />
     <Compile Include="Util\TestLongText.cs" />
     <Compile Include="Util\TestSerialisationUtilities.cs" />
     <Compile Include="Util\TestSortedStringCollection.cs" />

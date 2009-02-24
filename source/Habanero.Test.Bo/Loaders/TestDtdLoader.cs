@@ -84,7 +84,7 @@ TestDtd3";
                     File.Delete("key.dtd");
                 }
             }
-            catch (Exception ex) {
+            catch (Exception) {
                 Console.Out.WriteLine("Problem removing test dtd files.");
             }
         }

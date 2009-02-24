@@ -288,7 +288,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void Test_CreatedBusinessObject_RestoredAll()
+        public void Test_CreatedBusinessObject_CancelEdits()
         {
             //---------------Set up test pack-------------------
             //ContactPersonTestBO.LoadDefaultClassDef();
@@ -301,7 +301,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             AssertOneObjectInCurrentAndCreatedCollection(cpCol);
 
             //---------------Execute Test ----------------------
-            cpCol.RestoreAll();
+            cpCol.CancelEdits();
 
             //---------------Test Result -----------------------
             AssertAllCollectionsHaveNoItems(cpCol);

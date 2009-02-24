@@ -23,7 +23,7 @@ namespace Habanero.UI.VWG
 {
     ///<summary>
     /// Class that provides utility to convert enumerations that differ between VWG and Win.
-    ///<summary>
+    ///</summary>
     public class EnumerationConverter
     {
         ///<summary>

@@ -1027,7 +1027,7 @@ namespace Habanero.Test.UI.Base
             {
                 IDataGridViewColumn column = GetControlFactory().CreateDataGridViewColumn("InvalidColumnType", null);
             }
-            catch (UnknownTypeNameException ex)
+            catch (UnknownTypeNameException)
             {
                 errorThrown = true;
             }
@@ -1047,7 +1047,7 @@ namespace Habanero.Test.UI.Base
             {
                 object column = GetControlFactory().CreateDataGridViewColumn(wrongType);
             }
-            catch (UnknownTypeNameException ex)
+            catch (UnknownTypeNameException)
             {
                 errorThrown = true;
             }

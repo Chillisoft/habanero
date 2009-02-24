@@ -80,7 +80,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(def.IgnoreIfNull);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), "An invalid node 'keyDef' was encountered when loading the class definitions.")]
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), ExpectedMessage = "An invalid node 'keyDef' was encountered when loading the class definitions.")]
         public void TestLoadKeyWithWrongElementName()
         {
             _xmlKeyLoader.LoadKey(@"<keyDef name=""Key1""><prop name=""TestProp"" /></keyDef>", _propDefCol);

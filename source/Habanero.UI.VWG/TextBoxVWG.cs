@@ -31,8 +31,6 @@ namespace Habanero.UI.VWG
     /// </summary>
     public class TextBoxVWG : TextBox, ITextBox
     {
-        private string _errorMessage = "";
-
         /// <summary>
         /// Gets or sets the anchoring style.
         /// </summary>

@@ -153,7 +153,7 @@ namespace Habanero.Test.BO.Relationship
                 Assert.Fail("Should have failed because we're accessing a multiple relationship as a single.");
             //---------------Test Result -----------------------
             }
-            catch (InvalidRelationshipAccessException ex)
+            catch (InvalidRelationshipAccessException)
             {
 
             }
@@ -193,7 +193,7 @@ namespace Habanero.Test.BO.Relationship
                 Assert.Fail("Should have failed because we're accessing a single relationship as a multiple.");
                 //---------------Test Result -----------------------
             }
-            catch (InvalidRelationshipAccessException ex)
+            catch (InvalidRelationshipAccessException)
             {
 
             }
@@ -234,7 +234,7 @@ namespace Habanero.Test.BO.Relationship
                 Assert.Fail("Should have failed because we're accessing a multiple relationship as a single.");
                 //---------------Test Result -----------------------
             }
-            catch (InvalidRelationshipAccessException ex)
+            catch (InvalidRelationshipAccessException)
             {
 
             }
@@ -274,7 +274,7 @@ namespace Habanero.Test.BO.Relationship
                 Assert.Fail("Should have failed because we're accessing a single relationship as a multiple.");
                 //---------------Test Result -----------------------
             }
-            catch (InvalidRelationshipAccessException ex)
+            catch (InvalidRelationshipAccessException)
             {
 
             }

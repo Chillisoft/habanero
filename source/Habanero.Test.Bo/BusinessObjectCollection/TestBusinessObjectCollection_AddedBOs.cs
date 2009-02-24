@@ -230,7 +230,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
 
         [Test]
-        public void Test_Add_PersistedBO_RestoreAll()
+        public void Test_Add_PersistedBO_CancelEdits()
         {
             //---------------Set up test pack-------------------
             //The persisted objects are added to the added cpCollection
@@ -247,7 +247,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(3, cpCol.AddedBusinessObjects.Count, "Three objects should be in the cpCollection");
             Assert.IsFalse(_removedEventFired);
             ///---------------Execute Test ----------------------
-            cpCol.RestoreAll();
+            cpCol.CancelEdits();
 
             //---------------Test Result ----------------------- - Result
             AssertAllCollectionsHaveNoItems(cpCol);
@@ -699,7 +699,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void Test_MarkForDelete_Added_RestoreAll()
+        public void Test_MarkForDelete_Added_CancelEdits()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
@@ -714,7 +714,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsTrue(myBO.Status.IsDirty);
 
             //---------------Execute Test ----------------------
-            cpCol.RestoreAll();
+            cpCol.CancelEdits();
 
             //---------------Test Result -----------------------
             AssertAllCollectionsHaveNoItems(cpCol);
