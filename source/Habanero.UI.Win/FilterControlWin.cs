@@ -132,14 +132,30 @@ namespace Habanero.UI.Win
         public IComboBox AddStringFilterComboBox(string labelText, string propertyName, ICollection options,
                                                  bool strictMatch)
         {
-            IComboBox comboBox =
-                _filterControlManager.AddStringFilterComboBox(labelText, propertyName, options, strictMatch);
-            comboBox.TextChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
-            comboBox.SelectedIndexChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
-            return comboBox;
+                IComboBox comboBox = AddStringFilterComboBox(labelText, propertyName, options, strictMatch,false);
+                return comboBox;
         }
 
-        /// <summary>
+            /// <summary>
+            /// Adds a ComboBox filter control
+            /// </summary>
+            /// <param name="labelText">The label to appear before the control</param>
+            /// <param name="propertyName">The business object property on which to filter</param>
+            /// <param name="options">The collection of items used to fill the combo box.</param>
+            /// <param name="strictMatch">Whether to filter the DataGridView column on a strict match or using a LIKE operator</param>
+            /// <param name="filterOnTextChangedEvent">Whether to filter the collection of items when the text in the ComboBox schanges</param>
+            /// <returns>Returns the new ComboBox added</returns>
+            public IComboBox AddStringFilterComboBox(string labelText, string propertyName, ICollection options, bool strictMatch, bool filterOnTextChangedEvent)
+            {
+                    IComboBox comboBox =
+                        _filterControlManager.AddStringFilterComboBox(labelText, propertyName, options, strictMatch);
+                    comboBox.TextChanged += delegate { if (filterOnTextChangedEvent) FireFilterEvent(); };
+                    comboBox.SelectedIndexChanged += delegate { if (this.FilterMode == FilterModes.Filter) FireFilterEvent(); };
+                    return comboBox;
+                   
+            }
+
+            /// <summary>
         /// Adds a CheckBox filter that displays only rows whose boolean value
         /// matches the on-off state of the CheckBox. The column of data must
         /// have "true" or "false" as its values (boolean database fields are

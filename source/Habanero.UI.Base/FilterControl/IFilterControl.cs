@@ -68,6 +68,17 @@ namespace Habanero.UI.Base
         IComboBox AddStringFilterComboBox(string labelText, string propertyName, ICollection options, bool strictMatch);
 
         /// <summary>
+        /// Adds a ComboBox filter control
+        /// </summary>
+        /// <param name="labelText">The label to appear before the control</param>
+        /// <param name="propertyName">The business object property on which to filter</param>
+        /// <param name="options">The collection of items used to fill the combo box.</param>
+        /// <param name="strictMatch">Whether to filter the DataGridView column on a strict match or using a LIKE operator</param>
+        /// <param name="filterOnTextChangedEvent">Whether to filter the collection of items when the text in the ComboBox schanges</param>
+        /// <returns>Returns the new ComboBox added</returns>
+        IComboBox AddStringFilterComboBox(string labelText, string propertyName, ICollection options, bool strictMatch,bool filterOnTextChangedEvent);
+
+        /// <summary>
         /// Adds a CheckBox filter that displays only rows whose boolean value
         /// matches the on-off state of the CheckBox. The column of data must
         /// have "true" or "false" as its values (boolean database fields are
@@ -221,5 +232,7 @@ namespace Habanero.UI.Base
         /// if previously removed.
         /// </summary>
         void AddDefaultClearClickEvent();
+
+            
     }
 }
