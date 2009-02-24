@@ -18,15 +18,11 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
-using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.Win
 {

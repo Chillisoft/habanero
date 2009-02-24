@@ -30,25 +30,12 @@ namespace Habanero.UI.Base
     /// </summary>
     public interface IEditableGridControl : IGridControl
     {
-        /// <summary>
-        /// Sets the business object collection to display.  Loading of
-        /// the collection needs to be done before it is assigned to the
-        /// grid.  This method assumes a default UI definition is to be
-        /// used, that is a 'ui' element without a 'name' attribute.
-        /// </summary>
-        /// <param name="boCollection">The new business object collection
-        /// to be shown in the grid</param>
-        void SetBusinessObjectCollection(IBusinessObjectCollection boCollection);
+
 
         /// <summary>
         /// Gets the buttons control used to save and cancel changes
         /// </summary>
         IEditableGridButtonsControl Buttons { get; }
-
-        /// <summary>
-        /// Gets the filter control used to filter which rows are shown in the grid
-        /// </summary>
-        IFilterControl FilterControl { get; }
 
         /// <summary>
         /// Gets and sets the filter modes for the grid (i.e. filter or search). See <see cref="FilterModes"/>.

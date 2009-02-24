@@ -78,15 +78,15 @@ namespace Habanero.UI.Base
         /// </summary>
         FilterModes FilterMode { get; set; }
 
-        /// <summary>
-        /// Sets the business object collection to display.  Loading of
-        /// the collection needs to be done before it is assigned to the
-        /// grid.  This method assumes a default UI definition is to be
-        /// used, that is a 'ui' element without a 'name' attribute.
-        /// </summary>
-        /// <param name="boCollection">The business object collection
-        /// to be shown in the grid</param>
-        void SetBusinessObjectCollection(IBusinessObjectCollection boCollection);
+//        /// <summary>
+//        /// Sets the business object collection to display.  Loading of
+//        /// the collection needs to be done before it is assigned to the
+//        /// grid.  This method assumes a default UI definition is to be
+//        /// used, that is a 'ui' element without a 'name' attribute.
+//        /// </summary>
+//        /// <param name="boCollection">The business object collection
+//        /// to be shown in the grid</param>
+//        void SetBusinessObjectCollection(IBusinessObjectCollection boCollection);
 
         /// <summary>
         /// Initialises the grid without a ClassDef. This is used where the columns are set up manually.

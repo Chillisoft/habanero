@@ -31,13 +31,15 @@ namespace Habanero.UI.Win
     {
         private readonly ListBoxSelectedObjectCollectionWin _selectedObjectCollection;
         private readonly ListBoxObjectCollectionWin _objectCollection;
-        private string _errorMessage;
-
+//        private string _errorMessage;
+        /// <summary>
+        /// Constructor for <see cref="ListBoxWin"/>
+        /// </summary>
         public ListBoxWin()
         {
             _objectCollection = new ListBoxObjectCollectionWin(base.Items);
             _selectedObjectCollection = new ListBoxSelectedObjectCollectionWin(base.SelectedItems);
-            _errorMessage = "";
+//            _errorMessage = "";
            
         }
 

@@ -32,16 +32,17 @@ namespace Habanero.UI.Base
     {
         private readonly IMultiSelector<T> _multiSelector;
         private readonly MultiSelectorModel<T> _model;
-
+        /// <summary>
+        /// Constructor for <see cref="MultiSelectorManager{T}"/>
+        /// </summary>
+        /// <param name="multiSelector"></param>
         public MultiSelectorManager(IMultiSelector<T> multiSelector)
         {
             _multiSelector = multiSelector;
             _model = new MultiSelectorModel<T>();
-            _model.OptionAdded +=
-                delegate(object sender, MultiSelectorModel<T>.ModelEventArgs<T> e) { AvailableOptionsListBox.Items.Add(e.Item); };
+            _model.OptionAdded +=((sender, e) => AvailableOptionsListBox.Items.Add(e.Item));
 
-            _model.OptionRemoved +=
-                delegate(object sender, MultiSelectorModel<T>.ModelEventArgs<T> e) { AvailableOptionsListBox.Items.Remove(e.Item); };
+            _model.OptionRemoved +=((sender, e) => AvailableOptionsListBox.Items.Remove(e.Item));
 
             _model.OptionsChanged += delegate { UpdateListBoxes(); };
 
@@ -70,14 +71,22 @@ namespace Habanero.UI.Base
             IButton deselectAllButton = GetButton(MultiSelectorButton.DeselectAll);
             deselectAllButton.Click += delegate { _model.DeselectAll(); };
         }
-
+        /// <summary>
+        /// Event handler for Selecting an item 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void DoSelect(object sender, EventArgs e)
         {
             List<T> items = new List<T>();
             foreach (T item in AvailableOptionsListBox.SelectedItems) items.Add(item);
             _model.Select(items);
         }
-
+        /// <summary>
+        /// Event handler for deselecting an item
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void DoDeselect(object sender, EventArgs e)
         {
             List<T> items = new List<T>();
@@ -88,7 +97,7 @@ namespace Habanero.UI.Base
         private void UpdateListBoxes()
         {
             AvailableOptionsListBox.Items.Clear();
-            _model.AvailableOptions.ForEach(delegate(T obj) { AvailableOptionsListBox.Items.Add(obj); });
+            _model.AvailableOptions.ForEach(obj => AvailableOptionsListBox.Items.Add(obj));
             SelectionsListBox.Items.Clear();
             foreach (T obj in _model.SelectionsView)
             {
