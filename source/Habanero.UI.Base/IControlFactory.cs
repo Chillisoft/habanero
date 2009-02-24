@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
 {
@@ -510,30 +509,72 @@ namespace Habanero.UI.Base
         ///<returns>The message box result.</returns>
         DialogResult ShowMessageBox(string message, string title, MessageBoxButtons buttons, MessageBoxIcon icon);
 
-
         ///<summary>
         /// Displays a message box with specified text.
         ///</summary>
         ///<param name="message">The text to display in the message box.</param>
         ///<returns>The message box result.</returns>
-        Base.DialogResult ShowMessageBox(string message);
-
+        DialogResult ShowMessageBox(string message);
 
         /// <summary>
         /// Creates a TextBox that provides filtering of characters depending on the property type.
         /// </summary>
         IPictureBox CreatePictureBox();
 
+        ///<summary>
+        /// Creates a <see cref="IDateTimePickerMapperStrategy"/>
+        ///</summary>
         IDateTimePickerMapperStrategy CreateDateTimePickerMapperStrategy();
+
+        ///<summary>
+        /// Creates a <see cref="IBusinessObjectControlWithErrorDisplay"/>
+        ///</summary>
         IBusinessObjectControlWithErrorDisplay CreateBOEditorForm(ClassDef lookupTypeClassDef, string uiDefName, IControlFactory controlFactory);
 
+        ///<summary>
+        /// Creates a <see cref="IGridAndBOEditorControl"/>
+        ///</summary>
         IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>() 
             where TBusinessObject:class, IBusinessObject;
 
+        ///<summary>
+        /// Creates a <see cref="IGridAndBOEditorControl"/>
+        ///</summary>
         IGridAndBOEditorControl CreateGridAndBOEditorControl(ClassDef classDef);
 
+        ///<summary>
+        /// Creates a <see cref="IGridAndBOEditorControl"/>
+        ///</summary>
         IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>(IBusinessObjectControlWithErrorDisplay editorPanel)
             where TBusinessObject : class, IBusinessObject;
+
+        ///<summary>
+        /// Creates a <see cref="ICollapsiblePanel"/>
+        ///</summary>
+        ICollapsiblePanel CreateCollapsiblePanel();
+
+        
+        ///<summary>
+        /// Creates a <see cref="IButton"/> configured with the collapsible style
+        ///</summary>
+        ///<returns>a <see cref="IButton"/> </returns>
+        IButton CreateButtonCollapsibleStyle();
+
+        ///<summary>
+        /// Creates a <see cref="ILabel"/> configured with the collapsible style
+        ///</summary>
+        ///<returns>a <see cref="ILabel"/> </returns>
+        ILabel CreateLabelPinOffStyle();
+
+        ///<summary>
+        /// Configures the <see cref="ILabel"/> with the pinoff style
+        ///</summary>
+        void ConfigurePinOffStyleLabel(ILabel label);
+
+        ///<summary>
+        /// Configures the <see cref="ILabel"/> with the pinon style
+        ///</summary>
+        void ConfigurePinOnStyleLabel(ILabel label);
     }
 
     /// <summary>
@@ -590,6 +631,13 @@ namespace Habanero.UI.Base
         /// <param name="boProp">The property being mapped</param>
         void AddKeyPressEventHandler(TextBoxMapper mapper, IBOProp boProp);
 
+        ///<summary>
+        /// Add a handler to the <see cref="ITextBox"/> TextChanged Event that
+        /// automatically updates the Business Object with this change.
+        /// This is only applicable in Windows not for VWG (Web).
+        ///</summary>
+        ///<param name="mapper"></param>
+        ///<param name="boProp"></param>
         void AddUpdateBoPropOnTextChangedHandler(TextBoxMapper mapper, IBOProp boProp);
     }
 

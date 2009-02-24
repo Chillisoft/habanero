@@ -44,6 +44,9 @@ namespace Habanero.UI.Win
         private readonly ControlFactoryManager _manager;
 
         
+        ///<summary>
+        /// Construct <see cref="ControlFactoryWin"/>
+        ///</summary>
         public ControlFactoryWin()
         {
             _manager = new ControlFactoryManager(this);
@@ -956,9 +959,17 @@ namespace Habanero.UI.Win
             return new GridAndBOEditorControlWin<TBusinessObject>(this, editorPanel);
         }
 
-        public IGridAndBOEditorControl CreateGridAndBOEditorControl(IBusinessObjectControlWithErrorDisplay boEditorPanel,IBusinessObject businessObject)
+//        public IGridAndBOEditorControl CreateGridAndBOEditorControl(IBusinessObjectControlWithErrorDisplay boEditorPanel,IBusinessObject businessObject)
+//        {
+//            return new GridAndBOEditorControlWin<IBusinessObject>(this, boEditorPanel,businessObject);
+//        }
+
+        ///<summary>
+        /// Creates a <see cref="ICollapsiblePanel"/>
+        ///</summary>
+        public ICollapsiblePanel CreateCollapsiblePanel()
         {
-            return new GridAndBOEditorControlWin<IBusinessObject>(this, boEditorPanel,businessObject);
+            return new CollapsiblePanelWin(this);
         }
 
         /// <summary>
@@ -968,5 +979,63 @@ namespace Habanero.UI.Win
         {
             throw new NotImplementedException();
         }
+
+        #region Collapsible Panel Button Creators
+
+        ///<summary>
+        /// Creates a <see cref="IButton"/> configured with the collapsible style
+        ///</summary>
+        ///<returns>a <see cref="IButton"/> </returns>
+        public IButton CreateButtonCollapsibleStyle()
+        {
+            ButtonWin button = (ButtonWin)CreateButton();
+            ConfigureCollapsibleStyleButton(button);
+            return button;
+        }
+
+        private void ConfigureCollapsibleStyleButton(IButton button)
+        {
+            ButtonWin buttonWin = ((ButtonWin)button);
+            buttonWin.BackgroundImage = CollapsiblePanelResource.headergradient;
+            buttonWin.FlatStyle = FlatStyle.Flat;
+
+        }
+
+        ///<summary>
+        /// Creates a <see cref="ILabel"/> configured with the collapsible style
+        ///</summary>
+        ///<returns>a <see cref="ILabel"/> </returns>
+        public ILabel CreateLabelPinOffStyle()
+        {
+            LabelWin label = (LabelWin)CreateLabel();
+            ConfigurePinOffStyleLabel(label);
+            return label;
+        }
+
+        ///<summary>
+        /// Configures the <see cref="ILabel"/> with the pinoff style
+        ///</summary>
+        public void ConfigurePinOffStyleLabel(ILabel label)
+        {
+            LabelWin labelWin = (LabelWin)CreateLabel();
+            labelWin.BackgroundImage = CollapsiblePanelResource.pinoff_withcolour;
+            labelWin.FlatStyle = FlatStyle.Flat;
+            labelWin.BackgroundImageLayout = ImageLayout.Center;
+            labelWin.Width = 24;
+        }
+
+        ///<summary>
+        ///</summary>
+        ///<param name="label"></param>
+        public void ConfigurePinOnStyleLabel(ILabel label)
+        {
+            LabelWin labelWin = (LabelWin)CreateLabel();
+            labelWin.BackgroundImage = CollapsiblePanelResource.pinon_withcolour;
+            labelWin.FlatStyle = FlatStyle.Flat;
+            labelWin.BackgroundImageLayout = ImageLayout.Center;
+            labelWin.Width = 24;
+        }
+
+        #endregion
     }
 }

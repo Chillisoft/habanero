@@ -50,6 +50,9 @@
     <Compile Include="BOEditorPanelWin.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="CollapsiblePanelWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ComboBoxAutoCompleteSourceWin.cs" />
     <Compile Include="ComboBoxAutoCompleteModeWin.cs" />
     <Compile Include="BOColTabControlWin.cs">

@@ -49,9 +49,8 @@ namespace Habanero.Base
         /// <summary>
         /// Indicates whether all of the property values of the object are valid
         /// </summary>
-        /// <param name="message">If the object is not valid then this returns the reason for it being invalid/param>
+        /// <param name="message">If the object is not valid then this returns the reason for it being invalid</param>
         /// <returns>Returns true if all are valid </returns>
-        /// </summary>
         bool IsValid(out string message);
 
         /// <summary>

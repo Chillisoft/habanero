@@ -325,8 +325,8 @@ namespace Habanero.Util
 
         /// <summary>
         /// For a given name value pair e.g. a query string or cookie string that is formatted
-        /// as name=value&name2=value2&name3=value3 etc this will return the value for a specified
-        /// name e.g. for nameValuePairString = "name=value&name2=value2&name3=value3" and name = "name2"
+        /// as name=value&amp;name2=value2&amp;name3=value3 etc this will return the value for a specified
+        /// name e.g. for nameValuePairString = "name=value&amp;name2=value2&amp;name3=value3" and name = "name2"
         /// GetValueString will return value2.
         /// </summary>
         /// <param name="nameValuePairString">The name value pair to parse</param>

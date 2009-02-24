@@ -26,8 +26,11 @@ namespace Habanero.UI.Base
     /// </summary>
     public class ComboBoxManager
     {
-        private IComboBox _comboBox;
-
+        private readonly IComboBox _comboBox;
+        /// <summary>
+        /// Creates <see cref="ComboBoxManager"/>
+        /// </summary>
+        /// <param name="comboBox"></param>
         public ComboBoxManager(IComboBox comboBox)
         {
             _comboBox = comboBox;
@@ -35,18 +38,29 @@ namespace Habanero.UI.Base
 
         }
 
+        ///<summary>
+        /// Returns the Key for the Selected Item if it is a <see cref="ComboPair"/> else
+        /// returns the selectedItem.
+        ///</summary>
+        ///<param name="selectedItem"></param>
+        ///<returns></returns>
         public object GetSelectedItem(object selectedItem)
         {
             if (selectedItem is ComboPair)
             {
                 return ((ComboPair)selectedItem).Key;
             }
-            else
-            {
-                return selectedItem;
-            }
+            return selectedItem;
         }
 
+        ///<summary>
+        /// If the <see cref="IComboBox"/> contains <see cref="ComboPair"/>s ;<br/>
+        ///   If the <paramref name="value"/> equals a <see cref="ComboPair.Key"/> for a <see cref="ComboPair"/> then return the <see cref="ComboPair"/>;<br/>
+        ///   else returns null;<br/>
+        /// else return the value;<br/>
+        ///</summary>
+        ///<param name="value"></param>
+        ///<returns></returns>
         public object GetItemToSelect(object value)
         {
             if (value is string && _comboBox.Items.Count > 0 && _comboBox.Items[0] is ComboPair)
@@ -66,18 +80,31 @@ namespace Habanero.UI.Base
             return null;
         }
 
+        ///<summary>
+        /// 
+        /// If the item is a <see cref="ComboPair"/> then returns the <see cref="ComboPair.Value"/> for the <see cref="ComboPair"/>
+        ///   else returns the item.
+        ///</summary>
+        ///<param name="item"></param>
+        ///<returns></returns>
         public object GetSelectedValue(object item)
         {
             if (item is ComboPair)
             {
                 return ((ComboPair)item).Value;
             }
-            else
-            {
-                return item;
-            }
+            return item;
         }
 
+        ///<summary>
+        /// If the <see cref="IComboBox"/> contains <see cref="ComboPair"/>s <br/>
+        ///   If the value is equal to the <see cref="ComboPair.Value"/> for a <see cref="ComboPair"/> then<br/>
+        ///    returns the <see cref="ComboPair"/> else returns the null.<br/>
+        /// Else<br/>
+        ///  returns the value<br/>
+        ///</summary>
+        ///<param name="value"></param>
+        ///<returns></returns>
         public object GetValueToSelect(object value)
         {
             if (_comboBox.Items.Count > 0 && _comboBox.Items[0] is ComboPair)

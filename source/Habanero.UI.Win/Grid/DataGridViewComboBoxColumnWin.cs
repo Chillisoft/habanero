@@ -17,11 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using System.Windows.Forms;
 using Habanero.UI.Base;
-using Habanero.UI.Base;
-using DataGridViewColumnSortMode = Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.Win
 {

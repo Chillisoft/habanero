@@ -36,7 +36,13 @@ namespace Habanero.Util
         /// </summary>
         public struct MetadataDetail
         {
+            /// <summary>
+            /// The Hex Value of the MetaData for a JPeg
+            /// </summary>
             public string Hex;
+            /// <summary>
+            /// The Raw Value 
+            /// </summary>
             public string RawValueAsString;
             public string DisplayValue;
         }

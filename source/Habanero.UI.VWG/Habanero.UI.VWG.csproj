@@ -196,6 +196,9 @@
     <Compile Include="TextBoxVWG.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CollapsiblePanel\CollapsiblePanelVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ToBeGeneralised\TabControlVWG.cs">
       <SubType>Component</SubType>
     </Compile>

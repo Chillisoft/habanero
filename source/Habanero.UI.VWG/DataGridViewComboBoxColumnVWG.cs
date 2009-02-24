@@ -17,7 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
@@ -32,6 +31,10 @@ namespace Habanero.UI.VWG
     {
         private readonly DataGridViewComboBoxColumn _dataGridViewComboBoxColumn;
 
+        ///<summary>
+        /// Constructor for <see cref="DataGridViewComboBoxColumnVWG"/>
+        ///</summary>
+        ///<param name="dataGridViewComboBoxColumn"></param>
         public DataGridViewComboBoxColumnVWG(DataGridViewComboBoxColumn dataGridViewComboBoxColumn)
             : base(dataGridViewComboBoxColumn)
         {

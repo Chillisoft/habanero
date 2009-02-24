@@ -18,11 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.UI.Base;
-using Habanero.UI.Base;
-using Habanero.UI.Win;
 
 namespace Habanero.UI.Win
 {
