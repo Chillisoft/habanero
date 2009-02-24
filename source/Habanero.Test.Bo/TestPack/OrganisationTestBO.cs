@@ -56,7 +56,23 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-
+        public static ClassDef LoadDefaultClassDef_NoRelationships()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
+					<property  name=""OrganisationID"" type=""Guid"" />
+                    <property name=""Name"" />
+					<primaryKey>
+						<prop name=""OrganisationID"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         public static ClassDef LoadDefaultClassDef_WithTwoRelationshipsToContactPerson()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -189,6 +205,32 @@ namespace Habanero.Test.BO
             MultipleRelationshipDef relationshipDef = new MultipleRelationshipDef("ContactPeople", "Habanero.Test.BO",
                     "ContactPersonTestBO", relKeyDef,true, "", DeleteParentAction.DeleteRelated
                     , RelationshipType.Composition);
+        
+            itsClassDef.RelationshipDefCol.Add(relationshipDef);
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+        public static ClassDef LoadDefaultClassDef_SingleRel_NoReverseRelationship()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
+					<property  name=""OrganisationID"" type=""Guid"" />
+                    <property name=""Name"" />
+					<primaryKey>
+						<prop name=""OrganisationID"" />
+					</primaryKey>
+			    </class>
+			");
+            RelPropDef relPropDef = new RelPropDef(itsClassDef.PropDefcol["OrganisationID"], "OrganisationID");
+            RelKeyDef relKeyDef = new RelKeyDef();
+            relKeyDef.Add(relPropDef);
+            IRelationshipDef relationshipDef = new SingleRelationshipDef("ContactPerson", "Habanero.Test.BO",
+                    "ContactPersonTestBO", relKeyDef,true, DeleteParentAction.DeleteRelated
+                    , RelationshipType.Aggregation);
+            relationshipDef.OwningBOHasForeignKey = false;
             itsClassDef.RelationshipDefCol.Add(relationshipDef);
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;

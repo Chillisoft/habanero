@@ -182,7 +182,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// The <see cref="ClassDef"/> for the related object.
         /// </summary>
-    	internal ClassDef RelatedObjectClassDef
+        public IClassDef RelatedObjectClassDef
     	{
     		get
     		{
@@ -231,7 +231,7 @@ namespace Habanero.BO.ClassDefinition
         /// Returns the specific action that the relationship must carry out in the case of a child being added to it.
         /// <see cref="RelationshipType"/>
         ///</summary>
-        public RelationshipType RelationshipType { get; internal set; }
+        public RelationshipType RelationshipType { get; set; }
 
         ///<summary>
         /// Returns true where the owning business object has the foreign key for this relationship false otherwise.

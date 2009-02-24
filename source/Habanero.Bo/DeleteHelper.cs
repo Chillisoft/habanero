@@ -187,7 +187,7 @@ namespace Habanero.BO
 			        listOfPaths.Add(relationshipName, null);
 			    } else
 			    {
-			        ClassDef classDef = relationshipDef.RelatedObjectClassDef;
+			        ClassDef classDef = (ClassDef) relationshipDef.RelatedObjectClassDef;
 			        if (classDef != null)
 			        {
 			            MatchList results = FindRelationshipsSafe(classDef.RelationshipDefCol, matchesConditionDelegate, alreadyChecked);

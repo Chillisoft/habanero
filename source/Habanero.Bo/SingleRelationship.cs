@@ -463,7 +463,7 @@ namespace Habanero.BO
 //                    if (reverseRelationship != null)
 //                    {
                         transactionCommitter.AddTransaction
-                            (new TransactionalSingleRelationship_Added(this, this.GetRelatedObject()));
+                            (new TransactionalSingleRelationship_Added(this, _relatedBo));
 //                    }
                 }
                 else if (IsRemoved)

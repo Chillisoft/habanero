@@ -398,7 +398,7 @@ namespace Habanero.BO.Loaders
                           relationshipDef.RelationshipName, reverseRelationshipName, relatedClassDef.ClassNameFull));
             }
 
-            RelationshipDef reverseRelationshipDef = relatedClassDef.RelationshipDefCol[reverseRelationshipName];
+            RelationshipDef reverseRelationshipDef = (RelationshipDef) relatedClassDef.RelationshipDefCol[reverseRelationshipName];
             CheckReverseRelationshipRelKeyDefProps(relationshipDef, relatedClassDef, reverseRelationshipName, reverseRelationshipDef, classDef);
 //            if (!reverseRelationshipDef.OwningBOHasForeignKey) return;
 //

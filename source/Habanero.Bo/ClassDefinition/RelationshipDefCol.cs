@@ -27,23 +27,23 @@ namespace Habanero.BO.ClassDefinition
     /// <summary>
     /// Manages a collection of relationship definitions
     /// </summary>
-    public class RelationshipDefCol : IEnumerable<RelationshipDef>
+    public class RelationshipDefCol : IEnumerable<IRelationshipDef>
     {
-        private Dictionary<string, RelationshipDef> _relDefs;
+        private readonly Dictionary<string, IRelationshipDef> _relDefs;
 
         /// <summary>
         /// A constructor to create a new empty collection
         /// </summary>
         public RelationshipDefCol()
         {
-            _relDefs = new Dictionary<string, RelationshipDef>();
+            _relDefs = new Dictionary<string, IRelationshipDef>();
         }
 
         /// <summary>
         /// Add an existing relationship to the collection
         /// </summary>
         /// <param name="relationshipDef">The existing relationship to add</param>
-        public void Add(RelationshipDef relationshipDef)
+        public void Add(IRelationshipDef relationshipDef)
         {
             if (Contains(relationshipDef))
             {
@@ -58,7 +58,7 @@ namespace Habanero.BO.ClassDefinition
 		/// Removes a relationship definition from the collection
 		/// </summary>
 		/// <param name="relationshipDef">The Relationship definition to remove</param>
-		protected void Remove(RelationshipDef relationshipDef)
+		protected void Remove(IRelationshipDef relationshipDef)
 		{
 			if (Contains(relationshipDef))
 			{
@@ -73,7 +73,7 @@ namespace Habanero.BO.ClassDefinition
 		/// </summary>
 		/// <param name="relationshipDef">The Relationship definition to search for</param>
 		/// <returns>Returns true if found, false if not</returns>
-		protected bool Contains(RelationshipDef relationshipDef)
+		protected bool Contains(IRelationshipDef relationshipDef)
 		{
             return _relDefs.ContainsKey(relationshipDef.RelationshipName);
 		}
@@ -99,7 +99,7 @@ namespace Habanero.BO.ClassDefinition
         /// access</param>
         /// <returns>Returns the relationship definition that matches the
         /// name provided</returns>
-        public RelationshipDef this[string relationshipName]
+        public IRelationshipDef this[string relationshipName]
         {
             get
             {
@@ -146,7 +146,7 @@ namespace Habanero.BO.ClassDefinition
             }
 		}
 
-		#region IEnumerable<RelationshipDef> Members
+		#region IEnumerable<IRelationshipDef> Members
 
         ///<summary>
         ///Returns an enumerator that iterates through the collection.
@@ -156,7 +156,7 @@ namespace Habanero.BO.ClassDefinition
         ///A <see cref="T:System.Collections.Generic.IEnumerator`1"></see> that can be used to iterate through the collection.
         ///</returns>
         ///<filterpriority>1</filterpriority>
-        IEnumerator<RelationshipDef> IEnumerable<RelationshipDef>.GetEnumerator()
+        IEnumerator<IRelationshipDef> IEnumerable<IRelationshipDef>.GetEnumerator()
 		{
 			return _relDefs.Values.GetEnumerator();
 		}

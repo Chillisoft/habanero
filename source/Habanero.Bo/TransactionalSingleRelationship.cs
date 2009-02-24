@@ -32,6 +32,7 @@ namespace Habanero.BO
 
         protected TransactionalSingleRelationship(IRelationship relationship, IBusinessObject relatedBO)
         {
+            if (relatedBO == null) throw new ArgumentNullException("relatedBO");
             _transactionID = Guid.NewGuid().ToString();
             _relationship = relationship;
             _relatedBO = relatedBO;

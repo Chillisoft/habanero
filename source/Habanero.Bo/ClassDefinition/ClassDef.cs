@@ -768,7 +768,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="relationshipName">The relationship name in question</param>
         /// <returns>Returns the relationship definition if found, 
         /// or null if not found</returns>
-        public RelationshipDef GetRelationship(string relationshipName)
+        public IRelationshipDef GetRelationship(string relationshipName)
         {
             ClassDef currentClassDef = this;
             while (currentClassDef != null)
@@ -840,7 +840,7 @@ namespace Habanero.BO.ClassDefinition
                 return null;
             }
 
-            ClassDef relatedClassDef = this.RelationshipDefCol[source.Name].RelatedObjectClassDef;
+            IClassDef relatedClassDef = this.RelationshipDefCol[source.Name].RelatedObjectClassDef;
             if (source.Joins.Count > 0)
             {
                 return relatedClassDef.GetPropDef(source.Joins[0].ToSource, propertyName, throwError);
@@ -1047,8 +1047,8 @@ namespace Habanero.BO.ClassDefinition
                 {
                     if (RelationshipDefCol.Contains(relationship))
                     {
-                        RelationshipDef relationshipDef = RelationshipDefCol[relationship];
-                        ClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
+                        IRelationshipDef relationshipDef = RelationshipDefCol[relationship];
+                        IClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
                         if (relatedObjectClassDef != null)
                         {
                             Type propertyType = relatedObjectClassDef.GetPropertyType(propertyName);

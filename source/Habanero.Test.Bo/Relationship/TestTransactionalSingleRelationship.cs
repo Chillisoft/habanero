@@ -41,8 +41,8 @@ namespace Habanero.Test.BO.Relationship
         public void Test_TransactionID()
         {
             //---------------Set up test pack-------------------
-            TransactionalSingleRelationship_Added transactionalSingleRelationship1 = new TransactionalSingleRelationship_Added(null, null);
-            TransactionalSingleRelationship_Added transactionalSingleRelationship2 = new TransactionalSingleRelationship_Added(null, null);
+            TransactionalSingleRelationship_Added transactionalSingleRelationship1 = new TransactionalSingleRelationship_Added(null, new Car());
+            TransactionalSingleRelationship_Added transactionalSingleRelationship2 = new TransactionalSingleRelationship_Added(null, new Car());
             
             //---------------Execute Test ----------------------
             string transactionID1 = transactionalSingleRelationship1.TransactionID();
@@ -63,7 +63,7 @@ namespace Habanero.Test.BO.Relationship
             SingleRelationship<OrganisationTestBO> singleRelationship = contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation");
 
             //---------------Execute Test ----------------------
-            TransactionalSingleRelationship_Added tsr = new TransactionalSingleRelationship_Added(singleRelationship, null);
+            TransactionalSingleRelationship_Added tsr = new TransactionalSingleRelationship_Added(singleRelationship, new OrganisationTestBO());
             //---------------Test Result -----------------------
 
             Assert.AreSame(singleRelationship, tsr.Relationship);

@@ -373,10 +373,10 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
             ClassDef classDef = classDefList.FindByClassName("TestClass");
-            RelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
+            IRelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
             Assert.IsFalse(relationshipDef.OwningBOHasForeignKey, "Should have converted this to false");
             ClassDef revesreclassDef = classDefList.FindByClassName("TestClass");
-            RelationshipDef reverserelationshipDef = revesreclassDef.RelationshipDefCol["TestRelatedClass"];
+            IRelationshipDef reverserelationshipDef = revesreclassDef.RelationshipDefCol["TestRelatedClass"];
             Assert.IsFalse(reverserelationshipDef.OwningBOHasForeignKey, "Should not have converted this to true");
         }
 
@@ -412,9 +412,9 @@ namespace Habanero.Test.BO.Loaders
             ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
             //---------------Test Result -----------------------
             ClassDef classDef = classDefList.FindByClassName("TestClass");
-            RelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
+            IRelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
             ClassDef reverseClassDef = classDefList.FindByClassName("TestRelatedClass");
-            RelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
+            IRelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
             Assert.AreEqual(2, classDefList.Count);
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
@@ -454,9 +454,9 @@ namespace Habanero.Test.BO.Loaders
             ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
             //---------------Test Result -----------------------
             ClassDef classDef = classDefList.FindByClassName("TestClass");
-            RelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
+            IRelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
             ClassDef reverseClassDef = classDefList.FindByClassName("TestRelatedClass");
-            RelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
+            IRelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
             Assert.AreEqual(2, classDefList.Count);
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
@@ -495,7 +495,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
             ClassDef classDef = classDefList.FindByClassName("TestClass");
-            RelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
+            IRelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
             Assert.IsFalse(relationshipDef.OwningBOHasForeignKey);
         }
         [Test]
@@ -535,9 +535,9 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
 
             ClassDef classDef = classDefList.FindByClassName("TestClass");
-            RelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
+            IRelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
             ClassDef reverseClassDef = classDefList.FindByClassName("TestRelatedClass");
-            RelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
+            IRelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
 
             Assert.IsFalse(relationshipDef.OwningBOHasForeignKey);
             Assert.IsTrue(reverseRelationshipDef.OwningBOHasForeignKey);
@@ -585,9 +585,9 @@ namespace Habanero.Test.BO.Loaders
             Assert.Fail("wRITE TEST THSI should throw validation error");
 
             ClassDef classDef = classDefList.FindByClassName("TestClass");
-            RelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
+            IRelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
             ClassDef reverseClassDef = classDefList.FindByClassName("TestRelatedClass");
-            RelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
+            IRelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
 
             Assert.IsFalse(relationshipDef.OwningBOHasForeignKey);
             Assert.IsTrue(reverseRelationshipDef.OwningBOHasForeignKey);
@@ -629,7 +629,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
 
             ClassDef reverseClassDef = classDefList.FindByClassName("TestRelatedClass");
-            RelationshipDef relationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
+            IRelationshipDef relationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
 
             Assert.IsTrue(relationshipDef.OwningBOHasForeignKey);
         }
@@ -671,9 +671,9 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
 
             ClassDef classDef = classDefList.FindByClassName("TestClass");
-            RelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
+            IRelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
             ClassDef reverseClassDef = classDefList.FindByClassName("TestRelatedClass");
-            RelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
+            IRelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
 
             Assert.IsFalse(relationshipDef.OwningBOHasForeignKey);
             Assert.IsTrue(reverseRelationshipDef.OwningBOHasForeignKey);
@@ -716,9 +716,9 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
 
             ClassDef classDef = classDefList.FindByClassName("TestClass");
-            RelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
+            IRelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
             ClassDef reverseClassDef = classDefList.FindByClassName("TestRelatedClass");
-            RelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
+            IRelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
 
             Assert.IsFalse(relationshipDef.OwningBOHasForeignKey);
             Assert.IsTrue(reverseRelationshipDef.OwningBOHasForeignKey);
@@ -763,9 +763,9 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
 
             ClassDef classDef = classDefList.FindByClassName("TestClass");
-            RelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
+            IRelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
             ClassDef reverseClassDef = classDefList.FindByClassName("TestRelatedClass");
-            RelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
+            IRelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
 
             Assert.IsFalse(relationshipDef.OwningBOHasForeignKey);
             Assert.IsTrue(reverseRelationshipDef.OwningBOHasForeignKey);

@@ -356,8 +356,10 @@ namespace Habanero.Test.BO
             RelationshipDefCol relationshipDefCol = ClassDef.RelationshipDefCol;
             if (relationshipDefCol.Contains(childName))
             {
-                RelationshipDef relationshipDef = relationshipDefCol[childName];
-                ClassDef classDef = relationshipDef.RelatedObjectClassDef;
+                IRelationshipDef relationshipDef = relationshipDefCol[childName];
+#pragma warning disable 168
+                IClassDef classDef = relationshipDef.RelatedObjectClassDef;
+#pragma warning restore 168
                 IMultipleRelationship relationship = (IMultipleRelationship) relationshipDef.CreateRelationship(this, this._boPropCol);
                 //_mock.DynamicMock<IMultipleRelationship>();
                 //(this, relationshipDef, this._boPropCol);
