@@ -204,9 +204,9 @@ namespace Habanero.Test.Util
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             //---------------Test Result -----------------------
-            DateTime testValue = DateTime.Now.AddSeconds(-5);
-            Assert.IsTrue(DateTimeUtilities.CloseToDateTimeNow(testValue, 10));
-            Assert.IsFalse(DateTimeUtilities.CloseToDateTimeNow(testValue, 5)); //milliseconds should pass?
+            DateTime testValue = DateTime.Now.AddSeconds(-20);
+            Assert.IsTrue(DateTimeUtilities.CloseToDateTimeNow(testValue, 50));
+            Assert.IsFalse(DateTimeUtilities.CloseToDateTimeNow(testValue, 20)); //milliseconds should pass?
             Assert.IsFalse(DateTimeUtilities.CloseToDateTimeNow(testValue, 3));
         }
 
@@ -217,9 +217,9 @@ namespace Habanero.Test.Util
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             //---------------Test Result -----------------------
-            DateTime testValue = DateTime.Now.AddSeconds(5);
-            Assert.IsTrue(DateTimeUtilities.CloseToDateTimeNow(testValue, 10));
-            Assert.IsFalse(DateTimeUtilities.CloseToDateTimeNow(testValue, 5)); //milliseconds should pass?
+            DateTime testValue = DateTime.Now.AddSeconds(20);
+            Assert.IsTrue(DateTimeUtilities.CloseToDateTimeNow(testValue, 50));
+            Assert.IsFalse(DateTimeUtilities.CloseToDateTimeNow(testValue, 20)); //milliseconds should pass?
             Assert.IsFalse(DateTimeUtilities.CloseToDateTimeNow(testValue, 3));
         }
     }
