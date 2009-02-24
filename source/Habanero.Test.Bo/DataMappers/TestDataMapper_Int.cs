@@ -96,7 +96,68 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsNull(parsedValue);
             Assert.IsFalse(parsedSucceed);
+
+        }
+
+        [Test]
+        public void Test_PropDef_ParsePropValue_WithDecimal_Max()
+        {
+            //---------------Set up test pack-------------------
+            const decimal value = decimal.MaxValue;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsedSucceed = _propDef.TryParsePropValue(value, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsNull(parsedValue);
+            Assert.IsFalse(parsedSucceed);
+        }
+
         
+
+        [Test]
+        public void Test_PropDef_ParsePropValue_WithDecimal_NoRoundingNecessary()
+        {
+            //---------------Set up test pack-------------------
+            const decimal value = 100.00m;
+            decimal expectedInteger = Math.Round(value);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsedSucceed = _propDef.TryParsePropValue(value, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedInteger, parsedValue);
+            Assert.IsTrue(parsedSucceed);
+        }
+
+        [Test]
+        public void Test_PropDef_ParsePropValue_WithDecimal_RoundUp()
+        {
+            //---------------Set up test pack-------------------
+            const decimal value = 123.50m;
+            decimal expectedInteger = Math.Round(value);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsedSucceed = _propDef.TryParsePropValue(value, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedInteger, parsedValue);
+            Assert.IsTrue(parsedSucceed);
+        }
+
+        [Test]
+        public void Test_PropDef_ParsePropValue_WithDecimal_RoundDown()
+        {
+            //---------------Set up test pack-------------------
+            const decimal value = 321.49m;
+            decimal expectedInteger = Math.Round(value);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsedSucceed = _propDef.TryParsePropValue(value, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedInteger, parsedValue);
+            Assert.IsTrue(parsedSucceed);
         }
 
         [Test]
@@ -206,6 +267,139 @@ namespace Habanero.Test.BO
             bool parsedSucceed = _dataMapper.TryParsePropValue(expectedint.ToString(), out parsedValue);
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedint, parsedValue);
+            Assert.IsTrue(parsedSucceed);
+        }
+
+        [Test]
+        public void Test_DataMapper_ParsePropValue_WithDecimal_AboveIntMax()
+        {
+            //---------------Set up test pack-------------------
+            const decimal value = int.MaxValue + 0.01m;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsedSucceed = _dataMapper.TryParsePropValue(value, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsNull(parsedValue);
+            Assert.IsFalse(parsedSucceed);
+        }
+
+        [Test]
+        public void Test_DataMapper_ParsePropValue_WithDecimal_EqualsIntMax()
+        {
+            //---------------Set up test pack-------------------
+            const decimal value = int.MaxValue;
+            decimal expectedInteger = Math.Round(value);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsedSucceed = _dataMapper.TryParsePropValue(value, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedInteger, parsedValue);
+            Assert.IsTrue(parsedSucceed);
+        }
+
+        [Test]
+        public void Test_DataMapper_ParsePropValue_WithDecimal_BelowIntMax()
+        {
+            //---------------Set up test pack-------------------
+            const decimal value = int.MaxValue - 0.01m;
+            decimal expectedInteger = Math.Round(value);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsedSucceed = _dataMapper.TryParsePropValue(value, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedInteger, parsedValue);
+            Assert.IsTrue(parsedSucceed);
+        }
+
+        [Test]
+        public void Test_DataMapper_ParsePropValue_WithDecimal_BelowIntMin()
+        {
+            //---------------Set up test pack-------------------
+            const decimal value = int.MinValue - 0.01m;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsedSucceed = _dataMapper.TryParsePropValue(value, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsNull(parsedValue);
+            Assert.IsFalse(parsedSucceed);
+        }
+
+        [Test]
+        public void Test_DataMapper_ParsePropValue_WithDecimal_EqualsIntMin()
+        {
+            //---------------Set up test pack-------------------
+            const decimal value = int.MinValue;
+            decimal expectedInteger = Math.Round(value);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsedSucceed = _dataMapper.TryParsePropValue(value, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedInteger, parsedValue);
+            Assert.IsTrue(parsedSucceed);
+        }
+
+        [Test]
+        public void Test_DataMapper_ParsePropValue_WithDecimal_AboveIntMin()
+        {
+            //---------------Set up test pack-------------------
+            const decimal value = int.MinValue + 0.01m;
+            decimal expectedInteger = Math.Round(value);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsedSucceed = _dataMapper.TryParsePropValue(value, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedInteger, parsedValue);
+            Assert.IsTrue(parsedSucceed);
+        }
+
+        [Test]
+        public void Test_DataMapper_ParsePropValue_WithDecimal_NoRoundingNecessary()
+        {
+            //---------------Set up test pack-------------------
+            const decimal value = 100.00m;
+            decimal expectedInteger = Math.Round(value);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsedSucceed = _dataMapper.TryParsePropValue(value, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedInteger, parsedValue);
+            Assert.IsTrue(parsedSucceed);
+        }
+
+        [Test]
+        public void Test_DataMapper_ParsePropValue_WithDecimal_RoundUp()
+        {
+            //---------------Set up test pack-------------------
+            const decimal value = 123.50m;
+            decimal expectedInteger = Math.Round(value);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsedSucceed = _dataMapper.TryParsePropValue(value, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedInteger, parsedValue);
+            Assert.IsTrue(parsedSucceed);
+        }
+
+        [Test]
+        public void Test_DataMapper_ParsePropValue_WithDecimal_RoundDown()
+        {
+            //---------------Set up test pack-------------------
+            const decimal value = 321.49m;
+            decimal expectedInteger = Math.Round(value);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsedSucceed = _dataMapper.TryParsePropValue(value, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedInteger, parsedValue);
             Assert.IsTrue(parsedSucceed);
         }
 

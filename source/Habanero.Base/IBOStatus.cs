@@ -61,7 +61,7 @@ namespace Habanero.Base
         bool IsValid();
 
         ///<summary>
-        /// Returns an invalid message if the object is valid <see IsValid()>
+        /// Returns an invalid message if the object is valid <see cref="IsValid()"/>
         ///</summary>
         string IsValidMessage { get; }
 

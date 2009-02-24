@@ -340,7 +340,7 @@ namespace Habanero.Util
 
         /// <summary>
         /// returns a NameValueCollection of nameValue Pairs for the nameValuePairString.
-        /// e.g. nameValuePairString = "name=value&name2=value2&name3=value3" will return a 
+        /// e.g. nameValuePairString = "name=value&amp;name2=value2&amp;name3=value3" will return a 
         /// NameValueCollection with 3 items for name, name2 and name3.
         /// </summary>
         /// <param name="nameValuePairString">The name value pair to split.</param>

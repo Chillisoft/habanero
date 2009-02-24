@@ -41,7 +41,7 @@ namespace Habanero.Test.Structure
 			    <property name=""EngineNo"" databaseField=""field_Engine_No"" />
 			    <property name=""DateManufactured"" type=""DateTime"" databaseField=""field_Date_Manufactured"" />
 			    <property name=""HorsePower"" type=""Int32"" databaseField=""field_Horse_Power"" />
-			    <property name=""FuelInjected"" type=""Boolean"" databaseField=""field_Fue_lInjected"" />
+			    <property name=""FuelInjected"" type=""Boolean"" databaseField=""field_Fuel_Injected"" />
 			    <property name=""CarID"" type=""Guid"" databaseField=""field_Car_ID"" />
 			    <primaryKey>
 			      <prop name=""EngineID"" />
@@ -65,7 +65,7 @@ namespace Habanero.Test.Structure
 			    <property name=""EngineNo"" databaseField=""field_Engine_No"" />
 			    <property name=""DateManufactured"" type=""DateTime"" databaseField=""field_Date_Manufactured"" />
 			    <property name=""HorsePower"" type=""Int32"" databaseField=""field_Horse_Power"" />
-			    <property name=""FuelInjected"" type=""Boolean"" databaseField=""field_Fue_lInjected"" />
+			    <property name=""FuelInjected"" type=""Boolean"" databaseField=""field_Fuel_Injected"" />
 			    <property name=""CarID"" type=""Guid"" databaseField=""field_Car_ID"" />
 			    <primaryKey>
 			      <prop name=""EngineID"" />

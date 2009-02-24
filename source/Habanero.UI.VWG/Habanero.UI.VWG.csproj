@@ -119,6 +119,7 @@
     <Compile Include="Grid\DataGridViewCellVWG.cs" />
     <Compile Include="Grid\DataGridViewColumnVWG.cs" />
     <Compile Include="Grid\DataGridViewImageColumnVWG.cs" />
+    <Compile Include="Grid\DataGridViewSelectionModeVWG.cs" />
     <Compile Include="Grid\DataGridViewVWG.cs">
       <SubType>Component</SubType>
     </Compile>

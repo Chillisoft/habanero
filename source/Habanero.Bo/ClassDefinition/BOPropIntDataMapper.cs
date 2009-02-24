@@ -82,6 +82,15 @@ namespace Habanero.BO.ClassDefinition
                     returnValue = intValue;
                     return true;
                 }
+                if (valueToParse is decimal)
+                {
+                    decimal decimalValue = (decimal)valueToParse;
+                    if (decimalValue >= int.MinValue && decimalValue <= int.MaxValue)
+                    {
+                        returnValue = Convert.ToInt32(valueToParse);
+                        return true;
+                    }
+                }
                 returnValue = null;
                 return false;
             }

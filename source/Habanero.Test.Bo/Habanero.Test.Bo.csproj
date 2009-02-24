@@ -113,6 +113,7 @@
     <Compile Include="Loaders\TestXmlFilterLoader.cs" />
     <Compile Include="Loaders\TestXmlSimpleLookupListLoader.cs" />
     <Compile Include="TestBOObjectID.cs" />
+    <Compile Include="TestBOPropInteger.cs" />
     <Compile Include="TestBOSerialisation.cs" />
     <Compile Include="TestBOStatus.cs" />
     <Compile Include="TestPack\BOWithIntID.cs" />

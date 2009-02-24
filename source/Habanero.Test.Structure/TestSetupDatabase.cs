@@ -26,7 +26,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.Structure
 {
-    [TestFixture, Ignore("Not Part of this project")]
+    [TestFixture, Ignore("This fixture is only run to create the database schema")]
     public class TestSetupDatabase
     {
         #region Setup/Teardown

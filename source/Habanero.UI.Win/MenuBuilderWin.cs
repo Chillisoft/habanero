@@ -215,7 +215,7 @@ namespace Habanero.UI.Win
                 }
                 catch (Win32Exception)
                 {
-                    //note: it will throw this error in testing.
+                    //note_: it will throw this error in testing.
                 }
                 catch (ObjectDisposedException)
                 {
