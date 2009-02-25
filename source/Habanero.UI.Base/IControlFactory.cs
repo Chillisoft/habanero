@@ -575,6 +575,12 @@ namespace Habanero.UI.Base
         /// Configures the <see cref="ILabel"/> with the pinon style
         ///</summary>
         void ConfigurePinOnStyleLabel(ILabel label);
+
+        ///<summary>
+        /// Craetes an <see cref="ICollapsiblePanelGroupControl"/>
+        ///</summary>
+        ///<returns></returns>
+        ICollapsiblePanelGroupControl CreateCollapsiblePanelGroupControl();
     }
 
     /// <summary>

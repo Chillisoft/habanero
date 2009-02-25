@@ -351,6 +351,4 @@ namespace Habanero.Test.UI.Base
             //---------------Tear down -------------------------
         }
     }
-
-
 }

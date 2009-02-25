@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BOColTabControlManager.cs" />
+    <Compile Include="CollapsiblePanelGroupManager.cs" />
     <Compile Include="CollapsiblePanelManager.cs" />
     <Compile Include="CollapsiblePanelResource.Designer.cs">
       <DependentUpon>CollapsiblePanelResource.resx</DependentUpon>
@@ -67,6 +68,7 @@
     <Compile Include="ControlInterfaces\IBusinessObjectControl.cs" />
     <Compile Include="ControlInterfaces\IBusinessObjectPanel.cs" />
     <Compile Include="ControlInterfaces\ICollapsiblePanel.cs" />
+    <Compile Include="ControlInterfaces\ICollapsiblePanelGroupControl.cs" />
     <Compile Include="ControlInterfaces\IControlHabanero.cs" />
     <Compile Include="ControlInterfaces\IDateRangeComboBox.cs" />
     <Compile Include="ControlInterfaces\IFileChooser.cs" />

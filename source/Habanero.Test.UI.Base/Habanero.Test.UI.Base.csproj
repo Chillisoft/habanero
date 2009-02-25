@@ -94,6 +94,7 @@
     <Compile Include="PanelBuilder\TestPanelInfo.cs" />
     <Compile Include="TestButton.cs" />
     <Compile Include="TestCheckBox.cs" />
+    <Compile Include="TestCollapsiblePanelGroupControlWin.cs" />
     <Compile Include="TestComboBox.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -41,16 +41,19 @@ namespace Habanero.UI.Win
     /// </summary>
     public class ControlFactoryWin : IControlFactory
     {
-        private readonly ControlFactoryManager _manager;
-
+        //This looks like it was planned to move common functionality between Win and Giz to a 
+        // manger but this has obviosly not been implemented
+        //I would suggest it is remvoed Brett 24/02/2009
+        //private readonly ControlFactoryManager _manager;
+        //        /<summary>
+        //        / Construct <see cref="ControlFactoryWin"/>
+        //        /</summary>
+        //        public ControlFactoryWin()
+        //        {
+        //            //_manager = new ControlFactoryManager(this);
+        //        }
         
-        ///<summary>
-        /// Construct <see cref="ControlFactoryWin"/>
-        ///</summary>
-        public ControlFactoryWin()
-        {
-            _manager = new ControlFactoryManager(this);
-        }
+
 
         #region IControlFactory Members
 
@@ -1034,6 +1037,15 @@ namespace Habanero.UI.Win
             labelWin.FlatStyle = FlatStyle.Flat;
             labelWin.BackgroundImageLayout = ImageLayout.Center;
             labelWin.Width = 24;
+        }
+
+        ///<summary>
+        /// Craetes an <see cref="ICollapsiblePanelGroupControl"/>
+        ///</summary>
+        ///<returns></returns>
+        public ICollapsiblePanelGroupControl CreateCollapsiblePanelGroupControl()
+        {
+            return new CollapsiblePanelGroupControlWin();
         }
 
         #endregion

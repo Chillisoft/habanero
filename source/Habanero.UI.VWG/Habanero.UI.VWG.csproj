@@ -68,6 +68,9 @@
     <Compile Include="CheckBoxVWG.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CollapsiblePanel\CollapsiblePanelGroupControlVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ComboBoxAutoCompleteModeVWG.cs" />
     <Compile Include="ComboBoxVWG.cs">
       <SubType>Component</SubType>

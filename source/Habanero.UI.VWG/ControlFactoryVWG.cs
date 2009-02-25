@@ -1060,6 +1060,15 @@ namespace Habanero.UI.VWG
             labelVWG.Width = 24;
         }
 
+        ///<summary>
+        /// Craetes an <see cref="ICollapsiblePanelGroupControl"/>
+        ///</summary>
+        ///<returns></returns>
+        public ICollapsiblePanelGroupControl CreateCollapsiblePanelGroupControl()
+        {
+            return new CollapsiblePanelGroupControlVWG();
+        }
+
         #endregion
 
 
