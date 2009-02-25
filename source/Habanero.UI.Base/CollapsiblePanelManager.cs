@@ -60,9 +60,12 @@ namespace Habanero.UI.Base
             set
             {
                 _collapsed = value;
-                if (_collapsed)
+                if (_collapsed )
                 {
-                    ExpandedHeight = _collapsiblePanel.Height;
+                    if (ExpandedHeight <= _collapseButton.Height)
+                    {
+                        ExpandedHeight = _collapsiblePanel.Height;
+                    }
                     _collapsiblePanel.Height = _collapseButton.Height;
                     Pinned = false;
                 }

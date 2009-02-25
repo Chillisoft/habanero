@@ -118,6 +118,25 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void TestCollapsePanel_CollapseTwice()
+        {
+            //---------------Set up test pack-------------------
+            ICollapsiblePanel panel = CreateControl();
+            panel.Collapsed = true;
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(panel.Collapsed);
+            Assert.AreEqual(panel.CollapseButton.Height, panel.Height);
+            Assert.AreNotEqual(panel.ExpandedHeight, panel.Height);
+            //---------------Execute Test ----------------------
+            
+            panel.Collapsed = true;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(panel.Collapsed);
+            Assert.AreEqual(panel.CollapseButton.Height, panel.Height);
+            Assert.AreNotEqual(panel.ExpandedHeight, panel.Height);
+            //---------------Tear down -------------------------
+        }
+        [Test]
         public void TestCollapsePanel()
         {
             //---------------Set up test pack-------------------
@@ -128,6 +147,7 @@ namespace Habanero.Test.UI.Base
             panel.Collapsed = true;
             //---------------Test Result -----------------------
             Assert.AreEqual(panel.CollapseButton.Height, panel.Height);
+            Assert.AreNotEqual(panel.ExpandedHeight, panel.Height);
             //---------------Tear down -------------------------
         }
 
@@ -138,11 +158,14 @@ namespace Habanero.Test.UI.Base
             ICollapsiblePanel panel = CreateControl();
             int originalHeight = panel.Height;
             panel.Collapsed = true;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(originalHeight, panel.ExpandedHeight);
+            Assert.AreNotEqual(originalHeight, panel.Height);
             //---------------Execute Test ----------------------
             panel.Collapsed = false;
             //---------------Test Result -----------------------
             Assert.AreEqual(originalHeight, panel.Height);
-            //---------------Tear down -------------------------
+            Assert.AreEqual(originalHeight, panel.ExpandedHeight);
         }
 
         [Test]

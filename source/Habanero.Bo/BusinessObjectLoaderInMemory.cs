@@ -306,7 +306,7 @@ namespace Habanero.BO
         /// <returns>An object of the type defined by the relationship if one was found, otherwise null</returns>
         public IBusinessObject GetRelatedBusinessObject(ISingleRelationship relationship)
         {
-            RelationshipDef relationshipDef = (RelationshipDef) relationship.RelationshipDef;
+            IRelationshipDef relationshipDef = (RelationshipDef) relationship.RelationshipDef;
             if (relationshipDef.RelatedObjectClassDef != null)
                 return GetBusinessObject(relationshipDef.RelatedObjectClassDef,
                                          Criteria.FromRelationship(relationship));

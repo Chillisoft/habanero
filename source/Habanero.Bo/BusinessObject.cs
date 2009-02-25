@@ -155,6 +155,11 @@ namespace Habanero.BO
             }
         }
 
+        public override string ToString()
+        {
+            return this.ID.GetAsValue() == null? base.ToString(): this.ID.GetAsValue().ToString();
+        }
+
         /// <summary>
         /// A destructor for the object
         /// </summary>

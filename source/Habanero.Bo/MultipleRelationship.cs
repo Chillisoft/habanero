@@ -263,7 +263,7 @@ namespace Habanero.BO
 //            {
 //                def.Add(new RelPropDef(businessObject.ClassDef.PropDefcol[prop.OwnerPropertyName],prop.OwnerPropertyName));
 //            }
-//            RelationshipDef relationshipDef = new SingleRelationshipDef("TempSingleReverseRelationship", businessObject.ClassDef.ClassType, def, false,
+//            IRelationshipDef relationshipDef = new SingleRelationshipDef("TempSingleReverseRelationship", businessObject.ClassDef.ClassType, def, false,
 //                 DeleteParentAction.DoNothing);
 //            return (ISingleRelationship) relationshipDef.CreateRelationship(businessObject, businessObject.Props);
 //        }

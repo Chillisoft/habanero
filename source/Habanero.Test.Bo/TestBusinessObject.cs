@@ -982,5 +982,19 @@ namespace Habanero.Test.BO
             Assert.IsFalse(contactPerson.Status.IsDirty);
             //---------------Tear Down -------------------------          
         }
+
+        [Test]
+        public void Test_ToString()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            Car myBO = new Car();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string toString = myBO.ToString();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(myBO.ID.GetAsValue().ToString(), toString);
+        }
     }
 }
