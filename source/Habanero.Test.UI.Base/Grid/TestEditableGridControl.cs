@@ -362,7 +362,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestSetCollection_Null_ClearsTheGrid()
+        public void Test_SetBusinessObjectCollection_Null_ClearsTheGrid()
         {
             //---------------Set up test pack-------------------
             LoadMyBoDefaultClassDef();
@@ -387,7 +387,7 @@ namespace Habanero.Test.UI.Base
 
 
         [Test]
-        public void TestSetCollection_Empty_HasOnlyOneRow()
+        public void Test_SetBusinessObjectCollection_Empty_HasOnlyOneRow()
         {
             //---------------Set up test pack-------------------
             LoadMyBoDefaultClassDef();
@@ -407,7 +407,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestSetCollection_NullCol_ThenNonNullEnablesButtons()
+        public void Test_SetBusinessObjectCollection_NullCol_ThenNonNullEnablesButtons()
         {
             //---------------Set up test pack-------------------
             LoadMyBoDefaultClassDef();
@@ -431,7 +431,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestSetCollection_InitialisesGridIfNotPreviouslyInitialised()
+        public void Test_SetBusinessObjectCollection_InitialisesGridIfNotPreviouslyInitialised()
         {
             //---------------Set up test pack-------------------
             LoadMyBoDefaultClassDef();
@@ -446,7 +446,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestSetCollection_NotInitialiseGrid_IfPreviouslyInitialised()
+        public void Test_SetBusinessObjectCollection_NotInitialiseGrid_IfPreviouslyInitialised()
         {
             //Verify that setting the collection for a grid that is already initialised
             //does not cause it to be reinitialised.
@@ -465,7 +465,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestSetCollection_IncorrectClassDef()
+        public void Test_SetBusinessObjectCollection_IncorrectClassDef()
         {
             //---------------Set up test pack-------------------
             LoadMyBoDefaultClassDef();
@@ -493,7 +493,7 @@ namespace Habanero.Test.UI.Base
 
 
         [Test]
-        public void TestSetCollection_NumberOfGridRows_Correct()
+        public void Test_SetBusinessObjectCollection_NumberOfGridRows_Correct()
         {
             //---------------Set up test pack-------------------
             LoadMyBoDefaultClassDef();
@@ -511,6 +511,62 @@ namespace Habanero.Test.UI.Base
             editableGridControl.SetBusinessObjectCollection(col);
             ////---------------Test Result -----------------------
             Assert.AreEqual(col.Count + 1, editableGrid.Rows.Count, "The number of items in the grid plus the null item");
+        }
+
+        [Test]
+        public void Test_GetBusinessObjectCollection()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IEditableGridControl editableGridControl = CreateEditableGridControl();
+
+            AddControlToForm(editableGridControl);
+
+            editableGridControl.Grid.Columns.Add("TestProp", "TestProp");
+            editableGridControl.SetBusinessObjectCollection(col);
+            //---------------Assert Preconditions --------------
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection returnedBusinessObjectCollection =
+                editableGridControl.GetBusinessObjectCollection();
+            //---------------Test Result -----------------------
+            Assert.AreSame(col, returnedBusinessObjectCollection);
+        }
+
+        [Test]
+        public void Test_GetBusinessObjectCollection_AfterChanged()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            BusinessObjectCollection<MyBO> col2 = new BusinessObjectCollection<MyBO>();
+            IEditableGridControl editableGridControl = CreateEditableGridControl();
+
+            AddControlToForm(editableGridControl);
+
+            editableGridControl.Grid.Columns.Add("TestProp", "TestProp");
+            editableGridControl.SetBusinessObjectCollection(col);
+            //---------------Assert Preconditions --------------
+            Assert.AreSame(col, editableGridControl.GetBusinessObjectCollection());
+            //---------------Execute Test ----------------------
+            editableGridControl.SetBusinessObjectCollection(col2);
+            IBusinessObjectCollection returnedBusinessObjectCollection =
+                editableGridControl.GetBusinessObjectCollection();
+            //---------------Test Result -----------------------
+            Assert.AreSame(col2, returnedBusinessObjectCollection);
+        }
+
+        [Test]
+        public void Test_GetBusinessObjectCollection_WhenNull()
+        {
+            //---------------Set up test pack-------------------
+            IEditableGridControl editableGridControl = CreateEditableGridControl();
+            //---------------Assert Preconditions --------------
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection returnedBusinessObjectCollection =
+                editableGridControl.GetBusinessObjectCollection();
+            //---------------Test Result -----------------------
+            Assert.IsNull(returnedBusinessObjectCollection);
         }
 
 
@@ -588,13 +644,13 @@ namespace Habanero.Test.UI.Base
             MyBO oldBO1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
             if (oldBO1 != null)
             {
-                oldBO1.Delete();
+                oldBO1.MarkForDelete();
                 oldBO1.Save();
             }
             MyBO oldBO2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
             if (oldBO2 != null)
             {
-                oldBO2.Delete();
+                oldBO2.MarkForDelete();
                 oldBO2.Save();
             }
 
@@ -629,7 +685,7 @@ namespace Habanero.Test.UI.Base
 //            MyBO savedBO = BOLoader.Instance.GetBusinessObject<MyBO>("TestProp='" + newText + "'");
             Assert.IsNotNull(savedBO);
             //---------------Tear Down--------------------------
-            savedBO.Delete();
+            savedBO.MarkForDelete();
             savedBO.Save();
         }
 

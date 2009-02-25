@@ -96,5 +96,11 @@ namespace Habanero.UI.Base
         /// <param name="boCollection">The new business object collection
         /// to be shown in the grid</param>
         void SetBusinessObjectCollection(IBusinessObjectCollection boCollection);
+
+        ///<summary>
+        /// Returns the <see cref="IBusinessObjectCollection"/> that has been set for this <see cref="IGridControl"/>.
+        ///</summary>
+        ///<returns>Returns the <see cref="IBusinessObjectCollection"/> that has been set for this <see cref="IGridControl"/>.</returns>
+        IBusinessObjectCollection GetBusinessObjectCollection();
     }
 }
