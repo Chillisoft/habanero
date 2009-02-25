@@ -49,7 +49,7 @@ namespace Habanero.Base
         /// <summary>
         /// Indicates whether all of the property values of the object are valid
         /// </summary>
-        /// <param name="message">If the object is not valid then this returns the reason for it being invalid/param>
+        /// <param name="message">If the object is not valid then this returns the reason for it being invalid</param>
         /// <returns>Returns true if all are valid </returns>
         bool IsValid(out string message);
 
@@ -60,8 +60,13 @@ namespace Habanero.Base
         bool IsValid();
 
         ///<summary>
-        /// Returns an invalid message if the object is valid <see IsValid()>
+        /// Returns an invalid message if the object is valid <see cref="IsValid()"/>
         ///</summary>
         string IsValidMessage { get; }
+
+        /// <summary>
+        /// Returns the Business Object that this Status is for.
+        /// </summary>
+        IBusinessObject BusinessObject { get; }
     }
 }

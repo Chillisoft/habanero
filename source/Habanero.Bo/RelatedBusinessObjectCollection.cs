@@ -54,24 +54,22 @@ namespace Habanero.BO
         /// Adds a business object to the collection
         /// </summary>
         /// <param name="bo">The business object to add</param>
-        public override void Add(TBusinessObject bo)
+        protected override bool AddInternal(TBusinessObject bo)
         {
             if (!Loading)
             {
                 MultipleRelationshipDef def = this._relationship.RelationshipDef as MultipleRelationshipDef;
                 if (def != null) def.CheckCanAddChild(bo);
             }
-            base.Add(bo);
-            if (this.Loading) return;
+            if (!base.AddInternal(bo)) return false;
+            if (this.Loading) return true;
 
-            if (IsForeignKeySetup(bo)) return;
+            if (IsForeignKeySetup(bo)) return true;
 
             SetUpForeignKey(bo);
             SetupRelatedObject(bo);
+            return true;
         }
-
-
-
 
         /// <summary>
         /// Removes the specified business object from the collection

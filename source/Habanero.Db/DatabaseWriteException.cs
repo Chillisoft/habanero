@@ -32,7 +32,7 @@ namespace Habanero.DB
     {
         private readonly string _sqlStatement;
         private readonly string _connectString;
-        private readonly string _developerMessage;
+//        private readonly string _developerMessage;
 
         /// <summary>
         /// Constructor to initialise a new exception
@@ -47,7 +47,7 @@ namespace Habanero.DB
         {
             _sqlStatement = sqlStatement;
             _connectString = connectString;
-            _developerMessage = developerMessage;
+//            _developerMessage = developerMessage;
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Habanero.DB
         {
             _sqlStatement = sqlStatement;
             _connectString = connectString;
-            _developerMessage = developerMessage;
+//            _developerMessage = developerMessage;
         }
 
         /// <summary>

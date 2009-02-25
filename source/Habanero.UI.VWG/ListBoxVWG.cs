@@ -31,13 +31,11 @@ namespace Habanero.UI.VWG
     {
         private readonly ListBoxSelectedObjectCollectionGiz _selectedObjectCollection;
         private readonly ListBoxObjectCollectionGiz _objectCollection;
-        private string _errorMessage;
 
         public ListBoxVWG()
         {
             _objectCollection = new ListBoxObjectCollectionGiz(base.Items);
             _selectedObjectCollection = new ListBoxSelectedObjectCollectionGiz(base.SelectedItems);
-            _errorMessage = "";
            
         }
 

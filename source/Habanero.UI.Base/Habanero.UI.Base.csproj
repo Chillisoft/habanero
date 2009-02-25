@@ -52,6 +52,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BOColTabControlManager.cs" />
+    <Compile Include="CollapsiblePanelManager.cs" />
+    <Compile Include="CollapsiblePanelResource.Designer.cs">
+      <DependentUpon>CollapsiblePanelResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="ComboBoxManager.cs" />
     <Compile Include="ButtonGroupControlManager.cs" />
     <Compile Include="ControlFactoryManager.cs" />
@@ -59,6 +66,7 @@
     <Compile Include="ControlInterfaces\IBOColTabControl.cs" />
     <Compile Include="ControlInterfaces\IBusinessObjectControl.cs" />
     <Compile Include="ControlInterfaces\IBusinessObjectPanel.cs" />
+    <Compile Include="ControlInterfaces\ICollapsiblePanel.cs" />
     <Compile Include="ControlInterfaces\IControlHabanero.cs" />
     <Compile Include="ControlInterfaces\IDateRangeComboBox.cs" />
     <Compile Include="ControlInterfaces\IFileChooser.cs" />
@@ -70,6 +78,7 @@
     <Compile Include="ControlInterfaces\IUserControlHabanero.cs" />
     <Compile Include="ControlMappers\ComboBoxCollectionSelector.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
+    <Compile Include="ControlMappers\EditableGridControlMapper.cs" />
     <Compile Include="ControlMappers\ExtendedComboBoxMapper.cs" />
     <Compile Include="IBOEditorPanel.cs" />
     <Compile Include="IBusinessObjectControlWithErrorDisplay.cs" />
@@ -244,10 +253,21 @@
     <None Include="key.snk" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CollapsiblePanelResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CollapsiblePanelResource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Util\ValidationProvider.resx">
       <DependentUpon>ValidationProvider.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\headergradient.png" />
+    <Content Include="Resources\pinoff_withcolour.png" />
+    <Content Include="Resources\pinon_withcolour.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

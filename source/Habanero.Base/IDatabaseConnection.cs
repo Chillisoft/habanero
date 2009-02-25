@@ -75,7 +75,7 @@ namespace Habanero.Base
         /// <param name="selectSql">The sql statement as a string</param>
         /// <param name="transaction">Thransaction that gives the context within which the sql statement should be executed</param>
         /// <returns>Returns an IDataReader object with the results of the query</returns>
-        /// DataBaseReadException Thrown when an error
+        /// <exception>DataBaseReadException Thrown when an error
         /// occurred while setting up the data reader.  Also sends error
         /// output to the log.</exception>        
         IDataReader LoadDataReader(string selectSql, IDbTransaction transaction);

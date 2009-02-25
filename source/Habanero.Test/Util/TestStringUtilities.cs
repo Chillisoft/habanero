@@ -181,11 +181,11 @@ namespace Habanero.Test.Util
             Assert.AreEqual("", StringUtilities.GetLeftSection(test, "abcdef"));
         }
 
-        [Test, ExpectedException(typeof (UserException))]
+        [Test]
         public void TestGetLeftSectionException()
         {
             string test = "abcdef";
-            StringUtilities.GetLeftSection(test, "g");
+            Assert.AreEqual("", StringUtilities.GetLeftSection(test, "g"));
         }
 
         [Test]
@@ -198,11 +198,11 @@ namespace Habanero.Test.Util
             Assert.AreEqual("", StringUtilities.GetRightSection(test, "abcdef"));
         }
 
-        [Test, ExpectedException(typeof (UserException))]
+        [Test]
         public void TestGetRightSectionException()
         {
             string test = "abcdef";
-            StringUtilities.GetRightSection(test, "g");
+            Assert.AreEqual("", StringUtilities.GetRightSection(test, "g"));
         }
 
         [Test]

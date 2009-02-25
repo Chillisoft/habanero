@@ -256,12 +256,7 @@ namespace Habanero.Util
             {
                 return fullText.Substring(0, fullText.IndexOf(searchText));
             }
-            else
-            {
-                throw new UserException
-                    (String.Format
-                         ("The given search term '{0}' " + "does not exist in the text '{1}'.", searchText, fullText));
-            }
+            return "";
         }
 
         /// <summary>
@@ -279,12 +274,7 @@ namespace Habanero.Util
                 int startPos = fullText.IndexOf(searchText) + searchText.Length;
                 return fullText.Substring(startPos, fullText.Length - startPos);
             }
-            else
-            {
-                throw new UserException
-                    (String.Format
-                         ("The given search term '{0}' " + "does not exist in the text '{1}'.", searchText, fullText));
-            }
+            return "";
         }
 
         /// <summary>
@@ -335,8 +325,8 @@ namespace Habanero.Util
 
         /// <summary>
         /// For a given name value pair e.g. a query string or cookie string that is formatted
-        /// as name=value&name2=value2&name3=value3 etc this will return the value for a specified
-        /// name e.g. for nameValuePairString = "name=value&name2=value2&name3=value3" and name = "name2"
+        /// as name=value&amp;name2=value2&amp;name3=value3 etc this will return the value for a specified
+        /// name e.g. for nameValuePairString = "name=value&amp;name2=value2&amp;name3=value3" and name = "name2"
         /// GetValueString will return value2.
         /// </summary>
         /// <param name="nameValuePairString">The name value pair to parse</param>
@@ -350,7 +340,7 @@ namespace Habanero.Util
 
         /// <summary>
         /// returns a NameValueCollection of nameValue Pairs for the nameValuePairString.
-        /// e.g. nameValuePairString = "name=value&name2=value2&name3=value3" will return a 
+        /// e.g. nameValuePairString = "name=value&amp;name2=value2&amp;name3=value3" will return a 
         /// NameValueCollection with 3 items for name, name2 and name3.
         /// </summary>
         /// <param name="nameValuePairString">The name value pair to split.</param>

@@ -375,7 +375,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             MyBO bo1 = new MyBO();
             col.Add(bo1);
             col.Add(new MyBO());
-            Assert.AreSame(bo1, col.FindByGuid(bo1.MyBoID.Value));
+            Assert.AreSame(bo1, col.Find(bo1.MyBoID.Value));
         }
 
         [Test]
@@ -434,7 +434,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             string newSurname = Guid.NewGuid().ToString();
             cp1.Surname = newSurname;
             cp1.Save();
-            ContactPersonTestBO secondInstanceOfCP1 = col.FindByGuid(cp1.ContactPersonID);
+            ContactPersonTestBO secondInstanceOfCP1 = col.Find(cp1.ContactPersonID);
 
             //--------------------Assert Preconditions----------
             AssertNotContains(cp1, col);
@@ -511,7 +511,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             ContactPersonTestBO cp2 = cpCol.CreateBusinessObject();
 
             //---------------Execute Test ----------------------
-            ContactPersonTestBO foundCp = cpCol.Find<ContactPersonTestBO>(cp2.ID.ObjectID);
+            ContactPersonTestBO foundCp = cpCol.Find(cp2.ID.ObjectID);
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(foundCp);

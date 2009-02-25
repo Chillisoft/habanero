@@ -84,39 +84,39 @@ namespace Habanero.BO
             {
                 foreach (string key in _parameters.Keys)
                 {
-					object value = Parameters[key];
-					if (value != null)
-					{
-						switch (key)
-						{
-							case "min":
-                                if (Convert.ToString(value) == "Today" || Convert.ToString(value) == "Now")
-                                {
-                                    _minValueExpression = Convert.ToString(value);
-                                }
-                                else
-                                {
-                                    _minValue = Convert.ToDateTime(value);
-                                }
-						        break;
-							case "max":
-                                if (Convert.ToString(value) == "Today" || Convert.ToString(value) == "Now")
-                                {
-                                    _maxValueExpression = Convert.ToString(value);
-                                }
-                                else
-                                {
-                                    _maxValue = Convert.ToDateTime(value);
-                                }
-						        break;
-							default:
-								throw new InvalidXmlDefinitionException(String.Format(
-                                	"The rule type '{0}' for dates does not exist. " +
-                                	"Check spelling and capitalisation, or see the " +
-                                	"documentation for existing options or ways to " +
-                                	"add options of your own.", key));
-						}
-					}
+                    object value = Parameters[key];
+                    if (value == null) continue;
+
+                    switch (key)
+                    {
+                        case "min":
+                            if (Convert.ToString(value) == "Today" || Convert.ToString(value) == "Now")
+                            {
+                                _minValueExpression = Convert.ToString(value);
+                            }
+                            else
+                            {
+                                _minValue = Convert.ToDateTime(value);
+                            }
+                            break;
+                        case "max":
+                            if (Convert.ToString(value) == "Today" || Convert.ToString(value) == "Now")
+                            {
+                                _maxValueExpression = Convert.ToString(value);
+                            }
+                            else
+                            {
+                                _maxValue = Convert.ToDateTime(value);
+                            }
+                            break;
+                        default:
+                            throw new InvalidXmlDefinitionException
+                                (String.Format
+                                     ("The rule type '{0}' for dates does not exist. "
+                                      + "Check spelling and capitalisation, or see the "
+                                      + "documentation for existing options or ways to "
+                                      + "add options of your own.", key));
+                    }
                 }
             }
             catch (InvalidXmlDefinitionException)

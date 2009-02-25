@@ -26,38 +26,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    internal class BusinessObjectControlStub : UserControlWin, IBusinessObjectControlWithErrorDisplay
-    {
-        private IBusinessObject _businessObject;
-        private bool _displayErrorsCalled;
-        private bool _clearErrorsCalled;
-
-        public bool DisplayErrorsCalled
-        {
-            get { return _displayErrorsCalled; }
-        }
-
-        public bool ClearErrorsCalled
-        {
-            get { return _clearErrorsCalled; }
-        }
-
-        public IBusinessObject BusinessObject
-        {
-            get { return _businessObject; }
-            set { _businessObject = value; }
-        }
-
-        public void DisplayErrors()
-        {
-            _displayErrorsCalled = true;
-        }
-
-        public void ClearErrors()
-        {
-            _clearErrorsCalled = true;
-        }
-    }
     /// <summary>
     /// This test class tests the base inherited methods of the ComboBox class.
     /// </summary>
@@ -304,6 +272,38 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(AutoCompleteSource.RecentlyUsedList, control.AutoCompleteSource);
             AssertAutoCompleteSourcesSame(control);
         }
+    }
 
+    internal class BusinessObjectControlStub : UserControlWin, IBusinessObjectControlWithErrorDisplay
+    {
+        private IBusinessObject _businessObject;
+        private bool _displayErrorsCalled;
+        private bool _clearErrorsCalled;
+
+        public bool DisplayErrorsCalled
+        {
+            get { return _displayErrorsCalled; }
+        }
+
+        public bool ClearErrorsCalled
+        {
+            get { return _clearErrorsCalled; }
+        }
+
+        public IBusinessObject BusinessObject
+        {
+            get { return _businessObject; }
+            set { _businessObject = value; }
+        }
+
+        public void DisplayErrors()
+        {
+            _displayErrorsCalled = true;
+        }
+
+        public void ClearErrors()
+        {
+            _clearErrorsCalled = true;
+        }
     }
 }

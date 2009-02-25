@@ -43,7 +43,7 @@ namespace Habanero.Test.BO.Loaders
             ClassDef.ClassDefs.Clear();
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), "An invalid node 'class1' was encountered when loading the class definitions.")]
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), ExpectedMessage = "An invalid node 'class1' was encountered when loading the class definitions.")]
         public void TestInvalidXmlFormatWrongRootElement()
         {
             loader.LoadClass("<class1 name=\"TestClass\" assembly=\"Habanero.Test.BO.Loaders\" />");

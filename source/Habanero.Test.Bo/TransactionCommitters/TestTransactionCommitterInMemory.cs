@@ -173,7 +173,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO =
                 ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
-            contactPersonTestBO.Delete();
+            contactPersonTestBO.MarkForDelete();
             TransactionCommitterInMemory committer = new TransactionCommitterInMemory(dataStore);
             committer.AddBusinessObject(contactPersonTestBO);
 

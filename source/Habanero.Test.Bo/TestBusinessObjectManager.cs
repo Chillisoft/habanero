@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -2167,7 +2168,11 @@ namespace Habanero.Test.BO
             BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
             ContactPersonTestBO.LoadDefaultClassDef();
-            new ContactPersonTestBO(); new ContactPersonTestBO(); new ContactPersonTestBO();
+#pragma warning disable 168
+            ContactPersonTestBO bo1 = new ContactPersonTestBO();  
+            ContactPersonTestBO bo2 = new ContactPersonTestBO();
+            ContactPersonTestBO bo3 = new ContactPersonTestBO();
+#pragma warning restore 168
             //----------------Assert preconditions ---------------
             Assert.AreEqual(3, BusinessObjectManager.Instance.Count);
             //--------------- Execute Test ----------------------

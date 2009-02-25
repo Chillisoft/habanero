@@ -85,19 +85,18 @@ namespace Habanero.Test.BO.SqlGeneration
 
             SingleRelationship<OrganisationTestBO> singleRelationship = contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation");
             singleRelationship.SetRelatedObject(organisationTestBO);
+            IRelationship relationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
             //TransactionalSingleRelationship_Added tsr = new TransactionalSingleRelationship_Added(singleRelationship);
             UpdateStatementGenerator generator = new UpdateStatementGenerator(contactPersonTestBO, DatabaseConnection.CurrentConnection);
             //---------------Assert PreConditions--------------- 
 
             //---------------Execute Test ----------------------
-            ISqlStatementCollection sql = generator.GenerateForRelationship(singleRelationship);
+            ISqlStatementCollection sql = generator.GenerateForRelationship(relationship, contactPersonTestBO);
             //---------------Test Result -----------------------
             Assert.AreEqual(1, sql.Count);
             Assert.AreEqual("UPDATE `contact_person` SET `OrganisationID` = ?Param0 WHERE `ContactPersonID` = ?Param1", sql[0].Statement.ToString());
             Assert.AreEqual(organisationTestBO.OrganisationID.Value.ToString("B").ToUpper(), sql[0].Parameters[0].Value);
-            Assert.AreEqual(contactPersonTestBO.ContactPersonID.ToString("B").ToUpper(), sql[0].Parameters[1].Value);
-
-            //---------------Tear Down -------------------------                  
+            Assert.AreEqual(contactPersonTestBO.ContactPersonID.ToString("B").ToUpper(), sql[0].Parameters[1].Value);           
         }
 
 
@@ -114,16 +113,16 @@ namespace Habanero.Test.BO.SqlGeneration
             contactPerson.PK1Prop2 = TestUtil.GetRandomString();
             contactPerson.Save();
 
-            
             contactPerson.GetCarsDriven().Add(car);
 
             SingleRelationship<ContactPersonCompositeKey> singleRelationship = car.Relationships.GetSingle<ContactPersonCompositeKey>("Driver");
             singleRelationship.SetRelatedObject(contactPerson);
+            IRelationship relationship = contactPerson.Relationships.GetMultiple<Car>("Driver");
             UpdateStatementGenerator generator = new UpdateStatementGenerator(car, DatabaseConnection.CurrentConnection);
             //---------------Assert PreConditions--------------- 
 
             //---------------Execute Test ----------------------
-            ISqlStatementCollection sql = generator.GenerateForRelationship(singleRelationship);
+            ISqlStatementCollection sql = generator.GenerateForRelationship(relationship, car);
             //---------------Test Result -----------------------
             Assert.AreEqual(1, sql.Count);
             Assert.AreEqual("UPDATE `car_table` SET `Driver_FK1` = ?Param0, `Driver_FK2` = ?Param1 WHERE `CAR_ID` = ?Param2", sql[0].Statement.ToString());

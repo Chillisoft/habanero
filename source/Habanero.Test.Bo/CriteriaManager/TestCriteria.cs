@@ -665,7 +665,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
-        [Test, ExpectedException(typeof(ArgumentException), "And is not a valid Logical Operator for a Unary Criteria")]
+        [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "And is not a valid Logical Operator for a Unary Criteria")]
         public void TestUnaryConstructorDoesntWorkForAnd()
         {
             //---------------Set up test pack-------------------
@@ -678,7 +678,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
 
         }
-        [Test, ExpectedException(typeof(ArgumentException), "Or is not a valid Logical Operator for a Unary Criteria")]
+        [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Or is not a valid Logical Operator for a Unary Criteria")]
         public void TestUnaryConstructorDoesntWorkForOr()
         {
             //---------------Set up test pack-------------------

@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
@@ -202,7 +203,7 @@ namespace Habanero.UI.Base
         ///</summary>
         public class FieldInfo
         {
-            private readonly ILabel _label;
+            private readonly IControlHabanero _labelControl;
             private readonly string _propertyName;
             private readonly IControlMapper _controlMapper;
 
@@ -210,12 +211,12 @@ namespace Habanero.UI.Base
             /// Constructs a Field info.
             ///</summary>
             ///<param name="propertyName">The property that this field info is for</param>
-            ///<param name="label">The label that this field info is wrapping</param>
+            ///<param name="labelControl">The label that this field info is wrapping</param>
             ///<param name="controlMapper">The control mapper that this field info is mapping</param>
-            public FieldInfo(string propertyName, ILabel label, IControlMapper controlMapper)
+            public FieldInfo(string propertyName, IControlHabanero labelControl, IControlMapper controlMapper)
             {
                 _propertyName = propertyName;
-                _label = label;
+                _labelControl = labelControl;
                 _controlMapper = controlMapper;
             }
 
@@ -224,9 +225,14 @@ namespace Habanero.UI.Base
                 get { return _propertyName; }
             }
 
+            public IControlHabanero LabelControl
+            {
+                get { return _labelControl;  }
+            }
+            [Obsolete("Please use LabelControl as UIFormFields can be configured to return a GroupBox or other types of label controls")]
             public ILabel Label
             {
-                get { return _label; }
+                get { return (ILabel)_labelControl; }
             }
 
             public IControlHabanero InputControl

@@ -39,7 +39,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             Structure.Car.LoadDefaultClassDef();
-            Structure.OrganisationPerson.LoadDefaultClassDef();
+            OrganisationPerson.LoadDefaultClassDef();
             Person.LoadDefaultClassDef();
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
@@ -60,7 +60,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             Structure.Car.LoadDefaultClassDef();
-            Structure.OrganisationPerson.LoadDefaultClassDef();
+            OrganisationPerson.LoadDefaultClassDef();
             ClassDef classDef = Person.LoadDefaultClassDef();
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
@@ -83,7 +83,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             Structure.Car.LoadDefaultClassDef();
-            Structure.OrganisationPerson.LoadDefaultClassDef();
+            OrganisationPerson.LoadDefaultClassDef();
             Person.LoadDefaultClassDef();
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
@@ -100,7 +100,36 @@ namespace Habanero.Test.BO
             AssertPersonsAreEqual(originalPerson, deserialisedPerson);
         }
 
-        private void AssertPersonsAreEqual(Person originalPerson, Person deserialisedPerson)
+        [Test]
+        public void Test_Serialise_AddBOPropAndDeserialise()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            Structure.Car.LoadDefaultClassDef();
+            OrganisationPerson.LoadDefaultClassDef();
+            ClassDef personClassDef = Person.LoadDefaultClassDef();
+            Person originalPerson = Person.CreateSavedPerson();
+            IFormatter formatter = new BinaryFormatter();
+            MemoryStream memoryStream = new MemoryStream();
+            BusinessObjectManager.Instance.ClearLoadedObjects();
+
+            //---------------Execute Test ----------------------
+            formatter.Serialize(memoryStream, originalPerson);
+            const string newpropertyName = "NewProperty";
+            const string defaultValue = "some Default";
+            personClassDef.PropDefcol.Add(new PropDef(newpropertyName, typeof(string),PropReadWriteRule.ReadWrite, defaultValue));
+
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            Person deserialisedPerson = (Person) formatter.Deserialize(memoryStream);
+
+            //---------------Test Result -----------------------
+            Assert.AreNotSame(deserialisedPerson, originalPerson);
+            AssertPersonsAreEqual(originalPerson, deserialisedPerson);
+            Assert.AreEqual(defaultValue, deserialisedPerson.GetPropertyValue(newpropertyName));
+        }
+
+        private static void AssertPersonsAreEqual(IBusinessObject originalPerson, IBusinessObject deserialisedPerson)
         {
             foreach (IBOProp prop in originalPerson.Props)
             {
@@ -115,7 +144,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             Structure.Car.LoadDefaultClassDef();
-            Structure.OrganisationPerson.LoadDefaultClassDef();
+            OrganisationPerson.LoadDefaultClassDef();
             Person.LoadDefaultClassDef();
             Person originalPerson = Person.CreateSavedPerson();
             IFormatter formatter = new BinaryFormatter();
@@ -129,8 +158,9 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             Assert.AreEqual(originalPerson.Status,deserialisedPerson.Status);
+            Assert.AreSame(deserialisedPerson, deserialisedPerson.Status.BusinessObject);
         }
-        
+
         [Test]
         public void TestSerialiseDeserialiseBusinessObjectCollection()
         {
@@ -138,7 +168,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             Structure.Car.LoadDefaultClassDef();
-            Structure.OrganisationPerson.LoadDefaultClassDef();
+            OrganisationPerson.LoadDefaultClassDef();
             Person.LoadDefaultClassDef();
             BusinessObjectCollection<Person> originalPeople = new BusinessObjectCollection<Person>();
             Person person1 = Person.CreateSavedPerson();
@@ -173,11 +203,11 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             Structure.Car.LoadDefaultClassDef();
-            Structure.OrganisationPerson.LoadDefaultClassDef();
+            OrganisationPerson.LoadDefaultClassDef();
             Person.LoadDefaultClassDef();
             BusinessObjectCollection<Person> originalPeople = new BusinessObjectCollection<Person>();
-            Person person1 = originalPeople.CreateBusinessObject();
-            Person person2 = originalPeople.CreateBusinessObject();
+            originalPeople.CreateBusinessObject();
+            originalPeople.CreateBusinessObject();
 
             IFormatter formatter = new BinaryFormatter();
             MemoryStream memoryStream = new MemoryStream();

@@ -160,9 +160,22 @@ namespace Habanero.Base
         /// Returns the specific action that the relationship must carry out in the case of a child being added to it.
         /// <see cref="RelationshipType"/>
         ///</summary>
-        RelationshipType RelationshipType { get; }
+        RelationshipType RelationshipType { get; set; }
 
+        ///<summary>
+        /// The name of the reverse relationship.
+        ///</summary>
         string ReverseRelationshipName { get; set; }
+        ///<summary>
+        /// Returns true where the owning business object has the foreign key for this relationship false otherwise.
+        /// This is used to differentiate between the two sides of the relationship.
+        ///</summary>
+        bool OwningBOHasForeignKey { get; set; }
+
+        /// <summary>
+        /// The <see cref="IClassDef"/> for the related object.
+        /// </summary>
+        IClassDef RelatedObjectClassDef { get; }
 
         /// <summary>
         /// Create and return a new Relationship based on the relationship definition.
@@ -173,7 +186,16 @@ namespace Habanero.Base
         /// <returns>The new relationship object created</returns>
         IRelationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol);
 
+        ///<summary>
+        /// Checks to see if the child can be added to the relationship
+        ///</summary>
+        ///<param name="bo"></param>
         void CheckCanAddChild(IBusinessObject bo);
+
+        ///<summary>
+        /// Checks to see if the child be removed to the relationship
+        ///</summary>
+        ///<param name="bo"></param>
         void CheckCanRemoveChild(IBusinessObject bo);
     }
 

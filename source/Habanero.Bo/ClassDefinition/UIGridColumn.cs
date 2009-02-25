@@ -33,9 +33,6 @@ namespace Habanero.BO.ClassDefinition
         private string _heading;
         private string _propertyName;
         private Type _gridControlType;
-        private bool _editable;
-        private int _width;
-        private PropAlignment _alignment;
         private readonly Hashtable _parameters;
         private string _gridControlTypeName;
         private string _gridControlAssemblyName;
@@ -45,8 +42,17 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public enum PropAlignment
         {
+            ///<summary>
+            /// Aligns to the left of grid.
+            ///</summary>
             left,
+            /// <summary>
+            /// Aligns to the right of the grid.
+            /// </summary>
             right,
+            /// <summary>
+            /// Aligns to the center of the grid.
+            /// </summary>
             centre
         }
 
@@ -69,9 +75,9 @@ namespace Habanero.BO.ClassDefinition
             _propertyName = propertyName;
             _gridControlTypeName = gridControlTypeName;
             _gridControlAssemblyName = gridControlAssembly;
-            _editable = editable;
-            _width = width;
-            _alignment = alignment;
+            Editable = editable;
+            Width = width;
+            Alignment = alignment;
             _parameters = parameters ?? new Hashtable();
         }
 
@@ -130,29 +136,17 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Indicates whether the column is editable
         /// </summary>
-        public bool Editable
-        {
-            get { return _editable; }
-            protected set { _editable = value; }
-        }
+        public bool Editable { get; protected set; }
 
         /// <summary>
         /// Returns the width
         /// </summary>
-        public int Width
-        {
-            get { return _width; }
-            protected set { _width = value; }
-        }
+        public int Width { get; protected set; }
 
         /// <summary>
         /// Returns the horizontal alignment
         /// </summary>
-        public PropAlignment Alignment
-        {
-            get { return _alignment; }
-            protected set { _alignment = value; }
-        }
+        public PropAlignment Alignment { get; protected set; }
 
         /// <summary>
         /// Returns the Hashtable containing the property parameters

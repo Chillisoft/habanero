@@ -27,12 +27,9 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
 using Habanero.Util;
-using AnchorStyles=Habanero.UI.Base.AnchorStyles;
 using DateTimePickerFormat=Habanero.UI.Base.DateTimePickerFormat;
 using HorizontalAlignment=Gizmox.WebGUI.Forms.HorizontalAlignment;
-using DockStyle=Habanero.UI.Base.DockStyle;
 using ScrollBars=Gizmox.WebGUI.Forms.ScrollBars;
 
 namespace Habanero.UI.VWG
@@ -43,15 +40,17 @@ namespace Habanero.UI.VWG
     public class ControlFactoryVWG : IControlFactory
     {
         public const int TEXTBOX_HEIGHT = 20;
-        private readonly ControlFactoryManager _manager;
+        //I Guess that the manager was created with the idea of 
+        // moving the common code in the Win and VWG control factory to a manager.
+//        private readonly ControlFactoryManager _manager;
 
-        ///<summary>
-        /// base Constructor
-        ///</summary>
-        public ControlFactoryVWG()
-        {
-            _manager = new ControlFactoryManager(this);
-        }
+//        ///<summary>
+//        /// base Constructor
+//        ///</summary>
+//        public ControlFactoryVWG()
+//        {
+////            _manager = new ControlFactoryManager(this);
+//        }
 
         /// <summary>
         /// Creates a filter control with the default layout manager
@@ -580,13 +579,21 @@ namespace Habanero.UI.VWG
 
         public IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>(IBusinessObjectControlWithErrorDisplay editorPanel) where TBusinessObject : class, IBusinessObject
         {
-            throw new System.NotImplementedException();
-        }
-
-        public IGridAndBOEditorControl CreateGridAndBOEditorControl(IBusinessObjectControlWithErrorDisplay boEditorPanel)
-        {
             throw new NotImplementedException();
         }
+
+        ///<summary>
+        /// Creates a <see cref="ICollapsiblePanel"/>
+        ///</summary>
+        public ICollapsiblePanel CreateCollapsiblePanel()
+        {
+            return new CollapsiblePanelVWG(this); 
+        }
+//
+//        public IGridAndBOEditorControl CreateGridAndBOEditorControl(IBusinessObjectControlWithErrorDisplay boEditorPanel)
+//        {
+//            throw new NotImplementedException();
+//        }
 
 
         /// <summary>
@@ -980,10 +987,10 @@ namespace Habanero.UI.VWG
             return new WizardFormVWG(wizardController, this);
         }
 
-        public IScreen CreateScreen()
-        {
-            throw new NotImplementedException();
-        }
+//        public IScreen CreateScreen()
+//        {
+//            throw new NotImplementedException();
+//        }
 
         
 
@@ -992,10 +999,70 @@ namespace Habanero.UI.VWG
             return TEXTBOX_HEIGHT;
         }
 
-        public IDataGridViewColumn CreateDataGridViewTextBoxColumn()
+//        public IDataGridViewColumn CreateDataGridViewTextBoxColumn()
+//        {
+//            return new DataGridViewTextBoxColumn() as IDataGridViewColumn;
+//        }
+
+        #region Collapsible Panel Button Creators
+
+        ///<summary>
+        /// Creates a <see cref="IButton"/> configured with the collapsible style
+        ///</summary>
+        ///<returns>a <see cref="IButton"/> </returns>
+        public IButton CreateButtonCollapsibleStyle()
         {
-            return new DataGridViewTextBoxColumn() as IDataGridViewColumn;
+            ButtonVWG button = (ButtonVWG)CreateButton();
+            ConfigureCollapsibleStyleButton(button);
+            return button;
         }
+
+        private static void ConfigureCollapsibleStyleButton(IButton button)
+        {
+            ButtonVWG buttonVWG = ((ButtonVWG) button);
+            buttonVWG.BackgroundImage = CollapsiblePanelResource.headergradient;
+            buttonVWG.FlatStyle = FlatStyle.Flat;
+
+        }
+
+        ///<summary>
+        /// Creates a <see cref="ILabel"/> configured with the collapsible style
+        ///</summary>
+        ///<returns>a <see cref="ILabel"/> </returns>
+        public ILabel CreateLabelPinOffStyle()
+        {
+            LabelVWG label = (LabelVWG)CreateLabel();
+            ConfigurePinOffStyleLabel(label);
+            return label;
+        }
+
+        ///<summary>
+        /// Configures the <see cref="ILabel"/> with the pinoff style
+        ///</summary>
+        public void ConfigurePinOffStyleLabel(ILabel label)
+        {
+            LabelVWG labelVWG = ((LabelVWG) label);
+            labelVWG.BackgroundImage = CollapsiblePanelResource.pinoff_withcolour;
+            labelVWG.FlatStyle = FlatStyle.Flat;
+            labelVWG.BackgroundImageLayout = ImageLayout.Center;
+            labelVWG.Width = 24;
+        }
+
+        ///<summary>
+        /// Configures the <see cref="ILabel"/> with the pinon style
+        ///</summary>
+        public void ConfigurePinOnStyleLabel(ILabel label)
+        {
+            LabelVWG labelVWG = ((LabelVWG)label);
+            labelVWG.BackgroundImage = CollapsiblePanelResource.pinon_withcolour;
+            labelVWG.FlatStyle = FlatStyle.Flat;
+            labelVWG.BackgroundImageLayout = ImageLayout.Center;
+            labelVWG.Width = 24;
+        }
+
+        #endregion
+
+
     }
 
     /// <summary>

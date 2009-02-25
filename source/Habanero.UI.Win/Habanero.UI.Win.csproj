@@ -50,6 +50,9 @@
     <Compile Include="BOEditorPanelWin.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="CollapsiblePanelWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ComboBoxAutoCompleteSourceWin.cs" />
     <Compile Include="ComboBoxAutoCompleteModeWin.cs" />
     <Compile Include="BOColTabControlWin.cs">
@@ -90,10 +93,10 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DockStyleWin.cs" />
-    <Compile Include="EditableGridControlWin.cs">
+    <Compile Include="Grid\EditableGridControlWin.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="EditableGridWin.cs">
+    <Compile Include="Grid\EditableGridWin.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ErrorDescriptionForm.cs">

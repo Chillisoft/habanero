@@ -170,10 +170,8 @@ namespace Habanero.BO
         /// <returns>A list of the parameters that this rule uses</returns>
     	protected internal override List<string> AvailableParameters()
     	{
-			List<string> parameters = new List<string>();
-			parameters.Add("min");
-			parameters.Add("max");
-			return parameters;
+			List<string> parameters = new List<string> {"min", "max"};
+            return parameters;
     	}
     }
 }

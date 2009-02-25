@@ -42,7 +42,6 @@ namespace Habanero.BO
         #region IBusinessObject Members
 
         public event EventHandler<BOEventArgs> Updated;
-
         public event EventHandler<BOEventArgs> Saved;
         public event EventHandler<BOEventArgs> Deleted;
         public event EventHandler<BOEventArgs> Restored;
@@ -99,9 +98,21 @@ namespace Habanero.BO
             Initialise(ClassDef.ClassDefs[this.GetType()]);
             foreach (IBOProp prop in _boPropCol)
             {
-                prop.InitialiseProp(info.GetValue(prop.PropertyName, prop.PropertyType));
+                try
+                {
+                    prop.InitialiseProp(info.GetValue(prop.PropertyName, prop.PropertyType));
+                }
+                catch (SerializationException ex)
+                {
+                    if (ex.Message.Contains("Member") && ex.Message.Contains("was not found"))
+                    {
+                        continue;
+                    }
+                    throw;
+                }
             }
             _boStatus = (BOStatus)info.GetValue("Status", typeof(BOStatus));
+            _boStatus.BusinessObject = this;
             AddToObjectManager();
         }
         [SecurityPermissionAttribute(SecurityAction.Demand,

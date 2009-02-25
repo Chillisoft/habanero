@@ -110,7 +110,7 @@ namespace Habanero.Test.UI.Base
                 {
                     dtColumn.CellTemplate = new System.Windows.Forms.DataGridViewCheckBoxCell();
                 }
-                catch (InvalidCastException ex) { errorThrown = true; }
+                catch (InvalidCastException) { errorThrown = true; }
                 //---------------Test Result -----------------------
                 Assert.IsTrue(errorThrown, "Cell Template must be type of NumericUpDownCell");
             }

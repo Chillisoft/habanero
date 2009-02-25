@@ -195,8 +195,8 @@ namespace Habanero.Test.BO.ClassDefinition
 
         private static UIForm GetUiForm()
         {
-            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null);
-            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null);
+            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
+            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null, UIFormField.LayoutStyle.Label);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);

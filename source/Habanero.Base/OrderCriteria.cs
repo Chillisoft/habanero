@@ -121,10 +121,7 @@ namespace Habanero.Base
         public override string ToString()
         {
             List<string> fieldsAsString = new List<string>();
-            _fields.ForEach(delegate(Field obj)
-            {
-                fieldsAsString.Add(obj.ToString());
-            });
+            _fields.ForEach(obj => fieldsAsString.Add(obj.ToString()));
             return String.Join(", ", fieldsAsString.ToArray());
         }
 
@@ -282,14 +279,14 @@ namespace Habanero.Base
             /// </summary>
             /// <param name="fieldString">The string in the correct format (see above)</param>
             /// <returns>A Field created from the string</returns>
-            public static Field FromString(string fieldString)
+            public new static Field FromString(string fieldString)
             {
                 string[] parts = fieldString.Trim().Split(' ');
                 if (parts.Length > 1)
                 {
                     SortDirection sortDirection;
                     if (parts[1].ToUpper().Equals("ASC")) sortDirection = SortDirection.Ascending;
-                    else if (parts[1].ToUpper().Equals("DESC")) sortDirection = OrderCriteria.SortDirection.Descending;
+                    else if (parts[1].ToUpper().Equals("DESC")) sortDirection = SortDirection.Descending;
                     else throw new ArgumentException(string.Format("'{0}' is an invalid sort order. Valid options are ASC and DESC", parts[1]));
                     return CreateField(parts[0], sortDirection);
                 }
@@ -323,7 +320,7 @@ namespace Habanero.Base
                 //string source = null;
                 string[] parts = sourceAndFieldName.Trim().Split('.');
                 string fieldName = parts[parts.Length-1];
-                Source source = Base.Source.FromString(String.Join(".", parts, 0, parts.Length - 1));
+                Source source = Source.FromString(String.Join(".", parts, 0, parts.Length - 1));
                 Field field = new Field(fieldName, fieldName, source, sortDirection);
                 return field;
             }

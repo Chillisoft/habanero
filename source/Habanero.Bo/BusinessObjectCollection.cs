@@ -88,15 +88,17 @@ namespace Habanero.BO
         private readonly List<TBusinessObject> _addedBusinessObjects = new List<TBusinessObject>();
         private readonly List<TBusinessObject> _markedForDeleteBusinessObjects = new List<TBusinessObject>();
 
-        private ISelectQuery _selectQuery;
         private readonly EventHandler<BOEventArgs> _savedEventHandler;
         private readonly EventHandler<BOEventArgs> _deletedEventHandler;
         private readonly EventHandler<BOEventArgs> _restoredEventHandler;
-        //private readonly EventHandler<BOEventArgs> _updateIDEventHandler;
         private readonly EventHandler<BOEventArgs> _markForDeleteEventHandler;
         private readonly EventHandler<BOEventArgs> _updatedEventHandler;
         private readonly EventHandler<BOPropUpdatedEventArgs> _boPropUpdatedEventHandler;
         private readonly EventHandler<BOEventArgs> _boIDUpdatedEventHandler;
+
+        private ISelectQuery _selectQuery;
+
+
 
         /// <summary>
         /// Default constructor. 
@@ -121,6 +123,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="bo">The business object whose class definition
         /// is used to initialise the collection</param>
+        [Obsolete("Please initialise with a ClassDef instead.  This option will be removed in later versions of Habanero.")]
         public BusinessObjectCollection(TBusinessObject bo) : this(null, bo)
         {
         }
@@ -150,6 +153,11 @@ namespace Habanero.BO
             _selectQuery = QueryBuilder.CreateSelectQuery(_boClassDef);
         }
 
+        /// <summary>
+        /// Reconstitutes the collection from a stream that was serialised.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
         protected BusinessObjectCollection(SerializationInfo info, StreamingContext context)
         {
             int count = info.GetInt32(COUNT);
@@ -168,37 +176,188 @@ namespace Habanero.BO
             //_updateIDEventHandler = UpdateHashTable;
         }
 
+        #region Events and event handlers
+
+
+        private readonly IDictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>> _updatedHandlers = new Dictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>>();
+        private readonly IDictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>> _addedHandlers = new Dictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>>();
+        private readonly IDictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>> _removedHandlers = new Dictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>>();
+        private readonly IDictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>> _idUpdatedHandlers = new Dictionary<EventHandler<BOEventArgs>, EventHandler<BOEventArgs<TBusinessObject>>>();
+        private readonly IDictionary<EventHandler<BOPropUpdatedEventArgs>, EventHandler<BOPropUpdatedEventArgs<TBusinessObject>>> _propertyUpdatedHandlers = new Dictionary<EventHandler<BOPropUpdatedEventArgs>, EventHandler<BOPropUpdatedEventArgs<TBusinessObject>>>();
+
+        private event EventHandler<BOEventArgs<TBusinessObject>> _BusinessObjectRemoved;
+        private event EventHandler<BOEventArgs<TBusinessObject>> _BusinessObjectAdded;
+        private event EventHandler<BOEventArgs<TBusinessObject>> _BusinessObjectUpdated;
+        private event EventHandler<BOEventArgs<TBusinessObject>> _BusinessObjectIDUpdated;
+        private event EventHandler<BOPropUpdatedEventArgs<TBusinessObject>> _BusinessObjectPropertyUpdated;
+
         /// <summary>
         /// Handles the event of a business object being added
         /// </summary>
-        public event EventHandler<BOEventArgs> BusinessObjectAdded;
+        event EventHandler<BOEventArgs> IBusinessObjectCollection.BusinessObjectAdded
+        {
+            add {
+                EventHandler<BOEventArgs<TBusinessObject>> addedHandler = new EventHandler<BOEventArgs<TBusinessObject>>(value);
+                _addedHandlers[value] = addedHandler;
+                _BusinessObjectAdded += addedHandler;
+        }
+            remove {
+                _BusinessObjectAdded -= _addedHandlers[value];
+                _addedHandlers.Remove(value);
+            }
+        }
+
+        /// <summary>
+        /// Handles the event of a business object being added
+        /// </summary>
+        public event EventHandler<BOEventArgs<TBusinessObject>> BusinessObjectAdded
+        {
+            add
+            {
+                _BusinessObjectAdded += value;
+            }
+            remove
+            {
+                _BusinessObjectAdded -=value;
+            }
+        }
 
         /// <summary>
         /// Handles the event of a business object being removed
         /// </summary>
-        public event EventHandler<BOEventArgs> BusinessObjectRemoved;
+        event EventHandler<BOEventArgs> IBusinessObjectCollection.BusinessObjectRemoved
+        {
+            add
+            {
+                EventHandler<BOEventArgs<TBusinessObject>> removedHandler = new EventHandler<BOEventArgs<TBusinessObject>>(value);
+                _removedHandlers[value] = removedHandler;
+                _BusinessObjectRemoved += removedHandler;
+            }
+            remove
+            {
+                _BusinessObjectRemoved -= _removedHandlers[value];
+                _removedHandlers.Remove(value);
+            }
+        }
+        
+        /// <summary>
+        /// Handles the event of a business object being removed
+        /// </summary>
+        public event EventHandler<BOEventArgs<TBusinessObject>> BusinessObjectRemoved
+        {
+            add
+            {
+                _BusinessObjectRemoved += value;
+            }
+            remove
+            {
+                _BusinessObjectRemoved -= value;
+            }
+        }
+
 
         /// <summary>
         /// Handles the event of any business object in this collection being Updated(i.e the BO is saved, or edits are cancelled).
         /// See the <see cref="IBusinessObject"/>.<see cref="IBusinessObject.Updated"/> event.
         /// </summary>
-        public event EventHandler<BOEventArgs> BusinessObjectUpdated;
+        event EventHandler<BOEventArgs> IBusinessObjectCollection.BusinessObjectUpdated
+        {
+            add
+            {
+                EventHandler<BOEventArgs<TBusinessObject>> updatedHandler = new EventHandler<BOEventArgs<TBusinessObject>>(value);
+                _updatedHandlers[value] = updatedHandler;
+                _BusinessObjectUpdated += updatedHandler;
+            }
+            remove
+            {
+                _BusinessObjectUpdated -= _updatedHandlers[value];
+                _updatedHandlers.Remove(value);
+            }
+        }
+        /// <summary>
+        /// Handles the event of any business object in this collection being Updated(i.e the BO is saved, or edits are cancelled).
+        /// See the <see cref="IBusinessObject"/>.<see cref="IBusinessObject.Updated"/> event.
+        /// </summary>
+        public event EventHandler<BOEventArgs<TBusinessObject>> BusinessObjectUpdated
+        {
+            add
+            {
+                _BusinessObjectUpdated += value;
+            }
+            remove
+            {
+                _BusinessObjectUpdated -= value;
+            }
+        }
 
         /// <summary>
         /// Handles the event of any business object in this collection being edited (i.e. a property value is changed).
         /// See the <see cref="IBusinessObject"/>.<see cref="IBusinessObject.PropertyUpdated"/> event.
         /// </summary>
-        public event EventHandler<BOPropUpdatedEventArgs> BusinessObjectPropertyUpdated;
+        event EventHandler<BOPropUpdatedEventArgs> IBusinessObjectCollection.BusinessObjectPropertyUpdated
+        {
+            add
+            {
+                EventHandler<BOPropUpdatedEventArgs<TBusinessObject>> propertyUpdatedHandler = new EventHandler<BOPropUpdatedEventArgs<TBusinessObject>>(value);
+                _propertyUpdatedHandlers[value] = propertyUpdatedHandler;
+                _BusinessObjectPropertyUpdated += propertyUpdatedHandler;
+            }
+            remove
+            {
+                _BusinessObjectPropertyUpdated -= _propertyUpdatedHandlers[value];
+                _propertyUpdatedHandlers.Remove(value);
+            }
+        }
+
+        /// <summary>
+        /// Handles the event of any business object in this collection being edited (i.e. a property value is changed).
+        /// See the <see cref="IBusinessObject"/>.<see cref="IBusinessObject.PropertyUpdated"/> event.
+        /// </summary>
+        public event EventHandler<BOPropUpdatedEventArgs<TBusinessObject>> BusinessObjectPropertyUpdated
+        {
+            add
+            {
+                _BusinessObjectPropertyUpdated += value;
+            }
+            remove
+            {
+                _BusinessObjectPropertyUpdated -= value;
+            }
+        }
+
 
         /// <summary>
         /// Handles the event when a BusinessObject in the collection has an ID that is Updated(i.e one of the properties of the ID is edited).
         /// </summary>
-        public event EventHandler<BOEventArgs> BusinessObjectIDUpdated;
+        event EventHandler<BOEventArgs> IBusinessObjectCollection.BusinessObjectIDUpdated
+        {
+            add
+            {
+                EventHandler<BOEventArgs<TBusinessObject>> idUpdatedHandler = new EventHandler<BOEventArgs<TBusinessObject>>(value);
+                _idUpdatedHandlers[value] = idUpdatedHandler;
+                _BusinessObjectIDUpdated += idUpdatedHandler;
+            }
+            remove
+            {
+                _BusinessObjectIDUpdated -= _idUpdatedHandlers[value];
+                _idUpdatedHandlers.Remove(value);
+            }
+        }
 
-        ///// <summary>
-        ///// Handles the event of any business object in this collection being edited
-        ///// </summary>
-        //public event EventHandler<BOEventArgs> BusinessObjectEdited;
+        /// <summary>
+        /// Handles the event when a BusinessObject in the collection has an ID that is Updated(i.e one of the properties of the ID is edited).
+        /// </summary>
+        public event EventHandler<BOEventArgs<TBusinessObject>> BusinessObjectIDUpdated
+        {
+            add
+            {
+                _BusinessObjectIDUpdated += value;
+            }
+            remove
+            {
+                _BusinessObjectIDUpdated -= value;
+            }
+        }
 
         /// <summary>
         /// Calls the BusinessObjectAdded() handler
@@ -206,9 +365,9 @@ namespace Habanero.BO
         /// <param name="bo">The business object added</param>
         private void FireBusinessObjectAdded(TBusinessObject bo)
         {
-            if (this.BusinessObjectAdded != null)
+            if (_BusinessObjectAdded != null)
             {
-                this.BusinessObjectAdded(this, new BOEventArgs(bo));
+                _BusinessObjectAdded(this, new BOEventArgs<TBusinessObject>(bo));
             }
         }
 
@@ -218,47 +377,37 @@ namespace Habanero.BO
         /// <param name="bo">The business object removed</param>
         private void FireBusinessObjectRemoved(TBusinessObject bo)
         {
-            if (this.BusinessObjectRemoved != null)
+            if (this._BusinessObjectRemoved != null)
             {
-                this.BusinessObjectRemoved(this, new BOEventArgs(bo));
+                this._BusinessObjectRemoved(this, new BOEventArgs<TBusinessObject>(bo));
             }
         }
 
         private void FireBusinessObjectUpdated(TBusinessObject bo)
         {
-            if (this.BusinessObjectUpdated != null)
+            if (_BusinessObjectUpdated != null)
             {
-                this.BusinessObjectUpdated(this, new BOEventArgs(bo));
+                _BusinessObjectUpdated(this, new BOEventArgs<TBusinessObject>(bo));
             }
         }
 
         private void FireBusinessObjectPropertyUpdated(TBusinessObject bo, IBOProp boProp)
         {
-            if (this.BusinessObjectPropertyUpdated != null)
+            if (_BusinessObjectPropertyUpdated != null)
             {
-                this.BusinessObjectPropertyUpdated(this, new BOPropUpdatedEventArgs(bo, boProp));
+                _BusinessObjectPropertyUpdated(this, new BOPropUpdatedEventArgs<TBusinessObject>(bo, boProp));
             }
         }
 
         private void FireBusinessObjectIDUpdated(TBusinessObject bo)
         {
-            if (this.BusinessObjectIDUpdated != null)
+            if (_BusinessObjectIDUpdated != null)
             {
-                this.BusinessObjectIDUpdated(this, new BOEventArgs(bo));
+                _BusinessObjectIDUpdated(this, new BOEventArgs<TBusinessObject>(bo));
             }
         }
 
-        ///// <summary>
-        ///// Calls the BusinessObjectEdited() handler
-        ///// </summary>
-        ///// <param name="bo">The business object that was edited</param>
-        //public void FireBusinessObjectEdited(TBusinessObject bo)
-        //{
-        //    if (this.BusinessObjectEdited != null)
-        //    {
-        //        this.BusinessObjectEdited(this, new BOEventArgs(bo));
-        //    }
-        //}
+        #endregion
 
         /// <summary>
         /// Adds a business object to the collection
@@ -267,31 +416,39 @@ namespace Habanero.BO
         public new virtual void Add(TBusinessObject bo)
         {
             if (bo == null) throw new ArgumentNullException("bo");
+            bool addSuccessful;
             lock (KeyObjectHashTable)
             {
-                if (this.Contains(bo)) return;
-                if (bo.Status.IsNew && !this.CreatedBusinessObjects.Contains(bo))
-                {
-                    AddCreatedBusinessObject(bo);
-                }
-                else
-                {
-                    if (bo.Status.IsDeleted) return;
-                    AddWithoutEvents(bo);
-                    if (!AddedBusinessObjects.Contains(bo) && !PersistedBusinessObjects.Contains(bo))
-                    {
-                        AddedBusinessObjects.Add(bo);
-                    }
-                    this.RemovedBusinessObjects.Remove(bo);
-                    this.FireBusinessObjectAdded(bo);
-                }
+                addSuccessful = AddInternal(bo);
             }
+            if (addSuccessful) this.FireBusinessObjectAdded(bo);
+        }
+
+        protected virtual bool AddInternal(TBusinessObject bo) {
+            if (this.Contains(bo)) return false;
+            if (bo.Status.IsNew && !this.CreatedBusinessObjects.Contains(bo))
+            {
+                AddCreatedBusinessObject(bo);
+            }
+            else
+            {
+                if (bo.Status.IsDeleted) return false;
+                AddWithoutEvents(bo);
+                if (!AddedBusinessObjects.Contains(bo) && !PersistedBusinessObjects.Contains(bo))
+                {
+                    AddedBusinessObjects.Add(bo);
+                }
+                this.RemovedBusinessObjects.Remove(bo);
+            }
+            return true;
         }
 
         void IBusinessObjectCollection.AddWithoutEvents(IBusinessObject businessObject)
         {
-            AddWithoutEvents(businessObject as TBusinessObject);
-            //AddToPersistedCollection(businessObject);
+            lock (KeyObjectHashTable)
+            {
+                AddWithoutEvents(businessObject as TBusinessObject);
+            }
         }
 
         /// <summary>
@@ -308,13 +465,9 @@ namespace Habanero.BO
         private void AddWithoutEvents(TBusinessObject bo)
         {
             if (bo == null) throw new ArgumentNullException("bo");
-
             base.Add(bo);
-            lock (KeyObjectHashTable)
-            {
-                if (bo.ID != null) if (KeyObjectHashTable.Contains(bo.ID.ObjectID)) return;
-                if (bo.ID != null) KeyObjectHashTable.Add(bo.ID.ObjectID, bo);
-            }
+            if (bo.ID != null) if (KeyObjectHashTable.Contains(bo.ID.ObjectID)) return;
+            if (bo.ID != null) KeyObjectHashTable.Add(bo.ID.ObjectID, bo);
             RegisterBOEvents(bo);
         }
 
@@ -375,18 +528,21 @@ namespace Habanero.BO
 
         private void MarkForDeleteEventHandler(object sender, BOEventArgs e)
         {
-            TBusinessObject bo = e.BusinessObject as TBusinessObject;
-            if (bo == null) return;
-            if (this.MarkedForDeleteBusinessObjects.Contains(bo)) return;
-
-            this.MarkedForDeleteBusinessObjects.Add(bo);
-            base.Remove(bo);
-            //KeyObjectHashTable.Remove(bo.ID.AsString_CurrentValue());
-            KeyObjectHashTable.Remove(bo.ID.ObjectID);
-            if (!this.RemovedBusinessObjects.Remove(bo))
+            bool removeSuccessful;
+            TBusinessObject bo;
+            lock (KeyObjectHashTable)
             {
-                this.FireBusinessObjectRemoved(bo);
+                bo = e.BusinessObject as TBusinessObject;
+                if (bo == null) return;
+                if (this.MarkedForDeleteBusinessObjects.Contains(bo)) return;
+
+                this.MarkedForDeleteBusinessObjects.Add(bo);
+                base.Remove(bo);
+                //KeyObjectHashTable.Remove(bo.ID.AsString_CurrentValue());
+				KeyObjectHashTable.Remove(bo.ID.ObjectID);
+                removeSuccessful = !this.RemovedBusinessObjects.Remove(bo);
             }
+            if (removeSuccessful) this.FireBusinessObjectRemoved(bo);
         }
 
         /// <summary>
@@ -396,75 +552,108 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void DeletedEventHandler(object sender, BOEventArgs e)
         {
-            TBusinessObject bo = e.BusinessObject as TBusinessObject;
-            if (bo == null) return;
-            this.RemoveInternal(bo);
-            this.PersistedBusinessObjects.Remove(bo);
-            this.RemovedBusinessObjects.Remove(bo);
-            this.MarkedForDeleteBusinessObjects.Remove(bo);
-            if (bo.Status.IsDeleted) this.AddedBusinessObjects.Remove(bo);
-            DeRegisterBOEvents(bo);
+            bool fireEvent;
+            TBusinessObject bo;
+            lock (KeyObjectHashTable)
+            {
+                bo = e.BusinessObject as TBusinessObject;
+                if (bo == null) return;
+                this.RemoveInternal(bo, out fireEvent);
+                this.PersistedBusinessObjects.Remove(bo);
+                this.RemovedBusinessObjects.Remove(bo);
+                this.MarkedForDeleteBusinessObjects.Remove(bo);
+                if (bo.Status.IsDeleted) this.AddedBusinessObjects.Remove(bo);
+                DeRegisterBOEvents(bo);
+            }
+            if (fireEvent) FireBusinessObjectRemoved(bo);
+
         }
 
 
         protected virtual void RestoredEventHandler(object sender, BOEventArgs e)
         {
-            TBusinessObject bo = (TBusinessObject) e.BusinessObject;
-            if (!this.MarkedForDeleteBusinessObjects.Remove(bo) || (this.Contains(bo))) return;
-            if (this.AddedBusinessObjects.Contains(bo) && this.Contains(bo))
+            bool addEventRequired = false;
+            TBusinessObject bo;
+            lock (KeyObjectHashTable)
             {
-                this.AddWithoutEvents(bo);
+                bo = e.BusinessObject as TBusinessObject;
+                if (!this.MarkedForDeleteBusinessObjects.Remove(bo) || (this.Contains(bo))) return;
+                if (this.AddedBusinessObjects.Contains(bo) && this.Contains(bo))
+                {
+                    this.AddWithoutEvents(bo);
+                }
+                else
+                {
+                   addEventRequired =  this.AddInternal(bo);
+                }
             }
-            else
-            {
-                this.Add(bo);
-            }
+            if (addEventRequired) FireBusinessObjectAdded(bo);
         }
 
         protected virtual void SavedEventHandler(object sender, BOEventArgs e)
         {
-            TBusinessObject bo = (TBusinessObject) e.BusinessObject;
-            if (bo == null) return;
-            CreatedBusinessObjects.Remove(bo);
-            if (this.RemovedBusinessObjects.Remove(bo)) return;
-            if (!this.Contains(bo))
+            bool addEventRequired = false;
+            TBusinessObject bo;
+            lock (KeyObjectHashTable)
             {
-                if (this.SelectQuery.Criteria.IsMatch(bo))
+                bo = e.BusinessObject as TBusinessObject;
+                if (bo == null) return;
+                CreatedBusinessObjects.Remove(bo);
+                if (this.RemovedBusinessObjects.Remove(bo)) return;
+                if (!this.Contains(bo))
                 {
-                    Add(bo);
+                    if (this.SelectQuery.Criteria.IsMatch(bo))
+                    {
+                        addEventRequired = AddInternal(bo);
+                    }
+                }
+                if (!bo.Status.IsNew && !bo.Status.IsDeleted && !this.PersistedBusinessObjects.Contains(bo))
+                {
+                    AddToPersistedCollection(bo);
                 }
             }
-            if (!bo.Status.IsNew && !bo.Status.IsDeleted && !this.PersistedBusinessObjects.Contains(bo))
-            {
-                AddToPersistedCollection(bo);
-            }
+            if (addEventRequired) FireBusinessObjectAdded(bo);
         }
 
         private void UpdatedEventHandler(object sender, BOEventArgs e)
         {
-            TBusinessObject businessObject = (TBusinessObject) e.BusinessObject;
-            if (!this.Contains(businessObject)) return;
+            TBusinessObject businessObject;
+            lock (KeyObjectHashTable)
+            {
+                businessObject = (TBusinessObject) e.BusinessObject;
+                if (!this.Contains(businessObject)) return;
+            }
             FireBusinessObjectUpdated(businessObject);
+
         }
 
         private void BOPropUpdatedEventHandler(object sender, BOPropUpdatedEventArgs propEventArgs)
         {
-            TBusinessObject businessObject = (TBusinessObject) propEventArgs.BusinessObject;
-            if (!this.Contains(businessObject)) return;
+            TBusinessObject businessObject;
+            lock (KeyObjectHashTable)
+            {
+                businessObject = propEventArgs.BusinessObject as TBusinessObject;
+                
+                if (!this.Contains(businessObject)) return;
+            }
             FireBusinessObjectPropertyUpdated(businessObject, propEventArgs.Prop);
         }
 
         private void BOIDUpdatedEventHandler(object sender, BOEventArgs e)
         {
-            TBusinessObject businessObject = (TBusinessObject) e.BusinessObject;
-            if (!this.Contains(businessObject)) return;
-            if (businessObject.ID == null) return;
-
-            Guid previousObjectID = businessObject.ID.PreviousObjectID;
-            if (KeyObjectHashTable.Contains(previousObjectID))
+            TBusinessObject businessObject;
+            lock (KeyObjectHashTable)
             {
-                KeyObjectHashTable.Remove(previousObjectID);
-                KeyObjectHashTable.Add(businessObject.ID.ObjectID, businessObject);
+                businessObject = (TBusinessObject) e.BusinessObject;
+                if (!this.Contains(businessObject)) return;
+                if (businessObject.ID == null) return;
+
+                Guid previousObjectID = businessObject.ID.PreviousObjectID;
+                if (KeyObjectHashTable.Contains(previousObjectID))
+                {
+                    KeyObjectHashTable.Remove(previousObjectID);
+                    KeyObjectHashTable.Add(businessObject.ID.ObjectID, businessObject);
+                }
             }
             FireBusinessObjectIDUpdated(businessObject);
         }
@@ -698,14 +887,17 @@ namespace Habanero.BO
         /// </summary>
         public new void Clear()
         {
-            DeRegisterBoEventsForAllBusinessObjects();
-            base.Clear();
-            KeyObjectHashTable.Clear();
-            this.PersistedBusinessObjects.Clear();
-            this.CreatedBusinessObjects.Clear();
-            this.RemovedBusinessObjects.Clear();
-            this.AddedBusinessObjects.Clear();
-            this.MarkedForDeleteBusinessObjects.Clear();
+            lock (KeyObjectHashTable)
+            {
+                DeRegisterBoEventsForAllBusinessObjects();
+                base.Clear();
+                KeyObjectHashTable.Clear();
+                this.PersistedBusinessObjects.Clear();
+                this.CreatedBusinessObjects.Clear();
+                this.RemovedBusinessObjects.Clear();
+                this.AddedBusinessObjects.Clear();
+                this.MarkedForDeleteBusinessObjects.Clear();
+            }
         }
 
 
@@ -715,8 +907,12 @@ namespace Habanero.BO
         /// <param name="index">The index position to remove from</param>
         public new void RemoveAt(int index)
         {
-            TBusinessObject boToRemove = this[index];
-            Remove(boToRemove);
+            lock (KeyObjectHashTable)
+            {
+                TBusinessObject boToRemove = this[index];
+                Remove(boToRemove);
+            }
+
         }
 
         /// <summary>
@@ -725,7 +921,10 @@ namespace Habanero.BO
         /// <param name="bo">The business object to remove</param>
         public new virtual bool Remove(TBusinessObject bo)
         {
-            return RemoveInternal(bo);
+            bool fireEvent;
+            bool success = RemoveInternal(bo, out fireEvent);
+            if (fireEvent) FireBusinessObjectRemoved(bo);
+            return success;
         }
 
         ///<summary>
@@ -752,9 +951,11 @@ namespace Habanero.BO
         /// when loading and refreshing.
         /// </summary>
         /// <param name="businessObject"></param>
+        /// <param name="fireEvent">Indicates whether to fire a removed event after calling this method.</param>
         /// <returns></returns>
-        internal bool RemoveInternal(TBusinessObject businessObject)
+        private bool RemoveInternal(TBusinessObject businessObject, out bool fireEvent)
         {
+            fireEvent = false;
             bool removed = base.Remove(businessObject);
             KeyObjectHashTable.Remove(businessObject.ID.ObjectID);
 
@@ -762,7 +963,7 @@ namespace Habanero.BO
                 && !_markedForDeleteBusinessObjects.Contains(businessObject))
             {
                 _removedBusinessObjects.Add(businessObject);
-                this.FireBusinessObjectRemoved(businessObject);
+                fireEvent = true;
             }
             RemoveCreatedBusinessObject(businessObject);
             RemoveAddedBusinessObject(businessObject);
@@ -786,17 +987,6 @@ namespace Habanero.BO
             this.RemovedBusinessObjects.Remove(businessObject);
             DeRegisterBOEvents(businessObject);
         }
-
-        ///// <summary>
-        ///// Indicates whether the collection contains the specified 
-        ///// business object
-        ///// </summary>
-        ///// <param name="bo">The business object</param>
-        ///// <returns>Returns true if contained</returns>
-        //public bool Contains(TBusinessObject bo)
-        //{
-        //    return Contains(bo);
-        //}
 
         /// <summary>
         /// Indicates whether any of the business objects have been amended 
@@ -874,23 +1064,6 @@ namespace Habanero.BO
             }
         }
 
-#pragma warning disable 693
-        /// <summary>
-        /// Finds a business object that has the key string specified.<br/>
-        /// The format of the search term is strict, so that a Guid ID
-        /// may be stored as "boIDname=########-####-####-####-############".
-        /// In the case of such Guid ID's, rather use the FindByGuid() function.
-        /// Composite primary keys may be stored otherwise, such as a
-        /// concatenation of the key names.
-        /// </summary>
-        /// <param name="key">The object identifier as a Guid</param>
-        /// <returns>Returns the business object if found, or null if not</returns>
-        public TBusinessObject Find<TBusinessObject>(Guid key)
-
-        {
-            return (TBusinessObject) Find(key);
-        }
-#pragma warning restore 693
 
         /// <summary>
         /// Finds a business object that has the key string specified.<br/>
@@ -902,7 +1075,8 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="key">The object identifier as a Guid</param>
         /// <returns>Returns the business object if found, or null if not</returns>
-        public IBusinessObject Find(Guid key)
+        public TBusinessObject Find(Guid key)
+
         {
             if (KeyObjectHashTable.ContainsKey(key))
             {
@@ -912,6 +1086,22 @@ namespace Habanero.BO
             return null;
         }
 
+
+        /// <summary>
+        /// Finds a business object that has the key string specified.<br/>
+        /// The format of the search term is strict, so that a Guid ID
+        /// may be stored as "boIDname=########-####-####-####-############".
+        /// In the case of such Guid ID's, rather use the FindByGuid() function.
+        /// Composite primary keys may be stored otherwise, such as a
+        /// concatenation of the key names.
+        /// </summary>
+        /// <param name="key">The object identifier as a Guid</param>
+        /// <returns>Returns the business object if found, or null if not</returns>
+        IBusinessObject IBusinessObjectCollection.Find(Guid key)
+        {
+            return Find(key);
+        }
+
         /// <summary>
         /// Finds a business object in the collection that contains the
         /// specified Guid ID
@@ -919,6 +1109,7 @@ namespace Habanero.BO
         /// <param name="searchTerm">The Guid to search for</param>
         /// <returns>Returns the business object if found, or null if not
         /// found</returns>
+        [Obsolete("Please use Find(Guid key) instead")]
         public TBusinessObject FindByGuid(Guid searchTerm)
         {
             //string formattedSearchItem = searchTerm.ToString();
@@ -1204,32 +1395,50 @@ namespace Habanero.BO
             }
             while (this.CreatedBusinessObjects.Count > 0)
             {
-                TBusinessObject bo = this.CreatedBusinessObjects[0];
-                this.CreatedBusinessObjects.Remove(bo);
-                bo.Restore();
-                this.RemoveInternal(bo);
-                this.RemovedBusinessObjects.Remove(bo);
-                DeRegisterBOEvents(bo);
+                bool fireEvent;
+                TBusinessObject bo;
+                lock (KeyObjectHashTable)
+                {
+                    bo = this.CreatedBusinessObjects[0];
+                    this.CreatedBusinessObjects.Remove(bo);
+                    bo.Restore();
+                    
+                    this.RemoveInternal(bo, out fireEvent);
+                    this.RemovedBusinessObjects.Remove(bo);
+                    DeRegisterBOEvents(bo);
+                }
+                if (fireEvent) FireBusinessObjectRemoved(bo);
             }
             while (this.RemovedBusinessObjects.Count > 0)
             {
-                TBusinessObject bo = this.RemovedBusinessObjects[0];
-                this.RemovedBusinessObjects.Remove(bo);
-                bo.Restore();
-                this.Add(bo);
+                bool fireEvent;
+                TBusinessObject bo;
+                lock (KeyObjectHashTable)
+                {
+                    bo = this.RemovedBusinessObjects[0];
+                    this.RemovedBusinessObjects.Remove(bo);
+                    bo.Restore();
+                    fireEvent = this.AddInternal(bo);
+                }
+                if (fireEvent) FireBusinessObjectAdded(bo);
             }
             while (this.AddedBusinessObjects.Count > 0)
             {
-                TBusinessObject bo = this.AddedBusinessObjects[0];
-                this.AddedBusinessObjects.Remove(bo);
-                bo.Restore();
-                bool removed = base.Remove(bo);
-                KeyObjectHashTable.Remove(bo.ID.ToString());
+                bool removed;
+                TBusinessObject bo;
+                lock (KeyObjectHashTable)
+                {
+                    bo = this.AddedBusinessObjects[0];
+                    this.AddedBusinessObjects.Remove(bo);
+                    bo.Restore();
+                    removed = base.Remove(bo);
+                    KeyObjectHashTable.Remove(bo.ID.ToString());
+                    this.RemovedBusinessObjects.Remove(bo);
+                }
                 if (removed)
                 {
                     this.FireBusinessObjectRemoved(bo);
                 }
-                this.RemovedBusinessObjects.Remove(bo);
             }
         }
 
@@ -1244,21 +1453,6 @@ namespace Habanero.BO
         }
 
         #region IBusinessObjectCollection Members
-
-        /// <summary>
-        /// Finds a business object that has the key string specified.<br/>
-        /// The format of the search term is strict, so that a Guid ID
-        /// may be stored as "boIDname=########-####-####-####-############".
-        /// In the case of such Guid ID's, rather use the FindByGuid() function.
-        /// Composite primary keys may be stored otherwise, such as a
-        /// concatenation of the key names.
-        /// </summary>
-        /// <param name="key">The orimary key as a string</param>
-        /// <returns>Returns the business object if found, or null if not</returns>
-        IBusinessObject IBusinessObjectCollection.Find(Guid key)
-        {
-            return this.Find(key);
-        }
 
         /// <summary>
         /// Returns a new collection that is a copy of this collection
@@ -1279,18 +1473,6 @@ namespace Habanero.BO
         int IBusinessObjectCollection.IndexOf(IBusinessObject item)
         {
             return this.IndexOf((TBusinessObject) item);
-        }
-
-        /// <summary>
-        /// Inserts an item to the <see cref="T:System.Collections.Generic.IList`1"></see> at the specified index.
-        /// </summary>
-        /// <param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1"></see>.</param>
-        /// <param name="index">The zero-based index at which item should be inserted.</param>
-        /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"></see> is read-only.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"></see>.</exception>
-        void IBusinessObjectCollection.Insert(int index, IBusinessObject item)
-        {
-            this.Insert(index, (TBusinessObject) item);
         }
 
         /// <summary>
@@ -1510,39 +1692,47 @@ namespace Habanero.BO
         public virtual TBusinessObject CreateBusinessObject()
         {
             TBusinessObject newBO;
-            if (this.ClassDef == ClassDefinition.ClassDef.ClassDefs[typeof (TBusinessObject)])
+            lock (KeyObjectHashTable)
             {
-                newBO = (TBusinessObject) Activator.CreateInstance(typeof (TBusinessObject));
-            }
-            else
-            {
-                //use the customised classdef instead of the default.
-                try
+                if (this.ClassDef == ClassDefinition.ClassDef.ClassDefs[typeof (TBusinessObject)])
                 {
-                    newBO =
-                        (TBusinessObject)
-                        Activator.CreateInstance(typeof (TBusinessObject), new object[] {this.ClassDef});
+                    newBO = (TBusinessObject) Activator.CreateInstance(typeof (TBusinessObject));
                 }
-                catch (MissingMethodException ex)
+                else
                 {
-                    string className = typeof (TBusinessObject).FullName;
-                    string msg = string.Format
-                        ("An attempt was made to create a {0} with a customised class def. Please add a constructor that takes a ClassDef as a parameter to the business object class of type {1}.",
-                         className, className);
-                    throw new HabaneroDeveloperException("There was a problem creating a " + className, msg, ex);
+                    //use the customised classdef instead of the default.
+                    try
+                    {
+                        newBO =
+                            (TBusinessObject)
+                            Activator.CreateInstance(typeof (TBusinessObject), new object[] {this.ClassDef});
+                    }
+                    catch (MissingMethodException ex)
+                    {
+                        string className = typeof (TBusinessObject).FullName;
+                        string msg = string.Format
+                            ("An attempt was made to create a {0} with a customised class def. Please add a constructor that takes a ClassDef as a parameter to the business object class of type {1}.",
+                             className, className);
+                        throw new HabaneroDeveloperException("There was a problem creating a " + className, msg, ex);
+                    }
                 }
+                AddCreatedBusinessObject(newBO);
             }
-            AddCreatedBusinessObject(newBO);
+            FireBusinessObjectAdded(newBO);
             return newBO;
         }
 
+        /// <summary>
+        /// Adds a new bo to the collection.  If you call this you must call <see cref="FireBusinessObjectAdded"/> to raise the event (outside of the lock)
+        /// This should be called from inside a lock
+        /// </summary>
+        /// <param name="newBO"></param>
         private void AddCreatedBusinessObject(TBusinessObject newBO)
         {
             CreatedBusinessObjects.Add(newBO);
             if (this.Contains(newBO)) return;
 
             AddWithoutEvents(newBO);
-            this.FireBusinessObjectAdded(newBO);
         }
 
         /// <summary>
@@ -1558,21 +1748,24 @@ namespace Habanero.BO
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            int count = 0;
-            info.AddValue(COUNT, Count);
-            info.AddValue(CREATED_COUNT, this.CreatedBusinessObjects.Count);
-            info.AddValue(CLASS_NAME, this.ClassDef.ClassName);
-            info.AddValue(ASSEMBLY_NAME, this.ClassDef.AssemblyName);
-            foreach (TBusinessObject businessObject in this)
+            lock (KeyObjectHashTable)
             {
-                info.AddValue(BUSINESS_OBJECT + count, businessObject);
-                count++;
-            }
-            int createdCount = 0;
-            foreach (TBusinessObject createdBusinessObject in this.CreatedBusinessObjects)
-            {
-                info.AddValue(CREATED_BUSINESS_OBJECT + createdCount, createdBusinessObject);
-                createdCount++;
+                int count = 0;
+                info.AddValue(COUNT, Count);
+                info.AddValue(CREATED_COUNT, this.CreatedBusinessObjects.Count);
+                info.AddValue(CLASS_NAME, this.ClassDef.ClassName);
+                info.AddValue(ASSEMBLY_NAME, this.ClassDef.AssemblyName);
+                foreach (TBusinessObject businessObject in this)
+                {
+                    info.AddValue(BUSINESS_OBJECT + count, businessObject);
+                    count++;
+                }
+                int createdCount = 0;
+                foreach (TBusinessObject createdBusinessObject in this.CreatedBusinessObjects)
+                {
+                    info.AddValue(CREATED_BUSINESS_OBJECT + createdCount, createdBusinessObject);
+                    createdCount++;
+                }
             }
         }
 

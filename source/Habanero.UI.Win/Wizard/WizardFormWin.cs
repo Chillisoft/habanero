@@ -116,7 +116,7 @@ namespace Habanero.UI.Win
         /// Forces the form to invalidate its client area and
         /// immediately redraw itself and any child controls
         /// </summary>
-        public void Refresh()
+        public new void Refresh()
         {
             // do nothing
         }

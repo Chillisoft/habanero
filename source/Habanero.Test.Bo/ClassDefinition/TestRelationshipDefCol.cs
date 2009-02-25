@@ -53,7 +53,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestThisIndexerException()
         {
             RelationshipDefCol col = new RelationshipDefCol();
-            RelationshipDef relDef = col["rel"];
+            IRelationshipDef relDef = col["rel"];
         }
 
         // Grants access to protected methods

@@ -194,7 +194,7 @@ namespace Habanero.Test.BO
             TransactionCommitterDB tc = new TransactionCommitterDB();
             tc.AddBusinessObject(cp);
             tc.CommitTransaction();
-            cp.Delete();
+            cp.MarkForDelete();
             tc = new TransactionCommitterDB();
             tc.AddBusinessObject(cp);
             //---------------Execute Test ----------------------
@@ -253,7 +253,7 @@ namespace Habanero.Test.BO
             }
                
                 //---------------Test Result -----------------------
-            catch (BusObjDuplicateConcurrencyControlException ex)
+            catch (BusObjDuplicateConcurrencyControlException)
             {
             }
 
@@ -284,7 +284,7 @@ namespace Habanero.Test.BO
             cp.Save();
             cp.Surname = Guid.NewGuid().ToString();
             cp.Save();
-            cp.Delete();
+            cp.MarkForDelete();
             cp.Save();
             BusinessObjectCollection<TransactionLogBusObj> colTransactions =
                 new BusinessObjectCollection<TransactionLogBusObj>();

@@ -598,7 +598,7 @@ namespace Habanero.UI.Base
             if (dataSetProvider != null)
             {
                 dataSetProvider.ObjectInitialiser =
-                    new RelationshipObjectInitialiser(bo, classDef.GetRelationship(formGrid.RelationshipName),
+                    new RelationshipObjectInitialiser(bo, (RelationshipDef) classDef.GetRelationship(formGrid.RelationshipName),
                                                       formGrid.CorrespondingRelationshipName);
             }
             IBusinessObjectCollection collection =

@@ -84,7 +84,7 @@ namespace Habanero.Base
         }
 
         ///<summary>
-        /// The right field delimiter to be used for formatting a sql statement<
+        /// The right field delimiter to be used for formatting a sql statement
         ///</summary>
         public string RightFieldDelimiter
         {

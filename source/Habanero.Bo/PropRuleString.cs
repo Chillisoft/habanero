@@ -125,31 +125,31 @@ namespace Habanero.BO
             {
                 foreach (string key in _parameters.Keys)
                 {
-                	object value = _parameters[key];
-					if (value != null)
-					{
-						switch (key)
-						{
-							case "patternMatch":
-								_patternMatch = Convert.ToString(value);
-								break;
-                            case "patternMatchMessage":
-								_patternMatchMessage = Convert.ToString(value);
-								break;
-							case "minLength":
-								_minLength = Convert.ToInt32(value);
-								break;
-							case "maxLength":
-								_maxLength = Convert.ToInt32(value);
-								break;
-							default:
-								throw new InvalidXmlDefinitionException(String.Format(
-                                	"The rule type '{0}' for strings does not exist. " +
-                                	"Check spelling and capitalisation, or see the " +
-                                	"documentation for existing options or ways to " +
-                                	"add options of your own.", key));
-						}
-					}
+                    object value = _parameters[key];
+                    if (value == null) continue;
+
+                    switch (key)
+                    {
+                        case "patternMatch":
+                            _patternMatch = Convert.ToString(value);
+                            break;
+                        case "patternMatchMessage":
+                            _patternMatchMessage = Convert.ToString(value);
+                            break;
+                        case "minLength":
+                            _minLength = Convert.ToInt32(value);
+                            break;
+                        case "maxLength":
+                            _maxLength = Convert.ToInt32(value);
+                            break;
+                        default:
+                            throw new InvalidXmlDefinitionException
+                                (String.Format
+                                     ("The rule type '{0}' for strings does not exist. "
+                                      + "Check spelling and capitalisation, or see the "
+                                      + "documentation for existing options or ways to "
+                                      + "add options of your own.", key));
+                    }
                 }
             }
             catch (InvalidXmlDefinitionException)

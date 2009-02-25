@@ -130,7 +130,7 @@ namespace Habanero.Test.BO
             ContactPerson contactPerson = new ContactPerson();
             IBOProp dateBoProp = contactPerson.Props["DateLastUpdated"];
             IBOProp userBoProp = contactPerson.Props["UserLastUpdated"];
-            contactPerson.Restore();
+            contactPerson.CancelEdits();
             ISecurityController securityController = new MySecurityController();
             GlobalRegistry.SecurityController = securityController;
             BusinessObjectLastUpdatePropertiesLog log = new BusinessObjectLastUpdatePropertiesLog(contactPerson);
@@ -180,7 +180,7 @@ namespace Habanero.Test.BO
             ContactPerson contactPerson = new ContactPerson();
             contactPerson.Props.Remove("DateLastUpdated");
             contactPerson.Props.Remove("UserLastUpdated");
-            contactPerson.Restore();
+            contactPerson.CancelEdits();
             ISecurityController securityController = new MySecurityController();
             GlobalRegistry.SecurityController = securityController;
             BusinessObjectLastUpdatePropertiesLog log = new BusinessObjectLastUpdatePropertiesLog(contactPerson);

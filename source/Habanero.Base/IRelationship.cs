@@ -58,6 +58,9 @@ namespace Habanero.Base
         /// </summary>
         string RelationshipName { get; }
 
+        ///<summary>
+        /// Returns true if the Relationship is initialised or not.
+        ///</summary>
         bool Initialised { get; }
 
         ///<summary>

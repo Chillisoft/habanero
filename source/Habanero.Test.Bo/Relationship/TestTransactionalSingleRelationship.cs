@@ -41,8 +41,8 @@ namespace Habanero.Test.BO.Relationship
         public void Test_TransactionID()
         {
             //---------------Set up test pack-------------------
-            TransactionalSingleRelationship_Added transactionalSingleRelationship1 = new TransactionalSingleRelationship_Added(null);
-            TransactionalSingleRelationship_Added transactionalSingleRelationship2 = new TransactionalSingleRelationship_Added(null);
+            TransactionalSingleRelationship_Added transactionalSingleRelationship1 = new TransactionalSingleRelationship_Added(null, new Car());
+            TransactionalSingleRelationship_Added transactionalSingleRelationship2 = new TransactionalSingleRelationship_Added(null, new Car());
             
             //---------------Execute Test ----------------------
             string transactionID1 = transactionalSingleRelationship1.TransactionID();
@@ -63,7 +63,7 @@ namespace Habanero.Test.BO.Relationship
             SingleRelationship<OrganisationTestBO> singleRelationship = contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation");
 
             //---------------Execute Test ----------------------
-            TransactionalSingleRelationship_Added tsr = new TransactionalSingleRelationship_Added(singleRelationship);
+            TransactionalSingleRelationship_Added tsr = new TransactionalSingleRelationship_Added(singleRelationship, new OrganisationTestBO());
             //---------------Test Result -----------------------
 
             Assert.AreSame(singleRelationship, tsr.Relationship);
@@ -79,7 +79,9 @@ namespace Habanero.Test.BO.Relationship
 
             SingleRelationship<OrganisationTestBO> singleRelationship = contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation");
             singleRelationship.SetRelatedObject(organisationTestBO);
-            TransactionalSingleRelationship_Added tsr = new TransactionalSingleRelationship_Added(singleRelationship);
+
+            IRelationship relationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            TransactionalSingleRelationship_Added tsr = new TransactionalSingleRelationship_Added(relationship, contactPersonTestBO);
             IBOProp relationshipProp = contactPersonTestBO.Props["OrganisationID"];
             
             //---------------Assert PreConditions--------------- 
@@ -101,10 +103,11 @@ namespace Habanero.Test.BO.Relationship
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPerson();
             OrganisationTestBO organisationTestBO = new OrganisationTestBO();
 
-            SingleRelationship<OrganisationTestBO> singleRelationship = contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation");
+            //SingleRelationship<OrganisationTestBO> singleRelationship = contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation");
             BusinessObjectCollection<ContactPersonTestBO> people = organisationTestBO.ContactPeople;
             contactPersonTestBO.Organisation = organisationTestBO;
-            TransactionalSingleRelationship_Added tsr = new TransactionalSingleRelationship_Added(singleRelationship);
+            IRelationship relationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            TransactionalSingleRelationship_Added tsr = new TransactionalSingleRelationship_Added(relationship, contactPersonTestBO);
             //---------------Assert PreConditions--------------- 
 
             Assert.AreEqual(1, people.AddedBusinessObjects.Count);
@@ -133,7 +136,8 @@ namespace Habanero.Test.BO.Relationship
             contactPersonTestBO.Organisation = organisationTestBO;
             contactPersonTestBO.Save();
             contactPersonTestBO.Organisation = null;
-            TransactionalSingleRelationship_Removed tsr = new TransactionalSingleRelationship_Removed(singleRelationship);
+            IRelationship relationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            TransactionalSingleRelationship_Removed tsr = new TransactionalSingleRelationship_Removed(relationship, contactPersonTestBO);
             //---------------Assert PreConditions--------------- 
 
             Assert.AreEqual(1, people.RemovedBusinessObjects.Count);
@@ -146,7 +150,7 @@ namespace Habanero.Test.BO.Relationship
 
             Assert.AreEqual(0, people.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, people.PersistedBusinessObjects.Count);
-            Assert.IsFalse(singleRelationship.IsRemoved);
+//            Assert.IsFalse(singleRelationship.IsRemoved);
             //---------------Tear Down -------------------------          
         }
 
@@ -159,8 +163,8 @@ namespace Habanero.Test.BO.Relationship
 
             SingleRelationship<OrganisationTestBO> singleRelationship = contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation");
             singleRelationship.SetRelatedObject(organisationTestBO);
-            
-            TransactionalSingleRelationship_Added tsr = new TransactionalSingleRelationship_Added(singleRelationship);
+            IRelationship relationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            TransactionalSingleRelationship_Added tsr = new TransactionalSingleRelationship_Added(relationship, contactPersonTestBO);
             
             //---------------Assert PreConditions--------------- 
             Assert.IsTrue(contactPersonTestBO.Status.IsDirty);
@@ -182,7 +186,7 @@ namespace Habanero.Test.BO.Relationship
 
             SingleRelationship<OrganisationTestBO> singleRelationship = contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation");
             singleRelationship.SetRelatedObject(organisationTestBO);
-            TransactionalSingleRelationship_Added tsr = new TransactionalSingleRelationship_Added(singleRelationship);
+            TransactionalSingleRelationship_Added tsr = new TransactionalSingleRelationship_Added(singleRelationship, organisationTestBO);
 
             contactPersonTestBO.Surname = TestUtil.GetRandomString();
             

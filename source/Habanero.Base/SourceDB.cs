@@ -26,8 +26,12 @@ namespace Habanero.Base
     /// </summary>
     public class SourceDB : Source
     {
-        private Source _source;
+        private readonly Source _source;
 
+        ///<summary>
+        /// Constructor for SourceDB
+        ///</summary>
+        ///<param name="source"></param>
         public SourceDB(Source source)
             : base(source.Name, source.EntityName)
         {
@@ -76,7 +80,7 @@ namespace Habanero.Base
             return CreateSQL(new SqlFormatter("", "", "", ""));
         }
 
-        private string GetJoinString(Source source, SqlFormatter sqlFormatter)
+        private string GetJoinString(Source source, ISqlFormatter sqlFormatter)
         {
             string joinString = "";
             foreach (Join join in source.Joins)
@@ -131,7 +135,7 @@ namespace Habanero.Base
             return GetTableJoinString(this, sqlFormatter) +  GetJoinString(this, sqlFormatter);
         }
 
-        private string GetTableJoinString(Source source, SqlFormatter sqlFormatter)
+        private string GetTableJoinString(Source source, ISqlFormatter sqlFormatter)
         {
             string joinString = sqlFormatter.DelimitTable(EntityName);
             joinString = GetInheritanceJoinString(sqlFormatter, source, joinString);

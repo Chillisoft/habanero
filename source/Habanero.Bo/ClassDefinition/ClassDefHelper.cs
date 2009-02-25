@@ -57,9 +57,9 @@ namespace Habanero.BO.ClassDefinition
                 {
                     if (relationshipDefCol.Contains(relName))
                     {
-                        RelationshipDef relationshipDef = relationshipDefCol[relName];
-                        ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
-                        propDef = GetPropDefByPropName(relatedClassDef, propertyName);
+                        IRelationshipDef relationshipDef = relationshipDefCol[relName];
+                        IClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
+                        propDef = GetPropDefByPropName((ClassDef) relatedClassDef, propertyName);
                     }
                     if (propDef != null)
                     {
@@ -68,17 +68,8 @@ namespace Habanero.BO.ClassDefinition
                 }
                 return null;
             }
-            else
-            {
-                IPropDefCol propDefCol = classDef.PropDefColIncludingInheritance;
-                if (propDefCol.Contains(propertyName))
-                {
-                    return propDefCol[propertyName];
-                } else
-                {
-                    return null;
-                }
-            }
+            IPropDefCol propDefCol = classDef.PropDefColIncludingInheritance;
+            return propDefCol.Contains(propertyName) ? propDefCol[propertyName] : null;
         }
     }
 }

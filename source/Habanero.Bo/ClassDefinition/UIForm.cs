@@ -28,11 +28,10 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class UIForm : ICollection, IEquatable<UIForm>
     {
-        private IList _list;
+        private readonly IList _list;
         private int _width;
         private int _height;
         private string _title;
-        private UIDef _uiDef;
 
         /// <summary>
         /// Constructor to initialise a new definition
@@ -155,11 +154,10 @@ namespace Habanero.BO.ClassDefinition
             get { return _title; }
         }
 
-        public UIDef UIDef
-        {
-            get { return _uiDef; }
-            internal set { _uiDef = value; }
-        }
+        ///<summary>
+        /// The UI Def that this UIForm is related to.
+        ///</summary>
+        public UIDef UIDef { get; internal set; }
 
         ///<summary>
         ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
@@ -169,7 +167,7 @@ namespace Habanero.BO.ClassDefinition
         ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
         ///</returns>
         ///
-        ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
+        /////<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
         //public override bool Equals(object obj)
         //{
         //    if (obj == null)
@@ -209,7 +207,7 @@ namespace Habanero.BO.ClassDefinition
         public static bool operator ==(UIForm a, UIForm b)
         {
             // If both are null, or both are same instance, return true.
-            if (System.Object.ReferenceEquals(a, b))
+            if (ReferenceEquals(a, b))
             {
                 return true;
             }
@@ -260,7 +258,7 @@ namespace Habanero.BO.ClassDefinition
         ///true if the current object is equal to the other parameter; otherwise, false.
         ///</returns>
         ///
-        ///<param name="other">An object to compare with this object.</param>
+        ///<param name="otherUIForm">An object to compare with this object.</param>
         public bool Equals(UIForm otherUIForm)
         {
             if (otherUIForm == null) return false;

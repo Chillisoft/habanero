@@ -42,6 +42,26 @@ namespace Habanero.Test.BO
 
         private bool _afterLoadCalled;
 
+        public static ClassDef LoadDefaultClassDef_WOrganisationID()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property name=""ContactPersonID"" type=""Guid"" />
+					<property name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property name=""FirstName"" databaseField=""FirstName_field"" />
+					<property name=""DateOfBirth"" type=""DateTime"" />
+                    <property name=""OrganisationID"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         public static ClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -350,7 +370,8 @@ namespace Habanero.Test.BO
 			    </class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
-            CreateRelatedAddressClassDef(itsLoader);
+            if (!ClassDef.ClassDefs.Contains(typeof(AddressTestBO)))
+                AddressTestBO.LoadDefaultClassDef();
             return itsClassDef;
         }
 
@@ -414,7 +435,8 @@ namespace Habanero.Test.BO
 			    </class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
-            CreateRelatedAddressClassDef(itsLoader);
+            if (!ClassDef.ClassDefs.Contains(typeof(AddressTestBO)))
+                AddressTestBO.LoadDefaultClassDef();
             return itsClassDef;
         }
 
@@ -502,30 +524,12 @@ namespace Habanero.Test.BO
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
 
-            CreateRelatedAddressClassDef(itsLoader);
+            if (!ClassDef.ClassDefs.Contains(typeof(AddressTestBO)))
+                AddressTestBO.LoadDefaultClassDef();
             return itsClassDef;
         }
 
-        private static void CreateRelatedAddressClassDef(XmlClassLoader itsLoader)
-        {
-            ClassDef addressClassDef =
-                itsLoader.LoadClass(
-                    @"
-				<class name=""AddressTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person_address"">
-					<property  name=""AddressID"" type=""Guid"" />
-                    <property name=""AddressLine1"" />
-                    <property name=""OrganisationID"" type=""Guid"" />
-                    <property  name=""ContactPersonID"" type=""Guid"" />
-					<primaryKey>
-						<prop name=""AddressID"" />
-					</primaryKey>
-					<relationship name=""ContactPersonTestBO"" type=""single"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DoNothing"" reverseRelationship=""Addresses"">
-						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
-					</relationship>
-			    </class>
-			");
-            ClassDef.ClassDefs.Add(addressClassDef);
-        }
+
 
 
         public static ClassDef LoadClassDefWithAddressesRelationship_SortOrder_AddressLine1()
@@ -549,7 +553,8 @@ namespace Habanero.Test.BO
 			    </class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
-            CreateRelatedAddressClassDef(itsLoader);
+            if (!ClassDef.ClassDefs.Contains(typeof(AddressTestBO)))
+                AddressTestBO.LoadDefaultClassDef();
             return itsClassDef;
         }
 
@@ -611,8 +616,7 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
-
-        public static ClassDef LoadClassDefOrganisationRelationship()
+        public static ClassDef LoadClassDef_NoOrganisationRelationship()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef =
@@ -624,7 +628,7 @@ namespace Habanero.Test.BO
                     <property  name=""FirstName"" databaseField=""FirstName_field"" compulsory=""true"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
                     <property  name=""OrganisationID"" type=""Guid"" >
-                      <businessObjectLookupList class=""Organisation"" assembly=""Habanero.Test"" />
+                      <businessObjectLookupList class=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" />
                     </property>
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
@@ -640,6 +644,34 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
+
+//        public static ClassDef LoadClassDef_NoOrganisationRelationshipDefined()
+//        {
+//            XmlClassLoader itsLoader = new XmlClassLoader();
+//            ClassDef itsClassDef =
+//                itsLoader.LoadClass(
+//                    @"
+//				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+//					<property  name=""ContactPersonID"" type=""Guid"" />
+//					<property  name=""Surname"" compulsory=""true"" databaseField=""Surname_field"" />
+//                    <property  name=""FirstName"" compulsory=""true"" databaseField=""FirstName_field"" />
+//					<property  name=""DateOfBirth"" type=""DateTime"" />
+//                    <property  name=""OrganisationID"" type=""Guid"" >
+//                      <businessObjectLookupList class=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" />
+//                    </property>
+//					<primaryKey>
+//						<prop name=""ContactPersonID"" />
+//					</primaryKey>
+//					<ui>
+//						<grid>
+//							<column heading=""OrganisationID"" property=""OrganisationID"" type=""DataGridViewComboBoxColumn"" />
+//						</grid>
+//                    </ui>
+//			    </class>
+//			");
+//            ClassDef.ClassDefs.Add(itsClassDef);
+//            return itsClassDef;
+//        }
         public static ClassDef LoadClassDefOrganisationTestBORelationship_MultipleReverse()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -688,7 +720,37 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
-                    <relationship name=""Organisation"" type=""single"" relatedClass=""OrganisationTestBO"" relatedAssembly=""Habanero.Test.BO""                                           reverseRelationship=""ContactPerson"">
+                    <relationship name=""Organisation"" type=""single"" relatedClass=""OrganisationTestBO"" relatedAssembly=""Habanero.Test.BO"" reverseRelationship=""ContactPerson"">
+						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
+					</relationship>
+					<ui>
+						<grid>
+							<column heading=""OrganisationID"" property=""OrganisationID"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+                    </ui>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+        public static ClassDef LoadClassDefOrganisationTestBORelationship_SingleReverse_NoReverse()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" databaseField=""Surname_field"" />
+                    <property  name=""FirstName"" compulsory=""true"" databaseField=""FirstName_field"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+                    <property  name=""OrganisationID"" type=""Guid"" >
+                      <businessObjectLookupList class=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" />
+                    </property>
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+                    <relationship name=""Organisation"" type=""single"" relatedClass=""OrganisationTestBO"" relatedAssembly=""Habanero.Test.BO"">
 						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
 					</relationship>
 					<ui>

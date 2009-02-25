@@ -51,14 +51,14 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(true, def.IsGuidObjectID, "Def should by default be an objectID");
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), "An invalid node 'primaryKeyDef' was encountered when loading the class definitions.")]
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), ExpectedMessage = "An invalid node 'primaryKeyDef' was encountered when loading the class definitions.")]
 
         public void TestWrongElementName()
         {
             itsLoader.LoadPrimaryKey(@"<primaryKeyDef><prop name=""TestProp"" /></primaryKeyDef>", itsPropDefs);
         }
 
-        [Test, ExpectedException(typeof (InvalidXmlDefinitionException), "A primaryKey node must have one or more prop nodes")]
+        [Test, ExpectedException(typeof (InvalidXmlDefinitionException), ExpectedMessage = "A primaryKey node must have one or more prop nodes")]
         public void TestWithNoProps()
         {
             itsLoader.LoadPrimaryKey(@"<primaryKey></primaryKey>", itsPropDefs);

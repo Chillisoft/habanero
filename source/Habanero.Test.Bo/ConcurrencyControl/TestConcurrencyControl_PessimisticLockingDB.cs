@@ -319,7 +319,7 @@ namespace Habanero.Test.BO
             concurrCntrl.CheckConcurrencyBeforeBeginEditing();
             //---------------Execute Test ----------------------
 
-            cp.Restore();
+            cp.CancelEdits();
 
             //---------------Test Result -----------------------
             //Test that locked.

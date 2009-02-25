@@ -41,6 +41,21 @@ namespace Habanero.Test.General
 
 
         [Test]
+        public void Test_NoColumnName_DoesntError()
+        {
+            //---------------Set up test pack-------------------
+            string sql = "Select FirstName + ', ' + Surname from contactpersoncompositekey";
+            SqlStatement sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection,sql);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+
+            DataTable dataTable = DatabaseConnection.CurrentConnection.LoadDataTable(sqlStatement, "", "");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, dataTable.Columns.Count);
+        }
+
+        [Test]
         public void TestDataReader()
         {
             //DatabaseConnection.CurrentConnection.ConnectionString =
@@ -220,6 +235,25 @@ namespace Habanero.Test.General
             Assert.AreEqual("]", dbConn.RightFieldDelimiter);
             StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
             Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
+        }
+
+        [Test]
+        public void Test_NoColumnName_DoesntError_SqlServer()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConfig databaseConfig = new DatabaseConfig("SqlServer", "localhost", "habanero_test_trunk", "sa", "sa", null);
+            DatabaseConnection.CurrentConnection = databaseConfig.GetDatabaseConnection();
+            //DatabaseConnection.CurrentConnection = new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection","server=localhost;database=habanero_test_trunk;user=sa;password=sa");
+            const string sql = "Select FirstName + ', ' + Surname from tbPersonTable";
+            SqlStatement sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection, sql);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+
+            DataTable dataTable = DatabaseConnection.CurrentConnection.LoadDataTable(sqlStatement, "", "");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, dataTable.Columns.Count);
+            this.SetupDBConnection();
         }
         internal class DatabaseConnection_Stub : DatabaseConnection
         {

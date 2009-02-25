@@ -298,9 +298,9 @@ namespace Habanero.BO
             try
             {
                 _isBeingAdded = true;
-                _collection.BusinessObjectAdded -= AddedHandler;
+               _collection.BusinessObjectAdded -= AddedHandler;
                 BusinessObject newBo = (BusinessObject) _collection.CreateBusinessObject();
-                _collection.BusinessObjectAdded += AddedHandler;
+               _collection.BusinessObjectAdded += AddedHandler;
 
                 //log.Debug("Initialising obj");
                 if (this._objectInitialiser != null)

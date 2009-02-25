@@ -83,10 +83,12 @@
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
     <Compile Include="ButtonsControl\TestButtonGroupControl.cs" />
+    <Compile Include="TestCollapsiblePanel.cs" />
     <Compile Include="FilterController\TestFilterControlBuilder.cs" />
     <Compile Include="FilterController\TestFilterControlManager.cs" />
     <Compile Include="FilterController\TestStringTextBoxFilter.cs" />
     <Compile Include="Grid\TestDataGridView.cs" />
+    <Compile Include="Mappers\TestEditableGridMapper.cs" />
     <Compile Include="Mappers\TestExtendedLookupComboBoxMapper.cs" />
     <Compile Include="PanelBuilder\TestPanelBuilder.cs" />
     <Compile Include="PanelBuilder\TestPanelInfo.cs" />

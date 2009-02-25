@@ -21,6 +21,7 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using Habanero.DB;
 
 namespace Habanero.Test.BO
@@ -44,7 +45,7 @@ namespace Habanero.Test.BO
         {
             return ClassDef.IsDefined(typeof (AddressTestBO))
                        ? ClassDef.ClassDefs[typeof (AddressTestBO)]
-                       : CreateClassDef();
+                       : LoadDefaultClassDef();
         }
 
         protected override ClassDef ConstructClassDef()
@@ -52,56 +53,43 @@ namespace Habanero.Test.BO
             return GetClassDef();
         }
 
-        private static ClassDef CreateClassDef()
+        public static ClassDef LoadDefaultClassDef()
         {
-            PropDefCol propDefCol = CreateBOPropDef();
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""AddressTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person_address"">
+					<property name=""AddressID"" type=""Guid"" />
+                    <property name=""ContactPersonID"" type=""Guid"" />
+					<property name=""OrganisationID"" type=""Guid""  />
+                    <property name=""AddressLine1""  />
+					<property name=""AddressLine2""  />
+					<property name=""AddressLine3""  />
+					<property name=""AddressLine4""  />
+					<primaryKey>
+						<prop name=""AddressID"" />
+					</primaryKey>
+                    <relationship name=""ContactPersonTestBO"" type=""single"" relatedClass=""ContactPersonTestBO"" relatedAssembly=""Habanero.Test.BO"" reverseRelationship=""Addresses"">
+						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
+					</relationship>
+                    <ui>
+						<grid>
+							<column heading=""AddressLine1"" property=""AddressLine1"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""AddressLine2"" property=""AddressLine2"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""AddressLine3"" property=""AddressLine3"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""AddressLine4"" property=""AddressLine4"" type=""DataGridViewTextBoxColumn"" />
+						</grid>
+					</ui>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
 
-            KeyDefCol keysCol = new KeyDefCol();
-
-            PrimaryKeyDef primaryKey = new PrimaryKeyDef();
-            primaryKey.IsGuidObjectID = true;
-            primaryKey.Add(propDefCol["AddressID"]);
-
-            RelationshipDefCol relDefCol = CreateRelationshipDefCol(propDefCol);
-
-            ClassDef classDef = new ClassDef(typeof (AddressTestBO), primaryKey, "contact_person_address", propDefCol, keysCol,
-                                             relDefCol);
-            ClassDef.ClassDefs.Add(classDef);
-            return classDef;
         }
 
-        private static RelationshipDefCol CreateRelationshipDefCol(IPropDefCol lPropDefCol)
-        {
-            RelationshipDefCol relDefCol = new RelationshipDefCol();
 
-            //Define Relationships
-            RelKeyDef relKeyDef = new RelKeyDef();
-            IPropDef propDef = lPropDefCol["ContactPersonID"];
-
-            RelPropDef relPropDef = new RelPropDef(propDef, "ContactPersonID");
-            relKeyDef.Add(relPropDef);
-
-            RelationshipDef relDef = new SingleRelationshipDef("ContactPersonTestBO", typeof(ContactPersonTestBO), relKeyDef, false,
-                                                               DeleteParentAction.Prevent);
-
-            relDefCol.Add(relDef);
-
-            return relDefCol;
-        }
-
-        private static PropDefCol CreateBOPropDef()
-        {
-            PropDefCol propDefCol = new PropDefCol();
-            propDefCol.Add("AddressID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
-            propDefCol.Add("ContactPersonID", typeof (Guid), PropReadWriteRule.ReadWrite, null);
-            propDefCol.Add("AddressLine1", typeof (String), PropReadWriteRule.ReadWrite, null);
-            propDefCol.Add("AddressLine2", typeof (String), PropReadWriteRule.ReadWrite, null);
-            propDefCol.Add("AddressLine3", typeof (String), PropReadWriteRule.ReadWrite, null);
-            propDefCol.Add("AddressLine4", typeof (String), PropReadWriteRule.ReadWrite, null);
-            propDefCol.Add("OrganisationID", typeof (Guid), PropReadWriteRule.ReadWrite, null);
-            return propDefCol;
-        }
-
+      
         #endregion //Constructors
 
         #region Properties

@@ -122,6 +122,20 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual(typeof(Habanero.UI.Win.ComboBoxWin), controlHabanero.GetType());
                 //---------------Tear Down -------------------------   
             }
+
+            [Test]
+            public void TestCreateControl_ViaType_CreateEditableGridControl()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Verify test pack-------------------
+                //---------------Execute Test ----------------------
+                IControlHabanero controlHabanero = _factory.CreateControl(typeof(Habanero.UI.Win.EditableGridControlWin));
+                //---------------Verify Result -----------------------
+                Assert.IsNotNull(controlHabanero);
+                Assert.AreEqual(typeof(Habanero.UI.Win.EditableGridControlWin), controlHabanero.GetType());
+                //---------------Tear Down -------------------------   
+            }
+
             [Test]
             public void TestCreateControl_ViaType_CreateCheckBox()
             {
@@ -1013,7 +1027,7 @@ namespace Habanero.Test.UI.Base
             {
                 IDataGridViewColumn column = GetControlFactory().CreateDataGridViewColumn("InvalidColumnType", null);
             }
-            catch (UnknownTypeNameException ex)
+            catch (UnknownTypeNameException)
             {
                 errorThrown = true;
             }
@@ -1033,7 +1047,7 @@ namespace Habanero.Test.UI.Base
             {
                 object column = GetControlFactory().CreateDataGridViewColumn(wrongType);
             }
-            catch (UnknownTypeNameException ex)
+            catch (UnknownTypeNameException)
             {
                 errorThrown = true;
             }

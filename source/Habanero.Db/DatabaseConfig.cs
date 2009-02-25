@@ -32,13 +32,44 @@ namespace Habanero.DB
     /// </summary>
     public  class DatabaseConfig : IDatabaseConfig
     {
+        /// <summary>
+        /// MySql - the MySql .NET data provider will be used
+        /// </summary>
         public const string MySql = "MYSQL";
+
+        /// <summary>
+        /// Microsoft Sql Server - the built in SqlClient data provider will be used
+        /// </summary>
         public const string SqlServer = "SQLSERVER";
+
+        /// <summary>
+        /// Oracle - the built in Oracle data provider will be used
+        /// </summary>
         public const string Oracle = "ORACLE";
+
+        /// <summary>
+        /// Access - the built in OleDb data provider will be used
+        /// </summary>
 		public const string Access = "ACCESS";
+        
+        /// <summary>
+        /// PostGreSQL - the PostGreSQL data provider will be used
+        /// </summary>
         public const string PostgreSql = "POSTGRESQL";
+
+        /// <summary>
+        /// SQLite - the SQLite data provider will be used
+        /// </summary>
         public const string SQLite = "SQLITE";
+
+        /// <summary>
+        /// Firebird - the Firebird data provider will be used
+        /// </summary>
         public const string Firebird = "FIREBIRD";
+
+        /// <summary>
+        /// Firebird embedded - the Firebird embedded data provider will be used
+        /// </summary>
         public const string FirebirdEmbedded = "FIREBIRDEMBEDDED";
 
         private String _vendor;

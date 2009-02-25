@@ -743,13 +743,13 @@ namespace Habanero.Test.BO
         public void TestBoStatusEqual()
         {
             //---------------Set up test pack-------------------
-            BOStatus boStatus1 = new BOStatus(null);
+            BOStatus boStatus1 = new BOStatus(new Car());
             boStatus1.SetBOFlagValue(BOStatus.Statuses.isDeleted, true);
             boStatus1.SetBOFlagValue(BOStatus.Statuses.isDirty, false);
             boStatus1.SetBOFlagValue(BOStatus.Statuses.isEditing, true);
             boStatus1.SetBOFlagValue(BOStatus.Statuses.isNew, false);
 
-            BOStatus boStatus2 = new BOStatus(null);
+            BOStatus boStatus2 = new BOStatus(new Car());
             boStatus2.SetBOFlagValue(BOStatus.Statuses.isDeleted, true);
             boStatus2.SetBOFlagValue(BOStatus.Statuses.isDirty, false);
             boStatus2.SetBOFlagValue(BOStatus.Statuses.isEditing, true);
@@ -765,7 +765,7 @@ namespace Habanero.Test.BO
         public void TestBoStatusEqual_Null()
         {
             //---------------Set up test pack-------------------
-            BOStatus boStatus1 = new BOStatus(null);
+            BOStatus boStatus1 = new BOStatus(new Car());
             //---------------Execute Test ----------------------
             bool equal = boStatus1.Equals(null);
             //---------------Test Result -----------------------
@@ -776,10 +776,10 @@ namespace Habanero.Test.BO
         public void TestBoStatusNotEqual()
         {
             //---------------Set up test pack-------------------
-            BOStatus boStatus1 = new BOStatus(null);
+            BOStatus boStatus1 = new BOStatus(new Car());
             boStatus1.SetBOFlagValue(BOStatus.Statuses.isDeleted, true);
 
-            BOStatus boStatus2 = new BOStatus(null);
+            BOStatus boStatus2 = new BOStatus(new Car());
             boStatus2.SetBOFlagValue(BOStatus.Statuses.isDeleted, false);
             //---------------Execute Test ----------------------
             bool equal = boStatus1.Equals(boStatus2);

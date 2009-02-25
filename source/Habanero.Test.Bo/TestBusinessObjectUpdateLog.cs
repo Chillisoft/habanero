@@ -158,7 +158,7 @@ namespace Habanero.Test.BO
             transactionCommitterStub.AddBusinessObject(myBusinessObjectUpdateLogBo);
             transactionCommitterStub.CommitTransaction();
             BusinessObjectUpdateLogStub businessObjectUpdateLog = myBusinessObjectUpdateLogBo.BusinessObjectUpdateLog as BusinessObjectUpdateLogStub;
-            myBusinessObjectUpdateLogBo.Delete();
+            myBusinessObjectUpdateLogBo.MarkForDelete();
             transactionCommitterStub = new TransactionCommitterStub();
             transactionCommitterStub.AddBusinessObject(myBusinessObjectUpdateLogBo);
 

@@ -105,6 +105,9 @@
   <ItemGroup>
     <Compile Include="DateTimeUtilities.cs" />
     <Compile Include="FileUtilities.cs" />
+    <Compile Include="JpgMetaData.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -127,9 +130,6 @@
     </Compile>
     <Compile Include="IdNumberUtilities.cs" />
     <Compile Include="ImageThumbnailCreator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="JpgMetaData.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LongText.cs" />

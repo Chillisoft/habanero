@@ -18,8 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -88,12 +86,12 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             }
         }
 
-        private MultipleRelationship<ContactPersonTestBO> GetCompositionRelationship(out BusinessObjectCollection<ContactPersonTestBO> cpCol) {
+        private static MultipleRelationship<ContactPersonTestBO> GetCompositionRelationship(out BusinessObjectCollection<ContactPersonTestBO> cpCol) {
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             return GetCompositionRelationship(out cpCol, organisationTestBO);
         }
 
-        private MultipleRelationship<ContactPersonTestBO> GetCompositionRelationship(out BusinessObjectCollection<ContactPersonTestBO> cpCol, OrganisationTestBO organisationTestBO)
+        private static MultipleRelationship<ContactPersonTestBO> GetCompositionRelationship(out BusinessObjectCollection<ContactPersonTestBO> cpCol, OrganisationTestBO organisationTestBO)
         {
             MultipleRelationship<ContactPersonTestBO> compositionRelationship =
                 organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
@@ -212,7 +210,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol, organisationTestBO);
+            GetCompositionRelationship(out cpCol, organisationTestBO);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());
             util.RegisterForAddedAndRemovedEvents(cpCol);
 
@@ -296,7 +294,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             // In this case the organisation can not be set to null for myBO since myBO has
             //   been associated with am organisation.
             //---------------Set up test pack-------------------
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             MultipleRelationship<ContactPersonTestBO> compositionRelationship = GetCompositionRelationship(out cpCol);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson(TestUtil.GetRandomString(), TestUtil.GetRandomString());

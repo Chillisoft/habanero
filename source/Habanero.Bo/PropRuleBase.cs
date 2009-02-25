@@ -35,6 +35,10 @@ namespace Habanero.BO
     /// </summary>
     public abstract class PropRuleBase : IPropRule
     {
+        /// <summary>
+        /// A dictionary of parameters that are used for the different PropRules that Inherit from <see cref="PropRuleBase"/>
+        /// e.g. values of 'min' or 'max' for that particular rule.
+        /// </summary>
         protected Dictionary<string, object> _parameters;
 
 		/// <summary>

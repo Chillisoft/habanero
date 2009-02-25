@@ -256,7 +256,7 @@ namespace Habanero.BO
                 if (childSource != null)
                 {
                     string relationshipName = childSource.Name;
-                    RelationshipDef relationshipDef = currentClassDef.GetRelationship(relationshipName);
+                    IRelationshipDef relationshipDef = currentClassDef.GetRelationship(relationshipName);
                     if (relationshipDef == null)
                     {
                         string message = string.Format("'{0}' does not have a relationship called '{1}'.",
@@ -272,7 +272,7 @@ namespace Habanero.BO
                         QueryField toField = new QueryField(relPropDef.RelatedClassPropName, relatedFieldName, childSource);
                         currentSource.Joins[0].JoinFields.Add(new Source.Join.JoinField(fromField, toField));
                     }
-                    currentClassDef = relationshipDef.RelatedObjectClassDef;
+                    currentClassDef = (ClassDef) relationshipDef.RelatedObjectClassDef;
                 }
 
                 currentSource = childSource;

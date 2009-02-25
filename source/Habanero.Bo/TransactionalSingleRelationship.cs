@@ -26,29 +26,45 @@ namespace Habanero.BO
 {
     internal abstract class TransactionalSingleRelationship : ITransactionalDB
     {
-        private ISingleRelationship _singleRelationship;
-        private string _transactionID;
+        private readonly IRelationship _relationship;
+        private readonly IBusinessObject _relatedBO;
+        private readonly string _transactionID;
 
-        public TransactionalSingleRelationship(ISingleRelationship singleRelationship)
+        protected TransactionalSingleRelationship(IRelationship relationship, IBusinessObject relatedBO)
         {
+            if (relatedBO == null) throw new ArgumentNullException("relatedBO");
             _transactionID = Guid.NewGuid().ToString();
-            _singleRelationship = singleRelationship;
-
+            _relationship = relationship;
+            _relatedBO = relatedBO;
         }
 
-        public ISingleRelationship Relationship { get { return _singleRelationship; } }
+        public IRelationship Relationship { get { return _relationship; } }
 
+        protected IBusinessObject RelatedBO
+        {
+            get { return _relatedBO; }
+        }
+
+        ///<summary>
+        ///</summary>
+        ///<returns>The ID that uniquelty identifies this item of the transaction. In the case of business objects the object Id.
+        /// for non business objects that no natural id exists for the particular transactional item a guid that uniquely identifies 
+        /// transactional item should be generated. This is used by the transaction committer to ensure that the transactional item
+        /// is not added twice in error.</returns>
         public string TransactionID()
         {
             return _transactionID;
         }
 
+        ///<summary>
+        /// Updates the business object as committed
+        ///</summary>
         public void UpdateStateAsCommitted()
         {
-            BusinessObject businessObject = (BusinessObject) _singleRelationship.OwningBO;
-            foreach (IRelPropDef relPropDef in _singleRelationship.RelationshipDef.RelKeyDef)
+            BusinessObject businessObject = (BusinessObject)RelatedBO;
+            foreach (IRelPropDef relPropDef in _relationship.RelationshipDef.RelKeyDef)
             {
-                businessObject.Props[relPropDef.OwnerPropertyName].BackupPropValue();
+                businessObject.Props[relPropDef.RelatedClassPropName].BackupPropValue();
             }
             UpdateCollections();
             ((Relationship)Relationship).UpdateRelationshipAsPersisted();
@@ -57,47 +73,50 @@ namespace Habanero.BO
 
         protected abstract void UpdateCollections();
 
+        ///<summary>
+        /// updates the object as rolled back
+        ///</summary>
         public void UpdateAsRolledBack() { }
 
         public virtual ISqlStatementCollection GetPersistSql()
         {
-            UpdateStatementGenerator gen = new UpdateStatementGenerator(Relationship.OwningBO, DatabaseConnection.CurrentConnection);
-            return gen.GenerateForRelationship(Relationship);
+            UpdateStatementGenerator gen = new UpdateStatementGenerator(RelatedBO, DatabaseConnection.CurrentConnection);
+            return gen.GenerateForRelationship(Relationship, RelatedBO);
         }
     }
 
     internal class TransactionalSingleRelationship_Added : TransactionalSingleRelationship
     {
-        public TransactionalSingleRelationship_Added(ISingleRelationship singleRelationship) : base(singleRelationship)
+        internal TransactionalSingleRelationship_Added(IRelationship singleRelationship, IBusinessObject relatedBO)
+            : base(singleRelationship, relatedBO)
         {}
 
         protected override void UpdateCollections()
         {
-            RelationshipBase relationshipBase = (RelationshipBase)Relationship;
-            IMultipleRelationship reverseRelationship = relationshipBase.GetReverseRelationship(Relationship.GetRelatedObject()) as IMultipleRelationship;
-            if (reverseRelationship != null)
+//            RelationshipBase relationshipBase = (RelationshipBase)Relationship;
+            IMultipleRelationship relationship = Relationship as IMultipleRelationship;
+            if (relationship != null)
             {
-                reverseRelationship.BusinessObjectCollection.AddedBusinessObjects.Remove(Relationship.OwningBO);
+                relationship.BusinessObjectCollection.AddedBusinessObjects.Remove(this.RelatedBO);
             }
         }
-
     }
 
     internal class TransactionalSingleRelationship_Removed : TransactionalSingleRelationship
     {
-        public TransactionalSingleRelationship_Removed(ISingleRelationship singleRelationship)
-            : base(singleRelationship)
+        public TransactionalSingleRelationship_Removed(IRelationship singleRelationship , IBusinessObject relatedBO)
+            : base(singleRelationship, relatedBO)
         {}
 
         protected override void UpdateCollections()
         {
-            SingleRelationshipBase relationshipBase = (SingleRelationshipBase)Relationship;
-            IMultipleRelationship reverseRelationship = relationshipBase.GetReverseRelationship(relationshipBase.RemovedBOInternal) as IMultipleRelationship;
-            if (reverseRelationship != null)
+//            SingleRelationshipBase relationshipBase = (SingleRelationshipBase)Relationship;
+            IMultipleRelationship relationship = Relationship as IMultipleRelationship;
+            if (relationship != null)
             {
-                IBusinessObjectCollection businessObjectCollection = reverseRelationship.BusinessObjectCollection;
-                businessObjectCollection.RemovedBusinessObjects.Remove(Relationship.OwningBO);
-                businessObjectCollection.PersistedBusinessObjects.Remove(Relationship.OwningBO);
+                IBusinessObjectCollection businessObjectCollection = relationship.BusinessObjectCollection;
+                businessObjectCollection.RemovedBusinessObjects.Remove(this.RelatedBO);
+                businessObjectCollection.PersistedBusinessObjects.Remove(this.RelatedBO);
             }
         }
     }

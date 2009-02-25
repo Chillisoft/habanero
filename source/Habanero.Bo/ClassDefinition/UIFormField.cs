@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
@@ -39,7 +40,21 @@ namespace Habanero.BO.ClassDefinition
         private readonly Hashtable _parameters;
         private readonly TriggerCol _triggers;
         private readonly string _toolTipText;
-        private UIFormColumn _uiFormColumn;
+
+        ///<summary>
+        /// The layout style for the UIForm Field <see cref="Label"/> and <see cref="GroupBox"/>
+        ///</summary>
+        public enum LayoutStyle
+        {
+            ///<summary>
+            /// The label should be to the left of the control.
+            ///</summary>
+            Label,
+            ///<summary>
+            /// The label will be shown in the group box around the control
+            ///</summary>
+            GroupBox
+        }
 
         /// <summary>
         /// Constructor to initialise a new definition
@@ -53,9 +68,10 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="toolTipText">The tool tip text to be used.</param>
         /// <param name="parameters">The property attributes</param>
         /// <param name="triggers">The collection of triggers managed by the field</param>
+        /// <param name="layout">The <see cref="LayoutStyle"/> to use</param>
         public UIFormField(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly,
-                           bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers)
-            : this(label, propertyName, controlType, null, null, mapperTypeName, mapperAssembly, editable, toolTipText, parameters, triggers)
+                           bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers, LayoutStyle layout)
+            : this(label, propertyName, controlType, null, null, mapperTypeName, mapperAssembly, editable, toolTipText, parameters, triggers, layout)
 		{}
 
         /// <summary>
@@ -71,17 +87,16 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="toolTipText">The tool tip text to be used.</param>
         /// <param name="parameters">The property attributes</param>
         /// <param name="triggers">The collection of triggers managed by the field</param>
-        public UIFormField(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly,
-                           bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers)
+        /// <param name="layout">The <see cref="LayoutStyle"/> to use</param>
+        public UIFormField(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers, LayoutStyle layout)
 			: this(label, propertyName, null, controlTypeName, controlAssembly,
-                    mapperTypeName, mapperAssembly, editable, toolTipText, parameters, triggers)
+                    mapperTypeName, mapperAssembly, editable, toolTipText, parameters, triggers, layout)
 		{}
 
         /// <summary>
         /// The master constructor for all of the possible arguments
         /// </summary>
-        private UIFormField(string label, string propertyName, Type controlType, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly,
-                           bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers)
+        private UIFormField(string label, string propertyName, Type controlType, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers, LayoutStyle layout)
         {
 			if (controlType != null)
         	{
@@ -102,6 +117,7 @@ namespace Habanero.BO.ClassDefinition
             _parameters = parameters;
             //_controlType = controlType;
             _triggers = triggers ?? new TriggerCol();
+            Layout = layout;
         }
 
 		#region Properties
@@ -401,19 +417,52 @@ namespace Habanero.BO.ClassDefinition
 			}
 		}
 
+        ///<summary>
+        /// How many rows the Field must span.
+        ///</summary>
+        ///<exception cref="InvalidXmlDefinitionException"></exception>
         public int RowSpan
         {
             get
             {
-                return HasParameterValue("rowSpan") ? Convert.ToInt32(GetParameterValue("rowSpan")) : 1;
+                if (HasParameterValue("rowSpan"))
+                {
+                     try
+                     {
+                         return Convert.ToInt32(GetParameterValue("rowSpan"));
+                     }catch (FormatException)
+                    {
+                        throw new InvalidXmlDefinitionException(
+                            "An error occurred while reading the 'rowSpan' parameter from the class definitions.  The 'value' attribute must be a valid integer.");
+                    }
+                }
+                if (HasParameterValue("numLines"))
+                {
+                    try
+                    {
+                        return Convert.ToInt32(GetParameterValue("numLines"));
+
+                    } catch (FormatException)
+                    {
+                        throw new InvalidXmlDefinitionException(
+                            "An error occurred while reading the 'numLines' parameter from the class definitions.  The 'value' attribute must be a valid integer.");
+                    }
+                }
+                return 1;
             }
         }
 
+        ///<summary>
+        /// How many columns the field must span
+        ///</summary>
         public int ColSpan
         {
             get { return HasParameterValue("colSpan") ? Convert.ToInt32(GetParameterValue("colSpan")) : 1; }
         }
 
+        ///<summary>
+        /// Is the field compulsory (i.e. must it be shown as compulsory on the form or not)
+        ///</summary>
         public bool IsCompulsory
         {
             get {
@@ -425,11 +474,10 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
-        public UIFormColumn UIFormColumn
-        {
-            get { return _uiFormColumn; }
-            internal set { _uiFormColumn = value; }
-        }
+        ///<summary>
+        /// The <see cref="UIFormColumn"/> that this form field is to be placed in.
+        ///</summary>
+        public UIFormColumn UIFormColumn { get; internal set; }
 
         ///<summary>
         /// Returns the alignment property of the form field or null if none is provided
@@ -437,14 +485,6 @@ namespace Habanero.BO.ClassDefinition
         public string Alignment
         {
             get { return HasParameterValue("alignment") ? Convert.ToString(GetParameterValue("alignment")) : null; }
-        }
-
-        ///<summary>
-        /// Returns the numlines property from the form field or null if none is provided 
-        ///</summary>
-        public string NumLines
-        {
-            get { return HasParameterValue("numLines") ? Convert.ToString(GetParameterValue("numLines")) : null; }
         }
 
         ///<summary>
@@ -478,6 +518,11 @@ namespace Habanero.BO.ClassDefinition
         {
             get { return HasParameterValue("dateFormat") ? Convert.ToString(GetParameterValue("dateFormat")) : null; }
         }
+
+        ///<summary>
+        /// The <see cref="LayoutStyle"/> to be used for this form field.
+        ///</summary>
+        public LayoutStyle Layout { get; set; }
 
         private ClassDef GetClassDef()
         {

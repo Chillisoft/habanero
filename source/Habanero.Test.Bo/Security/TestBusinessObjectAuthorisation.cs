@@ -108,7 +108,7 @@ namespace Habanero.Test.BO.Security
             Assert.IsFalse(myBoStub.Status.IsNew);
 
             //---------------Execute Test ----------------------
-            myBoStub.Delete();
+            myBoStub.MarkForDelete();
             myBoStub.Save();
 
             //---------------Test Result -----------------------
@@ -133,7 +133,7 @@ namespace Habanero.Test.BO.Security
             //---------------Execute Test ----------------------
             try
             {
-                myBoStub.Delete();
+                myBoStub.MarkForDelete();
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------

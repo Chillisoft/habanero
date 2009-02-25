@@ -29,8 +29,11 @@ namespace Habanero.UI.Win
     public class ButtonGroupControlWin : PanelWin, IButtonGroupControl
     {
         private readonly IControlFactory _controlFactory;
-        private ButtonGroupControlManager _buttonGroupControlManager;
-
+        private readonly ButtonGroupControlManager _buttonGroupControlManager;
+        /// <summary>
+        /// Constructor for the <see cref="ButtonGroupControlWin"/>
+        /// </summary>
+        /// <param name="controlFactory"></param>
         public ButtonGroupControlWin(IControlFactory controlFactory)
         {
             _controlFactory = controlFactory;

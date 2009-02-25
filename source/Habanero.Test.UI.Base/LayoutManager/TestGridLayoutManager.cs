@@ -418,6 +418,33 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void TestColumnSpanWithOneFixedColumn()
+        {
+            //---------------Set up test pack-------------------
+            IControlHabanero controlHabanero = GetControlFactory().CreateControl();
+            controlHabanero.Width = 100;
+            GridLayoutManager manager = new GridLayoutManager(controlHabanero, GetControlFactory());
+            manager.SetGridSize(1, 3);
+            manager.FixColumnBasedOnContents(0);
+            manager.FixColumnBasedOnContents(2);
+
+            IControlHabanero col1Control = GetControlFactory().CreateControl();
+            col1Control.Width = 20;
+            IControlHabanero col3Control = GetControlFactory().CreateControl();
+            col3Control.Width = 10;
+
+            //---------------Execute Test ----------------------
+            manager.AddControl(col1Control, 1, 2);
+            manager.AddControl(col3Control);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(LayoutManager.DefaultBorderSize, col1Control.Left);
+            Assert.AreEqual(controlHabanero.Width - LayoutManager.DefaultBorderSize - col3Control.Width - LayoutManager.DefaultGapSize, col1Control.Left + col1Control.Width);
+
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
         public void TestColumnSpan3()
         {
             //----------------------Setup ------------------------------

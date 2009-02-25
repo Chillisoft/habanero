@@ -18,89 +18,52 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using Gizmox.WebGUI.Forms;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO;
-using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base;
 using Habanero.UI.Base;
 
-namespace Habanero.UI.VWG
+namespace Habanero.UI.Win
 {
     /// <summary>
     /// Provides a combination of editable grid, filter and buttons used to edit a
     /// collection of business objects
     /// </summary>
-    public class EditableGridControlVWG : UserControlVWG, IEditableGridControl
+    public class EditableGridControlWin : UserControlWin, IEditableGridControl
     {
+        private readonly IEditableGridButtonsControl _buttons;
         private readonly IControlFactory _controlFactory;
-        private readonly IEditableGrid _grid;
         private readonly EditableGridControlManager _editableGridManager;
+        private readonly IFilterControl _filterControl;
+        private readonly IEditableGrid _grid;
+        private string _additionalSearchCriteria;
+        private string _orderBy;
 
-
-        public EditableGridControlVWG(IControlFactory controlFactory)
+        ///<summary>
+        /// Constructs a new instance of a <see cref="EditableGridControlWin"/>.
+        /// This uses the <see cref="IControlFactory"/> from the <see cref="GlobalUIRegistry"/> to construct the control.
+        ///</summary>
+        public EditableGridControlWin() : this(GlobalUIRegistry.ControlFactory)
         {
-            if (controlFactory == null) throw new HabaneroArgumentException("controlFactory", 
-                    "Cannot create an editable grid control if the control factory is null");
+        }
+
+        ///<summary>
+        /// Constructs a new instance of a <see cref="EditableGridControlWin"/>.
+        ///</summary>
+        ///<param name="controlFactory">The <see cref="IControlFactory"/> to use to construct the control.</param>
+        public EditableGridControlWin(IControlFactory controlFactory)
+        {
             _controlFactory = controlFactory;
             _editableGridManager = new EditableGridControlManager(this, controlFactory);
             _grid = _controlFactory.CreateEditableGrid();
-            Buttons = _controlFactory.CreateEditableGridButtonsControl();
-            FilterControl = _controlFactory.CreateFilterControl();
+            _buttons = _controlFactory.CreateEditableGridButtonsControl();
+            _filterControl = _controlFactory.CreateFilterControl();
             InitialiseButtons();
             InitialiseFilterControl();
-            HasDoubleClickEventHandler = false;
             BorderLayoutManager manager = controlFactory.CreateBorderLayoutManager(this);
-            manager.AddControl(FilterControl, BorderLayoutManager.Position.North);
+            manager.AddControl(_filterControl, BorderLayoutManager.Position.North);
             manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
-            manager.AddControl(Buttons, BorderLayoutManager.Position.South);
+            manager.AddControl(_buttons, BorderLayoutManager.Position.South);
             //TODO copy rest from readonly version
-        }
-
-        private void InitialiseButtons()
-        {
-            Buttons.CancelClicked += Buttons_CancelClicked;
-            Buttons.SaveClicked += Buttons_SaveClicked;
-        }
-
-        private void InitialiseFilterControl()
-        {
-            FilterControl.Filter += _filterControl_OnFilter;
-        }
-
-        private void _filterControl_OnFilter(object sender, EventArgs e)
-        {
-            this.Grid.CurrentPage = 1;
-            if (FilterMode == FilterModes.Search)
-            {
-                string searchClause = FilterControl.GetFilterClause().GetFilterClauseString("%", "'");
-                if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
-                {
-                    if (!string.IsNullOrEmpty(searchClause))
-                    {
-                        searchClause += " AND ";
-                    }
-                    searchClause += AdditionalSearchCriteria;
-                }
-                IBusinessObjectCollection collection = BORegistry.DataAccessor.BusinessObjectLoader.
-                    GetBusinessObjectCollection(this.ClassDef, searchClause, OrderBy);
-                SetBusinessObjectCollection(collection);
-            }
-            else
-            {
-                this.Grid.ApplyFilter(FilterControl.GetFilterClause());
-            }
-        }
-
-        /// <summary>
-        /// Returns the grid object held. This property can be used to
-        /// access a range of functionality for the grid
-        /// (eg. myGridWithButtons.Grid.AddBusinessObject(...)).
-        /// </summary>    
-        public IGridBase Grid
-        {
-            get { return _grid; }
         }
 
         /// <summary>
@@ -112,7 +75,6 @@ namespace Habanero.UI.VWG
             _editableGridManager.Initialise(classDef);
         }
 
-
         /// <summary>
         /// Initialises the grid structure using the specified UI class definition
         /// </summary>
@@ -123,14 +85,13 @@ namespace Habanero.UI.VWG
             _editableGridManager.Initialise(classDef, uiDefName);
         }
 
-
         /// <summary>
         /// Gets and sets the UI definition used to initialise the grid structure (the UI name is indicated
         /// by the "name" attribute on the UI element in the class definitions
         /// </summary>
         public string UiDefName
         {
-            get { return _grid.UiDefName;  }
+            get { return _grid.UiDefName; }
             set { _grid.UiDefName = value; }
         }
 
@@ -141,6 +102,35 @@ namespace Habanero.UI.VWG
         {
             get { return _grid.ClassDef; }
             set { _grid.ClassDef = value; }
+        }
+
+        /// <summary>
+        /// Returns the grid object held. This property can be used to
+        /// access a range of functionality for the grid
+        /// (eg. myGridWithButtons.Grid.AddBusinessObject(...)).
+        /// </summary>    
+        public IEditableGrid Grid
+        {
+            get { return _grid; }
+        }
+
+        /// <summary>
+        /// Returns the editable grid object held. This property can be used to
+        /// access a range of functionality for the grid
+        /// (eg. myGridWithButtons.Grid.AddBusinessObject(...)).
+        /// </summary>    
+        IGridBase IGridControl.Grid
+        {
+            get { return _grid; }
+        }
+
+        /// <summary>
+        /// Gets the button control, which contains a set of default buttons for
+        /// editing the objects and can be customised
+        /// </summary>
+        IButtonGroupControl IGridControl.Buttons
+        {
+            get { return Buttons; }
         }
 
         /// <summary>
@@ -158,17 +148,17 @@ namespace Habanero.UI.VWG
                 //TODO: weakness where user could call _control.Grid.Set..(null) directly and bypass the disabling.
                 _grid.SetBusinessObjectCollection(null);
                 _grid.AllowUserToAddRows = false;
-                this.Buttons.Enabled = false;
-                this.FilterControl.Enabled = false;
+                Buttons.Enabled = false;
+                FilterControl.Enabled = false;
                 return;
             }
-            if (this.ClassDef == null)
+            if (ClassDef == null)
             {
                 Initialise(boCollection.ClassDef);
             }
             else
             {
-                if (this.ClassDef != boCollection.ClassDef)
+                if (ClassDef != boCollection.ClassDef)
                 {
                     throw new ArgumentException(
                         "You cannot call set collection for a collection that has a different class def than is initialised");
@@ -184,63 +174,100 @@ namespace Habanero.UI.VWG
 
             _grid.SetBusinessObjectCollection(boCollection);
 
-            this.Buttons.Enabled = true;
-            this.FilterControl.Enabled = true;
+            Buttons.Enabled = true;
+            FilterControl.Enabled = true;
             _grid.AllowUserToAddRows = true;
         }
 
         /// <summary>
         /// Gets the buttons control used to save and cancel changes
         /// </summary>
-        public IEditableGridButtonsControl Buttons { get; private set; }
+        public IEditableGridButtonsControl Buttons
+        {
+            get { return _buttons; }
+        }
 
         /// <summary>
         /// Gets the filter control used to filter which rows are shown in the grid
         /// </summary>
-        public IFilterControl FilterControl { get; private set; }
+        public IFilterControl FilterControl
+        {
+            get { return _filterControl; }
+        }
 
         /// <summary>
         /// Gets and sets the filter modes for the grid (i.e. filter or search). See <see cref="FilterModes"/>.
         /// </summary>
         public FilterModes FilterMode
         {
-            get { return FilterControl.FilterMode; }
-            set { FilterControl.FilterMode = value; }
-        }
-
-        IEditableGrid IEditableGridControl.Grid
-        {
-            get { return _grid; }
+            get { return _filterControl.FilterMode; }
+            set { _filterControl.FilterMode = value; }
         }
 
         /// <summary>
         /// Gets and sets the default order by clause used for loading the grid when the <see cref="FilterModes"/>
         /// is set to Search
         /// </summary>
-        public string OrderBy { get; set; }
+        public string OrderBy
+        {
+            get { return _orderBy; }
+            set { _orderBy = value; }
+        }
 
         /// <summary>
         /// Gets and sets the standard search criteria used for loading the grid when the <see cref="FilterModes"/>
         /// is set to Search. This search criteria will be appended with an AND to any search criteria returned
         /// by the FilterControl.
         /// </summary>
-        public string AdditionalSearchCriteria { get; set; }
+        public string AdditionalSearchCriteria
+        {
+            get { return _additionalSearchCriteria; }
+            set { _additionalSearchCriteria = value; }
+        }
 
-        ///<summary>
-        /// Returns true if this countrol has a double clicked Handler. For VWG this always returns false
-        ///</summary>
-        public bool HasDoubleClickEventHandler { get; private set; }
+        private void InitialiseButtons()
+        {
+            _buttons.CancelClicked += Buttons_CancelClicked;
+            _buttons.SaveClicked += Buttons_SaveClicked;
+        }
+
+        private void InitialiseFilterControl()
+        {
+            _filterControl.Filter += _filterControl_OnFilter;
+        }
+
+        private void _filterControl_OnFilter(object sender, EventArgs e)
+        {
+            //this.Grid.CurrentPage = 1;
+            if (FilterMode == FilterModes.Search)
+            {
+                string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
+                if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
+                {
+                    if (!string.IsNullOrEmpty(searchClause))
+                    {
+                        searchClause += " AND ";
+                    }
+                    searchClause += AdditionalSearchCriteria;
+                }
+                IBusinessObjectCollection collection = BORegistry.DataAccessor.BusinessObjectLoader.
+                    GetBusinessObjectCollection(ClassDef, searchClause, OrderBy);
+                SetBusinessObjectCollection(collection);
+            }
+            else
+            {
+                Grid.ApplyFilter(_filterControl.GetFilterClause());
+            }
+        }
 
         private void Buttons_CancelClicked(object sender, EventArgs e)
         {
-            _grid.SelectedBusinessObject = null;
-           this._grid.RejectChanges();
-        }  
-        
+            _grid.RejectChanges();
+        }
+
         private void Buttons_SaveClicked(object sender, EventArgs e)
         {
-            _grid.SelectedBusinessObject = null;
-            this._grid.SaveChanges();
+            _grid.SaveChanges();
         }
     }
 }

@@ -287,10 +287,10 @@ namespace Habanero.UI.VWG
         /// Gets or sets the dialog result that indicates what action was
         /// taken to close the form
         /// </summary>
-        public Base.DialogResult DialogResult
+        public new Base.DialogResult DialogResult
         {
-            get { return (Base.DialogResult) base.DialogResult; }
-            set { base.DialogResult = (Gizmox.WebGUI.Forms.DialogResult) value; }
+            get { return (Base.DialogResult)base.DialogResult; }
+            set { base.DialogResult = (Gizmox.WebGUI.Forms.DialogResult)value; }
         }
 
         /// <summary>
@@ -310,14 +310,14 @@ namespace Habanero.UI.VWG
             get { return new ControlCollectionVWG(this.Controls); }
         }
 
-        /// <summary>
-        /// Forces the form to invalidate its client area and
-        /// immediately redraw itself and any child controls
-        /// </summary>
-        public void Refresh()
-        {
-            // do nothing
-        }
+        ///// <summary>
+        ///// Forces the form to invalidate its client area and
+        ///// immediately redraw itself and any child controls
+        ///// </summary>
+        //public void Refresh()
+        //{
+        //    // do nothing
+        //}
 
         /// <summary>
         /// Gets or sets the current multiple document interface (MDI) parent form of this form

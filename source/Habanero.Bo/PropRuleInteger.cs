@@ -38,8 +38,7 @@ namespace Habanero.BO
         /// <param name="message">This rule's failure message</param> 
         /// <param name="min">The minimum value allowed for the integer</param>
         /// <param name="max">The maximum value allowed for the integer</param>
-        public PropRuleInteger(string name, string message, int min, int max)
-			: base(name, message)
+        public PropRuleInteger(string name, string message, int min, int max) : base(name, message)
         {
             _minValue = min;
             _maxValue = max;
@@ -51,41 +50,39 @@ namespace Habanero.BO
         /// <param name="name">The rule name</param>
         /// <param name="message">This rule's failure message</param>
         /// <param name="parameters">The parameters for this rule.  Valid parameters are "min" and "max"</param>
-        public PropRuleInteger(string name, string message, Dictionary<string, object> parameters)
-			: base(name, message)
-		{
-			base.Parameters = parameters;
-		}
+        public PropRuleInteger(string name, string message, Dictionary<string, object> parameters) : base(name, message)
+        {
+            base.Parameters = parameters;
+        }
 
         /// <summary>
         /// Sets up the parameters to the rule, that is the individual pairs
         /// of rule type and rule value that make up the composite rule
         /// </summary>
-		protected internal override void SetupParameters()
-		{
+        protected internal override void SetupParameters()
+        {
             try
             {
                 foreach (string key in _parameters.Keys)
                 {
                     object value = _parameters[key];
-					if (value != null)
-					{
-						switch (key)
-						{
-							case "min":
-								_minValue = Convert.ToInt32(value);
-								break;
-							case "max":
-								_maxValue = Convert.ToInt32(value);
-								break;
-							default:
-								throw new InvalidXmlDefinitionException(String.Format(
-                                	"The rule type '{0}' for integers does not exist. " +
-                                	"Check spelling and capitalisation, or see the " +
-                                	"documentation for existing options or ways to " +
-                                	"add options of your own.", key));
-						}
-					}
+                    if (value == null) continue;
+                    switch (key)
+                    {
+                        case "min":
+                            _minValue = Convert.ToInt32(value);
+                            break;
+                        case "max":
+                            _maxValue = Convert.ToInt32(value);
+                            break;
+                        default:
+                            throw new InvalidXmlDefinitionException
+                                (String.Format
+                                     ("The rule type '{0}' for integers does not exist. "
+                                      + "Check spelling and capitalisation, or see the "
+                                      + "documentation for existing options or ways to " + "add options of your own.",
+                                      key));
+                    }
                 }
             }
             catch (InvalidXmlDefinitionException)
@@ -94,10 +91,10 @@ namespace Habanero.BO
             }
             catch (Exception ex)
             {
-                throw new InvalidXmlDefinitionException("An error occurred " +
-                    "while processing the property rules for an integer.  The " +
-                    "likely cause is that one of the attributes in the 'add' " +
-                    "element of the class definitions has an invalid value.", ex);
+                throw new InvalidXmlDefinitionException
+                    ("An error occurred " + "while processing the property rules for an integer.  The "
+                     + "likely cause is that one of the attributes in the 'add' "
+                     + "element of the class definitions has an invalid value.", ex);
             }
         }
 
@@ -107,7 +104,7 @@ namespace Habanero.BO
         public int MinValue
         {
             get { return _minValue; }
-        	protected set { _minValue = value; }
+            protected set { _minValue = value; }
         }
 
         /// <summary>
@@ -116,7 +113,7 @@ namespace Habanero.BO
         public int MaxValue
         {
             get { return _maxValue; }
-        	protected set { _maxValue = value; }
+            protected set { _maxValue = value; }
         }
 
         /// <summary>
@@ -132,7 +129,7 @@ namespace Habanero.BO
             bool valueValid = base.IsPropValueValid(displayName, propValue, ref errorMessage);
             if (propValue is int)
             {
-                int intPropRule = (int)propValue;
+                int intPropRule = (int) propValue;
                 if (intPropRule < _minValue)
                 {
                     errorMessage = GetBaseErrorMessage(propValue, displayName);
@@ -161,19 +158,18 @@ namespace Habanero.BO
                 }
             }
             return valueValid;
-            
         }
 
         /// <summary>
         /// Returns the list of available parameter names for the rule.
         /// </summary>
         /// <returns>A list of the parameters that this rule uses</returns>
-    	protected internal override List<string> AvailableParameters()
-    	{
-			List<string> parameters = new List<string>();
-			parameters.Add("min");
-			parameters.Add("max");
-			return parameters;
-    	}
+        protected internal override List<string> AvailableParameters()
+        {
+            List<string> parameters = new List<string>();
+            parameters.Add("min");
+            parameters.Add("max");
+            return parameters;
+        }
     }
 }

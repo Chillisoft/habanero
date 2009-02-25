@@ -18,11 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Drawing;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
-using Habanero.UI.VWG;
-using Habanero.UI.VWG;
 using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.VWG

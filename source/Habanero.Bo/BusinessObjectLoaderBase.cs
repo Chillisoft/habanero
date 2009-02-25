@@ -33,6 +33,9 @@ namespace Habanero.BO
     ///</summary>
     public abstract class BusinessObjectLoaderBase
     {
+        /// <summary>
+        /// The log file used to log errors or events for this class
+        /// </summary>
         protected static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObjectLoaderBase");
         private static Criteria GetCriteriaObject(IClassDef classDef, string criteriaString)
         {
@@ -124,8 +127,16 @@ namespace Habanero.BO
             DoRefresh(collection);
             ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
         }
-
+        /// <summary>
+        /// Actual Executes the Refresh this method is impleemented by the inherited classes of the business object loader base.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
         protected abstract void DoRefresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new();
+        /// <summary>
+        /// Actual Executes the Refresh this method is impleemented by the inherited classes of the business object loader base.
+        /// </summary>
+        /// <param name="collection"></param>
         protected abstract void DoRefresh(IBusinessObjectCollection collection);
 
         /// <summary>
@@ -178,18 +189,18 @@ namespace Habanero.BO
         /// <summary>
         /// Loads business objects that match the search criteria provided, 
         /// loaded in the order specified, and limiting the number of objects loaded. 
-        /// The limited list of <see cref="T"/>s specified as follows:
+        /// The limited list of <see cref="IBusinessObject"/>s of type T specified as follows:
         /// If you want record 6 to 15 then 
-        /// <see cref="firstRecordToLoad"/> will be set to 5 (this is zero based) and 
-        /// <see cref="numberOfRecordsToLoad"/> will be set to 10.
-        /// This will load 10 records, starting at record 6 of the ordered set (ordered by the <see cref="orderCriteria"/>).
+        /// firstRecordToLoad will be set to 5 (this is zero based) and 
+        /// numberOfRecordsToLoad will be set to 10.
+        /// This will load 10 records, starting at record 6 of the ordered set (ordered by the orderCriteria).
         /// If there are fewer than 15 records in total, then the remaining records after record 6 willbe returned. 
         /// </summary>
         /// <remarks>
-        /// As a design decision, we have elected for the <see cref="firstRecordToLoad"/> to be zero based since this is consistent with the limit clause in used by MySql etc.
-        /// Also, the <see cref="numberOfRecordsToLoad"/> returns the specified number of records unless its value is '-1' where it will 
-        /// return all the remaining records from the specified <see cref="firstRecordToLoad"/>.
-        /// If you give '0' as the value for the <see cref="numberOfRecordsToLoad"/> parameter, it will load zero records.
+        /// As a design decision, we have elected for the firstRecordToLoad to be zero based since this is consistent with the limit clause in used by MySql etc.
+        /// Also, the numberOfRecordsToLoad returns the specified number of records unless its value is '-1' where it will 
+        /// return all the remaining records from the specified firstRecordToLoad.
+        /// If you give '0' as the value for the numberOfRecordsToLoad parameter, it will load zero records.
         /// </remarks>
         /// <example>
         /// The following code demonstrates how to loop through the invoices in the data store, 
@@ -407,7 +418,7 @@ namespace Habanero.BO
 
         //The collection should show all loaded object less removed or deleted object not yet persisted
         //     plus all created or added objects not yet persisted.
-        //Note: This behaviour is fundamentally different than the business objects behaviour which 
+        //Note_: This behaviour is fundamentally different than the business objects behaviour which 
         //  throws and error if any of the items are dirty when it is being refreshed.
         //Should a refresh be allowed on a dirty collection (what do we do with BO's
         //I think this could be done via reflection instead of having all these public methods.
@@ -431,7 +442,7 @@ namespace Habanero.BO
             if (addedBoArray == null) throw new ArgumentNullException("addedBoArray");
             //The collection should show all loaded object less removed or deleted object not yet persisted
            //      plus all created or added objects not yet persisted.
-            //Note: This behaviour is fundamentally different than the business objects behaviour which 
+            //Note_: This behaviour is fundamentally different than the business objects behaviour which 
             //  throws and error if any of the items are dirty when it is being refreshed.
             //Should a refresh be allowed on a dirty collection (what do we do with BO's
             foreach (IBusinessObject addedBO in addedBoArray)
@@ -488,7 +499,7 @@ namespace Habanero.BO
         {
             //The collection should show all loaded object less removed or deleted object not yet persisted
             //     plus all created or added objects not yet persisted.
-            //Note: This behaviour is fundamentally different than the business objects behaviour which 
+            //Note_: This behaviour is fundamentally different than the business objects behaviour which 
             //  throws and error if any of the items are dirty when it is being refreshed.
             //Should a refresh be allowed on a dirty collection (what do we do with BO's
             foreach (IBusinessObject createdBO in createdBusinessObjects)
@@ -503,7 +514,7 @@ namespace Habanero.BO
         {
             //The collection should show all loaded object less removed or deleted object not yet persisted
             //     plus all created or added objects not yet persisted.
-            //Note: This behaviour is fundamentally different than the business objects behaviour which 
+            //Note_: This behaviour is fundamentally different than the business objects behaviour which 
             //  throws and error if any of the items are dirty when it is being refreshed.
             //Should a refresh be allowed on a dirty collection (what do we do with BO's
             foreach (IBusinessObject removedBO in removedBusinessObjects)
@@ -512,25 +523,6 @@ namespace Habanero.BO
             }
         }
 
-//        /// <summary>
-//        /// Ensures that the added collection and main collection are synchronised after a refresh.
-//        /// </summary>
-//        /// <param name="collection">the main bo collection</param>
-//        /// <param name="addedBusinessObjects">The list of added BO's prior to loading</param>
-//        protected static void RestoreAddedCollection(IBusinessObjectCollection collection, IList addedBusinessObjects)
-//        {
-//            //The collection should show all loaded object less removed or deleted object not yet persisted
-//            //     plus all created or added objects not yet persisted.
-//            //Note: This behaviour is fundamentally different than the business objects behaviour which 
-//            //  throws and error if any of the items are dirty when it is being refreshed.
-//            //Should a refresh be allowed on a dirty collection (what do we do with BO's
-//            foreach (IBusinessObject addedBO in addedBusinessObjects)
-//            {
-//                if (collection.Contains(addedBO)) continue;
-//                collection.Add(addedBO);
-////                collection.AddedBOCol.Add(addedBO);
-//            }
-//        }
         /// <summary>
         /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
         /// fields defined in the relationship.
@@ -561,7 +553,7 @@ namespace Habanero.BO
         }
 
 
-        protected void LoadBOCollection(IBusinessObjectCollection collection, ICollection loadedBos)
+        protected static void LoadBOCollection(IBusinessObjectCollection collection, ICollection loadedBos)
         {
             ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
 
