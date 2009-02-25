@@ -45,8 +45,6 @@ namespace Habanero.UI.VWG
     [MetadataTag("P")]
     public class ReadOnlyGridControlVWG : PanelVWG, IReadOnlyGridControl, ISupportInitialize
     {
-        public delegate void RefreshGridDelegate();
-
         private readonly IReadOnlyGridButtonsControl _buttons;
         private readonly IControlFactory _controlFactory;
         private readonly IFilterControl _filterControl;
@@ -58,13 +56,18 @@ namespace Habanero.UI.VWG
         private IBusinessObjectEditor _businessObjectEditor;
         private string _orderBy;
 
+        ///<summary>
+        /// Constructs a new instance of a <see cref="ReadOnlyGridControlVWG"/>.
+        /// This uses the <see cref="IControlFactory"/> from the <see cref="GlobalUIRegistry"/> to construct the control.
+        ///</summary>
         public ReadOnlyGridControlVWG() : this(GlobalUIRegistry.ControlFactory)
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise a new grid
-        /// </summary>
+        ///<summary>
+        /// Constructs a new instance of a <see cref="ReadOnlyGridControlVWG"/>.
+        ///</summary>
+        ///<param name="controlFactory">The <see cref="IControlFactory"/> to use to construct the control.</param>
         public ReadOnlyGridControlVWG(IControlFactory controlFactory)
         {
             _controlFactory = controlFactory;
@@ -107,16 +110,6 @@ namespace Habanero.UI.VWG
             UiDefName = uiDefName;
 
             _gridInitialiser.InitialiseGrid(ClassDef, uiDefName);
-        }
-
-        /// <summary>
-        /// Returns the grid object held. This property can be used to
-        /// access a range of functionality for the grid
-        /// (eg. myGridWithButtons.Grid.AddBusinessObject(...)).
-        /// </summary>    
-        public IGridBase Grid
-        {
-            get { return _grid; }
         }
 
         /// <summary>
@@ -216,6 +209,25 @@ namespace Habanero.UI.VWG
         }
 
         /// <summary>
+        /// Returns the grid object held. This property can be used to
+        /// access a range of functionality for the grid
+        /// (eg. myGridWithButtons.Grid.AddBusinessObject(...)).
+        /// </summary>    
+        public IReadOnlyGrid Grid
+        {
+            get { return _grid; }
+        }
+
+        /// <summary>
+        /// Returns the <see cref="IReadOnlyGrid"/> object held. This property can be used to
+        /// access a range of functionality for the <see cref="IReadOnlyGrid"/>.
+        /// </summary>    
+        IGridBase IGridControl.Grid
+        {
+            get { return _grid; }
+        }
+
+        /// <summary>
         /// Gets and sets the default order by clause used for loading the grid when the <see cref="FilterModes"/>
         /// is set to Search
         /// </summary>
@@ -234,6 +246,15 @@ namespace Habanero.UI.VWG
         {
             get { return _additionalSearchCriteria; }
             set { _additionalSearchCriteria = value; }
+        }
+
+        /// <summary>
+        /// Gets the button control, which contains a set of default buttons for
+        /// editing the objects and can be customised
+        /// </summary>
+        IButtonGroupControl IGridControl.Buttons
+        {
+            get { return Buttons; }
         }
 
         /// <summary>

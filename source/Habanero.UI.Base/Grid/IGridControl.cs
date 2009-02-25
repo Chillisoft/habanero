@@ -77,6 +77,17 @@ namespace Habanero.UI.Base
         IFilterControl FilterControl { get; }
 
         /// <summary>
+        /// Gets and sets the filter modes for the grid (i.e. filter or search). See <see cref="FilterModes"/>.
+        /// </summary>
+        FilterModes FilterMode { get; set; }
+
+        /// <summary>
+        /// Gets the button control, which contains a set of default buttons for
+        /// editing the objects and can be customised
+        /// </summary>
+        IButtonGroupControl Buttons { get; }
+
+        /// <summary>
         /// Sets the business object collection to display.  Loading of
         /// the collection needs to be done before it is assigned to the
         /// grid.  This method assumes a default UI definition is to be

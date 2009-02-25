@@ -35,8 +35,31 @@ namespace Habanero.UI.Base
     /// A filter control is placed above the grid and is used to filter which rows
     /// are shown.
     /// </summary>
-    public interface IReadOnlyGridControl : IGridControl 
+    public interface IReadOnlyGridControl : IGridControl
     {
+        /// <summary>
+        /// Returns the <see cref="IReadOnlyGrid"/> object held. This property can be used to
+        /// access a range of functionality for the <see cref="IReadOnlyGrid"/>.
+        /// </summary>    
+        new IReadOnlyGrid Grid { get; }
+
+        /// <summary>
+        /// Initialises the grid without a ClassDef. This is used where the columns are set up manually.
+        /// A typical case of when you would want to set the columns manually would be when the grid
+        /// requires alternate columns, such as images to indicate the state of the object or buttons/links.
+        /// The grid must already have at least one column added with the name "HABANERO_OBJECTID". This column is used
+        /// to synchronise the grid with the business objects.
+        /// </summary>
+        /// <exception cref="GridBaseInitialiseException">Occurs where the columns have not
+        /// already been defined for the grid</exception>
+        void Initialise();
+
+        /// <summary>
+        /// Gets the value indicating whether one of the overloaded initialise
+        /// methods been called for the grid
+        /// </summary>
+        bool IsInitialised { get; }
+
         ///<summary>
         /// The <see cref="IBusinessObject"/> currently selected in the Grid
         ///</summary>
@@ -46,7 +69,7 @@ namespace Habanero.UI.Base
         /// Gets the button control, which contains a set of default buttons for
         /// editing the objects and can be customised
         /// </summary>
-        IReadOnlyGridButtonsControl Buttons { get; }
+        new IReadOnlyGridButtonsControl Buttons { get; }
 
         /// <summary>
         /// Gets and sets the business object editor used to edit the object when the edit button is clicked
@@ -66,38 +89,6 @@ namespace Habanero.UI.Base
         /// is hidden unless programmatically shown (using Buttons.ShowDefaultDeleteButton).
         /// </summary>
         IBusinessObjectDeletor BusinessObjectDeletor { get; set; }
-
-        /// <summary>
-        /// Gets the value indicating whether one of the overloaded initialise
-        /// methods been called for the grid
-        /// </summary>
-        bool IsInitialised { get; }
-
-        /// <summary>
-        /// Gets and sets the filter modes for the grid (i.e. filter or search).  See <see cref="FilterModes"/>.
-        /// </summary>
-        FilterModes FilterMode { get; set; }
-
-        /// <summary>
-        /// Sets the business object collection to display.  Loading of
-        /// the collection needs to be done before it is assigned to the
-        /// grid.  This method assumes a default UI definition is to be
-        /// used, that is a 'ui' element without a 'name' attribute.
-        /// </summary>
-        /// <param name="boCollection">The business object collection
-        /// to be shown in the grid</param>
-        void SetBusinessObjectCollection(IBusinessObjectCollection boCollection);
-
-        /// <summary>
-        /// Initialises the grid without a ClassDef. This is used where the columns are set up manually.
-        /// A typical case of when you would want to set the columns manually would be when the grid
-        /// requires alternate columns, such as images to indicate the state of the object or buttons/links.
-        /// The grid must already have at least one column added with the name "HABANERO_OBJECTID". This column is used
-        /// to synchronise the grid with the business objects.
-        /// </summary>
-        /// <exception cref="GridBaseInitialiseException">Occurs where the columns have not
-        /// already been defined for the grid</exception>
-        void Initialise();
 
         ///<summary>
         /// Enable or disable the default double click handler for the grid where the <see cref="IBusinessObjectEditor"/>

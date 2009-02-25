@@ -92,10 +92,10 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DockStyleVWG.cs" />
-    <Compile Include="EditableGridControlVWG.cs">
+    <Compile Include="Grid\EditableGridControlVWG.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="EditableGridVWG.cs">
+    <Compile Include="Grid\EditableGridVWG.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="EnumerationConverter.cs" />

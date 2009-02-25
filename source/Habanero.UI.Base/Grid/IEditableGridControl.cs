@@ -30,22 +30,16 @@ namespace Habanero.UI.Base
     /// </summary>
     public interface IEditableGridControl : IGridControl
     {
-
-
-        /// <summary>
-        /// Gets the buttons control used to save and cancel changes
-        /// </summary>
-        IEditableGridButtonsControl Buttons { get; }
-
-        /// <summary>
-        /// Gets and sets the filter modes for the grid (i.e. filter or search). See <see cref="FilterModes"/>.
-        /// </summary>
-        FilterModes FilterMode { get; set; }
         /// <summary>
         /// Returns the editable grid object held. This property can be used to
         /// access a range of functionality for the grid
         /// (eg. myGridWithButtons.Grid.AddBusinessObject(...)).
         /// </summary>    
         new IEditableGrid Grid { get; }
+
+        /// <summary>
+        /// Gets the buttons control used to save and cancel changes
+        /// </summary>
+        new IEditableGridButtonsControl Buttons { get; }
     }
 }
