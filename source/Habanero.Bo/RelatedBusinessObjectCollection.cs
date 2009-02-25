@@ -126,19 +126,16 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Creates a business object of type TBusinessObject
-        /// Adds this BO to the CreatedBusinessObjects list. When the object is saved it will
-        /// be added to the actual bo collection.
+        /// Creates a new <see cref="TBusinessObject"/> for this RelatedBusinessObjectCollection.
+        /// The new BusinessObject has all of its foreign key properties set, but is not added in to the collection yet.
         /// </summary>
-        /// <returns></returns>
-        public override TBusinessObject CreateBusinessObject()
+        /// <returns>A new <see cref="TBusinessObject"/>.</returns>
+        protected override TBusinessObject CreateNewBusinessObject()
         {
-            //TODO: Think about this we are trying to solve the problem that you can set
-            // the properties of an object but the related object is only loaded based on its persisted values.
-            TBusinessObject bo = base.CreateBusinessObject();
-            SetUpForeignKey(bo);
-            SetupRelatedObject(bo);
-            return bo;
+            TBusinessObject newBusinessObject = base.CreateNewBusinessObject();
+            SetUpForeignKey(newBusinessObject);
+            SetupRelatedObject(newBusinessObject);
+            return newBusinessObject;
         }
 
         private void SetupRelatedObject(TBusinessObject bo)

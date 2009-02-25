@@ -101,8 +101,9 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Test Result -----------------------
             AssertOneObjectInCurrentAndPersistedCollection(cpCol);
         }
+
         [Test]
-        public void Test_CreateBusObject()
+        public void Test_CreateBusinessObject()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
@@ -543,6 +544,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             _addedEventFired = false;
             cpCol.BusinessObjectAdded += delegate { _addedEventFired = true; };
         }
+
         private static void AssertOneObjectInCurrentAndCreatedCollection
             (IBusinessObjectCollection cpCol)
         {

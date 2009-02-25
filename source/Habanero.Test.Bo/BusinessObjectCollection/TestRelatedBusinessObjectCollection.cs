@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -135,24 +136,80 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
-        public void TestCreateBusObjectCollection_ForeignKeySetUp()
+        public void Test_CreateBusinessObject_ForeignKeySetUp()
         {
+            //---------------Set up test pack-------------------
             //The Foreign Key (address.ContactPersonId) should be set up to be 
             // equal to the contactPerson.ContactPersonID
-            //SetupTests
+            //---------------Assert Precondition----------------
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             //MultipleRelationship rel = (MultipleRelationship)bo.Relationships["MyMultipleRelationship"];
             //RelatedBusinessObjectCollection<MyRelatedBo> col = new RelatedBusinessObjectCollection<MyRelatedBo>(rel);
-
-            //Run tests
+            //---------------Execute Test ----------------------
             AddressTestBO address = contactPersonTestBO.Addresses.CreateBusinessObject();
-
-            //Test results
+            //---------------Test Result -----------------------
             Assert.AreEqual(contactPersonTestBO.ContactPersonID, address.ContactPersonID);
             Assert.IsTrue(address.Status.IsNew);
             Assert.AreEqual(1, contactPersonTestBO.Addresses.CreatedBusinessObjects.Count);
+        }
+
+        [Test]
+        public void Test_CreateBusinessObject_ForeignKeySetUp_BeforeAddedEventFired()
+        {
+            //---------------Set up test pack-------------------
+            //The Foreign Key (address.ContactPersonId) should be set up to be 
+            // equal to the contactPerson.ContactPersonID before he Added event fires.
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            RelatedBusinessObjectCollection<AddressTestBO> addresses = contactPersonTestBO.Addresses;
+            AddressTestBO addressFromEvent = null;
+            Guid? addressContactPersonIDFromEvent = null;
+            addresses.BusinessObjectAdded += delegate(object sender, BOEventArgs<AddressTestBO> e)
+            {
+                addressFromEvent = e.BusinessObject;
+                addressContactPersonIDFromEvent = addressFromEvent.ContactPersonID;
+            };
+            //---------------Assert Precondition----------------
+            Assert.IsNull(addressFromEvent);
+            Assert.IsNull(addressContactPersonIDFromEvent);
+            //---------------Execute Test ----------------------
+            AddressTestBO address = addresses.CreateBusinessObject();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(addressFromEvent);
+            Assert.IsNotNull(addressContactPersonIDFromEvent, "Adress.ContactPersonID should have been set before the Added event was called");
+            Assert.AreEqual(contactPersonTestBO.ContactPersonID, addressContactPersonIDFromEvent);
+            Assert.AreSame(address, addressFromEvent);
+            Assert.AreEqual(contactPersonTestBO.ContactPersonID, address.ContactPersonID);
+            Assert.IsTrue(address.Status.IsNew);
+            Assert.AreEqual(1, addresses.CreatedBusinessObjects.Count);
+        }
+
+        [Test]
+        public void Test_CreateBusinessObject_ForeignKeySetUp_PropertyUpdatedEventNotFired()
+        {
+            //---------------Set up test pack-------------------
+            //The Foreign Key (address.ContactPersonId) should be set up to be 
+            // equal to the contactPerson.ContactPersonID before he Added event fires.
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            RelatedBusinessObjectCollection<AddressTestBO> addresses = contactPersonTestBO.Addresses;
+            bool propetyUpdatedEventFired = false;
+            addresses.BusinessObjectPropertyUpdated += delegate(object sender, BOPropUpdatedEventArgs<AddressTestBO> e)
+            {
+                propetyUpdatedEventFired = true;
+            };
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(propetyUpdatedEventFired);
+            Assert.AreEqual(0, addresses.CreatedBusinessObjects.Count);
+            //---------------Execute Test ----------------------
+            AddressTestBO address = addresses.CreateBusinessObject();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(propetyUpdatedEventFired);
+            Assert.AreEqual(1, addresses.CreatedBusinessObjects.Count);
         }
 
         [Test]
