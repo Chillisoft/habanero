@@ -30,7 +30,7 @@ namespace Habanero.UI.Base
     {
         public virtual void DeleteBusinessObject(IBusinessObject businessObject)
         {
-            businessObject.Delete();
+            businessObject.MarkForDelete();
             businessObject.Save();
         }
     }

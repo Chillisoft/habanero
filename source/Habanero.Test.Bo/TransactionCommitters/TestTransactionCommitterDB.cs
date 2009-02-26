@@ -155,7 +155,7 @@ namespace Habanero.Test.BO.TransactionCommitters
 
         private static void CleanupObjectFromDatabase(IBusinessObject bo)
         {
-            bo.Delete();
+            bo.MarkForDelete();
             bo.Save();
         }
 

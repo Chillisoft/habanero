@@ -86,8 +86,8 @@ namespace Habanero.Test
                 {
                     if (!thisBo.Status.IsNew)
                     {
-                        thisBo.Restore();
-                        thisBo.Delete();
+                        thisBo.CancelEdits();
+                        thisBo.MarkForDelete();
                         thisBo.Save();
                     }
                     objectsToDelete.Remove(thisBo);

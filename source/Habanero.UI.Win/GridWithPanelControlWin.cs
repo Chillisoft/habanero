@@ -17,21 +17,15 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using DialogResult=Habanero.UI.Base.DialogResult;
-using MessageBoxButtons=Habanero.UI.Base.MessageBoxButtons;
-using MessageBoxIcon=Habanero.UI.Base.MessageBoxIcon;
 
 namespace Habanero.UI.Win
 {
+    /// TODO: This uses ReadOnlyGridControl due to some flaw in ReadOnlyGrid. Look at switching back
+    /// to the grid in the future.  What happens when you double-click?
     /// <summary>
-    /// /// <summary>
     /// Represents a control to edit a collection of business objects.  A grid
     /// lists the objects as specified by SetBusinessObjectCollection and a control
     /// below the grid allows the selected business object to be edited.  Default
@@ -48,24 +42,38 @@ namespace Habanero.UI.Win
     /// Some customisation is provided through the GridWithPanelControlStrategy,
     /// including how controls should be enabled for the appropriate environment.
     /// </summary>
-    /// TODO: This uses ReadOnlyGridControl due to some flaw in ReadOnlyGrid. Look at switching back
-    /// to the grid in the future.  What happens when you double-click?
     public class GridWithPanelControlWin<TBusinessObject> : UserControlWin, IGridWithPanelControl<TBusinessObject> 
                 where TBusinessObject : class, IBusinessObject, new()
     {
-        private GridWithPanelControlManager<TBusinessObject> _gridWithPanelControlManager; 
+        private readonly GridWithPanelControlManager<TBusinessObject> _gridWithPanelControlManager; 
         
+        ///<summary>
+        /// Constructor for <see cref="GridWithPanelControlWin{TBusinessObject}"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="uiDefName"></param>
         public GridWithPanelControlWin(IControlFactory controlFactory, string uiDefName)
         {
             IBusinessObjectControl businessObjectControl = new BusinessObjectPanelWin<TBusinessObject>(controlFactory, uiDefName);
             _gridWithPanelControlManager = new GridWithPanelControlManager<TBusinessObject>(this,controlFactory,businessObjectControl,uiDefName);
         }
 
+        ///<summary>
+        /// Constructor for <see cref="GridWithPanelControlWin{TBusinessObject}"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="businessObjectControl"></param>
         public GridWithPanelControlWin(IControlFactory controlFactory, IBusinessObjectControl businessObjectControl)
             : this(controlFactory, businessObjectControl, "default")
         {
         }
 
+        ///<summary>
+        /// Constructor for <see cref="GridWithPanelControlWin{TBusinessObject}"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="businessObjectControl"></param>
+        ///<param name="uiDefName"></param>
         public GridWithPanelControlWin(IControlFactory controlFactory, IBusinessObjectControl businessObjectControl, string uiDefName)
         {
             _gridWithPanelControlManager = new GridWithPanelControlManager<TBusinessObject>(this, controlFactory, businessObjectControl, uiDefName);
@@ -106,6 +114,9 @@ namespace Habanero.UI.Win
             get { return _gridWithPanelControlManager.Buttons; }
         }
 
+        ///<summary>
+        /// Returns the currently selected business object.
+        ///</summary>
         public TBusinessObject CurrentBusinessObject
         {
             get { return _gridWithPanelControlManager.CurrentBusinessObject; }
@@ -147,6 +158,11 @@ namespace Habanero.UI.Win
     {
         private IPanelInfo _panelInfo;
 
+        ///<summary>
+        /// Constructor for <see cref="BusinessObjectPanelWin{T}"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="uiDefName"></param>
         public BusinessObjectPanelWin(IControlFactory controlFactory, string uiDefName)
         {
             PanelBuilder panelBuilder = new PanelBuilder(controlFactory);

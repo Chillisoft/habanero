@@ -48,14 +48,14 @@ namespace Habanero.Test.General
             shapes.LoadAll();
             foreach (Shape shape in shapes)
             {
-                shape.Delete();
+                shape.MarkForDelete();
             }
             shapes.SaveAll();
             //Shape shape = BOLoader.Instance.GetBusinessObject<Shape>(
             //    "ShapeName = 'MyShape' OR ShapeName = 'MyShapeChanged'");
             //if (shape != null)
             //{
-            //    shape.Delete();
+            //    shape.MarkForDelete();
             //    shape.Save();
             //}
 
@@ -63,7 +63,7 @@ namespace Habanero.Test.General
             //    "ShapeName = 'Circle' OR ShapeName = 'CircleChanged'");
             //if (circle != null)
             //{
-            //    circle.Delete();
+            //    circle.MarkForDelete();
             //    circle.Save();
             //}
 
@@ -71,7 +71,7 @@ namespace Habanero.Test.General
             //    "ShapeName = 'FilledCircle' OR ShapeName = 'FilledCircleChanged'");
             //if (filledCircle != null)
             //{
-            //    filledCircle.Delete();
+            //    filledCircle.MarkForDelete();
             //    filledCircle.Save();
             //}
         }
@@ -197,11 +197,11 @@ namespace Habanero.Test.General
             CircleNoPrimaryKey circle = CreateSavedCircle();
             FilledCircleInheritsCircleNoPK filledCircle = CreateSavedFilledCircle();
             //-------------Execute test ---------------------
-            shape.Delete();
+            shape.MarkForDelete();
             shape.Save();
-            circle.Delete();
+            circle.MarkForDelete();
             circle.Save();
-            filledCircle.Delete();
+            filledCircle.MarkForDelete();
             filledCircle.Save();
             //-------------Test Result ----------------------
             BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();

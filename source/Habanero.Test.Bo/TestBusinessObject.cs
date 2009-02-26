@@ -483,7 +483,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
             IBusinessObject bo = classDef.CreateNewBusinessObject();
-            bo.Delete();
+            bo.MarkForDelete();
         }
 
         [Test]
@@ -514,7 +514,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             try
             {
-                bo.Delete();
+                bo.MarkForDelete();
                 //---------------Test Result -----------------------
                 Assert.Fail("Should have thrown an exception");
             }

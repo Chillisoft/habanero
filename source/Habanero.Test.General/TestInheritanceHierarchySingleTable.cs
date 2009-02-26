@@ -49,7 +49,7 @@ namespace Habanero.Test.General
                 criteria1);
             if (shape != null)
             {
-                shape.Delete();
+                shape.MarkForDelete();
                 shape.Save();
             }
             criteria1 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "Circle");
@@ -59,7 +59,7 @@ namespace Habanero.Test.General
                 criteria);
             if (circle != null)
             {
-                circle.Delete();
+                circle.MarkForDelete();
                 circle.Save();
             }
             criteria1 = new Criteria("ShapeName", Criteria.ComparisonOp.Equals, "FilledCircle");
@@ -68,7 +68,7 @@ namespace Habanero.Test.General
             FilledCircleNoPrimaryKey filledCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<FilledCircleNoPrimaryKey>(
                 criteria);
             if (filledCircle == null) return;
-            filledCircle.Delete();
+            filledCircle.MarkForDelete();
             filledCircle.Save();
         }
 
@@ -239,11 +239,11 @@ namespace Habanero.Test.General
             Assert.AreEqual("FilledCircleChanged", filledCircles[0].ShapeName);
 
             // Test deleting
-            shape.Delete();
+            shape.MarkForDelete();
             shape.Save();
-            circle.Delete();
+            circle.MarkForDelete();
             circle.Save();
-            filledCircle.Delete();
+            filledCircle.MarkForDelete();
             filledCircle.Save();
 
             shapes.LoadAll();

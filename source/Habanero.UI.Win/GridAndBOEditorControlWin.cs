@@ -281,7 +281,7 @@ namespace Habanero.UI.Win
             }
             else
             {
-                currentBO.Restore();
+                currentBO.CancelEdits();
             }
             UpdateControlEnabledState();
 
@@ -369,7 +369,7 @@ namespace Habanero.UI.Win
         private void DeleteButtonClicked(object sender, EventArgs e)
         {
             IBusinessObject businessObject = CurrentBusinessObject;
-            businessObject.Delete();
+            businessObject.MarkForDelete();
             businessObject.Save();
 
             if (CurrentBusinessObject == null && _readOnlyGridControl.Grid.Rows.Count > 0)
@@ -602,7 +602,7 @@ namespace Habanero.UI.Win
             }
             else
             {
-                currentBO.Restore();
+                currentBO.CancelEdits();
             }
             UpdateControlEnabledState();
 
@@ -687,7 +687,7 @@ namespace Habanero.UI.Win
         private void DeleteButtonClicked(object sender, EventArgs e)
         {
             IBusinessObject businessObject = CurrentBusinessObject;
-            businessObject.Delete();
+            businessObject.MarkForDelete();
             businessObject.Save();
 
             if (CurrentBusinessObject == null && _readOnlyGridControl.Grid.Rows.Count > 0)

@@ -277,7 +277,7 @@ namespace Habanero.UI.Base
             }
             else
             {
-                businessObject.Delete();
+                businessObject.MarkForDelete();
                 businessObject.Save();
             }
             AddGridSelectionEvent();
@@ -312,7 +312,7 @@ namespace Habanero.UI.Base
             }
             else
             {
-                currentBO.Restore();
+                currentBO.CancelEdits();
             }
         }
 

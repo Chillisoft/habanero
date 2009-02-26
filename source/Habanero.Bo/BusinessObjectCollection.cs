@@ -1386,12 +1386,12 @@ namespace Habanero.BO
         {
             foreach (TBusinessObject bo in this.Clone())
             {
-                bo.Restore();
+                bo.CancelEdits();
             }
             while (this.MarkedForDeleteBusinessObjects.Count > 0)
             {
                 TBusinessObject bo = this.MarkedForDeleteBusinessObjects[0];
-                bo.Restore();
+                bo.CancelEdits();
             }
             while (this.CreatedBusinessObjects.Count > 0)
             {
@@ -1401,7 +1401,7 @@ namespace Habanero.BO
                 {
                     bo = this.CreatedBusinessObjects[0];
                     this.CreatedBusinessObjects.Remove(bo);
-                    bo.Restore();
+                    bo.CancelEdits();
                     
                     this.RemoveInternal(bo, out fireEvent);
                     this.RemovedBusinessObjects.Remove(bo);
@@ -1417,7 +1417,7 @@ namespace Habanero.BO
                 {
                     bo = this.RemovedBusinessObjects[0];
                     this.RemovedBusinessObjects.Remove(bo);
-                    bo.Restore();
+                    bo.CancelEdits();
                     fireEvent = this.AddInternal(bo);
                 }
                 if (fireEvent) FireBusinessObjectAdded(bo);
@@ -1430,7 +1430,7 @@ namespace Habanero.BO
                 {
                     bo = this.AddedBusinessObjects[0];
                     this.AddedBusinessObjects.Remove(bo);
-                    bo.Restore();
+                    bo.CancelEdits();
                     removed = base.Remove(bo);
                     KeyObjectHashTable.Remove(bo.ID.ToString());
                     this.RemovedBusinessObjects.Remove(bo);

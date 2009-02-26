@@ -588,13 +588,13 @@ namespace Habanero.Test.UI.Base
             MyBO oldBO1 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
             if (oldBO1 != null)
             {
-                oldBO1.Delete();
+                oldBO1.MarkForDelete();
                 oldBO1.Save();
             }
             MyBO oldBO2 = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(criteria);
             if (oldBO2 != null)
             {
-                oldBO2.Delete();
+                oldBO2.MarkForDelete();
                 oldBO2.Save();
             }
 
@@ -629,7 +629,7 @@ namespace Habanero.Test.UI.Base
 //            MyBO savedBO = BOLoader.Instance.GetBusinessObject<MyBO>("TestProp='" + newText + "'");
             Assert.IsNotNull(savedBO);
             //---------------Tear Down--------------------------
-            savedBO.Delete();
+            savedBO.MarkForDelete();
             savedBO.Save();
         }
 
