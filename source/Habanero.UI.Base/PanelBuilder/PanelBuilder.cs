@@ -20,15 +20,23 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Reflection;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
+    ///<summary>
+    /// Builds an <see cref="IPanelInfo"/> that has the information required link the <see cref="IPanel"/>
+    ///  built by the Panel Builder to the <see cref="IBusinessObject"/> with a certain layout (as defined by the
+    ///  <see cref="LayoutManager"/> (Currently Only the <see cref="GridLayoutManager"/> can be used).<br/>
+    /// The <see cref="IPanel"/> Built by the PanelBuilder has all the controls required for a <see cref="IBusinessObject"/> 
+    ///     to be viewed and edited in. The Controls to be used are defind in the <see cref="UIFormTab"/> or the
+    ///     <see cref="UIForm"/> depending on whether the <see cref="BuildPanelForForm"/> or <see cref="BuildPanelForTab"/>
+    ///     method is used.<br/>
+    ///</summary>
     public class PanelBuilder
     {
-        private IControlFactory _factory;
         public const int ERROR_PROVIDER_WIDTH = 20;
         public const int CONTROLS_PER_COLUMN = 3;
         public const int LABEL_CONTROL_COLUMN_NO = 0;
@@ -36,12 +44,27 @@ namespace Habanero.UI.Base
         public const int ERROR_PROVIDER_COLUMN_NO = CONTROLS_PER_COLUMN - 1;
 
 
-        public PanelBuilder(IControlFactory factory) { _factory = factory; }
+        ///<summary>
+        /// Gets and Sets the control Factory that is used to create the individual controls on the <see cref="IPanel"/>
+        ///</summary>
+        public IControlFactory Factory { get; set; }
 
-        public IControlFactory Factory { get { return _factory; } set { _factory = value; } }
+        ///<summary>
+        /// Creates the panel Builder with the <see cref="IControlFactory"/>
+        ///   to be used by the panel builder for buiding the controls.
+        ///</summary>
+        ///<param name="factory"></param>
+        public PanelBuilder(IControlFactory factory) { Factory = factory; }
 
+        ///<summary>
+        /// Builds a Panel for a single Tab as defined in the <see cref="UIFormTab"/>.
+        ///   There will be one <see cref="IPanelInfo"/> for the defined tab.
+        ///</summary>
+        ///<param name="formTab">The Tab that the panel is being built for.</param>
+        ///<returns></returns>
         public IPanelInfo BuildPanelForTab(UIFormTab formTab)
         {
+            if (formTab == null) throw new ArgumentNullException("formTab");
             IPanel panel = Factory.CreatePanel();
             PanelInfo panelInfo = new PanelInfo();
             GridLayoutManager layoutManager = panelInfo.LayoutManager = SetupLayoutManager(formTab, panel);
@@ -59,9 +82,20 @@ namespace Habanero.UI.Base
             return panelInfo;
         }
 
-
+        ///<summary>
+        /// Builds a Panel for a single Tab as defined in the <see cref="UIForm"/>.
+        ///   There will be one <see cref="IPanelInfo"/> for the defined uiForm.<br/>
+        /// If there are multiple tabs defined for the <paramref name="uiForm"/> then
+        ///  an actual <see cref="ITabPage"/> is created for each <see cref="UIFormTab"/> 
+        ///  and the <see cref="IPanel"/> created by <see cref="BuildPanelForTab"/> will 
+        ///  be placed on this TabPage.<br></br>
+        /// Else the <see cref="IPanel"/> is placed on the form directly.
+        ///</summary>
+        ///<param name="uiForm">The uiForm that the Panel is being built for.</param>
+        ///<returns></returns>
         public IPanelInfo BuildPanelForForm(UIForm uiForm)
         {
+            if (uiForm == null) throw new ArgumentNullException("uiForm");
             PanelInfo panelInfo = new PanelInfo();
             IPanel panel = Factory.CreatePanel();
             panelInfo.Panel = panel;
@@ -171,10 +205,8 @@ namespace Habanero.UI.Base
             else
             {
                 labelControl = CreateAndAddGroupBox(panelInfo, formField);
-                controlMapper = CreateAndAddInputControlToContainerControl(panelInfo, formField, (IGroupBox)labelControl); ;
+                controlMapper = CreateAndAddInputControlToContainerControl(formField, labelControl);
             }
-
-
 
             CreateAndAddErrorProviderPanel(panelInfo, formField);
 
@@ -192,7 +224,7 @@ namespace Habanero.UI.Base
             return labelControl;
         }
 
-        private void AddNullControlsForEmptyField(IPanelInfo panelInfo)
+        private static void AddNullControlsForEmptyField(IPanelInfo panelInfo)
         {
             for (int i = 0; i < CONTROLS_PER_COLUMN; i++)
                 panelInfo.LayoutManager.AddControl(null);
@@ -204,7 +236,7 @@ namespace Habanero.UI.Base
             panelInfo.LayoutManager.AddControl(panel, formField.RowSpan, 1);
         }
 
-        private IControlMapper CreateAndAddInputControlToContainerControl(IPanelInfo panelInfo, UIFormField formField, IControlHabanero containerControl)
+        private IControlMapper CreateAndAddInputControlToContainerControl(UIFormField formField, IControlHabanero containerControl)
         {
             IControlMapper controlMapper;
             IControlHabanero inputControl = ConfigureInputControl(formField, out controlMapper);
@@ -233,7 +265,7 @@ namespace Habanero.UI.Base
                                                                   formField.ControlAssemblyName);
             controlMapper = ControlMapper.Create(formField.MapperTypeName,
                                                  formField.MapperAssembly, inputControl,
-                                                 formField.PropertyName, !formField.Editable, _factory);
+                                                 formField.PropertyName, !formField.Editable, Factory);
 
 
             if (!String.IsNullOrEmpty(formField.Alignment)) SetInputControlAlignment(formField, inputControl);
@@ -278,7 +310,7 @@ namespace Habanero.UI.Base
             {
                 DateTimePickerMapper dateTimePickerMapper = new DateTimePickerMapper((IDateTimePicker)inputControl,
                                                                                      formField.PropertyName, formField.Editable,
-                                                                                     _factory);
+                                                                                     Factory);
                 dateTimePickerMapper.SetPropertyAttributes(formField.Parameters);
             }
 
@@ -305,7 +337,7 @@ namespace Habanero.UI.Base
             }
         }
 
-        private void SetInputControlNumLines(UIFormField formField, IControlHabanero inputControl)
+        private static void SetInputControlNumLines(UIFormField formField, IControlHabanero inputControl)
         {
             if (inputControl is ITextBox)
             {
@@ -319,7 +351,7 @@ namespace Habanero.UI.Base
             }
         }
 
-        private void SetInputControlAlignment(UIFormField formField, IControlHabanero inputControl)
+        private static void SetInputControlAlignment(UIFormField formField, IControlHabanero inputControl)
         {
             // Some controls have TextAlign and others don't. This code uses reflection to apply it if appropriate.
             // This did not work because the propertyInfo.SetValue method was not calling the TestBoxVWG TextAlign Set property method.
@@ -349,7 +381,7 @@ namespace Habanero.UI.Base
             return labelControl;
         }
 
-        private void SetupInputControlColumnWidth(IPanelInfo panelInfo, UIFormTab formTab)
+        private static void SetupInputControlColumnWidth(IPanelInfo panelInfo, UIFormTab formTab)
         {
             GridLayoutManager layoutManager = panelInfo.LayoutManager;
             int formColCount = 0;
@@ -377,7 +409,7 @@ namespace Habanero.UI.Base
         private void SetToolTip(UIFormField formField, IControlHabanero inputControl)
         {
             string toolTipText = formField.GetToolTipText();
-            IToolTip toolTip = _factory.CreateToolTip();
+            IToolTip toolTip = Factory.CreateToolTip();
             if (!String.IsNullOrEmpty(toolTipText))
             {
                 toolTip.SetToolTip(inputControl, toolTipText);

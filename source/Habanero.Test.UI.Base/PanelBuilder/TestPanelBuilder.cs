@@ -19,10 +19,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
@@ -57,7 +54,28 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_1Field_String()
+        public void Test_BuildPanelForTab_tabNull()
+        {
+            //---------------Set up test pack-------------------
+            PanelBuilder panelBuilder = new PanelBuilder(this.GetControlFactory());
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                panelBuilder.BuildPanelForTab(null);
+                Assert.Fail("expected ArgumentNullException");
+            }
+            //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("formTab", ex.ParamName);
+            }
+        }
+        [Test]
+        public void Test_BuildPanelForTab_1Field_String()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -78,7 +96,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_1Field_Integer()
+        public void Test_BuildPanelForTab_1Field_Integer()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -97,7 +115,7 @@ namespace Habanero.Test.UI.Base
        
 
         [Test]
-        public void Test_BuildPanel_1Field_GroupBoxLayout_Integer()
+        public void Test_BuildPanelForTab_1Field_GroupBoxLayout_Integer()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -121,7 +139,7 @@ namespace Habanero.Test.UI.Base
 
 
         [Test]
-        public void Test_BuildPanel_1Field_GroupBoxLayout_TextBox_Multiline()
+        public void Test_BuildPanelForTab_1Field_GroupBoxLayout_TextBox_Multiline()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -142,7 +160,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_1Field_Layout()
+        public void Test_BuildPanelForTab_1Field_Layout()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -173,7 +191,7 @@ namespace Habanero.Test.UI.Base
 
 
         [Test]
-        public void Test_BuildPanel_1Field_GroupBoxLayout_Layout()
+        public void Test_BuildPanelForTab_1Field_GroupBoxLayout_Layout()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -201,7 +219,7 @@ namespace Habanero.Test.UI.Base
 
 
         [Test]
-        public void Test_BuildPanel_2Fields_Layout()
+        public void Test_BuildPanelForTab_2Fields_Layout()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -241,13 +259,13 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public virtual void Test_BuildPanel_2Fields()
+        public virtual void Test_BuildPanelForTab_2Fields()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab twoFieldTab = interfaceMapper.GetFormTabTwoFields();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
-            int expectedFields = 2;
+            const int expectedFields = 2;
             //---------------Assert Precondition----------------
             Assert.AreEqual(expectedFields, twoFieldTab[0].Count);
             //---------------Execute Test ----------------------
@@ -271,14 +289,14 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_2Columns_1_1()
+        public void Test_BuildPanelForTab_2Columns_1_1()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumns_1_1();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
-            int expectedColumns = 2;
-            int expectedFieldsInEachColumn = 1;
+            const int expectedColumns = 2;
+            const int expectedFieldsInEachColumn = 1;
             //---------------Assert Precondition----------------
             Assert.AreEqual(expectedColumns, twoColumnTab.Count);
             Assert.AreEqual(expectedFieldsInEachColumn, twoColumnTab[0].Count);
@@ -290,14 +308,14 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_2Columns_1_2()
+        public void Test_BuildPanelForTab_2Columns_1_2()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab twoColumnTab = interfaceMapper.GetFormTabTwoColumns_1_2();
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
-            int expectedColumns = 2;
-            int maxFieldsInAColumn = 2;
+            const int expectedColumns = 2;
+            const int maxFieldsInAColumn = 2;
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, twoColumnTab.Count);
             Assert.AreEqual(1, twoColumnTab[0].Count);
@@ -309,7 +327,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_2Columns_1_2_CorrectLayout()
+        public void Test_BuildPanelForTab_2Columns_1_2_CorrectLayout()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -350,7 +368,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_ColumnWidths_SingleColumn()
+        public void Test_BuildPanelForTab_ColumnWidths_SingleColumn()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -376,7 +394,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_ColumnWidths_FirstColumnOfMultiColumn()
+        public void Test_BuildPanelForTab_ColumnWidths_FirstColumnOfMultiColumn()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -403,7 +421,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_ColumnWidths_LastColumnOfMultiColumn()
+        public void Test_BuildPanelForTab_ColumnWidths_LastColumnOfMultiColumn()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -429,7 +447,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_ColumnWidths_MiddleColumnOfMultiColumn()
+        public void Test_BuildPanelForTab_ColumnWidths_MiddleColumnOfMultiColumn()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -455,7 +473,7 @@ namespace Habanero.Test.UI.Base
 
 
         [Test]
-        public void Test_BuildPanel_ColumnWidths_DataColumnResizes()
+        public void Test_BuildPanelForTab_ColumnWidths_DataColumnResizes()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -463,8 +481,8 @@ namespace Habanero.Test.UI.Base
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             IPanel panel = panelBuilder.BuildPanelForTab(singleIntegerFieldTab).Panel;
 
-            int columnWidthOrig = 300;
-            int columnWidthAfter = 500;
+            const int columnWidthOrig = 300;
+            const int columnWidthAfter = 500;
             panel.Width = columnWidthOrig;
             ILabel label = (ILabel) panel.Controls[0];
             IControlHabanero textbox = panel.Controls[1];
@@ -480,9 +498,9 @@ namespace Habanero.Test.UI.Base
 
             Assert.AreEqual(originalWidth + columnWidthAfter - columnWidthOrig, textbox.Width);
         }
-
+        // ReSharper disable AccessToStaticMemberViaDerivedType
         [Test]
-        public virtual void Test_BuildPanel_3Columns_1Column_RowSpan2()
+        public virtual void Test_BuildPanelForTab_3Columns_1Column_RowSpan2()
         {
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
             UIFormTab singleIntegerFieldTab = interfaceMapper.GetFormTabThreeColumnsOneColumnWithRowSpan();
@@ -511,9 +529,10 @@ namespace Habanero.Test.UI.Base
                 textBoxCol1.Left + textBoxCol1.Width + PanelBuilder.ERROR_PROVIDER_WIDTH + GridLayoutManager.DefaultGapSize*2,
                 col2TextBox2Label.Left);
         }
-
+        // ReSharper restore AccessToStaticMemberViaDerivedType
+#pragma warning disable 168
         [Test]
-        public void Test_BuildPanel_RowSpanAndColumnSpan()
+        public void Test_BuildPanelForTab_RowSpanAndColumnSpan_DoesNotCauseError()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = new Sample.SampleUserInterfaceMapperWin();
@@ -524,11 +543,11 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             IPanel panel = panelBuilder.BuildPanelForTab(oneFieldRowColSpan).Panel;
             //---------------Test Result -----------------------
+
             IControlCollection controlCollection = panel.Controls;
         }
-
         [Test]
-        public void Test_BuildPanel_RowSpan()
+        public void Test_BuildPanelForTab_RowSpan()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -549,9 +568,10 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(row2InputControl.Multiline);
             Assert.AreEqual(row1InputControl.Height*2 + LayoutManager.DefaultGapSize, row2InputControl.Height);
         }
+#pragma warning restore 168
 
         [Test]
-        public void Test_BuildPanel_Parameter_ColumnSpan()
+        public void Test_BuildPanelForTab_Parameter_ColumnSpan()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -584,7 +604,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_Parameter_DefaultAlignment_Left()
+        public void Test_BuildPanelForTab_Parameter_DefaultAlignment_Left()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -607,7 +627,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_Parameter_Alignment_Right()
+        public void Test_BuildPanelForTab_Parameter_Alignment_Right()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -627,7 +647,7 @@ namespace Habanero.Test.UI.Base
 
 
         [Test]
-        public void Test_BuildPanel_Parameter_Alignment_Center()
+        public void Test_BuildPanelForTab_Parameter_Alignment_Center()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -644,9 +664,9 @@ namespace Habanero.Test.UI.Base
             ITextBox control = (ITextBox) panel.Controls[1];
             Assert.AreEqual(HorizontalAlignment.Center, control.TextAlign);
         }
-
+#pragma warning disable 168
         [Test]
-        public void Test_BuildPanel_Parameter_Alignment_InvalidAlignment()
+        public void Test_BuildPanelForTab_Parameter_Alignment_InvalidAlignment()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -673,9 +693,10 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(errorThrown, "The alignment value is invalid and a HabaneroDeveloperException should be thrown.");
             StringAssert.Contains("Invalid alignment property value ", errMessage);
         }
+#pragma warning restore 168
 
         [Test]
-        public void Test_BuildPanel_Parameter_MultiLine()
+        public void Test_BuildPanelForTab_Parameter_MultiLine()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -693,9 +714,9 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(64, control.Height);
             Assert.AreEqual(ScrollBars.Vertical, control.ScrollBars);
         }
-
+#pragma warning disable 168
         [Test]
-        public void Test_BuildPanel_Parameter_InvalidMultiLineValue()
+        public void Test_BuildPanelForTab_Parameter_InvalidMultiLineValue()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -720,9 +741,10 @@ namespace Habanero.Test.UI.Base
                 "An error occurred while reading the 'numLines' parameter from the class definitions.  The 'value' attribute must be a valid integer.",
                 errMessage);
         }
+#pragma warning restore 168
 
         [Test]
-        public void Test_BuildPanel_Parameter_DecimalPlaces_NumericUpDownMoneyMapper()
+        public void Test_BuildPanelForTab_Parameter_DecimalPlaces_NumericUpDownMoneyMapper()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -743,7 +765,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_Parameter_Options()
+        public void Test_BuildPanelForTab_Parameter_Options()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -765,9 +787,10 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual("M", control.Items[1].ToString());
             Assert.AreEqual("F", control.Items[2].ToString());
         }
+#pragma warning disable 168
 
         [Test, Ignore("Can not test the event on the TextBox")]
-        public void Test_BuildPanel_Parameter_isEmal()
+        public void Test_BuildPanelForTab_Parameter_isEmal()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -787,9 +810,10 @@ namespace Habanero.Test.UI.Base
             Assert.IsInstanceOfType(typeof (ITextBox), panel.Controls[1]);
             ITextBox control = (ITextBox) panel.Controls[1];
         }
+#pragma warning restore 168
 
         [Test]
-        public void Test_BuildPanel_Parameter_DateFormat()
+        public void Test_BuildPanelForTab_Parameter_DateFormat()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -814,10 +838,10 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_GetAlignmentValueMethod_Left()
+        public void Test_BuildPanelForTab_GetAlignmentValueMethod_Left()
         {
             //---------------Set up test pack-------------------
-            string alignment = "left";
+            const string alignment = "left";
 
             //---------------Assert Precondition----------------
 
@@ -832,10 +856,10 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_GetAlignmentValueMethod_Right()
+        public void Test_BuildPanelForTab_GetAlignmentValueMethod_Right()
         {
             //---------------Set up test pack-------------------
-            string alignment = "right";
+            const string alignment = "right";
 
             //---------------Assert Precondition----------------
 
@@ -849,10 +873,10 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_GetAlignmentValueMethod_Center()
+        public void Test_BuildPanelForTab_GetAlignmentValueMethod_Center()
         {
             //---------------Set up test pack-------------------
-            string alignment = "center";
+            const string alignment = "center";
 
             //---------------Assert Precondition----------------
 
@@ -866,10 +890,10 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_GetAlignmentValueMethod_Centre()
+        public void Test_BuildPanelForTab_GetAlignmentValueMethod_Centre()
         {
             //---------------Set up test pack-------------------
-            string alignment = "centre";
+            const string alignment = "centre";
 
             //---------------Assert Precondition----------------
 
@@ -886,10 +910,10 @@ namespace Habanero.Test.UI.Base
         //Throws a HabaneroDeveloperException 
         //if an invalid alignment value is passed into the method.
         [Test]
-        public void Test_BuildPanel_GetAlignmentValueMethod_ThrowsADeveloperException()
+        public void Test_BuildPanelForTab_GetAlignmentValueMethod_ThrowsADeveloperException()
         {
             //---------------Set up test pack-------------------
-            string alignment = "TestAlignment";
+            const string alignment = "TestAlignment";
             bool errorThrown = false;
             string errMessage = "";
             //---------------Assert Precondition----------------
@@ -898,7 +922,7 @@ namespace Habanero.Test.UI.Base
 
             try
             {
-                HorizontalAlignment alignmentValueLowerCase = PanelBuilder.GetAlignmentValue(alignment.ToLower());
+                PanelBuilder.GetAlignmentValue(alignment.ToLower());
             }
             catch (HabaneroDeveloperException ex)
             {
@@ -913,7 +937,7 @@ namespace Habanero.Test.UI.Base
 
 
         [Test]
-        public void Test_BuildPanel_CompulsoryFieldsAreBoldAndStarred()
+        public void Test_BuildPanelForTab_CompulsoryFieldsAreBoldAndStarred()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneCompulsory();
@@ -937,7 +961,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_PopulatesFieldInfoCollection()
+        public void Test_BuildPanelForTab_PopulatesFieldInfoCollection()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
@@ -953,13 +977,13 @@ namespace Habanero.Test.UI.Base
 
             IControlHabanero sampleTextLabel = panelInfo.Panel.Controls[PanelBuilder.LABEL_CONTROL_COLUMN_NO];
             IControlHabanero sampleTextInputControl = panelInfo.Panel.Controls[PanelBuilder.INPUT_CONTROL_COLUMN_NO];
-            string propertyName = "SampleText";
+            const string propertyName = "SampleText";
             IControlMapper sampleTextControlMapper = panelInfo.FieldInfos[propertyName].ControlMapper;
 
             Assert.AreEqual(2, panelInfo.FieldInfos.Count);
 
             PanelInfo.FieldInfo fieldInfo = panelInfo.FieldInfos[propertyName];
-            Assert.AreSame(sampleTextLabel, fieldInfo.Label);
+            Assert.AreSame(sampleTextLabel, fieldInfo.LabelControl);
             Assert.AreSame(sampleTextInputControl, fieldInfo.InputControl);
 
             Assert.AreSame(sampleTextInputControl, sampleTextControlMapper.Control);
@@ -969,7 +993,7 @@ namespace Habanero.Test.UI.Base
 
 
         [Test]
-        public void Test_BuildPanel_InputControlsHaveCorrectEnabledState()
+        public void Test_BuildPanelForTab_InputControlsHaveCorrectEnabledState()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
@@ -988,7 +1012,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void Test_BuildPanel_LayoutManagerIsSet()
+        public void Test_BuildPanelForTab_LayoutManagerIsSet()
         {
             ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
             UIFormTab twoFieldTabOneCompulsory = classDef.UIDefCol["default"].UIForm[0];
@@ -1066,6 +1090,27 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void Test_BuildPanelForForm_formNull()
+        {
+            //---------------Set up test pack-------------------
+            PanelBuilder panelBuilder = new PanelBuilder(this.GetControlFactory());
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                panelBuilder.BuildPanelForForm(null);
+                Assert.Fail("expected ArgumentNullException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("uiForm", ex.ParamName);
+            }
+        }
+        [Test]
         public void Test_BuildPanelForForm_ReturnsOnlyPanelForOneTab()
         {
             //---------------Set up test pack-------------------
@@ -1088,7 +1133,6 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadClassDefWithTwoUITabs();
             UIForm uiForm = classDef.UIDefCol["default"].UIForm;
-            MyBO myBo = new MyBO();
             //--------------Assert PreConditions----------------            
             //---------------Execute Test ----------------------
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
@@ -1120,7 +1164,7 @@ namespace Habanero.Test.UI.Base
 
 
         //[Test, Ignore("This doesn't work in code for some reason")]
-        //public void Test_BuildPanel_SetToolTip()
+        //public void Test_BuildPanelForTab_SetToolTip()
         //{
         //    //---------------Set up test pack-------------------
         //    ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneWithToolTipText();
@@ -1151,7 +1195,7 @@ namespace Habanero.Test.UI.Base
         protected virtual Sample.SampleUserInterfaceMapper GetSampleUserInterfaceMapper() { return new Sample.SampleUserInterfaceMapperWin(); }
 
         [Test]
-        public void Test_BuildPanel_Parameter_SetNumericUpDownAlignment()
+        public void Test_BuildPanelForTab_Parameter_SetNumericUpDownAlignment()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();
@@ -1192,7 +1236,7 @@ namespace Habanero.Test.UI.Base
         protected override Sample.SampleUserInterfaceMapper GetSampleUserInterfaceMapper() { return new Sample.SampleUserInterfaceMapperVWG(); }
 
         [Test, Ignore("Gizmox does not support changing the TextAlign Property (Default value iss Left) ")]
-        public void Test_BuildPanel_Parameter_SetAlignment_NumericUpDown()
+        public void Test_BuildPanelForTab_Parameter_SetAlignment_NumericUpDown()
         {
             //---------------Set up test pack-------------------
             Sample.SampleUserInterfaceMapper interfaceMapper = GetSampleUserInterfaceMapper();

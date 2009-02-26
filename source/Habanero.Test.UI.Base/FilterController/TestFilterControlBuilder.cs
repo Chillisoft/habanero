@@ -19,16 +19,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
-using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.FilterController
@@ -113,8 +109,8 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             //---------------Set up test pack-------------------
             FilterControlBuilder builder = new FilterControlBuilder(GetControlFactory());
-            string filterType = "Habanero.Test.UI.Base.FilterController.SimpleFilter";
-            string filterTypeAssembly = "Habanero.Test.UI.Base";
+            const string filterType = "Habanero.Test.UI.Base.FilterController.SimpleFilter";
+            const string filterTypeAssembly = "Habanero.Test.UI.Base";
             FilterDef filterDef = CreateFilterDef_1PropertyWithTypeAndAssembly(filterType, filterTypeAssembly);
 
             //---------------Execute Test ----------------------
@@ -290,7 +286,7 @@ namespace Habanero.Test.UI.Base.FilterController
             //---------------Execute Test ----------------------
             try
             {
-                ICustomFilter customFilter = builder.BuildCustomFilter(filterPropertyDef);
+                builder.BuildCustomFilter(filterPropertyDef);
                 Assert.Fail("Error should have occured because a parameter didn't exist.");
 
                 //---------------Test Result -----------------------
@@ -328,7 +324,7 @@ namespace Habanero.Test.UI.Base.FilterController
         
         private static FilterDef CreateFilterDef_1Property(string propName)
         {
-            return new FilterDef(new List<FilterPropertyDef>() { CreateFilterPropertyDef(propName) });
+            return new FilterDef(new List<FilterPropertyDef> { CreateFilterPropertyDef(propName) });
         }
 
         private static FilterPropertyDef CreateFilterPropertyDef()
@@ -380,8 +376,7 @@ namespace Habanero.Test.UI.Base.FilterController
         }
 
         private static FilterDef CreateFilterDef_2Properties(string propName1, string filterType1, string propName2, string filterType2) {
-            return new FilterDef(new List<FilterPropertyDef>()
-                                     {
+            return new FilterDef(new List<FilterPropertyDef> {
                                          CreateFilterPropertyDef(propName1, filterType1, "", FilterClauseOperator.OpEquals), 
                                          CreateFilterPropertyDef(propName2, filterType2, "", FilterClauseOperator.OpEquals)
                                      });
@@ -399,17 +394,19 @@ namespace Habanero.Test.UI.Base.FilterController
     
     internal class SimpleFilter : ICustomFilter
     {
-        private IControlHabanero _textBox;
+        private readonly IControlHabanero _textBox;
+#pragma warning disable 168
         public SimpleFilter(IControlFactory controlFactory, string propertyName, FilterClauseOperator filterClauseOperator)
+#pragma warning restore 168
         {
             _textBox = controlFactory.CreateTextBox();
         }
         public IControlHabanero Control { get { return _textBox; } }
-        public IFilterClause GetFilterClause(IFilterClauseFactory filterClauseFactory) { throw new System.NotImplementedException(); }
-        public void Clear() { throw new System.NotImplementedException(); }
+        public IFilterClause GetFilterClause(IFilterClauseFactory filterClauseFactory) { throw new NotImplementedException(); }
+        public void Clear() { throw new NotImplementedException(); }
         public event EventHandler ValueChanged;
-        public string PropertyName { get { throw new System.NotImplementedException(); } }
-        public FilterClauseOperator FilterClauseOperator { get { throw new System.NotImplementedException(); } }
+        public string PropertyName { get { throw new NotImplementedException(); } }
+        public FilterClauseOperator FilterClauseOperator { get { throw new NotImplementedException(); } }
     }
     
 

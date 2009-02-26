@@ -101,7 +101,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
 
             Assert.AreEqual(propertyName, fieldInfo.PropertyName);
-            Assert.AreSame(label, fieldInfo.Label);
+            Assert.AreSame(label, fieldInfo.LabelControl);
             Assert.AreSame(controlMapper, fieldInfo.ControlMapper);
             Assert.AreSame(tb, fieldInfo.InputControl);
         }

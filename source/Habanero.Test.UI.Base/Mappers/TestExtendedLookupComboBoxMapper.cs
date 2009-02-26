@@ -240,8 +240,8 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsInstanceOfType(typeof(GridAndBOEditorControlWin), form.Controls[0]);
             GridAndBOEditorControlWin gridAndBOEditorControlWin = (GridAndBOEditorControlWin)form.Controls[0];
             //Assert.AreSame(mapper.BusinessObject, GridAndBOEditorControlWin.BusinessObjectControl.BusinessObject);
-            Assert.IsTrue(gridAndBOEditorControlWin.ReadOnlyGridControl.IsInitialised);
-            IBusinessObjectCollection collection = gridAndBOEditorControlWin.ReadOnlyGridControl.Grid.GetBusinessObjectCollection();
+            Assert.IsTrue(gridAndBOEditorControlWin.GridControl.IsInitialised);
+            IBusinessObjectCollection collection = gridAndBOEditorControlWin.GridControl.Grid.GetBusinessObjectCollection();
             Assert.IsNotNull(collection);
             Assert.AreEqual(organisationTestBOS.Count, collection.Count);
             Assert.AreEqual(organisationTestBOS.Count, mapper.LookupList.Count);
@@ -281,8 +281,8 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsInstanceOfType(typeof(GridAndBOEditorControlWin), form.Controls[0]);
             GridAndBOEditorControlWin gridAndBOEditorControlWin = (GridAndBOEditorControlWin)form.Controls[0];
             //Assert.AreSame(mapper.BusinessObject, GridAndBOEditorControlWin.BusinessObjectControl.BusinessObject);
-            Assert.IsTrue(gridAndBOEditorControlWin.ReadOnlyGridControl.IsInitialised);
-            IBusinessObjectCollection collection = gridAndBOEditorControlWin.ReadOnlyGridControl.Grid.GetBusinessObjectCollection();
+            Assert.IsTrue(gridAndBOEditorControlWin.GridControl.IsInitialised);
+            IBusinessObjectCollection collection = gridAndBOEditorControlWin.GridControl.Grid.GetBusinessObjectCollection();
             Assert.IsNotNull(collection);
             Assert.AreEqual(organisationTestBOS.Count, collection.Count);
             Assert.AreEqual(organisationTestBOS.Count, mapper.LookupList.Count);

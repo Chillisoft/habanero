@@ -104,8 +104,7 @@ namespace Habanero.Test.UI.Base.FilterController
             IFilterControl filterControl = GetControlFactory().CreateFilterControl();
             ITextBox tb = filterControl.AddStringFilterTextBox("Test:", "TestColumn");
             tb.Text = "testvalue";
-            IFilterClause clause =
-                filterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpLike, "testvalue");
+            filterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpLike, "testvalue");
 
             ITextBox tb2 = filterControl.AddStringFilterTextBox("Test2:", "TestColumn2");
             tb2.Text = "testvalue2";
@@ -216,7 +215,7 @@ namespace Habanero.Test.UI.Base.FilterController
             filterControl.AddCustomFilter("LabelText", customFilter);
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, filterControl.CountOfFilters);
+            Assert.AreEqual(1, filterControl.FilterControls.Count);
             IControlHabanero controlHabanero = filterControl.GetChildControl("test");
             Assert.AreEqual(customFilter.Control, controlHabanero);
             Assert.IsNotNull(controlHabanero);
@@ -230,7 +229,9 @@ namespace Habanero.Test.UI.Base.FilterController
             //---------------Set up test pack-------------------
             IFilterControl filterControl = GetControlFactory().CreateFilterControl();
             ICustomFilter customFilter = new CustomFilterStub(GetControlFactory());
+#pragma warning disable 618,612
             filterControl.AddCustomFilter("LabelText", "test", customFilter);
+#pragma warning restore 618,612
 
             //---------------Assert pre conditions--------------
             Assert.IsFalse(((CustomFilterStub)customFilter)._valueChangedFired);
@@ -507,8 +508,8 @@ namespace Habanero.Test.UI.Base.FilterController
             //---------------Execute Test ----------------------
             IComboBox comboBox = filterControl.AddStringFilterComboBox("Test:", "TestColumn", options, true);
             //---------------Test Result -----------------------
-            int numOfItemsInCollection = 2;
-            int numItemsExpectedInComboBox = numOfItemsInCollection + 1; //one extra for the null selected item
+            const int numOfItemsInCollection = 2;
+            const int numItemsExpectedInComboBox = numOfItemsInCollection + 1;
             Assert.AreEqual(numItemsExpectedInComboBox, comboBox.Items.Count);
         }
 

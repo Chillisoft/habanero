@@ -21,78 +21,18 @@ using System;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using UserControlWin=Habanero.UI.Win.UserControlWin;
 
 namespace Habanero.UI.Win
 {
-    public class BusinessObjectControl : UserControlWin, IBusinessObjectControlWithErrorDisplay
-    {
-        private IPanelInfo _panelInfo;
 
-        public BusinessObjectControl(IControlFactory controlFactory,ClassDef classDef, string uiDefName)
-        {
-            PanelBuilder panelBuilder = new PanelBuilder(controlFactory);
-          
-            UIForm uiForm = classDef.UIDefCol[uiDefName].UIForm;
-            //_panelInfo = panelBuilder.BuildPanelForForm(ClassDef.Get<T>().UIDefCol[uiDefName].UIForm);
-            _panelInfo = panelBuilder.BuildPanelForForm(uiForm);
-            BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(this);
-            layoutManager.AddControl(_panelInfo.Panel, BorderLayoutManager.Position.Centre);
-        }
-
-        public IBusinessObject BusinessObject
-        {
-            get { return _panelInfo.BusinessObject; }
-            set { _panelInfo.BusinessObject = value; }
-        }
-
-        public void DisplayErrors()
-        {
-            _panelInfo.ApplyChangesToBusinessObject();
-        }
-
-        public void ClearErrors()
-        {
-            _panelInfo.ClearErrorProviders();
-        }
-    }
-
-    public class BusinessObjectControl<T> : UserControlWin, IBusinessObjectControlWithErrorDisplay
-        where T : class, IBusinessObject
-    {
-        private readonly IPanelInfo _panelInfo;
-
-        public BusinessObjectControl(IControlFactory controlFactory, string uiDefName)
-        {
-            PanelBuilder panelBuilder = new PanelBuilder(controlFactory);
-            //UIForm uiForm = ClassDef.ClassDefs[businessObject.GetType()].UIDefCol[uiDefName].UIForm;
-            _panelInfo = panelBuilder.BuildPanelForForm(ClassDef.Get<T>().UIDefCol[uiDefName].UIForm);
-            //_panelInfo = panelBuilder.BuildPanelForForm(uiForm);
-            BorderLayoutManager layoutManager = controlFactory.CreateBorderLayoutManager(this);
-            layoutManager.AddControl(_panelInfo.Panel, BorderLayoutManager.Position.Centre);
-        }
-
-        public IBusinessObject BusinessObject
-        {
-            get { return _panelInfo.BusinessObject; }
-            set { _panelInfo.BusinessObject = value; }
-        }
-
-        public void DisplayErrors()
-        {
-            _panelInfo.ApplyChangesToBusinessObject();
-        }
-
-        public void ClearErrors()
-        {
-            _panelInfo.ClearErrorProviders();
-        }
-    }
-
-    class GridAndBOEditorControlWin : UserControlWin, IGridAndBOEditorControl
+    ///<summary>
+    /// Control For Win that displays a collection of a Business Object along side an editor/creator panel.
+    /// The collection of business objects can be shown using any selector control e.g. an <see cref="IEditableGridControl"/>,
+    ///   <see cref="IGridControl"/> etc.
+    ///</summary>
+    public class GridAndBOEditorControlWin : UserControlWin, IGridAndBOEditorControl
     {
         private readonly ClassDef _classDef;
-        private readonly IBusinessObject _businessObject;
         private IControlFactory _controlFactory;
         private IBusinessObjectControlWithErrorDisplay _businessObjectControl;
         private IReadOnlyGridControl _readOnlyGridControl;
@@ -107,8 +47,9 @@ namespace Habanero.UI.Win
 
         public GridAndBOEditorControlWin(IControlFactory controlFactory, ClassDef classDef, string uiDefName)
         {
+            if (controlFactory == null) throw new ArgumentNullException("controlFactory");
+            if (classDef == null) throw new ArgumentNullException("classDef");
             _classDef = classDef;
-            // _businessObject = businessObject;
             BusinessObjectControl businessObjectControl = new BusinessObjectControl(controlFactory, classDef, uiDefName);
             SetupGridAndBOEditorControlWin(controlFactory, businessObjectControl, uiDefName);
         }
@@ -147,7 +88,7 @@ namespace Habanero.UI.Win
             layoutManager.AddControl(_buttonGroupControl, BorderLayoutManager.Position.South);
 
             _readOnlyGridControl.Grid.BusinessObjectSelected +=
-                delegate(object sender, BOEventArgs e) { FireBusinessObjectSelected(e.BusinessObject); };
+                ((sender, e) => FireBusinessObjectSelected(e.BusinessObject));
         }
 
 
@@ -391,7 +332,7 @@ namespace Habanero.UI.Win
             _newButton.Enabled = true;
         }
 
-        public IReadOnlyGridControl ReadOnlyGridControl
+        public IGridControl GridControl
         {
             get { return _readOnlyGridControl; }
         }
@@ -482,7 +423,7 @@ namespace Habanero.UI.Win
             layoutManager.AddControl(_buttonGroupControl, BorderLayoutManager.Position.South);
 
             _readOnlyGridControl.Grid.BusinessObjectSelected +=
-                delegate(object sender, BOEventArgs e) { FireBusinessObjectSelected(e.BusinessObject); };
+                ((sender, e) => FireBusinessObjectSelected(e.BusinessObject));
         }
 
 
@@ -497,6 +438,10 @@ namespace Habanero.UI.Win
             _newButton.Enabled = false;
         }
 
+        ///<summary>
+        ///</summary>
+        ///<param name="grid"></param>
+        ///<returns></returns>
         public static int GetGridWidthToFitColumns(IGridBase grid)
         {
             int width = 0;
@@ -709,7 +654,7 @@ namespace Habanero.UI.Win
             _newButton.Enabled = true;
         }
 
-        public IReadOnlyGridControl ReadOnlyGridControl
+        public IGridControl GridControl
         {
             get { return _readOnlyGridControl; }
         }
@@ -719,6 +664,9 @@ namespace Habanero.UI.Win
             get { return _businessObjectControl; }
         }
 
+        ///<summary>
+        /// Returns the <see cref="IButtonGroupControl"/> for the 
+        ///</summary>
         public IButtonGroupControl ButtonGroupControl
         {
             get { return _buttonGroupControl; }
@@ -729,6 +677,9 @@ namespace Habanero.UI.Win
             get { return _readOnlyGridControl.SelectedBusinessObject; }
         }
 
+        ///<summary>
+        /// The Current Business Object that is selected in the grid.
+        ///</summary>
         public TBusinessObject CurrentBusinessObject
         {
             get { return (TBusinessObject)_readOnlyGridControl.SelectedBusinessObject; }

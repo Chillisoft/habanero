@@ -54,16 +54,6 @@ namespace Habanero.UI.Base
         /// already been defined for the grid</exception>
         void Initialise();
 
-        /// <summary>
-        /// Gets the value indicating whether one of the overloaded initialise
-        /// methods been called for the grid
-        /// </summary>
-        bool IsInitialised { get; }
-
-        ///<summary>
-        /// The <see cref="IBusinessObject"/> currently selected in the Grid
-        ///</summary>
-        IBusinessObject SelectedBusinessObject { get; set; }
 
         /// <summary>
         /// Gets the button control, which contains a set of default buttons for

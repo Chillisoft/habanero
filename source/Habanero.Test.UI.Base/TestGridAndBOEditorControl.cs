@@ -18,7 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
@@ -89,7 +89,7 @@ namespace Habanero.Test.UI.Base
 
         private static void AssertSelectedBusinessObject(OrganisationTestBO businessObjectInfo, GridAndBOEditorControlWin<OrganisationTestBO> GridAndBOEditorControlWin)
         {
-            Assert.AreSame(businessObjectInfo, GridAndBOEditorControlWin.ReadOnlyGridControl.SelectedBusinessObject);
+            Assert.AreSame(businessObjectInfo, GridAndBOEditorControlWin.GridControl.SelectedBusinessObject);
             Assert.AreSame(businessObjectInfo, GridAndBOEditorControlWin.BusinessObjectControl.BusinessObject, "Selected BO in Grid should be loaded in the BoControl");
             Assert.AreSame(businessObjectInfo, GridAndBOEditorControlWin.CurrentBusinessObject);
         }
@@ -107,12 +107,11 @@ namespace Habanero.Test.UI.Base
             // ---------------Execute Test ----------------------
             try
             {
-                GridAndBOEditorControlWin<OrganisationTestBO> GridAndBOEditorControlWin =
-                    new GridAndBOEditorControlWin<OrganisationTestBO>(GetControlFactory(), (IBusinessObjectControlWithErrorDisplay)((IBusinessObjectControlWithErrorDisplay)null));
+                new GridAndBOEditorControlWin<OrganisationTestBO>(GetControlFactory(), (IBusinessObjectControlWithErrorDisplay)null);
 
                 Assert.Fail("Null BOControl should be prevented");
             }
-            //    ---------------Test Result -----------------------
+                //    ---------------Test Result -----------------------
             catch (ArgumentNullException ex)
             {
                 Assert.AreEqual("businessObjectControl", ex.ParamName);
@@ -130,12 +129,11 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             try
             {
-                GridAndBOEditorControlWin<OrganisationTestBO> GridAndBOEditorControlWin =
-                    new GridAndBOEditorControlWin<OrganisationTestBO>((IControlFactory)((IControlFactory)null), businessObjectControl);
+                new GridAndBOEditorControlWin<OrganisationTestBO>(null, businessObjectControl);
 
                 Assert.Fail("Null ControlFactory should be prevented");
             }
-            // ---------------Test Result -----------------------
+                // ---------------Test Result -----------------------
             catch (ArgumentNullException ex)
             {
                 Assert.AreEqual("controlFactory", ex.ParamName);
@@ -143,6 +141,114 @@ namespace Habanero.Test.UI.Base
             //   ---------------Test Result -----------------------
         }
 
+        [Ignore(" Currently working on this")] //Brett 26 Feb 2009:
+        [Test]
+        public void TestConstructor_NonGeneric()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef def = GetCustomClassDef();
+            IBusinessObjectControlWithErrorDisplay businessObjectControl = new BusinessObjectControlStub();
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(def.GetUIDef(CUSTOM_UIDEF_NAME));
+            Assert.IsNotNull(def.GetUIDef(CUSTOM_UIDEF_NAME).UIForm);
+            //---------------Execute Test ----------------------
+            IGridAndBOEditorControl GridAndBOEditorControlWin =
+                new GridAndBOEditorControlWin(GetControlFactory(), def, CUSTOM_UIDEF_NAME);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, GridAndBOEditorControlWin.Controls.Count);
+            Assert.IsInstanceOfType(typeof(IUserControlHabanero), GridAndBOEditorControlWin);
+            Assert.IsInstanceOfType(typeof(IBusinessObjectControlWithErrorDisplay), GridAndBOEditorControlWin.Controls[0]);
+            Assert.IsInstanceOfType(typeof(IReadOnlyGridControl), GridAndBOEditorControlWin.Controls[1]);
+            Assert.IsInstanceOfType(typeof(IButtonGroupControl), GridAndBOEditorControlWin.Controls[2]);
+            Assert.AreSame(businessObjectControl, GridAndBOEditorControlWin.BusinessObjectControl);
+            Assert.IsFalse(businessObjectControl.Enabled);
+        }
+        [Test]
+        public void TestConstructor_NonGeneric_NullClassDef_ShouldRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                new GridAndBOEditorControlWin(GetControlFactory(),(ClassDef) null, CUSTOM_UIDEF_NAME);
+                Assert.Fail("expected ArgumentNullException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("classDef", ex.ParamName);
+            }
+        }
+        [Test]
+        public void TestConstructor_NonGeneric_NullControlFactory_ShouldRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef def = GetCustomClassDef();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                new GridAndBOEditorControlWin(null, def, CUSTOM_UIDEF_NAME);
+                Assert.Fail("expected ArgumentNullException");
+            }
+            //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("controlFactory", ex.ParamName);
+            }
+        }
+
+        [Test]
+        public void TestConstructor_NonGeneric_NoFormDefDefinedForUIDef_ShouldRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef def = GetCustomClassDef();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                new GridAndBOEditorControlWin(GetControlFactory(), def, CUSTOM_UIDEF_NAME);
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+
+                string expectedDeveloperMessage = "The 'BusinessObjectControl' could not be created since the the uiDef '" + CUSTOM_UIDEF_NAME +
+                                        "' in the classDef '" + def.ClassNameFull + "' does not have a UIForm defined";
+                StringAssert.Contains(expectedDeveloperMessage, ex.Message);
+            }
+        }
+
+        [Test]
+        public void TestConstructor_NonGeneric_DefinedUIDefDoesNotExistForDef_ShouldRiaseError()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef def = GetCustomClassDef();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string uidDefDoesnotexist = "";
+            try
+            {
+                uidDefDoesnotexist = "DoesNotExist";
+                new GridAndBOEditorControlWin(GetControlFactory(), def, uidDefDoesnotexist);
+                Assert.Fail("expected Err");
+            }
+                //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                string expectedMessage = "BusinessObjectControl' could not be created since the the uiDef '" + uidDefDoesnotexist +
+                                  "' does not exist in the classDef for '" + def.ClassNameFull + "'";
+                StringAssert.Contains(expectedMessage, ex.Message);
+            }
+        }
         [Test]
         public void TestConstructor()
         {
@@ -211,7 +317,7 @@ namespace Habanero.Test.UI.Base
             GridAndBOEditorControlWin<OrganisationTestBO> GridAndBOEditorControlWin =
                 new GridAndBOEditorControlWin<OrganisationTestBO>(GetControlFactory(), businessObjectControl);
             //  ---------------Test Result -----------------------
-            IReadOnlyGridControl readOnlyGridControl = GridAndBOEditorControlWin.ReadOnlyGridControl;
+            IGridControl readOnlyGridControl = GridAndBOEditorControlWin.GridControl;
             Assert.IsNotNull(readOnlyGridControl);
             Assert.IsFalse(readOnlyGridControl.Buttons.Visible);
             Assert.IsFalse(readOnlyGridControl.FilterControl.Visible);
@@ -237,11 +343,11 @@ namespace Habanero.Test.UI.Base
             GridAndBOEditorControlWin<OrganisationTestBO> gridAndBOEditorControlWin =
                 new GridAndBOEditorControlWin<OrganisationTestBO>(GetControlFactory(), businessObjectControl, CUSTOM_UIDEF_NAME);
             //---------------Test Result -----------------------
-            Assert.AreEqual(CUSTOM_UIDEF_NAME, gridAndBOEditorControlWin.ReadOnlyGridControl.UiDefName);
+            Assert.AreEqual(CUSTOM_UIDEF_NAME, gridAndBOEditorControlWin.GridControl.UiDefName);
         }
 
 
-        private BusinessObjectCollection<OrganisationTestBO> CreateSavedOrganisationTestBOSCollection()
+        private static BusinessObjectCollection<OrganisationTestBO> CreateSavedOrganisationTestBOSCollection()
         {
             BusinessObjectCollection<OrganisationTestBO> organisationTestBOS = new BusinessObjectCollection<OrganisationTestBO>();
             organisationTestBOS.Add(OrganisationTestBO.CreateSavedOrganisation());
@@ -283,7 +389,7 @@ namespace Habanero.Test.UI.Base
             // ---------------Execute Test ----------------------
             gridAndBOEditorControlWin.SetBusinessObjectCollection(businessObjectInfos);
             // ---------------Test Result -----------------------
-            IReadOnlyGridControl readOnlyGridControl = gridAndBOEditorControlWin.ReadOnlyGridControl;
+            IGridControl readOnlyGridControl = gridAndBOEditorControlWin.GridControl;
             Assert.AreEqual(businessObjectInfos.Count, readOnlyGridControl.Grid.Rows.Count);
             AssertSelectedBusinessObject(null, gridAndBOEditorControlWin);
         }
@@ -313,16 +419,16 @@ namespace Habanero.Test.UI.Base
             BORegistry.DataAccessor = new DataAccessorInMemory();
             BusinessObjectCollection<OrganisationTestBO> businessObjectInfos =
                CreateSavedOrganisationTestBOSCollection();
-            GridAndBOEditorControlWin<OrganisationTestBO> GridAndBOEditorControlWin = CreateGridAndBOEditorControlWin();
-            IReadOnlyGridControl readOnlyGridControl = GridAndBOEditorControlWin.ReadOnlyGridControl;
-            GridAndBOEditorControlWin.SetBusinessObjectCollection(businessObjectInfos);
+            GridAndBOEditorControlWin<OrganisationTestBO> gridAndBOEditorControlWin = CreateGridAndBOEditorControlWin();
+            IGridControl readOnlyGridControl = gridAndBOEditorControlWin.GridControl;
+            gridAndBOEditorControlWin.SetBusinessObjectCollection(businessObjectInfos);
             //   ---------------Assert Precondition----------------
             Assert.AreEqual(4, businessObjectInfos.Count);
-            AssertSelectedBusinessObject(businessObjectInfos[0], GridAndBOEditorControlWin);
+            AssertSelectedBusinessObject(businessObjectInfos[0], gridAndBOEditorControlWin);
             // ---------------Execute Test ----------------------
             readOnlyGridControl.SelectedBusinessObject = businessObjectInfos[1];
             //  ---------------Test Result -----------------------
-            AssertSelectedBusinessObject(businessObjectInfos[1], GridAndBOEditorControlWin);
+            AssertSelectedBusinessObject(businessObjectInfos[1], gridAndBOEditorControlWin);
         }
 
         [Test]
@@ -336,12 +442,12 @@ namespace Habanero.Test.UI.Base
                 CreateSavedOrganisationTestBOSCollection();
             //---------------Assert Precondition----------------
             Assert.AreEqual(4, businessObjectInfos.Count);
-            Assert.AreEqual(0, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(0, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             //---------------Execute Test ----------------------
             GridAndBOEditorControlWin.SetBusinessObjectCollection(businessObjectInfos);
             //---------------Test Result -----------------------
-            Assert.AreEqual(businessObjectInfos.Count, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
-            Assert.AreNotEqual(0, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Columns.Count);
+            Assert.AreEqual(businessObjectInfos.Count, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
+            Assert.AreNotEqual(0, GridAndBOEditorControlWin.GridControl.Grid.Columns.Count);
         }
 
         [Test]
@@ -351,7 +457,7 @@ namespace Habanero.Test.UI.Base
             GetCustomClassDef();
             GridAndBOEditorControlWin<OrganisationTestBO> GridAndBOEditorControlWin = CreateGridAndBOEditorControlWin();
             //  ---------------Assert Precondition----------------
-            Assert.AreEqual(0, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(0, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             // ---------------Execute Test ----------------------
             try
             {
@@ -380,7 +486,7 @@ namespace Habanero.Test.UI.Base
             //   ---------------Execute Test ----------------------
             GridAndBOEditorControlWin.SetBusinessObjectCollection(new BusinessObjectCollection<OrganisationTestBO>());
             //  ---------------Test Result -----------------------
-            Assert.AreEqual(0, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(0, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             AssertSelectedBusinessObject(null, GridAndBOEditorControlWin);
             Assert.IsFalse(GridAndBOEditorControlWin.BusinessObjectControl.Enabled);
         }
@@ -431,12 +537,12 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<OrganisationTestBO> businessObjectInfos = new BusinessObjectCollection<OrganisationTestBO>();
             gridAndBOEditorControlWin.SetBusinessObjectCollection(businessObjectInfos);
             //  ---------------Assert Precondition----------------
-            Assert.AreEqual(0, gridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(0, gridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             Assert.AreEqual(0, businessObjectInfos.Count);
             //  ---------------Execute Test ----------------------
             gridAndBOEditorControlWin.ButtonGroupControl["New"].PerformClick();
             // ---------------Test Result -----------------------
-            Assert.AreEqual(1, gridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(1, gridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             Assert.AreEqual(1, businessObjectInfos.Count);
             AssertSelectedBusinessObject(businessObjectInfos[0], gridAndBOEditorControlWin);
             Assert.IsTrue(gridAndBOEditorControlWin.BusinessObjectControl.Enabled);
@@ -457,13 +563,13 @@ namespace Habanero.Test.UI.Base
                 CreateSavedOrganisationTestBOSCollection();
             GridAndBOEditorControlWin.SetBusinessObjectCollection(organisationTestBOS);
             //   ---------------Assert Precondition----------------
-            Assert.AreEqual(4, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(4, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             Assert.AreEqual(4, organisationTestBOS.Count);
             Assert.IsFalse(GridAndBOEditorControlWin.BusinessObjectControl.Focused);
             //  ---------------Execute Test ----------------------
             GridAndBOEditorControlWin.ButtonGroupControl["New"].PerformClick();
             // ---------------Test Result -----------------------
-            Assert.AreEqual(5, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(5, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             Assert.AreEqual(5, organisationTestBOS.Count);
             Assert.IsTrue(organisationTestBOS[4].Status.IsNew);
             AssertSelectedBusinessObject(organisationTestBOS[4], GridAndBOEditorControlWin);
@@ -540,12 +646,12 @@ namespace Habanero.Test.UI.Base
             IButton deleteButton = GridAndBOEditorControlWin.ButtonGroupControl["Delete"];
             IButton newButton = GridAndBOEditorControlWin.ButtonGroupControl["New"];
             // ---------------Assert Precondition----------------
-            Assert.AreEqual(0, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(0, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             Assert.IsFalse(deleteButton.Enabled);
             //  ---------------Execute Test ----------------------
             newButton.PerformClick();
             //  ---------------Test Result -----------------------
-            Assert.AreEqual(1, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(1, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             Assert.IsFalse(deleteButton.Enabled);
         }
 
@@ -560,12 +666,12 @@ namespace Habanero.Test.UI.Base
             GridAndBOEditorControlWin<OrganisationTestBO> GridAndBOEditorControlWin = CreateGridAndBOEditorControlWin();
             IButton deleteButton = GridAndBOEditorControlWin.ButtonGroupControl["Delete"];
             // ---------------Assert Precondition----------------
-            Assert.AreEqual(0, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(0, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             Assert.IsFalse(deleteButton.Enabled);
             //  ---------------Execute Test ----------------------
             GridAndBOEditorControlWin.SetBusinessObjectCollection(businessObjectInfos);
             //  ---------------Test Result -----------------------
-            Assert.AreEqual(4, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(4, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             Assert.IsTrue(deleteButton.Enabled);
         }
 
@@ -609,12 +715,12 @@ namespace Habanero.Test.UI.Base
             OrganisationTestBO otherBO = organisationTestBOS[1];
             //---------------Assert Precondition----------------
             AssertSelectedBusinessObject(currentBO, GridAndBOEditorControlWin);
-            Assert.AreEqual(4, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(4, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             //---------------Execute Test ----------------------
             deleteButton.PerformClick();
             //---------------Test Result -----------------------
             AssertSelectedBusinessObject(otherBO, GridAndBOEditorControlWin);
-            Assert.AreEqual(3, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(3, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
         }
 
         //         Tests a unique set of circumstances
@@ -633,14 +739,14 @@ namespace Habanero.Test.UI.Base
             IButton cancelButton = GridAndBOEditorControlWin.ButtonGroupControl["Cancel"];
             OrganisationTestBO currentBO = GridAndBOEditorControlWin.CurrentBusinessObject;
             //---------------Assert Precondition----------------
-            Assert.AreEqual(4, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(4, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             //---------------Execute Test ----------------------
             newButton.PerformClick();
             newButton.PerformClick();
             cancelButton.PerformClick();
             deleteButton.PerformClick();
             //---------------Test Result -----------------------
-            Assert.AreEqual(4, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(4, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             // Assert.AreSame(currentBO, GridAndBOEditorControlWin.CurrentBusinessObject);
         }
 
@@ -720,12 +826,12 @@ namespace Habanero.Test.UI.Base
             newButton.PerformClick();
             //---------------Assert Precondition----------------
             Assert.IsTrue(cancelButton.Enabled);
-            Assert.AreEqual(1, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(1, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             Assert.IsTrue(GridAndBOEditorControlWin.BusinessObjectControl.Enabled);
             //---------------Execute Test ----------------------
             cancelButton.PerformClick();
             //---------------Test Result -----------------------
-            Assert.AreEqual(0, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(0, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             Assert.IsFalse(GridAndBOEditorControlWin.BusinessObjectControl.Enabled);
         }
 
@@ -745,14 +851,14 @@ namespace Habanero.Test.UI.Base
             newButton.PerformClick();
             // ---------------Assert Precondition----------------
             Assert.IsTrue(cancelButton.Enabled);
-            Assert.AreEqual(5, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(5, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             Assert.IsTrue(GridAndBOEditorControlWin.BusinessObjectControl.Enabled);
             //   ---------------Execute Test ----------------------
             cancelButton.PerformClick();
             //  ---------------Test Result -----------------------
-            Assert.AreEqual(4, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.Rows.Count);
+            Assert.AreEqual(4, GridAndBOEditorControlWin.GridControl.Grid.Rows.Count);
             Assert.IsTrue(GridAndBOEditorControlWin.BusinessObjectControl.Enabled);
-            Assert.IsNotNull(GridAndBOEditorControlWin.ReadOnlyGridControl.SelectedBusinessObject);
+            Assert.IsNotNull(GridAndBOEditorControlWin.GridControl.SelectedBusinessObject);
         }
 
         [Test]
@@ -797,13 +903,13 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(firstBO.Status.IsNew);
             Assert.IsFalse(secondBO.Status.IsDirty);
             Assert.IsFalse(secondBO.Status.IsNew);
-            Assert.AreEqual(0, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.SelectedRows[0].Index);
-            Assert.AreSame(firstBO, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.SelectedBusinessObject);
+            Assert.AreEqual(0, GridAndBOEditorControlWin.GridControl.Grid.SelectedRows[0].Index);
+            Assert.AreSame(firstBO, GridAndBOEditorControlWin.GridControl.Grid.SelectedBusinessObject);
             //---------------Execute Test ----------------------
-            GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.SelectedBusinessObject = secondBO;
+            GridAndBOEditorControlWin.GridControl.Grid.SelectedBusinessObject = secondBO;
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.SelectedRows[0].Index);
-            Assert.AreSame(secondBO, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.SelectedBusinessObject);
+            Assert.AreEqual(1, GridAndBOEditorControlWin.GridControl.Grid.SelectedRows[0].Index);
+            Assert.AreSame(secondBO, GridAndBOEditorControlWin.GridControl.Grid.SelectedBusinessObject);
             Assert.IsFalse(firstBO.Status.IsDirty);
             Assert.IsFalse(boControl.DisplayErrorsCalled);
         }
@@ -823,14 +929,14 @@ namespace Habanero.Test.UI.Base
         //            Assert.IsTrue(firstBO.Status.IsDirty);
         //            Assert.IsFalse(firstBO.Status.IsNew);
         //            Assert.IsFalse(firstBO.IsValid());
-        //            Assert.AreEqual(0, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.SelectedRows[0].Index);
-        //            Assert.AreSame(firstBO, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.SelectedBusinessObject);
+        //            Assert.AreEqual(0, GridAndBOEditorControlWin.GridControl.Grid.SelectedRows[0].Index);
+        //            Assert.AreSame(firstBO, GridAndBOEditorControlWin.GridControl.Grid.SelectedBusinessObject);
         //            Assert.IsFalse(boControl.DisplayErrorsCalled);
         //            ---------------Execute Test ----------------------
-        //            GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.SelectedBusinessObject = secondBO;
+        //            GridAndBOEditorControlWin.GridControl.Grid.SelectedBusinessObject = secondBO;
         //            ---------------Test Result -----------------------
-        //            Assert.AreEqual(0, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.SelectedRows[0].Index);
-        //            Assert.AreSame(firstBO, GridAndBOEditorControlWin.ReadOnlyGridControl.Grid.SelectedBusinessObject);
+        //            Assert.AreEqual(0, GridAndBOEditorControlWin.GridControl.Grid.SelectedRows[0].Index);
+        //            Assert.AreSame(firstBO, GridAndBOEditorControlWin.GridControl.Grid.SelectedBusinessObject);
         //            Assert.IsTrue(firstBO.Status.IsDirty);
         //            Assert.IsTrue(boControl.DisplayErrorsCalled);
         //        }

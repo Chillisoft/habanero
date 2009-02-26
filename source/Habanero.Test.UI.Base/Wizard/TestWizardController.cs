@@ -504,8 +504,8 @@ namespace Habanero.Test.UI.Base.Wizard
             throw new System.NotImplementedException();
         }
 
-        public event EventHandler TextChanged;
-
+        public event EventHandler TextChanged;                                    
+ 
         #endregion
     }
 }

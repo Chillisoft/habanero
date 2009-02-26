@@ -87,6 +87,18 @@ namespace Habanero.UI.Base
         /// </summary>
         IButtonGroupControl Buttons { get; }
 
+        ///<summary>
+        /// Returns a Flag indicating whether this control has been initialised yet or not.
+        /// Gets the value indicating whether one of the overloaded initialise
+        /// methods been called for the grid
+        ///</summary>
+        bool IsInitialised { get; }
+
+        ///<summary>
+        /// The Business Object currently Selected in the Grid.
+        ///</summary>
+        IBusinessObject SelectedBusinessObject { get; set; }
+
         /// <summary>
         /// Sets the business object collection to display.  Loading of
         /// the collection needs to be done before it is assigned to the

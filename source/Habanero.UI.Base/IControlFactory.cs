@@ -26,7 +26,13 @@ using Habanero.BO.ClassDefinition;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Creates controls for a specific UI environment
+    /// Creates controls for a specific UI environment.
+    /// The control Factory provides a specific peice of functionality fundamental to the 
+    /// ability of habanero to swap between Windows, Web and WPF. If the control factory is 
+    ///  used for creating all controls in the application then moving the application from windows to web
+    ///   or visa versa is trivial. The control factory also gives a very simple and easy way of 
+    ///   styling an application. Swap out the control factory and create 
+    ///   controls with any image etc you want.
     /// </summary>
     public interface IControlFactory
     {

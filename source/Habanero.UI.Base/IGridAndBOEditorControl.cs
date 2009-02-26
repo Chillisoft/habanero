@@ -23,6 +23,8 @@ namespace Habanero.UI.Base
 {
     ///<summary>
     /// Interface for a control that displays a collection of a Business Object along side an editor/creator panel.
+    /// The collection of business objects can be shown using any selector control e.g. an <see cref="IEditableGridControl"/>,
+    ///   <see cref="IGridControl"/> etc.
     ///</summary>
     public interface IGridAndBOEditorControl : IControlHabanero
     {
@@ -33,12 +35,24 @@ namespace Habanero.UI.Base
         /// collection needs to be provided by a suitable context.
         /// </summary>
         void SetBusinessObjectCollection(IBusinessObjectCollection col);
-
-        IReadOnlyGridControl ReadOnlyGridControl { get; }
+        /// <summary>
+        /// Returns the <see cref="IGridControl"/> that is being used along side of the <see cref="IBusinessObjectControlWithErrorDisplay"/>
+        ///  to provide bo editing behaviour.
+        /// </summary>
+        IGridControl GridControl { get; }
+        /// <summary>
+        /// The <see cref="IBusinessObjectControlWithErrorDisplay"/> that is being used to 
+        /// edit the <see cref="IBusinessObject"/>.
+        /// </summary>
         IBusinessObjectControlWithErrorDisplay BusinessObjectControl { get; }
+        /// <summary>
+        /// The <see cref="IButtonGroupControl"/> that is has the individual buttons that
+        ///   are shown at the bottom of this control.
+        /// </summary>
         IButtonGroupControl ButtonGroupControl { get; }
+        /// <summary>
+        /// Method to create a new Business Object that is part of the collection.
+        /// </summary>
         IBusinessObject CurrentBusinessObject { get; }
     }
-
-
 }

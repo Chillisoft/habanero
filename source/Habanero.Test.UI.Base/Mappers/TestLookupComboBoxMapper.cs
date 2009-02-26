@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
@@ -45,7 +44,6 @@ namespace Habanero.Test.UI.Base.Mappers
         [TestFixture]
         public class TestLookupComboBoxMapperVWG : TestLookupComboBoxMapper
         {
-            private DataStoreInMemory _store;
 
             protected override IControlFactory GetControlFactory()
             {

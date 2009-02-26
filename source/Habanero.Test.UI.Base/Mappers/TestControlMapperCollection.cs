@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using NUnit.Framework;
 

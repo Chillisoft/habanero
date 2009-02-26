@@ -18,8 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 
@@ -33,12 +31,13 @@ namespace Habanero.UI.Win
 
         private readonly DateTimePickerManager _manager;
 
+        ///<summary>
+        /// Constructor for <see cref="DateTimePickerWin"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public DateTimePickerWin(IControlFactory controlFactory)
         {
-            DateTimePickerManager.ValueGetter<DateTime> valueGetter = delegate()
-            {
-                return base.Value;
-            };
+            DateTimePickerManager.ValueGetter<DateTime> valueGetter = () => base.Value;
             DateTimePickerManager.ValueSetter<DateTime> valueSetter = delegate(DateTime value)
             {
                 base.Value = value;
@@ -96,13 +95,23 @@ namespace Habanero.UI.Win
                 if (_manager != null) _manager.OnValueChanged(new EventArgs());
             }
         }
-        
+
+        ///<summary>
+        ///Raises the <see cref="E:System.Windows.Forms.DateTimePicker.ValueChanged" /> event.
+        ///</summary>
+        ///
+        ///<param name="eventargs">An <see cref="T:System.EventArgs" /> that contains the event data. </param>
         protected override void OnValueChanged(EventArgs eventargs)
         {
             _manager.OnValueChanged(eventargs);
             base.OnValueChanged(eventargs);
         }
 
+        ///<summary>
+        ///Raises the <see cref="E:System.Windows.Forms.Control.Resize" /> event.
+        ///</summary>
+        ///
+        ///<param name="eventargs">An <see cref="T:System.EventArgs" /> that contains the event data. </param>
         protected override void OnResize(EventArgs eventargs)
         {
             base.OnResize(eventargs);
@@ -115,6 +124,11 @@ namespace Habanero.UI.Win
             _manager.ChangeToValueMode();
         }
 
+        ///<summary>
+        ///Raises the <see cref="E:System.Windows.Forms.Control.KeyDown" /> event.
+        ///</summary>
+        ///
+        ///<param name="e">A <see cref="T:System.Windows.Forms.KeyEventArgs" /> that contains the event data. </param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -136,30 +150,55 @@ namespace Habanero.UI.Win
             }
         }
 
+        ///<summary>
+        ///Raises the <see cref="E:System.Windows.Forms.Control.BackColorChanged" /> event.
+        ///</summary>
+        ///
+        ///<param name="e">An <see cref="T:System.EventArgs" /> that contains the event data. </param>
         protected override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
             _manager.UpdateFocusState();
         }
 
+        ///<summary>
+        ///Raises the <see cref="E:System.Windows.Forms.Control.ForeColorChanged" /> event.
+        ///</summary>
+        ///
+        ///<param name="e">An <see cref="T:System.EventArgs" /> that contains the event data. </param>
         protected override void OnForeColorChanged(EventArgs e)
         {
             base.OnForeColorChanged(e);
             _manager.UpdateFocusState();
         }
 
+        ///<summary>
+        ///Raises the <see cref="E:System.Windows.Forms.Control.EnabledChanged" /> event.
+        ///</summary>
+        ///
+        ///<param name="e">An <see cref="T:System.EventArgs" /> that contains the event data. </param>
         protected override void OnEnabledChanged(EventArgs e)
         {
             base.OnEnabledChanged(e);
             _manager.UpdateFocusState();
         }
 
+        ///<summary>
+        ///Raises the <see cref="E:System.Windows.Forms.Control.GotFocus" /> event.
+        ///</summary>
+        ///
+        ///<param name="e">An <see cref="T:System.EventArgs" /> that contains the event data. </param>
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
             _manager.UpdateFocusState();
         }
 
+        ///<summary>
+        ///Raises the <see cref="E:System.Windows.Forms.Control.LostFocus" /> event.
+        ///</summary>
+        ///
+        ///<param name="e">An <see cref="T:System.EventArgs" /> that contains the event data. </param>
         protected override void OnLostFocus(EventArgs e)
         {
             base.OnLostFocus(e);
@@ -197,8 +236,8 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets or sets the format of the date and time displayed in the control.
         /// </summary>
-        ///	<returns>One of the <see cref="DateTimePickerFormat"></see> values. The default is <see cref="DateTimePickerFormat.Long"></see>.</returns>
-        ///	<exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The value assigned is not one of the <see cref="DateTimePickerFormat"></see> values. </exception>
+        ///	<returns>One of the <see cref="Base.DateTimePickerFormat"></see> values. The default is <see cref="Base.DateTimePickerFormat.Long"></see>.</returns>
+        ///	<exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The value assigned is not one of the <see cref="Base.DateTimePickerFormat"></see> values. </exception>
         Base.DateTimePickerFormat IDateTimePicker.Format
         {
             get { return (Base.DateTimePickerFormat)base.Format; }

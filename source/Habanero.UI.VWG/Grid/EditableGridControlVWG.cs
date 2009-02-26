@@ -169,6 +169,20 @@ namespace Habanero.UI.VWG
             get { return Buttons; }
         }
 
+        ///<summary>
+        /// Returns a Flag indicating whether this control has been initialised yet or not.
+        ///</summary>
+        public bool IsInitialised
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public IBusinessObject SelectedBusinessObject
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
         /// <summary>
         /// Sets the business object collection to display.  Loading of
         /// the collection needs to be done before it is assigned to the
