@@ -449,6 +449,11 @@ namespace Habanero.BO
             //Do nothing single relationship does not have children
         }
 
+        internal override void CancelEdits()
+        {
+            throw new NotImplementedException();
+        }
+
         internal override void AddDirtyChildrenToTransactionCommitter(TransactionCommitter transactionCommitter)
         {
             foreach (TBusinessObject businessObject in GetDirtyChildren())

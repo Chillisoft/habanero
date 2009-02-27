@@ -840,6 +840,7 @@ namespace Habanero.BO
             _boStatus.IsDeleted = false;
             _boStatus.IsEditing = false;
             _boStatus.IsDirty = false;
+            Relationships.CancelEdits();
             ReleaseWriteLocks();
             FireUpdatedEvent();
             FireRestoredEvent();

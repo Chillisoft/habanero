@@ -24,6 +24,7 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO.Relationship
 {
@@ -417,5 +418,63 @@ namespace Habanero.Test.BO.Relationship
             //---------------Test Result -----------------------
              Assert.AreEqual(2, tc.OriginalTransactions.Count);
         }
+
+        [Test]
+        public void Test_CancelEdits()
+        {
+            //---------------Set up test pack-------------------
+            new AddressTestBO();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            OrganisationTestBO.LoadDefaultClassDef_WithRelationShipToAddress();
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            RelationshipCol relationships = organisationTestBO.Relationships;
+            MultipleRelationship<ContactPersonTestBO> contactPersonRelationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            BusinessObjectCollection<ContactPersonTestBO> contactPersonCol = contactPersonRelationship.BusinessObjectCollection;
+            MultipleRelationship<AddressTestBO> addressRelationship = organisationTestBO.Relationships.GetMultiple<AddressTestBO>("Addresses");
+            BusinessObjectCollection<AddressTestBO> addressCol = addressRelationship.BusinessObjectCollection;
+
+            contactPersonCol.CreateBusinessObject();
+            addressCol.CreateBusinessObject();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(relationships.IsDirty);
+            //---------------Execute Test ----------------------
+            relationships.CancelEdits();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(relationships.IsDirty);
+        }
+
+        [Test]
+        public void Test_CancelEdits_CallsCancelEditsOnDirtyRelationshipsOnly()
+        {
+            //---------------Set up test pack-------------------
+            new AddressTestBO();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            OrganisationTestBO.LoadDefaultClassDef_WithRelationShipToAddress();
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            RelationshipCol relationshipCol = new RelationshipCol(organisationTestBO);
+            // Setup Mocks
+            MockRepository mockRepository = new MockRepository();
+            RelationshipBase dirtyRelationship = mockRepository.PartialMock<RelationshipBase>();
+            RelationshipBase nonDirtyRelationship = mockRepository.PartialMock<RelationshipBase>();
+
+            Expect.Call(dirtyRelationship.RelationshipName).Return("DirtyRelationship").Repeat.Any();
+            Expect.Call(dirtyRelationship.IsDirty).Return(true).Repeat.Once();
+            Expect.Call(dirtyRelationship.CancelEdits).Repeat.Once();
+
+            Expect.Call(nonDirtyRelationship.RelationshipName).Return("NonDirtyRelationship").Repeat.Any();
+            Expect.Call(nonDirtyRelationship.IsDirty).Return(false).Repeat.Once();
+            Expect.Call(nonDirtyRelationship.CancelEdits).Repeat.Never();
+            mockRepository.ReplayAll();
+            relationshipCol.Add(dirtyRelationship);
+            relationshipCol.Add(nonDirtyRelationship);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            relationshipCol.CancelEdits();
+            //---------------Test Result -----------------------
+            mockRepository.VerifyAll();
+        }
+
+        
     }
 }

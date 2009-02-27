@@ -112,6 +112,7 @@
     <Compile Include="Loaders\TestXmlDatabaseLookupListLoader.cs" />
     <Compile Include="Loaders\TestXmlFilterLoader.cs" />
     <Compile Include="Loaders\TestXmlSimpleLookupListLoader.cs" />
+    <Compile Include="Relationship\TestMultipleRelationshipCancelEdits_Aggregation.cs" />
     <Compile Include="TestBOObjectID.cs" />
     <Compile Include="TestBOPropInteger.cs" />
     <Compile Include="TestBOSerialisation.cs" />

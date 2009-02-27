@@ -325,6 +325,15 @@ namespace Habanero.BO
 
     	#endregion
 
+
+        internal void CancelEdits()
+        {
+            foreach (RelationshipBase relationship in this)
+            {
+                if (relationship.IsDirty)  relationship.CancelEdits();
+            }
+        }
+
         internal void AddDirtyChildrenToTransactionCommitter(TransactionCommitter transactionCommitter)
         {
             if (_bo.Status.IsDeleted) return;
@@ -363,6 +372,5 @@ namespace Habanero.BO
                 }
             }
         }
-
     }
 }

@@ -20,7 +20,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Habanero.Base;
@@ -566,9 +565,7 @@ namespace Habanero.BO
                 DeRegisterBOEvents(bo);
             }
             if (fireEvent) FireBusinessObjectRemoved(bo);
-
         }
-
 
         protected virtual void RestoredEventHandler(object sender, BOEventArgs e)
         {
@@ -1638,7 +1635,6 @@ namespace Habanero.BO
         /// Returns a collection of business objects that have been marked for deletion from the collection
         /// but the collection has not yet been persisted.
         ///</summary>
-        ///<exception cref="NotImplementedException"></exception>
         public List<TBusinessObject> MarkedForDeleteBusinessObjects
         {
             get { return _markedForDeleteBusinessObjects; }

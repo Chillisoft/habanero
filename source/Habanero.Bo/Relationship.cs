@@ -133,7 +133,10 @@ namespace Habanero.BO
         ///</summary>
         public abstract IBusinessObject OwningBO { get; }
 
+        internal abstract void CancelEdits();
+
         internal abstract void AddDirtyChildrenToTransactionCommitter(TransactionCommitter committer);
+
         internal abstract void DereferenceChildren(TransactionCommitter committer);
 
         internal abstract void DeleteChildren(TransactionCommitter committer);
@@ -241,7 +244,7 @@ namespace Habanero.BO
         {
             get { return _owningBo; }
         }
-        
+
         ///<summary>
         /// The key that identifies this relationship i.e. the properties in the 
         /// source object and how they are related to properties in the related object.

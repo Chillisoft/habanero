@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
@@ -217,6 +218,24 @@ namespace Habanero.BO
             {
                 if (_relDef.OrderCriteria == null) return new OrderCriteria();
                 return _relDef.OrderCriteria;
+            }
+        }
+
+        internal override void CancelEdits()
+        {
+            foreach (TBusinessObject createdChild in _boCol.CreatedBusinessObjects.ToArray())
+            {
+                createdChild.CancelEdits();
+                _boCol.Remove(createdChild);
+            }
+            foreach (TBusinessObject addedChild in _boCol.AddedBusinessObjects.ToArray())
+            {
+                addedChild.CancelEdits();
+                _boCol.Remove(addedChild);
+            }
+            foreach (TBusinessObject dirtyChild in GetDirtyChildren())
+            {
+                dirtyChild.CancelEdits();
             }
         }
 
