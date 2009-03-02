@@ -485,6 +485,29 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsNotNull(contactPerson.OrganisationID);
             Assert.AreEqual(organisationTestBO2.OrganisationID,  returnedOrg.OrganisationID);
         }
+
+        [Test]
+        [Ignore("Working on this. Testing to see if an edit to a FK prop edits the Relationship")] //TODO Mark 02 Mar 2009: Ignored Test - Working on this. Testing to see if an edit to a FK prop edits the Relationship
+        public void Test_SetByID_ToAnotherOrgID_InBOManager_SavedOrganisation()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            OrganisationTestBO organisationTestBO2 = OrganisationTestBO.CreateSavedOrganisation();
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
+            relationship.OwningBOHasForeignKey = false;
+            ContactPersonTestBO contactPerson = new ContactPersonTestBO
+            {
+                Surname = TestUtil.GetRandomString(),
+                FirstName = TestUtil.GetRandomString()
+            };
+            contactPerson.OrganisationID = organisationTestBO.OrganisationID;
+            //---------------Assert Preconditions --------------
+            //---------------Execute Test ----------------------
+            contactPerson.OrganisationID = organisationTestBO2.OrganisationID;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(relationship.IsDirty);
+            Assert.AreSame(contactPerson, organisationTestBO2.ContactPerson);
+        }
         [Test]
         public void Test_SetByID_InBOManager_UnsavedOrganisation_NoReverseRelationship()
         {
@@ -493,10 +516,10 @@ namespace Habanero.Test.BO.Relationship
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             relationship.OwningBOHasForeignKey = true;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO
-                    {
-                        Surname = TestUtil.GetRandomString(),
-                        FirstName = TestUtil.GetRandomString()
-                    };
+            {
+                Surname = TestUtil.GetRandomString(),
+                FirstName = TestUtil.GetRandomString()
+            };
             //---------------Execute Test ----------------------
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             OrganisationTestBO returnedOrg = contactPerson.Organisation;
