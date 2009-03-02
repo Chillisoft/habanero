@@ -855,15 +855,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns>The primary key for this class</returns>
         public PrimaryKeyDef GetPrimaryKeyDef()
         {
-            PrimaryKeyDef primaryKeyDef = PrimaryKeyDef;
-            if (primaryKeyDef == null)
-            {
-                ClassDef superClassClassDef = SuperClassClassDef;
-                if (superClassClassDef != null)
-                {
-                    primaryKeyDef = superClassClassDef.GetPrimaryKeyDef();
-                }
-            }
+            PrimaryKeyDef primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(this, ClassDef.ClassDefs);
             return primaryKeyDef;
         }
 

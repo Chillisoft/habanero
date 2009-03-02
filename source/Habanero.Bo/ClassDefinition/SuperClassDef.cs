@@ -177,21 +177,12 @@ namespace Habanero.BO.ClassDefinition
 		{
 			get
 			{
-				if (_superClassClassDef == null && _assemblyName != null && _className != null)
+				if (_superClassClassDef == null)
 				{
                     //TODO Mark 2009-01-15: Look at how we can change this ClassDef.ClassDefs to the actual parent collection of this SuperClassDef's Class (Low priority)
-					_superClassClassDef = ClassDef.ClassDefs[_assemblyName, _className];
-                    if (_superClassClassDef == null)
-                    {
-                        throw new InvalidXmlDefinitionException(String.Format(
-                            "The class definition for the super class with the type " +
-                            "'{0}' was not found.  Check that the class definition " +
-                            "exists or that spelling and capitalisation are correct. " + 
-                            "There are {1} class definitions currently loaded."
-                            ,_assemblyName + "." + _className, ClassDef.ClassDefs.Count));
-                    }
+                    _superClassClassDef = ClassDefHelper.GetSuperClassClassDef(this, ClassDef.ClassDefs);
 				}
-				return _superClassClassDef;
+			    return _superClassClassDef;
 			}
 			set
 			{
@@ -210,7 +201,7 @@ namespace Habanero.BO.ClassDefinition
 			}
 		}
 
-		#endregion SuperClassDef Methods
+	    #endregion SuperClassDef Methods
 
 	}
 }

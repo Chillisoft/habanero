@@ -31,7 +31,7 @@ namespace Habanero.Test.BO.ClassDefinition
     [TestFixture]
     public class TestClassDef
     {
-        private ClassDef itsClassDef;
+        private ClassDef _classDef;
 
         [SetUp]
         public void Setup()
@@ -132,7 +132,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             ClassDef.ClassDefs.Clear();
             XmlClassLoader loader = new XmlClassLoader();
-            itsClassDef =
+            _classDef =
                 loader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -143,8 +143,8 @@ namespace Habanero.Test.BO.ClassDefinition
 					</primaryKey>
 				</class>
 			");
-            ClassDef.ClassDefs.Add(itsClassDef);
-            IBusinessObject bo = itsClassDef.CreateNewBusinessObject();
+            ClassDef.ClassDefs.Add(_classDef);
+            IBusinessObject bo = _classDef.CreateNewBusinessObject();
             Assert.AreSame(typeof(MyBO), bo.GetType());
             bo.SetPropertyValue("TestProp", "TestValue");
             Assert.AreEqual("TestValue", bo.GetPropertyValue("TestProp"));
@@ -156,7 +156,7 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             XmlClassLoader loader = new XmlClassLoader();
-            itsClassDef =
+            _classDef =
                 loader.LoadClass(
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
@@ -167,11 +167,11 @@ namespace Habanero.Test.BO.ClassDefinition
 					</primaryKey>
 				</class>
 			");
-            ClassDef.ClassDefs.Add(itsClassDef);
+            ClassDef.ClassDefs.Add(_classDef);
             //-------------Assert Preconditions -------------
 
             //---------------Execute Test ----------------------
-            IBusinessObject bo = itsClassDef.CreateNewBusinessObject();
+            IBusinessObject bo = _classDef.CreateNewBusinessObject();
             //---------------Test Result -----------------------
             Assert.IsInstanceOfType(typeof(MyBO), bo);
             Assert.AreEqual("defaultValue", bo.GetPropertyValue("TestProp"));

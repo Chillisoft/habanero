@@ -101,6 +101,54 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsNull(classDefInherited.PrimaryKeyDef);
         }
 
+        /// <summary>
+        /// This test was written because the was a problem determining the BO owning the FK with a relationship
+        /// where the owning class's PK is inherited.
+        /// </summary>
+        [Test]
+        public void TestLoadClassDefs_InheritedClassWithNoPrimaryKey_WithRelationship()
+        {
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            ClassDefCol classDefList =
+                loader.LoadClassDefs(
+                    @"
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" type=""Guid"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+						</class>
+						<class name=""TestClass2"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClass2ID"" type=""Guid"" />
+                            <primaryKey>
+                                <prop name=""TestClass2ID""/>
+                            </primaryKey>
+						</class>
+						<class name=""TestClassInherited"" assembly=""Habanero.Test.BO.Loaders"" >							
+                            <superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" />
+					        <property name=""RelatedTestClassID"" type=""Guid"" />    
+                            <relationship name=""TestRelationship"" type=""single"" 
+						        relatedClass=""TestClass"" relatedAssembly=""Habanero.Test.BO.Loaders"">
+						        <relatedProperty property=""RelatedTestClassID"" relatedProperty=""TestClassID"" />
+					        </relationship>                
+						</class>
+					</classes>
+			");
+            Assert.AreEqual(3, classDefList.Count);
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass2"), "Class 'TestClass2' should have been loaded.");
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClassInherited"), "Class 'TestClassInherited' should have been loaded.");
+            ClassDef classDefTestClass = classDefList["Habanero.Test.BO.Loaders", "TestClass"];
+            ClassDef classDefInherited = classDefList["Habanero.Test.BO.Loaders", "TestClassInherited"];
+            Assert.IsNotNull(classDefTestClass);
+            Assert.IsNotNull(classDefInherited.SuperClassDef);
+            Assert.IsNull(classDefInherited.PrimaryKeyDef);
+            RelationshipDefCol relDefCol = classDefInherited.RelationshipDefCol;
+            Assert.AreEqual(1, relDefCol.Count, "There should be one relationship def from the given xml definition");
+            Assert.IsNotNull(relDefCol["TestRelationship"], "'TestRelationship' should be the name of the relationship created");
+        }
+
         [Test]
         public void TestLoadClassDefs_KeyDefinedWithInheritedProperties()
         {
