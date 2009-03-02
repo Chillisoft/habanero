@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
@@ -42,6 +43,7 @@ namespace Habanero.UI.Win
     /// Some customisation is provided through the GridWithPanelControlStrategy,
     /// including how controls should be enabled for the appropriate environment.
     /// </summary>
+    [Obsolete("This has been replaced by BusinessObjectControlWin")]
     public class GridWithPanelControlWin<TBusinessObject> : UserControlWin, IGridWithPanelControl<TBusinessObject> 
                 where TBusinessObject : class, IBusinessObject, new()
     {
@@ -150,10 +152,11 @@ namespace Habanero.UI.Win
             set { _gridWithPanelControlManager.ConfirmSaveDelegate = value; }
         }
     }
-
+    
     /// <summary>
     /// Represents a panel containing a PanelInfo used to edit a single business object.
     /// </summary>
+    [Obsolete("This has been replaced by BusinessObjectControlWin")]
     public class BusinessObjectPanelWin<T> : UserControlWin, IBusinessObjectPanel where T : class, IBusinessObject
     {
         private IPanelInfo _panelInfo;

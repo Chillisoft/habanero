@@ -141,7 +141,38 @@ namespace Habanero.UI.Win
             {
                 _items.Clear();
             }
+            /// <summary>
+            /// Retrieves the item at the specified index within the collection
+            /// </summary>
+            /// <param name="index">The index of the item in the collection to retrieve</param>
+            /// <returns>An object representing the item located at the
+            /// specified index within the collection</returns>
+            public object this[int index]
+            {
+                get { return _items[index]; }
+                set { _items[index] = value; }
+            }
 
+            /// <summary>
+            /// Determines if the specified item is located within the collection
+            /// </summary>
+            /// <param name="value">An object representing the item to locate in the collection</param>
+            /// <returns>true if the item is located within the collection; otherwise, false</returns>
+            public bool Contains(object value)
+            {
+                return _items.Contains(value);
+            }
+
+            /// <summary>
+            /// Retrieves the index within the collection of the specified item
+            /// </summary>
+            /// <param name="value">An object representing the item to locate in the collection</param>
+            /// <returns>The zero-based index where the item is
+            /// located within the collection; otherwise, -1</returns>
+            public int IndexOf(object value)
+            {
+                return _items.IndexOf(value);
+            }
             ///<summary>
             ///Returns an enumerator that iterates through a collection.
             ///</summary>

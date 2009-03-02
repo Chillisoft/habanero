@@ -35,8 +35,6 @@ namespace Habanero.UI.Win
         private readonly EditableGridControlManager _editableGridManager;
         private readonly IFilterControl _filterControl;
         private readonly IEditableGrid _grid;
-        private string _additionalSearchCriteria;
-        private string _orderBy;
 
         ///<summary>
         /// Constructs a new instance of a <see cref="EditableGridControlWin"/>.
@@ -141,10 +139,32 @@ namespace Habanero.UI.Win
             get { return true; }
         }
 
+        public IBusinessObjectCollection BusinessObjectCollection
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+
         public IBusinessObject SelectedBusinessObject
         {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }
+        }
+
+        public event EventHandler<BOEventArgs> BusinessObjectSelected;
+        public void Clear()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int NoOfItems
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public IBusinessObject GetBusinessObjectAtRow(int row)
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>
@@ -160,7 +180,7 @@ namespace Habanero.UI.Win
             if (boCollection == null)
             {
                 //TODO: weakness where user could call _control.Grid.Set..(null) directly and bypass the disabling.
-                _grid.SetBusinessObjectCollection(null);
+                _grid.BusinessObjectCollection = null;
                 _grid.AllowUserToAddRows = false;
                 Buttons.Enabled = false;
                 FilterControl.Enabled = false;
@@ -186,7 +206,7 @@ namespace Habanero.UI.Win
             //if (this.BusinessObjectEditor == null) this.BusinessObjectEditor = new DefaultBOEditor(_controlFactory);
             //if (this.BusinessObjectDeletor == null) this.BusinessObjectDeletor = new DefaultBODeletor();
 
-            _grid.SetBusinessObjectCollection(boCollection);
+            _grid.BusinessObjectCollection = boCollection;
 
             Buttons.Enabled = true;
             FilterControl.Enabled = true;
@@ -222,22 +242,14 @@ namespace Habanero.UI.Win
         /// Gets and sets the default order by clause used for loading the grid when the <see cref="FilterModes"/>
         /// is set to Search
         /// </summary>
-        public string OrderBy
-        {
-            get { return _orderBy; }
-            set { _orderBy = value; }
-        }
+        public string OrderBy { get; set; }
 
         /// <summary>
         /// Gets and sets the standard search criteria used for loading the grid when the <see cref="FilterModes"/>
         /// is set to Search. This search criteria will be appended with an AND to any search criteria returned
         /// by the FilterControl.
         /// </summary>
-        public string AdditionalSearchCriteria
-        {
-            get { return _additionalSearchCriteria; }
-            set { _additionalSearchCriteria = value; }
-        }
+        public string AdditionalSearchCriteria { get; set; }
 
         private void InitialiseButtons()
         {

@@ -18,19 +18,14 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.Test.BO;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
 using Habanero.UI.Win;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
-using DataGridViewCellEventArgs=System.Windows.Forms.DataGridViewCellEventArgs;
 
 namespace Habanero.Test.UI.Base
 {
@@ -50,27 +45,6 @@ namespace Habanero.Test.UI.Base
     /// </summary>
     public abstract class TestEditableGrid //: TestUsingDatabase
     {
-
-        //TODO  08 Feb 2009: Need to do tests and changes to update the ID on the grid column?
-        // am having problems where I edit the primary key then delete it and it is not found in the collection
-        // IN Editable Data Provider
-        //This could also be due to the fact that the item is now in the mark 4 deleted and not 
-        //  in the main collection.
-//                            if ((RowState) _rowStates[e.Row] != RowState.Deleted)
-//                    {
-//                        //log.Debug("Saving...");
-//                        changedBo = _collection.Find(e.Row[IDColumnName].ToString());
-//
-//                        if (changedBo != null) changedBo.Save();
-//                        _rowStates.Remove(e.Row);
-//                    }
-//                    else
-//                    {
-//                        changedBo = _collection.Find((string) _deletedRowIDs[e.Row]);
-//                        if (changedBo != null) changedBo.Save(); ************
-//                        _rowStates.Remove(e.Row);
-//                        _deletedRowIDs.Remove(e.Row);
-//                    }
         [SetUp]
         public void SetupTest()
         {
@@ -888,7 +862,7 @@ namespace Habanero.Test.UI.Base
             IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
             AddControlToForm(editableGrid);
             SetupGridColumnsForMyBo(editableGrid);
-            editableGrid.SetBusinessObjectCollection(col);
+            editableGrid.BusinessObjectCollection = col;
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(5,editableGrid.Rows.Count);
@@ -936,7 +910,7 @@ namespace Habanero.Test.UI.Base
             IEditableGrid editableGrid = GetControlFactory().CreateEditableGrid();
             AddControlToForm(editableGrid);
             SetupGridColumnsForMyBo(editableGrid);
-            editableGrid.SetBusinessObjectCollection(col);
+            editableGrid.BusinessObjectCollection  = col;
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, editableGrid.Rows.Count);
             Assert.AreEqual(originalText, editableGrid.Rows[0].Cells[0].Value);
@@ -970,7 +944,7 @@ namespace Habanero.Test.UI.Base
             AddControlToForm(editableGrid);
             SetupGridColumnsForMyBo(editableGrid);
             //---------------Execute Test ----------------------
-            editableGrid.SetBusinessObjectCollection(col);
+            editableGrid.BusinessObjectCollection  = col;
             //---------------Test Result -----------------------
             Assert.AreEqual(col.Count + 1, editableGrid.Rows.Count, "should be 4 item 1 adding item");
             //---------------Tear Down -------------------------    
@@ -995,7 +969,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1,uiGridDef.Count);
 
             //---------------Execute Test ----------------------
-            grid.SetBusinessObjectCollection(colBOs);
+            grid.BusinessObjectCollection = colBOs;
             //---------------Test Result -----------------------
             IDataGridViewColumn dataGridViewColumn = grid.Columns[0];
             AssertIsTextBoxColumnType(dataGridViewColumn);
@@ -1020,7 +994,33 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, uiGridDef.Count);
 
             //---------------Execute Test ----------------------
+#pragma warning disable 618,612
             grid.SetBusinessObjectCollection(colBOs);
+#pragma warning restore 618,612
+            //---------------Test Result -----------------------
+            IDataGridViewColumn dataGridViewColumn = grid.Columns[0];
+            AssertIsCheckBoxColumnType(dataGridViewColumn);
+            //---------------Tear Down -------------------------        
+        }
+        [Test]
+        public void Test_Set_BusinessObjectCollection_SetupColumnAsCheckBoxType()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1CheckBoxColumn();
+            IBusinessObjectCollection colBOs = GetCol_BO_1CheckboxItem(classDef);
+            IEditableGrid grid = GetControlFactory().CreateEditableGrid();
+            IDataGridViewColumn dataGridViewColumnSetup = GetControlFactory().CreateDataGridViewCheckBoxColumn();
+            SetupGridColumnsForMyBo(grid,dataGridViewColumnSetup);
+
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(1, grid.Columns.Count);
+            Assert.AreEqual(1, classDef.UIDefCol.Count);
+            UIGrid uiGridDef = classDef.UIDefCol["default"].UIGrid;
+            Assert.IsNotNull(uiGridDef);
+            Assert.AreEqual(1, uiGridDef.Count);
+
+            //---------------Execute Test ----------------------
+            grid.BusinessObjectCollection = colBOs;
             //---------------Test Result -----------------------
             IDataGridViewColumn dataGridViewColumn = grid.Columns[0];
             AssertIsCheckBoxColumnType(dataGridViewColumn);
@@ -1044,7 +1044,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsNotNull(uiGridDef);
             Assert.AreEqual(1, uiGridDef.Count);
             //---------------Execute Test ----------------------
-            grid.SetBusinessObjectCollection(colBOs);
+            grid.BusinessObjectCollection = colBOs;
             //---------------Test Result -----------------------
             IDataGridViewColumn dataGridViewColumn = grid.Columns[0];
             AssertIsComboBoxColumnType(dataGridViewColumn);    
@@ -1067,18 +1067,17 @@ namespace Habanero.Test.UI.Base
 
 
 
-        private ClassDef LoadMyBoDefaultClassDef()
+        private void LoadMyBoDefaultClassDef()
         {
-            ClassDef classDef;
             if (GetControlFactory() is ControlFactoryVWG)
             {
-                classDef = MyBO.LoadDefaultClassDefVWG();
+                MyBO.LoadDefaultClassDefVWG();
             }
             else
             {
-                classDef = MyBO.LoadDefaultClassDef();
+                MyBO.LoadDefaultClassDef();
             }
-            return classDef;
+            return;
         }
 
         private static IBusinessObjectCollection GetCol_BO_1ComboBoxItem(IClassDef classDef)
@@ -1140,7 +1139,7 @@ namespace Habanero.Test.UI.Base
             col = CreateCollectionWith_4_Objects();
             IEditableGrid grid = CreateEditableGrid();
             SetupGridColumnsForMyBo(grid);
-            grid.SetBusinessObjectCollection(col);
+            grid.BusinessObjectCollection  = col;
             return grid;
         }
 
@@ -1160,12 +1159,12 @@ namespace Habanero.Test.UI.Base
             SetupGridColumnsForMyBo(editableGrid, column);
         }
 
-        private static void SetupGridColumnsForMyBo(IEditableGrid editableGrid, IDataGridViewColumn dataGridViewColumn)
+        private static void SetupGridColumnsForMyBo(IDataGridView editableGrid, IDataGridViewColumn dataGridViewColumn)
         {
             editableGrid.Columns.Add(dataGridViewColumn);
         }
 
-        private static void SetupGridColumnsForMyBo(IEditableGrid editableGrid)
+        private static void SetupGridColumnsForMyBo(IDataGridView editableGrid)
         {
             editableGrid.Columns.Add("TestProp","TestProp");
         }

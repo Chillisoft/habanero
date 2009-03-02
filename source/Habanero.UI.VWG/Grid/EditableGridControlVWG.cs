@@ -177,10 +177,32 @@ namespace Habanero.UI.VWG
             get { throw new NotImplementedException(); }
         }
 
+        public IBusinessObjectCollection BusinessObjectCollection
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+
         public IBusinessObject SelectedBusinessObject
         {
             get { throw new System.NotImplementedException(); }
             set { throw new NotImplementedException(); }
+        }
+
+        public event EventHandler<BOEventArgs> BusinessObjectSelected;
+        public void Clear()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int NoOfItems
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public IBusinessObject GetBusinessObjectAtRow(int row)
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>
@@ -196,7 +218,7 @@ namespace Habanero.UI.VWG
             if (boCollection == null)
             {
                 //TODO: weakness where user could call _control.Grid.Set..(null) directly and bypass the disabling.
-                _grid.SetBusinessObjectCollection(null);
+                _grid.BusinessObjectCollection = null;
                 _grid.AllowUserToAddRows = false;
                 this.Buttons.Enabled = false;
                 this.FilterControl.Enabled = false;
@@ -222,7 +244,7 @@ namespace Habanero.UI.VWG
             //if (this.BusinessObjectEditor == null) this.BusinessObjectEditor = new DefaultBOEditor(_controlFactory);
             //if (this.BusinessObjectDeletor == null) this.BusinessObjectDeletor = new DefaultBODeletor();
 
-            _grid.SetBusinessObjectCollection(boCollection);
+            _grid.BusinessObjectCollection = boCollection;
 
             this.Buttons.Enabled = true;
             this.FilterControl.Enabled = true;

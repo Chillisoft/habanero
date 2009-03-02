@@ -29,14 +29,20 @@ namespace Habanero.UI.Base
     {
         private readonly IControlFactory _controlFactory;
         private readonly string _message;
-        private IComboBox _comboBox;
+        private readonly IComboBox _comboBox;
 
+        ///<summary>
+        /// Constructor for <see cref="InputFormComboBox"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="message"></param>
+        ///<param name="choices"></param>
         public InputFormComboBox(IControlFactory controlFactory, string message, List<object> choices)
         {
             _controlFactory = controlFactory;
             _message = message;
             _comboBox = _controlFactory.CreateComboBox();
-            choices.ForEach(delegate(object item) { _comboBox.Items.Add(item); });
+            choices.ForEach(item => _comboBox.Items.Add(item));
         }
 
         /// <summary>

@@ -19,7 +19,6 @@
 
 #pragma warning disable DoNotCallOverridableMethodsInConstructor
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
@@ -266,22 +265,7 @@ namespace Habanero.UI.VWG
                 }
                 _summaryPanel.Height = sdHeight;
                 int heightRemaining = Height - BUTTONS_HEIGHT - sdHeight - 16;
-                if (heightRemaining > 0)
-                {
-                    _fullDetailPanel.Height = heightRemaining;
-                }
-                else
-                {
-                    _fullDetailPanel.Height = 0;
-                }
-            }
-
-            /// <summary>
-            /// Gets the collection of controls contained within the control
-            /// </summary>
-            IControlCollection IControlChiHabanerontrols
-            {
-                get { return new ControlCollectionVWG(base.Controls); }
+                _fullDetailPanel.Height = heightRemaining > 0 ? heightRemaining : 0;
             }
         }
     }

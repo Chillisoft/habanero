@@ -31,6 +31,10 @@ namespace Habanero.UI.Win
     {
         private readonly Control.ControlCollection _col;
 
+        ///<summary>
+        /// Constructor for <see cref="ControlCollectionWin"/>
+        ///</summary>
+        ///<param name="col"></param>
         public ControlCollectionWin(Control.ControlCollection col)
         {
             _col = col;

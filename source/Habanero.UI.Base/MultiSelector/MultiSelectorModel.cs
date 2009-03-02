@@ -32,7 +32,6 @@ namespace Habanero.UI.Base
     {
         private List<T> _allOptions;
         private List<T> _selectedOptions;
-        private List<T> _originalSelections;
 
         public event EventHandler OptionsChanged;
         public event EventHandler SelectionsChanged;
@@ -41,11 +40,13 @@ namespace Habanero.UI.Base
         public event EventHandler<ModelEventArgs<T>> Selected;
         public event EventHandler<ModelEventArgs<T>> Deselected;
 
+#pragma warning disable 693
         /// <summary>
         /// The Event Arguements for the Multiselector Model
         /// </summary>
         /// <typeparam name="T">The object type used for the item</typeparam>
         public class ModelEventArgs<T> : EventArgs
+#pragma warning restore 693
         {
             private readonly T _item;
 
@@ -72,7 +73,7 @@ namespace Habanero.UI.Base
         /// </summary>
         public MultiSelectorModel()
         {
-            _originalSelections = new List<T>();
+            OriginalSelections = new List<T>();
             _selectedOptions = new List<T>();
             _allOptions = new List<T>();
         }
@@ -129,7 +130,7 @@ namespace Habanero.UI.Base
                 {
                     _selectedOptions = new List<T>();
                 }
-                _originalSelections = ShallowCopy(_selectedOptions);
+                OriginalSelections = ShallowCopy(_selectedOptions);
                 //_originalSelections = .GetRange(0, _selectedOptions.Count);
                 FireSelectionsChanged();
             }
@@ -147,19 +148,12 @@ namespace Habanero.UI.Base
         {
             get
             {
-                if (_selectedOptions == null)
-                {
-                    return null;
-                }
-                return _selectedOptions.AsReadOnly();
+                return _selectedOptions == null ? null : _selectedOptions.AsReadOnly();
             }
         }
 
 
-        private List<T> OriginalSelections
-        {
-            get { return _originalSelections; }
-        }
+        private List<T> OriginalSelections { get; set; }
 
         /// <summary>
         /// Returns the list of available options, which is the set 
@@ -244,7 +238,6 @@ namespace Habanero.UI.Base
         public void SelectAll()
         {
             Select(AvailableOptions);
-            //AvailableOptions.ForEach(delegate(T obj) { Select(obj); });
         }
 
         /// <summary>
@@ -253,7 +246,6 @@ namespace Habanero.UI.Base
         public void DeselectAll()
         {
             Deselect(ShallowCopy(_selectedOptions));
-            //_selectedOptions.FindAll(delegate { return true; }).ForEach(delegate(T obj) { Deselect(obj); });
         }
 
         /// <summary>

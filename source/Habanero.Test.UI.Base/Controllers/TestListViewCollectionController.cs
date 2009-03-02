@@ -30,7 +30,7 @@ namespace Habanero.Test.UI.Base
         //TODO: Port
     }
 //        //IListView _listView;
-//        //ListViewCollectionSelector controller;
+//        //ListViewCollectionManager controller;
 //        //private BusinessObjectCollection<BusinessObject> _collection;
 //
 //        protected abstract IControlFactory GetControlFactory();
@@ -76,7 +76,7 @@ namespace Habanero.Test.UI.Base
 //            ClassDef classDef = MyBO.LoadDefaultClassDef();
 //            IListView listView = GetControlFactory().CreateListView();
 //            //---------------Execute Test ----------------------
-//            ListViewCollectionSelector cntrl = new ListViewCollectionSelector(listView, classDef);
+//            ListViewCollectionManager cntrl = new ListViewCollectionManager(listView, classDef);
 //            //---------------Test Result -----------------------
 //            Assert.IsNotNull(cntrl.ListView);
 //            Assert.AreEqual(classDef, cntrl.ClassDef);
@@ -88,7 +88,7 @@ namespace Habanero.Test.UI.Base
 //        public void TestSetCollection_EmptyCollection()
 //        {
 //            //---------------Set up test pack-------------------
-//            ListViewCollectionSelector cntrl = CreateDefaultListVievController();
+//            ListViewCollectionManager cntrl = CreateDefaultListVievController();
 //            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
 //
 //            //---------------Execute Test ----------------------
@@ -101,16 +101,16 @@ namespace Habanero.Test.UI.Base
 //            //---------------Tear Down -------------------------          
 //        }
 //
-//        private UIDef GetDefaultUIDef(ListViewCollectionSelector cntrl)
+//        private UIDef GetDefaultUIDef(ListViewCollectionManager cntrl)
 //        {
 //            return cntrl.ClassDef.UIDefCol["default"];
 //        }
 //
-//        private ListViewCollectionSelector CreateDefaultListVievController()
+//        private ListViewCollectionManager CreateDefaultListVievController()
 //        {
 //            ClassDef classDef = MyBO.LoadDefaultClassDef();
 //            IListView listView = GetControlFactory().CreateListView();
-//            ListViewCollectionSelector cntrl = new ListViewCollectionSelector(listView, classDef);
+//            ListViewCollectionManager cntrl = new ListViewCollectionManager(listView, classDef);
 //            return cntrl;
 //        }
 //
@@ -120,7 +120,7 @@ namespace Habanero.Test.UI.Base
 ////            //---------------Set up test pack-------------------
 ////            IListView listView = GetControlFactory().CreateListView();
     ////            ClassDef def = MyBO.LoadDefaultClassDefVWG();
-////            ListViewCollectionSelector controller = new ListViewCollectionSelector(listView, def);
+////            ListViewCollectionManager controller = new ListViewCollectionManager(listView, def);
 ////            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
 ////            col.Add(new MyBO());
 ////            col.Add(new MyBO());

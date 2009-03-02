@@ -10,6 +10,9 @@ namespace Habanero.UI.Base
     /// </summary>
     public interface ICollapsiblePanel : IPanel
     {
+        /// <summary>
+        /// The Event for the Collapsible Panel being collapsed or uncollapsed.
+        /// </summary>
         event EventHandler Uncollapsed;
         ///<summary>
         /// Gets and Sets whether the <see cref="IPanel"/> is collapsed or expanded.

@@ -42,6 +42,11 @@ namespace Habanero.UI.Base
         private readonly Dictionary<string, ClassDef> _items;
         private ITreeNode _currentSectionNode;
 
+        ///<summary>
+        /// Constrcutor for the <see cref="StaticDataEditorManager"/>
+        ///</summary>
+        ///<param name="staticDataEditor"></param>
+        ///<param name="controlFactory"></param>
         public StaticDataEditorManager(IStaticDataEditor staticDataEditor, IControlFactory controlFactory)
         {
             _staticDataEditor = staticDataEditor;
@@ -53,7 +58,7 @@ namespace Habanero.UI.Base
             BorderLayoutManager layoutManager = _controlFactory.CreateBorderLayoutManager(_staticDataEditor);
             layoutManager.AddControl(_gridControl, BorderLayoutManager.Position.Centre);
             layoutManager.AddControl(_treeView, BorderLayoutManager.Position.West);
-            _treeView.AfterSelect += delegate(object sender, TreeViewEventArgs e) { SelectItem(e.Node.Text); };
+            _treeView.AfterSelect += ((sender, e) => SelectItem(e.Node.Text));
             _treeView.BeforeSelect += _treeView_OnBeforeSelect;
             _gridControl.Enabled = false;
             _gridControl.FilterControl.Visible = false;
@@ -62,20 +67,23 @@ namespace Habanero.UI.Base
 
         private void _treeView_OnBeforeSelect(object sender, TreeViewCancelEventArgs e)
         {
-            if (_gridControl.Grid == null || _gridControl.Grid.GetBusinessObjectCollection() == null) return;
-            if (_gridControl.Grid.GetBusinessObjectCollection().IsDirty)
+            if (_gridControl.Grid == null || _gridControl.Grid.BusinessObjectCollection == null) return;
+            if (_gridControl.Grid.BusinessObjectCollection.IsDirty)
             {
                 DialogResult result = _controlFactory.ShowMessageBox("Do you want to save changes?",
                     "Save?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
-                if (result == DialogResult.Yes)
+                switch (result)
                 {
-                    e.Cancel = !SaveChanges();
+                    case DialogResult.Yes:
+                        e.Cancel = !SaveChanges();
+                        break;
+                    case DialogResult.No:
+                        e.Cancel = !RejectChanges();
+                        break;
+                    default:
+                        e.Cancel = true;
+                        break;
                 }
-                else if (result == DialogResult.No)
-                {
-                    e.Cancel = !RejectChanges();
-                }
-                else e.Cancel = true;
             }
         }
 
@@ -123,8 +131,8 @@ namespace Habanero.UI.Base
             try
             {
                 _gridControl.Initialise(classDef);
-                _gridControl.Grid.SetBusinessObjectCollection(
-                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, ""));
+                _gridControl.Grid.BusinessObjectCollection =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, "");
                 _gridControl.Enabled = true;
             }
             catch (Exception ex)
@@ -167,7 +175,6 @@ namespace Habanero.UI.Base
             {
                 GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem cancelling changes:", "Problem cancelling");
                 return false;
-                ;
             }
         }
     }

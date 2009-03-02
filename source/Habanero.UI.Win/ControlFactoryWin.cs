@@ -243,9 +243,7 @@ namespace Habanero.UI.Win
         /// <param name="title">The page title to appear in the tab</param>
         public ITabPage CreateTabPage(string title)
         {
-            TabPageWin page = new TabPageWin();
-            page.Text = title;
-            return page;
+            return new TabPageWin {Text = title};
         }
 
         /// <summary>
@@ -336,6 +334,19 @@ namespace Habanero.UI.Win
                                                        PostObjectEditDelegate action)
         {
             return new DefaultBOEditorFormWin(bo, uiDefName, this, action);
+        }
+
+        /// <summary>
+        /// Creates a form in which a business object can be edited
+        /// </summary>
+        /// <param name="bo">The business object to edit</param>
+        /// <param name="uiDefName">The name of the set of UI definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a UI definition with no name attribute specified.</param>
+        /// <param name="groupControlCreator">The Creator that will be used to Create the <see cref="IGroupControl"/></param>
+        public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName, GroupControlCreator groupControlCreator)
+        {
+            return new DefaultBOEditorFormWin(bo, uiDefName, this, groupControlCreator);
         }
 
         /// <summary>
@@ -936,29 +947,45 @@ namespace Habanero.UI.Win
             return new PictureBoxWin();
         }
 
+        ///<summary>
+        /// Creates a <see cref="IDateTimePickerMapperStrategy"/>
+        ///</summary>
         public IDateTimePickerMapperStrategy CreateDateTimePickerMapperStrategy()
         {
             return new DateTimePickerMapperStrategyWin();
         }
-
+#pragma warning disable 618,612//Maintained for backward compatibility
+        ///<summary>
+        /// Creates a <see cref="IBusinessObjectControlWithErrorDisplay"/>
+        ///</summary>
         public IBusinessObjectControlWithErrorDisplay CreateBOEditorForm(ClassDef lookupTypeClassDef, string uiDefName, IControlFactory controlFactory)
         {
             return new BOEditorPanelWin(lookupTypeClassDef, uiDefName, controlFactory);
         }
-
+#pragma warning restore 618,612
+        ///<summary>
+        /// Creates a <see cref="IGridAndBOEditorControl"/>
+        ///</summary>
         public IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>() where TBusinessObject : class, IBusinessObject
         {
             return new GridAndBOEditorControlWin<TBusinessObject>(this, "default");
 
         }
 
+        ///<summary>
+        /// Creates a <see cref="IGridAndBOEditorControl"/>
+        ///</summary>
         public IGridAndBOEditorControl CreateGridAndBOEditorControl(ClassDef classDef)
         {
             return new GridAndBOEditorControlWin(this, classDef, "default");
         }
 
+        ///<summary>
+        /// Creates a <see cref="IGridAndBOEditorControl"/>
+        ///</summary>
         public IGridAndBOEditorControl CreateGridAndBOEditorControl<TBusinessObject>(IBusinessObjectControlWithErrorDisplay editorPanel) where TBusinessObject : class, IBusinessObject
         {
+
             return new GridAndBOEditorControlWin<TBusinessObject>(this, editorPanel);
         }
 
@@ -973,6 +1000,14 @@ namespace Habanero.UI.Win
         public ICollapsiblePanel CreateCollapsiblePanel()
         {
             return new CollapsiblePanelWin(this);
+        }
+
+        ///<summary>
+        /// Creates a <see cref="ICollapsiblePanel"/>
+        ///</summary>
+        public ICollapsiblePanel CreateCollapsiblePanel(string name)
+        {
+            return new CollapsiblePanelWin(this) {Name = name, Text = name};
         }
 
         /// <summary>
@@ -1048,6 +1083,43 @@ namespace Habanero.UI.Win
             return new CollapsiblePanelGroupControlWin();
         }
 
+        ///<summary>
+        /// Creates a <see cref="IGroupBoxGroupControl"/>
+        ///</summary>
+        ///<returns></returns>
+        public IGroupBoxGroupControl CreateGroupBoxGroupControl()
+        {
+            return new GroupBoxGroupControlWin(this);
+        }
+
         #endregion
+        ///<summary>
+        /// Creates an <see cref="IBOComboBoxSelector"/>
+        ///</summary>
+        ///<returns></returns>
+        public IBOComboBoxSelector CreateComboBoxSelector()
+        {
+            return new ComboBoxSelectorWin(this);
+        }
+
+        ///<summary>
+        /// Creates an <see cref="IBOListBoxSelector"/>
+        ///</summary>
+        ///<returns></returns>
+        public IBOListBoxSelector CreateListBoxSelector()
+        {
+            return new ListBoxSelectorWin(this);
+        }
+
+        ///<summary>
+        /// Creates an <see cref="IBOCollapsiblePanelSelector"/>
+        ///</summary>
+        ///<returns></returns>
+        public IBOCollapsiblePanelSelector CreateCollapsiblePanelSelector()
+        {
+            return new CollapsiblePanelSelectorWin(this);
+        }
     }
+
+
 }

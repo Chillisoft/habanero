@@ -9,19 +9,19 @@ namespace Habanero.UI.Win
     ///<summary>
     /// A Control for Editing/Viewing an <see cref="IBusinessObject"/>.
     ///</summary>
-    public class BusinessObjectControl : UserControlWin, IBusinessObjectControlWithErrorDisplay
+    public class BusinessObjectControlWin : UserControlWin, IBusinessObjectControlWithErrorDisplay
     {
         private readonly IPanelInfo _panelInfo;
 
         ///<summary>
-        /// The Constructor for the <see cref="BusinessObjectControl"/> which passes in the
+        /// The Constructor for the <see cref="BusinessObjectControlWin"/> which passes in the
         /// <paramref name="classDef"/> for the <see cref="IBusinessObject"/> and the <see cref="uiDefName"/> that 
         ///  is used to defined the User Interface for the <see cref="IBusinessObject"/>      
         ///</summary>
         ///<param name="controlFactory">The control factory which is used to create the Controls on this form.</param>
         ///<param name="classDef">The <see cref="IClassDef"/> for the  <see cref="IBusinessObject"/> that will be edited by this control</param>
         ///<param name="uiDefName">The user interface defined in the <see cref="IClassDef"/> that will be used to Build this control</param>
-        public BusinessObjectControl(IControlFactory controlFactory,IClassDef classDef, string uiDefName)
+        public BusinessObjectControlWin(IControlFactory controlFactory,IClassDef classDef, string uiDefName)
         {
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             if (classDef == null) throw new ArgumentNullException("classDef");
@@ -30,18 +30,15 @@ namespace Habanero.UI.Win
             _panelInfo = BusinessObjectControlUtils.CreatePanelInfo(controlFactory, classDef, uiDefName, this);
         }
 
-
-
-
         ///<summary>
-        /// The Constructor for the <see cref="BusinessObjectControl"/> which passes in the
+        /// The Constructor for the <see cref="BusinessObjectControlWin"/> which passes in the
         /// <paramref name="classDef"/> for the <see cref="IBusinessObject"/> and
         ///  this control will be built using the default <see cref="UIDef"/> and the <see cref="IControlFactory"/> 
         ///  from the <see cref="GlobalUIRegistry.ControlFactory"/>
         ///  is used to defined the User Interface for the <see cref="IBusinessObject"/>      
         ///</summary>
         ///<param name="classDef">The <see cref="IClassDef"/> for the  <see cref="IBusinessObject"/> that will be edited by this control</param>
-        public BusinessObjectControl(IClassDef classDef): this(GlobalUIRegistry.ControlFactory,classDef, "default")
+        public BusinessObjectControlWin(IClassDef classDef): this(GlobalUIRegistry.ControlFactory,classDef, "default")
         {
         }
 
@@ -68,18 +65,18 @@ namespace Habanero.UI.Win
     ///<summary>
     /// A Control for Editing/Viewing an <see cref="IBusinessObject"/> of type <typeparam name="T"/>.
     ///</summary>
-    public class BusinessObjectControl<T> : UserControlWin, IBusinessObjectControlWithErrorDisplay
+    public class BusinessObjectControlWin<T> : UserControlWin, IBusinessObjectControlWithErrorDisplay
         where T : class, IBusinessObject
     {
         private readonly IPanelInfo _panelInfo;
 
         ///<summary>
-        /// The Constructor for <see cref="BusinessObjectControl{T}"/>
+        /// The Constructor for <see cref="BusinessObjectControlWin{T}"/>
         ///</summary>
         ///<param name="controlFactory"></param>
         ///<param name="uiDefName">the user interface that identifies the <see cref="UIDef"/> that will be used
         /// for building the <see cref="IBusinessObject"/>'s Controls. </param>
-        public BusinessObjectControl(IControlFactory controlFactory, string uiDefName)
+        public BusinessObjectControlWin(IControlFactory controlFactory, string uiDefName)
         {
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             if (uiDefName == null) throw new ArgumentNullException("uiDefName");
@@ -104,7 +101,7 @@ namespace Habanero.UI.Win
         }
     }
     /// <summary>
-    /// A Utility Class used by <see cref="BusinessObjectControl"/> and <see cref="BusinessObjectControl{T}"/> providing common functionality.
+    /// A Utility Class used by <see cref="BusinessObjectControlWin"/> and <see cref="BusinessObjectControlWin{T}"/> providing common functionality.
     /// </summary>
     internal static class BusinessObjectControlUtils
     {
@@ -117,13 +114,13 @@ namespace Habanero.UI.Win
             }
             catch (HabaneroDeveloperException ex)
             {
-                string developerMessage = "The 'BusinessObjectControl' could not be created since the the uiDef '" + uiDefName +
+                string developerMessage = "The 'BusinessObjectControlWin' could not be created since the the uiDef '" + uiDefName +
                                           "' does not exist in the classDef for '" + classDef.ClassNameFull + "'";
                 throw new HabaneroDeveloperException(developerMessage, developerMessage, ex);
             }
             if (uiForm == null)
             {
-                string developerMessage = "The 'BusinessObjectControl' could not be created since the the uiDef '" + uiDefName +
+                string developerMessage = "The 'BusinessObjectControlWin' could not be created since the the uiDef '" + uiDefName +
                                           "' in the classDef '" + classDef.ClassNameFull + "' does not have a UIForm defined";
                 throw new HabaneroDeveloperException(developerMessage, developerMessage);
             }

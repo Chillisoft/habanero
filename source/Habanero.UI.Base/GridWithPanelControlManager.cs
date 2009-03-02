@@ -32,10 +32,8 @@ namespace Habanero.UI.Base
     {
         private readonly IGridWithPanelControl<TBusinessObject> _gridWithPanelControl;
         private IGridWithPanelControlStrategy<TBusinessObject> _strategy;
-        private ConfirmSave _confirmSaveDelegate;
         private IControlFactory _controlFactory;
         private IBusinessObjectControl _businessObjectControl;
-        private IReadOnlyGridControl _readOnlyGridControl;
         private IButtonGroupControl _buttonControl;
         private IButton _newButton;
         private IButton _deleteButton;
@@ -43,6 +41,13 @@ namespace Habanero.UI.Base
         private TBusinessObject _lastSelectedBusinessObject;
         private IButton _saveButton;
 
+        ///<summary>
+        /// Constructor for the <see cref="GridWithPanelControlManager{TBusinessObject}"/>
+        ///</summary>
+        ///<param name="gridWithPanelControl"></param>
+        ///<param name="controlFactory"></param>
+        ///<param name="businessObjectControl"></param>
+        ///<param name="uiDefName"></param>
         public GridWithPanelControlManager(IGridWithPanelControl<TBusinessObject> gridWithPanelControl, IControlFactory controlFactory, IBusinessObjectControl businessObjectControl, string uiDefName)
         {
             _gridWithPanelControl = gridWithPanelControl;
@@ -62,7 +67,7 @@ namespace Habanero.UI.Base
             UpdateControlEnabledState();
 
             BorderLayoutManager layoutManager = _controlFactory.CreateBorderLayoutManager(_gridWithPanelControl);
-            layoutManager.AddControl(_readOnlyGridControl, BorderLayoutManager.Position.North);
+            layoutManager.AddControl(ReadOnlyGridControl, BorderLayoutManager.Position.North);
             layoutManager.AddControl(_businessObjectControl, BorderLayoutManager.Position.Centre);
             layoutManager.AddControl(_buttonControl, BorderLayoutManager.Position.South);
 
@@ -71,15 +76,15 @@ namespace Habanero.UI.Base
 
         private void SetupReadOnlyGridControl(string gridUiDefName)
         {
-            _readOnlyGridControl = _controlFactory.CreateReadOnlyGridControl();
-            _readOnlyGridControl.Height = 300;
-            _readOnlyGridControl.Buttons.Visible = false;
-            _readOnlyGridControl.FilterControl.Visible = false;
+            ReadOnlyGridControl = _controlFactory.CreateReadOnlyGridControl();
+            ReadOnlyGridControl.Height = 300;
+            ReadOnlyGridControl.Buttons.Visible = false;
+            ReadOnlyGridControl.FilterControl.Visible = false;
             ClassDef classDef = ClassDef.Get<TBusinessObject>();
-            if (!string.IsNullOrEmpty(gridUiDefName)) _readOnlyGridControl.Initialise(classDef, gridUiDefName);
+            if (!string.IsNullOrEmpty(gridUiDefName)) ReadOnlyGridControl.Initialise(classDef, gridUiDefName);
 
             AddGridSelectionEvent();
-            _readOnlyGridControl.DoubleClickEditsBusinessObject = false;
+            ReadOnlyGridControl.DoubleClickEditsBusinessObject = false;
         }
 
         private void SetupButtonGroupControl()
@@ -97,17 +102,17 @@ namespace Habanero.UI.Base
 
         private void AddGridSelectionEvent()
         {
-            _readOnlyGridControl.Grid.BusinessObjectSelected += GridSelectionChanged;
+            ReadOnlyGridControl.Grid.BusinessObjectSelected += GridSelectionChanged;
         }
 
         private void RemoveGridSelectionEvent()
         {
-            _readOnlyGridControl.Grid.BusinessObjectSelected -= GridSelectionChanged;
+            ReadOnlyGridControl.Grid.BusinessObjectSelected -= GridSelectionChanged;
         }
 
         private void GridSelectionChanged(object sender, EventArgs e)
         {
-            if (_lastSelectedBusinessObject == null || _readOnlyGridControl.SelectedBusinessObject != _lastSelectedBusinessObject)
+            if (_lastSelectedBusinessObject == null || ReadOnlyGridControl.SelectedBusinessObject != _lastSelectedBusinessObject)
             {
                 if (!CheckRowSelectionCanChange()) return;
                 SetSelectedBusinessObject();
@@ -120,7 +125,7 @@ namespace Habanero.UI.Base
         /// </summary>
         private bool CheckRowSelectionCanChange()
         {
-            if (_lastSelectedBusinessObject != null && _readOnlyGridControl.SelectedBusinessObject != _lastSelectedBusinessObject)
+            if (_lastSelectedBusinessObject != null && ReadOnlyGridControl.SelectedBusinessObject != _lastSelectedBusinessObject)
             {
                 CallApplyChangesOnPanelInfo_IfStrategyAllows();
                 if (!_lastSelectedBusinessObject.IsValid())
@@ -179,9 +184,9 @@ namespace Habanero.UI.Base
 
         private void SelectLastRowInGrid()
         {
-            int rowCount = _readOnlyGridControl.Grid.Rows.Count - 1;
-            IBusinessObject lastObjectInGrid = _readOnlyGridControl.Grid.GetBusinessObjectAtRow(rowCount);
-            _readOnlyGridControl.SelectedBusinessObject = lastObjectInGrid;
+            int rowCount = ReadOnlyGridControl.Grid.Rows.Count - 1;
+            IBusinessObject lastObjectInGrid = ReadOnlyGridControl.Grid.GetBusinessObjectAtRow(rowCount);
+            ReadOnlyGridControl.SelectedBusinessObject = lastObjectInGrid;
         }
 
         /// <summary>
@@ -190,7 +195,7 @@ namespace Habanero.UI.Base
         private void SelectBusinessObjectInGrid_NoEvents(IBusinessObject businessObject)
         {
             RemoveGridSelectionEvent();
-            _readOnlyGridControl.SelectedBusinessObject = businessObject;
+            ReadOnlyGridControl.SelectedBusinessObject = businessObject;
             AddGridSelectionEvent();
         }
 
@@ -207,7 +212,7 @@ namespace Habanero.UI.Base
             // Removing the event prevents the flicker event that happens while a grid is being refreshed
             //  - perhaps the SelectionChanged event should be temporarily removed inside the RefreshGrid method itself?
             RemoveGridSelectionEvent();
-            _readOnlyGridControl.Grid.RefreshGrid();
+            ReadOnlyGridControl.Grid.RefreshGrid();
             AddGridSelectionEvent();
         }
 
@@ -252,7 +257,7 @@ namespace Habanero.UI.Base
                 if (currentBO.Status.IsDirty) return;
             }
 
-            IBusinessObjectCollection collection = _readOnlyGridControl.Grid.GetBusinessObjectCollection();
+            IBusinessObjectCollection collection = ReadOnlyGridControl.Grid.BusinessObjectCollection;
             IBusinessObject newBusinessObject = collection.CreateBusinessObject();
             SelectBusinessObjectInGrid_NoEvents(newBusinessObject);
 
@@ -271,8 +276,8 @@ namespace Habanero.UI.Base
             if (businessObject.Status.IsNew)
             {
                 //RemoveGridSelectionEvent();
-                _readOnlyGridControl.SelectedBusinessObject = null;
-                _readOnlyGridControl.Grid.GetBusinessObjectCollection().Remove(businessObject);
+                ReadOnlyGridControl.SelectedBusinessObject = null;
+                ReadOnlyGridControl.Grid.BusinessObjectCollection.Remove(businessObject);
                 //AddGridSelectionEvent();
             }
             else
@@ -283,7 +288,7 @@ namespace Habanero.UI.Base
             AddGridSelectionEvent();
             _lastSelectedBusinessObject = null;
 
-            if (CurrentBusinessObject == null && _readOnlyGridControl.Grid.Rows.Count > 0)
+            if (CurrentBusinessObject == null && ReadOnlyGridControl.Grid.Rows.Count > 0)
             {
                 SelectLastRowInGrid();
             }
@@ -307,7 +312,7 @@ namespace Habanero.UI.Base
             if (currentBO.Status.IsNew)
             {
                 _lastSelectedBusinessObject = null;
-                _readOnlyGridControl.Grid.GetBusinessObjectCollection().Remove(currentBO);
+                ReadOnlyGridControl.Grid.BusinessObjectCollection.Remove(currentBO);
                 if (selectLastRowInGrid) SelectLastRowInGrid();
             }
             else
@@ -332,7 +337,7 @@ namespace Habanero.UI.Base
                 _deleteButton.Enabled = false;
                 _saveButton.Enabled = false;
                 _cancelButton.Enabled = false;
-                _newButton.Enabled = _readOnlyGridControl.Grid.GetBusinessObjectCollection() != null;
+                _newButton.Enabled = ReadOnlyGridControl.Grid.BusinessObjectCollection != null;
             }
             _businessObjectControl.Enabled = selectedBusinessObjectNotNull;
 
@@ -382,44 +387,49 @@ namespace Habanero.UI.Base
         public void SetBusinessObjectCollection(IBusinessObjectCollection col)
         {
             if (col == null) throw new ArgumentNullException("col");
-            _readOnlyGridControl.SetBusinessObjectCollection(col);
-            if (col.Count > 0)
-            {
-                _readOnlyGridControl.SelectedBusinessObject = col[0];
-            }
-            else
-            {
-                _readOnlyGridControl.SelectedBusinessObject = null;
-            }
+            ReadOnlyGridControl.SetBusinessObjectCollection(col);
+            ReadOnlyGridControl.SelectedBusinessObject = col.Count > 0 ? col[0] : null;
             _newButton.Enabled = true;
         }
 
-        public IReadOnlyGridControl ReadOnlyGridControl
-        {
-            get { return _readOnlyGridControl; }
-        }
+        ///<summary>
+        /// Returns the ReadOnly Grid Control that is used as the Selector control for the <see cref="IGridAndBOEditorControl"/>
+        ///</summary>
+        public IReadOnlyGridControl  ReadOnlyGridControl { get; private set; }
 
+        ///<summary>
+        /// Returns the Business Object Control that is used for editing the Business Object for the <see cref="IGridAndBOEditorControl"/>
+        ///</summary>
         public IBusinessObjectControl BusinessObjectControl
         {
             get { return _businessObjectControl; }
         }
 
+        ///<summary>
+        /// Returns the <see cref="IButtonGroupControl"/> that shows the buttons that are available on this control.
+        /// Typically these buttons provide the Add, Save, Cancel Edits.
+        ///</summary>
         public IButtonGroupControl Buttons
         {
             get { return _buttonControl; }
         }
 
+        ///<summary>
+        /// Returns the Business Object Currently Selected in the Selector and being viewed in the <see cref="IBusinessObjectControl"/>
+        ///</summary>
         public TBusinessObject CurrentBusinessObject
         {
-            get { return (TBusinessObject)_readOnlyGridControl.SelectedBusinessObject; }
+            get { return (TBusinessObject)ReadOnlyGridControl.SelectedBusinessObject; }
         }
 
-        public ConfirmSave ConfirmSaveDelegate
-        {
-            get { return _confirmSaveDelegate; }
-            set { _confirmSaveDelegate = value; }
-        }
+        ///<summary>
+        /// Gets and sets the delegate that is used when the business object is to be saved (e.g. when the save button is clicked)
+        ///</summary>
+        public ConfirmSave ConfirmSaveDelegate { get; set; }
 
+        ///<summary>
+        /// Gets and sets the <see cref="IGridWithPanelControlStrategy{TBusinessObject}"/>
+        ///</summary>
         public IGridWithPanelControlStrategy<TBusinessObject> GridWithPanelControlStrategy
         {
             get { return _strategy; }

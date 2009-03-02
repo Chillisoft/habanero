@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Data;
 
 namespace Habanero.UI.Base
 {
@@ -26,7 +25,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Represents a ComboBox control
     /// </summary>
-    public interface IComboBox : IControlHabanero
+    public interface IComboBox : IListControl
     {
 
         /// <summary>
@@ -40,10 +39,10 @@ namespace Habanero.UI.Base
         /// </summary>
         IComboBoxObjectCollection Items { get; }
 
-        /// <summary>
-        /// Gets or sets the index specifying the currently selected item
-        /// </summary>
-        int SelectedIndex { get; set; }
+//        /// <summary>
+//        /// Gets or sets the index specifying the currently selected item
+//        /// </summary>
+//        int SelectedIndex { get; set; }
 
         /// <summary>
         /// Gets or sets currently selected item in the ComboBox
@@ -55,26 +54,26 @@ namespace Habanero.UI.Base
         /// </summary>
         int DropDownWidth { get; set; }
 
-        /// <summary>
-        /// Gets or sets the property to use as the actual value for the items in the ComboBox
-        /// </summary>
-        string ValueMember { get; set; }
-
-        /// <summary>
-        /// Gets or sets the property to display for this ComboBox
-        /// </summary>
-        string DisplayMember { get; set; }
+//        /// <summary>
+//        /// Gets or sets the property to use as the actual value for the items in the ComboBox
+//        /// </summary>
+//        string ValueMember { get; set; }
+//
+//        /// <summary>
+//        /// Gets or sets the property to display for this ComboBox
+//        /// </summary>
+//        string DisplayMember { get; set; }
 
         /// <summary>
         /// Gets or sets the data source for this ComboBox
         /// </summary>
         object DataSource { get; set; }
 
-        /// <summary>
-        /// Gets or sets the value of the member property specified by
-        /// the ValueMember property
-        /// </summary>
-        object SelectedValue { get; set; }
+//        /// <summary>
+//        /// Gets or sets the value of the member property specified by
+//        /// the ValueMember property
+//        /// </summary>
+//        object SelectedValue { get; set; }
 
         /// <summary>
         ///  Gets or sets the value of the AutoCompleteMode property
@@ -97,6 +96,11 @@ namespace Habanero.UI.Base
         private readonly string _key;
         private readonly object _value;
 
+        ///<summary>
+        /// The pair of values shown in the Combo Box (i.e. the Key, Value Pair)
+        ///</summary>
+        ///<param name="key"></param>
+        ///<param name="value"></param>
         public ComboPair(string key, object value)
         {
             _key = key;
@@ -141,7 +145,7 @@ namespace Habanero.UI.Base
             if (this.GetType() != obj.GetType()) return false;
 
             ComboPair other = obj as ComboPair;
-
+            if (other == null) return false;
             return String.Compare(other.Key, Key) == 0 && (other.Value == Value);
         }
 

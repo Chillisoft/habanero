@@ -74,14 +74,21 @@
     <Compile Include="ControlInterfaces\IFileChooser.cs" />
     <Compile Include="ControlInterfaces\IFormHabanero.cs" />
     <Compile Include="ControlInterfaces\IGridWithPanelControl.cs" />
+    <Compile Include="ControlInterfaces\IGroupBoxGroupControl.cs" />
+    <Compile Include="ControlInterfaces\IGroupControl.cs" />
     <Compile Include="ControlInterfaces\IListControl.cs" />
+    <Compile Include="ControlInterfaces\IListView.cs" />
+    <Compile Include="ControlInterfaces\IListViewItem.cs" />
+    <Compile Include="ControlInterfaces\IListViewItemCollection.cs" />
     <Compile Include="ControlInterfaces\IPictureBox.cs" />
     <Compile Include="ControlInterfaces\IStaticDataEditor.cs" />
     <Compile Include="ControlInterfaces\IUserControlHabanero.cs" />
-    <Compile Include="ControlMappers\ComboBoxCollectionSelector.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
     <Compile Include="ControlMappers\EditableGridControlMapper.cs" />
     <Compile Include="ControlMappers\ExtendedComboBoxMapper.cs" />
+    <Compile Include="ControlMappers\ListComboBoxMapper.cs" />
+    <Compile Include="Selectors\IBOSelector.cs" />
+    <Compile Include="GroupBoxGroupControlManager.cs" />
     <Compile Include="IBOEditorPanel.cs" />
     <Compile Include="IBusinessObjectControlWithErrorDisplay.cs" />
     <Compile Include="IGridAndBOEditorControl.cs" />
@@ -111,8 +118,6 @@
     <Compile Include="Grid\IEditableGridControl.cs" />
     <Compile Include="FileChooserManager.cs" />
     <Compile Include="IColumnHeaderCollection.cs" />
-    <Compile Include="ControlMappers\ListViewCollectionSelector.cs" />
-    <Compile Include="ControlMappers\ListComboBoxMapper.cs" />
     <Compile Include="ControlMappers\NumericUpDownCurrencyMapper.cs" />
     <Compile Include="ControlMappers\NumericUpDownIntegerMapper.cs" />
     <Compile Include="ControlMappers\NumericUpDownMapper.cs" />
@@ -142,6 +147,12 @@
     <Compile Include="PanelBuilder\PanelBuilder.cs" />
     <Compile Include="PanelBuilder\PanelInfo.cs" />
     <Compile Include="ReadOnlyGridButtonsControlManager.cs" />
+    <Compile Include="Selectors\ComboBoxCollectionSelector.cs" />
+    <Compile Include="Selectors\IBOCollapsiblePanelSelector.cs" />
+    <Compile Include="Selectors\IBOComboBoxSelector.cs" />
+    <Compile Include="Selectors\IBOListBoxSelector.cs" />
+    <Compile Include="Selectors\ListBoxCollectionManager.cs" />
+    <Compile Include="Selectors\ListViewCollectionManager.cs" />
     <Compile Include="StaticDataEditorManager.cs">
     </Compile>
     <Compile Include="Util\CustomValidationEventArgs.cs" />
@@ -164,7 +175,6 @@
     <Compile Include="ControlMappers\TextBoxMapper.cs" />
     <Compile Include="DefaultBOCreator.cs" />
     <Compile Include="ControlInterfaces\IGroupBox.cs" />
-    <Compile Include="ControlInterfaces\IListView.cs" />
     <Compile Include="ControlInterfaces\INumericUpDown.cs" />
     <Compile Include="DateTimePicker\DateTimePickerController.cs" />
     <Compile Include="FilterControl\DataViewCompositeFilterClause.cs" />

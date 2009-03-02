@@ -173,8 +173,7 @@ namespace Habanero.UI.VWG
         {
             get
             {
-                if (base.CurrentRow == null) return null;
-                return new DataGridViewRowVWG(base.CurrentRow);
+                return base.CurrentRow == null ? null : new DataGridViewRowVWG(base.CurrentRow);
             }
         }
 

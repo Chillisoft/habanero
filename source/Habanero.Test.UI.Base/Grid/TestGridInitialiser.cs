@@ -303,7 +303,7 @@ namespace Habanero.Test.UI.Base
             AddControlToForm(grid);
 
             //--------------Assert PreConditions----------------            
-            string formattedPropertyName = "TestDateTimeFormat";
+            const string formattedPropertyName = "TestDateTimeFormat";
             Assert.IsNotNull(uiGridDef[formattedPropertyName]);
             Assert.IsNotNull(uiGridDef["TestDateTimeNoFormat"]);
             Assert.IsNotNull(uiGridDef["TestDateTime"]);
@@ -312,7 +312,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsNull(uiGridDef["TestDateTime"].GetParameterValue("dateFormat"));
             object dateFormatObject = uiGridDef[formattedPropertyName].GetParameterValue("dateFormat");
             string dateFormatParameter = dateFormatObject.ToString();
-            string expectedFormat = "dd.MMM.yyyy";
+            const string expectedFormat = "dd.MMM.yyyy";
             Assert.AreEqual(expectedFormat, dateFormatParameter);
 
             MyBO myBo = new MyBO();
@@ -368,7 +368,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = LoadMyBoDefaultClassDef();
-            string alternateUIDefName = "Alternate";
+            const string alternateUIDefName = "Alternate";
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             UIDef uiDef = classDef.UIDefCol[alternateUIDefName];
@@ -499,7 +499,7 @@ namespace Habanero.Test.UI.Base
 
         private static void AssertVerifyIDFieldSetUpCorrectly(IDataGridViewColumn column)
         {
-            string idPropertyName = _gridIdColumnName;
+            const string idPropertyName = _gridIdColumnName;
             Assert.AreEqual(idPropertyName, column.Name);
             Assert.AreEqual(idPropertyName, column.HeaderText);
             Assert.AreEqual(idPropertyName, column.DataPropertyName);
@@ -509,7 +509,7 @@ namespace Habanero.Test.UI.Base
         }
 
         private static void AssertThatDataColumnSetupCorrectly
-            (ClassDef classDef, UIGridColumn columnDef1, IDataGridViewColumn dataColumn1)
+            (IClassDef classDef, UIGridColumn columnDef1, IDataGridViewColumn dataColumn1)
         {
             Assert.AreEqual(columnDef1.PropertyName, dataColumn1.DataPropertyName); //Test Prop
             Assert.AreEqual(columnDef1.PropertyName, dataColumn1.Name);
@@ -523,7 +523,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(propDef.PropertyType, dataColumn1.ValueType);
         }
 
-        private static IPropDef GetPropDef(ClassDef classDef, UIGridColumn gridColumn)
+        private static IPropDef GetPropDef(IClassDef classDef, UIGridColumn gridColumn)
         {
             IPropDef propDef = null;
             if (classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))

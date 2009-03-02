@@ -29,10 +29,6 @@ namespace Habanero.UI.VWG
     /// </summary>
     public class TabPageVWG : TabPage, ITabPage
     {
-        public TabPageVWG()
-        {
-        }
-
         /// <summary>
         /// Gets or sets the anchoring style.
         /// </summary>

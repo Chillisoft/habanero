@@ -74,7 +74,6 @@ namespace Habanero.Test.UI.Base
                 return gridBase;
             }
 
-//            [Test, Ignore("To be implemented in win")]
             [Test]
             public void TestWin_RowShowingBusinessObjectsValues()
             {
@@ -86,7 +85,28 @@ namespace Habanero.Test.UI.Base
                 const string propName = "TestProp";
                 const int rowIndex = 1;
                 //---------------Execute Test ----------------------
+#pragma warning disable 618,612 //Maintained for backward compatibility testing
                 gridBase.SetBusinessObjectCollection(col);
+#pragma warning restore 618,612
+
+                //---------------Test Result -----------------------
+                MyBO selectedBo = (MyBO) gridBase.GetBusinessObjectAtRow(rowIndex);
+                IDataGridViewRow row = gridBase.Rows[rowIndex];
+                IDataGridViewCell cell = row.Cells[propName];
+                Assert.AreEqual(selectedBo.TestProp, cell.Value);
+            } 
+            [Test]
+            public void TestWin_Set_BusinessObjectCollection()
+            {
+                //---------------Set up test pack-------------------
+                MyBO.LoadDefaultClassDef();
+                BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+                IGridBase gridBase = CreateGridBaseStub();
+                SetupGridColumnsForMyBo(gridBase);
+                const string propName = "TestProp";
+                const int rowIndex = 1;
+                //---------------Execute Test ----------------------
+                gridBase.BusinessObjectCollection =col;
 
                 //---------------Test Result -----------------------
                 MyBO selectedBo = (MyBO) gridBase.GetBusinessObjectAtRow(rowIndex);
@@ -133,7 +153,7 @@ namespace Habanero.Test.UI.Base
                 Assert.IsTrue(filterUpdatedFired);
             }
 
-            [Test]  //TODO: CurrentRow not working in VWG
+            [Test]
             public void TestSelectedBusinessObject_SetsCurrentRow()
             {
                 //---------------Set up test pack-------------------
@@ -328,7 +348,29 @@ namespace Habanero.Test.UI.Base
                 const string propName = "TestProp";
                 const int rowIndex = 1;
                 //---------------Execute Test ----------------------
+#pragma warning disable 618,612 //Maintained for backward compatibility testing
                 gridBase.SetBusinessObjectCollection(col);
+#pragma warning restore 618,612
+
+                //---------------Test Result -----------------------
+                MyBO selectedBo = (MyBO) gridBase.GetBusinessObjectAtRow(rowIndex);
+                IDataGridViewRow row = gridBase.Rows[rowIndex];
+                IDataGridViewCell cell = row.Cells[propName];
+                Assert.AreEqual(selectedBo.TestProp, cell.Value);
+            }
+            [Test]
+            public void TestVWG_Set_BusinessObjectCollection()
+            {
+                //---------------Set up test pack-------------------
+                MyBO.LoadDefaultClassDef();
+                BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+                IGridBase gridBase = CreateGridBaseStub();
+
+                SetupGridColumnsForMyBo(gridBase);
+                const string propName = "TestProp";
+                const int rowIndex = 1;
+                //---------------Execute Test ----------------------
+                gridBase.BusinessObjectCollection = col;
 
                 //---------------Test Result -----------------------
                 MyBO selectedBo = (MyBO) gridBase.GetBusinessObjectAtRow(rowIndex);
@@ -346,7 +388,7 @@ namespace Habanero.Test.UI.Base
             //    BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
             //    IGridBase gridBase = CreateGridBaseStub();
             //    SetupGridColumnsForMyBo(gridBase);
-            //    gridBase.SetBusinessObjectCollection(col);
+            //    gridBase.BusinessObjectCollection  = col;
             //    string propName = "TestProp";
             //    //---------------Execute Test ----------------------
             //    MyBO bo = col[1];
@@ -460,12 +502,28 @@ namespace Habanero.Test.UI.Base
             IGridBase gridBase = CreateGridBaseStub();
             SetupGridColumnsForMyBo(gridBase);
             //---------------Execute Test ----------------------
+#pragma warning disable 618,612
             gridBase.SetBusinessObjectCollection(col);
+#pragma warning restore 618,612
             //---------------Test Result -----------------------
             Assert.AreEqual(0, gridBase.Rows.Count);
             //Assert.AreEqual(classDef.PropDefcol.Count, myGridBase.Columns.Count);//There are 8 columns in the collection BO
             Assert.IsNull(gridBase.SelectedBusinessObject);
             //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void Test_Set_BusinessCollectionOnGrid_EmptyCollection()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            IGridBase gridBase = CreateGridBaseStub();
+            SetupGridColumnsForMyBo(gridBase);
+            //---------------Execute Test ----------------------
+            gridBase.BusinessObjectCollection = col;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, gridBase.Rows.Count);
+            Assert.IsNull(gridBase.SelectedBusinessObject);
         }
 
         [Test]
@@ -476,9 +534,27 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
+#pragma warning disable 618,612 //For backward compatibility testing
             gridBase.SetBusinessObjectCollection(null);
             //---------------Test Result -----------------------
             Assert.IsNull(gridBase.GetBusinessObjectCollection());
+            Assert.AreEqual(0, gridBase.Rows.Count);
+            Assert.AreEqual(0, gridBase.Columns.Count);
+        }
+#pragma warning restore 618,612
+
+        [Test]
+        public void Test_Set_BusinessCollectionOnGrid_NullCollection()
+        {
+            //---------------Set up test pack-------------------
+            IGridBase gridBase = CreateGridBaseStub();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            gridBase.BusinessObjectCollection = null;
+            //---------------Test Result -----------------------
+            Assert.IsNull(gridBase.BusinessObjectCollection);
+            Assert.AreEqual(0, gridBase.Rows.Count);
             Assert.AreEqual(0, gridBase.Columns.Count);
         }
 
@@ -493,8 +569,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             gridBase.Columns.Add("TestProp", "TestProp");
             //---------------Test Result -----------------------
-            Assert.AreEqual(DataGridViewColumnSortMode.Automatic , gridBase.Columns[0].SortMode);
-            //---------------Tear Down -------------------------          
+            Assert.AreEqual(DataGridViewColumnSortMode.Automatic , gridBase.Columns[0].SortMode);        
         }
         [Test]
         public void TestSetCollectionOnGrid_NoOfRows()
@@ -505,10 +580,24 @@ namespace Habanero.Test.UI.Base
             IGridBase gridBase = CreateGridBaseStub();
             SetupGridColumnsForMyBo(gridBase);
             //---------------Execute Test ----------------------
+#pragma warning disable 618,612
             gridBase.SetBusinessObjectCollection(col);
+#pragma warning restore 618,612
             //---------------Test Result -----------------------
             Assert.AreEqual(4, gridBase.Rows.Count);
-            //---------------Tear Down -------------------------    
+        }
+        [Test]
+        public void Test_Set_BusinessObjectCollectionOnGrid_NoOfRows()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IGridBase gridBase = CreateGridBaseStub();
+            SetupGridColumnsForMyBo(gridBase);
+            //---------------Execute Test ----------------------
+            gridBase.BusinessObjectCollection = col;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, gridBase.Rows.Count);
         }
 
         [Test]
@@ -519,7 +608,7 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
             IGridBase gridBase = CreateGridBaseStub();
             SetupGridColumnsForMyBo(gridBase);
-            gridBase.SetBusinessObjectCollection(col);
+            gridBase.BusinessObjectCollection =col;
             MyBO myBO = col[0];
             string testPropValue = TestUtil.GetRandomString();
             myBO.TestProp = testPropValue;
@@ -542,7 +631,7 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
             IGridBase gridBase = CreateGridBaseStub();
             SetupGridColumnsForMyBo(gridBase);
-            gridBase.SetBusinessObjectCollection(col);
+            gridBase.BusinessObjectCollection = col;
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             gridBase.RefreshBusinessObjectRow(null);
@@ -563,8 +652,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             IDataGridViewColumn column = gridBase.Columns["NonExistant"];
             //---------------Test Result -----------------------
-            Assert.IsNull(column);
-            //---------------Tear Down -------------------------          
+            Assert.IsNull(column);      
         }
         [Test]
         public void Test_SelectedBusinessObject_FirstRowIsSelected()
@@ -576,7 +664,7 @@ namespace Habanero.Test.UI.Base
             SetupGridColumnsForMyBo(gridBase);
 
             //---------------Execute Test ----------------------
-            gridBase.SetBusinessObjectCollection(col);
+            gridBase.BusinessObjectCollection  = col;
             IBusinessObject selectedBo = gridBase.SelectedBusinessObject;
             //---------------Test Result -----------------------
             Assert.AreSame(col[0], selectedBo);
@@ -619,14 +707,18 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
             IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
-            //---------------Execute Test ----------------------
             gridBase.SelectedBusinessObject = col[2];
+            //---------------Assert Precondition ---------------
+            Assert.IsNotNull(gridBase.SelectedBusinessObject);
+//            Assert.IsNotNull(gridBase.CurrentRow); 
+            //The current row is never set for VWG see ignored test TestSelectedBusinessObject_SetsCurrentRow
+            //---------------Execute Test ----------------------
             gridBase.SelectedBusinessObject = null;
 
             //---------------Test Result -----------------------
             Assert.IsNull(gridBase.SelectedBusinessObject);
             Assert.IsNull(gridBase.CurrentRow);
-            //The current row is never set see ignored test TestSelectedBusinessObject_SetsCurrentRow
+            
         }
 
         [Test, Ignore("Works in real, but not in the tests")]
@@ -717,6 +809,7 @@ namespace Habanero.Test.UI.Base
             //Test that the correct items where returned
             Assert.AreEqual(0, gridBase.SelectedBusinessObjects.Count);
             Assert.AreEqual(null, gridBase.SelectedBusinessObject);
+            Assert.IsNull(gridBase.BusinessObjectCollection);
         }
 
         [Test]
@@ -730,7 +823,7 @@ namespace Habanero.Test.UI.Base
             bool hasCollectionChangedFired = false;
             gridBase.CollectionChanged += delegate { hasCollectionChangedFired = true; };
             //---------------Execute Test ----------------------
-            gridBase.SetBusinessObjectCollection(col);
+            gridBase.BusinessObjectCollection  = col;
             //---------------Test Result -----------------------
             Assert.IsTrue(hasCollectionChangedFired, "CollectionChanged event should have fired.");
             //---------------Tear Down -------------------------
@@ -743,10 +836,9 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> col;
             IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
             //---------------Execute Test ----------------------
-            IBusinessObjectCollection collection = gridBase.GetBusinessObjectCollection();
+            IBusinessObjectCollection collection = gridBase.BusinessObjectCollection;
             //---------------Test Result -----------------------
             Assert.AreSame(col, collection);
-            //---------------Tear Down -------------------------
         }
 
         [Test]
@@ -761,7 +853,6 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreSame(col[2], businessObject2);
             Assert.AreSame(col[3], businessObject3);
-            //---------------Tear Down -------------------------
         }
 
         [Test]
@@ -787,7 +878,6 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
             IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
-            MyBO myBO2 = col[2];
             //-------------Assert Preconditions -------------
             //---------------Execute Test ----------------------
             IDataGridViewRow dataGridViewRow = gridBase.GetBusinessObjectRow(null);
@@ -817,7 +907,6 @@ namespace Habanero.Test.UI.Base
             IGridBase gridBase = CreateGridBaseStub();
             //---------------Test Result -----------------------
             Assert.AreEqual(0, gridBase.Columns.Count);
-            //---------------Tear Down -------------------------
         }
 
         [Test]
@@ -830,7 +919,6 @@ namespace Habanero.Test.UI.Base
             gridBase.Columns.Add(Guid.NewGuid().ToString("N"), "");
             //---------------Test Result -----------------------
             Assert.AreEqual(1, gridBase.Columns.Count);
-            //---------------Tear Down -------------------------
         }
 
         [Test]
@@ -844,7 +932,6 @@ namespace Habanero.Test.UI.Base
             gridBase.Columns.Add(Guid.NewGuid().ToString("N"), "");
             //---------------Test Result -----------------------
             Assert.AreEqual(2, gridBase.Columns.Count);
-            //---------------Tear Down -------------------------
         }
 
         [Test]
@@ -858,10 +945,9 @@ namespace Habanero.Test.UI.Base
             //IDataGridViewColumn column = new DataGridViewColumnStub();
             gridBase.Columns.Add(Guid.NewGuid().ToString("N"), "");
             gridBase.Columns.Add(Guid.NewGuid().ToString("N"), "");
-            gridBase.SetBusinessObjectCollection(col);
+            gridBase.BusinessObjectCollection  = col;
             //---------------Test Result -----------------------
             Assert.AreEqual(2, gridBase.Columns.Count);
-            //---------------Tear Down -------------------------
         }
 
 
@@ -875,7 +961,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             try
             {
-                gridBase.SetBusinessObjectCollection(col);
+                gridBase.BusinessObjectCollection  = col;
                 Assert.Fail();
                 //---------------Test Result -----------------------
             }
@@ -883,8 +969,6 @@ namespace Habanero.Test.UI.Base
             {
                 StringAssert.Contains("cannot call SetBusinessObjectCollection if the grid's columns have not been set up", ex.Message);
             }
-
-            //---------------Tear Down -------------------------
         }
 
         [Test]
@@ -899,10 +983,9 @@ namespace Habanero.Test.UI.Base
 
             //---------------Execute Test ----------------------
             gridBase.GridLoader = GridLoaderDelegateStub;
-            gridBase.SetBusinessObjectCollection(col);
+            gridBase.BusinessObjectCollection  = col;
             //---------------Test Result -----------------------
             Assert.AreEqual(1, gridBase.Rows.Count);
-            //---------------Tear Down -------------------------          
         }
         public void GridLoaderDelegateStub(IGridBase grid, IBusinessObjectCollection col)
         {
@@ -937,7 +1020,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             MyBO cp = col[2];
             gridBase.GridLoader = GridLoaderDelegateStub_LoadAllItems;
-            gridBase.SetBusinessObjectCollection(col);
+            gridBase.BusinessObjectCollection  = col;
             gridBase.SelectedBusinessObject = cp;
             //---------------Test Result -----------------------
             Assert.AreEqual(cp, gridBase.SelectedBusinessObject);
@@ -953,7 +1036,7 @@ namespace Habanero.Test.UI.Base
             gridBase.Columns.Add(_gridIdColumnName, _gridIdColumnName);
             gridBase.Columns.Add(Guid.NewGuid().ToString("N"), "");
             gridBase.GridLoader = GridLoaderDelegateStub_LoadAllItems;
-            gridBase.SetBusinessObjectCollection(col);
+            gridBase.BusinessObjectCollection  = col;
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(4, gridBase.Rows.Count);
             //---------------Execute Test ----------------------
@@ -975,8 +1058,7 @@ namespace Habanero.Test.UI.Base
             col.Add(new MyBO());
             //---------------Test Result -----------------------
             Assert.AreEqual(5, col.Count);
-            Assert.AreEqual(5, gridBase.Rows.Count);
-            //---------------Tear Down -------------------------          
+            Assert.AreEqual(5, gridBase.Rows.Count);    
         }
 
         [Test]
@@ -993,8 +1075,7 @@ namespace Habanero.Test.UI.Base
             col.Remove(bo);
             //---------------Test Result -----------------------
             Assert.AreEqual(3, col.Count);
-            Assert.AreEqual(3, gridBase.Rows.Count);
-            //---------------Tear Down -------------------------          
+            Assert.AreEqual(3, gridBase.Rows.Count);     
         }
 
         [Test]
@@ -1006,7 +1087,7 @@ namespace Habanero.Test.UI.Base
             const string propName = "TestProp";
             const int rowIndex = 1;
             MyBO bo = col[rowIndex];
-            gridBase.SetBusinessObjectCollection(col);
+            gridBase.BusinessObjectCollection  = col;
             MyBO selectedBo = (MyBO) gridBase.GetBusinessObjectAtRow(rowIndex);
             IDataGridViewCell cell = GetCell(rowIndex, gridBase, propName);
             //---------------Verify precondition----------------
@@ -1017,7 +1098,6 @@ namespace Habanero.Test.UI.Base
             bo.Save();
             //---------------Test Result -----------------------
             Assert.AreEqual(newPropValue, cell.Value);
-            //---------------Tear Down -------------------------          
         }
 
         [Test]
@@ -1115,7 +1195,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestApplyFilter_SetBusinessObject_ToAnObjectNoLongerInTheGrid_ReturnsTheCorretRow()
+        public void TestApplyFilter_SetBusinessObject_ToAnObjectNoLongerInTheGrid_ReturnsNullSelectedBO()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> boColllection;
@@ -1169,13 +1249,13 @@ namespace Habanero.Test.UI.Base
             MyBO selectedBo = col[2];
             gridBase.SelectedBusinessObject = selectedBo;
             //---------------Verify PreConditions --------------
-            Assert.AreSame(col, gridBase.GetBusinessObjectCollection());
+            Assert.AreSame(col, gridBase.BusinessObjectCollection);
             Assert.AreSame(selectedBo, gridBase.SelectedBusinessObject);
             //---------------Execute Test ----------------------
             gridBase.RefreshGrid();
 
             //---------------Test Result -----------------------
-            Assert.AreSame(col, gridBase.GetBusinessObjectCollection());
+            Assert.AreSame(col, gridBase.BusinessObjectCollection);
             Assert.AreSame(selectedBo, gridBase.SelectedBusinessObject);
             //---------------Tear Down -------------------------
         }
@@ -1186,7 +1266,7 @@ namespace Habanero.Test.UI.Base
             MyBO.LoadDefaultClassDef();
             IGridBase gridBase = CreateGridBaseStub();
             //---------------Verify PreConditions --------------
-            Assert.IsNull(gridBase.GetBusinessObjectCollection());
+            Assert.IsNull(gridBase.BusinessObjectCollection);
             //---------------Execute Test ----------------------
             try
             {
@@ -1207,7 +1287,7 @@ namespace Habanero.Test.UI.Base
             MyBO.LoadDefaultClassDef();
             IGridBase gridBase = CreateGridBaseStub();
             //---------------Verify PreConditions --------------
-            Assert.IsNull(gridBase.GetBusinessObjectCollection());
+            Assert.IsNull(gridBase.BusinessObjectCollection);
             //---------------Execute Test ----------------------
 
 
@@ -1277,7 +1357,7 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
-            gridBase.SetBusinessObjectCollection(col);
+            gridBase.BusinessObjectCollection  = col;
 
             //---------------Test Result -----------------------
 
@@ -1322,37 +1402,30 @@ namespace Habanero.Test.UI.Base
             col.DefaultCellStyle.Format = requiredFormat;
             return gridBase;
         }
-        private static void AddColumnsForContactPerson(BusinessObjectCollection<ContactPersonTestBO> businessObjectCollection, IGridBase gridBase, string propName)
+        private static void AddColumnsForContactPerson(IBusinessObjectCollection businessObjectCollection, IGridBase gridBase, string propName)
         {
             gridBase.Columns.Add(_gridIdColumnName, _gridIdColumnName);
             gridBase.Columns.Add(propName, propName);
-            gridBase.SetBusinessObjectCollection(businessObjectCollection);
+            gridBase.BusinessObjectCollection =businessObjectCollection;
         }
 
         private static void CreateBOAndAddToCollection(
             BusinessObjectCollection<ContactPersonTestBO> businessObjectCollection)
         {
-            ContactPersonTestBO cp = new ContactPersonTestBO();
-            cp.Surname = Guid.NewGuid().ToString("N");
+            ContactPersonTestBO cp = new ContactPersonTestBO {Surname = Guid.NewGuid().ToString("N")};
             cp.Save();
             businessObjectCollection.Add(cp);
         }
         private static BusinessObjectCollection<MyBO> CreateCollectionWith_4_Objects()
         {
-            MyBO cp = new MyBO();
-            cp.TestProp = "b";
-            MyBO cp2 = new MyBO();
-            cp2.TestProp = "d";
-            MyBO cp3 = new MyBO();
-            cp3.TestProp = "c";
-            MyBO cp4 = new MyBO();
-            cp4.TestProp = "a";
-            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
-            col.Add(cp, cp2, cp3, cp4);
-            return col;
+            MyBO cp = new MyBO {TestProp = "b"};
+            MyBO cp2 = new MyBO {TestProp = "d"};
+            MyBO cp3 = new MyBO {TestProp = "c"};
+            MyBO cp4 = new MyBO {TestProp = "a"};
+            return new BusinessObjectCollection<MyBO> {{cp, cp2, cp3, cp4}};
         }
 
-        private static IDataGridViewCell GetCell(int rowIndex, IGridBase gridBase, string propName)
+        private static IDataGridViewCell GetCell(int rowIndex, IDataGridView gridBase, string propName)
         {
             IDataGridViewRow row = gridBase.Rows[rowIndex];
             return row.Cells[propName];
@@ -1364,12 +1437,12 @@ namespace Habanero.Test.UI.Base
             col = CreateCollectionWith_4_Objects();
             IGridBase gridBase = CreateGridBaseStub();
             SetupGridColumnsForMyBo(gridBase);
-            gridBase.SetBusinessObjectCollection(col);
+            gridBase.BusinessObjectCollection  = col;
             return gridBase;
         }
 
 
-        private static void SetupGridColumnsForMyBo(IGridBase gridBase)
+        private static void SetupGridColumnsForMyBo(IDataGridView gridBase)
         {
             gridBase.Columns.Add(_gridIdColumnName, _gridIdColumnName);
             gridBase.Columns.Add("TestProp", "TestProp");
@@ -1408,14 +1481,6 @@ namespace Habanero.Test.UI.Base
 
     internal class DataGridViewColumnStub : IDataGridViewColumn
     {
-        private string _dataPropertyName;
-        private string _headerText;
-        private string _name;
-        private bool _readOnly;
-        private string _toolTipText;
-        private Type _valueType;
-        private int _width;
-
         /// <summary>Gets or sets the name of the data source property or database column to which the <see cref="IDataGridViewColumn"></see> is bound.</summary>
         /// <returns>The name of the property or database column associated with the <see cref="IDataGridViewColumn"></see>.</returns>
         /// <filterpriority>1</filterpriority>
@@ -1426,39 +1491,23 @@ namespace Habanero.Test.UI.Base
         //TypeConverter(
         //    "IForms.Design.DataMemberFieldConverter, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
         //    ), Browsable(true)]
-        public string DataPropertyName
-        {
-            get { return _dataPropertyName; }
-            set { _dataPropertyName = value; }
-        }
+        public string DataPropertyName { get; set; }
 
         /// <summary>Gets or sets the caption text on the column's header cell.</summary>
         /// <returns>A <see cref="T:System.String"></see> with the desired text. The default is an empty string ("").</returns>
         /// <filterpriority>1</filterpriority>
-        public string HeaderText
-        {
-            get { return _headerText; }
-            set { _headerText = value; }
-        }
+        public string HeaderText { get; set; }
 
         /// <summary>Gets or sets the name of the column.</summary>
         /// <returns>A <see cref="T:System.String"></see> that contains the name of the column. The default is an empty string ("").</returns>
         /// <filterpriority>1</filterpriority>
-        public string Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
+        public string Name { get; set; }
 
         /// <summary>Gets or sets a value indicating whether the user can edit the column's cells.</summary>
         /// <returns>true if the user cannot edit the column's cells; otherwise, false.</returns>
         /// <exception cref="T:System.InvalidOperationException">This property is set to false for a column that is bound to a read-only data source. </exception>
         /// <filterpriority>1</filterpriority>
-        public bool ReadOnly
-        {
-            get { return _readOnly; }
-            set { _readOnly = value; }
-        }
+        public bool ReadOnly { get; set; }
 
         /// <summary>Gets or sets the sort mode for the column.</summary>
         /// <returns>A <see cref="DataGridViewColumnSortMode"></see> that specifies the criteria used to order the rows based on the cell values in a column.</returns>
@@ -1473,30 +1522,18 @@ namespace Habanero.Test.UI.Base
         /// <summary>Gets or sets the text used for ToolTips.</summary>
         /// <returns>The text to display as a ToolTip for the column.</returns>
         /// <filterpriority>1</filterpriority>
-        public string ToolTipText
-        {
-            get { return _toolTipText; }
-            set { _toolTipText = value; }
-        }
+        public string ToolTipText { get; set; }
 
         /// <summary>Gets or sets the data type of the values in the column's cells.</summary>
         /// <returns>A <see cref="T:System.Type"></see> that describes the run-time class of the values stored in the column's cells.</returns>
         /// <filterpriority>1</filterpriority>
-        public Type ValueType
-        {
-            get { return _valueType; }
-            set { _valueType = value; }
-        }
+        public Type ValueType { get; set; }
 
         /// <summary>Gets or sets the current width of the column.</summary>
         /// <returns>The width, in pixels, of the column. The default is 100.</returns>
         /// <exception cref="T:System.ArgumentOutOfRangeException">The specified value when setting this property is greater than 65536.</exception>
         /// <filterpriority>1</filterpriority>
-        public int Width
-        {
-            get { return _width; }
-            set { _width = value; }
-        }
+        public int Width { get; set; }
 
         public bool Visible
         {

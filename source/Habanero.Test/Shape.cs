@@ -50,6 +50,7 @@ namespace Habanero.Test
             lPropDefCol.Add(propDef);
             propDef = new PropDef("ShapeID", typeof(Guid), PropReadWriteRule.WriteOnce, "ShapeID_field", null);
             lPropDefCol.Add(propDef);
+
            // propDef = new PropDef("MyID", typeof(Guid), PropReadWriteRule.WriteOnce, null);
            // lPropDefCol.Add(propDef);
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
@@ -67,7 +68,7 @@ namespace Habanero.Test
            //                                                      relKeyDef, false, "", DeleteParentAction.DereferenceRelated);
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             //relDefCol.Add(relDef);
-			
+
             ClassDef lClassDef = new ClassDef(typeof (Shape), primaryKey, "Shape_table", lPropDefCol, keysCol, relDefCol);
 			ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;

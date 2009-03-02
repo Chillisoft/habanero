@@ -36,17 +36,7 @@ namespace Habanero.UI.Base
         /// else returns false.
         /// </summary>
         /// <returns>True if the edit was a success, false if not</returns>
-        bool ShowDialog();
-
-        /// <summary>
-        /// Shows the form to the user
-        /// </summary>
-        void Show();
-
-        /// <summary>
-        /// Disposes of the form
-        /// </summary>
-        void Dispose();
+        new bool ShowDialog();
 
         /// <summary>
         /// Gets or sets the dialog result that indicates what action was
@@ -59,5 +49,10 @@ namespace Habanero.UI.Base
         /// its controls, mappers and business object
         /// </summary>
         IPanelInfo PanelInfo{ get;}
+
+        ///<summary>
+        /// The Creator (<see cref="GroupControlCreator"/> used to create the <see cref="IGroupControl"/>
+        ///</summary>
+        GroupControlCreator GroupControlCreator { get; }
     }
 }

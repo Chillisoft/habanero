@@ -74,17 +74,18 @@ namespace Habanero.Test.UI.Base
         public void TestSetFormControlCreator()
         {
             //---------------Set up test pack-------------------
+            FormControlStub formControlStub = new FormControlStub();
             HabaneroMenu.Item menuItem = new HabaneroMenu.Item(TestUtil.GetRandomString());
-            IFormControl formControl = null;
             //---------------Assert PreConditions---------------            
             Assert.IsNull(menuItem.FormControlCreator);
             //---------------Execute Test ----------------------
-            menuItem.FormControlCreator += delegate { return new FormControlStub(); };
-            formControl = menuItem.FormControlCreator();
+            menuItem.FormControlCreator += (() => formControlStub);
+            IFormControl formControl = menuItem.FormControlCreator();
             //---------------Test Result -----------------------
             Assert.IsNotNull(menuItem.FormControlCreator);
             Assert.IsNotNull(formControl);
             Assert.IsInstanceOfType(typeof(FormControlStub), formControl);
+            Assert.AreSame(formControlStub,formControl);
             //---------------Tear Down -------------------------          
         }
 
@@ -93,12 +94,11 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             HabaneroMenu.Item menuItem = new HabaneroMenu.Item(TestUtil.GetRandomString());
-            IControlManager controlManager = null;
             //---------------Assert PreConditions---------------            
             Assert.IsNull(menuItem.ControlManagerCreator);
             //---------------Execute Test ----------------------
             menuItem.ControlManagerCreator += delegate { return new ControlManagerStub(); };
-            controlManager = menuItem.ControlManagerCreator(null);
+            IControlManager controlManager = menuItem.ControlManagerCreator(null);
             //---------------Test Result -----------------------
             Assert.IsNotNull(menuItem.ControlManagerCreator);
             Assert.IsNotNull(controlManager);

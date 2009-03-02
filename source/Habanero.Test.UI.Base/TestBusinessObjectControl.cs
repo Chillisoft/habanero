@@ -41,7 +41,7 @@ namespace Habanero.Test.UI.Base
             // ---------------Execute Test ----------------------
             try
             {
-                new BusinessObjectControl<OrganisationTestBO>(GetControlFactory(), null);
+                new BusinessObjectControlWin<OrganisationTestBO>(GetControlFactory(), null);
 
                 Assert.Fail("Null uiDefName should be prevented");
             }
@@ -61,7 +61,7 @@ namespace Habanero.Test.UI.Base
             // ---------------Execute Test ----------------------
             try
             {
-                new BusinessObjectControl<OrganisationTestBO>(null, CUSTOM_UIDEF_NAME);
+                new BusinessObjectControlWin<OrganisationTestBO>(null, CUSTOM_UIDEF_NAME);
 
                 Assert.Fail("Null controlFactory should be prevented");
             }
@@ -81,15 +81,17 @@ namespace Habanero.Test.UI.Base
             // ---------------Execute Test ----------------------
             try
             {
-                new BusinessObjectControl<OrganisationTestBO>(GetControlFactory(), CUSTOM_UIDEF_NAME);
+                new BusinessObjectControlWin<OrganisationTestBO>(GetControlFactory(), CUSTOM_UIDEF_NAME);
                 Assert.Fail("expected Err");
             }
             //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
             {
 
-                string expectedDeveloperMessage = "The 'BusinessObjectControl' could not be created since the the uiDef '" + CUSTOM_UIDEF_NAME +
-                                                  "' in the classDef '" + def.ClassNameFull + "' does not have a UIForm defined";
+                string expectedDeveloperMessage = "The 'BusinessObjectControl";
+                StringAssert.Contains(expectedDeveloperMessage, ex.Message);
+                expectedDeveloperMessage ="' could not be created since the the uiDef '" + CUSTOM_UIDEF_NAME +
+                                          "' in the classDef '" + def.ClassNameFull + "' does not have a UIForm defined";
                 StringAssert.Contains(expectedDeveloperMessage, ex.Message);
             }
         }
@@ -102,7 +104,7 @@ namespace Habanero.Test.UI.Base
             // ---------------Execute Test ----------------------
             try
             {
-                new BusinessObjectControl(GetControlFactory(), def, null);
+                new BusinessObjectControlWin(GetControlFactory(), def, null);
 
                 Assert.Fail("Null uiDefName should be prevented");
             }
@@ -121,7 +123,7 @@ namespace Habanero.Test.UI.Base
             // ---------------Execute Test ----------------------
             try
             {
-                new BusinessObjectControl(null, def, CUSTOM_UIDEF_NAME);
+                new BusinessObjectControlWin(null, def, CUSTOM_UIDEF_NAME);
 
                 Assert.Fail("Null controlFactory should be prevented");
             }
@@ -140,7 +142,7 @@ namespace Habanero.Test.UI.Base
             // ---------------Execute Test ----------------------
             try
             {
-                new BusinessObjectControl(GetControlFactory(), null, CUSTOM_UIDEF_NAME);
+                new BusinessObjectControlWin(GetControlFactory(), null, CUSTOM_UIDEF_NAME);
 
                 Assert.Fail("Null controlFactory should be prevented");
             }
@@ -160,15 +162,16 @@ namespace Habanero.Test.UI.Base
             // ---------------Execute Test ----------------------
             try
             {
-                new BusinessObjectControl(GetControlFactory(), def, CUSTOM_UIDEF_NAME);
+                new BusinessObjectControlWin(GetControlFactory(), def, CUSTOM_UIDEF_NAME);
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------
             catch (HabaneroDeveloperException ex)
             {
-
-                string expectedDeveloperMessage = "The 'BusinessObjectControl' could not be created since the the uiDef '" + CUSTOM_UIDEF_NAME +
-                                                  "' in the classDef '" + def.ClassNameFull + "' does not have a UIForm defined";
+                string expectedDeveloperMessage = "The 'BusinessObjectControl";
+                StringAssert.Contains(expectedDeveloperMessage, ex.Message);
+                expectedDeveloperMessage = "' could not be created since the the uiDef '" + CUSTOM_UIDEF_NAME +
+                                          "' in the classDef '" + def.ClassNameFull + "' does not have a UIForm defined";
                 StringAssert.Contains(expectedDeveloperMessage, ex.Message);
             }
         }
@@ -182,7 +185,7 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
             Assert.IsNotNull(GlobalUIRegistry.ControlFactory);
             //---------------Execute Test ----------------------
-            BusinessObjectControl control = new BusinessObjectControl(def);
+            BusinessObjectControlWin control = new BusinessObjectControlWin(def);
             //---------------Test Result -----------------------
             Assert.IsNotNull(control);
 
@@ -194,7 +197,7 @@ namespace Habanero.Test.UI.Base
             //   ---------------Set up test pack-------------------
             GlobalUIRegistry.ControlFactory = GetControlFactory();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectControl control = new BusinessObjectControl(GetCustomClassDef());
+            BusinessObjectControlWin control = new BusinessObjectControlWin(GetCustomClassDef());
             OrganisationTestBO businessObject = OrganisationTestBO.CreateSavedOrganisation();
             //---------------Assert Precondition----------------
             Assert.IsNull(control.BusinessObject);
@@ -209,7 +212,7 @@ namespace Habanero.Test.UI.Base
             //   ---------------Set up test pack-------------------
             GlobalUIRegistry.ControlFactory = GetControlFactory();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectControl control = new BusinessObjectControl(GetCustomClassDef());
+            BusinessObjectControlWin control = new BusinessObjectControlWin(GetCustomClassDef());
             OrganisationTestBO businessObject = OrganisationTestBO.CreateSavedOrganisation();
             control.BusinessObject = businessObject;
             //---------------Assert Precondition----------------
@@ -226,7 +229,7 @@ namespace Habanero.Test.UI.Base
             //   ---------------Set up test pack-------------------
             GlobalUIRegistry.ControlFactory = GetControlFactory();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectControl control = new BusinessObjectControl(GetCustomClassDef());
+            BusinessObjectControlWin control = new BusinessObjectControlWin(GetCustomClassDef());
             control.BusinessObject = null;
             //---------------Assert Precondition----------------
             Assert.IsNull(control.BusinessObject);
@@ -241,7 +244,7 @@ namespace Habanero.Test.UI.Base
             //   ---------------Set up test pack-------------------
             GlobalUIRegistry.ControlFactory = GetControlFactory();
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectControl control = new BusinessObjectControl(GetCustomClassDef());
+            BusinessObjectControlWin control = new BusinessObjectControlWin(GetCustomClassDef());
             control.BusinessObject = null;
             //---------------Assert Precondition----------------
             Assert.IsNull(control.BusinessObject);

@@ -17,11 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Habanero.UI.Base;
-
 namespace Habanero.UI.Base
 {
     /// <summary>
@@ -36,6 +31,11 @@ namespace Habanero.UI.Base
         private readonly ITextBox _fileTextBox;
         private readonly IButton _selectFileButton;
 
+        ///<summary>
+        /// Constructs the <see cref="FileChooserManager"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="fileChooser"></param>
         public FileChooserManager(IControlFactory controlFactory, IFileChooser fileChooser)
         {
             _controlFactory = controlFactory;
@@ -47,6 +47,9 @@ namespace Habanero.UI.Base
             manager.AddControl(_selectFileButton);
         }
 
+        ///<summary>
+        /// Gets and Sets the selected file path.
+        ///</summary>
         public string SelectedFilePath
         {
             get { return _fileTextBox.Text; }

@@ -18,10 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
@@ -47,6 +44,11 @@ namespace Habanero.UI.VWG
         /// Occurs when the collection in the grid is changed
         /// </summary>
         public event EventHandler CollectionChanged;
+
+        public void FireBusinessObjectEditedEvent(BusinessObject bo)
+        {
+            FireSelectedBusinessObjectEdited(bo);
+        }
 
         /// <summary>
         /// Occurs when a business object is being edited
@@ -142,7 +144,13 @@ namespace Habanero.UI.VWG
         /// collection must be pre-loaded.</param>
         public void SetBusinessObjectCollection(IBusinessObjectCollection col)
         {
-            _manager.SetBusinessObjectCollection(col);
+            BusinessObjectCollection = col;
+        }
+
+        public IBusinessObjectCollection BusinessObjectCollection
+        {
+            get { return _manager.GetBusinessObjectCollection(); }
+            set { _manager.SetBusinessObjectCollection(value); }
         }
 
         /// <summary>
@@ -259,8 +267,6 @@ namespace Habanero.UI.VWG
         /// is being edited
         /// </summary>
         /// <param name="bo">The business object being edited</param>
-        /// TODO: this is badly named (why do we indicate the BO, but say "Selected") - this should be a
-        /// verb, as in FireBusinessObjectEdited
         public void SelectedBusinessObjectEdited(BusinessObject bo)
         {
             FireSelectedBusinessObjectEdited(bo);
@@ -272,6 +278,12 @@ namespace Habanero.UI.VWG
             {
                 this.BusinessObjectEdited(this, new BOEventArgs(bo));
             }
+        }
+        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelector"></see>.</summary>
+        /// <returns>The number of rows in the <see cref="IBOSelector"></see>.</returns>
+        int IBOSelector.NoOfItems
+        {
+            get { return this.Rows.Count; }
         }
     }
 }

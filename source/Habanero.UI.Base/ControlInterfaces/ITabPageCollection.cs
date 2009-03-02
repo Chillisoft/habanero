@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections;
+
 namespace Habanero.UI.Base
 {
     /// <summary>
@@ -24,7 +26,7 @@ namespace Habanero.UI.Base
     /// </summary>
     public interface ITabPageCollection
     {
-        //int Add(ITabPage page);
+//        int Add(ITabPage page);
 
         /// <summary>
         /// Adds a tab page to the collection

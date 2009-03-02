@@ -25,19 +25,35 @@ using Habanero.BO;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// This manager groups common logic for IBOColTabControl objects.
+    /// This manager groups common logic for <see cref="IBOColTabControl"/>  objects.
     /// Do not use this object in working code - rather call CreateBOColTabControl
     /// in the appropriate control factory.
+    /// <remarks>
+    /// This Manager is an extract of common functionality required for the <see cref="IBOColTabControl"/> it is used to 
+    /// as part of the pattern to isolate the implementation of the actual BOColTabControl from the code using the BOColTabControl.
+    /// This allows the developer to swap <see cref="IBOColTabControl"/>s that support this interface without having to redevelop 
+    /// any code.
+    /// Habanero uses this to isolate the UIframework so that a different framework can be implemented
+    /// using these interfaces. This allows swapping in custom controls as well total other control libraries without 
+    ///  modifying the app.
+    /// This allows the Architecture to swap between Visual Web Gui and Windows or in fact between any UI framework and
+    /// any other UI Framework.
+    /// </remarks>
     /// </summary>
     public class BOColTabControlManager
     {
-        private ITabControl _tabControl;
+        private readonly ITabControl _tabControl;
         private readonly IControlFactory _controlFactory;
-        private Dictionary<ITabPage, IBusinessObject> _pageBoTable;
-        private Dictionary<IBusinessObject, ITabPage> _boPageTable;
+        private readonly Dictionary<ITabPage, IBusinessObject> _pageBoTable;
+        private readonly Dictionary<IBusinessObject, ITabPage> _boPageTable;
         private IBusinessObjectControl _boControl;
         private IBusinessObjectCollection _businessObjectCollection;
 
+        ///<summary>
+        /// Constructor for the <see cref="BOColTabControlManager"/>
+        ///</summary>
+        ///<param name="tabControl"></param>
+        ///<param name="controlFactory"></param>
         public BOColTabControlManager(ITabControl tabControl, IControlFactory controlFactory)
         {
             //BorderLayoutManager manager = new BorderLayoutManager(this);
@@ -77,11 +93,9 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Sets the collection of tab pages for the collection of business
-        /// objects provided
+        /// Sets the collection of tab pages for the collection of business (<see cref="IBusinessObjectCollection"/>)
+        /// objects used to Create teh Tab Pages.
         /// </summary>
-        /// <param name="value">The business object collection to create tab pages
-        /// for</param>
         public IBusinessObjectCollection BusinessObjectCollection
         {
             set
@@ -169,14 +183,7 @@ namespace Habanero.UI.Base
         {
             if (tabPage == null) return null;
 
-            if (_pageBoTable.ContainsKey(tabPage))
-            {
-                return _pageBoTable[tabPage];
-            }
-            else
-            {
-                return null;
-            }
+            return _pageBoTable.ContainsKey(tabPage) ? _pageBoTable[tabPage] : null;
         }
 
         /// <summary>
@@ -192,11 +199,7 @@ namespace Habanero.UI.Base
                     return null;
                 }
                 int tabIndex = TabControl.TabPages.IndexOf(TabControl.SelectedTab);
-                if (tabIndex == -1) return null;
-                else
-                {
-                    return _businessObjectCollection[tabIndex];
-                }
+                return tabIndex == -1 ? null : _businessObjectCollection[tabIndex];
             }
             set
             {
@@ -206,11 +209,17 @@ namespace Habanero.UI.Base
             }
         }
 
+        ///<summary>
+        /// A dictionalry linking the Tab Page to the particular Business Object.
+        ///</summary>
         public Dictionary<ITabPage, IBusinessObject> PageBoTable
         {
             get { return _pageBoTable; }
         }
 
+        ///<summary>
+        /// A dictionary linking the Business Object to a particular TabPage
+        ///</summary>
         public Dictionary<IBusinessObject, ITabPage> BoPageTable
         {
             get { return _boPageTable; }
@@ -260,14 +269,7 @@ namespace Habanero.UI.Base
         /// <returns>Returns the TabPage object, or null if not found</returns>
         public virtual ITabPage GetTabPage(IBusinessObject bo)
         {
-            if (_boPageTable.ContainsKey(bo))
-            {
-                return _boPageTable[bo];
-            }
-            else
-            {
-                return null;
-            }
+            return _boPageTable.ContainsKey(bo) ? _boPageTable[bo] : null;
         }
 
         /// <summary>

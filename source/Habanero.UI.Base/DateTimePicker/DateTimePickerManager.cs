@@ -31,8 +31,17 @@ namespace Habanero.UI.Base
     {
         #region Delegates
 
+        ///<summary>
+        /// A delegate for getting the Value of a DateTimePicker
+        ///</summary>
+        ///<typeparam name="T"></typeparam>
         public delegate T ValueGetter<T>();
 
+        ///<summary>
+        /// A delegate for setting the value of a DateTimePicker
+        ///</summary>
+        ///<param name="value"></param>
+        ///<typeparam name="T"></typeparam>
         public delegate void ValueSetter<T>(T value);
 
         #endregion
@@ -41,6 +50,9 @@ namespace Habanero.UI.Base
         private readonly IDateTimePicker _dateTimePicker;
         private readonly ValueGetter<DateTime> _valueGetter;
         private readonly ValueSetter<DateTime> _valueSetter;
+        /// <summary>
+        /// The <see cref="EventHandler"/> for the <see cref="IDateTimePicker"/> value changing.
+        /// </summary>
         public event EventHandler ValueChanged;
 
         //State Variables
@@ -50,6 +62,14 @@ namespace Habanero.UI.Base
 
         //private event EventHandler _valueChanged;
 
+        ///<summary>
+        /// The Constructor for the <see cref="DateTimePickerManager"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="dateTimePicker"></param>
+        ///<param name="valueGetter"></param>
+        ///<param name="valueSetter"></param>
+        ///<exception cref="ArgumentNullException"></exception>
         public DateTimePickerManager(IControlFactory controlFactory, IDateTimePicker dateTimePicker,
                                      ValueGetter<DateTime> valueGetter, ValueSetter<DateTime> valueSetter)
         {
@@ -97,6 +117,9 @@ namespace Habanero.UI.Base
             _displayBox.Height = _dateTimePicker.Height - 7;
         }
 
+        ///<summary>
+        /// Updates the Focus state for the control
+        ///</summary>
         public void UpdateFocusState()
         {
             if (_dateTimePicker.Focused)

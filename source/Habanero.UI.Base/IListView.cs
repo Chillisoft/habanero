@@ -24,7 +24,6 @@ using Habanero.BO;
 
 namespace Habanero.UI.Base
 {
-    //TODO: Port
 //    /// <summary>
 //    /// Represents a list view control, which displays a collection of
 //    /// items that can be displayed using one of four different views

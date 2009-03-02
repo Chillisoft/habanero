@@ -589,6 +589,12 @@ namespace Habanero.UI.VWG
         {
             return new CollapsiblePanelVWG(this); 
         }
+
+        public ICollapsiblePanel CreateCollapsiblePanel(string name)
+        {
+            return new CollapsiblePanelVWG(this) {Text = name};
+        }
+
 //
 //        public IGridAndBOEditorControl CreateGridAndBOEditorControl(IBusinessObjectControlWithErrorDisplay boEditorPanel)
 //        {
@@ -766,6 +772,19 @@ namespace Habanero.UI.VWG
                                                                PostObjectEditDelegate action)
         {
             return new DefaultBOEditorFormVWG(bo, uiDefName, this, action);
+        }
+        /// <summary>
+        /// Creates a form in which a business object can be edited
+        /// </summary>
+        /// <param name="bo">The business object to edit</param>
+        /// <param name="uiDefName">The name of the set of UI definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a UI definition with no name attribute specified.</param>
+        /// <param name="groupControlCreator">The Creator that will be used to Create the <see cref="IGroupControl"/></param>
+        public virtual IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName,
+                                                               GroupControlCreator groupControlCreator)
+        {
+            return new DefaultBOEditorFormVWG(bo, uiDefName, this, groupControlCreator);
         }
 
         /// <summary>
@@ -1069,10 +1088,45 @@ namespace Habanero.UI.VWG
             return new CollapsiblePanelGroupControlVWG();
         }
 
+        ///<summary>
+        /// Creates a <see cref="IGroupBoxGroupControl"/>
+        ///</summary>
+        ///<returns></returns>
+        public IGroupBoxGroupControl CreateGroupBoxGroupControl()
+        {
+            return new GroupBoxGroupControlVWG(this);
+        }
+
+        ///<summary>
+        /// Creates an <see cref="IBOComboBoxSelector"/>
+        ///</summary>
+        ///<returns></returns>
+        public IBOComboBoxSelector CreateComboBoxSelector()
+        {
+            return new ComboBoxSelectorVWG();
+        }
+
+        ///<summary>
+        /// Creates an <see cref="IBOListBoxSelector"/>
+        ///</summary>
+        ///<returns></returns>
+        public IBOListBoxSelector CreateListBoxSelector()
+        {
+            return new ListBoxSelectorVWG();
+        }
+        
+        ///<summary>
+        /// Creates an <see cref="IBOCollapsiblePanelSelector"/>
+        ///</summary>
+        ///<returns></returns>
+        public IBOCollapsiblePanelSelector CreateCollapsiblePanelSelector()
+        {
+            return new CollapsiblePanelSelectorVWG(this);
+        }
+
         #endregion
-
-
     }
+ 
 
     /// <summary>
     /// Provides a set of behaviour strategies that can be applied to a NumericUpDown

@@ -83,6 +83,15 @@
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
     <Compile Include="ButtonsControl\TestButtonGroupControl.cs" />
+    <Compile Include="Controllers\TestListBoxCollectionController.cs" />
+    <Compile Include="Selectors\TestBOSelector.cs" />
+    <Compile Include="Selectors\TestCollapsiblePanelSelector.cs">
+    </Compile>
+    <Compile Include="Selectors\TestComboBoxSelector.cs" />
+    <Compile Include="Selectors\TestGridSelector.cs" />
+    <Compile Include="Selectors\TestListBoxSelector.cs" />
+    <Compile Include="Selectors\TestReadOnlyGridControlSelector.cs" />
+    <Compile Include="TestGroupBoxGroupControl.cs" />
     <Compile Include="TestBusinessObjectControl.cs" />
     <Compile Include="TestCollapsiblePanel.cs" />
     <Compile Include="FilterController\TestFilterControlBuilder.cs" />
@@ -97,7 +106,6 @@
     <Compile Include="TestCheckBox.cs" />
     <Compile Include="TestCollapsiblePanelGroupControlWin.cs" />
     <Compile Include="TestComboBox.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TestExtendedComboBox.cs" />
     <Compile Include="TestEnumerationConverter.cs" />
@@ -148,7 +156,6 @@
     <Compile Include="LayoutManager\TestGridLayoutManager.cs" />
     <Compile Include="Mappers\TestCollectionTabControlMapper.cs">
     </Compile>
-    <Compile Include="Mappers\TestComboBoxCollectionController.cs" />
     <Compile Include="Mappers\TestControlMapperStrategyWin.cs" />
     <Compile Include="Mappers\TestDateTimePickerMapper.cs" />
     <Compile Include="Mappers\TestCheckBoxMapper.cs" />

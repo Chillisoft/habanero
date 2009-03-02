@@ -38,12 +38,6 @@ namespace Habanero.UI.Base
         bool AutoSize { get; set; }
 
         /// <summary>
-        /// Gets or sets the font of the text displayed by the control
-        /// </summary>
-        /// TODO: is this needed - it's in the IControl?
-        Font Font { get; set; }
-
-        /// <summary>
         /// Gets or sets the alignment of text in the label
         /// </summary>
         ContentAlignment TextAlign { get; set; }

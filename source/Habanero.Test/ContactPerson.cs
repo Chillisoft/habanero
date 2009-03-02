@@ -193,6 +193,49 @@ namespace Habanero.Test
         }
 
 
+        public static ClassDef CreateClassDefWithShapeRelationship()
+        {
+            PropDefCol lPropDefCol = CreateBOPropDef();
+
+            KeyDef lKeyDef = new KeyDef();
+            lKeyDef.IgnoreIfNull = true;
+            lKeyDef.Add(lPropDefCol["PK2Prop1"]);
+            lKeyDef.Add(lPropDefCol["PK2Prop2"]);
+            KeyDefCol keysCol = new KeyDefCol();
+
+            keysCol.Add(lKeyDef);
+
+            lKeyDef = new KeyDef();
+            lKeyDef.IgnoreIfNull = false;
+
+            lKeyDef.Add(lPropDefCol["PK3Prop"]);
+            keysCol.Add(lKeyDef);
+
+            PrimaryKeyDef primaryKey = new PrimaryKeyDef();
+            primaryKey.IsGuidObjectID = true;
+            primaryKey.Add(lPropDefCol["ContactPersonID"]);
+
+
+            //Releationships
+            RelationshipDefCol relDefs = new RelationshipDefCol();
+
+            RelKeyDef relKeyDef = new RelKeyDef();
+            IPropDef propDef = lPropDefCol["ContactPersonID"];
+            RelPropDef lRelPropDef = new RelPropDef(propDef, "OwnerId");
+            relKeyDef.Add(lRelPropDef);
+
+            RelationshipDef relDef = new MultipleRelationshipDef("Shapes", typeof(Shape),
+             relKeyDef, false, "",
+             DeleteParentAction.DereferenceRelated);
+            //relDefCol.Add(relDef1);
+            relDefs.Add(relDef);
+
+            ClassDef lClassDef = new ClassDef(typeof(ContactPerson), primaryKey, "contact_person", lPropDefCol, keysCol, relDefs);
+
+            ClassDef.ClassDefs.Add(lClassDef);
+            return lClassDef;
+        }
+
         /// <summary>
         /// returns the ContactPerson identified by id.
         /// </summary>

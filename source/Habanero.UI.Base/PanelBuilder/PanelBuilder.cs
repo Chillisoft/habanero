@@ -26,35 +26,106 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// A Creator (<see cref="Delegate"/> that is used to create the Grouping control being used by the 
+    /// <see cref="PanelBuilder.BuildPanelForForm(UIForm,GroupControlCreator)"/> to create the Group control
+    /// that is being used to Group the Controls within the an <see cref="ITabControl"/>, an <see cref="ICollapsiblePanelGroupControl"/>
+    /// or a <see cref="IGroupBox"/>
+    /// </summary>
+    /// <returns></returns>
+    public delegate IGroupControl GroupControlCreator();
+
+//    /// <summary>
+//    /// A Creator (<see cref="Delegate"/> that is used to create the individual control being used by the 
+//    /// <see cref="PanelBuilder.BuildPanelForForm(UIForm,GroupControlCreator)"/> to create the control that 
+//    /// is fitted within the Control Created by the <see cref="GroupControlCreator"/>.
+//    /// <example>
+//    ///<li> If the Group control used is a <see cref="ITabControl"/> then this will be an <see cref="ITabPage"/><br/></li>
+//    ///<li> If the Group Control is a <see cref="ICollapsiblePanelGroupControl"/> the this will be a <see cref="ICollapsiblePanel"/><br/></li>
+//    ///<li> If the Group Control is a <see cref="IGroupBox"/> then this delegate can return any control that can be placed in an <see cref="IGroupBox"/>
+//    ///      typically an <see cref="IPanel"/></li>
+//    /// </example>
+//    /// </summary>
+//    /// <returns></returns>
+//    public delegate IControlHabanero IndividualControlCreator(string name);
+
     ///<summary>
-    /// Builds an <see cref="IPanelInfo"/> that has the information required link the <see cref="IPanel"/>
+    /// Builds an <see cref="IPanelInfo"/> that has the information required to link the <see cref="IPanel"/>
     ///  built by the Panel Builder to the <see cref="IBusinessObject"/> with a certain layout (as defined by the
     ///  <see cref="LayoutManager"/> (Currently Only the <see cref="GridLayoutManager"/> can be used).<br/>
     /// The <see cref="IPanel"/> Built by the PanelBuilder has all the controls required for a <see cref="IBusinessObject"/> 
     ///     to be viewed and edited in. The Controls to be used are defind in the <see cref="UIFormTab"/> or the
-    ///     <see cref="UIForm"/> depending on whether the <see cref="BuildPanelForForm"/> or <see cref="BuildPanelForTab"/>
+    ///     <see cref="UIForm"/> depending on whether the <see cref="BuildPanelForForm(UIForm)"/> or <see cref="BuildPanelForTab"/>
     ///     method is used.<br/>
     ///</summary>
     public class PanelBuilder
     {
+        /// <summary>
+        /// The width that the error provider will Take up on the screen.
+        /// </summary>
         public const int ERROR_PROVIDER_WIDTH = 20;
+        /// <summary>
+        /// The number of controls per <see cref="IClassDef"/>.<see cref="UIDef"/> defined column on the Panel Builder. (Typically the label, the Actual control (e.g. TextBox)
+        ///  and the 
+        /// </summary>
         public const int CONTROLS_PER_COLUMN = 3;
+        /// <summary>
+        /// The column Number that the Label Control will be placed in.
+        /// </summary>
         public const int LABEL_CONTROL_COLUMN_NO = 0;
+        /// <summary>
+        /// The column Number that the Actual user control (e.g. TextBox) will be placed in.
+        /// </summary>
         public const int INPUT_CONTROL_COLUMN_NO = 1;
+        /// <summary>
+        /// The column that the error provider will be placed in. 
+        ///   This is the last column position within the <see cref="IClassDef"/>.<see cref="UIDef"/> defined column.
+        /// </summary>
         public const int ERROR_PROVIDER_COLUMN_NO = CONTROLS_PER_COLUMN - 1;
 
+
+        private GroupControlCreator _groupControlCreator;
+
+//        ///<summary>
+//        /// Sets the <see cref="groupControlCreator"/> and the <see cref="individualControlCreator"/>
+//        /// to use a new set of control Creators.
+//        ///</summary>
+//        ///<param name="groupControlCreator"></param>
+//        ///<param name="individualControlCreator"></param>
+//        public void SetControlCreators(GroupControlCreator groupControlCreator, IndividualControlCreator individualControlCreator)
+//        {
+//            this.GroupControlCreator = groupControlCreator;
+//            this.IndividualControlCreator = individualControlCreator;
+//        }
+        ///<summary>
+        /// Get or set the <see cref="GroupControlCreator"/> for the <see cref="PanelBuilder"/>.
+        ///</summary>
+        public GroupControlCreator GroupControlCreator
+        {
+            get { return _groupControlCreator; }
+            set
+            {
+                if (value == null) throw new ArgumentNullException("value");
+                _groupControlCreator = value;
+            }
+        }
 
         ///<summary>
         /// Gets and Sets the control Factory that is used to create the individual controls on the <see cref="IPanel"/>
         ///</summary>
-        public IControlFactory Factory { get; set; }
+        public IControlFactory ControlFactory { get; set; }
 
         ///<summary>
         /// Creates the panel Builder with the <see cref="IControlFactory"/>
         ///   to be used by the panel builder for buiding the controls.
         ///</summary>
-        ///<param name="factory"></param>
-        public PanelBuilder(IControlFactory factory) { Factory = factory; }
+        ///<param name="controlFactory"></param>
+        public PanelBuilder(IControlFactory controlFactory)
+        {
+            if (controlFactory == null) throw new ArgumentNullException("controlFactory");
+            ControlFactory = controlFactory;
+            this.GroupControlCreator = controlFactory.CreateTabControl;
+        }
 
         ///<summary>
         /// Builds a Panel for a single Tab as defined in the <see cref="UIFormTab"/>.
@@ -65,7 +136,7 @@ namespace Habanero.UI.Base
         public IPanelInfo BuildPanelForTab(UIFormTab formTab)
         {
             if (formTab == null) throw new ArgumentNullException("formTab");
-            IPanel panel = Factory.CreatePanel();
+            IPanel panel = ControlFactory.CreatePanel();
             PanelInfo panelInfo = new PanelInfo();
             GridLayoutManager layoutManager = panelInfo.LayoutManager = SetupLayoutManager(formTab, panel);
             AddFieldsToLayoutManager(formTab, panelInfo);
@@ -95,36 +166,52 @@ namespace Habanero.UI.Base
         ///<returns></returns>
         public IPanelInfo BuildPanelForForm(UIForm uiForm)
         {
+
+            return BuildPanelForForm(uiForm, this.GroupControlCreator);
+        }
+        ///<summary>
+        /// Builds a Panel for a single Tab as defined in the <see cref="UIForm"/>.
+        ///   There will be one <see cref="IPanelInfo"/> for the defined uiForm.<br/>
+        /// If there are multiple tabs defined for the <paramref name="uiForm"/> then
+        ///  an actual <see cref="ITabPage"/> is created for each <see cref="UIFormTab"/> 
+        ///  and the <see cref="IPanel"/> created by <see cref="BuildPanelForTab"/> will 
+        ///  be placed on this TabPage.<br></br>
+        /// Else the <see cref="IPanel"/> is placed on the form directly.
+        ///</summary>
+        ///<param name="uiForm">The uiForm that the Panel is being built for.</param>
+        ///<param name="groupControlCreator">The <see cref="GroupControlCreator"/></param>
+        ///<returns></returns>
+        public IPanelInfo BuildPanelForForm(UIForm uiForm,  GroupControlCreator groupControlCreator)
+        {
             if (uiForm == null) throw new ArgumentNullException("uiForm");
+            if (groupControlCreator == null) throw new ArgumentNullException("groupControlCreator");
             PanelInfo panelInfo = new PanelInfo();
-            IPanel panel = Factory.CreatePanel();
+            IPanel panel = ControlFactory.CreatePanel();
             panelInfo.Panel = panel;
-            ITabControl tabControl = Factory.CreateTabControl();
-            IPanel tabPagePanel = Factory.CreatePanel();
+            IGroupControl groupControl = groupControlCreator();
+            // generic interface
+            IPanel childPanel = ControlFactory.CreatePanel();
             foreach (UIFormTab formTab in uiForm)
             {
-                ITabPage tabPage = Factory.CreateTabPage(formTab.Name);
+
                 IPanelInfo tabPagePanelInfo = BuildPanelForTab(formTab);
-                tabPagePanel = tabPagePanelInfo.Panel;
-                tabPage.Width = tabPagePanel.Width;
-                tabPage.Height = tabPagePanel.Height;
-                tabPagePanel.Dock = DockStyle.Fill;
-                tabPage.Controls.Add(tabPagePanel);
-                tabControl.TabPages.Add(tabPage);
+                childPanel = tabPagePanelInfo.Panel;
+                groupControl.AddControl(childPanel, formTab.Name, childPanel.Height, childPanel.Width);
+
                 panelInfo.PanelInfos.Add(tabPagePanelInfo);
                 foreach (PanelInfo.FieldInfo fieldInfo in tabPagePanelInfo.FieldInfos)
                 {
                     panelInfo.FieldInfos.Add(fieldInfo);
                 }
             }
-            tabControl.Dock = DockStyle.Fill;
+            groupControl.Dock = DockStyle.Fill;
             if (uiForm.Count == 1)
             {
-                panelInfo.Panel = tabPagePanel;
+                panelInfo.Panel = childPanel;
             }
             else
             {
-                panel.Controls.Add(tabControl);
+                panel.Controls.Add(groupControl);
             }
 
             panelInfo.UIForm = uiForm;
@@ -133,7 +220,7 @@ namespace Habanero.UI.Base
 
         private GridLayoutManager SetupLayoutManager(UIFormTab formTab, IPanel panel)
         {
-            GridLayoutManager layoutManager = new GridLayoutManager(panel, Factory);
+            GridLayoutManager layoutManager = new GridLayoutManager(panel, ControlFactory);
             int maxRowsInColumns = formTab.GetMaxRowsInColumns();
             int colCount = formTab.Count*CONTROLS_PER_COLUMN;
             layoutManager.SetGridSize(maxRowsInColumns, colCount);
@@ -143,7 +230,7 @@ namespace Habanero.UI.Base
                 layoutManager.FixColumnBasedOnContents(i + LABEL_CONTROL_COLUMN_NO);
                 layoutManager.FixColumn(i + ERROR_PROVIDER_COLUMN_NO, ERROR_PROVIDER_WIDTH);
             }
-            ITextBox sampleTextBoxForHeight = Factory.CreateTextBox();
+            ITextBox sampleTextBoxForHeight = ControlFactory.CreateTextBox();
             for (int row = 0; row < maxRowsInColumns; row++)
             {
                 layoutManager.FixRow(row, sampleTextBoxForHeight.Height);
@@ -216,7 +303,7 @@ namespace Habanero.UI.Base
       
 
         private IControlHabanero CreateAndAddGroupBox(IPanelInfo panelInfo, UIFormField formField) {
-            IControlHabanero labelControl = Factory.CreateGroupBox(formField.GetLabel());
+            IControlHabanero labelControl = ControlFactory.CreateGroupBox(formField.GetLabel());
             labelControl.Width = 0;  // don't affect the label column's fixed width
             labelControl.Name = formField.PropertyName;
             SetToolTip(formField, labelControl);
@@ -232,7 +319,7 @@ namespace Habanero.UI.Base
 
         private void CreateAndAddErrorProviderPanel(IPanelInfo panelInfo, UIFormField formField)
         {
-            IPanel panel = Factory.CreatePanel();
+            IPanel panel = ControlFactory.CreatePanel();
             panelInfo.LayoutManager.AddControl(panel, formField.RowSpan, 1);
         }
 
@@ -261,16 +348,51 @@ namespace Habanero.UI.Base
         }
 
         private IControlHabanero ConfigureInputControl(UIFormField formField, out IControlMapper controlMapper) {
-            IControlHabanero inputControl = Factory.CreateControl(formField.ControlTypeName,
+            IControlHabanero inputControl = ControlFactory.CreateControl(formField.ControlTypeName,
                                                                   formField.ControlAssemblyName);
             controlMapper = ControlMapper.Create(formField.MapperTypeName,
                                                  formField.MapperAssembly, inputControl,
-                                                 formField.PropertyName, !formField.Editable, Factory);
+                                                 formField.PropertyName, !formField.Editable, ControlFactory);
 
 
             if (!String.IsNullOrEmpty(formField.Alignment)) SetInputControlAlignment(formField, inputControl);
             SetInputControlNumLines(formField, inputControl);
 
+            AddDecimalPlacesToNumericUpDown(formField, inputControl);
+
+            AddComboBoxItems(formField, inputControl);
+
+            AddEmailFunctionalityToTextBox(formField, inputControl);
+
+            AddDateTimePickerParameters(formField, inputControl);
+
+            AddMultiLintTTextbox(formField, inputControl);
+
+            SetToolTip(formField, inputControl);
+            return inputControl;
+        }
+
+        private static void AddMultiLintTTextbox(UIFormField formField, IControlHabanero inputControl)
+        {
+            if (formField.RowSpan > 1)
+            {
+                if (inputControl is ITextBox) ((ITextBox)inputControl).Multiline = true;
+            }
+        }
+
+        private void AddDateTimePickerParameters(UIFormField formField, IControlHabanero inputControl)
+        {
+            if (formField.MapperTypeName == "DateTimePickerMapper")
+            {
+                DateTimePickerMapper dateTimePickerMapper = new DateTimePickerMapper((IDateTimePicker)inputControl,
+                                                                                     formField.PropertyName, formField.Editable,
+                                                                                     ControlFactory);
+                dateTimePickerMapper.SetPropertyAttributes(formField.Parameters);
+            }
+        }
+
+        private static void AddDecimalPlacesToNumericUpDown(UIFormField formField, IControlHabanero inputControl)
+        {
             if (!String.IsNullOrEmpty(formField.DecimalPlaces))
             {
                 if (inputControl is INumericUpDown && formField.MapperTypeName.ToLower() == "numericupdowncurrencymapper")
@@ -282,7 +404,10 @@ namespace Habanero.UI.Base
                     }
                 }
             }
+        }
 
+        private static void AddComboBoxItems(UIFormField formField, IControlHabanero inputControl)
+        {
             if (!String.IsNullOrEmpty(formField.Options))
             {
                 if (inputControl is IComboBox && formField.MapperTypeName.ToLower() == "listcomboboxmapper")
@@ -296,7 +421,10 @@ namespace Habanero.UI.Base
                     }
                 }
             }
+        }
 
+        private static void AddEmailFunctionalityToTextBox(UIFormField formField, IControlHabanero inputControl)
+        {
             if (!String.IsNullOrEmpty(formField.IsEmail))
             {
                 if (inputControl is ITextBox && Convert.ToBoolean(formField.IsEmail))
@@ -305,23 +433,8 @@ namespace Habanero.UI.Base
                     textBox.DoubleClick += EmailTextBoxDoubleClickedHandler;
                 }
             }
-
-            if (formField.MapperTypeName == "DateTimePickerMapper")
-            {
-                DateTimePickerMapper dateTimePickerMapper = new DateTimePickerMapper((IDateTimePicker)inputControl,
-                                                                                     formField.PropertyName, formField.Editable,
-                                                                                     Factory);
-                dateTimePickerMapper.SetPropertyAttributes(formField.Parameters);
-            }
-
-            if (formField.RowSpan > 1)
-            {
-                if (inputControl is ITextBox) ((ITextBox)inputControl).Multiline = true;
-            }
-            SetToolTip(formField, inputControl);
-            return inputControl;
         }
-
+        ///<summary>
         /// A handler to deal with a double-click on an email textbox, which
         /// causes the default mail client on the user system to be opened
         /// </summary>
@@ -330,11 +443,14 @@ namespace Habanero.UI.Base
         private static void EmailTextBoxDoubleClickedHandler(object sender, EventArgs e)
         {
             ITextBox tb = (ITextBox) sender;
-            if (tb.Text.IndexOf("@") != -1)
-            {
-                string comm = "mailto:" + tb.Text;
-                Process.Start(comm);
-            }
+            if (!IsEmailAddress(tb.Text)) return;
+            string comm = "mailto:" + tb.Text;
+            Process.Start(comm);
+        }
+
+        private static bool IsEmailAddress(string text)
+        {
+            return text.IndexOf("@") != -1;
         }
 
         private static void SetInputControlNumLines(UIFormField formField, IControlHabanero inputControl)
@@ -374,7 +490,7 @@ namespace Habanero.UI.Base
 
         private ILabel CreateAndAddLabel(IPanelInfo panelInfo, UIFormField formField)
         {
-            ILabel labelControl = Factory.CreateLabel(formField.GetLabel(), formField.IsCompulsory);
+            ILabel labelControl = ControlFactory.CreateLabel(formField.GetLabel(), formField.IsCompulsory);
             labelControl.Name = formField.PropertyName;
             SetToolTip(formField, labelControl);
             panelInfo.LayoutManager.AddControl(labelControl, formField.RowSpan, 1);
@@ -409,7 +525,7 @@ namespace Habanero.UI.Base
         private void SetToolTip(UIFormField formField, IControlHabanero inputControl)
         {
             string toolTipText = formField.GetToolTipText();
-            IToolTip toolTip = Factory.CreateToolTip();
+            IToolTip toolTip = ControlFactory.CreateToolTip();
             if (!String.IsNullOrEmpty(toolTipText))
             {
                 toolTip.SetToolTip(inputControl, toolTipText);

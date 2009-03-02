@@ -17,9 +17,9 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 using Habanero.BO;
-using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
 {
@@ -30,11 +30,7 @@ namespace Habanero.UI.Base
     /// </summary>
     public class ComboBoxCollectionSelector
     {
-        private readonly IComboBox _comboBox;
         private readonly IControlFactory _controlFactory;
-        private IBusinessObjectCollection _collection;
-        //private ComboBoxRightClickController _comboBoxRightClickController;
-
 
         /// <summary>
         /// Constructor to create a new collection ComboBox mapper object.
@@ -43,8 +39,11 @@ namespace Habanero.UI.Base
         /// <param name="controlFactory">The control factory used to create controls</param>
         public ComboBoxCollectionSelector(IComboBox comboBox, IControlFactory controlFactory)
         {
-            _comboBox = comboBox;
+            if (comboBox == null) throw new ArgumentNullException("comboBox");
+            if (controlFactory == null) throw new ArgumentNullException("controlFactory");
+            Control = comboBox;
             _controlFactory = controlFactory;
+            Control.SelectedIndexChanged += delegate { FireBusinessObjectSelected(); };
         }
 
         /// <summary>
@@ -56,40 +55,31 @@ namespace Habanero.UI.Base
         /// top of the list</param>
 		public void SetCollection(IBusinessObjectCollection collection, bool includeBlank)
         {
-            if (_collection != null)
+            if (Collection != null)
             {
-                _collection.BusinessObjectAdded -= BusinessObjectAddedHandler;
-                _collection.BusinessObjectRemoved -= BusinessObjectRemovedHandler;
+                Collection.BusinessObjectAdded -= BusinessObjectAddedHandler;
+                Collection.BusinessObjectRemoved -= BusinessObjectRemovedHandler;
             }
-            _collection = collection;
-            //TODO _Port: SetupComboBoxRightClickController();
-            SetComboBoxCollection(_comboBox, _collection, includeBlank);
+            Collection = collection;
+            SetComboBoxCollection(Control, Collection, includeBlank);
+            if (Collection == null) return;
+            Collection.BusinessObjectAdded += BusinessObjectAddedHandler;
+            Collection.BusinessObjectRemoved += BusinessObjectRemovedHandler;
 
-            _collection.BusinessObjectAdded += BusinessObjectAddedHandler;
-            _collection.BusinessObjectRemoved += BusinessObjectRemovedHandler;
         }
-        //TODO _Port: 
-        //private void SetupComboBoxRightClickController()
-        //{
-        //    _comboBoxRightClickController = new ComboBoxRightClickController(_comboBox, _collection.ClassDef);
-        //    _comboBoxRightClickController.NewObjectCreated += NewComboBoxObjectCreatedHandler;
-        //}
-
-        //private void NewComboBoxObjectCreatedHandler(IBusinessObject businessObject)
-        //{
-        //    _collection.Add(businessObject);
-        //    _comboBox.SelectedItem = businessObject;
-        //}
-
-        //TODO _Port:
-        /////<summary>
-        ///// The controller used to handle the right-click pop-up form behaviour
-        /////</summary>
-        //public ComboBoxRightClickController ComboBoxRightClickController
-        //{
-        //    get { return _comboBoxRightClickController; }
-        //    set { _comboBoxRightClickController = value; }
-        //}
+        /// <summary>
+        /// Event Occurs when a business object is selected
+        /// </summary>
+        public event EventHandler<BOEventArgs> BusinessObjectSelected;
+                    
+        
+        private void FireBusinessObjectSelected()
+        {
+            if (this.BusinessObjectSelected != null)
+            {
+                this.BusinessObjectSelected(this, new BOEventArgs(this.SelectedBusinessObject));
+            }
+        }
 
         /// <summary>
         /// This handler is called when a business object has been removed from
@@ -100,7 +90,7 @@ namespace Habanero.UI.Base
         /// <param name="e">Attached arguments regarding the event</param>
         private void BusinessObjectRemovedHandler(object sender, BOEventArgs e)
         {
-            _comboBox.Items.Remove(e.BusinessObject);
+            Control.Items.Remove(e.BusinessObject);
         }
 
         /// <summary>
@@ -112,43 +102,46 @@ namespace Habanero.UI.Base
         /// <param name="e">Attached arguments regarding the event</param>
         private void BusinessObjectAddedHandler(object sender, BOEventArgs e)
         {
-            _comboBox.Items.Add(e.BusinessObject);
+            Control.Items.Add(e.BusinessObject);
         }
 
         /// <summary>
         /// Returns the business object, in object form, that is currently 
         /// selected in the ComboBox list, or null if none is selected
         /// </summary>
-        public BusinessObject SelectedBusinessObject
+        public IBusinessObject SelectedBusinessObject
         {
             get
             {
-                //if (_comboBox.SelectedText == "")
-                //{
-                //    return null;
-                //}
-                //else
-                //{
-                if (_comboBox.SelectedIndex == -1)
-                {
-                    return null;
-                }
-                if (_comboBox.SelectedItem is string && (_comboBox.SelectedItem == null || (string)_comboBox.SelectedItem == ""))
-                {
-                    return null;
-                }
-                return (BusinessObject)_comboBox.SelectedItem;
-                //}
+                if (NoItemSelected() || NullItemSelected()) return null;
+
+                return (BusinessObject)Control.SelectedItem;
             }
+            set
+            {
+                Control.SelectedItem = ContainsValue(value) ? value : null;
+            }
+        }
+
+        private bool ContainsValue(IBusinessObject value)
+        {
+            return (value != null && Control.Items.Contains(value));
+        }
+
+        private bool NullItemSelected()
+        {
+            return Control.SelectedItem is string && (Control.SelectedItem == null || (string)Control.SelectedItem == "");
+        }
+
+        private bool NoItemSelected()
+        {
+            return Control.SelectedIndex == -1;
         }
 
         /// <summary>
         /// Returns the ComboBox control
         /// </summary>
-        public IComboBox Control
-        {
-            get { return _comboBox; }
-        }
+        public IComboBox Control { get; private set; }
 
         /// <summary>
         /// Returns the control factory used to generate controls
@@ -162,10 +155,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Returns the collection used to populate the items shown in the ComboBox
         /// </summary>
-        public IBusinessObjectCollection Collection
-        {
-            get { return _collection; }
-        }
+        public IBusinessObjectCollection Collection { get; private set; }
 
         /// <summary>
         /// Set the list of objects in the ComboBox to a specific collection of
@@ -178,39 +168,45 @@ namespace Habanero.UI.Base
         /// <param name="col">The business object collection used to populate the items list</param>
         /// <param name="includeBlank">Whether to include a blank item at the
         /// top of the list</param>
-        public void SetComboBoxCollection(IComboBox cbx, IBusinessObjectCollection col, bool includeBlank)
+        private void SetComboBoxCollection(IComboBox cbx, IBusinessObjectCollection col, bool includeBlank)
         {
             int width = cbx.Width;
 
-            ILabel lbl = _controlFactory.CreateLabel("", false);
             cbx.Items.Clear();
+            int numBlankItems = 0;
             if (includeBlank)
             {
                 cbx.Items.Add("");
+                numBlankItems++;
             }
-            foreach (IBusinessObject businessObjectBase in col)
+            if (col == null) return;
+
+            //This is a bit of a hack but is used to get the 
+            //width of the dropdown list when it drops down
+            // uses the preferedwith calculation on the 
+            //Label to do this. Makes drop down width equal to the 
+            // width of the longest name shown.
+            ILabel lbl = _controlFactory.CreateLabel("", false);
+            foreach (IBusinessObject businessObject in col)
             {
-                lbl.Text = businessObjectBase.ToString();
+                lbl.Text = businessObject.ToString();
                 if (lbl.PreferredWidth > width)
                 {
                     width = lbl.PreferredWidth;
                 }
-                cbx.Items.Add(businessObjectBase);
+                cbx.Items.Add(businessObject);
             }
+            if (col.Count > 0) cbx.SelectedIndex = numBlankItems;
             cbx.DropDownWidth = width;
         }
 
-        //TODO _Port
-        ///// <summary>
-        ///// Sets up a handler so that right-clicking on the ComboBox will
-        ///// allow the user to create a new business object using a form that is
-        ///// provided.  A tooltip is also added to indicate this possibility to
-        ///// the user.
-        ///// </summary>
-        //public void SetupRightClickBehaviour()
-        //{
-        //    _comboBoxRightClickController.SetupRightClickBehaviour();
-        //}
-        
+        ///<summary>
+        /// Clears all items in the Combo Box and sets the selected item and <see cref="Collection"/>
+        /// to null
+        ///</summary>
+        public void Clear()
+        {
+            SetCollection (null, false);
+        }
     }
 }

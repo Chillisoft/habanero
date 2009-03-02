@@ -26,6 +26,9 @@ namespace Habanero.UI.Base
     /// </summary>
     public abstract class WizardControl
     {
+     /// <summary>
+     /// The Padding that is used at the top, left, right and bottom when placing a wizard step in the control.
+     /// </summary>
         public const int PADDING = 3;
     }
 
@@ -42,8 +45,10 @@ namespace Habanero.UI.Base
 
         /// <summary>
         /// Raised when a message is communicated so the controlling object can display or log the message.
+        ///  uses an <see cref="Action{T}"/> which is merely a predifined delegate that takes one parameter of Type T and
+        /// returns a void.
         /// </summary>
-        event Action<string> MessagePosted;//TODO: Peter what the hell are these things 
+        event Action<string> MessagePosted;
 
         /// <summary>
         /// Raised when the wizard step changes. The new step is passed through as an event argument.

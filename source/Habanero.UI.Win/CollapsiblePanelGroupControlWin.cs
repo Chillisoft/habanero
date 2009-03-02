@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
@@ -15,12 +17,19 @@ namespace Habanero.UI.Win
     public class CollapsiblePanelGroupControlWin : PanelWin, ICollapsiblePanelGroupControl
     {
         private readonly CollapsiblePanelGroupManager _collapsiblePanelGroupManager;
+
+        public event EventHandler ItemSelected;
+
         public List<ICollapsiblePanel> PanelsList
         {
             get { return _collapsiblePanelGroupManager.PanelsList; }
+            //            set { _collapsiblePanelGroupManager.PanelsList = value; }
         }
 
-        public ColumnLayoutManager ColumnLayoutManager { get { return _collapsiblePanelGroupManager.ColumnLayoutManager; } }
+        public ColumnLayoutManager ColumnLayoutManager
+        {
+            get { return _collapsiblePanelGroupManager.ColumnLayoutManager; }
+        }
 
         /// <summary>
         /// Constructs the <see cref="CollapsiblePanelGroupControlWin"/>
@@ -37,24 +46,83 @@ namespace Habanero.UI.Win
 
         public int TotalExpandedHeight
         {
-            get
+            get { return _collapsiblePanelGroupManager.TotalExpandedHeight; }
+        }
+
+        public ICollapsiblePanel AddControl
+            (IControlHabanero contentControl, string headingText, int minimumControlHeight)
+        {
+            ICollapsiblePanel control = _collapsiblePanelGroupManager.AddControl
+                (contentControl, headingText, minimumControlHeight);
+            control.Uncollapsed += ((sender, e) => FireItemSelected(control));
+            return control;
+        }
+
+
+        private void FireItemSelected(ICollapsiblePanel collapsiblePanel)
+        {
+            if (ItemSelected != null)
             {
-               return _collapsiblePanelGroupManager.TotalExpandedHeight;
+                ItemSelected(collapsiblePanel, new EventArgs());
             }
         }
-
-        public ICollapsiblePanel AddControl(IControlHabanero contentControl, string headingText, int minimumControlHeight)
-        {
-            return _collapsiblePanelGroupManager.AddControl(contentControl, headingText, minimumControlHeight);
-        }
-
 
         public bool AllCollapsed
         {
-            set
-            {
-                _collapsiblePanelGroupManager.AllCollapsed = value;
-            }
+            set { _collapsiblePanelGroupManager.AllCollapsed = value; }
         }
+
+        #region Implementation of IGroupControl
+
+//        /// <summary>
+//        /// Gets the collection of tab pages in this tab control
+//        /// </summary>
+//        IControlCollection IGroupControl.ChildControls
+//        {
+//            get { return ; }
+//        }
+
+//        /// <summary>
+//        /// Gets or sets the index of the currently selected ChildControl
+//        /// </summary>
+//        int IGroupControl.SelectedIndex
+//        {
+//            get { throw new System.NotImplementedException(); }
+//            set { throw new System.NotImplementedException(); }
+//        }
+//
+//        /// <summary>
+//        /// Gets or sets the currently selected tab page
+//        /// </summary>
+//        IControlHabanero IGroupControl.SelectedChildControl
+//        {
+//            get { throw new System.NotImplementedException(); }
+//            set { throw new System.NotImplementedException(); }
+//        }
+
+        /// <summary>
+        /// Occurs when the SelectedIndex property is changed
+        /// </summary>
+        public event EventHandler SelectedIndexChanged;
+
+        /// <summary>
+        /// Adds an <see cref="IControlHabanero"/> to this control. The <paramref name="contentControl"/> is
+        ///    wrapped in the appropriate Child Control Type.
+        /// </summary>
+        /// <param name="contentControl">The control that is being placed as a child within this control. The content control could be 
+        ///  a Panel of <see cref="IBusinessObject"/>.<see cref="IBOProp"/>s or any other child control</param>
+        /// <param name="headingText">The heading text that will be shown as the Header for this Group e.g. For a <see cref="ITabControl"/>
+        ///   this will be the Text shown in the Tab for a <see cref="ICollapsiblePanelGroupControl"/> this will be the text shown
+        ///   on the Collapse Panel and for an <see cref="IGroupBox"/> this will be the title of the Group Box.</param>
+        /// <param name="minimumControlHeight">The minimum height that the <paramref name="contentControl"/> can be.
+        ///   This height along with any other spacing required will be used as the minimum height for the ChildControlCreated</param>
+        /// <returns></returns>
+        IControlHabanero IGroupControl.AddControl
+            (IControlHabanero contentControl, string headingText, int minimumControlHeight, int minimumControlWidth)
+        {
+            return AddControl(contentControl, headingText, minimumControlHeight);
+        }
+
+        #endregion
     }
 }

@@ -30,8 +30,11 @@ namespace Habanero.UI.Win
     /// </summary>
     public partial class ComboBoxWin : ComboBox, IComboBox
     {
-        private ComboBoxManager _manager;
+        private readonly ComboBoxManager _manager;
 
+        ///<summary>
+        /// Constructor for ComboBoxWin
+        ///</summary>
         public ComboBoxWin()
         {
             InitializeComponent();
@@ -81,7 +84,7 @@ namespace Habanero.UI.Win
         /// Gets or sets the value of the member property specified by
         /// the ValueMember property
         /// </summary>
-        object IComboBox.SelectedValue
+        object IListControl.SelectedValue
         {
             get
             {

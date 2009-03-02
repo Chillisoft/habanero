@@ -19,8 +19,16 @@
 
 namespace Habanero.UI.Base
 {
+    ///<summary>
+    /// An interface for the Menu Builder. This provides common functionality to build a a menu.
+    ///</summary>
     public interface IMenuBuilder
     {
+        ///<summary>
+        /// Builds the Main Menu based on a <see cref="habaneroMenu"/>
+        ///</summary>
+        ///<param name="habaneroMenu"></param>
+        ///<returns></returns>
         IMainMenuHabanero BuildMainMenu(HabaneroMenu habaneroMenu);
     }
 }

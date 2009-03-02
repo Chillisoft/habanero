@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using System.ComponentModel;
 
 namespace Habanero.UI.Base
@@ -84,7 +83,7 @@ namespace Habanero.UI.Base
         /// <PermissionSet><IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" /><IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" /></PermissionSet>
         [DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden), Browsable(false)
         , Bindable(true)]
-        object SelectedItem { get; }
+        object SelectedItem { get; set; }
 
         /// <summary>
         /// Gets a collection containing the currently selected items in the ListBox

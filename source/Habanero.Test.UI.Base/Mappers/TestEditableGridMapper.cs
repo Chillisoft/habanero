@@ -1,5 +1,3 @@
-using System;
-using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
@@ -34,7 +32,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IEditableGridControl editableGrid = GetControlFactory().CreateEditableGridControl();
-            string propName = "asdfa";
+            const string propName = "asdfa";
 
             //---------------Execute Test ----------------------
             EditableGridControlMapper mapper = new EditableGridControlMapper(editableGrid, propName, false, GetControlFactory());
@@ -52,7 +50,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IEditableGridControl editableGrid = GetControlFactory().CreateEditableGridControl();
 
-            string propName = "Addresses";
+            const string propName = "Addresses";
             EditableGridControlMapper mapper = new EditableGridControlMapper(editableGrid, propName, false, GetControlFactory());
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
@@ -73,7 +71,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IEditableGridControl editableGrid = GetControlFactory().CreateEditableGridControl();
-            string propName = "Addresses";
+            const string propName = "Addresses";
             EditableGridControlMapper mapper = new EditableGridControlMapper(editableGrid, propName, false, GetControlFactory());
             AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_DeleteDoNothing(out address);
@@ -85,7 +83,7 @@ namespace Habanero.Test.UI.Base
             mapper.BusinessObject = contactPersonTestBO;
             //---------------Test Result -----------------------
 
-            Assert.AreSame(contactPersonTestBO.Addresses, editableGrid.Grid.GetBusinessObjectCollection());
+            Assert.AreSame(contactPersonTestBO.Addresses, editableGrid.Grid.BusinessObjectCollection);
             //---------------Tear Down -------------------------          
 
         }

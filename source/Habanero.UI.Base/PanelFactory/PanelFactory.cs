@@ -23,7 +23,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using log4net;
+//using log4net;
 
 namespace Habanero.UI.Base
 {
@@ -33,16 +33,15 @@ namespace Habanero.UI.Base
     /// which contains all the information relating to the panel, including the controls, the
     /// mappers, the business object and the panel control.
     /// </summary>
-    [Obsolete("Panelfactory and PanelFactoryInfo is soon to be replaced by PanelBuild and PanelInfo.")]
+    [Obsolete("Panelfactory and PanelFactoryInfo has been replaced by PanelBuild and PanelInfo.")]
     public class PanelFactory : IPanelFactory
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.PanelFactory");
+//        private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.PanelFactory");
         private BusinessObject _currentBusinessObject;
         private readonly UIForm _uiForm;
         private IControlHabanero _firstControl;
         private readonly IControlFactory _controlFactory;
         private readonly string _uiDefName;
-        //TODO Port:        private EventHandler _emailTextBoxDoubleClickedHandler;
 
         /// <summary>
         /// Constructor to initialise a new PanelFactory object, assuming
@@ -106,7 +105,6 @@ namespace Habanero.UI.Base
         private void InitialiseFactory(BusinessObject bo)
         {
             _currentBusinessObject = bo;
-            //TODO Port:            _emailTextBoxDoubleClickedHandler = EmailTextBoxDoubleClickedHandler;
         }
 
         /// <summary>
@@ -136,7 +134,6 @@ namespace Habanero.UI.Base
                     tabControl.TabPages.Add(page);
                 }
                 factoryInfo = new PanelFactoryInfo(mainPanel, controlMappers, _uiDefName, _firstControl);
-                // TODO : This should not set FormGrid, this should be populated some other way
                 factoryInfo.FormGrids = formGrids;
             }
             else
@@ -160,7 +157,6 @@ namespace Habanero.UI.Base
         /// Creates one panel for each UI Form definition of a business object
         /// </summary>
         /// <returns>Returns the list of panel info objects created</returns>
-        /// TODO: improve tab order (ie make all tabs use one sequence rather than each starting a new sequence)
         public List<IPanelFactoryInfo> CreateOnePanelPerUIFormTab()
         {
             List<IPanelFactoryInfo> panelInfoList = new List<IPanelFactoryInfo>();
@@ -314,7 +310,6 @@ namespace Habanero.UI.Base
                                      + "attribute must hold either 'true' or 'false'.");
                             }
 
-                            //TODO: Port
                             //bool isEmail = Convert.ToBoolean(isEmailValue);
                             //if (isEmail)
                             //{
@@ -323,7 +318,6 @@ namespace Habanero.UI.Base
                             //}
                         }
                     }
-                    //TODO: Port
                     //if (ctl is IDateTimePicker)
                     //{
                     //    IDateTimePicker editor = (IDateTimePicker) ctl;
@@ -347,7 +341,6 @@ namespace Habanero.UI.Base
                     {
                         ControlMapper controlMapper = (ControlMapper)ctlMapper;
                         controlMapper.SetPropertyAttributes(field.Parameters);
-                        //TODO: This was a quick fix to get his working. Investigate where the SetPropertyAttributes method should go.
                     }
                     controlMappers.Add(ctlMapper);
                     ctlMapper.BusinessObject = _currentBusinessObject;
@@ -526,7 +519,6 @@ namespace Habanero.UI.Base
         //    _firstControl.Focus();
         //}
 
-        //TODO Port:
         ///// <summary>
         ///// A handler to deal with the press of an Enter key when the control
         ///// is an up-down object
@@ -538,7 +530,6 @@ namespace Habanero.UI.Base
         //    INumericUpDown upDown = (INumericUpDown) sender;
         //    upDown.Select(0, upDown.Text.Length);
         //}
-        //TODO Port:
         ///// <summary>
         ///// A handler to deal with the press of an Enter key when the control
         ///// is a date-time picker
@@ -549,7 +540,6 @@ namespace Habanero.UI.Base
         //{
         //}
 
-        //TODO Port:        ///// <summary>
         ///// A handler to deal with a double-click on an email textbox, which
         ///// causes the default mail client on the user system to be opened
         ///// </summary>
@@ -575,13 +565,9 @@ namespace Habanero.UI.Base
             {
                 return factory.CreateControl(field.ControlType);
             }
-            else
-            {
-                return factory.CreateControl(field.ControlTypeName, field.ControlAssemblyName);
-            }
+            return factory.CreateControl(field.ControlTypeName, field.ControlAssemblyName);
         }
 
-        // TODO: Finish port
         /// <summary>
         /// Creates a panel with a grid containing the business object
         /// information
@@ -640,7 +626,6 @@ namespace Habanero.UI.Base
         ///// <summary>
         ///// Attaches the specified trigger to the relevant field control
         ///// </summary>
-        ///// TODO ERIC: 
         ///// - deal with controls that don't have TextChanged, eg a Checkbox?
         ///// - use a Prop.Updated event rather than TextChanged? But what about reflected properties?
         ///// - support for DatabaseLookupList

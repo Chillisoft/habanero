@@ -19,10 +19,37 @@
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Represents a menu item displayed in the Menu control. This class cannot be inherited.
+    ///  A Menu control is made up of a hierarchy of menu items represented by MenuItem objects. 
+    /// Menu items at the top level (level 0) that do not have a
+    ///  parent menu item are called root menu items. A menu item that has a parent menu item is 
+    /// called a submenu item. All root menu items are stored in the Items collection. Submenu 
+    /// items are stored in a parent menu item's <see cref="MenuItems"/> collection.
+    /// <remarks>
+    /// This Inteface is an extract of common functionality required for menu item and is used to 
+    /// isolate the implementation of the actual menu from the menu code using the menu.
+    /// This allows the developer to swap menu's that support this interface without having to redevelop 
+    /// any menu code.
+    /// Habanero uses this to isolate the UIframework so that a different framework can be implemented
+    /// using these interfaces.
+    /// This allows the Architecture to swap between Visual Web Gui and Windows or in fact between any UI framework and
+    /// any other UI Framework.
+    /// </remarks>
+    /// </summary>
     public interface IMenuItem
     {
+        ///<summary>
+        /// The text displayed for this <see cref="IMenuItem"/>.
+        ///</summary>
         string Text { get; }
+        /// <summary>
+        /// The Child Menu items for this <see cref="IMenuItem"/>.
+        /// </summary>
         IMenuItemCollection MenuItems { get; }
+        /// <summary>
+        /// Performs the Click event for this <see cref="IMenuItem"/>.
+        /// </summary>
         void PerformClick();
     }
 }

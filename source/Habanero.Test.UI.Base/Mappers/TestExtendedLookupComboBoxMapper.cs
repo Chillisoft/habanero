@@ -218,7 +218,7 @@ namespace Habanero.Test.UI.Base.Mappers
             BusinessObjectCollection<OrganisationTestBO> organisationTestBOS = CreateSavedOrganisationTestBOSCollection();
             IControlFactory controlFactory = GetControlFactory();
             ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
-            string propName = "OrganisationID";
+            const string propName = "OrganisationID";
             ExtendedComboBoxMapper mapper = new ExtendedComboBoxMapper(
                 extendedComboBox, propName, true, controlFactory);
             mapper.BusinessObject = new ContactPersonTestBO();
@@ -239,9 +239,9 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsInstanceOfType(typeof(IGridAndBOEditorControl), form.Controls[0]);
             Assert.IsInstanceOfType(typeof(GridAndBOEditorControlWin), form.Controls[0]);
             GridAndBOEditorControlWin gridAndBOEditorControlWin = (GridAndBOEditorControlWin)form.Controls[0];
-            //Assert.AreSame(mapper.BusinessObject, GridAndBOEditorControlWin.BusinessObjectControl.BusinessObject);
+            //Assert.AreSame(mapper.BusinessObject, GridAndBOEditorControlWin.BusinessObjectControlWin.BusinessObject);
             Assert.IsTrue(gridAndBOEditorControlWin.GridControl.IsInitialised);
-            IBusinessObjectCollection collection = gridAndBOEditorControlWin.GridControl.Grid.GetBusinessObjectCollection();
+            IBusinessObjectCollection collection = gridAndBOEditorControlWin.GridControl.Grid.BusinessObjectCollection;
             Assert.IsNotNull(collection);
             Assert.AreEqual(organisationTestBOS.Count, collection.Count);
             Assert.AreEqual(organisationTestBOS.Count, mapper.LookupList.Count);
@@ -259,7 +259,7 @@ namespace Habanero.Test.UI.Base.Mappers
             
             IControlFactory controlFactory = GetControlFactory();
             ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
-            string propName = "OrganisationID";
+            const string propName = "OrganisationID";
             ExtendedComboBoxMapper mapper = new ExtendedComboBoxMapper(
                 extendedComboBox, propName, true, controlFactory);
             mapper.BusinessObject = new ContactPersonTestBO();
@@ -280,9 +280,9 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsInstanceOfType(typeof(IGridAndBOEditorControl), form.Controls[0]);
             Assert.IsInstanceOfType(typeof(GridAndBOEditorControlWin), form.Controls[0]);
             GridAndBOEditorControlWin gridAndBOEditorControlWin = (GridAndBOEditorControlWin)form.Controls[0];
-            //Assert.AreSame(mapper.BusinessObject, GridAndBOEditorControlWin.BusinessObjectControl.BusinessObject);
+            //Assert.AreSame(mapper.BusinessObject, GridAndBOEditorControlWin.BusinessObjectControlWin.BusinessObject);
             Assert.IsTrue(gridAndBOEditorControlWin.GridControl.IsInitialised);
-            IBusinessObjectCollection collection = gridAndBOEditorControlWin.GridControl.Grid.GetBusinessObjectCollection();
+            IBusinessObjectCollection collection = gridAndBOEditorControlWin.GridControl.Grid.BusinessObjectCollection;
             Assert.IsNotNull(collection);
             Assert.AreEqual(organisationTestBOS.Count, collection.Count);
             Assert.AreEqual(organisationTestBOS.Count, mapper.LookupList.Count);
@@ -299,7 +299,7 @@ namespace Habanero.Test.UI.Base.Mappers
 
             IControlFactory controlFactory = GetControlFactory();
             ExtendedComboBoxWin extendedComboBox = new ExtendedComboBoxWin(controlFactory);
-            string propName = "OrganisationID";
+            const string propName = "OrganisationID";
             ExtendedComboBoxMapper mapper = new ExtendedComboBoxMapper(
                 extendedComboBox, propName, true, controlFactory);
             DatabaseConfig databaseConfig = TestUtil.GetDatabaseConfig();
@@ -315,7 +315,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.IsNotNull(mapper.PopupForm);
         }
 
-        private BusinessObjectCollection<OrganisationTestBO> CreateSavedOrganisationTestBOSCollection()
+        private static BusinessObjectCollection<OrganisationTestBO> CreateSavedOrganisationTestBOSCollection()
         {
             OrganisationTestBO.LoadDefaultClassDef();
             BusinessObjectCollection<OrganisationTestBO> organisationTestBOS = new BusinessObjectCollection<OrganisationTestBO>();

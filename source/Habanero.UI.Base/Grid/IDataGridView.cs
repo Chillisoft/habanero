@@ -141,7 +141,6 @@ namespace Habanero.UI.Base
         /// it should be sorted in ascending or descending order
         /// </summary>
         /// <param name="columnName">The column number to sort on</param>
-        /// object property</param>
         /// <param name="ascending">True for ascending order, false for descending order</param>
         void Sort(string columnName, bool ascending);
 
@@ -386,7 +385,7 @@ namespace Habanero.UI.Base
         /// <returns>The number of rows to display in the <see cref="IDataGridView"></see>.</returns>
         /// <exception cref="T:System.ArgumentException">The specified value when setting this property is less 
         /// than 0.-or-The specified value is less than 1 and <see cref="AllowUserToAddRows"></see> is set to true. </exception>
-        /// <exception cref="T:System.InvalidOperationException">When setting this property, the </see> property is set. </exception>
+        /// <exception cref="T:System.InvalidOperationException">When setting this property, the property is set. </exception>
         /// <filterpriority>1</filterpriority>
         [DefaultValue(0), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
          EditorBrowsable(EditorBrowsableState.Advanced), Browsable(false)]
@@ -395,7 +394,7 @@ namespace Habanero.UI.Base
         /// <summary>Gets or sets a value indicating whether the column that contains row headers is displayed.</summary>
         /// <returns>true if the column that contains row headers is displayed; otherwise, false. The default is true.</returns>
         /// <exception cref="T:System.InvalidOperationException">The specified value when setting this property 
-        /// is false and the </see> property is set to </see> or </see>.</exception>
+        /// is false and the property is set to or .</exception>
         /// <filterpriority>1</filterpriority>
         [ DefaultValue(true)]
         bool RowHeadersVisible { get; set; }

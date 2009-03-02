@@ -50,10 +50,13 @@
     <Compile Include="BOEditorPanelWin.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="BusinessObjectControl.cs">
+    <Compile Include="BusinessObjectControlWin.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="CollapsiblePanelGroupControlWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CollapsiblePanelSelectorWin.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CollapsiblePanelWin.cs">
@@ -70,6 +73,9 @@
     </Compile>
     <Compile Include="CheckBoxStrategyWin.cs" />
     <Compile Include="CheckBoxWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ComboBoxSelectorWin.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ComboBoxWin.cs">
@@ -149,6 +155,9 @@
     <Compile Include="Grid\EditableGridButtonsControlWin.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GroupBoxGroupControlWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GroupBoxWin.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -157,6 +166,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="LabelWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ListBoxSelectorWin.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ListBoxWin.cs">

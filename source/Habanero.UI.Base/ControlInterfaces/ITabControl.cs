@@ -24,7 +24,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Manages a related set of tab pages
     /// </summary>
-    public interface ITabControl : IControlHabanero
+    public interface ITabControl : IGroupControl
     {
         /// <summary>
         /// Gets the collection of tab pages in this tab control

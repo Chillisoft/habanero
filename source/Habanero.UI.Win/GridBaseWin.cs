@@ -96,7 +96,7 @@ namespace Habanero.UI.Win
         private void DoubleClickHandler(object sender, EventArgs e)
         {
             System.Drawing.Point pt = this.PointToClient(Cursor.Position);
-            DataGridView.HitTestInfo hti = this.HitTest(pt.X, pt.Y);
+            HitTestInfo hti = this.HitTest(pt.X, pt.Y);
             if (hti.Type == DataGridViewHitTestType.Cell)
             {
                 FireRowDoubleClicked(SelectedBusinessObject);
@@ -151,7 +151,13 @@ namespace Habanero.UI.Win
         /// collection must be pre-loaded.</param>
         public void SetBusinessObjectCollection(IBusinessObjectCollection col)
         {
-            _manager.SetBusinessObjectCollection(col);
+            BusinessObjectCollection = col;
+        }
+
+        public IBusinessObjectCollection BusinessObjectCollection
+        {
+            get { return _manager.GetBusinessObjectCollection(); }
+            set { _manager.SetBusinessObjectCollection(value); }
         }
 
         /// <summary>
@@ -160,7 +166,7 @@ namespace Habanero.UI.Win
         /// <returns>Returns a business collection</returns>
         public IBusinessObjectCollection GetBusinessObjectCollection()
         {
-            return _manager.GetBusinessObjectCollection();
+            return BusinessObjectCollection;
         }
 
         /// <summary>
@@ -273,11 +279,22 @@ namespace Habanero.UI.Win
         /// is being edited
         /// </summary>
         /// <param name="bo">The business object being edited</param>
-        /// TODO: this is badly named (why do we indicate the BO, but say "Selected") - this should be a
-        /// verb, as in FireBusinessObjectEdited
         public void SelectedBusinessObjectEdited(BusinessObject bo)
         {
-            throw new NotImplementedException();
+            FireSelectedBusinessObjectEdited(bo);
+        }
+
+        private void FireSelectedBusinessObjectEdited(IBusinessObject bo)
+        {
+            if (this.BusinessObjectEdited != null)
+            {
+                this.BusinessObjectEdited(this, new BOEventArgs(bo));
+            }
+        }
+
+        public void FireBusinessObjectEditedEvent(BusinessObject bo)
+        {
+            FireSelectedBusinessObjectEdited(bo);
         }
 
         /// <summary>
@@ -317,6 +334,12 @@ namespace Habanero.UI.Win
             {
                 this.FilterUpdated(this, new EventArgs());
             }
+        }
+        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelector"></see>.</summary>
+        /// <returns>The number of rows in the <see cref="IBOSelector"></see>.</returns>
+        int IBOSelector.NoOfItems
+        {
+            get { return this.Rows.Count; }
         }
     }
 }

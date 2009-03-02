@@ -401,11 +401,37 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             _textBox = controlFactory.CreateTextBox();
         }
+
+        ///<summary>
+        /// The control that has been constructed by this Control Manager.
+        ///</summary>
         public IControlHabanero Control { get { return _textBox; } }
+
+        ///<summary>
+        /// Returns the filter clause for this control
+        ///</summary>
+        ///<param name="filterClauseFactory"></param>
+        ///<returns></returns>
         public IFilterClause GetFilterClause(IFilterClauseFactory filterClauseFactory) { throw new NotImplementedException(); }
+
+        ///<summary>
+        /// Clears the <see cref="IDateRangeComboBox"/> of its value
+        ///</summary>
         public void Clear() { throw new NotImplementedException(); }
+
+        /// <summary>
+        /// Event handler that fires when the value in the Filter control changes
+        /// </summary>
         public event EventHandler ValueChanged;
+
+        ///<summary>
+        /// The name of the property being filtered by.
+        ///</summary>
         public string PropertyName { get { throw new NotImplementedException(); } }
+
+        ///<summary>
+        /// Returns the operator <see cref="ICustomFilter.FilterClauseOperator"/> e.g.OpEquals to be used by for creating the Filter Clause.
+        ///</summary>
         public FilterClauseOperator FilterClauseOperator { get { throw new NotImplementedException(); } }
     }
     

@@ -22,70 +22,63 @@ using System.Collections.Generic;
 using System.Drawing;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    public abstract class TestControlFactory
+    [TestFixture]
+    public class TestControlFactory
     {
-        protected abstract IControlFactory GetControlFactory();
-        protected abstract int GetBoldTextExtraWidth();
-        protected abstract Type GetCustomGridColumnType();
-        protected abstract Type GetMasterGridColumnType();
-        protected abstract Type GetMasterTextBoxGridColumnType();
-        protected abstract Type GetHabaneroMasterGridColumnType();
-        protected abstract string GetUINameSpace();
+        protected virtual IControlFactory GetControlFactory()
+        {
+            IControlFactory factory = new Habanero.UI.Win.ControlFactoryWin();
+            GlobalUIRegistry.ControlFactory = factory;
+            return factory;
+        }
 
-        protected abstract void AssertGridColumnTypeAfterCast(IDataGridViewColumn createdColumn, Type expectedColumnType);
+        protected virtual int GetBoldTextExtraWidth()
+        {
+            return 10;
+        }
+
+        protected virtual Type GetCustomGridColumnType()
+        {
+            return typeof(CustomDataGridViewColumnWin);
+        }
+
+        protected virtual Type GetMasterGridColumnType()
+        {
+            return typeof(System.Windows.Forms.DataGridViewColumn);
+        }
+
+        protected virtual Type GetMasterTextBoxGridColumnType()
+        {
+            return typeof(System.Windows.Forms.DataGridViewTextBoxColumn);
+        }
+
+        protected virtual Type GetHabaneroMasterGridColumnType()
+        {
+            return typeof(Habanero.UI.Win.DataGridViewColumnWin);
+        }
+
+        protected virtual string GetUINameSpace()
+        {
+            return "System.Windows.Forms";
+        }
+
+        protected virtual void AssertGridColumnTypeAfterCast(IDataGridViewColumn createdColumn, Type expectedColumnType)
+        {
+            Habanero.UI.Win.DataGridViewColumnWin columnWin = (Habanero.UI.Win.DataGridViewColumnWin)createdColumn;
+            System.Windows.Forms.DataGridViewColumn column = columnWin.DataGridViewColumn;
+            Assert.AreEqual(expectedColumnType, column.GetType());
+        }
 
         [TestFixture]
         public class TestControlFactoryWin : TestControlFactory
         {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new Habanero.UI.Win.ControlFactoryWin();
-            }
-
-            protected override int GetBoldTextExtraWidth()
-            {
-                return 10;
-            }
-
-            protected override Type GetCustomGridColumnType()
-            {
-                return typeof (CustomDataGridViewColumnWin);
-            }
-
-            protected override Type GetMasterGridColumnType()
-            {
-                return typeof(System.Windows.Forms.DataGridViewColumn);
-            }
-
-            protected override Type GetMasterTextBoxGridColumnType()
-            {
-                return typeof(System.Windows.Forms.DataGridViewTextBoxColumn);
-            }
-
-            protected override Type GetHabaneroMasterGridColumnType()
-            {
-                return typeof(Habanero.UI.Win.DataGridViewColumnWin);
-            }
-
-            protected override string GetUINameSpace()
-            {
-                return "System.Windows.Forms";
-            }
-
-            protected override void AssertGridColumnTypeAfterCast(IDataGridViewColumn createdColumn, Type expectedColumnType)
-            {
-                Habanero.UI.Win.DataGridViewColumnWin columnWin = (Habanero.UI.Win.DataGridViewColumnWin) createdColumn;
-                System.Windows.Forms.DataGridViewColumn column = columnWin.DataGridViewColumn;
-                Assert.AreEqual(expectedColumnType, column.GetType());
-            }
-
             [Test]
             public void TestCreateCheckBoxWin()
             {
@@ -221,8 +214,8 @@ namespace Habanero.Test.UI.Base
             public void TestCreateSpecifiedControlType()
             {
                 //---------------Set up test pack-------------------
-                String typeName = "TextBox";
-                String assemblyName = "System.Windows.Forms";
+                const string typeName = "TextBox";
+                const string assemblyName = "System.Windows.Forms";
                 //---------------Verify test pack-------------------
                 //---------------Execute Test ----------------------
                 IControlHabanero control = _factory.CreateControl(typeName, assemblyName);
@@ -242,7 +235,9 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.VWG.ControlFactoryVWG();
+                ControlFactoryVWG factory = new Habanero.UI.VWG.ControlFactoryVWG();
+                GlobalUIRegistry.ControlFactory = factory;
+                return factory;
             }
 
             protected override int GetBoldTextExtraWidth()
@@ -410,8 +405,8 @@ namespace Habanero.Test.UI.Base
             public void TestCreateSpecifiedControlType()
             {
                 //---------------Set up test pack-------------------
-                String typeName = "TextBox";
-                String assemblyName = "Gizmox.WebGUI.Forms";
+                const string typeName = "TextBox";
+                const string assemblyName = "Gizmox.WebGUI.Forms";
                 //---------------Verify test pack-------------------
                 //---------------Execute Test ----------------------
                 IControlHabanero control = _factory.CreateControl(typeName, assemblyName);
@@ -419,7 +414,22 @@ namespace Habanero.Test.UI.Base
                 Assert.IsTrue(control is Gizmox.WebGUI.Forms.TextBox);
                 //---------------Tear Down -------------------------   
             }
+            //This has not been implemented for win and is therefore overriden here with an implementation
+            [Test]
+            public override void TestCreateDataGridViewColumn_WithTypeName_Image()
+            {
+                //---------------Set up test pack-------------------
+                IDataGridViewImageColumn dataGridViewNumericUpDownColumn = GetControlFactory().CreateDataGridViewImageColumn();
+                //-------------Assert Preconditions -------------
 
+                //---------------Execute Test ----------------------
+                IDataGridViewColumn dataGridViewColumn = GetControlFactory().
+                    CreateDataGridViewColumn("DataGridViewImageColumn", null);
+                //---------------Test Result -----------------------
+                Assert.IsNotNull(dataGridViewColumn);
+                Assert.IsInstanceOfType(typeof(IDataGridViewImageColumn), dataGridViewColumn);
+                Assert.AreSame(dataGridViewNumericUpDownColumn.GetType(), dataGridViewColumn.GetType());
+            }
             [Test, Ignore("Not implemented for VWG")]
             public override void TestCreateDataGridViewColumn_WithTypeName_NumericUpDown()
             {
@@ -472,7 +482,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             //---------------Verify test pack-------------------
-            string labelText = "test label";
+            const string labelText = "test label";
             //---------------Execute Test ----------------------
 
             ILabel lbl = _factory.CreateLabel(labelText);
@@ -491,7 +501,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             //---------------Verify test pack-------------------
-            string labelText = "test label";
+            const string labelText = "test label";
             //---------------Execute Test ----------------------
 
             ILabel lbl = _factory.CreateLabel(labelText, true);
@@ -508,7 +518,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             //---------------Verify test pack-------------------
-            string buttonText = "test label";
+            const string buttonText = "test label";
             //---------------Execute Test ----------------------
 
             IButton button = _factory.CreateButton(buttonText);
@@ -535,7 +545,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsNotNull(groupBox);
             Assert.AreEqual("", groupBox.Text);
             Assert.AreEqual("", groupBox.Name);
-            int expectedWidth = 200;
+            const int expectedWidth = 200;
             Assert.AreEqual(expectedWidth, groupBox.Width);
             //---------------Tear Down -------------------------   
         }
@@ -545,7 +555,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             //---------------Verify test pack-------------------
-            string groupBoxText = "test label";
+            const string groupBoxText = "test label";
             //---------------Execute Test ----------------------
 
             IGroupBox groupBox = _factory.CreateGroupBox(groupBoxText);
@@ -553,7 +563,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsNotNull(groupBox);
             Assert.AreEqual(groupBoxText, groupBox.Text);
             Assert.AreEqual(groupBoxText, groupBox.Name);
-            int expectedWidth = 200;
+            const int expectedWidth = 200;
             Assert.AreEqual(groupBoxText, groupBox.Name);
             Assert.AreEqual(expectedWidth, groupBox.Width);
             //---------------Tear Down -------------------------   
@@ -595,14 +605,14 @@ namespace Habanero.Test.UI.Base
             ClassDef.ClassDefs.Clear();
             MyBO.LoadDefaultClassDef();
             MyBO businessObject = new MyBO();
-            string uiDefName = "Alternate";
+            const string uiDefName = "Alternate";
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
             IDefaultBOEditorForm boEditorForm = _factory.CreateBOEditorForm(businessObject, uiDefName);
             //---------------Verify Result -----------------------
             Assert.IsNotNull(boEditorForm);
             Assert.AreSame(businessObject, boEditorForm.PanelInfo.BusinessObject);
-            //TODO: Assert.AreEqual(uiDefName, boEditorForm.PanelFactoryInfo.UIDefName);
+            Assert.AreEqual(uiDefName, boEditorForm.PanelInfo.UIForm.UIDef.Name);
         }
 
         [Test]
@@ -612,28 +622,44 @@ namespace Habanero.Test.UI.Base
             ClassDef.ClassDefs.Clear();
             MyBO.LoadDefaultClassDef();
             MyBO businessObject = new MyBO();
-            string uiDefName = "Alternate";
-            PostObjectEditDelegate action = delegate(IBusinessObject bo, bool cancelled) {  };
+            const string uiDefName = "Alternate";
+            PostObjectEditDelegate action = delegate {  };
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
             IDefaultBOEditorForm boEditorForm = _factory.CreateBOEditorForm(businessObject, uiDefName, action);
             //---------------Verify Result -----------------------
             Assert.IsNotNull(boEditorForm);
             Assert.AreSame(businessObject, boEditorForm.PanelInfo.BusinessObject);
-            //TODO: Assert.AreEqual(uiDefName, boEditorForm.PanelFactoryInfo.UIDefName);
+            Assert.AreEqual(uiDefName, boEditorForm.PanelInfo.UIForm.UIDef.Name);
+        }
+
+        [Test]
+        public void TestCreateBOEditorForm_BoParam_UiDefNameParam_GroupControlCreator()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadDefaultClassDef();
+            MyBO businessObject = new MyBO();
+            const string uiDefName = "Alternate";
+            GroupControlCreator controlCreator = GetControlFactory().CreateTabControl;
+            //---------------Verify test pack-------------------
+            //---------------Execute Test ----------------------
+            IDefaultBOEditorForm boEditorForm = _factory.CreateBOEditorForm(businessObject, uiDefName, controlCreator);
+            //---------------Verify Result -----------------------
+            Assert.IsNotNull(boEditorForm);
+            Assert.AreSame(businessObject, boEditorForm.PanelInfo.BusinessObject);
+            Assert.AreEqual(uiDefName, boEditorForm.PanelInfo.UIForm.UIDef.Name);
+            Assert.AreSame(controlCreator, boEditorForm.GroupControlCreator);
         }
 
         [Test]
         public void TestCreateControlWithNullAssemblyName()
         {
             //---------------Set up test pack-------------------
-
             //---------------Execute Test ----------------------
             IControlHabanero control = _factory.CreateControl("NumericUpDown", null);
             //---------------Test Result -----------------------
             Assert.IsInstanceOfType(typeof(INumericUpDown), control);
-            //---------------Tear down -------------------------
-
         }
 
         [Test]
@@ -641,7 +667,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             //---------------Verify test pack-------------------
-            string buttonText = "test label";
+            const string buttonText = "test label";
             bool buttonClicked = false;
             EventHandler handler = delegate { buttonClicked = true; };
 
@@ -710,7 +736,7 @@ namespace Habanero.Test.UI.Base
         public void TestCreateTreeView()
         {
             //---------------Set up test pack-------------------
-            string treeViewname = "TVNAme";
+            const string treeViewname = "TVNAme";
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
             ITreeView treeView = _factory.CreateTreeView(treeViewname);
@@ -725,7 +751,7 @@ namespace Habanero.Test.UI.Base
         public void TestCreateTreeNode()
         {
             //---------------Set up test pack-------------------
-            string treeNodeName = "TVNodeName";
+            const string treeNodeName = "TVNodeName";
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
             ITreeNode treeNode = _factory.CreateTreeNode(treeNodeName);
@@ -739,7 +765,7 @@ namespace Habanero.Test.UI.Base
         public void TestCreatePanel()
         {
             //---------------Set up test pack-------------------
-            string pnlName = "PanelName";
+            const string pnlName = "PanelName";
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
             IPanel panelName = _factory.CreatePanel(pnlName, GetControlFactory());
@@ -880,8 +906,8 @@ namespace Habanero.Test.UI.Base
         public void TestCreateDefaultControl()
         {
             //---------------Set up test pack-------------------
-            String typeName = "";
-            String assemblyName = "";
+            const string typeName = "";
+            const string assemblyName = "";
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
             IControlHabanero control = _factory.CreateControl(typeName, assemblyName);
@@ -896,11 +922,11 @@ namespace Habanero.Test.UI.Base
         public void TestCreateInvalidControlType()
         {
             //---------------Set up test pack-------------------
-            String typeName = "GeewizBox";
-            String assemblyName = "SuperDuper.Components";
+            const string typeName = "GeewizBox";
+            const string assemblyName = "SuperDuper.Components";
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
-            IControlHabanero control = _factory.CreateControl(typeName, assemblyName);
+            _factory.CreateControl(typeName, assemblyName);
             //---------------Verify Result -----------------------
             //---------------Tear Down -------------------------   
         }
@@ -909,10 +935,10 @@ namespace Habanero.Test.UI.Base
         public void TestCreateControlMapperStrategy()
         {
             //---------------Set up test pack-------------------
-            IControlMapperStrategy strategy = _factory.CreateControlMapperStrategy();
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
+            _factory.CreateControlMapperStrategy();
 
             //---------------Test Result -----------------------
 
@@ -959,7 +985,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             Type columnType = GetCustomGridColumnType();
             string typeName = columnType.Name;  //"CustomDataGridViewColumn";
-            string assemblyName = "Habanero.Test.UI.Base";
+            const string assemblyName = "Habanero.Test.UI.Base";
             //---------------Assert Precondition----------------
             Assert.IsTrue(columnType.IsSubclassOf(GetMasterGridColumnType()));
             //---------------Execute Test ----------------------
@@ -974,7 +1000,7 @@ namespace Habanero.Test.UI.Base
         public void TestCreateDataGridViewColumn_DefaultAssembly()
         {
             //---------------Set up test pack-------------------
-            string typeName = "DataGridViewCheckBoxColumn";
+            const string typeName = "DataGridViewCheckBoxColumn";
             //---------------Assert Precondition----------------
             Assert.IsTrue(typeName.Contains("DataGridViewCheckBoxColumn"));
             //---------------Execute Test ----------------------
@@ -1025,7 +1051,7 @@ namespace Habanero.Test.UI.Base
             bool errorThrown = false;
             try
             {
-                IDataGridViewColumn column = GetControlFactory().CreateDataGridViewColumn("InvalidColumnType", null);
+                GetControlFactory().CreateDataGridViewColumn("InvalidColumnType", null);
             }
             catch (UnknownTypeNameException)
             {
@@ -1045,7 +1071,7 @@ namespace Habanero.Test.UI.Base
             bool errorThrown = false;
             try
             {
-                object column = GetControlFactory().CreateDataGridViewColumn(wrongType);
+                GetControlFactory().CreateDataGridViewColumn(wrongType);
             }
             catch (UnknownTypeNameException)
             {
@@ -1122,19 +1148,44 @@ namespace Habanero.Test.UI.Base
         [Test]
         public virtual void TestCreateDataGridViewColumn_WithTypeName_Image()
         {
-            //---------------Set up test pack-------------------
-            IDataGridViewImageColumn dataGridViewNumericUpDownColumn = GetControlFactory().CreateDataGridViewImageColumn();
-            //-------------Assert Preconditions -------------
-
-            //---------------Execute Test ----------------------
-            IDataGridViewColumn dataGridViewColumn = GetControlFactory().
-                CreateDataGridViewColumn("DataGridViewImageColumn", null);
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(dataGridViewColumn);
-            Assert.IsInstanceOfType(typeof(IDataGridViewImageColumn), dataGridViewColumn);
-            Assert.AreSame(dataGridViewNumericUpDownColumn.GetType(), dataGridViewColumn.GetType());
+            //Not implemented in win
         }
 
-        //TODO: write tests for CreateGridWithPanelControl
+        [Test]
+        public void Test_Create_GroupBoxGroupControl()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IGroupBoxGroupControl groupBoxGroupControl = GetControlFactory().CreateGroupBoxGroupControl();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(groupBoxGroupControl);
+        }
+        [Test]
+        public void Test_Create_ComboBoxSelector()
+        {
+            //---------------Set up test pack-------------------
+            IControlFactory factory = GetControlFactory();            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IBOComboBoxSelector control = factory.CreateComboBoxSelector();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(control);
+        }
+        [Test]
+        public void Test_Create_CollapsiblePanelSelector()
+        {
+            //---------------Set up test pack-------------------
+            IControlFactory factory = GetControlFactory();            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IBOCollapsiblePanelSelector control = factory.CreateCollapsiblePanelSelector();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(control);
+        }
     }
 }

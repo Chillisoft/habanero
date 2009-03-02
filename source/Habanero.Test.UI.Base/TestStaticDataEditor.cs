@@ -19,7 +19,6 @@
 
 using Habanero.BO.ClassDefinition;
 using Habanero.BO;
-using Habanero.Test;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
@@ -128,8 +127,8 @@ namespace Habanero.Test.UI.Base
             Assert.IsInstanceOfType(typeof (IEditableGridControl), editor.Controls[0]);
             Assert.IsInstanceOfType(typeof (ITreeView), editor.Controls[1]);
             IEditableGridControl editableGridControl = (IEditableGridControl) editor.Controls[0];
-            Assert.AreEqual(Habanero.UI.Base.DockStyle.Fill, editor.Controls[0].Dock);
-            Assert.AreEqual(Habanero.UI.Base.DockStyle.Left, editor.Controls[1].Dock);
+            Assert.AreEqual(DockStyle.Fill, editor.Controls[0].Dock);
+            Assert.AreEqual(DockStyle.Left, editor.Controls[1].Dock);
             Assert.IsFalse(editableGridControl.FilterControl.Visible);
 
             //---------------Tear down -------------------------
@@ -249,8 +248,8 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             editor.SelectItem(itemName);
             //---------------Test Result -----------------------
-            Assert.IsNotNull(gridControl.Grid.GetBusinessObjectCollection());
-            Assert.AreSame(classDef, gridControl.Grid.GetBusinessObjectCollection().ClassDef);
+            Assert.IsNotNull(gridControl.Grid.BusinessObjectCollection);
+            Assert.AreSame(classDef, gridControl.Grid.BusinessObjectCollection.ClassDef);
             //---------------Tear Down -------------------------
             TearDownForm(frm);
         }
@@ -277,8 +276,8 @@ namespace Habanero.Test.UI.Base
             editor.SelectItem(itemName2);
 
             //---------------Test Result -----------------------
-            Assert.IsNotNull(gridControl.Grid.GetBusinessObjectCollection());
-            Assert.AreSame(classDef2, gridControl.Grid.GetBusinessObjectCollection().ClassDef);
+            Assert.IsNotNull(gridControl.Grid.BusinessObjectCollection);
+            Assert.AreSame(classDef2, gridControl.Grid.BusinessObjectCollection.ClassDef);
             //---------------Tear Down -------------------------
             TearDownForm(frm);
         }
@@ -353,8 +352,8 @@ namespace Habanero.Test.UI.Base
             treeView.SelectedNode = treeView.Nodes[0].Nodes[0];
 
             //---------------Test Result -----------------------
-            Assert.IsNotNull(gridControl.Grid.GetBusinessObjectCollection());
-            Assert.AreSame(classDef, gridControl.Grid.GetBusinessObjectCollection().ClassDef);
+            Assert.IsNotNull(gridControl.Grid.BusinessObjectCollection);
+            Assert.AreSame(classDef, gridControl.Grid.BusinessObjectCollection.ClassDef);
             //---------------Tear Down -------------------------
             TearDownForm(frm);
         }
@@ -381,15 +380,15 @@ namespace Habanero.Test.UI.Base
             editor.SelectItem(itemName1);
 
             //---------------Assert Preconditions---------------
-            Assert.IsNotNull(gridControl.Grid.GetBusinessObjectCollection());
-            Assert.AreSame(classDef1, gridControl.Grid.GetBusinessObjectCollection().ClassDef);
+            Assert.IsNotNull(gridControl.Grid.BusinessObjectCollection);
+            Assert.AreSame(classDef1, gridControl.Grid.BusinessObjectCollection.ClassDef);
 
             //---------------Execute Test ----------------------
             editor.SelectItem(itemName2);
 
             //---------------Test Result -----------------------
-            Assert.IsNotNull(gridControl.Grid.GetBusinessObjectCollection());
-            Assert.AreSame(classDef2, gridControl.Grid.GetBusinessObjectCollection().ClassDef);
+            Assert.IsNotNull(gridControl.Grid.BusinessObjectCollection);
+            Assert.AreSame(classDef2, gridControl.Grid.BusinessObjectCollection.ClassDef);
             //---------------Tear Down -------------------------
             TearDownForm(frm);
         }

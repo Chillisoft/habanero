@@ -22,7 +22,6 @@ using System.Drawing;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.Test;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
@@ -57,7 +56,9 @@ namespace Habanero.Test.UI.Base
 
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryWin();
+                ControlFactoryWin factory = new ControlFactoryWin();
+                GlobalUIRegistry.ControlFactory = factory;
+                return factory;
             }
 
             protected override IBusinessObjectControl GetBusinessObjectControlStub()
@@ -103,7 +104,9 @@ namespace Habanero.Test.UI.Base
 
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryVWG();
+                ControlFactoryVWG factory = new ControlFactoryVWG();
+                GlobalUIRegistry.ControlFactory = factory;
+                return factory;
             }
 
             protected override IBusinessObjectControl GetBusinessObjectControlStub()
@@ -386,8 +389,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             try
             {
-                IGridWithPanelControl<MyBO> gridWithPanelControl =
-                    GetControlFactory().CreateGridWithPanelControl<MyBO>((IBusinessObjectControl) null);
+                GetControlFactory().CreateGridWithPanelControl<MyBO>((IBusinessObjectControl) null);
 
                 Assert.Fail("Null BOControl should be prevented");
             }
@@ -445,7 +447,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IBusinessObjectControl businessObjectControl = GetBusinessObjectControlStub();
 
-            ClassDef classDef = GetCustomClassDef();
+            GetCustomClassDef();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -477,7 +479,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsNotNull(readOnlyGridControl);
             Assert.IsFalse(readOnlyGridControl.Buttons.Visible);
             Assert.IsFalse(readOnlyGridControl.FilterControl.Visible);
-            Assert.IsNull(readOnlyGridControl.Grid.GetBusinessObjectCollection());
+            Assert.IsNull(readOnlyGridControl.Grid.BusinessObjectCollection);
             Assert.AreEqual(300, readOnlyGridControl.Height);
         }
 
@@ -1081,7 +1083,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(saveButton.Enabled);
             Assert.IsFalse(cancelButton.Enabled);
             Assert.IsTrue(newButton.Enabled);
-            //Assert.IsFalse(boControl.DisplayErrorsCalled);   //TODO
+            //Assert.IsFalse(boControl.DisplayErrorsCalled);   
         }
 
 
@@ -1348,7 +1350,7 @@ namespace Habanero.Test.UI.Base
            // Assert.IsTrue(boControl.ClearErrorsCalled);  //TODO
         }
 
-        private MyBO CreateSavedMyBo()
+        private static MyBO CreateSavedMyBo()
         {
             MyBO myBO = new MyBO();
             myBO.TestProp = BOTestUtils.RandomString;
@@ -1356,7 +1358,7 @@ namespace Habanero.Test.UI.Base
             return myBO;
         }
 
-        private BusinessObjectCollection<MyBO> CreateSavedMyBoCollection()
+        private static BusinessObjectCollection<MyBO> CreateSavedMyBoCollection()
         {
             CreateSavedMyBo();
             CreateSavedMyBo();
@@ -1368,7 +1370,6 @@ namespace Habanero.Test.UI.Base
 
     internal class BusinessObjectControlStubWin : UserControlWin, IBusinessObjectControl
     {
-        private IBusinessObject _businessObject;
         //private bool _displayErrorsCalled;
         //private bool _clearErrorsCalled;
 
@@ -1382,11 +1383,7 @@ namespace Habanero.Test.UI.Base
         //    get { return _clearErrorsCalled; }
         //}
 
-        public IBusinessObject BusinessObject
-        {
-            get { return _businessObject; }
-            set { _businessObject = value; }
-        }
+        public IBusinessObject BusinessObject { get; set; }
 
         //public void DisplayErrors()
         //{
@@ -1401,7 +1398,6 @@ namespace Habanero.Test.UI.Base
 
     internal class BusinessObjectControlStubVWG : UserControlVWG, IBusinessObjectControl
     {
-        private IBusinessObject _businessObject;
         //private bool _displayErrorsCalled;
         //private bool _clearErrorsCalled;
 
@@ -1415,11 +1411,7 @@ namespace Habanero.Test.UI.Base
         //    get { return _clearErrorsCalled; }
         //}
 
-        public IBusinessObject BusinessObject
-        {
-            get { return _businessObject; }
-            set { _businessObject = value; }
-        }
+        public IBusinessObject BusinessObject { get; set; }
 
         //public void DisplayErrors()
         //{
@@ -1434,7 +1426,7 @@ namespace Habanero.Test.UI.Base
 
     internal class GridWithPanelStrategyVWGStub<TBusinessObject> : IGridWithPanelControlStrategy<TBusinessObject>
     {
-        public void UpdateControlEnabledState(IBusinessObject lastSelectedBusinessObject)
+        public void UpdateControlEnabledState(TBusinessObject lastSelectedBusinessObject)
         {
         }
 

@@ -31,11 +31,18 @@ namespace Habanero.UI.Win
     {
         private readonly DataGridViewColumn _dataGridViewColumn;
 
+        ///<summary>
+        /// Constructor for <see cref="DataGridViewColumnWin"/>
+        ///</summary>
+        ///<param name="dataGridViewColumn"></param>
         public DataGridViewColumnWin(DataGridViewColumn dataGridViewColumn)
         {
             _dataGridViewColumn = dataGridViewColumn;
         }
 
+        ///<summary>
+        /// Returns the DataGridViewColumn of type 'System.Windows.Forms'
+        ///</summary>
         public DataGridViewColumn DataGridViewColumn
         {
             get { return _dataGridViewColumn; }

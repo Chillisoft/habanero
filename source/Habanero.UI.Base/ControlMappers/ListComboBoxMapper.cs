@@ -17,18 +17,24 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using Habanero.UI.Base;
-
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Wraps a ComboBox in order to display and capture a property of the business object 
+    /// Wraps a ComboBox in order to display and capture a property of the business object.
+    /// The List of items to be selected is a '|' seperated list. 
     /// </summary>
     public class ListComboBoxMapper : ControlMapper
     {
         private readonly IComboBox _comboBox;
         private readonly IListComboBoxMapperStrategy _mapperStrategy;
 
+        ///<summary>
+        /// Constructor form <see cref="ListComboBoxMapper"/>
+        ///</summary>
+        ///<param name="ctl"></param>
+        ///<param name="propName"></param>
+        ///<param name="isReadOnly"></param>
+        ///<param name="factory"></param>
         public ListComboBoxMapper(IControlHabanero ctl, string propName, bool isReadOnly, IControlFactory factory)
             : base(ctl, propName, isReadOnly, factory)
         {

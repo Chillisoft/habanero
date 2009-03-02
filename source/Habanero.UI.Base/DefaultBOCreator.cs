@@ -58,15 +58,7 @@ namespace Habanero.UI.Base
         /// <returns></returns>
         public IBusinessObject CreateBusinessObject()
         {
-            if (_boCol != null)
-            {
-                return _boCol.CreateBusinessObject();
-            }
-            else
-            {
-                return _classDef.CreateNewBusinessObject();
-            }
+            return _boCol != null ? _boCol.CreateBusinessObject() : _classDef.CreateNewBusinessObject();
         }
-
     }
 }

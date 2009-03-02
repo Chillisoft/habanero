@@ -17,11 +17,15 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+
 namespace Habanero.UI.Base
 {
     /// <summary>
     /// Represents a panel containing a PanelInfo used to edit a single business object.
+    /// This inherits from the <see cref="IBusinessObjectControl"/>
     /// </summary>
+    [Obsolete]
     public interface IBusinessObjectPanel : IBusinessObjectControl
     {
         /// <summary>

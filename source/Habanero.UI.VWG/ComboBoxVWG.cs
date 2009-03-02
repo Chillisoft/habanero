@@ -17,14 +17,10 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using System.Collections;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
-using Habanero.BO;
 using Habanero.UI.Base;
-using AutoCompleteMode=Habanero.UI.Base.AutoCompleteMode;
-using AutoCompleteSource=Habanero.UI.Base.AutoCompleteSource;
 
 namespace Habanero.UI.VWG
 {
@@ -33,8 +29,11 @@ namespace Habanero.UI.VWG
     /// </summary>
     public class ComboBoxVWG : ComboBox, IComboBox
     {
-        private ComboBoxManager _manager;
+        private readonly ComboBoxManager _manager;
 
+        ///<summary>
+        /// Constructor for <see cref="ComboBoxVWG"/>
+        ///</summary>
         public ComboBoxVWG()
         {
             _manager = new ComboBoxManager(this);
@@ -76,7 +75,7 @@ namespace Habanero.UI.VWG
         /// Gets or sets the value of the member property specified by
         /// the ValueMember property
         /// </summary>
-        object IComboBox.SelectedValue
+        object IListControl.SelectedValue
         {
             get { return _manager.GetSelectedValue(this.SelectedItem); }
             set { SelectedItem = _manager.GetValueToSelect(value); }
@@ -101,7 +100,6 @@ namespace Habanero.UI.VWG
         internal class ComboBoxObjectCollectionVWG : IComboBoxObjectCollection
         {
             private readonly ObjectCollection _items;
-            private string _label;
 
             public ComboBoxObjectCollectionVWG(ObjectCollection items)
             {
@@ -128,11 +126,7 @@ namespace Habanero.UI.VWG
             /// <summary>
             /// Gets or sets the label to display
             /// </summary>
-            public string Label
-            {
-                get { return _label; }
-                set { _label = value; }
-            }
+            public string Label { get; set; }
 
             /// <summary>
             /// Removes the specified item from the ComboBox

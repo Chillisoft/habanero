@@ -17,7 +17,10 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections;
 using Gizmox.WebGUI.Forms;
+using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.VWG
@@ -70,6 +73,56 @@ namespace Habanero.UI.VWG
         {
             get { return TabPages[base.SelectedIndex]; }
             set { base.SelectedIndex = TabPages.IndexOf(value); }
+        }
+
+//        /// <summary>
+//        /// Gets the collection of tab pages in this tab control
+//        /// </summary>
+//        IControlCollection IGroupControl.ChildControls
+//        {
+//            get
+//            {
+//                return new ControlCollectionVWG(this.Controls);
+//            }
+//        }
+
+//        /// <summary>
+//        /// Gets or sets the currently selected tab page
+//        /// </summary>
+//        IControlHabanero IGroupControl.SelectedChildControl
+//        {
+//            get { return TabPages[base.SelectedIndex]; }
+//            set { base.SelectedIndex = TabPages.IndexOf((ITabPage) value); }
+//        }
+
+        /// <summary>
+        /// Adds an <see cref="IControlHabanero"/> to this control. The <paramref name="contentControl"/> is
+        ///    wrapped in the appropriate Child Control Type.
+        /// </summary>
+        /// <param name="contentControl">The control that is being placed as a child within this control. The content control could be 
+        ///  a Panel of <see cref="IBusinessObject"/>.<see cref="IBOProp"/>s or any other child control</param>
+        /// <param name="headingText">The heading text that will be shown as the Header for this Group e.g. For a <see cref="ITabControl"/>
+        ///   this will be the Text shown in the Tab for a <see cref="ICollapsiblePanelGroupControl"/> this will be the text shown
+        ///   on the Collapse Panel and for an <see cref="IGroupBox"/> this will be the title of the Group Box.</param>
+        /// <param name="minimumControlHeight">The minimum height that the <paramref name="contentControl"/> can be.
+        ///   This height along with any other spacing required will be used as the minimum height for the ChildControlCreated</param>
+        /// <param name="minimumControlWidth">The min width that the content control can be.</param>
+        /// <returns></returns>
+        public IControlHabanero AddControl(IControlHabanero contentControl, string headingText, int minimumControlHeight, int minimumControlWidth)
+        {
+            IControlFactory factory = GlobalUIRegistry.ControlFactory;
+            if (factory == null)
+            {
+                const string errMessage = "There is a serious error since the GlobalUIRegistry.ControlFactory  has not been set up.";
+                throw new HabaneroDeveloperException(errMessage, errMessage);
+            }
+            ITabPage childControl = factory.CreateTabPage(headingText);
+            childControl.Width = minimumControlHeight;
+            childControl.Height = minimumControlHeight;
+            contentControl.Dock = Base.DockStyle.Fill;
+            childControl.Controls.Add(contentControl);
+            this.TabPages.Add(childControl);
+            return childControl;
         }
     }
 
@@ -126,9 +179,17 @@ namespace Habanero.UI.VWG
             return -1;
         }
 
+        /// <summary>
+        /// Clears all the tab pages.
+        /// </summary>
         public void Clear()
         {
             _tabPages.Clear();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _tabPages.GetEnumerator();
         }
     }
 }

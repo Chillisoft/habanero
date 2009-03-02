@@ -20,7 +20,6 @@
 using System;
 using System.Collections;
 using Habanero.BO;
-using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
 {
@@ -29,7 +28,7 @@ namespace Habanero.UI.Base
     /// </summary>
     public class ControlMapperCollection : IControlMapperCollection, ICollection
     {
-        private IList _collection;
+        private readonly IList _collection;
         private BusinessObject _businessObject;
 
         /// <summary>

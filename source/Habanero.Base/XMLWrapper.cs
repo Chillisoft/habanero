@@ -31,7 +31,7 @@ namespace Habanero.Base
     /// </summary>
     public class XmlWrapper
     {
-        private XmlDocument _doc;
+        private readonly XmlDocument _doc;
         private string _filename;
 
         /// <summary>
@@ -82,10 +82,7 @@ namespace Habanero.Base
                     "being passed in the method ReadXMLValue() is null.");
             }
             IXPathNavigable node = parentNode.CreateNavigator().SelectSingleNode(elementName);
-            if (node != null)
-                return node.CreateNavigator().InnerXml;
-            else
-                return string.Empty;
+            return node != null ? node.CreateNavigator().InnerXml : string.Empty;
         }
         
         /// <summary>

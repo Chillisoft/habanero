@@ -169,7 +169,7 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            string uiDefName = "Alternate";
+            const string uiDefName = "Alternate";
             gridControl.Initialise(def, uiDefName);
             //---------------Test Result -----------------------
             Assert.AreEqual(2, gridControl.Grid.Columns.Count);
@@ -195,7 +195,7 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
-            gridControl.Grid.SetBusinessObjectCollection(col);
+            gridControl.Grid.BusinessObjectCollection  = col;
             //---------------Test Result -----------------------
             Assert.IsFalse(gridControl.Grid.ReadOnly);
             Assert.IsTrue(gridControl.Grid.AllowUserToAddRows);
@@ -217,7 +217,7 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
-            gridControl.Grid.SetBusinessObjectCollection(col);
+            gridControl.Grid.BusinessObjectCollection  = col;
             //---------------Test Result -----------------------
             Assert.IsInstanceOfType(typeof (EditableDataSetProvider), gridControl.Grid.DataSetProvider);
             //---------------Tear Down -------------------------          
@@ -235,7 +235,7 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(1, grid.Grid.Rows.Count);
             //---------------Execute Test ----------------------
-            grid.Grid.SetBusinessObjectCollection(col);
+            grid.Grid.BusinessObjectCollection  = col;
             const string testvalue = "testvalue";
             grid.Grid.Rows[0].Cells[1].Value = testvalue;
 //            grid.ApplyChangesToBusinessObject();
@@ -258,7 +258,7 @@ namespace Habanero.Test.UI.Base
             MyBO bo = new MyBO();
             bo.TestProp = "testPropValue";
             col.Add(bo);
-            grid.Grid.SetBusinessObjectCollection(col);
+            grid.Grid.BusinessObjectCollection  = col;
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(2, grid.Grid.Rows.Count, "Editable auto adds adding row");
 
@@ -608,7 +608,7 @@ namespace Habanero.Test.UI.Base
             IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
             AddControlToForm(gridControl.Grid);
             SetupGridColumnsForMyBo(gridControl.Grid);
-            gridControl.Grid.SetBusinessObjectCollection(col);
+            gridControl.Grid.BusinessObjectCollection  = col;
             //---------------Assert Precondition----------------
             Assert.AreEqual(2, gridControl.Grid.Rows.Count);
             Assert.AreEqual(originalText, gridControl.Grid.Rows[0].Cells[0].Value);
@@ -789,25 +789,25 @@ namespace Habanero.Test.UI.Base
             return gridControl;
         }
 
-        private static void SetupGridColumnsForMyBo(IGridBase gridBase)
+        private static void SetupGridColumnsForMyBo(IDataGridView gridBase)
         {
             gridBase.Columns.Add("TestProp", "TestProp");
         }
 
-        private static ContactPersonTestBO CreateContactPersonInDB()
+        private static void CreateContactPersonInDB()
         {
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             contactPersonTestBO.Surname = Guid.NewGuid().ToString("N");
             contactPersonTestBO.Save();
-            return contactPersonTestBO;
+            return;
         }
 
-        private static ContactPersonTestBO CreateContactPersonInDB_With_SSSSS_InSurname()
+        private static void CreateContactPersonInDB_With_SSSSS_InSurname()
         {
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             contactPersonTestBO.Surname = Guid.NewGuid().ToString("N") + "SSSSS";
             contactPersonTestBO.Save();
-            return contactPersonTestBO;
+            return;
         }
 
         #region Nested type: TestEditableGridControlVWG

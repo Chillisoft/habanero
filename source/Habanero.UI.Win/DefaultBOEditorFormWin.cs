@@ -35,13 +35,13 @@ namespace Habanero.UI.Win
     public class DefaultBOEditorFormWin : FormWin, IDefaultBOEditorForm
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Win.DefaultBOEditorFormWin");
-        private BusinessObject _bo;
-        private IControlFactory _controlFactory;
-        private string _uiDefName;
-        private IPanelInfo _panelInfo;
-        private IPanel _boPanel;
-        private IButtonGroupControl _buttons;
-        private PostObjectEditDelegate _action;
+        private readonly BusinessObject _bo;
+        private readonly IControlFactory _controlFactory;
+        private readonly string _uiDefName;
+        private readonly IPanelInfo _panelInfo;
+        private readonly IPanel _boPanel;
+        private readonly IButtonGroupControl _buttons;
+        private readonly PostObjectEditDelegate _action;
 
 
         /// <summary>
@@ -58,18 +58,19 @@ namespace Habanero.UI.Win
         {
             _action = action;
         }
-
-        /// <summary>
+                /// <summary>
         /// Constructs the <see cref="DefaultBOEditorFormWin"/> class  with 
-        /// the specified <see cref="BusinessObject"/>, uiDefName and <see cref="IControlFactory"/>. 
+        /// the specified businessObject, uiDefName and post edit action. 
         /// </summary>
         /// <param name="bo">The business object to represent</param>
         /// <param name="uiDefName">The name of the ui def to use.</param>
         /// <param name="controlFactory">The <see cref="IControlFactory"/> to use for creating the Editor form controls</param>
-        public DefaultBOEditorFormWin(BusinessObject bo, string uiDefName, IControlFactory controlFactory)
+        /// <param name="creator">The Creator used to Create the Group Control.</param>
+        public DefaultBOEditorFormWin(BusinessObject bo, string uiDefName, IControlFactory controlFactory, GroupControlCreator creator)
         {
             _bo = bo;
             _controlFactory = controlFactory;
+            GroupControlCreator = creator;
             _uiDefName = uiDefName;
 
             BOMapper mapper = new BOMapper(bo);
@@ -110,7 +111,7 @@ namespace Habanero.UI.Win
 
             PanelBuilder panelBuilder = new PanelBuilder(_controlFactory);
             //_panelInfo = panelBuilder.BuildPanelForForm(_bo.ClassDef.UIDefCol["default"].UIForm);
-            _panelInfo = panelBuilder.BuildPanelForForm(_bo.ClassDef.UIDefCol[uiDefName].UIForm);
+            _panelInfo = panelBuilder.BuildPanelForForm(_bo.ClassDef.UIDefCol[uiDefName].UIForm, this.GroupControlCreator);
 
             _panelInfo.BusinessObject = _bo;
             _boPanel = _panelInfo.Panel;
@@ -121,7 +122,7 @@ namespace Habanero.UI.Win
             this.AcceptButton = (ButtonWin)okbutton;
             this.Load += delegate { FocusOnFirstControl(); };
 
-            Text = def.Title;
+            this.Text = def.Title;
             SetupFormSize(def);
             MinimizeBox = false;
             MaximizeBox = false;
@@ -129,6 +130,18 @@ namespace Habanero.UI.Win
 
             CreateLayout();
             OnResize(new EventArgs());
+
+        }
+        /// <summary>
+        /// Constructs the <see cref="DefaultBOEditorFormWin"/> class  with 
+        /// the specified <see cref="BusinessObject"/>, uiDefName and <see cref="IControlFactory"/>. 
+        /// </summary>
+        /// <param name="bo">The business object to represent</param>
+        /// <param name="uiDefName">The name of the ui def to use.</param>
+        /// <param name="controlFactory">The <see cref="IControlFactory"/> to use for creating the Editor form controls</param>
+        public DefaultBOEditorFormWin(BusinessObject bo, string uiDefName, IControlFactory controlFactory)
+            : this(bo, uiDefName, controlFactory, controlFactory.CreateTabControl)
+        {
         }
 
         protected IPanel BoPanel
@@ -181,7 +194,7 @@ namespace Habanero.UI.Win
                 _panelInfo.ApplyChangesToBusinessObject();
                 TransactionCommitter committer = CreateSaveTransaction();
                 committer.CommitTransaction();
-                DialogResult = Base.DialogResult.OK;
+                DialogResult = DialogResult.OK;
                 Close();
                 if (_action != null)
                 {
@@ -228,7 +241,7 @@ namespace Habanero.UI.Win
         /// Gets or sets the dialog result that indicates what action was
         /// taken to close the form
         /// </summary>
-        public Base.DialogResult DialogResult
+        public new Base.DialogResult DialogResult
         {
             get { return (Base.DialogResult) base.DialogResult; }
             set { base.DialogResult = (System.Windows.Forms.DialogResult)value; }
@@ -243,6 +256,11 @@ namespace Habanero.UI.Win
             get { return _panelInfo; }
         }
 
+        ///<summary>
+        /// The Creator (<see cref="IDefaultBOEditorForm.GroupControlCreator"/> used to create the <see cref="IGroupControl"/>
+        ///</summary>
+        public GroupControlCreator GroupControlCreator { get; protected set; }
+
         /// <summary>
         /// Pops the form up in a modal dialog.  If the BO is successfully edited and saved, returns true,
         /// else returns false.
@@ -251,14 +269,7 @@ namespace Habanero.UI.Win
         bool IDefaultBOEditorForm.ShowDialog()
         {
             {
-                if (this.ShowDialog() == (System.Windows.Forms.DialogResult)Base.DialogResult.OK)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return this.ShowDialog() == (System.Windows.Forms.DialogResult)Base.DialogResult.OK;
             }
         }
     }

@@ -89,7 +89,7 @@
 ////            BOColTabControlManager colTabCtlMapper = new BOColTabControlManager(tabControl, GetControlFactory());
 ////            //---------------Execute Test ----------------------
 ////            IBusinessObjectControl busControl = new BusinessObjectControlVWG();
-////            colTabCtlMapper.BusinessObjectControl = busControl;
+////            colTabCtlMapper.BusinessObjectControlWin = busControl;
 
 ////            //---------------Test Result -----------------------
 ////            Assert.AreSame(busControl, colTabCtlMapper.BoControl);
@@ -105,7 +105,7 @@
 ////            ITabControl tabControl = GetControlFactory().CreateTabControl();
 ////            BOColTabControlManager colTabCtlMapper = new BOColTabControlManager(tabControl, GetControlFactory());
 ////            IBusinessObjectControl busControl = new BusinessObjectControlVWG();
-////            colTabCtlMapper.BusinessObjectControl = busControl;
+////            colTabCtlMapper.BusinessObjectControlWin = busControl;
 ////            //---------------Execute Test ----------------------
 ////            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
 ////            myBoCol.Add(new MyBO());
@@ -127,7 +127,7 @@
 ////            ITabControl tabControl = GetControlFactory().CreateTabControl();
 ////            BOColTabControlManager colTabCtlMapper = new BOColTabControlManager(tabControl, GetControlFactory());
 ////            IBusinessObjectControl busControl = new BusinessObjectControlVWG();
-////            colTabCtlMapper.BusinessObjectControl = busControl;
+////            colTabCtlMapper.BusinessObjectControlWin = busControl;
 ////            //---------------Execute Test ----------------------
 ////            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
 ////            MyBO testBo = new MyBO();
@@ -148,7 +148,7 @@
 ////            ITabControl tabControl = GetControlFactory().CreateTabControl();
 ////            BOColTabControlManager colTabCtlMapper = new BOColTabControlManager(tabControl, GetControlFactory());
 ////            IBusinessObjectControl busControl = new BusinessObjectControlVWG();
-////            colTabCtlMapper.BusinessObjectControl = busControl;
+////            colTabCtlMapper.BusinessObjectControlWin = busControl;
 ////            //---------------Execute Test ----------------------
 ////            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
 ////            MyBO testBo = new MyBO();

@@ -21,11 +21,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 using Habanero.UI.Win.Grid;
-using IEnumerable=System.Collections.IEnumerable;
 
 namespace Habanero.UI.Win
 {
@@ -36,6 +34,9 @@ namespace Habanero.UI.Win
     {
         private readonly DataGridViewManager _manager;
 
+        ///<summary>
+        /// Constructor for <see cref="DataGridViewWin"/>
+        ///</summary>
         public DataGridViewWin()
         {
             _manager = new DataGridViewManager(this);
@@ -47,8 +48,8 @@ namespace Habanero.UI.Win
         /// <value></value>
         Base.AnchorStyles IControlHabanero.Anchor
         {
-            get { return (Base.AnchorStyles)base.Anchor; }
-            set { base.Anchor = (System.Windows.Forms.AnchorStyles)value; }
+            get { return (Base.AnchorStyles) base.Anchor; }
+            set { base.Anchor = (System.Windows.Forms.AnchorStyles) value; }
         }
 
         /// <summary>
@@ -83,7 +84,7 @@ namespace Habanero.UI.Win
         public new IDataGridViewCell CurrentCell
         {
             get { return base.CurrentCell == null ? null : new DataGridViewCellWin(base.CurrentCell); }
-            set { base.CurrentCell = value == null ? null : ((DataGridViewCellWin)value).DataGridViewCell; }
+            set { base.CurrentCell = value == null ? null : ((DataGridViewCellWin) value).DataGridViewCell; }
         }
 
         /// <summary>
@@ -93,11 +94,8 @@ namespace Habanero.UI.Win
         {
             get
             {
-                if (base.CurrentRow == null)
-                {
-                    return null;
-                }
-                return new DataGridViewRowWin(base.CurrentRow);
+                return base.CurrentRow == null ? null : new DataGridViewRowWin(base.CurrentRow);
+                
             }
         }
 
@@ -144,7 +142,7 @@ namespace Habanero.UI.Win
         public new IDataGridViewCell this[int columnIndex, int rowIndex]
         {
             get { return new DataGridViewCellWin(base[columnIndex, rowIndex]); }
-            set { base[columnIndex, rowIndex] = value == null ? null : ((DataGridViewCellWin)value).DataGridViewCell; }
+            set { base[columnIndex, rowIndex] = value == null ? null : ((DataGridViewCellWin) value).DataGridViewCell; }
         }
 
         /// <summary>Sorts the contents of the <see cref="IDataGridView"></see> control in ascending or
@@ -164,7 +162,7 @@ namespace Habanero.UI.Win
         /// <filterpriority>1</filterpriority>
         public void Sort(IDataGridViewColumn dataGridViewColumn, ListSortDirection direction)
         {
-            base.Sort(((DataGridViewColumnWin) dataGridViewColumn).DataGridViewColumn,direction);
+            base.Sort(((DataGridViewColumnWin) dataGridViewColumn).DataGridViewColumn, direction);
         }
 
         /// <summary>
@@ -183,7 +181,7 @@ namespace Habanero.UI.Win
         /// <returns>The <see cref="IDataGridViewColumn"></see> by which the <see cref="IDataGridView"></see> 
         /// contents are currently sorted.</returns>
         /// <filterpriority>1</filterpriority>
-        public IDataGridViewColumn SortedColumn
+        public new IDataGridViewColumn SortedColumn
         {
             get { throw new System.NotImplementedException(); }
         }
@@ -248,9 +246,6 @@ namespace Habanero.UI.Win
         }
 
 
-
-
-
         /// <summary>
         /// A collection of DataGridViewRow objects
         /// </summary>
@@ -309,7 +304,7 @@ namespace Habanero.UI.Win
             }
 
             /// <summary>Clears the collection. </summary>
-            /// <exception cref="T:System.InvalidOperationException">The collection is data bound and the underlying data source does not support clearing the row data.-or-The associated <see cref="IDataGridView"></see> control is performing one of the following actions that temporarily prevents new rows from being added:Selecting all cells in the control.Clearing the selection.-or-This method is being called from a handler for one of the following <see cref="IDataGridView"></see> events:<see cref="IDataGridView.CellEnter"></see><see cref="IDataGridView.CellLeave"></see><see cref="IDataGridView.CellValidating"></see><see cref="IDataGridView.CellValidated"></see><see cref="IDataGridView.RowEnter"></see><see cref="IDataGridView.RowLeave"></see><see cref="IDataGridView.RowValidated"></see><see cref="IDataGridView.RowValidating"></see></exception>
+            /// <exception cref="T:System.InvalidOperationException">The collection is data bound and the underlying data source does not support clearing the row data.-or-The associated <see cref="IDataGridView"></see> control is performing one of the following actions that temporarily prevents new rows from being added:Selecting all cells in the control.Clearing the selection.-or-This method is being called from a handler for one of the following <see cref="IDataGridView"></see> events:<see cref="IDataGridView"></see>.CellEnter<see cref="IDataGridView<see cref="IDataGridView"></see>.CellLeave<see cref="IDataGridView<see cref="IDataGridView"></see>.CellValidating<see cref="IDataGridView<see cref="IDataGridView"></see>.CellValidated<see cref="IDataGridView<see cref="IDataGridView"></see>.RowEnter<see cref="IDataGridView<see cref="IDataGridView"></see>.RowLeave<see cref="IDataGridView<see cref="IDataGridView"></see>.RowValidated<see cref="IDataGridView<see cref="IDataGridView"></see>.RowValidating</exception>
             /// <filterpriority>1</filterpriority>
             public void Clear()
             {
@@ -318,7 +313,7 @@ namespace Habanero.UI.Win
 
             /// <summary>Removes the row from the collection.</summary>
             /// <param name="dataGridViewRow">The row to remove from the <see cref="IDataGridViewRowCollection"></see>.</param>
-            /// <exception cref="T:System.InvalidOperationException">The associated <see cref="IDataGridView"></see> control is performing one of the following actions that temporarily prevents new rows from being added:Selecting all cells in the control.Clearing the selection.-or-This method is being called from a handler for one of the following <see cref="IDataGridView"></see> events:<see cref="IDataGridView.CellEnter"></see><see cref="IDataGridView.CellLeave"></see><see cref="IDataGridView.CellValidating"></see><see cref="IDataGridView.CellValidated"></see><see cref="IDataGridView.RowEnter"></see><see cref="IDataGridView.RowLeave"></see><see cref="IDataGridView.RowValidated"></see><see cref="IDataGridView.RowValidating"></see>-or-dataGridViewRow is the row for new records.-or-The associated <see cref="IDataGridView"></see> control is bound to an <see cref="T:System.ComponentModel.IBindingList"></see> implementation with <see cref="P:System.ComponentModel.IBindingList.AllowRemove"></see> and <see cref="P:System.ComponentModel.IBindingList.SupportsChangeNotification"></see> property values that are not both true. </exception>
+            /// <exception cref="T:System.InvalidOperationException">The associated <see cref="IDataGridView"></see> control is performing one of the following actions that temporarily prevents new rows from being added:Selecting all cells in the control.Clearing the selection.-or-This method is being called from a handler for one of the following <see cref="IDataGridView"></see> events:<see cref="IDataGridView"></see>.CellEnter<see cref="IDataGridView"></see>.CellLeave<see cref="IDataGridView">.CellValidating</see><see cref="IDataGridView<see cref="IDataGridView"></see>.CellValidated<see cref="IDataGridView<see cref="IDataGridView"></see>.RowEnter<see cref="IDataGridView<see cref="IDataGridView"></see>.RowLeave<see cref="IDataGridView<see cref="IDataGridView"></see>.RowValidated<see cref="IDataGridView<see cref="IDataGridView"></see>.RowValidating-or-dataGridViewRow is the row for new records.-or-The associated <see cref="IDataGridView"></see> control is bound to an <see cref="T:System.ComponentModel.IBindingList"></see> implementation with <see cref="P:System.ComponentModel.IBindingList.AllowRemove"></see> and <see cref="P:System.ComponentModel.IBindingList.SupportsChangeNotification"></see> property values that are not both true. </exception>
             /// <exception cref="T:System.ArgumentException">dataGridViewRow is not contained in this collection.-or-dataGridViewRow is a shared row.</exception>
             /// <exception cref="T:System.ArgumentNullException">dataGridViewRow is null.</exception>
             /// <filterpriority>1</filterpriority>
@@ -330,7 +325,7 @@ namespace Habanero.UI.Win
             /// <summary>Removes the row at the specified position from the collection.</summary>
             /// <param name="index">The position of the row to remove.</param>
             /// <exception cref="T:System.ArgumentOutOfRangeException">index is less than zero and greater than the number of rows in the collection minus one. </exception>
-            /// <exception cref="T:System.InvalidOperationException">The associated <see cref="IDataGridView"></see> control is performing one of the following actions that temporarily prevents new rows from being added:Selecting all cells in the control.Clearing the selection.-or-This method is being called from a handler for one of the following <see cref="IDataGridView"></see> events:<see cref="IDataGridView.CellEnter"></see><see cref="IDataGridView.CellLeave"></see><see cref="IDataGridView.CellValidating"></see><see cref="IDataGridView.CellValidated"></see><see cref="IDataGridView.RowEnter"></see><see cref="IDataGridView.RowLeave"></see><see cref="IDataGridView.RowValidated"></see><see cref="IDataGridView.RowValidating"></see>-or-index is equal to the number of rows in the collection and the <see cref="IDataGridView.AllowUserToAddRows"></see> property of the <see cref="IDataGridView"></see> is set to true.-or-The associated <see cref="IDataGridView"></see> control is bound to an <see cref="T:System.ComponentModel.IBindingList"></see> implementation with <see cref="P:System.ComponentModel.IBindingList.AllowRemove"></see> and <see cref="P:System.ComponentModel.IBindingList.SupportsChangeNotification"></see> property values that are not both true.</exception>
+            /// <exception cref="T:System.InvalidOperationException">The associated <see cref="IDataGridView"></see> control is performing one of the following actions that temporarily prevents new rows from being added:Selecting all cells in the control.Clearing the selection.-or-This method is being called from a handler for one of the following <see cref="IDataGridView"></see> events:<see cref="IDataGridView<see cref="IDataGridView"></see>.CellEnter<see cref="IDataGridView"></see>.CellLeave<see cref="IDataGridView<see cref="IDataGridView"></see>.CellValidating<see cref="IDataGridView<see cref="IDataGridView"></see>.CellValidated<see cref="IDataGridView<see cref="IDataGridView"></see>.RowEnter<see cref="IDataGridView<see cref="IDataGridView"></see>.RowLeave<see cref="IDataGridView<see cref="IDataGridView"></see>.RowValidated<see cref="IDataGridView<see cref="IDataGridView"></see>.RowValidating-or-index is equal to the number of rows in the collection and the <see cref="IDataGridView.AllowUserToAddRows"></see> property of the <see cref="IDataGridView"></see> is set to true.-or-The associated <see cref="IDataGridView"></see> control is bound to an <see cref="T:System.ComponentModel.IBindingList"></see> implementation with <see cref="P:System.ComponentModel.IBindingList.AllowRemove"></see> and <see cref="P:System.ComponentModel.IBindingList.SupportsChangeNotification"></see> property values that are not both true.</exception>
             /// <filterpriority>1</filterpriority>
             public void RemoveAt(int index)
             {
@@ -602,10 +597,10 @@ namespace Habanero.UI.Win
                 _cells = cells;
             }
 
-            public int Count
-            {
-                get { return _cells.Count; }
-            }
+//            public int Count
+//            {
+//                get { return _cells.Count; }
+//            }
 
             /// <summary>Adds a cell to the collection.</summary>
             /// <returns>The position in which to insert the new element.</returns>
@@ -713,21 +708,21 @@ namespace Habanero.UI.Win
                 get { return new DataGridViewCellWin(_cells[columnName]); }
             }
 
-            ///<summary>
-            ///Returns an enumerator that iterates through a collection.
-            ///</summary>
-            ///
-            ///<returns>
-            ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
-            ///</returns>
-            ///<filterpriority>2</filterpriority>
-            public System.Collections.IEnumerator GetEnumerator()
-            {
-                foreach (DataGridViewRow row in _cells)
-                {
-                    yield return new DataGridViewRowWin(row);
-                }
-            }
+//            ///<summary>
+//            ///Returns an enumerator that iterates through a collection.
+//            ///</summary>
+//            ///
+//            ///<returns>
+//            ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+//            ///</returns>
+//            ///<filterpriority>2</filterpriority>
+//            public System.Collections.IEnumerator GetEnumerator()
+//            {
+//                foreach (DataGridViewRow row in _cells)
+//                {
+//                    yield return new DataGridViewRowWin(row);
+//                }
+//            }
         }
 
         /// <summary>
@@ -847,7 +842,7 @@ namespace Habanero.UI.Win
         /// <filterpriority>1</filterpriority>
         public void ApplyStyle(IDataGridViewCellStyle dataGridViewCellStyle)
         {
-            _dataGridViewCellStyle.ApplyStyle(((DataGridViewCellStyleWin)dataGridViewCellStyle).DataGridViewCellStyle);
+            _dataGridViewCellStyle.ApplyStyle(((DataGridViewCellStyleWin) dataGridViewCellStyle).DataGridViewCellStyle);
         }
 
         /// <summary>Creates an exact copy of this <see cref="IDataGridViewCellStyle"></see>.</summary>

@@ -23,26 +23,54 @@ using System.Collections.Generic;
 namespace Habanero.UI.Base
 {
 
+    ///<summary>
+    /// A delegate for Creating a <see cref="IFilterControl"/>
+    ///</summary>
     public delegate IFormControl FormControlCreator();
+    ///<summary>
+    /// A delegate definition for creating a <see cref="IControlManager"/>
+    ///</summary>
+    ///<param name="controlFactory"></param>
     public delegate IControlManager ControlManagerCreator(IControlFactory controlFactory);
 
+    ///<summary>
+    /// An abstract class that provides the functionality to Add <see cref="HabaneroMenu"/>.
+    ///</summary>
     public abstract class MenuItemCreator
     {
+        ///<summary>
+        /// Adds a <see cref="HabaneroMenu"/>
+        ///</summary>
+        ///<param name="currentMenu"></param>
+        ///<param name="controlFactory"></param>
         public abstract void AddToMenu(HabaneroMenu currentMenu, IControlFactory controlFactory);
     }
 
+    ///<summary>
+    /// A class for managing a menu including its list of sub menus (other Habanero Menus)
+    ///</summary>
     public class HabaneroMenu
     {
         private readonly List<HabaneroMenu> _submenus = new List<HabaneroMenu>();
         private readonly string _name;
         private readonly IFormHabanero _form;
         private readonly IControlFactory _controlFactory;
-        private readonly List<HabaneroMenu.Item> _menuItems = new List<HabaneroMenu.Item>();
+        private readonly List<Item> _menuItems = new List<Item>();
 
+        ///<summary>
+        /// Constrcutor for <see cref="HabaneroMenu"/>
+        ///</summary>
+        ///<param name="menuName"></param>
         public HabaneroMenu(string menuName) : this(menuName, null, null)
         {
         }
 
+        ///<summary>
+        ///  Constrcutor for <see cref="HabaneroMenu"/>
+        ///</summary>
+        ///<param name="menuName"></param>
+        ///<param name="form"></param>
+        ///<param name="controlFactory"></param>
         public HabaneroMenu(string menuName, IFormHabanero form, IControlFactory controlFactory)
         {
             _name = menuName;
@@ -50,16 +78,25 @@ namespace Habanero.UI.Base
             _controlFactory = controlFactory;
         }
 
+        ///<summary>
+        /// A list of sub Menus for this menu
+        ///</summary>
         public List<HabaneroMenu> Submenus
         {
             get { return _submenus; }
         }
 
+        ///<summary>
+        /// The name of this menu.
+        ///</summary>
         public string Name
         {
             get { return _name; }
         }
 
+        ///<summary>
+        /// A list of <see cref="Item"/>s shown in this menu.
+        ///</summary>
         public List<HabaneroMenu.Item> MenuItems
         {
             get { return _menuItems; }
@@ -70,11 +107,20 @@ namespace Habanero.UI.Base
             get { return _form; }
         }
 
+        ///<summary>
+        /// The <see cref="IControlFactory"/> used to Create controls for this menu.
+        ///</summary>
         public IControlFactory ControlFactory
         {
             get { return _controlFactory; }
         }
 
+        ///<summary>
+        /// Adds a sub menu to this menu. This method creates a new <see cref="HabaneroMenu"/> with the name
+        /// <paramref name="menuName"/> and adds it as a sub menu.
+        ///</summary>
+        ///<param name="menuName"></param>
+        ///<returns></returns>
         public HabaneroMenu AddSubmenu(string menuName)
         {
             HabaneroMenu submenu = new HabaneroMenu(menuName, _form, _controlFactory);
@@ -82,26 +128,41 @@ namespace Habanero.UI.Base
             return submenu;
         }
 
-        public HabaneroMenu.Item AddMenuItem(string menuItemName)
+        ///<summary>
+        /// Adds a MenuItem. Creates a Menu <see cref="Item"/> with the name <paramref name="menuItemName"/>
+        ///</summary>
+        ///<param name="menuItemName"></param>
+        ///<returns></returns>
+        public Item AddMenuItem(string menuItemName)
         {
             HabaneroMenu.Item menuItem = new HabaneroMenu.Item(menuItemName, _form, _controlFactory);
             _menuItems.Add(menuItem);
             return menuItem;
         }
 
+        ///<summary>
+        /// A particular menu item that ????
+        ///</summary>
         public class Item
         {
             private readonly string _name;
             private readonly IControlFactory _controlFactory;
             private readonly IFormHabanero _form;
-            private FormControlCreator _formControlCreator;
-            private EventHandler _customHandler;
-            private ControlManagerCreator _controlManagerCreator;
 
+            ///<summary>
+            /// Consructor for an <see cref="Item"/>
+            ///</summary>
+            ///<param name="name"></param>
             public Item(string name) : this(name, null, null)
             {
      
             }
+            /// <summary>
+            /// Construcotr for an <see cref="Item"/>
+            /// </summary>
+            /// <param name="name"></param>
+            /// <param name="form"></param>
+            /// <param name="controlFactory"></param>
             public Item(string name, IFormHabanero form, IControlFactory controlFactory)
             {
                 _name = name;
@@ -109,34 +170,41 @@ namespace Habanero.UI.Base
                 _form = form;
             }
 
+            ///<summary>
+            /// The menu item name.
+            ///</summary>
             public string Name
             {
                 get { return _name; }
             }
 
-            public FormControlCreator FormControlCreator
-            {
-                get { return _formControlCreator; }
-                set { _formControlCreator = value; }
-            }
+            ///<summary>
+            /// The Creator that creates the form when this menu is selected
+            ///</summary>
+            public FormControlCreator FormControlCreator { get; set; }
 
-            public ControlManagerCreator ControlManagerCreator
-            {
-                get { return _controlManagerCreator; }
-                set { _controlManagerCreator = value; }
-            }
+            ///<summary>
+            /// Gets and sets the <see cref="ControlManagerCreator"/> delegate.
+            ///</summary>
+            public ControlManagerCreator ControlManagerCreator { get; set; }
 
-            public EventHandler CustomHandler
-            {
-                get { return _customHandler; }
-                set { _customHandler = value; }
-            }
+            ///<summary>
+            /// Gets and Sets the CustomHandler that is used when the menu is clicked. This allows
+            /// the developer to hook into this event to imlement custom logic when the menu item is clicked.
+            ///</summary>
+            public EventHandler CustomHandler { get; set; }
 
+            ///<summary>
+            /// Gets the <see cref="IControlFactory"/> that is used to create control for htis menu.
+            ///</summary>
             public IControlFactory ControlFactory
             {
                 get { return _controlFactory; }
             }
 
+            ///<summary>
+            /// Gest the <see cref="IFormHabanero"/> that this menu is associated with
+            ///</summary>
             public IFormHabanero Form
             {
                 get { return _form; }

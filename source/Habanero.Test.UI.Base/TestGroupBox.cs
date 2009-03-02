@@ -50,7 +50,24 @@ namespace Habanero.Test.UI.Base
     /// This test class tests the GroupBox class.
     /// </summary>
     [TestFixture]
-    public class TestGroupBox
+    public class TestGroupBoxVWG
     {
+        protected virtual IControlFactory GetControlFactory()
+        {
+            Habanero.UI.VWG.ControlFactoryVWG factory = new Habanero.UI.VWG.ControlFactoryVWG();
+            GlobalUIRegistry.ControlFactory = factory;
+            return factory;
+        }
     }
+    [TestFixture]
+    public class TestGroupBoxWin
+    {
+        protected virtual IControlFactory GetControlFactory()
+        {
+            Habanero.UI.Win.ControlFactoryWin factory = new Habanero.UI.Win.ControlFactoryWin();
+            GlobalUIRegistry.ControlFactory = factory;
+            return factory;
+        }
+    }
+
 }

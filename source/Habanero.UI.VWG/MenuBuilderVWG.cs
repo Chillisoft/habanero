@@ -24,6 +24,9 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.VWG
 {
+    ///<summary>
+    /// An Implementation of a <see cref="IMenuBuilder"/> for Visual Web Gui
+    ///</summary>
     public class MenuBuilderVWG : IMenuBuilder
     {
         public IMainMenuHabanero BuildMainMenu(HabaneroMenu habaneroMenu)

@@ -30,10 +30,20 @@ namespace Habanero.UI.Base
     public abstract class LayoutManager : MarshalByRefObject
     {
         private IControlHabanero _managedControl;
+        /// <summary>
+        /// The <see cref="IControlFactory"/> used to create any controls required for this layout manager
+        /// </summary>
         protected readonly IControlFactory _controlFactory;
         private int _borderSize = DefaultBorderSize;
         private int _gapSize = DefaultGapSize;
+        /// <summary>
+        /// The default border size used in all layout managers. The Border size is the 
+        /// Gap between the Edge of the parent control and the placement of the control in it.
+        /// </summary>
         public const int DefaultBorderSize = 5;
+        /// <summary>
+        /// The default gap size is the gap between the various controls placed on the parent control
+        /// </summary>
         public const int DefaultGapSize = 2;
 
         /// <summary>
@@ -128,21 +138,38 @@ namespace Habanero.UI.Base
     /// </summary>
     public class LayoutManagerException : HabaneroDeveloperException
     {
+        ///<summary>
+        /// Constructor for <see cref="LayoutManager"/>
+        ///</summary>
+        ///<param name="message"></param>
         public LayoutManagerException(string message)
             : base(message, "")
         {
         }
 
+        ///<summary>
+        /// Constructor for <see cref="LayoutManager"/>
+        ///</summary>
+        ///<param name="info"></param>
+        ///<param name="context"></param>
         public LayoutManagerException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
 
+        ///<summary>
+        /// Constructor for <see cref="LayoutManager"/>
+        ///</summary>
+        ///<param name="message"></param>
+        ///<param name="inner"></param>
         public LayoutManagerException(string message, Exception inner)
             : base(message, "", inner)
         {
         }
 
+        ///<summary>
+        /// Constructor for <see cref="LayoutManager"/>
+        ///</summary>
         public LayoutManagerException()
         {
         }

@@ -29,16 +29,9 @@ namespace Habanero.Test
     public class FilledCircle : Circle
     {
 
-        public static ClassDef GetClassDef()
+        public new static ClassDef GetClassDef()
         {
-            if (!ClassDef.IsDefined(typeof (FilledCircle)))
-            {
-                return CreateClassDef();
-            }
-            else
-            {
-                return ClassDef.ClassDefs[typeof (FilledCircle)];
-            }
+            return !ClassDef.IsDefined(typeof (FilledCircle)) ? CreateClassDef() : ClassDef.ClassDefs[typeof (FilledCircle)];
         }
 
         protected override ClassDef ConstructClassDef()
@@ -47,7 +40,7 @@ namespace Habanero.Test
             return _classDef;
         }
 
-        private static ClassDef CreateClassDef()
+        private new static ClassDef CreateClassDef()
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =

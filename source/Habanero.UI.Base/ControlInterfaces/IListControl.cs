@@ -63,7 +63,7 @@ namespace Habanero.UI.Base
         /// <returns>A zero-based index of the currently selected item.
         /// A value of negative one (-1) is returned if no item is selected.</returns>
         /// <filterpriority>1</filterpriority>
-        [System.ComponentModel.Bindable(true)]
+        [Bindable(true)]
         int SelectedIndex { get; set; }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Habanero.UI.Base
         object SelectedValue { get; set; }
 
         /// <summary>
-        /// Gets or sets the property to use as the actual value for the items in the ListControl</see>
+        /// Gets or sets the property to use as the actual value for the items in the <see cref="IListControl"/>
         /// </summary>
         /// <returns>A <see cref="T:System.String"></see> representing the name of an object property
         /// that is contained in the collection specified by the DataSource property.

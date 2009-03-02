@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.UI.VWG;
@@ -71,10 +70,10 @@ namespace Habanero.Test.UI.Base
                 System.Windows.Forms.Form winForm = (System.Windows.Forms.Form)form;
                 Assert.LessOrEqual(1, winForm.MdiChildren.Length);
                 bool found = false;
-                foreach (Form childForm in winForm.MdiChildren)
+                foreach (System.Windows.Forms.Form childForm in winForm.MdiChildren)
                 {
                     Assert.AreEqual(1, childForm.Controls.Count);
-                    Control childFormControl = childForm.Controls[0];
+                    System.Windows.Forms.Control childFormControl = childForm.Controls[0];
                     if (childFormControl == control)
                     {
                         found = true;
@@ -97,7 +96,7 @@ namespace Habanero.Test.UI.Base
                 HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
     
 
-                menuItem.FormControlCreator += delegate { return new FormControlStubWin(); };
+                menuItem.FormControlCreator += (() => new FormControlStubWin());
                 IMenuBuilder menuBuilder = CreateMenuBuilder();
                 IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
                 menu.DockInForm(habaneroMenu.Form);
@@ -160,7 +159,7 @@ namespace Habanero.Test.UI.Base
                 IControlHabanero contentControl = form.Controls[0];
                 Assert.AreEqual(1, contentControl.Controls.Count);
                 Assert.AreSame(control, contentControl.Controls[0]);
-                Assert.AreEqual(Habanero.UI.Base.DockStyle.Fill, control.Dock);
+                Assert.AreEqual(DockStyle.Fill, control.Dock);
             }
 
             private class FormControlStubVWG : UserControlVWG, IFormControl
@@ -423,8 +422,7 @@ namespace Habanero.Test.UI.Base
             HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
             HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
-            menuItem.CustomHandler += delegate(object sender, EventArgs e)
-            {
+            menuItem.CustomHandler += delegate {
                 throw exception;
             };
             IMenuBuilder menuBuilder = CreateMenuBuilder();
@@ -518,7 +516,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             HabaneroMenu habaneroMenu = CreateHabaneroMenuFullySetup();
             HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
-            HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
+            submenu.AddMenuItem(TestUtil.GetRandomString());
             IMenuBuilder menuBuilder = CreateMenuBuilder();
             IFormHabanero form = habaneroMenu.Form;
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
@@ -539,7 +537,7 @@ namespace Habanero.Test.UI.Base
             HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             IFormControl expectedFormControl = CreateFormControlStub();
-            menuItem.FormControlCreator += delegate { return expectedFormControl; };
+            menuItem.FormControlCreator += (() => expectedFormControl);
             IMenuBuilder menuBuilder = CreateMenuBuilder();
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
             menu.DockInForm(habaneroMenu.Form);
@@ -561,7 +559,7 @@ namespace Habanero.Test.UI.Base
             HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem = submenu.AddMenuItem(TestUtil.GetRandomString());
             IFormControl expectedFormControl = CreateFormControlStub();
-            menuItem.FormControlCreator += delegate { return expectedFormControl; };
+            menuItem.FormControlCreator += (() => expectedFormControl);
             IMenuBuilder menuBuilder = CreateMenuBuilder();
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);
             menu.DockInForm(habaneroMenu.Form);
@@ -588,10 +586,10 @@ namespace Habanero.Test.UI.Base
             HabaneroMenu submenu = habaneroMenu.AddSubmenu(TestUtil.GetRandomString());
             HabaneroMenu.Item menuItem1 = submenu.AddMenuItem(TestUtil.GetRandomString());
             IFormControl expectedFormControl1 = CreateFormControlStub();
-            menuItem1.FormControlCreator += delegate { return expectedFormControl1; };
+            menuItem1.FormControlCreator += (() => expectedFormControl1);
             HabaneroMenu.Item menuItem2 = submenu.AddMenuItem(TestUtil.GetRandomString());
             IFormControl expectedFormControl2 = CreateFormControlStub();
-            menuItem2.FormControlCreator += delegate { return expectedFormControl2; };
+            menuItem2.FormControlCreator += (() => expectedFormControl2);
 
             IMenuBuilder menuBuilder = CreateMenuBuilder();
             IMainMenuHabanero menu = menuBuilder.BuildMainMenu(habaneroMenu);

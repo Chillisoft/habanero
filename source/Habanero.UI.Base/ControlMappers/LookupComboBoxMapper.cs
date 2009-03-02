@@ -72,13 +72,10 @@ namespace Habanero.UI.Base
             //                          };
         }
 
-        //TODO Brett 09 Jan 2009: Fix this with new Lookup list that has an ID Value as well as a Value ID
-        //   Dictionary.
         /// <summary>
         /// Gets and sets the lookup list used to populate the items in the
         /// ComboBox.  This method is typically called by SetupLookupList().
         /// </summary>
-        /// <param name="value">The items used to populate the list</param>
         public override Dictionary<string, string> LookupList
         {
             get { return _collection; }
@@ -102,6 +99,15 @@ namespace Habanero.UI.Base
                 // _comboBox.DropDownWidth = 25;
                 // _comboBox.DropDownWidth = chars;
             }
+        }
+        /// <summary>
+        /// Sets the lookup list to the lookupList Values
+        /// </summary>
+        /// <param name="lookupList"></param>
+        [Obsolete("Use Lookuplist property")]
+        public override void SetupLookupList(Dictionary<string, string> lookupList)
+        {
+            LookupList = lookupList;
         }
 
         ///<summary>

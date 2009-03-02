@@ -30,8 +30,15 @@ namespace Habanero.UI.Base
     /// </summary>
     public class DefaultBOEditor : IBusinessObjectEditor
     {
-        private readonly IControlFactory _controlFactory;
+        /// <summary>
+        /// The Control Factory that is used to create the controls on this Editor.
+        /// </summary>
+        protected readonly IControlFactory _controlFactory;
 
+        ///<summary>
+        /// Constructor for <see cref="DefaultBOEditor"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public DefaultBOEditor(IControlFactory controlFactory)
         {
             _controlFactory = controlFactory;
@@ -47,7 +54,7 @@ namespace Habanero.UI.Base
         /// will use a ui definition with no name attribute specified.</param>
         /// <returns>Returs true if the user chose to save the edits or
         /// false if the user cancelled the edits</returns>
-        public bool EditObject(IBusinessObject obj, string uiDefName)
+        public virtual bool EditObject(IBusinessObject obj, string uiDefName)
         {
             BusinessObject bo = (BusinessObject)obj;
             IDefaultBOEditorForm form = CreateEditorForm(bo, uiDefName);
@@ -65,7 +72,7 @@ namespace Habanero.UI.Base
         /// a grid or a list in an asynchronous environment (E.g. to select the recently edited item in the grid)</param>
         /// <returns>Returs true if edited successfully of false if the edits
         /// were cancelled</returns>
-        public bool EditObject(IBusinessObject obj, string uiDefName, PostObjectEditDelegate postEditAction)
+        public virtual bool EditObject(IBusinessObject obj, string uiDefName, PostObjectEditDelegate postEditAction)
         {
             BusinessObject bo = (BusinessObject)obj;
             IDefaultBOEditorForm form = CreateEditorForm(bo, uiDefName, postEditAction);
@@ -84,8 +91,16 @@ namespace Habanero.UI.Base
         {
             return _controlFactory.CreateBOEditorForm(bo, uiDefName);
         }
-
-        private IDefaultBOEditorForm CreateEditorForm(BusinessObject bo, string uiDefName, PostObjectEditDelegate action)
+        /// <summary>
+        /// Creates a form in which a business object can be edited
+        /// </summary>
+        /// <param name="bo">The business object to edit</param>
+        /// <param name="uiDefName">The name of the set of ui definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a ui definition with no name attribute specified.</param>
+        /// <param name="action"></param>
+        /// <returns>Returns a DefaultBOEditorForm object</returns>
+        protected virtual IDefaultBOEditorForm CreateEditorForm(BusinessObject bo, string uiDefName, PostObjectEditDelegate action)
         {
             return _controlFactory.CreateBOEditorForm(bo, uiDefName, action);
         }

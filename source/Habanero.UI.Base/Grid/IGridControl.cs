@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
+using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
@@ -25,7 +26,7 @@ namespace Habanero.UI.Base
     /// Provides a combination of grid, filter and buttons used to edit a
     /// collection of business objects
     /// </summary>
-    public interface IGridControl : IControlHabanero
+    public interface IGridControl : IBOSelector //IControlHabanero
     {
         /// <summary>
         /// Initiliases the grid structure using the default UI class definition (implicitly named "default")
@@ -41,13 +42,13 @@ namespace Habanero.UI.Base
         void Initialise(IClassDef classDef, string uiDefName);
 
         /// <summary>
-        /// Gets and sets the UI definition used to initialise the grid structure (the UI name is indicated
-        /// by the "name" attribute on the UI element in the class definitions
+        /// Gets and sets the name of the UI definition <see cref="UIDef"/> used to initialise the grid structure (the UI name is indicated
+        /// by the "name" attribute on the UI element in the class definitions (<see cref="IClassDef"/>)
         /// </summary>
         string UiDefName { get; set; }
 
         /// <summary>
-        /// Gets and sets the class definition used to initialise the grid structure
+        /// Gets and sets the class definition ((<see cref="IClassDef"/>) used to initialise the grid structure
         /// </summary>
         IClassDef ClassDef { get; set;}
 

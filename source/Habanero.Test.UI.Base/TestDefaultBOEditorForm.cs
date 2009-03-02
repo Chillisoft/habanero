@@ -23,27 +23,30 @@ using Habanero.BO.ClassDefinition;
 using Habanero.Console;
 using Habanero.DB;
 using Habanero.UI.Base;
+using Habanero.UI.VWG;
+using Habanero.UI.Win;
 using NMock;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
     /// <summary>
-    /// Summary description for TestDefaultBOEditory.
+    /// Summary description for TestDefaultBOEditorForm.
     /// </summary>
-    public abstract class TestDefaultBOEditorForm : TestUsingDatabase
+    [TestFixture]
+    public class TestDefaultBOEditorForm : TestUsingDatabase
     {
-        protected abstract IControlFactory GetControlFactory();
+        protected virtual IControlFactory GetControlFactory()
+        {
+            ControlFactoryWin factory = new Habanero.UI.Win.ControlFactoryWin();
+            GlobalUIRegistry.ControlFactory = factory;
+            return factory;
+        }
         //private IDatabaseConnection _conn;
 
         [TestFixture]
         public class TestDefaultBOEditorFormWin : TestDefaultBOEditorForm
         {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new Habanero.UI.Win.ControlFactoryWin();
-            }
-
             [Test]
             public void TestLayout()
             {
@@ -165,7 +168,9 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.VWG.ControlFactoryVWG();
+                ControlFactoryVWG factory = new Habanero.UI.VWG.ControlFactoryVWG();
+                GlobalUIRegistry.ControlFactory =factory;
+                return factory;
             }
 
             //Create a duplicate for win
@@ -214,7 +219,56 @@ namespace Habanero.Test.UI.Base
             _bo = _classDefMyBo.CreateNewBusinessObject();
             _defaultBOEditorForm = GetControlFactory().CreateBOEditorForm((BusinessObject) _bo);
         }
-
+        [Test]
+        public void Test_Construct_ShouldConstructWithDefaultConstructor()
+        {
+            //---------------Set up test pack-------------------
+            IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IDefaultBOEditorForm defaultBOEditorForm = GetControlFactory().CreateBOEditorForm((BusinessObject)bo);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(defaultBOEditorForm.PanelInfo);
+            Assert.IsNotNull(defaultBOEditorForm.GroupControlCreator);
+        }
+        [Test]
+        public void Test_AlternateConstruct_ShouldConstructWithDefaultConstructor()
+        {
+            //---------------Set up test pack-------------------
+            IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IDefaultBOEditorForm defaultBOEditorForm = GetControlFactory().CreateBOEditorForm((BusinessObject)bo,"default");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(defaultBOEditorForm.PanelInfo);
+            Assert.IsNotNull(defaultBOEditorForm.GroupControlCreator);
+        }
+        [Test]
+        public void Test_AlternateConstruct_2_ShouldConstructWithDefaultConstructor()
+        {
+            //---------------Set up test pack-------------------
+            IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IDefaultBOEditorForm defaultBOEditorForm = GetControlFactory().CreateBOEditorForm((BusinessObject)bo,"default", delegate {  });
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(defaultBOEditorForm.PanelInfo);
+            Assert.IsNotNull(defaultBOEditorForm.GroupControlCreator);
+        }
+        [Test]
+        public void Test_Constructor_WithGroupCreator()
+        {
+            //---------------Set up test pack-------------------
+            IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject();
+            GroupControlCreator groupControl = GetControlFactory().CreateCollapsiblePanelGroupControl;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            IDefaultBOEditorForm defaultBOEditorForm = GetControlFactory().CreateBOEditorForm((BusinessObject)bo,"default",  groupControl);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(defaultBOEditorForm.PanelInfo);
+            Assert.IsNotNull(defaultBOEditorForm.GroupControlCreator);
+            Assert.AreSame(groupControl, defaultBOEditorForm.GroupControlCreator);
+        }
         #region Utility Methods
 
         private void PrepareMockForSave()

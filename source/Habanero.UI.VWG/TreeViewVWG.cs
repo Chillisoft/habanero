@@ -138,7 +138,7 @@ namespace Habanero.UI.VWG
             set { _topNode = value; }
         }
 
-        public ITreeNode SelectedNode
+        public new ITreeNode SelectedNode
         {
             get { return GetITreeNode(base.SelectedNode); }
             set { base.SelectedNode = GetTreeNode(value); }
@@ -159,12 +159,12 @@ namespace Habanero.UI.VWG
                 set { _originalNode.Text = value; }
             }
 
-            public ITreeNode Parent
+            public new ITreeNode Parent
             {
                 get { return GetITreeNode(_originalNode.Parent); }
             }
 
-            public ITreeNodeCollection Nodes
+            public new ITreeNodeCollection Nodes
             {
                 get { return new TreeNodeCollectionVWG(_originalNode.Nodes); }
             }

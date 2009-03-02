@@ -45,26 +45,38 @@ namespace Habanero.UI.Win
 
         public event EventHandler<BOEventArgs<IBusinessObject>> BusinessObjectSelected;
 
+        ///<summary>
+        /// Constructor for the <see cref="GridAndBOEditorControlWin"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="classDef"></param>
+        ///<param name="uiDefName"></param>
+        ///<exception cref="ArgumentNullException"></exception>
         public GridAndBOEditorControlWin(IControlFactory controlFactory, ClassDef classDef, string uiDefName)
         {
             if (controlFactory == null) throw new ArgumentNullException("controlFactory");
             if (classDef == null) throw new ArgumentNullException("classDef");
             _classDef = classDef;
-            BusinessObjectControl businessObjectControl = new BusinessObjectControl(controlFactory, classDef, uiDefName);
+            BusinessObjectControlWin businessObjectControl = new BusinessObjectControlWin(controlFactory, classDef, uiDefName);
             SetupGridAndBOEditorControlWin(controlFactory, businessObjectControl, uiDefName);
         }
 
+        ///<summary>
+        /// Constructor for the <see cref="GridAndBOEditorControlWin"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="businessObjectControl"></param>
         public GridAndBOEditorControlWin(IControlFactory controlFactory, IBusinessObjectControlWithErrorDisplay businessObjectControl)
             : this(controlFactory, businessObjectControl, "default")
         {
         }
 
-        public GridAndBOEditorControlWin(IControlFactory controlFactory, IBusinessObjectControlWithErrorDisplay businessObjectControl, IBusinessObject businessObject)
-            :this(controlFactory,businessObjectControl,"default")
-        {
-            
-        }
-
+        ///<summary>
+        /// Constructor for the <see cref="GridAndBOEditorControlWin"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="businessObjectControl"></param>
+        ///<param name="gridUiDefName"></param>
         public GridAndBOEditorControlWin(IControlFactory controlFactory, IBusinessObjectControlWithErrorDisplay businessObjectControl, string gridUiDefName)
         {
             SetupGridAndBOEditorControlWin(controlFactory, businessObjectControl, gridUiDefName);
@@ -103,6 +115,12 @@ namespace Habanero.UI.Win
             _newButton.Enabled = false;
         }
 
+        ///<summary>
+        /// Returns the Total width of the Selector. <see cref="IGridBase"/>. This is used so that the 
+        ///   Selector and BOEditor can be layed out.
+        ///</summary>
+        ///<param name="grid"></param>
+        ///<returns></returns>
         public static int GetGridWidthToFitColumns(IGridBase grid)
         {
             int width = 0;
@@ -217,7 +235,7 @@ namespace Habanero.UI.Win
             if (currentBO.Status.IsNew)
             {
                 _lastSelectedBusinessObject = null;
-                _readOnlyGridControl.Grid.GetBusinessObjectCollection().Remove(currentBO);
+                _readOnlyGridControl.Grid.BusinessObjectCollection.Remove(currentBO);
                 SelectLastRowInGrid();
             }
             else
@@ -231,6 +249,9 @@ namespace Habanero.UI.Win
             RefreshGrid();
         }
 
+        ///<summary>
+        /// Refreshes the Selector control (i.e. the 
+        ///</summary>
         public void RefreshGrid()
         {
             RemoveGridSelectionChangedEvent();
@@ -238,11 +259,17 @@ namespace Habanero.UI.Win
             AddGridSelectionChangedEvent();
         }
 
-        public void AddGridSelectionChangedEvent()
+        ///<summary>
+        /// Adds the <see cref="GridSelectionChanged"/> Event Handler to the <see cref="IDataGridView.SelectionChanged"/> event
+        ///</summary>
+        internal void AddGridSelectionChangedEvent()
         {
             _readOnlyGridControl.Grid.SelectionChanged += GridSelectionChanged;
         }
 
+        ///<summary>
+        /// Removes the <see cref="GridSelectionChanged"/> Event Handler from the <see cref="IDataGridView.SelectionChanged"/> event
+        ///</summary>
         public void RemoveGridSelectionChangedEvent()
         {
             _readOnlyGridControl.Grid.SelectionChanged -= GridSelectionChanged;
@@ -292,7 +319,7 @@ namespace Habanero.UI.Win
                 currentBO.Save();
             }
 
-            IBusinessObjectCollection collection = _readOnlyGridControl.Grid.GetBusinessObjectCollection();
+            IBusinessObjectCollection collection = _readOnlyGridControl.Grid.BusinessObjectCollection;
             _readOnlyGridControl.Grid.SelectionChanged -= GridSelectionChanged;
             _newBO = collection.CreateBusinessObject();
             // _readOnlyGridControl.Grid.GetBusinessObjectCollection().Add(businessObject);
@@ -352,6 +379,9 @@ namespace Habanero.UI.Win
             get { return _readOnlyGridControl.SelectedBusinessObject; }
         }
 
+        ///<summary>
+        /// Gets and Sets the currently selected business object
+        ///</summary>
         public IBusinessObject CurrentBusinessObject
         {
             get { return _readOnlyGridControl.SelectedBusinessObject; }
@@ -373,7 +403,6 @@ namespace Habanero.UI.Win
         where TBusinessObject : class, IBusinessObject
     {
         private IControlFactory _controlFactory;
-        private IBusinessObjectControlWithErrorDisplay _businessObjectControl;
         private IReadOnlyGridControl _readOnlyGridControl;
         private IButtonGroupControl _buttonGroupControl;
         private IButton _newButton;
@@ -383,23 +412,45 @@ namespace Habanero.UI.Win
 
         public event EventHandler<BOEventArgs<TBusinessObject>> BusinessObjectSelected;
 
+        ///<summary>
+        /// Constructor for <see cref="GridAndBOEditorControlWin"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="uiDefName"></param>
         public GridAndBOEditorControlWin(IControlFactory controlFactory, string uiDefName)
         {
-            BusinessObjectControl<TBusinessObject> businessObjectControl = new BusinessObjectControl<TBusinessObject>(controlFactory, uiDefName);
+            BusinessObjectControlWin<TBusinessObject> businessObjectControl = new BusinessObjectControlWin<TBusinessObject>(controlFactory, uiDefName);
             SetupGridAndBOEditorControlWin(controlFactory, businessObjectControl, uiDefName);
         }
 
+        ///<summary>
+        ///  Constructor for <see cref="GridAndBOEditorControlWin"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="businessObjectControl"></param>
         public GridAndBOEditorControlWin(IControlFactory controlFactory, IBusinessObjectControlWithErrorDisplay businessObjectControl)
             : this(controlFactory, businessObjectControl, "default")
         {
         }
 
-        public GridAndBOEditorControlWin(IControlFactory controlFactory, IBusinessObjectControlWithErrorDisplay businessObjectControl, IBusinessObject businessObject)
-            :this(controlFactory,businessObjectControl,"default")
-        {
-            
-        }
+//        ///<summary>
+//        ///  Constructor for <see cref="GridAndBOEditorControlWin"/>
+//        ///</summary>
+//        ///<param name="controlFactory"></param>
+//        ///<param name="businessObjectControl"></param>
+//        ///<param name="businessObject"></param>
+//        public GridAndBOEditorControlWin(IControlFactory controlFactory, IBusinessObjectControlWithErrorDisplay businessObjectControl, IBusinessObject businessObject)
+//            :this(controlFactory,businessObjectControl,"default")
+//        {
+//            
+//        }
 
+        ///<summary>
+        ///  Constructor for <see cref="GridAndBOEditorControlWin"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="businessObjectControl"></param>
+        ///<param name="gridUiDefName"></param>
         public GridAndBOEditorControlWin(IControlFactory controlFactory, IBusinessObjectControlWithErrorDisplay businessObjectControl, string gridUiDefName)
         {
             SetupGridAndBOEditorControlWin(controlFactory, businessObjectControl, gridUiDefName);
@@ -411,7 +462,7 @@ namespace Habanero.UI.Win
             if (businessObjectControl == null) throw new ArgumentNullException("businessObjectControl");
 
             _controlFactory = controlFactory;
-            _businessObjectControl = businessObjectControl;
+            this.BusinessObjectControl = businessObjectControl;
 
             SetupReadOnlyGridControl(gridUiDefName);
             SetupButtonGroupControl();
@@ -419,7 +470,7 @@ namespace Habanero.UI.Win
 
             BorderLayoutManager layoutManager = _controlFactory.CreateBorderLayoutManager(this);
             layoutManager.AddControl(_readOnlyGridControl, BorderLayoutManager.Position.West);
-            layoutManager.AddControl(_businessObjectControl, BorderLayoutManager.Position.Centre);
+            layoutManager.AddControl(BusinessObjectControl, BorderLayoutManager.Position.Centre);
             layoutManager.AddControl(_buttonGroupControl, BorderLayoutManager.Position.South);
 
             _readOnlyGridControl.Grid.BusinessObjectSelected +=
@@ -503,7 +554,7 @@ namespace Habanero.UI.Win
             {
                 if (!_lastSelectedBusinessObject.IsValid())
                 {
-                    _businessObjectControl.DisplayErrors();
+                    this.BusinessObjectControl.DisplayErrors();
                     _readOnlyGridControl.SelectedBusinessObject = _lastSelectedBusinessObject;
                     return false;
                 }
@@ -514,7 +565,7 @@ namespace Habanero.UI.Win
         private void SetSelectedBusinessObject()
         {
             TBusinessObject businessObject = CurrentBusinessObject;
-            _businessObjectControl.BusinessObject = businessObject;
+            this.BusinessObjectControl.BusinessObject = businessObject;
             if (businessObject != null)
             {
                 businessObject.PropertyUpdated += PropertyUpdated;
@@ -542,7 +593,7 @@ namespace Habanero.UI.Win
             if (currentBO.Status.IsNew)
             {
                 _lastSelectedBusinessObject = null;
-                _readOnlyGridControl.Grid.GetBusinessObjectCollection().Remove(currentBO);
+                _readOnlyGridControl.Grid.BusinessObjectCollection.Remove(currentBO);
                 SelectLastRowInGrid();
             }
             else
@@ -556,6 +607,9 @@ namespace Habanero.UI.Win
             RefreshGrid();
         }
 
+        ///<summary>
+        /// Refreshes the Grid. I.e. Reloads the collection from the Datastore
+        ///</summary>
         public void RefreshGrid()
         {
             RemoveGridSelectionChangedEvent();
@@ -563,11 +617,17 @@ namespace Habanero.UI.Win
             AddGridSelectionChangedEvent();
         }
 
-        public void AddGridSelectionChangedEvent()
+        ///<summary>
+        /// Adds the <see cref="GridSelectionChanged"/> Event Handler to the <see cref="IDataGridView.SelectionChanged"/> event
+        ///</summary>
+        internal void AddGridSelectionChangedEvent()
         {
             _readOnlyGridControl.Grid.SelectionChanged += GridSelectionChanged;
         }
 
+        ///<summary>
+        /// Removes the <see cref="GridSelectionChanged"/> Event Handler from the <see cref="IDataGridView.SelectionChanged"/> event
+        ///</summary>
         public void RemoveGridSelectionChangedEvent()
         {
             _readOnlyGridControl.Grid.SelectionChanged -= GridSelectionChanged;
@@ -591,11 +651,11 @@ namespace Habanero.UI.Win
             }
             else
             {
-                _businessObjectControl.Enabled = false;
+                this.BusinessObjectControl.Enabled = false;
                 _deleteButton.Enabled = false;
                 _cancelButton.Enabled = false;
             }
-            _businessObjectControl.Enabled = selectedBusinessObjectNotNull;
+            this.BusinessObjectControl.Enabled = selectedBusinessObjectNotNull;
         }
 
         /// <summary>
@@ -610,13 +670,13 @@ namespace Habanero.UI.Win
             {
                 if (!currentBO.IsValid())
                 {
-                    _businessObjectControl.DisplayErrors();
+                    this.BusinessObjectControl.DisplayErrors();
                     return;
                 }
                 currentBO.Save();
             }
 
-            IBusinessObjectCollection collection = _readOnlyGridControl.Grid.GetBusinessObjectCollection();
+            IBusinessObjectCollection collection = _readOnlyGridControl.Grid.BusinessObjectCollection;
             _readOnlyGridControl.Grid.SelectionChanged -= GridSelectionChanged;
             IBusinessObject businessObject = collection.CreateBusinessObject();
             UpdateControlEnabledState();
@@ -624,8 +684,8 @@ namespace Habanero.UI.Win
             _readOnlyGridControl.SelectedBusinessObject = businessObject;
             _readOnlyGridControl.Grid.SelectionChanged += GridSelectionChanged;
             GridSelectionChanged(null, null);
-            _businessObjectControl.Focus();
-            _businessObjectControl.ClearErrors();
+            this.BusinessObjectControl.Focus();
+            this.BusinessObjectControl.ClearErrors();
             _cancelButton.Enabled = true;
         }
 
@@ -659,10 +719,7 @@ namespace Habanero.UI.Win
             get { return _readOnlyGridControl; }
         }
 
-        public IBusinessObjectControlWithErrorDisplay BusinessObjectControl
-        {
-            get { return _businessObjectControl; }
-        }
+        public IBusinessObjectControlWithErrorDisplay BusinessObjectControl { get; private set; }
 
         ///<summary>
         /// Returns the <see cref="IButtonGroupControl"/> for the 

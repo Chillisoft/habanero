@@ -127,12 +127,6 @@ namespace Habanero.UI.Base
         void Refresh();
 
         /// <summary>
-        /// Sets input focus to the Form
-        /// </summary>
-        /// <returns>true if the input focus request was successful; otherwise, false</returns>
-        bool Focus();
-
-        /// <summary>
         /// Forces the form to apply layout logic to all its child controls
         /// </summary>
         void PerformLayout();

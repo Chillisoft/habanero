@@ -20,7 +20,6 @@
 using System;
 using System.Collections;
 using System.Drawing;
-using Habanero.UI;
 
 namespace Habanero.UI.Base
 {
@@ -35,15 +34,16 @@ namespace Habanero.UI.Base
     {
         private Hashtable _formsbyHeading;
         private Hashtable _formsbyForm;
-        private IFormHabanero _parentForm;
+        private readonly IFormHabanero _parentForm;
         private readonly IControlFactory _controlFactory;
-        private float _fontSize = 0.0f;
+        private float _fontSize;
         
         /// <summary>
         /// Constructor to initialise a new controller
         /// </summary>
         /// <param name="parentForm">The parent form</param>
-        public FormController(IFormHabanero parentForm, IControlFactory controlFactory)
+        /// <param name="controlFactory"></param>
+        protected FormController(IFormHabanero parentForm, IControlFactory controlFactory)
         {
             _parentForm = parentForm;
             _controlFactory = controlFactory;
@@ -81,31 +81,28 @@ namespace Habanero.UI.Base
                 frm.PerformLayout();
                 return (IFormControl)frm.Controls[0];
             }
-            else
-            {
-                IFormControl formCtl = GetFormControl(heading);
+            IFormControl formCtl = GetFormControl(heading);
 
-                IFormHabanero newMdiForm = _controlFactory.CreateForm();
-                newMdiForm.Width = 800;
-                newMdiForm.Height = 600;
-                newMdiForm.MdiParent = _parentForm;
-                newMdiForm.WindowState = FormWindowState.Maximized;
+            IFormHabanero newMdiForm = _controlFactory.CreateForm();
+            newMdiForm.Width = 800;
+            newMdiForm.Height = 600;
+            newMdiForm.MdiParent = _parentForm;
+            newMdiForm.WindowState = FormWindowState.Maximized;
 
-                //IControlHabanero ctl = formCtl;
+            //IControlHabanero ctl = formCtl;
        
-                newMdiForm.Text = heading;
-                newMdiForm.Controls.Clear();
-                         BorderLayoutManager layoutManager = _controlFactory.CreateBorderLayoutManager(newMdiForm);
+            newMdiForm.Text = heading;
+            newMdiForm.Controls.Clear();
+            BorderLayoutManager layoutManager = _controlFactory.CreateBorderLayoutManager(newMdiForm);
 
-                layoutManager.AddControl((IControlHabanero) formCtl, BorderLayoutManager.Position.Centre);
-                newMdiForm.Show();
-                _formsbyHeading.Add(heading, newMdiForm);
-                _formsbyForm.Add(newMdiForm, heading);
-                formCtl.SetForm(newMdiForm);
-                newMdiForm.Closed += MdiFormClosed;
+            layoutManager.AddControl((IControlHabanero) formCtl, BorderLayoutManager.Position.Centre);
+            newMdiForm.Show();
+            _formsbyHeading.Add(heading, newMdiForm);
+            _formsbyForm.Add(newMdiForm, heading);
+            formCtl.SetForm(newMdiForm);
+            newMdiForm.Closed += MdiFormClosed;
 
-                return formCtl;
-            }
+            return formCtl;
         }
 
         /// <summary>
@@ -123,14 +120,7 @@ namespace Habanero.UI.Base
         protected IControlHabanero GetControl(string heading)
         {
             IFormHabanero frm = (IFormHabanero)this._formsbyHeading[heading];
-            if (frm != null)
-            {
-                return frm.Controls[0];
-            }
-            else
-            {
-                return null;
-            }
+            return frm != null ? frm.Controls[0] : null;
         }
 
         /// <summary>

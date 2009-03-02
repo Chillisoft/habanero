@@ -25,6 +25,9 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
+    ///<summary>
+    /// 
+    ///</summary>
     public class MenuBuilderWin : IMenuBuilder
     {
 
@@ -57,7 +60,7 @@ namespace Habanero.UI.Win
     }
     
     ///<summary>
-    /// The standard windows main menu structure object.
+    /// The standard windows main menu structure object. <see cref="MainMenu"/>
     ///</summary>
     internal class MainMenuWin : MainMenu, IMainMenuHabanero
     {
@@ -80,7 +83,7 @@ namespace Habanero.UI.Win
         //}
 
         ///<summary>
-        /// The collection of menu items for this menu
+        /// The collection of menu items for this menu <see cref="Menu.MenuItemCollection"/>
         ///</summary>
         public new IMenuItemCollection MenuItems
         {
@@ -99,7 +102,9 @@ namespace Habanero.UI.Win
             formWin.Menu = this;
         }
     }
-
+    /// <summary>
+    /// A menuItems Collection representing the <see cref="Menu.MenuItemCollection"/>
+    /// </summary>
     internal class MenuItemCollectionWin : IMenuItemCollection
     {
         private readonly Menu.MenuItemCollection _menuItemCollection;

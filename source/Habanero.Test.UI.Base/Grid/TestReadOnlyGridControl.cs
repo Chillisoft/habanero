@@ -661,7 +661,7 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
-            gridControl.Grid.SetBusinessObjectCollection(col);
+            gridControl.Grid.BusinessObjectCollection = col;
             //---------------Test Result -----------------------
             Assert.IsInstanceOfType(typeof (ReadOnlyDataSetProvider), gridControl.Grid.DataSetProvider);
             //---------------Tear Down -------------------------          
@@ -679,7 +679,7 @@ namespace Habanero.Test.UI.Base
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
-            gridControl.Grid.SetBusinessObjectCollection(col);
+            gridControl.Grid.BusinessObjectCollection = col;
             //---------------Test Result -----------------------
             Assert.IsTrue(gridControl.Grid.ReadOnly);
             Assert.IsFalse(gridControl.Grid.AllowUserToAddRows);
@@ -745,7 +745,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             //MyBO.LoadDefaultClassDef();
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
-            IReadOnlyGrid readOnlyGrid = (IReadOnlyGrid) readOnlyGridControl.Grid;
+            IReadOnlyGrid readOnlyGrid = readOnlyGridControl.Grid;
 
             //---------------Execute Test ----------------------
             readOnlyGrid.Columns.Add("TestProp", "TestProp");
@@ -1005,7 +1005,7 @@ namespace Habanero.Test.UI.Base
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl(true);
 
             AddControlToForm(readOnlyGridControl);
-            IReadOnlyGrid readOnlyGrid = (IReadOnlyGrid) readOnlyGridControl.Grid;
+            IReadOnlyGrid readOnlyGrid = readOnlyGridControl.Grid;
 
             readOnlyGrid.Columns.Add("TestProp", "TestProp");
             //---------------Execute Test ----------------------
@@ -1081,7 +1081,7 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Preconditions ----------------------
             Assert.IsTrue(originalDefaultBoCreator is DefaultBOCreator);
             Assert.AreNotSame(col, col2);
-            Assert.AreEqual(col, readOnlyGridControl.Grid.GetBusinessObjectCollection());
+            Assert.AreEqual(col, readOnlyGridControl.Grid.BusinessObjectCollection);
             //---------------Execute Test ----------------------
 
             readOnlyGridControl.SetBusinessObjectCollection(col2);
@@ -1740,7 +1740,6 @@ namespace Habanero.Test.UI.Base
             IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows_ClassDefAlreadyLoaded(out col, true);
             //AddControlToForm(readOnlyGridControl);
             IButton addButton = readOnlyGridControl.Buttons["Add"];
-            IButton editButton = readOnlyGridControl.Buttons["Edit"];
             MyBO myEditedBo = null;
             readOnlyGridControl.BusinessObjectEditor = new DelegatedBusinessObjectEditor<MyBO>(
                 delegate(MyBO obj, string uiDefName, PostObjectEditDelegate postEditAction)
@@ -1841,10 +1840,7 @@ namespace Habanero.Test.UI.Base
             //Get Grid with 4 items
             BusinessObjectCollection<MyBO> col;
             IReadOnlyGridControl readOnlyGridControl = GetGridWith_4_Rows(out col, true);
-            readOnlyGridControl.BusinessObjectCreator = new DelegatedBusinessObjectCreator<MyBO>(delegate
-            {
-                return new MyBO();
-            });
+            readOnlyGridControl.BusinessObjectCreator = new DelegatedBusinessObjectCreator<MyBO>(() => new MyBO());
             //AddControlToForm(readOnlyGridControl);
             IButton button = readOnlyGridControl.Buttons["Add"];
             MyBO myNewBo = null;
@@ -1961,18 +1957,17 @@ namespace Habanero.Test.UI.Base
             return classDef;
         }
 
-        private ClassDef LoadMyBoClassDef_NonGuidID()
+        private void LoadMyBoClassDef_NonGuidID()
         {
-            ClassDef classDef;
             if (GetControlFactory() is Habanero.UI.VWG.ControlFactoryVWG)
             {
-                classDef = MyBO.LoadClassDefVWG_NonGuidID();
+                MyBO.LoadClassDefVWG_NonGuidID();
             }
             else
             {
-                classDef = MyBO.LoadClassDef_NonGuidID();
+                MyBO.LoadClassDef_NonGuidID();
             }
-            return classDef;
+            return;
         }
 
         #region stubs
@@ -2152,7 +2147,7 @@ namespace Habanero.Test.UI.Base
             return readOnlyGridControl;
         }
 
-        private static void SetupGridColumnsForMyBo(IGridBase gridBase)
+        private static void SetupGridColumnsForMyBo(IDataGridView gridBase)
         {
             gridBase.Columns.Add("TestProp", "TestProp");
         }

@@ -17,13 +17,9 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using DialogResult = Habanero.UI.Base.DialogResult;
-using MessageBoxButtons = Habanero.UI.Base.MessageBoxButtons;
-using MessageBoxIcon = Habanero.UI.Base.MessageBoxIcon;
 
 namespace Habanero.UI.VWG
 {
@@ -49,8 +45,13 @@ namespace Habanero.UI.VWG
     public class GridWithPanelControlVWG<TBusinessObject> : UserControlVWG, IGridWithPanelControl<TBusinessObject>
         where TBusinessObject : class, IBusinessObject, new()
     {
-        private GridWithPanelControlManager<TBusinessObject> _gridWithPanelControlManager;
+        private readonly GridWithPanelControlManager<TBusinessObject> _gridWithPanelControlManager;
         
+        ///<summary>
+        /// Constructor for <see cref="GridWithPanelControlVWG{TBusinessObject}"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="uiDefName"></param>
         public GridWithPanelControlVWG(IControlFactory controlFactory, string uiDefName)
         {
             IBusinessObjectControl businessObjectControl = new BusinessObjectPanelVWG<TBusinessObject>(controlFactory, uiDefName);
@@ -59,11 +60,22 @@ namespace Habanero.UI.VWG
             //SetupControl(controlFactory, businessObjectControl, uiDefName);
             _gridWithPanelControlManager.GridWithPanelControlStrategy = new GridWithPanelControlStrategyVWG<TBusinessObject>(this);
         }
+        ///<summary>
+        /// Constructor for <see cref="GridWithPanelControlVWG{TBusinessObject}"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="businessObjectControl"></param>
         public GridWithPanelControlVWG(IControlFactory controlFactory, IBusinessObjectControl businessObjectControl)
             : this(controlFactory, businessObjectControl, "default")
         {
         }
 
+        ///<summary>
+        /// Constructor for <see cref="GridWithPanelControlVWG{TBusinessObject}"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="businessObjectControl"></param>
+        ///<param name="uiDefName"></param>
         public GridWithPanelControlVWG(IControlFactory controlFactory, IBusinessObjectControl businessObjectControl, string uiDefName)
         {
             _gridWithPanelControlManager = new GridWithPanelControlManager<TBusinessObject>(this, controlFactory, businessObjectControl, uiDefName);
@@ -117,6 +129,9 @@ namespace Habanero.UI.VWG
             get { return _gridWithPanelControlManager.Buttons; }
         }
 
+        ///<summary>
+        /// Returns the <see cref="IBusinessObject"/> of type TBusinessObject.
+        ///</summary>
         public TBusinessObject CurrentBusinessObject
         {
             get { return _gridWithPanelControlManager.CurrentBusinessObject; }
@@ -147,6 +162,11 @@ namespace Habanero.UI.VWG
     {
         private IPanelInfo _panelInfo;
 
+        ///<summary>
+        /// Constructor for <see cref="BusinessObjectPanelVWG{T}"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="uiDefName"></param>
         public BusinessObjectPanelVWG(IControlFactory controlFactory, string uiDefName)
         {
             PanelBuilder panelBuilder = new PanelBuilder(controlFactory);
@@ -179,8 +199,12 @@ namespace Habanero.UI.VWG
     /// </summary>
     public class GridWithPanelControlStrategyVWG<TBusinessObject> : IGridWithPanelControlStrategy<TBusinessObject>
     {
-        private IGridWithPanelControl<TBusinessObject> _gridWithPanelControl;
+        private readonly IGridWithPanelControl<TBusinessObject> _gridWithPanelControl;
 
+        ///<summary>
+        /// Constructor for <see cref="GridWithPanelControlStrategyVWG{TBusinessObject}"/>
+        ///</summary>
+        ///<param name="gridWithPanelControl"></param>
         public GridWithPanelControlStrategyVWG(IGridWithPanelControl<TBusinessObject> gridWithPanelControl)
         {
             _gridWithPanelControl = gridWithPanelControl;
@@ -193,7 +217,7 @@ namespace Habanero.UI.VWG
         /// <param name="lastSelectedBusinessObject">The previous selected business
         /// object in the grid - used to revert when a user tries to change a grid
         /// row while an object is dirty or invalid</param>
-        public void UpdateControlEnabledState(IBusinessObject lastSelectedBusinessObject)
+        public void UpdateControlEnabledState(TBusinessObject lastSelectedBusinessObject)
         {
             IButton cancelButton = _gridWithPanelControl.Buttons["Cancel"];
             IButton deleteButton = _gridWithPanelControl.Buttons["Delete"];
@@ -229,7 +253,8 @@ namespace Habanero.UI.VWG
         /// Indicates whether PanelInfo.ApplyChangesToBusinessObject needs to be
         /// called to copy control values to the business object.  This will be
         /// the case if the application uses minimal events and does not update
-        /// the BO every time a control value changes.
+        /// the BO every time a control value changes. This is typically the case with
+        /// Web applications e.g. Visual Web Gui but could be used for Windows apps if required.
         /// </summary>
         public bool CallApplyChangesToEditBusinessObject
         {
@@ -238,8 +263,13 @@ namespace Habanero.UI.VWG
 
         /// <summary>
         /// Indicates whether the grid should be refreshed.  For instance, a VWG
-        /// implementation needs regular refreshes due to the lack of synchronisation,
-        /// but this behaviour has some adverse affects in the WinForms implementation
+        /// implementation needs regular refreshes due to the lack of synchronisation. I.e.
+        /// the model changes on the server are not pushed to the user interface in an 
+        /// individual browser. In a windows forms or other rich client application this is 
+        /// not necessary.
+        /// In windows Refreshing the grid regularly will therefore 
+        /// actually deteriorate the application performance since changes to the business object
+        /// model propogate themselves through the application.
         /// </summary>
         public bool RefreshGrid
         {

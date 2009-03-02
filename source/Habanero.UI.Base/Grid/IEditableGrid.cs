@@ -17,14 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Habanero.BO.ClassDefinition;
-
 namespace Habanero.UI.Base
 {
-
     /// <summary>
     /// Checks whether the user wants to delete selected rows
     /// </summary>
@@ -53,7 +47,7 @@ namespace Habanero.UI.Base
     /// to save the changes they have made, and all changes will be lost if the form
     /// is closed and changes are not saved programmatically.  Either carry out a dirty check when the
     /// parent form is closed and take appropriate save action using SaveChanges(), or use an
-    /// IEditableGridControl, which provides Save and Cancel buttons. 
+    /// <see cref="IEditableGridControl"/> , which provides Save and Cancel buttons. 
     /// </summary>
     public interface IEditableGrid : IGridBase
     {

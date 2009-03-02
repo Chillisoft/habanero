@@ -68,10 +68,16 @@
     <Compile Include="CheckBoxVWG.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CollapsiblePanelSelectorVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CollapsiblePanel\CollapsiblePanelGroupControlVWG.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ComboBoxAutoCompleteModeVWG.cs" />
+    <Compile Include="ComboBoxSelectorVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ComboBoxVWG.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -141,6 +147,9 @@
     <Compile Include="Grid\ReadOnlyGridVWG.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GroupBoxGroupControlVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GroupBoxVWG.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -149,6 +158,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="LabelVWG.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ListBoxSelectorVWG.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ListBoxVWG.cs">

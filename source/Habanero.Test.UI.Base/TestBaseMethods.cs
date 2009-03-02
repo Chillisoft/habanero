@@ -46,7 +46,9 @@ namespace Habanero.Test.UI.Base
             [STAThread]
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryWin();
+                ControlFactoryWin factory = new ControlFactoryWin();
+                GlobalUIRegistry.ControlFactory = factory;
+                return factory;
             }
 
             protected override string GetUnderlyingDockStyleToString(IControlHabanero controlHabanero)
@@ -63,7 +65,9 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new ControlFactoryVWG();
+                ControlFactoryVWG factory = new ControlFactoryVWG();
+                GlobalUIRegistry.ControlFactory = factory;
+                return factory;
             }
 
             protected override string GetUnderlyingDockStyleToString(IControlHabanero controlHabanero)

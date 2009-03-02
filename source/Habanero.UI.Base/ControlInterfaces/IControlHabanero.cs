@@ -75,11 +75,25 @@ namespace Habanero.UI.Base
     [Flags]
     public enum AnchorStyles
     {
-        // Fields
+        /// <summary>
+        /// Anchors to the bottom
+        /// </summary>
         Bottom = 2,
+        /// <summary>
+        /// Anchors to the Left
+        /// </summary>
         Left = 4,
+        /// <summary>
+        /// No Anchor
+        /// </summary>
         None = 0,
+        /// <summary>
+        /// Anchors to the Right
+        /// </summary>
         Right = 8,
+        /// <summary>
+        /// Anchors to the Toop
+        /// </summary>
         Top = 1
     }
 

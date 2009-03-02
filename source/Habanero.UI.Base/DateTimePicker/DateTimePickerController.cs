@@ -73,7 +73,9 @@ namespace Habanero.UI.Base
             Value = null;
             UpdateFocusState();
         }
-
+        /// <summary>
+        /// Destructor for DateTimePicker (unregisters for events to DateTimePicker.
+        /// </summary>
         ~DateTimePickerController()
         {
             //_dateTimePicker.KeyDown -= DateTimePicker_KeyDown;

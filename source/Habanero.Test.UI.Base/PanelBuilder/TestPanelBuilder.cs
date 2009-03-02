@@ -33,7 +33,12 @@ namespace Habanero.Test.UI.Base
     public class TestPanelBuilderWin
     {
         protected const int DEFAULT_CONTROLS_PER_FIELD = 3;
-        protected virtual IControlFactory GetControlFactory() { return new ControlFactoryWin(); }
+        protected virtual IControlFactory GetControlFactory()
+        {
+            ControlFactoryWin factory = new ControlFactoryWin();
+            GlobalUIRegistry.ControlFactory = factory;
+            return factory;
+        }
 
         protected virtual Sample.SampleUserInterfaceMapper GetSampleUserInterfaceMapper() { return new Sample.SampleUserInterfaceMapperWin(); }
 
@@ -50,7 +55,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Test Result -----------------------
-            Assert.AreEqual(GetControlFactory().GetType(), panelBuilder.Factory.GetType());
+            Assert.AreEqual(GetControlFactory().GetType(), panelBuilder.ControlFactory.GetType());
         }
 
         [Test]
@@ -1035,7 +1040,7 @@ namespace Habanero.Test.UI.Base
             UIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
             PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
             //---------------Assert Precondition----------------
-
+            Assert.IsNotNull(GlobalUIRegistry.ControlFactory);
             //---------------Execute Test ----------------------
             IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form);
             //---------------Test Result -----------------------
@@ -1162,6 +1167,200 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
+        [Test]
+        public void Test_BuldUsingAlaternateFormBuilder_CollapsiblePanel()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, form.Count);
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form, GetControlFactory().CreateCollapsiblePanelGroupControl);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(ICollapsiblePanelGroupControl), panelInfo.Panel.Controls[0]);
+            ICollapsiblePanelGroupControl groupControl = (ICollapsiblePanelGroupControl)panelInfo.Panel.Controls[0];
+            ICollapsiblePanel panel_1 = groupControl.PanelsList[0];
+            ICollapsiblePanel panel_2 = groupControl.PanelsList[1];
+            Assert.AreEqual(2, panel_1.Controls.Count, "Should have the Collapse Button and the Content Control");
+            Assert.IsInstanceOfType(typeof(IPanel), panel_1.Controls[1]);
+            IPanel contentPanel_1 = (IPanel)panel_1.Controls[0];
+            Assert.AreEqual(PanelBuilder.CONTROLS_PER_COLUMN, contentPanel_1.Controls.Count, "Should have the Collapse Button and the Content Control");
+            Assert.AreEqual(2, panel_2.Controls.Count);
+            Assert.IsInstanceOfType(typeof(IPanel), panel_2.Controls[1]);
+            IPanel contentPanel_2 = (IPanel)panel_2.Controls[0];
+            Assert.AreEqual(PanelBuilder.CONTROLS_PER_COLUMN, contentPanel_2.Controls.Count);
+        }
+
+        [Test]
+        public void Test_BuildPanelForForm_NullForm_ShouldRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, form.Count);
+            //---------------Execute Test ----------------------
+            try
+            {
+                panelBuilder.BuildPanelForForm(null, GetControlFactory().CreateTabControl);
+                Assert.Fail("expected ArgumentNullException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("uiForm", ex.ParamName);
+            }
+
+
+        }
+        [Test]
+        public void Test_BuildPanelForForm_NullCreateGroupControl_ShouldRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, form.Count);
+            //---------------Execute Test ----------------------
+            try
+            {
+                panelBuilder.BuildPanelForForm(form, null);
+                Assert.Fail("expected ArgumentNullException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("groupControlCreator", ex.ParamName);
+            }
+        }
+
+        [Test]
+        public void Test_Constructor_NullControlFactory_ShouldRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, form.Count);
+            //---------------Execute Test ----------------------
+            try
+            {
+                new PanelBuilder(null);
+                Assert.Fail("expected ArgumentNullException");
+            }
+            //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("controlFactory", ex.ParamName);
+            }
+        }
+        [Test]
+        public void Test_Set_GroupControlCreator_Null_ShouldRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, form.Count);
+            //---------------Execute Test ----------------------
+            try
+            {
+                panelBuilder.GroupControlCreator = null;
+                Assert.Fail("expected ArgumentNullException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("value", ex.ParamName);
+            }
+        }
+//        [Test]
+//        public void Test_Set_IndividualControlCreator_Null_ShouldRaiseError()
+//        {
+//            //---------------Set up test pack-------------------
+//            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+//            UIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
+//            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+//            //---------------Assert Precondition----------------
+//            Assert.AreEqual(2, form.Count);
+//            //---------------Execute Test ----------------------
+//            try
+//            {
+//                panelBuilder.SetControlCreators(GetControlFactory().CreateTabControl, null);
+//                Assert.Fail("expected ArgumentNullException");
+//            }
+//                //---------------Test Result -----------------------
+//            catch (ArgumentNullException ex)
+//            {
+//                StringAssert.Contains("Value cannot be null", ex.Message);
+//                StringAssert.Contains("individualControlCreator", ex.ParamName);
+//            }
+//        }
+
+        [Test]
+        public void Test_ConstructsWithDefault_ControlCreator()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, form.Count);
+            //---------------Execute Test ----------------------
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(panelBuilder.GroupControlCreator);
+        }
+        [Test]
+        public void Test_Set_GroupControlCreator_ToCollapsiblePanel()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            GroupControlCreator groupControlCreator = GetControlFactory().CreateCollapsiblePanelGroupControl;
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, form.Count);
+            //---------------Execute Test ----------------------
+            panelBuilder.GroupControlCreator = groupControlCreator;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(panelBuilder.GroupControlCreator);
+            Assert.AreEqual(groupControlCreator, panelBuilder.GroupControlCreator);
+        }
+        [Test]
+        public void Test_BuldUsingAlaternateFormBuilder()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = Sample.CreateClassDefWithTwoPropsOneInteger();
+            UIForm form = classDef.UIDefCol["TwoTabs"].UIForm;
+            PanelBuilder panelBuilder = new PanelBuilder(GetControlFactory());
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, form.Count);
+            //---------------Execute Test ----------------------
+            IPanelInfo panelInfo = panelBuilder.BuildPanelForForm(form, GetControlFactory().CreateTabControl);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(ITabControl), panelInfo.Panel.Controls[0]);
+            ITabControl tabControl = (ITabControl)panelInfo.Panel.Controls[0];
+            ITabPage tabPage1 = tabControl.TabPages[0];
+            ITabPage tabPage2 = tabControl.TabPages[1];
+            Assert.AreEqual(1, tabPage1.Controls.Count);
+            Assert.IsInstanceOfType(typeof(IPanel), tabPage1.Controls[0]);
+            IPanel tabPage1Panel = (IPanel)tabPage1.Controls[0];
+            Assert.AreEqual(PanelBuilder.CONTROLS_PER_COLUMN, tabPage1Panel.Controls.Count);
+            Assert.AreEqual(1, tabPage2.Controls.Count);
+            Assert.IsInstanceOfType(typeof(IPanel), tabPage2.Controls[0]);
+            IPanel tabPage2Panel = (IPanel)tabPage2.Controls[0];
+            Assert.AreEqual(PanelBuilder.CONTROLS_PER_COLUMN, tabPage2Panel.Controls.Count);
+
+        }
 
         //[Test, Ignore("This doesn't work in code for some reason")]
         //public void Test_BuildPanelForTab_SetToolTip()
@@ -1231,7 +1430,12 @@ namespace Habanero.Test.UI.Base
     [TestFixture]
     public class TestPanelBuilderVWG : TestPanelBuilderWin
     {
-        protected override IControlFactory GetControlFactory() { return new ControlFactoryVWG(); }
+        protected override IControlFactory GetControlFactory()
+        {
+            ControlFactoryVWG factory = new ControlFactoryVWG();
+            GlobalUIRegistry.ControlFactory = factory;
+            return factory;
+        }
 
         protected override Sample.SampleUserInterfaceMapper GetSampleUserInterfaceMapper() { return new Sample.SampleUserInterfaceMapperVWG(); }
 

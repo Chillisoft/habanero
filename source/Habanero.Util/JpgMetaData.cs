@@ -44,6 +44,9 @@ namespace Habanero.Util
             /// The Raw Value 
             /// </summary>
             public string RawValueAsString;
+            /// <summary>
+            /// The Display value for the MetaData.
+            /// </summary>
             public string DisplayValue;
         }
 

@@ -72,6 +72,9 @@ namespace Habanero.UI.Base
             _splitters = new bool[5];
         }
 
+        /// <summary>
+        /// Updates the layout and appearance of the managed controls
+        /// </summary>
         protected override void RefreshControlPositions()
         {
            

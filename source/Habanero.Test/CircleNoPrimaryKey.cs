@@ -43,8 +43,19 @@ namespace Habanero.Test
             PropDef propDef =
                 new PropDef("Radius", typeof(int), PropReadWriteRule.ReadWrite, null);
             lPropDefCol.Add(propDef);
+            //propDef = new PropDef("ContactPersonID", typeof(Guid), PropReadWriteRule.WriteOnce, "ContactPersonID", null);
+            //lPropDefCol.Add(propDef);
+
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
+
+            //RelKeyDef relKeyDef = new RelKeyDef();
+            //IPropDef relPropDef = lPropDefCol["ContactPersonID"];
+            //RelPropDef lRelPropDef = new RelPropDef(relPropDef, "ContactPersonID");
+            //relKeyDef.Add(lRelPropDef);
+            //RelationshipDef relDef = new SingleRelationshipDef("ContactPerson", typeof(ContactPerson), relKeyDef, false, DeleteParentAction.DoNothing);
+            //relDefCol.Add(relDef);
+
             ClassDef lClassDef = new ClassDef(typeof(CircleNoPrimaryKey), null, "circle_table", lPropDefCol, keysCol, relDefCol, null);
             //ClassDef lClassDef = new ClassDef(typeof(CircleNoPrimaryKey), null, lPropDefCol, keysCol, relDefCol);
             

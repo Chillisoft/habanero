@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
@@ -25,27 +26,20 @@ using NUnit.Framework;
 namespace Habanero.Test.UI.Base.Controllers
 {
 
-    public abstract class TestComboBoxCollectionController
+    [TestFixture]
+    public class TestComboBoxCollectionControllerVWG : TestComboBoxCollectionControllerWin
     {
-        protected abstract IControlFactory GetControlFactory();
-
-        [TestFixture]
-        public class TestComboBoxCollectionControllerWin : TestComboBoxCollectionController
+        protected override IControlFactory GetControlFactory()
         {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new Habanero.UI.Win.ControlFactoryWin();
-            }
+            return new Habanero.UI.VWG.ControlFactoryVWG();
         }
-
-        [TestFixture]
-        public class TestComboBoxCollectionControllerVWG : TestComboBoxCollectionController
+    }
+    [TestFixture]
+    public class TestComboBoxCollectionControllerWin
+    {
+        protected virtual IControlFactory GetControlFactory()
         {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new Habanero.UI.VWG.ControlFactoryVWG();
-            }
-
+            return new Habanero.UI.Win.ControlFactoryWin();
         }
 
         [Test]
@@ -54,10 +48,7 @@ namespace Habanero.Test.UI.Base.Controllers
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefWithBoolean();
-            BusinessObjectCollection<MyBO> myBOs = new BusinessObjectCollection<MyBO>(); 
-            MyBO myBO1 = new MyBO();
-            MyBO myBO2 = new MyBO();
-            myBOs.Add(myBO1,myBO2);
+            BusinessObjectCollection<MyBO> myBOs = new BusinessObjectCollection<MyBO> {{new MyBO(), new MyBO()}};
             IComboBox cmb = GetControlFactory().CreateComboBox();
             ComboBoxCollectionSelector selector = new ComboBoxCollectionSelector(cmb,GetControlFactory());
             //---------------Verify test pack-------------------
@@ -68,6 +59,200 @@ namespace Habanero.Test.UI.Base.Controllers
             Assert.AreSame(cmb,selector.Control);
             //---------------Tear Down -------------------------   
         }
+        [Test]
+        public void TestSetCollectionNull()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithBoolean();
 
+            IComboBox cmb = GetControlFactory().CreateComboBox();
+            ComboBoxCollectionSelector selector = new ComboBoxCollectionSelector(cmb, GetControlFactory());
+            //---------------Verify test pack-------------------
+            //---------------Execute Test ----------------------
+            selector.SetCollection(null, false);
+            //---------------Verify Result -----------------------
+            Assert.IsNull(selector.Collection);
+            Assert.AreSame(cmb,selector.Control);
+        }
+
+        [Test]
+        public void TestConstructor()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            IControlFactory controlFactory = GetControlFactory();
+            //---------------Execute Test ----------------------
+            ComboBoxCollectionSelector selectorManger = new ComboBoxCollectionSelector(cmbox, controlFactory);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(selectorManger);
+            Assert.AreSame(cmbox, selectorManger.Control);
+            Assert.AreSame(controlFactory, selectorManger.ControlFactory);
+
+            //---------------Tear Down -------------------------
+        }
+        [Test]
+        public void Test_Constructor_NullControlFactoryRaisesError()
+        {
+            //---------------Set up test pack-------------------
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            //---------------Execute Test ----------------------
+            try
+            {
+                new ComboBoxCollectionSelector(cmbox, null);
+                Assert.Fail("expected ArgumentNullException");
+            }
+            //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("controlFactory", ex.ParamName);
+            }
+        }
+
+        [Test]
+        public void TestConstructor_NullComboBoxRaisesError()
+        {
+            //---------------Set up test pack-------------------
+            IControlFactory controlFactory = GetControlFactory();
+            //---------------Execute Test ----------------------
+            try
+            {
+                new ComboBoxCollectionSelector(null, controlFactory);
+                Assert.Fail("expected ArgumentNullException");
+            }
+            //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("comboBox", ex.ParamName);
+            }
+        }
+
+        [Test]
+        public void TestSetComboBoxCollection()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            IControlFactory controlFactory = GetControlFactory();
+            ComboBoxCollectionSelector selectorManger = new ComboBoxCollectionSelector(cmbox, controlFactory);
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>
+                                                         {new MyBO(), new MyBO(), new MyBO()};
+            //---------------Execute Test ----------------------
+            selectorManger.SetCollection(myBoCol, false);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, selectorManger.Collection.Count);
+            Assert.AreEqual(3, selectorManger.Control.Items.Count);
+        }
+        [Test]
+        public void TestSetComboBoxCollection_AddNullItemTrue()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            IControlFactory controlFactory = GetControlFactory();
+            ComboBoxCollectionSelector selectorManger = new ComboBoxCollectionSelector(cmbox, controlFactory);
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>
+                                                         {new MyBO(), new MyBO(), new MyBO()};
+            //---------------Execute Test ----------------------
+            selectorManger.SetCollection(myBoCol, true);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, selectorManger.Collection.Count);
+            Assert.AreEqual(4, selectorManger.Control.Items.Count);
+        }
+        [Test]
+        public void TestSetComboBoxCollection_IncludeBlankFalse_SetsFirstItem()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            IControlFactory controlFactory = GetControlFactory();
+            ComboBoxCollectionSelector selectorManger = new ComboBoxCollectionSelector(cmbox, controlFactory);
+            MyBO.LoadDefaultClassDef();
+            MyBO firstBo = new MyBO();
+            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO> 
+                    { firstBo, new MyBO(), new MyBO() };
+            //---------------Execute Test ----------------------
+            selectorManger.SetCollection(myBoCol, false);
+            //---------------Test Result -----------------------
+            Assert.AreSame(firstBo, selectorManger.SelectedBusinessObject);
+        }
+        [Test]
+        public void TestSetComboBoxCollection_IncludeBlank_True()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            IControlFactory controlFactory = GetControlFactory();
+            ComboBoxCollectionSelector selectorManger = new ComboBoxCollectionSelector(cmbox, controlFactory);
+            MyBO.LoadDefaultClassDef();
+            MyBO firstBo = new MyBO();
+            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>
+                                                         {firstBo, new MyBO(), new MyBO()};
+            //---------------Execute Test ----------------------
+            selectorManger.SetCollection(myBoCol, true);
+            //---------------Test Result -----------------------
+            Assert.AreSame(firstBo, selectorManger.SelectedBusinessObject);
+        }
+
+        [Test]
+        public void TestSelectedBusinessObject()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            IControlFactory controlFactory = GetControlFactory();
+            ComboBoxCollectionSelector selectorManger = new ComboBoxCollectionSelector(cmbox, controlFactory);
+            MyBO.LoadDefaultClassDef();
+            MyBO selectedBO = new MyBO();
+            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>
+                                                         {new MyBO(), selectedBO, new MyBO()};
+            //---------------Execute Test ----------------------
+            selectorManger.SetCollection(myBoCol, false);
+            selectorManger.Control.SelectedIndex = 1;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(selectedBO, selectorManger.SelectedBusinessObject);
+            //---------------Tear down -------------------------
+        }
+
+        [Test]
+        public void TestBusinessObejctAddedToCollection()
+        {
+            ClassDef.ClassDefs.Clear();
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            IControlFactory controlFactory = GetControlFactory();
+            ComboBoxCollectionSelector selectorManger = new ComboBoxCollectionSelector(cmbox, controlFactory);
+            MyBO.LoadDefaultClassDef();
+            MyBO addedBo = new MyBO();
+            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>
+                                                         {new MyBO(), new MyBO(), new MyBO()};
+            selectorManger.SetCollection(myBoCol, false);
+            //---------------Execute Test ----------------------
+            selectorManger.Collection.Add(addedBo);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, selectorManger.Control.Items.Count);
+            //---------------Tear down -------------------------
+        }
+
+        [Test]
+        public void TestBusinessObejctRemovedFromCollection()
+        {
+            ClassDef.ClassDefs.Clear();
+            IComboBox cmbox = GetControlFactory().CreateComboBox();
+            IControlFactory controlFactory = GetControlFactory();
+            ComboBoxCollectionSelector selectorManger = new ComboBoxCollectionSelector(cmbox, controlFactory);
+            MyBO.LoadDefaultClassDef();
+            MyBO removedBo = new MyBO();
+            BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>
+                                                         {new MyBO(), removedBo, new MyBO()};
+            selectorManger.SetCollection(myBoCol, false);
+            //---------------Execute Test ----------------------
+            selectorManger.Collection.Remove(removedBo);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, selectorManger.Control.Items.Count);
+        }
     }
 }

@@ -22,7 +22,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
@@ -68,7 +67,8 @@ namespace Habanero.UI.Base
             set
             {
                 _businessObject = value;
-                if (this.BusinessObject != null) this.BusinessObject.IsValid();//This causes the BO to run all its validation rules.
+                if (this.BusinessObject != null)
+                    this.BusinessObject.IsValid(); //This causes the BO to run all its validation rules.
                 for (int fieldInfoNum = 0; fieldInfoNum < FieldInfos.Count; fieldInfoNum++)
                 {
                     FieldInfos[fieldInfoNum].ControlMapper.BusinessObject = value;
@@ -104,8 +104,8 @@ namespace Habanero.UI.Base
             {
                 FieldInfos[fieldInfoNum].ControlMapper.ApplyChangesToBusinessObject();
             }
-
         }
+
         /// <summary>
         /// Sets all the error providers to have no errors.
         /// </summary>
@@ -142,10 +142,7 @@ namespace Habanero.UI.Base
         /// </summary>
         public string PanelTabText
         {
-            get
-            {
-                return this.UIFormTab == null ? "" : this.UIFormTab.Name;
-            }
+            get { return this.UIFormTab == null ? "" : this.UIFormTab.Name; }
         }
 
         ///<summary>
@@ -155,6 +152,11 @@ namespace Habanero.UI.Base
         {
             private readonly IList<FieldInfo> _fieldInfos = new List<FieldInfo>();
 
+            ///<summary>
+            /// Returns the Field Info identified by the PropertyName.
+            ///</summary>
+            ///<param name="propertyName"></param>
+            ///<exception cref="InvalidPropertyNameException"></exception>
             public FieldInfo this[string propertyName]
             {
                 get
@@ -166,31 +168,58 @@ namespace Habanero.UI.Base
                             return fieldInfo;
                         }
                     }
-                    throw new InvalidPropertyNameException(
-                        string.Format("A label for the property {0} was not found.", propertyName));
+                    throw new InvalidPropertyNameException
+                        (string.Format("A label for the property {0} was not found.", propertyName));
                 }
             }
 
+            ///<summary>
+            /// Returns the field info at index
+            ///</summary>
+            ///<param name="index"></param>
             public FieldInfo this[int index]
             {
                 get { return _fieldInfos[index]; }
             }
 
+            ///<summary>
+            /// Adds a new Field Info
+            ///</summary>
+            ///<param name="fieldInfo"></param>
             public void Add(FieldInfo fieldInfo)
             {
                 _fieldInfos.Add(fieldInfo);
             }
 
+            ///<summary>
+            /// The number of fields
+            ///</summary>
             public int Count
             {
                 get { return _fieldInfos.Count; }
             }
 
+            ///<summary>
+            ///Returns an enumerator that iterates through the collection.
+            ///</summary>
+            ///
+            ///<returns>
+            ///A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+            ///</returns>
+            ///<filterpriority>1</filterpriority>
             IEnumerator<FieldInfo> IEnumerable<FieldInfo>.GetEnumerator()
             {
                 return _fieldInfos.GetEnumerator();
             }
 
+            ///<summary>
+            ///Returns an enumerator that iterates through a collection.
+            ///</summary>
+            ///
+            ///<returns>
+            ///An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+            ///</returns>
+            ///<filterpriority>2</filterpriority>
             IEnumerator IEnumerable.GetEnumerator()
             {
                 return _fieldInfos.GetEnumerator();
@@ -220,26 +249,44 @@ namespace Habanero.UI.Base
                 _controlMapper = controlMapper;
             }
 
+            ///<summary>
+            /// Returns the PropertyName of this <see cref="FieldInfo"/>
+            ///</summary>
             public string PropertyName
             {
                 get { return _propertyName; }
             }
 
+            ///<summary>
+            /// Returns the Label Control for this <see cref="FieldInfo"/>
+            ///</summary>
             public IControlHabanero LabelControl
             {
-                get { return _labelControl;  }
-            }
-            [Obsolete("Please use LabelControl as UIFormFields can be configured to return a GroupBox or other types of label controls")]
-            public ILabel Label
-            {
-                get { return (ILabel)_labelControl; }
+                get { return _labelControl; }
             }
 
+            ///<summary>
+            /// Returns the Label Control for this <see cref="FieldInfo"/>
+            ///</summary>
+            [Obsolete(
+                "Please use LabelControl as UIFormFields can be configured to return a GroupBox or other types of label controls"
+                )]
+            public ILabel Label
+            {
+                get { return (ILabel) _labelControl; }
+            }
+
+            ///<summary>
+            /// Returns the Input control <see cref="FieldInfo"/>
+            ///</summary>
             public IControlHabanero InputControl
             {
                 get { return _controlMapper.Control; }
             }
 
+            ///<summary>
+            /// Returns the ControlMapper <see cref="FieldInfo"/>
+            ///</summary>
             public IControlMapper ControlMapper
             {
                 get { return _controlMapper; }

@@ -57,5 +57,7 @@ namespace Habanero.UI.VWG
             get { return DockStyleVWG.GetDockStyle(base.Dock); }
             set { base.Dock = DockStyleVWG.GetDockStyle(value); }
         }
+
+ 
     }
 }

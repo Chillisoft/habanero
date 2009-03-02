@@ -102,7 +102,7 @@ namespace Habanero.UI.Base
             return filter;
         }
 
-        private void AddControlToLayoutManager(ILabel label, IControlHabanero entryControl)
+        private void AddControlToLayoutManager(IControlHabanero label, IControlHabanero entryControl)
         {
             if (label == null) throw new ArgumentNullException("label");
             if (entryControl == null) throw new ArgumentNullException("entryControl");
@@ -281,6 +281,10 @@ namespace Habanero.UI.Base
         /// Clears the <see cref="IDateRangeComboBox"/>
         ///</summary>
         public void Clear() { _dateRangeComboBox.SelectedIndex = -1;}
+
+        /// <summary>
+        /// Event handler that fires when the value in the Filter control changes
+        /// </summary>
         public event EventHandler ValueChanged;
         ///<summary>
         /// The name of the property being filtered by.
@@ -313,6 +317,10 @@ namespace Habanero.UI.Base
         private readonly string _propertyName;
         private readonly FilterClauseOperator _filterClauseOperator;
         private readonly IComboBox _comboBox;
+
+        /// <summary>
+        /// Event handler that fires when the value in the Filter control changes
+        /// </summary>
         public event EventHandler ValueChanged;
 
         ///<summary>
@@ -395,6 +403,10 @@ namespace Habanero.UI.Base
         private readonly string _propertyName;
         private readonly FilterClauseOperator _filterClauseOperator;
         private readonly ICheckBox _checkBox;
+
+        /// <summary>
+        /// Event handler that fires when the value in the Filter control changes
+        /// </summary>
         public event EventHandler ValueChanged;
 
         ///<summary>
@@ -420,11 +432,13 @@ namespace Habanero.UI.Base
                 this.ValueChanged(this, new EventArgs());
             }
         }
-
+        /// <summary>
+        /// Returns the Control that is being used in the filter
+        /// </summary>
         public IControlHabanero Control { get { return _checkBox; } }
 
         ///<summary>
-        /// returns true of false Depending Whether the <see cref="ICheckBox"/ is checked or not>
+        /// returns true of false Depending Whether the <see cref="ICheckBox"/> is checked or not>
         ///</summary>
         public bool IsChecked { get { return _checkBox.Checked; } set { _checkBox.Checked = value;} }
 
@@ -495,8 +509,16 @@ namespace Habanero.UI.Base
             }
         }
 
+        ///<summary>
+        /// The control that has been constructed by this Control Manager.
+        ///</summary>
         public IControlHabanero Control { get { return _dateTimePicker; } }
 
+        ///<summary>
+        /// Returns the filter clause for this control
+        ///</summary>
+        ///<param name="filterClauseFactory"></param>
+        ///<returns></returns>
         public IFilterClause GetFilterClause(IFilterClauseFactory filterClauseFactory) {
             DateTime date = _dateTimePicker.Value;
             date = date.Date;
@@ -511,8 +533,20 @@ namespace Habanero.UI.Base
             }
             return filterClauseFactory.CreateDateFilterClause(_propertyName, _filterClauseOperator, date);
         }
+
+        ///<summary>
+        /// Clears the <see cref="IDateRangeComboBox"/> of its value
+        ///</summary>
         public void Clear() { _dateTimePicker.ValueOrNull = null; }
+
+        /// <summary>
+        /// Event handler that fires when the value in the Filter control changes
+        /// </summary>
         public event EventHandler ValueChanged;
+
+        ///<summary>
+        /// The name of the property being filtered by.
+        ///</summary>
         public string PropertyName { get { return _propertyName; } }
         ///<summary>
         /// Gets and Sets the DefaultDate that is used by the DateTimePicker.
@@ -525,6 +559,10 @@ namespace Habanero.UI.Base
                 _defaultDate = value;
                 _dateTimePicker.ValueOrNull = _defaultDate;
         } }
+
+        ///<summary>
+        /// Returns the operator <see cref="ICustomFilter.FilterClauseOperator"/> e.g.OpEquals to be used by for creating the Filter Clause.
+        ///</summary>
         public FilterClauseOperator FilterClauseOperator { get { return _filterClauseOperator; } }
     }
 
@@ -543,6 +581,9 @@ namespace Habanero.UI.Base
         /// Clears the <see cref="IDateRangeComboBox"/> of its value
         ///</summary>
         void Clear();
+        /// <summary>
+        /// Event handler that fires when the value in the Filter control changes
+        /// </summary>
         event EventHandler ValueChanged;
         ///<summary>
         /// The name of the property being filtered by.
@@ -559,7 +600,13 @@ namespace Habanero.UI.Base
     /// </summary>
     public abstract class FilterUI
     {
+        /// <summary>
+        /// The <see cref="IFilterClauseFactory"/> used to create the filter clauses.
+        /// </summary>
         protected readonly IFilterClauseFactory _clauseFactory;
+        /// <summary>
+        /// The name of the property (column) that is being used in creating this filter clause.
+        /// </summary>
         protected readonly string _columnName;
 
         /// <summary>

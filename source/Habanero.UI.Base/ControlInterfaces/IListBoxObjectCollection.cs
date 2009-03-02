@@ -47,5 +47,28 @@ namespace Habanero.UI.Base
         /// Removes all items from the collection
         /// </summary>
         void Clear();
+
+        /// <summary>
+        /// Retrieves the item at the specified index within the collection
+        /// </summary>
+        /// <param name="index">The index of the item in the collection to retrieve</param>
+        /// <returns>An object representing the item located at the
+        /// specified index within the collection</returns>
+        object this[int index] { get; set; }
+
+        /// <summary>
+        /// Determines if the specified item is located within the collection
+        /// </summary>
+        /// <param name="value">An object representing the item to locate in the collection</param>
+        /// <returns>true if the item is located within the collection; otherwise, false</returns>
+        bool Contains(object value);
+
+        /// <summary>
+        /// Retrieves the index within the collection of the specified item
+        /// </summary>
+        /// <param name="value">An object representing the item to locate in the collection</param>
+        /// <returns>The zero-based index where the item is
+        /// located within the collection; otherwise, -1</returns>
+        int IndexOf(object value);
     }
 }

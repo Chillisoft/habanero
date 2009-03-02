@@ -35,7 +35,7 @@ namespace Habanero.UI.Base
     /// A filter control is placed above the grid and is used to filter which rows
     /// are shown.
     /// </summary>
-    public interface IReadOnlyGridControl : IGridControl
+    public interface IReadOnlyGridControl :  IGridControl
     {
         /// <summary>
         /// Returns the <see cref="IReadOnlyGrid"/> object held. This property can be used to

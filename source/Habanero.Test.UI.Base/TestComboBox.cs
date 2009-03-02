@@ -272,29 +272,18 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(AutoCompleteSource.RecentlyUsedList, control.AutoCompleteSource);
             AssertAutoCompleteSourcesSame(control);
         }
-    }
-
     internal class BusinessObjectControlStub : UserControlWin, IBusinessObjectControlWithErrorDisplay
     {
-        private IBusinessObject _businessObject;
         private bool _displayErrorsCalled;
-        private bool _clearErrorsCalled;
 
         public bool DisplayErrorsCalled
         {
             get { return _displayErrorsCalled; }
         }
 
-        public bool ClearErrorsCalled
-        {
-            get { return _clearErrorsCalled; }
-        }
+        public bool ClearErrorsCalled { get; private set; }
 
-        public IBusinessObject BusinessObject
-        {
-            get { return _businessObject; }
-            set { _businessObject = value; }
-        }
+        public IBusinessObject BusinessObject { get; set; }
 
         public void DisplayErrors()
         {
@@ -303,7 +292,9 @@ namespace Habanero.Test.UI.Base
 
         public void ClearErrors()
         {
-            _clearErrorsCalled = true;
+            ClearErrorsCalled = true;
         }
     }
+    }
+
 }

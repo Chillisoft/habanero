@@ -35,14 +35,35 @@ namespace Habanero.UI.Base
     /// </summary>
     public abstract class ControlMapper : IControlMapper
     {
+        /// <summary>
+        /// the <see cref="ILog"/> used to log any messages for this class or its children
+        /// </summary>
         protected static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.ControlMapper");
         private readonly IErrorProvider _errorProvider;
         private readonly IControlFactory _factory;
+        /// <summary>
+        /// Is the property Read Only.
+        /// </summary>
         protected readonly bool _isReadOnly;
+        /// <summary>
+        /// A Hash table of additional Attributes available for this Control Mapper e.g. for DateTimePickerMapper may have date format
+        /// </summary>
         protected Hashtable _attributes;
+        /// <summary>
+        /// The Business Object being mapped
+        /// </summary>
         protected IBusinessObject _businessObject;
+        /// <summary>
+        /// The Control being mapped to 
+        /// </summary>
         protected IControlHabanero _control;
+        /// <summary>
+        /// Whether the control must allow editing or not.
+        /// </summary>
         protected bool _isEditable;
+        /// <summary>
+        /// The Property Name being mapped
+        /// </summary>
         protected string _propertyName;
 
         /// <summary>
@@ -308,7 +329,7 @@ namespace Habanero.UI.Base
                 if (ctl is IComboBox) mapperTypeName = "LookupComboBoxMapper";
                 else if (ctl is ICheckBox) mapperTypeName = "CheckBoxMapper";
                 else if (ctl is IDateTimePicker) mapperTypeName = "DateTimePickerMapper";
-                //                else if (ctl is IListView) mapperTypeName = "ListViewCollectionSelector"; TODO: Port
+                //                else if (ctl is IListView) mapperTypeName = "ListViewCollectionManager"; TODO: Port
                 else if (ctl is INumericUpDown) mapperTypeName = "NumericUpDownIntegerMapper";
                 else if (ctl is IExtendedComboBox) mapperTypeName = "ExtendedComboBoxMapper";
                 else

@@ -28,9 +28,18 @@ namespace Habanero.UI.Base
     /// </summary>
     public class HelpAboutBoxManager
     {
-        private IFormHabanero _FormHabanero;
-        private IPanel _mainPanel;
+        private readonly IFormHabanero _FormHabanero;
+        private readonly IPanel _mainPanel;
 
+        ///<summary>
+        /// Constructor for the <see cref="HelpAboutBoxManager"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="formHabanero"></param>
+        ///<param name="programName"></param>
+        ///<param name="producedForName"></param>
+        ///<param name="producedByName"></param>
+        ///<param name="versionNumber"></param>
         public HelpAboutBoxManager(IControlFactory controlFactory, IFormHabanero formHabanero, string programName, string producedForName, string producedByName, string versionNumber)
         {
             _FormHabanero = formHabanero;
@@ -60,11 +69,19 @@ namespace Habanero.UI.Base
             formHabanero.Text = "About";
         }
 
+        ///<summary>
+        /// The Main Panel
+        ///</summary>
         public IPanel MainPanel 
         {
             get { return _mainPanel; }
         }
 
+        ///<summary>
+        /// the handler for when the OK button is clicked.
+        ///</summary>
+        ///<param name="sender"></param>
+        ///<param name="e"></param>
         public void OKButtonClickHandler(object sender, EventArgs e)
         {
             _FormHabanero.Close();

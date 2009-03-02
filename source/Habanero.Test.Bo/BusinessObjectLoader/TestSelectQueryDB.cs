@@ -658,10 +658,13 @@ namespace Habanero.Test.BO.BusinessObjectLoader
  
         public class DatabaseConnectionStub_LimitClauseAtEnd : DatabaseConnectionStub
         {
+#pragma warning disable 672 //Tests on backward compatibility are being maintained.
             public override string GetLimitClauseForEnd(int limit)
+
             {
                 return "LIMIT " + limit;
             }
+#pragma warning restore 672
         }
     }
 }

@@ -47,12 +47,10 @@ namespace Habanero.UI.Win
         private readonly IFilterControl _filterControl;
         private readonly ReadOnlyGridWin _grid;
         private readonly IGridInitialiser _gridInitialiser;
-        private string _additionalSearchCriteria;
         private IBusinessObjectCreator _businessObjectCreator;
         private IBusinessObjectDeletor _businessObjectDeletor;
         private IBusinessObjectEditor _businessObjectEditor;
         private ClassDef _classDef;
-        private string _orderBy;
         private bool _doubleClickEditsBusinessObject;
 
         ///<summary>
@@ -85,6 +83,7 @@ namespace Habanero.UI.Win
 
             _doubleClickEditsBusinessObject = false;
             DoubleClickEditsBusinessObject = true;
+            this.Grid.BusinessObjectSelected +=Grid_OnBusinessObjectSelected;
         }
 
         #region IReadOnlyGridControl Members
@@ -116,13 +115,65 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
+        /// Gets and Sets the business object collection displayed in the grid.  This
+        /// collection must be pre-loaded using the collection's Load() command or from the
+        /// <see cref="IBusinessObjectLoader"/>.
+        /// The default UI definition will be used, that is a 'ui' element 
+        /// without a 'name' attribute.
+        /// </summary>
+        public IBusinessObjectCollection BusinessObjectCollection
+        {
+            get { return _grid.GetBusinessObjectCollection(); }
+            set { SetBusinessObjectCollection(value); }
+        }
+
+        /// <summary>
         /// Gets or sets the single selected business object (null if none are selected)
         /// denoted by where the current selected cell is
         /// </summary>
         public IBusinessObject SelectedBusinessObject
         {
-            get { return _grid.SelectedBusinessObject; }
-            set { _grid.SelectedBusinessObject = value; }
+            get { return this.Grid.SelectedBusinessObject; }
+            set { this.Grid.SelectedBusinessObject = value; }
+        }
+
+        /// <summary>
+        /// Event Occurs when a business object is selected
+        /// </summary>
+        public event EventHandler<BOEventArgs> BusinessObjectSelected;
+
+        private void Grid_OnBusinessObjectSelected(object sender, BOEventArgs e)
+        {
+            if (this.BusinessObjectSelected != null)
+            {
+                this.BusinessObjectSelected(this, new BOEventArgs(this.SelectedBusinessObject));
+            }
+        }
+
+        /// <summary>
+        /// Clears the business object collection and the rows in the data table
+        /// </summary>
+        public void Clear()
+        {
+            SetBusinessObjectCollection(null);
+        }
+
+        /// <summary>Gets the number of rows displayed in the <see cref="IBOSelector"></see>.</summary>
+        /// <returns>The number of rows in the <see cref="IBOSelector"></see>.</returns>
+        public int NoOfItems
+        {
+            get { return this.Grid.Rows.Count; }
+        }
+
+        /// <summary>
+        /// Returns the business object at the specified row number
+        /// </summary>
+        /// <param name="row">The row number in question</param>
+        /// <returns>Returns the busines object at that row, or null
+        /// if none is found</returns>
+        public IBusinessObject GetBusinessObjectAtRow(int row)
+        {
+            return this.Grid.GetBusinessObjectAtRow(row);
         }
 
         /// <summary>
@@ -234,22 +285,14 @@ namespace Habanero.UI.Win
         /// Gets and sets the default order by clause used for loading the grid when the <see cref="FilterModes"/>
         /// is set to Search
         /// </summary>
-        public string OrderBy
-        {
-            get { return _orderBy; }
-            set { _orderBy = value; }
-        }
+        public string OrderBy { get; set; }
 
         /// <summary>
         /// Gets and sets the standard search criteria used for loading the grid when the <see cref="FilterModes"/>
         /// is set to Search. This search criteria will be appended with an AND to any search criteria returned
         /// by the FilterControl.
         /// </summary>
-        public string AdditionalSearchCriteria
-        {
-            get { return _additionalSearchCriteria; }
-            set { _additionalSearchCriteria = value; }
-        }
+        public string AdditionalSearchCriteria { get; set; }
 
         /// <summary>
         /// Gets the button control, which contains a set of default buttons for
@@ -272,8 +315,7 @@ namespace Habanero.UI.Win
         {
             if (boCollection == null)
             {
-                //TODO: weakness where user could call _control.Grid.Set..(null) directly and bypass the disabling.
-                _grid.SetBusinessObjectCollection(null);
+                _grid.BusinessObjectCollection = null;
                 Buttons.Enabled = false;
                 FilterControl.Enabled = false;
                 return;
@@ -395,7 +437,7 @@ namespace Habanero.UI.Win
 
         private void Buttons_DeleteClicked(object sender, EventArgs e)
         {
-            if (Grid.GetBusinessObjectCollection() == null)
+            if (Grid.BusinessObjectCollection == null)
             {
                 throw new GridDeveloperException("You cannot call delete since the grid has not been set up");
             }
@@ -417,7 +459,7 @@ namespace Habanero.UI.Win
 
         private void Buttons_EditClicked(object sender, EventArgs e)
         {
-            if (Grid.GetBusinessObjectCollection() == null)
+            if (Grid.BusinessObjectCollection == null)
             {
                 throw new GridDeveloperException("You cannot call edit since the grid has not been set up");
             }
@@ -433,7 +475,7 @@ namespace Habanero.UI.Win
 
         private void Buttons_AddClicked(object sender, EventArgs e)
         {
-            if (Grid.GetBusinessObjectCollection() == null)
+            if (Grid.BusinessObjectCollection == null)
             {
                 throw new GridDeveloperException("You cannot call add since the grid has not been set up");
             }
@@ -448,7 +490,7 @@ namespace Habanero.UI.Win
                 _businessObjectEditor.EditObject(newBo, UiDefName, 
                     delegate(IBusinessObject bo, bool cancelled)
                     {
-                        IBusinessObjectCollection collection = this.Grid.GetBusinessObjectCollection();
+                        IBusinessObjectCollection collection = this.Grid.BusinessObjectCollection;
                         if (cancelled)
                         {
                             collection.Remove(bo);

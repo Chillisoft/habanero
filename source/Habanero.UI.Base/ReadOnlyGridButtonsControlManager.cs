@@ -29,30 +29,43 @@ namespace Habanero.UI.Base
     public class ReadOnlyGridButtonsControlManager
     {
         private readonly IReadOnlyGridButtonsControl _buttonsControl;
-        private IButton _deleteButton;
 
+        ///<summary>
+        /// Constructor for the <see cref="ReadOnlyGridButtonsControlManager"/>
+        ///</summary>
+        ///<param name="buttonsControl"></param>
         public ReadOnlyGridButtonsControlManager(IReadOnlyGridButtonsControl buttonsControl)
         {
             _buttonsControl = buttonsControl;
         }
 
-        public IButton DeleteButton
-        {
-            get { return _deleteButton; }
-        }
+        ///<summary>
+        /// The delete button.
+        ///</summary>
+        public IButton DeleteButton { get; private set; }
 
+        ///<summary>
+        /// Creates the delete button and binds it to the <paramref name="eventHandler"/>
+        ///</summary>
+        ///<param name="eventHandler"></param>
         public void CreateDeleteButton(EventHandler eventHandler)
         {
-            _deleteButton = _buttonsControl.AddButton("Delete", eventHandler);
-            _deleteButton.Visible = false;
+            DeleteButton = _buttonsControl.AddButton("Delete", eventHandler);
+            DeleteButton.Visible = false;
         }
-
+        ///<summary>
+        /// Creates the Edit button and binds it to the <paramref name="eventHandler"/>
+        ///</summary>
+        ///<param name="eventHandler"></param>
         public void CreateEditButton(EventHandler eventHandler)
         {
             IButton editButton = _buttonsControl.AddButton("Edit", eventHandler);
             editButton.Visible = true;
         }
-
+        ///<summary>
+        /// Creates the add button and binds it to the <paramref name="eventHandler"/>
+        ///</summary>
+        ///<param name="eventHandler"></param>
         public void CreateAddButton(EventHandler eventHandler)
         {
             IButton addButton = _buttonsControl.AddButton("Add", eventHandler);

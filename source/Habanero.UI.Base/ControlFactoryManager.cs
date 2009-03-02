@@ -17,12 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Habanero.Base.Exceptions;
-using Habanero.Util;
-
 namespace Habanero.UI.Base
 {
     /// <summary>
@@ -32,12 +26,16 @@ namespace Habanero.UI.Base
     /// </summary>
     public class ControlFactoryManager
     {
-        private IControlFactory _controlFactory;
+//        private IControlFactory _controlFactory;
 
         
+        ///<summary>
+        /// Creates the ControlFactoryManager
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public ControlFactoryManager(IControlFactory controlFactory)
         {
-            _controlFactory = controlFactory;
+//            _controlFactory = controlFactory;
         }
     }
 }

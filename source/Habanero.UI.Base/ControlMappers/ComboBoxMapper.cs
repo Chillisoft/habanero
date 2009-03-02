@@ -17,20 +17,41 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
-using Habanero.BO.ClassDefinition;
+using Habanero.Base;
+using Habanero.BO;
 
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Wraps a ComboBox in order to display and capture a lookup property of the business object 
+    /// Wraps a <see cref="IComboBox"/> in order to display and capture a lookup property of the business object 
     /// </summary>
     public abstract class ComboBoxMapper : ControlMapper
     {
+        /// <summary>
+        /// The actual <see cref="IComboBox"/> control that is being mapped to the Business Object Property identified by PropertyName.
+        /// </summary>
         protected IComboBox _comboBox;
+        /// <summary>
+        /// The actual <see cref="Dictionary{TKey,TValue}"/> of values that will be displayed in the combo box. This is a key value dictionary
+        /// where the key contains the value that will be displayed in the ComboBox and the Value is the Unique identifier for the record.
+        /// An object identifier (<see cref="IBusinessObject.ID"/> - <see cref="IPrimaryKey.ObjectID"/>) in the case of a <see cref="BusinessObjectLookupList"/>.
+        /// or the Primary Key (field or composite fileds) in the case of a <see cref="DatabaseLookupList"/> or the key value for a <see cref="SimpleLookupList"/>.
+        /// The Application developer can of course implement any other <see cref="ILookupList"/> that they require.
+        /// </summary>
         protected Dictionary<string, string> _collection;
+        /// <summary>
+        /// A boolean to enable or disable right click handling for this <see cref="IComboBox"/>. Right click handling allows the 
+        /// user to right click and from this a form to allow the editing of Values in the <see cref="IComboBox"/>. This is only applicable 
+        /// by default to <see cref="BusinessObjectLookupList"/> or a custom <see cref="ILookupList"/> defined by the user.
+        /// </summary>
         protected bool _rightClickEnabled;
-        protected ClassDef _lookupTypeClassDef;
+        /// <summary>
+        /// In the case of a <see cref="BusinessObjectLookupList"/> this will be the class def of the <see cref="IBusinessObject"/>s shown
+        /// in the list.
+        /// </summary>
+//        protected ClassDef _lookupTypeClassDef;
         //protected ComboBoxRightClickController _comboBoxRightClickController;
 
         /// <summary>
@@ -150,8 +171,14 @@ namespace Habanero.UI.Base
         /// Gets and sets the lookup list used to populate the items in the
         /// ComboBox.  This method is typically called by SetupLookupList().
         /// </summary>
-        /// <param name="value">The items used to populate the list</param>
         public abstract Dictionary<string, string> LookupList { set; get;}
+        /// <summary>
+        /// Sets the <see cref="Dictionary{TKey,TValue}"/> that is being used to fill this 
+        /// combo box with values.
+        /// </summary>
+        /// <param name="lookupList"></param>
+        [Obsolete("Use Lookuplist property")]
+        public abstract void SetupLookupList(Dictionary<string, string> lookupList);
 
     }
 }

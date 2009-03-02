@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 
 namespace Habanero.UI.Base
 {
@@ -26,6 +27,9 @@ namespace Habanero.UI.Base
     /// </summary>
     public abstract class NumericUpDownMapper : ControlMapper
     {
+        /// <summary>
+        /// Teh actual <see cref="INumericUpDown"/> control being mapped to the <see cref="IBusinessObject"/>.<see cref="IBOProp"/>
+        /// </summary>
         protected INumericUpDown _numericUpDown;
         private readonly INumericUpDownMapperStrategy _mapperStrategy;
 

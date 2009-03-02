@@ -17,30 +17,32 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Runtime.Serialization;
-using Habanero.Base;
-using Habanero.Base.Exceptions;
-using Habanero.BO;
-using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
     /// <summary>
     /// This manager groups common logic for IDataGridView objects.
-    /// Do not use this object in working code.
+    /// Do not use this object in working code. Instead use one of the 
+    /// implementations of <see cref="IDataGridView"/>
     /// </summary>
     public class DataGridViewManager
     {
         private readonly IDataGridView _grid;
 
+        ///<summary>
+        /// Constructor for 
+        ///</summary>
+        ///<param name="gridBase"></param>
         public DataGridViewManager(IDataGridView gridBase)
         {
             _grid = gridBase;
         }
-
+        /// <summary>
+        /// Sets the column to be sorted
+        /// </summary>
+        /// <param name="columnName"></param>
+        /// <param name="isAscending"></param>
         public void SetSortColumn(string columnName, bool isAscending)
         {
             if (_grid.DataSource is DataView)

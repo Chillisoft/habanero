@@ -28,8 +28,17 @@ namespace Habanero.UI.Base
     /// </summary>
     public abstract class DataViewFilterClause : IFilterClause
     {
+        /// <summary>
+        /// The actual value in the filterClause.
+        /// </summary>
         protected readonly object _filterValue;
+        /// <summary>
+        /// The <see cref="FilterClauseOperator"/> to be used when creating this filterClause.
+        /// </summary>
         protected readonly FilterClauseOperator _clauseOperator;
+        /// <summary>
+        /// The Column Name (Property Name) to use when building this filter.
+        /// </summary>
         protected readonly string _filterColumn;
 
         /// <summary>

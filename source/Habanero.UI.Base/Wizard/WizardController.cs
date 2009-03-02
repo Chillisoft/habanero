@@ -30,6 +30,9 @@ namespace Habanero.UI.Base
     {
         private List<IWizardStep> _wizardSteps;
         private int _currentStep = -1;
+        /// <summary>
+        /// Event Handler for the Wizard being finished. Allows you to do special handling when this occurs.
+        /// </summary>
         public event EventHandler WizardFinished;
 
         /// <summary>
@@ -76,15 +79,11 @@ namespace Habanero.UI.Base
         /// <returns>The next step.</returns>
         public virtual IWizardStep GetNextStep()
         {
-
             if (_currentStep < _wizardSteps.Count - 1)
             {
                 return _wizardSteps[++_currentStep];
             }
-            else
-            {
-                throw new WizardStepException("Invalid Wizard Step: " + (_currentStep + 1));
-            }
+            throw new WizardStepException("Invalid Wizard Step: " + (_currentStep + 1));
         }
 
 
@@ -99,10 +98,7 @@ namespace Habanero.UI.Base
             {
                 return _wizardSteps[--_currentStep];
             }
-            else
-            {
-                throw new WizardStepException("Invalid Wizard Step: " + (_currentStep - 1));
-            }
+            throw new WizardStepException("Invalid Wizard Step: " + (_currentStep - 1));
         }
 
 
@@ -179,13 +175,7 @@ namespace Habanero.UI.Base
         /// <returns></returns>
         public virtual IWizardStep GetCurrentStep()
         {
-            if (_currentStep == -1)
-            {
-                return null;
-            } else
-            {
-                return _wizardSteps[_currentStep];
-            }
+            return _currentStep == -1 ? null : _wizardSteps[_currentStep];
         }
 
         /// <summary>

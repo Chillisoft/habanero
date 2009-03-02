@@ -17,7 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System.ComponentModel;
 using System.Drawing;
 
 namespace Habanero.UI.Base
@@ -41,7 +40,7 @@ namespace Habanero.UI.Base
         /// </summary>
         Normal = 0,
         /// <summary>
-        /// The image within the <see cref="IPictureBox"></see> is stretched or shrunk to fit the size of the <see cref="TIPictureBox"></see>.
+        /// The image within the <see cref="IPictureBox"></see> is stretched or shrunk to fit the size of the <see cref="IPictureBox"></see>.
         /// </summary>
         StretchImage = 1
     }

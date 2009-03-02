@@ -39,13 +39,17 @@ namespace Habanero.UI.VWG
     /// </summary>
     public partial class MultiSelectorVWG<T> : UserControlVWG, IMultiSelector<T>
     {
-        private readonly IControlFactory _controlFactory;
+//        private readonly IControlFactory _controlFactory;
         private readonly MultiSelectorManager<T> _manager;
-        private GridLayoutManager _gridLayoutManager;
+        private readonly GridLayoutManager _gridLayoutManager;
 
+        ///<summary>
+        /// Constructor for the <see cref="MultiSelectorVWG{T}"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
         public MultiSelectorVWG(IControlFactory controlFactory)
         {
-            _controlFactory = controlFactory;
+//            _controlFactory = controlFactory;
             InitializeComponent();
             _gridLayoutManager = new GridLayoutManager(this, controlFactory);
             PanelVWG optionsPanel = new PanelVWG();

@@ -17,20 +17,19 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections;
-using Habanero.Base;
-using Habanero.BO;
-using Habanero.BO.ClassDefinition;
+//using System;
+//using System.Collections;
+//using Habanero.Base;
+//using Habanero.BO;
+//using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
-        //TODO: Port
-//    /// <summary>
-//    /// Maps a ListView object in a user interface
-//    /// </summary>
-//    public class ListViewCollectionSelector
-//    {
+    /// <summary>
+    /// Maps a ListView object in a user interface
+    /// </summary>
+    public class ListViewCollectionManager
+    {
 //        private readonly string _uiDefName;
 //        private readonly IListView _listView;
 //        private readonly ClassDef _classDef;
@@ -43,7 +42,7 @@ namespace Habanero.UI.Base
 //        /// </summary>
 //        /// <param name="listView">The ListView object to map</param>
 //        /// <param name="classDef">the class defintion of the class that this controller is setting up the list view for</param>
-//        public ListViewCollectionSelector(IListView listView,ClassDef classDef)
+//        public ListViewCollectionManager(IListView listView,ClassDef classDef)
 //            : this(listView, classDef, "default")
 //        {
 // 
@@ -55,7 +54,7 @@ namespace Habanero.UI.Base
 //        /// <param name="listView">The ListView object to map</param>
 //        /// <param name="classDef">the class defintion of the class that this controller is setting up the list view for</param>
 //        /// <param name="uiDefName">The ui definition that the list view be set up for i.e. the properties that will be shown in the list view</param>
-//        public ListViewCollectionSelector(IListView listView,ClassDef classDef, string uiDefName)
+//        public ListViewCollectionManager(IListView listView,ClassDef classDef, string uiDefName)
 //        {
 //            _listView = listView;
 //            _classDef = classDef;
@@ -173,5 +172,5 @@ namespace Habanero.UI.Base
 //        {
 //  
 //        }
-//    }
+    }
 }

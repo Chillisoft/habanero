@@ -342,7 +342,6 @@ namespace Habanero.UI.Base
         /// Returns a BOEditor form. This is a form that the business object can be edited in.
         /// </summary>
         /// <param name="bo"></param>
-        ///   a grid, list etc in an asynchronous environment. E.g. to select the recently edited item in the grid</param>
         /// <returns></returns>
         IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo);
 
@@ -365,6 +364,15 @@ namespace Habanero.UI.Base
         /// <param name="action">Action to be performed when the editing is completed or cancelled. Typically used if you want to update
         /// a grid or a list in an asynchronous environment (E.g. to select the recently edited item in the grid)</param>
         IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName, PostObjectEditDelegate action);
+        /// <summary>
+        /// Creates a form in which a business object can be edited
+        /// </summary>
+        /// <param name="bo">The business object to edit</param>
+        /// <param name="uiDefName">The name of the set of UI definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a UI definition with no name attribute specified.</param>
+        /// <param name="groupControlCreator">The Creator that will be used to Create the <see cref="IGroupControl"/></param>
+        IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName, GroupControlCreator groupControlCreator);
 
         ///// <summary>
         ///// Creates a ListView control
@@ -559,6 +567,11 @@ namespace Habanero.UI.Base
         ///</summary>
         ICollapsiblePanel CreateCollapsiblePanel();
 
+        ///<summary>
+        /// Creates a <see cref="ICollapsiblePanel"/>
+        ///</summary>
+        ICollapsiblePanel CreateCollapsiblePanel(string name);
+
         
         ///<summary>
         /// Creates a <see cref="IButton"/> configured with the collapsible style
@@ -587,6 +600,29 @@ namespace Habanero.UI.Base
         ///</summary>
         ///<returns></returns>
         ICollapsiblePanelGroupControl CreateCollapsiblePanelGroupControl();
+
+        ///<summary>
+        /// Creates a <see cref="IGroupBoxGroupControl"/>
+        ///</summary>
+        ///<returns></returns>
+        IGroupBoxGroupControl CreateGroupBoxGroupControl();
+
+        ///<summary>
+        /// Creates an <see cref="IBOComboBoxSelector"/>
+        ///</summary>
+        ///<returns></returns>
+        IBOComboBoxSelector CreateComboBoxSelector();
+        ///<summary>
+        /// Creates an <see cref="IBOListBoxSelector"/>
+        ///</summary>
+        ///<returns></returns>
+        IBOListBoxSelector CreateListBoxSelector();
+
+        ///<summary>
+        /// Creates an <see cref="IBOCollapsiblePanelSelector"/>
+        ///</summary>
+        ///<returns></returns>
+        IBOCollapsiblePanelSelector CreateCollapsiblePanelSelector();
     }
 
     /// <summary>

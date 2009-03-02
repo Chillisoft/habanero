@@ -20,7 +20,6 @@
 using System;
 using System.Windows.Forms;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
 using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.Win
@@ -30,6 +29,10 @@ namespace Habanero.UI.Win
     /// </summary>
     public class DataGridViewDateTimeColumnWin : DataGridViewColumnWin, IDataGridViewDateTimeColumn
     {
+        ///<summary>
+        /// Constructor for <see cref="DataGridViewDateTimeColumnWin"/>
+        ///</summary>
+        ///<param name="dataGridViewColumn"></param>
         public DataGridViewDateTimeColumnWin(DataGridViewDateTimeColumn dataGridViewColumn)
             : base(dataGridViewColumn)
         {
@@ -73,7 +76,7 @@ namespace Habanero.UI.Win
         /// <exception cref="System.InvalidOperationException">The value assigned to the property 
         /// conflicts with SelectionMode. </exception>
         /// <filterpriority>1</filterpriority>
-        public DataGridViewColumnSortMode SortMode
+        public new DataGridViewColumnSortMode SortMode
         {
             get { return (DataGridViewColumnSortMode)base.SortMode; }
             set { base.SortMode = (System.Windows.Forms.DataGridViewColumnSortMode)value; }
@@ -82,7 +85,7 @@ namespace Habanero.UI.Win
         /// <summary>Gets or sets the column's default cell style.</summary>
         /// <returns>A <see cref="IDataGridViewCellStyle"></see> that represents the default style of the cells in the column.</returns>
         /// <filterpriority>1</filterpriority>
-        public IDataGridViewCellStyle DefaultCellStyle
+        public new IDataGridViewCellStyle DefaultCellStyle
         {
             get { return new DataGridViewCellStyleWin(base.DefaultCellStyle); }
             set { throw new NotImplementedException(); }
@@ -100,7 +103,6 @@ namespace Habanero.UI.Win
         /// Constructor to initialise a new cell, using the short date format
         /// </summary>
         public CalendarCell()
-            : base()
         {
             // Use the short date format.
             this.Style.Format = "d";
@@ -123,12 +125,12 @@ namespace Habanero.UI.Win
 
             if (this.Value == null)
             {
-                ctl.Checked = false;
+                if (ctl != null) ctl.Checked = false;
             }
             else
             {
                 if (this.Value.ToString() != "")
-                    ctl.Value = DateTime.Parse(this.Value.ToString());
+                    if (ctl != null) ctl.Value = DateTime.Parse(this.Value.ToString());
             }
         }
 
@@ -164,9 +166,7 @@ namespace Habanero.UI.Win
     /// </summary>
     public class CalendarEditingControl : DateTimePicker, IDataGridViewEditingControl
     {
-        DataGridView _dataGridView;
-        private bool _valueChanged = false;
-        int _rowIndex;
+        private bool _valueChanged;
 
         /// <summary>
         /// Constructor to initialise a new editing control with the short
@@ -218,11 +218,7 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Gets and sets the row index number
         /// </summary>
-        public int EditingControlRowIndex
-        {
-            get { return _rowIndex; }
-            set { _rowIndex = value; }
-        }
+        public int EditingControlRowIndex { get; set; }
 
         /// <summary>
         /// Indicates if the editing control wants the input key specified
@@ -274,11 +270,7 @@ namespace Habanero.UI.Win
         /// Gets and sets the DataGridView object referenced in this
         /// control
         /// </summary>
-        public DataGridView EditingControlDataGridView
-        {
-            get { return _dataGridView; }
-            set { _dataGridView = value; }
-        }
+        public DataGridView EditingControlDataGridView { get; set; }
 
         /// <summary>
         /// Gets and sets the boolean which indicates whether the value

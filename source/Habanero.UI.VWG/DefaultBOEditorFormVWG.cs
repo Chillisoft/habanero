@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Reflection;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -37,13 +36,24 @@ namespace Habanero.UI.VWG
     /// </summary>
     public class DefaultBOEditorFormVWG : FormVWG, IDefaultBOEditorForm
     {
+        ///<summary>
+        /// The Creator (<see cref="GroupControlCreator"/> used to create the <see cref="IGroupControl"/>
+        ///</summary>
+        public GroupControlCreator GroupControlCreator { get; private set; }
         private readonly PostObjectEditDelegate _action;
         private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.DefaultBOEditorFormVWG");
         private readonly string _uiDefName;
         private readonly IButtonGroupControl _buttons;
+        /// <summary>
+        /// The <see cref="IBusinessObject"/> being managed by this editor.
+        /// </summary>
         protected BusinessObject _bo;
         private readonly IControlFactory _controlFactory;
         private readonly IPanel _boPanel;
+        /// <summary>
+        /// The <see cref="IPanelInfo"/> containting the panel info created by the <see cref="PanelBuilder"/>. This contains 
+        /// the panel and all other info required to display the Panel on the form.
+        /// </summary>
         protected IPanelInfo _panelInfo;
 
         /// <summary>
@@ -60,6 +70,19 @@ namespace Habanero.UI.VWG
         {
             _action = action;
         }
+        /// <summary>
+        /// Constructs the <see cref="DefaultBOEditorFormVWG"/> class  with 
+        /// the specified businessObject, uiDefName and post edit action. 
+        /// </summary>
+        /// <param name="bo">The business object to represent</param>
+        /// <param name="uiDefName">The name of the ui def to use.</param>
+        /// <param name="controlFactory">The <see cref="IControlFactory"/> to use for creating the Editor form controls</param>
+        /// <param name="creator">The Creator used to Create the Group Control.</param>
+        public DefaultBOEditorFormVWG(BusinessObject bo, string uiDefName, IControlFactory controlFactory, GroupControlCreator creator)
+            : this(bo, uiDefName, controlFactory)
+        {
+            GroupControlCreator = creator;
+        }
 
         /// <summary>
         /// Constructs the <see cref="DefaultBOEditorFormVWG"/> class  with 
@@ -73,7 +96,7 @@ namespace Habanero.UI.VWG
             _bo = bo;
             _controlFactory = controlFactory;
             _uiDefName = uiDefName;
-
+            GroupControlCreator = _controlFactory.CreateTabControl;
             BOMapper mapper = new BOMapper(bo);
 
             UIForm def;
@@ -335,14 +358,7 @@ namespace Habanero.UI.VWG
         /// <returns>True if the edit was a success, false if not</returns>
         bool IDefaultBOEditorForm.ShowDialog()
         {
-            if (this.ShowDialog() == (Gizmox.WebGUI.Forms.DialogResult) Base.DialogResult.OK)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return this.ShowDialog() == (Gizmox.WebGUI.Forms.DialogResult) Base.DialogResult.OK;
         }
     }
 }

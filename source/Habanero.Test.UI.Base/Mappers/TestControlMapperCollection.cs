@@ -39,7 +39,9 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.Win.ControlFactoryWin();
+                Habanero.UI.Win.ControlFactoryWin factory = new Habanero.UI.Win.ControlFactoryWin();
+                GlobalUIRegistry.ControlFactory = factory;
+                return factory;
             }
 
             [Test]
@@ -71,7 +73,9 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.VWG.ControlFactoryVWG();
+                Habanero.UI.VWG.ControlFactoryVWG factory = new  Habanero.UI.VWG.ControlFactoryVWG();
+                GlobalUIRegistry.ControlFactory = factory;
+                return factory;
             }
 
             [Test]
@@ -136,7 +140,7 @@ namespace Habanero.Test.UI.Base
         }
 
         
-        private void ChangeValuesInControls(IPanelInfo panelInfo)
+        private static void ChangeValuesInControls(IPanelInfo panelInfo)
         {
             panelInfo.FieldInfos[TEST_PROP_1].ControlMapper.Control.Text = CHANGED_VALUE_1;
             panelInfo.FieldInfos[TEST_PROP_2].ControlMapper.Control.Text = CHANGED_VALUE_2;

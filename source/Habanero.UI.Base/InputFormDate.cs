@@ -29,8 +29,13 @@ namespace Habanero.UI.Base
     {
         private readonly IControlFactory _controlFactory;
         private readonly string _message;
-        private IDateTimePicker _dateTimePicker;
+        private readonly IDateTimePicker _dateTimePicker;
 
+        ///<summary>
+        /// Constructor for <see cref="InputFormDate"/>
+        ///</summary>
+        ///<param name="controlFactory"></param>
+        ///<param name="message"></param>
         public InputFormDate(IControlFactory controlFactory, string message)
         {
             _controlFactory = controlFactory;

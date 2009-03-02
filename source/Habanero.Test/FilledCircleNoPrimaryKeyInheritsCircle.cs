@@ -29,16 +29,9 @@ namespace Habanero.Test
     public class FilledCircleNoPrimaryKeyInheritsCircle : Circle
     {
 
-        public static ClassDef GetClassDef()
+        public new static ClassDef GetClassDef()
         {
-            if (!ClassDef.IsDefined(typeof(FilledCircleNoPrimaryKeyInheritsCircle)))
-            {
-                return CreateClassDef();
-            }
-            else
-            {
-                return ClassDef.ClassDefs[typeof (FilledCircleNoPrimaryKeyInheritsCircle)];
-            }
+            return !ClassDef.IsDefined(typeof(FilledCircleNoPrimaryKeyInheritsCircle)) ? CreateClassDef() : ClassDef.ClassDefs[typeof (FilledCircleNoPrimaryKeyInheritsCircle)];
         }
 
         protected override ClassDef ConstructClassDef()
@@ -47,7 +40,7 @@ namespace Habanero.Test
             return _classDef;
         }
 
-        private static ClassDef CreateClassDef()
+        private new static ClassDef CreateClassDef()
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =

@@ -167,10 +167,10 @@ namespace Habanero.Test.UI.Base.Wizard
             Assert.AreSame(null, _wizardController.GetCurrentStep());
         }
 
+        [Ignore(" Test not yet written")] //Brett 26 Feb 2009: I found this while cleaning up code had a not that needs to be implemented
         [Test]
         public void Test_WizardControllerCancelsWizardSteps_Win()
         {
-            //TODO:Implement
         }
 
         [Test]
@@ -201,12 +201,8 @@ namespace Habanero.Test.UI.Base.Wizard
 
     internal class WizardStepStub : IWizardStep
     {
-        private bool _cancelled = false;
+        public bool Cancelled { get; private set; }
 
-        public bool Cancelled
-        {
-            get { return _cancelled; }
-        }
         /// <summary>
         /// Initialises the step. Run when the step is reached.
         /// </summary>
@@ -249,7 +245,7 @@ namespace Habanero.Test.UI.Base.Wizard
         /// </summary>
         public void CancelStep()
         {
-            _cancelled = true;
+            Cancelled = true;
         }
 
         #region IControlInterface
@@ -263,7 +259,15 @@ namespace Habanero.Test.UI.Base.Wizard
         /// Occurs when the control is double clicked.
         /// </summary>
         public event EventHandler DoubleClick;
+
+        /// <summary>
+        /// Occurs when the control is resized
+        /// </summary>
         public event EventHandler Resize;
+
+        /// <summary>
+        /// Occurs when the Visible property value changes
+        /// </summary>
         public event EventHandler VisibleChanged;
 
         /// <summary>
@@ -272,8 +276,8 @@ namespace Habanero.Test.UI.Base.Wizard
         /// <value></value>
         public AnchorStyles Anchor
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         /// <summary>
@@ -310,7 +314,7 @@ namespace Habanero.Test.UI.Base.Wizard
 
         public bool Focus()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         /// <summary>Gets a value indicating whether the control has input focus.</summary>
@@ -501,7 +505,7 @@ namespace Habanero.Test.UI.Base.Wizard
 
         public void Dispose()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public event EventHandler TextChanged;                                    

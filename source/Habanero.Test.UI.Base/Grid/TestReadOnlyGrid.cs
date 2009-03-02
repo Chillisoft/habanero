@@ -137,7 +137,24 @@ namespace Habanero.Test.UI.Base
             AddControlToForm(readOnlyGrid);
             SetupGridColumnsForMyBo(readOnlyGrid);
             //---------------Execute Test ----------------------
+#pragma warning disable 618,612
             readOnlyGrid.SetBusinessObjectCollection(col);
+#pragma warning restore 618,612
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, readOnlyGrid.Rows.Count);
+            //---------------Tear Down -------------------------    
+        }
+        [Test]
+        public void Test_Set_BusinessObjectCollectionOnGrid_NoOfRows()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IReadOnlyGrid readOnlyGrid = GetControlFactory().CreateReadOnlyGrid();
+            AddControlToForm(readOnlyGrid);
+            SetupGridColumnsForMyBo(readOnlyGrid);
+            //---------------Execute Test ----------------------
+            readOnlyGrid.BusinessObjectCollection = col;
             //---------------Test Result -----------------------
             Assert.AreEqual(4, readOnlyGrid.Rows.Count);
             //---------------Tear Down -------------------------    

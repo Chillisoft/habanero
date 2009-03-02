@@ -290,7 +290,24 @@ namespace Habanero.Test.General
             Assert.AreEqual(ORMapping.SingleTableInheritance,
                             FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef.ORMapping);
         }
-
         // Provided in case the above test fails and the rows remain in the database
+
+        //[Test]
+        //public void Test_Load()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    ClassDef classDef = ContactPerson.CreateClassDefWithShapeRelationship();
+        //    ContactPerson contactPerson = new ContactPerson();
+        //    CircleNoPrimaryKey circleNoPrimaryKey = new CircleNoPrimaryKey();
+        //    //---------------Assert Precondition----------------
+
+        //    //---------------Execute Test ----------------------
+        //    SingleRelationship<ContactPerson>  relationship = (SingleRelationship<ContactPerson>) circleNoPrimaryKey.Relationships["ContactPerson"];
+        //    relationship.SetRelatedObject(contactPerson);
+        //    //---------------Test Result -----------------------
+        //    Assert.IsNotNull(contactPerson);
+        //}
+
+        
     }
 }

@@ -38,6 +38,9 @@ namespace Habanero.UI.Base
         private IDataSetProvider _dataSetProvider;
         private IBusinessObjectCollection _boCol;
         private DataView _dataTableDefaultView;
+        /// <summary>
+        /// Handler for the CollectionChanged Event
+        /// </summary>
         public event EventHandler CollectionChanged;
         private GridLoaderDelegate _gridLoader;
 
@@ -64,7 +67,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// See <see cref="IGridBase.SetBusinessObjectCollection"/>
+        /// See <see cref="IGridBase.BusinessObjectCollection"/>
         /// </summary>
         public void SetBusinessObjectCollection(IBusinessObjectCollection col)
         {
@@ -116,7 +119,12 @@ namespace Habanero.UI.Base
             }
             gridBase.DataSource = GetDataTable(boCol);
         }
-
+        /// <summary>
+        /// Returns a DataView based on the <see cref="IBusinessObjectCollection"/> defined by <paramref name="boCol"/>.
+        /// The Columns in the <see cref="DataView"/> will be the collumns defined in the Grids <see cref="UiDefName"/>
+        /// </summary>
+        /// <param name="boCol">The collection that the DataView is based on</param>
+        /// <returns></returns>
         protected DataView GetDataTable(IBusinessObjectCollection boCol)
         {
             _dataSetProvider = _gridBase.CreateDataSetProvider(boCol);
@@ -147,8 +155,7 @@ namespace Habanero.UI.Base
                 int rownum = -1;
                 for (int i = 0; i < _gridBase.Rows.Count; i++)
                     if (_gridBase.Rows[i].Selected) rownum = i;
-                if (rownum < 0) return null;
-                return this.GetBusinessObjectAtRow(rownum);
+                return rownum < 0 ? null : this.GetBusinessObjectAtRow(rownum);
             }
             set
             {
@@ -276,7 +283,7 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// See <see cref="IGridBase.GetBusinessObjectCollection"/>
+        /// See <see cref="IGridBase.BusinessObjectCollection"/>
         /// </summary>
         public IBusinessObjectCollection GetBusinessObjectCollection()
         {
@@ -365,7 +372,7 @@ namespace Habanero.UI.Base
         /// </summary>
         public void RefreshGrid()
         {
-            IBusinessObjectCollection col = this._gridBase.GetBusinessObjectCollection();
+            IBusinessObjectCollection col = this._gridBase.BusinessObjectCollection;
             IBusinessObject bo = this._gridBase.SelectedBusinessObject;
             SetBusinessObjectCollection(null);
             SetBusinessObjectCollection(col);

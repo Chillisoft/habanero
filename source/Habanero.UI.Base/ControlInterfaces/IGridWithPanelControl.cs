@@ -98,7 +98,7 @@ namespace Habanero.UI.Base
         /// <param name="lastSelectedBusinessObject">The previous selected business
         /// object in the grid - used to revert when a user tries to change a grid
         /// row while an object is dirty or invalid</param>
-        void UpdateControlEnabledState(IBusinessObject lastSelectedBusinessObject);
+        void UpdateControlEnabledState(TBusinessObject lastSelectedBusinessObject);
 
         /// <summary>
         /// Whether to show the save confirmation dialog when moving away from
