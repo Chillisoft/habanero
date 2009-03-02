@@ -284,16 +284,6 @@ namespace Habanero.UI.VWG
         }
 
         /// <summary>
-        /// Gets or sets the dialog result that indicates what action was
-        /// taken to close the form
-        /// </summary>
-        public new Base.DialogResult DialogResult
-        {
-            get { return (Base.DialogResult)base.DialogResult; }
-            set { base.DialogResult = (Gizmox.WebGUI.Forms.DialogResult)value; }
-        }
-
-        /// <summary>
         /// Gets the object containing all information related to the form, including
         /// its controls, mappers and business object
         /// </summary>

@@ -170,6 +170,12 @@ namespace Habanero.UI.Base
         FormStartPosition StartPosition { get; set; }
 
         bool IsMdiContainer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dialog result that indicates what action was
+        /// taken to close the form
+        /// </summary>
+        DialogResult DialogResult { get; set; }
     }
 
 }

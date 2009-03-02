@@ -85,7 +85,7 @@ namespace Habanero.Test.UI.Base
                 //---------------Execute Test ----------------------
                 okCancelDialogFactory.OkButton_ClickHandler(dialogForm);
                 //---------------Test Result -----------------------
-                Assert.AreEqual(dialogForm.DialogResult, System.Windows.Forms.DialogResult.OK);
+                Assert.AreEqual(dialogForm.DialogResult, Habanero.UI.Base.DialogResult.OK);
                 //---------------Tear Down -------------------------
             }
             [Test]
@@ -98,7 +98,7 @@ namespace Habanero.Test.UI.Base
                 //---------------Execute Test ----------------------
                 okCancelDialogFactory.CancelButton_ClickHandler(dialogForm);
                 //---------------Test Result -----------------------
-                Assert.AreEqual(dialogForm.DialogResult, System.Windows.Forms.DialogResult.Cancel);
+                Assert.AreEqual(dialogForm.DialogResult, Habanero.UI.Base.DialogResult.Cancel);
                 //---------------Tear Down -------------------------
             }
         }

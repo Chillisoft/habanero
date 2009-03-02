@@ -225,16 +225,6 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
-        /// Gets or sets the dialog result that indicates what action was
-        /// taken to close the form
-        /// </summary>
-        public Base.DialogResult DialogResult
-        {
-            get { return (Base.DialogResult) base.DialogResult; }
-            set { base.DialogResult = (System.Windows.Forms.DialogResult)value; }
-        }
-
-        /// <summary>
         /// Gets the object containing all information related to the form, including
         /// its controls, mappers and business object
         /// </summary>
