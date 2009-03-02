@@ -312,7 +312,7 @@ namespace Habanero.Test.BO.Relationship
         /// a Dirty child will be cancelled.
         /// </summary>
         [Test]
-        public void Test_CancelEdit_ForDirtyChild()
+        public void Test_CancelEdit_Owner_ForDirtyChild()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
@@ -347,7 +347,7 @@ namespace Habanero.Test.BO.Relationship
         /// an Added child will be removed and cancelled.
         /// </summary>
         [Test]
-        public void Test_CancelEdit_ForAddedChild()
+        public void Test_CancelEdit_Owner_ForAddedChild()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
@@ -382,7 +382,7 @@ namespace Habanero.Test.BO.Relationship
         /// an Created child will be removed and cancelled.
         /// </summary>
         [Test]
-        public void Test_CancelEdit_ForCreatedChild()
+        public void Test_CancelEdit_Owner_ForCreatedChild()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
@@ -417,7 +417,7 @@ namespace Habanero.Test.BO.Relationship
         /// an Removed child will be added and cancelled.
         /// </summary>
         [Test]
-        public void Test_CancelEdit_ForRemovedChild()
+        public void Test_CancelEdit_Owner_ForRemovedChild()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
@@ -452,7 +452,7 @@ namespace Habanero.Test.BO.Relationship
         /// a Deleted child will be cancelled and the mark for delete will be undone.
         /// </summary>
         [Test]
-        public void Test_CancelEdit_ForDeletedChild()
+        public void Test_CancelEdit_Owner_ForDeletedChild()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
@@ -489,7 +489,7 @@ namespace Habanero.Test.BO.Relationship
         /// edits to the child will be cancelled, and the relationship will be left as is.
         /// </summary>
         [Test]
-        public void Test_Child_CancelEdit_ForDirtyChild()
+        public void Test_CancelEdit_NonOwner_ForDirtyChild()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
@@ -529,7 +529,7 @@ namespace Habanero.Test.BO.Relationship
         /// </summary>
         [Test]
         [Ignore("Working on this")] //TODO Mark 27 Feb 2009: Ignored Test - Working on this
-        public void Test_Child_CancelEdit_ForAddedChild()
+        public void Test_CancelEdit_NonOwner_ForAddedChild()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
@@ -567,7 +567,7 @@ namespace Habanero.Test.BO.Relationship
         /// </summary>
         [Test]
         [Ignore("Working on this")] //TODO Mark 27 Feb 2009: Ignored Test - Working on this
-        public void Test_Child_CancelEdit_ForCreatedChild()
+        public void Test_CancelEdit_NonOwner_ForCreatedChild()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
@@ -605,7 +605,7 @@ namespace Habanero.Test.BO.Relationship
         /// </summary>
         [Test]
         [Ignore("Working on this")] //TODO Mark 27 Feb 2009: Ignored Test - Working on this
-        public void Test_Child_CancelEdit_ForRemovedChild()
+        public void Test_CancelEdit_NonOwner_ForRemovedChild()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
@@ -642,7 +642,7 @@ namespace Habanero.Test.BO.Relationship
         /// edits to the child will be cancelled, and the mark for delete will be undone.
         /// </summary>
         [Test]
-        public void Test_Child_CancelEdit_ForDeletedChild()
+        public void Test_CancelEdit_NonOwner_ForDeletedChild()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
@@ -685,7 +685,7 @@ namespace Habanero.Test.BO.Relationship
         /// </summary>
         [Test]
         [Ignore("Working on this")] //TODO Mark 27 Feb 2009: Ignored Test - Working on this
-        public void Test_Reverse_CancelEdit_ChildOwnsTheEdit_ForAddedChild()
+        public void Test_CancelEdit_Owner_ChildOwnsTheEdit_ForAddedChild()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO; 
@@ -722,7 +722,7 @@ namespace Habanero.Test.BO.Relationship
         /// </summary>
         [Test]
         [Ignore("Working on this")] //TODO Mark 27 Feb 2009: Ignored Test - Working on this
-        public void Test_Reverse_CancelEdit_ChildOwnsTheEdit_ForCreatedChild()
+        public void Test_CancelEdit_Owner_ChildOwnsTheEdit_ForCreatedChild()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO;
@@ -758,7 +758,7 @@ namespace Habanero.Test.BO.Relationship
         /// the Removed child will be added and cancelled.
         /// </summary>
         [Test]
-        public void Test_Reverse_CancelEdit_ChildOwnsTheEdit_ForRemovedChild()
+        public void Test_CancelEdit_Owner_ChildOwnsTheEdit_ForRemovedChild()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO;
@@ -788,50 +788,13 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
             Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
         }
-
-        ///// <summary>
-        ///// • If CancelEdit is called on the relationship, then 
-        ///// a Deleted child will be cancelled and the mark for delete will be undone.
-        ///// </summary>
-        //[Test]
-        //public void Test_CancelEdit_ForDeletedChild()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    BusinessObjectCollection<ContactPersonTestBO> cpCol;
-        //    MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(out cpCol);
-        //    ContactPersonTestBO deletedChild = CreateDeletedChild(cpCol);
-        //    //---------------Assert Precondition----------------
-        //    Assert.AreEqual(0, cpCol.Count);
-        //    Assert.IsTrue(deletedChild.Status.IsDirty);
-        //    Assert.IsTrue(aggregateRelationship.IsDirty);
-        //    Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
-        //    Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
-        //    Assert.AreEqual(1, cpCol.MarkedForDeleteBusinessObjects.Count);
-        //    //---------------Execute Test ----------------------
-        //    aggregateRelationship.CancelEdits();
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual(1, cpCol.Count);
-        //    Assert.IsFalse(deletedChild.Status.IsDirty);
-        //    Assert.IsFalse(aggregateRelationship.IsDirty);
-        //    Assert.AreEqual(0, aggregateRelationship.GetDirtyChildren().Count);
-        //    Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
-        //}
-
-
-
+        
         ///// <summary>
         ///// • If CancelEdit is called on a Dirty child, then 
         ///// edits to the child will be cancelled, and the relationship will be left as is.
         ///// </summary>
         //[Test]
-        //public void Test_Child_CancelEdit_ForDirtyChild()
+        //public void Test_CancelEdit_NonOwner_ChildOwnsTheEdit_ForDirtyChild()
         //{
         //    //---------------Set up test pack-------------------
         //    BusinessObjectCollection<ContactPersonTestBO> cpCol;
@@ -865,126 +828,131 @@ namespace Habanero.Test.BO.Relationship
         //    Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
         //}
 
-        ///// <summary>
-        ///// • If CancelEdit is called on a Added child, then 
-        ///// edits to the child will be cancelled, and the relationship will be left as is.
-        ///// </summary>
-        //[Test]
-        //[Ignore("Working on this")] //TODO Mark 27 Feb 2009: Ignored Test - Working on this
-        //public void Test_Child_CancelEdit_ForAddedChild()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    BusinessObjectCollection<ContactPersonTestBO> cpCol;
-        //    MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(out cpCol);
-        //    ContactPersonTestBO addedChild = EditChild(CreateAddedChild(cpCol));
-        //    //---------------Assert Precondition----------------
-        //    Assert.AreEqual(1, cpCol.Count);
-        //    AssertEditedPropDirtyState(true, addedChild);
-        //    AssertFKDirtyState(true, addedChild);
-        //    Assert.IsTrue(aggregateRelationship.IsDirty);
-        //    Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
-        //    Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
-        //    Assert.AreEqual(1, cpCol.AddedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
-        //    //---------------Execute Test ----------------------
-        //    addedChild.CancelEdits();
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual(1, cpCol.Count);
-        //    AssertEditedPropDirtyState(false, addedChild);
-        //    AssertFKDirtyState(true, addedChild);
-        //    Assert.IsTrue(aggregateRelationship.IsDirty);
-        //    Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
-        //    Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
-        //    Assert.AreEqual(1, cpCol.AddedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
-        //}
+        /// <summary>
+        /// • If CancelEdit is called on the parent when a child is Added through edits on the child, then 
+        /// edits to the child will not be cancelled, and the relationship will be left as is.
+        /// </summary>
+        [Test]
+        [Ignore("Working on this")] //TODO Mark 02 Mar 2009: Ignored Test - Working on this
+        public void Test_CancelEdit_NonOwner_ChildOwnsTheEdit_ForAddedChild()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(out organisationTestBO, out cpCol);
+            ContactPersonTestBO addedChild = EditChild(CreateAddedChild_ChildOwnsEdit(organisationTestBO));
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, cpCol.Count);
+            AssertEditedPropDirtyState(true, addedChild);
+            AssertFKDirtyState(true, addedChild);
+            Assert.IsTrue(aggregateRelationship.IsDirty);
+            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.AddedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+            //---------------Execute Test ----------------------
+            aggregateRelationship.CancelEdits();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, cpCol.Count);
+            AssertEditedPropDirtyState(true, addedChild);
+            AssertFKDirtyState(true, addedChild);
+            Assert.IsTrue(aggregateRelationship.IsDirty);
+            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.AddedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+        }
 
-        ///// <summary>
-        ///// • If CancelEdit is called on a Created child, then 
-        ///// edits to the child will be cancelled, and the relationship will be left as is.
-        ///// </summary>
-        //[Test]
-        //[Ignore("Working on this")] //TODO Mark 27 Feb 2009: Ignored Test - Working on this
-        //public void Test_Child_CancelEdit_ForCreatedChild()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    BusinessObjectCollection<ContactPersonTestBO> cpCol;
-        //    MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(out cpCol);
-        //    ContactPersonTestBO createdChild = EditChild(CreateCreatedChild(cpCol));
-        //    //---------------Assert Precondition----------------
-        //    Assert.AreEqual(1, cpCol.Count);
-        //    AssertEditedPropDirtyState(true, createdChild);
-        //    AssertFKDirtyState(true, createdChild);
-        //    Assert.IsTrue(aggregateRelationship.IsDirty);
-        //    Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
-        //    Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
-        //    Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
-        //    //---------------Execute Test ----------------------
-        //    createdChild.CancelEdits();
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual(1, cpCol.Count);
-        //    AssertEditedPropDirtyState(false, createdChild);
-        //    AssertFKDirtyState(true, createdChild);
-        //    Assert.IsTrue(aggregateRelationship.IsDirty);
-        //    Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
-        //    Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
-        //    Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
-        //}
+        /// <summary>
+        /// • If CancelEdit is called on the parent when a child is Created and associated through 
+        /// edits on the child, then edits to the child will not be cancelled, and 
+        /// the relationship will be left as is.
+        /// </summary>
+        [Test]
+        [Ignore("Working on this")] //TODO Mark 02 Mar 2009: Ignored Test - Working on this
+        public void Test_CancelEdit_NonOwner_ChildOwnsTheEdit_ForCreatedChild()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(out organisationTestBO, out cpCol);
+            ContactPersonTestBO createdChild = EditChild(CreateCreatedChild_ChildOwnsEdit(organisationTestBO));
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, cpCol.Count);
+            AssertEditedPropDirtyState(true, createdChild);
+            AssertFKDirtyState(true, createdChild);
+            Assert.IsTrue(aggregateRelationship.IsDirty);
+            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+            //---------------Execute Test ----------------------
+            aggregateRelationship.CancelEdits();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, cpCol.Count);
+            AssertEditedPropDirtyState(true, createdChild);
+            AssertFKDirtyState(true, createdChild);
+            Assert.IsTrue(aggregateRelationship.IsDirty);
+            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.AreEqual(0, cpCol.PersistedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+        }
 
-        ///// <summary>
-        ///// • If CancelEdit is called on a Removed child, then 
-        ///// edits to the child will be cancelled, and the relationship will be left as is.
-        ///// </summary>
-        //[Test]
-        //[Ignore("Working on this")] //TODO Mark 27 Feb 2009: Ignored Test - Working on this
-        //public void Test_Child_CancelEdit_ForRemovedChild()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    BusinessObjectCollection<ContactPersonTestBO> cpCol;
-        //    MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(out cpCol);
-        //    ContactPersonTestBO removedChild = EditChild(CreateRemovedChild(cpCol));
-        //    //---------------Assert Precondition----------------
-        //    Assert.AreEqual(0, cpCol.Count);
-        //    AssertEditedPropDirtyState(true, removedChild);
-        //    AssertFKDirtyState(true, removedChild);
-        //    Assert.IsTrue(aggregateRelationship.IsDirty);
-        //    Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
-        //    Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
-        //    Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
-        //    //---------------Execute Test ----------------------
-        //    removedChild.CancelEdits();
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual(0, cpCol.Count);
-        //    AssertEditedPropDirtyState(false, removedChild);
-        //    AssertFKDirtyState(true, removedChild);
-        //    Assert.IsFalse(aggregateRelationship.IsDirty);
-        //    Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
-        //    Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
-        //    Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
-        //    Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
-        //}
+        /// <summary>
+        /// • If CancelEdit is called on the parent when a child is Removed through 
+        /// edits on the child, then edits to the child will not be cancelled, and 
+        /// the relationship will be left as is.
+        /// </summary>
+        [Test]
+        [Ignore("Working on this")] //TODO Mark 02 Mar 2009: Ignored Test - Working on this
+        public void Test_CancelEdit_NonOwner_ChildOwnsTheEdit_ForRemovedChild()
+        {
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol;
+            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(out organisationTestBO, out cpCol);
+            ContactPersonTestBO removedChild = EditChild(CreateRemovedChild_ChildOwnsEdit(organisationTestBO));
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, cpCol.Count);
+            AssertEditedPropDirtyState(true, removedChild);
+            AssertFKDirtyState(true, removedChild);
+            Assert.IsTrue(aggregateRelationship.IsDirty);
+            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+            //---------------Execute Test ----------------------
+            aggregateRelationship.CancelEdits();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, cpCol.Count);
+            AssertEditedPropDirtyState(true, removedChild);
+            AssertFKDirtyState(true, removedChild);
+            Assert.IsFalse(aggregateRelationship.IsDirty);
+            Assert.AreEqual(1, aggregateRelationship.GetDirtyChildren().Count);
+            Assert.AreEqual(1, cpCol.PersistedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.AddedBusinessObjects.Count);
+            Assert.AreEqual(1, cpCol.RemovedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+            Assert.AreEqual(0, cpCol.MarkedForDeleteBusinessObjects.Count);
+        }
 
         ///// <summary>
         ///// • If CancelEdit is called on a Deleted child, then 
         ///// edits to the child will be cancelled, and the mark for delete will be undone.
         ///// </summary>
         //[Test]
-        //public void Test_Child_CancelEdit_ForDeletedChild()
+        //public void Test_CancelEdit_NonOwner_ChildOwnsTheEdit_ForDeletedChild()
         //{
         //    //---------------Set up test pack-------------------
         //    BusinessObjectCollection<ContactPersonTestBO> cpCol;
