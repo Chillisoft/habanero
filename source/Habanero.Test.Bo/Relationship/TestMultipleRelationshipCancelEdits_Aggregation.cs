@@ -28,10 +28,10 @@ namespace Habanero.Test.BO.Relationship
 
         #region Utility Methods
 
-        private static MultipleRelationship<ContactPersonTestBO> GetAggregationRelationship(
+        protected MultipleRelationship<ContactPersonTestBO> GetAggregationRelationship(
             OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
-            const RelationshipType relationshipType = RelationshipType.Aggregation;
+            RelationshipType relationshipType = GetRelationshipType();
             MultipleRelationship<ContactPersonTestBO> relationship =
                 organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
             RelationshipDef relationshipDef = (RelationshipDef) relationship.RelationshipDef;
@@ -40,14 +40,19 @@ namespace Habanero.Test.BO.Relationship
             return relationship;
         }
 
-        private MultipleRelationship<ContactPersonTestBO> GetAggregationRelationship(
+        protected virtual RelationshipType GetRelationshipType()
+        {
+            return RelationshipType.Aggregation;
+        }
+
+        protected MultipleRelationship<ContactPersonTestBO> GetAggregationRelationship(
             out BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
             OrganisationTestBO organisationTestBO;
             return GetAggregationRelationship(out organisationTestBO, out cpCol);
         }
 
-        private MultipleRelationship<ContactPersonTestBO> GetAggregationRelationship(
+        protected MultipleRelationship<ContactPersonTestBO> GetAggregationRelationship(
             out OrganisationTestBO organisationTestBO, 
             out BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
@@ -55,7 +60,7 @@ namespace Habanero.Test.BO.Relationship
             return GetAggregationRelationship(out organisationTestBO, out relationships, out cpCol);
         }
 
-        private MultipleRelationship<ContactPersonTestBO> GetAggregationRelationship(
+        protected MultipleRelationship<ContactPersonTestBO> GetAggregationRelationship(
             out OrganisationTestBO organisationTestBO, out RelationshipCol relationships,
             out BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
@@ -64,7 +69,7 @@ namespace Habanero.Test.BO.Relationship
             return GetAggregationRelationship(organisationTestBO, out cpCol);
         }
 
-        private static void CreateDirtyChildren(BusinessObjectCollection<ContactPersonTestBO> cpCol,
+        protected virtual void CreateDirtyChildren(BusinessObjectCollection<ContactPersonTestBO> cpCol,
                                                 out ContactPersonTestBO existingChild,
                                                 out ContactPersonTestBO editedChild,
                                                 out ContactPersonTestBO deletedChild,
@@ -81,7 +86,7 @@ namespace Habanero.Test.BO.Relationship
             addedChild = CreateAddedChild(cpCol);
         }
 
-        private static ContactPersonTestBO CreateCreatedChildWithEdits(
+        protected static ContactPersonTestBO CreateCreatedChildWithEdits(
             BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
             ContactPersonTestBO createdChildEdited = CreateCreatedChild(cpCol);
@@ -89,75 +94,75 @@ namespace Habanero.Test.BO.Relationship
             return createdChildEdited;
         }
 
-        private static ContactPersonTestBO EditChild(ContactPersonTestBO child)
+        protected static ContactPersonTestBO EditChild(ContactPersonTestBO child)
         {
             child.FirstName = TestUtil.GetRandomString();
             return child;
         }
 
-        private static void AssertEditedPropDirtyState(bool expected, ContactPersonTestBO child)
+        protected static void AssertEditedPropDirtyState(bool expected, ContactPersonTestBO child)
         {
             string message = string.Format("Child edited prop expected{0} to be dirty.",
                                            expected ? "" : " not");
             Assert.AreEqual(expected, child.Props["FirstName"].IsDirty, message);
         }
 
-        private static void AssertFKDirtyState(bool expected, ContactPersonTestBO child)
+        protected static void AssertFKDirtyState(bool expected, ContactPersonTestBO child)
         {
             string message = string.Format("Child FK expected{0} to be dirty.",
                                            expected ? "" : " not");
             Assert.AreEqual(expected, child.Props["OrganisationID"].IsDirty, message);
         }
 
-        private static ContactPersonTestBO CreateCreatedChild(BusinessObjectCollection<ContactPersonTestBO> cpCol)
+        protected static ContactPersonTestBO CreateCreatedChild(BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
             ContactPersonTestBO createdChildUnedited = cpCol.CreateBusinessObject();
             return createdChildUnedited;
         }
 
-        private static ContactPersonTestBO CreateCreatedChild_ChildOwnsEdit(OrganisationTestBO organisationTestBO)
+        protected static ContactPersonTestBO CreateCreatedChild_ChildOwnsEdit(OrganisationTestBO organisationTestBO)
         {
             ContactPersonTestBO createdChild = ContactPersonTestBO.CreateUnsavedContactPerson();
             createdChild.Organisation = organisationTestBO;
             return createdChild;
         }
 
-        private static ContactPersonTestBO CreateAddedChild(BusinessObjectCollection<ContactPersonTestBO> cpCol)
+        protected static ContactPersonTestBO CreateAddedChild(BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
             ContactPersonTestBO addedChild = ContactPersonTestBO.CreateSavedContactPerson();
             cpCol.Add(addedChild);
             return addedChild;
         }
 
-        private ContactPersonTestBO CreateAddedChild_ChildOwnsEdit(OrganisationTestBO organisationTestBO)
+        protected virtual ContactPersonTestBO CreateAddedChild_ChildOwnsEdit(OrganisationTestBO organisationTestBO)
         {
             ContactPersonTestBO addedChild = ContactPersonTestBO.CreateSavedContactPerson();
             addedChild.Organisation = organisationTestBO;
             return addedChild;
         }
 
-        private static ContactPersonTestBO CreateEditedChild(BusinessObjectCollection<ContactPersonTestBO> cpCol)
+        protected static ContactPersonTestBO CreateEditedChild(BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
             ContactPersonTestBO existingChildEdited = CreateExistingChild(cpCol);
             EditChild(existingChildEdited);
             return existingChildEdited;
         }
 
-        private static ContactPersonTestBO CreateDeletedChild(BusinessObjectCollection<ContactPersonTestBO> cpCol)
+        protected static ContactPersonTestBO CreateDeletedChild(BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
             ContactPersonTestBO existingChildMarkedForDelete = CreateExistingChild(cpCol);
             existingChildMarkedForDelete.MarkForDelete();
             return existingChildMarkedForDelete;
         }
 
-        private static ContactPersonTestBO CreateRemovedChild(BusinessObjectCollection<ContactPersonTestBO> cpCol)
+        protected static ContactPersonTestBO CreateRemovedChild(BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
             ContactPersonTestBO removedChild = CreateExistingChild(cpCol);
             cpCol.Remove(removedChild);
             return removedChild;
         }
 
-        private static ContactPersonTestBO CreateRemovedChild_ChildOwnsEdit(OrganisationTestBO organisationTestBO)
+        protected static ContactPersonTestBO CreateRemovedChild_ChildOwnsEdit(OrganisationTestBO organisationTestBO)
         {
             ContactPersonTestBO removedChild = ContactPersonTestBO.CreateUnsavedContactPerson();
             removedChild.Organisation = organisationTestBO;
@@ -166,7 +171,7 @@ namespace Habanero.Test.BO.Relationship
             return removedChild;
         }
 
-        private static ContactPersonTestBO CreateExistingChild(BusinessObjectCollection<ContactPersonTestBO> cpCol)
+        protected static ContactPersonTestBO CreateExistingChild(BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
             ContactPersonTestBO existingChildEdited = cpCol.CreateBusinessObject();
             existingChildEdited.Surname = TestUtil.GetRandomString();
@@ -181,7 +186,7 @@ namespace Habanero.Test.BO.Relationship
         /// • If edits to a car are cancelled then it must cancel edits to all its tyres.
         /// </summary>
         [Test]
-        public void Test_Acceptance_CancelEditParent_CancelsEditsForDirtyChildren()
+        public virtual void Test_Acceptance_CancelEditParent_CancelsEditsForDirtyChildren()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO;
@@ -249,7 +254,7 @@ namespace Habanero.Test.BO.Relationship
         /// • If CancelEdit is called on the relationship, then the dirty children should be cancelled
         /// </summary>
         [Test]
-        public void Test_Acceptance_CancelEdit_CancelsEditsForDirtyChildren()
+        public virtual void Test_Acceptance_CancelEdit_CancelsEditsForDirtyChildren()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
@@ -347,7 +352,7 @@ namespace Habanero.Test.BO.Relationship
         /// an Added child will be removed and cancelled.
         /// </summary>
         [Test]
-        public void Test_CancelEdit_Owner_ForAddedChild()
+        public virtual void Test_CancelEdit_Owner_ForAddedChild()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
@@ -382,7 +387,7 @@ namespace Habanero.Test.BO.Relationship
         /// an Created child will be removed and cancelled.
         /// </summary>
         [Test]
-        public void Test_CancelEdit_Owner_ForCreatedChild()
+        public virtual void Test_CancelEdit_Owner_ForCreatedChild()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
@@ -417,7 +422,7 @@ namespace Habanero.Test.BO.Relationship
         /// an Removed child will be added and cancelled.
         /// </summary>
         [Test]
-        public void Test_CancelEdit_Owner_ForRemovedChild()
+        public virtual void Test_CancelEdit_Owner_ForRemovedChild()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
@@ -529,12 +534,13 @@ namespace Habanero.Test.BO.Relationship
         /// </summary>
         [Test]
         [Ignore("Working on this")] //TODO Mark 27 Feb 2009: Ignored Test - Working on this
-        public void Test_CancelEdit_NonOwner_ForAddedChild()
+        public virtual void Test_CancelEdit_NonOwner_ForAddedChild()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
             MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(out cpCol);
-            ContactPersonTestBO addedChild = EditChild(CreateAddedChild(cpCol));
+            ContactPersonTestBO addedChild = CreateAddedChild(cpCol);
+            addedChild = EditChild(addedChild);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, cpCol.Count);
             AssertEditedPropDirtyState(true, addedChild);
@@ -605,7 +611,7 @@ namespace Habanero.Test.BO.Relationship
         /// </summary>
         [Test]
         [Ignore("Working on this")] //TODO Mark 27 Feb 2009: Ignored Test - Working on this
-        public void Test_CancelEdit_NonOwner_ForRemovedChild()
+        public virtual void Test_CancelEdit_NonOwner_ForRemovedChild()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
@@ -685,7 +691,7 @@ namespace Habanero.Test.BO.Relationship
         /// </summary>
         [Test]
         [Ignore("Working on this")] //TODO Mark 27 Feb 2009: Ignored Test - Working on this
-        public void Test_CancelEdit_Owner_ChildOwnsTheEdit_ForAddedChild()
+        public virtual void Test_CancelEdit_Owner_ChildOwnsTheEdit_ForAddedChild()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO; 
@@ -758,7 +764,7 @@ namespace Habanero.Test.BO.Relationship
         /// the Removed child will be added and cancelled.
         /// </summary>
         [Test]
-        public void Test_CancelEdit_Owner_ChildOwnsTheEdit_ForRemovedChild()
+        public virtual void Test_CancelEdit_Owner_ChildOwnsTheEdit_ForRemovedChild()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO;
@@ -834,7 +840,7 @@ namespace Habanero.Test.BO.Relationship
         /// </summary>
         [Test]
         [Ignore("Working on this")] //TODO Mark 02 Mar 2009: Ignored Test - Working on this
-        public void Test_CancelEdit_NonOwner_ChildOwnsTheEdit_ForAddedChild()
+        public virtual void Test_CancelEdit_NonOwner_ChildOwnsTheEdit_ForAddedChild()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO;
@@ -914,7 +920,7 @@ namespace Habanero.Test.BO.Relationship
         /// </summary>
         [Test]
         [Ignore("Working on this")] //TODO Mark 02 Mar 2009: Ignored Test - Working on this
-        public void Test_CancelEdit_NonOwner_ChildOwnsTheEdit_ForRemovedChild()
+        public virtual void Test_CancelEdit_NonOwner_ChildOwnsTheEdit_ForRemovedChild()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO;

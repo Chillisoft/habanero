@@ -85,10 +85,27 @@ namespace Habanero.BO
                                  " relationship is set up as a composition relationship (RemoveChildAction.Prevent)";
                 throw new HabaneroDeveloperException(message, message);
             }
+            return RemoveInternal(bo);
+        }
+
+        /// <summary>
+        /// A method for removing the busines object without doing any checks for relationship type.
+        /// This is needed for cases where a parent business object that has created composite children has
+        /// <see cref="IBusinessObject.CancelEdits"/> called. The parent business objects should
+        /// then cancel all its children
+        /// </summary>
+        /// <param name="bo">The child business object that needs to be removed from the collection.</param>
+        /// <returns>true if the business object is removed, otherwise false.</returns>
+        internal bool RemoveInternal(TBusinessObject bo)
+        {
             if (!base.Remove(bo)) return false;
             if (this.Loading) return true;
             DereferenceBO(bo);
-            RemoveRelatedObject(bo);
+            MultipleRelationshipDef def = this._relationship.RelationshipDef as MultipleRelationshipDef;
+            if (!(def != null && !Loading && (def.RelationshipType == RelationshipType.Composition)))
+            {
+                RemoveRelatedObject(bo);
+            }
             return true;
         }
 

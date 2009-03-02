@@ -25,6 +25,7 @@ using System.Security.Permissions;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -581,7 +582,9 @@ namespace Habanero.BO
                 }
                 else
                 {
+                   ReflectionUtilities.SetPrivatePropertyValue(this, "Loading", true);
                    addEventRequired =  this.AddInternal(bo);
+                   ReflectionUtilities.SetPrivatePropertyValue(this, "Loading", false);
                 }
             }
             if (addEventRequired) FireBusinessObjectAdded(bo);
@@ -1668,15 +1671,13 @@ namespace Habanero.BO
         /// prevent certain checks being done (e.g. Adding persisted business objects to a collection.
         /// </summary>
         protected bool Loading { get; set; }
+// ReSharper restore UnusedPrivateMember
 
         ///<summary>
         /// This property is used to return the total number of records available for paging.
         /// It is set internally by the loader when the collection is being loaded.
         ///</summary>
         internal int TotalCountAvailableForPaging { get; set; }
-
-// ReSharper restore UnusedPrivateMember
-
         #endregion
 
         /// <summary>
