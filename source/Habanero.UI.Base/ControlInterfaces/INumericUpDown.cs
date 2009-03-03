@@ -32,6 +32,11 @@ namespace Habanero.UI.Base
         event EventHandler Enter;
 
         /// <summary>
+        /// Occurs when the <see cref="INumericUpDown"/>.<see cref="INumericUpDown.Value"/> property has been changed in some way.
+        /// </summary>
+        event EventHandler ValueChanged;
+
+        /// <summary>
         /// Gets or sets the number of decimal places to display. The default is 0.
         /// </summary>
         int DecimalPlaces { get; set; }

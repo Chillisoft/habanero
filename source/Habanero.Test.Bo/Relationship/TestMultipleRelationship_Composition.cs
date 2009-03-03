@@ -274,7 +274,7 @@ namespace Habanero.Test.BO.Relationship
         /// •	If an invoice is persisted then it must persist all its invoice lines.  
         /// </summary>
         [Test]
-        public void Test_ParentPersistsDirtyChildren()
+        public void Test_PersistParent_PersistsDirtyChildren()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();

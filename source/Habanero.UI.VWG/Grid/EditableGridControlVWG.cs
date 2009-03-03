@@ -251,6 +251,15 @@ namespace Habanero.UI.VWG
             _grid.AllowUserToAddRows = true;
         }
 
+        ///<summary>
+        /// Returns the <see cref="IBusinessObjectCollection"/> that has been set for this <see cref="IGridControl"/>.
+        ///</summary>
+        ///<returns>Returns the <see cref="IBusinessObjectCollection"/> that has been set for this <see cref="IGridControl"/>.</returns>
+        public IBusinessObjectCollection GetBusinessObjectCollection()
+        {
+            return Grid.GetBusinessObjectCollection();
+        }
+
         /// <summary>
         /// Gets the buttons control used to save and cancel changes
         /// </summary>

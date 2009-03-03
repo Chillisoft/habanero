@@ -56,7 +56,8 @@ namespace Habanero.Test.BO.ClassDefinition
                 new SuperClassDef("ass", "class", ORMapping.ClassTableInheritance, null, "disc");
         }
 
-        [Test, ExpectedException(typeof(HabaneroDeveloperException))]
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        //[Test, ExpectedException(typeof(HabaneroDeveloperException))]
         public void TestCantFindSuperClassClassDefException()
         {
             SuperClassDef superClassDef =
@@ -91,6 +92,48 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsNull(superClassDef.SuperClassClassDef);
             Assert.IsNull(superClassDef.AssemblyName);
             Assert.IsNull(superClassDef.ClassName);
+        }
+
+        [Test]
+        public void Test_SuperClassClassDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = new ClassDef("Habanero.Test.BO", "UnknownClass", null, null, null, null, null);
+            ClassDef.ClassDefs.Add(classDef);
+            SuperClassDef superClassDef = new SuperClassDef(classDef.AssemblyName, classDef.ClassName, ORMapping.ClassTableInheritance, null, null);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            IClassDef def = superClassDef.SuperClassClassDef;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(def);
+            Assert.AreSame(classDef, def);
+        }
+
+        [Test]
+        public void Test_SuperClassClassDef_NotFound()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            SuperClassDef superClassDef = new SuperClassDef("Habanero.Test.BO", "UnknownClass", ORMapping.ClassTableInheritance, null, null);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                IClassDef def = superClassDef.SuperClassClassDef;
+                //---------------Test Result -----------------------
+                Assert.Fail("Expected to throw an InvalidXmlDefinitionException");
+                Assert.IsNull(def);// This will never get hit. It is here to state an expectation and to avoid a resharper warning.
+            }
+            catch (InvalidXmlDefinitionException ex)
+            {
+                StringAssert.Contains("The class definition for the super class with the type " +
+                    "'Habanero.Test.BO.UnknownClass' was not found. Check that the class definition " +
+                    "exists or that spelling and capitalisation are correct. " +
+                    "There are 0 class definitions currently loaded.", ex.Message);
+            }
         }
 
         // Grants access to protected methods

@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
+using Habanero.BO;
 
 namespace Habanero.UI.Base
 {

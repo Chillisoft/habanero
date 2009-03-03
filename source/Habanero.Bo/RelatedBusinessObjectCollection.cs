@@ -85,10 +85,27 @@ namespace Habanero.BO
                                  " relationship is set up as a composition relationship (RemoveChildAction.Prevent)";
                 throw new HabaneroDeveloperException(message, message);
             }
+            return RemoveInternal(bo);
+        }
+
+        /// <summary>
+        /// A method for removing the busines object without doing any checks for relationship type.
+        /// This is needed for cases where a parent business object that has created composite children has
+        /// <see cref="IBusinessObject.CancelEdits"/> called. The parent business objects should
+        /// then cancel all its children
+        /// </summary>
+        /// <param name="bo">The child business object that needs to be removed from the collection.</param>
+        /// <returns>true if the business object is removed, otherwise false.</returns>
+        internal bool RemoveInternal(TBusinessObject bo)
+        {
             if (!base.Remove(bo)) return false;
             if (this.Loading) return true;
             DereferenceBO(bo);
-            RemoveRelatedObject(bo);
+            MultipleRelationshipDef def = this._relationship.RelationshipDef as MultipleRelationshipDef;
+            if (!(def != null && !Loading && (def.RelationshipType == RelationshipType.Composition)))
+            {
+                RemoveRelatedObject(bo);
+            }
             return true;
         }
 
@@ -126,19 +143,16 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Creates a business object of type TBusinessObject
-        /// Adds this BO to the CreatedBusinessObjects list. When the object is saved it will
-        /// be added to the actual bo collection.
+        /// Creates a new <see cref="TBusinessObject"/> for this RelatedBusinessObjectCollection.
+        /// The new BusinessObject has all of its foreign key properties set, but is not added in to the collection yet.
         /// </summary>
-        /// <returns></returns>
-        public override TBusinessObject CreateBusinessObject()
+        /// <returns>A new <see cref="TBusinessObject"/>.</returns>
+        protected override TBusinessObject CreateNewBusinessObject()
         {
-            //TODO: Think about this we are trying to solve the problem that you can set
-            // the properties of an object but the related object is only loaded based on its persisted values.
-            TBusinessObject bo = base.CreateBusinessObject();
-            SetUpForeignKey(bo);
-            SetupRelatedObject(bo);
-            return bo;
+            TBusinessObject newBusinessObject = base.CreateNewBusinessObject();
+            SetUpForeignKey(newBusinessObject);
+            SetupRelatedObject(newBusinessObject);
+            return newBusinessObject;
         }
 
         private void SetupRelatedObject(TBusinessObject bo)

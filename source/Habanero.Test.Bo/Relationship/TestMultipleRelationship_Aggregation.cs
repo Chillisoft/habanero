@@ -17,9 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -38,9 +36,7 @@ namespace Habanero.Test.BO.Relationship
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef_PreventAddChild();
         }
-
-
-
+        
         [Test]
         public void Test_DirtyIfHasCreatedChildren()
         {
@@ -70,7 +66,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(organisationTestBO, out cpCol);
+            GetAggregationRelationship(organisationTestBO, out cpCol);
 
             //---------------Assert Precondition----------------
             Assert.IsFalse(organisationTestBO.Status.IsDirty);
@@ -134,7 +130,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(organisationTestBO, out cpCol);
+            GetAggregationRelationship(organisationTestBO, out cpCol);
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
             myBO.Surname = TestUtil.GetRandomString();
             myBO.FirstName = TestUtil.GetRandomString();
@@ -186,7 +182,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> relationship = GetAggregationRelationship(organisationTestBO, out cpCol);
+            GetAggregationRelationship(organisationTestBO, out cpCol);
             ContactPersonTestBO myBO = cpCol.CreateBusinessObject();
             myBO.Surname = TestUtil.GetRandomString();
             myBO.FirstName = TestUtil.GetRandomString();
@@ -236,9 +232,8 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            RelationshipCol relationships = organisationTestBO.Relationships;
             BusinessObjectCollection<ContactPersonTestBO> cpCol;
-            MultipleRelationship<ContactPersonTestBO> aggregateRelationship = GetAggregationRelationship(organisationTestBO, out cpCol);
+            GetAggregationRelationship(organisationTestBO, out cpCol);
 
             ContactPersonTestBO contactPerson = cpCol.CreateBusinessObject();
             contactPerson.Surname = TestUtil.GetRandomString();
@@ -366,7 +361,7 @@ namespace Habanero.Test.BO.Relationship
         /// • If a car is persisted then it must persist all its tyres.
         /// </summary>
         [Test]
-        public void Test_ParentPersistsDirtyChildren()
+        public void Test_PersistParent_PersistsDirtyChildren()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
@@ -398,7 +393,7 @@ namespace Habanero.Test.BO.Relationship
 
         private MultipleRelationship<ContactPersonTestBO> GetAggregationRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
-            RelationshipType relationshipType = RelationshipType.Aggregation;
+            const RelationshipType relationshipType = RelationshipType.Aggregation;
             MultipleRelationship<ContactPersonTestBO> relationship =
                 organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
             RelationshipDef relationshipDef = (RelationshipDef)relationship.RelationshipDef;

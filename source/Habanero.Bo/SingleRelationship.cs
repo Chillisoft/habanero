@@ -274,7 +274,6 @@ namespace Habanero.BO
             if (relatedObject != null) RelationshipDef.CheckCanAddChild(relatedObject);
             if (_relatedBo != null) RelationshipDef.CheckCanRemoveChild(_relatedBo);
 
-
             RemoveFromReverseRelationship(_relatedBo);
 
             _relatedBo = relatedObject;
@@ -447,6 +446,11 @@ namespace Habanero.BO
         internal override void DeleteMarkedForDeleteChildren(TransactionCommitter committer)
         {
             //Do nothing single relationship does not have children
+        }
+
+        internal override void CancelEdits()
+        {
+            throw new NotImplementedException();
         }
 
         internal override void AddDirtyChildrenToTransactionCommitter(TransactionCommitter transactionCommitter)

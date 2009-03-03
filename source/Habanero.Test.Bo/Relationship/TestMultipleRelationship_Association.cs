@@ -369,7 +369,7 @@ namespace Habanero.Test.BO.Relationship
         /// related driver that is dirty.
         /// </summary>
         [Test]
-        public void Test_ParentDoesNotPersistDirtyChildren()
+        public void Test_PersistParent_DoesNotPersistDirtyChildren()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();

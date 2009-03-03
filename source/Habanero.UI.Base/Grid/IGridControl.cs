@@ -110,6 +110,13 @@ namespace Habanero.UI.Base
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         void SetBusinessObjectCollection(IBusinessObjectCollection boCollection);
 
+        ///<summary>
+        /// Returns the <see cref="IBusinessObjectCollection"/> that has been set for this <see cref="IGridControl"/>.
+        ///</summary>
+        ///<returns>Returns the <see cref="IBusinessObjectCollection"/> that has been set for this <see cref="IGridControl"/>.</returns>
+        [Obsolete("Should be replaced with 'BusinessObjectCollection' property")] //01 Mar 2009
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        IBusinessObjectCollection GetBusinessObjectCollection();
 
         /// <summary>
         /// Gets and sets the currently selected business object in the grid

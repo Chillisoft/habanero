@@ -175,7 +175,7 @@ namespace Habanero.BO.Loaders
             //  a bo are not both set to OwnerHasForeignKey
         }
 
-        private static void UpdateOwningBOHasForeignKey(IEnumerable<ClassDef> classDefCol)
+        private static void UpdateOwningBOHasForeignKey(ClassDefCol classDefCol)
         {
             foreach (ClassDef classDef in classDefCol)
             {
@@ -187,8 +187,8 @@ namespace Habanero.BO.Loaders
                     }
                     else if (relationshipDef.OwningBOHasForeignKey)
                     {
-                        relationshipDef.OwningBOHasForeignKey = !OwningClassHasPrimaryKey(relationshipDef, classDef);
-                        relationshipDef.OwningBOHasPrimaryKey = OwningClassHasPrimaryKey(relationshipDef, classDef);
+                        relationshipDef.OwningBOHasForeignKey = !OwningClassHasPrimaryKey(relationshipDef, classDef, classDefCol);
+                        relationshipDef.OwningBOHasPrimaryKey = OwningClassHasPrimaryKey(relationshipDef, classDef, classDefCol);
                     }
                 }
             }
@@ -457,14 +457,15 @@ namespace Habanero.BO.Loaders
             return true;
         }
 
-        private static bool OwningClassHasPrimaryKey(IRelationshipDef relationshipDef, ClassDef classDef)
+        private static bool OwningClassHasPrimaryKey(IRelationshipDef relationshipDef, ClassDef classDef, ClassDefCol classDefCol)
         {
             //For each Property in the Relationship Key check if it is defined as the primary key for the
             //class if it is then check the other properties else this is not a primaryKey
+            PrimaryKeyDef primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(classDef, classDefCol);
             foreach (IRelPropDef relPropDef in relationshipDef.RelKeyDef)
             {
                 bool isInKeyDef = false;
-                foreach (IPropDef propDef in classDef.PrimaryKeyDef)
+                foreach (IPropDef propDef in primaryKeyDef)
                 {
                     if (propDef.PropertyName != relPropDef.OwnerPropertyName)
                     {

@@ -24,8 +24,6 @@ using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO;
 using Habanero.UI.Base;
 using NUnit.Framework;
-//using Habanero.UI.WebGUI;
-//using Habanero.UI.Win;
 
 namespace Habanero.Test.UI.Base
 {
@@ -728,7 +726,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             IControlHabanero grid = CreateReadOnlyGridControl();
 
-            ////---------------Test Result -----------------------
+            //---------------Test Result -----------------------
             Assert.IsNotNull(grid);
             Assert.IsTrue(grid is IReadOnlyGridControl);
             IReadOnlyGridControl readOnlyGrid = (IReadOnlyGridControl) grid;
@@ -749,7 +747,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Execute Test ----------------------
             readOnlyGrid.Columns.Add("TestProp", "TestProp");
-            ////---------------Test Result -----------------------
+            //---------------Test Result -----------------------
             Assert.AreEqual(1, readOnlyGrid.Columns.Count);
         }
 
@@ -897,7 +895,7 @@ namespace Habanero.Test.UI.Base
         }
 #pragma warning disable 618,612
         [Test]
-        public void TestSetCollection_IncorrectClassDef()
+        public void Test_SetBusinessObjectCollection_IncorrectClassDef()
         {
             //---------------Set up test pack-------------------
             LoadMyBoDefaultClassDef();
@@ -913,7 +911,7 @@ namespace Habanero.Test.UI.Base
 
                 Assert.Fail
                     ("You cannot call set collection for a collection that has a different class def than is initialised");
-                ////---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             }
             catch (ArgumentException ex)
             {
@@ -924,7 +922,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestSetCollection_Null_ClearsTheGrid()
+        public void Test_SetBusinessObjectCollection_Null_ClearsTheGrid()
         {
             //---------------Set up test pack-------------------
             LoadMyBoDefaultClassDef();
@@ -945,7 +943,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestSetCollection_NullCol_ThenNonNullEnablesButtons()
+        public void Test_SetBusinessObjectCollection_NullCol_ThenNonNullEnablesButtons()
         {
             //---------------Set up test pack-------------------
             LoadMyBoDefaultClassDef();
@@ -965,7 +963,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestSetCollection_InitialisesGridIfNotPreviouslyInitialised()
+        public void Test_SetBusinessObjectCollection_InitialisesGridIfNotPreviouslyInitialised()
         {
             //---------------Set up test pack-------------------
             LoadMyBoDefaultClassDef();
@@ -974,13 +972,13 @@ namespace Habanero.Test.UI.Base
 
             //---------------Execute Test ----------------------
             readOnlyGridControl.SetBusinessObjectCollection(col);
-            ////---------------Test Result -----------------------
+            //---------------Test Result -----------------------
             Assert.AreEqual("default", readOnlyGridControl.UiDefName);
             Assert.AreEqual(col.ClassDef, readOnlyGridControl.ClassDef);
         }
 
         [Test]
-        public void TestSetCollection_NotInitialiseGrid_IfPreviouslyInitialised()
+        public void Test_SetBusinessObjectCollection_NotInitialiseGrid_IfPreviouslyInitialised()
         {
             //Verify that setting the collection for a grid that is already initialised
             //does not cause it to be reinitialised.
@@ -994,12 +992,12 @@ namespace Habanero.Test.UI.Base
             grid.Initialise(classDef, alternateUIDefName);
             //---------------Execute Test ----------------------
             grid.SetBusinessObjectCollection(col);
-            ////---------------Test Result -----------------------
+            //---------------Test Result -----------------------
             Assert.AreEqual(alternateUIDefName, grid.UiDefName);
         }
 
         [Test]
-        public void TestSetCollection_NumberOfGridRows_Correct()
+        public void Test_SetBusinessObjectCollection_NumberOfGridRows_Correct()
         {
             //---------------Set up test pack-------------------
             LoadMyBoDefaultClassDef();
@@ -1012,12 +1010,12 @@ namespace Habanero.Test.UI.Base
             readOnlyGrid.Columns.Add("TestProp", "TestProp");
             //---------------Execute Test ----------------------
             readOnlyGridControl.SetBusinessObjectCollection(col);
-            ////---------------Test Result -----------------------
+            //---------------Test Result -----------------------
             Assert.AreEqual(4, readOnlyGrid.Rows.Count);
         }
 
         [Test]
-        public void TestSetCollection_DefaultEditorsSetUp()
+        public void Test_SetBusinessObjectCollection_DefaultEditorsSetUp()
         {
             //---------------Set up test pack-------------------
             LoadMyBoDefaultClassDef();
@@ -1027,20 +1025,20 @@ namespace Habanero.Test.UI.Base
             AddControlToForm(readOnlyGridControl);
 
             readOnlyGridControl.Grid.Columns.Add("TestProp", "TestProp");
-            //---------------Assert Preconditions ----------------------
+            //---------------Assert Preconditions --------------
             Assert.IsNull(readOnlyGridControl.BusinessObjectEditor);
             Assert.IsNull(readOnlyGridControl.BusinessObjectCreator);
             Assert.IsNull(readOnlyGridControl.BusinessObjectDeletor);
             //---------------Execute Test ----------------------
             readOnlyGridControl.SetBusinessObjectCollection(col);
-            ////---------------Test Result -----------------------
+            //---------------Test Result -----------------------
             Assert.IsTrue(readOnlyGridControl.BusinessObjectEditor is DefaultBOEditor);
             Assert.IsTrue(readOnlyGridControl.BusinessObjectCreator is DefaultBOCreator);
             Assert.IsTrue(readOnlyGridControl.BusinessObjectDeletor is DefaultBODeletor);
         }
 
         [Test]
-        public void TestSetCollection_NonDefaultEditorsNotOverridden()
+        public void Test_SetBusinessObjectCollection_NonDefaultEditorsNotOverridden()
         {
             //---------------Set up test pack-------------------
             LoadMyBoDefaultClassDef();
@@ -1053,16 +1051,72 @@ namespace Habanero.Test.UI.Base
             readOnlyGridControl.BusinessObjectEditor = new ObjectEditorStub();
             readOnlyGridControl.BusinessObjectCreator = new ObjectCreatorStub();
             readOnlyGridControl.BusinessObjectDeletor = new ObjectDeletorStub();
-            //---------------Assert Preconditions ----------------------
+            //---------------Assert Preconditions --------------
             Assert.IsTrue(readOnlyGridControl.BusinessObjectEditor is ObjectEditorStub);
             Assert.IsTrue(readOnlyGridControl.BusinessObjectCreator is ObjectCreatorStub);
             Assert.IsTrue(readOnlyGridControl.BusinessObjectDeletor is ObjectDeletorStub);
             //---------------Execute Test ----------------------
             readOnlyGridControl.SetBusinessObjectCollection(col);
-            ////---------------Test Result -----------------------
+            //---------------Test Result -----------------------
             Assert.IsTrue(readOnlyGridControl.BusinessObjectEditor is ObjectEditorStub);
             Assert.IsTrue(readOnlyGridControl.BusinessObjectCreator is ObjectCreatorStub);
             Assert.IsTrue(readOnlyGridControl.BusinessObjectDeletor is ObjectDeletorStub);
+        }
+
+        [Test]
+        public void Test_GetBusinessObjectCollection()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+
+            AddControlToForm(readOnlyGridControl);
+
+            readOnlyGridControl.Grid.Columns.Add("TestProp", "TestProp");
+            readOnlyGridControl.SetBusinessObjectCollection(col);
+            //---------------Assert Preconditions --------------
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection returnedBusinessObjectCollection =
+                readOnlyGridControl.BusinessObjectCollection;
+            //---------------Test Result -----------------------
+            Assert.AreSame(col, returnedBusinessObjectCollection);
+        }
+
+        [Test]
+        public void Test_GetBusinessObjectCollection_AfterChanged()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            BusinessObjectCollection<MyBO> col2 = new BusinessObjectCollection<MyBO>();
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+
+            AddControlToForm(readOnlyGridControl);
+
+            readOnlyGridControl.Grid.Columns.Add("TestProp", "TestProp");
+            readOnlyGridControl.SetBusinessObjectCollection(col);
+            //---------------Assert Preconditions --------------
+            Assert.AreSame(col, readOnlyGridControl.BusinessObjectCollection);
+            //---------------Execute Test ----------------------
+            readOnlyGridControl.SetBusinessObjectCollection(col2);
+            IBusinessObjectCollection returnedBusinessObjectCollection =
+                readOnlyGridControl.BusinessObjectCollection;
+            //---------------Test Result -----------------------
+            Assert.AreSame(col2, returnedBusinessObjectCollection);
+        }
+        
+        [Test]
+        public void Test_GetBusinessObjectCollection_WhenNull()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+            //---------------Assert Preconditions --------------
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection returnedBusinessObjectCollection =
+                readOnlyGridControl.BusinessObjectCollection;
+            //---------------Test Result -----------------------
+            Assert.IsNull(returnedBusinessObjectCollection);
         }
 
         [Test]
@@ -1080,7 +1134,7 @@ namespace Habanero.Test.UI.Base
 
             IBusinessObjectCreator originalDefaultBoCreator = readOnlyGridControl.BusinessObjectCreator;
             BusinessObjectCollection<MyBO> col2 = CreateCollectionWith_4_Objects();
-            //---------------Assert Preconditions ----------------------
+            //---------------Assert Preconditions --------------
             Assert.IsTrue(originalDefaultBoCreator is DefaultBOCreator);
             Assert.AreNotSame(col, col2);
             Assert.AreEqual(col, readOnlyGridControl.Grid.BusinessObjectCollection);
@@ -1107,12 +1161,12 @@ namespace Habanero.Test.UI.Base
             readOnlyGridControl.SetBusinessObjectCollection(col);
             IBusinessObjectCreator originalDefaultBoCreator = readOnlyGridControl.BusinessObjectCreator;
             BusinessObjectCollection<MyBO> col2 = CreateCollectionWith_4_Objects();
-            //---------------Assert Preconditions ----------------------
+            //---------------Assert Preconditions --------------
             Assert.IsTrue(readOnlyGridControl.BusinessObjectCreator is ObjectCreatorStub);
             //---------------Execute Test ----------------------
             readOnlyGridControl.SetBusinessObjectCollection(col);
             readOnlyGridControl.SetBusinessObjectCollection(col2);
-            ////---------------Test Result -----------------------
+            //---------------Test Result -----------------------
             Assert.IsTrue(readOnlyGridControl.BusinessObjectCreator is ObjectCreatorStub);
             Assert.AreSame(originalDefaultBoCreator, readOnlyGridControl.BusinessObjectCreator);
         }

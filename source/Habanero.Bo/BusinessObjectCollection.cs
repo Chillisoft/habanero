@@ -20,12 +20,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -566,9 +566,7 @@ namespace Habanero.BO
                 DeRegisterBOEvents(bo);
             }
             if (fireEvent) FireBusinessObjectRemoved(bo);
-
         }
-
 
         protected virtual void RestoredEventHandler(object sender, BOEventArgs e)
         {
@@ -584,7 +582,9 @@ namespace Habanero.BO
                 }
                 else
                 {
+                   ReflectionUtilities.SetPrivatePropertyValue(this, "Loading", true);
                    addEventRequired =  this.AddInternal(bo);
+                   ReflectionUtilities.SetPrivatePropertyValue(this, "Loading", false);
                 }
             }
             if (addEventRequired) FireBusinessObjectAdded(bo);
@@ -1638,7 +1638,6 @@ namespace Habanero.BO
         /// Returns a collection of business objects that have been marked for deletion from the collection
         /// but the collection has not yet been persisted.
         ///</summary>
-        ///<exception cref="NotImplementedException"></exception>
         public List<TBusinessObject> MarkedForDeleteBusinessObjects
         {
             get { return _markedForDeleteBusinessObjects; }
@@ -1672,15 +1671,13 @@ namespace Habanero.BO
         /// prevent certain checks being done (e.g. Adding persisted business objects to a collection.
         /// </summary>
         protected bool Loading { get; set; }
+// ReSharper restore UnusedPrivateMember
 
         ///<summary>
         /// This property is used to return the total number of records available for paging.
         /// It is set internally by the loader when the collection is being loaded.
         ///</summary>
         internal int TotalCountAvailableForPaging { get; set; }
-
-// ReSharper restore UnusedPrivateMember
-
         #endregion
 
         /// <summary>
@@ -1694,31 +1691,41 @@ namespace Habanero.BO
             TBusinessObject newBO;
             lock (KeyObjectHashTable)
             {
-                if (this.ClassDef == ClassDefinition.ClassDef.ClassDefs[typeof (TBusinessObject)])
-                {
-                    newBO = (TBusinessObject) Activator.CreateInstance(typeof (TBusinessObject));
-                }
-                else
-                {
-                    //use the customised classdef instead of the default.
-                    try
-                    {
-                        newBO =
-                            (TBusinessObject)
-                            Activator.CreateInstance(typeof (TBusinessObject), new object[] {this.ClassDef});
-                    }
-                    catch (MissingMethodException ex)
-                    {
-                        string className = typeof (TBusinessObject).FullName;
-                        string msg = string.Format
-                            ("An attempt was made to create a {0} with a customised class def. Please add a constructor that takes a ClassDef as a parameter to the business object class of type {1}.",
-                             className, className);
-                        throw new HabaneroDeveloperException("There was a problem creating a " + className, msg, ex);
-                    }
-                }
+                newBO = CreateNewBusinessObject();
                 AddCreatedBusinessObject(newBO);
             }
             FireBusinessObjectAdded(newBO);
+            return newBO;
+        }
+        /// <summary>
+        /// Creates a new <see cref="TBusinessObject"/> for this BusinessObjectCollection.
+        /// The new BusinessObject is not added in to the collection.
+        /// </summary>
+        /// <returns>A new <see cref="TBusinessObject"/>.</returns>
+        protected virtual TBusinessObject CreateNewBusinessObject()
+        {
+            TBusinessObject newBO;
+            if (this.ClassDef == ClassDefinition.ClassDef.ClassDefs[typeof (TBusinessObject)])
+            {
+                newBO = (TBusinessObject) Activator.CreateInstance(typeof (TBusinessObject));
+            }
+            else
+            {
+                //use the customised classdef instead of the default.
+                try
+                {
+                    newBO = (TBusinessObject)
+                            Activator.CreateInstance(typeof (TBusinessObject), new object[] {this.ClassDef});
+                }
+                catch (MissingMethodException ex)
+                {
+                    string className = typeof (TBusinessObject).FullName;
+                    string msg = string.Format
+                        ("An attempt was made to create a {0} with a customised class def. Please add a constructor that takes a ClassDef as a parameter to the business object class of type {1}.",
+                         className, className);
+                    throw new HabaneroDeveloperException("There was a problem creating a " + className, msg, ex);
+                }
+            }
             return newBO;
         }
 

@@ -691,8 +691,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Test Result -----------------------
             util.AssertOneObjectInCurrentAndAddedCollection(cpCol);
             util.AssertAddedEventFired();
-            Assert.IsTrue
-                (myBO.Status.IsDirty, "Should be dirty since is readded to collection when cancel edits called");
+            Assert.IsFalse(myBO.Status.IsDirty, "Should be dirty since is readded to collection when cancel edits called");
             //TODO: test that mybo.orgid set correctly.
             util.AssertRemovedEventNotFired();
         }
@@ -718,7 +717,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
 
             //---------------Test Result -----------------------
             util.AssertOneObjectInCurrentAndAddedCollection(cpCol);
-            Assert.IsTrue(myBO.Status.IsDirty);
+            Assert.IsFalse(myBO.Status.IsDirty);
             util.AssertAddedEventFired();
             util.AssertRemovedEventNotFired();
         }

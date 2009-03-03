@@ -67,7 +67,7 @@ namespace Habanero.BO
     public class MultipleRelationship<TBusinessObject> : MultipleRelationshipBase, IMultipleRelationship
         where TBusinessObject : class, IBusinessObject, new()
     {
-        protected BusinessObjectCollection<TBusinessObject> _boCol;
+        protected RelatedBusinessObjectCollection<TBusinessObject> _boCol;
 
         /// <summary>
         /// Constructor to initialise a new relationship
@@ -215,8 +215,26 @@ namespace Habanero.BO
         {
             get
             {
-                if (_relDef.OrderCriteria == null) return new OrderCriteria();
-                return _relDef.OrderCriteria;
+                return _relDef.OrderCriteria ?? new OrderCriteria();
+            }
+        }
+
+        internal override void CancelEdits()
+        {
+            foreach (TBusinessObject createdChild in _boCol.CreatedBusinessObjects.ToArray())
+            {
+                createdChild.CancelEdits();
+                _boCol.RemoveInternal(createdChild);
+//                createdChild.
+            }
+            foreach (TBusinessObject addedChild in _boCol.AddedBusinessObjects.ToArray())
+            {
+                addedChild.CancelEdits();
+                _boCol.Remove(addedChild);
+            }
+            foreach (TBusinessObject dirtyChild in GetDirtyChildren())
+            {
+                dirtyChild.CancelEdits();
             }
         }
 
